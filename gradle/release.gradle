@@ -1,0 +1,32 @@
+// release plugin fails if git repository not found, so we have to simply not register it until git repo will be available
+if (file("$project.rootDir/.git").exists()) {
+    apply plugin: 'release'
+
+// confirmReleaseVersion will remove the -SNAPSHOT, but the jar task are already configured with the SNAPSHOT name
+    confirmReleaseVersion << {
+        publishing.publications.mavenJava.version = project.version
+        jar.version = project.version
+        javadocJar.version = project.version
+        sourcesJar.version = project.version
+        publishing.publications.mavenJava.setArtifacts([jar, sourcesJar, javadocJar])
+
+        // reset bintray versions
+        if (bintrayUpload.versionName.contains('SNAPSHOT')) {
+            bintrayUpload.versionName = project.version
+        }
+        if (bintrayUpload.versionVcsTag.contains('SNAPSHOT')) {
+            bintrayUpload.versionVcsTag = project.version
+        }
+    }
+
+    if (project.ext.bintray.signFiles) {
+        createReleaseTag.dependsOn bintrayUpload, bintraySign
+    } else {
+        createReleaseTag.dependsOn bintrayUpload
+    }
+    release.doLast {
+        logger.warn "RELEASED $project.group:$project.name:$project.version"
+    }
+} else {
+    logger.warn("Git repository not initialized, release plugin disabled");
+}

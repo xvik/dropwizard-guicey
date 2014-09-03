@@ -1,0 +1,80 @@
+/* Quality plugins checks applied during "gradle check" execution, so travis build will fail in case of quality problems
+ * and its better to call check manually before push. */
+
+
+/* NOTE: findbugs support disabled, because it cause strange errors with java 8 (findbug 3)
+
+apply plugin: 'findbugs'
+
+// findbugs 3 support java 8, but requires java 7!
+// if you need java 6 suport use 2.0.3 version
+findbugs {
+    toolVersion = "3.0.0"
+    ignoreFailures = false
+    sourceSets = [sourceSets.main]
+}
+*/
+
+apply plugin: 'pmd'
+
+pmd {
+    toolVersion = "5.1.2"
+    ignoreFailures = false
+    ruleSetFiles = files("gradle/config/pmd/pmd.xml")
+    sourceSets = [sourceSets.main]
+}
+
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if ((task.name == 'pmdMain' || task.name == 'pmdTest') && state.failure) {
+        // print pmd errors
+        def outFile = task.name == 'pmdMain' ? 'main.xml' : 'test.xml'
+        def reportFile = file("${buildDir}/reports/pmd/${outFile}")
+
+        if(reportFile.exists()) {
+            def result = new XmlParser().parse(reportFile)
+
+            println ''
+            result.file.each { file ->
+                file.violation.each { violation ->
+                    println "${file.'@name'}:${violation.'@beginline'}: ${violation.text()}"
+                }
+            }
+        }
+    }
+}
+
+
+apply plugin: 'checkstyle'
+
+checkstyle {
+    toolVersion = "5.7"
+    ignoreFailures = false
+    sourceSets = [sourceSets.main]
+    configFile = file('gradle/config/checkstyle/checkstyle.xml')
+}
+
+def checkType;
+task checkstyleReport << {
+    if (file("$buildDir/reports/checkstyle/${checkType}.xml").exists()) {
+        def htmlReportPath = "$buildDir/reports/checkstyle/${checkType}.html"
+        ant.xslt(in: "$buildDir/reports/checkstyle/${checkType}.xml",
+                style:"gradle/config/checkstyle/checkstyle-noframes-sorted.xsl",
+                out: htmlReportPath
+        )
+        logger.error("Checkstyle HTML report: file:///${file(htmlReportPath).canonicalPath.replaceAll("\\\\", "/")}")
+    }
+}
+
+gradle.taskGraph.afterTask {Task task, TaskState state ->
+    if(state.failure) {
+        if (task.name in ['checkstyleMain', 'checkstyleTest']) {
+            checkstyleReport {
+                def matcher = task.name =~ /^checkstyle(.*)$/
+                if (matcher.matches()) {
+                    checkType = matcher.group(1).toLowerCase()
+                }
+            }
+            checkstyleReport.execute()
+        }
+    }
+}

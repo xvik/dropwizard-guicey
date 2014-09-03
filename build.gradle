@@ -1,0 +1,102 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import java.awt.*
+
+buildscript {
+    apply from: "gradle/buildscript.gradle", to: buildscript
+}
+
+group = 'ru.vyarus'
+description = 'Dropwizard guice integration'
+
+// convention: project.name == github project name == bintray package page
+project.ext {
+    github = {
+        user = 'xvik'
+    }
+    bintray = {
+        user = project.hasProperty('bintrayUser') ? bintrayUser : 'USER' // configured in ~/.gradle/gradle.properties
+        key = project.hasProperty('bintrayKey') ? bintrayKey : 'KEY' // configured in ~/.gradle/gradle.properties
+        repo = 'xvik'
+        tags = ['dropwizard','guice']
+        dryRun = false // whether to run this as dry-run, without deploying (TEST RUN)
+        publish = true //If version should be auto published after an upload
+        signFiles = true // true to sign files on bintray (certificate must be installed on bintray account)
+    }
+    license = 'MIT'
+    licenseDesc = 'The MIT License'
+    // extend pom for maven central acceptance
+    pomConfig = {
+        scm {
+            url github.scm
+            connection github.scmConnection
+        }
+        licenses {
+            license {
+                name licenseDesc
+                url github.licenseUrl
+                distribution "repo"
+            }
+        }
+        developers {
+            developer {
+                id "xvik"
+                name "Vyacheslav Rusakov"
+                email "vyarus@gmail.com"
+            }
+        }
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'project-report'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+apply from: 'gradle/github.gradle'
+apply from: 'gradle/bintray.gradle'
+apply from: 'gradle/release.gradle'
+apply from: 'gradle/maven.gradle'
+apply from: 'gradle/quality.gradle'
+
+
+repositories {
+    mavenLocal()
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.7'
+    compile 'com.google.inject:guice:4.0-beta4'
+    compile 'com.google.inject.extensions:guice-servlet:4.0-beta4'
+    compile "io.dropwizard:dropwizard-core:0.7.1"
+    compile "com.sun.jersey.contribs:jersey-guice:1.18.1"
+
+    testCompile 'junit:junit:4.11'
+    testCompile 'ch.qos.logback:logback-classic:1.1.2'
+    testCompile 'org.slf4j:jul-to-slf4j:1.7.7'
+    testCompile "io.dropwizard:dropwizard-testing:0.7.1"
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+    testCompile 'org.spockframework:spock-guice:0.7-groovy-2.0'
+    testCompile 'com.github.stefanbirkner:system-rules:1.6.0'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
+
+task checkOutOfDate(type: DependencyUpdatesTask, description: 'Checks dependencies updates availability') {
+    revision 'release'
+}
+
+task showDependenciesTree(dependsOn: 'htmlDependencyReport', description:
+        'Generates dependencies tree report and opens it in browser (useful to analyze dependencies)') << {
+    Desktop.getDesktop().open(file('/build/reports/project/dependencies/root.html'))
+}
+
+task install(dependsOn: 'publishMavenJavaPublicationToMavenLocal', description: 'Install to local maven repository') << {
+    logger.warn "INSTALLED $project.group:$project.name:$project.version"
+}
