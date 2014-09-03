@@ -5,13 +5,13 @@
 
 ### About
 
-Based on ideas from [dropwizard-guice](https://github.com/HubSpot/dropwizard-guice) and 
+[Dropwizard](http://dropwizard.io/) integration based on ideas from [dropwizard-guice](https://github.com/HubSpot/dropwizard-guice) and 
 [dropwizardy-guice](https://github.com/jclawson/dropwizardry/tree/master/dropwizardry-guice) 
 (which was derived from first one).
 
 Features:
 * Guice injector created on run phase (in opposite to dropwizard-guice; the same as dropwizardry-guice)
-* Jersey integration through jersey-guice (the same in both libs)
+* Jersey integration through [jersey-guice](https://jersey.java.net/documentation/1.18/chapter_deps.html#d4e1876) (the same in both libs)
 * No base classes for application or guice module (only bundle registration required)
 * Classpath scan (optional) to auto configure resources, tasks, commands, health checks etc (but no dependency on reflections library)
 * Extending classpath scanner with custom installer plugins (and ability to switch off default installers)
