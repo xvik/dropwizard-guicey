@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.scanner;
+package ru.vyarus.dropwizard.guice.module.installer.scanner;
 
 /**
  * Visitor for classpath scanner.

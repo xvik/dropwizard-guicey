@@ -1,11 +1,12 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.feature;
+package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.vyarus.dropwizard.guice.module.autoconfig.util.FeatureUtils;
+import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class FeatureInstallerExecutor {
     @SuppressWarnings("unchecked")
     private void installFeatures() {
         for (FeatureInstaller installer : holder.getInstallers()) {
-            final List<Class> res = holder.getFeatures(installer);
+            final List<Class<?>> res = holder.getFeatures(installer.getClass());
             if (res != null) {
                 for (Class inst : res) {
                     installer.install(environment, injector.getInstance(inst));

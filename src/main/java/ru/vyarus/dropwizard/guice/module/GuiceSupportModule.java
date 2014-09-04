@@ -4,16 +4,13 @@ import com.google.inject.AbstractModule;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.autoconfig.AutoConfigModule;
-import ru.vyarus.dropwizard.guice.module.autoconfig.feature.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.autoconfig.scanner.ClasspathScanner;
+import ru.vyarus.dropwizard.guice.module.installer.InstallerModule;
+import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
+import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.JerseyContainerModule;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Bootstrap integration guice module.
@@ -24,25 +21,23 @@ import java.util.List;
  * <li>Starts auto scanning, if enabled (for automatic features installation)</li>
  * </ul>
  *
+ * @param <T> configuration type
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
- * @param <T> configuration type
  */
 public class GuiceSupportModule<T extends Configuration> extends AbstractModule
         implements BootstrapAwareModule<T>, EnvironmentAwareModule, ConfigurationAwareModule<T> {
 
     private final ClasspathScanner scanner;
-    private final List<Class<? extends FeatureInstaller>> disabledInstallers;
+    private final InstallerConfig installerConfig;
     private Bootstrap<T> bootstrap;
     private T configuration;
     private Environment environment;
 
     public GuiceSupportModule(final ClasspathScanner scanner,
-                              final List<Class<? extends FeatureInstaller>> disabledInstallers) {
+                              final InstallerConfig installerConfig) {
         this.scanner = scanner;
-        this.disabledInstallers = disabledInstallers == null
-                ? Collections.<Class<? extends FeatureInstaller>>emptyList()
-                : disabledInstallers;
+        this.installerConfig = installerConfig;
     }
 
     @Override
@@ -64,9 +59,7 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
     protected void configure() {
         bindEnvironment();
         install(new JerseyContainerModule());
-        if (scanner != null) {
-            install(new AutoConfigModule(scanner, disabledInstallers));
-        }
+        install(new InstallerModule(scanner, installerConfig));
     }
 
     /**

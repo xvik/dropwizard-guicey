@@ -1,6 +1,6 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.util;
+package ru.vyarus.dropwizard.guice.module.installer.util;
 
-import ru.vyarus.dropwizard.guice.module.autoconfig.feature.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;

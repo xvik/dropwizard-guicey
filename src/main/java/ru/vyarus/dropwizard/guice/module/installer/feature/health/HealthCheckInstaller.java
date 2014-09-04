@@ -1,14 +1,14 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.feature.installer.health;
+package ru.vyarus.dropwizard.guice.module.installer.feature.health;
 
 import com.codahale.metrics.health.HealthCheck;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.autoconfig.feature.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.autoconfig.util.FeatureUtils;
+import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 /**
  * Health check installer.
  * Looks for classes extending
- * {@code ru.vyarus.dropwizard.guice.module.autoconfig.feature.installer.health.NamedHealthCheck} and register in
+ * {@code ru.vyarus.dropwizard.guice.module.installer.installer.health.NamedHealthCheck} and register in
  * environment.
  */
 public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck> {

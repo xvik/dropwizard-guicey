@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.support.feature
 
-import ru.vyarus.dropwizard.guice.module.autoconfig.feature.installer.eager.Eager
+import ru.vyarus.dropwizard.guice.module.installer.feature.eager.Eager
 
 /**
  * @author Vyacheslav Rusakov 

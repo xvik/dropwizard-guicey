@@ -1,9 +1,9 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.feature.installer.eager;
+package ru.vyarus.dropwizard.guice.module.installer.feature.eager;
 
 
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.autoconfig.feature.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.autoconfig.util.FeatureUtils;
+import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 /**
  * Search for classes with {@code @Eager} annotation and register them in guice context.

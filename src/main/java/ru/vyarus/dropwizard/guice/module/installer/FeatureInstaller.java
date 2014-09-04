@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.feature;
+package ru.vyarus.dropwizard.guice.module.installer;
 
 import io.dropwizard.setup.Environment;
 
@@ -14,7 +14,7 @@ import io.dropwizard.setup.Environment;
 public interface FeatureInstaller<T> {
 
     /**
-     * NOTE: consider using {@code ru.vyarus.dropwizard.guice.module.autoconfig.util.FeatureUtils} to simplify checks
+     * NOTE: consider using {@code ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils} to simplify checks
      * (for example, types most likely must be checks to be not abstract).
      * <br/>
      * When type accepted by any extension it's registered in guice module.

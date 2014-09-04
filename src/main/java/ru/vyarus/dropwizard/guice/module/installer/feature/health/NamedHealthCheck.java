@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.feature.installer.health;
+package ru.vyarus.dropwizard.guice.module.installer.feature.health;
 
 import com.codahale.metrics.health.HealthCheck;
 

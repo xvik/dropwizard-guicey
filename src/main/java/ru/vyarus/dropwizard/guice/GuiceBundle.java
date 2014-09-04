@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -12,15 +13,17 @@ import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
-import ru.vyarus.dropwizard.guice.module.autoconfig.feature.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.autoconfig.scanner.ClasspathScanner;
-import ru.vyarus.dropwizard.guice.module.autoconfig.util.CommandSupport;
+import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
+import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
+import ru.vyarus.dropwizard.guice.module.installer.util.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Bundle enables guice integration for dropwizard. Guice context is configured in initialization phase,
@@ -31,7 +34,7 @@ import java.util.List;
  * {@link ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule}).
  * <p>You can use auto scan to automatically install features. To enable auto scan you must configure package (or
  * packages) to search in. To know all supported features look
- * {@link ru.vyarus.dropwizard.guice.module.autoconfig.feature.FeatureInstaller} implementations. Installers are
+ * {@link ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller} implementations. Installers are
  * expendable mechanism: they are resolved by scanning classpath, so you can add new installers in your code and
  * classpath scanning will find them and activate. Also, features could be disabled (for example, if you want to
  * replace existing feature, you will disable it in builder and implement your own - auto scan will find it and
@@ -56,17 +59,17 @@ import java.util.List;
  * <p>Project is based on ideas from <a href="https://github.com/HubSpot/dropwizard-guice">dropwizard-guice</a>
  * project</p>. And because of this project name was changed to dropwizard-guicey.
  *
+ * @param <T> configuration type
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
- * @param <T> configuration type
  */
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     private static Injector injector;
 
     private final List<Module> modules = Lists.newArrayList();
-    private final List<String> autoscanPackages = Lists.newArrayList();
-    private final List<Class<? extends FeatureInstaller>> disabledInstallers = Lists.newArrayList();
+    private final Set<String> autoscanPackages = Sets.newHashSet();
+    private final InstallerConfig installerConfig = new InstallerConfig();
     private boolean searchCommands;
     private Stage stage = Stage.PRODUCTION;
 
@@ -79,6 +82,10 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
     @Override
     public void initialize(final Bootstrap bootstrap) {
+        if (searchCommands) {
+            Preconditions.checkState(!autoscanPackages.isEmpty(),
+                    "Commands search could not be performed, because auto scan was not activated");
+        }
         // have to remember bootstrap in order to
         this.bootstrap = bootstrap;
         // init scanner
@@ -93,7 +100,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @Override
     @SuppressWarnings("unchecked")
     public void run(final T configuration, final Environment environment) throws Exception {
-        modules.add(new GuiceSupportModule(scanner, disabledInstallers));
+        modules.add(new GuiceSupportModule(scanner, installerConfig));
         configureModules(configuration, environment);
         GuiceBundle.injector = Guice.createInjector(stage, modules);
         CommandSupport.initCommands(bootstrap.getCommands(), injector);
@@ -154,16 +161,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
             Preconditions.checkState(basePackages.length > 0, "Specify at least one package to scan");
             bundle.autoscanPackages.addAll(Arrays.asList(basePackages));
             // adding special package with predefined feature installers
-            bundle.autoscanPackages.add("ru.vyarus.dropwizard.guice.module.autoconfig.feature");
-            return this;
-        }
-
-        /**
-         * @param installers installer types to disable
-         * @return builder instance for chained calls
-         */
-        public Builder<T> disableInstallers(final Class<? extends FeatureInstaller>... installers) {
-            bundle.disabledInstallers.addAll(Arrays.asList(installers));
+            bundle.autoscanPackages.add("ru.vyarus.dropwizard.guice.module.installer.feature");
             return this;
         }
 
@@ -190,6 +188,48 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> searchCommands(final boolean searchCommands) {
             bundle.searchCommands = searchCommands;
+            return this;
+        }
+
+        /**
+         * @param features feature installer types to disable
+         * @return builder instance for chained calls
+         */
+        public Builder<T> disableFeatures(final Class<? extends FeatureInstaller>... features) {
+            bundle.installerConfig.getDisabledFeatures().addAll(Arrays.asList(features));
+            return this;
+        }
+
+        /**
+         * Feature installers registered automatically when auto scan enabled,
+         * but if you don't want to use it, you can register installers manually (note: without auto scan default
+         * installers will not be registered).
+         * <p>Also, could be used to add installers from packages not included in auto scanning.</p>
+         *
+         * @param features feature installer classes to register
+         * @return builder instance for chained calls
+         */
+        public Builder<T> addFeatures(final Class<? extends FeatureInstaller>... features) {
+            bundle.installerConfig.getManualFeatures().addAll(Arrays.asList(features));
+            return this;
+        }
+
+        /**
+         * Beans could be registered automatically when auto scan enabled,
+         * but if you don't want to use it, you can register beans manually.
+         * <p>Guice injector will instantiate beans and registered installers will be used to recognize and
+         * properly register provided extension beans.</p>
+         * <p>Also, could be used to add beans from packages not included in auto scanning.</p>
+         * <p>NOTE: startup will fail if bean not recognized by installers.</p>
+         * <p>NOTE: Don't register commands here: either enable auto scan, which will install commands automatically
+         * or register command directly to bootstrap object and dependencies will be injected to them after
+         * injector creation.</p>
+         *
+         * @param beanClasses extension bean classes to register
+         * @return builder instance for chained calls
+         */
+        public Builder<T> addBeans(final Class<?>... beanClasses) {
+            bundle.installerConfig.getManualBeans().addAll(Arrays.asList(beanClasses));
             return this;
         }
 

@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.support.feature
 
-import ru.vyarus.dropwizard.guice.module.autoconfig.feature.installer.health.NamedHealthCheck
+import ru.vyarus.dropwizard.guice.module.installer.feature.health.NamedHealthCheck
 
 /**
  * @author Vyacheslav Rusakov 

@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.util;
+package ru.vyarus.dropwizard.guice.module.installer.scanner.util;
 
 import java.io.File;
 import java.io.IOException;

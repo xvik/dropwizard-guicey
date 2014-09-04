@@ -1,9 +1,9 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.feature.installer;
+package ru.vyarus.dropwizard.guice.module.installer.feature;
 
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.autoconfig.feature.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.autoconfig.util.FeatureUtils;
+import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 /**
  * Managed objects installer.

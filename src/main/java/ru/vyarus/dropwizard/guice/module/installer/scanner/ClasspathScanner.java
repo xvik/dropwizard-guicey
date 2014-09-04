@@ -1,8 +1,9 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.scanner;
+package ru.vyarus.dropwizard.guice.module.installer.scanner;
 
-import ru.vyarus.dropwizard.guice.module.autoconfig.util.OReflectionHelper;
+import ru.vyarus.dropwizard.guice.module.installer.scanner.util.OReflectionHelper;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Classpath scanner, reduced to provided packages.
@@ -12,9 +13,9 @@ import java.util.List;
  * @since 31.08.2014
  */
 public class ClasspathScanner {
-    private final List<String> packages;
+    private final Set<String> packages;
 
-    public ClasspathScanner(final List<String> packages) {
+    public ClasspathScanner(final Set<String> packages) {
         this.packages = packages;
     }
 

@@ -1,12 +1,12 @@
-package ru.vyarus.dropwizard.guice.module.autoconfig.util;
+package ru.vyarus.dropwizard.guice.module.installer.util;
 
 import com.google.inject.Injector;
 import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.vyarus.dropwizard.guice.module.autoconfig.scanner.ClassVisitor;
-import ru.vyarus.dropwizard.guice.module.autoconfig.scanner.ClasspathScanner;
+import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
+import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
 import java.util.List;
 
