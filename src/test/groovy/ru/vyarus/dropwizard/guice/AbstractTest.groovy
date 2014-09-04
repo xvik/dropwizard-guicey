@@ -1,6 +1,16 @@
-package ru.vyarus.dropwizard.guice;
+package ru.vyarus.dropwizard.guice
 
+import com.codahale.metrics.health.HealthCheckRegistry
+import com.google.common.reflect.Reflection
+import io.dropwizard.jersey.setup.JerseyEnvironment
+import io.dropwizard.jetty.MutableServletContextHandler
+import io.dropwizard.jetty.setup.ServletEnvironment
+import io.dropwizard.lifecycle.setup.LifecycleEnvironment
+import io.dropwizard.setup.AdminEnvironment
+import io.dropwizard.setup.Environment;
 import spock.lang.Specification
+
+import javax.servlet.FilterRegistration
 
 /**
  * Base class for tests.
@@ -14,5 +24,19 @@ abstract class AbstractTest extends Specification {
     }
 
     void cleanup() {
+        GuiceBundle.getDeclaredField("injector").setAccessible(true)
+        GuiceBundle.injector = null
+    }
+
+    Environment mockEnvironment() {
+        def environment = Mock(Environment)
+        environment.jersey() >> Mock(JerseyEnvironment)
+        environment.servlets() >> Mock(ServletEnvironment)
+        environment.servlets().addFilter(*_) >> Mock(FilterRegistration.Dynamic)
+        environment.getApplicationContext() >> Mock(MutableServletContextHandler)
+        environment.admin() >> Mock(AdminEnvironment)
+        environment.lifecycle() >> Mock(LifecycleEnvironment)
+        environment.healthChecks() >> Mock(HealthCheckRegistry)
+        return environment
     }
 }

@@ -8,4 +8,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.eager.Eager
  */
 @Eager
 class DummyService {
+
+    public String hey() {
+        'hey!'
+    }
 }

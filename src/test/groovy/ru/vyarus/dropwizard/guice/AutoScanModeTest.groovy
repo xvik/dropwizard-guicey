@@ -44,9 +44,10 @@ class AutoScanModeTest extends AbstractTest {
         holder.installers.size() == 8
 
         then: "command found"
-        bootstrap.getCommands().size() == 1
-        bootstrap.getCommands()[0].getClass() == DummyCommand
-        bootstrap.getCommands()[0].service
+        bootstrap.getCommands().size() == 2
+        def dummyCmd = bootstrap.getCommands().find {it.class == DummyCommand}
+        dummyCmd
+        dummyCmd.service
 
         then: "task found"
         holder.getFeatures(TaskInstaller) == [DummyTask]

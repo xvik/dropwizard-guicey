@@ -81,7 +81,7 @@ dependencies {
     testCompile "io.dropwizard:dropwizard-testing:0.7.1"
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testCompile 'org.spockframework:spock-guice:0.7-groovy-2.0'
-    testCompile 'com.github.stefanbirkner:system-rules:1.6.0'
+    testCompile 'cglib:cglib-nodep:2.2.2'
 }
 
 task wrapper(type: Wrapper) {

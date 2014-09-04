@@ -1,7 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.installer.util;
 
 import com.google.inject.Injector;
+import io.dropwizard.Application;
 import io.dropwizard.cli.Command;
+import io.dropwizard.cli.EnvironmentCommand;
 import io.dropwizard.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,37 +26,64 @@ public final class CommandSupport {
 
     /**
      * Scans classpath to find commands and register them. Default constructor used to instantiate command.
+     * Commands are instantiated using default constructor, but {@link io.dropwizard.cli.EnvironmentCommand}
+     * should have constructor with {@link io.dropwizard.Application} argument.
      *
      * @param bootstrap bootstrap object
      * @param scanner   configured scanner instance
      */
     public static void registerCommands(final Bootstrap bootstrap, final ClasspathScanner scanner) {
-        scanner.scan(new ClassVisitor() {
-            @Override
-            public void visit(final Class<?> type) {
-                if (FeatureUtils.is(type, Command.class)) {
-                    try {
-                        final Command cmd = (Command) type.newInstance();
-                        bootstrap.addCommand(cmd);
-                        LOGGER.debug("Command registered: {}", type.getSimpleName());
-                    } catch (Exception e) {
-                        throw new IllegalStateException("Failed to instantiate command: {}"
-                                + type.getSimpleName(), e);
-                    }
-                }
-            }
-        });
+        scanner.scan(new CommandClassVisitor(bootstrap));
     }
 
     /**
-     * Inject dependencies into all registered commands. (only field and setter injection could be used)
+     * Inject dependencies into all registered environment commands. (only field and setter injection could be used)
+     * There is no need to process other commands, because only environment commands will run bundles and so will
+     * start the injector.
      *
      * @param commands registered commands
      * @param injector guice injector object
      */
     public static void initCommands(final List<Command> commands, final Injector injector) {
-        for (Command cmd : commands) {
-            injector.injectMembers(cmd);
+        if (commands != null) {
+            for (Command cmd : commands) {
+                if (cmd instanceof EnvironmentCommand) {
+                    injector.injectMembers(cmd);
+                }
+            }
+        }
+    }
+
+    /**
+     * Search catch all {@link Command} derived classes.
+     * Instantiate command with default constructor and {@link io.dropwizard.cli.EnvironmentCommand}
+     * using constructor with {@link io.dropwizard.Application} argument.
+     */
+    private static class CommandClassVisitor implements ClassVisitor {
+        private final Bootstrap bootstrap;
+
+        public CommandClassVisitor(final Bootstrap bootstrap) {
+            this.bootstrap = bootstrap;
+        }
+
+        @Override
+        public void visit(final Class<?> type) {
+            if (FeatureUtils.is(type, Command.class)) {
+                try {
+                    Command cmd;
+                    if (EnvironmentCommand.class.isAssignableFrom(type)) {
+                        cmd = (Command) type.getConstructor(Application.class)
+                                .newInstance(bootstrap.getApplication());
+                    } else {
+                        cmd = (Command) type.newInstance();
+                    }
+                    bootstrap.addCommand(cmd);
+                    LOGGER.debug("Command registered: {}", type.getSimpleName());
+                } catch (Exception e) {
+                    throw new IllegalStateException("Failed to instantiate command: "
+                            + type.getSimpleName(), e);
+                }
+            }
         }
     }
 }

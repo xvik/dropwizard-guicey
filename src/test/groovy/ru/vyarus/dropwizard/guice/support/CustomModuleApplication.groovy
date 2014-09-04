@@ -6,14 +6,14 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 
 /**
- * Example of automatic configuration: installers, beans and commands searched automatically.
+ *
  * @author Vyacheslav Rusakov 
- * @since 01.09.2014
+ * @since 04.09.2014
  */
-class AutoScanApplication extends Application<TestConfiguration> {
+class CustomModuleApplication extends Application<TestConfiguration> {
 
     public static void main(String[] args) {
-        new AutoScanApplication().run(args)
+        new CustomInstallerApplication().run(args)
     }
 
     @Override
@@ -21,6 +21,7 @@ class AutoScanApplication extends Application<TestConfiguration> {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
                 .searchCommands(true)
+                .modules(new AutowiredModule())
                 .build()
         );
     }

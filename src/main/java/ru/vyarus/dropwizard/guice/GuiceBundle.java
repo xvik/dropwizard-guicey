@@ -54,7 +54,7 @@ import java.util.Set;
  * installers to find extensions</li>
  * <li>Guice injector created</li>
  * <li>Register all extensions found by installers</li>
- * <li>Perform injections for all registered commands</li>
+ * <li>Perform injections for all registered environment commands (because only environment commands runs bundles)</li>
  * </ul>
  * <p>Project is based on ideas from <a href="https://github.com/HubSpot/dropwizard-guice">dropwizard-guice</a>
  * project</p>. And because of this project name was changed to dropwizard-guicey.
