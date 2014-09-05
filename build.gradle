@@ -29,6 +29,7 @@ project.ext {
         scm {
             url github.scm
             connection github.scmConnection
+            developerConnection github.scmConnection
         }
         licenses {
             license {

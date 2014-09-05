@@ -27,6 +27,8 @@ publishing {
                 root.appendNode('description', project.description)
                 root.appendNode('url', github.site)
                 root.children().last() + pomConfig
+
+                asNode().scm[0].appendNode('tag', project.version.replaceAll('-SNAPSHOT', ''))
             }
         }
     }
