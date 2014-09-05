@@ -162,7 +162,7 @@ Custom base class is required, because default `HealthCheck` did not provide che
 [JerseyInjectableProviderInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/JerseyInjectableProviderInstaller.java)
 finds classes implementing `InjectableProvider` interface and register their instance in environment.
 
-#### Jersey provider installer
+##### Jersey provider installer
 
 [JerseyProviderInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/JerseyProviderInstaller.java)
 finds classes annotated with jersey `@Provider` annotation and register their instance in environment.
