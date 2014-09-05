@@ -209,7 +209,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param features feature installer classes to register
          * @return builder instance for chained calls
          */
-        public Builder<T> addFeatures(final Class<? extends FeatureInstaller>... features) {
+        public Builder<T> features(final Class<? extends FeatureInstaller>... features) {
             bundle.installerConfig.getManualFeatures().addAll(Arrays.asList(features));
             return this;
         }
@@ -228,7 +228,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param beanClasses extension bean classes to register
          * @return builder instance for chained calls
          */
-        public Builder<T> addBeans(final Class<?>... beanClasses) {
+        public Builder<T> beans(final Class<?>... beanClasses) {
             bundle.installerConfig.getManualBeans().addAll(Arrays.asList(beanClasses));
             return this;
         }
