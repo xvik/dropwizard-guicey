@@ -129,45 +129,30 @@ When installer recognize class, it binds it into guice `binder.bind(foundClass)`
 On run phase (when injector created) all found or manually provided extensions are instantiated (`injector.getInstance(foundClass)`) and passed to installer 
 to register extension within dropwizard.
 
-##### Resource installer
-
 [ResourceInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ResourceInstaller.java) 
 finds classes annotated with `@Path` and register them as resources (after class registration
 in binder, jersey-guice performs actual registration implicitly)
 
-##### Task installer
-
 [TaskInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/TaskInstaller.java)
 finds classes extending `Task` class and register their instance in environment.
-
-##### Managed installer
 
 [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ManagedInstaller.java)
 finds classes implementing `Managed` and register their instance in environment.
 
-##### Lifecycle installer
-
 [LifeCycleInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/LifeCycleInstaller.java)
 finds classes implementing jetty `LifeCycle` interface and register their instance in environment.
-
-##### Health check installer
 
 [HealthCheckInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/health/HealthCheckInstaller.java)
 finds classes extending `NamedHealthCheck` class and register their instance in environment.
 
 Custom base class is required, because default `HealthCheck` did not provide check name, which is required for registration.
 
-##### Jersey injectable provider installer
 
 [JerseyInjectableProviderInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/JerseyInjectableProviderInstaller.java)
 finds classes implementing `InjectableProvider` interface and register their instance in environment.
 
-##### Jersey provider installer
-
 [JerseyProviderInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/JerseyProviderInstaller.java)
 finds classes annotated with jersey `@Provider` annotation and register their instance in environment.
-
-##### Eager installer
 
 [EagerInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/eager/EagerInstaller.java)
 finds classes annotated with `@Eager` annotation and register them in guice injector.

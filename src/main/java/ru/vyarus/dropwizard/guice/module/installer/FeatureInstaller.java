@@ -16,8 +16,7 @@ public interface FeatureInstaller<T> {
     /**
      * NOTE: consider using {@code ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils} to simplify checks
      * (for example, types most likely must be checks to be not abstract).
-     * <br/>
-     * When type accepted by any extension it's registered in guice module.
+     * <p>When type accepted by any extension it's registered in guice module.</p>
      *
      * @param type type to check
      * @return true if extension recognized, false otherwise
