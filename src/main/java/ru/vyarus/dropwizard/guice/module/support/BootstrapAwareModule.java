@@ -6,7 +6,8 @@ import io.dropwizard.setup.Bootstrap;
 /**
  * Guice module, registered in bundle, may implement this to be able to use bootstrap object in module
  * configuration method.
- * <p>NOTE: setter will be called on run phase, so bootstrap object may be used only for reference (too late for changes).</p>
+ * <p>NOTE: setter will be called on run phase, so bootstrap object may be used only for reference
+ * (too late for changes).</p>
  *
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
