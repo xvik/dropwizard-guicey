@@ -25,7 +25,7 @@ Releases are published to [bintray jcenter](https://bintray.com/bintray/jcenter)
 and then to maven central (require few days after release to be published). 
 
 [![Download](https://api.bintray.com/packages/vyarus/xvik/dropwizard-guicey/images/download.png) ](https://bintray.com/vyarus/xvik/dropwizard-guicey/_latestVersion)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey/badge.svg?style=flat)](https://maven-badges.hrokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
 
 Maven:
 
