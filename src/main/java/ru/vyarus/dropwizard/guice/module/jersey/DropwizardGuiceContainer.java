@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.api.core.ResourceConfig;
+import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 import com.sun.jersey.spi.container.servlet.WebConfig;
 import io.dropwizard.setup.Environment;
@@ -23,12 +24,12 @@ import java.util.Map;
  * @since 31.08.2014
  */
 @Singleton
-public class GuiceContainer extends com.sun.jersey.guice.spi.container.servlet.GuiceContainer {
+public class DropwizardGuiceContainer extends GuiceContainer {
 
     private ResourceConfig resourceConfig;
 
     @Inject
-    public GuiceContainer(final Injector injector, final Environment environment) {
+    public DropwizardGuiceContainer(final Injector injector, final Environment environment) {
         super(injector);
         bindEnvironment(environment);
     }
@@ -39,7 +40,7 @@ public class GuiceContainer extends com.sun.jersey.guice.spi.container.servlet.G
             @Nullable
             @Override
             public ServletContainer apply(final ResourceConfig resourceConfig) {
-                return GuiceContainer.this;
+                return DropwizardGuiceContainer.this;
             }
         });
         environment.servlets().addFilter("Guice Filter", GuiceFilter.class)

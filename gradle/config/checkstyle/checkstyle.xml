@@ -6,7 +6,6 @@
         "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 
 <module name="Checker">
-
     <module name="SuppressWarningsFilter" />
 
     <module name="FileLength">

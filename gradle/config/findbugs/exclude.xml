@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- http://findbugs.sourceforge.net/manual/filter.html -->
+<FindBugsFilter>
+    <!-- not important -->
+    <Match>
+        <Class name="ru.vyarus.dropwizard.guice.GuiceBundle"/>
+        <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+    </Match>
+</FindBugsFilter>

@@ -14,7 +14,7 @@ public class JerseyContainerModule extends JerseyServletModule {
 
     @Override
     protected void configureServlets() {
-        bind(GuiceContainer.class).asEagerSingleton();
+        bind(DropwizardGuiceContainer.class).asEagerSingleton();
     }
 }
 

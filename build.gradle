@@ -86,7 +86,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '2.1'
 }
 
 task checkOutOfDate(type: DependencyUpdatesTask, description: 'Checks dependencies updates availability') {

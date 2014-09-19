@@ -12,6 +12,6 @@ dependencies {
     // coveralls integration
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0"
     // check dependencies updates
-    classpath "com.github.ben-manes:gradle-versions-plugin:0.5-beta-6"
+    classpath "com.github.ben-manes:gradle-versions-plugin:0.5"
     classpath 'com.github.townsfolk:gradle-release:1.2'
 }

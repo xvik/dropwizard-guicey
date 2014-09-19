@@ -1,19 +1,84 @@
 /* Quality plugins checks applied during "gradle check" execution, so travis build will fail in case of quality problems
  * and its better to call check manually before push. */
 
-
-/* NOTE: findbugs support disabled, because it cause strange errors with java 8 (findbug 3)
-
 apply plugin: 'findbugs'
 
-// findbugs 3 support java 8, but requires java 7!
-// if you need java 6 suport use 2.0.3 version
+// findbugs 3 supports java 8, but requires java 7!
+// if you need java 6 support use 2.0.3 version
 findbugs {
     toolVersion = "3.0.0"
     ignoreFailures = false
     sourceSets = [sourceSets.main]
+    effort = "max"
+    reportLevel = "medium"
+    excludeFilter = file("gradle/config/findbugs/exclude.xml")
 }
-*/
+
+// extended xml report is required to build pretty console output (also, can't generate both xml and html report)
+findbugsMain.reports {
+    xml {
+        enabled true
+        withMessages true
+    }
+}
+
+findbugsTest.reports {
+    xml {
+        enabled true
+        withMessages true
+    }
+}
+
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if ((task.name == 'findbugsMain' || task.name == 'findbugsTest')) {
+        def findbugsType = task.name == 'findbugsMain' ? 'main' : 'test'
+
+        if (state.failure) {
+            // print findbugs errors
+            def outFile = findbugsType + '.xml'
+            def reportFile = file("${buildDir}/reports/findbugs/${outFile}")
+
+            if (reportFile.exists()) {
+                def result = new XmlParser().parse(reportFile)
+
+                def desc = [:]
+                result.BugPattern.each { pattern ->
+                    desc[pattern.'@type'] = '  ' + pattern.Details[0].text()
+                    //remove html tags
+                            .replaceAll("<(.|\n)*?>", '')
+                    // remove empty lines after tags remove (only one separator lne remain)
+                            .replaceAll("( *\n){3,}", '\n\n')
+                    // reduce left indents
+                            .replaceAll(" {2,}", '  ')
+                    // indent all not indented lines
+                            .replaceAll("\n([^ ])", '\n  $1').trim()
+                }
+                def cat = [:]
+                result.BugCategory.each { category ->
+                    cat[category.'@category'] = category.Description[0].text()
+                }
+                result.BugInstance.each { bug ->
+                    println ''
+                    def msg = bug.LongMessage[0]
+                    println "[${cat[bug.'@category']}] ${msg.text()} [${bug.'@type'}]\n${desc[bug.'@type']}"
+                }
+                println ''
+            }
+        }
+
+        if (file("$buildDir/reports/findbugs/${findbugsType}.xml").exists()) {
+            def htmlReportPath = "$buildDir/reports/findbugs/${findbugsType}.html"
+            ant.xslt(in: "$buildDir/reports/findbugs/${findbugsType}.xml",
+                    style: "gradle/config/findbugs/plain.xsl",
+                    out: htmlReportPath
+            )
+            if (state.failure) {
+                logger.error("Findbugs HTML report: file:///${file(htmlReportPath).canonicalPath.replaceAll("\\\\", "/")}")
+            }
+        }
+    }
+}
+
 
 apply plugin: 'pmd'
 
@@ -30,7 +95,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
         def outFile = task.name == 'pmdMain' ? 'main.xml' : 'test.xml'
         def reportFile = file("${buildDir}/reports/pmd/${outFile}")
 
-        if(reportFile.exists()) {
+        if (reportFile.exists()) {
             def result = new XmlParser().parse(reportFile)
 
             println ''
@@ -58,15 +123,15 @@ task checkstyleReport << {
     if (file("$buildDir/reports/checkstyle/${checkType}.xml").exists()) {
         def htmlReportPath = "$buildDir/reports/checkstyle/${checkType}.html"
         ant.xslt(in: "$buildDir/reports/checkstyle/${checkType}.xml",
-                style:"gradle/config/checkstyle/checkstyle-noframes-sorted.xsl",
+                style: "gradle/config/checkstyle/checkstyle-noframes-sorted.xsl",
                 out: htmlReportPath
         )
         logger.error("Checkstyle HTML report: file:///${file(htmlReportPath).canonicalPath.replaceAll("\\\\", "/")}")
     }
 }
 
-gradle.taskGraph.afterTask {Task task, TaskState state ->
-    if(state.failure) {
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if (state.failure) {
         if (task.name in ['checkstyleMain', 'checkstyleTest']) {
             checkstyleReport {
                 def matcher = task.name =~ /^checkstyle(.*)$/
