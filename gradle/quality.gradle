@@ -101,7 +101,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
             println ''
             result.file.each { file ->
                 file.violation.each { violation ->
-                    println "${file.'@name'}:${violation.'@beginline'}: ${violation.text()}"
+                    println "${file.'@name'}:${violation.'@beginline'}: ${violation.text()}${violation.'@externalInfoUrl'}\n"
                 }
             }
         }
@@ -141,5 +141,15 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
             }
             checkstyleReport.execute()
         }
+    }
+}
+
+// configure tests to show additional info in logs
+// important for travis build to quickly see failure cause
+// see http://www.gradle.org/docs/current/dsl/org.gradle.api.tasks.testing.Test.html#org.gradle.api.tasks.testing.Test:testLogging
+test {
+    testLogging {
+        events "skipped", "failed", "standardError"
+        exceptionFormat "full"
     }
 }

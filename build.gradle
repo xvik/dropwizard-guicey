@@ -64,9 +64,9 @@ apply from: 'gradle/quality.gradle'
 
 
 repositories {
-    mavenLocal()
     jcenter()
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {

@@ -24,7 +24,7 @@ Features:
 Releases are published to [bintray jcenter](https://bintray.com/bintray/jcenter) (package appear immediately after release) 
 and then to maven central (require few days after release to be published). 
 
-[![Download](https://api.bintray.com/packages/vyarus/xvik/dropwizard-guicey/images/download.png) ](https://bintray.com/vyarus/xvik/dropwizard-guicey/_latestVersion)
+[![Download](https://api.bintray.com/packages/vyarus/xvik/dropwizard-guicey/images/download.svg) ](https://bintray.com/vyarus/xvik/dropwizard-guicey/_latestVersion)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
 
 Maven:
@@ -209,6 +209,28 @@ You can use guice injections only in `EnvironmentCommand`'s because only these c
 
 No matter if environment command was registered with classpath scan or manually in bootstrap, `injector.injectMembers(commands)` will be called on it
 to inject guice dependencies.
+
+### Request scoped beans
+
+You can use request scoped beans in context of resources.  
+
+```java
+@RequestScoped
+public class MyRequestScopedBean {
+```
+
+To obtain bean reference use provider:
+
+```java
+Provider<MyRequestScopedBean> myBeanProvider;
+```
+
+You can get request and response objects in any bean:
+
+```java
+Provider<HttpServletRequest> requestProvider
+Provider<HttpServletResponse> responseProvider
+```
 
 ### Might also like
 
