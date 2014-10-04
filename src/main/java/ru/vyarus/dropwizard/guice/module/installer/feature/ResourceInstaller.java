@@ -23,7 +23,9 @@ public class ResourceInstaller implements FeatureInstaller<Object> {
 
     @Override
     public void install(final Environment environment, final Object instance) {
-        environment.jersey().register(instance);
         // no need for installation, instance creation is enough for jersey-guice to register
+        /* this will force singletons for registered resources.
+        disabled because some prefer prototype resources
+        environment.jersey().register(instance); */
     }
 }
