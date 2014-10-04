@@ -131,9 +131,10 @@ to register extension within dropwizard.
 
 [ResourceInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ResourceInstaller.java) 
 finds classes annotated with `@Path` and register them as resources (after class registration
-in binder, jersey-guice performs actual registration implicitly)
+in binder, jersey-guice performs actual registration implicitly).
+
 **Be careful with bean scope**: if you don't annotate your resource with `@Singleton` (or define scope in module), default prototype scope will be used and 
-resource instance will be created for every(!) request
+resource instance will be created for every(!) request.
 Generally it's better to use singleton resources, but some people prefer prototypes (that's why singletons are not forced in installer).
 If you want to force singletons, register your installer which will do instance registration `environment.jersey().register(instance);`
 
