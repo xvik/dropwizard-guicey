@@ -1,20 +1,8 @@
-import org._10ne.gradle.rest.RestTask
-
-buildscript {
-    apply from: "gradle/buildscript.gradle", to: buildscript
-}
-
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'org.10ne.rest'
 
 // hack: without it bintray property is not visible (???!)
 logger.debug("$project.ext.bintray")
 def bintrayCfg = project.ext.bintray
-
-def bitrayApiUrl = "https://api.bintray.com"
-// bintray will not accept snapshot versions, so its safe to fix version manually
-bintrayCfg.signApiUrl = ("$bitrayApiUrl/gpg/$bintrayCfg.user/$bintrayCfg.repo/$project.name/versions/$project.version".replace('-SNAPSHOT',''))
-bintrayCfg.publishApiUrl = ("$bitrayApiUrl/content/$bintrayCfg.user/$bintrayCfg.repo/$project.name/$project.version/publish".replace('-SNAPSHOT',''))
 
 bintray {
     user = bintrayCfg.user
@@ -32,37 +20,11 @@ bintray {
         vcsUrl = github.scm
         licenses = [license]
         labels = bintrayCfg.tags
+        version {
+            gpg {
+                sign = bintrayCfg.signFiles
+                passphrase = bintrayCfg.gpgPassphrase
+            }
+        }
     }
 }
-
-// no way to do it from web ui and bintray plugin doesn't support it
-// NOTE: files wil remain unpublished so go to bintray and publish them, after that do maven central sync (on web ui)
-task bintraySignVersion(type: RestTask, description: 'Sign version files (auto sign bintray feature') {
-    httpMethod = 'post'
-    uri = bintray.signApiUrl
-    username = bintray.user
-    password = bintray.key
-}
-bintraySignVersion.doFirst {
-    // cancel task in dry run mode
-    if (bintray.dryRun) {
-        logger.warn('Skipping version signing in dry run mode')
-        throw new StopExecutionException()
-    }
-}
-
-task bintraySign(type: RestTask, dependsOn: 'bintraySignVersion', description: 'Sign version files and publish sign files') {
-    httpMethod = 'post'
-    uri = bintray.publishApiUrl
-    username = bintray.user
-    password = bintray.key
-}
-bintraySign.doFirst {
-    // cancel task in dry run mode
-    if (bintray.dryRun) {
-        logger.warn('Skipping version publishing in dry run mode')
-        throw new StopExecutionException()
-    }
-}
-
-bintraySign.mustRunAfter bintrayUpload

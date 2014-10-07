@@ -1,0 +1,27 @@
+// hack: without it build property is not visible (???!)
+logger.debug("$project.ext.build")
+def buildCfg = project.ext.build
+
+// compatibility required only for main classes - test don't need restrictions
+compileJava {
+    sourceCompatibility = buildCfg.java
+    targetCompatibility = buildCfg.java
+}
+
+boolean signatureSet = buildCfg.signature
+if (signatureSet) {
+    apply plugin: 'be.insaneprogramming.gradle.animalsniffer'
+
+    animalsniffer {
+        signature = buildCfg.signature
+        ignores = [] // list of packages to ignore
+        annotations = [] // supported annotations to signal Animal Sniffer to ignore annotated elements
+        excludeDependencies = true // only disable if you have signatures for all dependencies!
+        skip = false // skip animal sniffer tasks
+        runForTests = false // run animal sniffer for test classes as well
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = buildCfg.gradle
+}

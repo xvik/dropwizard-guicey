@@ -6,12 +6,11 @@ repositories {
 }
 dependencies {
     // bintray upload
-    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5"
-    // rest support to call some bintray api methods directly
-    classpath "org._10ne.gradle:rest-gradle-plugin:0.3.1"
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6"
     // coveralls integration
-    classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.0"
+    classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1"
     // check dependencies updates
     classpath "com.github.ben-manes:gradle-versions-plugin:0.5"
     classpath 'com.github.townsfolk:gradle-release:1.2'
+    classpath "be.insaneprogramming.gradle:animalsniffer-gradle-plugin:1.4.0"
 }

@@ -10,6 +10,12 @@ description = 'Dropwizard guice integration'
 
 // convention: project.name == github project name == bintray package page
 project.ext {
+    build = {
+        gradle = 2.1
+        java = 1.6
+        // if not empty runs animal sniffer on compile to guarantee binary compatibility; set '' to disable
+        signature = 'org.codehaus.mojo.signature:java16-sun:+@signature'
+    }
     github = {
         user = 'xvik'
     }
@@ -20,7 +26,8 @@ project.ext {
         tags = ['dropwizard','guice']
         dryRun = false // whether to run this as dry-run, without deploying (TEST RUN)
         publish = true //If version should be auto published after an upload
-        signFiles = true // true to sign files on bintray (certificate must be installed on bintray account)
+        signFiles = true // true to gpg sign files on bintray (certificate must be installed on bintray account)
+        gpgPassphrase = project.hasProperty('gpgPassphrase') ? gpgPassphrase : '' // optionally configured in ~/.gradle/gradle.properties if certificate requires it
     }
     license = 'MIT'
     licenseDesc = 'The MIT License'
@@ -53,9 +60,7 @@ apply plugin: 'groovy'
 apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'project-report'
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
-
+apply from: 'gradle/build.gradle'
 apply from: 'gradle/github.gradle'
 apply from: 'gradle/bintray.gradle'
 apply from: 'gradle/release.gradle'
@@ -83,10 +88,6 @@ dependencies {
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testCompile 'org.spockframework:spock-guice:0.7-groovy-2.0'
     testCompile 'cglib:cglib-nodep:2.2.2'
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.1'
 }
 
 task checkOutOfDate(type: DependencyUpdatesTask, description: 'Checks dependencies updates availability') {
