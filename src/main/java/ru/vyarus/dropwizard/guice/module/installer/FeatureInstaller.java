@@ -7,6 +7,8 @@ import io.dropwizard.setup.Environment;
  * (in dropwizard or somewhere else). Each installer should work with single feature.
  * <p>Installers are not guice beans: they are instantiated during guice context start and used to register
  * additional beans in guice context.</p>
+ * <p>If installer implements {@code CustomBindingInstaller} it's bind method called during injector creation.
+ * Note that each extension is always binded by type.</p>
  * <p>After context start installer is called to properly install class (register health check, resource, etc.).</p>
  *
  * @param <T> expected extension type (or Object when no super type (e.g. for annotated beans))
@@ -21,7 +23,7 @@ public interface FeatureInstaller<T> {
      * @param type type to check
      * @return true if extension recognized, false otherwise
      */
-    boolean matches(final Class<?> type);
+    boolean matches(Class<?> type);
 
     /**
      * Every found extension (during classpath scan) is instantiated with guice and pass here for
@@ -30,5 +32,5 @@ public interface FeatureInstaller<T> {
      * @param environment environment object
      * @param instance    extension instance
      */
-    void install(final Environment environment, final T instance);
+    void install(Environment environment, T instance);
 }

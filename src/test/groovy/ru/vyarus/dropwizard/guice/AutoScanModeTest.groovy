@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice
 
 import com.google.inject.Injector
 import com.google.inject.Key
+import com.google.inject.TypeLiteral
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
@@ -10,6 +11,7 @@ import org.junit.Rule
 import ru.vyarus.dropwizard.guice.module.installer.feature.*
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
@@ -41,7 +43,7 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(TestConfiguration))
 
         then: "all installers found"
-        holder.installers.size() == 8
+        holder.installers.size() == 9
 
         then: "command found"
         bootstrap.getCommands().size() == 2
@@ -79,5 +81,9 @@ class AutoScanModeTest extends AbstractTest {
 
         then: "eager found"
         holder.getFeatures(EagerInstaller) == [DummyService]
+
+        then: "plugins found"
+        holder.getFeatures(PluginInstaller) == [DummyPlugin1, DummyPlugin2]
+        injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface>>(){})).size() == 2
     }
 }

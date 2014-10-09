@@ -1,38 +1,15 @@
 package ru.vyarus.dropwizard.guice.unit
 
-import com.codahale.metrics.health.HealthCheckRegistry
-import io.dropwizard.jersey.setup.JerseyEnvironment
 import io.dropwizard.lifecycle.Managed
-import io.dropwizard.lifecycle.setup.LifecycleEnvironment
-import io.dropwizard.setup.AdminEnvironment
 import io.dropwizard.setup.Environment
 import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.AbstractTest
-import ru.vyarus.dropwizard.guice.module.installer.feature.JerseyInjectableProviderInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.JerseyProviderInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.*
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
-import ru.vyarus.dropwizard.guice.support.feature.DummyExceptionMapper
-import ru.vyarus.dropwizard.guice.support.feature.DummyHealthCheck
-import ru.vyarus.dropwizard.guice.support.feature.DummyJerseyProvider
-import ru.vyarus.dropwizard.guice.support.feature.DummyLifeCycle
-import ru.vyarus.dropwizard.guice.support.feature.DummyManaged
-import ru.vyarus.dropwizard.guice.support.feature.DummyResource
-import ru.vyarus.dropwizard.guice.support.feature.DummyService
-import ru.vyarus.dropwizard.guice.support.feature.DummyTask
-import ru.vyarus.dropwizard.guice.support.feature.abstr.AbstractHealthCheck
-import ru.vyarus.dropwizard.guice.support.feature.abstr.AbstractJerseyInjectableProvider
-import ru.vyarus.dropwizard.guice.support.feature.abstr.AbstractJerseyProvider
-import ru.vyarus.dropwizard.guice.support.feature.abstr.AbstractLifeCycle
-import ru.vyarus.dropwizard.guice.support.feature.abstr.AbstractManaged
-import ru.vyarus.dropwizard.guice.support.feature.abstr.AbstractResource
-import ru.vyarus.dropwizard.guice.support.feature.abstr.AbstractService
-import ru.vyarus.dropwizard.guice.support.feature.abstr.AbstractTask
-import spock.lang.Shared
+import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
+import ru.vyarus.dropwizard.guice.support.feature.*
+import ru.vyarus.dropwizard.guice.support.feature.abstr.*
 import spock.lang.Unroll
 
 /**
@@ -47,7 +24,7 @@ class InstallersTest extends AbstractTest {
         setup:
         Environment environment = mockEnvironment()
         interaction {
-            switch (installer){
+            switch (installer) {
                 case TaskInstaller:
                     1 * environment.admin().addTask(_)
                     break;
@@ -74,14 +51,15 @@ class InstallersTest extends AbstractTest {
         inst.install(environment, goodBean.newInstance())
 
         where:
-        installer                           | goodBean              | denyBean
-        TaskInstaller                       | DummyTask             | AbstractTask
-        ResourceInstaller                   | DummyResource         | AbstractResource
-        ManagedInstaller                    | DummyManaged          | AbstractManaged
-        LifeCycleInstaller                  | DummyLifeCycle        | AbstractLifeCycle
-        JerseyProviderInstaller             | DummyExceptionMapper  | AbstractJerseyProvider
-        JerseyInjectableProviderInstaller   | DummyJerseyProvider   | AbstractJerseyInjectableProvider
-        HealthCheckInstaller                | DummyHealthCheck      | AbstractHealthCheck
-        EagerInstaller                      | DummyService          | AbstractService
+        installer                         | goodBean             | denyBean
+        TaskInstaller                     | DummyTask            | AbstractTask
+        ResourceInstaller                 | DummyResource        | AbstractResource
+        ManagedInstaller                  | DummyManaged         | AbstractManaged
+        LifeCycleInstaller                | DummyLifeCycle       | AbstractLifeCycle
+        JerseyProviderInstaller           | DummyExceptionMapper | AbstractJerseyProvider
+        JerseyInjectableProviderInstaller | DummyJerseyProvider  | AbstractJerseyInjectableProvider
+        HealthCheckInstaller              | DummyHealthCheck     | AbstractHealthCheck
+        EagerInstaller                    | DummyService         | AbstractService
+        PluginInstaller                   | DummyPlugin1         | AbstractPlugin
     }
 }

@@ -78,6 +78,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.7'
     compile 'com.google.inject:guice:4.0-beta4'
     compile 'com.google.inject.extensions:guice-servlet:4.0-beta4'
+    compile 'com.google.inject.extensions:guice-multibindings:4.0-beta4'
     compile "io.dropwizard:dropwizard-core:0.7.1"
     compile "com.sun.jersey.contribs:jersey-guice:1.18.1"
 
