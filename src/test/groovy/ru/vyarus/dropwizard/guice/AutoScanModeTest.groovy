@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice
 
+import com.google.common.collect.Sets
 import com.google.inject.Injector
 import com.google.inject.Key
 import com.google.inject.TypeLiteral
@@ -83,7 +84,7 @@ class AutoScanModeTest extends AbstractTest {
         holder.getFeatures(EagerInstaller) == [DummyService]
 
         then: "plugins found"
-        holder.getFeatures(PluginInstaller) == [DummyPlugin1, DummyPlugin2]
+        Sets.newHashSet(holder.getFeatures(PluginInstaller)) == [DummyPlugin1, DummyPlugin2] as Set
         injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface>>(){})).size() == 2
     }
 }
