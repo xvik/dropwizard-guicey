@@ -3,13 +3,14 @@ package ru.vyarus.dropwizard.guice.module.installer.feature;
 import io.dropwizard.servlets.tasks.Task;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 /**
  * Dropwizard tasks installer.
  * Looks for classes extending {@code io.dropwizard.servlets.tasks.Task} and register in environment.
  */
-public class TaskInstaller implements FeatureInstaller<Task> {
+public class TaskInstaller implements FeatureInstaller<Task>, InstanceInstaller<Task> {
 
     @Override
     public boolean matches(final Class<?> type) {

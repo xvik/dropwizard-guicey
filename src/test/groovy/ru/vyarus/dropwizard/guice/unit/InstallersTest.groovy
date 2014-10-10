@@ -8,6 +8,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.*
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
+import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller
+import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller
 import ru.vyarus.dropwizard.guice.support.feature.*
 import ru.vyarus.dropwizard.guice.support.feature.abstr.*
 import spock.lang.Unroll
@@ -48,7 +50,10 @@ class InstallersTest extends AbstractTest {
         def inst = installer.newInstance()
         inst.matches(goodBean)
         !inst.matches(denyBean)
-        inst.install(environment, goodBean.newInstance())
+        if (inst instanceof TypeInstaller)
+            inst.install(environment, goodBean)
+        if (inst instanceof InstanceInstaller)
+            inst.install(environment, goodBean.newInstance())
 
         where:
         installer                         | goodBean             | denyBean

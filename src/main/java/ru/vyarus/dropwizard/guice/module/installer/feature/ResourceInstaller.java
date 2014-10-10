@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature;
 
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import javax.ws.rs.Path;
@@ -14,7 +15,7 @@ import javax.ws.rs.Path;
  * <p>NOTE: if you will nor annotate resource with @Singleton, it will be used as prototype and
  * instantiated on each request!</p>
  */
-public class ResourceInstaller implements FeatureInstaller<Object> {
+public class ResourceInstaller implements FeatureInstaller<Object>, TypeInstaller<Object> {
 
     @Override
     public boolean matches(final Class<?> type) {
@@ -22,10 +23,7 @@ public class ResourceInstaller implements FeatureInstaller<Object> {
     }
 
     @Override
-    public void install(final Environment environment, final Object instance) {
-        // no need for installation, instance creation is enough for jersey-guice to register
-        /* this will force singletons for registered resources.
-        disabled because some prefer prototype resources
-        environment.jersey().register(instance); */
+    public void install(final Environment environment, final Class<Object> type) {
+        environment.jersey().register(type);
     }
 }

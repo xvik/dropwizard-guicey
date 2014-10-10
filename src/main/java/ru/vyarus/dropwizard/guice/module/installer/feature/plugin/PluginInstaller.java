@@ -2,8 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.plugin;
 
 import com.google.inject.Binder;
 import com.google.inject.multibindings.Multibinder;
-import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.installer.BindingInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
@@ -25,13 +24,8 @@ public class PluginInstaller implements FeatureInstaller<Object>, BindingInstall
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> void bind(final Binder binder, final Class<? extends T> type) {
+    public <T> void install(final Binder binder, final Class<? extends T> type) {
         final Class<T> pluginType = (Class<T>) type.getAnnotation(Plugin.class).value();
         Multibinder.newSetBinder(binder, pluginType).addBinding().to(type);
-    }
-
-    @Override
-    public void install(final Environment environment, final Object instance) {
-        // nothing to do
     }
 }

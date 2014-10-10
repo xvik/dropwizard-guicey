@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.health;
 import com.codahale.metrics.health.HealthCheck;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 /**
@@ -11,7 +12,8 @@ import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
  * {@code ru.vyarus.dropwizard.guice.module.installer.installer.health.NamedHealthCheck} and register in
  * environment.
  */
-public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck> {
+public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck>,
+        InstanceInstaller<NamedHealthCheck> {
 
     @Override
     public boolean matches(final Class<?> type) {

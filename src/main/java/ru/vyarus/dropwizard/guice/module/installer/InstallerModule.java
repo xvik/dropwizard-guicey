@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 import com.google.inject.AbstractModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.module.installer.install.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeatureInstallerExecutor;
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder;
 import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
@@ -22,10 +23,7 @@ import java.util.Set;
 /**
  * Module performs auto configuration using classpath scanning or manually predefined installers and beans.
  * First search provided packages for registered installers
- * {@link FeatureInstaller}. Then scan classpath obe more time
- * with installers to apply extensions.
- * <p>If installer implements {@link BindingInstaller} then it's bind method will be called just after
- * extension type registration ({@code bind(extType)}), allowing more complicated bindings.</p>
+ * {@link FeatureInstaller}. Then scan classpath obe more time with installers to apply extensions.
  * <p>Feature installers can be disabled from bundle config.</p>
  * NOTE: Classpath scan will load all found classes in configured packages. Try to reduce scan scope
  * as much as possible.
@@ -146,7 +144,7 @@ public class InstallerModule extends AbstractModule {
                 holder.register(installer.getClass(), type);
                 binder().bind(type);
                 if (installer instanceof BindingInstaller) {
-                    ((BindingInstaller) installer).bind(binder(), type);
+                    ((BindingInstaller) installer).install(binder(), type);
                 }
             }
         }

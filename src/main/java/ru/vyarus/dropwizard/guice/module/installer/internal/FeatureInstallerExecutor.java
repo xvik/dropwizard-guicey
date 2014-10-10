@@ -6,6 +6,8 @@ import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.util.List;
@@ -39,7 +41,12 @@ public class FeatureInstallerExecutor {
             final List<Class<?>> res = holder.getFeatures(installer.getClass());
             if (res != null) {
                 for (Class inst : res) {
-                    installer.install(environment, injector.getInstance(inst));
+                    if (installer instanceof TypeInstaller) {
+                        ((TypeInstaller) installer).install(environment, inst);
+                    }
+                    if (installer instanceof InstanceInstaller) {
+                        ((InstanceInstaller) installer).install(environment, injector.getInstance(inst));
+                    }
                     logger.debug("{} extension installed: {}",
                             FeatureUtils.getInstallerExtName(installer.getClass()), inst.getName());
                 }
