@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.eager;
 
 
-import io.dropwizard.setup.Environment;
+import com.google.inject.Binder;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 /**
@@ -13,14 +13,14 @@ import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
  * automatically. Moreover, even in DEVELOPMENT stage instance will be requested, which makes class suitable
  * for initialization logic.
  */
-public class EagerInstaller implements FeatureInstaller<Object>, InstanceInstaller<Object> {
+public class EagerSingletonInstaller implements FeatureInstaller<Object>, BindingInstaller {
     @Override
     public boolean matches(final Class<?> type) {
-        return FeatureUtils.hasAnnotation(type, Eager.class);
+        return FeatureUtils.hasAnnotation(type, EagerSingleton.class);
     }
 
     @Override
-    public void install(final Environment environment, final Object instance) {
-        // instance installer required only to force bean instance creation (and so jsr250 annotations could act)
+    public <T> void install(final Binder binder, final Class<? extends T> type) {
+        binder.bind(type).asEagerSingleton();
     }
 }

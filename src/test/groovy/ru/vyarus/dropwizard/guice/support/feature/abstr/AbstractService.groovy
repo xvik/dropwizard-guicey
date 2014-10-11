@@ -1,11 +1,11 @@
 package ru.vyarus.dropwizard.guice.support.feature.abstr
 
-import ru.vyarus.dropwizard.guice.module.installer.feature.eager.Eager
+import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 04.09.2014
  */
-@Eager
+@EagerSingleton
 abstract class AbstractService {
 }

@@ -142,9 +142,10 @@ public class InstallerModule extends AbstractModule {
                 logger.trace("{} extension found: {}",
                         FeatureUtils.getInstallerExtName(installer.getClass()), type.getName());
                 holder.register(installer.getClass(), type);
-                binder().bind(type);
                 if (installer instanceof BindingInstaller) {
                     ((BindingInstaller) installer).install(binder(), type);
+                } else {
+                    binder().bind(type);
                 }
             }
         }

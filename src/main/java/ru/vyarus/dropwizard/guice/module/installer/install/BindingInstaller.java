@@ -5,8 +5,8 @@ import com.google.inject.Binder;
 /**
  * Marker interface must be used together with {@code FeatureInstaller}.
  * Used for installers which requires custom bindings for extension.
- * Note: all found extension classes are always binded by type. Use this mechanism for additional
- * custom bindings
+ * Note: {@code binder.install(type)} is not called by default fo binding installer, assuming installer will
+ * specify proper binding itself.
  *
  * @author Vyacheslav Rusakov
  * @since 09.10.2014
@@ -16,7 +16,7 @@ public interface BindingInstaller {
 
     /**
      * Called to apply custom binding for installed feature.
-     * All found features install as {@code binder.install(type)} by default, so
+     * All found features installed as {@code binder.install(type)} by default, so
      * implement it only if some custom binding required.
      *
      * @param binder guice binder

@@ -10,7 +10,7 @@ import io.dropwizard.setup.Environment
 import io.dropwizard.testing.junit.DropwizardAppRule
 import org.junit.Rule
 import ru.vyarus.dropwizard.guice.module.installer.feature.*
-import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
@@ -81,7 +81,7 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(DummyHealthCheck))
 
         then: "eager found"
-        holder.getFeatures(EagerInstaller) == [DummyService]
+        holder.getFeatures(EagerSingletonInstaller) == [DummyService]
 
         then: "plugins found"
         Sets.newHashSet(holder.getFeatures(PluginInstaller)) == [DummyPlugin1, DummyPlugin2] as Set

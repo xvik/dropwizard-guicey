@@ -5,7 +5,7 @@ import io.dropwizard.setup.Environment
 import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.installer.feature.*
-import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller
@@ -64,7 +64,7 @@ class InstallersTest extends AbstractTest {
         JerseyProviderInstaller           | DummyExceptionMapper | AbstractJerseyProvider
         JerseyInjectableProviderInstaller | DummyJerseyProvider  | AbstractJerseyInjectableProvider
         HealthCheckInstaller              | DummyHealthCheck     | AbstractHealthCheck
-        EagerInstaller                    | DummyService         | AbstractService
+        EagerSingletonInstaller                    | DummyService         | AbstractService
         PluginInstaller                   | DummyPlugin1         | AbstractPlugin
     }
 }

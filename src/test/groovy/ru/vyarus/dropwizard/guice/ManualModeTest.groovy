@@ -8,8 +8,6 @@ import io.dropwizard.setup.Environment
 import io.dropwizard.testing.junit.DropwizardAppRule
 import org.junit.Rule
 import ru.vyarus.dropwizard.guice.module.installer.feature.*
-import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.ManualApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration

@@ -24,9 +24,9 @@ class ResourcesSingletonTest extends AbstractTest {
         when: "calling prototype resource"
         new URL("http://localhost:8080/prototype/").getText()
         new URL("http://localhost:8080/prototype/").getText()
-        then: "resource instantiated three times"
+        then: "resource instantiated one time, because singletons are forced"
         PrototypeResource.callCounter == 2
-        PrototypeResource.creationCounter == 2
+        PrototypeResource.creationCounter == 1
 
         when: "calling singleton resource"
         new URL("http://localhost:8080/singleton/").getText()
