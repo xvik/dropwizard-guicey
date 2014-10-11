@@ -84,7 +84,8 @@ class AutoScanModeTest extends AbstractTest {
         holder.getFeatures(EagerSingletonInstaller) == [DummyService]
 
         then: "plugins found"
-        Sets.newHashSet(holder.getFeatures(PluginInstaller)) == [DummyPlugin1, DummyPlugin2] as Set
+        Sets.newHashSet(holder.getFeatures(PluginInstaller)) == [DummyPlugin1, DummyPlugin2, DummyNamedPlugin1, DummyNamedPlugin2] as Set
         injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface>>(){})).size() == 2
+        injector.getInstance(Key.get(new TypeLiteral<Map<String, PluginInterface>>(){})).size() == 2
     }
 }

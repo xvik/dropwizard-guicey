@@ -5,7 +5,7 @@ package ru.vyarus.dropwizard.guice.module.installer;
  * (in dropwizard or somewhere else). Each installer should work with single feature.
  * <p>Installers are not guice beans: they are instantiated during guice context start and used to register
  * additional beans in guice context.</p>
- * <p>Installer may choose from three possible types of installation:
+ * Installer may choose from three possible types of installation:
  * <ul>
  * <li>{@link ru.vyarus.dropwizard.guice.module.installer.install.BindingInstaller} to apply specific
  * guice bindings (called in process of injector creation, whereas other installer are called after)</li>
@@ -14,7 +14,7 @@ package ru.vyarus.dropwizard.guice.module.installer;
  * <li>{@link ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller} to register instance
  * in environment or somewhere else</li>
  * </ul>
- * Even if installer doesn't implement any of these types, extension will be still registered in guice.</p>
+ * Even if installer doesn't implement any of these types, extension will be still registered in guice.
  *
  * @param <T> expected extension type (or Object when no super type (e.g. for annotated beans))
  */
