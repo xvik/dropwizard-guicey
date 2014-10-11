@@ -1,9 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.eager;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Annotated beans will be injected in guice module as singleton.
@@ -14,5 +11,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
 public @interface EagerSingleton {
 }

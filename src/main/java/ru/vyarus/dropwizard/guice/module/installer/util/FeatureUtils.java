@@ -3,7 +3,9 @@ package ru.vyarus.dropwizard.guice.module.installer.util;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 /**
  * Utility methods to simplify checks for feature installers.
@@ -22,18 +24,65 @@ public final class FeatureUtils {
      * @return true if annotation found on class or super class and type is not abstract, false otherwise
      */
     public static boolean hasAnnotation(final Class<?> type, final Class<? extends Annotation> annotation) {
-        boolean has = false;
+        return getAnnotation(type, annotation) != null;
+    }
+
+    /**
+     * @param type       type to check
+     * @param annotation annotation to find
+     * @return true if annotation found on one of class or super class annotations and type is not abstract,
+     * false otherwise
+     */
+    public static boolean hasAnnotatedAnnotation(final Class<?> type, final Class<? extends Annotation> annotation) {
+        return getAnnotatedAnnotation(type, annotation) != null;
+    }
+
+    /**
+     * @param type       type to examine
+     * @param annotation annotation to search
+     * @param <T>        annotation type
+     * @return found annotation or null
+     */
+    public static <T extends Annotation> T getAnnotation(final Class<?> type, final Class<T> annotation) {
+        T res = null;
         if (!Modifier.isAbstract(type.getModifiers())) {
             Class<?> supertype = type;
             while (supertype != null && Object.class != supertype) {
-                if (type.isAnnotationPresent(annotation)) {
-                    has = true;
+                if (supertype.isAnnotationPresent(annotation)) {
+                    res = supertype.getAnnotation(annotation);
                     break;
                 }
                 supertype = supertype.getSuperclass();
             }
         }
-        return has;
+        return res;
+    }
+
+    /**
+     * @param type       type to examine
+     * @param annotation annotation which must be found on target annotation
+     * @param <T>        annotation type
+     * @return annotation annotated with provided annotation type or null if not found
+     */
+    public static <T extends Annotation> Annotation getAnnotatedAnnotation(
+            final Class<?> type, final Class<T> annotation) {
+        Annotation res = null;
+        if (!Modifier.isAbstract(type.getModifiers())) {
+            Class<?> supertype = type;
+            while (supertype != null && Object.class != supertype) {
+                for (Annotation ann : supertype.getAnnotations()) {
+                    if (ann.annotationType().isAnnotationPresent(annotation)) {
+                        res = ann;
+                        break;
+                    }
+                }
+                if (res != null) {
+                    break;
+                }
+                supertype = supertype.getSuperclass();
+            }
+        }
+        return res;
     }
 
     /**
@@ -53,5 +102,41 @@ public final class FeatureUtils {
      */
     public static String getInstallerExtName(final Class<? extends FeatureInstaller> installer) {
         return installer.getSimpleName().replace("Installer", "").toLowerCase();
+    }
+
+    /**
+     * @param type examining type
+     * @param name method name
+     * @param args method argument types
+     * @return found method
+     */
+    public static Method findMethod(final Class<?> type, final String name, final Class<Object>... args) {
+        try {
+            return type.getMethod(name, args);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalStateException(String.format("Failed to obtain method '%s#%s(%s)' of class ",
+                    type, name, Arrays.toString(args)), e);
+        }
+    }
+
+    /**
+     * @param method   method to call
+     * @param instance object instance to call method on
+     * @param args     optional arguments
+     * @param <T>      expected type of execution result
+     * @return method execution result
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T invokeMethod(final Method method, final Object instance, final Object... args) {
+        final boolean acc = method.isAccessible();
+        method.setAccessible(true);
+        try {
+            return (T) method.invoke(instance, args);
+        } catch (Exception e) {
+            throw new IllegalStateException(String.format("Failed to invoke method '%s#%s(%s)'",
+                    method.getDeclaringClass(), method.getName(), Arrays.toString(args)), e);
+        } finally {
+            method.setAccessible(acc);
+        }
     }
 }

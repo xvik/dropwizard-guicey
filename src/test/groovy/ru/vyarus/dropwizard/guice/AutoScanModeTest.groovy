@@ -48,7 +48,7 @@ class AutoScanModeTest extends AbstractTest {
 
         then: "command found"
         bootstrap.getCommands().size() == 2
-        def dummyCmd = bootstrap.getCommands().find {it.class == DummyCommand}
+        def dummyCmd = bootstrap.getCommands().find { it.class == DummyCommand }
         dummyCmd
         dummyCmd.service
 
@@ -85,7 +85,7 @@ class AutoScanModeTest extends AbstractTest {
 
         then: "plugins found"
         Sets.newHashSet(holder.getFeatures(PluginInstaller)) == [DummyPlugin1, DummyPlugin2, DummyNamedPlugin1, DummyNamedPlugin2] as Set
-        injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface>>(){})).size() == 2
-        injector.getInstance(Key.get(new TypeLiteral<Map<String, PluginInterface>>(){})).size() == 2
+        injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface>>() {})).size() == 2
+        injector.getInstance(Key.get(new TypeLiteral<Map<DummyPluginKey, PluginInterface>>() {})).size() == 2
     }
 }
