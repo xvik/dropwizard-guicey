@@ -4,8 +4,8 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.installer.feature.JerseyInjectableProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 
 /**
@@ -19,7 +19,7 @@ class InjectableProviderCheckApplication extends Application<TestConfiguration> 
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
-                .features(JerseyInjectableProviderInstaller, ResourceInstaller)
+                .features(JerseyProviderInstaller, ResourceInstaller)
                 .beans(LocaleInjectableProvider, CustomFeatureInjectableProvider, InjectableProviderTestResource)
                 .build()
         );

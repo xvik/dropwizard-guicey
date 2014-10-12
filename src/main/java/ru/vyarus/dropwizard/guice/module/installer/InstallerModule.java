@@ -42,6 +42,7 @@ public class InstallerModule extends AbstractModule {
     @Override
     @SuppressWarnings("unchecked")
     protected void configure() {
+        // called just after injector creation to process instance installers
         bind(FeatureInstallerExecutor.class).asEagerSingleton();
 
         final Set<Class<? extends FeatureInstaller>> installerClasses = findInstallers();
@@ -50,6 +51,7 @@ public class InstallerModule extends AbstractModule {
         final FeaturesHolder holder = new FeaturesHolder(installers);
         bind(FeaturesHolder.class).toInstance(holder);
         resolveFeatures(holder);
+        holder.order();
     }
 
     /**

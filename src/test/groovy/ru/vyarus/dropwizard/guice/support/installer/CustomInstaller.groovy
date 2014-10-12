@@ -25,4 +25,8 @@ class CustomInstaller implements FeatureInstaller<CustomFeature>, InstanceInstal
     void install(Environment environment, CustomFeature instance) {
         feature = instance
     }
+
+    @Override
+    void report() {
+    }
 }

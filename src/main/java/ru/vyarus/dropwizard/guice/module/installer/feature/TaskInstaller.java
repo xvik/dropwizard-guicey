@@ -21,4 +21,9 @@ public class TaskInstaller implements FeatureInstaller<Task>, InstanceInstaller<
     public void install(final Environment environment, final Task instance) {
         environment.admin().addTask(instance);
     }
+
+    @Override
+    public void report() {
+        // dropwizard logs installed tasks
+    }
 }

@@ -8,6 +8,7 @@ import com.sun.jersey.spi.inject.Injectable
 import com.sun.jersey.spi.inject.InjectableProvider
 
 import javax.ws.rs.core.Context
+import javax.ws.rs.ext.Provider
 import java.lang.reflect.Type
 
 /**
@@ -16,6 +17,7 @@ import java.lang.reflect.Type
  * @author Vyacheslav Rusakov 
  * @since 09.10.2014
  */
+@Provider
 class LocaleInjectableProvider extends AbstractHttpContextInjectable<Locale>
         implements InjectableProvider<Context, Type> {
     static int creationCounter = 0

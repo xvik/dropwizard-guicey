@@ -9,6 +9,7 @@ import com.sun.jersey.spi.inject.InjectableProvider
 import ru.vyarus.dropwizard.guice.support.feature.CustomFeature
 
 import javax.ws.rs.core.Context
+import javax.ws.rs.ext.Provider
 import java.lang.reflect.Type
 
 /**
@@ -17,6 +18,7 @@ import java.lang.reflect.Type
  * @author Vyacheslav Rusakov 
  * @since 09.10.2014
  */
+@Provider
 class CustomFeatureInjectableProvider extends AbstractHttpContextInjectable<CustomFeature>
         implements InjectableProvider<Context, Type> {
     static int creationCounter = 0

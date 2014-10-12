@@ -6,6 +6,7 @@ import com.sun.jersey.spi.inject.Injectable
 import com.sun.jersey.spi.inject.InjectableProvider
 
 import javax.ws.rs.core.Context
+import javax.ws.rs.ext.Provider
 import java.lang.reflect.Type
 
 /**
@@ -13,6 +14,7 @@ import java.lang.reflect.Type
  * @author Vyacheslav Rusakov 
  * @since 03.09.2014
  */
+@Provider
 class DummyJerseyProvider implements InjectableProvider<Context, Type> {
 
     @Override

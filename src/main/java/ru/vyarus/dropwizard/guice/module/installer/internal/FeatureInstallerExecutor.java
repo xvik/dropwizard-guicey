@@ -47,10 +47,11 @@ public class FeatureInstallerExecutor {
                     if (installer instanceof InstanceInstaller) {
                         ((InstanceInstaller) installer).install(environment, injector.getInstance(inst));
                     }
-                    logger.debug("{} extension installed: {}",
+                    logger.trace("{} extension installed: {}",
                             FeatureUtils.getInstallerExtName(installer.getClass()), inst.getName());
                 }
             }
+            installer.report();
         }
     }
 }

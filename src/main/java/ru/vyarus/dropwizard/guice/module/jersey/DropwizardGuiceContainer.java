@@ -45,7 +45,6 @@ public class DropwizardGuiceContainer extends GuiceContainer {
         });
         environment.servlets().addFilter("Guice Filter", GuiceFilter.class)
                 .addMappingForUrlPatterns(null, false, environment.getApplicationContext().getContextPath() + "*");
-
     }
 
     @Override

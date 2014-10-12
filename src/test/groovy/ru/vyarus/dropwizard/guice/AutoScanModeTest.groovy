@@ -9,10 +9,14 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import io.dropwizard.testing.junit.DropwizardAppRule
 import org.junit.Rule
-import ru.vyarus.dropwizard.guice.module.installer.feature.*
+import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
@@ -44,7 +48,7 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(TestConfiguration))
 
         then: "all installers found"
-        holder.installers.size() == 9
+        holder.installers.size() == 8
 
         then: "command found"
         bootstrap.getCommands().size() == 2
@@ -69,11 +73,8 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(DummyLifeCycle))
 
         then: "jersey provider found"
-        holder.getFeatures(JerseyProviderInstaller) == [DummyExceptionMapper]
+        Sets.newHashSet(holder.getFeatures(JerseyProviderInstaller)) == [DummyExceptionMapper, DummyJerseyProvider] as Set
         injector.getExistingBinding(Key.get(DummyExceptionMapper))
-
-        then: "jersey injectable found"
-        holder.getFeatures(JerseyInjectableProviderInstaller) == [DummyJerseyProvider]
         injector.getExistingBinding(Key.get(DummyJerseyProvider))
 
         then: "health check found"

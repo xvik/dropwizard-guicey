@@ -29,4 +29,12 @@ public interface FeatureInstaller<T> {
      * @return true if extension recognized, false otherwise
      */
     boolean matches(Class<?> type);
+
+    /**
+     * Called to log registered endpoints in dropwizard log fashion.
+     * It's important to naturally show all dynamically resolved classes to easily catch errors.
+     * Use {@link ru.vyarus.dropwizard.guice.module.installer.util.Reporter} to simplify reporting.
+     * <p>Method may do nothing if reporting not required</p>
+     */
+    void report();
 }

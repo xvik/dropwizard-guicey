@@ -24,6 +24,8 @@ import java.lang.reflect.Method;
  */
 public class PluginInstaller implements FeatureInstaller<Object>, BindingInstaller {
 
+    private final PluginReporter reporter = new PluginReporter();
+
     @Override
     public boolean matches(final Class<?> type) {
         return FeatureUtils.hasAnnotation(type, Plugin.class)
@@ -35,14 +37,18 @@ public class PluginInstaller implements FeatureInstaller<Object>, BindingInstall
     public <T> void install(final Binder binder, final Class<? extends T> type) {
         final Plugin annotation = FeatureUtils.getAnnotation(type, Plugin.class);
         if (annotation != null) {
-            Multibinder.newSetBinder(binder, (Class<T>) annotation.value()).addBinding().to(type);
+            final Class<T> pluginType = (Class<T>) annotation.value();
+            reporter.simple(pluginType, type);
+            Multibinder.newSetBinder(binder, pluginType).addBinding().to(type);
         } else {
             final Annotation namesAnnotation = FeatureUtils.getAnnotatedAnnotation(type, Plugin.class);
             final Method valueMethod = FeatureUtils.findMethod(namesAnnotation.annotationType(), "value");
             final Class<Object> keyType = (Class<Object>) valueMethod.getReturnType();
             final Object key = FeatureUtils.invokeMethod(valueMethod, namesAnnotation);
             final Plugin pluginAnnotation = namesAnnotation.annotationType().getAnnotation(Plugin.class);
-            registerNamedPlugin(binder, (Class<Object>) pluginAnnotation.value(), keyType, type, key);
+            final Class<Object> pluginType = (Class<Object>) pluginAnnotation.value();
+            reporter.named(keyType, pluginType, key, type);
+            registerNamedPlugin(binder, pluginType, keyType, type, key);
         }
     }
 
@@ -50,5 +56,10 @@ public class PluginInstaller implements FeatureInstaller<Object>, BindingInstall
     private <T, K> void registerNamedPlugin(final Binder binder, final Class<T> pluginType, final Class<K> keyType,
                                             final Class<? extends T> plugin, final K key) {
         MapBinder.newMapBinder(binder, keyType, pluginType).addBinding(key).to(plugin);
+    }
+
+    @Override
+    public void report() {
+        reporter.report();
     }
 }

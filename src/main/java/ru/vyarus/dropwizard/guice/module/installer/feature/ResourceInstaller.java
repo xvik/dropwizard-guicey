@@ -1,11 +1,12 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature;
 
 
-import io.dropwizard.setup.Environment;
+import com.google.inject.Binder;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
+import javax.inject.Singleton;
 import javax.ws.rs.Path;
 
 /**
@@ -15,7 +16,7 @@ import javax.ws.rs.Path;
  * which will lead to performance overhead. To ovoid misuse, singleton resources are forced. Override installer
  * if you really need prototype resources.
  */
-public class ResourceInstaller implements FeatureInstaller<Object>, InstanceInstaller<Object> {
+public class ResourceInstaller implements FeatureInstaller<Object>, BindingInstaller {
 
     @Override
     public boolean matches(final Class<?> type) {
@@ -23,7 +24,13 @@ public class ResourceInstaller implements FeatureInstaller<Object>, InstanceInst
     }
 
     @Override
-    public void install(final Environment environment, final Object instance) {
-        environment.jersey().register(instance);
+    public <T> void install(final Binder binder, final Class<? extends T> type) {
+        // force singleton
+        binder.bind(type).in(Singleton.class);
+    }
+
+    @Override
+    public void report() {
+        // dropwizard logs installed resources
     }
 }

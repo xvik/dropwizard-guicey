@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.support.installer
 
-import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller
 import ru.vyarus.dropwizard.guice.module.installer.scanner.InvisibleForScanner
 
@@ -17,6 +16,6 @@ class InvisibleInstaller implements FeatureInstaller<Object> {
     }
 
     @Override
-    void install(Environment environment, Object instance) {
+    void report() {
     }
 }

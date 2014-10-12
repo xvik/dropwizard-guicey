@@ -5,6 +5,7 @@ import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
+import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
 /**
  * Health check installer.
@@ -15,6 +16,8 @@ import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck>,
         InstanceInstaller<NamedHealthCheck> {
 
+    private final Reporter reporter = new Reporter(HealthCheckInstaller.class, "health checks =");
+
     @Override
     public boolean matches(final Class<?> type) {
         return FeatureUtils.is(type, HealthCheck.class);
@@ -23,5 +26,11 @@ public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck>,
     @Override
     public void install(final Environment environment, final NamedHealthCheck instance) {
         environment.healthChecks().register(instance.getName(), instance);
+        reporter.line("%-10s (%s)", instance.getName(), instance.getClass().getName());
+    }
+
+    @Override
+    public void report() {
+        reporter.report();
     }
 }
