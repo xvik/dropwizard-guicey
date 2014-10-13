@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -27,14 +26,13 @@ public class FeaturesHolder {
 
     public FeaturesHolder(final List<FeatureInstaller> installers) {
         this.installers = installers;
-        this.installerTypes = Lists.newArrayList(
-                Iterables.transform(installers,
-                        new Function<FeatureInstaller, Class<? extends FeatureInstaller>>() {
-                            @Override
-                            public Class<? extends FeatureInstaller> apply(final FeatureInstaller input) {
-                                return input.getClass();
-                            }
-                        }));
+        this.installerTypes = Lists.transform(installers,
+                new Function<FeatureInstaller, Class<? extends FeatureInstaller>>() {
+                    @Override
+                    public Class<? extends FeatureInstaller> apply(final FeatureInstaller input) {
+                        return input.getClass();
+                    }
+                });
     }
 
     /**
@@ -76,7 +74,7 @@ public class FeaturesHolder {
             if (Ordered.class.isAssignableFrom(installer)) {
                 final List<Class<?>> extensions = features.get(installer);
                 if (extensions == null || extensions.size() <= 1) {
-                    break;
+                    continue;
                 }
                 Collections.sort(extensions, comparator);
             }
