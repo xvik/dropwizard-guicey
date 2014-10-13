@@ -51,7 +51,6 @@ public class InstallerModule extends AbstractModule {
         final FeaturesHolder holder = new FeaturesHolder(installers);
         bind(FeaturesHolder.class).toInstance(holder);
         resolveFeatures(holder);
-        holder.order();
     }
 
     /**

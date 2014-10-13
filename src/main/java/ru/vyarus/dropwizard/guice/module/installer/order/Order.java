@@ -19,5 +19,5 @@ public @interface Order {
     /**
      * @return order
      */
-    int value() default Integer.MAX_VALUE;
+    int value();
 }

@@ -37,6 +37,7 @@ public class FeatureInstallerExecutor {
 
     @SuppressWarnings("unchecked")
     private void installFeatures() {
+        holder.order();
         for (FeatureInstaller installer : holder.getInstallers()) {
             final List<Class<?>> res = holder.getFeatures(installer.getClass());
             if (res != null) {
