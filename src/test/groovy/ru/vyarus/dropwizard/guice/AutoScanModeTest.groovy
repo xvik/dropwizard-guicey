@@ -13,6 +13,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilterInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
@@ -48,7 +50,7 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(TestConfiguration))
 
         then: "all installers found"
-        holder.installers.size() == 8
+        holder.installers.size() == 10
 
         then: "command found"
         bootstrap.getCommands().size() == 2
@@ -88,5 +90,11 @@ class AutoScanModeTest extends AbstractTest {
         Sets.newHashSet(holder.getFeatures(PluginInstaller)) == [DummyPlugin1, DummyPlugin2, DummyNamedPlugin1, DummyNamedPlugin2] as Set
         injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface>>() {})).size() == 2
         injector.getInstance(Key.get(new TypeLiteral<Map<DummyPluginKey, PluginInterface>>() {})).size() == 2
+
+        then: "admin servlet found"
+        holder.getFeatures(AdminServletInstaller) == [DummyAdminServlet]
+
+        then: "admin filter found"
+        holder.getFeatures(AdminFilterInstaller) == [DummyAdminFilter]
     }
 }

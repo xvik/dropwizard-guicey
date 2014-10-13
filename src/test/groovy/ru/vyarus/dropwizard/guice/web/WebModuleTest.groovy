@@ -28,5 +28,15 @@ class WebModuleTest extends AbstractTest {
         res = new URL("http://localhost:8080/dummyServlet").getText()
         then: "servlet active"
         res == 'Sample servlet'
+
+        when: "calling admin servlet"
+        res = new URL("http://localhost:8081/dummy").getText()
+        then: "servlet active"
+        res == 'dispatched'
+
+        when: "calling admin servlet"
+        res = new URL("http://localhost:8081/sample").getText()
+        then: "filter active"
+        res == 'dispatched'
     }
 }

@@ -8,6 +8,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilterInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
@@ -17,6 +19,8 @@ import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller
 import ru.vyarus.dropwizard.guice.support.feature.*
 import ru.vyarus.dropwizard.guice.support.feature.abstr.*
 import spock.lang.Unroll
+
+import javax.servlet.Filter
 
 /**
  * @author Vyacheslav Rusakov 
@@ -69,5 +73,7 @@ class InstallersTest extends AbstractTest {
         HealthCheckInstaller    | DummyHealthCheck     | AbstractHealthCheck
         EagerSingletonInstaller | DummyService         | AbstractService
         PluginInstaller         | DummyPlugin1         | AbstractPlugin
+        AdminFilterInstaller    | DummyAdminFilter     | AbstractAdminFilter
+        AdminServletInstaller   | DummyAdminServlet    | AbstractAdminServlet
     }
 }

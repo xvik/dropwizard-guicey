@@ -7,6 +7,7 @@
 * Add dropwizard style reporting for installed features (like resources or tasks)
 * Removed JerseyInjectableProviderInstaller. Now injectable providers must be annotated with @Provider
 * Add extensions ordering support using @Order annotation (by default for LifeCycle and Managed installers)
+* Add admin context filter and servlet installers
 
 ### 0.9.0 (2014-09-05)
 
