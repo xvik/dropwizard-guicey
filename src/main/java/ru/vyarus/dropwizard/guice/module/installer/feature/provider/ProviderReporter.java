@@ -2,11 +2,10 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.provider;
 
 import com.google.common.collect.Lists;
 import com.sun.jersey.spi.inject.InjectableProvider;
+import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
 import javax.ws.rs.ext.ExceptionMapper;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -64,28 +63,14 @@ public class ProviderReporter extends Reporter {
     }
 
     private void logInjectable(final Class<?> provider) {
-        for (Type type : provider.getGenericInterfaces()) {
-            if (type instanceof ParameterizedType
-                    && InjectableProvider.class.equals(((ParameterizedType) type).getRawType())) {
-                final Type[] args = ((ParameterizedType) type).getActualTypeArguments();
-                injectables.add(format(INJECTABLE,
-                        ((Class) args[0]).getSimpleName(),
-                        ((Class) args[1]).getSimpleName(),
-                        provider.getName()));
-            }
-        }
+        final Class[] params = FeatureUtils.getInterfaceGenerics(provider, InjectableProvider.class);
+        injectables.add(format(INJECTABLE,
+                params[0].getSimpleName(), params[1].getSimpleName(), provider.getName()));
     }
 
     private void logException(final Class<?> provider) {
-        for (Type type : provider.getGenericInterfaces()) {
-            if (type instanceof ParameterizedType
-                    && ExceptionMapper.class.equals(((ParameterizedType) type).getRawType())) {
-                final Type[] args = ((ParameterizedType) type).getActualTypeArguments();
-                exceptions.add(format(EXCEPTION,
-                        ((Class) args[0]).getSimpleName(),
-                        provider.getName()));
-            }
-        }
+        final Class[] params = FeatureUtils.getInterfaceGenerics(provider, ExceptionMapper.class);
+        exceptions.add(format(EXCEPTION, params[0].getSimpleName(), provider.getName()));
     }
 
     private void printAll(final List<String> lines) {

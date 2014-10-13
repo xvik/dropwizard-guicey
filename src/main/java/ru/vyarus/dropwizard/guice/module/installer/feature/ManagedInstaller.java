@@ -24,7 +24,7 @@ public class ManagedInstaller implements
 
     @Override
     public void install(final Environment environment, final Managed instance) {
-        reporter.line("(%s)", instance.getClass().getName());
+        reporter.line("(%s)", FeatureUtils.getInstanceClass(instance).getName());
         environment.lifecycle().manage(instance);
     }
 

@@ -41,7 +41,7 @@ public class PluginReporter extends Reporter {
     @Override
     public void report() {
         printAll(plugins);
-        if (!namedPlugins.isEmpty()) {
+        if (!plugins.isEmpty() && !namedPlugins.isEmpty()) {
             emptyLine();
         }
         printAll(namedPlugins);

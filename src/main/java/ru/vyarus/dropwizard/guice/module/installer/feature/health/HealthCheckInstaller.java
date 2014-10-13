@@ -26,7 +26,7 @@ public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck>,
     @Override
     public void install(final Environment environment, final NamedHealthCheck instance) {
         environment.healthChecks().register(instance.getName(), instance);
-        reporter.line("%-10s (%s)", instance.getName(), instance.getClass().getName());
+        reporter.line("%-10s (%s)", instance.getName(), FeatureUtils.getInstanceClass(instance).getName());
     }
 
     @Override

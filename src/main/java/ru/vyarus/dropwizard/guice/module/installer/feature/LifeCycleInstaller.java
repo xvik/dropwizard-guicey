@@ -24,7 +24,7 @@ public class LifeCycleInstaller implements
 
     @Override
     public void install(final Environment environment, final LifeCycle instance) {
-        reporter.line("(%s)", instance.getClass().getName());
+        reporter.line("(%s)", FeatureUtils.getInstanceClass(instance).getName());
         environment.lifecycle().manage(instance);
     }
 

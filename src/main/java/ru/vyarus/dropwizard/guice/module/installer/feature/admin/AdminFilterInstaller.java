@@ -32,21 +32,22 @@ public class AdminFilterInstaller implements FeatureInstaller<Filter>,
 
     @Override
     public void install(final Environment environment, final Filter instance) {
-        final AdminFilter annotation = FeatureUtils.getAnnotation(instance.getClass(), AdminFilter.class);
+        final Class<Filter> extType = FeatureUtils.getInstanceClass(instance);
+        final AdminFilter annotation = FeatureUtils.getAnnotation(extType, AdminFilter.class);
         final String[] servlets = annotation.servlets();
         final String[] patterns = annotation.patterns();
         final String filterName = Preconditions.checkNotNull(Strings.emptyToNull(annotation.name()),
-                "Filter name not specified for servlet %s", instance.getClass().getName());
+                "Filter name not specified for servlet %s", extType.getName());
         Preconditions.checkArgument(servlets.length > 0 || patterns.length > 0,
-                "Filter %s not specified servlet or pattern for mapping", instance.getClass().getName());
+                "Filter %s not specified servlet or pattern for mapping", extType.getName());
         Preconditions.checkArgument(servlets.length == 0 || patterns.length == 0,
                 "Filter %s specifies both servlets and patters, when only one allowed",
-                instance.getClass().getName());
+                extType.getName());
         final boolean servletMapping = servlets.length > 0;
         reporter.line("%-10s %-10s (%s)",
                 filterName,
                 Joiner.on(",").join(servletMapping ? servlets : patterns),
-                instance.getClass().getName());
+                extType.getName());
         final FilterRegistration.Dynamic mapping = environment.admin().addFilter(filterName, instance);
         if (servletMapping) {
             mapping.addMappingForServletNames(null, false, servlets);

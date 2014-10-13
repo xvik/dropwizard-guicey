@@ -31,12 +31,13 @@ public class AdminServletInstaller implements FeatureInstaller<HttpServlet>,
 
     @Override
     public void install(final Environment environment, final HttpServlet instance) {
-        final AdminServlet annotation = FeatureUtils.getAnnotation(instance.getClass(), AdminServlet.class);
+        final Class<? extends HttpServlet> extType = FeatureUtils.getInstanceClass(instance);
+        final AdminServlet annotation = FeatureUtils.getAnnotation(extType, AdminServlet.class);
         final String servletName = Preconditions.checkNotNull(Strings.emptyToNull(annotation.name()),
-                "Servlet name not specified for servlet %s", instance.getClass().getName());
+                "Servlet name not specified for servlet %s", extType.getName());
         final String[] patterns = annotation.patterns();
         reporter.line("%-10s %-10s (%s)", servletName, Joiner.on(",").join(patterns),
-                instance.getClass().getName());
+                extType.getName());
         environment.admin().addServlet(servletName, instance).addMapping(patterns);
     }
 
