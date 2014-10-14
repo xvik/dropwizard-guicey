@@ -18,7 +18,7 @@ class ServletsApplication extends Application<TestConfiguration> {
                  // need registered resources to start properly
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
                 .modules(new WebModule())
-                .beans(AdminFilterOnServlet)
+                .extensions(AdminFilterOnServlet)
                 .build()
         );
     }

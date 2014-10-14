@@ -192,11 +192,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * @param features feature installer types to disable
+         * @param installers feature installer types to disable
          * @return builder instance for chained calls
          */
-        public Builder<T> disableFeatures(final Class<? extends FeatureInstaller>... features) {
-            bundle.installerConfig.getDisabledFeatures().addAll(Arrays.asList(features));
+        public Builder<T> disableInstallers(final Class<? extends FeatureInstaller>... installers) {
+            bundle.installerConfig.getDisabledFeatures().addAll(Arrays.asList(installers));
             return this;
         }
 
@@ -206,11 +206,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * installers will not be registered).
          * <p>Also, could be used to add installers from packages not included in auto scanning.</p>
          *
-         * @param features feature installer classes to register
+         * @param installers feature installer classes to register
          * @return builder instance for chained calls
          */
-        public Builder<T> features(final Class<? extends FeatureInstaller>... features) {
-            bundle.installerConfig.getManualFeatures().addAll(Arrays.asList(features));
+        public Builder<T> installers(final Class<? extends FeatureInstaller>... installers) {
+            bundle.installerConfig.getManualFeatures().addAll(Arrays.asList(installers));
             return this;
         }
 
@@ -225,11 +225,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * or register command directly to bootstrap object and dependencies will be injected to them after
          * injector creation.</p>
          *
-         * @param beanClasses extension bean classes to register
+         * @param extensionClasses extension bean classes to register
          * @return builder instance for chained calls
          */
-        public Builder<T> beans(final Class<?>... beanClasses) {
-            bundle.installerConfig.getManualBeans().addAll(Arrays.asList(beanClasses));
+        public Builder<T> extensions(final Class<?>... extensionClasses) {
+            bundle.installerConfig.getManualBeans().addAll(Arrays.asList(extensionClasses));
             return this;
         }
 

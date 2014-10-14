@@ -19,8 +19,8 @@ class InjectableProviderCheckApplication extends Application<TestConfiguration> 
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
-                .features(JerseyProviderInstaller, ResourceInstaller)
-                .beans(LocaleInjectableProvider, CustomFeatureInjectableProvider, InjectableProviderTestResource)
+                .installers(JerseyProviderInstaller, ResourceInstaller)
+                .extensions(LocaleInjectableProvider, CustomFeatureInjectableProvider, InjectableProviderTestResource)
                 .build()
         );
     }

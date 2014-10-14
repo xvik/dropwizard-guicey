@@ -8,6 +8,7 @@
 * Removed JerseyInjectableProviderInstaller. Now injectable providers must be annotated with @Provider
 * Add extensions ordering support using @Order annotation (by default for LifeCycle and Managed installers)
 * Add admin context filter and servlet installers
+* Rename bundle options: features -> installers, disabledFeatures -> disabledInstallers, beans -> extensions
 
 ### 0.9.0 (2014-09-05)
 

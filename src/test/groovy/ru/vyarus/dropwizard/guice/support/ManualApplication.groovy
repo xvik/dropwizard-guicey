@@ -26,8 +26,8 @@ class ManualApplication extends Application<TestConfiguration> {
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
-                .features(ResourceInstaller, TaskInstaller, ManagedInstaller)
-                .beans(DummyTask, DummyResource, DummyManaged)
+                .installers(ResourceInstaller, TaskInstaller, ManagedInstaller)
+                .extensions(DummyTask, DummyResource, DummyManaged)
                 .build()
         );
         bootstrap.addCommand(new DummyCommand(bootstrap.getApplication()))

@@ -5,7 +5,6 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
-import ru.vyarus.dropwizard.guice.support.feature.DummyCommand
 
 /**
  * Example of disabling installers and commands auto search not active.
@@ -23,7 +22,7 @@ class DisabledFeatureApplication extends Application<TestConfiguration> {
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
-                .disableFeatures(TaskInstaller)
+                .disableInstallers(TaskInstaller)
                 .build()
         );
     }
