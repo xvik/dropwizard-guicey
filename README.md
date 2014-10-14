@@ -249,8 +249,8 @@ public class WebModule extends ServletModule {
 
     @Override
     protected void configureServlets() {
-        filter('/*').through(MyFilter.class)
-        serve('/myservlet').with(MyServlet.class)
+        filter("/*").through(MyFilter.class)
+        serve("/myservlet").with(MyServlet.class)
     }
 }
 ```
@@ -378,8 +378,8 @@ As example, see [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/blo
 Installers `report()` method will be called after it finish installation of all found extensions. Report provides
 user visibility of installed extensions. 
 
-To simplify reporting use predefined `Reporter` class.See example usage in 
-[ManagedInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ManagedInstaller.java)
+To simplify reporting use predefined [Reporter](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/util/Reporter.java) class. 
+See example usage in [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ManagedInstaller.java)
 
 For complex cases, reporter may be extended to better handle installed extensions. As examples see 
 [plugin installer reporter](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/plugin/PluginReporter.java)
