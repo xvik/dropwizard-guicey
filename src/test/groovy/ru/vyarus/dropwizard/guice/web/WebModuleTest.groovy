@@ -31,8 +31,8 @@ class WebModuleTest extends AbstractTest {
 
         when: "calling admin servlet"
         res = new URL("http://localhost:8081/dummy").getText()
-        then: "servlet active"
-        res == 'dispatched'
+        then: "servlet active and filter around it active"
+        res == 'dispatched addition'
 
         when: "calling admin servlet"
         res = new URL("http://localhost:8081/sample").getText()

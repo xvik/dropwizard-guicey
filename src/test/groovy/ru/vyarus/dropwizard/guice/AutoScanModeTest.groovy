@@ -75,7 +75,7 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(DummyLifeCycle))
 
         then: "jersey provider found"
-        Sets.newHashSet(holder.getFeatures(JerseyProviderInstaller)) == [DummyExceptionMapper, DummyJerseyProvider] as Set
+        Sets.newHashSet(holder.getFeatures(JerseyProviderInstaller)) == [DummyExceptionMapper, DummyJerseyProvider, DummyOtherProvider] as Set
         injector.getExistingBinding(Key.get(DummyExceptionMapper))
         injector.getExistingBinding(Key.get(DummyJerseyProvider))
 
@@ -87,8 +87,9 @@ class AutoScanModeTest extends AbstractTest {
         holder.getFeatures(EagerSingletonInstaller) == [DummyService]
 
         then: "plugins found"
-        Sets.newHashSet(holder.getFeatures(PluginInstaller)) == [DummyPlugin1, DummyPlugin2, DummyNamedPlugin1, DummyNamedPlugin2] as Set
+        Sets.newHashSet(holder.getFeatures(PluginInstaller)) == [DummyPlugin1, DummyPlugin2, DummyPlugin3, DummyNamedPlugin1, DummyNamedPlugin2] as Set
         injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface>>() {})).size() == 2
+        injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface2>>() {})).size() == 1
         injector.getInstance(Key.get(new TypeLiteral<Map<DummyPluginKey, PluginInterface>>() {})).size() == 2
 
         then: "admin servlet found"
