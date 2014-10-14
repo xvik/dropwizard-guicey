@@ -161,8 +161,8 @@ Custom base class is required, because default `HealthCheck` did not provide che
 
 [JerseyProviderInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/provider/JerseyProviderInstaller.java)
 finds classes annotated with jersey `@Provider` annotation and register their instance in environment (forced singleton). Suitable for all type of extensions, 
-like [InjectableProvider](https://github.com/xvik/dropwizard-guicey/tree/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/LocaleInjectableProvider.java), 
-[ExceptionMapper](https://github.com/xvik/dropwizard-guicey/tree/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/feature/DummyExceptionMapper.java) etc 
+like [InjectableProvider](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/LocaleInjectableProvider.groovy), 
+[ExceptionMapper](https://github.com/xvik/dropwizard-guicey/tree/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/feature/DummyExceptionMapper.groovy) etc 
 (everything you would normally pass into `environment.jersey().register()`.
 
 [EagerSingletonInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/eager/EagerSingletonInstaller.java)
