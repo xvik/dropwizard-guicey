@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.provider;
 
 import com.google.common.collect.Lists;
 import com.sun.jersey.spi.inject.InjectableProvider;
-import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
+import ru.vyarus.dropwizard.guice.module.installer.util.GenericsUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
 import javax.ws.rs.ext.ExceptionMapper;
@@ -63,14 +63,14 @@ public class ProviderReporter extends Reporter {
     }
 
     private void logInjectable(final Class<?> provider) {
-        final Class[] params = FeatureUtils.getInterfaceGenerics(provider, InjectableProvider.class);
+        final String[] params = GenericsUtils.getInterfaceGenericsAsStrings(provider, InjectableProvider.class);
         injectables.add(format(INJECTABLE,
-                params[0].getSimpleName(), params[1].getSimpleName(), provider.getName()));
+                params[0], params[1], provider.getName()));
     }
 
     private void logException(final Class<?> provider) {
-        final Class[] params = FeatureUtils.getInterfaceGenerics(provider, ExceptionMapper.class);
-        exceptions.add(format(EXCEPTION, params[0].getSimpleName(), provider.getName()));
+        final String[] params = GenericsUtils.getInterfaceGenericsAsStrings(provider, ExceptionMapper.class);
+        exceptions.add(format(EXCEPTION, params[0], provider.getName()));
     }
 
     private void printAll(final List<String> lines) {

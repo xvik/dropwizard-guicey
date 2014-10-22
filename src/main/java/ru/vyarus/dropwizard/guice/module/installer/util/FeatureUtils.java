@@ -5,8 +5,6 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 
 /**
@@ -153,31 +151,5 @@ public final class FeatureUtils {
     public static <T> Class<T> getInstanceClass(final T object) {
         final Class cls = object.getClass();
         return cls.getName().contains("$$EnhancerByGuice") ? (Class<T>) cls.getSuperclass() : cls;
-    }
-
-    /**
-     * @param type            inspecting type
-     * @param targetInterface target interface to find generics on
-     * @return found interface generics or null if not found (e.g. type doesn't implement interface)
-     */
-    public static Class[] getInterfaceGenerics(final Class<?> type, final Class<?> targetInterface) {
-        Type[] args = null;
-        Class<?> supertype = type;
-        while (args == null && supertype != null && Object.class != supertype) {
-            for (Type iface : supertype.getGenericInterfaces()) {
-                if (iface instanceof ParameterizedType
-                        && targetInterface.equals(((ParameterizedType) iface).getRawType())) {
-                    args = ((ParameterizedType) iface).getActualTypeArguments();
-                    break;
-                }
-            }
-            supertype = supertype.getSuperclass();
-        }
-        Class[] res = null;
-        if (args != null) {
-            res = new Class[args.length];
-            System.arraycopy(args, 0, res, 0, args.length);
-        }
-        return res;
     }
 }

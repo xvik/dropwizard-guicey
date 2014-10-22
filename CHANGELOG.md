@@ -1,3 +1,5 @@
+* Fix interface generics resolution to support nested generics and moved generics resolution into GenericsUtils instead of FeatureUtils
+
 ### 1.0.0 (2014-10-14)
 * Add dependency on guice-multibindings
 * Installers may choose now from three types of installation (binding, type or instance) or combine them.
