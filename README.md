@@ -22,7 +22,11 @@ Features:
 * Servlets and filters could be installed into admin context (using annotations)
 * Extensions ordering supported (for some extension types, where it might be useful)
 * Dropwizard style reporting of installed extensions
-* Custom junit rule for lightweight integration testing 
+* Custom junit rule for lightweight integration testing  
+
+### Thanks to
+
+[Sébastien Boulet](https://github.com/gontard) ([intactile design](https://github.com/gontard)) for very usefull feedback
 
 ### Setup
 
