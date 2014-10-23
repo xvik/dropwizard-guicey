@@ -26,7 +26,7 @@ Features:
 
 ### Thanks to
 
-[Sébastien Boulet](https://github.com/gontard) ([intactile design](https://github.com/gontard)) for very usefull feedback
+[Sébastien Boulet](https://github.com/gontard) ([intactile design](http://intactile.com)) for very usefull feedback
 
 ### Setup
 
