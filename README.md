@@ -22,6 +22,7 @@ Features:
 * Servlets and filters could be installed into admin context (using annotations)
 * Extensions ordering supported (for some extension types, where it might be useful)
 * Dropwizard style reporting of installed extensions
+* Custom junit rule for lightweight integration testing 
 
 ### Setup
 
@@ -37,14 +38,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:1.0.0'
+compile 'ru.vyarus:dropwizard-guicey:1.1.0'
 ```
 
 ### Usage
@@ -314,7 +315,35 @@ The following request-scope objects available for injection:
 * javax.ws.rs.core.SecurityContext
 * com.sun.jersey.api.core.HttpResponseContext
 
-#### Writing custom installer
+### Testing
+
+For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like 
+[DropwizardAppRule](https://dropwizard.github.io/dropwizard/manual/testing.html),
+but doesn't start jetty (and so jersey and guice web modules will not be initialized). Managed and lifecycle objects 
+supported.
+
+```java
+public class MyTest {
+
+    @Rule
+    GuiceyAppRule<MyConfiguration> RULE = new GuiceyAppRule<>(MyApplication.class, 'path/to/configuration.yaml')
+    
+    public void testSomething() {
+        RULE.getBean(MyService.class).doSomething();
+        ...
+    }
+}
+```
+
+As with dropwizard rule, configuration is optional
+
+```java
+new GuiceyAppRule<>(MyApplication.class, null)
+```
+
+NOTE: rule requires `'io.dropwizard:dropwizard-testing:0.7.1'` dependency.
+
+### Writing custom installer
 
 Installer should implement [FeatureInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/FeatureInstaller.java)
 interface. It will be automatically registered if auto scan is enabled. To register manually use `.features()` bundle option.

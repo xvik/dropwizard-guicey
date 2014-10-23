@@ -110,6 +110,7 @@ public final class FeatureUtils {
      * @param args method argument types
      * @return found method
      */
+    @SafeVarargs
     public static Method findMethod(final Class<?> type, final String name, final Class<Object>... args) {
         try {
             return type.getMethod(name, args);
