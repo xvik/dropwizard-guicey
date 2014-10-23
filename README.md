@@ -326,7 +326,7 @@ supported.
 public class MyTest {
 
     @Rule
-    GuiceyAppRule<MyConfiguration> RULE = new GuiceyAppRule<>(MyApplication.class, 'path/to/configuration.yaml')
+    GuiceyAppRule<MyConfiguration> RULE = new GuiceyAppRule<>(MyApplication.class, "path/to/configuration.yaml")
     
     public void testSomething() {
         RULE.getBean(MyService.class).doSomething();
