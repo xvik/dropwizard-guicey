@@ -8,6 +8,13 @@ compileJava {
     targetCompatibility = buildCfg.java
 }
 
+// optional and provided scopes, but they must be supported manually (see pom rendering)
+configurations {
+    provided
+    optional
+    compile.extendsFrom provided, optional
+}
+
 boolean signatureSet = buildCfg.signature
 if (signatureSet) {
     apply plugin: 'be.insaneprogramming.gradle.animalsniffer'

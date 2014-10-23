@@ -60,7 +60,8 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
                 result.BugInstance.each { bug ->
                     println ''
                     def msg = bug.LongMessage[0]
-                    println "[${cat[bug.'@category']}] ${msg.text()} [${bug.'@type'}]\n${desc[bug.'@type']}"
+                    def src = bug.SourceLine[0]
+                    logger.error "[${cat[bug.'@category']}] ${src.'@sourcepath'}:${src.'@start'}:${src.'@end'} ${msg.text()} [${bug.'@type'}]\n${desc[bug.'@type']}"
                 }
                 println ''
             }
@@ -83,7 +84,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = "5.1.2"
+    toolVersion = "5.1.3"
     ignoreFailures = false
     ruleSetFiles = files("gradle/config/pmd/pmd.xml")
     sourceSets = [sourceSets.main]
@@ -101,7 +102,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
             println ''
             result.file.each { file ->
                 file.violation.each { violation ->
-                    println "${file.'@name'}:${violation.'@beginline'}: ${violation.text()}${violation.'@externalInfoUrl'}\n"
+                    logger.error "${file.'@name'}:${violation.'@beginline'}:${violation.'@endline'} ${violation.text()}${violation.'@externalInfoUrl'}\n"
                 }
             }
         }
@@ -112,7 +113,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
 apply plugin: 'checkstyle'
 
 checkstyle {
-    toolVersion = "5.7"
+    toolVersion = "5.9"
     ignoreFailures = false
     sourceSets = [sourceSets.main]
     configFile = file('gradle/config/checkstyle/checkstyle.xml')

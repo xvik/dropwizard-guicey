@@ -68,6 +68,7 @@ public class FeaturesHolder {
      * Installer must implement {@link ru.vyarus.dropwizard.guice.module.installer.order.Ordered} otherwise
      * no order appear.
      */
+    @SuppressWarnings("PMD.UseCollectionIsEmpty")
     public void order() {
         final OrderComparator comparator = new OrderComparator();
         for (Class<? extends FeatureInstaller> installer : installerTypes) {

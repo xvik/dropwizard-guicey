@@ -44,8 +44,6 @@
     <rule ref="rulesets/java/controversial.xml">
         <exclude name="AtLeastOneConstructor"/>
         <exclude name="UseConcurrentHashMap"/>
-        <exclude name="CouplingBetweenObjects"/>
-        <exclude name="ExcessiveImports"/>
         <exclude name="DataflowAnomalyAnalysis"/>
         <exclude name="CallSuperInConstructor"/>
     </rule>
@@ -66,7 +64,6 @@
         <exclude name="EmptyFinalizer" />
         <exclude name="FinalizeOnlyCallsSuperFinalize" />
         <exclude name="FinalizeDoesNotCallSuperFinalize" />
-        <exclude name="FinalizeShould" />
     </rule>
 
     <rule ref="rulesets/java/imports.xml">

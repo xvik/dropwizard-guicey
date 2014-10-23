@@ -75,6 +75,8 @@ repositories {
 }
 
 dependencies {
+    provided 'com.google.code.findbugs:jsr305:3.0.0'
+
     compile 'org.slf4j:slf4j-api:1.7.7'
     compile 'com.google.inject:guice:4.0-beta5'
     compile 'com.google.inject.extensions:guice-servlet:4.0-beta5'
