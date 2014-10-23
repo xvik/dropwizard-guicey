@@ -13,8 +13,7 @@ import ru.vyarus.dropwizard.guice.support.web.ServletsApplication
 class WebModuleTest extends AbstractTest {
 
     @Rule
-    DropwizardAppRule<TestConfiguration> RULE =
-            new DropwizardAppRule<TestConfiguration>(ServletsApplication.class, 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml');
+    DropwizardAppRule<TestConfiguration> RULE = new DropwizardAppRule<>(ServletsApplication, null);
 
 
     def "Check web bindings"() {

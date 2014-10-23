@@ -7,7 +7,6 @@ import com.google.inject.TypeLiteral
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import io.dropwizard.testing.junit.DropwizardAppRule
 import org.junit.Rule
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
@@ -23,6 +22,7 @@ import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.*
+import ru.vyarus.dropwizard.guice.test.GuiceyAppRule
 
 /**
  * Dummy test.
@@ -33,15 +33,14 @@ import ru.vyarus.dropwizard.guice.support.feature.*
 class AutoScanModeTest extends AbstractTest {
 
     @Rule
-    DropwizardAppRule<TestConfiguration> RULE =
-            new DropwizardAppRule<TestConfiguration>(AutoScanApplication.class, 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml');
+    GuiceyAppRule<TestConfiguration> RULE = new GuiceyAppRule<>(AutoScanApplication, null);
 
     def "Check auto scan configuration"() {
 
         when: "application started"
-        Injector injector = GuiceBundle.getInjector()
-        FeaturesHolder holder = injector.getInstance(FeaturesHolder.class);
-        Bootstrap bootstrap = injector.getInstance(Bootstrap.class);
+        Injector injector = RULE.getInjector()
+        FeaturesHolder holder = RULE.getBean(FeaturesHolder.class);
+        Bootstrap bootstrap = RULE.getBean(Bootstrap.class);
 
         then: "environment binding done"
         bootstrap

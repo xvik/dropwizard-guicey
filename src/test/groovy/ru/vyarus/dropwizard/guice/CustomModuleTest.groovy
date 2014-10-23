@@ -1,18 +1,13 @@
 package ru.vyarus.dropwizard.guice
 
-import com.google.inject.Injector
-import io.dropwizard.testing.junit.DropwizardAppRule
 import org.junit.Rule
+import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.AutowiredModule
-import ru.vyarus.dropwizard.guice.support.CustomInstallerApplication
 import ru.vyarus.dropwizard.guice.support.CustomModuleApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
-import ru.vyarus.dropwizard.guice.support.feature.CustomFeature
 import ru.vyarus.dropwizard.guice.support.feature.InvisibleResource
-import ru.vyarus.dropwizard.guice.support.installer.CustomInstaller
-import spock.lang.Specification
-
+import ru.vyarus.dropwizard.guice.test.GuiceyAppRule
 
 /**
  * @author Vyacheslav Rusakov 
@@ -21,8 +16,7 @@ import spock.lang.Specification
 class CustomModuleTest extends AbstractTest {
 
     @Rule
-    DropwizardAppRule<TestConfiguration> RULE =
-            new DropwizardAppRule<TestConfiguration>(CustomModuleApplication.class, 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml');
+    GuiceyAppRule<TestConfiguration> RULE = new GuiceyAppRule<>(CustomModuleApplication, null);
 
     def "Check custom module"() {
 
@@ -30,6 +24,6 @@ class CustomModuleTest extends AbstractTest {
         AutowiredModule.instance.environment
         AutowiredModule.instance.bootstrap
         AutowiredModule.instance.configuration
-        AutowiredModule.instance.environment.jersey().resourceConfig.rootResourceClasses.contains(InvisibleResource)
+        !RULE.getBean(FeaturesHolder).getFeatures(ResourceInstaller).contains(InvisibleResource)
     }
 }

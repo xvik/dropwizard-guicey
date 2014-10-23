@@ -3,7 +3,6 @@ package ru.vyarus.dropwizard.guice
 import com.google.inject.Injector
 import com.google.inject.Key
 import io.dropwizard.setup.Bootstrap
-import io.dropwizard.testing.junit.DropwizardAppRule
 import org.junit.Rule
 import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
@@ -11,6 +10,7 @@ import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.DisabledFeatureApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.DummyResource
+import ru.vyarus.dropwizard.guice.test.GuiceyAppRule
 
 /**
  * @author Vyacheslav Rusakov 
@@ -19,8 +19,7 @@ import ru.vyarus.dropwizard.guice.support.feature.DummyResource
 class DisabledFeatureTest extends AbstractTest {
 
     @Rule
-    DropwizardAppRule<TestConfiguration> RULE =
-            new DropwizardAppRule<TestConfiguration>(DisabledFeatureApplication.class, 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml');
+    GuiceyAppRule<TestConfiguration> RULE = new GuiceyAppRule<>(DisabledFeatureApplication, null);
 
     def "Check disabled feature and no command search"() {
 

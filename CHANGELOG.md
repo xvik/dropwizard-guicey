@@ -1,4 +1,6 @@
 * Fix interface generics resolution to support nested generics and moved generics resolution into GenericsUtils instead of FeatureUtils
+* Drop java 1.6 compatibility, because dropwizard is 1.7 compatible
+* Add junit rule for lightweight testing (run guice without starting jetty)
 
 ### 1.0.0 (2014-10-14)
 * Add dependency on guice-multibindings
