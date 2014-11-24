@@ -7,12 +7,14 @@ package ru.vyarus.dropwizard.guice.module.installer;
  * additional beans in guice context.</p>
  * Installer may choose from three possible types of installation:
  * <ul>
- * <li>{@link ru.vyarus.dropwizard.guice.module.installer.install.BindingInstaller} to apply specific
+ * <li>{@link ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller} to apply specific
  * guice bindings (called in process of injector creation, whereas other installer are called after)</li>
  * <li>{@link ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller} to register class
  * in environment or somewhere else</li>
  * <li>{@link ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller} to register instance
  * in environment or somewhere else</li>
+ * <li>{@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller} to register jersey related
+ * extension</li>
  * </ul>
  * Even if installer doesn't implement any of these types, extension will be still registered in guice.
  *

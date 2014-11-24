@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
@@ -14,6 +15,9 @@ import java.util.List;
 
 /**
  * Installs all extensions found during classpath scanning.
+ *
+ * @author Vyacheslav Rusakov
+ * @since 01.09.2014
  */
 public class FeatureInstallerExecutor {
     private final Logger logger = LoggerFactory.getLogger(FeatureInstallerExecutor.class);
@@ -52,7 +56,10 @@ public class FeatureInstallerExecutor {
                             FeatureUtils.getInstallerExtName(installer.getClass()), inst.getName());
                 }
             }
-            installer.report();
+            if (!(installer instanceof JerseyInstaller)) {
+                // jersey installers reporting occurs after jersey context start
+                installer.report();
+            }
         }
     }
 }

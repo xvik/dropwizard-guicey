@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.installer.install;
+package ru.vyarus.dropwizard.guice.module.installer.install.binding;
 
 import com.google.inject.Binder;
 
@@ -7,10 +7,12 @@ import com.google.inject.Binder;
  * Used for installers which requires custom bindings for extension.
  * Note: {@code binder.install(type)} is not called by default fo binding installer, assuming installer will
  * specify proper binding itself.
+ * <p>If extension is annotated with {@code LazyBinding} boolean hint is passed and installer must decide
+ * what to do with it (preferably support or fail, not ignore).</p>
  *
  * @author Vyacheslav Rusakov
- * @since 09.10.2014
  * @see ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
+ * @since 09.10.2014
  */
 public interface BindingInstaller {
 
@@ -21,7 +23,8 @@ public interface BindingInstaller {
      *
      * @param binder guice binder
      * @param type   extension class
-     * @param <T> plugin type (used just to define strict hierarchy and simplify binding)
+     * @param lazy   true if extension is annotated with {@code @LazyBinding}
+     * @param <T>    plugin type (used just to define strict hierarchy and simplify binding)
      */
-    <T> void install(Binder binder, Class<? extends T> type);
+    <T> void install(Binder binder, Class<? extends T> type, boolean lazy);
 }

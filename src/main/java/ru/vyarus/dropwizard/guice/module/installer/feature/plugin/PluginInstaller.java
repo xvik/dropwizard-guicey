@@ -1,10 +1,11 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.plugin;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.install.BindingInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.lang.annotation.Annotation;
@@ -34,7 +35,8 @@ public class PluginInstaller implements FeatureInstaller<Object>, BindingInstall
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> void install(final Binder binder, final Class<? extends T> type) {
+    public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazy) {
+        Preconditions.checkArgument(!lazy, "Plugin bean can't be lazy: %s", type.getName());
         final Plugin annotation = FeatureUtils.getAnnotation(type, Plugin.class);
         if (annotation != null) {
             final Class<T> pluginType = (Class<T>) annotation.value();

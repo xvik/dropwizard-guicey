@@ -6,21 +6,19 @@ import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilterInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.provider.JerseyProviderInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller
 import ru.vyarus.dropwizard.guice.support.feature.*
 import ru.vyarus.dropwizard.guice.support.feature.abstr.*
 import spock.lang.Unroll
-
-import javax.servlet.Filter
 
 /**
  * @author Vyacheslav Rusakov 
@@ -43,9 +41,6 @@ class InstallersTest extends AbstractTest {
                     break;
                 case LifeCycleInstaller:
                     1 * environment.lifecycle().manage(_ as LifeCycle)
-                    break;
-                case JerseyProviderInstaller:
-                    1 * environment.jersey().register(_)
                     break;
                 case HealthCheckInstaller:
                     1 * environment.healthChecks().register(*_)

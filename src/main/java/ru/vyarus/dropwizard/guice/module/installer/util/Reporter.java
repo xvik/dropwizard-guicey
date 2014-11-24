@@ -16,6 +16,7 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 public class Reporter {
     protected static final String NEWLINE = String.format("%n");
     protected static final String TAB = "    ";
+    protected static final String LAZY_MARKER = " *LAZY_MARKER";
 
     // marker to be able switch off reports easily
     private static final Marker MARKER = MarkerFactory.getMarker("installer reporter");
@@ -23,10 +24,22 @@ public class Reporter {
     private Logger logger;
     private StringBuilder message = new StringBuilder();
     private int counter;
+    private boolean wasEmptyLine;
 
     public Reporter(final Class<? extends FeatureInstaller> type, final String title) {
         this.logger = LoggerFactory.getLogger(type);
-        message.append(title).append(NEWLINE).append(NEWLINE);
+        message.append(title).append(NEWLINE);
+        emptyLine();
+    }
+
+    /**
+     * Supports {@code @LazyBinding} annotation, to show lazy marks in report.
+     *
+     * @param isLazy lazy marker
+     * @return empty string if lazy not set, lazy marker if lazy set.
+     */
+    public final String lazy(final boolean isLazy) {
+        return isLazy ? LAZY_MARKER : "";
     }
 
     /**
@@ -36,8 +49,9 @@ public class Reporter {
      * @param args message arguments
      * @return reporter instance
      */
-    public Reporter line(final String line, final Object... args) {
+    public final Reporter line(final String line, final Object... args) {
         counter++;
+        wasEmptyLine = false;
         message.append(TAB).append(String.format(line, args)).append(NEWLINE);
         return this;
     }
@@ -47,8 +61,21 @@ public class Reporter {
      *
      * @return reporter instance
      */
-    public Reporter emptyLine() {
+    public final Reporter emptyLine() {
+        wasEmptyLine = true;
         message.append(NEWLINE);
+        return this;
+    }
+
+    /**
+     * Writes empty line if something was printed before and it was not {@link #emptyLine()}.
+     *
+     * @return reporter instance
+     */
+    public final Reporter separate() {
+        if (message.length() > 0 && !wasEmptyLine) {
+            emptyLine();
+        }
         return this;
     }
 

@@ -4,7 +4,7 @@ import com.google.inject.Injector
 import com.google.inject.Key
 import io.dropwizard.setup.Bootstrap
 import org.junit.Rule
-import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.DisabledFeatureApplication

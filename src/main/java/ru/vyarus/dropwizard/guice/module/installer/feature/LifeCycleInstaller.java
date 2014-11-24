@@ -11,6 +11,9 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 /**
  * Lifecycle objects installer.
  * Looks for classes implementing {@code org.eclipse.jetty.util.component.LifeCycle} and register them in environment.
+ *
+ * @author Vyacheslav Rusakov
+ * @since 01.09.2014
  */
 public class LifeCycleInstaller implements
         FeatureInstaller<LifeCycle>, InstanceInstaller<LifeCycle>, Ordered {

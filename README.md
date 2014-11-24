@@ -420,6 +420,7 @@ and [provider installer reporter](https://github.com/xvik/dropwizard-guicey/blob
 
 ### Might also like
 
+* [generics-resolver](https://github.com/xvik/generics-resolver) - runtime generics resolution
 * [guice-validator](https://github.com/xvik/guice-validator) - hibernate validator integration for guice 
 (objects validation, method arguments and return type runtime validation)
 * [guice-ext-annotations](https://github.com/xvik/guice-ext-annotations) - @Log, @PostConstruct, @PreDestroy and

@@ -11,6 +11,9 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 /**
  * Managed objects installer.
  * Looks for classes implementing {@code io.dropwizard.lifecycle.Managed} and register them in environment.
+ *
+ * @author Vyacheslav Rusakov
+ * @since 01.09.2014
  */
 public class ManagedInstaller implements
         FeatureInstaller<Managed>, InstanceInstaller<Managed>, Ordered {

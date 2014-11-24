@@ -10,14 +10,14 @@ import io.dropwizard.setup.Environment
 import org.junit.Rule
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilterInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.provider.JerseyProviderInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration

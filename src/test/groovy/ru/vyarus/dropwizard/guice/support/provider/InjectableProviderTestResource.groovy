@@ -2,6 +2,8 @@ package ru.vyarus.dropwizard.guice.support.provider
 
 import com.google.common.base.Preconditions
 import ru.vyarus.dropwizard.guice.support.feature.CustomFeature
+import ru.vyarus.dropwizard.guice.support.provider.annotated.Auth
+import ru.vyarus.dropwizard.guice.support.provider.annotated.User
 
 import javax.ws.rs.GET
 import javax.ws.rs.Path
@@ -20,9 +22,10 @@ class InjectableProviderTestResource {
 
     @GET
     @Path("/")
-    public Response latest(@Context Locale locale, @Context CustomFeature feature) {
+    public Response latest(@Context Locale locale, @Context CustomFeature feature, @Auth User user) {
         Preconditions.checkNotNull(locale)
         Preconditions.checkNotNull(feature)
+        Preconditions.checkNotNull(user)
         return Response.ok().build();
     }
 }

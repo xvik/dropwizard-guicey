@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice
 
 import org.junit.Rule
-import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.AutowiredModule
 import ru.vyarus.dropwizard.guice.support.CustomModuleApplication

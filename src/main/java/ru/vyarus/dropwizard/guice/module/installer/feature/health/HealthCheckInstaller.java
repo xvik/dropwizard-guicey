@@ -12,6 +12,9 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
  * Looks for classes extending
  * {@code ru.vyarus.dropwizard.guice.module.installer.installer.health.NamedHealthCheck} and register in
  * environment.
+ *
+ * @author Vyacheslav Rusakov
+ * @since 01.09.2014
  */
 public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck>,
         InstanceInstaller<NamedHealthCheck> {

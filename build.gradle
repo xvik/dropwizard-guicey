@@ -75,19 +75,15 @@ repositories {
 }
 
 dependencies {
-    provided 'com.google.code.findbugs:jsr305:3.0.0'
     provided 'junit:junit:4.11'
-    provided "io.dropwizard:dropwizard-testing:0.7.1"
+    provided "io.dropwizard:dropwizard-testing:0.8.0-rc1"
 
-    compile 'org.slf4j:slf4j-api:1.7.7'
-    compile 'com.google.inject:guice:4.0-beta5'
     compile 'com.google.inject.extensions:guice-servlet:4.0-beta5'
     compile 'com.google.inject.extensions:guice-multibindings:4.0-beta5'
-    compile "io.dropwizard:dropwizard-core:0.7.1"
-    compile "com.sun.jersey.contribs:jersey-guice:1.18.1"
+    compile "io.dropwizard:dropwizard-core:0.8.0-rc1"
+    compile 'org.glassfish.hk2:guice-bridge:2.3.0-b10'
+    compile 'ru.vyarus:generics-resolver:1.0.0-SNAPSHOT'
 
-    testCompile 'ch.qos.logback:logback-classic:1.1.2'
-    testCompile 'org.slf4j:jul-to-slf4j:1.7.7'
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testCompile 'org.spockframework:spock-guice:0.7-groovy-2.0'
     testCompile 'cglib:cglib-nodep:3.1'

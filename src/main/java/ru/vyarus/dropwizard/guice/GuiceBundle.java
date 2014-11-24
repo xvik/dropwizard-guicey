@@ -195,7 +195,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param installers feature installer types to disable
          * @return builder instance for chained calls
          */
-        public Builder<T> disableInstallers(final Class<? extends FeatureInstaller>... installers) {
+        @SafeVarargs
+        public final Builder<T> disableInstallers(final Class<? extends FeatureInstaller>... installers) {
             bundle.installerConfig.getDisabledFeatures().addAll(Arrays.asList(installers));
             return this;
         }
@@ -209,7 +210,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param installers feature installer classes to register
          * @return builder instance for chained calls
          */
-        public Builder<T> installers(final Class<? extends FeatureInstaller>... installers) {
+        @SafeVarargs
+        public final Builder<T> installers(final Class<? extends FeatureInstaller>... installers) {
             bundle.installerConfig.getManualFeatures().addAll(Arrays.asList(installers));
             return this;
         }

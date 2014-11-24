@@ -1,3 +1,8 @@
+* Dropwizard 0.8 integration (as result, no more depends on jersey-guice, but depends on guice-bridge(hk2)).
+Jersey integration completely rewritten.
+* Add JerseyInstaller installer type
+* Add @LazyBinding annotation, which allows extension not to be registered in guice context (it will be created on first request)
+
 ### 1.1.0 (2014-10-23)
 * Fix interface generics resolution to support nested generics and moved generics resolution into GenericsUtils instead of FeatureUtils
 * Drop java 1.6 compatibility, because dropwizard is 1.7 compatible

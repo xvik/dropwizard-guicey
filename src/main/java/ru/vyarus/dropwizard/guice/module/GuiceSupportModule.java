@@ -7,7 +7,7 @@ import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.InstallerModule;
 import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
-import ru.vyarus.dropwizard.guice.module.jersey.JerseyContainerModule;
+import ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
@@ -58,8 +58,8 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
     @Override
     protected void configure() {
         bindEnvironment();
-        install(new JerseyContainerModule());
         install(new InstallerModule(scanner, installerConfig));
+        install(new Jersey2Module(environment));
     }
 
     /**

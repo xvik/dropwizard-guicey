@@ -5,7 +5,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
 import ru.vyarus.dropwizard.guice.support.feature.DummyCommand
 import ru.vyarus.dropwizard.guice.support.feature.DummyManaged

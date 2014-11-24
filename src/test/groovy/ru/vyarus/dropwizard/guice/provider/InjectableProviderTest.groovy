@@ -4,15 +4,21 @@ import io.dropwizard.testing.junit.DropwizardAppRule
 import org.junit.Rule
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
+import ru.vyarus.dropwizard.guice.support.provider.CustomFeatureInjectableProvider
 import ru.vyarus.dropwizard.guice.support.provider.InjectableProviderCheckApplication
 import ru.vyarus.dropwizard.guice.support.provider.LocaleInjectableProvider
-import ru.vyarus.dropwizard.guice.support.provider.CustomFeatureInjectableProvider
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 09.10.2014
  */
 class InjectableProviderTest extends AbstractTest {
+
+    void setupSpec() {
+        LocaleInjectableProvider.resetCounters()
+        CustomFeatureInjectableProvider.resetCounters()
+    }
+
     @Rule
     DropwizardAppRule<TestConfiguration> RULE =
             new DropwizardAppRule<TestConfiguration>(InjectableProviderCheckApplication.class, 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml');

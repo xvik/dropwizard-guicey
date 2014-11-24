@@ -4,9 +4,12 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.installer.feature.ResourceInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.provider.JerseyProviderInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
+import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthFactory
+import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthFactoryProvider
+import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthInjectionResolver
 
 /**
  * Injectable providers are always registered as singletons no matter what getScope method returns.
@@ -20,7 +23,13 @@ class InjectableProviderCheckApplication extends Application<TestConfiguration> 
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .installers(JerseyProviderInstaller, ResourceInstaller)
-                .extensions(LocaleInjectableProvider, CustomFeatureInjectableProvider, InjectableProviderTestResource)
+                .extensions(
+                LocaleInjectableProvider,
+                CustomFeatureInjectableProvider,
+                InjectableProviderTestResource,
+                AuthFactory,
+                AuthFactoryProvider,
+                AuthInjectionResolver)
                 .build()
         );
     }

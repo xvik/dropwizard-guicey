@@ -8,7 +8,8 @@ import com.google.common.collect.Sets;
 import com.google.inject.AbstractModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.vyarus.dropwizard.guice.module.installer.install.BindingInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeatureInstallerExecutor;
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder;
 import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
@@ -143,9 +144,11 @@ public class InstallerModule extends AbstractModule {
                 logger.trace("{} extension found: {}",
                         FeatureUtils.getInstallerExtName(installer.getClass()), type.getName());
                 holder.register(installer.getClass(), type);
+                final boolean lazy = type.isAnnotationPresent(LazyBinding.class);
                 if (installer instanceof BindingInstaller) {
-                    ((BindingInstaller) installer).install(binder(), type);
-                } else {
+                    ((BindingInstaller) installer).install(binder(), type, lazy);
+                } else if (!lazy) {
+                    // if installer isn't install binding manually, lazy simply disable registration
                     binder().bind(type);
                 }
             }

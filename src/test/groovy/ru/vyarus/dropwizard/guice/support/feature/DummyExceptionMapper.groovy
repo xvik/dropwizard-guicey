@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.support.feature
 
-import com.sun.jersey.api.client.ClientResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -23,7 +22,7 @@ class DummyExceptionMapper implements ExceptionMapper<RuntimeException> {
     @Override
     public Response toResponse(RuntimeException e) {
         logger.debug("Problem while executing", e);
-        return Response.status(ClientResponse.Status.BAD_REQUEST)
+        return Response.status(Response.Status.BAD_REQUEST)
                 .type(MediaType.TEXT_PLAIN)
                 .entity(e.getMessage())
                 .build();
