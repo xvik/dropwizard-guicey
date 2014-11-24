@@ -84,10 +84,17 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = "5.1.3"
+    toolVersion = "5.2.1"
     ignoreFailures = false
     ruleSetFiles = files("gradle/config/pmd/pmd.xml")
     sourceSets = [sourceSets.main]
+}
+// pmd 5.2 was split into two jars, have to declare dependencies manually to work properly (waiting gradle support)
+dependencies {
+    pmd(
+            'net.sourceforge.pmd:pmd-core:5.2.1',
+            'net.sourceforge.pmd:pmd-java:5.2.1'
+    )
 }
 
 gradle.taskGraph.afterTask { Task task, TaskState state ->
@@ -113,7 +120,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
 apply plugin: 'checkstyle'
 
 checkstyle {
-    toolVersion = "5.9"
+    toolVersion = "6.1"
     ignoreFailures = false
     sourceSets = [sourceSets.main]
     configFile = file('gradle/config/checkstyle/checkstyle.xml')
