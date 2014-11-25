@@ -1,3 +1,4 @@
+### 2.0.0 (2014-11-25)
 * Dropwizard 0.8 integration (as result, no more depends on jersey-guice, but depends on guice-bridge(hk2)).
 Jersey integration completely rewritten.
 * Add JerseyInstaller installer type
