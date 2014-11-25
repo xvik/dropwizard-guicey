@@ -11,7 +11,7 @@
 
 Features:
 * Guice injector created on run phase (now both dropwizard-guice and dropwizardry-guice do the same)
-* Jersey integration through [jersey-guice](https://jersey.java.net/documentation/1.18/chapter_deps.html#d4e1876)
+* Flexible HK2 integration
 * No base classes for application or guice module (only bundle registration required)
 * Configurable installers mechanism: each supported feature (task install, health check install, etc) has it's own installer and may be disabled
 * Custom feature installers could be added
@@ -42,15 +42,17 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>1.1.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:1.1.0'
+compile 'ru.vyarus:dropwizard-guicey:2.0.0'
 ```
+
+for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
 
 ### Usage
 
@@ -91,7 +93,7 @@ Installers defined manually. They will be used to detect provided bean classes a
 Look [tests](https://github.com/xvik/dropwizard-guicey/tree/master/src/test/groovy/ru/vyarus/dropwizard/guice/support) 
 for configuration examples.
 
-After application start look application log for dropwizard style extension installation reports.
+After application start, look application log for dropwizard style extension installation reports.
 
 Bundle options:
 * `enableAutoConfig` enables auto scan on one or more packages to scan. If not set - no auto scan will be performed and default installers will not be available.
@@ -143,12 +145,15 @@ Installers itself are resolved using classpath scanning, so it's very easy to ad
 All default installers could be found [here](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature)
 
 When installer recognize class, it binds it into guice `binder.bind(foundClass)` (or bind by installer if it support binding).
+But extensions annotated with `@LazyBinding` are not bind to guice context. This may be useful to delay bean creation:
+by default, guice production stage will instantiate all registered beans.
+
 On run phase (after injector created) all found or manually provided extensions are installed by type or instantiated (`injector.getInstance(foundClass)`) and passed to installer 
 to register extension within dropwizard (installation type is defined by installer).
 
-[ResourceInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ResourceInstaller.java) 
-finds classes annotated with `@Path` and register their instance as resources. Resources registered as singletons, even if guice bean scope isn't set. If you need prototype
-resources, install them manually or write custom installer.
+[ResourceInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/ResourceInstaller.java)
+finds classes annotated with `@Path` and register their instance as resources. Resources registered as singletons, even if guice bean scope isn't set. If extension annotated as
+`@HK2Managed` then jersey HK contain will manage bean creation (still guice beans injections are possible).
 
 [TaskInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/TaskInstaller.java)
 finds classes extending `Task` class and register their instance in environment.
@@ -164,11 +169,16 @@ finds classes extending `NamedHealthCheck` class and register their instance in 
 
 Custom base class is required, because default `HealthCheck` did not provide check name, which is required for registration.
 
-[JerseyProviderInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/provider/JerseyProviderInstaller.java)
-finds classes annotated with jersey `@Provider` annotation and register their instance in environment (forced singleton). Suitable for all type of extensions, 
-like [InjectableProvider](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/LocaleInjectableProvider.groovy), 
-[ExceptionMapper](https://github.com/xvik/dropwizard-guicey/tree/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/feature/DummyExceptionMapper.groovy) etc 
+[JerseyProviderInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java)
+finds classes annotated with jersey `@Provider` annotation and register their instance in environment (forced singleton). Suitable for all types of extensions,
+like [Factory](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/LocaleInjectableProvider.groovy),
+[ExceptionMapper](https://github.com/xvik/dropwizard-guicey/tree/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/feature/DummyExceptionMapper.groovy),
+[InjectionResolver](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/annotated/AuthInjectionResolver.groovy),
+[ValueFactoryProvider](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/annotated/AuthFactoryProvider.groovy) etc
 (everything you would normally pass into `environment.jersey().register()`.
+
+Due to specifics of HK integration (see below), you may been to use `@HK2Managed` to delegate bean creation to HK,
+`@LazyBinding` to delay bean creation to time when all dependencies will we available and of course, `Provider` (for guice or HK).
 
 [EagerSingletonInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/eager/EagerSingletonInstaller.java)
 finds classes annotated with `@EagerSingleton` annotation and register them in guice injector. It is equivalent of eager singleton registration
@@ -297,27 +307,23 @@ NOTE: this will work only for application context and will not work for admin co
 is limited to one servlet context). As a result request scope and request/response injections will not work in tasks, 
 healthchecks and admin filters and servlets.
 
-#### Jersey-guice provided objects
+#### Jersey objects available for injection
 
 The following objects available for injection:
 
-* com.sun.jersey.spi.container.WebApplication
+* javax.ws.rs.core.Application
 * javax.ws.rs.ext.Providers
-* com.sun.jersey.core.util.FeaturesAndProperties
-* com.sun.jersey.spi.MessageBodyWorkers
-* com.sun.jersey.api.core.ResourceContext
-* com.sun.jersey.spi.container.ExceptionMapperContext
+* org.glassfish.hk2.api.ServiceLocator
+* org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider
 
 The following request-scope objects available for injection:
 
-* com.sun.jersey.api.core.HttpContext
 * javax.ws.rs.core.UriInfo
-* com.sun.jersey.api.core.ExtendedUriInfo
-* com.sun.jersey.api.core.HttpRequestContext
 * javax.ws.rs.core.HttpHeaders
-* javax.ws.rs.core.Request
 * javax.ws.rs.core.SecurityContext
-* com.sun.jersey.api.core.HttpResponseContext
+* javax.ws.rs.core.Request
+* org.glassfish.jersey.server.ContainerRequest
+* org.glassfish.jersey.server.internal.process.AsyncContext
 
 ### Testing
 
@@ -345,7 +351,48 @@ As with dropwizard rule, configuration is optional
 new GuiceyAppRule<>(MyApplication.class, null)
 ```
 
-NOTE: rule requires `'io.dropwizard:dropwizard-testing:0.7.1'` dependency.
+NOTE: rule requires `'io.dropwizard:dropwizard-testing:0.8.0-rc1'` dependency.
+
+### Jersey guice integration
+
+Jersey2 guice integration is much more complicated, because of [HK2](https://hk2.java.net/2.4.0-b06/introduction.html) container, used by jersey.
+
+Guice integration done in guice exclusive way as much as possible: everything should be managed by guice and invisibly integrated into HK2.
+Anyway, it is not always possible to hide integration details, especially if you need to register jersey extensions.
+
+Lifecycle:
+* Guice context starts first. This is important for commands support: command did not start jersey and so jersey related extensions will not be activated,
+still core guice context will be completely operable.
+* Guice context includes special module with [jersey related bindings](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/jersey/hk2/GuiceBindingsModule.java).
+This bindings are lazy (it's impossible to resolve them before jersey will start). So if this dependencies are used in singleton beans, they must be wrapped with `Provider`.
+* [Guice feature](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/jersey/GuiceFeature.java) registered in jersey.
+It will bind guice specific extensions into jersey, when jersey starts.
+* [JerseyInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/install/JerseyInstaller.java)
+installer type is called to bind extensions into HK2 context.
+This binding is done, using HK `Factory` as much as possible to make definitions lazy and delay actual creation as much as possible.
+* HK [guice-bridge](https://hk2.java.net/2.4.0-b06/guice-bridge.html) is also registered (not bi-directional) (but, in fact, this bridge is not required).
+Bridge adds just injection points resolution for hk managed beans, and not bean resolution. Anyway, this may be useful in some cases.
+
+So when guice context is created, jersey context doesn't exist and when jersey context is created it doesn't aware of guice existence.
+But, `JerseyInstaller` installs HK bindings directly in time of hk context creation, which allows to workaround HK's lack of guice knowledge.
+Extensions on both sides must be registered lazily (using `Factory` and `Provider`).
+Special [utility](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/util/JerseyBinding.java)
+helps with this.
+
+The problems may appear with binding of jersey extensions.
+Good example is `ValueFactoryProvider`. Most likely you will use `AbstractValueFactoryProvider` as base class, but it declares
+direct binding for `MultivaluedParameterExtractorProvider`. So such bean would be impossible to create eagerly in guice context.
+
+There are two options to solve this:
+* use `@LazyBinding`: bean stance will not be created together with guice context (which `MultivaluedParameterExtractorProvider` is not available),
+and creation will be initiated by HK, when binding could be resolved.
+* or use `@HK2Managed` this will delegate instance management to HK, but still guice specific extensions may be used.
+
+In other cases simply wrap jersey specific bindings into `Provider`.
+
+Note, that current integration could be extended: you can write custom installer in order to register additional types into HK directly.
+On guice side you can register additional bindings for jersey components the same way as in
+[jersey bindings module](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/jersey/hk2/GuiceBindingsModule.java)
 
 ### Writing custom installer
 
@@ -360,8 +407,13 @@ Three types of installation supported. Installer should implement one or more of
 * `BindingInstaller` allows custom guice bindings. If installer doesn't implement this interface sinmple `bind(type)` will be called to register in guice.
 * `TypeInstaller` used for registration based on type (no instance created during installation).
 * `InstanceInstaller` used for instance registration. Instance created using `injector.getInstance(type)`.
+* `JerseyInstaller` used for registration of bindings in HK context.
+
+Note that extensions may use `@LazyBinding` annotation. In general case such extensions will not be registered in guice.
+In case of `BindingInstaller`, special hint will be passed and installer should decide how to handle it (may throw exception as not supported).
 
 `BindingInstaller` called in time of injector creation, whereas `TypeInstaller` and `InstanceInstaller` are called just after injector creation.
+`JerseyInstaller` is called on jersey start.
 
 Installers are not guice beans! So injections can't be used inside them. This is because installers also used during initialization phase and instantiated before injector creation.
 
@@ -382,15 +434,15 @@ because guice registration is enough.
 Now suppose CustomFeature is a base class for our jersey extensions. Then installer will be:
 
 ```java
-public class CustomInstaller implements FeatureInstaller<CustomFeature>, InstanceInstaller<CustomFeature> {
+public class CustomInstaller implements FeatureInstaller<CustomFeature>, JerseyInstaller<CustomFeature> {
     @Override
     public boolean matches(final Class<?> type) {
         return FeatureUtils.is(type, CustomFeature.class);
     }
     
     @Override
-    public void install(final Environment environment, final CustomFeature instance) {
-        environment.jersey().register(instance);
+    public void install(final AbstractBinder binder, final Class<CustomFeature> type) {
+        JerseyBinding.bindComponent(binder, type);
     }
     
     @Override
@@ -416,7 +468,7 @@ See example usage in [ManagedInstaller](https://github.com/xvik/dropwizard-guice
 
 For complex cases, reporter may be extended to better handle installed extensions. As examples see 
 [plugin installer reporter](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/plugin/PluginReporter.java)
-and [provider installer reporter](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/provider/ProviderReporter.java)
+and [provider installer reporter](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/ProviderReporter.java)
 
 ### Might also like
 

@@ -10,10 +10,11 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
  * <p>Installer must support {@code HK2Managed} annotation, which delegates bean creation to HK2.
  * Use {@link ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding} to properly support annotation.</p>
  *
+ * @param <T> expected extension type (or Object when no super type (e.g. for annotated beans))
  * @author Vyacheslav Rusakov
  * @since 16.11.2014
  */
-public interface JerseyInstaller {
+public interface JerseyInstaller<T> {
 
     /**
      * Called on jersey start to inject extensions into HK context.
@@ -27,5 +28,5 @@ public interface JerseyInstaller {
      * @see ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding
      * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
      */
-    void install(AbstractBinder binder, Class<?> type);
+    void install(AbstractBinder binder, Class<T> type);
 }

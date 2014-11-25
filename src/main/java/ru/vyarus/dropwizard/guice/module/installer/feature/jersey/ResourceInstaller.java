@@ -27,7 +27,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isH
  * @since 01.09.2014
  */
 public class ResourceInstaller implements FeatureInstaller<Object>, BindingInstaller, TypeInstaller<Object>,
-        JerseyInstaller {
+        JerseyInstaller<Object> {
 
     @Override
     public boolean matches(final Class<?> type) {
@@ -44,11 +44,12 @@ public class ResourceInstaller implements FeatureInstaller<Object>, BindingInsta
 
     @Override
     public void install(final Environment environment, final Class<Object> type) {
+        // type registration is required to properly start resource
         environment.jersey().register(type);
     }
 
     @Override
-    public void install(final AbstractBinder binder, final Class<?> type) {
+    public void install(final AbstractBinder binder, final Class<Object> type) {
         JerseyBinding.bindComponent(binder, type);
     }
 

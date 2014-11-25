@@ -32,7 +32,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
  * @since 10.10.2014
  */
 public class JerseyProviderInstaller implements FeatureInstaller<Object>,
-        BindingInstaller, JerseyInstaller {
+        BindingInstaller, JerseyInstaller<Object> {
 
     private final Logger logger = LoggerFactory.getLogger(JerseyProviderInstaller.class);
     private final ProviderReporter reporter = new ProviderReporter();
@@ -57,7 +57,7 @@ public class JerseyProviderInstaller implements FeatureInstaller<Object>,
 
     @Override
     @SuppressWarnings("unchecked")
-    public void install(final AbstractBinder binder, final Class<?> type) {
+    public void install(final AbstractBinder binder, final Class<Object> type) {
         if (is(type, Factory.class)) {
             // register factory directly (without wrapping)
             bindFactory(binder, type);
