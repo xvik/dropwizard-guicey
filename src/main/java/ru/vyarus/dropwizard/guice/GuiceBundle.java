@@ -25,6 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import ru.vyarus.dropwizard.guice.api.InjectorFactory;
+
 /**
  * Bundle enables guice integration for dropwizard. Guice context is configured in initialization phase,
  * but actual injector is created on run phase, This approach provides greater configuration options, because during
@@ -65,7 +67,8 @@ import java.util.Set;
  */
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
-    private static Injector injector;
+    private static Injector       injector;
+    private InjectorFactory       injectorFactory  = new DefaultInjectorFactoryImpl();
 
     private final List<Module> modules = Lists.newArrayList();
     private final Set<String> autoscanPackages = Sets.newHashSet();
@@ -102,7 +105,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     public void run(final T configuration, final Environment environment) throws Exception {
         modules.add(new GuiceSupportModule(scanner, installerConfig));
         configureModules(configuration, environment);
-        GuiceBundle.injector = Guice.createInjector(stage, modules);
+        GuiceBundle.injector = injectorFactory.createInjector(stage, modules);
         CommandSupport.initCommands(bootstrap.getCommands(), injector);
     }
 
@@ -149,6 +152,18 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     public static class Builder<T extends Configuration> {
         private final GuiceBundle<T> bundle = new GuiceBundle<T>();
+
+        /**
+         * Configures as custom {@link InjectorFactory}.
+         *
+         * @param injectorFactory
+         *            a custom factory for creating Guice injectors
+         * @return builder instance for chained calls
+         */
+        public Builder<T> injectorFactory(final InjectorFactory injectorFactory) {
+            bundle.injectorFactory = injectorFactory;
+            return this;
+        }
 
         /**
          * Enables auto scan feature.
@@ -251,6 +266,19 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public GuiceBundle<T> build() {
             return build(Stage.PRODUCTION);
+        }
+    }
+
+    /**
+     * A default {@link InjectorFactory} that simply delegates to {@link Guice#createInjector(Stage, Module...)}.
+     *
+     * @author Nicholas Pace
+     * @since Dec 26, 2014
+     */
+    private class DefaultInjectorFactoryImpl implements InjectorFactory {
+        @Override
+        public Injector createInjector(final Stage stage, final Iterable<? extends Module> modules) {
+            return Guice.createInjector(stage, modules);
         }
     }
 }

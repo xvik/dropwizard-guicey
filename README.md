@@ -130,6 +130,37 @@ This will work only for modules set to `modules()` bundle option.
 
 [Example](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/AutowiredModule.groovy)
 
+### Custom Injectors
+
+Some Guice extension libraries require Injectors created by their API.
+A custom Injector may be supplied by implementing `InjectorFactory` and passing an instance of this implementation to the bundle builder.
+For example, to add support for https://github.com/Netflix/governator one might create a factory like the following:
+
+```java
+public class GovernatorInjectorFactory implements InjectorFactory {
+    @Override
+    public Injector createInjector(Stage stage, Iterable<? extends Module> modules) {
+        return LifecycleInjector.builder().withModules(modules).build().createInjector();;
+    }
+}
+```
+
+and provide this factory when building the bundle for dropwizard:
+
+```java
+@Override
+void initialize(Bootstrap<TestConfiguration> bootstrap) {
+    bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+            .installers(ResourceInstaller.class, TaskInstaller.class, ManagedInstaller.class)
+            .extensions(MyTask.class, MyResource.class, MyManaged.class)
+            .modules(new MyModule())
+            .injectorFactory(new GovernatorInjectorFactory())
+            .build()
+    );
+    bootstrap.addCommand(new MyCommand())
+}
+```
+
 ### Extension ordering
 
 Some installers support extensions ordering (managed, lifecycle and admin servlet and filters).
