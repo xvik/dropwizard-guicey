@@ -25,6 +25,7 @@ import java.util.List;
 public class InstallerBinder extends AbstractBinder {
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void configure() {
         final Injector injector = GuiceBundle.getInjector();
         final FeaturesHolder holder = injector.getInstance(FeaturesHolder.class);

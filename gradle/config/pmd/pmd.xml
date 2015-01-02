@@ -20,9 +20,9 @@
             <property name="minimum" value="30"/>
         </properties>
     </rule>
-    <rule ref="rulesets/java/codesize.xml/ExcessiveClassLength" message="Avoid classes longer than 300 lines">
+    <rule ref="rulesets/java/codesize.xml/ExcessiveClassLength" message="Avoid classes longer than 200 lines">
         <properties>
-            <property name="minimum" value="300"/>
+            <property name="minimum" value="200"/>
         </properties>
     </rule>
     <rule ref="rulesets/java/codesize.xml/TooManyMethods" message="Avoid classes longer than 25 methods">

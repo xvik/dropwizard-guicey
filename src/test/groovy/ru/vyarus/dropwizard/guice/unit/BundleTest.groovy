@@ -1,14 +1,10 @@
 package ru.vyarus.dropwizard.guice.unit
 
 import io.dropwizard.Configuration
-import io.dropwizard.jersey.setup.JerseyEnvironment
-import io.dropwizard.jetty.MutableServletContextHandler
-import io.dropwizard.jetty.setup.ServletEnvironment
 import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.api.InjectorFactory;
+import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import com.google.inject.Injector;
 
 /**
@@ -34,8 +30,8 @@ class BundleTest extends AbstractTest {
     }
     
     def "Check custom injector factory"() {
-        InjectorFactory mockInjectorFactory = Mock()
-        Injector mockInjector = Mock()
+        InjectorFactory mockInjectorFactory = Mock(InjectorFactory)
+        Injector mockInjector = Mock(Injector)
         
         when: "using default factory"
         GuiceBundle bundle = GuiceBundle.builder().build()
@@ -49,7 +45,7 @@ class BundleTest extends AbstractTest {
         bundle.initialize(Mock(Bootstrap))
         bundle.run(Mock(Configuration), mockEnvironment())
         then: "injector factory has been customized"
-        1 * mockInjectorFactory.createInjector(_, _) >> mockInjector
+        1 * mockInjectorFactory.createInjector(*_) >> mockInjector
         GuiceBundle.getInjector() == mockInjector
     }
 

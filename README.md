@@ -96,6 +96,7 @@ for configuration examples.
 After application start, look application log for dropwizard style extension installation reports.
 
 Bundle options:
+* `injectorFactory` sets custom injector factory (see below)
 * `enableAutoConfig` enables auto scan on one or more packages to scan. If not set - no auto scan will be performed and default installers will not be available.
 * `searchCommands` if true, command classes will be searched in classpath and registered in bootstrap object. 
 Auto scan must be enabled. By default commands scan is disabled (false), because it may be not obvious.
@@ -106,6 +107,36 @@ Note: when auto scan not enabled no installers will be registered automatically.
 configure installers when auto scan not used.
 * `extensions` manually register classes (for example, when auto scan disabled). Classes will be installed using configured installers.
 * `build` allows specifying guice injector stage (production, development). By default, PRODUCTION stage used.
+
+#### Using custom injector factory
+
+Some Guice extension libraries require injector created by their API.
+You can control injector creation with custom `InjectorFactory` implementation.
+
+For example, to add support for [governator](https://github.com/Netflix/governator):
+
+```java
+public class GovernatorInjectorFactory implements InjectorFactory {
+    @Override
+    public Injector createInjector(final Stage stage, final Iterable<? extends Module> modules) {
+        return LifecycleInjector.builder().withModules(modules).build().createInjector();
+    }
+}
+```
+
+Configure custom factory in bundle:
+
+```java
+@Override
+void initialize(Bootstrap<TestConfiguration> bootstrap) {
+    bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+            .injectorFactory(new GovernatorInjectorFactory())
+            .enableAutoConfig("package.to.scan")
+            .modules(new MyModule())
+            .build()
+    );
+}
+```
 
 ### Classpath scan
 
@@ -129,37 +160,6 @@ interfaces and reference object will be set to module just before injector creat
 This will work only for modules set to `modules()` bundle option.
 
 [Example](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/AutowiredModule.groovy)
-
-### Custom Injectors
-
-Some Guice extension libraries require Injectors created by their API.
-A custom Injector may be supplied by implementing `InjectorFactory` and passing an instance of this implementation to the bundle builder.
-For example, to add support for https://github.com/Netflix/governator one might create a factory like the following:
-
-```java
-public class GovernatorInjectorFactory implements InjectorFactory {
-    @Override
-    public Injector createInjector(Stage stage, Iterable<? extends Module> modules) {
-        return LifecycleInjector.builder().withModules(modules).build().createInjector();;
-    }
-}
-```
-
-and provide this factory when building the bundle for dropwizard:
-
-```java
-@Override
-void initialize(Bootstrap<TestConfiguration> bootstrap) {
-    bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
-            .installers(ResourceInstaller.class, TaskInstaller.class, ManagedInstaller.class)
-            .extensions(MyTask.class, MyResource.class, MyManaged.class)
-            .modules(new MyModule())
-            .injectorFactory(new GovernatorInjectorFactory())
-            .build()
-    );
-    bootstrap.addCommand(new MyCommand())
-}
-```
 
 ### Extension ordering
 
@@ -448,7 +448,7 @@ as write binding manually).
 ### Writing custom installer
 
 Installer should implement [FeatureInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/FeatureInstaller.java)
-interface. It will be automatically registered if auto scan is enabled. To register manually use `.features()` bundle option.
+interface. It will be automatically registered if auto scan is enabled. To register manually use `.installers()` bundle option.
 
 Installer `matches` method implements feature detection logic. You can use `FeatureUtils` for type checks, because it's denies
 abstract classes. Method is called for classes found during scan to detect installable features and for classes directly specified

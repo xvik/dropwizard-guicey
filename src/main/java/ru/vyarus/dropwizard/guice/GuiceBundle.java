@@ -4,7 +4,6 @@ package ru.vyarus.dropwizard.guice;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
@@ -12,6 +11,8 @@ import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
+import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
@@ -24,8 +25,6 @@ import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-
-import ru.vyarus.dropwizard.guice.api.InjectorFactory;
 
 /**
  * Bundle enables guice integration for dropwizard. Guice context is configured in initialization phase,
@@ -65,14 +64,15 @@ import ru.vyarus.dropwizard.guice.api.InjectorFactory;
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
+@SuppressWarnings("PMD.ExcessiveClassLength")
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
-    private static Injector       injector;
-    private InjectorFactory       injectorFactory  = new DefaultInjectorFactoryImpl();
+    private static Injector injector;
 
     private final List<Module> modules = Lists.newArrayList();
     private final Set<String> autoscanPackages = Sets.newHashSet();
     private final InstallerConfig installerConfig = new InstallerConfig();
+    private InjectorFactory injectorFactory = new DefaultInjectorFactory();
     private boolean searchCommands;
     private Stage stage = Stage.PRODUCTION;
 
@@ -154,10 +154,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         private final GuiceBundle<T> bundle = new GuiceBundle<T>();
 
         /**
-         * Configures as custom {@link InjectorFactory}.
+         * Configures custom {@link InjectorFactory}. Required by some guice extensions like governator.
          *
-         * @param injectorFactory
-         *            a custom factory for creating Guice injectors
+         * @param injectorFactory custom guice injector factory
          * @return builder instance for chained calls
          */
         public Builder<T> injectorFactory(final InjectorFactory injectorFactory) {
@@ -260,25 +259,10 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Stage implicitly set to PRODUCTION.
-         *
-         * @return bundle instance
+         * @return bundle instance with implicit PRODUCTION stage
          */
         public GuiceBundle<T> build() {
             return build(Stage.PRODUCTION);
-        }
-    }
-
-    /**
-     * A default {@link InjectorFactory} that simply delegates to {@link Guice#createInjector(Stage, Module...)}.
-     *
-     * @author Nicholas Pace
-     * @since Dec 26, 2014
-     */
-    private class DefaultInjectorFactoryImpl implements InjectorFactory {
-        @Override
-        public Injector createInjector(final Stage stage, final Iterable<? extends Module> modules) {
-            return Guice.createInjector(stage, modules);
         }
     }
 }
