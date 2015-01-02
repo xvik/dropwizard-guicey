@@ -25,6 +25,11 @@ bintray {
                 sign = bintrayCfg.signFiles
                 passphrase = bintrayCfg.gpgPassphrase
             }
+            mavenCentralSync {
+                sync = bintrayCfg.mavenCentralSync
+                user = bintrayCfg.ossUser
+                password = bintrayCfg.ossPassword
+            }
         }
     }
 }

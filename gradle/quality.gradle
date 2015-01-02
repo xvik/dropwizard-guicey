@@ -1,6 +1,10 @@
 /* Quality plugins checks applied during "gradle check" execution, so travis build will fail in case of quality problems
  * and its better to call check manually before push. */
 
+
+// enable detailed warnings (all options http://docs.oracle.com/javase/8/docs/technotes/tools/windows/javac.html#BHCJCABJ)
+compileJava.options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+
 apply plugin: 'findbugs'
 
 // findbugs 3 supports java 8, but requires java 7!
@@ -84,7 +88,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = "5.2.1"
+    toolVersion = "5.2.2"
     ignoreFailures = false
     ruleSetFiles = files("gradle/config/pmd/pmd.xml")
     sourceSets = [sourceSets.main]
@@ -92,8 +96,8 @@ pmd {
 // pmd 5.2 was split into two jars, have to declare dependencies manually to work properly (waiting gradle support)
 dependencies {
     pmd(
-            'net.sourceforge.pmd:pmd-core:5.2.1',
-            'net.sourceforge.pmd:pmd-java:5.2.1'
+            'net.sourceforge.pmd:pmd-core:5.2.2',
+            'net.sourceforge.pmd:pmd-java:5.2.2'
     )
 }
 
@@ -120,7 +124,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
 apply plugin: 'checkstyle'
 
 checkstyle {
-    toolVersion = "6.1"
+    toolVersion = "6.1.1"
     ignoreFailures = false
     sourceSets = [sourceSets.main]
     configFile = file('gradle/config/checkstyle/checkstyle.xml')

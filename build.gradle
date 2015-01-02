@@ -11,7 +11,7 @@ description = 'Dropwizard guice integration'
 // convention: project.name == github project name == bintray package page
 project.ext {
     build = {
-        gradle = 2.2
+        gradle = '2.2.1'
         java = 1.7
         // if not empty runs animal sniffer on compile to guarantee binary compatibility; set '' to disable
         signature = 'org.codehaus.mojo.signature:java17:+@signature'
@@ -26,8 +26,13 @@ project.ext {
         tags = ['dropwizard','guice']
         dryRun = false // whether to run this as dry-run, without deploying (TEST RUN)
         publish = true //If version should be auto published after an upload
+
         signFiles = true // true to gpg sign files on bintray (certificate must be installed on bintray account)
         gpgPassphrase = project.hasProperty('gpgPassphrase') ? gpgPassphrase : '' // optionally configured in ~/.gradle/gradle.properties if certificate requires it
+
+        mavenCentralSync = true // true to sync with maven central (files signing required)
+        ossUser = project.hasProperty('sonatypeUser') ? sonatypeUser : 'USER' // configured in ~/.gradle/gradle.properties
+        ossPassword = project.hasProperty('sonatypePassword') ? sonatypePassword : 'PASSWORD' // configured in ~/.gradle/gradle.properties
     }
     license = 'MIT'
     licenseDesc = 'The MIT License'
@@ -75,14 +80,14 @@ repositories {
 }
 
 dependencies {
-    provided 'junit:junit:4.11'
+    provided 'junit:junit:4.12'
     provided "io.dropwizard:dropwizard-testing:0.8.0-rc1"
 
     compile 'com.google.inject.extensions:guice-servlet:4.0-beta5'
     compile 'com.google.inject.extensions:guice-multibindings:4.0-beta5'
     compile "io.dropwizard:dropwizard-core:0.8.0-rc1"
     compile 'org.glassfish.hk2:guice-bridge:2.3.0-b10'
-    compile 'ru.vyarus:generics-resolver:1.0.0'
+    compile 'ru.vyarus:generics-resolver:1.1.0'
 
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testCompile 'org.spockframework:spock-guice:0.7-groovy-2.0'

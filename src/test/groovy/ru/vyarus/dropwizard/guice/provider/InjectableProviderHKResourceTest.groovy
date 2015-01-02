@@ -13,6 +13,12 @@ import ru.vyarus.dropwizard.guice.support.provider.LocaleInjectableProvider
  * @since 25.11.2014
  */
 class InjectableProviderHKResourceTest extends AbstractTest {
+
+    void setupSpec() {
+        LocaleInjectableProvider.resetCounters()
+        CustomFeatureInjectableProvider.resetCounters()
+    }
+
     @Rule
     DropwizardAppRule<TestConfiguration> RULE =
             new DropwizardAppRule<TestConfiguration>(InjectableProviderCheckApplication3.class, 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml');
