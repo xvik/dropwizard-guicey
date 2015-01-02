@@ -139,6 +139,8 @@ void initialize(Bootstrap<TestConfiguration> bootstrap) {
 }
 ```
 
+[Read more about governator integration](https://github.com/xvik/dropwizard-guicey/wiki/Governator-Integration)
+
 ### Classpath scan
 
 Classpath scanning is activated by specifying packages to scan in bundle `.enableAutoConfig("package.to.scan")`.
