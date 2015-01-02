@@ -8,6 +8,8 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.api.InjectorFactory;
+import com.google.inject.Injector;
 
 /**
  * @author Vyacheslav Rusakov 
@@ -29,6 +31,26 @@ class BundleTest extends AbstractTest {
         GuiceBundle.getInjector()
         then: "injector available"
         true
+    }
+    
+    def "Check custom injector factory"() {
+        InjectorFactory mockInjectorFactory = Mock()
+        Injector mockInjector = Mock()
+        
+        when: "using default factory"
+        GuiceBundle bundle = GuiceBundle.builder().build()
+        bundle.initialize(Mock(Bootstrap))
+        bundle.run(Mock(Configuration), mockEnvironment())        
+        then: "injector is a Guice injector"
+        GuiceBundle.getInjector() instanceof Injector
+        
+        when: "using custom factory"        
+        bundle = GuiceBundle.builder().injectorFactory(mockInjectorFactory).build()
+        bundle.initialize(Mock(Bootstrap))
+        bundle.run(Mock(Configuration), mockEnvironment())
+        then: "injector factory has been customized"
+        1 * mockInjectorFactory.createInjector(_, _) >> mockInjector
+        GuiceBundle.getInjector() == mockInjector
     }
 
     def "Check commands search" () {
