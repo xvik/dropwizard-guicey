@@ -62,7 +62,6 @@
         <module name="InnerAssignment"/>
         <module name="InnerTypeLast"/>
         <module name="InterfaceIsType"/>
-        <module name="JUnitTestCase"/>
         <module name="JavaNCSS"/>
         <module name="JavadocStyle"/>
         <module name="JavadocType"/>
@@ -113,9 +112,6 @@
         <module name="ParenPad"/>
         <module name="RedundantImport"/>
         <module name="RedundantModifier"/>
-        <module name="RedundantThrows">
-            <property name="suppressLoadErrors" value="true"/>
-        </module>
         <module name="RightCurly"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
