@@ -114,7 +114,7 @@ configure installers when auto scan not used.
 Some Guice extension libraries require injector created by their API.
 You can control injector creation with custom `InjectorFactory` implementation.
 
-For example, to add support for [governator](https://github.com/Netflix/governator):
+For example, to support [governator](https://github.com/Netflix/governator):
 
 ```java
 public class GovernatorInjectorFactory implements InjectorFactory {
