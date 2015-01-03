@@ -23,11 +23,13 @@ Features:
 * Servlets and filters could be installed into admin context (using annotations)
 * Extensions ordering supported (for some extension types, where it might be useful)
 * Dropwizard style reporting of installed extensions
-* Custom junit rule for lightweight integration testing  
+* Custom junit rule for lightweight integration testing
+* [Spock](http://spockframework.org) extensions
 
 ### Thanks to
 
 [Sébastien Boulet](https://github.com/gontard) ([intactile design](http://intactile.com)) for very useful feedback
+[Nicholas Pace](https://github.com/segfly) for governator integration
 
 ### Setup
 
@@ -43,14 +45,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>2.0.0</version>
+  <version>2.1.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:2.0.0'
+compile 'ru.vyarus:dropwizard-guicey:2.1.0'
 ```
 
 for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
@@ -377,6 +379,8 @@ The following request-scope objects available for injection:
 
 ### Testing
 
+Tests requires `'io.dropwizard:dropwizard-testing:0.8.0-rc1'` dependency.
+
 For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like 
 [DropwizardAppRule](https://dropwizard.github.io/dropwizard/manual/testing.html),
 but doesn't start jetty (and so jersey and guice web modules will not be initialized). Managed and lifecycle objects 
@@ -401,7 +405,79 @@ As with dropwizard rule, configuration is optional
 new GuiceyAppRule<>(MyApplication.class, null)
 ```
 
-NOTE: rule requires `'io.dropwizard:dropwizard-testing:0.8.0-rc1'` dependency.
+#### Spock
+
+If you use [spock framework](http://spockframework.org) you can use spock specific extensions:
+* `@UseGuiceyApp` - internally use `GuiceyAppRule`
+* `@UseDropwizardApp` - internally use `DropwizardAppRule`
+
+Both extensions allows using injections directly in specifications (like spock-guice).
+
+##### UseGuiceyApp
+
+```groovy
+@UseGuiceyApp(MyApplication)
+class AutoScanModeTest extends Specification {
+
+    @Inject MyService service
+
+    def "My service test" {
+        when: 'calling service'
+        def res = service.getSmth()
+        then: 'correct result returned'
+        res == 'hello'
+    }
+```
+
+Annotation allows you to configure the same things as rules does: application class, configuration file (optional),
+configuration overrides.
+
+```groovy
+@UseGuiceyApp(value = MyApplication,
+    config = 'path/to/my/config.yml',
+    configOverride = [
+            @ConfigOverride(key = "foo", value = "2"),
+            @ConfigOverride(key = "bar", value = "12")
+    ])
+class ConfigOverrideTest extends Specification {
+```
+
+As with rules, `configOverride` may be used without setting config file (simply to fill some configurations)
+
+##### UseDropwizardApp
+
+For complete integration testing (when web part is required):
+
+```groovy
+@UseDropwizardApp(MyApplication)
+class WebModuleTest extends Specification {
+
+    @Inject MyService service
+
+    def "Check web bindings"() {
+
+        when: "calling filter"
+        def res = new URL("http://localhost:8080/dummyFilter").getText()
+        then: "filter active"
+        res == 'Sample filter and service called'
+        service.isCalled()
+```
+
+Annotation supports the same configuration options as `@UseGuiceyApp` (see above)
+
+##### Spock extensions details
+
+Extensions follow spock-guice style - application started once for all tests in class. It's the same as using rule with
+`@ClassRule` annotation. Rules may be used with spock too (the same way as in junit), but don't mix them with
+annotation extensions.
+
+To better understand how injections works, see [this test](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/test/InjectionTest.groovy)
+Also, look other tests - they all use spock extensions.
+
+There are two limitations comparing to rules:
+* Application can't be created for each test separately (like with `@Rule` annotation). This is because of `@Shared` instances support.
+* You can't customize application creation: application class must have no-args constructor (with rules you can extend rule class
+and override `newApplication` method). But this should be rare requirement.
 
 ### Jersey guice integration
 

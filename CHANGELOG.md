@@ -1,3 +1,4 @@
+### 2.1.0 (2015-01-04)
 * Add ability to customize injector creation (required by some guice third party modules, like governator). Contributed by [Nicholas Pace](https://github.com/segfly)
 * Add spock extensions to use injections directly in specification (like spock-guice do)
 
