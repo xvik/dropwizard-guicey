@@ -28,8 +28,8 @@ Features:
 
 ### Thanks to
 
-[Sébastien Boulet](https://github.com/gontard) ([intactile design](http://intactile.com)) for very useful feedback
-[Nicholas Pace](https://github.com/segfly) for governator integration
+* [Sébastien Boulet](https://github.com/gontard) ([intactile design](http://intactile.com)) for very useful feedback
+* [Nicholas Pace](https://github.com/segfly) for governator integration
 
 ### Setup
 
