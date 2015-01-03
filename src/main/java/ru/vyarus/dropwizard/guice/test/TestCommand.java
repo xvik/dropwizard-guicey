@@ -21,7 +21,7 @@ public class TestCommand<C extends Configuration> extends EnvironmentCommand<C> 
     private ContainerLifeCycle container;
 
     public TestCommand(final Application<C> application) {
-        super(application, "guicey-test", "Test specific command to run guice context without jetty server");
+        super(application, "guicey-test", "Specific command to run guice context without jetty server");
         configurationClass = application.getConfigurationClass();
     }
 

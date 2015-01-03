@@ -1,22 +1,22 @@
 package ru.vyarus.dropwizard.guice
 
-import org.junit.Rule
+import com.google.inject.Inject
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.AutowiredModule
 import ru.vyarus.dropwizard.guice.support.CustomModuleApplication
-import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.InvisibleResource
-import ru.vyarus.dropwizard.guice.test.GuiceyAppRule
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 04.09.2014
  */
+@UseGuiceyApp(CustomModuleApplication)
 class CustomModuleTest extends AbstractTest {
 
-    @Rule
-    GuiceyAppRule<TestConfiguration> RULE = new GuiceyAppRule<>(CustomModuleApplication, null);
+    @Inject
+    FeaturesHolder holder
 
     def "Check custom module"() {
 
@@ -24,6 +24,6 @@ class CustomModuleTest extends AbstractTest {
         AutowiredModule.instance.environment
         AutowiredModule.instance.bootstrap
         AutowiredModule.instance.configuration
-        !RULE.getBean(FeaturesHolder).getFeatures(ResourceInstaller).contains(InvisibleResource)
+        !holder.getFeatures(ResourceInstaller).contains(InvisibleResource)
     }
 }

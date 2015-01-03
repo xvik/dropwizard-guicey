@@ -1,23 +1,19 @@
 package ru.vyarus.dropwizard.guice.resource
 
-import io.dropwizard.testing.junit.DropwizardAppRule
-import org.junit.Rule
 import ru.vyarus.dropwizard.guice.AbstractTest
-import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.resource.PrototypeResource
 import ru.vyarus.dropwizard.guice.support.resource.ResourceSingletonCheckApplication
 import ru.vyarus.dropwizard.guice.support.resource.SingletonResource
+import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 /**
  * Check resources are singletons
  * @author Vyacheslav Rusakov 
  * @since 04.10.2014
  */
+@UseDropwizardApp(ResourceSingletonCheckApplication)
 class ResourcesSingletonTest extends AbstractTest {
 
-    @Rule
-    DropwizardAppRule<TestConfiguration> RULE =
-            new DropwizardAppRule<TestConfiguration>(ResourceSingletonCheckApplication.class, 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml');
 
     def "Check resource singleton"() {
 

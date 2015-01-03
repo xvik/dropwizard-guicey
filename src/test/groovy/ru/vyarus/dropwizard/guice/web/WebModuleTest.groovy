@@ -1,19 +1,15 @@
 package ru.vyarus.dropwizard.guice.web
 
-import io.dropwizard.testing.junit.DropwizardAppRule
-import org.junit.Rule
 import ru.vyarus.dropwizard.guice.AbstractTest
-import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.web.ServletsApplication
+import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 12.10.2014
  */
+@UseDropwizardApp(ServletsApplication)
 class WebModuleTest extends AbstractTest {
-
-    @Rule
-    DropwizardAppRule<TestConfiguration> RULE = new DropwizardAppRule<>(ServletsApplication, null);
 
 
     def "Check web bindings"() {

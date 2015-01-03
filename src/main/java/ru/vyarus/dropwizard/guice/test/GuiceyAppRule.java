@@ -9,9 +9,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.junit.ConfigOverride;
 import net.sourceforge.argparse4j.inf.Namespace;
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+import org.junit.rules.ExternalResource;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 
 import javax.annotation.Nullable;
@@ -33,7 +31,7 @@ import java.util.Enumeration;
  * @author Vyacheslav Rusakov
  * @since 23.10.2014
  */
-public class GuiceyAppRule<C extends Configuration> implements TestRule {
+public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
 
     private final Class<? extends Application<C>> applicationClass;
     private final String configPath;
@@ -41,7 +39,6 @@ public class GuiceyAppRule<C extends Configuration> implements TestRule {
     private C configuration;
     private Application<C> application;
     private Environment environment;
-    private boolean initialized;
     private TestCommand<C> command;
 
     public GuiceyAppRule(final Class<? extends Application<C>> applicationClass,
@@ -52,23 +49,6 @@ public class GuiceyAppRule<C extends Configuration> implements TestRule {
         for (ConfigOverride configOverride : configOverrides) {
             configOverride.addToSystemProperties();
         }
-    }
-
-    @Override
-    public Statement apply(final Statement base, final Description description) {
-        return new Statement() {
-            @Override
-            public void evaluate() throws Throwable {
-                startIfRequired();
-                try {
-                    base.evaluate();
-                } finally {
-                    command.stop();
-                    resetConfigOverrides();
-                    cleanupInjector();
-                }
-            }
-        };
     }
 
     public C getConfiguration() {
@@ -100,8 +80,25 @@ public class GuiceyAppRule<C extends Configuration> implements TestRule {
         }
     }
 
+    @Override
+    protected void before() throws Throwable {
+        startIfRequired();
+    }
+
+    @Override
+    @SuppressWarnings("PMD.NullAssignment")
+    protected void after() {
+        resetConfigOverrides();
+        try {
+            command.stop();
+            command = null;
+        } finally {
+            cleanupInjector();
+        }
+    }
+
     private void startIfRequired() {
-        if (initialized) {
+        if (command != null) {
             return;
         }
 
@@ -136,7 +133,6 @@ public class GuiceyAppRule<C extends Configuration> implements TestRule {
         final Namespace namespace = new Namespace(file.build());
 
         command.run(bootstrap, namespace);
-        initialized = true;
     }
 
     private void resetConfigOverrides() {
@@ -153,9 +149,8 @@ public class GuiceyAppRule<C extends Configuration> implements TestRule {
             final Field injector = GuiceBundle.class.getDeclaredField("injector");
             injector.setAccessible(true);
             injector.set(null, null);
-            initialized = false;
         } catch (Exception e) {
-            throw new IllegalStateException("Failed to cleanup injector insatnce", e);
+            throw new IllegalStateException("Failed to cleanup injector instance", e);
         }
     }
 }

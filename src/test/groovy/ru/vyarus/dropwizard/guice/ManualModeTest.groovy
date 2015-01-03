@@ -1,37 +1,39 @@
 package ru.vyarus.dropwizard.guice
 
+import com.google.inject.Inject
 import com.google.inject.Injector
 import com.google.inject.Key
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import org.junit.Rule
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.ManualApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.DummyManaged
 import ru.vyarus.dropwizard.guice.support.feature.DummyResource
 import ru.vyarus.dropwizard.guice.support.feature.DummyTask
-import ru.vyarus.dropwizard.guice.test.GuiceyAppRule
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 04.09.2014
  */
+@UseGuiceyApp(ManualApplication)
 class ManualModeTest extends AbstractTest {
 
-    @Rule
-    GuiceyAppRule<TestConfiguration> RULE = new GuiceyAppRule<>(ManualApplication, null);
+    @Inject
+    FeaturesHolder holder
+    @Inject
+    Bootstrap bootstrap
+    @Inject
+    Injector injector
 
     def "Check manual configuration"() {
 
         when: "application started"
-        Injector injector = RULE.getInjector()
-        FeaturesHolder holder = RULE.getBean(FeaturesHolder.class);
-        Bootstrap bootstrap = RULE.getBean(Bootstrap.class);
 
         then: "environment binding done"
         bootstrap

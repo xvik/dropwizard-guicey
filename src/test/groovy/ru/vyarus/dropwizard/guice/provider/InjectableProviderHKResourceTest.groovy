@@ -1,27 +1,22 @@
 package ru.vyarus.dropwizard.guice.provider
 
-import io.dropwizard.testing.junit.DropwizardAppRule
-import org.junit.Rule
 import ru.vyarus.dropwizard.guice.AbstractTest
-import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.provider.CustomFeatureInjectableProvider
 import ru.vyarus.dropwizard.guice.support.provider.InjectableProviderCheckApplication3
 import ru.vyarus.dropwizard.guice.support.provider.LocaleInjectableProvider
+import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 25.11.2014
  */
+@UseDropwizardApp(InjectableProviderCheckApplication3)
 class InjectableProviderHKResourceTest extends AbstractTest {
 
-    void setupSpec() {
+    void cleanupSpec() {
         LocaleInjectableProvider.resetCounters()
         CustomFeatureInjectableProvider.resetCounters()
     }
-
-    @Rule
-    DropwizardAppRule<TestConfiguration> RULE =
-            new DropwizardAppRule<TestConfiguration>(InjectableProviderCheckApplication3.class, 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml');
 
     def "Checks injectable provider usage"() {
 

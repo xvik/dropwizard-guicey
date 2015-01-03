@@ -1,11 +1,9 @@
 package ru.vyarus.dropwizard.guice.request
 
-import io.dropwizard.testing.junit.DropwizardAppRule
-import org.junit.Rule
 import ru.vyarus.dropwizard.guice.AbstractTest
-import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.request.RequestBeansApplication
 import ru.vyarus.dropwizard.guice.support.request.RequestScopedBean
+import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 /**
  * Check request scoped beans supported.
@@ -13,10 +11,8 @@ import ru.vyarus.dropwizard.guice.support.request.RequestScopedBean
  * @author Vyacheslav Rusakov 
  * @since 04.10.2014
  */
+@UseDropwizardApp(RequestBeansApplication)
 class RequestBeansTest extends AbstractTest {
-    @Rule
-    DropwizardAppRule<TestConfiguration> RULE =
-            new DropwizardAppRule<TestConfiguration>(RequestBeansApplication.class, 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml');
 
     def "Check request bean"() {
 

@@ -11,4 +11,10 @@ class TestConfiguration extends Configuration {
 
     @JsonProperty
     int foo
+
+    @JsonProperty
+    int bar
+
+    @JsonProperty
+    int baa
 }
