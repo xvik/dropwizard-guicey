@@ -8,9 +8,9 @@ dependencies {
     // bintray upload
     classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0"
     // coveralls integration
-    classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1"
+    classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.1.0"
     // check dependencies updates
-    classpath "com.github.ben-manes:gradle-versions-plugin:0.6"
+    classpath "com.github.ben-manes:gradle-versions-plugin:0.7"
     classpath 'com.github.townsfolk:gradle-release:1.2'
     classpath "be.insaneprogramming.gradle:animalsniffer-gradle-plugin:1.4.0"
 }

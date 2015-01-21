@@ -1,0 +1,19 @@
+repositories {
+    jcenter()
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    provided 'junit:junit:4.12'
+    provided "io.dropwizard:dropwizard-testing:0.8.0-rc1"
+    provided 'org.spockframework:spock-core:0.7-groovy-2.0'
+
+    compile 'com.google.inject.extensions:guice-servlet:4.0-beta5'
+    compile 'com.google.inject.extensions:guice-multibindings:4.0-beta5'
+    compile "io.dropwizard:dropwizard-core:0.8.0-rc1"
+    compile 'org.glassfish.hk2:guice-bridge:2.3.0-b10'
+    compile 'ru.vyarus:generics-resolver:1.1.0'
+
+    testCompile 'cglib:cglib-nodep:3.1'
+}

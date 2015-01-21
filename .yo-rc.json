@@ -1,0 +1,20 @@
+{
+  "generator-lib-java": {
+    "githubUser": "xvik",
+    "authorName": "Vyacheslav Rusakov",
+    "authorEmail": "vyarus@gmail.com",
+    "libName": "dropwizard-guicey",
+    "libGroup": "ru.vyarus",
+    "libPackage": "ru.vyarus.dropwizard.guice",
+    "libVersion": "0.1.0",
+    "libDesc": "Dropwizard guice integration",
+    "targetJava": "1.7",
+    "libTags": "dropwizard, guice",
+    "bintrayUser": "vyarus",
+    "bintrayRepo": "xvik",
+    "bintraySignFiles": true,
+    "mavenCentralSync": true,
+    "enableQualityChecks": true,
+    "usedGeneratorVersion": "1.0.0"
+  }
+}
