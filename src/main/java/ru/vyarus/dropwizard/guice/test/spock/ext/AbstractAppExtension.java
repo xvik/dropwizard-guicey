@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.spock.ext;
 
-import io.dropwizard.testing.junit.ConfigOverride;
+import io.dropwizard.testing.ConfigOverride;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.SpecInfo;
 

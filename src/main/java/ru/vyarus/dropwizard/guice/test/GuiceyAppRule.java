@@ -7,7 +7,7 @@ import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.dropwizard.testing.junit.ConfigOverride;
+import io.dropwizard.testing.ConfigOverride;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.junit.rules.ExternalResource;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
