@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Must be used together with {@code @UseGuiceApp} or {@code UseDropwizardApp} to specify configuration overrides.
  *
- * @see io.dropwizard.testing.junit.ConfigOverride
+ * @see io.dropwizard.testing.ConfigOverride
  * @author Vyacheslav Rusakov
  * @since 03.01.2015
  */
