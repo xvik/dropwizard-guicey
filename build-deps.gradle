@@ -13,7 +13,7 @@ dependencies {
     compile 'com.google.inject.extensions:guice-multibindings:4.0-beta5'
     compile "io.dropwizard:dropwizard-core:0.8.0-rc2"
     compile 'org.glassfish.hk2:guice-bridge:2.4.0-b06'
-    compile 'ru.vyarus:generics-resolver:1.1.0'
+    compile 'ru.vyarus:generics-resolver:1.2.0'
 
     testCompile 'cglib:cglib-nodep:3.1'
 }
