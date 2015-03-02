@@ -26,9 +26,9 @@ public abstract class AbstractAppExtension<T extends Annotation> extends Abstrac
     public void visitSpec(final SpecInfo spec) {
         final GuiceyInterceptor interceptor = new GuiceyInterceptor(spec, buildResourceFactory(annotation));
         final SpecInfo topSpec = spec.getTopSpec();
-        topSpec.getSharedInitializerMethod().addInterceptor(interceptor);
-        topSpec.getInitializerMethod().addInterceptor(interceptor);
-        topSpec.getCleanupSpecMethod().addInterceptor(interceptor);
+        topSpec.getSharedInitializerInterceptors().add(interceptor);
+        topSpec.getInitializerInterceptors().add(interceptor);
+        topSpec.getCleanupSpecInterceptors().add(interceptor);
     }
 
     /**

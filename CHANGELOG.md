@@ -1,3 +1,6 @@
+### 2.1.2 (2015-03-03)
+* Spock 1.0 compatibility
+
 ### 2.1.1 (2015-01-25)
 * Dropwizard 0.8-rc2 compatibility
 
