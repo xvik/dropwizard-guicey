@@ -6,13 +6,13 @@ repositories {
 
 dependencies {
     provided 'junit:junit:4.12'
-    provided "io.dropwizard:dropwizard-testing:0.8.0"
+    provided "io.dropwizard:dropwizard-testing:0.8.1"
     provided 'org.spockframework:spock-core:1.0-groovy-2.4'
 
     compile 'com.google.inject.extensions:guice-servlet:4.0-beta5'
     compile 'com.google.inject.extensions:guice-multibindings:4.0-beta5'
-    compile "io.dropwizard:dropwizard-core:0.8.0"
-    compile 'org.glassfish.hk2:guice-bridge:2.4.0-b09'
+    compile "io.dropwizard:dropwizard-core:0.8.1"
+    compile 'org.glassfish.hk2:guice-bridge:2.4.0-b10'
     compile 'ru.vyarus:generics-resolver:1.2.1'
 
     testCompile 'cglib:cglib-nodep:3.1'
