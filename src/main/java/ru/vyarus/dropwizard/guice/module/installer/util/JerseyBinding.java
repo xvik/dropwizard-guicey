@@ -12,9 +12,12 @@ import ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory;
 import ru.vyarus.dropwizard.guice.module.jersey.support.JerseyComponentProvider;
 import ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
+import ru.vyarus.java.generics.resolver.context.GenericsContext;
 
 import javax.inject.Singleton;
-import java.lang.annotation.Annotation;
+import javax.ws.rs.ext.ExceptionMapper;
+import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * HK binding utilities. Supplement {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}.
@@ -30,7 +33,7 @@ public final class JerseyBinding {
 
     /**
      * @param type type to check
-     * @return true if type annotated with {@code HK2Managed}, false otherwise
+     * @return true if type annotated with {@link HK2Managed}, false otherwise
      * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
      */
     public static boolean isHK2Managed(final Class<?> type) {
@@ -38,7 +41,7 @@ public final class JerseyBinding {
     }
 
     /**
-     * Binds component into HK context. If component is annotated with {@code HK2Managed}, then registers type,
+     * Binds component into HK context. If component is annotated with {@link HK2Managed}, then registers type,
      * otherwise register guice "bridge" factory around component.
      *
      * @param binder hk binder
@@ -58,7 +61,7 @@ public final class JerseyBinding {
     }
 
     /**
-     * Binds hk {@code Factory}. If bean is {@code @HK2Managed} then registered directly as
+     * Binds hk {@link Factory}. If bean is {@link HK2Managed} then registered directly as
      * factory. Otherwise register factory through special "lazy bridge" to delay guice factory bean instantiation.
      * Also registers factory directly (through wrapper to be able to inject factory by its type).
      *
@@ -86,7 +89,39 @@ public final class JerseyBinding {
     }
 
     /**
-     * Binds {@code ValueFactoryProvider}. If type is {@code HK2Managed}, binds directly. Otherwise,
+     * Binds jersey specific component (component implements jersey interface or extends class).
+     * Specific binding is required for types directly supported by jersey (e.g. ExceptionMapper).
+     * Such types must be bound to target interface directly, otherwise jersey would not be able to resolve them.
+     * <p> If type is {@link HK2Managed}, binds directly.
+     * Otherwise, use guice "bridge" factory to lazily bind type.</p>
+     * <p>Shortcut methods provided for most common cases.</p>
+     *
+     * @param binder       hk binder
+     * @param type         type which implements specific jersey interface or extends class
+     * @param specificType specific jersey type (interface or abstract class)
+     * @see #bindExceptionMapper(AbstractBinder, Class)
+     * @see #bindInjectionResolver(AbstractBinder, Class)
+     * @see #bindValueFactoryProvider(AbstractBinder, Class)
+     */
+    @SuppressWarnings("unchecked")
+    public static void bindSpecificComponent(final AbstractBinder binder, final Class<?> type,
+                                             final Class<?> specificType) {
+        // resolve generics of specific type
+        final GenericsContext context = GenericsResolver.resolve(type).type(specificType);
+        final List<Type> genericTypes = context.genericTypes();
+        final Type[] generics = genericTypes.toArray(new Type[genericTypes.size()]);
+        final Type binding = generics.length > 0 ? new ParameterizedTypeImpl(specificType, generics)
+                : specificType;
+        if (isHK2Managed(type)) {
+            binder.bind(type).to(binding).in(Singleton.class);
+        } else {
+            binder.bindFactory(new GuiceComponentFactory(type)).to(type).in(Singleton.class);
+            binder.bind(type).to(binding).in(Singleton.class);
+        }
+    }
+
+    /**
+     * Binds {@link ValueFactoryProvider}. If type is {@link HK2Managed}, binds directly. Otherwise,
      * use guice "bridge" factory to lazily bind type.
      * Note: value factory provider are instantiated eagerly in hk context.
      *
@@ -95,38 +130,31 @@ public final class JerseyBinding {
      */
     @SuppressWarnings("unchecked")
     public static void bindValueFactoryProvider(final AbstractBinder binder, final Class<?> type) {
-        if (isHK2Managed(type)) {
-            binder.bind(type)
-                    .to(ValueFactoryProvider.class)
-                    .in(Singleton.class);
-        } else {
-            binder.bindFactory(new GuiceComponentFactory(type))
-                    .to(type)
-                    .in(Singleton.class);
-            binder.bind(type)
-                    .to(ValueFactoryProvider.class)
-                    .in(Singleton.class);
-        }
+        bindSpecificComponent(binder, type, ValueFactoryProvider.class);
     }
 
+    /**
+     * Binds {@link InjectionResolver}. If type is {@link HK2Managed}, binds directly. Otherwise,
+     * use guice "bridge" factory to lazily bind type.
+     *
+     * @param binder hk binder
+     * @param type   injection resolver instance
+     */
     @SuppressWarnings("unchecked")
     public static void bindInjectionResolver(final AbstractBinder binder, final Class<?> type) {
-        // resolve InjectionProvider<T> generic - it's actual binding annotation
-        final Class<? extends Annotation> annotation = (Class<? extends Annotation>) GenericsResolver.resolve(type)
-                .type(InjectionResolver.class).generic(0);
-        // trick - bind to type and hk2 should use factory to obtain actual instance
-        if (isHK2Managed(type)) {
-            binder.bind(type)
-                    .to(new ParameterizedTypeImpl(InjectionResolver.class, annotation))
-                    .in(Singleton.class);
-        } else {
-            binder.bindFactory(new GuiceComponentFactory(type))
-                    .to(type)
-                    .in(Singleton.class);
-            binder.bind(type)
-                    .to(new ParameterizedTypeImpl(InjectionResolver.class, annotation))
-                    .in(Singleton.class);
-        }
+        bindSpecificComponent(binder, type, InjectionResolver.class);
+    }
+
+    /**
+     * Binds {@link ExceptionMapper}. If type is {@link HK2Managed}, binds directly. Otherwise,
+     * use guice "bridge" factory to lazily bind type.
+     *
+     * @param binder hk binder
+     * @param type   exception mapper instance
+     */
+    @SuppressWarnings("unchecked")
+    public static void bindExceptionMapper(final AbstractBinder binder, final Class<?> type) {
+        bindSpecificComponent(binder, type, ExceptionMapper.class);
     }
 
     /**

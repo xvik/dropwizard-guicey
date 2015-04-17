@@ -13,6 +13,7 @@ import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstal
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import javax.inject.Singleton;
+import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import static ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils.is;
@@ -67,6 +68,9 @@ public class JerseyProviderInstaller implements FeatureInstaller<Object>,
 
         } else if (is(type, InjectionResolver.class)) {
             bindInjectionResolver(binder, type);
+
+        } else if (is(type, ExceptionMapper.class)) {
+            bindExceptionMapper(binder, type);
 
         } else {
             bindComponent(binder, type);
