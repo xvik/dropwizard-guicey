@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
@@ -26,6 +27,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isH
  * @author Vyacheslav Rusakov
  * @since 01.09.2014
  */
+@Order(40)
 public class ResourceInstaller implements FeatureInstaller<Object>, BindingInstaller, TypeInstaller<Object>,
         JerseyInstaller<Object> {
 

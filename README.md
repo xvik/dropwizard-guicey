@@ -45,14 +45,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>2.1.2</version>
+  <version>2.2.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:2.1.2'
+compile 'ru.vyarus:dropwizard-guicey:2.2.0'
 ```
 
 for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
@@ -186,6 +186,9 @@ by default, guice production stage will instantiate all registered beans.
 
 On run phase (after injector created) all found or manually provided extensions are installed by type or instantiated (`injector.getInstance(foundClass)`) and passed to installer 
 to register extension within dropwizard (installation type is defined by installer).
+
+Installers order is defined by `@Order` annotation. Default installers are ordered with indexes from 10 to 100 with gap 10.
+If you need to run your installer before/after some installer simply annotate it with `@Order`. Installers without annotation goes last.
 
 ##### Resource
 [ResourceInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/ResourceInstaller.java)

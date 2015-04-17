@@ -4,6 +4,7 @@ import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
@@ -15,6 +16,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
  * @author Vyacheslav Rusakov
  * @since 01.09.2014
  */
+@Order(20)
 public class ManagedInstaller implements
         FeatureInstaller<Managed>, InstanceInstaller<Managed>, Ordered {
 

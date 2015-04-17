@@ -1,3 +1,8 @@
+### 2.2.0 (2015-04-17)
+* Fix ExceptionMapper registration
+* Add installers ordering support with @Order annotation. Default installers are ordered now with indexes from 10 to 100 with gap 10 
+(to simplify custom installers injection between them)
+
 ### 2.1.2 (2015-03-03)
 * Spock 1.0 compatibility
 

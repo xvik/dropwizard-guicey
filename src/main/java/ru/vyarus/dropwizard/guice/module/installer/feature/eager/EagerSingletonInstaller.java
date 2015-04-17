@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
@@ -19,6 +20,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
  * @author Vyacheslav Rusakov
  * @since 01.09.2014
  */
+@Order(50)
 public class EagerSingletonInstaller implements FeatureInstaller<Object>, BindingInstaller {
     private final Reporter reporter = new Reporter(EagerSingletonInstaller.class, "eager singletons =");
 

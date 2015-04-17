@@ -13,11 +13,13 @@ import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeatureInstallerExecutor;
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder;
 import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
+import ru.vyarus.dropwizard.guice.module.installer.order.OrderComparator;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -30,6 +32,7 @@ import java.util.Set;
  * as much as possible.
  */
 public class InstallerModule extends AbstractModule {
+    private static final OrderComparator COMPARATOR = new OrderComparator();
     private final Logger logger = LoggerFactory.getLogger(InstallerModule.class);
     private final ClasspathScanner scanner;
     private final InstallerConfig installerConfig;
@@ -46,7 +49,7 @@ public class InstallerModule extends AbstractModule {
         // called just after injector creation to process instance installers
         bind(FeatureInstallerExecutor.class).asEagerSingleton();
 
-        final Set<Class<? extends FeatureInstaller>> installerClasses = findInstallers();
+        final List<Class<? extends FeatureInstaller>> installerClasses = findInstallers();
         final List<FeatureInstaller> installers = prepareInstallers(installerClasses);
 
         final FeaturesHolder holder = new FeaturesHolder(installers);
@@ -58,10 +61,10 @@ public class InstallerModule extends AbstractModule {
      * Performs classpath scan to find all classes implementing or use only manually configured installers.
      * {@link FeatureInstaller}.
      *
-     * @return set of found installers or empty list
+     * @return list of found installers or empty list
      */
     @SuppressWarnings("unchecked")
-    private Set<Class<? extends FeatureInstaller>> findInstallers() {
+    private List<Class<? extends FeatureInstaller>> findInstallers() {
         final List<Class<? extends FeatureInstaller>> installers = Lists.newArrayList();
         if (scanner != null) {
             scanner.scan(new ClassVisitor() {
@@ -83,9 +86,11 @@ public class InstallerModule extends AbstractModule {
                         return !installerConfig.getDisabledFeatures().contains(input);
                     }
                 }));
-
-        logger.debug("Found {} feature installers", validInstallers.size());
-        return validInstallers;
+        installers.clear();
+        installers.addAll(validInstallers);
+        Collections.sort(installers, COMPARATOR);
+        logger.debug("Found {} feature installers", installers.size());
+        return installers;
     }
 
     /**
@@ -95,7 +100,7 @@ public class InstallerModule extends AbstractModule {
      * @return list of installer instances
      */
     private List<FeatureInstaller> prepareInstallers(
-            final Set<Class<? extends FeatureInstaller>> installerClasses) {
+            final List<Class<? extends FeatureInstaller>> installerClasses) {
         final List<FeatureInstaller> installers = Lists.newArrayList();
         for (Class<? extends FeatureInstaller> installerClass : installerClasses) {
             try {

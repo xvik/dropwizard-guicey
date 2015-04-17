@@ -6,6 +6,7 @@ import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.lang.annotation.Annotation;
@@ -23,6 +24,7 @@ import java.lang.reflect.Method;
  * @author Vyacheslav Rusakov
  * @since 08.10.2014
  */
+@Order(80)
 public class PluginInstaller implements FeatureInstaller<Object>, BindingInstaller {
 
     private final PluginReporter reporter = new PluginReporter();

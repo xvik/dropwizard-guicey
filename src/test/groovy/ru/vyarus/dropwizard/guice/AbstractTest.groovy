@@ -20,10 +20,7 @@ import javax.servlet.ServletRegistration
  */
 abstract class AbstractTest extends Specification {
 
-    void setup() {
-    }
-
-    void cleanup() {
+    void cleanupSpec() {
         GuiceBundle.getDeclaredField("injector").setAccessible(true)
         GuiceBundle.injector = null
     }

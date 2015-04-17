@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServlet;
  * @author Vyacheslav Rusakov
  * @since 13.10.2014
  */
+@Order(100)
 public class AdminServletInstaller implements FeatureInstaller<HttpServlet>,
         InstanceInstaller<HttpServlet>, Ordered {
 

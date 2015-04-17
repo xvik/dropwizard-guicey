@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import javax.inject.Singleton;
@@ -32,6 +33,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
  * @see ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
  * @since 10.10.2014
  */
+@Order(30)
 public class JerseyProviderInstaller implements FeatureInstaller<Object>,
         BindingInstaller, JerseyInstaller<Object> {
 

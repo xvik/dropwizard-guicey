@@ -10,6 +10,11 @@ import ru.vyarus.dropwizard.guice.support.feature.NonInjactableCommand
  */
 class CommandTest extends AbstractTest {
 
+    void cleanup() {
+        GuiceBundle.getDeclaredField("injector").setAccessible(true)
+        GuiceBundle.injector = null
+    }
+
     def "Check command start"() {
 
         when: "run guice powered command"
