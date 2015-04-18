@@ -1,3 +1,5 @@
+* fix HealthCheckInstaller: now installs only NamedHealthCheck classes and ignore other HealthCheck types (which it can't install properly) 
+
 ### 2.2.0 (2015-04-17)
 * Fix ExceptionMapper registration
 * Add installers ordering support with @Order annotation. Default installers are ordered now with indexes from 10 to 100 with gap 10 

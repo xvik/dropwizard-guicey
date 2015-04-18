@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.health;
 
-import com.codahale.metrics.health.HealthCheck;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
@@ -25,7 +24,7 @@ public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck>,
 
     @Override
     public boolean matches(final Class<?> type) {
-        return FeatureUtils.is(type, HealthCheck.class);
+        return FeatureUtils.is(type, NamedHealthCheck.class);
     }
 
     @Override
