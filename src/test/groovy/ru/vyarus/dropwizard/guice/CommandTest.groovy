@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice
 
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.support.CustomModuleApplication
 import ru.vyarus.dropwizard.guice.support.feature.NonInjactableCommand
 
@@ -10,29 +11,24 @@ import ru.vyarus.dropwizard.guice.support.feature.NonInjactableCommand
  */
 class CommandTest extends AbstractTest {
 
-    void cleanup() {
-        GuiceBundle.getDeclaredField("injector").setAccessible(true)
-        GuiceBundle.injector = null
-    }
-
     def "Check command start"() {
 
         when: "run guice powered command"
-        new CustomModuleApplication().run(['sample', 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml'] as String[])
+        def app = new CustomModuleApplication()
+        app.run(['sample', 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml'] as String[])
         then: "command executed"
-        GuiceBundle.injector
+        InjectorLookup.getInjector(app).isPresent()
     }
 
     def "Check simple command not inject members"() {
 
         when: "run simple command, registered with classpath scan"
-        new CustomModuleApplication().run(['nonguice', 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml'] as String[])
+        def app = new CustomModuleApplication()
+        app.run(['nonguice', 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml'] as String[])
         then: "command was found and registered, but without injection because injector not constructed"
         NonInjactableCommand.instance.service == null
 
-        when: "accessing injector"
-        GuiceBundle.injector
-        then: "it's not initialized"
-        thrown(NullPointerException)
+        expect: "injector not available"
+        !InjectorLookup.getInjector(app).isPresent()
     }
 }

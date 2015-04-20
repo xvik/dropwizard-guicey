@@ -3,15 +3,17 @@ package ru.vyarus.dropwizard.guice.module.jersey;
 
 import com.google.inject.servlet.GuiceFilter;
 import com.google.inject.servlet.ServletModule;
+import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorProvider;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule;
 
 /**
  * Guice jersey2 integration module.
  * <p>Integration is very similar to old jersey-guice: guice context is dominant;
  * guice instantiated first; jersey objects directly registered in guice; guice objects directly registered
- * in guice.</p>
+ * in hk.</p>
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.jersey.GuiceFeature for integration details
@@ -19,20 +21,28 @@ import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule;
  */
 public class Jersey2Module extends ServletModule {
 
+    /**
+     * Guice filter registration name.
+     */
+    public static final String GUICE_FILTER = "Guice Filter";
+    private final Application application;
     private final Environment environment;
 
-    public Jersey2Module(final Environment environment) {
+    public Jersey2Module(final Application application, final Environment environment) {
+        this.application = application;
         this.environment = environment;
     }
 
     @Override
     protected void configureServlets() {
-        install(new GuiceBindingsModule());
-        final GuiceFeature component = new GuiceFeature();
+        // injector not available at this point, so using provider
+        final InjectorProvider provider = new InjectorProvider(application);
+        install(new GuiceBindingsModule(provider));
+        final GuiceFeature component = new GuiceFeature(provider);
         bind(ServiceLocator.class).toProvider(component);
         environment.jersey().register(component);
 
-        environment.servlets().addFilter("Guice Filter", GuiceFilter.class)
+        environment.servlets().addFilter(GUICE_FILTER, GuiceFilter.class)
                 .addMappingForUrlPatterns(null, false, environment.getApplicationContext().getContextPath() + "*");
     }
 }

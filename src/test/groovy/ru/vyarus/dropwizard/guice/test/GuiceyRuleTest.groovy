@@ -21,5 +21,6 @@ class GuiceyRuleTest extends Specification {
 
         expect: "app initialized"
         RULE.getInjector().getExistingBinding(Key.get(Environment))
+        RULE.getBean(Environment) != null
     }
 }

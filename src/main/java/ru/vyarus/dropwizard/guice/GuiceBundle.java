@@ -13,6 +13,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
@@ -67,7 +68,7 @@ import java.util.Set;
 @SuppressWarnings("PMD.ExcessiveClassLength")
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
-    private static Injector injector;
+    private Injector injector;
 
     private final List<Module> modules = Lists.newArrayList();
     private final Set<String> autoscanPackages = Sets.newHashSet();
@@ -105,14 +106,17 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     public void run(final T configuration, final Environment environment) throws Exception {
         modules.add(new GuiceSupportModule(scanner, installerConfig));
         configureModules(configuration, environment);
-        GuiceBundle.injector = injectorFactory.createInjector(stage, modules);
+        injector = injectorFactory.createInjector(stage, modules);
+        // registering as managed to cleanup injector on application stop
+        environment.lifecycle().manage(
+                InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
         CommandSupport.initCommands(bootstrap.getCommands(), injector);
     }
 
     /**
      * @return created injector instance or fail if injector not yet created
      */
-    public static Injector getInjector() {
+    public Injector getInjector() {
         return Preconditions.checkNotNull(injector, "Guice not initialized");
     }
 

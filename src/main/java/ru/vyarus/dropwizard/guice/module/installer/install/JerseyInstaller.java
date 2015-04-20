@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.install;
 
+import com.google.inject.Injector;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
 /**
@@ -23,10 +24,11 @@ public interface JerseyInstaller<T> {
      * respect guice scopes (most of the time we not register ready instance, but factory which delegates
      * creation to guice).
      *
-     * @param binder hk binder
-     * @param type   extension type to register
+     * @param binder   hk binder
+     * @param injector guice injector
+     * @param type     extension type to register
      * @see ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding
      * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
      */
-    void install(AbstractBinder binder, Class<T> type);
+    void install(AbstractBinder binder, Injector injector, Class<T> type);
 }

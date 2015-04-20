@@ -1,11 +1,11 @@
 package ru.vyarus.dropwizard.guice.test.spock.ext;
 
+import com.google.inject.Injector;
 import com.google.inject.spi.InjectionPoint;
 import org.junit.rules.ExternalResource;
 import org.spockframework.runtime.extension.AbstractMethodInterceptor;
 import org.spockframework.runtime.extension.IMethodInvocation;
 import org.spockframework.runtime.model.SpecInfo;
-import ru.vyarus.dropwizard.guice.GuiceBundle;
 import spock.lang.Shared;
 
 import java.lang.reflect.Field;
@@ -26,7 +26,7 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     private static Method before;
     private static Method after;
 
-    private final ResourceFactory resourceFactory;
+    private final ExternalRuleAdapter externalRuleAdapter;
     private final Set<InjectionPoint> injectionPoints;
     private ExternalResource resource;
 
@@ -42,15 +42,15 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
         }
     }
 
-    public GuiceyInterceptor(final SpecInfo spec, final ResourceFactory resourceFactory) {
-        this.resourceFactory = resourceFactory;
+    public GuiceyInterceptor(final SpecInfo spec, final ExternalRuleAdapter externalRuleAdapter) {
+        this.externalRuleAdapter = externalRuleAdapter;
         injectionPoints = InjectionPoint.forInstanceMethodsAndFields(spec.getReflection());
     }
 
     @Override
     public void interceptSharedInitializerMethod(final IMethodInvocation invocation) throws Throwable {
         if (resource == null) {
-            resource = resourceFactory.newResource();
+            resource = externalRuleAdapter.newResource();
         }
         before.invoke(resource);
         injectValues(invocation.getSharedInstance(), true);
@@ -83,20 +83,25 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
                 continue;
             }
 
-            final Object value = GuiceBundle.getInjector().getInstance(point.getDependencies().get(0).getKey());
+            final Object value = externalRuleAdapter.getInjector().getInstance(point.getDependencies().get(0).getKey());
             field.setAccessible(true);
             field.set(target, value);
         }
     }
 
     /**
-     * Resource factory used to create rule instance.
+     * External junit rules adapter.
      */
-    public interface ResourceFactory {
+    public interface ExternalRuleAdapter {
 
         /**
          * @return new rule instance
          */
         ExternalResource newResource();
+
+        /**
+         * @return injector instance
+         */
+        Injector getInjector();
     }
 }

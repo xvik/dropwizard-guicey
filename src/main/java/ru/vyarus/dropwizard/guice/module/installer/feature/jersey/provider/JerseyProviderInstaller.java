@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider;
 
 import com.google.inject.Binder;
+import com.google.inject.Injector;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
@@ -60,22 +61,22 @@ public class JerseyProviderInstaller implements FeatureInstaller<Object>,
 
     @Override
     @SuppressWarnings("unchecked")
-    public void install(final AbstractBinder binder, final Class<Object> type) {
+    public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {
         if (is(type, Factory.class)) {
             // register factory directly (without wrapping)
-            bindFactory(binder, type);
+            bindFactory(binder, injector, type);
 
         } else if (is(type, ValueFactoryProvider.class)) {
-            bindValueFactoryProvider(binder, type);
+            bindValueFactoryProvider(binder, injector, type);
 
         } else if (is(type, InjectionResolver.class)) {
-            bindInjectionResolver(binder, type);
+            bindInjectionResolver(binder, injector, type);
 
         } else if (is(type, ExceptionMapper.class)) {
-            bindExceptionMapper(binder, type);
+            bindExceptionMapper(binder, injector, type);
 
         } else {
-            bindComponent(binder, type);
+            bindComponent(binder, injector, type);
         }
     }
 

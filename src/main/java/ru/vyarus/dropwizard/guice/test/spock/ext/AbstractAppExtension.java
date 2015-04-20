@@ -35,7 +35,7 @@ public abstract class AbstractAppExtension<T extends Annotation> extends Abstrac
      * @param annotation extension annotation instance
      * @return resource factory instance, which will create correct rule instance
      */
-    protected abstract GuiceyInterceptor.ResourceFactory buildResourceFactory(T annotation);
+    protected abstract GuiceyInterceptor.ExternalRuleAdapter buildResourceFactory(T annotation);
 
     /**
      * Utility method to convert configuration overrides from annotation to rule compatible format.

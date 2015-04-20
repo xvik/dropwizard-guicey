@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.jersey;
 
 
 import com.google.inject.Binder;
+import com.google.inject.Injector;
 import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -51,8 +52,8 @@ public class ResourceInstaller implements FeatureInstaller<Object>, BindingInsta
     }
 
     @Override
-    public void install(final AbstractBinder binder, final Class<Object> type) {
-        JerseyBinding.bindComponent(binder, type);
+    public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {
+        JerseyBinding.bindComponent(binder, injector, type);
     }
 
     @Override

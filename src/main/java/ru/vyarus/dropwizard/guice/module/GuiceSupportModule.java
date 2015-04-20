@@ -59,7 +59,7 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
     protected void configure() {
         bindEnvironment();
         install(new InstallerModule(scanner, installerConfig));
-        install(new Jersey2Module(environment));
+        install(new Jersey2Module(bootstrap.getApplication(), environment));
     }
 
     /**

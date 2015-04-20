@@ -6,7 +6,6 @@ import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.ServiceLocatorProvider;
 import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
 import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
-import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.InstallerBinder;
 
 import javax.inject.Provider;
@@ -40,18 +39,23 @@ import javax.ws.rs.core.FeatureContext;
  */
 public class GuiceFeature implements Feature, Provider<ServiceLocator> {
 
+    private final Provider<Injector> provider;
     private ServiceLocator locator;
+
+    public GuiceFeature(final Provider<Injector> provider) {
+        this.provider = provider;
+    }
 
     @Override
     public boolean configure(final FeatureContext context) {
         locator = ServiceLocatorProvider.getServiceLocator(context);
-        final Injector injector = GuiceBundle.getInjector();
+        final Injector injector = this.provider.get();
 
         GuiceBridge.getGuiceBridge().initializeGuiceBridge(locator);
         final GuiceIntoHK2Bridge guiceBridge = locator.getService(GuiceIntoHK2Bridge.class);
         guiceBridge.bridgeGuiceInjector(injector);
 
-        context.register(new InstallerBinder());
+        context.register(new InstallerBinder(injector));
         return true;
     }
 

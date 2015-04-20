@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.test;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Injector;
+import com.google.inject.servlet.GuiceFilter;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
@@ -10,10 +11,10 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.ConfigOverride;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.junit.rules.ExternalResource;
-import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Enumeration;
 
 /**
@@ -65,7 +66,7 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
     }
 
     public Injector getInjector() {
-        return GuiceBundle.getInjector();
+        return InjectorLookup.getInjector(application).get();
     }
 
     public <T> T getBean(final Class<T> type) {
@@ -89,12 +90,9 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
     @SuppressWarnings("PMD.NullAssignment")
     protected void after() {
         resetConfigOverrides();
-        try {
-            command.stop();
-            command = null;
-        } finally {
-            cleanupInjector();
-        }
+        resetGuiceFilter();
+        command.stop();
+        command = null;
     }
 
     private void startIfRequired() {
@@ -144,13 +142,15 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
         }
     }
 
-    private void cleanupInjector() {
+    private void resetGuiceFilter() {
         try {
-            final Field injector = GuiceBundle.class.getDeclaredField("injector");
-            injector.setAccessible(true);
-            injector.set(null, null);
+            // GuiceFilter is initialized even in lightweight guicey rule case
+            // This produce invalid warnings in log (about double filter initialization)
+            final Method reset = GuiceFilter.class.getDeclaredMethod("reset");
+            reset.setAccessible(true);
+            reset.invoke(null);
         } catch (Exception e) {
-            throw new IllegalStateException("Failed to cleanup injector instance", e);
+            throw new IllegalStateException("Failed to cleanup GuiceFilter instance", e);
         }
     }
 }

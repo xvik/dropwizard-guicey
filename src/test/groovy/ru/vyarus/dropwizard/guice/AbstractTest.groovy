@@ -7,6 +7,7 @@ import io.dropwizard.jetty.setup.ServletEnvironment
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment
 import io.dropwizard.setup.AdminEnvironment
 import io.dropwizard.setup.Environment
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import spock.lang.Specification
 
 import javax.servlet.FilterRegistration
@@ -21,8 +22,7 @@ import javax.servlet.ServletRegistration
 abstract class AbstractTest extends Specification {
 
     void cleanupSpec() {
-        GuiceBundle.getDeclaredField("injector").setAccessible(true)
-        GuiceBundle.injector = null
+        InjectorLookup.clear()
     }
 
     Environment mockEnvironment() {

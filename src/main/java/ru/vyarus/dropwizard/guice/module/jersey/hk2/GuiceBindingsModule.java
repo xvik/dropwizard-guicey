@@ -17,11 +17,14 @@
 package ru.vyarus.dropwizard.guice.module.jersey.hk2;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.servlet.RequestScoped;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider;
 import org.glassfish.jersey.server.internal.process.AsyncContext;
 
+import javax.inject.Provider;
 import javax.ws.rs.core.*;
 import javax.ws.rs.ext.Providers;
 
@@ -48,17 +51,27 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bin
  */
 public class GuiceBindingsModule extends AbstractModule {
 
+    private final Provider<Injector> provider;
+
+    public GuiceBindingsModule(final Provider<Injector> provider) {
+        this.provider = provider;
+    }
+
     @Override
     protected void configure() {
-        bindJerseyComponent(binder(), MultivaluedParameterExtractorProvider.class);
-        bindJerseyComponent(binder(), Application.class);
-        bindJerseyComponent(binder(), Providers.class);
+        jerseyToGuice(MultivaluedParameterExtractorProvider.class);
+        jerseyToGuice(Application.class);
+        jerseyToGuice(Providers.class);
 
-        bindJerseyComponent(binder(), UriInfo.class).in(RequestScoped.class);
-        bindJerseyComponent(binder(), HttpHeaders.class).in(RequestScoped.class);
-        bindJerseyComponent(binder(), SecurityContext.class).in(RequestScoped.class);
-        bindJerseyComponent(binder(), Request.class).in(RequestScoped.class);
-        bindJerseyComponent(binder(), ContainerRequest.class).in(RequestScoped.class);
-        bindJerseyComponent(binder(), AsyncContext.class).in(RequestScoped.class);
+        jerseyToGuice(UriInfo.class).in(RequestScoped.class);
+        jerseyToGuice(HttpHeaders.class).in(RequestScoped.class);
+        jerseyToGuice(SecurityContext.class).in(RequestScoped.class);
+        jerseyToGuice(Request.class).in(RequestScoped.class);
+        jerseyToGuice(ContainerRequest.class).in(RequestScoped.class);
+        jerseyToGuice(AsyncContext.class).in(RequestScoped.class);
+    }
+
+    private ScopedBindingBuilder jerseyToGuice(final Class<?> type) {
+        return bindJerseyComponent(binder(), provider, type);
     }
 }
