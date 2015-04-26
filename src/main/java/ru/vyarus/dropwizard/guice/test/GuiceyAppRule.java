@@ -3,7 +3,6 @@ package ru.vyarus.dropwizard.guice.test;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Injector;
-import com.google.inject.servlet.GuiceFilter;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
@@ -14,7 +13,6 @@ import org.junit.rules.ExternalResource;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Method;
 import java.util.Enumeration;
 
 /**
@@ -90,7 +88,6 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
     @SuppressWarnings("PMD.NullAssignment")
     protected void after() {
         resetConfigOverrides();
-        resetGuiceFilter();
         command.stop();
         command = null;
     }
@@ -139,18 +136,6 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
             if (keyString.startsWith("dw.")) {
                 System.clearProperty(keyString);
             }
-        }
-    }
-
-    private void resetGuiceFilter() {
-        try {
-            // GuiceFilter is initialized even in lightweight guicey rule case
-            // This produce invalid warnings in log (about double filter initialization)
-            final Method reset = GuiceFilter.class.getDeclaredMethod("reset");
-            reset.setAccessible(true);
-            reset.invoke(null);
-        } catch (Exception e) {
-            throw new IllegalStateException("Failed to cleanup GuiceFilter instance", e);
         }
     }
 }
