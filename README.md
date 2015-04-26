@@ -45,14 +45,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>2.2.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:2.2.0'
+compile 'ru.vyarus:dropwizard-guicey:3.0.0'
 ```
 
 for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
@@ -142,6 +142,25 @@ void initialize(Bootstrap<TestConfiguration> bootstrap) {
 ```
 
 [Read more about governator integration](https://github.com/xvik/dropwizard-guicey/wiki/Governator-Integration)
+
+#### Injector instance
+
+In some cases it may be important to get injector instance outside of guice context.
+
+Injector instance could be resolved with:
+* getInjector method on GuiceBundle instance (note that injector initialized on run phase, and NPE will be thrown if injector not initialized)
+* InjectorLookup.getInjector(app).get() static call using application instance (lookup returns Optional and last get() throws exception or returns injector instance).
+
+If you need lazy injector reference, you can use `InjectorProvider` class (its actually `Provider<Injector>`):
+
+```java
+InjectorProvider provider = new InjectorProvider(app);
+// somewhere after run phase
+Injector injector = provider.get();
+```
+
+Most likely, requirement for injector instance means integration with some third party library.
+Consider writing custom installer in such cases (it will eliminate need for injector instance).
 
 ### Classpath scan
 

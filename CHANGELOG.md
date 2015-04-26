@@ -1,4 +1,9 @@
-* fix HealthCheckInstaller: now installs only NamedHealthCheck classes and ignore other HealthCheck types (which it can't install properly) 
+### 3.0.0 (2015-04-26)
+* Fix HealthCheckInstaller: now installs only NamedHealthCheck classes and ignore other HealthCheck types (which it can't install properly) 
+* (breaking) Remove static state from GuiceBundle:
+  - GuiceBundle.getInjector method remain, but its now instance specific (instead of static)
+  - Injector could be referenced statically using application instance: InjectorLookup.getInjector(app).get() 
+  - JerseyInstaller interface signature changed: now install method receives injector instance
 
 ### 2.2.0 (2015-04-17)
 * Fix ExceptionMapper registration
