@@ -6,11 +6,11 @@ repositories {
 }
 dependencies {
     // bintray upload
-    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1"
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2"
     // coveralls integration
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.3.1"
     // check dependencies updates
-    classpath "com.github.ben-manes:gradle-versions-plugin:0.8"
-    classpath 'com.github.townsfolk:gradle-release:1.2'
+    classpath "com.github.ben-manes:gradle-versions-plugin:0.9"
+    classpath 'net.researchgate:gradle-release:2.0.2'
     classpath "be.insaneprogramming.gradle:animalsniffer-gradle-plugin:1.4.0"
 }

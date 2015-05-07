@@ -29,6 +29,6 @@ if (signatureSet) {
     }
 }
 
-task wrapper(type: Wrapper) {
+task wrapper(type: Wrapper, group: 'build setup') {
     gradleVersion = buildCfg.gradle
 }

@@ -52,12 +52,12 @@ publishing {
 }
 
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+task sourcesJar(type: Jar, dependsOn: classes, group: 'build') {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+task javadocJar(type: Jar, dependsOn: javadoc, group: 'build') {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }

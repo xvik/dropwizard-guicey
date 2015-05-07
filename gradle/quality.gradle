@@ -10,7 +10,7 @@ apply plugin: 'findbugs'
 // findbugs 3 supports java 8, but requires java 7!
 // if you need java 6 support use 2.0.3 version
 findbugs {
-    toolVersion = "3.0.0"
+    toolVersion = "3.0.1"
     ignoreFailures = false
     sourceSets = [sourceSets.main]
     effort = "max"
@@ -93,13 +93,6 @@ pmd {
     ruleSetFiles = files("gradle/config/pmd/pmd.xml")
     sourceSets = [sourceSets.main]
 }
-// pmd 5.2 was split into two jars, have to declare dependencies manually to work properly (waiting gradle support)
-dependencies {
-    pmd(
-            'net.sourceforge.pmd:pmd-core:5.2.3',
-            'net.sourceforge.pmd:pmd-java:5.2.3'
-    )
-}
 
 gradle.taskGraph.afterTask { Task task, TaskState state ->
     if ((task.name == 'pmdMain' || task.name == 'pmdTest') && state.failure) {
@@ -125,7 +118,7 @@ apply plugin: 'checkstyle'
 
 // Note: checkstyle 6.2 requires jdk7 or above. For jdk6 use older version (6.1.1)
 checkstyle {
-    toolVersion = "6.3"
+    toolVersion = "6.5"
     ignoreFailures = false
     sourceSets = [sourceSets.main]
     configFile = file('gradle/config/checkstyle/checkstyle.xml')

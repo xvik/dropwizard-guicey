@@ -4,14 +4,19 @@ repositories {
     mavenLocal()
 }
 
+ext {
+    dropwizard = '0.8.1'
+    guice = '4.0'
+}
+
 dependencies {
     provided 'junit:junit:4.12'
-    provided "io.dropwizard:dropwizard-testing:0.8.1"
+    provided "io.dropwizard:dropwizard-testing:$dropwizard"
     provided 'org.spockframework:spock-core:1.0-groovy-2.4'
 
-    compile 'com.google.inject.extensions:guice-servlet:4.0'
-    compile 'com.google.inject.extensions:guice-multibindings:4.0'
-    compile "io.dropwizard:dropwizard-core:0.8.1"
+    compile "com.google.inject.extensions:guice-servlet:$guice"
+    compile "com.google.inject.extensions:guice-multibindings:$guice"
+    compile "io.dropwizard:dropwizard-core:$dropwizard"
     compile 'org.glassfish.hk2:guice-bridge:2.4.0-b10'
     compile 'ru.vyarus:generics-resolver:1.2.1'
 
