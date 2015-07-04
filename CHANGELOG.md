@@ -1,3 +1,5 @@
+* Add DropwizardAwareModule abstract module to remove boilerplate of using all aware interfaces
+
 ### 3.0.0 (2015-04-26)
 * Fix HealthCheckInstaller: now installs only NamedHealthCheck classes and ignore other HealthCheck types (which it can't install properly) 
 * (breaking) Remove static state from GuiceBundle:
