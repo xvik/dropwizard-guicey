@@ -12,6 +12,7 @@ project.ext {
         java = 1.7
         // if not empty runs animal sniffer on compile to guarantee binary compatibility; set '' to disable
         signature = 'org.codehaus.mojo.signature:java17:+@signature'
+        strictQualityCheck = true  // true to fail build on quality plugins warnings
     }
     github = {
         user = 'xvik'

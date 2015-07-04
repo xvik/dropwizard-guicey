@@ -57,6 +57,14 @@ compile 'ru.vyarus:dropwizard-guicey:3.0.0'
 
 for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
 
+##### Snapshots
+
+You can use snapshot versions through [JitPack](https://jitpack.io):
+
+* Go to [JitPack project page](https://jitpack.io/#xvik/dropwizard-guicey)
+* Select `Commits` section and click `Get it` on commit you want to use (top one - the most recent)
+* Follow displayed instruction: add repository and change dependency (NOTE: due to JitPack convention artifact group will be different)
+
 ### Usage
 
 You can use classpath scanning or configure everything manually (or combine both).

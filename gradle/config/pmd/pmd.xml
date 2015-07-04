@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="Base ruleset" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+<ruleset name="Base ruleset" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
     <description>Based on Juan Roperto's ruleset (https://github.com/jroperto)</description>
 
@@ -49,10 +51,10 @@
     </rule>
 
     <rule ref="rulesets/java/design.xml">
-        <exclude name="ConfusingTernary" />
-        <exclude name="UseLocaleWithCaseConversions" />
-        <exclude name="MissingBreakInSwitch" />
-        <exclude name="AbstractClassWithoutAbstractMethod" />
+        <exclude name="ConfusingTernary"/>
+        <exclude name="UseLocaleWithCaseConversions"/>
+        <exclude name="MissingBreakInSwitch"/>
+        <exclude name="AbstractClassWithoutAbstractMethod"/>
     </rule>
     <rule ref="rulesets/java/design.xml/AvoidDeeplyNestedIfStmts">
         <properties>
@@ -61,30 +63,30 @@
     </rule>
 
     <rule ref="rulesets/java/finalizers.xml">
-        <exclude name="EmptyFinalizer" />
-        <exclude name="FinalizeOnlyCallsSuperFinalize" />
-        <exclude name="FinalizeDoesNotCallSuperFinalize" />
+        <exclude name="EmptyFinalizer"/>
+        <exclude name="FinalizeOnlyCallsSuperFinalize"/>
+        <exclude name="FinalizeDoesNotCallSuperFinalize"/>
     </rule>
 
     <rule ref="rulesets/java/imports.xml">
-        <exclude name="TooManyStaticImports" />
+        <exclude name="TooManyStaticImports"/>
     </rule>
 
     <rule ref="rulesets/java/javabeans.xml">
-        <exclude name="BeanMembersShouldSerialize" />
-        <exclude name="MissingSerialVersionUID" />
+        <exclude name="BeanMembersShouldSerialize"/>
+        <exclude name="MissingSerialVersionUID"/>
     </rule>
 
     <rule ref="rulesets/java/junit.xml">
-        <exclude name="JUnitStaticSuite" />
-        <exclude name="JUnitSpelling" />
-        <exclude name="JUnitAssertionsShouldIncludeMessage" />
-        <exclude name="JUnitTestsShouldIncludeAssert" />
+        <exclude name="JUnitStaticSuite"/>
+        <exclude name="JUnitSpelling"/>
+        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+        <exclude name="JUnitTestsShouldIncludeAssert"/>
     </rule>
 
     <rule ref="rulesets/java/logging-jakarta-commons.xml">
-        <exclude name="UseCorrectExceptionLogging" />
-        <exclude name="GuardDebugLogging" />
+        <exclude name="UseCorrectExceptionLogging"/>
+        <exclude name="GuardDebugLogging"/>
         <exclude name="GuardLogStatement"/>
     </rule>
 
@@ -93,38 +95,42 @@
     </rule>
 
     <rule ref="rulesets/java/migrating.xml">
-        <exclude name="JUnit4SuitesShouldUseSuiteAnnotation" />
+        <exclude name="JUnit4SuitesShouldUseSuiteAnnotation"/>
     </rule>
 
     <rule ref="rulesets/java/naming.xml">
-        <exclude name="ShortClassName" />
-        <exclude name="ShortVariable" />
-        <exclude name="LongVariable" />
-        <exclude name="ShortMethodName" />
-        <exclude name="AbstractNaming" />
+        <exclude name="ShortClassName"/>
+        <exclude name="ShortVariable"/>
+        <exclude name="LongVariable"/>
+        <exclude name="ShortMethodName"/>
+        <exclude name="AbstractNaming"/>
     </rule>
 
     <rule ref="rulesets/java/optimizations.xml">
-        <exclude name="LocalVariableCouldBeFinal" />
-        <exclude name="MethodArgumentCouldBeFinal" />
+        <exclude name="LocalVariableCouldBeFinal"/>
     </rule>
 
     <rule ref="rulesets/java/strictexception.xml">
-        <exclude name="SignatureDeclareThrowsException" />
-        <exclude name="AvoidCatchingGenericException" />
+        <exclude name="SignatureDeclareThrowsException"/>
+        <exclude name="AvoidCatchingGenericException"/>
         <exclude name="AvoidCatchingThrowable"/>
     </rule>
 
-    <rule ref="rulesets/java/strings.xml" />
+    <rule ref="rulesets/java/strings.xml"/>
+    <rule ref="rulesets/java/strings.xml/AvoidDuplicateLiterals">
+        <properties>
+            <property name="skipAnnotations" value="true"/>
+        </properties>
+    </rule>
 
     <rule ref="rulesets/java/sunsecure.xml">
         <exclude name="ArrayIsStoredDirectly"/>
     </rule>
 
     <rule ref="rulesets/java/typeresolution.xml">
-        <exclude name="SignatureDeclareThrowsException" />
+        <exclude name="SignatureDeclareThrowsException"/>
     </rule>
 
-    <rule ref="rulesets/java/unusedcode.xml" />
+    <rule ref="rulesets/java/unusedcode.xml"/>
 
 </ruleset>

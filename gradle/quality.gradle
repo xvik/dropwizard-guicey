@@ -1,6 +1,9 @@
 /* Quality plugins checks applied during "gradle check" execution, so travis build will fail in case of quality problems
  * and its better to call check manually before push. */
 
+// hack: without it build property is not visible (???!)
+logger.debug("$project.ext.build")
+boolean ignoreFailuresCfg = !project.ext.build.strictQualityCheck
 
 // enable detailed warnings (all options http://docs.oracle.com/javase/8/docs/technotes/tools/windows/javac.html#BHCJCABJ)
 compileJava.options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
@@ -11,7 +14,7 @@ apply plugin: 'findbugs'
 // if you need java 6 support use 2.0.3 version
 findbugs {
     toolVersion = "3.0.1"
-    ignoreFailures = false
+    ignoreFailures = ignoreFailuresCfg
     sourceSets = [sourceSets.main]
     effort = "max"
     reportLevel = "medium"
@@ -88,8 +91,8 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = "5.2.3"
-    ignoreFailures = false
+    toolVersion = "5.3.2"
+    ignoreFailures = ignoreFailuresCfg
     ruleSetFiles = files("gradle/config/pmd/pmd.xml")
     sourceSets = [sourceSets.main]
 }
@@ -118,8 +121,8 @@ apply plugin: 'checkstyle'
 
 // Note: checkstyle 6.2 requires jdk7 or above. For jdk6 use older version (6.1.1)
 checkstyle {
-    toolVersion = "6.5"
-    ignoreFailures = false
+    toolVersion = "6.7"
+    ignoreFailures = ignoreFailuresCfg
     sourceSets = [sourceSets.main]
     configFile = file('gradle/config/checkstyle/checkstyle.xml')
 }

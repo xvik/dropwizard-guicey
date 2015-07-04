@@ -19,8 +19,8 @@ if (file("$project.rootDir/.git").exists()) {
         }
     }
 
-    createReleaseTag.dependsOn bintrayUpload
-    release.doLast {
+    afterReleaseBuild.dependsOn bintrayUpload
+    afterReleaseBuild.doLast {
         logger.warn "RELEASED $project.group:$project.name:$project.version"
     }
 } else {
