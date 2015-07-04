@@ -45,14 +45,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>3.0.0</version>
+  <version>3.0.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:3.0.0'
+compile 'ru.vyarus:dropwizard-guicey:3.0.1'
 ```
 
 for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
@@ -192,6 +192,20 @@ interfaces and reference object will be set to module just before injector creat
 This will work only for modules set to `modules()` bundle option.
 
 [Example](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/AutowiredModule.groovy)
+
+Alternatively, abstract module class `DropwizardAwareModule` may be used. It implements all aware interfaces and reduce implementation boilerplate.
+
+```java
+public class MyModule extends DropwizardAwareModule<MyConfiguration> {
+    @Override
+    protected void configure() {
+        bootstrap()     // Bootstrap instance
+        environment()   // Environment instance
+        configuration() // MyConfiguration instance
+        appPackage()    // application class package 
+    }
+} 
+```
 
 ### Extension ordering
 

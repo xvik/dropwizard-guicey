@@ -1,3 +1,4 @@
+### 3.0.1 (2015-07-04)
 * Add DropwizardAwareModule abstract module to remove boilerplate of using all aware interfaces
 
 ### 3.0.0 (2015-04-26)
