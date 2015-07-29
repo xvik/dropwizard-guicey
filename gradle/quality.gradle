@@ -40,7 +40,6 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
     if ((task.name == 'findbugsMain' || task.name == 'findbugsTest')) {
         def findbugsType = task.name == 'findbugsMain' ? 'main' : 'test'
 
-        if (state.failure) {
             // print findbugs errors
             def outFile = findbugsType + '.xml'
             def reportFile = file("${buildDir}/reports/findbugs/${outFile}")
@@ -70,8 +69,8 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
                     def src = bug.SourceLine[0]
                     logger.error "[${cat[bug.'@category']}] ${src.'@sourcepath'}:${src.'@start'}:${src.'@end'} ${msg.text()} [${bug.'@type'}]\n${desc[bug.'@type']}"
                 }
-                println ''
-            }
+                if (result.BugInstance.size() > 0)
+                    println ''
         }
 
         if (file("$buildDir/reports/findbugs/${findbugsType}.xml").exists()) {
@@ -91,14 +90,14 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = "5.3.2"
+    toolVersion = "5.3.3"
     ignoreFailures = ignoreFailuresCfg
     ruleSetFiles = files("gradle/config/pmd/pmd.xml")
     sourceSets = [sourceSets.main]
 }
 
 gradle.taskGraph.afterTask { Task task, TaskState state ->
-    if ((task.name == 'pmdMain' || task.name == 'pmdTest') && state.failure) {
+    if ((task.name == 'pmdMain' || task.name == 'pmdTest')) {
         // print pmd errors
         def outFile = task.name == 'pmdMain' ? 'main.xml' : 'test.xml'
         def reportFile = file("${buildDir}/reports/pmd/${outFile}")
@@ -106,8 +105,9 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
         if (reportFile.exists()) {
             def result = new XmlParser().parse(reportFile)
 
-            println ''
             result.file.each { file ->
+                if (file.violation.size() >0)
+                    println ''
                 file.violation.each { violation ->
                     logger.error "${file.'@name'}:${violation.'@beginline'}:${violation.'@endline'} ${violation.text()}${violation.'@externalInfoUrl'}\n"
                 }
@@ -121,26 +121,37 @@ apply plugin: 'checkstyle'
 
 // Note: checkstyle 6.2 requires jdk7 or above. For jdk6 use older version (6.1.1)
 checkstyle {
-    toolVersion = "6.7"
+    toolVersion = "6.8.1"
     ignoreFailures = ignoreFailuresCfg
     sourceSets = [sourceSets.main]
     configFile = file('gradle/config/checkstyle/checkstyle.xml')
+
+    // due to ant task rename in 6.8, gradle plugin can't use it. extra jar fixes compatibility until proper gradle fix
+    // https://github.com/checkstyle/checkstyle/issues/1108
+    // https://issues.gradle.org/browse/GRADLE-3314
+    dependencies {
+        checkstyle files('gradle/config/checkstyle/compatibility.jar')
+        checkstyle "com.puppycrawl.tools:checkstyle:6.8.1"
+    }
 }
 
 def checkType;
 task checkstyleReport << {
-    if (file("$buildDir/reports/checkstyle/${checkType}.xml").exists()) {
-        def htmlReportPath = "$buildDir/reports/checkstyle/${checkType}.html"
-        ant.xslt(in: "$buildDir/reports/checkstyle/${checkType}.xml",
-                style: "gradle/config/checkstyle/checkstyle-noframes-sorted.xsl",
-                out: htmlReportPath
-        )
-        logger.error("Checkstyle HTML report: file:///${file(htmlReportPath).canonicalPath.replaceAll("\\\\", "/")}")
+    def report = "$buildDir/reports/checkstyle/${checkType}.xml"
+    if (file(report).exists()) {
+        def hasErrors = new XmlParser().parse(file(report)).find{ file -> file.error}
+        if (hasErrors) {
+            def htmlReportPath = "$buildDir/reports/checkstyle/${checkType}.html"
+            ant.xslt(in: report,
+                    style: "gradle/config/checkstyle/checkstyle-noframes-sorted.xsl",
+                    out: htmlReportPath
+            )
+            logger.error("Checkstyle HTML report: file:///${file(htmlReportPath).canonicalPath.replaceAll("\\\\", "/")}")
+        }
     }
 }
 
 gradle.taskGraph.afterTask { Task task, TaskState state ->
-    if (state.failure) {
         if (task.name in ['checkstyleMain', 'checkstyleTest']) {
             checkstyleReport {
                 def matcher = task.name =~ /^checkstyle(.*)$/
@@ -149,7 +160,6 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
                 }
             }
             checkstyleReport.execute()
-        }
     }
 }
 

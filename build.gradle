@@ -8,7 +8,7 @@ description = 'Dropwizard guice integration'
 // convention: project.name == github project name == bintray package page
 project.ext {
     build = {
-        gradle = 2.4
+        gradle = 2.5
         java = 1.7
         // if not empty runs animal sniffer on compile to guarantee binary compatibility; set '' to disable
         signature = 'org.codehaus.mojo.signature:java17:+@signature'
