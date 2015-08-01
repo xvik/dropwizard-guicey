@@ -4,10 +4,8 @@ import com.google.inject.Binder;
 import com.google.inject.Injector;
 import com.google.inject.binder.ScopedBindingBuilder;
 import org.glassfish.hk2.api.Factory;
-import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.hk2.utilities.reflection.ParameterizedTypeImpl;
-import org.glassfish.jersey.server.spi.internal.ValueFactoryProvider;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed;
 import ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory;
 import ru.vyarus.dropwizard.guice.module.jersey.support.JerseyComponentProvider;
@@ -17,7 +15,6 @@ import ru.vyarus.java.generics.resolver.context.GenericsContext;
 
 import javax.inject.Provider;
 import javax.inject.Singleton;
-import javax.ws.rs.ext.ExceptionMapper;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -104,9 +101,6 @@ public final class JerseyBinding {
      * @param injector     guice injector
      * @param type         type which implements specific jersey interface or extends class
      * @param specificType specific jersey type (interface or abstract class)
-     * @see #bindExceptionMapper(AbstractBinder, Injector, Class)
-     * @see #bindInjectionResolver(AbstractBinder, Injector, Class)
-     * @see #bindValueFactoryProvider(AbstractBinder, Injector, Class)
      */
     @SuppressWarnings("unchecked")
     public static void bindSpecificComponent(final AbstractBinder binder, final Injector injector,
@@ -123,49 +117,6 @@ public final class JerseyBinding {
             binder.bindFactory(new GuiceComponentFactory(injector, type)).to(type).in(Singleton.class);
             binder.bind(type).to(binding).in(Singleton.class);
         }
-    }
-
-    /**
-     * Binds {@link ValueFactoryProvider}. If type is {@link HK2Managed}, binds directly. Otherwise,
-     * use guice "bridge" factory to lazily bind type.
-     * Note: value factory provider are instantiated eagerly in hk context.
-     *
-     * @param binder   hk binder
-     * @param injector guice injector
-     * @param type     value factory provider type
-     */
-    @SuppressWarnings("unchecked")
-    public static void bindValueFactoryProvider(final AbstractBinder binder, final Injector injector,
-                                                final Class<?> type) {
-        bindSpecificComponent(binder, injector, type, ValueFactoryProvider.class);
-    }
-
-    /**
-     * Binds {@link InjectionResolver}. If type is {@link HK2Managed}, binds directly. Otherwise,
-     * use guice "bridge" factory to lazily bind type.
-     *
-     * @param binder   hk binder
-     * @param injector guice injector
-     * @param type     injection resolver instance
-     */
-    @SuppressWarnings("unchecked")
-    public static void bindInjectionResolver(final AbstractBinder binder, final Injector injector,
-                                             final Class<?> type) {
-        bindSpecificComponent(binder, injector, type, InjectionResolver.class);
-    }
-
-    /**
-     * Binds {@link ExceptionMapper}. If type is {@link HK2Managed}, binds directly. Otherwise,
-     * use guice "bridge" factory to lazily bind type.
-     *
-     * @param binder   hk binder
-     * @param injector guice injector
-     * @param type     exception mapper instance
-     */
-    @SuppressWarnings("unchecked")
-    public static void bindExceptionMapper(final AbstractBinder binder, final Injector injector,
-                                           final Class<?> type) {
-        bindSpecificComponent(binder, injector, type, ExceptionMapper.class);
     }
 
     /**

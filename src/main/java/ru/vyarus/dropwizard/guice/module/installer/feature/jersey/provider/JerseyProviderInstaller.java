@@ -1,10 +1,13 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 import com.google.inject.Binder;
 import com.google.inject.Injector;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.spi.internal.ValueFactoryProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +16,14 @@ import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
+import ru.vyarus.java.generics.resolver.GenericsResolver;
 
 import javax.inject.Singleton;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.container.DynamicFeature;
+import javax.ws.rs.ext.*;
+import java.util.Set;
 
 import static ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils.is;
 import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
@@ -37,6 +44,22 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
 @Order(30)
 public class JerseyProviderInstaller implements FeatureInstaller<Object>,
         BindingInstaller, JerseyInstaller<Object> {
+
+    private static final Set<Class<?>> EXTENSION_TYPES = ImmutableSet.<Class<?>>of(
+            ExceptionMapper.class,
+            ParamConverterProvider.class,
+            ContextResolver.class,
+            MessageBodyReader.class,
+            MessageBodyWriter.class,
+            ReaderInterceptor.class,
+            WriterInterceptor.class,
+            ContainerRequestFilter.class,
+            ContainerResponseFilter.class,
+            DynamicFeature.class,
+            ValueFactoryProvider.class,
+            InjectionResolver.class,
+            ApplicationEventListener.class
+    );
 
     private final Logger logger = LoggerFactory.getLogger(JerseyProviderInstaller.class);
     private final ProviderReporter reporter = new ProviderReporter();
@@ -66,17 +89,18 @@ public class JerseyProviderInstaller implements FeatureInstaller<Object>,
             // register factory directly (without wrapping)
             bindFactory(binder, injector, type);
 
-        } else if (is(type, ValueFactoryProvider.class)) {
-            bindValueFactoryProvider(binder, injector, type);
-
-        } else if (is(type, InjectionResolver.class)) {
-            bindInjectionResolver(binder, injector, type);
-
-        } else if (is(type, ExceptionMapper.class)) {
-            bindExceptionMapper(binder, injector, type);
-
         } else {
-            bindComponent(binder, injector, type);
+            // support multiple extension interfaces on one type
+            final Set<Class<?>> extensions = Sets.intersection(EXTENSION_TYPES,
+                    GenericsResolver.resolve(type).getGenericsInfo().getComposingTypes());
+            if (!extensions.isEmpty()) {
+                for (Class<?> ext : extensions) {
+                    bindSpecificComponent(binder, injector, type, ext);
+                }
+            } else {
+                // no known extension found
+                bindComponent(binder, injector, type);
+            }
         }
     }
 

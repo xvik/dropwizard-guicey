@@ -1,3 +1,8 @@
+* JerseyProviderInstaller: 
+  - add support for: ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, ReaderInterceptor, WriterInterceptor,
+  ContainerRequestFilter, ContainerResponseFilter, DynamicFeature, ApplicationEventListener
+  - support multiple extension interfaces on the same bean
+
 ### 3.0.1 (2015-07-04)
 * Add DropwizardAwareModule abstract module to remove boilerplate of using all aware interfaces
 
