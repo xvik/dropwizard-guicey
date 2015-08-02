@@ -2,6 +2,9 @@
   - add support for: ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, ReaderInterceptor, WriterInterceptor,
   ContainerRequestFilter, ContainerResponseFilter, DynamicFeature, ApplicationEventListener
   - support multiple extension interfaces on the same bean
+* Introduce bundles (GuiceyBundle) to simplify extensions:
+  - core installers now registered with CoreInstallersBundle and classpath scan on core installers package is removed
+  - new builder option configureFromDropwizardBundles enables all registered dropwizard bundles lookup if they implement GuiceyBundle (unified extension mechanism)
 
 ### 3.0.1 (2015-07-04)
 * Add DropwizardAwareModule abstract module to remove boilerplate of using all aware interfaces

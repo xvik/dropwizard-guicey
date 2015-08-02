@@ -15,7 +15,11 @@ import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
+import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.installer.internal.DwBundleSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.CommandSupport;
@@ -71,10 +75,12 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     private Injector injector;
 
     private final List<Module> modules = Lists.newArrayList();
+    private final List<GuiceyBundle> bundles = Lists.newArrayList();
     private final Set<String> autoscanPackages = Sets.newHashSet();
     private final InstallerConfig installerConfig = new InstallerConfig();
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
     private boolean searchCommands;
+    private boolean configureFromDropwizardBundles;
     private Stage stage = Stage.PRODUCTION;
 
     private Bootstrap bootstrap;
@@ -104,6 +110,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @Override
     @SuppressWarnings("unchecked")
     public void run(final T configuration, final Environment environment) throws Exception {
+        configureFromBundles(configuration, environment);
         modules.add(new GuiceSupportModule(scanner, installerConfig));
         configureModules(configuration, environment);
         injector = injectorFactory.createInjector(stage, modules);
@@ -118,6 +125,23 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     public Injector getInjector() {
         return Preconditions.checkNotNull(injector, "Guice not initialized");
+    }
+
+    /**
+     * Apply configuration from registered bundles. If dropwizard bundles support is enabled, lookup them too.
+     *
+     * @param configuration configuration object
+     * @param environment   environment object
+     */
+    private void configureFromBundles(final T configuration, final Environment environment) {
+        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(modules, installerConfig,
+                configuration, environment);
+        if (configureFromDropwizardBundles) {
+            bundles.addAll(DwBundleSupport.findBundles(bootstrap, GuiceyBundle.class));
+        }
+        for (GuiceyBundle bundle : bundles) {
+            bundle.initialize(guiceyBootstrap);
+        }
     }
 
     /**
@@ -170,6 +194,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
         /**
          * Enables auto scan feature.
+         * When enabled, all core installers are registered automatically.
          *
          * @param basePackages packages to scan extensions in
          * @return builder instance for chained calls
@@ -178,8 +203,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
             Preconditions.checkState(bundle.autoscanPackages.isEmpty(), "Auto config packages already configured");
             Preconditions.checkState(basePackages.length > 0, "Specify at least one package to scan");
             bundle.autoscanPackages.addAll(Arrays.asList(basePackages));
-            // adding special package with predefined feature installers
-            bundle.autoscanPackages.add("ru.vyarus.dropwizard.guice.module.installer.feature");
+            bundle.bundles.add(new CoreInstallersBundle());
             return this;
         }
 
@@ -191,6 +215,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule
          * @see ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule
          * @see ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule
+         * @see ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
          */
         public Builder<T> modules(final Module... modules) {
             Preconditions.checkState(modules.length > 0, "Specify at least one module");
@@ -250,6 +275,34 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> extensions(final Class<?>... extensionClasses) {
             bundle.installerConfig.getManualBeans().addAll(Arrays.asList(extensionClasses));
+            return this;
+        }
+
+        /**
+         * Guicey bundles are mainly useful for extensions (to group installers and extensions installation without
+         * auto scan). Its very like dropwizard bundles.
+         * <p>Its also possible to use dropwizard bundles as guicey bundles: bundle must implement
+         * {@link GuiceyBundle} and {@link #configureFromDropwizardBundles(boolean)} must be enabled
+         * (disabled by default). This allows using dropwizard bundles as universal extension point.</p>
+         *
+         * @param bundles guicey bundles
+         * @return builder instance for chained calls
+         */
+        public Builder<T> bundles(final GuiceyBundle... bundles) {
+            bundle.bundles.addAll(Arrays.asList(bundles));
+            return this;
+        }
+
+        /**
+         * If enabled registered dropwizard bundles are checked if they implement {@link GuiceyBundle} and called
+         * to configure guice. This allows using dropwizard bundles as universal extension point.
+         * <p>Disabled by default.</p>
+         *
+         * @param enable true to enable configuration from dropwizard bundles
+         * @return builder instance for chained calls
+         */
+        public Builder<T> configureFromDropwizardBundles(final boolean enable) {
+            bundle.configureFromDropwizardBundles = enable;
             return this;
         }
 
