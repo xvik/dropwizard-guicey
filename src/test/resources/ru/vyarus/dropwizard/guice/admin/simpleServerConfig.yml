@@ -1,0 +1,7 @@
+foo: 1
+bar: 3
+baa: 4
+
+server:
+  type: simple
+  rootPath: '/rest/*'

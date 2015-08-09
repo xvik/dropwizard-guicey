@@ -6,6 +6,7 @@
   - core installers now registered with CoreInstallersBundle and classpath scan on core installers package is removed
   - new builder bundles() method to add guicey bundles
   - new builder option configureFromDropwizardBundles enables all registered dropwizard bundles lookup if they implement GuiceyBundle (unified extension mechanism)
+* Add admin context rest support (AdminRestBundle)
 
 ### 3.0.1 (2015-07-04)
 * Add DropwizardAwareModule abstract module to remove boilerplate of using all aware interfaces
