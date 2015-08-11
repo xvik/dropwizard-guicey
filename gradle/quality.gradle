@@ -121,7 +121,7 @@ apply plugin: 'checkstyle'
 
 // Note: checkstyle 6.2 requires jdk7 or above. For jdk6 use older version (6.1.1)
 checkstyle {
-    toolVersion = "6.8.1"
+    toolVersion = "6.9"
     ignoreFailures = ignoreFailuresCfg
     sourceSets = [sourceSets.main]
     configFile = file('gradle/config/checkstyle/checkstyle.xml')
@@ -131,7 +131,7 @@ checkstyle {
     // https://issues.gradle.org/browse/GRADLE-3314
     dependencies {
         checkstyle files('gradle/config/checkstyle/compatibility.jar')
-        checkstyle "com.puppycrawl.tools:checkstyle:6.8.1"
+        checkstyle "com.puppycrawl.tools:checkstyle:6.9"
     }
 }
 

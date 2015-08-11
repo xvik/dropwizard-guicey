@@ -1,7 +1,8 @@
 language: java
-sudo: false
 jdk:
   - oraclejdk7
+
+sudo: false
 env:
   - TERM=dumb
 
