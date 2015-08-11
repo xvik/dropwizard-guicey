@@ -17,3 +17,7 @@ script:
 
 after_success:
   - ./gradlew jacocoTestReport coveralls
+
+cache:
+   directories:
+   - $HOME/.gradle/caches/
