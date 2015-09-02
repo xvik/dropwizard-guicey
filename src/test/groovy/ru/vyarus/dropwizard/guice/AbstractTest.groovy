@@ -34,6 +34,7 @@ abstract class AbstractTest extends Specification {
         environment.admin() >> Mock(AdminEnvironment)
         environment.admin().addFilter(*_) >> Mock(FilterRegistration.Dynamic)
         environment.admin().addServlet(*_) >> Mock(ServletRegistration.Dynamic)
+        environment.getAdminContext() >> Mock(MutableServletContextHandler)
         environment.lifecycle() >> Mock(LifecycleEnvironment)
         environment.healthChecks() >> Mock(HealthCheckRegistry)
         return environment

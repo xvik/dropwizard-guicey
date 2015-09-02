@@ -7,6 +7,7 @@ import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorProvider;
+import ru.vyarus.dropwizard.guice.module.installer.internal.AdminGuiceFilter;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule;
 
 /**
@@ -25,6 +26,7 @@ public class Jersey2Module extends ServletModule {
      * Guice filter registration name.
      */
     public static final String GUICE_FILTER = "Guice Filter";
+    private static final String STAR = "*";
     private final Application application;
     private final Environment environment;
 
@@ -42,8 +44,11 @@ public class Jersey2Module extends ServletModule {
         bind(ServiceLocator.class).toProvider(component);
         environment.jersey().register(component);
 
-        environment.servlets().addFilter(GUICE_FILTER, GuiceFilter.class)
-                .addMappingForUrlPatterns(null, false, environment.getApplicationContext().getContextPath() + "*");
+        final GuiceFilter guiceFilter = new GuiceFilter();
+        environment.servlets().addFilter(GUICE_FILTER, guiceFilter)
+                .addMappingForUrlPatterns(null, false, environment.getApplicationContext().getContextPath() + STAR);
+        environment.admin().addFilter(GUICE_FILTER, new AdminGuiceFilter(guiceFilter))
+                .addMappingForUrlPatterns(null, false, environment.getAdminContext().getContextPath() + STAR);
     }
 }
 
