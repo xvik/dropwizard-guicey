@@ -5,7 +5,7 @@ repositories {
 }
 
 ext {
-    dropwizard = '0.8.2'
+    dropwizard = '0.8.4'
     guice = '4.0'
 }
 
@@ -17,7 +17,7 @@ dependencies {
     compile "com.google.inject.extensions:guice-servlet:$guice"
     compile "com.google.inject.extensions:guice-multibindings:$guice"
     compile "io.dropwizard:dropwizard-core:$dropwizard"
-    compile 'org.glassfish.hk2:guice-bridge:2.4.0-b25'
+    compile 'org.glassfish.hk2:guice-bridge:2.4.0-b31'
     compile 'ru.vyarus:generics-resolver:2.0.0'
 
     testCompile 'cglib:cglib-nodep:3.1'

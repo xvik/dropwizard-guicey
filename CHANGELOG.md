@@ -7,6 +7,7 @@
   - new builder bundles() method to add guicey bundles
   - new builder option configureFromDropwizardBundles enables all registered dropwizard bundles lookup if they implement GuiceyBundle (unified extension mechanism)
 * Add admin context rest support (AdminRestBundle)
+* Add request scoped beans support in admin context
 
 ### 3.0.1 (2015-07-04)
 * Add DropwizardAwareModule abstract module to remove boilerplate of using all aware interfaces
