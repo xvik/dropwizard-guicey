@@ -23,6 +23,7 @@ Features:
 * Servlets and filters could be installed into admin context (using annotations)
 * Extensions ordering supported (for some extension types, where it might be useful)
 * Dropwizard style reporting of installed extensions
+* Admin context rest emulation
 * Custom junit rule for lightweight integration testing
 * [Spock](http://spockframework.org) extensions
 
@@ -45,14 +46,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>3.0.1</version>
+  <version>3.1.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:3.0.1'
+compile 'ru.vyarus:dropwizard-guicey:3.1.0'
 ```
 
 for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
@@ -117,6 +118,8 @@ Note: when auto scan not enabled no installers will be registered automatically.
 * `installers` registers feature installers. Used either to add installers from packages not visible by auto scan or to
 configure installers when auto scan not used.
 * `extensions` manually register classes (for example, when auto scan disabled). Classes will be installed using configured installers.
+* `bundles` registers guicey bundles (see below)
+* `configureFromDropwizardBundles` enables registered dropwizard bundles lookup if they implement `GuiceyBundle` (false by default)
 * `build` allows specifying guice injector stage (production, development). By default, PRODUCTION stage used.
 
 #### Using custom injector factory
@@ -233,8 +236,10 @@ If you need to run your installer before/after some installer simply annotate it
 
 ##### Resource
 [ResourceInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/ResourceInstaller.java)
-finds classes annotated with `@Path` and register their instance as resources. Resources registered as singletons, even if guice bean scope isn't set. If extension annotated as
+finds classes annotated with `@Path` and register their instance as resources. Resources **registered as singletons**, even if guice bean scope isn't set. If extension annotated as
 `@HK2Managed` then jersey HK container will manage bean creation (still guice beans injections are possible).
+
+Use `Provider` for [request scoped beans](#request-scoped-beans) injections.
 
 ##### Task
 [TaskInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/TaskInstaller.java)
@@ -259,15 +264,25 @@ Custom base class is required, because default `HealthCheck` did not provide che
 
 ##### Jersey extension
 [JerseyProviderInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java)
-finds classes annotated with jersey `@Provider` annotation and register their instance in jersey (forced singleton). Suitable for all types of extensions,
+finds classes annotated with jersey `@Provider` annotation and register their instance in jersey (**forced singleton**). Supports the following extensions:
 like [Factory](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/LocaleInjectableProvider.groovy),
 [ExceptionMapper](https://github.com/xvik/dropwizard-guicey/tree/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/feature/DummyExceptionMapper.groovy),
 [InjectionResolver](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/annotated/AuthInjectionResolver.groovy),
-[ValueFactoryProvider](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/annotated/AuthFactoryProvider.groovy) etc
-(everything you would normally pass into `environment.jersey().register()`.
+[ValueFactoryProvider](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/annotated/AuthFactoryProvider.groovy),
+[ParamConverterProvider](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/support/provider/paramconv/FooParamConverter.groovy), 
+[ContextResolver](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ContextResolver.html), 
+[MessageBodyReader](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/MessageBodyReader.html), 
+[MessageBodyWriter](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/MessageBodyWriter.html),
+[ReaderInterceptor](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ReaderInterceptor.html), 
+[WriterInterceptor](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/WriterInterceptor.html), 
+[ContainerRequestFilter](https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/ContainerRequestFilter.html), 
+[ContainerResponseFilter](https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/ContainerResponseFilter.html),
+[DynamicFeature](https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/DynamicFeature.html), 
+[ApplicationEventListener](https://jersey.java.net/apidocs/2.9/jersey/org/glassfish/jersey/server/monitoring/ApplicationEventListener.html) 
+(all of this usually registered through `environment.jersey().register()`).
 
 Due to specifics of HK integration (see below), you may need to use `@HK2Managed` to delegate bean creation to HK,
-`@LazyBinding` to delay bean creation to time when all dependencies will we available and, of course, `Provider` (for guice or HK).
+`@LazyBinding` to delay bean creation to time when all dependencies will be available and, of course, `Provider` (for guice or HK).
 
 
 ##### Eager
@@ -347,9 +362,128 @@ installs filters annotated with `@AdminFilter` into administration context. Supp
 [AdminServletInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/admin/AdminServletInstaller.java)
 installs servlets annotated with `@AdminServlet` into administration context. Support ordering.
 
-NOTE: guice is too tied to `GuiceFilter`, which is registered on main context and can't be registered for admin context too. 
-So you will not be able to use request scoped beans for filters and servlets (and can't inject request response objects) in admin scope 
-(`ServletModule` can't be used for registration in admin context).
+### Guicey bundles
+
+By analogy with dropwizard bundles, guicey has its own `GuiceyBundle`. These bundles contains almost the same options as 
+main `GuiceBundle` builder. The main purpose is to group installers, extensions and guice modules related to specific 
+feature.
+
+Guicey bundles are initialized during dropwizard `run` phase. All guice modules registered in bundles will also be checked if 
+[dropwizard objects autowiring](https://github.com/xvik/dropwizard-guicey#module-autowiring) required.
+
+For example, custom integration with some scheduler framework will require installers to register tasks and guice module
+to configure framework. GuiceyBundle will allow reduce integration to just one bundle installation.
+
+```java
+public class XLibIntegrationBundle implements GuiceyBundle {
+
+    @Override
+    public void initialize(final GuiceyBootstrap bootstrap) {
+        bootstrap.installers(
+                XLibFeature1Installer.class,
+                XLibFeature2Installer.class,                
+        )
+        .modules(new XLibGuiceModule());
+    }
+}
+
+bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
+        .bundles(new XLibIntegrationBundle())
+        .enableAutoConfig("package.to.scan")
+        .build()
+);
+```
+
+Or, if auto-scan is not used, bundles may be used to group application features: e.g. ResourcesBundle, TasksBundle.
+
+##### Core bundle
+
+Core installers are grouped into `CoreInstallersBundle`.
+If classpath scan is not active, all core installers may be registered like this:
+
+```java
+bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
+        .bundles(new CoreInstallersBundle())
+        .extensions(MyTask.class, MyResource.class, MyManaged.class)
+        .build()
+);
+```
+
+##### Dropwizard bundles unification
+
+Guicey bundles and dropwizard bundles may be unified providing single (standard) extension point for both 
+dropwizard and guicey features.
+
+Feature is disabled by default, to enable it use `configureFromDropwizardBundles` option.
+
+```java
+bootstrap.addBundle(new XLibBundle());
+bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
+        .configureFromDropwizardBundles(true)
+        .build()
+);
+```
+
+where
+
+```java
+public class XLibBundle implements Bundle, GuiceyBundle {
+    public void initialize(Bootstrap<?> bootstrap) {...}
+    public void initialize(GuiceyBootstrap bootstrap){...}
+    public void run(Environment environment) {...}
+}
+```
+
+When active, all registered bundles are checked if they implement `GuiceyBundle`.
+Also, works with dropwizard `ConfiguredBundle`.
+
+WARNING: don't assume if guicey bundle's `initialize` method will be called before/after dropwizard bundle's `run` method. 
+Both are possible (it depends if bundle registered before or after GuiceBundle).
+
+
+### Admin REST
+
+All rest resources could be "published" in the admin context too.  This is just an emulation of rest: the same resources 
+are accessible in both contexts. On admin side special servlet simply redirects all incoming requests into jersey context.
+
+Such approach is better than registering completely separate jersey context for admin rest because
+of no overhead and simplicity of jersey extensions management.
+
+To install admin rest servlet, register bundle:
+
+```java
+bootstrap.addBundle(new AdminRestBundle());
+```
+
+In this case rest is registered either to '/api/*', if main context rest is mapped to root ('/*')
+or to the same path as main context rest.
+
+To register on custom path:
+
+```java
+bootstrap.addBundle(new AdminRestBundle("/custom/*"));
+```
+
+##### Security
+
+In order to hide specific resource methods or entire resources on main context, annotate resource methods
+or resource class with `@AdminResource` annotation.
+
+For example:
+
+```java
+@GET
+@Path("/admin")
+@AdminResource
+public String admin() {
+    return "admin"
+}
+```
+
+This (annotated) method will return 403 error when called from main context and process when called from admin context.
+
+This is just the simplest option to control resources access. Any other method may be used (with some security
+framework or something else).
 
 ### Servlets and filters
 
@@ -379,7 +513,7 @@ to inject guice dependencies.
 
 ### Request scoped beans
 
-You can use request scoped beans in main context. 
+You can use request scoped beans in both main and admin contexts. 
 
 ```java
 @RequestScoped
@@ -398,10 +532,6 @@ You can get request and response objects in any bean:
 Provider<HttpServletRequest> requestProvider
 Provider<HttpServletResponse> responseProvider
 ```
-
-NOTE: this will work only for application context and will not work for admin context (because guice implementation
-is limited to one servlet context). As a result request scope and request/response injections will not work in tasks, 
-healthchecks and admin filters and servlets.
 
 #### Jersey objects available for injection
 
