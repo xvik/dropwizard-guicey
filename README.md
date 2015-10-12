@@ -184,6 +184,10 @@ Without auto scan default installers not registered.
 * If commands search enabled `.searchCommands(true)`, performs search for all classes extending `Command` and install them into
 bootstrap.
 
+Classes are searched in specified packages and all their subpackages. 
+[Inner static](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/cases/innercls/AbstractExceptionMapper.groovy) 
+classes are also resolved.
+
 `@InvisibleForScanner` annotation hides class from scanner (for example, to install it manually or to avoid installation at all)
 
 ### Module autowiring
