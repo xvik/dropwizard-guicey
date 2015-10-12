@@ -1,7 +1,11 @@
 package ru.vyarus.dropwizard.guice.module.installer.scanner;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.util.OReflectionHelper;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -16,7 +20,7 @@ public class ClasspathScanner {
     private final Set<String> packages;
 
     public ClasspathScanner(final Set<String> packages) {
-        this.packages = packages;
+        this.packages = validate(packages);
     }
 
     /**
@@ -38,5 +42,31 @@ public class ClasspathScanner {
                 }
             }
         }
+    }
+
+    /**
+     * @param packages specified packages
+     * @return original set if validation pass
+     * @throws IllegalStateException if packages intersect
+     */
+    private Set<String> validate(final Set<String> packages) {
+        final List<String> pkg = Lists.newArrayList(packages);
+        Collections.sort(pkg, new Comparator<String>() {
+            @Override
+            public int compare(final String o1, final String o2) {
+                return Integer.compare(o1.length(), o2.length());
+            }
+        });
+        for (int i = 0; i < pkg.size(); i++) {
+            final String path = pkg.get(i);
+            for (int j = i + 1; j < pkg.size(); j++) {
+                final String path2 = pkg.get(j);
+                Preconditions.checkState(!path2.startsWith(path + "."),
+                        "Autoscan path '%s' is already covered by '%s' and may lead "
+                                + "to duplicate instances in runtime",
+                        path2, path);
+            }
+        }
+        return packages;
     }
 }

@@ -1,3 +1,5 @@
+* Add classpath scan packages validation for intersection (to prevent duplicate instances)
+
 ### 3.1.0 (2015-09-06)
 * JerseyProviderInstaller: 
   - add support for: ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, ReaderInterceptor, WriterInterceptor,
