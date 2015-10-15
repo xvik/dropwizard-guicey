@@ -173,6 +173,22 @@ Injector injector = provider.get();
 Most likely, requirement for injector instance means integration with some third party library.
 Consider writing custom installer in such cases (it will eliminate need for injector instance).
 
+##### Authentication
+
+Authentication is a good case when injector is required externally:
+
+```java
+@Override
+public void run(ExampleConfiguration configuration, Environment environment) {
+    environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<String>(
+                          InjectorLookup.getInjector(this).get().getInstance(SimpleAuthenticator.class),
+                          "SUPER SECRET STUFF",
+                          User.class)));
+}                         
+```
+
+For more details see [wiki page](https://github.com/xvik/dropwizard-guicey/wiki/Authentication-integration)
+
 ### Classpath scan
 
 Classpath scanning is activated by specifying packages to scan in bundle `.enableAutoConfig("package.to.scan")`.
