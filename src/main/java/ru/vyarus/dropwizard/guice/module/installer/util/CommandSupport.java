@@ -62,7 +62,7 @@ public final class CommandSupport {
     private static class CommandClassVisitor implements ClassVisitor {
         private final Bootstrap bootstrap;
 
-        public CommandClassVisitor(final Bootstrap bootstrap) {
+        CommandClassVisitor(final Bootstrap bootstrap) {
             this.bootstrap = bootstrap;
         }
 

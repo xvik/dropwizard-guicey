@@ -74,7 +74,7 @@ public class AdminRestBundle implements Bundle {
     private class ServletRegistration implements Managed {
         private final Environment environment;
 
-        public ServletRegistration(final Environment environment) {
+        ServletRegistration(final Environment environment) {
             this.environment = environment;
         }
 

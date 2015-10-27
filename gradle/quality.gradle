@@ -90,7 +90,7 @@ gradle.taskGraph.afterTask { Task task, TaskState state ->
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = "5.3.3"
+    toolVersion = "5.4.0"
     ignoreFailures = ignoreFailuresCfg
     ruleSetFiles = files("gradle/config/pmd/pmd.xml")
     sourceSets = [sourceSets.main]
@@ -121,18 +121,10 @@ apply plugin: 'checkstyle'
 
 // Note: checkstyle 6.2 requires jdk7 or above. For jdk6 use older version (6.1.1)
 checkstyle {
-    toolVersion = "6.9"
+    toolVersion = "6.11.2"
     ignoreFailures = ignoreFailuresCfg
     sourceSets = [sourceSets.main]
     configFile = file('gradle/config/checkstyle/checkstyle.xml')
-
-    // due to ant task rename in 6.8, gradle plugin can't use it. extra jar fixes compatibility until proper gradle fix
-    // https://github.com/checkstyle/checkstyle/issues/1108
-    // https://issues.gradle.org/browse/GRADLE-3314
-    dependencies {
-        checkstyle files('gradle/config/checkstyle/compatibility.jar')
-        checkstyle "com.puppycrawl.tools:checkstyle:6.9"
-    }
 }
 
 def checkType;

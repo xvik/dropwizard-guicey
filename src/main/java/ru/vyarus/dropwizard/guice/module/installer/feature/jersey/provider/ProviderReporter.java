@@ -118,7 +118,7 @@ public class ProviderReporter extends Reporter {
         public String format;
         public int generics;
 
-        public ExtDescriptor(final String name, final String format, final int generics) {
+        ExtDescriptor(final String name, final String format, final int generics) {
             this.name = name;
             this.format = format;
             this.generics = generics;
