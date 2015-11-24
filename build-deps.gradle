@@ -19,6 +19,7 @@ dependencies {
     compile "io.dropwizard:dropwizard-core:$dropwizard"
     compile 'org.glassfish.hk2:guice-bridge:2.4.0-b31'
     compile 'ru.vyarus:generics-resolver:2.0.0'
+    compile 'com.google.code.findbugs:annotations:3.0.1'
 
     testCompile "io.dropwizard:dropwizard-auth:$dropwizard"
     testCompile 'cglib:cglib-nodep:3.1'
