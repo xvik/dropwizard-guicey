@@ -7,10 +7,13 @@ import com.google.common.collect.Sets;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
@@ -71,6 +74,7 @@ import java.util.Set;
  */
 @SuppressWarnings("PMD.ExcessiveClassLength")
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
+    private final Logger logger = LoggerFactory.getLogger(GuiceBundle.class);
 
     private Injector injector;
 
@@ -113,7 +117,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         configureFromBundles(configuration, environment);
         modules.add(new GuiceSupportModule(scanner, installerConfig));
         configureModules(configuration, environment);
-        injector = injectorFactory.createInjector(stage, modules);
+        createInjector();
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
@@ -162,6 +166,20 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
             if (mod instanceof EnvironmentAwareModule) {
                 ((EnvironmentAwareModule) mod).setEnvironment(environment);
             }
+        }
+    }
+
+    /**
+     * Creates injector using injector factory. If injector creation failed forcing jvm exit to prevent
+     * application from staying alive.
+     */
+    @SuppressFBWarnings("DM_EXIT")
+    private void createInjector() {
+        try {
+            injector = injectorFactory.createInjector(stage, modules);
+        } catch (Exception ex) {
+            logger.error("Failed to create guice injector", ex);
+            System.exit(1);
         }
     }
 
