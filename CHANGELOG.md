@@ -1,3 +1,5 @@
+### 3.1.1 (2015-11-24)
+* Exit on guice injector creation error. Contributed by [Adam Dougal](https://github.com/adamdougal)
 * Add classpath scan packages validation for intersection (to prevent duplicate instances)
 
 ### 3.1.0 (2015-09-06)
