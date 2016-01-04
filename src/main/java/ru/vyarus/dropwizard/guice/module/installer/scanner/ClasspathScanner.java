@@ -30,7 +30,7 @@ public class ClasspathScanner {
      */
     public void scan(final ClassVisitor visitor) {
         for (String pkg : packages) {
-            List<Class<?>> found;
+            final List<Class<?>> found;
             try {
                 found = OReflectionHelper.getClassesFor(pkg, Thread.currentThread().getContextClassLoader());
             } catch (ClassNotFoundException e) {

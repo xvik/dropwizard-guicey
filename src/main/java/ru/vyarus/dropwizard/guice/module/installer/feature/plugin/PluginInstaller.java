@@ -56,7 +56,6 @@ public class PluginInstaller implements FeatureInstaller<Object>, BindingInstall
         }
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private <T, K> void registerNamedPlugin(final Binder binder, final Class<T> pluginType, final Class<K> keyType,
                                             final Class<? extends T> plugin, final K key) {
         MapBinder.newMapBinder(binder, keyType, pluginType).addBinding(key).to(plugin);

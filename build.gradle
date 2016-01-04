@@ -1,93 +1,113 @@
-buildscript {
-    apply from: "gradle/buildscript.gradle", to: buildscript
+plugins {
+    id 'groovy'
+    id 'jacoco'
+    id 'project-report'
+    id 'ru.vyarus.java-lib' version '1.0.1'
+    id 'ru.vyarus.github-info' version '1.0.0'
+    id 'ru.vyarus.animalsniffer' version '1.0.0'
+    id 'ru.vyarus.quality' version '1.2.0'
+    id 'com.github.kt3k.coveralls' version '2.4.0x'
+    id 'com.jfrog.bintray' version '1.5'
+    id 'net.researchgate.release' version '2.3.4'
+    id 'com.github.ben-manes.versions' version '0.11.3'
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+wrapper {
+    gradleVersion = 2.10
+}
+
+ext {
+    dropwizard = '0.8.5'
+    guice = '4.0'
+}
+
+repositories { jcenter(); mavenCentral(); mavenLocal() }
+dependencies {
+    signature 'org.codehaus.mojo.signature:java17:+@signature'
+
+    provided 'junit:junit:4.12'
+    provided "io.dropwizard:dropwizard-testing:$dropwizard"
+    provided 'org.spockframework:spock-core:1.0-groovy-2.4'
+    provided 'com.google.code.findbugs:annotations:3.0.1'
+
+    compile "com.google.inject.extensions:guice-servlet:$guice"
+    compile "com.google.inject.extensions:guice-multibindings:$guice"
+    compile "io.dropwizard:dropwizard-core:$dropwizard"
+    compile 'org.glassfish.hk2:guice-bridge:2.4.0-b31'
+    compile 'ru.vyarus:generics-resolver:2.0.1'
+
+    testCompile "io.dropwizard:dropwizard-auth:$dropwizard"
+    testCompile 'cglib:cglib-nodep:3.1'
+    testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
+    testCompile 'com.github.stefanbirkner:system-rules:1.9.0'
 }
 
 group = 'ru.vyarus'
 description = 'Dropwizard guice integration'
 
-// convention: project.name == github project name == bintray package page
-project.ext {
-    build = {
-        gradle = 2.8
-        java = 1.7
-        // if not empty runs animal sniffer on compile to guarantee binary compatibility; set '' to disable
-        signature = 'org.codehaus.mojo.signature:java17:+@signature'
-        strictQualityCheck = true  // true to fail build on quality plugins warnings
-    }
-    github = {
-        user = 'xvik'
-    }
-    bintray = {
-        user = project.hasProperty('bintrayUser') ? bintrayUser : 'USER' // configured in ~/.gradle/gradle.properties
-        key = project.hasProperty('bintrayKey') ? bintrayKey : 'KEY' // configured in ~/.gradle/gradle.properties
-        repo = 'xvik'
-        tags = ['dropwizard', 'guice']
-        dryRun = false // whether to run this as dry-run, without deploying (TEST RUN)
-        publish = true //If version should be auto published after an upload
-
-        signFiles = true // true to gpg sign files on bintray (certificate must be installed on bintray account)
-        gpgPassphrase = project.hasProperty('gpgPassphrase') ? gpgPassphrase : '' // optionally configured in ~/.gradle/gradle.properties if certificate requires it
-
-        mavenCentralSync = true // true to sync with maven central (files signing required)
-        ossUser = project.hasProperty('sonatypeUser') ? sonatypeUser : 'USER' // configured in ~/.gradle/gradle.properties
-        ossPassword = project.hasProperty('sonatypePassword') ? sonatypePassword : 'PASSWORD' // configured in ~/.gradle/gradle.properties
-    }
+github {
+    user = 'xvik'
     license = 'MIT'
-    licenseDesc = 'The MIT License'
-    // extend pom for maven central acceptance
-    pomConfig = {
-        scm {
-            url github.scm
-            connection github.scmConnection
-            developerConnection github.scmConnection
+}
+
+pom {
+    developers {
+        developer {
+            id "xvik"
+            name "Vyacheslav Rusakov"
+            email "vyarus@gmail.com"
         }
-        licenses {
-            license {
-                name licenseDesc
-                url github.licenseUrl
-                distribution "repo"
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? bintrayUser : 'USER'
+    key = project.hasProperty('bintrayKey') ? bintrayKey : 'KEY'
+    publications = ['maven']
+    dryRun = false
+    publish = true
+    pkg {
+        repo = 'xvik'
+        name = project.name
+        desc = project.description
+        labels = ['dropwizard', 'guice']
+        publicDownloadNumbers = true
+        version {
+            gpg {
+                sign = true
+                passphrase = project.hasProperty('gpgPassphrase') ? gpgPassphrase : ''
             }
-        }
-        developers {
-            developer {
-                id "xvik"
-                name "Vyacheslav Rusakov"
-                email "vyarus@gmail.com"
+            mavenCentralSync {
+                sync = true
+                user = project.hasProperty('sonatypeUser') ? sonatypeUser : 'USER'
+                password = project.hasProperty('sonatypePassword') ? sonatypePassword : 'PASSWORD'
             }
         }
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'com.github.ben-manes.versions'
-apply plugin: 'project-report'
+afterReleaseBuild {
+    dependsOn = [bintrayUpload]
+    doLast {
+        logger.warn "RELEASED $project.group:$project.name:$project.version"
+    }
+}
 
-apply from: 'gradle/build.gradle'
-apply from: 'gradle/github.gradle'
-apply from: 'gradle/bintray.gradle'
-apply from: 'gradle/release.gradle'
-apply from: 'gradle/maven.gradle'
-apply from: 'gradle/quality.gradle'
-
-apply from: 'build-deps.gradle'
+test {
+    testLogging {
+        events "skipped", "failed", "standard_error"
+        exceptionFormat "full"
+    }
+    maxHeapSize = "512m"
+}
 
 dependencyUpdates.revision = 'release'
+jacocoTestReport.reports.xml.enabled = true
 
 task showDependenciesTree(dependsOn: 'htmlDependencyReport', group: 'help', description:
         'Generates dependencies tree report and opens it in browser') << {
     java.awt.Desktop.getDesktop().open(file('/build/reports/project/dependencies/root.html'))
 }
-
-task install(dependsOn: 'publishMavenJavaPublicationToMavenLocal', group: 'publishing',
-        description: 'Install to local maven repository') << {
-    logger.warn "INSTALLED $project.group:$project.name:$project.version"
-}
-
-/*
-Tasks hint:
-    - dependencyUpdates: checks available dependencies updates
-    - dependencies: print dependencies tree in console
-    - check: run quality checks and tests
-    - release: release version
-*/

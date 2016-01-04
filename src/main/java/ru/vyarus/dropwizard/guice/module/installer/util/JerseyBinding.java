@@ -24,7 +24,6 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 21.11.2014
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public final class JerseyBinding {
 
     private JerseyBinding() {

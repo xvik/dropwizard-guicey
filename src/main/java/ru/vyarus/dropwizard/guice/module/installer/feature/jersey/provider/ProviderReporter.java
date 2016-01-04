@@ -112,7 +112,7 @@ public class ProviderReporter extends Reporter {
     /**
      * Extension point descriptor.
      */
-    @SuppressWarnings({"checkstyle:visibilitymodifier", "PMD.AbstractClassWithoutAnyMethod"})
+    @SuppressWarnings("checkstyle:VisibilityModifier")
     private static class ExtDescriptor {
         public String name;
         public String format;

@@ -72,7 +72,7 @@ import java.util.Set;
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
-@SuppressWarnings("PMD.ExcessiveClassLength")
+@SuppressWarnings("PMD.ExcessiveImports")
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
     private final Logger logger = LoggerFactory.getLogger(GuiceBundle.class);
 
