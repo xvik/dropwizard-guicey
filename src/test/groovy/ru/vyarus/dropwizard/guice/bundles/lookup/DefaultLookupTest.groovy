@@ -1,16 +1,15 @@
 package ru.vyarus.dropwizard.guice.bundles.lookup
 
+import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
-import spock.lang.Specification
-
 
 /**
  * @author Vyacheslav Rusakov
  * @since 17.01.2016
  */
-class DefaultLookupTest extends Specification {
+class DefaultLookupTest extends AbstractTest {
 
     def "Check default lookup"() {
 
