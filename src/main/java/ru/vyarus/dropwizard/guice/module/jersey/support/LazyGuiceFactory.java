@@ -8,24 +8,26 @@ import org.glassfish.hk2.api.Factory;
  * For example, if hk context is just starting and referenced guice bean depends on some hk bean,
  * we can't instantiate guice bean. This moves guice bean creation into hk init phase (when hk pre-init some factories)
  * or even further (first usage).
+ *
+ * @param <T> injection type
  */
-public class LazyGuiceFactory implements Factory {
+public class LazyGuiceFactory<T> implements Factory<T> {
 
     private final Injector injector;
-    private final Class<?> type;
+    private final Class<Factory<T>> type;
 
-    public LazyGuiceFactory(final Injector injector, final Class<?> type) {
+    public LazyGuiceFactory(final Injector injector, final Class<Factory<T>> type) {
         this.injector = injector;
         this.type = type;
     }
 
     @Override
-    public Object provide() {
-        return ((Factory) injector.getInstance(type)).provide();
+    public T provide() {
+        return injector.getInstance(type).provide();
     }
 
     @Override
-    public void dispose(final Object instance) {
+    public void dispose(final T instance) {
         // do nothing
     }
 }
