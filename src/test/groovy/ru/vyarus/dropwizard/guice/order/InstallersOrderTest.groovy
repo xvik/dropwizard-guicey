@@ -38,7 +38,7 @@ class InstallersOrderTest extends AbstractTest {
         expect:
         holder.getInstallers()[1] instanceof ManagedInstaller
         holder.getInstallers()[2] instanceof DummyInstaller
-        holder.getInstallers()[3] instanceof JerseyFeatureInstaller
+        holder.getInstallers()[3] instanceof JerseyProviderInstaller || holder.getInstallers()[3] instanceof JerseyFeatureInstaller
 
     }
 }
