@@ -1,7 +1,17 @@
+* Add GuiceyBundleLookup to automatically resolve and install guicey bundles from various sources.
+    - Default implementation checks 'guicey.bundles' system property and install bundles described there. May be useful for tests to enable debug bundles.
+    - Add builder bundleLookup method to register custom lookup implementation
+    - Add builder disableBundleLookup to disable default lookups
+    - Default lookup implementation logs all resolved bundles
+* Fix JerseyProviderInstaller: to prevent hk beans duplicate instantiations; fix DynamicFeature support.
+* Add HK2DebugBundle. When enabled, checks that beans are instantiated by guice only and annotated with @HK2Managed 
+are managed by HK2 only. May be used in tests as extra validation.
+* Add JerseyFeatureInstaller (included in code bundle) which installs javax.ws.rs.core.Feature. Useful for low level configuration. 
+* Update to dropwizard 0.9
 * Revert system exit on guice injector creation error (added in 3.1.1)
 
 ### 3.1.1 (2015-11-24)
-* Exit on guice injector creation error. Contributed by [Adam Dougal](https://github.com/adamdougal)
+* Exit on guice injector creation error.
 * Add classpath scan packages validation for intersection (to prevent duplicate instances)
 
 ### 3.1.0 (2015-09-06)
