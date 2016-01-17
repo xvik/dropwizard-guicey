@@ -33,7 +33,7 @@ class BootstrapMethodsTest extends AbstractTest {
         when: "application started"
 
         then: "all registered installers found"
-        holder.installers.size() == 8
+        holder.installers.size() == 9
 
         then: "task found"
         holder.getFeatures(TaskInstaller) == [DummyTask]

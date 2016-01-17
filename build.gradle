@@ -13,14 +13,13 @@ plugins {
 }
 
 sourceCompatibility = 1.7
-targetCompatibility = 1.7
 
 wrapper {
     gradleVersion = 2.10
 }
 
 ext {
-    dropwizard = '0.8.5'
+    dropwizard = '0.9.1'
     guice = '4.0'
 }
 
@@ -40,9 +39,8 @@ dependencies {
     compile 'ru.vyarus:generics-resolver:2.0.1'
 
     testCompile "io.dropwizard:dropwizard-auth:$dropwizard"
-    testCompile 'cglib:cglib-nodep:3.1'
+    testCompile 'cglib:cglib-nodep:3.2.0'
     testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
-    testCompile 'com.github.stefanbirkner:system-rules:1.9.0'
 }
 
 group = 'ru.vyarus'

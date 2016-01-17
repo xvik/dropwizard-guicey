@@ -1,13 +1,11 @@
 package ru.vyarus.dropwizard.guice
 
 import com.google.inject.AbstractModule
+import com.google.inject.CreationException
 import com.google.inject.name.Named
 import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import org.junit.Rule
-import org.junit.contrib.java.lang.system.ExpectedSystemExit
-import org.junit.contrib.java.lang.system.internal.CheckExitCalled
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.DummyCommand
 
@@ -19,17 +17,13 @@ import javax.inject.Inject
  */
 class StartErrorTest extends AbstractTest {
 
-    @Rule
-    ExpectedSystemExit exit = ExpectedSystemExit.none();
-
     def "Check application exit on injector error"() {
 
         when:
-        exit.expectSystemExitWithStatus(1)
         new ErrorApplication().main(['server', 'src/test/resources/ru/vyarus/dropwizard/guice/config.yml'] as String[])
 
-        then: 'exit called'
-        thrown(CheckExitCalled)
+        then: 'guice exception thrown'
+        thrown(CreationException)
     }
 
     static class ErrorApplication extends Application<TestConfiguration> {

@@ -6,6 +6,7 @@ import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilterInstaller
@@ -65,6 +66,7 @@ class InstallersTest extends AbstractTest {
         LifeCycleInstaller      | DummyLifeCycle       | AbstractLifeCycle
         JerseyProviderInstaller | DummyExceptionMapper | AbstractJerseyProvider
         JerseyProviderInstaller | DummyJerseyProvider  | AbstractJerseyInjectableProvider
+        JerseyFeatureInstaller  | DummyFeature         | AbstractFeature
         HealthCheckInstaller    | DummyHealthCheck     | AbstractHealthCheck
         EagerSingletonInstaller | DummyService         | AbstractService
         PluginInstaller         | DummyPlugin1         | AbstractPlugin

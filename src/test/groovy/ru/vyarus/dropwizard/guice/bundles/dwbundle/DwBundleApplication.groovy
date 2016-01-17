@@ -4,6 +4,7 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.DummyManaged
@@ -19,6 +20,7 @@ class DwBundleApplication extends Application<TestConfiguration>{
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+                .disableBundleLookup()
                 .configureFromDropwizardBundles(true)
                 .build()
         );

@@ -15,10 +15,12 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilterInst
 import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
+import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.*
@@ -51,7 +53,7 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(TestConfiguration))
 
         then: "all installers found"
-        holder.installers.size() == 10
+        holder.installers.size() == 11
 
         then: "command found"
         bootstrap.getCommands().size() == 2
@@ -79,6 +81,10 @@ class AutoScanModeTest extends AbstractTest {
         Sets.newHashSet(holder.getFeatures(JerseyProviderInstaller)) == [DummyExceptionMapper, DummyJerseyProvider, DummyOtherProvider] as Set
         injector.getExistingBinding(Key.get(DummyExceptionMapper))
         injector.getExistingBinding(Key.get(DummyJerseyProvider))
+
+        then: "feature found"
+        holder.getFeatures(JerseyFeatureInstaller) == [DummyFeature, HK2DebugFeature]
+        injector.getExistingBinding(Key.get(DummyFeature))
 
         then: "health check found"
         holder.getFeatures(HealthCheckInstaller) == [DummyHealthCheck]

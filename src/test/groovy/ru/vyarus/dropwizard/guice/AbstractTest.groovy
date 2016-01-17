@@ -7,7 +7,9 @@ import io.dropwizard.jetty.setup.ServletEnvironment
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment
 import io.dropwizard.setup.AdminEnvironment
 import io.dropwizard.setup.Environment
+import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
+import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import spock.lang.Specification
 
 import javax.servlet.FilterRegistration
@@ -21,8 +23,19 @@ import javax.servlet.ServletRegistration
  */
 abstract class AbstractTest extends Specification {
 
+    static {
+        // setupSpec is too late - app already launched
+        PropertyBundleLookup.enableBundles(HK2DebugBundle.class)
+    }
+
+    void setupSpec() {
+        assert System.getProperty(PropertyBundleLookup.BUNDLES_PROPERTY)
+    }
+
     void cleanupSpec() {
         InjectorLookup.clear()
+        // recover system property after test
+        PropertyBundleLookup.enableBundles(HK2DebugBundle.class)
     }
 
     Environment mockEnvironment() {

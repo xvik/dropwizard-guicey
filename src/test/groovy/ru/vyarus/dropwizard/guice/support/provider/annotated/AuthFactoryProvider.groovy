@@ -23,7 +23,7 @@ class AuthFactoryProvider extends AbstractValueFactoryProvider {
 
     @Inject
     public AuthFactoryProvider(final MultivaluedParameterExtractorProvider extractorProvider,
-                               final Factory<User> factory, // also Provider<AuthFactory> could be used
+                               final AuthFactory factory, // also Provider<AuthFactory> could be used
                                final ServiceLocator injector) {
         super(extractorProvider, injector, Parameter.Source.UNKNOWN);
         this.authFactory = factory;

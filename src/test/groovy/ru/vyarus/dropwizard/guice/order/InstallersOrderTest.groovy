@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.order
 import com.google.inject.Inject
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.module.installer.order.Order
@@ -25,7 +26,7 @@ class InstallersOrderTest extends AbstractTest {
         def pos = 0;
         holder.getInstallers().each {
             int instPos = it.class.getAnnotation(Order).value()
-            assert instPos > pos
+            assert instPos >= pos
             pos = instPos
         }
         expect:
@@ -37,7 +38,7 @@ class InstallersOrderTest extends AbstractTest {
         expect:
         holder.getInstallers()[1] instanceof ManagedInstaller
         holder.getInstallers()[2] instanceof DummyInstaller
-        holder.getInstallers()[3] instanceof JerseyProviderInstaller
+        holder.getInstallers()[3] instanceof JerseyFeatureInstaller
 
     }
 }

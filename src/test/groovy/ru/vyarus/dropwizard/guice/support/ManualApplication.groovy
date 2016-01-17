@@ -4,6 +4,7 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
@@ -26,6 +27,7 @@ class ManualApplication extends Application<TestConfiguration> {
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+                .disableBundleLookup()
                 .installers(ResourceInstaller, TaskInstaller, ManagedInstaller)
                 .extensions(DummyTask, DummyResource, DummyManaged)
                 .build()
