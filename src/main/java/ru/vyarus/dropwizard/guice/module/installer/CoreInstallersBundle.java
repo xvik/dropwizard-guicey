@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer;
 
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller;
@@ -7,11 +9,10 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilterInst
 import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminServletInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 
 /**
  * Core installers bundle.
@@ -26,6 +27,7 @@ public class CoreInstallersBundle implements GuiceyBundle {
         bootstrap.installers(
                 LifeCycleInstaller.class,
                 ManagedInstaller.class,
+                JerseyFeatureInstaller.class,
                 JerseyProviderInstaller.class,
                 ResourceInstaller.class,
                 EagerSingletonInstaller.class,

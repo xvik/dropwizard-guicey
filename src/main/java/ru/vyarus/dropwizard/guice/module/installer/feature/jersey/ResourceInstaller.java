@@ -20,7 +20,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isH
 
 /**
  * Jersey resource installer.
- * Search classes annotated with {@code @Path}. Directly register instance in jersey context to force singleton.
+ * Search classes annotated with {@link Path}. Directly register instance in jersey context to force singleton.
  * If we register it by type, then we could use prototype beans (resource instance created on each request),
  * which will lead to performance overhead. To ovoid misuse, singleton resources are forced. Override installer
  * if you really need prototype resources.
