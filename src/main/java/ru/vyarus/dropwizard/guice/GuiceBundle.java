@@ -11,6 +11,9 @@ import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
+import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
+import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
 import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
@@ -79,6 +82,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     private final Set<String> autoscanPackages = Sets.newHashSet();
     private final InstallerConfig installerConfig = new InstallerConfig();
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
+    private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
     private boolean searchCommands;
     private boolean configureFromDropwizardBundles;
     private Stage stage = Stage.PRODUCTION;
@@ -139,6 +143,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         if (configureFromDropwizardBundles) {
             bundles.addAll(DwBundleSupport.findBundles(bootstrap, GuiceyBundle.class));
         }
+        bundles.addAll(bundleLookup.lookup());
         for (GuiceyBundle bundle : bundles) {
             bundle.initialize(guiceyBootstrap);
         }
@@ -190,6 +195,28 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         public Builder<T> injectorFactory(final InjectorFactory injectorFactory) {
             bundle.injectorFactory = injectorFactory;
             return this;
+        }
+
+        /**
+         * Configure custom {@link GuiceyBundleLookup}. Lookup provides an easy way to indirectly install
+         * {@link GuiceyBundle} bundles. Default implementation support lookup by system property.
+         *
+         * @param bundleLookup custom bundle lookup implementation
+         * @return builder instance for chained calls
+         * @see DefaultBundleLookup
+         */
+        public Builder<T> bundleLookup(final GuiceyBundleLookup bundleLookup) {
+            bundle.bundleLookup = bundleLookup;
+            return this;
+        }
+
+        /**
+         * Disables default bundle lookup.
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder<T> disableBundleLookup() {
+            return bundleLookup(new VoidBundleLookup());
         }
 
         /**
