@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup;
+import ru.vyarus.dropwizard.guice.bundle.lookup.ServiceLoaderBundleLookup;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 
 import java.util.List;
@@ -17,11 +18,13 @@ import java.util.List;
  * By default includes:
  * <ul>
  * <li>{@link PropertyBundleLookup} to use system property</li>
+ * <li>{@link ServiceLoaderBundleLookup} to load bundles using {@link java.util.ServiceLoader} by
+ * {@link GuiceyBundle}</li>
  * </ul>
  * Any simple lookup may be registered directly in builder instead of default lookup (the same contract).
  * <p/>
  * Additional lookups could be added using {@link #addLookup(GuiceyBundleLookup)} method.
- * Default lookup implementation could be customized by calling constructor with custom list.
+ * Default lookup implementation could be customized by calling constructor with custom loaders list.
  *
  * @author Vyacheslav Rusakov
  * @since 15.01.2016
@@ -36,7 +39,10 @@ public class DefaultBundleLookup implements GuiceyBundleLookup {
      * Use predefined lookups.
      */
     public DefaultBundleLookup() {
-        this(new PropertyBundleLookup());
+        this(
+                new PropertyBundleLookup(),
+                new ServiceLoaderBundleLookup()
+        );
     }
 
     /**
@@ -63,9 +69,11 @@ public class DefaultBundleLookup implements GuiceyBundleLookup {
      * Add additional lookup mechanism.
      *
      * @param lookup lookup implementation
+     * @return default lookup instance for chained calls
      */
-    public void addLookup(final GuiceyBundleLookup lookup) {
+    public DefaultBundleLookup addLookup(final GuiceyBundleLookup lookup) {
         lookups.add(lookup);
+        return this;
     }
 
     private void report(final List<GuiceyBundle> bundles) {

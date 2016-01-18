@@ -1,5 +1,6 @@
 * Add GuiceyBundleLookup to automatically resolve and install guicey bundles from various sources.
-    - Default implementation checks 'guicey.bundles' system property and install bundles described there. May be useful for tests to enable debug bundles.
+    - Default: check 'guicey.bundles' system property and install bundles described there. May be useful for tests to enable debug bundles.
+    - Default: use ServiceLoader mechanism to load declared GuiceyBundle services. Useful for automatic loading of third party extensions.
     - Add builder bundleLookup method to register custom lookup implementation
     - Add builder disableBundleLookup to disable default lookups
     - Default lookup implementation logs all resolved bundles

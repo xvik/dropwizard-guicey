@@ -41,18 +41,23 @@ import java.util.Set;
  * object will be available in juice context. But if you need them in module (for example to get
  * configuration parameters), implement one of *AwareModule interfaces (e.g.
  * {@link ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule}).
- * <p>You can use auto scan to automatically install features. To enable auto scan you must configure package (or
+ * <p/>
+ * You can use auto scan to automatically install features. To enable auto scan you must configure package (or
  * packages) to search in. To know all supported features look
  * {@link ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller} implementations. Installers are
  * expendable mechanism: they are resolved by scanning classpath, so you can add new installers in your code and
  * classpath scanning will find them and activate. Also, features could be disabled (for example, if you want to
  * replace existing feature, you will disable it in builder and implement your own - auto scan will find it and
- * activate).</p>
- * <p>Any class may be hidden from auto scanning with {@code @InvisibleForScanner} annotation.</p>
- * <p>Commands may use injection too, but only fields injection. You can register command manually and their fields
+ * activate).
+ * <p/>
+ * Any class may be hidden from auto scanning with {@code @InvisibleForScanner} annotation.
+ * <p/>
+ * Commands may use injection too, but only fields injection. You can register command manually and their fields
  * will be injected or you can activate auto scan for commands in builder (disabled by default). If auto scan
- * for commands enabled, they will be instantiated with default no-arg constructor.</p>
- * <p>Resources are registered using jersey integration module. GuiceFilter is also registered.</p>
+ * for commands enabled, they will be instantiated with default no-arg constructor.
+ * <p/>
+ * Resources are registered using jersey integration module. GuiceFilter is also registered.
+ * <p/>
  * Lifecycle:
  * <ul>
  * <li>Bundle configured</li>
@@ -61,12 +66,14 @@ import java.util.Set;
  * <li>Bundle run started</li>
  * <li>If auto scan enabled, scan classpath for feature installers and perform one more scan with registered
  * installers to find extensions</li>
+ * <li>Perform {@link GuiceyBundle} lookup with registered {@link GuiceyBundleLookup}</li>
  * <li>Guice injector created</li>
  * <li>Register all extensions found by installers</li>
  * <li>Perform injections for all registered environment commands (because only environment commands runs bundles)</li>
  * </ul>
- * <p>Project is based on ideas from <a href="https://github.com/HubSpot/dropwizard-guice">dropwizard-guice</a>
- * project</p>. And because of this project name was changed to dropwizard-guicey.
+ * <p/>
+ * Project is based on ideas from <a href="https://github.com/HubSpot/dropwizard-guice">dropwizard-guice</a>
+ * project. And because of this project name was changed to dropwizard-guicey.
  *
  * @param <T> configuration type
  * @author Vyacheslav Rusakov
