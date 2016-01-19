@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.installer.internal;
+package ru.vyarus.dropwizard.guice.module.installer.util;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
@@ -16,9 +16,29 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 01.08.2015
  */
-public final class DwBundleSupport {
+public final class BundleSupport {
 
-    private DwBundleSupport() {
+    private BundleSupport() {
+    }
+
+    /**
+     * Remove duplicates in list by rule: only one instance of type must be present in list.
+     *
+     * @param list bundles list
+     * @return list cleared from duplicates
+     */
+    public static <T> List<T> removeDuplicates(final List<T> list) {
+        final List<Class> registered = Lists.newArrayList();
+        final Iterator it = list.iterator();
+        while (it.hasNext()) {
+            final Class type = it.next().getClass();
+            if (registered.contains(type)) {
+                it.remove();
+            } else {
+                registered.add(type);
+            }
+        }
+        return list;
     }
 
     /**

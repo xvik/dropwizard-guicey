@@ -22,10 +22,10 @@ import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
-import ru.vyarus.dropwizard.guice.module.installer.internal.DwBundleSupport;
+import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
-import ru.vyarus.dropwizard.guice.module.installer.util.CommandSupport;
+import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
@@ -148,10 +148,10 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(modules, installerConfig,
                 configuration, environment);
         if (configureFromDropwizardBundles) {
-            bundles.addAll(DwBundleSupport.findBundles(bootstrap, GuiceyBundle.class));
+            bundles.addAll(BundleSupport.findBundles(bootstrap, GuiceyBundle.class));
         }
         bundles.addAll(bundleLookup.lookup());
-        for (GuiceyBundle bundle : bundles) {
+        for (GuiceyBundle bundle : BundleSupport.removeDuplicates(bundles)) {
             bundle.initialize(guiceyBootstrap);
         }
     }

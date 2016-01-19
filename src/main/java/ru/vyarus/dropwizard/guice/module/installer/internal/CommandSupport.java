@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.installer.util;
+package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.inject.Injector;
 import io.dropwizard.Application;
@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
+import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.util.List;
 

@@ -1,3 +1,4 @@
+* Clear possible duplicate guicey bundle instances
 * Add GuiceyBundleLookup to automatically resolve and install guicey bundles from various sources.
     - Default: check 'guicey.bundles' system property and install bundles described there. May be useful for tests to enable debug bundles.
     - Default: use ServiceLoader mechanism to load declared GuiceyBundle services. Useful for automatic loading of third party extensions.
