@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Listens guice for created services and checks correctness for services registered by
  * {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller} based installers.
- * <p/>
+ * <p>
  * Some services will be registered before debug service gets injected into listener instance,
  * so before this listener simply collects all created objects to check after.
  *

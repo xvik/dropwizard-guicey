@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Debug service checks and collect information on jersey (and hk) related types instantiation.
  * Actual bean instantiation detection by guice or hk is performed by specific listeners.
  * Service only checks correctness and tracks instantiated objects.
- * <p/>
+ * <p>
  * Only objects installed by {@link JerseyInstaller} installers are tracked.
  *
  * @author Vyacheslav Rusakov

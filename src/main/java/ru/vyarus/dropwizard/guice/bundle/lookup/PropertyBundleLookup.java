@@ -12,12 +12,12 @@ import java.util.List;
 /**
  * Use 'guicey.bundles' system property to lookup bundles. Property value must contain comma-separated list of
  * complete bundle class names. Each bundle in list must have default no-args constructor.
- * <p/>
+ * <p>
  * Example: {@code -Dguicey.bundles=com.foo.MyBundle1,com.foo.MyBundle2}.
- * <p/>
+ * <p>
  * Static shortcut method may be used to set property value from code (for example, in unit tests to enable
  * specific debug bundle): {@code PropertyBundleLookup.enableBundles(MyBundle1.class, MyBundle2.class)}.
- * <p/>
+ * <p>
  * For example, last approach is used in guicey tests to enable
  * {@link ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle} to check beans boundaries during tests.
  *

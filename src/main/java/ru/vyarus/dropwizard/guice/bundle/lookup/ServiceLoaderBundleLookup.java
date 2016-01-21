@@ -10,7 +10,7 @@ import java.util.ServiceLoader;
 /**
  * Load bundles using {@link ServiceLoader} by {@link GuiceyBundle}. Intended to be used for automatic
  * installation of third party extensions.
- * <p/>
+ * <p>
  * Extension jar must contain file:
  * {@code META-INF/services/ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}.
  * File must contain one or more implementation classes (per line): {@code com.foo.MyGuiceyBundle}.

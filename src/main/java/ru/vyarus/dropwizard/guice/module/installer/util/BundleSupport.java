@@ -25,6 +25,7 @@ public final class BundleSupport {
      * Remove duplicates in list by rule: only one instance of type must be present in list.
      *
      * @param list bundles list
+     * @param <T>  required bundle type
      * @return list cleared from duplicates
      */
     public static <T> List<T> removeDuplicates(final List<T> list) {

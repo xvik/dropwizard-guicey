@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Default implementation of bundles lookup mechanism. Did not implement lookup logic but compose more simple
  * lookups. Additionally, logs all resolved bundles.
- * <p/>
+ * <p>
  * By default includes:
  * <ul>
  * <li>{@link PropertyBundleLookup} to use system property</li>
@@ -22,7 +22,7 @@ import java.util.List;
  * {@link GuiceyBundle}</li>
  * </ul>
  * Any simple lookup may be registered directly in builder instead of default lookup (the same contract).
- * <p/>
+ * <p>
  * Additional lookups could be added using {@link #addLookup(GuiceyBundleLookup)} method.
  * Default lookup implementation could be customized by calling constructor with custom loaders list.
  *
