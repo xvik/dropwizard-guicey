@@ -176,7 +176,7 @@ Injector injector = provider.get();
 When you are inside your Application class:
 
 ```java
-InjectorLookup.getInjector(this).get().getInstance(SomeService.class),
+InjectorLookup.getInjector(this).get().getInstance(SomeService.class)
 ```
 
 Most likely, requirement for injector instance means integration with some third party library.
@@ -521,7 +521,7 @@ in tests (e.g. HK2DebugBundle) or to install 3rd party extensions from classpath
 
 Bundle lookup is equivalent to registering bundle directly using builder `bundles` method.
 
-By default, bundle 2 lookup mechanisms active. All found bundles are logged into console.
+By default, 2 lookup mechanisms active. All found bundles are logged into console.
 Duplicate bundles are removed (using bundle class to detect duplicate).
 
 To disable default lookups use `disableBundleLookup`:
