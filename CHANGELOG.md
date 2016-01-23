@@ -1,3 +1,4 @@
+### 3.2.0 (2015-01-23)
 * Clear possible duplicate guicey bundle instances
 * Add GuiceyBundleLookup to automatically resolve and install guicey bundles from various sources.
     - Default: check 'guicey.bundles' system property and install bundles described there. May be useful for tests to enable debug bundles.
