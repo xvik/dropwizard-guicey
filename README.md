@@ -46,17 +46,18 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>3.1.1</version>
+  <version>3.2.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:3.1.1'
+compile 'ru.vyarus:dropwizard-guicey:3.2.0'
 ```
 
-for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
+- for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
+- for dropwizard 0.8 use version 3.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.8))
 
 ##### Snapshots
 
@@ -109,6 +110,8 @@ After application start, look application log for dropwizard style extension ins
 
 Bundle options:
 * `injectorFactory` sets custom injector factory (see below)
+* `bundleLookup` overrides default guicey bundle lookup implementation 
+* `disableBundleLookup` disables default bundle lookup
 * `enableAutoConfig` enables auto scan on one or more packages to scan. If not set - no auto scan will be performed and default installers will not be available.
 * `searchCommands` if true, command classes will be searched in classpath and registered in bootstrap object. 
 Auto scan must be enabled. By default commands scan is disabled (false), because it may be not obvious.
@@ -170,22 +173,40 @@ InjectorProvider provider = new InjectorProvider(app);
 Injector injector = provider.get();
 ```
 
+When you are inside your Application class:
+
+```java
+InjectorLookup.getInjector(this).get().getInstance(SomeService.class),
+```
+
 Most likely, requirement for injector instance means integration with some third party library.
 Consider writing custom installer in such cases (it will eliminate need for injector instance).
 
-##### Authentication
+### Authentication
 
-Authentication is a good case when injector is required externally:
+All [dropwizard authentication](http://www.dropwizard.io/0.9.2/docs/manual/auth.html) 
+configurations are pretty much the same. Here is an example of oauth configuration:
 
 ```java
-@Override
-public void run(ExampleConfiguration configuration, Environment environment) {
-    environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<String>(
-                          InjectorLookup.getInjector(this).get().getInstance(SimpleAuthenticator.class),
-                          "SUPER SECRET STUFF",
-                          User.class)));
-}                         
+@Provider
+class OAuthDynamicFeature extends AuthDynamicFeature {
+
+    @Inject
+    OAuthDynamicFeature(MyAuthenticator authenticator, MyAuthorizer authorizer, Environment environment) {
+        super(new OAuthCredentialAuthFilter.Builder<User>()
+                .setAuthenticator(authenticator)
+                .setAuthorizer(authorizer)
+                .setPrefix("Bearer")
+                .buildAuthFilter())
+
+        environment.jersey().register(RolesAllowedDynamicFeature.class)
+        environment.jersey().register(new AuthValueFactoryProvider.Binder(User.class))
+    }
+}
 ```
+
+Here MyAuthenticator and MyAuthorizer are guice beans. OAuthDynamicFeature is guice bean also (created by guice),
+but instance registered into jersey (by JerseyProviderInstaller)
 
 For more details see [wiki page](https://github.com/xvik/dropwizard-guicey/wiki/Authentication-integration)
 
@@ -304,6 +325,29 @@ like [Factory](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/gr
 Due to specifics of HK integration (see below), you may need to use `@HK2Managed` to delegate bean creation to HK,
 `@LazyBinding` to delay bean creation to time when all dependencies will be available and, of course, `Provider` (for guice or HK).
 
+
+##### Jersey Feature
+[JerseyFeatureInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/JerseyFeatureInstaller.java)
+finds classes implementing `javax.ws.rs.core.Feature` and register their instance in jersey.
+
+It may be useful to configure jersey inside guice components:
+
+```java
+
+public class MyClass ... {
+    ...   
+    public static class ConfigurationFeature implements Feature {
+        @Override
+        boolean configure(FeatureContext context) {
+            context.register(RolesAllowedDynamicFeature.class)
+            context.register(new AuthValueFactoryProvider.Binder(User.class))
+            return true;
+        }
+    }
+}
+```
+
+But often the same could be achieved by injecting `Environment` instance.
 
 ##### Eager
 [EagerSingletonInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/eager/EagerSingletonInstaller.java)
@@ -429,6 +473,16 @@ bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
 );
 ```
 
+##### HK debug bundle 
+
+`HK2DebugBundle` is special debug bundle to check that beans properly instantiated by guice or HK 
+(and no beans are instantiated by both).
+
+Only beans installed by installers implementing `JerseyInstaller` (`ResourceInstaller`, `JerseyProviderInstaller`).
+All beans must be created by guice and only beans annotated with `@HK2Managed` must be instantiated by HK.
+
+Bundle may be used in tests. For example using `guicey.bundles` property (see bundles lookup below).
+
 ##### Dropwizard bundles unification
 
 Guicey bundles and dropwizard bundles may be unified providing single (standard) extension point for both 
@@ -460,6 +514,105 @@ Also, works with dropwizard `ConfiguredBundle`.
 WARNING: don't assume if guicey bundle's `initialize` method will be called before/after dropwizard bundle's `run` method. 
 Both are possible (it depends if bundle registered before or after GuiceBundle).
 
+### Bundle lookup
+
+Bundle lookup mechanism used to lookup guicey bundles in various sources. It may be used to activate specific bundles
+in tests (e.g. HK2DebugBundle) or to install 3rd party extensions from classpath.
+
+Bundle lookup is equivalent to registering bundle directly using builder `bundles` method.
+
+By default, bundle 2 lookup mechanisms active. All found bundles are logged into console.
+Duplicate bundles are removed (using bundle class to detect duplicate).
+
+To disable default lookups use `disableBundleLookup`:
+
+```java
+bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
+        .disableBundleLookup()
+        .build()
+```
+
+#### System property lookup
+
+System property `guicey.bundles` could contain comma separated list of guicey bundle classes. These bundles 
+must have no-args constructor.
+
+For example, activate HK debug bundle for tests:
+
+```
+java ... -Dguicey.bundles=ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
+```
+
+Alternatively, system property may be set in code:
+
+```java
+PropertyBundleLookup.enableBundles(HK2DebugBundle.class)
+```
+
+#### Service loader lookup
+
+Using default java [ServiceLoader](https://docs.oracle.com/javase/7/docs/api/java/util/ServiceLoader.html) 
+mechanism, loads all GuiceyBundle services.
+
+This is useful for automatically install 3rd party extensions (additional installers, extensions, guice modules).
+
+3rd party jar must contain services file:
+
+```
+META-INF/services/ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
+```
+
+File contain one or more (per line) GuiceyBundle implementations. E.g.
+
+```
+com.foo.Bundle1
+com.foo.Bundle2
+```
+
+Then Bundle1, Bundle2 would be loaded automatically on startup.
+
+#### Customizing lookup mechanism
+
+Custom bundle lookup must implement `GuiceyBundleLookup` interface:
+
+```java
+public class CustomBundleLookup implements GuiceyBundleLookup {
+
+    @Override
+    public List<GuiceyBundle> lookup() {
+        List<GuiceyBundle> bundles = Lists.newArrayList();
+        ...
+        return bundles;
+    }
+}
+```
+
+Custom lookup implementation may be registered through:
+
+```java
+bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
+        .bundleLookup(new CustomBundleLookup())
+        .build()
+```
+
+But its better to register it through default implementation `DefaultBundleLookup`, which performs composition 
+of multiple lookup implementations and logs resolved bundles to console.
+
+```java
+bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
+        .bundleLookup(new DefaultBundleLookup().addLookup(new CustomBundleLookup()))
+        .build()
+```
+
+To override list of default lookups:
+
+```java
+bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
+        .bundleLookup(new DefaultBundleLookup(new ServiceLoaderBundleLookup(), new CustomBundleLookup()))
+        .build()
+```
+
+Here two lookup mechanisms registered (property lookup is not registered and will not be implicitly added).
 
 ### Admin REST
 

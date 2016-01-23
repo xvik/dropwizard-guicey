@@ -5,7 +5,7 @@
     - Add builder bundleLookup method to register custom lookup implementation
     - Add builder disableBundleLookup to disable default lookups
     - Default lookup implementation logs all resolved bundles
-* Fix JerseyProviderInstaller: to prevent hk beans duplicate instantiations; fix DynamicFeature support.
+* Fix JerseyProviderInstaller: prevent hk beans duplicate instantiations; fix DynamicFeature support.
 * Add HK2DebugBundle. When enabled, checks that beans are instantiated by guice only and annotated with @HK2Managed 
 are managed by HK2 only. May be used in tests as extra validation.
 * Add JerseyFeatureInstaller (included in code bundle) which installs javax.ws.rs.core.Feature. Useful for low level configuration. 
