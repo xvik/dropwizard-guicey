@@ -4,6 +4,8 @@
 [![Build Status](http://img.shields.io/travis/xvik/dropwizard-guicey.svg?style=flat&branch=master)](https://travis-ci.org/xvik/dropwizard-guicey)
 [![Coverage Status](https://img.shields.io/coveralls/xvik/dropwizard-guicey.svg?style=flat)](https://coveralls.io/r/xvik/dropwizard-guicey?branch=master)
 
+> **[Examples repository](https://github.com/xvik/dropwizard-guicey-examples)**
+
 ### About
 
 [Dropwizard](http://dropwizard.io/) integration based on ideas from [dropwizard-guice](https://github.com/HubSpot/dropwizard-guice) and 
@@ -70,7 +72,7 @@ You can use snapshot versions through [JitPack](https://jitpack.io):
 ### Usage
 
 You can use classpath scanning or configure everything manually (or combine both).
-Auto scan configuration example:
+Auto scan configuration [example](https://github.com/xvik/dropwizard-guicey-examples/tree/master/autoconfig-base):
 
 ```java
 @Override
@@ -86,7 +88,7 @@ public void initialize(Bootstrap<TestConfiguration> bootstrap) {
 Auto scan will resolve installers and using installers find features in classpath and install them. 
 Commands will also be searched in classpath, instantiated and set into bootstrap object.
 
-Manual configuration example:
+Manual configuration [example](https://github.com/xvik/dropwizard-guicey-examples/tree/master/manualconfig-base):
 
 ```java
 @Override
@@ -726,10 +728,10 @@ The following request-scope objects available for injection:
 
 ### Testing
 
-Tests requires `'io.dropwizard:dropwizard-testing:0.8.0-rc1'` dependency.
+Tests requires `'io.dropwizard:dropwizard-testing:0.9.2'` dependency.
 
 For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like 
-[DropwizardAppRule](https://dropwizard.github.io/dropwizard/manual/testing.html),
+[DropwizardAppRule](http://www.dropwizard.io/0.9.2/docs/manual/testing.html),
 but doesn't start jetty (and so jersey and guice web modules will not be initialized). Managed and lifecycle objects 
 supported.
 
