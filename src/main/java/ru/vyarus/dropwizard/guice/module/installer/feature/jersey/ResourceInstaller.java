@@ -20,7 +20,8 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isH
 
 /**
  * Jersey resource installer.
- * Search classes annotated with {@link Path}. Directly register instance in jersey context to force singleton.
+ * Search classes annotated with {@link Path} or implementing interfaces annotated with {@link Path}
+ * (only directly implemented). Directly register instance in jersey context to force singleton.
  * If we register it by type, then we could use prototype beans (resource instance created on each request),
  * which will lead to performance overhead. To ovoid misuse, singleton resources are forced. Override installer
  * if you really need prototype resources.
@@ -34,7 +35,8 @@ public class ResourceInstaller implements FeatureInstaller<Object>, BindingInsta
 
     @Override
     public boolean matches(final Class<?> type) {
-        return FeatureUtils.hasAnnotation(type, Path.class);
+        return !type.isInterface()
+                && (FeatureUtils.hasAnnotation(type, Path.class) || hasMatchedInterfaces(type));
     }
 
     @Override
@@ -59,5 +61,17 @@ public class ResourceInstaller implements FeatureInstaller<Object>, BindingInsta
     @Override
     public void report() {
         // dropwizard logs installed resources
+    }
+
+    private boolean hasMatchedInterfaces(final Class<?> type) {
+        boolean matches = false;
+        // looking only first interface level
+        for (Class<?> iface : type.getInterfaces()) {
+            if (iface.isAnnotationPresent(Path.class)) {
+                matches = true;
+                break;
+            }
+        }
+        return matches;
     }
 }
