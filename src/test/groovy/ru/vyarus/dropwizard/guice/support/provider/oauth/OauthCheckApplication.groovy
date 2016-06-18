@@ -7,6 +7,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
+import ru.vyarus.dropwizard.guice.support.util.BindModule
 
 /**
  * @author Vyacheslav Rusakov 
@@ -19,6 +20,8 @@ class OauthCheckApplication extends Application<TestConfiguration> {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .installers(ResourceInstaller, JerseyProviderInstaller)
                 .extensions(OAuthTestResource, OAuthDynamicFeature)
+                .modules(new BindModule(OAuthDynamicFeature.OAuthAuthenticator,
+                OAuthDynamicFeature.OAuthAuthorizer))
                 .build()
         );
     }

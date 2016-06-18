@@ -10,6 +10,9 @@ class WebModule extends ServletModule {
 
     @Override
     protected void configureServlets() {
+        bind(DummyFilter)
+        bind(DummyServlet)
+
         filter('/dummyFilter').through(DummyFilter)
         serve('/dummyServlet').with(DummyServlet)
     }

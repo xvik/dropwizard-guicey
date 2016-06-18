@@ -4,6 +4,8 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.support.util.BindModule
+import ru.vyarus.dropwizard.guice.test.InjectionTest
 
 /**
  * Example of automatic configuration: installers, beans and commands searched automatically.
@@ -21,6 +23,7 @@ class AutoScanApplication extends Application<TestConfiguration> {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
                 .searchCommands(true)
+                .modules(new BindModule(InjectionTest.TestBean, InjectionTest.TestSingletonBean))
                 .build()
         );
     }

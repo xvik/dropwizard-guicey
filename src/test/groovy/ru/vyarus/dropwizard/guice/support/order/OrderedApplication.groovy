@@ -6,6 +6,8 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.DummyResource
+import ru.vyarus.dropwizard.guice.support.feature.DummyService
+import ru.vyarus.dropwizard.guice.support.util.BindModule
 
 /**
  * Application to check extension ordering.
@@ -21,6 +23,7 @@ class OrderedApplication extends Application<TestConfiguration> {
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.order")
                 // at least one resource required
                 .extensions(DummyResource)
+                .modules(new BindModule(DummyService))
                 .build()
         );
     }

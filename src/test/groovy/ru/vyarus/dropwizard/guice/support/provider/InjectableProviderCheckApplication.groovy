@@ -10,6 +10,8 @@ import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthFactory
 import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthFactoryProvider
 import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthInjectionResolver
+import ru.vyarus.dropwizard.guice.support.provider.oauth.OAuthDynamicFeature
+import ru.vyarus.dropwizard.guice.support.util.BindModule
 
 /**
  * Injectable providers are always registered as singletons no matter what getScope method returns.
@@ -30,6 +32,9 @@ class InjectableProviderCheckApplication extends Application<TestConfiguration> 
                 AuthFactory,
                 AuthFactoryProvider,
                 AuthInjectionResolver)
+                .modules(new BindModule(AuthFactoryProvider,
+                OAuthDynamicFeature.OAuthAuthenticator,
+                OAuthDynamicFeature.OAuthAuthorizer))
                 .build()
         );
     }

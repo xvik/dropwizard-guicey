@@ -5,6 +5,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
+import ru.vyarus.dropwizard.guice.support.util.BindModule
 
 /**
  * Application used to validate request scoped beans.
@@ -22,6 +23,7 @@ class RequestBeansApplication extends Application<TestConfiguration> {
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.request")
+                .modules(new BindModule(RequestScopedBean))
                 .build()
         );
     }

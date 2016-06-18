@@ -10,6 +10,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
+import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import spock.lang.Specification
 
 import javax.servlet.FilterRegistration
@@ -25,7 +26,7 @@ abstract class AbstractTest extends Specification {
 
     static {
         // setupSpec is too late - app already launched
-        PropertyBundleLookup.enableBundles(HK2DebugBundle.class)
+        PropertyBundleLookup.enableBundles(HK2DebugBundle, GuiceRestrictedConfigBundle)
     }
 
     void setupSpec() {
@@ -35,7 +36,7 @@ abstract class AbstractTest extends Specification {
     void cleanupSpec() {
         InjectorLookup.clear()
         // recover system property after test
-        PropertyBundleLookup.enableBundles(HK2DebugBundle.class)
+        PropertyBundleLookup.enableBundles(HK2DebugBundle, GuiceRestrictedConfigBundle)
     }
 
     Environment mockEnvironment() {

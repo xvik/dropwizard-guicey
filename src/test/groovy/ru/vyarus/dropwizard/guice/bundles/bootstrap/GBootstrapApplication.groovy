@@ -14,6 +14,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.DummyManaged
 import ru.vyarus.dropwizard.guice.support.feature.DummyResource
+import ru.vyarus.dropwizard.guice.support.feature.DummyService
 import ru.vyarus.dropwizard.guice.support.feature.DummyTask
 
 /**
@@ -40,6 +41,7 @@ class GBootstrapApplication extends Application<TestConfiguration> {
                             @Override
                             protected void configure() {
                                 bindConstant().annotatedWith(Names.named("sample")).to("test str")
+                                bind(DummyService)
                             }
                         })
                     }

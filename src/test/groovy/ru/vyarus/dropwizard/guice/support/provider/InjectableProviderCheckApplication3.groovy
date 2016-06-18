@@ -10,6 +10,7 @@ import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthFactory
 import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthFactoryProvider
 import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthInjectionResolver
+import ru.vyarus.dropwizard.guice.support.util.BindModule
 
 /**
  * Only resource is HKmanaged now
@@ -29,6 +30,7 @@ class InjectableProviderCheckApplication3 extends Application<TestConfiguration>
                 AuthFactory,
                 AuthFactoryProvider,
                 AuthInjectionResolver)
+                .modules(new BindModule(AuthFactoryProvider))
                 .build()
         );
     }
