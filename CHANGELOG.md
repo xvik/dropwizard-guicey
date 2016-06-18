@@ -1,3 +1,5 @@
+* Update to guice 4.1.0
+
 ### 3.2.0 (2016-01-23)
 * Clear possible duplicate guicey bundle instances
 * Add GuiceyBundleLookup to automatically resolve and install guicey bundles from various sources.
