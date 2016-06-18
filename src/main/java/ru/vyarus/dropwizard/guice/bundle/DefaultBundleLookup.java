@@ -11,6 +11,9 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 
 import java.util.List;
 
+import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
+import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
+
 /**
  * Default implementation of bundles lookup mechanism. Did not implement lookup logic but compose more simple
  * lookups. Additionally, logs all resolved bundles.
@@ -80,11 +83,11 @@ public class DefaultBundleLookup implements GuiceyBundleLookup {
         if (bundles.isEmpty()) {
             return;
         }
-        final StringBuilder msg = new StringBuilder("guicey bundles lookup =\n\n");
+        final StringBuilder msg = new StringBuilder("guicey bundles lookup =")
+                .append(NEWLINE).append(NEWLINE);
         for (GuiceyBundle bundle : bundles) {
-            msg.append('\t').append(bundle.getClass().getName());
+            msg.append(TAB).append(bundle.getClass().getName()).append(NEWLINE);
         }
-        msg.append('\n');
         logger.info(MARKER, msg.toString());
     }
 

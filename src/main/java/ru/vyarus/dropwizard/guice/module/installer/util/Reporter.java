@@ -14,8 +14,8 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
  */
 @SuppressWarnings("PMD.AvoidStringBufferField")
 public class Reporter {
-    protected static final String NEWLINE = String.format("%n");
-    protected static final String TAB = "    ";
+    public static final String NEWLINE = String.format("%n");
+    public static final String TAB = "    ";
     protected static final String LAZY_MARKER = " *LAZY_MARKER";
 
     // marker to be able switch off reports easily

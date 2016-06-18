@@ -1,5 +1,6 @@
 * Update to guice 4.1.0
 * ResourceInstaller looks for @Path on directly implemented interface (#10)
+* Fix bundles lookup reporting (correct multiline)
 
 ### 3.2.0 (2016-01-23)
 * Clear possible duplicate guicey bundle instances
