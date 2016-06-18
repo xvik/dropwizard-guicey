@@ -71,7 +71,7 @@ public final class CommandSupport {
         public void visit(final Class<?> type) {
             if (FeatureUtils.is(type, Command.class)) {
                 try {
-                    Command cmd;
+                    final Command cmd;
                     if (EnvironmentCommand.class.isAssignableFrom(type)) {
                         cmd = (Command) type.getConstructor(Application.class)
                                 .newInstance(bootstrap.getApplication());
