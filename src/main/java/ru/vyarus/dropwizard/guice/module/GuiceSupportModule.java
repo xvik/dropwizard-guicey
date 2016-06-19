@@ -20,6 +20,15 @@ import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
  * guice filter</li>
  * <li>Starts auto scanning, if enabled (for automatic features installation)</li>
  * </ul>
+ * Configuration is mapped as:
+ * <ul>
+ *     <li>Root configuration class (e.g. {@code MyAppConfiguration extends Configuration})</li>
+ *     <li>Dropwizard {@link Configuration} class</li>
+ *     <li>All classes in hierarchy between root and {@link Configuration} (e.g.
+ *     {@code MyAppConfiguration extends MyBaseConfiguration extends Configuration}</li>
+ *     <li>All interfaces implemented directly by classes in configuration hierarchy except interfaces from
+ *     'java' package (e.g. {@code MyBaseConfiguration implements HasMyOtherConfig})</li>
+ * </ul>
  *
  * @param <T> configuration type
  * @author Vyacheslav Rusakov
@@ -68,13 +77,29 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
      */
     private void bindEnvironment() {
         bind(Bootstrap.class).toInstance(bootstrap);
-        bind(Configuration.class).toInstance(configuration);
-        @SuppressWarnings("unchecked")
-        final Class<T> confClass = (Class<T>) configuration.getClass();
-        if (confClass != Configuration.class) {
-            bind(confClass).toInstance(configuration);
-        }
-
         bind(Environment.class).toInstance(environment);
+        bindConfig(configuration.getClass());
+    }
+
+    /**
+     * Bind configuration hierarchy: all superclasses and direct interfaces for each level (except interfaces
+     * from java package).
+     *
+     * @param type configuration type
+     */
+    @SuppressWarnings("unchecked")
+    private void bindConfig(final Class type) {
+        bind(type).toInstance(configuration);
+        if (type == Configuration.class) {
+            return;
+        }
+        for (Class iface : type.getInterfaces()) {
+            final String pkg = iface.getPackage().getName();
+            if (pkg.startsWith("java.") || pkg.startsWith("groovy.")) {
+                continue;
+            }
+            bind(iface).toInstance(configuration);
+        }
+        bindConfig(type.getSuperclass());
     }
 }

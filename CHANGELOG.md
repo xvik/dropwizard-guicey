@@ -1,6 +1,10 @@
 * Update to guice 4.1.0
 * ResourceInstaller looks for @Path on directly implemented interface (#10)
 * Fix bundles lookup reporting (correct multiline)
+* Configuration binding improve:
+ - Complete configuration hierarchy bound (root, all classes between root and Configuration and Configuration itself)
+ - Interfaces directly implemented by classes in configuration hierarchy expect interfaces from java package 
+ (it's common to use HasSomeConfig interface convention and now interface may be directly used for binding)
 
 ### 3.2.0 (2016-01-23)
 * Clear possible duplicate guicey bundle instances
