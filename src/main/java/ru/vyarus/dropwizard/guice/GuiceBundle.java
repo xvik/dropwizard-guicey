@@ -92,6 +92,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
     private boolean searchCommands;
     private boolean configureFromDropwizardBundles;
+    private boolean bindConfigurationInterfaces = true;
     private Stage stage = Stage.PRODUCTION;
 
     private Bootstrap bootstrap;
@@ -122,7 +123,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @SuppressWarnings("unchecked")
     public void run(final T configuration, final Environment environment) throws Exception {
         configureFromBundles(configuration, environment);
-        modules.add(new GuiceSupportModule(scanner, installerConfig));
+        modules.add(new GuiceSupportModule(scanner, installerConfig, bindConfigurationInterfaces));
         configureModules(configuration, environment);
         injector = injectorFactory.createInjector(stage, modules);
         // registering as managed to cleanup injector on application stop
@@ -337,6 +338,25 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> configureFromDropwizardBundles(final boolean enable) {
             bundle.configureFromDropwizardBundles = enable;
+            return this;
+        }
+
+        /**
+         * If enabled, interfaces implemented by configuration will also be bound to configuration instance
+         * in to guice context. Only interfaces directly implemented by any configuration class in configuration
+         * classes hierarchy. Interfaces from java and groovy packages are skipped.
+         * This is useful to support {@code HasSomeConfiguration} interfaces convention.
+         * <p/>
+         * When disabled, only classes in configuration hierarchy are registered (e.g. in case
+         * {@code MyConfiguration extends MyBaseConfiguration extends Configuration}, all 3 classes would be bound.
+         * <p/>
+         * Enabled by default.
+         *
+         * @param enable true to enable configuration interfaces binding
+         * @return builder instance for chained calls
+         */
+        public Builder<T> bindConfigurationInterfaces(final boolean enable) {
+            bundle.bindConfigurationInterfaces = enable;
             return this;
         }
 

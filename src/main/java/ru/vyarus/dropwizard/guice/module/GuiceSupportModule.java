@@ -22,13 +22,14 @@ import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
  * </ul>
  * Configuration is mapped as:
  * <ul>
- *     <li>Root configuration class (e.g. {@code MyAppConfiguration extends Configuration})</li>
- *     <li>Dropwizard {@link Configuration} class</li>
- *     <li>All classes in hierarchy between root and {@link Configuration} (e.g.
- *     {@code MyAppConfiguration extends MyBaseConfiguration extends Configuration}</li>
- *     <li>All interfaces implemented directly by classes in configuration hierarchy except interfaces from
- *     'java' package (e.g. {@code MyBaseConfiguration implements HasMyOtherConfig})</li>
+ * <li>Root configuration class (e.g. {@code MyAppConfiguration extends Configuration})</li>
+ * <li>Dropwizard {@link Configuration} class</li>
+ * <li>All classes in hierarchy between root and {@link Configuration} (e.g.
+ * {@code MyAppConfiguration extends MyBaseConfiguration extends Configuration}</li>
+ * <li>All interfaces implemented directly by classes in configuration hierarchy except interfaces from
+ * 'java' package (e.g. {@code MyBaseConfiguration implements HasMyOtherConfig})</li>
  * </ul>
+ * Interface binding could be disabled using {@code bindConfigurationInterfaces} bundle option.
  *
  * @param <T> configuration type
  * @author Vyacheslav Rusakov
@@ -39,14 +40,17 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
 
     private final ClasspathScanner scanner;
     private final InstallerConfig installerConfig;
+    private final boolean bindConfigurationInterfaces;
     private Bootstrap<T> bootstrap;
     private T configuration;
     private Environment environment;
 
     public GuiceSupportModule(final ClasspathScanner scanner,
-                              final InstallerConfig installerConfig) {
+                              final InstallerConfig installerConfig,
+                              final boolean bindConfigurationInterfaces) {
         this.scanner = scanner;
         this.installerConfig = installerConfig;
+        this.bindConfigurationInterfaces = bindConfigurationInterfaces;
     }
 
     @Override
@@ -93,12 +97,14 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
         if (type == Configuration.class) {
             return;
         }
-        for (Class iface : type.getInterfaces()) {
-            final String pkg = iface.getPackage().getName();
-            if (pkg.startsWith("java.") || pkg.startsWith("groovy.")) {
-                continue;
+        if (bindConfigurationInterfaces) {
+            for (Class iface : type.getInterfaces()) {
+                final String pkg = iface.getPackage().getName();
+                if (pkg.startsWith("java.") || pkg.startsWith("groovy.")) {
+                    continue;
+                }
+                bind(iface).toInstance(configuration);
             }
-            bind(iface).toInstance(configuration);
         }
         bindConfig(type.getSuperclass());
     }
