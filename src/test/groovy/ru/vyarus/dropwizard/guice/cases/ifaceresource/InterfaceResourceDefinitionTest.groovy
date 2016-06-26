@@ -2,13 +2,12 @@ package ru.vyarus.dropwizard.guice.cases.ifaceresource
 
 import ru.vyarus.dropwizard.guice.cases.ifaceresource.support.InterfaceResourceApp
 import ru.vyarus.dropwizard.guice.cases.ifaceresource.support.ResourceImpl
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
-
 
 /**
  * @author Vyacheslav Rusakov
@@ -18,12 +17,12 @@ import javax.inject.Inject
 class InterfaceResourceDefinitionTest extends Specification {
 
     @Inject
-    FeaturesHolder holder
+    GuiceyConfigurationInfo info
 
     def "Check resources recognition"() {
 
         expect: "only one resource recognized"
-        holder.getFeatures(ResourceInstaller) == [ResourceImpl]
+        info.getExtensions(ResourceInstaller) == [ResourceImpl]
     }
 
     def "Check resource registered"() {

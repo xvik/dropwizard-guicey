@@ -97,11 +97,11 @@ public class ContextDebugService {
 
     private List<Class<?>> buildManagedTypes() {
         final List<Class<?>> managedTypes = Lists.newArrayList();
-        for (FeatureInstaller installer : holder.get().getInstallers()) {
-            if (!(installer instanceof JerseyInstaller)) {
+        for (Class<? extends FeatureInstaller> installer : holder.get().getInstallerTypes()) {
+            if (!(JerseyInstaller.class.isAssignableFrom(installer))) {
                 continue;
             }
-            final List<Class<?>> features = holder.get().getFeatures(installer.getClass());
+            final List<Class<?>> features = holder.get().getExtensions(installer);
             if (features != null) {
                 managedTypes.addAll(features);
             }

@@ -5,7 +5,6 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder;
-import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class InstallerBinder extends AbstractBinder {
         final FeaturesHolder holder = injector.getInstance(FeaturesHolder.class);
         for (FeatureInstaller installer : holder.getInstallers()) {
             if (installer instanceof JerseyInstaller) {
-                final List<Class<?>> features = holder.getFeatures(FeatureUtils.getInstanceClass(installer));
+                final List<Class<?>> features = holder.getExtensions(installer.getClass());
                 if (features != null) {
                     for (Class<?> type : features) {
                         ((JerseyInstaller) installer).install(this, injector, type);

@@ -5,10 +5,8 @@ import com.google.inject.Module;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Guicey configuration object. Provides almost the same configuration methods as
@@ -21,15 +19,13 @@ import java.util.List;
 @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public class GuiceyBootstrap {
 
-    private final List<Module> modules;
-    private final InstallerConfig installerConfig;
+    private final BundleContext context;
     private final Configuration configuration;
     private final Environment environment;
 
-    public GuiceyBootstrap(final List<Module> modules, final InstallerConfig installerConfig,
+    public GuiceyBootstrap(final BundleContext context,
                            final Configuration configuration, final Environment environment) {
-        this.modules = modules;
-        this.installerConfig = installerConfig;
+        this.context = context;
         this.configuration = configuration;
         this.environment = environment;
     }
@@ -62,7 +58,7 @@ public class GuiceyBootstrap {
      */
     public GuiceyBootstrap modules(final Module... modules) {
         Preconditions.checkState(modules.length > 0, "Specify at least one module");
-        this.modules.addAll(Arrays.asList(modules));
+        context.modules.addAll(Arrays.asList(modules));
         return this;
     }
 
@@ -72,41 +68,53 @@ public class GuiceyBootstrap {
      */
     @SafeVarargs
     public final GuiceyBootstrap disableInstallers(final Class<? extends FeatureInstaller>... installers) {
-        installerConfig.getDisabledFeatures().addAll(Arrays.asList(installers));
+        context.installerConfig.getDisabledInstallers().addAll(Arrays.asList(installers));
         return this;
     }
 
     /**
-     * Feature installers registered automatically when auto scan enabled,
-     * but if you don't want to use it, you can register installers manually (note: without auto scan default
-     * installers will not be registered).
-     * <p>Also, could be used to add installers from packages not included in auto scanning.</p>
+     * If bundle provides new installers then they must be declared here.
+     * Optionally, core or other 3rd party installers may be declared also to indicate dependency
+     * (duplicate installers registrations will be removed).
      *
      * @param installers feature installer classes to register
      * @return configurer instance for chained calls
      */
     @SafeVarargs
     public final GuiceyBootstrap installers(final Class<? extends FeatureInstaller>... installers) {
-        installerConfig.getManualFeatures().addAll(Arrays.asList(installers));
+        context.installerConfig.getManualInstallers().addAll(Arrays.asList(installers));
         return this;
     }
 
     /**
-     * Beans could be registered automatically when auto scan enabled,
-     * but if you don't want to use it, you can register beans manually.
-     * <p>Guice injector will instantiate beans and registered installers will be used to recognize and
-     * properly register provided extension beans.</p>
-     * <p>Also, could be used to add beans from packages not included in auto scanning.</p>
-     * <p>NOTE: startup will fail if bean not recognized by installers.</p>
-     * <p>NOTE: Don't register commands here: either enable auto scan, which will install commands automatically
+     * Bundle should not rely on auto-scan mechanism and so must declare all extensions manually
+     * (this better declares bundle content and speed ups startup).
+     * <p/>
+     * NOTE: startup will fail if bean not recognized by installers.
+     * <p/>
+     * NOTE: Don't register commands here: either enable auto scan, which will install commands automatically
      * or register command directly to bootstrap object and dependencies will be injected to them after
-     * injector creation.</p>
+     * injector creation.
      *
      * @param extensionClasses extension bean classes to register
      * @return configurer instance for chained calls
      */
     public GuiceyBootstrap extensions(final Class<?>... extensionClasses) {
-        installerConfig.getManualBeans().addAll(Arrays.asList(extensionClasses));
+        context.installerConfig.getManualExtensions().addAll(Arrays.asList(extensionClasses));
+        return this;
+    }
+
+    /**
+     * Register other guicey bundles for installation.
+     * <p/>
+     * Duplicate bundles will be filtered automatically: bundles of the same type considered duplicate
+     * (if two or more bundles of the same type detected then only first instance will be processed).
+     *
+     * @param bundles guicey bundles
+     * @return configurer instance for chained calls
+     */
+    public GuiceyBootstrap bundles(final GuiceyBundle... bundles) {
+        context.bundles.addAll(Arrays.asList(bundles));
         return this;
     }
 }

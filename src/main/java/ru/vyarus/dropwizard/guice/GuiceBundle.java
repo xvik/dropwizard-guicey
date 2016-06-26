@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice;
 
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -20,10 +19,9 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.BundleContext;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
-import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
@@ -31,7 +29,6 @@ import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -77,17 +74,15 @@ import java.util.Set;
  *
  * @param <T> configuration type
  * @author Vyacheslav Rusakov
+ * @see ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo for configuratio diagnostic
  * @since 31.08.2014
  */
 @SuppressWarnings("PMD.ExcessiveImports")
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     private Injector injector;
-
-    private final List<Module> modules = Lists.newArrayList();
-    private final List<GuiceyBundle> bundles = Lists.newArrayList();
+    private final BundleContext context = new BundleContext();
     private final Set<String> autoscanPackages = Sets.newHashSet();
-    private final InstallerConfig installerConfig = new InstallerConfig();
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
     private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
     private boolean searchCommands;
@@ -123,9 +118,10 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @SuppressWarnings("unchecked")
     public void run(final T configuration, final Environment environment) throws Exception {
         configureFromBundles(configuration, environment);
-        modules.add(new GuiceSupportModule(scanner, installerConfig, bindConfigurationInterfaces));
+        context.modules.add(new GuiceSupportModule(
+                scanner, context, bindConfigurationInterfaces));
         configureModules(configuration, environment);
-        injector = injectorFactory.createInjector(stage, modules);
+        injector = injectorFactory.createInjector(stage, context.modules);
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
@@ -146,15 +142,12 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      * @param environment   environment object
      */
     private void configureFromBundles(final T configuration, final Environment environment) {
-        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(modules, installerConfig,
-                configuration, environment);
         if (configureFromDropwizardBundles) {
-            bundles.addAll(BundleSupport.findBundles(bootstrap, GuiceyBundle.class));
+            context.bundles.addAll(BundleSupport.findBundles(bootstrap, GuiceyBundle.class));
         }
-        bundles.addAll(bundleLookup.lookup());
-        for (GuiceyBundle bundle : BundleSupport.removeDuplicates(bundles)) {
-            bundle.initialize(guiceyBootstrap);
-        }
+        context.lookupBundles = bundleLookup.lookup();
+        context.bundles.addAll(context.lookupBundles);
+        BundleSupport.processBundles(context, configuration, environment);
     }
 
     /**
@@ -165,7 +158,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     @SuppressWarnings("unchecked")
     private void configureModules(final T configuration, final Environment environment) {
-        for (Module mod : modules) {
+        for (Module mod : context.modules) {
             if (mod instanceof BootstrapAwareModule) {
                 ((BootstrapAwareModule) mod).setBootstrap(bootstrap);
             }
@@ -238,7 +231,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
             Preconditions.checkState(bundle.autoscanPackages.isEmpty(), "Auto config packages already configured");
             Preconditions.checkState(basePackages.length > 0, "Specify at least one package to scan");
             bundle.autoscanPackages.addAll(Arrays.asList(basePackages));
-            bundle.bundles.add(new CoreInstallersBundle());
+            bundle.context.bundles.add(new CoreInstallersBundle());
             return this;
         }
 
@@ -254,7 +247,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> modules(final Module... modules) {
             Preconditions.checkState(modules.length > 0, "Specify at least one module");
-            bundle.modules.addAll(Arrays.asList(modules));
+            bundle.context.modules.addAll(Arrays.asList(modules));
             return this;
         }
 
@@ -275,7 +268,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         @SafeVarargs
         public final Builder<T> disableInstallers(final Class<? extends FeatureInstaller>... installers) {
-            bundle.installerConfig.getDisabledFeatures().addAll(Arrays.asList(installers));
+            bundle.context.installerConfig.getDisabledInstallers().addAll(Arrays.asList(installers));
             return this;
         }
 
@@ -290,7 +283,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         @SafeVarargs
         public final Builder<T> installers(final Class<? extends FeatureInstaller>... installers) {
-            bundle.installerConfig.getManualFeatures().addAll(Arrays.asList(installers));
+            bundle.context.installerConfig.getManualInstallers().addAll(Arrays.asList(installers));
             return this;
         }
 
@@ -309,22 +302,25 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          */
         public Builder<T> extensions(final Class<?>... extensionClasses) {
-            bundle.installerConfig.getManualBeans().addAll(Arrays.asList(extensionClasses));
+            bundle.context.installerConfig.getManualExtensions().addAll(Arrays.asList(extensionClasses));
             return this;
         }
 
         /**
          * Guicey bundles are mainly useful for extensions (to group installers and extensions installation without
          * auto scan). Its very like dropwizard bundles.
-         * <p>Its also possible to use dropwizard bundles as guicey bundles: bundle must implement
+         * <p/>
+         * Its also possible to use dropwizard bundles as guicey bundles: bundle must implement
          * {@link GuiceyBundle} and {@link #configureFromDropwizardBundles(boolean)} must be enabled
-         * (disabled by default). This allows using dropwizard bundles as universal extension point.</p>
+         * (disabled by default). This allows using dropwizard bundles as universal extension point.
+         * <p/>
+         * Duplicate bundles are filtered automatically: bundles of the same type considered duplicate.
          *
          * @param bundles guicey bundles
          * @return builder instance for chained calls
          */
         public Builder<T> bundles(final GuiceyBundle... bundles) {
-            bundle.bundles.addAll(Arrays.asList(bundles));
+            bundle.context.bundles.addAll(Arrays.asList(bundles));
             return this;
         }
 

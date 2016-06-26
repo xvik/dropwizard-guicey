@@ -14,13 +14,15 @@ class GuiceRestrictedConfigBundle implements GuiceyBundle {
 
     @Override
     void initialize(GuiceyBootstrap bootstrap) {
-        bootstrap.modules(new AbstractModule() {
-            @Override
-            protected void configure() {
-                binder().disableCircularProxies()
-                binder().requireExactBindingAnnotations()
-                binder().requireExplicitBindings()
-            }
-        })
+        bootstrap.modules(new GRestrictModule())
+    }
+
+    static class GRestrictModule extends AbstractModule {
+        @Override
+        protected void configure() {
+            binder().disableCircularProxies()
+            binder().requireExactBindingAnnotations()
+            binder().requireExplicitBindings()
+        }
     }
 }

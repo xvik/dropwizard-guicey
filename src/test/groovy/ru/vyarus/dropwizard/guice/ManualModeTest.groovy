@@ -6,10 +6,10 @@ import com.google.inject.Key
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.ManualApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.DummyManaged
@@ -25,7 +25,7 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 class ManualModeTest extends AbstractTest {
 
     @Inject
-    FeaturesHolder holder
+    GuiceyConfigurationInfo info
     @Inject
     Bootstrap bootstrap
     @Inject
@@ -42,21 +42,21 @@ class ManualModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(TestConfiguration))
 
         then: "all registered installers found"
-        holder.installers.size() == 3
+        info.installers.size() == 3
 
         then: "command injection done"
         bootstrap.getCommands()[0].service
 
         then: "task found"
-        holder.getFeatures(TaskInstaller) == [DummyTask]
+        info.getExtensions(TaskInstaller) == [DummyTask]
         injector.getExistingBinding(Key.get(DummyTask))
 
         then: "resource found"
-        holder.getFeatures(ResourceInstaller) == [DummyResource]
+        info.getExtensions(ResourceInstaller) == [DummyResource]
         injector.getExistingBinding(Key.get(DummyResource))
 
         then: "managed found"
-        holder.getFeatures(ManagedInstaller) == [DummyManaged]
+        info.getExtensions(ManagedInstaller) == [DummyManaged]
         injector.getExistingBinding(Key.get(DummyManaged))
     }
 }

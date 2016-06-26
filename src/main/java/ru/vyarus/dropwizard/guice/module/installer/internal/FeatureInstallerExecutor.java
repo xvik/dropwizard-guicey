@@ -43,7 +43,7 @@ public class FeatureInstallerExecutor {
     private void installFeatures() {
         holder.order();
         for (FeatureInstaller installer : holder.getInstallers()) {
-            final List<Class<?>> res = holder.getFeatures(installer.getClass());
+            final List<Class<?>> res = holder.getExtensions(installer.getClass());
             if (res != null) {
                 for (Class inst : res) {
                     if (installer instanceof TypeInstaller) {

@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice
 
 import com.google.inject.Inject
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.AutowiredModule
 import ru.vyarus.dropwizard.guice.support.CustomModuleApplication
 import ru.vyarus.dropwizard.guice.support.feature.InvisibleResource
@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 class CustomModuleTest extends AbstractTest {
 
     @Inject
-    FeaturesHolder holder
+    GuiceyConfigurationInfo info
 
     def "Check custom module"() {
 
@@ -24,6 +24,6 @@ class CustomModuleTest extends AbstractTest {
         AutowiredModule.instance.environment
         AutowiredModule.instance.bootstrap
         AutowiredModule.instance.configuration
-        !holder.getFeatures(ResourceInstaller).contains(InvisibleResource)
+        !info.getExtensions(ResourceInstaller).contains(InvisibleResource)
     }
 }

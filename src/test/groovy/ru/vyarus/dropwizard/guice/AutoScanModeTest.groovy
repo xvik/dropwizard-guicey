@@ -8,6 +8,7 @@ import com.google.inject.TypeLiteral
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
@@ -19,7 +20,6 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureI
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
@@ -36,7 +36,7 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 class AutoScanModeTest extends AbstractTest {
 
     @Inject
-    FeaturesHolder holder
+    GuiceyConfigurationInfo info
     @Inject
     Bootstrap bootstrap
     @Inject
@@ -53,7 +53,7 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(TestConfiguration))
 
         then: "all installers found"
-        holder.installers.size() == 11
+        info.installers.size() == 11
 
         then: "command found"
         bootstrap.getCommands().size() == 2
@@ -62,47 +62,47 @@ class AutoScanModeTest extends AbstractTest {
         dummyCmd.service
 
         then: "task found"
-        holder.getFeatures(TaskInstaller) == [DummyTask]
+        info.getExtensions(TaskInstaller) == [DummyTask]
         injector.getExistingBinding(Key.get(DummyTask))
 
         then: "resource found"
-        holder.getFeatures(ResourceInstaller) == [DummyResource]
+        info.getExtensions(ResourceInstaller) == [DummyResource]
         injector.getExistingBinding(Key.get(DummyResource))
 
         then: "managed found"
-        holder.getFeatures(ManagedInstaller) == [DummyManaged]
+        info.getExtensions(ManagedInstaller) == [DummyManaged]
         injector.getExistingBinding(Key.get(DummyManaged))
 
         then: "lifecycle found"
-        holder.getFeatures(LifeCycleInstaller) == [DummyLifeCycle]
+        info.getExtensions(LifeCycleInstaller) == [DummyLifeCycle]
         injector.getExistingBinding(Key.get(DummyLifeCycle))
 
         then: "jersey provider found"
-        Sets.newHashSet(holder.getFeatures(JerseyProviderInstaller)) == [DummyExceptionMapper, DummyJerseyProvider, DummyOtherProvider] as Set
+        Sets.newHashSet(info.getExtensions(JerseyProviderInstaller)) == [DummyExceptionMapper, DummyJerseyProvider, DummyOtherProvider] as Set
         injector.getExistingBinding(Key.get(DummyExceptionMapper))
         injector.getExistingBinding(Key.get(DummyJerseyProvider))
 
         then: "feature found"
-        holder.getFeatures(JerseyFeatureInstaller) == [DummyFeature, HK2DebugFeature]
+        info.getExtensions(JerseyFeatureInstaller) == [DummyFeature, HK2DebugFeature]
         injector.getExistingBinding(Key.get(DummyFeature))
 
         then: "health check found"
-        holder.getFeatures(HealthCheckInstaller) == [DummyHealthCheck]
+        info.getExtensions(HealthCheckInstaller) == [DummyHealthCheck]
         injector.getExistingBinding(Key.get(DummyHealthCheck))
 
         then: "eager found"
-        holder.getFeatures(EagerSingletonInstaller) == [DummyService]
+        info.getExtensions(EagerSingletonInstaller) == [DummyService]
 
         then: "plugins found"
-        Sets.newHashSet(holder.getFeatures(PluginInstaller)) == [DummyPlugin1, DummyPlugin2, DummyPlugin3, DummyNamedPlugin1, DummyNamedPlugin2] as Set
+        Sets.newHashSet(info.getExtensions(PluginInstaller)) == [DummyPlugin1, DummyPlugin2, DummyPlugin3, DummyNamedPlugin1, DummyNamedPlugin2] as Set
         injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface>>() {})).size() == 2
         injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface2>>() {})).size() == 1
         injector.getInstance(Key.get(new TypeLiteral<Map<DummyPluginKey, PluginInterface>>() {})).size() == 2
 
         then: "admin servlet found"
-        holder.getFeatures(AdminServletInstaller) == [DummyAdminServlet]
+        info.getExtensions(AdminServletInstaller) == [DummyAdminServlet]
 
         then: "admin filter found"
-        holder.getFeatures(AdminFilterInstaller) == [DummyAdminFilter]
+        info.getExtensions(AdminFilterInstaller) == [DummyAdminFilter]
     }
 }

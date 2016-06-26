@@ -36,7 +36,7 @@ class BundleSupportTest extends AbstractTest {
         lst[0] instanceof CoreInstallersBundle
     }
 
-    def "Check filtering"() {
+    def "Check dw bundles recognition"() {
 
         when: "prepare bootstrap with hybrid bundles"
         def bootstrap = new Bootstrap(null)
@@ -48,6 +48,18 @@ class BundleSupportTest extends AbstractTest {
         res.size() == 2
         res[0] instanceof SampleBundle
         res[1] instanceof SampleConfiguredBundle
+    }
+
+    def "Check filtering"() {
+
+        setup: "prepare filter list"
+        def filter = [SampleBundle, AdminRestBundle]
+
+        when: "filtering bundles list"
+        def res = BundleSupport.removeTypes([new CoreInstallersBundle(), new SampleBundle(), new HK2DebugBundle(),
+                                             new SampleConfiguredBundle(), new AdminRestBundle()], filter)
+        then: "filtered"
+        res*.class == [CoreInstallersBundle, HK2DebugBundle, SampleConfiguredBundle]
     }
 
     static class SampleBundle implements Bundle, GuiceyBundle {

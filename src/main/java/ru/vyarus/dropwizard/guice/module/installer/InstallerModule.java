@@ -77,19 +77,19 @@ public class InstallerModule extends AbstractModule {
             });
         }
 
-        installers.addAll(installerConfig.getManualFeatures());
+        installers.addAll(installerConfig.getManualInstallers());
 
         final Set<Class<? extends FeatureInstaller>> validInstallers = Sets.newHashSet(
                 Iterables.filter(installers, new Predicate<Class<? extends FeatureInstaller>>() {
                     @Override
                     public boolean apply(@Nullable final Class<? extends FeatureInstaller> input) {
-                        return !installerConfig.getDisabledFeatures().contains(input);
+                        return !installerConfig.getDisabledInstallers().contains(input);
                     }
                 }));
         installers.clear();
         installers.addAll(validInstallers);
         Collections.sort(installers, COMPARATOR);
-        logger.debug("Found {} feature installers", installers.size());
+        logger.debug("Found {} installers", installers.size());
         return installers;
     }
 
@@ -106,7 +106,7 @@ public class InstallerModule extends AbstractModule {
             try {
                 final FeatureInstaller installer = installerClass.newInstance();
                 installers.add(installer);
-                logger.trace("Registered feature installer: {}",
+                logger.trace("Registered installer: {}",
                         FeatureUtils.getInstallerExtName(installerClass));
             } catch (Exception e) {
                 throw new IllegalStateException("Failed to register installer "
@@ -130,9 +130,9 @@ public class InstallerModule extends AbstractModule {
                 }
             });
         }
-        for (Class<?> type : installerConfig.getManualBeans()) {
+        for (Class<?> type : installerConfig.getManualExtensions()) {
             Preconditions.checkState(processType(type, holder),
-                    "No installer found for type %s", type.getName());
+                    "No installer found for extension %s", type.getName());
         }
     }
 

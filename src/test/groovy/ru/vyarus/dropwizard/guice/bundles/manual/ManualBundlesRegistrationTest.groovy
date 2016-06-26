@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.bundles.manual
 
 import com.google.inject.Inject
 import ru.vyarus.dropwizard.guice.AbstractTest
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 /**
@@ -13,13 +13,13 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 class ManualBundlesRegistrationTest extends AbstractTest {
 
     @Inject
-    FeaturesHolder holder
+    GuiceyConfigurationInfo info
 
     def "Check manual bundle processed"() {
 
         when: "application started"
         then: "installers registered"
-        holder.installers.size() == 11
+        info.installers.size() == 11
 
     }
 }

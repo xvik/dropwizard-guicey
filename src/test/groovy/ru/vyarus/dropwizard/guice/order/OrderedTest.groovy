@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.order
 
 import com.google.inject.Inject
 import ru.vyarus.dropwizard.guice.AbstractTest
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
 import ru.vyarus.dropwizard.guice.support.order.Ext1
 import ru.vyarus.dropwizard.guice.support.order.Ext2
 import ru.vyarus.dropwizard.guice.support.order.Ext3
@@ -18,14 +18,14 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 class OrderedTest extends AbstractTest {
 
     @Inject
-    FeaturesHolder holder
+    GuiceyConfigurationInfo info
 
     def "Check extensions ordering"() {
 
         when: "application started"
 
         then: "extensions ordered"
-        holder.getFeatures(ManagedInstaller) == [Ext3, Ext1, Ext2]
+        info.getExtensions(ManagedInstaller) == [Ext3, Ext1, Ext2]
 
     }
 }

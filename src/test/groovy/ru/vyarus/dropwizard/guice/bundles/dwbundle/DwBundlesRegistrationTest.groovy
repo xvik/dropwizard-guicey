@@ -2,10 +2,8 @@ package ru.vyarus.dropwizard.guice.bundles.dwbundle
 
 import com.google.inject.Inject
 import ru.vyarus.dropwizard.guice.AbstractTest
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
-import spock.lang.Specification
-
 
 /**
  * @author Vyacheslav Rusakov 
@@ -15,13 +13,13 @@ import spock.lang.Specification
 class DwBundlesRegistrationTest extends AbstractTest {
 
     @Inject
-    FeaturesHolder holder
+    GuiceyConfigurationInfo info
 
     def "Check dw bundle processed"() {
 
         when: "application started"
         then: "installers registered"
-        holder.installers.size() == 6
+        info.installers.size() == 6
 
     }
 

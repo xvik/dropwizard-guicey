@@ -41,16 +41,21 @@ public class HK2DebugBundle implements GuiceyBundle {
                 // register to guarantee installer presence (e.g. in manual mode)
                 .installers(JerseyFeatureInstaller.class)
                 .extensions(HK2DebugFeature.class)
-                .modules(new AbstractModule() {
-                    @Override
-                    protected void configure() {
-                        final GuiceInstanceListener listener = new GuiceInstanceListener();
-                        requestInjection(listener);
-                        bindListener(Matchers.any(), listener);
+                .modules(new HK2DebugModule());
+    }
 
-                        bind(ContextDebugService.class);
-                        bind(HK2InstanceListener.class);
-                    }
-                });
+    /**
+     * Guice module with scope validation services.
+     */
+    public static class HK2DebugModule extends AbstractModule {
+        @Override
+        protected void configure() {
+            final GuiceInstanceListener listener = new GuiceInstanceListener();
+            requestInjection(listener);
+            bindListener(Matchers.any(), listener);
+
+            bind(ContextDebugService.class);
+            bind(HK2InstanceListener.class);
+        }
     }
 }

@@ -6,6 +6,8 @@
  - Interfaces directly implemented by classes in configuration hierarchy expect interfaces from java package 
  (it's common to use HasSomeConfig interface convention and now interface may be directly used for binding)
  - Add bindConfigurationInterfaces() option to GuiceBundle to be able to disable interface bindings
+* Add transitive guicey bundles support (GuiceyBundle can install other guicey bundles). Duplicate bundles are detected by type.
+* Add GuiceyConfigurationInfo: guice service with internal guicey configuration information (installed bundles, used installers, installed extensions etc.)
 
 ### 3.2.0 (2016-01-23)
 * Clear possible duplicate guicey bundle instances

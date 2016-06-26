@@ -13,8 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Bean used to hold found extensions (after scan with installers) to register them dropwizard after
+ * Bean used to hold found extensions (after scan with installers) to register them in dropwizard after
  * injector creation.
+ * <p/>
+ * Internal api. Use {@link ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo} instead.
  *
  * @author Vyacheslav Rusakov
  * @since 01.09.2014
@@ -22,7 +24,7 @@ import java.util.Map;
 public class FeaturesHolder {
     private final List<FeatureInstaller> installers;
     private final List<Class<? extends FeatureInstaller>> installerTypes;
-    private final Map<Class<? extends FeatureInstaller>, List<Class<?>>> features = Maps.newHashMap();
+    private final Map<Class<? extends FeatureInstaller>, List<Class<?>>> extensions = Maps.newHashMap();
 
     public FeaturesHolder(final List<FeatureInstaller> installers) {
         this.installers = installers;
@@ -37,15 +39,15 @@ public class FeaturesHolder {
 
     /**
      * @param installer installer type
-     * @param feature   feature type to store
+     * @param extension feature type to store
      */
-    public void register(final Class<? extends FeatureInstaller> installer, final Class feature) {
+    public void register(final Class<? extends FeatureInstaller> installer, final Class extension) {
         Preconditions.checkArgument(installerTypes.contains(installer), "Installer %s not registered",
                 installer.getSimpleName());
-        if (!features.containsKey(installer)) {
-            features.put(installer, Lists.<Class<?>>newArrayList());
+        if (!extensions.containsKey(installer)) {
+            extensions.put(installer, Lists.<Class<?>>newArrayList());
         }
-        features.get(installer).add(feature);
+        extensions.get(installer).add(extension);
     }
 
     /**
@@ -56,11 +58,18 @@ public class FeaturesHolder {
     }
 
     /**
+     * @return list of all registered installer types
+     */
+    public List<Class<? extends FeatureInstaller>> getInstallerTypes() {
+        return installerTypes;
+    }
+
+    /**
      * @param installer installer type
      * @return list of all found extensions for installer or null if nothing found.
      */
-    public List<Class<?>> getFeatures(final Class<? extends FeatureInstaller> installer) {
-        return features.get(installer);
+    public List<Class<?>> getExtensions(final Class<? extends FeatureInstaller> installer) {
+        return extensions.get(installer);
     }
 
     /**
@@ -72,7 +81,7 @@ public class FeaturesHolder {
         final OrderComparator comparator = new OrderComparator();
         for (Class<? extends FeatureInstaller> installer : installerTypes) {
             if (Ordered.class.isAssignableFrom(installer)) {
-                final List<Class<?>> extensions = features.get(installer);
+                final List<Class<?>> extensions = this.extensions.get(installer);
                 if (extensions == null || extensions.size() <= 1) {
                     continue;
                 }

@@ -5,12 +5,15 @@ import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.InstallerModule;
-import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.BundleContext;
+import ru.vyarus.dropwizard.guice.module.installer.internal.BundleContextHolder;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
+
+import javax.inject.Singleton;
 
 /**
  * Bootstrap integration guice module.
@@ -39,17 +42,17 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
         implements BootstrapAwareModule<T>, EnvironmentAwareModule, ConfigurationAwareModule<T> {
 
     private final ClasspathScanner scanner;
-    private final InstallerConfig installerConfig;
+    private final BundleContext bundleContext;
     private final boolean bindConfigurationInterfaces;
     private Bootstrap<T> bootstrap;
     private T configuration;
     private Environment environment;
 
     public GuiceSupportModule(final ClasspathScanner scanner,
-                              final InstallerConfig installerConfig,
+                              final BundleContext bundleContext,
                               final boolean bindConfigurationInterfaces) {
         this.scanner = scanner;
-        this.installerConfig = installerConfig;
+        this.bundleContext = bundleContext;
         this.bindConfigurationInterfaces = bindConfigurationInterfaces;
     }
 
@@ -70,8 +73,11 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
 
     @Override
     protected void configure() {
+        bind(BundleContextHolder.class).toInstance(new BundleContextHolder(bundleContext));
+        bind(GuiceyConfigurationInfo.class).in(Singleton.class);
+
         bindEnvironment();
-        install(new InstallerModule(scanner, installerConfig));
+        install(new InstallerModule(scanner, bundleContext.installerConfig));
         install(new Jersey2Module(bootstrap.getApplication(), environment));
     }
 
