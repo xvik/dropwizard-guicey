@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * Public api for internal guicey configuration info. Provides information about registered bundle types,
  * installers, extensions, disabled installers etc. Registered as guice bean and could be directly injected.
- * <p/>
- * Could to be used for configuration diagnostics or unit test checks.
+ * <p>
+ * Could be used for configuration diagnostics or unit test checks.
  *
  * @author Vyacheslav Rusakov
  * @since 21.06.2016

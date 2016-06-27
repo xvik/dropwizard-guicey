@@ -24,6 +24,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
+import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
@@ -309,11 +310,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         /**
          * Guicey bundles are mainly useful for extensions (to group installers and extensions installation without
          * auto scan). Its very like dropwizard bundles.
-         * <p/>
+         * <p>
          * Its also possible to use dropwizard bundles as guicey bundles: bundle must implement
          * {@link GuiceyBundle} and {@link #configureFromDropwizardBundles(boolean)} must be enabled
          * (disabled by default). This allows using dropwizard bundles as universal extension point.
-         * <p/>
+         * <p>
          * Duplicate bundles are filtered automatically: bundles of the same type considered duplicate.
          *
          * @param bundles guicey bundles
@@ -342,10 +343,10 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * in to guice context. Only interfaces directly implemented by any configuration class in configuration
          * classes hierarchy. Interfaces from java and groovy packages are skipped.
          * This is useful to support {@code HasSomeConfiguration} interfaces convention.
-         * <p/>
+         * <p>
          * When disabled, only classes in configuration hierarchy are registered (e.g. in case
          * {@code MyConfiguration extends MyBaseConfiguration extends Configuration}, all 3 classes would be bound.
-         * <p/>
+         * <p>
          * Enabled by default.
          *
          * @param enable true to enable configuration interfaces binding
@@ -353,6 +354,27 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> bindConfigurationInterfaces(final boolean enable) {
             bundle.bindConfigurationInterfaces = enable;
+            return this;
+        }
+
+        /**
+         * Enables strict control of beans instantiation context: all beans must be instantiated by guice, except
+         * beans annotated with {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed}.
+         * When bean instantiated in wrong context exception would be thrown.
+         * <p>
+         * It is useful if you write your own installers or to simply ensure correctness in doubtful cases.
+         * <p>
+         * Do not use for production! It is intended to be used mostly in tests or to diagnose problems
+         * during development.
+         * <p>
+         * To implicitly enable this check in all tests use
+         * {@code PropertyBundleLookup.enableBundles(HK2DebugBundle.class)}.
+         *
+         * @return builder instance for chained calls
+         * @see HK2DebugBundle
+         */
+        public Builder<T> strictScopeControl() {
+            bundle.context.bundles.add(new HK2DebugBundle());
             return this;
         }
 

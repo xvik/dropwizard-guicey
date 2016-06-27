@@ -89,9 +89,9 @@ public class GuiceyBootstrap {
     /**
      * Bundle should not rely on auto-scan mechanism and so must declare all extensions manually
      * (this better declares bundle content and speed ups startup).
-     * <p/>
+     * <p>
      * NOTE: startup will fail if bean not recognized by installers.
-     * <p/>
+     * <p>
      * NOTE: Don't register commands here: either enable auto scan, which will install commands automatically
      * or register command directly to bootstrap object and dependencies will be injected to them after
      * injector creation.
@@ -106,7 +106,7 @@ public class GuiceyBootstrap {
 
     /**
      * Register other guicey bundles for installation.
-     * <p/>
+     * <p>
      * Duplicate bundles will be filtered automatically: bundles of the same type considered duplicate
      * (if two or more bundles of the same type detected then only first instance will be processed).
      *

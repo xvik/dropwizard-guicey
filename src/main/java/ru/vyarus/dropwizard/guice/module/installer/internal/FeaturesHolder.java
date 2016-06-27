@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Bean used to hold found extensions (after scan with installers) to register them in dropwizard after
  * injector creation.
- * <p/>
+ * <p>
  * Internal api. Use {@link ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo} instead.
  *
  * @author Vyacheslav Rusakov

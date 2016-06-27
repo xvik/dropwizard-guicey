@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Bean holds dynamic configuration data: loaded bundles, registered guice modules, disabled and manual
  * installers.
- * <p/>
+ * <p>
  * Internal api. Use {@link ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo} instead.
  *
  * @author Vyacheslav Rusakov

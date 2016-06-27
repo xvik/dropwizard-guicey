@@ -1,13 +1,15 @@
 * Update to guice 4.1.0
 * ResourceInstaller looks for @Path on directly implemented interface (#10)
 * Fix bundles lookup reporting (correct multiline)
-* Configuration binding improve:
+* Improve configuration binding:
  - Complete configuration hierarchy bound (root, all classes between root and Configuration and Configuration itself)
- - Interfaces directly implemented by classes in configuration hierarchy expect interfaces from java package 
+ - Bind interfaces directly implemented by classes in configuration hierarchy except interfaces from java and groovy packages 
  (it's common to use HasSomeConfig interface convention and now interface may be directly used for binding)
- - Add bindConfigurationInterfaces() option to GuiceBundle to be able to disable interface bindings
 * Add transitive guicey bundles support (GuiceyBundle can install other guicey bundles). Duplicate bundles are detected by type.
 * Add GuiceyConfigurationInfo: guice service with internal guicey configuration information (installed bundles, used installers, installed extensions etc.)
+* Add GuiceBundle builder configuration options:
+ - bindConfigurationInterfaces() to disable configuration interface bindings
+ - strictScopeControl() is shortcut to enable HK2DebugBundle (to control beans creation scope during development and tests)
 
 ### 3.2.0 (2016-01-23)
 * Clear possible duplicate guicey bundle instances
