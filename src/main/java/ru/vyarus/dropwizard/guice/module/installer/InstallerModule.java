@@ -1,27 +1,24 @@
 package ru.vyarus.dropwizard.guice.module.installer;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.inject.AbstractModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
+import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 import ru.vyarus.dropwizard.guice.module.installer.internal.FeatureInstallerExecutor;
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder;
-import ru.vyarus.dropwizard.guice.module.installer.internal.InstallerConfig;
 import ru.vyarus.dropwizard.guice.module.installer.order.OrderComparator;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
+import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Module performs auto configuration using classpath scanning or manually predefined installers and beans.
@@ -35,12 +32,12 @@ public class InstallerModule extends AbstractModule {
     private static final OrderComparator COMPARATOR = new OrderComparator();
     private final Logger logger = LoggerFactory.getLogger(InstallerModule.class);
     private final ClasspathScanner scanner;
-    private final InstallerConfig installerConfig;
+    private final ConfigurationContext context;
 
     public InstallerModule(final ClasspathScanner scanner,
-                           final InstallerConfig installerConfig) {
+                           final ConfigurationContext context) {
         this.scanner = scanner;
-        this.installerConfig = installerConfig;
+        this.context = context;
     }
 
     @Override
@@ -52,9 +49,11 @@ public class InstallerModule extends AbstractModule {
         final List<Class<? extends FeatureInstaller>> installerClasses = findInstallers();
         final List<FeatureInstaller> installers = prepareInstallers(installerClasses);
 
-        final FeaturesHolder holder = new FeaturesHolder(installers);
-        bind(FeaturesHolder.class).toInstance(holder);
-        resolveFeatures(holder);
+        final ExtensionsHolder holder = new ExtensionsHolder(installers);
+        bind(ExtensionsHolder.class).toInstance(holder);
+
+        resolveExtensions(holder);
+        context.finalizeConfiguration();
     }
 
     /**
@@ -65,8 +64,8 @@ public class InstallerModule extends AbstractModule {
      */
     @SuppressWarnings("unchecked")
     private List<Class<? extends FeatureInstaller>> findInstallers() {
-        final List<Class<? extends FeatureInstaller>> installers = Lists.newArrayList();
         if (scanner != null) {
+            final List<Class<? extends FeatureInstaller>> installers = Lists.newArrayList();
             scanner.scan(new ClassVisitor() {
                 @Override
                 public void visit(final Class<?> type) {
@@ -75,19 +74,10 @@ public class InstallerModule extends AbstractModule {
                     }
                 }
             });
+            context.registerInstallersFromScan(installers);
         }
-
-        installers.addAll(installerConfig.getManualInstallers());
-
-        final Set<Class<? extends FeatureInstaller>> validInstallers = Sets.newHashSet(
-                Iterables.filter(installers, new Predicate<Class<? extends FeatureInstaller>>() {
-                    @Override
-                    public boolean apply(@Nullable final Class<? extends FeatureInstaller> input) {
-                        return !installerConfig.getDisabledInstallers().contains(input);
-                    }
-                }));
-        installers.clear();
-        installers.addAll(validInstallers);
+        final List<Class<? extends FeatureInstaller>> installers = context.getInstallers();
+        installers.removeAll(context.getDisabledInstallers());
         Collections.sort(installers, COMPARATOR);
         logger.debug("Found {} installers", installers.size());
         return installers;
@@ -121,19 +111,33 @@ public class InstallerModule extends AbstractModule {
      *
      * @param holder holder to store found extension classes until injector creation
      */
-    private void resolveFeatures(final FeaturesHolder holder) {
+    private void resolveExtensions(final ExtensionsHolder holder) {
+        for (Class<?> type : context.getExtensions()) {
+            Preconditions.checkState(processType(type, holder, false),
+                    "No installer found for extension %s", type.getName());
+        }
         if (scanner != null) {
             scanner.scan(new ClassVisitor() {
                 @Override
                 public void visit(final Class<?> type) {
-                    processType(type, holder);
+                    processType(type, holder, true);
                 }
             });
         }
-        for (Class<?> type : installerConfig.getManualExtensions()) {
-            Preconditions.checkState(processType(type, holder),
-                    "No installer found for extension %s", type.getName());
+    }
+
+    private boolean processType(final Class<?> type, final ExtensionsHolder holder, final boolean fromScan) {
+        final boolean lazy = type.isAnnotationPresent(LazyBinding.class);
+        final List<Class<? extends FeatureInstaller>> installers = bindExtension(type, lazy, holder);
+
+        final boolean recognized = !installers.isEmpty();
+        if (recognized) {
+            final ExtensionItemInfoImpl info = context.getOrRegisterExtensionFromScan(type, fromScan);
+            info.setLazy(lazy);
+            info.setHk2Managed(JerseyBinding.isHK2Managed(type));
+            info.getInstalledBy().addAll(installers);
         }
+        return recognized;
     }
 
     /**
@@ -141,15 +145,17 @@ public class InstallerModule extends AbstractModule {
      * @return true is class recognized by any installer, false otherwise
      */
     @SuppressWarnings("unchecked")
-    private boolean processType(final Class<?> type, final FeaturesHolder holder) {
-        boolean recognized = false;
+    private List<Class<? extends FeatureInstaller>> bindExtension(
+            final Class<?> type, final boolean lazy, final ExtensionsHolder holder) {
+
+        final List<Class<? extends FeatureInstaller>> recognized = Lists.newArrayList();
         for (FeatureInstaller installer : holder.getInstallers()) {
             if (installer.matches(type)) {
-                recognized = true;
+                final Class<? extends FeatureInstaller> installerClass = installer.getClass();
                 logger.trace("{} extension found: {}",
-                        FeatureUtils.getInstallerExtName(installer.getClass()), type.getName());
-                holder.register(installer.getClass(), type);
-                final boolean lazy = type.isAnnotationPresent(LazyBinding.class);
+                        FeatureUtils.getInstallerExtName(installerClass), type.getName());
+                recognized.add(installerClass);
+                holder.register(installerClass, type);
                 if (installer instanceof BindingInstaller) {
                     ((BindingInstaller) installer).install(binder(), type, lazy);
                 } else if (!lazy) {

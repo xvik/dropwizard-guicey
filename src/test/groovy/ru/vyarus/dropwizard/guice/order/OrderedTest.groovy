@@ -25,7 +25,7 @@ class OrderedTest extends AbstractTest {
         when: "application started"
 
         then: "extensions ordered"
-        info.getExtensions(ManagedInstaller) == [Ext3, Ext1, Ext2]
+        info.getExtensionsOrdered(ManagedInstaller) == [Ext3, Ext1, Ext2]
 
     }
 }

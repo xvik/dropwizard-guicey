@@ -4,9 +4,11 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Module;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Guicey configuration object. Provides almost the same configuration methods as
@@ -19,13 +21,15 @@ import java.util.Arrays;
 @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public class GuiceyBootstrap {
 
-    private final BundleContext context;
+    private final ConfigurationContext context;
+    private final List<GuiceyBundle> iterationBundles;
     private final Configuration configuration;
     private final Environment environment;
 
-    public GuiceyBootstrap(final BundleContext context,
+    public GuiceyBootstrap(final ConfigurationContext context, final List<GuiceyBundle> iterationBundles,
                            final Configuration configuration, final Environment environment) {
         this.context = context;
+        this.iterationBundles = iterationBundles;
         this.configuration = configuration;
         this.environment = environment;
     }
@@ -58,7 +62,7 @@ public class GuiceyBootstrap {
      */
     public GuiceyBootstrap modules(final Module... modules) {
         Preconditions.checkState(modules.length > 0, "Specify at least one module");
-        context.modules.addAll(Arrays.asList(modules));
+        context.registerModules(modules);
         return this;
     }
 
@@ -68,7 +72,7 @@ public class GuiceyBootstrap {
      */
     @SafeVarargs
     public final GuiceyBootstrap disableInstallers(final Class<? extends FeatureInstaller>... installers) {
-        context.installerConfig.getDisabledInstallers().addAll(Arrays.asList(installers));
+        context.disableInstallers(installers);
         return this;
     }
 
@@ -82,7 +86,7 @@ public class GuiceyBootstrap {
      */
     @SafeVarargs
     public final GuiceyBootstrap installers(final Class<? extends FeatureInstaller>... installers) {
-        context.installerConfig.getManualInstallers().addAll(Arrays.asList(installers));
+        context.registerInstallers(installers);
         return this;
     }
 
@@ -100,7 +104,7 @@ public class GuiceyBootstrap {
      * @return configurer instance for chained calls
      */
     public GuiceyBootstrap extensions(final Class<?>... extensionClasses) {
-        context.installerConfig.getManualExtensions().addAll(Arrays.asList(extensionClasses));
+        context.registerExtensions(extensionClasses);
         return this;
     }
 
@@ -114,7 +118,8 @@ public class GuiceyBootstrap {
      * @return configurer instance for chained calls
      */
     public GuiceyBootstrap bundles(final GuiceyBundle... bundles) {
-        context.bundles.addAll(Arrays.asList(bundles));
+        context.registerBundles(bundles);
+        iterationBundles.addAll(Arrays.asList(bundles));
         return this;
     }
 }

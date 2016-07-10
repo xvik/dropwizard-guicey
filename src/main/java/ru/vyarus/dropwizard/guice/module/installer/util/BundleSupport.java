@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.BundleContext;
+import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 
@@ -41,20 +41,26 @@ public final class BundleSupport {
      * @param configuration configuration object
      * @param environment   environment object
      */
-    public static void processBundles(final BundleContext context,
+    public static void processBundles(final ConfigurationContext context,
                                       final Configuration configuration, final Environment environment) {
-        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, configuration, environment);
+        final List<GuiceyBundle> bundles = context.getBundles();
+        final List<Class<? extends GuiceyBundle>> installedBundles = Lists.newArrayList();
+        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, bundles, configuration, environment);
+
         // iterating while no new bundles registered
-        while (!context.bundles.isEmpty()) {
-            final List<GuiceyBundle> bundles = Lists.newArrayList(BundleSupport.removeDuplicates(context.bundles));
-            context.bundles.clear();
-            for (GuiceyBundle bundle : removeTypes(bundles, context.installedBundles)) {
-                bundle.initialize(guiceyBootstrap);
+        while (!bundles.isEmpty()) {
+            final List<GuiceyBundle> processingBundles = Lists.newArrayList(BundleSupport.removeDuplicates(bundles));
+            bundles.clear();
+            for (GuiceyBundle bundle : removeTypes(processingBundles, installedBundles)) {
 
                 final Class<? extends GuiceyBundle> bundleType = bundle.getClass();
-                Preconditions.checkState(!context.installedBundles.contains(bundleType),
+                Preconditions.checkState(!installedBundles.contains(bundleType),
                         "State error: duplicate bundle '%s' registration", bundleType.getName());
-                context.installedBundles.add(bundleType);
+
+                context.setScope(bundleType);
+                bundle.initialize(guiceyBootstrap);
+                installedBundles.add(bundleType);
+                context.closeScope();
             }
         }
     }

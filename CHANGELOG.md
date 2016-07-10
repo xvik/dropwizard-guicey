@@ -1,12 +1,15 @@
 * Update to guice 4.1.0
 * ResourceInstaller looks for @Path on directly implemented interface (#10)
 * Fix bundles lookup reporting (correct multiline)
-* Improve configuration binding:
+* Improve dropwizard configuration class binding:
  - Complete configuration hierarchy bound (root, all classes between root and Configuration and Configuration itself)
  - Bind interfaces directly implemented by classes in configuration hierarchy except interfaces from java and groovy packages 
  (it's common to use HasSomeConfig interface convention and now interface may be directly used for binding)
 * Add transitive guicey bundles support (GuiceyBundle can install other guicey bundles). Duplicate bundles are detected by type.
-* Add GuiceyConfigurationInfo: guice service with internal guicey configuration information (installed bundles, used installers, installed extensions etc.)
+* Rewrite internal configuration mechanism (bundles, installers etc) to generalize it and introduce complete configuration tracking: 
+  store registration sources, disabling, used installers and other specific information for each item
+ - Add GuiceyConfigurationInfo service to access tracked guicey configuration information (may be used for configuration diagnostic purposes, 
+   performing post configuration checks, printing complete configuration tree etc)
 * Add GuiceBundle builder configuration options:
  - bindConfigurationInterfaces() to disable configuration interface bindings
  - strictScopeControl() is shortcut to enable HK2DebugBundle (to control beans creation scope during development and tests)

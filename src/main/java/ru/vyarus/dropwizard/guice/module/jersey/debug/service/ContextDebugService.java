@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.module.jersey.debug.service;
 import com.google.common.collect.Lists;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder;
+import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
 import javax.inject.Inject;
@@ -26,7 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Singleton
 public class ContextDebugService {
 
-    private final Provider<FeaturesHolder> holder;
+    private final Provider<ExtensionsHolder> holder;
     private final List<Class<?>> hkManaged = Lists.newArrayList();
     private final List<Class<?>> guiceManaged = Lists.newArrayList();
 
@@ -34,7 +34,7 @@ public class ContextDebugService {
     private List<Class<?>> managedTypes;
 
     @Inject
-    public ContextDebugService(final Provider<FeaturesHolder> holder) {
+    public ContextDebugService(final Provider<ExtensionsHolder> holder) {
         this.holder = holder;
     }
 

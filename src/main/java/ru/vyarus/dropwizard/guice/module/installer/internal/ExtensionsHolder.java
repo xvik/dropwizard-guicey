@@ -21,12 +21,12 @@ import java.util.Map;
  * @author Vyacheslav Rusakov
  * @since 01.09.2014
  */
-public class FeaturesHolder {
+public class ExtensionsHolder {
     private final List<FeatureInstaller> installers;
     private final List<Class<? extends FeatureInstaller>> installerTypes;
     private final Map<Class<? extends FeatureInstaller>, List<Class<?>>> extensions = Maps.newHashMap();
 
-    public FeaturesHolder(final List<FeatureInstaller> installers) {
+    public ExtensionsHolder(final List<FeatureInstaller> installers) {
         this.installers = installers;
         this.installerTypes = Lists.transform(installers,
                 new Function<FeatureInstaller, Class<? extends FeatureInstaller>>() {

@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.diagnostic
 
+import io.dropwizard.Application
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.diagnostic.support.AutoScanApp
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooInstaller
@@ -7,6 +8,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
+import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
@@ -19,6 +21,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureI
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
+import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 import javax.inject.Inject
@@ -38,6 +41,7 @@ class AutoScanModeDiagnosticTest extends AbstractTest {
         expect: "correct bundles info"
         info.bundles == [CoreInstallersBundle]
         info.bundlesFromLookup.isEmpty()
+        info.bundlesFromDw.isEmpty()
 
         and: "correct installers info"
         def classes = [FooInstaller,
@@ -51,7 +55,7 @@ class AutoScanModeDiagnosticTest extends AbstractTest {
                        PluginInstaller.class,
                        AdminFilterInstaller.class,
                        AdminServletInstaller.class]
-        info.installers as Set == classes  as Set
+        info.installers as Set == classes as Set
         info.installersDisabled == [LifeCycleInstaller]
         info.installersFromScan == [FooInstaller]
 
@@ -63,5 +67,16 @@ class AutoScanModeDiagnosticTest extends AbstractTest {
         and: "correct modules"
         info.modules as Set == [FooModule, GuiceSupportModule] as Set
 
+        and: "correct scopes"
+        info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle] as Set
+        info.getItemsByScope(Application) as Set == [CoreInstallersBundle, FooModule,  GuiceSupportModule] as Set
+        info.getItemsByScope(ClasspathScanner) as Set == [FooInstaller, FooResource] as Set
+
+        and: "lifecycle installer was disabled"
+        !info.getItemsByScope(CoreInstallersBundle).contains(LifeCycleInstaller)
+        InstallerItemInfo li = info.data.getInfo(LifeCycleInstaller)
+        !li.enabled
+        li.disabledBy == [Application] as Set
+        li.registered
     }
 }

@@ -78,12 +78,12 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(DummyLifeCycle))
 
         then: "jersey provider found"
-        Sets.newHashSet(info.getExtensions(JerseyProviderInstaller)) == [DummyExceptionMapper, DummyJerseyProvider, DummyOtherProvider] as Set
+        info.getExtensions(JerseyProviderInstaller) as Set == [DummyExceptionMapper, DummyJerseyProvider, DummyOtherProvider] as Set
         injector.getExistingBinding(Key.get(DummyExceptionMapper))
         injector.getExistingBinding(Key.get(DummyJerseyProvider))
 
         then: "feature found"
-        info.getExtensions(JerseyFeatureInstaller) == [DummyFeature, HK2DebugFeature]
+        info.getExtensions(JerseyFeatureInstaller) as Set == [DummyFeature, HK2DebugFeature] as Set
         injector.getExistingBinding(Key.get(DummyFeature))
 
         then: "health check found"
@@ -94,7 +94,7 @@ class AutoScanModeTest extends AbstractTest {
         info.getExtensions(EagerSingletonInstaller) == [DummyService]
 
         then: "plugins found"
-        Sets.newHashSet(info.getExtensions(PluginInstaller)) == [DummyPlugin1, DummyPlugin2, DummyPlugin3, DummyNamedPlugin1, DummyNamedPlugin2] as Set
+        info.getExtensions(PluginInstaller) as Set == [DummyPlugin1, DummyPlugin2, DummyPlugin3, DummyNamedPlugin1, DummyNamedPlugin2] as Set
         injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface>>() {})).size() == 2
         injector.getInstance(Key.get(new TypeLiteral<Set<PluginInterface2>>() {})).size() == 1
         injector.getInstance(Key.get(new TypeLiteral<Map<DummyPluginKey, PluginInterface>>() {})).size() == 2

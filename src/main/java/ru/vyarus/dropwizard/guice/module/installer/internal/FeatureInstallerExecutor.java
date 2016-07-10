@@ -22,13 +22,13 @@ import java.util.List;
 public class FeatureInstallerExecutor {
     private final Logger logger = LoggerFactory.getLogger(FeatureInstallerExecutor.class);
 
-    private final FeaturesHolder holder;
+    private final ExtensionsHolder holder;
     private final Environment environment;
     private final Injector injector;
 
     @Inject
     public FeatureInstallerExecutor(
-            final FeaturesHolder holder,
+            final ExtensionsHolder holder,
             final Environment environment,
             final Injector injector) {
 

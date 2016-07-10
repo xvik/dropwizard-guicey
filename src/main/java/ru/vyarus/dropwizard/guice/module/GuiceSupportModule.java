@@ -4,9 +4,9 @@ import com.google.inject.AbstractModule;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.installer.InstallerModule;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.BundleContext;
-import ru.vyarus.dropwizard.guice.module.installer.internal.BundleContextHolder;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
@@ -42,17 +42,17 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
         implements BootstrapAwareModule<T>, EnvironmentAwareModule, ConfigurationAwareModule<T> {
 
     private final ClasspathScanner scanner;
-    private final BundleContext bundleContext;
+    private final ConfigurationContext context;
     private final boolean bindConfigurationInterfaces;
     private Bootstrap<T> bootstrap;
     private T configuration;
     private Environment environment;
 
     public GuiceSupportModule(final ClasspathScanner scanner,
-                              final BundleContext bundleContext,
+                              final ConfigurationContext context,
                               final boolean bindConfigurationInterfaces) {
         this.scanner = scanner;
-        this.bundleContext = bundleContext;
+        this.context = context;
         this.bindConfigurationInterfaces = bindConfigurationInterfaces;
     }
 
@@ -73,12 +73,13 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
 
     @Override
     protected void configure() {
-        bind(BundleContextHolder.class).toInstance(new BundleContextHolder(bundleContext));
-        bind(GuiceyConfigurationInfo.class).in(Singleton.class);
-
         bindEnvironment();
-        install(new InstallerModule(scanner, bundleContext.installerConfig));
+        install(new InstallerModule(scanner, context));
         install(new Jersey2Module(bootstrap.getApplication(), environment));
+
+        // provide access for configuration info collected during startup
+        bind(ConfigurationInfo.class).toInstance(new ConfigurationInfo(context));
+        bind(GuiceyConfigurationInfo.class).in(Singleton.class);
     }
 
     /**

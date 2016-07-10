@@ -1,15 +1,25 @@
 package ru.vyarus.dropwizard.guice.module;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Sets;
 import com.google.inject.Module;
+import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
+import ru.vyarus.dropwizard.guice.module.context.Filters;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
+import ru.vyarus.dropwizard.guice.module.context.info.impl.InstallerItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
-import ru.vyarus.dropwizard.guice.module.installer.internal.BundleContextHolder;
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder;
+import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+
+import static com.google.common.base.Predicates.not;
 
 /**
  * Public api for internal guicey configuration info. Provides information about registered bundle types,
@@ -22,86 +32,151 @@ import java.util.List;
  */
 public class GuiceyConfigurationInfo {
 
-    private final BundleContextHolder context;
-    private final FeaturesHolder features;
+    private final ConfigurationInfo context;
+    private final ExtensionsHolder holder;
 
     @Inject
-    public GuiceyConfigurationInfo(final BundleContextHolder context, final FeaturesHolder features) {
-        this.features = features;
+    public GuiceyConfigurationInfo(final ConfigurationInfo context, final ExtensionsHolder holder) {
         this.context = context;
+        this.holder = holder;
     }
+
+    /**
+     * Use to perform custom data lookups (e.g. for additional logging, diagnostics or consistency checks).
+     *
+     * @return raw configuration info object
+     */
+    public ConfigurationInfo getData() {
+        return context;
+    }
+
+    /**
+     * @param scope required scope
+     * @return all enabled items registered in specified scope or empty list
+     */
+    public List<Class<Object>> getItemsByScope(final Class<?> scope) {
+        return context.getItems(Predicates.and(Filters.enabled(), Filters.registeredBy(scope)));
+    }
+
+    /**
+     * @return all active scopes or empty collection
+     */
+    public Set<Class<?>> getActiveScopes() {
+        final Set<Class<?>> res = Sets.newHashSet();
+        context.getItems(new Predicate<ItemInfo>() {
+            @Override
+            public boolean apply(final @Nonnull ItemInfo input) {
+                res.addAll(input.getRegisteredBy());
+                return false;
+            }
+        });
+        return res;
+    }
+
+    // --------------------------------------------------------------------------- BUNDLES
 
     /**
      * @return types of all installed bundles (including lookup bundles) or empty list
      */
-    public List<Class<? extends GuiceyBundle>> getBundles() {
-        return context.getBundles();
+    public List<Class<GuiceyBundle>> getBundles() {
+        return context.getItems(ConfigItem.Bundle);
     }
 
     /**
      * @return types of bundles resolved by bundle lookup mechanism or empty list
      * @see ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
      */
-    public List<Class<? extends GuiceyBundle>> getBundlesFromLookup() {
-        return context.getBundlesFromLookup();
+    public List<Class<GuiceyBundle>> getBundlesFromLookup() {
+        return context.getItems(ConfigItem.Bundle, Filters.lookupBundles());
     }
+
+    /**
+     * @return types of bundles resolved from dropwizard bundles or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles(boolean)
+     */
+    public List<Class<GuiceyBundle>> getBundlesFromDw() {
+        return context.getItems(ConfigItem.Bundle, Filters.dwBundles());
+    }
+
+    // --------------------------------------------------------------------------- MODULES
 
     /**
      * @return types of all registered guice modules or empty list
      */
-    public List<Class<? extends Module>> getModules() {
-        return context.getModules();
+    public List<Class<Module>> getModules() {
+        return context.getItems(ConfigItem.Module);
     }
+
+    // --------------------------------------------------------------------------- INSTALLERS
 
     /**
      * @return types of all registered installers (without disabled) or empty list
      */
-    public List<Class<? extends FeatureInstaller>> getInstallers() {
-        return features.getInstallerTypes();
+    public List<Class<FeatureInstaller>> getInstallers() {
+        return context.getItems(ConfigItem.Installer, Filters.enabled());
     }
 
     /**
      * @return installer types, resolved by classpath scan (without disabled) or empty list
      */
-    public List<Class<? extends FeatureInstaller>> getInstallersFromScan() {
-        final List<Class<? extends FeatureInstaller>> types = Lists.newArrayList(features.getInstallerTypes());
-        types.removeAll(context.getInstallers());
-        return types;
+    public List<Class<FeatureInstaller>> getInstallersFromScan() {
+        return context.getItems(ConfigItem.Installer,
+                Predicates.<InstallerItemInfoImpl>and(Filters.enabled(), Filters.fromScan()));
     }
 
     /**
      * @return types of manually disabled installers or empty list
      */
-    public List<Class<? extends FeatureInstaller>> getInstallersDisabled() {
-        return context.getInstallersDisabled();
+    public List<Class<FeatureInstaller>> getInstallersDisabled() {
+        return context.getItems(ConfigItem.Installer, not(Filters.enabled()));
+    }
+
+    /**
+     * Returned installers are ordered not by execution order
+     * (according to {@link ru.vyarus.dropwizard.guice.module.installer.order.Order} annotations).
+     *
+     * @return ordered list of installers or empty list
+     */
+    @SuppressWarnings("unchecked")
+    public List<Class<FeatureInstaller>> getInstallersOrdered() {
+        return (List) holder.getInstallerTypes();
+    }
+
+    // --------------------------------------------------------------------------- EXTENSIONS
+
+    /**
+     * @return all registered extension types (including resolved with classpath scan) or empty list
+     */
+    public List<Class<Object>> getExtensions() {
+        return context.getItems(ConfigItem.Extension);
+    }
+
+    /**
+     * @param installer installer type
+     * @return list of extensions installed by provided installer or empty list
+     */
+    public List<Class<Object>> getExtensions(final Class<? extends FeatureInstaller> installer) {
+        return context.getItems(ConfigItem.Extension, Filters.installedBy(installer));
     }
 
     /**
      * @return extension types, resolved by classpath scan or empty list
      */
-    public List<Class<?>> getExtensionsFromScan() {
-        final List<Class<?>> types = getExtensions();
-        types.removeAll(context.getExtensions());
-        return types;
+    public List<Class<Object>> getExtensionsFromScan() {
+        return context.getItems(ConfigItem.Extension, Filters.<ExtensionItemInfoImpl>fromScan());
     }
 
     /**
+     * Returned installers are ordered by execution order according to
+     * {@link ru.vyarus.dropwizard.guice.module.installer.order.Order} annotation.
+     * Note: not all installers supports ordering (in any case returned order is the same order as
+     * extensions were processed by installer).
+     *
      * @param installer installer type
-     * @return list of extensions installed by this installer or empty list
+     * @return ordered list of extensions installed by provided installer or empty list
      */
-    public List<Class<?>> getExtensions(final Class<? extends FeatureInstaller> installer) {
-        final List<Class<?>> res = features.getExtensions(installer);
-        return res == null ? Collections.<Class<?>>emptyList() : res;
-    }
-
-    /**
-     * @return all registered extension types (including resolved with classpath scan) or empty list
-     */
-    public List<Class<?>> getExtensions() {
-        final List<Class<?>> res = Lists.newArrayList();
-        for (Class<? extends FeatureInstaller> installer : getInstallers()) {
-            res.addAll(getExtensions(installer));
-        }
-        return res;
+    @SuppressWarnings("unchecked")
+    public List<Class<Object>> getExtensionsOrdered(final Class<? extends FeatureInstaller> installer) {
+        return (List) holder.getExtensions(installer);
     }
 }

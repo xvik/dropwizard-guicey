@@ -24,7 +24,7 @@ class InstallersOrderTest extends AbstractTest {
     def "Check default installers order"() {
 
         def pos = 0;
-        info.installers.each {
+        info.installersOrdered.each {
             int instPos = it.getAnnotation(Order).value()
             assert instPos >= pos
             pos = instPos
@@ -36,9 +36,9 @@ class InstallersOrderTest extends AbstractTest {
     def "Check custom installer position correct"() {
 
         expect:
-        info.installers[1] == ManagedInstaller
-        info.installers[2] == DummyInstaller
-        info.installers[3] == JerseyProviderInstaller || info.installers[3] == JerseyFeatureInstaller
+        info.installersOrdered[1] == ManagedInstaller
+        info.installersOrdered[2] == DummyInstaller
+        info.installersOrdered[3] == JerseyProviderInstaller || info.installersOrdered[3] == JerseyFeatureInstaller
 
     }
 }

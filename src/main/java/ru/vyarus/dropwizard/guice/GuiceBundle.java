@@ -17,9 +17,9 @@ import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
+import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.BundleContext;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
@@ -82,7 +82,7 @@ import java.util.Set;
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     private Injector injector;
-    private final BundleContext context = new BundleContext();
+    private final ConfigurationContext context = new ConfigurationContext();
     private final Set<String> autoscanPackages = Sets.newHashSet();
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
     private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
@@ -119,10 +119,10 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @SuppressWarnings("unchecked")
     public void run(final T configuration, final Environment environment) throws Exception {
         configureFromBundles(configuration, environment);
-        context.modules.add(new GuiceSupportModule(
+        context.registerModules(new GuiceSupportModule(
                 scanner, context, bindConfigurationInterfaces));
         configureModules(configuration, environment);
-        injector = injectorFactory.createInjector(stage, context.modules);
+        injector = injectorFactory.createInjector(stage, context.getModules());
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
@@ -144,10 +144,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     private void configureFromBundles(final T configuration, final Environment environment) {
         if (configureFromDropwizardBundles) {
-            context.bundles.addAll(BundleSupport.findBundles(bootstrap, GuiceyBundle.class));
+            context.registerDwBundles(BundleSupport.findBundles(bootstrap, GuiceyBundle.class));
         }
-        context.lookupBundles = bundleLookup.lookup();
-        context.bundles.addAll(context.lookupBundles);
+        context.registerLookupBundles(bundleLookup.lookup());
         BundleSupport.processBundles(context, configuration, environment);
     }
 
@@ -159,7 +158,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     @SuppressWarnings("unchecked")
     private void configureModules(final T configuration, final Environment environment) {
-        for (Module mod : context.modules) {
+        for (Module mod : context.getModules()) {
             if (mod instanceof BootstrapAwareModule) {
                 ((BootstrapAwareModule) mod).setBootstrap(bootstrap);
             }
@@ -232,7 +231,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
             Preconditions.checkState(bundle.autoscanPackages.isEmpty(), "Auto config packages already configured");
             Preconditions.checkState(basePackages.length > 0, "Specify at least one package to scan");
             bundle.autoscanPackages.addAll(Arrays.asList(basePackages));
-            bundle.context.bundles.add(new CoreInstallersBundle());
+            bundle.context.registerBundles(new CoreInstallersBundle());
             return this;
         }
 
@@ -248,7 +247,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> modules(final Module... modules) {
             Preconditions.checkState(modules.length > 0, "Specify at least one module");
-            bundle.context.modules.addAll(Arrays.asList(modules));
+            bundle.context.registerModules(modules);
             return this;
         }
 
@@ -269,7 +268,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         @SafeVarargs
         public final Builder<T> disableInstallers(final Class<? extends FeatureInstaller>... installers) {
-            bundle.context.installerConfig.getDisabledInstallers().addAll(Arrays.asList(installers));
+            bundle.context.disableInstallers(installers);
             return this;
         }
 
@@ -284,7 +283,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         @SafeVarargs
         public final Builder<T> installers(final Class<? extends FeatureInstaller>... installers) {
-            bundle.context.installerConfig.getManualInstallers().addAll(Arrays.asList(installers));
+            bundle.context.registerInstallers(installers);
             return this;
         }
 
@@ -303,7 +302,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          */
         public Builder<T> extensions(final Class<?>... extensionClasses) {
-            bundle.context.installerConfig.getManualExtensions().addAll(Arrays.asList(extensionClasses));
+            bundle.context.registerExtensions(extensionClasses);
             return this;
         }
 
@@ -321,7 +320,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          */
         public Builder<T> bundles(final GuiceyBundle... bundles) {
-            bundle.context.bundles.addAll(Arrays.asList(bundles));
+            bundle.context.registerBundles(bundles);
             return this;
         }
 
@@ -374,7 +373,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see HK2DebugBundle
          */
         public Builder<T> strictScopeControl() {
-            bundle.context.bundles.add(new HK2DebugBundle());
+            bundle.context.registerBundles(new HK2DebugBundle());
             return this;
         }
 

@@ -4,7 +4,7 @@ import com.google.inject.Injector;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeaturesHolder;
+import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class InstallerBinder extends AbstractBinder {
     @Override
     @SuppressWarnings("unchecked")
     protected void configure() {
-        final FeaturesHolder holder = injector.getInstance(FeaturesHolder.class);
+        final ExtensionsHolder holder = injector.getInstance(ExtensionsHolder.class);
         for (FeatureInstaller installer : holder.getInstallers()) {
             if (installer instanceof JerseyInstaller) {
                 final List<Class<?>> features = holder.getExtensions(installer.getClass());
