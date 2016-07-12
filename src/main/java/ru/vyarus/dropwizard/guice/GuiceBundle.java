@@ -147,7 +147,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
             context.registerDwBundles(BundleSupport.findBundles(bootstrap, GuiceyBundle.class));
         }
         context.registerLookupBundles(bundleLookup.lookup());
-        BundleSupport.processBundles(context, configuration, environment);
+        BundleSupport.processBundles(context, configuration, environment, bootstrap.getApplication());
     }
 
     /**

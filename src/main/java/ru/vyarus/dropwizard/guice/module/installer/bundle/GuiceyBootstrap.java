@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.bundle;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Module;
+import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
@@ -25,13 +26,16 @@ public class GuiceyBootstrap {
     private final List<GuiceyBundle> iterationBundles;
     private final Configuration configuration;
     private final Environment environment;
+    private final Application application;
 
     public GuiceyBootstrap(final ConfigurationContext context, final List<GuiceyBundle> iterationBundles,
-                           final Configuration configuration, final Environment environment) {
+                           final Configuration configuration, final Environment environment,
+                           final Application application) {
         this.context = context;
         this.iterationBundles = iterationBundles;
         this.configuration = configuration;
         this.environment = environment;
+        this.application = application;
     }
 
     /**
@@ -48,6 +52,22 @@ public class GuiceyBootstrap {
      */
     public Environment environment() {
         return environment;
+    }
+
+    /**
+     * Application instance may be useful for complex (half manual) integrations where access for
+     * injector is required.
+     * For example, manually registered
+     * {@link io.dropwizard.lifecycle.Managed} may access injector in it's start method by calling
+     * {@link ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup#getInjector(Application)}.
+     * <p>
+     * NOTE: it will work in this example, because injector access will be after injector creation.
+     * Directly inside bundle initialization method injector could not be obtained as it's not exists yet.
+     *
+     * @return dropwizard application instance
+     */
+    public Application application() {
+        return application;
     }
 
     /**

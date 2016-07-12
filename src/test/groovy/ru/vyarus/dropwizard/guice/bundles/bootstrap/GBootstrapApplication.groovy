@@ -33,6 +33,7 @@ class GBootstrapApplication extends Application<TestConfiguration> {
                     void initialize(GuiceyBootstrap gbootstrap) {
                         assert gbootstrap.configuration() !=null
                         assert gbootstrap.environment() !=null
+                        assert gbootstrap.application() !=null
 
                         gbootstrap
                         .disableInstallers(LifeCycleInstaller, HealthCheckInstaller)

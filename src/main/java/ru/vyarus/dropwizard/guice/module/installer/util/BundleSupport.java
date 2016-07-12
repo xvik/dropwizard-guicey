@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.installer.util;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -42,10 +43,12 @@ public final class BundleSupport {
      * @param environment   environment object
      */
     public static void processBundles(final ConfigurationContext context,
-                                      final Configuration configuration, final Environment environment) {
+                                      final Configuration configuration, final Environment environment,
+                                      final Application application) {
         final List<GuiceyBundle> bundles = context.getBundles();
         final List<Class<? extends GuiceyBundle>> installedBundles = Lists.newArrayList();
-        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, bundles, configuration, environment);
+        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(
+                context, bundles, configuration, environment, application);
 
         // iterating while no new bundles registered
         while (!bundles.isEmpty()) {
