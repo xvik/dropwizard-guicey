@@ -16,6 +16,7 @@ import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -177,6 +178,7 @@ public class GuiceyConfigurationInfo {
      */
     @SuppressWarnings("unchecked")
     public List<Class<Object>> getExtensionsOrdered(final Class<? extends FeatureInstaller> installer) {
-        return (List) holder.getExtensions(installer);
+        final List<Class<?>> extensions = holder.getExtensions(installer);
+        return extensions == null ? Collections.emptyList() : (List) extensions;
     }
 }
