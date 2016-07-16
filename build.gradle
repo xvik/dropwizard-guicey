@@ -39,6 +39,7 @@ dependencies {
     compile 'ru.vyarus:generics-resolver:2.0.1'
 
     testCompile "io.dropwizard:dropwizard-auth:$dropwizard"
+    testCompile 'org.glassfish.jersey.ext:jersey-proxy-client:2.22.1'
     testCompile 'cglib:cglib-nodep:3.2.0'
     testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
 }
