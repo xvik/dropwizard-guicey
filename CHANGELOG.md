@@ -10,10 +10,12 @@
     - application(): returns current application instance
 * Rewrite internal configuration mechanism (bundles, installers etc) to generalize it and introduce complete configuration tracking: store registration sources, disabling, used installers and other specific information for each item
     - Add GuiceyConfigurationInfo service to access tracked guicey configuration information (may be used for configuration diagnostic purposes, performing post configuration checks, printing complete configuration tree etc)
+    - Add DiagnosticBundle to log configuration items diagnostic information. Log format is configurable. Rendering is externalized and may be re-used (e.g. for web page). 
 * Add GuiceBundle builder configuration options:
     - bindConfigurationInterfaces() to disable configuration interface bindings
     - strictScopeControl() is shortcut to enable HK2DebugBundle (to control beans creation scope during development and tests)
-
+    - printDiagnosticInfo() is shortcut to enable DiagnosticBundle with default preset (enable diagnostic logs)
+    
 ### 3.2.0 (2016-01-23)
 * Clear possible duplicate guicey bundle instances
 * Add GuiceyBundleLookup to automatically resolve and install guicey bundles from various sources.

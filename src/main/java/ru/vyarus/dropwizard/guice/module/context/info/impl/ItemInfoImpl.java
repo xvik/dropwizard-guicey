@@ -17,6 +17,7 @@ public class ItemInfoImpl implements ItemInfo {
     private final ConfigItem itemType;
     private final Class<?> type;
     private final Set<Class<?>> registeredBy = Sets.newLinkedHashSet();
+    private Class<?> registrationScope;
     private int registrationAttempts;
 
     public ItemInfoImpl(final ConfigItem itemType, final Class<?> type) {
@@ -54,8 +55,17 @@ public class ItemInfoImpl implements ItemInfo {
         return getRegisteredBy().contains(Application.class);
     }
 
+    @Override
+    public Class<?> getRegistrationScope() {
+        return registrationScope;
+    }
+
     public void countRegistrationAttempt() {
         registrationAttempts++;
+    }
+
+    public void setRegistrationScope(final Class<?> registrationScope) {
+        this.registrationScope = registrationScope;
     }
 
     @Override

@@ -68,6 +68,8 @@ public final class Filters {
      * {@link io.dropwizard.Bundle}, {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and
      * classes implementing {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}.
      * Safe to apply filter for all items.
+     * <p>
+     * Note: counts only actual registration, ignoring duplicate (rejected) registrations.
      *
      * @param type context class
      * @param <T>  expected info container type (if used within single configuration type)
@@ -77,7 +79,7 @@ public final class Filters {
         return new Predicate<T>() {
             @Override
             public boolean apply(final @Nonnull T input) {
-                return input.getRegisteredBy().contains(type);
+                return type.equals(input.getRegistrationScope());
             }
         };
     }

@@ -41,6 +41,7 @@ public final class BundleSupport {
      * @param context       bundles context
      * @param configuration configuration object
      * @param environment   environment object
+     * @param application   application instance
      */
     public static void processBundles(final ConfigurationContext context,
                                       final Configuration configuration, final Environment environment,

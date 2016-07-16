@@ -52,11 +52,20 @@ public class GuiceyConfigurationInfo {
     }
 
     /**
+     * NOTE: single item may be registered from multiple scopes! This method will return entity by all it's registered
+     * scopes and not just but by first registration. It makes it usable, for example, for configuration tree building.
+     * If you need exact registration scope use {@link Filters#registeredBy(Class)} filter.
+     *
      * @param scope required scope
      * @return all enabled items registered in specified scope or empty list
      */
     public List<Class<Object>> getItemsByScope(final Class<?> scope) {
-        return context.getItems(Predicates.and(Filters.enabled(), Filters.registeredBy(scope)));
+        return context.getItems(Predicates.and(Filters.enabled(), new Predicate<ItemInfo>() {
+            @Override
+            public boolean apply(final @Nonnull ItemInfo input) {
+                return input.getRegisteredBy().contains(scope);
+            }
+        }));
     }
 
     /**

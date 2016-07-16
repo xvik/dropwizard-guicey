@@ -301,6 +301,10 @@ public final class ConfigurationContext {
         // if registered multiple times in one scope attempts will reveal it
         info.countRegistrationAttempt();
         info.getRegisteredBy().add(getScope());
+        // first registration scope stored
+        if (info.getRegistrationScope() == null) {
+            info.setRegistrationScope(getScope());
+        }
         return info;
     }
 

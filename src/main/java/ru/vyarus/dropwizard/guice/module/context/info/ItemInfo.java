@@ -47,6 +47,17 @@ public interface ItemInfo {
     Set<Class<?>> getRegisteredBy();
 
     /**
+     * Item may be registered multiple times, but only first scope will be actual registration scope
+     * (registrations from other scopes will be simply ignored).
+     * <p>
+     * May be null for never registered but disabled items!
+     *
+     * @return registration scope
+     * @see #getRegisteredBy() for all scopes performing registratoin
+     */
+    Class<?> getRegistrationScope();
+
+    /**
      * It may be 0 for disabled items (e.g. installer disabled but never registered).
      * Also, count may be greater than registration sources count, because the same source could register
      * item multiple times.

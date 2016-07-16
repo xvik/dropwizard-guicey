@@ -100,6 +100,7 @@ class AutoScanModeWithLookupDiagnosticTest extends AbstractTest {
         and: "feature installer was registered multiple times"
         InstallerItemInfo ji = info.data.getInfo(JerseyFeatureInstaller)
         ji.registeredBy == [CoreInstallersBundle, HK2DebugBundle] as Set
+        ji.registrationScope == CoreInstallersBundle
         ji.registrationAttempts == 2
     }
 }

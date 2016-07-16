@@ -96,8 +96,9 @@ public class InstallerModule extends AbstractModule {
             try {
                 final FeatureInstaller installer = installerClass.newInstance();
                 installers.add(installer);
-                logger.trace("Registered installer: {}",
-                        FeatureUtils.getInstallerExtName(installerClass));
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Registered installer: {}", FeatureUtils.getInstallerExtName(installerClass));
+                }
             } catch (Exception e) {
                 throw new IllegalStateException("Failed to register installer "
                         + installerClass.getName(), e);
@@ -152,8 +153,10 @@ public class InstallerModule extends AbstractModule {
         for (FeatureInstaller installer : holder.getInstallers()) {
             if (installer.matches(type)) {
                 final Class<? extends FeatureInstaller> installerClass = installer.getClass();
-                logger.trace("{} extension found: {}",
-                        FeatureUtils.getInstallerExtName(installerClass), type.getName());
+                if (logger.isTraceEnabled()) {
+                    logger.trace("{} extension found: {}",
+                            FeatureUtils.getInstallerExtName(installerClass), type.getName());
+                }
                 recognized.add(installerClass);
                 holder.register(installerClass, type);
                 if (installer instanceof BindingInstaller) {
