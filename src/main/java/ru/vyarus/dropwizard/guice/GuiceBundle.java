@@ -18,6 +18,7 @@ import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
@@ -78,7 +79,7 @@ import java.util.Set;
  * @see ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo for configuratio diagnostic
  * @since 31.08.2014
  */
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     private Injector injector;
@@ -374,6 +375,20 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> strictScopeControl() {
             bundle.context.registerBundles(new HK2DebugBundle());
+            return this;
+        }
+
+        /**
+         * Print additional diagnostic logs with installed bundles, installers and resolved extensions.
+         * Useful for configuration problems resolution.
+         * <p>
+         * If custom logging format is required use {@link DiagnosticBundle} directly.
+         *
+         * @return builder instance for chained calls
+         * @see DiagnosticBundle
+         */
+        public Builder<T> printDiagnosticInfo() {
+            bundle.context.registerBundles(new DiagnosticBundle());
             return this;
         }
 
