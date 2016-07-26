@@ -121,7 +121,7 @@ public class DiagnosticRenderer {
         }
         res.append(renderClassLine(bundle, markers)).append(NEWLINE);
         final List<Class<GuiceyBundle>> bundles = service.getData()
-                .getItems(ConfigItem.Bundle, Filters.registeredBy(bundle));
+                .getItems(ConfigItem.Bundle, Filters.registrationScope(bundle));
         for (Class<GuiceyBundle> relative : bundles) {
             renderBundleRecursive(res, relative, level + 1);
         }

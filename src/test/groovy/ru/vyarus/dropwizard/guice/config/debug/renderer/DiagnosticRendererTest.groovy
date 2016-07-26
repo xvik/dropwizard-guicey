@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.config.debug
+package ru.vyarus.dropwizard.guice.config.debug.renderer
 
 import com.google.common.collect.Lists
 import io.dropwizard.Application
@@ -47,15 +47,15 @@ class DiagnosticRendererTest extends Specification {
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
-        DWBundle                     (r.v.d.g.c.d.DiagnosticRendererTest) *DW
+        DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
 
 
     INSTALLERS and EXTENSIONS in processing order =
         jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller)
             HK2DebugFeature              (r.v.d.g.m.j.d.service)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
-            LazyExtension                (r.v.d.g.c.d.DiagnosticRendererTest) *LAZY
-            HKExtension                  (r.v.d.g.c.d.DiagnosticRendererTest) *HK
+            LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
+            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
 
@@ -81,7 +81,7 @@ class DiagnosticRendererTest extends Specification {
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
-        DWBundle                     (r.v.d.g.c.d.DiagnosticRendererTest) *DW
+        DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
 
 
     INSTALLERS and EXTENSIONS in processing order =
@@ -89,8 +89,8 @@ class DiagnosticRendererTest extends Specification {
             HK2DebugFeature              (r.v.d.g.m.j.d.service)
         jerseyprovider       (r.v.d.g.m.i.f.j.p.JerseyProviderInstaller)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
-            LazyExtension                (r.v.d.g.c.d.DiagnosticRendererTest) *LAZY
-            HKExtension                  (r.v.d.g.c.d.DiagnosticRendererTest) *HK
+            LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
+            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
@@ -126,7 +126,7 @@ class DiagnosticRendererTest extends Specification {
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
-        DWBundle                     (r.v.d.g.c.d.DiagnosticRendererTest) *DW
+        DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
 """ as String;
     }
 
@@ -189,8 +189,8 @@ class DiagnosticRendererTest extends Specification {
         jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller)
             HK2DebugFeature              (r.v.d.g.m.j.d.service)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
-            LazyExtension                (r.v.d.g.c.d.DiagnosticRendererTest) *LAZY
-            HKExtension                  (r.v.d.g.c.d.DiagnosticRendererTest) *HK
+            LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
+            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
 """ as String;
@@ -203,8 +203,8 @@ class DiagnosticRendererTest extends Specification {
                 .printExtensions()) == """
 
     EXTENSIONS =
-        LazyExtension                (r.v.d.g.c.d.DiagnosticRendererTest) *LAZY
-        HKExtension                  (r.v.d.g.c.d.DiagnosticRendererTest) *HK
+        LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
+        HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK
         FooBundleResource            (r.v.d.g.d.s.bundle)
         HK2DebugFeature              (r.v.d.g.m.j.d.service)
         FooResource                  (r.v.d.g.d.s.features)     *SCAN

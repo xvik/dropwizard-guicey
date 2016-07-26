@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.config.debug
+package ru.vyarus.dropwizard.guice.config.debug.util
 
 import com.google.inject.Binder
 import com.google.inject.Module
@@ -37,8 +37,8 @@ class RendererUtilsTest extends Specification {
         where:
         type                 | render
         ResourceInstaller    | "r.v.d.g.m.i.f.j.ResourceInstaller"
-        InnerClass           | "r.v.d.g.c.d.RendererUtilsTest\$InnerClass"
-        ANONYMOUS.getClass() | "r.v.d.g.c.debug.RendererUtilsTest\$1"
+        InnerClass           | "r.v.d.g.c.d.u.RendererUtilsTest\$InnerClass"
+        ANONYMOUS.getClass() | "r.v.d.g.c.d.util.RendererUtilsTest\$1"
     }
 
     def "Check package render"() {
@@ -49,8 +49,8 @@ class RendererUtilsTest extends Specification {
         where:
         type                 | render
         ResourceInstaller    | "r.v.d.g.m.i.f.jersey"
-        InnerClass           | "r.v.d.g.c.d.RendererUtilsTest"
-        ANONYMOUS.getClass() | "r.v.d.g.config.debug"
+        InnerClass           | "r.v.d.g.c.d.u.RendererUtilsTest"
+        ANONYMOUS.getClass() | "r.v.d.g.c.debug.util"
     }
 
     def "Check class line render"() {
@@ -61,8 +61,8 @@ class RendererUtilsTest extends Specification {
         where:
         type                 | render
         ResourceInstaller    | "ResourceInstaller            (r.v.d.g.m.i.f.jersey)     *TEST,SM"
-        InnerClass           | "InnerClass                   (r.v.d.g.c.d.RendererUtilsTest) *TEST,SM"
-        ANONYMOUS.getClass() | "RendererUtilsTest\$1          (r.v.d.g.config.debug)     *TEST,SM"
+        InnerClass           | "InnerClass                   (r.v.d.g.c.d.u.RendererUtilsTest) *TEST,SM"
+        ANONYMOUS.getClass() | "RendererUtilsTest\$1          (r.v.d.g.c.debug.util)     *TEST,SM"
     }
 
     def "Check markers"() {

@@ -379,10 +379,15 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Print additional diagnostic logs with installed bundles, installers and resolved extensions.
-         * Useful for configuration problems resolution.
+         * Print additional diagnostic logs with installed bundles, installers and resolved extensions and
+         * configuration tree.
+         * <p>
+         * Useful for configuration problems resolution and for better understanding how guicey works.
          * <p>
          * If custom logging format is required use {@link DiagnosticBundle} directly.
+         * <p>
+         * Also, bundle could be enabled with bundle lookup mechanism (e.g. with system property, see
+         * {@link GuiceyBundleLookup}).
          *
          * @return builder instance for chained calls
          * @see DiagnosticBundle

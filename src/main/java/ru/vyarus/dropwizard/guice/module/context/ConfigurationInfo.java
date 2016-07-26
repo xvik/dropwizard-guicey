@@ -28,7 +28,7 @@ import java.util.Map;
  * @see ConfigItem for the list of available confiugration items
  * @since 06.07.2016
  */
-public class ConfigurationInfo {
+public final class ConfigurationInfo {
 
     // required structure to preserve registration order
     private final Multimap<ConfigItem, Class<?>> itemsHolder = LinkedHashMultimap.create();

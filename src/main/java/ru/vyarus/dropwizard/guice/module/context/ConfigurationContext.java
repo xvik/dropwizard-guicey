@@ -274,12 +274,25 @@ public final class ConfigurationContext {
         }
     }
 
+    /**
+     * @param type config type
+     * @param <T>  expected container type
+     * @return list of all registered items of type or empty list
+     */
     @SuppressWarnings("unchecked")
     public <T> List<T> getItems(final ConfigItem type) {
         final Collection<Object> res = itemsHolder.get(type);
         return res.isEmpty() ? Collections.<T>emptyList() : (List<T>) Lists.newArrayList(res);
     }
 
+    /**
+     * Note: registration is always tracked by class, so when instance provided actual info will be returned
+     * for object class.
+     *
+     * @param item item to get info
+     * @param <T>  expected container type
+     * @return item registration info container or null if item not registered
+     */
     @SuppressWarnings("unchecked")
     public <T extends ItemInfoImpl> T getInfo(final Object item) {
         final Class<?> itemType = getType(item);
