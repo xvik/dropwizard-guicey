@@ -128,6 +128,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
         CommandSupport.initCommands(bootstrap.getCommands(), injector);
+        if (scanner != null) {
+            scanner.cleanup();
+        }
     }
 
     /**

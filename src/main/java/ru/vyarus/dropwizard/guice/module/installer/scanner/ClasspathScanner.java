@@ -1,7 +1,10 @@
 package ru.vyarus.dropwizard.guice.module.installer.scanner;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.util.OReflectionHelper;
 
 import java.util.Collections;
@@ -11,13 +14,21 @@ import java.util.Set;
 
 /**
  * Classpath scanner, reduced to provided packages.
- * Ignores classes annotated with {@code InvisibleForScanner}.
+ * Ignores classes annotated with {@link InvisibleForScanner}.
+ * <p>
+ * Actual scan is performed only on first {@link #scan(ClassVisitor)} call. Later scans used cached classes.
+ * {@link #cleanup()} must be used to clear cache.
  *
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
 public class ClasspathScanner {
+    private static final int SCAN_THRESHOLD = 1000;
+
+    private final Logger logger = LoggerFactory.getLogger(ClasspathScanner.class);
+
     private final Set<String> packages;
+    private List<Class> scanned;
 
     public ClasspathScanner(final Set<String> packages) {
         this.packages = validate(packages);
@@ -29,19 +40,20 @@ public class ClasspathScanner {
      * @param visitor visitor to investigate found classes
      */
     public void scan(final ClassVisitor visitor) {
-        for (String pkg : packages) {
-            final List<Class<?>> found;
-            try {
-                found = OReflectionHelper.getClassesFor(pkg, Thread.currentThread().getContextClassLoader());
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException("Failed to scan classpath", e);
-            }
-            for (Class<?> cls : found) {
-                if (!cls.isAnnotationPresent(InvisibleForScanner.class)) {
-                    visitor.visit(cls);
-                }
-            }
+        if (scanned == null) {
+            performScan();
         }
+        for (Class<?> cls : scanned) {
+            visitor.visit(cls);
+        }
+    }
+
+    /**
+     * Should be called to flush scanner cache.
+     */
+    @SuppressWarnings("PMD.NullAssignment")
+    public void cleanup() {
+        scanned = null;
     }
 
     /**
@@ -68,5 +80,28 @@ public class ClasspathScanner {
             }
         }
         return packages;
+    }
+
+    private void performScan() {
+        int count = 0;
+        scanned = Lists.newArrayList();
+        for (String pkg : packages) {
+            final List<Class<?>> found;
+            try {
+                found = OReflectionHelper.getClassesFor(pkg, Thread.currentThread().getContextClassLoader());
+            } catch (ClassNotFoundException e) {
+                throw new IllegalStateException("Failed to scan classpath", e);
+            }
+            count += found.size();
+            for (Class<?> cls : found) {
+                if (!cls.isAnnotationPresent(InvisibleForScanner.class)) {
+                    scanned.add(cls);
+                }
+            }
+        }
+        if (count > SCAN_THRESHOLD) {
+            logger.warn("{} classes were loaded while scanning '{}' packages. Reduce packages to scan "
+                    + "to increase efficiency.", count, Joiner.on(',').join(packages));
+        }
     }
 }
