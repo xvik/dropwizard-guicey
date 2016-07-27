@@ -21,7 +21,7 @@ class DwBundleApplication extends Application<TestConfiguration>{
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .disableBundleLookup()
-                .configureFromDropwizardBundles(true)
+                .configureFromDropwizardBundles()
                 .build()
         );
         bootstrap.addBundle(new Bundle1())

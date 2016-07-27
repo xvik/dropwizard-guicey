@@ -54,7 +54,7 @@ class BundleTest extends AbstractTest {
 
         when: "bundle without auto scan but commands search enabled"
         GuiceBundle bundle = GuiceBundle.builder()
-                .searchCommands(true)
+                .searchCommands()
                 .build()
         bundle.initialize(mockBootstrap())
         then: "init failed"

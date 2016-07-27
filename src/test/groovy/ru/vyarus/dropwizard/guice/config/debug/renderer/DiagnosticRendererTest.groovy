@@ -256,14 +256,14 @@ class DiagnosticRendererTest extends Specification {
                         }
                     })
                             .enableAutoConfig(FooResource.package.name)
-                            .searchCommands(true)
+                            .searchCommands()
                             .bundles(
                             new FooBundle(),
                             new GuiceRestrictedConfigBundle())
                             .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule())
                             .extensions(LazyExtension, HKExtension)
                             .disableInstallers(LifeCycleInstaller)
-                            .configureFromDropwizardBundles(true)
+                            .configureFromDropwizardBundles()
                             .strictScopeControl()
                             .build())
         }

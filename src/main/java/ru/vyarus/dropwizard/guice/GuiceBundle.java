@@ -256,9 +256,23 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * NOTE: will not scan if auto scan not enabled (packages not configured).
+         * Shortcut for {@link #searchCommands(boolean)}.
          *
-         * @param searchCommands true to enable class path scanning for commands, false to disable (default)
+         * @return builder instance for chained calls
+         */
+        public Builder<T> searchCommands() {
+            return searchCommands(true);
+        }
+
+        /**
+         * NOTE: will not scan if auto scan not enabled (packages not configured).
+         * <p>
+         * Use shortcut method for simple cases {@link #searchCommands()}. Method with parameter
+         * is suitable for cases when option is dynamic (e.g. computed from system property).
+         * <p>
+         * By default, commands search is disabled.
+         *
+         * @param searchCommands true to enable class path scanning for commands, false to disable
          * @return builder instance for chained calls
          */
         public Builder<T> searchCommands(final boolean searchCommands) {
@@ -329,9 +343,22 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
+         * Shortcut for {@link #configureFromDropwizardBundles(boolean)}.
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder<T> configureFromDropwizardBundles() {
+            return configureFromDropwizardBundles(true);
+        }
+
+        /**
          * If enabled registered dropwizard bundles are checked if they implement {@link GuiceyBundle} and called
          * to configure guice. This allows using dropwizard bundles as universal extension point.
-         * <p>Disabled by default.</p>
+         * <p>
+         * Use shortcut method for simple cases {@link #configureFromDropwizardBundles()}. Method with parameter
+         * is suitable for cases when option is dynamic (e.g. computed from system property).
+         * <p>
+         * Disabled by default.
          *
          * @param enable true to enable configuration from dropwizard bundles
          * @return builder instance for chained calls

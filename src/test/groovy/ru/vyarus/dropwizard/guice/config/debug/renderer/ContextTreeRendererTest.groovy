@@ -328,7 +328,7 @@ class ContextTreeRendererTest extends Specification {
                         }
                     })
                             .enableAutoConfig(FooResource.package.name)
-                            .searchCommands(true)
+                            .searchCommands()
                             .bundles(
                             new FooBundle(),
                             new GuiceRestrictedConfigBundle())

@@ -19,7 +19,7 @@ class DwBundleApp extends Application<Configuration> {
     void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(new DwBundle())
         bootstrap.addBundle(GuiceBundle.builder()
-                .configureFromDropwizardBundles(true)
+                .configureFromDropwizardBundles()
                 .build())
     }
 
