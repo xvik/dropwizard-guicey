@@ -1,10 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.impl.BundleItemInfoImpl;
-import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
-import ru.vyarus.dropwizard.guice.module.context.info.impl.InstallerItemInfoImpl;
-import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
+import ru.vyarus.dropwizard.guice.module.context.info.impl.*;
 
 /**
  * Guicey configurable item types.
@@ -31,7 +28,11 @@ public enum ConfigItem {
      * Note that only directly modules are tracked (if module register other guice module in it's configure
      * method it would not be tracked - it's pure guice staff).
      */
-    Module;
+    Module,
+    /**
+     * Dropwizard command. Commands could be resolved with classpath scan and installed (by default disabled).
+     */
+    Command;
 
     /**
      * Creates info container for configuration item.
@@ -45,13 +46,16 @@ public enum ConfigItem {
         final ItemInfo res;
         switch (this) {
             case Installer:
-                res = new InstallerItemInfoImpl(this, type);
+                res = new InstallerItemInfoImpl(type);
                 break;
             case Extension:
-                res = new ExtensionItemInfoImpl(this, type);
+                res = new ExtensionItemInfoImpl(type);
                 break;
             case Bundle:
-                res = new BundleItemInfoImpl(this, type);
+                res = new BundleItemInfoImpl(type);
+                break;
+            case Command:
+                res = new CommandItemInfoImpl(type);
                 break;
             default:
                 res = new ItemInfoImpl(this, type);

@@ -75,7 +75,9 @@ class ContextTreeRendererTest extends Specification {
     │
     └── CLASSPATH SCAN
         ├── installer  FooInstaller                 (r.v.d.g.d.s.features)
-        └── extension  FooResource                  (r.v.d.g.d.s.features)
+        ├── extension  FooResource                  (r.v.d.g.d.s.features)
+        ├── command    Cli                          (r.v.d.g.d.s.features)
+        └── command    EnvCommand                   (r.v.d.g.d.s.features)
 """
     }
 
@@ -83,7 +85,8 @@ class ContextTreeRendererTest extends Specification {
         expect:
         render(new ContextTreeConfig()
                 .hideModules()
-                .hideExtensions()) == """
+                .hideExtensions()
+                .hideCommands()) == """
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
@@ -124,7 +127,8 @@ class ContextTreeRendererTest extends Specification {
         render(new ContextTreeConfig()
                 .hideModules()
                 .hideExtensions()
-                .hideInstallers()) == """
+                .hideInstallers()
+                .hideCommands()) == """
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
@@ -148,7 +152,8 @@ class ContextTreeRendererTest extends Specification {
                 .hideModules()
                 .hideExtensions()
                 .hideInstallers()
-                .hideEmptyBundles()) == """
+                .hideEmptyBundles()
+                .hideCommands()) == """
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
@@ -163,7 +168,8 @@ class ContextTreeRendererTest extends Specification {
         render(new ContextTreeConfig()
                 .hideModules()
                 .hideExtensions()
-                .hideDisables()) == """
+                .hideDisables()
+                .hideCommands()) == """
 
     APPLICATION
     │
@@ -200,7 +206,8 @@ class ContextTreeRendererTest extends Specification {
         render(new ContextTreeConfig()
                 .hideModules()
                 .hideExtensions()
-                .hideDuplicateRegistrations()) == """
+                .hideDuplicateRegistrations()
+                .hideCommands()) == """
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
@@ -236,7 +243,8 @@ class ContextTreeRendererTest extends Specification {
         render(new ContextTreeConfig()
                 .hideModules()
                 .hideExtensions()
-                .hideNotUsedInstallers()) == """
+                .hideNotUsedInstallers()
+                .hideCommands()) == """
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
@@ -267,7 +275,8 @@ class ContextTreeRendererTest extends Specification {
                 .hideNotUsedInstallers()
                 .hideEmptyBundles()
                 .hideDisables()
-                .hideDuplicateRegistrations()) == """
+                .hideDuplicateRegistrations()
+                .hideCommands()) == """
 
     APPLICATION
     │
@@ -283,7 +292,8 @@ class ContextTreeRendererTest extends Specification {
                 .hideModules()
                 .hideExtensions()
                 .hideDuplicateRegistrations()
-                .hideScopes(CoreInstallersBundle)) == """
+                .hideScopes(CoreInstallersBundle)
+                .hideCommands()) == """
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
@@ -318,6 +328,7 @@ class ContextTreeRendererTest extends Specification {
                         }
                     })
                             .enableAutoConfig(FooResource.package.name)
+                            .searchCommands(true)
                             .bundles(
                             new FooBundle(),
                             new GuiceRestrictedConfigBundle())

@@ -13,8 +13,8 @@ import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
  */
 public class BundleItemInfoImpl extends ItemInfoImpl implements BundleItemInfo {
 
-    public BundleItemInfoImpl(final ConfigItem itemType, final Class<?> type) {
-        super(itemType, type);
+    public BundleItemInfoImpl(final Class<?> type) {
+        super(ConfigItem.Bundle, type);
     }
 
     @Override

@@ -3,6 +3,8 @@ package ru.vyarus.dropwizard.guice.diagnostic
 import io.dropwizard.Application
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.diagnostic.support.AutoScanApp
+import ru.vyarus.dropwizard.guice.diagnostic.support.features.Cli
+import ru.vyarus.dropwizard.guice.diagnostic.support.features.EnvCommand
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooInstaller
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
@@ -38,7 +40,10 @@ class AutoScanModeDiagnosticTest extends AbstractTest {
 
     def "Check diagnostic info correctness"() {
 
-        expect: "correct bundles info"
+        expect: "correct commands info"
+        info.commands as Set == [Cli, EnvCommand] as Set
+
+        and: "correct bundles info"
         info.bundles == [CoreInstallersBundle]
         info.bundlesFromLookup.isEmpty()
         info.bundlesFromDw.isEmpty()
@@ -70,7 +75,7 @@ class AutoScanModeDiagnosticTest extends AbstractTest {
         and: "correct scopes"
         info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle] as Set
         info.getItemsByScope(Application) as Set == [CoreInstallersBundle, FooModule,  GuiceSupportModule] as Set
-        info.getItemsByScope(ClasspathScanner) as Set == [FooInstaller, FooResource] as Set
+        info.getItemsByScope(ClasspathScanner) as Set == [FooInstaller, FooResource, EnvCommand, Cli] as Set
 
         and: "lifecycle installer was disabled"
         !info.getItemsByScope(CoreInstallersBundle).contains(LifeCycleInstaller)

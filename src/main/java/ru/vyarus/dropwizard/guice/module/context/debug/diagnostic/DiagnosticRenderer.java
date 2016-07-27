@@ -3,10 +3,12 @@ package ru.vyarus.dropwizard.guice.module.context.debug.diagnostic;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.inject.Module;
+import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.CommandItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -23,6 +25,10 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
 
 /**
  * Render configuration diagnostic info.
+ * <p>
+ * Commands rendered in registration order. All commands are rendered with SCAN marker to indicate
+ * classpath scanning. Environment commands are also marked with GUICE_ENABLED to indicate that only
+ * these commands may use guice injections.
  * <p>
  * Bundles rendered as tree to indicate transitive installations.
  * Possible markers:
@@ -75,21 +81,37 @@ public class DiagnosticRenderer {
      */
     public String renderReport(final DiagnosticConfig config) {
         final StringBuilder res = new StringBuilder();
-        if (config.isPrintBundles()) {
-            printBundles(res);
-        }
+        printCommands(config, res);
+        printBundles(config, res);
         if (config.isPrintInstallers()) {
             printInstallers(config, res);
-        } else if (config.isPrintExtensions()) {
-            printExtensionsOnly(res);
+        } else {
+            printExtensionsOnly(config, res);
         }
-        if (config.isPrintModules()) {
-            printModules(res);
-        }
+        printModules(config, res);
         return res.toString();
     }
 
-    private void printBundles(final StringBuilder res) {
+    private void printCommands(final DiagnosticConfig config, final StringBuilder res) {
+        final List<Class<Command>> commands = service.getCommands();
+        if (!config.isPrintCommands() || commands.isEmpty()) {
+            return;
+        }
+        // modules will never be empty
+        res.append(NEWLINE).append(NEWLINE).append(TAB).append("COMMANDS = ").append(NEWLINE);
+        final List<String> markers = Lists.newArrayList();
+        for (Class<Command> command : commands) {
+            markers.clear();
+            final CommandItemInfo info = service.getData().getInfo(command);
+            markers.add(SCAN);
+            if (info.isEnvironmentCommand()) {
+                markers.add("GUICE_ENABLED");
+            }
+            res.append(TAB).append(TAB).append(renderClassLine(command, markers)).append(NEWLINE);
+        }
+    }
+
+    private void printBundles(final DiagnosticConfig config, final StringBuilder res) {
         // top level bundles
         final List<Class<GuiceyBundle>> bundles = service.getData()
                 .getItems(ConfigItem.Bundle, new Predicate<BundleItemInfo>() {
@@ -98,7 +120,7 @@ public class DiagnosticRenderer {
                         return input.isRegisteredDirectly() || input.isFromLookup() || input.isFromDwBundle();
                     }
                 });
-        if (bundles.isEmpty()) {
+        if (!config.isPrintBundles() || bundles.isEmpty()) {
             return;
         }
         res.append(NEWLINE).append(NEWLINE).append(TAB).append("BUNDLES = ").append(NEWLINE);
@@ -171,9 +193,9 @@ public class DiagnosticRenderer {
         }
     }
 
-    private void printExtensionsOnly(final StringBuilder res) {
+    private void printExtensionsOnly(final DiagnosticConfig config, final StringBuilder res) {
         final List<Class<Object>> extensions = service.getExtensions();
-        if (extensions.isEmpty()) {
+        if (!config.isPrintExtensions() || extensions.isEmpty()) {
             return;
         }
         res.append(NEWLINE).append(NEWLINE).append(TAB).append("EXTENSIONS = ").append(NEWLINE);
@@ -197,10 +219,14 @@ public class DiagnosticRenderer {
         return renderClassLine(extension, markers);
     }
 
-    private void printModules(final StringBuilder res) {
+    private void printModules(final DiagnosticConfig config, final StringBuilder res) {
+        final List<Class<Module>> modules = service.getModules();
+        if (!config.isPrintModules() || modules.isEmpty()) {
+            return;
+        }
         // modules will never be empty
         res.append(NEWLINE).append(NEWLINE).append(TAB).append("GUICE MODULES = ").append(NEWLINE);
-        for (Class<Module> module : service.getModules()) {
+        for (Class<Module> module : modules) {
             res.append(TAB).append(TAB).append(renderClassLine(module, null)).append(NEWLINE);
         }
     }

@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 import com.google.inject.Module;
+import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
@@ -78,6 +79,16 @@ public class GuiceyConfigurationInfo {
             }
         });
         return res;
+    }
+
+    // --------------------------------------------------------------------------- COMMANDS
+
+    /**
+     * @return types of all installed commands or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands(boolean)
+     */
+    public List<Class<Command>> getCommands() {
+        return context.getItems(ConfigItem.Command);
     }
 
     // --------------------------------------------------------------------------- BUNDLES

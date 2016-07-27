@@ -104,6 +104,16 @@ public final class ContextTreeConfig {
     }
 
     /**
+     * Hide commands registrations (commands registered only by classpath scan).
+     *
+     * @return config instance for chained calls
+     */
+    public ContextTreeConfig hideCommands() {
+        items.add(ConfigItem.Command);
+        return this;
+    }
+
+    /**
      * Hide some scopes from report.
      * <p>
      * Warning: this can remove entire subtrees (for example, by hiding bundle which installs other bundles)

@@ -41,6 +41,11 @@ class DiagnosticRendererTest extends Specification {
         expect:
         render(new DiagnosticConfig().printDefaults()) == """
 
+    COMMANDS =
+        Cli                          (r.v.d.g.d.s.features)     *SCAN
+        EnvCommand                   (r.v.d.g.d.s.features)     *SCAN,GUICE_ENABLED
+
+
     BUNDLES =
         CoreInstallersBundle         (r.v.d.g.m.installer)
         FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP
@@ -74,6 +79,11 @@ class DiagnosticRendererTest extends Specification {
 
         expect:
         render(new DiagnosticConfig().printAll()) == """
+
+    COMMANDS =
+        Cli                          (r.v.d.g.d.s.features)     *SCAN
+        EnvCommand                   (r.v.d.g.d.s.features)     *SCAN,GUICE_ENABLED
+
 
     BUNDLES =
         CoreInstallersBundle         (r.v.d.g.m.installer)
@@ -246,6 +256,7 @@ class DiagnosticRendererTest extends Specification {
                         }
                     })
                             .enableAutoConfig(FooResource.package.name)
+                            .searchCommands(true)
                             .bundles(
                             new FooBundle(),
                             new GuiceRestrictedConfigBundle())

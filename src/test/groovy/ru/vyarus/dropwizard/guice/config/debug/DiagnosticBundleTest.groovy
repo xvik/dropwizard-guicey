@@ -48,6 +48,7 @@ class DiagnosticBundleTest extends Specification {
                     GuiceBundle.builder()
                             .bundleLookup(new VoidBundleLookup())
                             .enableAutoConfig(FooResource.package.name)
+                            .searchCommands(true)
                             .bundles(
                             new FooBundle(),
                             new GuiceRestrictedConfigBundle())

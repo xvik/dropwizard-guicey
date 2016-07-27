@@ -60,7 +60,8 @@ public class DiagnosticBundle implements GuiceyBundle {
         printContextTree(new ContextTreeConfig()
                 .hideDuplicateRegistrations()
                 .hideNotUsedInstallers()
-                .hideEmptyBundles());
+                .hideEmptyBundles()
+                .hideCommands());
     }
 
     /**

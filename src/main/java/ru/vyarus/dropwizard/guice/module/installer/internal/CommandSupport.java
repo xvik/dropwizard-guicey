@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import io.dropwizard.Application;
 import io.dropwizard.cli.Command;
@@ -7,6 +8,7 @@ import io.dropwizard.cli.EnvironmentCommand;
 import io.dropwizard.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
@@ -33,8 +35,11 @@ public final class CommandSupport {
      * @param bootstrap bootstrap object
      * @param scanner   configured scanner instance
      */
-    public static void registerCommands(final Bootstrap bootstrap, final ClasspathScanner scanner) {
-        scanner.scan(new CommandClassVisitor(bootstrap));
+    public static void registerCommands(final Bootstrap bootstrap, final ClasspathScanner scanner,
+                                        final ConfigurationContext context) {
+        final CommandClassVisitor visitor = new CommandClassVisitor(bootstrap);
+        scanner.scan(visitor);
+        context.registerCommands(visitor.getCommands());
     }
 
     /**
@@ -62,12 +67,14 @@ public final class CommandSupport {
      */
     private static class CommandClassVisitor implements ClassVisitor {
         private final Bootstrap bootstrap;
+        private final List<Class<Command>> commands = Lists.newArrayList();
 
         CommandClassVisitor(final Bootstrap bootstrap) {
             this.bootstrap = bootstrap;
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public void visit(final Class<?> type) {
             if (FeatureUtils.is(type, Command.class)) {
                 try {
@@ -78,6 +85,7 @@ public final class CommandSupport {
                     } else {
                         cmd = (Command) type.newInstance();
                     }
+                    commands.add((Class<Command>) type);
                     bootstrap.addCommand(cmd);
                     LOGGER.debug("Command registered: {}", type.getSimpleName());
                 } catch (Exception e) {
@@ -85,6 +93,13 @@ public final class CommandSupport {
                             + type.getSimpleName(), e);
                 }
             }
+        }
+
+        /**
+         * @return list of installed commands or empty list
+         */
+        public List<Class<Command>> getCommands() {
+            return commands;
         }
     }
 }

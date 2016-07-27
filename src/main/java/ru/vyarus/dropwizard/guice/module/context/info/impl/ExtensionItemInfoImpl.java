@@ -20,8 +20,8 @@ public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItem
     private boolean lazy;
     private boolean hk2Managed;
 
-    public ExtensionItemInfoImpl(final ConfigItem itemType, final Class<?> type) {
-        super(itemType, type);
+    public ExtensionItemInfoImpl(final Class<?> type) {
+        super(ConfigItem.Extension, type);
     }
 
     @Override

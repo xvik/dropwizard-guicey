@@ -111,7 +111,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         if (!autoscanPackages.isEmpty()) {
             scanner = new ClasspathScanner(autoscanPackages);
             if (searchCommands) {
-                CommandSupport.registerCommands(bootstrap, scanner);
+                CommandSupport.registerCommands(bootstrap, scanner, context);
             }
         }
     }

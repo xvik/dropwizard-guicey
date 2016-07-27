@@ -8,6 +8,7 @@ import com.google.common.collect.Multimap;
 import com.google.inject.Module;
 import io.dropwizard.Application;
 import io.dropwizard.Bundle;
+import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
@@ -82,6 +83,22 @@ public final class ConfigurationContext {
     public void closeScope() {
         Preconditions.checkState(currentScope != null, "State error: trying to close not opened scope");
         currentScope = null;
+    }
+
+    // --------------------------------------------------------------------------- COMMANDS
+
+    /**
+     * Register commands resolved with classpath scan.
+     *
+     * @param commands installed commands
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands(boolean)
+     */
+    public void registerCommands(final List<Class<Command>> commands) {
+        setScope(ClasspathScanner.class);
+        for (Class<Command> cmd : commands) {
+            register(ConfigItem.Command, cmd);
+        }
+        closeScope();
     }
 
     // --------------------------------------------------------------------------- BUNDLES

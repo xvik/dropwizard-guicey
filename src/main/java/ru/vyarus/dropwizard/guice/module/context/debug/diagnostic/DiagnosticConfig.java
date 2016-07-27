@@ -20,6 +20,7 @@ package ru.vyarus.dropwizard.guice.module.context.debug.diagnostic;
  */
 public final class DiagnosticConfig {
 
+    private boolean commands;
     private boolean bundles;
     private boolean installers;
     private boolean notUsedInstallers;
@@ -32,7 +33,15 @@ public final class DiagnosticConfig {
      */
     @SuppressWarnings("checkstyle:BooleanExpressionComplexity")
     public boolean isEmptyConfig() {
-        return !(bundles || installers || notUsedInstallers || disabledInstallers || extensions || modules);
+        return !(commands || bundles || installers || notUsedInstallers
+                || disabledInstallers || extensions || modules);
+    }
+
+    /**
+     * @return true if commands logging enabled
+     */
+    public boolean isPrintCommands() {
+        return commands;
     }
 
     /**
@@ -75,6 +84,16 @@ public final class DiagnosticConfig {
      */
     public boolean isPrintModules() {
         return modules;
+    }
+
+    /**
+     * Enables installed commands (with classpath scan) print.
+     *
+     * @return config instance for chained calls
+     */
+    public DiagnosticConfig printCommands() {
+        commands = true;
+        return this;
     }
 
     /**
@@ -161,11 +180,12 @@ public final class DiagnosticConfig {
     }
 
     /**
-     * Enables default prints (most useful info): bundles, installers, extensions, modules.
+     * Enables default prints (most useful info): commands, bundles, installers, extensions, modules.
      *
      * @return config instance for chained calls
      */
     public DiagnosticConfig printDefaults() {
+        printCommands();
         printBundles();
         printInstallers();
         printExtensions();

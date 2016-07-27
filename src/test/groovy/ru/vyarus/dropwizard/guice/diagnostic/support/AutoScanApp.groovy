@@ -22,6 +22,7 @@ class AutoScanApp extends Application<Configuration> {
                 // no default test bundles from abstract test
                 .bundleLookup(new VoidBundleLookup())
                 .enableAutoConfig(FooResource.package.name)
+                .searchCommands(true)
                 .modules(new FooModule())
                 .disableInstallers(LifeCycleInstaller)
                 .build())
