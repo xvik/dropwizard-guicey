@@ -6,6 +6,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.InstallerModule;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module;
@@ -75,10 +76,11 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
     protected void configure() {
         bindEnvironment();
         install(new InstallerModule(scanner, context));
-        install(new Jersey2Module(bootstrap.getApplication(), environment));
+        install(new Jersey2Module(bootstrap.getApplication(), environment, context.stat()));
 
         // provide access for configuration info collected during startup
         bind(ConfigurationInfo.class).toInstance(new ConfigurationInfo(context));
+        bind(StatsInfo.class).toInstance(new StatsInfo(context.stat()));
         bind(GuiceyConfigurationInfo.class).in(Singleton.class);
     }
 

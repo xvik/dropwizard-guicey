@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.debug.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.diagnostic.DiagnosticRenderer;
+import ru.vyarus.dropwizard.guice.module.context.debug.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.tree.ContextTreeRenderer;
 
@@ -21,18 +22,26 @@ public final class DiagnosticReporter {
 
     private final DiagnosticConfig config;
     private final ContextTreeConfig treeConfig;
+    private final boolean printStats;
 
+    @Inject
+    private StatsRenderer statsRenderer;
     @Inject
     private DiagnosticRenderer diagnosticRenderer;
     @Inject
     private ContextTreeRenderer contextTreeRenderer;
 
-    public DiagnosticReporter(final DiagnosticConfig config, final ContextTreeConfig treeConfig) {
+    public DiagnosticReporter(final DiagnosticConfig config, final ContextTreeConfig treeConfig,
+                              final boolean printStats) {
         this.config = config;
         this.treeConfig = treeConfig;
+        this.printStats = printStats;
     }
 
     public void report() {
+        if (printStats) {
+            logger.info("Startup stats = {}", statsRenderer.renderReport());
+        }
         logger.info("Configuration diagnostic info = {}", diagnosticRenderer.renderReport(config));
         if (treeConfig != null) {
             logger.info("Configuration context tree = {}", contextTreeRenderer.renderReport(treeConfig));

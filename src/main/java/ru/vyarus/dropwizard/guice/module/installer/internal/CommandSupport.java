@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import io.dropwizard.Application;
@@ -9,11 +10,14 @@ import io.dropwizard.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.util.List;
+
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.CommandTime;
 
 /**
  * Provides support for commands injection support and classpath scanning resolution of commands.
@@ -37,9 +41,11 @@ public final class CommandSupport {
      */
     public static void registerCommands(final Bootstrap bootstrap, final ClasspathScanner scanner,
                                         final ConfigurationContext context) {
+        final Stopwatch timer = context.stat().timer(CommandTime);
         final CommandClassVisitor visitor = new CommandClassVisitor(bootstrap);
         scanner.scan(visitor);
         context.registerCommands(visitor.getCommands());
+        timer.stop();
     }
 
     /**
@@ -49,8 +55,11 @@ public final class CommandSupport {
      *
      * @param commands registered commands
      * @param injector guice injector object
+     * @param tracker  stats tracker
      */
-    public static void initCommands(final List<Command> commands, final Injector injector) {
+    public static void initCommands(final List<Command> commands, final Injector injector,
+                                    final StatsTracker tracker) {
+        final Stopwatch timer = tracker.timer(CommandTime);
         if (commands != null) {
             for (Command cmd : commands) {
                 if (cmd instanceof EnvironmentCommand) {
@@ -58,6 +67,7 @@ public final class CommandSupport {
                 }
             }
         }
+        timer.stop();
     }
 
     /**

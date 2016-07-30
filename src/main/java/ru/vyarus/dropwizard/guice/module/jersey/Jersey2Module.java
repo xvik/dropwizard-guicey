@@ -7,6 +7,7 @@ import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorProvider;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.internal.AdminGuiceFilter;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule;
 
@@ -29,10 +30,12 @@ public class Jersey2Module extends ServletModule {
     private static final String STAR = "*";
     private final Application application;
     private final Environment environment;
+    private final StatsTracker tracker;
 
-    public Jersey2Module(final Application application, final Environment environment) {
+    public Jersey2Module(final Application application, final Environment environment, final StatsTracker tracker) {
         this.application = application;
         this.environment = environment;
+        this.tracker = tracker;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class Jersey2Module extends ServletModule {
         // injector not available at this point, so using provider
         final InjectorProvider provider = new InjectorProvider(application);
         install(new GuiceBindingsModule(provider));
-        final GuiceFeature component = new GuiceFeature(provider);
+        final GuiceFeature component = new GuiceFeature(provider, tracker);
         bind(ServiceLocator.class).toProvider(component);
         environment.jersey().register(component);
 

@@ -4,6 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.OrderComparator;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
@@ -25,9 +26,11 @@ public class ExtensionsHolder {
     private final List<FeatureInstaller> installers;
     private final List<Class<? extends FeatureInstaller>> installerTypes;
     private final Map<Class<? extends FeatureInstaller>, List<Class<?>>> extensions = Maps.newHashMap();
+    private final StatsTracker tracker;
 
-    public ExtensionsHolder(final List<FeatureInstaller> installers) {
+    public ExtensionsHolder(final List<FeatureInstaller> installers, final StatsTracker tracker) {
         this.installers = installers;
+        this.tracker = tracker;
         this.installerTypes = Lists.transform(installers,
                 new Function<FeatureInstaller, Class<? extends FeatureInstaller>>() {
                     @Override
@@ -88,5 +91,15 @@ public class ExtensionsHolder {
                 Collections.sort(extensions, comparator);
             }
         }
+    }
+
+    /**
+     * Workaround to pass stats tracker instance to installer executor, without direct registration in context
+     * (aka making it publicly available).
+     *
+     * @return stats tracker object
+     */
+    protected StatsTracker stat() {
+        return tracker;
     }
 }

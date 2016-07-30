@@ -1,12 +1,14 @@
 package ru.vyarus.dropwizard.guice.module.installer;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
+import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
@@ -19,6 +21,8 @@ import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
 import java.util.Collections;
 import java.util.List;
+
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
 
 /**
  * Module performs auto configuration using classpath scanning or manually predefined installers and beans.
@@ -46,10 +50,12 @@ public class InstallerModule extends AbstractModule {
         // called just after injector creation to process instance installers
         bind(FeatureInstallerExecutor.class).asEagerSingleton();
 
+        final Stopwatch timer = context.stat().timer(InstallersTime);
         final List<Class<? extends FeatureInstaller>> installerClasses = findInstallers();
         final List<FeatureInstaller> installers = prepareInstallers(installerClasses);
+        timer.stop();
 
-        final ExtensionsHolder holder = new ExtensionsHolder(installers);
+        final ExtensionsHolder holder = new ExtensionsHolder(installers, context.stat());
         bind(ExtensionsHolder.class).toInstance(holder);
 
         resolveExtensions(holder);
@@ -100,8 +106,7 @@ public class InstallerModule extends AbstractModule {
                     logger.trace("Registered installer: {}", FeatureUtils.getInstallerExtName(installerClass));
                 }
             } catch (Exception e) {
-                throw new IllegalStateException("Failed to register installer "
-                        + installerClass.getName(), e);
+                throw new IllegalStateException("Failed to register installer " + installerClass.getName(), e);
             }
         }
         return installers;
@@ -113,6 +118,7 @@ public class InstallerModule extends AbstractModule {
      * @param holder holder to store found extension classes until injector creation
      */
     private void resolveExtensions(final ExtensionsHolder holder) {
+        final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
         for (Class<?> type : context.getExtensions()) {
             Preconditions.checkState(processType(type, holder, false),
                     "No installer found for extension %s", type.getName());
@@ -125,6 +131,7 @@ public class InstallerModule extends AbstractModule {
                 }
             });
         }
+        timer.stop();
     }
 
     private boolean processType(final Class<?> type, final ExtensionsHolder holder, final boolean fromScan) {

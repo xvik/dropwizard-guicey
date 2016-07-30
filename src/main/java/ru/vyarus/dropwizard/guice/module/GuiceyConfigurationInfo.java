@@ -11,6 +11,7 @@ import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.InstallerItemInfoImpl;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
@@ -24,7 +25,8 @@ import java.util.Set;
 import static com.google.common.base.Predicates.not;
 
 /**
- * Public api for internal guicey configuration info. Provides information about registered bundle types,
+ * Public api for internal guicey configuration info ans startup statistics. Provides information about time spent
+ * for configurations and configuration details like registered bundle types,
  * installers, extensions, disabled installers etc. Registered as guice bean and could be directly injected.
  * <p>
  * Could be used for configuration diagnostics or unit test checks.
@@ -35,21 +37,35 @@ import static com.google.common.base.Predicates.not;
 public class GuiceyConfigurationInfo {
 
     private final ConfigurationInfo context;
+    private final StatsInfo stats;
     private final ExtensionsHolder holder;
 
     @Inject
-    public GuiceyConfigurationInfo(final ConfigurationInfo context, final ExtensionsHolder holder) {
+    public GuiceyConfigurationInfo(final ConfigurationInfo context, final StatsInfo stats,
+                                   final ExtensionsHolder holder) {
         this.context = context;
+        this.stats = stats;
         this.holder = holder;
     }
 
     /**
-     * Use to perform custom data lookups (e.g. for additional logging, diagnostics or consistency checks).
+     * Use to perform custom configuration items data lookups (e.g. for additional logging,
+     * diagnostics or consistency checks).
      *
      * @return raw configuration info object
      */
     public ConfigurationInfo getData() {
         return context;
+    }
+
+    /**
+     * Timers and counters collected at startup.
+     *
+     * @return startup statistics object
+     * @see ru.vyarus.dropwizard.guice.module.context.stat.Stat for available stats
+     */
+    public StatsInfo getStats() {
+        return stats;
     }
 
     /**

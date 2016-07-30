@@ -2,10 +2,13 @@ package ru.vyarus.dropwizard.guice.module.context.debug;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
-import io.dropwizard.lifecycle.Managed;
+import io.dropwizard.Application;
+import org.eclipse.jetty.util.component.AbstractLifeCycle;
+import org.eclipse.jetty.util.component.LifeCycle;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.context.debug.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.diagnostic.DiagnosticRenderer;
+import ru.vyarus.dropwizard.guice.module.context.debug.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.tree.ContextTreeRenderer;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
@@ -17,6 +20,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
  * <p>
  * Sections:
  * <ul>
+ * <li>startup stats - collected timers and counters showing how much time were spent on different stages</li>
  * <li>diagnostic section - summary of installed bundles, modules, used installers and extensions
  * (showing execution order). Shows what was configured.</li>
  * <li>context tree - tree showing configuration hierarchy (configuration sources). Shows
@@ -38,16 +42,26 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
  *          .printContextTree(new ContextTreeConfig().hideDuplicateRegistrations());
  * </code></pre>
  * <p>
- * Actual diagnostic rendering is performed by {@link DiagnosticRenderer} and {@link ContextTreeRenderer},
- * which may be used directly, for example, to show report on web page.
+ * To print startup stats use {@link #printStartupStats()}:
+ * <pre><code>
+ *     new DiagnosticBundle(new DiagnosticConfig().printAll())
+ *          .printStartupStats()
+ * </code></pre>
+ * <p>
+ * Actual diagnostic rendering is performed by {@link DiagnosticRenderer}, {@link ContextTreeRenderer} and
+ * {@link StatsRenderer}. They may be used directly, for example, to show report on web page.
+ * <p>
+ * Reporting is performed after context startup (pure guicey context (in tests) or entire web context) and so
+ * does not affect collected statistics.
  *
  * @author Vyacheslav Rusakov
  * @since 21.06.2016
  */
-public class DiagnosticBundle implements GuiceyBundle {
+public final class DiagnosticBundle implements GuiceyBundle {
 
     private final DiagnosticConfig config;
     private ContextTreeConfig treeConfig;
+    private boolean printStats;
 
     /**
      * Initialize bundle with default diagnostic configuration. Configures most commonly required info.
@@ -62,6 +76,8 @@ public class DiagnosticBundle implements GuiceyBundle {
                 .hideNotUsedInstallers()
                 .hideEmptyBundles()
                 .hideCommands());
+
+        printStartupStats();
     }
 
     /**
@@ -91,22 +107,35 @@ public class DiagnosticBundle implements GuiceyBundle {
         return this;
     }
 
+    /**
+     * Enables startup statistic printing. Stats shows internal guicey timings and some details of configuration
+     * process.
+     * <p>
+     * Enabled automatically if default bundle constructor used.
+     *
+     * @return bundle instance
+     */
+    public DiagnosticBundle printStartupStats() {
+        this.printStats = true;
+        return this;
+    }
+
     @Override
     public void initialize(final GuiceyBootstrap bootstrap) {
-        bootstrap.environment().lifecycle().manage(new Managed() {
+        // use  listener to work properly for both guicey only test and normal app (to show hk stats)
+        bootstrap.environment().lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
             @Override
-            public void start() throws Exception {
-                final DiagnosticReporter reporter = new DiagnosticReporter(config, treeConfig);
-                InjectorLookup.getInjector(bootstrap.application()).get().injectMembers(reporter);
-                reporter.report();
-            }
-
-            @Override
-            public void stop() throws Exception {
-                // not needed
+            public void lifeCycleStarted(final LifeCycle event) {
+                report(bootstrap.application());
             }
         });
         bootstrap.modules(new DiagnosticModule());
+    }
+
+    private void report(final Application app) {
+        final DiagnosticReporter reporter = new DiagnosticReporter(config, treeConfig, printStats);
+        InjectorLookup.getInjector(app).get().injectMembers(reporter);
+        reporter.report();
     }
 
     /**
@@ -115,6 +144,7 @@ public class DiagnosticBundle implements GuiceyBundle {
     public static class DiagnosticModule extends AbstractModule {
         @Override
         protected void configure() {
+            bind(StatsRenderer.class);
             bind(DiagnosticRenderer.class);
             bind(ContextTreeRenderer.class);
         }

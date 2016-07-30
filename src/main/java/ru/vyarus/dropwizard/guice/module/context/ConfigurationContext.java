@@ -14,6 +14,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
@@ -62,6 +63,11 @@ public final class ConfigurationContext {
      * Current scope hierarchy. The last one is actual scope (application or bundle).
      */
     private Class<?> currentScope;
+
+    /**
+     * Used to gather guicey startup metrics.
+     */
+    private final StatsTracker tracker = new StatsTracker();
 
 
     // --------------------------------------------------------------------------- SCOPE
@@ -314,6 +320,13 @@ public final class ConfigurationContext {
     public <T extends ItemInfoImpl> T getInfo(final Object item) {
         final Class<?> itemType = getType(item);
         return (T) detailsHolder.get(itemType);
+    }
+
+    /**
+     * @return startup statistics tracker instance
+     */
+    public StatsTracker stat() {
+        return tracker;
     }
 
     private Class<?> getScope() {

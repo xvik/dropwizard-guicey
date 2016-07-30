@@ -6,11 +6,15 @@ import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.ServiceLocatorProvider;
 import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
 import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
+import ru.vyarus.dropwizard.guice.module.installer.scanner.InvisibleForScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.InstallerBinder;
 
 import javax.inject.Provider;
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
+
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.HKTime;
 
 /**
  * Feature activates guice integration.
@@ -37,17 +41,21 @@ import javax.ws.rs.core.FeatureContext;
  * @see ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory
  * @since 21.11.2014
  */
+@InvisibleForScanner
 public class GuiceFeature implements Feature, Provider<ServiceLocator> {
 
     private final Provider<Injector> provider;
+    private final StatsTracker tracker;
     private ServiceLocator locator;
 
-    public GuiceFeature(final Provider<Injector> provider) {
+    public GuiceFeature(final Provider<Injector> provider, final StatsTracker tracker) {
         this.provider = provider;
+        this.tracker = tracker;
     }
 
     @Override
     public boolean configure(final FeatureContext context) {
+        tracker.startHkTimer(HKTime);
         locator = ServiceLocatorProvider.getServiceLocator(context);
         final Injector injector = this.provider.get();
 
@@ -55,7 +63,8 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
         final GuiceIntoHK2Bridge guiceBridge = locator.getService(GuiceIntoHK2Bridge.class);
         guiceBridge.bridgeGuiceInjector(injector);
 
-        context.register(new InstallerBinder(injector));
+        context.register(new InstallerBinder(injector, tracker));
+        tracker.stopHkTimer(HKTime);
         return true;
     }
 

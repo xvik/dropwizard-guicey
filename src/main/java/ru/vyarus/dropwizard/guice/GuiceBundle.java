@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice;
 
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Sets;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -32,6 +33,8 @@ import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
 
 import java.util.Arrays;
 import java.util.Set;
+
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
 
 /**
  * Bundle enables guice integration for dropwizard. Guice context is configured in initialization phase,
@@ -101,6 +104,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
     @Override
     public void initialize(final Bootstrap bootstrap) {
+        final Stopwatch timer = context.stat().timer(GuiceyTime);
         if (searchCommands) {
             Preconditions.checkState(!autoscanPackages.isEmpty(),
                     "Commands search could not be performed, because auto scan was not activated");
@@ -109,28 +113,23 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         this.bootstrap = bootstrap;
         // init scanner
         if (!autoscanPackages.isEmpty()) {
-            scanner = new ClasspathScanner(autoscanPackages);
+            scanner = new ClasspathScanner(autoscanPackages, context.stat());
             if (searchCommands) {
                 CommandSupport.registerCommands(bootstrap, scanner, context);
             }
         }
+        timer.stop();
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void run(final T configuration, final Environment environment) throws Exception {
+        final Stopwatch timer = context.stat().timer(GuiceyTime);
         configureFromBundles(configuration, environment);
-        context.registerModules(new GuiceSupportModule(
-                scanner, context, bindConfigurationInterfaces));
+        context.registerModules(new GuiceSupportModule(scanner, context, bindConfigurationInterfaces));
         configureModules(configuration, environment);
-        injector = injectorFactory.createInjector(stage, context.getModules());
-        // registering as managed to cleanup injector on application stop
-        environment.lifecycle().manage(
-                InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
-        CommandSupport.initCommands(bootstrap.getCommands(), injector);
-        if (scanner != null) {
-            scanner.cleanup();
-        }
+        createInjector(environment);
+        afterInjectorCreation();
+        timer.stop();
     }
 
     /**
@@ -147,11 +146,15 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      * @param environment   environment object
      */
     private void configureFromBundles(final T configuration, final Environment environment) {
+        final Stopwatch timer = context.stat().timer(BundleTime);
+        final Stopwatch resolutionTimer = context.stat().timer(BundleResolutionTime);
         if (configureFromDropwizardBundles) {
             context.registerDwBundles(BundleSupport.findBundles(bootstrap, GuiceyBundle.class));
         }
         context.registerLookupBundles(bundleLookup.lookup());
+        resolutionTimer.stop();
         BundleSupport.processBundles(context, configuration, environment, bootstrap.getApplication());
+        timer.stop();
     }
 
     /**
@@ -172,6 +175,23 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
             if (mod instanceof EnvironmentAwareModule) {
                 ((EnvironmentAwareModule) mod).setEnvironment(environment);
             }
+        }
+    }
+
+    private void createInjector(final Environment environment) {
+        final Stopwatch timer = context.stat().timer(InjectorCreationTime);
+        injector = injectorFactory.createInjector(stage, context.getModules());
+        // registering as managed to cleanup injector on application stop
+        environment.lifecycle().manage(
+                InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
+        timer.stop();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void afterInjectorCreation() {
+        CommandSupport.initCommands(bootstrap.getCommands(), injector, context.stat());
+        if (scanner != null) {
+            scanner.cleanup();
         }
     }
 
@@ -409,10 +429,12 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Print additional diagnostic logs with installed bundles, installers and resolved extensions and
-         * configuration tree.
+         * Print additional diagnostic logs with startup statistics, installed bundles, installers and resolved
+         * extensions and configuration tree.
          * <p>
-         * Useful for configuration problems resolution and for better understanding how guicey works.
+         * Statistics shows mainly where guice spent most time. Configuration info is
+         * useful for configuration problems resolution.
+         * Also, logs useful for better understanding how guicey works.
          * <p>
          * If custom logging format is required use {@link DiagnosticBundle} directly.
          * <p>

@@ -2,15 +2,20 @@ package ru.vyarus.dropwizard.guice.module.installer.scanner;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.util.OReflectionHelper;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ScanClassesCount;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ScanTime;
 
 /**
  * Classpath scanner, reduced to provided packages.
@@ -27,11 +32,21 @@ public class ClasspathScanner {
 
     private final Logger logger = LoggerFactory.getLogger(ClasspathScanner.class);
 
+    private final StatsTracker tracker;
+
     private final Set<String> packages;
     private List<Class> scanned;
 
     public ClasspathScanner(final Set<String> packages) {
+        // for backwards compatibility allow using without tracker
+        this(packages, null);
+    }
+
+    public ClasspathScanner(final Set<String> packages, final StatsTracker tracker) {
         this.packages = validate(packages);
+        this.tracker = tracker;
+        // perform scan before to fill cache and get accurate traversing stats
+        performScan();
     }
 
     /**
@@ -82,7 +97,9 @@ public class ClasspathScanner {
         return packages;
     }
 
+    @SuppressWarnings("PMD.PrematureDeclaration")
     private void performScan() {
+        final Stopwatch timer = tracker == null ? null : tracker.timer(ScanTime);
         int count = 0;
         scanned = Lists.newArrayList();
         for (String pkg : packages) {
@@ -102,6 +119,10 @@ public class ClasspathScanner {
         if (count > SCAN_THRESHOLD) {
             logger.warn("{} classes were loaded while scanning '{}' packages. Reduce packages to scan "
                     + "to increase efficiency.", count, Joiner.on(',').join(packages));
+        }
+        if (timer != null) {
+            timer.stop();
+            tracker.count(ScanClassesCount, count);
         }
     }
 }

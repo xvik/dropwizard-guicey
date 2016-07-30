@@ -2,11 +2,14 @@ package ru.vyarus.dropwizard.guice.module.jersey.hk2;
 
 import com.google.inject.Injector;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 
 import java.util.List;
+
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyInstallerTime;
 
 /**
  * Hk2 module, which must be registered before hk context start (to properly bind resources).
@@ -23,14 +26,17 @@ import java.util.List;
 public class InstallerBinder extends AbstractBinder {
 
     private final Injector injector;
+    private final StatsTracker tracker;
 
-    public InstallerBinder(final Injector injector) {
+    public InstallerBinder(final Injector injector, final StatsTracker tracker) {
         this.injector = injector;
+        this.tracker = tracker;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected void configure() {
+        tracker.startHkTimer(JerseyInstallerTime);
         final ExtensionsHolder holder = injector.getInstance(ExtensionsHolder.class);
         for (FeatureInstaller installer : holder.getInstallers()) {
             if (installer instanceof JerseyInstaller) {
@@ -43,5 +49,6 @@ public class InstallerBinder extends AbstractBinder {
                 installer.report();
             }
         }
+        tracker.stopHkTimer(JerseyInstallerTime);
     }
 }

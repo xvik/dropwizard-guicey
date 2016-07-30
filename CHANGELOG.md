@@ -15,7 +15,7 @@
     - bindConfigurationInterfaces() to disable configuration interface bindings
     - strictScopeControl() is shortcut to enable HK2DebugBundle (to control beans creation scope during development and tests)
     - printDiagnosticInfo() is shortcut to enable DiagnosticBundle with default preset (enable diagnostic logs)
-    - shortcuts methods for disabled boolean options: searchCommands() and configureFromDropwizardBundles()
+    - shortcut methods for disabled boolean options: searchCommands() and configureFromDropwizardBundles()
     
 ### 3.2.0 (2016-01-23)
 * Clear possible duplicate guicey bundle instances

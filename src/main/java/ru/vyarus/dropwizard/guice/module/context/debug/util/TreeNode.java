@@ -27,24 +27,26 @@ public class TreeNode {
      * Creates new node.
      *
      * @param name node name
+     * @param args string format arguments
      */
-    public TreeNode(final String name) {
-        this.name = name;
+    public TreeNode(final String name, final Object... args) {
+        this.name = String.format(name, args);
     }
 
     /**
      * @param name node name
+     * @param args string format arguments
      * @return child node instance, already attached to current node
      */
-    public TreeNode child(final String name) {
-        final TreeNode node = new TreeNode(name);
+    public TreeNode child(final String name, final Object... args) {
+        final TreeNode node = new TreeNode(name, args);
         children.add(node);
         return node;
     }
 
     /**
      * Add child node. Useful for situations when node could be appear empty (due to builder specifics) and
-     * empty nodes must be avoided. In other cases {@link #child(String)} is simpler to use.
+     * empty nodes must be avoided. In other cases {@link #child(String, Object...)} is simpler to use.
      *
      * @param node node to add
      */

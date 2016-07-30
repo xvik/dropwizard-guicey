@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
+import com.google.common.base.Stopwatch;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.dropwizard.setup.Environment;
@@ -12,6 +13,8 @@ import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.util.List;
+
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ExtensionsInstallationTime;
 
 /**
  * Installs all extensions found during classpath scanning.
@@ -41,6 +44,7 @@ public class FeatureInstallerExecutor {
 
     @SuppressWarnings("unchecked")
     private void installFeatures() {
+        final Stopwatch timer = holder.stat().timer(ExtensionsInstallationTime);
         holder.order();
         for (FeatureInstaller installer : holder.getInstallers()) {
             final List<Class<?>> res = holder.getExtensions(installer.getClass());
@@ -61,5 +65,6 @@ public class FeatureInstallerExecutor {
                 installer.report();
             }
         }
+        timer.stop();
     }
 }
