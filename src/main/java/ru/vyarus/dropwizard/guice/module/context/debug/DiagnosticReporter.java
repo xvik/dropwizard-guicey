@@ -40,7 +40,7 @@ public final class DiagnosticReporter {
 
     public void report() {
         if (printStats) {
-            logger.info("Startup stats = {}", statsRenderer.renderReport());
+            logger.info("Startup stats = {}", statsRenderer.renderReport(true));
         }
         logger.info("Configuration diagnostic info = {}", diagnosticRenderer.renderReport(config));
         if (treeConfig != null) {

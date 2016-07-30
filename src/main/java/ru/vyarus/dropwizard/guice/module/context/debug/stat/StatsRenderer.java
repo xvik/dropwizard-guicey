@@ -60,33 +60,36 @@ public class StatsRenderer {
     }
 
     /**
+     * @param hideTiny hide sections with time less then 1ms
      * @return rendered statistics report
      */
-    public String renderReport() {
+    public String renderReport(final boolean hideTiny) {
         final TreeNode root = new TreeNode("GUICEY started in %s", info.getStats().humanTime(GuiceyTime));
-        renderTimes(root);
+        renderTimes(root, hideTiny);
 
         final StringBuilder res = new StringBuilder().append(NEWLINE).append(NEWLINE);
         root.render(res);
         return res.toString();
     }
 
-    private void renderTimes(final TreeNode root) {
+    private void renderTimes(final TreeNode root, final boolean hideTiny) {
         long remaining = info.getStats().time(GuiceyTime);
         final double percent = remaining / 100d;
-        remaining -= renderClasspathScanInfo(root, percent);
-        remaining -= renderCommandsRegistration(root, percent);
-        remaining -= renderBundlesProcessing(root, percent);
+        remaining -= renderClasspathScanInfo(root, hideTiny, percent);
+        remaining -= renderCommandsRegistration(root, hideTiny, percent);
+        remaining -= renderBundlesProcessing(root, hideTiny, percent);
         remaining -= renderInjectorCreation(root, percent);
-        remaining -= renderHkPart(root, percent);
-        root.child("[%.2g%%] remaining %s ms", remaining / percent, remaining);
+        remaining -= renderHkPart(root, hideTiny, percent);
+        if (show(hideTiny, remaining)) {
+            root.child("[%.2g%%] remaining %s ms", remaining / percent, remaining);
+        }
     }
 
-    private long renderCommandsRegistration(final TreeNode root, final double percent) {
+    private long renderCommandsRegistration(final TreeNode root, final boolean hideTiny, final double percent) {
         final long command = info.getStats().time(CommandTime);
         // most likely if commands search wasn't register then processing time will be less then 1 ms and so
         // no commands processing will be shown
-        if (command > 0) {
+        if (show(hideTiny, command)) {
             final TreeNode node = root.child("[%.2g%%] COMMANDS processed in %s",
                     command / percent, info.getStats().humanTime(CommandTime));
             final int registered = info.getCommands().size();
@@ -97,14 +100,14 @@ public class StatsRenderer {
         return command;
     }
 
-    private long renderBundlesProcessing(final TreeNode root, final double percent) {
+    private long renderBundlesProcessing(final TreeNode root, final boolean hideTiny, final double percent) {
         final long bundle = info.getStats().time(BundleTime);
-        if (bundle > 0) {
+        if (show(hideTiny, bundle)) {
             final TreeNode node = root.child("[%.2g%%] BUNDLES processed in %s",
                     bundle / percent, info.getStats().humanTime(BundleTime));
             // if no bundles were actually resolved, resolution time would be tiny
             final long resolved = info.getStats().time(BundleResolutionTime);
-            if (resolved > 0) {
+            if (show(hideTiny, resolved)) {
                 node.child("%s resolved in %s",
                         info.getBundlesFromDw().size() + info.getBundlesFromLookup().size(),
                         info.getStats().humanTime(BundleResolutionTime));
@@ -114,9 +117,9 @@ public class StatsRenderer {
         return bundle;
     }
 
-    private long renderClasspathScanInfo(final TreeNode root, final double percent) {
+    private long renderClasspathScanInfo(final TreeNode root, final boolean hideTiny, final double percent) {
         final long scan = info.getStats().time(ScanTime);
-        if (scan > 0) {
+        if (show(hideTiny, scan)) {
             final TreeNode node = root.child("[%.2g%%] CLASSPATH scanned in %s",
                     scan / percent, info.getStats().humanTime(ScanTime));
             final int classes = info.getStats().count(ScanClassesCount);
@@ -148,9 +151,9 @@ public class StatsRenderer {
         root.child("from %s classes", info.getStats().count(ScanClassesCount) + manual);
     }
 
-    private long renderHkPart(final TreeNode root, final double percent) {
+    private long renderHkPart(final TreeNode root, final boolean hideTiny, final double percent) {
         final long hk = info.getStats().time(HKTime);
-        if (hk > 0) {
+        if (show(hideTiny, hk)) {
             final TreeNode node = root.child("[%.2g%%] HK bridged in %s",
                     hk / percent, info.getStats().humanTime(HKTime));
             final int installers = info.getData().getItems(ConfigItem.Installer, JERSEY_INSTALLER).size();
@@ -163,5 +166,9 @@ public class StatsRenderer {
             }
         }
         return hk;
+    }
+
+    private boolean show(final boolean hideTiny, final long value) {
+        return !hideTiny || value > 0;
     }
 }
