@@ -5,8 +5,8 @@
 * Restrict extension installation to one installer (first matching, according to installers order)
 * Improve dropwizard configuration class binding:
     - Complete configuration hierarchy bound (root, all classes between root and Configuration and Configuration itself)
-    - Bind interfaces directly implemented by classes in configuration hierarchy except interfaces from java and groovy packages 
- (it's common to use HasSomeConfig interface convention and now interface may be directly used for binding)
+    - (optional) Bind interfaces directly implemented by classes in configuration hierarchy except interfaces from java and groovy packages 
+ (it's common to use HasSomeConfig interface convention and now interface may be directly used for binding (when bindConfigurationInterfaces()))
 * Add GuiceyBootstrap methods (extend GuiceyBundle abilities):
     - bundles(): add transitive guicey bundles support (to install other guicey bundles from bundle). Duplicate bundles are detected by type.
     - application(): returns current application instance
@@ -14,10 +14,10 @@
     - Add GuiceyConfigurationInfo service to access tracked guicey configuration information (may be used for configuration diagnostic purposes, performing post configuration checks, printing complete configuration tree etc)
     - Add DiagnosticBundle to log configuration items diagnostic information. Log format is configurable. Rendering is externalized and may be re-used (e.g. for web page). 
 * Add GuiceBundle builder configuration options:
-    - bindConfigurationInterfaces() to disable configuration interface bindings
+    - bindConfigurationInterfaces() to enable configuration interface bindings
     - strictScopeControl() is shortcut to enable HK2DebugBundle (to control beans creation scope during development and tests)
     - printDiagnosticInfo() is shortcut to enable DiagnosticBundle with default preset (enable diagnostic logs)
-    - shortcut methods for disabled boolean options: searchCommands() and configureFromDropwizardBundles()
+    - shortcut methods for disabled boolean options: searchCommands(), configureFromDropwizardBundles() and bindConfigurationInterfaces()
     
 ### 3.2.0 (2016-01-23)
 * Clear possible duplicate guicey bundle instances

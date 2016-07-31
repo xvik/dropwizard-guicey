@@ -92,7 +92,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
     private boolean searchCommands;
     private boolean configureFromDropwizardBundles;
-    private boolean bindConfigurationInterfaces = true;
+    private boolean bindConfigurationInterfaces;
     private Stage stage = Stage.PRODUCTION;
 
     private Bootstrap bootstrap;
@@ -389,15 +389,24 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
+         * Shortcut for {@link #bindConfigurationInterfaces(boolean)}.
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder<T> bindConfigurationInterfaces() {
+            return bindConfigurationInterfaces(true);
+        }
+
+        /**
          * If enabled, interfaces implemented by configuration will also be bound to configuration instance
-         * in to guice context. Only interfaces directly implemented by any configuration class in configuration
-         * classes hierarchy. Interfaces from java and groovy packages are skipped.
+         * in guice context. Only interfaces directly implemented by any configuration class in configuration
+         * classes hierarchy. Interfaces from java.* and groovy.*  packages are skipped.
          * This is useful to support {@code HasSomeConfiguration} interfaces convention.
          * <p>
          * When disabled, only classes in configuration hierarchy are registered (e.g. in case
          * {@code MyConfiguration extends MyBaseConfiguration extends Configuration}, all 3 classes would be bound.
          * <p>
-         * Enabled by default.
+         * Disabled by default.
          *
          * @param enable true to enable configuration interfaces binding
          * @return builder instance for chained calls
