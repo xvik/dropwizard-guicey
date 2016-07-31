@@ -119,7 +119,8 @@ public class InstallerModule extends AbstractModule {
      */
     private void resolveExtensions(final ExtensionsHolder holder) {
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
-        for (Class<?> type : context.getExtensions()) {
+        final List<Class<?>> manual = context.getExtensions();
+        for (Class<?> type : manual) {
             Preconditions.checkState(processType(type, holder, false),
                     "No installer found for extension %s", type.getName());
         }
@@ -127,7 +128,12 @@ public class InstallerModule extends AbstractModule {
             scanner.scan(new ClassVisitor() {
                 @Override
                 public void visit(final Class<?> type) {
-                    processType(type, holder, true);
+                    if (manual.contains(type)) {
+                        // avoid duplicate extension installation, but register it's appearance in auto scan scope
+                        context.getOrRegisterExtension(type, true);
+                    } else {
+                        processType(type, holder, true);
+                    }
                 }
             });
         }
@@ -136,27 +142,29 @@ public class InstallerModule extends AbstractModule {
 
     private boolean processType(final Class<?> type, final ExtensionsHolder holder, final boolean fromScan) {
         final boolean lazy = type.isAnnotationPresent(LazyBinding.class);
-        final List<Class<? extends FeatureInstaller>> installers = bindExtension(type, lazy, holder);
+        final Class<? extends FeatureInstaller> installer = bindExtension(type, lazy, holder);
 
-        final boolean recognized = !installers.isEmpty();
+        final boolean recognized = installer != null;
         if (recognized) {
-            final ExtensionItemInfoImpl info = context.getOrRegisterExtensionFromScan(type, fromScan);
+            final ExtensionItemInfoImpl info = context.getOrRegisterExtension(type, fromScan);
             info.setLazy(lazy);
             info.setHk2Managed(JerseyBinding.isHK2Managed(type));
-            info.getInstalledBy().addAll(installers);
+            info.setInstalledBy(installer);
         }
         return recognized;
     }
 
     /**
+     * Only one installer could manage extension. If extension could be matched by multiple installers,
+     * then first matched installer wins (note that installers are ordered).
+     *
      * @param type class to analyze
-     * @return true is class recognized by any installer, false otherwise
+     * @return matched installer or null if no matching installer found
      */
     @SuppressWarnings("unchecked")
-    private List<Class<? extends FeatureInstaller>> bindExtension(
+    private Class<? extends FeatureInstaller> bindExtension(
             final Class<?> type, final boolean lazy, final ExtensionsHolder holder) {
-
-        final List<Class<? extends FeatureInstaller>> recognized = Lists.newArrayList();
+        Class<? extends FeatureInstaller> recognized = null;
         for (FeatureInstaller installer : holder.getInstallers()) {
             if (installer.matches(type)) {
                 final Class<? extends FeatureInstaller> installerClass = installer.getClass();
@@ -164,7 +172,6 @@ public class InstallerModule extends AbstractModule {
                     logger.trace("{} extension found: {}",
                             FeatureUtils.getInstallerExtName(installerClass), type.getName());
                 }
-                recognized.add(installerClass);
                 holder.register(installerClass, type);
                 if (installer instanceof BindingInstaller) {
                     ((BindingInstaller) installer).install(binder(), type, lazy);
@@ -172,6 +179,8 @@ public class InstallerModule extends AbstractModule {
                     // if installer isn't install binding manually, lazy simply disable registration
                     binder().bind(type);
                 }
+                recognized = installerClass;
+                break;
             }
         }
         return recognized;

@@ -1,6 +1,8 @@
 * Update to guice 4.1.0
 * ResourceInstaller looks for @Path on directly implemented interface (#10)
 * Fix bundles lookup reporting (correct multiline)
+* Fix duplicate extensions installation when registered both manually and by auto scan
+* Restrict extension installation to one installer (first matching, according to installers order)
 * Improve dropwizard configuration class binding:
     - Complete configuration hierarchy bound (root, all classes between root and Configuration and Configuration itself)
     - Bind interfaces directly implemented by classes in configuration hierarchy except interfaces from java and groovy packages 

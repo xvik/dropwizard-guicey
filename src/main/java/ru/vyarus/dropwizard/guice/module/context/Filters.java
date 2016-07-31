@@ -182,7 +182,7 @@ public final class Filters {
         return new Predicate<ExtensionItemInfo>() {
             @Override
             public boolean apply(final @Nonnull ExtensionItemInfo input) {
-                return input.getInstalledBy().contains(type);
+                return type.equals(input.getInstalledBy());
             }
         };
     }

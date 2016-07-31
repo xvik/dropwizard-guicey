@@ -251,7 +251,7 @@ public final class ConfigurationContext {
     /**
      * Extensions classpath scan requires testing with all installers to recognize actual extensions.
      * To avoid duplicate installers recognition, extensions resolved by classpath scan are registered
-     * immediately. This requirement cause this not obvious method used for both manually registered extensions
+     * immediately. It's required because of not obvious method used for both manually registered extensions
      * (to obtain container) and to create container from extensions from classpath scan.
      *
      * @param extension found extension
@@ -259,7 +259,7 @@ public final class ConfigurationContext {
      *                  registered extension
      * @return extension info container
      */
-    public ExtensionItemInfoImpl getOrRegisterExtensionFromScan(final Class<?> extension, final boolean fromScan) {
+    public ExtensionItemInfoImpl getOrRegisterExtension(final Class<?> extension, final boolean fromScan) {
         final ExtensionItemInfoImpl info;
         if (fromScan) {
             setScope(ClasspathScanner.class);

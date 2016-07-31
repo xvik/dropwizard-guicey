@@ -1,12 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
-import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
-
-import java.util.Set;
 
 /**
  * Extension item info implementation.
@@ -16,7 +13,7 @@ import java.util.Set;
  */
 public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItemInfo {
 
-    private final Set<Class<? extends FeatureInstaller>> installedBy = Sets.newLinkedHashSet();
+    private Class<? extends FeatureInstaller> installedBy;
     private boolean lazy;
     private boolean hk2Managed;
 
@@ -25,7 +22,7 @@ public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItem
     }
 
     @Override
-    public Set<Class<? extends FeatureInstaller>> getInstalledBy() {
+    public Class<? extends FeatureInstaller> getInstalledBy() {
         return installedBy;
     }
 
@@ -50,5 +47,9 @@ public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItem
 
     public void setHk2Managed(final boolean hk2Managed) {
         this.hk2Managed = hk2Managed;
+    }
+
+    public void setInstalledBy(final Class<? extends FeatureInstaller> installedBy) {
+        this.installedBy = installedBy;
     }
 }

@@ -3,8 +3,6 @@ package ru.vyarus.dropwizard.guice.module.context.info;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.ScanSupport;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 
-import java.util.Set;
-
 /**
  * Extension configuration information.
  *
@@ -14,13 +12,12 @@ import java.util.Set;
 public interface ExtensionItemInfo extends ItemInfo, ScanSupport {
 
     /**
-     * Set could not be empty, because otherwise startup will fail.
-     * Most of the time extensions developed for single installer (e.g. resource, heath check etc),
-     * but extension may be recognized and installed by multiple installers.
+     * Each extension is always registered by single installer. If extension is recognizable by multiple installers
+     * then it will be installed by first matching installer.
      *
-     * @return set of installers installed this extension
+     * @return installer installed this extension
      */
-    Set<Class<? extends FeatureInstaller>> getInstalledBy();
+    Class<? extends FeatureInstaller> getInstalledBy();
 
     /**
      * Lazy beans are not registered in guice by default. Some installers could support this flag in a special way.

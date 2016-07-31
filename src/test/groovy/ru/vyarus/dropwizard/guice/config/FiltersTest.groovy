@@ -126,7 +126,7 @@ class FiltersTest extends Specification {
 
         expect: "matched check"
         Filters.installedBy(JerseyFeatureInstaller).apply(item(ConfigItem.Extension, HK2DebugFeature) {
-            installedBy.add(JerseyFeatureInstaller)
+            installedBy = JerseyFeatureInstaller
         })
 
         and: "not matched check"

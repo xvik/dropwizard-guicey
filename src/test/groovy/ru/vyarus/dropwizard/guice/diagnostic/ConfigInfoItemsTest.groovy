@@ -81,7 +81,7 @@ class ConfigInfoItemsTest extends Specification {
         !ei.fromScan
         !ei.hk2Managed
         !ei.lazy
-        ei.installedBy == [ResourceInstaller] as Set
+        ei.installedBy == ResourceInstaller
         ei.toString() == "$ConfigItem.Extension $FooBundleResource.simpleName" as String
 
     }

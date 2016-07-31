@@ -8,7 +8,6 @@ import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.TreeNode;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
-import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 
 import javax.annotation.Nonnull;
@@ -41,14 +40,7 @@ public class StatsRenderer {
     private static final Predicate<ExtensionItemInfo> JERSEY_FEATURE = new Predicate<ExtensionItemInfo>() {
         @Override
         public boolean apply(@Nonnull final ExtensionItemInfo input) {
-            boolean res = false;
-            for (Class<? extends FeatureInstaller> installer : input.getInstalledBy()) {
-                if (JerseyInstaller.class.isAssignableFrom(installer)) {
-                    res = true;
-                    break;
-                }
-            }
-            return res;
+            return JerseyInstaller.class.isAssignableFrom(input.getInstalledBy());
         }
     };
 

@@ -333,7 +333,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * <p>Also, could be used to add beans from packages not included in auto scanning.</p>
          * <p>NOTE: startup will fail if bean not recognized by installers.</p>
          * <p>NOTE: Don't register commands here: either enable auto scan, which will install commands automatically
-         * or register command directly to bootstrap object and dependencies will be injected to them after
+         * or register command directly to bootstrap object and dependencies will be injected to it after
          * injector creation.</p>
          *
          * @param extensionClasses extension bean classes to register
