@@ -38,6 +38,7 @@ public final class CommandSupport {
      *
      * @param bootstrap bootstrap object
      * @param scanner   configured scanner instance
+     * @param context   configuration context
      */
     public static void registerCommands(final Bootstrap bootstrap, final ClasspathScanner scanner,
                                         final ConfigurationContext context) {
