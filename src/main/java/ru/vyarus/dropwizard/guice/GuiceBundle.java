@@ -260,6 +260,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
+         * All registered modules must be of unique type (all modules registered). If two or more modules of the
+         * same type registered, only first instance will be used.
+         * <p>
          * NOTE: if module implements *AwareModule interfaces, objects will be set just before configuration start.
          *
          * @param modules one or more juice modules
