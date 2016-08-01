@@ -12,8 +12,8 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
-import ru.vyarus.dropwizard.guice.module.context.debug.diagnostic.DiagnosticConfig
-import ru.vyarus.dropwizard.guice.module.context.debug.diagnostic.DiagnosticRenderer
+import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
+import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller

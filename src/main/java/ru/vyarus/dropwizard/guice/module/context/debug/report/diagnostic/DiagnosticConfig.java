@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.context.debug.diagnostic;
+package ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic;
 
 /**
  * Diagnostic reporting configuration. Config instance could be configured in chained fashion:

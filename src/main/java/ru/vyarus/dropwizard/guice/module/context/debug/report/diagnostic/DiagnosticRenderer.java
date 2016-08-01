@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.context.debug.diagnostic;
+package ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
@@ -7,6 +7,7 @@ import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.CommandItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
@@ -63,7 +64,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * @since 22.06.2016
  */
 @Singleton
-public class DiagnosticRenderer {
+public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
 
     public static final String SCAN = "SCAN";
     private final GuiceyConfigurationInfo service;
@@ -79,6 +80,7 @@ public class DiagnosticRenderer {
      * @param config print config
      * @return rendered diagnostic
      */
+    @Override
     public String renderReport(final DiagnosticConfig config) {
         final StringBuilder res = new StringBuilder();
         printCommands(config, res);

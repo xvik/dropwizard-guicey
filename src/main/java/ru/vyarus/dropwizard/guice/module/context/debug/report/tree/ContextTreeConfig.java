@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.context.debug.tree;
+package ru.vyarus.dropwizard.guice.module.context.debug.report.tree;
 
 import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;

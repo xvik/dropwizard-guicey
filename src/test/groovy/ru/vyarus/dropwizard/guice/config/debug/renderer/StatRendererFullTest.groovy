@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.config.debug.renderer
 
 import ru.vyarus.dropwizard.guice.AbstractTest
-import ru.vyarus.dropwizard.guice.module.context.debug.stat.StatsRenderer
+import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 import javax.inject.Inject

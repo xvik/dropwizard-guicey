@@ -6,8 +6,8 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup
-import ru.vyarus.dropwizard.guice.module.context.debug.diagnostic.DiagnosticConfig
-import ru.vyarus.dropwizard.guice.module.context.debug.diagnostic.DiagnosticRenderer
+import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
+import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
 

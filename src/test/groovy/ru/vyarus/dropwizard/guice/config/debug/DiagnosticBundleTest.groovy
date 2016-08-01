@@ -6,23 +6,21 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
-import ru.vyarus.dropwizard.guice.module.context.debug.diagnostic.DiagnosticConfig
+import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
+import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
-import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
-import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 12.07.2016
  */
-@UseDropwizardApp(App) // important to track HK part also
+@UseDropwizardApp(App)
+// important to track HK part also
 class DiagnosticBundleTest extends AbstractTest {
 
     def "Check logging"() {
@@ -35,11 +33,43 @@ class DiagnosticBundleTest extends AbstractTest {
     def "Check empty config detection"() {
 
         when: "empty config provided"
-        new DiagnosticBundle(new DiagnosticConfig())
+        DiagnosticBundle.builder()
+                .printConfiguration(new DiagnosticConfig())
 
         then: "error"
         thrown(IllegalStateException)
 
+    }
+
+    def "Diagnostic bundle builder test"() {
+
+        when: "bundle configured with builder"
+        DiagnosticBundle bundle = DiagnosticBundle.builder().printStartupStats(true).build()
+
+        then: "configured"
+        bundle.statsConfig == true
+        bundle.config == null
+        bundle.treeConfig == null
+
+        when: "all options configured"
+        bundle = DiagnosticBundle.builder()
+                .printStartupStats(false)
+                .printConfiguration(new DiagnosticConfig().printAll())
+                .printContextTree(new ContextTreeConfig())
+                .build()
+
+        then: "configured"
+        bundle.statsConfig == false
+        bundle.config.isPrintBundles()
+        bundle.treeConfig.hiddenItems.empty
+
+        when: "no options configured"
+        bundle = DiagnosticBundle.builder().build()
+
+        then: "nothing enabled"
+        bundle.statsConfig == null
+        bundle.config == null
+        bundle.treeConfig == null
     }
 
     static class App extends Application<Configuration> {

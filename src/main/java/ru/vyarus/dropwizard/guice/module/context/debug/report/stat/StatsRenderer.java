@@ -1,10 +1,11 @@
-package ru.vyarus.dropwizard.guice.module.context.debug.stat;
+package ru.vyarus.dropwizard.guice.module.context.debug.report.stat;
 
 import com.google.common.base.Predicate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.TreeNode;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
@@ -29,7 +30,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
  */
 @Singleton
 @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
-public class StatsRenderer {
+public class StatsRenderer implements ReportRenderer<Boolean> {
 
     private static final Predicate<ItemInfo> JERSEY_INSTALLER = new Predicate<ItemInfo>() {
         @Override
@@ -55,7 +56,8 @@ public class StatsRenderer {
      * @param hideTiny hide sections with time less then 1ms
      * @return rendered statistics report
      */
-    public String renderReport(final boolean hideTiny) {
+    @Override
+    public String renderReport(final Boolean hideTiny) {
         final TreeNode root = new TreeNode("GUICEY started in %s", info.getStats().humanTime(GuiceyTime));
         renderTimes(root, hideTiny);
 

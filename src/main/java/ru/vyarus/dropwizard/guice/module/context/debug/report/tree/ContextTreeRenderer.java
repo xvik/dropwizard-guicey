@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.context.debug.tree;
+package ru.vyarus.dropwizard.guice.module.context.debug.report.tree;
 
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.TreeNode;
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
@@ -32,7 +33,7 @@ import static com.google.common.base.Predicates.not;
  * @since 17.07.2016
  */
 @Singleton
-public class ContextTreeRenderer {
+public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
 
     private final GuiceyConfigurationInfo service;
 
@@ -49,6 +50,7 @@ public class ContextTreeRenderer {
      * @param config tree rendering config
      * @return rendered tree
      */
+    @Override
     public String renderReport(final ContextTreeConfig config) {
 
         final Set<Class<?>> scopes = service.getActiveScopes();

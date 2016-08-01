@@ -450,8 +450,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * <p>
          * If custom logging format is required use {@link DiagnosticBundle} directly.
          * <p>
-         * Also, bundle could be enabled with bundle lookup mechanism (e.g. with system property, see
-         * {@link GuiceyBundleLookup}).
+         * Bundle could be enabled indirectly with bundle lookup mechanism (e.g. with system property
+         * {@code PropertyBundleLookup.enableBundles(DiagnosticBundle.class)}).
          *
          * @return builder instance for chained calls
          * @see DiagnosticBundle
