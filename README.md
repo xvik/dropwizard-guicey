@@ -658,6 +658,40 @@ This guice bean is always registered and available for injection.
 
 Provided DiagnosticBundle (see above) is an example of collected info representation. It may serve as api usage examples.
 
+Example of recorded timings report:
+
+```
+    GUICEY started in 453.3 ms
+    │   
+    ├── [0,88%] CLASSPATH scanned in 4.282 ms
+    │   ├── scanned 5 classes
+    │   └── recognized 4 classes (80% of scanned)
+    │   
+    ├── [4,2%] COMMANDS processed in 19.10 ms
+    │   └── registered 2 commands
+    │   
+    ├── [6,4%] BUNDLES processed in 29.72 ms
+    │   ├── 2 resolved in 8.149 ms
+    │   └── 6 processed
+    │   
+    ├── [86%] INJECTOR created in 390.3 ms
+    │   ├── installers prepared in 13.79 ms
+    │   │   
+    │   ├── extensions recognized in 9.259 ms
+    │   │   ├── using 11 installers
+    │   │   └── from 7 classes
+    │   │   
+    │   └── 3 extensions installed in 4.188 ms
+    │   
+    ├── [1,3%] HK bridged in 6.583 ms
+    │   ├── using 2 jersey installers
+    │   └── 2 jersey extensions installed in 660.9 μs
+    │   
+    └── [1,1%] remaining 5 ms
+```
+
+See complete [diagnostics demo](https://github.com/xvik/dropwizard-guicey/wiki/Diagnostic-info)
+
 ### Admin REST
 
 All rest resources could be "published" in the admin context too.  This is just an emulation of rest: the same resources 
