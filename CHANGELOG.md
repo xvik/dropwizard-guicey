@@ -1,6 +1,7 @@
 ### 3.3.0 (2016-08-02)
 * Update to guice 4.1.0
 * Update to dropwizard 0.9.3
+* Grant compatibility with guice options: disableCircularProxies, requireExactBindingAnnotations and requireExplicitBindings
 * ResourceInstaller looks for @Path on directly implemented interface (#10)
 * Fix bundles lookup reporting (correct multiline)
 * Fix duplicate extensions installation when registered both manually and by auto scan
