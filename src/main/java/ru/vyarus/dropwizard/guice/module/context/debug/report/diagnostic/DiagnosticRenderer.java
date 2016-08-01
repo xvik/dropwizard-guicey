@@ -8,12 +8,10 @@ import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
-import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.CommandItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.*;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -58,6 +56,8 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * Some extensions may come from different sources. For example, bundle could come from lookup and registered directly.
  * In such cases all markers are shown (indicating all sources), whereas actually only one source was used for
  * configuration and other sources were ignored.
+ * <p>
+ * When item registered multiple times marker REG(N) shown where N - registrations count.
  *
  * @author Vyacheslav Rusakov
  * @see GuiceyConfigurationInfo for diagnostic data source
@@ -66,7 +66,8 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
 @Singleton
 public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
 
-    public static final String SCAN = "SCAN";
+    private static final int SINGLE = 1;
+
     private final GuiceyConfigurationInfo service;
 
     @Inject
@@ -105,7 +106,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         for (Class<Command> command : commands) {
             markers.clear();
             final CommandItemInfo info = service.getData().getInfo(command);
-            markers.add(SCAN);
+            commonMarkers(markers, info);
             if (info.isEnvironmentCommand()) {
                 markers.add("GUICE_ENABLED");
             }
@@ -140,6 +141,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         if (info.isFromDwBundle()) {
             markers.add("DW");
         }
+        commonMarkers(markers, info);
         for (int i = 0; i <= level; i++) {
             res.append(TAB);
         }
@@ -182,9 +184,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
             }
             final InstallerItemInfo info = service.getData().getInfo(installer);
             markers.clear();
-            if (info.isFromScan()) {
-                markers.add(SCAN);
-            }
+            commonMarkers(markers, info);
             res.append(TAB).append(TAB).append(renderInstaller(installer, markers)).append(NEWLINE);
 
             if (config.isPrintExtensions()) {
@@ -209,9 +209,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
     private String renderExtension(final Class<Object> extension) {
         final ExtensionItemInfo einfo = service.getData().getInfo(extension);
         final List<String> markers = Lists.newArrayList();
-        if (einfo.isFromScan()) {
-            markers.add(SCAN);
-        }
+        commonMarkers(markers, einfo);
         if (einfo.isLazy()) {
             markers.add("LAZY");
         }
@@ -228,8 +226,21 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         }
         // modules will never be empty
         res.append(NEWLINE).append(NEWLINE).append(TAB).append("GUICE MODULES = ").append(NEWLINE);
+        final List<String> markers = Lists.newArrayList();
         for (Class<Module> module : modules) {
-            res.append(TAB).append(TAB).append(renderClassLine(module, null)).append(NEWLINE);
+            markers.clear();
+            final ItemInfo info = service.getData().getInfo(module);
+            commonMarkers(markers, info);
+            res.append(TAB).append(TAB).append(renderClassLine(module, markers)).append(NEWLINE);
+        }
+    }
+
+    private void commonMarkers(final List<String> markers, final ItemInfo item) {
+        if (item.getRegisteredBy().contains(ClasspathScanner.class)) {
+            markers.add("SCAN");
+        }
+        if (item.getRegistrationAttempts() > SINGLE) {
+            markers.add("REG(" + item.getRegistrationAttempts() + ")");
         }
     }
 }

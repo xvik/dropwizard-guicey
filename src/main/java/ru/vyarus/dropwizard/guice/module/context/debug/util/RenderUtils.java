@@ -106,7 +106,7 @@ public final class RenderUtils {
     public static String markers(final List<String> markers) {
         String signs = "";
         if (markers != null && !markers.isEmpty()) {
-            signs = "*" + Joiner.on(',').join(markers);
+            signs = "*" + Joiner.on(", ").join(markers);
         }
         return signs;
     }

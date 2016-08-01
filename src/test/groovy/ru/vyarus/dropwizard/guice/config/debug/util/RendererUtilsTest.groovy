@@ -26,7 +26,7 @@ class RendererUtilsTest extends Specification {
 
         where:
         type              | render                                                                 | disabled
-        ResourceInstaller | "resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    *TEST,SM" | "-resource            (r.v.d.g.m.i.f.j.ResourceInstaller)"
+        ResourceInstaller | "resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    *TEST, SM" | "-resource            (r.v.d.g.m.i.f.j.ResourceInstaller)"
     }
 
     def "Check class render"() {
@@ -60,9 +60,9 @@ class RendererUtilsTest extends Specification {
 
         where:
         type                 | render
-        ResourceInstaller    | "ResourceInstaller            (r.v.d.g.m.i.f.jersey)     *TEST,SM"
-        InnerClass           | "InnerClass                   (r.v.d.g.c.d.u.RendererUtilsTest) *TEST,SM"
-        ANONYMOUS.getClass() | "RendererUtilsTest\$1          (r.v.d.g.c.debug.util)     *TEST,SM"
+        ResourceInstaller    | "ResourceInstaller            (r.v.d.g.m.i.f.jersey)     *TEST, SM"
+        InnerClass           | "InnerClass                   (r.v.d.g.c.d.u.RendererUtilsTest) *TEST, SM"
+        ANONYMOUS.getClass() | "RendererUtilsTest\$1          (r.v.d.g.c.debug.util)     *TEST, SM"
     }
 
     def "Check markers"() {
@@ -74,7 +74,7 @@ class RendererUtilsTest extends Specification {
         src            | res
         null           | ""
         ["TEST"]       | "*TEST"
-        ["TEST", "MM"] | "*TEST,MM"
+        ["TEST", "MM"] | "*TEST, MM"
     }
 
     def "Check brackets"() {

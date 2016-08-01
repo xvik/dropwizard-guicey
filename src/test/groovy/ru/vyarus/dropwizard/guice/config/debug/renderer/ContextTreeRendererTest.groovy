@@ -153,6 +153,7 @@ class ContextTreeRendererTest extends Specification {
                 .hideExtensions()
                 .hideInstallers()
                 .hideEmptyBundles()
+                .hideDuplicateRegistrations()
                 .hideCommands()) == """
 
     APPLICATION
@@ -160,6 +161,26 @@ class ContextTreeRendererTest extends Specification {
     │
     └── FooBundle                    (r.v.d.g.d.s.bundle)
         └── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
+"""
+    }
+
+    def "Check duplicate bundle render even when empty bundles hidden"() {
+        expect:
+        render(new ContextTreeConfig()
+                .hideModules()
+                .hideExtensions()
+                .hideInstallers()
+                .hideEmptyBundles()
+                .hideCommands()) == """
+
+    APPLICATION
+    ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
+    │
+    ├── FooBundle                    (r.v.d.g.d.s.bundle)
+    │   └── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
+    │
+    └── BUNDLES LOOKUP
+        └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
 """
     }
 

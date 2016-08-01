@@ -6,7 +6,9 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
+import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundleResource
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
@@ -25,7 +27,10 @@ class DiagnosticBundleTest extends AbstractTest {
 
     def "Check logging"() {
 
-        expect:
+        // test checks just no exceptions
+        // used for real reporting manual testing
+
+        expect: "correct startup"
         true
 
     }
@@ -80,8 +85,10 @@ class DiagnosticBundleTest extends AbstractTest {
                     GuiceBundle.builder()
                             .enableAutoConfig(FooResource.package.name)
                             .searchCommands()
-                            .bundles(new FooBundle())
+                            .bundles(new Foo2Bundle())
                             .modules(new FooModule())
+                            // intentional duplicate to increment REG
+                            .extensions(FooBundleResource, FooBundleResource)
                             .disableInstallers(LifeCycleInstaller)
                             .strictScopeControl()
                             .printDiagnosticInfo()

@@ -43,12 +43,12 @@ class DiagnosticRendererTest extends Specification {
 
     COMMANDS =
         Cli                          (r.v.d.g.d.s.features)     *SCAN
-        EnvCommand                   (r.v.d.g.d.s.features)     *SCAN,GUICE_ENABLED
+        EnvCommand                   (r.v.d.g.d.s.features)     *SCAN, GUICE_ENABLED
 
 
     BUNDLES =
         CoreInstallersBundle         (r.v.d.g.m.installer)
-        FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP
+        FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(2)
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
@@ -56,7 +56,7 @@ class DiagnosticRendererTest extends Specification {
 
 
     INSTALLERS and EXTENSIONS in processing order =
-        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller)
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
             HK2DebugFeature              (r.v.d.g.m.j.d.service)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
             LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
@@ -82,12 +82,12 @@ class DiagnosticRendererTest extends Specification {
 
     COMMANDS =
         Cli                          (r.v.d.g.d.s.features)     *SCAN
-        EnvCommand                   (r.v.d.g.d.s.features)     *SCAN,GUICE_ENABLED
+        EnvCommand                   (r.v.d.g.d.s.features)     *SCAN, GUICE_ENABLED
 
 
     BUNDLES =
         CoreInstallersBundle         (r.v.d.g.m.installer)
-        FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP
+        FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(2)
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
@@ -95,7 +95,7 @@ class DiagnosticRendererTest extends Specification {
 
 
     INSTALLERS and EXTENSIONS in processing order =
-        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller)
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
             HK2DebugFeature              (r.v.d.g.m.j.d.service)
         jerseyprovider       (r.v.d.g.m.i.f.j.p.JerseyProviderInstaller)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
@@ -132,7 +132,7 @@ class DiagnosticRendererTest extends Specification {
 
     BUNDLES =
         CoreInstallersBundle         (r.v.d.g.m.installer)
-        FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP
+        FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(2)
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
@@ -146,7 +146,7 @@ class DiagnosticRendererTest extends Specification {
         render(new DiagnosticConfig().printInstallers()) == """
 
     INSTALLERS in processing order =
-        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller)
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
 """ as String;
     }
@@ -159,7 +159,7 @@ class DiagnosticRendererTest extends Specification {
                 .printNotUsedInstallers()) == """
 
     INSTALLERS in processing order =
-        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller)
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
         jerseyprovider       (r.v.d.g.m.i.f.j.p.JerseyProviderInstaller)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
@@ -181,7 +181,7 @@ class DiagnosticRendererTest extends Specification {
                 .printDisabledInstallers()) == """
 
     INSTALLERS in processing order =
-        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller)
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
         -lifecycle           (r.v.d.g.m.i.f.LifeCycleInstaller)
         -managed             (r.v.d.g.m.i.feature.ManagedInstaller)
@@ -196,7 +196,7 @@ class DiagnosticRendererTest extends Specification {
                 .printExtensions()) == """
 
     INSTALLERS and EXTENSIONS in processing order =
-        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller)
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
             HK2DebugFeature              (r.v.d.g.m.j.d.service)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
             LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY

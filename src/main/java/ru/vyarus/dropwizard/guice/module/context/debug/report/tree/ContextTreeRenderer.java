@@ -35,6 +35,8 @@ import static com.google.common.base.Predicates.not;
 @Singleton
 public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
 
+    private static final String IGNORED = "IGNORED";
+
     private final GuiceyConfigurationInfo service;
 
     @Inject
@@ -150,6 +152,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param scope  current scope
      * @param bundle bundle class
      */
+    @SuppressWarnings("PMD.UselessParentheses")
     private void renderBundle(final ContextTreeConfig config, final TreeNode root,
                               final Class<?> scope, final Class<Object> bundle) {
         final BundleItemInfo info = service.getData().getInfo(bundle);
@@ -163,15 +166,16 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         if (!isDuplicateRegistration(info, scope)) {
             renderScopeContent(config, node, bundle);
         }
-        // avoid showing empty bundle line if configured to hide
-        if (node.hasChildren() || !config.isHideEmptyBundles()) {
+        // avoid showing empty bundle line if configured to hide (but show if bundle is ignored as duplicate)
+        if (node.hasChildren() || !config.isHideEmptyBundles()
+                || (!config.isHideDisables() && markers.contains(IGNORED))) {
             root.child(node);
         }
     }
 
     private void fillCommonMarkers(final ItemInfo info, final List<String> markers, final Class<?> scope) {
         if (isDuplicateRegistration(info, scope)) {
-            markers.add("IGNORED");
+            markers.add(IGNORED);
         }
         if (isDisabled(info)) {
             markers.add("DISABLED");
