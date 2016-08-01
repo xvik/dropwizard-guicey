@@ -1,4 +1,6 @@
+### 3.3.0 (2016-08-02)
 * Update to guice 4.1.0
+* Update to dropwizard 0.9.3
 * ResourceInstaller looks for @Path on directly implemented interface (#10)
 * Fix bundles lookup reporting (correct multiline)
 * Fix duplicate extensions installation when registered both manually and by auto scan
@@ -18,6 +20,8 @@
     - strictScopeControl() is shortcut to enable HK2DebugBundle (to control beans creation scope during development and tests)
     - printDiagnosticInfo() is shortcut to enable DiagnosticBundle with default preset (enable diagnostic logs)
     - shortcut methods for disabled boolean options: searchCommands(), configureFromDropwizardBundles() and bindConfigurationInterfaces()
+
+NOTE: if used FeaturesHolder (internal api bean), now it's renamed to ExtensionsHolder to force upgrade: use new GuiceyConfigurationInfo bean instead (public api)    
     
 ### 3.2.0 (2016-01-23)
 * Clear possible duplicate guicey bundle instances

@@ -14,6 +14,7 @@
 
 Features:
 * Guice injector created on run phase (now both dropwizard-guice and dropwizardry-guice do the same)
+* Compatible with guice restrictive options: `disableCircularProxies`, `requireExactBindingAnnotations` and `requireExplicitBindings`
 * Flexible HK2 integration
 * No base classes for application or guice module (only bundle registration required)
 * Configurable installers mechanism: each supported feature (task install, health check install, etc) has it's own installer and may be disabled
@@ -48,18 +49,18 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>3.2.0</version>
+  <version>3.3.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:3.2.0'
+compile 'ru.vyarus:dropwizard-guicey:3.3.0'
 ```
 
-- for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
 - for dropwizard 0.8 use version 3.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.8))
+- for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
 
 ##### Snapshots
 
@@ -106,7 +107,7 @@ void initialize(Bootstrap<TestConfiguration> bootstrap) {
 Installers defined manually. They will be used to detect provided bean classes and properly install them.
 
 Look [tests](https://github.com/xvik/dropwizard-guicey/tree/master/src/test/groovy/ru/vyarus/dropwizard/guice/support) 
-for configuration examples.
+and [examples repository](https://github.com/xvik/dropwizard-guicey-examples) for configuration examples.
 
 After application start, look application log for dropwizard style extension installation reports.
 
@@ -125,7 +126,14 @@ configure installers when auto scan not used.
 * `extensions` manually register classes (for example, when auto scan disabled). Classes will be installed using configured installers.
 * `bundles` registers guicey bundles (see below)
 * `configureFromDropwizardBundles` enables registered dropwizard bundles lookup if they implement `GuiceyBundle` (false by default)
+* `bindConfigurationInterfaces` enables configuration class binding with direct interfaces. This is useful for HasSomeConfig interfaces convention. Without it, configuration will be bound to all classes in configuration hierarchy
+* `strictScopeControl` shortcut to install HK2DebugBundle, which checks extensions instantiation in correct context (may be useful for debug)
+* `printDiagnosticInfo` shortcut to install DiagnosticBundle, which prints **[diagnostic info](https://github.com/xvik/dropwizard-guicey/wiki/Diagnostic-info)** 
 * `build` allows specifying guice injector stage (production, development). By default, PRODUCTION stage used.
+
+IMPORTANT: configured bundles, modules, installers and extensions are checked for duplicates using class type. Duplicate configurations will be simply ignored.
+For modules and bundles, which configured using instances, duplicates removes means that if two instances of the same type registered, then second instance will
+ be ignored.
 
 #### Using custom injector factory
 
@@ -186,7 +194,7 @@ Consider writing custom installer in such cases (it will eliminate need for inje
 
 ### Authentication
 
-All [dropwizard authentication](http://www.dropwizard.io/0.9.2/docs/manual/auth.html) 
+All [dropwizard authentication](http://www.dropwizard.io/0.9.3/docs/manual/auth.html) 
 configurations are pretty much the same. Here is an example of oauth configuration:
 
 ```java
@@ -220,7 +228,7 @@ When auto scan enabled:
 * Feature installers searched in classpath (including default installers): classes implementing `FeatureInstaller`.
 Without auto scan default installers not registered.
 * Search for features in classpath using `FeatureInstaller#matches` method.
-* If commands search enabled `.searchCommands(true)`, performs search for all classes extending `Command` and install them into
+* If commands search enabled `.searchCommands()`, performs search for all classes extending `Command` and install them into
 bootstrap.
 
 Classes are searched in specified packages and all their subpackages. 
@@ -265,7 +273,7 @@ Installer is a core integration concept: every extension point has it's own inst
 (the only difference is in manual mode classes specified manually).
 Installers itself are resolved using classpath scanning, so it's very easy to add custom installers (and possibly override default one by disabling it and registering alternative).
 
-All default installers could be found [here](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature)
+All default installers are registered by [CoreInstallersBundle](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/CoreInstallersBundle.java)
 
 When installer recognize class, it binds it into guice `binder.bind(foundClass)` (or bind by installer if it support binding).
 But extensions annotated with `@LazyBinding` are not bind to guice context. This may be useful to delay bean creation:
@@ -277,10 +285,15 @@ to register extension within dropwizard (installation type is defined by install
 Installers order is defined by `@Order` annotation. Default installers are ordered with indexes from 10 to 100 with gap 10.
 If you need to run your installer before/after some installer simply annotate it with `@Order`. Installers without annotation goes last.
 
+IMPORTANT: each extension is installed by only one installer! If extension could be recognized by more then one installers, it will be installed only by first matching installer (according to installers order). 
+
 ##### Resource
 [ResourceInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/ResourceInstaller.java)
 finds classes annotated with `@Path` and register their instance as resources. Resources **registered as singletons**, even if guice bean scope isn't set. If extension annotated as
 `@HK2Managed` then jersey HK container will manage bean creation (still guice beans injections are possible).
+
+Also recognize resources with `@Path` annotation on implemented interface. Annotations on interfaces are useful for [jersey client proxies](https://jersey.java.net/apidocs/2.22.1/jersey/org/glassfish/jersey/client/proxy/package-summary.html) 
+([example](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/cases/ifaceresource/InterfaceResourceDefinitionTest.groovy#L42)). 
 
 Use `Provider` for [request scoped beans](#request-scoped-beans) injections.
 
@@ -462,6 +475,15 @@ bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
 
 Or, if auto-scan is not used, bundles may be used to group application features: e.g. ResourcesBundle, TasksBundle.
 
+Bundles are transitive - bundle can install other bundles. 
+Duplicate bundles are detected using bundle type, so infinite configuration loops or duplicate configurations are not possible.
+
+NOTE: be careful if bundle is configurable (for example, requires constructor arguments). If two such bundles will be registered, only
+ first registration will be actually used and other instance ignored. Note that application configurations (using main GuiceBundle methods) 
+ performed before bundles processing and so bundle with correct parameters could be registered there.
+ 
+Transitive bundles (or simply a lot of bundles) may cause confusion. Use [diagnostic info](https://github.com/xvik/dropwizard-guicey/wiki/Diagnostic-info) to see how guicey was actually configured.  
+
 ##### Core bundle
 
 Core installers are grouped into `CoreInstallersBundle`.
@@ -484,6 +506,18 @@ Only beans installed by installers implementing `JerseyInstaller` (`ResourceInst
 All beans must be created by guice and only beans annotated with `@HK2Managed` must be instantiated by HK.
 
 Bundle may be used in tests. For example using `guicey.bundles` property (see bundles lookup below).
+
+May be enabled by `.strictScopeControl()' shortcut method.
+
+##### Diagnostic bundle 
+
+Bundle renders collected guicey diagnostic information (see below): [example output](https://github.com/xvik/dropwizard-guicey/wiki/Diagnostic-info#example-output).
+ 
+Output is highly configurable, use: `DiagnosticBundle.builder()` to configure reporting (if required).
+ 
+Bundle may be registered with bundle lookup mechanism: for example, using `guicey.bundles` property (see bundles lookup below). 
+ 
+May be enabled by `.printDiagnosticInfo()' shortcut method.
 
 ##### Dropwizard bundles unification
 
@@ -616,6 +650,14 @@ bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
 
 Here two lookup mechanisms registered (property lookup is not registered and will not be implicitly added).
 
+### Diagnostic info
+
+During startup guicey records main action timings and configuration process details. All this 
+information is accessible through [GuiceyConfigurationInfo](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/GuiceyConfigurationInfo.java).
+This guice bean is always registered and available for injection.  
+
+Provided DiagnosticBundle (see above) is an example of collected info representation. It may serve as api usage examples.
+
 ### Admin REST
 
 All rest resources could be "published" in the admin context too.  This is just an emulation of rest: the same resources 
@@ -728,10 +770,10 @@ The following request-scope objects available for injection:
 
 ### Testing
 
-Tests requires `'io.dropwizard:dropwizard-testing:0.9.2'` dependency.
+Tests requires `'io.dropwizard:dropwizard-testing:0.9.3'` dependency.
 
 For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like 
-[DropwizardAppRule](http://www.dropwizard.io/0.9.2/docs/manual/testing.html),
+[DropwizardAppRule](http://www.dropwizard.io/0.9.3/docs/manual/testing.html),
 but doesn't start jetty (and so jersey and guice web modules will not be initialized). Managed and lifecycle objects 
 supported.
 
