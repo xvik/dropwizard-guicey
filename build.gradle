@@ -35,7 +35,8 @@ dependencies {
     compile "com.google.inject.extensions:guice-servlet:$guice"
     compile "com.google.inject.extensions:guice-multibindings:$guice"
     compile "io.dropwizard:dropwizard-core:$dropwizard"
-    compile 'org.glassfish.hk2:guice-bridge:2.4.0-b31'
+    compile 'org.glassfish.hk2:guice-bridge:2.4.0'
+    compile 'org.glassfish.hk2:hk2-utils:2.4.0'
     compile 'ru.vyarus:generics-resolver:2.0.1'
 
     testCompile "io.dropwizard:dropwizard-auth:$dropwizard"
