@@ -14,7 +14,7 @@ import javax.ws.rs.Path
 class HKResource {
     @GET
     @Path("/foo")
-    public String get(){
+    public String get() {
         return ""
     }
 }

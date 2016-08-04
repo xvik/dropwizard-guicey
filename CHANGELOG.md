@@ -1,3 +1,5 @@
+* Update to dropwizard 1.0.0
+
 ### 3.3.0 (2016-08-02)
 * Update to guice 4.1.0
 * Update to dropwizard 0.9.3

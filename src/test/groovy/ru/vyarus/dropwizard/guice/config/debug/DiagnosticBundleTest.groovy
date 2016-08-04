@@ -7,7 +7,6 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
-import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundleResource
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource

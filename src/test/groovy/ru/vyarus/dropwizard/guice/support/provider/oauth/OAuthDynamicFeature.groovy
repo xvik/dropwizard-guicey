@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.support.provider.oauth
 
-import com.google.common.base.Optional
 import io.dropwizard.auth.*
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter
 import io.dropwizard.setup.Environment
@@ -39,7 +38,7 @@ class OAuthDynamicFeature extends AuthDynamicFeature {
 
         @Override
         Optional<User> authenticate(String credentials) throws AuthenticationException {
-            return Optional.fromNullable(credentials == "valid" ? new User(name: "valid") : null)
+            return Optional.ofNullable(credentials == "valid" ? new User(name: "valid") : null)
         }
     }
 

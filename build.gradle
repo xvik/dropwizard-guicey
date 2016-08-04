@@ -4,42 +4,46 @@ plugins {
     id 'project-report'
     id 'ru.vyarus.java-lib' version '1.0.2'
     id 'ru.vyarus.github-info' version '1.1.0'
-    id 'ru.vyarus.animalsniffer' version '1.1.0'
     id 'ru.vyarus.quality' version '1.3.0'
     id 'com.github.kt3k.coveralls' version '2.6.3'
     id 'com.jfrog.bintray' version '1.6'
     id 'net.researchgate.release' version '2.4.0'
-    id 'com.github.ben-manes.versions' version '0.12.0'
+    id 'com.github.ben-manes.versions' version '0.13.0'
+    id "io.spring.dependency-management" version "0.6.0.RELEASE"
 }
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 wrapper {
     gradleVersion = 2.14
 }
 
 ext {
-    dropwizard = '0.9.3'
+    dropwizard = '1.0.0'
     guice = '4.1.0'
 }
 
 repositories { jcenter(); mavenCentral(); mavenLocal() }
+dependencyManagement {
+    imports {
+        mavenBom "io.dropwizard:dropwizard-bom:$dropwizard"
+        mavenBom "com.google.inject:guice-bom:$guice"
+    }
+}
 dependencies {
-    signature 'org.codehaus.mojo.signature:java17:+@signature'
-
-    provided 'junit:junit:4.12'
-    provided "io.dropwizard:dropwizard-testing:$dropwizard"
+    provided 'junit:junit'
+    provided 'io.dropwizard:dropwizard-testing'
     provided 'org.spockframework:spock-core:1.0-groovy-2.4'
     provided 'com.google.code.findbugs:annotations:3.0.1'
 
-    compile "com.google.inject.extensions:guice-servlet:$guice"
-    compile "com.google.inject.extensions:guice-multibindings:$guice"
-    compile "io.dropwizard:dropwizard-core:$dropwizard"
-    compile 'org.glassfish.hk2:guice-bridge:2.4.0-b31'
+    compile 'com.google.inject.extensions:guice-servlet'
+    compile 'com.google.inject.extensions:guice-multibindings'
+    compile 'io.dropwizard:dropwizard-core'
+    compile "org.glassfish.hk2:guice-bridge:2.4.0-b34"
     compile 'ru.vyarus:generics-resolver:2.0.1'
 
-    testCompile "io.dropwizard:dropwizard-auth:$dropwizard"
-    testCompile 'org.glassfish.jersey.ext:jersey-proxy-client:2.22.1'
+    testCompile 'io.dropwizard:dropwizard-auth'
+    testCompile 'org.glassfish.jersey.ext:jersey-proxy-client'
     testCompile 'cglib:cglib-nodep:3.2.0'
     testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
 }

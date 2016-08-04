@@ -27,7 +27,8 @@ public class Jersey2Module extends ServletModule {
      * Guice filter registration name.
      */
     public static final String GUICE_FILTER = "Guice Filter";
-    private static final String STAR = "*";
+    private static final String ROOT_PATH = "/*";
+
     private final Application application;
     private final Environment environment;
     private final StatsTracker tracker;
@@ -49,9 +50,9 @@ public class Jersey2Module extends ServletModule {
 
         final GuiceFilter guiceFilter = new GuiceFilter();
         environment.servlets().addFilter(GUICE_FILTER, guiceFilter)
-                .addMappingForUrlPatterns(null, false, environment.getApplicationContext().getContextPath() + STAR);
+                .addMappingForUrlPatterns(null, false, ROOT_PATH);
         environment.admin().addFilter(GUICE_FILTER, new AdminGuiceFilter(guiceFilter))
-                .addMappingForUrlPatterns(null, false, environment.getAdminContext().getContextPath() + STAR);
+                .addMappingForUrlPatterns(null, false, ROOT_PATH);
     }
 }
 
