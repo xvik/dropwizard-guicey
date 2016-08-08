@@ -4,6 +4,7 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.DummyResource
 import ru.vyarus.dropwizard.guice.support.feature.DummyService
@@ -21,6 +22,7 @@ class OrderedInstallersApplication extends Application<TestConfiguration>{
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.installerorder")
+                .bundles(new WebInstallersBundle())
                 // at least one resource required
                 .extensions(DummyResource)
                 .modules(new BindModule(DummyService))

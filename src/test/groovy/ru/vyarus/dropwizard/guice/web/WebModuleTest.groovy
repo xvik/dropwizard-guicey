@@ -24,14 +24,24 @@ class WebModuleTest extends AbstractTest {
         then: "servlet active"
         res == 'Sample servlet'
 
-        when: "calling admin servlet"
-        res = new URL("http://localhost:8081/dummy").getText()
+        when: "calling extension servlet"
+        res = new URL("http://localhost:8080/dummy").getText()
         then: "servlet active and filter around it active"
         res == 'dispatched addition'
 
-        when: "calling admin servlet"
-        res = new URL("http://localhost:8081/sample").getText()
+        when: "calling extension filter"
+        res = new URL("http://localhost:8080/sample").getText()
         then: "filter active"
         res == 'dispatched'
+
+        when: "calling admin servlet"
+        res = new URL("http://localhost:8081/adminServlet").getText()
+        then: "servlet active"
+        res == 'admin'
+
+        when: "calling admin filter"
+        res = new URL("http://localhost:8081/adminFilter").getText()
+        then: "filter active"
+        res == 'admin'
     }
 }

@@ -1,8 +1,7 @@
-package ru.vyarus.dropwizard.guice.support.web
-
-import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilter
+package ru.vyarus.dropwizard.guice.support.web.feature
 
 import javax.servlet.*
+import javax.servlet.annotation.WebFilter
 
 /**
  * Filter mapped on admin servlet.
@@ -10,8 +9,8 @@ import javax.servlet.*
  * @author Vyacheslav Rusakov 
  * @since 14.10.2014
  */
-@AdminFilter(name = "aroundDummy", servlets = "dummy")
-class AdminFilterOnServlet implements Filter {
+@WebFilter(servletNames = ".dummy")
+class FilterOnServlet implements Filter {
 
     @Override
     void init(FilterConfig filterConfig) throws ServletException {

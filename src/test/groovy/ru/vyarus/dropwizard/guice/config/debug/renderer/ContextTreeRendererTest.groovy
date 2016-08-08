@@ -51,9 +51,7 @@ class ContextTreeRendererTest extends Specification {
     │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
     │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
     │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   ├── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
-    │   ├── installer  AdminFilterInstaller         (r.v.d.g.m.i.f.admin)
-    │   └── installer  AdminServletInstaller        (r.v.d.g.m.i.f.admin)
+    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
@@ -100,9 +98,7 @@ class ContextTreeRendererTest extends Specification {
     │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
     │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
     │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   ├── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
-    │   ├── installer  AdminFilterInstaller         (r.v.d.g.m.i.f.admin)
-    │   └── installer  AdminServletInstaller        (r.v.d.g.m.i.f.admin)
+    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
@@ -201,9 +197,7 @@ class ContextTreeRendererTest extends Specification {
     │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
     │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
     │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   ├── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
-    │   ├── installer  AdminFilterInstaller         (r.v.d.g.m.i.f.admin)
-    │   └── installer  AdminServletInstaller        (r.v.d.g.m.i.f.admin)
+    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
@@ -242,9 +236,7 @@ class ContextTreeRendererTest extends Specification {
     │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
     │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
     │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   ├── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
-    │   ├── installer  AdminFilterInstaller         (r.v.d.g.m.i.f.admin)
-    │   └── installer  AdminServletInstaller        (r.v.d.g.m.i.f.admin)
+    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)

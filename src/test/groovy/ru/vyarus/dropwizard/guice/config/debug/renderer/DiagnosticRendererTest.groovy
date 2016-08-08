@@ -107,8 +107,6 @@ class DiagnosticRendererTest extends Specification {
         healthcheck          (r.v.d.g.m.i.f.h.HealthCheckInstaller)
         task                 (r.v.d.g.m.i.feature.TaskInstaller)
         plugin               (r.v.d.g.m.i.f.plugin.PluginInstaller)
-        adminfilter          (r.v.d.g.m.i.f.a.AdminFilterInstaller)
-        adminservlet         (r.v.d.g.m.i.f.a.AdminServletInstaller)
         foobundle            (r.v.d.g.d.s.b.FooBundleInstaller)
         foo                  (r.v.d.g.d.s.features.FooInstaller)    *SCAN
         -lifecycle           (r.v.d.g.m.i.f.LifeCycleInstaller)
@@ -166,8 +164,6 @@ class DiagnosticRendererTest extends Specification {
         healthcheck          (r.v.d.g.m.i.f.h.HealthCheckInstaller)
         task                 (r.v.d.g.m.i.feature.TaskInstaller)
         plugin               (r.v.d.g.m.i.f.plugin.PluginInstaller)
-        adminfilter          (r.v.d.g.m.i.f.a.AdminFilterInstaller)
-        adminservlet         (r.v.d.g.m.i.f.a.AdminServletInstaller)
         foobundle            (r.v.d.g.d.s.b.FooBundleInstaller)
         foo                  (r.v.d.g.d.s.features.FooInstaller)    *SCAN
 """ as String;

@@ -1,4 +1,9 @@
 * Update to dropwizard 1.0.0
+* (breaking) Remove AdminServletInstaller and AdminFilterInstaller (replaced with new web bundle)
+* Add WebInstallersBundle (not installed by default) to install servlet and filters in both main and admin contexts:
+    - WebFilterInstaller installs filters annotated with java.servlet.annotation.WebFilter
+    - WebServletInstaller installs servlets annotated with java.servlet.annotation.WebServlet
+    - WebListenerInstaller installs filters annotated with java.servlet.annotation.WebListener
 
 ### 3.3.0 (2016-08-02)
 * Update to guice 4.1.0

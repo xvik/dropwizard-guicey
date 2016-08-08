@@ -3,11 +3,7 @@ package ru.vyarus.dropwizard.guice.diagnostic
 import io.dropwizard.Application
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.diagnostic.support.AutoScanApp
-import ru.vyarus.dropwizard.guice.diagnostic.support.features.Cli
-import ru.vyarus.dropwizard.guice.diagnostic.support.features.EnvCommand
-import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooInstaller
-import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
-import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
+import ru.vyarus.dropwizard.guice.diagnostic.support.features.*
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
@@ -15,8 +11,6 @@ import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilterInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
@@ -50,16 +44,14 @@ class AutoScanModeDiagnosticTest extends AbstractTest {
 
         and: "correct installers info"
         def classes = [FooInstaller,
-                       ManagedInstaller.class,
-                       JerseyFeatureInstaller.class,
-                       JerseyProviderInstaller.class,
-                       ResourceInstaller.class,
-                       EagerSingletonInstaller.class,
-                       HealthCheckInstaller.class,
-                       TaskInstaller.class,
-                       PluginInstaller.class,
-                       AdminFilterInstaller.class,
-                       AdminServletInstaller.class]
+                       ManagedInstaller,
+                       JerseyFeatureInstaller,
+                       JerseyProviderInstaller,
+                       ResourceInstaller,
+                       EagerSingletonInstaller,
+                       HealthCheckInstaller,
+                       TaskInstaller,
+                       PluginInstaller]
         info.installers as Set == classes as Set
         info.installersDisabled == [LifeCycleInstaller]
         info.installersFromScan == [FooInstaller]
@@ -74,7 +66,7 @@ class AutoScanModeDiagnosticTest extends AbstractTest {
 
         and: "correct scopes"
         info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle] as Set
-        info.getItemsByScope(Application) as Set == [CoreInstallersBundle, FooModule,  GuiceSupportModule] as Set
+        info.getItemsByScope(Application) as Set == [CoreInstallersBundle, FooModule, GuiceSupportModule] as Set
         info.getItemsByScope(ClasspathScanner) as Set == [FooInstaller, FooResource, EnvCommand, Cli] as Set
 
         and: "lifecycle installer was disabled"

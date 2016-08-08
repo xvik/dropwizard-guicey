@@ -6,19 +6,26 @@ import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilterInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebFilterInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListenerInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller
 import ru.vyarus.dropwizard.guice.support.feature.*
 import ru.vyarus.dropwizard.guice.support.feature.abstr.*
+import ru.vyarus.dropwizard.guice.support.web.feature.DummyFilter
+import ru.vyarus.dropwizard.guice.support.web.feature.DummyServlet
+import ru.vyarus.dropwizard.guice.support.web.feature.DummyWebListener
+import ru.vyarus.dropwizard.guice.support.web.feature.abstr.AbstractFilter
+import ru.vyarus.dropwizard.guice.support.web.feature.abstr.AbstractServlet
+import ru.vyarus.dropwizard.guice.support.web.feature.abstr.AbstractWebListener
 import spock.lang.Unroll
 
 /**
@@ -70,7 +77,8 @@ class InstallersTest extends AbstractTest {
         HealthCheckInstaller    | DummyHealthCheck     | AbstractHealthCheck
         EagerSingletonInstaller | DummyService         | AbstractService
         PluginInstaller         | DummyPlugin1         | AbstractPlugin
-        AdminFilterInstaller    | DummyAdminFilter     | AbstractAdminFilter
-        AdminServletInstaller   | DummyAdminServlet    | AbstractAdminServlet
+        WebFilterInstaller      | DummyFilter          | AbstractFilter
+        WebServletInstaller     | DummyServlet         | AbstractServlet
+        WebListenerInstaller    | DummyWebListener     | AbstractWebListener
     }
 }

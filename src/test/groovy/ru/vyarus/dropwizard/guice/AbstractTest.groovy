@@ -44,6 +44,7 @@ abstract class AbstractTest extends Specification {
         environment.jersey() >> Mock(JerseyEnvironment)
         environment.servlets() >> Mock(ServletEnvironment)
         environment.servlets().addFilter(*_) >> Mock(FilterRegistration.Dynamic)
+        environment.servlets().addServlet(*_) >> Mock(ServletRegistration.Dynamic)
         environment.getApplicationContext() >> Mock(MutableServletContextHandler)
         environment.admin() >> Mock(AdminEnvironment)
         environment.admin().addFilter(*_) >> Mock(FilterRegistration.Dynamic)

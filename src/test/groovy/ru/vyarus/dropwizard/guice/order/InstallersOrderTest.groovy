@@ -30,7 +30,7 @@ class InstallersOrderTest extends AbstractTest {
             pos = instPos
         }
         expect:
-        pos == 100
+        pos == 110
     }
 
     def "Check custom installer position correct"() {

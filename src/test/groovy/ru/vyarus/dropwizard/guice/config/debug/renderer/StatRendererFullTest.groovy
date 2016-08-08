@@ -71,7 +71,7 @@ class StatRendererFullTest extends AbstractTest {
         render.contains("] INJECTOR")
         render.contains("installers prepared in")
         render.contains("extensions recognized in")
-        render.contains("using 11 installers")
+        render.contains("using 9 installers")
         render.contains("from 7 classes")
         render.contains("3 extensions installed in")
 

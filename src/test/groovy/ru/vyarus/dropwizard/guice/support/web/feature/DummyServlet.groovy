@@ -1,10 +1,11 @@
-package ru.vyarus.dropwizard.guice.support.feature
+package ru.vyarus.dropwizard.guice.support.web.feature
 
 import com.google.common.base.Preconditions
-import com.google.inject.Inject
-import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminServlet
+import ru.vyarus.dropwizard.guice.support.feature.DummyService
 
+import javax.inject.Inject
 import javax.servlet.ServletException
+import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -13,13 +14,13 @@ import javax.servlet.http.HttpServletResponse
  * @author Vyacheslav Rusakov 
  * @since 13.10.2014
  */
-@AdminServlet(name = "dummy", patterns = "/dummy")
-class DummyAdminServlet extends HttpServlet {
+@WebServlet("/dummy")
+class DummyServlet extends HttpServlet {
 
     DummyService service
 
     @Inject
-    DummyAdminServlet(DummyService service) {
+    DummyServlet(DummyService service) {
         this.service = service
     }
 

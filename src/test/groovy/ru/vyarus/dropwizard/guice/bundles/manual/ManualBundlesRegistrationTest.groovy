@@ -19,7 +19,7 @@ class ManualBundlesRegistrationTest extends AbstractTest {
 
         when: "application started"
         then: "installers registered"
-        info.installers.size() == 11
+        info.installers.size() == 9
 
     }
 }

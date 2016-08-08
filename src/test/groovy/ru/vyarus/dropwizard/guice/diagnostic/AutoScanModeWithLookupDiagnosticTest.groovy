@@ -15,8 +15,6 @@ import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilterInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
@@ -52,15 +50,13 @@ class AutoScanModeWithLookupDiagnosticTest extends AbstractTest {
         and: "correct installers info"
         // feature installer was installed transitively by Hk2DebugBundle
         def classes = [FooInstaller, FooBundleInstaller, JerseyFeatureInstaller,
-                       JerseyFeatureInstaller.class,
-                       JerseyProviderInstaller.class,
-                       ResourceInstaller.class,
-                       EagerSingletonInstaller.class,
-                       HealthCheckInstaller.class,
-                       TaskInstaller.class,
-                       PluginInstaller.class,
-                       AdminFilterInstaller.class,
-                       AdminServletInstaller.class]
+                       JerseyFeatureInstaller,
+                       JerseyProviderInstaller,
+                       ResourceInstaller,
+                       EagerSingletonInstaller,
+                       HealthCheckInstaller,
+                       TaskInstaller,
+                       PluginInstaller]
         info.installers as Set == classes as Set
         info.installersDisabled as Set == [LifeCycleInstaller, ManagedInstaller] as Set
         info.installersFromScan == [FooInstaller]

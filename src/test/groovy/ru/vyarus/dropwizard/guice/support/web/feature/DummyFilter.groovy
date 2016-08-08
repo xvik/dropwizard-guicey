@@ -1,27 +1,23 @@
-package ru.vyarus.dropwizard.guice.support.feature
+package ru.vyarus.dropwizard.guice.support.web.feature
 
 import com.google.common.base.Preconditions
-import com.google.inject.Inject
-import ru.vyarus.dropwizard.guice.module.installer.feature.admin.AdminFilter
+import ru.vyarus.dropwizard.guice.support.feature.DummyService
 
-import javax.servlet.Filter
-import javax.servlet.FilterChain
-import javax.servlet.FilterConfig
-import javax.servlet.ServletException
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
+import javax.inject.Inject
+import javax.servlet.*
+import javax.servlet.annotation.WebFilter
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 13.10.2014
  */
-@AdminFilter(name = "dummy", patterns = "/sample")
-class DummyAdminFilter implements Filter{
+@WebFilter("/sample")
+class DummyFilter implements Filter {
 
     DummyService service
 
     @Inject
-    DummyAdminFilter(DummyService service) {
+    DummyFilter(DummyService service) {
         this.service = service
     }
 

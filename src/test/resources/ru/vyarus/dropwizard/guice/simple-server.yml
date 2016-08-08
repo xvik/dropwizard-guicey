@@ -1,0 +1,5 @@
+server:
+  type: simple
+  rootPath: '/rest/*'
+  applicationContextPath: '/'
+  adminContextPath: '/admin/'
