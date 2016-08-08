@@ -4,7 +4,7 @@
 [![Build Status](http://img.shields.io/travis/xvik/dropwizard-guicey.svg?style=flat&branch=master)](https://travis-ci.org/xvik/dropwizard-guicey)
 [![Coverage Status](https://img.shields.io/coveralls/xvik/dropwizard-guicey.svg?style=flat)](https://coveralls.io/r/xvik/dropwizard-guicey?branch=master)
 
-> **[Examples repository](https://github.com/xvik/dropwizard-guicey-examples)**
+> **[Examples repository](https://github.com/xvik/dropwizard-guicey-examples)** | [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey)
 
 ### About
 
