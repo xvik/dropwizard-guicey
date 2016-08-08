@@ -432,13 +432,15 @@ And all plugins could be referenced as map:
 @Inject Map<PluginKey, PluginInterface> plugins;
 ```
 
+NOTE: It's not required to use enum as key. Any type could be set in your custom annotation (for example, `String value();`) .
+
 ##### Admin filter
-[AdminFilterInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/admin/AdminFilterInstaller.java)
+[AdminFilterInstaller](https://github.com/xvik/dropwizard-guicey/blob/dw-0.9/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/admin/AdminFilterInstaller.java)
 installs filters annotated with `@AdminFilter` into administration context. Support ordering.
 
 
 ##### Admin servlet
-[AdminServletInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/admin/AdminServletInstaller.java)
+[AdminServletInstaller](https://github.com/xvik/dropwizard-guicey/blob/dw-0.9/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/admin/AdminServletInstaller.java)
 installs servlets annotated with `@AdminServlet` into administration context. Support ordering.
 
 ### Guicey bundles
