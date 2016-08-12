@@ -20,6 +20,7 @@ class ManualAppWithLookup extends Application<Configuration> {
     void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.builder()
                 // test bundles from abstract test lookup is enabled by default
+                .noDefaultInstallers()
                 .installers(ResourceInstaller, FooInstaller)
                 .extensions(FooResource)
                 .modules(new FooModule())

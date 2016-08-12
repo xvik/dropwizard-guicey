@@ -17,6 +17,7 @@ class ExceptionMapperApp extends Application<TestConfiguration> {
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+                .noDefaultInstallers()
                 .installers(JerseyProviderInstaller, ResourceInstaller)
                 .extensions(IOExceptionMapper, ExceptionResource)
                 .build());

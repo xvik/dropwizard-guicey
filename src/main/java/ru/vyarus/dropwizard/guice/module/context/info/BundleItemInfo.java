@@ -24,7 +24,7 @@ public interface BundleItemInfo extends ItemInfo {
 
     /**
      * @return true if bundle recognized from configured dropwizard {@link io.dropwizard.Bundle}, false otherwise
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles(boolean)
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles()
      */
     boolean isFromDwBundle();
 }

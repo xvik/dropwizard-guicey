@@ -15,6 +15,7 @@ class LoopApp2 extends Application<Configuration> {
     @Override
     void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.builder()
+                .noDefaultInstallers()
                 .bundles(new LoopBundle1())
                 .build())
     }

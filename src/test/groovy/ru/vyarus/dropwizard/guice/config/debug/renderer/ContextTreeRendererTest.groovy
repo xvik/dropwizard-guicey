@@ -42,17 +42,6 @@ class ContextTreeRendererTest extends Specification {
     ├── module     GuiceSupportModule           (r.v.d.guice.module)
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
     │
-    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)      *DISABLED
-    │   ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)      *DISABLED
-    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
-    │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
-    │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
-    │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
-    │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
-    │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
-    │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
     │   ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)
@@ -64,9 +53,20 @@ class ContextTreeRendererTest extends Specification {
     │   └── module     GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
     │
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
-    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
     │   ├── extension  HK2DebugFeature              (r.v.d.g.m.j.d.service)
     │   └── module     HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
+    │
+    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
+    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)      *DISABLED
+    │   ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)      *DISABLED
+    │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
+    │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
+    │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
+    │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
+    │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
+    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
     │
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
@@ -89,17 +89,6 @@ class ContextTreeRendererTest extends Specification {
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
     │
-    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)      *DISABLED
-    │   ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)      *DISABLED
-    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
-    │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
-    │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
-    │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
-    │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
-    │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
-    │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
     │   ├── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
@@ -108,7 +97,18 @@ class ContextTreeRendererTest extends Specification {
     ├── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
     │
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
-    │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
+    │
+    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
+    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)      *DISABLED
+    │   ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)      *DISABLED
+    │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
+    │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
+    │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
+    │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
+    │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
+    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
     │
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
@@ -128,7 +128,6 @@ class ContextTreeRendererTest extends Specification {
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
-    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
@@ -136,6 +135,7 @@ class ContextTreeRendererTest extends Specification {
     │
     ├── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
+    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
     │
     └── BUNDLES LOOKUP
         └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
@@ -190,15 +190,6 @@ class ContextTreeRendererTest extends Specification {
 
     APPLICATION
     │
-    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
-    │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
-    │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
-    │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
-    │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
-    │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
-    │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
     │   └── FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
@@ -206,7 +197,16 @@ class ContextTreeRendererTest extends Specification {
     ├── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
     │
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
-    │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
+    │
+    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
+    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
+    │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
+    │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
+    │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
+    │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
+    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
     │
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
@@ -227,24 +227,25 @@ class ContextTreeRendererTest extends Specification {
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
     │
-    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)      *DISABLED
-    │   ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)      *DISABLED
-    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
-    │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
-    │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
-    │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
-    │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
-    │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
-    │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
     │   ├── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
     │   └── FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
     │
     ├── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
+    │
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
+    │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
+    │
+    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
+    │   ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)      *DISABLED
+    │   ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)      *DISABLED
+    │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
+    │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
+    │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
+    │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
+    │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
+    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
     │
     └── CLASSPATH SCAN
         └── installer  FooInstaller                 (r.v.d.g.d.s.features)
@@ -262,10 +263,6 @@ class ContextTreeRendererTest extends Specification {
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
     │
-    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
-    │   └── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
-    │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
     │   └── FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
@@ -273,7 +270,11 @@ class ContextTreeRendererTest extends Specification {
     ├── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
     │
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
-    │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
+    │
+    ├── CoreInstallersBundle         (r.v.d.g.m.installer)
+    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   └── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
     │
     └── BUNDLES LOOKUP
         └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
@@ -293,8 +294,10 @@ class ContextTreeRendererTest extends Specification {
 
     APPLICATION
     │
+    ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
+    │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
+    │
     └── CoreInstallersBundle         (r.v.d.g.m.installer)
-        ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
         └── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
 """
     }
@@ -317,7 +320,9 @@ class ContextTreeRendererTest extends Specification {
     │   └── FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
     │
     ├── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
+    │
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
+    │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
     │
     └── CLASSPATH SCAN
         └── installer  FooInstaller                 (r.v.d.g.d.s.features)

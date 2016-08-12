@@ -17,6 +17,7 @@ class ParamConverterApp extends Application<TestConfiguration> {
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+                .noDefaultInstallers()
                 .installers(JerseyProviderInstaller, ResourceInstaller)
                 .extensions(FooParamConverter, ParamResource)
                 .build());

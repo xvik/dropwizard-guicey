@@ -6,6 +6,7 @@ import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 
 import java.util.Arrays;
@@ -13,8 +14,8 @@ import java.util.List;
 
 /**
  * Guicey configuration object. Provides almost the same configuration methods as
- * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder}. Also, contains dropwizard configuration and
- * environment objects (in case if they are required).
+ * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder}. Also, contains dropwizard configuration,
+ * environment and application objects (in case if they are required).
  *
  * @author Vyacheslav Rusakov
  * @since 01.08.2015
@@ -144,5 +145,25 @@ public class GuiceyBootstrap {
         context.registerBundles(bundles);
         iterationBundles.addAll(Arrays.asList(bundles));
         return this;
+    }
+
+    /**
+     * Read option value. Options could be set only in application root
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#option(Enum, Object)}.
+     * If value wasn't set there then default value will be returned. Null may return only if it was default value
+     * and no new value were assigned.
+     * <p>
+     * Option access is tracked as option usage (all tracked data is available through
+     * {@link ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo}).
+     *
+     * @param option option enum
+     * @param <V>    option value type
+     * @param <T>    helper type to define option
+     * @return assigned option value or default value
+     * @see Option for more info about options
+     * @see ru.vyarus.dropwizard.guice.GuiceyOptions for options example
+     */
+    public <V, T extends Enum & Option> V option(final T option) {
+        return context.option(option);
     }
 }

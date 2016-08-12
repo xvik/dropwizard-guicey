@@ -15,6 +15,7 @@ class TransitiveBundlesApp extends Application<Configuration> {
     @Override
     void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.builder()
+                .noDefaultInstallers()
                 .bundles(new Bundle1())
                 .build())
     }

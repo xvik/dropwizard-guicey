@@ -5,7 +5,6 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
@@ -19,8 +18,8 @@ class AutoScanApp extends Application<Configuration> {
     @Override
     void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.builder()
-                // no default test bundles from abstract test
-                .bundleLookup(new VoidBundleLookup())
+        // no default test bundles from abstract test
+                .disableBundleLookup()
                 .enableAutoConfig(FooResource.package.name)
                 .searchCommands()
                 .modules(new FooModule())

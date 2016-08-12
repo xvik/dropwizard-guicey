@@ -11,6 +11,7 @@ import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.InstallerItemInfoImpl;
+import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
@@ -38,13 +39,15 @@ public class GuiceyConfigurationInfo {
 
     private final ConfigurationInfo context;
     private final StatsInfo stats;
+    private final OptionsInfo options;
     private final ExtensionsHolder holder;
 
     @Inject
     public GuiceyConfigurationInfo(final ConfigurationInfo context, final StatsInfo stats,
-                                   final ExtensionsHolder holder) {
+                                   final OptionsInfo options, final ExtensionsHolder holder) {
         this.context = context;
         this.stats = stats;
+        this.options = options;
         this.holder = holder;
     }
 
@@ -66,6 +69,15 @@ public class GuiceyConfigurationInfo {
      */
     public StatsInfo getStats() {
         return stats;
+    }
+
+    /**
+     * @return configuration options
+     * @see ru.vyarus.dropwizard.guice.module.context.option.Option for more info
+     * @see ru.vyarus.dropwizard.guice.GuiceyOptions for options example
+     */
+    public OptionsInfo getOptions() {
+        return options;
     }
 
     /**
@@ -101,7 +113,7 @@ public class GuiceyConfigurationInfo {
 
     /**
      * @return types of all installed commands or empty list
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands(boolean)
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands()
      */
     public List<Class<Command>> getCommands() {
         return context.getItems(ConfigItem.Command);
@@ -126,7 +138,7 @@ public class GuiceyConfigurationInfo {
 
     /**
      * @return types of bundles resolved from dropwizard bundles or empty list
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles(boolean)
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles()
      */
     public List<Class<GuiceyBundle>> getBundlesFromDw() {
         return context.getItems(ConfigItem.Bundle, Filters.dwBundles());

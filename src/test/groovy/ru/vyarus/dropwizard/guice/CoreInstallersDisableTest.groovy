@@ -1,47 +1,45 @@
-package ru.vyarus.dropwizard.guice.bundles
+package ru.vyarus.dropwizard.guice
 
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
 
+
 /**
  * @author Vyacheslav Rusakov
- * @since 27.06.2016
+ * @since 13.08.2016
  */
-@UseGuiceyApp(SampleApp)
-class Hk2DebugEnableOptionTest extends Specification {
+@UseGuiceyApp(EmptyApp)
+class CoreInstallersDisableTest extends Specification {
 
     @Inject
     GuiceyConfigurationInfo info
 
-    def "Check hk debug bundle enable option"() {
+    def "Check no installers registered"() {
 
-        expect: "bundle enabled"
-        info.bundles == [HK2DebugBundle]
+        expect: "no installers"
+        info.getInstallers().empty
     }
 
-    static class SampleApp extends Application<Configuration> {
+    static class EmptyApp extends Application<Configuration> {
 
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundleLookup(new VoidBundleLookup())
+                    .disableBundleLookup()
                     .noDefaultInstallers()
-                    .strictScopeControl()
                     .build())
         }
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
+
         }
     }
 }

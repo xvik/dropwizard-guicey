@@ -6,6 +6,8 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
+import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.InstallerModule;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
@@ -15,6 +17,8 @@ import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
 
 import javax.inject.Singleton;
+
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationInterfaces;
 
 /**
  * Bootstrap integration guice module.
@@ -44,17 +48,14 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
 
     private final ClasspathScanner scanner;
     private final ConfigurationContext context;
-    private final boolean bindConfigurationInterfaces;
     private Bootstrap<T> bootstrap;
     private T configuration;
     private Environment environment;
 
     public GuiceSupportModule(final ClasspathScanner scanner,
-                              final ConfigurationContext context,
-                              final boolean bindConfigurationInterfaces) {
+                              final ConfigurationContext context) {
         this.scanner = scanner;
         this.context = context;
-        this.bindConfigurationInterfaces = bindConfigurationInterfaces;
     }
 
     @Override
@@ -78,9 +79,13 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
         install(new InstallerModule(scanner, context));
         install(new Jersey2Module(bootstrap.getApplication(), environment, context.stat()));
 
+        // let guice beans use options the same way as bundles (with usage tracking)
+        bind(Options.class).toInstance(new Options(context.options()));
+
         // provide access for configuration info collected during startup
         bind(ConfigurationInfo.class).toInstance(new ConfigurationInfo(context));
         bind(StatsInfo.class).toInstance(new StatsInfo(context.stat()));
+        bind(OptionsInfo.class).toInstance(new OptionsInfo(context.options()));
         bind(GuiceyConfigurationInfo.class).in(Singleton.class);
     }
 
@@ -106,7 +111,7 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
         if (type == Configuration.class) {
             return;
         }
-        if (bindConfigurationInterfaces) {
+        if (context.option(BindConfigurationInterfaces)) {
             for (Class iface : type.getInterfaces()) {
                 final String pkg = iface.getPackage().getName();
                 if (pkg.startsWith("java.") || pkg.startsWith("groovy.")) {

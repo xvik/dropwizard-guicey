@@ -14,6 +14,8 @@ import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
+import ru.vyarus.dropwizard.guice.module.context.option.Option;
+import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
@@ -40,6 +42,7 @@ import java.util.Map;
  * @see ConfigurationInfo for acessing collected info at runtime
  * @since 06.07.2016
  */
+@SuppressWarnings("PMD.GodClass")
 public final class ConfigurationContext {
 
     /**
@@ -68,6 +71,10 @@ public final class ConfigurationContext {
      * Used to gather guicey startup metrics.
      */
     private final StatsTracker tracker = new StatsTracker();
+    /**
+     * Used to set and get options within guicey.
+     */
+    private final OptionsSupport optionsSupport = new OptionsSupport();
 
 
     // --------------------------------------------------------------------------- SCOPE
@@ -97,7 +104,7 @@ public final class ConfigurationContext {
      * Register commands resolved with classpath scan.
      *
      * @param commands installed commands
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands(boolean)
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands()
      */
     public void registerCommands(final List<Class<Command>> commands) {
         setScope(ClasspathScanner.class);
@@ -113,7 +120,7 @@ public final class ConfigurationContext {
      * Register bundles, recognized from dropwizard bundles. {@link Bundle} used as context.
      *
      * @param bundles recognized bundles
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles(boolean)
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles()
      */
     public void registerDwBundles(final List<GuiceyBundle> bundles) {
         setScope(Bundle.class);
@@ -280,6 +287,35 @@ public final class ConfigurationContext {
         return getItems(ConfigItem.Extension);
     }
 
+    // --------------------------------------------------------------------------- OPTIONS
+
+    /**
+     * @param option option enum
+     * @param value  option value (not null)
+     * @param <T>    helper type to define option
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends Enum & Option> void setOption(final T option, final Object value) {
+        optionsSupport.set(option, value);
+    }
+
+    /**
+     * @param option option enum
+     * @param <V>    value type
+     * @param <T>    helper type to define option
+     * @return option value (set or default)
+     */
+    @SuppressWarnings("unchecked")
+    public <V, T extends Enum & Option> V option(final T option) {
+        return (V) optionsSupport.get(option);
+    }
+
+    /**
+     * @return options support object
+     */
+    public OptionsSupport options() {
+        return optionsSupport;
+    }
 
     // --------------------------------------------------------------------------- GENERAL
 

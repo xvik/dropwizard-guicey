@@ -32,9 +32,9 @@ public final class CommandSupport {
     }
 
     /**
-     * Scans classpath to find commands and register them. Default constructor used to instantiate command.
+     * Scans classpath to find commands and register them.
      * Commands are instantiated using default constructor, but {@link io.dropwizard.cli.EnvironmentCommand}
-     * should have constructor with {@link io.dropwizard.Application} argument.
+     * must have constructor with {@link io.dropwizard.Application} argument.
      *
      * @param bootstrap bootstrap object
      * @param scanner   configured scanner instance

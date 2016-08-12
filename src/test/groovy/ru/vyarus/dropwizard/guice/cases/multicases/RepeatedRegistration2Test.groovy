@@ -49,6 +49,7 @@ class RepeatedRegistration2Test extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
+                    .noDefaultInstallers()
                     .extensions(Feature)
                     .extensions(Feature)
                     .installers(EagerSingletonInstaller, CustomInstaller)

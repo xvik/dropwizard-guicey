@@ -47,11 +47,11 @@ class DiagnosticRendererTest extends Specification {
 
 
     BUNDLES =
-        CoreInstallersBundle         (r.v.d.g.m.installer)
         FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(2)
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
+        CoreInstallersBundle         (r.v.d.g.m.installer)
         DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
 
 
@@ -86,11 +86,11 @@ class DiagnosticRendererTest extends Specification {
 
 
     BUNDLES =
-        CoreInstallersBundle         (r.v.d.g.m.installer)
         FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(2)
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
+        CoreInstallersBundle         (r.v.d.g.m.installer)
         DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
 
 
@@ -129,11 +129,11 @@ class DiagnosticRendererTest extends Specification {
         render(new DiagnosticConfig().printBundles()) == """
 
     BUNDLES =
-        CoreInstallersBundle         (r.v.d.g.m.installer)
         FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(2)
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
+        CoreInstallersBundle         (r.v.d.g.m.installer)
         DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
 """ as String;
     }

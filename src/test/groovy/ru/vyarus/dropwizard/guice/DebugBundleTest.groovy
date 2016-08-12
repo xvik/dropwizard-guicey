@@ -72,6 +72,7 @@ class DebugBundleTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .bundles(new HK2DebugBundle())
                     .disableBundleLookup()
+                    .noDefaultInstallers()
                     .installers(ResourceInstaller, JerseyProviderInstaller)
                     .extensions(GuiceResource, HkResource, GuiceMapper, HkMapper)
                     .build())

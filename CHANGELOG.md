@@ -3,8 +3,18 @@
 * Add WebInstallersBundle (not installed by default) to install servlet and filters in both main and admin contexts:
     - WebFilterInstaller installs filters annotated with java.servlet.annotation.WebFilter
     - WebServletInstaller installs servlets annotated with java.servlet.annotation.WebServlet
-    - WebListenerInstaller installs filters annotated with java.servlet.annotation.WebListener
-
+    - WebListenerInstaller installs filters annotated with java.servlet.annotation.WebListener    
+* Add general options mechanism. Used to generify core guicey options, provide runtime options access (for bundles and reporting) and allow 3rd party bundles use it's own low-level options.
+    - GuiceBundle option(option, value) method used to specify options
+    - GuiceyBootstrap option(option) method provides access to defined options from bundles
+    - Options guice bean provide access to options from guice services
+    - OptionsInfo guice bean used for accessing options metadata (also accessible through GuiceyConfigurationInfo.getOptions())
+* (breaking) remove GuiceBunldle methods: searchCommands(boolean), configureFromDropwizardBundles(boolean), bindConfigurationInterfaces(boolean) 
+    (use either shortcuts without parameters or generic options method instead)
+* (breaking) core installers bundle now always installed (for both auto scan and manual modes)
+    - GuiceBundle noDefaultInstallers() shortcut method or GuiceyOptions.UseCoreInstallers option directly may be used to disable installation
+    
+    
 ### 3.3.0 (2016-08-02)
 * Update to guice 4.1.0
 * Update to dropwizard 0.9.3

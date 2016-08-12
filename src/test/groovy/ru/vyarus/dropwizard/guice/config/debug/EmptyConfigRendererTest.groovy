@@ -46,7 +46,10 @@ class EmptyConfigRendererTest extends Specification {
 
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
-            bootstrap.addBundle(GuiceBundle.builder().bundleLookup(new VoidBundleLookup()).build())
+            bootstrap.addBundle(GuiceBundle.builder()
+                    .bundleLookup(new VoidBundleLookup())
+                    .noDefaultInstallers()
+                    .build())
         }
 
         @Override

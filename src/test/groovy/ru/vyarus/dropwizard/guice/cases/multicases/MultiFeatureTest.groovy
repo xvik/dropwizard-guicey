@@ -40,7 +40,6 @@ class MultiFeatureTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(new CoreInstallersBundle())
                     .extensions(MultiExtension)
                     .build())
         }

@@ -5,7 +5,6 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooInstaller
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
@@ -22,7 +21,8 @@ class ManualAppWithBundle extends Application<Configuration> {
     void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.builder()
         // no default test bundles from abstract test
-                .bundleLookup(new VoidBundleLookup())
+                .disableBundleLookup()
+                .noDefaultInstallers()
                 .bundles(new FooBundle())
                 .installers(ResourceInstaller, FooInstaller)
                 .extensions(FooResource)

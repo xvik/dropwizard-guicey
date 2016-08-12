@@ -7,7 +7,7 @@ package ru.vyarus.dropwizard.guice.module.installer.bundle;
  * <p>Bundle should be registered into {@link ru.vyarus.dropwizard.guice.GuiceBundle} builder.</p>
  * <p>Dropwizard bundle may also be guicey bundle (in order to use single extension mechanism).
  * By default, dropwizard bundles lookup is disabled, to enable it use
- * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles(boolean)}.
+ * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles()}.
  * When enabled, all registered bundles are checked if they implement {@link GuiceyBundle}.</p>
  *
  * @author Vyacheslav Rusakov

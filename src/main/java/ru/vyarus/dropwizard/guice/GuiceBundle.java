@@ -20,6 +20,7 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
+import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
@@ -32,24 +33,24 @@ import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
 
 import java.util.Arrays;
-import java.util.Set;
 
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
 
 /**
  * Bundle enables guice integration for dropwizard. Guice context is configured in initialization phase,
  * but actual injector is created on run phase, This approach provides greater configuration options, because during
  * initialization configuration and environment objects are not available. Bootstrap, Environment and Configuration
- * object will be available in juice context. But if you need them in module (for example to get
+ * objects will be available in guice context. But if you need them in module (for example to get
  * configuration parameters), implement one of *AwareModule interfaces (e.g.
  * {@link ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule}).
  * <p>
  * You can use auto scan to automatically install features. To enable auto scan you must configure package (or
  * packages) to search in. To know all supported features look
  * {@link ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller} implementations. Installers are
- * expendable mechanism: they are resolved by scanning classpath, so you can add new installers in your code and
- * classpath scanning will find them and activate. Also, features could be disabled (for example, if you want to
- * replace existing feature, you will disable it in builder and implement your own - auto scan will find it and
+ * extendable mechanism: they are resolved by scanning classpath, so you can add new installers in your code and
+ * classpath scanning will find them and activate. Also, installers could be disabled (for example, if you want to
+ * replace existing installer, you will disable it in builder and implement your own - auto scan will find it and
  * activate).
  * <p>
  * Any class may be hidden from auto scanning with {@code @InvisibleForScanner} annotation.
@@ -58,7 +59,8 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
  * will be injected or you can activate auto scan for commands in builder (disabled by default). If auto scan
  * for commands enabled, they will be instantiated with default no-arg constructor.
  * <p>
- * Resources are registered using jersey integration module. GuiceFilter is also registered.
+ * Resources are registered using jersey integration module. GuiceFilter is registered for both contexts to provide
+ * request and session scopes support.
  * <p>
  * Lifecycle:
  * <ul>
@@ -74,8 +76,8 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
  * <li>Perform injections for all registered environment commands (because only environment commands runs bundles)</li>
  * </ul>
  * <p>
- * Project is based on ideas from <a href="https://github.com/HubSpot/dropwizard-guice">dropwizard-guice</a>
- * project. And because of this project name was changed to dropwizard-guicey.
+ * Project was originally inspired by <a href="https://github.com/HubSpot/dropwizard-guice">dropwizard-guice</a>
+ * project. And because of this, project name was changed to dropwizard-guicey.
  *
  * @param <T> configuration type
  * @author Vyacheslav Rusakov
@@ -87,13 +89,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
     private Injector injector;
     private final ConfigurationContext context = new ConfigurationContext();
-    private final Set<String> autoscanPackages = Sets.newHashSet();
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
     private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
-    private boolean searchCommands;
-    private boolean configureFromDropwizardBundles;
-    private boolean bindConfigurationInterfaces;
-    private Stage stage = Stage.PRODUCTION;
 
     private Bootstrap bootstrap;
     private ClasspathScanner scanner;
@@ -105,15 +102,18 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @Override
     public void initialize(final Bootstrap bootstrap) {
         final Stopwatch timer = context.stat().timer(GuiceyTime);
+        final String[] packages = context.option(ScanPackages);
+        final boolean searchCommands = context.option(SearchCommands);
+        final boolean scanEnabled = packages.length > 0;
         if (searchCommands) {
-            Preconditions.checkState(!autoscanPackages.isEmpty(),
+            Preconditions.checkState(scanEnabled,
                     "Commands search could not be performed, because auto scan was not activated");
         }
         // have to remember bootstrap in order to
         this.bootstrap = bootstrap;
         // init scanner
-        if (!autoscanPackages.isEmpty()) {
-            scanner = new ClasspathScanner(autoscanPackages, context.stat());
+        if (scanEnabled) {
+            scanner = new ClasspathScanner(Sets.newHashSet(Arrays.asList(packages)), context.stat());
             if (searchCommands) {
                 CommandSupport.registerCommands(bootstrap, scanner, context);
             }
@@ -124,8 +124,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @Override
     public void run(final T configuration, final Environment environment) throws Exception {
         final Stopwatch timer = context.stat().timer(GuiceyTime);
+        if (context.option(UseCoreInstallers)) {
+            context.registerBundles(new CoreInstallersBundle());
+        }
         configureFromBundles(configuration, environment);
-        context.registerModules(new GuiceSupportModule(scanner, context, bindConfigurationInterfaces));
+        context.registerModules(new GuiceSupportModule(scanner, context));
         configureModules(configuration, environment);
         createInjector(environment);
         afterInjectorCreation();
@@ -148,7 +151,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     private void configureFromBundles(final T configuration, final Environment environment) {
         final Stopwatch timer = context.stat().timer(BundleTime);
         final Stopwatch resolutionTimer = context.stat().timer(BundleResolutionTime);
-        if (configureFromDropwizardBundles) {
+        if (context.option(ConfigureFromDropwizardBundles)) {
             context.registerDwBundles(BundleSupport.findBundles(bootstrap, GuiceyBundle.class));
         }
         context.registerLookupBundles(bundleLookup.lookup());
@@ -180,7 +183,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
     private void createInjector(final Environment environment) {
         final Stopwatch timer = context.stat().timer(InjectorCreationTime);
-        injector = injectorFactory.createInjector(stage, context.getModules());
+        injector = injectorFactory.createInjector(context.option(InjectorStage), context.getModules());
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
@@ -210,6 +213,41 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     public static class Builder<T extends Configuration> {
         private final GuiceBundle<T> bundle = new GuiceBundle<T>();
+
+        /**
+         * Options is a generic mechanism to provide internal configuration values for guicey and 3rd party bundles.
+         * See {@link GuiceyOptions} as options example. Bundles may define their own enums in the same way to
+         * use options mechanism.
+         * <p>
+         * Options intended to be used for development time specific configurations (most likely
+         * low level options to slightly change behaviour). Also, in contrast to internal booleans
+         * (e.g. in main bundle), options are accessible everywhere and may be used by other 3rd party module or
+         * simply for reporting.
+         * <p>
+         * Options may be set only on application level. Guicey bundles could access option values through
+         * {@linkplain ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#option(Enum)
+         * bootstrap object}. Guice service could access options through
+         * {@linkplain ru.vyarus.dropwizard.guice.module.context.option.Options options bean}.
+         * Options metadata for reporting is available through
+         * {@linkplain ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo guice bean}.
+         * <p>
+         * Options may be used instead of shortcut methods when configuration value is dynamic (without options
+         * it would not be impossible to configure without breaking builder flow and additional if statements).
+         * <p>
+         * Note: each option declares exact option type and provided value is checked for type compatibility.
+         *
+         * @param option option enum
+         * @param value  option value (not null)
+         * @param <K>    helper type for option signature definition
+         * @return builder instance for chained calls
+         * @throws NullPointerException     is null value provided
+         * @throws IllegalArgumentException if provided value incompatible with option type
+         * @see Option for more details
+         */
+        public <K extends Enum & Option> Builder<T> option(final K option, final Object value) {
+            bundle.context.setOption(option, value);
+            return this;
+        }
 
         /**
          * Configures custom {@link InjectorFactory}. Required by some guice extensions like governator.
@@ -250,13 +288,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          *
          * @param basePackages packages to scan extensions in
          * @return builder instance for chained calls
+         * @see GuiceyOptions#ScanPackages
          */
         public Builder<T> enableAutoConfig(final String... basePackages) {
-            Preconditions.checkState(bundle.autoscanPackages.isEmpty(), "Auto config packages already configured");
             Preconditions.checkState(basePackages.length > 0, "Specify at least one package to scan");
-            bundle.autoscanPackages.addAll(Arrays.asList(basePackages));
-            bundle.context.registerBundles(new CoreInstallersBundle());
-            return this;
+            return option(ScanPackages, basePackages);
         }
 
         /**
@@ -279,28 +315,31 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Shortcut for {@link #searchCommands(boolean)}.
-         *
-         * @return builder instance for chained calls
-         */
-        public Builder<T> searchCommands() {
-            return searchCommands(true);
-        }
-
-        /**
-         * NOTE: will not scan if auto scan not enabled (packages not configured).
+         * NOTE: will not scan if auto scan not enabled (packages not configured
+         * with {@link #enableAutoConfig(String...)}).
          * <p>
-         * Use shortcut method for simple cases {@link #searchCommands()}. Method with parameter
-         * is suitable for cases when option is dynamic (e.g. computed from system property).
+         * Enables commands classpath search. All found commands are instantiated and registered in
+         * bootstrap. Default constructor is used for simple commands, but {@link io.dropwizard.cli.EnvironmentCommand}
+         * must have constructor with {@link io.dropwizard.Application} argument.
          * <p>
          * By default, commands search is disabled.
          *
-         * @param searchCommands true to enable class path scanning for commands, false to disable
          * @return builder instance for chained calls
+         * @see CommandSupport
+         * @see GuiceyOptions#SearchCommands
          */
-        public Builder<T> searchCommands(final boolean searchCommands) {
-            bundle.searchCommands = searchCommands;
-            return this;
+        public Builder<T> searchCommands() {
+            return option(SearchCommands, true);
+        }
+
+        /**
+         * Disables automatic {@link CoreInstallersBundle} registration (no installers will be registered by default).
+         *
+         * @return builder instance for chained calls
+         * @see GuiceyOptions#UseCoreInstallers
+         */
+        public Builder<T> noDefaultInstallers() {
+            return option(UseCoreInstallers, false);
         }
 
         /**
@@ -351,8 +390,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * Guicey bundles are mainly useful for extensions (to group installers and extensions installation without
          * auto scan). Its very like dropwizard bundles.
          * <p>
-         * Its also possible to use dropwizard bundles as guicey bundles: bundle must implement
-         * {@link GuiceyBundle} and {@link #configureFromDropwizardBundles(boolean)} must be enabled
+         * It's also possible to use dropwizard bundles as guicey bundles: bundle must implement
+         * {@link GuiceyBundle} and {@link #configureFromDropwizardBundles()} must be enabled
          * (disabled by default). This allows using dropwizard bundles as universal extension point.
          * <p>
          * Duplicate bundles are filtered automatically: bundles of the same type considered duplicate.
@@ -366,42 +405,20 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Shortcut for {@link #configureFromDropwizardBundles(boolean)}.
-         *
-         * @return builder instance for chained calls
-         */
-        public Builder<T> configureFromDropwizardBundles() {
-            return configureFromDropwizardBundles(true);
-        }
-
-        /**
-         * If enabled registered dropwizard bundles are checked if they implement {@link GuiceyBundle} and called
-         * to configure guice. This allows using dropwizard bundles as universal extension point.
-         * <p>
-         * Use shortcut method for simple cases {@link #configureFromDropwizardBundles()}. Method with parameter
-         * is suitable for cases when option is dynamic (e.g. computed from system property).
+         * Enables registered dropwizard bundles check if they implement {@link GuiceyBundle} and register them as
+         * guicey bundles. This allows using dropwizard bundles as universal extension point.
          * <p>
          * Disabled by default.
          *
-         * @param enable true to enable configuration from dropwizard bundles
          * @return builder instance for chained calls
+         * @see GuiceyOptions#ConfigureFromDropwizardBundles
          */
-        public Builder<T> configureFromDropwizardBundles(final boolean enable) {
-            bundle.configureFromDropwizardBundles = enable;
-            return this;
+        public Builder<T> configureFromDropwizardBundles() {
+            return option(ConfigureFromDropwizardBundles, true);
         }
 
         /**
-         * Shortcut for {@link #bindConfigurationInterfaces(boolean)}.
-         *
-         * @return builder instance for chained calls
-         */
-        public Builder<T> bindConfigurationInterfaces() {
-            return bindConfigurationInterfaces(true);
-        }
-
-        /**
-         * If enabled, interfaces implemented by configuration will also be bound to configuration instance
+         * Enables binding of interfaces implemented by configuration class to configuration instance
          * in guice context. Only interfaces directly implemented by any configuration class in configuration
          * classes hierarchy. Interfaces from java.* and groovy.*  packages are skipped.
          * This is useful to support {@code HasSomeConfiguration} interfaces convention.
@@ -411,12 +428,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * <p>
          * Disabled by default.
          *
-         * @param enable true to enable configuration interfaces binding
          * @return builder instance for chained calls
+         * @see GuiceyOptions#BindConfigurationInterfaces
          */
-        public Builder<T> bindConfigurationInterfaces(final boolean enable) {
-            bundle.bindConfigurationInterfaces = enable;
-            return this;
+        public Builder<T> bindConfigurationInterfaces() {
+            return option(BindConfigurationInterfaces, true);
         }
 
         /**
@@ -464,17 +480,19 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         /**
          * @param stage stage to run injector with
          * @return bundle instance
+         * @see GuiceyOptions#InjectorStage
          */
         public GuiceBundle<T> build(final Stage stage) {
-            bundle.stage = stage;
-            return bundle;
+            option(InjectorStage, stage);
+            return build();
         }
 
         /**
          * @return bundle instance with implicit PRODUCTION stage
+         * @see GuiceyOptions#InjectorStage
          */
         public GuiceBundle<T> build() {
-            return build(Stage.PRODUCTION);
+            return bundle;
         }
     }
 }

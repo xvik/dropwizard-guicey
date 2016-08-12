@@ -53,6 +53,7 @@ class ExtensionInfoCasesTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
+                    .noDefaultInstallers()
                     .installers(ResourceInstaller)
                     .extensions(HkResource, LazyResource)
                     .build())

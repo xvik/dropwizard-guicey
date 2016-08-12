@@ -23,7 +23,6 @@ class ManualBundlesApplication extends Application<TestConfiguration> {
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .disableBundleLookup()
-                .bundles(new CoreInstallersBundle())
                 .extensions(DummyTask, DummyResource, DummyManaged)
                 .build()
         );
