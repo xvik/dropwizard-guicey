@@ -25,6 +25,7 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeCo
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
@@ -111,9 +112,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
             Preconditions.checkState(scanEnabled,
                     "Commands search could not be performed, because auto scan was not activated");
         }
-        // have to remember bootstrap in order to
+        // have to remember bootstrap in order to inject it into modules
         this.bootstrap = bootstrap;
-        // init scanner
         if (scanEnabled) {
             scanner = new ClasspathScanner(Sets.newHashSet(Arrays.asList(packages)), context.stat());
             if (searchCommands) {
@@ -342,6 +342,20 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> noDefaultInstallers() {
             return option(UseCoreInstallers, false);
+        }
+
+        /**
+         * Shortcut to install {@link WebInstallersBundle}. Web installers are not available by default to
+         * reduce default installers count. Web installers use default servlet api annotations to install
+         * guice-aware servlets, filters and listeners. In many cases it will be more useful than using
+         * guice servlet modules.
+         *
+         * @return builder instance for chained calls
+         * @see WebInstallersBundle
+         */
+        public Builder<T> useWebInstallers() {
+            bundle.context.registerBundles(new WebInstallersBundle());
+            return this;
         }
 
         /**

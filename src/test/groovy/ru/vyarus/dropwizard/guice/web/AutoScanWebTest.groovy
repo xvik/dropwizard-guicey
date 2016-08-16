@@ -9,10 +9,9 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebFilterInstaller
-import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListenerInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebServletInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListenerInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.AdminGuiceFilter
 import ru.vyarus.dropwizard.guice.support.feature.DummyService
 import ru.vyarus.dropwizard.guice.support.util.BindModule
@@ -65,7 +64,7 @@ class AutoScanWebTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(new WebInstallersBundle())
+                    .useWebInstallers()
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.web.feature")
                     .modules(new BindModule(DummyService))
                     .build())

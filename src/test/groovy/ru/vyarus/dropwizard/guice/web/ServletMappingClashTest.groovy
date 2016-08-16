@@ -6,7 +6,6 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.support.web.servletclash.Servlet1
 import ru.vyarus.dropwizard.guice.support.web.servletclash.Servlet2
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
@@ -29,7 +28,7 @@ class ServletMappingClashTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(new WebInstallersBundle())
+                    .useWebInstallers()
                     .extensions(Servlet1, Servlet2)
                     .build())
         }

@@ -7,7 +7,6 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.support.web.crosscontext.CrossContextFilter
 import ru.vyarus.dropwizard.guice.support.web.crosscontext.CrossContextListener
 import ru.vyarus.dropwizard.guice.support.web.crosscontext.CrossContextServlet
@@ -49,7 +48,7 @@ class CrossContextTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(new WebInstallersBundle())
+                    .useWebInstallers()
                     .extensions(CrossContextFilter, CrossContextServlet, CrossContextListener)
                     .build())
         }

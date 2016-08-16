@@ -5,10 +5,8 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
-
 
 /**
  * @author Vyacheslav Rusakov
@@ -31,7 +29,7 @@ class AvailableInstallersPrintTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(new WebInstallersBundle())
+                    .useWebInstallers()
                     .printAvailableInstallers()
                     .build())
         }

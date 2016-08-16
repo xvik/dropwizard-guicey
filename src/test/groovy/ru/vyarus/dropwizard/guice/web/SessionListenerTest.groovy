@@ -6,10 +6,8 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import io.dropwizard.testing.junit.DropwizardAppRule
 import org.eclipse.jetty.server.session.SessionHandler
-import org.eclipse.jetty.util.MultiException
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.support.web.session.SessionListener
 
 /**
@@ -48,7 +46,7 @@ class SessionListenerTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(new WebInstallersBundle())
+                    .useWebInstallers()
                     .extensions(SessionListener)
                     .build())
         }
@@ -64,7 +62,7 @@ class SessionListenerTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(new WebInstallersBundle())
+                    .useWebInstallers()
                     .extensions(SessionListener)
                     .build())
         }

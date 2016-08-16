@@ -7,7 +7,6 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListenerInstaller
 import ru.vyarus.dropwizard.guice.support.web.listeners.ContextListener
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -35,7 +34,7 @@ class ListenersTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .enableAutoConfig(ContextListener.package.name)
-                    .bundles(new WebInstallersBundle())
+                    .useWebInstallers()
                     .build())
         }
 

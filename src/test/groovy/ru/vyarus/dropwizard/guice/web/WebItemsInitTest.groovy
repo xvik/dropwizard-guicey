@@ -10,7 +10,6 @@ import org.eclipse.jetty.servlet.FilterMapping
 import org.eclipse.jetty.servlet.ServletHolder
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.support.web.params.InitParamsFilter
 import ru.vyarus.dropwizard.guice.support.web.params.InitParamsServlet
 import ru.vyarus.dropwizard.guice.support.web.params.ServletRegFilter
@@ -59,7 +58,7 @@ class WebItemsInitTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .enableAutoConfig(InitParamsFilter.package.name)
-                    .bundles(new WebInstallersBundle())
+                    .useWebInstallers()
                     .build())
         }
 
