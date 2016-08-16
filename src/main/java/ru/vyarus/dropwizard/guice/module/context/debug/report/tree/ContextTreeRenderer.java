@@ -23,9 +23,6 @@ import javax.inject.Singleton;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Predicates.and;
-import static com.google.common.base.Predicates.not;
-
 /**
  * Renders complete configuration tree.
  *
@@ -93,7 +90,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         renderScopeItems(config, root, scope);
 
         final List<Class<Object>> bundles = service.getData()
-                .getItems(and(Filters.registeredBy(scope), Filters.type(ConfigItem.Bundle)));
+                .getItems(Filters.registeredBy(scope).and(Filters.type(ConfigItem.Bundle)));
 
         for (Class<Object> bundle : bundles) {
             renderBundle(config, root, scope, bundle);
@@ -109,7 +106,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      */
     private void renderScopeItems(final ContextTreeConfig config, final TreeNode root, final Class<?> scope) {
         final List<Class<Object>> items = service.getData()
-                .getItems(and(Filters.registeredBy(scope), not(Filters.type(ConfigItem.Bundle))));
+                .getItems(Filters.registeredBy(scope).and(Filters.type(ConfigItem.Bundle).negate()));
 
         final List<String> markers = Lists.newArrayList();
         for (Class<?> item : items) {

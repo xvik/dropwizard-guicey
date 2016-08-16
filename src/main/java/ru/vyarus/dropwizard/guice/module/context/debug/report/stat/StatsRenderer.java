@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.context.debug.report.stat;
 
-import com.google.common.base.Predicate;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
@@ -8,10 +7,8 @@ import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.TreeNode;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -31,19 +28,6 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
 @Singleton
 @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
 public class StatsRenderer implements ReportRenderer<Boolean> {
-
-    private static final Predicate<ItemInfo> JERSEY_INSTALLER = new Predicate<ItemInfo>() {
-        @Override
-        public boolean apply(@Nonnull final ItemInfo input) {
-            return JerseyInstaller.class.isAssignableFrom(input.getType());
-        }
-    };
-    private static final Predicate<ExtensionItemInfo> JERSEY_FEATURE = new Predicate<ExtensionItemInfo>() {
-        @Override
-        public boolean apply(@Nonnull final ExtensionItemInfo input) {
-            return JerseyInstaller.class.isAssignableFrom(input.getInstalledBy());
-        }
-    };
 
     private final GuiceyConfigurationInfo info;
 
@@ -150,11 +134,14 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         if (show(hideTiny, hk)) {
             final TreeNode node = root.child("[%.2g%%] HK bridged in %s",
                     hk / percent, info.getStats().humanTime(HKTime));
-            final int installers = info.getData().getItems(ConfigItem.Installer, JERSEY_INSTALLER).size();
+            final int installers = info.getData()
+                    .getItems(ConfigItem.Installer, it -> JerseyInstaller.class.isAssignableFrom(it.getType())).size();
             if (installers > 0) {
                 node.child("using %s jersey installers", installers);
 
-                final int extensions = info.getData().getItems(ConfigItem.Extension, JERSEY_FEATURE).size();
+                final int extensions = info.getData()
+                        .getItems(ConfigItem.Extension, (ExtensionItemInfo it) ->
+                                JerseyInstaller.class.isAssignableFrom(it.getInstalledBy())).size();
                 node.child("%s jersey extensions installed in %s",
                         extensions, info.getStats().humanTime(JerseyInstallerTime));
             }

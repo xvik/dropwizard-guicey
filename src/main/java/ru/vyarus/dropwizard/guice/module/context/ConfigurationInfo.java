@@ -1,14 +1,17 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.*;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Public api for collected guicey configuration info. In contrast to {@link ConfigurationContext},
@@ -17,8 +20,8 @@ import java.util.Map;
  * Configuration info may be used for any kind of diagnostics: configuration logging, configuration tree rendering,
  * automatic configuration warnings generation etc.
  * <p>
- * Configuration items are stored in registration order. Information querying is implemented with help of guava
- * {@link Predicate}.
+ * Configuration items are stored in registration order. Information querying is implemented with help of java 8
+ * {@link java.util.function.Predicate}.
  * <p>
  * Available for direct injection, but prefer accessing from
  * {@link ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo#getData()}.
@@ -60,9 +63,8 @@ public final class ConfigurationInfo {
 
     /**
      * Used to query items of one configuration type (e.g. only installers or bundles). Some common filters are
-     * predefined in {@link Filters}. Use {@link com.google.common.base.Predicates#and(Iterable)},
-     * {@link com.google.common.base.Predicates#or(Iterable)} and other composition methods to reuse default
-     * filters.
+     * predefined in {@link Filters}. Use {@link Predicate#and(Predicate)}, {@link Predicate#or(Predicate)}
+     * and {@link Predicate#negate()} to reuse default filters.
      * <p>
      * Pay attention that disabled (or disabled and never registered) items are also returned.
      *
@@ -80,9 +82,8 @@ public final class ConfigurationInfo {
     /**
      * Used to query items of all configuration types. May be useful to build configuration tree (e.g. to search
      * all items configured by bundle or by classpath scan). Some common filters are
-     * predefined in {@link Filters}. Use {@link com.google.common.base.Predicates#and(Iterable)},
-     * {@link com.google.common.base.Predicates#or(Iterable)} and other composition methods to reuse default
-     * filters.
+     * predefined in {@link Filters}. Use {@link Predicate#and(Predicate)}, {@link Predicate#or(Predicate)}
+     * and {@link Predicate#negate()} to reuse default filters.
      * <p>
      * Pay attention that disabled (or disabled and never registered) items are also returned.
      *
@@ -110,13 +111,6 @@ public final class ConfigurationInfo {
     }
 
     private <T, K extends ItemInfo> List<Class<T>> filter(final List<Class<T>> items, final Predicate<K> filter) {
-        return Lists.newArrayList(Iterables.filter(items, new Predicate<Class<T>>() {
-            @Override
-            @SuppressWarnings("unchecked")
-            public boolean apply(final @Nonnull Class<T> input) {
-                final K info = getInfo(input);
-                return filter.apply(info);
-            }
-        }));
+        return items.stream().filter(it -> filter.test(getInfo(it))).collect(Collectors.toList());
     }
 }

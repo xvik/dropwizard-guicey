@@ -1,7 +1,5 @@
 package ru.vyarus.dropwizard.guice.module;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Sets;
 import com.google.inject.Module;
 import io.dropwizard.cli.Command;
@@ -10,20 +8,16 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
-import ru.vyarus.dropwizard.guice.module.context.info.impl.InstallerItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import static com.google.common.base.Predicates.not;
 
 /**
  * Public api for internal guicey configuration info ans startup statistics. Provides information about time spent
@@ -90,7 +84,7 @@ public class GuiceyConfigurationInfo {
      * @see ItemInfo#getRegisteredBy() for more info about scopes
      */
     public List<Class<Object>> getItemsByScope(final Class<?> scope) {
-        return context.getItems(Predicates.and(Filters.enabled(), Filters.registeredBy(scope)));
+        return context.getItems(Filters.enabled().and(Filters.registeredBy(scope)));
     }
 
     /**
@@ -99,12 +93,9 @@ public class GuiceyConfigurationInfo {
      */
     public Set<Class<?>> getActiveScopes() {
         final Set<Class<?>> res = Sets.newHashSet();
-        context.getItems(new Predicate<ItemInfo>() {
-            @Override
-            public boolean apply(final @Nonnull ItemInfo input) {
-                res.addAll(input.getRegisteredBy());
-                return false;
-            }
+        context.getItems((it) -> {
+            res.addAll(it.getRegisteredBy());
+            return true;
         });
         return res;
     }
@@ -166,15 +157,14 @@ public class GuiceyConfigurationInfo {
      * @return installer types, resolved by classpath scan (without disabled) or empty list
      */
     public List<Class<FeatureInstaller>> getInstallersFromScan() {
-        return context.getItems(ConfigItem.Installer,
-                Predicates.<InstallerItemInfoImpl>and(Filters.enabled(), Filters.fromScan()));
+        return context.getItems(ConfigItem.Installer, Filters.enabled().and(Filters.fromScan()));
     }
 
     /**
      * @return types of manually disabled installers or empty list
      */
     public List<Class<FeatureInstaller>> getInstallersDisabled() {
-        return context.getItems(ConfigItem.Installer, not(Filters.enabled()));
+        return context.getItems(ConfigItem.Installer, Filters.enabled().negate());
     }
 
     /**

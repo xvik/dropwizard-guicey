@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.inject.Module;
 import io.dropwizard.cli.Command;
@@ -13,7 +12,6 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
@@ -117,12 +115,8 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
     private void printBundles(final DiagnosticConfig config, final StringBuilder res) {
         // top level bundles
         final List<Class<GuiceyBundle>> bundles = service.getData()
-                .getItems(ConfigItem.Bundle, new Predicate<BundleItemInfo>() {
-                    @Override
-                    public boolean apply(final @Nonnull BundleItemInfo input) {
-                        return input.isRegisteredDirectly() || input.isFromLookup() || input.isFromDwBundle();
-                    }
-                });
+                .getItems(ConfigItem.Bundle, (BundleItemInfo it) ->
+                        it.isRegisteredDirectly() || it.isFromLookup() || it.isFromDwBundle());
         if (!config.isPrintBundles() || bundles.isEmpty()) {
             return;
         }

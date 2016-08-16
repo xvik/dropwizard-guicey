@@ -22,24 +22,24 @@ class FiltersTest extends Specification {
     def "Check enabled filter"() {
 
         expect: "disabled item filtered"
-        !Filters.enabled().apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {
+        !Filters.enabled().test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
             disabledBy.add(Application)
         })
 
         and: "not supported items enabled"
-        Filters.enabled().apply(item(ConfigItem.Module, HK2DebugBundle.HK2DebugModule) {})
+        Filters.enabled().test(item(ConfigItem.Module, HK2DebugBundle.HK2DebugModule) {})
 
     }
 
     def "Check disabledBy filter"() {
 
         expect: "matched check"
-        Filters.disabledBy(Application).apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {
+        Filters.disabledBy(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
             disabledBy.add(Application)
         })
 
         and: "not matched check"
-        !Filters.disabledBy(Application).apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {
+        !Filters.disabledBy(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
             disabledBy.add(Bundle)
         })
 
@@ -48,27 +48,27 @@ class FiltersTest extends Specification {
     def "Check scan filter"() {
 
         expect: "from scan"
-        Filters.fromScan().apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {
+        Filters.fromScan().test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
             registeredBy.add(ClasspathScanner)
         })
 
         and: "not from scan"
-        !Filters.fromScan().apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
+        !Filters.fromScan().test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
 
         and: "item not support scan"
-        !Filters.fromScan().apply(item(ConfigItem.Module, HK2DebugBundle.HK2DebugModule) {})
+        !Filters.fromScan().test(item(ConfigItem.Module, HK2DebugBundle.HK2DebugModule) {})
 
     }
 
     def "Check registrationScope filter"() {
 
         expect: "matched check"
-        Filters.registrationScope(Application).apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {
+        Filters.registrationScope(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
             registrationScope = Application
         })
 
         and: "not matched check"
-        !Filters.registrationScope(Application).apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {
+        !Filters.registrationScope(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
             registrationScope = Bundle
         })
 
@@ -77,12 +77,12 @@ class FiltersTest extends Specification {
     def "Check registeredBy filter"() {
 
         expect: "matched check"
-        Filters.registeredBy(Application).apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {
+        Filters.registeredBy(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
             registeredBy.add(Application)
         })
 
         and: "not matched check"
-        !Filters.registeredBy(Application).apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {
+        !Filters.registeredBy(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
             registeredBy.add(Bundle)
         })
 
@@ -91,46 +91,46 @@ class FiltersTest extends Specification {
     def "Check type filter"() {
 
         expect: "matched check"
-        Filters.type(ConfigItem.Installer).apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
+        Filters.type(ConfigItem.Installer).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
 
         and: "not matched check"
-        !Filters.type(ConfigItem.Bundle).apply(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
+        !Filters.type(ConfigItem.Bundle).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
 
     }
 
     def "Check lookupBundles filter"() {
 
         expect: "matched check"
-        Filters.lookupBundles().apply(item(ConfigItem.Bundle, DiagnosticBundle) {
+        Filters.lookupBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {
             registeredBy.add(GuiceyBundleLookup)
         })
 
         and: "not matched check"
-        !Filters.lookupBundles().apply(item(ConfigItem.Bundle, DiagnosticBundle) {})
+        !Filters.lookupBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {})
 
     }
 
     def "Check dwBundles filter"() {
 
         expect: "matched check"
-        Filters.dwBundles().apply(item(ConfigItem.Bundle, DiagnosticBundle) {
+        Filters.dwBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {
             registeredBy.add(Bundle)
         })
 
         and: "not matched check"
-        !Filters.dwBundles().apply(item(ConfigItem.Bundle, DiagnosticBundle) {})
+        !Filters.dwBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {})
 
     }
 
     def "Check installedBy filter"() {
 
         expect: "matched check"
-        Filters.installedBy(JerseyFeatureInstaller).apply(item(ConfigItem.Extension, HK2DebugFeature) {
+        Filters.installedBy(JerseyFeatureInstaller).test(item(ConfigItem.Extension, HK2DebugFeature) {
             installedBy = JerseyFeatureInstaller
         })
 
         and: "not matched check"
-        !Filters.installedBy(JerseyFeatureInstaller).apply(item(ConfigItem.Extension, HK2DebugFeature) {})
+        !Filters.installedBy(JerseyFeatureInstaller).test(item(ConfigItem.Extension, HK2DebugFeature) {})
 
     }
 

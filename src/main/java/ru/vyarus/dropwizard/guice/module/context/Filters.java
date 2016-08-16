@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
-import com.google.common.base.Predicate;
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
@@ -8,17 +7,16 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.ScanSupport;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 
-import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Common filters for configuration information filtering in
  * {@link ConfigurationInfo#getItems(ConfigItem, Predicate)} and
  * {@link ConfigurationInfo#getItems(Predicate)}.
- * Use {@link com.google.common.base.Predicates#and(Iterable)},
- * {@link com.google.common.base.Predicates#or(Iterable)} and other composition methods to reuse default
- * filters.
+ * Use {@link Predicate#and(Predicate)}, {@link Predicate#or(Predicate)} and {@link Predicate#negate()}
+ * to reuse default filters.
  *
  * @author Vyacheslav Rusakov
  * @since 06.07.2016
@@ -39,12 +37,7 @@ public final class Filters {
      * @return enabled items filter
      */
     public static <T extends ItemInfo> Predicate<T> enabled() {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(final @Nonnull T input) {
-                return !(input instanceof DisableSupport) || ((DisableSupport) input).isEnabled();
-            }
-        };
+        return input -> !(input instanceof DisableSupport) || ((DisableSupport) input).isEnabled();
     }
 
     /**
@@ -57,12 +50,7 @@ public final class Filters {
      * @return items disabled in scope filter
      */
     public static <T extends ItemInfo> Predicate<T> disabledBy(final Class<?> scope) {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(final @Nonnull T input) {
-                return input instanceof DisableSupport && ((DisableSupport) input).getDisabledBy().contains(scope);
-            }
-        };
+        return input -> input instanceof DisableSupport && ((DisableSupport) input).getDisabledBy().contains(scope);
     }
 
     /**
@@ -74,12 +62,7 @@ public final class Filters {
      * @return items from classpath scan filter
      */
     public static <T extends ItemInfo> Predicate<T> fromScan() {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(final @Nonnull T input) {
-                return input instanceof ScanSupport && ((ScanSupport) input).isFromScan();
-            }
-        };
+        return input -> input instanceof ScanSupport && ((ScanSupport) input).isFromScan();
     }
 
     /**
@@ -97,12 +80,7 @@ public final class Filters {
      * @return items registered in specified context filter
      */
     public static <T extends ItemInfo> Predicate<T> registrationScope(final Class<?> scope) {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(final @Nonnull T input) {
-                return scope.equals(input.getRegistrationScope());
-            }
-        };
+        return input -> scope.equals(input.getRegistrationScope());
     }
 
     /**
@@ -114,30 +92,20 @@ public final class Filters {
      * @return items registered in specified context filter
      */
     public static <T extends ItemInfo> Predicate<T> registeredBy(final Class<?> type) {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(final @Nonnull T input) {
-                return input.getRegisteredBy().contains(type);
-            }
-        };
+        return input -> input.getRegisteredBy().contains(type);
     }
 
     /**
      * Filter used for multi-type searches to filter out item types.
      * In order to filter out only one type, may be used in conjunction with
-     * {@link com.google.common.base.Predicates#not(Predicate)}.
+     * {@link Predicate#negate()}.
      *
      * @param types item types to match
      * @return items of type filter
      */
     public static Predicate<ItemInfo> type(final ConfigItem... types) {
         final List<ConfigItem> target = Arrays.asList(types);
-        return new Predicate<ItemInfo>() {
-            @Override
-            public boolean apply(final @Nonnull ItemInfo input) {
-                return target.contains(input.getItemType());
-            }
-        };
+        return input -> target.contains(input.getItemType());
     }
 
     // --------------------------------------------------------------------------- BUNDLES
@@ -148,12 +116,7 @@ public final class Filters {
      * @return bundles resolved by lookup filter
      */
     public static Predicate<BundleItemInfo> lookupBundles() {
-        return new Predicate<BundleItemInfo>() {
-            @Override
-            public boolean apply(final @Nonnull BundleItemInfo input) {
-                return input.isFromLookup();
-            }
-        };
+        return BundleItemInfo::isFromLookup;
     }
 
     /**
@@ -162,12 +125,7 @@ public final class Filters {
      * @return bundles resolved from dropwizard bundles filter
      */
     public static Predicate<BundleItemInfo> dwBundles() {
-        return new Predicate<BundleItemInfo>() {
-            @Override
-            public boolean apply(final @Nonnull BundleItemInfo input) {
-                return input.isFromDwBundle();
-            }
-        };
+        return BundleItemInfo::isFromDwBundle;
     }
 
     // --------------------------------------------------------------------------- EXTENSIONS
@@ -179,11 +137,6 @@ public final class Filters {
      * @return extensions installed by specified installer filter
      */
     public static Predicate<ExtensionItemInfo> installedBy(final Class<? extends FeatureInstaller> type) {
-        return new Predicate<ExtensionItemInfo>() {
-            @Override
-            public boolean apply(final @Nonnull ExtensionItemInfo input) {
-                return type.equals(input.getInstalledBy());
-            }
-        };
+        return input -> type.equals(input.getInstalledBy());
     }
 }
