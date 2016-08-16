@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer;
@@ -24,19 +25,24 @@ public final class DiagnosticReporter {
     @Inject
     private StatsRenderer statsRenderer;
     @Inject
+    private OptionsRenderer optionsRenderer;
+    @Inject
     private DiagnosticRenderer diagnosticRenderer;
     @Inject
     private ContextTreeRenderer contextTreeRenderer;
 
     public void report(final Boolean statsConfig,
+                       final Boolean optionsConfig,
                        final DiagnosticConfig config,
                        final ContextTreeConfig treeConfig) {
 
         report("Startup stats = {}", statsRenderer, statsConfig);
+        report("Options = {}", optionsRenderer, optionsConfig);
         report("Configuration diagnostic info = {}", diagnosticRenderer, config);
         report("Configuration context tree = {}", contextTreeRenderer, treeConfig);
     }
 
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private <T> void report(final String name, final ReportRenderer<T> renderer, final T config) {
         if (config != null) {
             logger.info(name, renderer.renderReport(config));

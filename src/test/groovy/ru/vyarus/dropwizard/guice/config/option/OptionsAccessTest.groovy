@@ -41,7 +41,7 @@ class OptionsAccessTest extends Specification {
         info.options.findAll {
             it.declaringClass != GuiceyOptions
         } == [SampleOptions.BoolFalse, SampleOptions.BoolTrue, SampleOptions.NullOption] as Set
-        info.optionGroups == [SampleOptions, GuiceyOptions] as Set
+        info.optionGroups == [GuiceyOptions, SampleOptions]
 
         and: "set/read option info correct"
         info.getValue(SampleOptions.NullOption) == "SAMPLE"

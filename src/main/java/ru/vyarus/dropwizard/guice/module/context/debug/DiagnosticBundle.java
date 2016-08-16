@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer;
@@ -21,6 +22,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
  * Sections:
  * <ul>
  * <li>startup stats - collected timers and counters showing how much time were spent on different stages</li>
+ * <li>options - used options</li>
  * <li>diagnostic section - summary of installed bundles, modules, used installers and extensions
  * (showing execution order). Shows what was configured.</li>
  * <li>context tree - tree showing configuration hierarchy (configuration sources). Shows
@@ -36,8 +38,9 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
  *          .build();
  * </code></pre>
  * <p>
- * Actual diagnostic rendering is performed by {@link DiagnosticRenderer}, {@link ContextTreeRenderer} and
- * {@link StatsRenderer}. They may be used directly, for example, to show report on web page.
+ * Actual diagnostic rendering is performed by {@link DiagnosticRenderer}, {@link ContextTreeRenderer},
+ * {@link OptionsRenderer} and {@link StatsRenderer}. They may be used directly, for example, to show report
+ * on web page.
  * <p>
  * Reporting is performed after context startup (pure guicey context (in tests) or entire web context) and so
  * does not affect collected statistics.
@@ -48,6 +51,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 public class DiagnosticBundle implements GuiceyBundle {
 
     private final Boolean statsConfig;
+    private final Boolean optionsConfig;
     private final DiagnosticConfig config;
     private final ContextTreeConfig treeConfig;
 
@@ -58,6 +62,7 @@ public class DiagnosticBundle implements GuiceyBundle {
     public DiagnosticBundle() {
         this(builder()
                 .printStartupStats(true)
+                .printOptions(true)
 
                 .printConfiguration(new DiagnosticConfig()
                         .printDefaults())
@@ -70,6 +75,7 @@ public class DiagnosticBundle implements GuiceyBundle {
 
     DiagnosticBundle(final Builder builder) {
         this.statsConfig = builder.statsConfig;
+        this.optionsConfig = builder.optionsConfig;
         this.config = builder.config;
         this.treeConfig = builder.treeConfig;
     }
@@ -89,7 +95,7 @@ public class DiagnosticBundle implements GuiceyBundle {
     private void report(final Application app) {
         final DiagnosticReporter reporter = new DiagnosticReporter();
         InjectorLookup.getInjector(app).get().injectMembers(reporter);
-        reporter.report(statsConfig, config, treeConfig);
+        reporter.report(statsConfig, optionsConfig, config, treeConfig);
     }
 
     /**
@@ -105,11 +111,12 @@ public class DiagnosticBundle implements GuiceyBundle {
     public static class Builder {
 
         private Boolean statsConfig;
+        private Boolean optionsConfig;
         private DiagnosticConfig config;
         private ContextTreeConfig treeConfig;
 
         /**
-         * Enables startup statistic printing. Stats shows internal guicey timings and some details of configuration
+         * Enables startup statistic reporting. Stats shows internal guicey timings and some details of configuration
          * process.
          * <p>
          * Enabled automatically if default bundle constructor used.
@@ -120,6 +127,18 @@ public class DiagnosticBundle implements GuiceyBundle {
          */
         public Builder printStartupStats(final boolean hideSmallTimes) {
             this.statsConfig = hideSmallTimes;
+            return this;
+        }
+
+        /**
+         * Enables options reporting. Some options could be read lazily and so marked as NOT_USED at reporting time.
+         *
+         * @param showNotUsedMarker true to show NOT_USED marker for user defined but never read options, false
+         *                          to avoid marker
+         * @return builder instance for chained calls
+         */
+        public Builder printOptions(final boolean showNotUsedMarker) {
+            this.optionsConfig = showNotUsedMarker;
             return this;
         }
 
@@ -173,6 +192,7 @@ public class DiagnosticBundle implements GuiceyBundle {
         @Override
         protected void configure() {
             bind(StatsRenderer.class);
+            bind(OptionsRenderer.class);
             bind(DiagnosticRenderer.class);
             bind(ContextTreeRenderer.class);
         }

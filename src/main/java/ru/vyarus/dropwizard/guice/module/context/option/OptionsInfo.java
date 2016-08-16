@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context.option;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionHolder;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,10 @@ import java.util.stream.Collectors;
  * NOTE: service just provides info of already used options (consultation only service - for reporting).
  * If option wasn't used then default value will not be returned (error will be thrown). Option value read will not
  * mark option as used. Do not use it for reading option value (for actual option usage): use {@link Options} instead.
+ * <p>
+ * Most methods accept simple Enum instead of Enum & Option to simplify generic usage: if not allowed enum
+ * value will be used methods will throw exceptions. {@link #knowsOption(Enum)} method may be used to
+ * safely check enum value before calling actual data methods.
  *
  * @author Vyacheslav Rusakov
  * @see Option for options details
@@ -45,20 +50,21 @@ public final class OptionsInfo {
      * In contrast to {@link #getOptions()} returns only enum types of used options.
      * For example, {@link ru.vyarus.dropwizard.guice.GuiceyOptions} is enum type for core guicey options.
      *
-     * @return set of used options enums
+     * @return list of used option enums sorted by name
      */
-    public Set<Class<Enum>> getOptionGroups() {
-        return getOptions().stream().<Class<Enum>>map(Enum::getDeclaringClass).collect(Collectors.toSet());
+    public List<Class<Enum>> getOptionGroups() {
+        return getOptions().stream().<Class<Enum>>map(Enum::getDeclaringClass).distinct()
+                .sorted((one, two) -> one.getSimpleName().compareTo(two.getSimpleName()))
+                .collect(Collectors.toList());
     }
 
     /**
      * @param option option enum
      * @param <V>    value type
-     * @param <T>    helper type to define option
      * @return current option value (default or defined)
      * @throws IllegalArgumentException if option was not used
      */
-    public <V, T extends Enum & Option> V getValue(final T option) {
+    public <V> V getValue(final Enum option) {
         final OptionHolder<V> holder = options.getHolder(option);
         return holder == null ? null : holder.getValue();
     }
@@ -70,11 +76,10 @@ public final class OptionsInfo {
      * used value may change over time (even new options could appear for reporting).
      *
      * @param option option enum
-     * @param <T>    helper type to define option
      * @return true if option was read, false if option set but never used
      * @throws IllegalArgumentException if option was not used
      */
-    public <T extends Enum & Option> boolean isUsed(final T option) {
+    public boolean isUsed(final Enum option) {
         final OptionHolder holder = options.getHolder(option);
         return holder != null && holder.isUsed();
     }
@@ -83,13 +88,22 @@ public final class OptionsInfo {
      * All options are set in application (before application start) and will not change after.
      *
      * @param option option enum
-     * @param <T>    helper type to define option
      * @return true if option was manually defined, false when default value used
      * @throws IllegalArgumentException if option was not used
      */
-    public <T extends Enum & Option> boolean isSet(final T option) {
+    public boolean isSet(final Enum option) {
         final OptionHolder holder = options.getHolder(option);
         return holder != null && holder.isSet();
     }
 
+    /**
+     * Use this method to check if option is available for reporting (option details methods will fail with
+     * exception if not known option will be provided).
+     *
+     * @param option option enum
+     * @return true if option registered (was used or set), false otherwise
+     */
+    public boolean knowsOption(final Enum option) {
+        return options.containsOption(option);
+    }
 }

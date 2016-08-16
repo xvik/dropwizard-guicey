@@ -60,6 +60,14 @@ public final class OptionsSupport<T extends Enum & Option> {
     }
 
     /**
+     * @param option option
+     * @return true if option registered (was used or set), false otherwise
+     */
+    public boolean containsOption(final T option) {
+        return options.containsKey(option);
+    }
+
+    /**
      * @return set with all used options
      */
     public Set<T> getOptions() {

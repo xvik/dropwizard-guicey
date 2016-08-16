@@ -52,18 +52,21 @@ class DiagnosticBundleTest extends AbstractTest {
 
         then: "configured"
         bundle.statsConfig == true
+        bundle.optionsConfig == null
         bundle.config == null
         bundle.treeConfig == null
 
         when: "all options configured"
         bundle = DiagnosticBundle.builder()
                 .printStartupStats(false)
+                .printOptions(true)
                 .printConfiguration(new DiagnosticConfig().printAll())
                 .printContextTree(new ContextTreeConfig())
                 .build()
 
         then: "configured"
         bundle.statsConfig == false
+        bundle.optionsConfig == true
         bundle.config.isPrintBundles()
         bundle.treeConfig.hiddenItems.empty
 
@@ -72,6 +75,7 @@ class DiagnosticBundleTest extends AbstractTest {
 
         then: "nothing enabled"
         bundle.statsConfig == null
+        bundle.optionsConfig == null
         bundle.config == null
         bundle.treeConfig == null
     }

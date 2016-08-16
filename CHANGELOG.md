@@ -9,6 +9,7 @@
     - GuiceyBootstrap option(option) method provides access to defined options from bundles
     - Options guice bean provide access to options from guice services
     - OptionsInfo guice bean used for accessing options metadata (also accessible through GuiceyConfigurationInfo.getOptions())
+    - Options reporting added to DiagnosticBundle
 * (breaking) remove GuiceBunldle methods: searchCommands(boolean), configureFromDropwizardBundles(boolean), bindConfigurationInterfaces(boolean) 
     (use either shortcuts without parameters or generic options method instead)
 * (breaking) core installers bundle now always installed (for both auto scan and manual modes)
