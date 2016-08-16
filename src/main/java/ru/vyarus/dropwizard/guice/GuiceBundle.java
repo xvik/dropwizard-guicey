@@ -20,6 +20,8 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -468,12 +470,47 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * <p>
          * Bundle could be enabled indirectly with bundle lookup mechanism (e.g. with system property
          * {@code PropertyBundleLookup.enableBundles(DiagnosticBundle.class)}).
+         * <p>
+         * NOTE: Can't be used together with {@link #printAvailableInstallers()}.
          *
          * @return builder instance for chained calls
          * @see DiagnosticBundle
          */
         public Builder<T> printDiagnosticInfo() {
             bundle.context.registerBundles(new DiagnosticBundle());
+            return this;
+        }
+
+        /**
+         * Prints all registered (not disabled) installers with registration source. Useful to see all supported
+         * extension types when multiple guicey bundles registered and available features become not obvious
+         * from application class.
+         * <p>
+         * In contrast to {@link #printDiagnosticInfo()} shows all installers (including installers not used by
+         * application extensions). Installers report intended only to show available installers and will not
+         * show duplicate installers registrations or installers disabling (use diagnostic reporting for
+         * all configuration aspects).
+         * <p>
+         * NOTE: Can't be used together with {@link #printDiagnosticInfo()}. Both serve different purposes:
+         * available installers - to see what can be used and diagnostic info - to solve configuration problems
+         * or better understand current configuration.
+         *
+         * @return builder instance for chained calls
+         * @see DiagnosticBundle
+         */
+        public Builder<T> printAvailableInstallers() {
+            bundle.context.registerBundles(
+                    DiagnosticBundle.builder()
+                            .printConfiguration(new DiagnosticConfig()
+                                    .printInstallers()
+                                    .printNotUsedInstallers())
+                            .printContextTree(new ContextTreeConfig()
+                                    .hideCommands()
+                                    .hideDuplicateRegistrations()
+                                    .hideEmptyBundles()
+                                    .hideExtensions()
+                                    .hideModules())
+                            .build());
             return this;
         }
 

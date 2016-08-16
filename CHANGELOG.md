@@ -14,6 +14,8 @@
     (use either shortcuts without parameters or generic options method instead)
 * (breaking) core installers bundle now always installed (for both auto scan and manual modes)
     - GuiceBundle noDefaultInstallers() shortcut method or GuiceyOptions.UseCoreInstallers option directly may be used to disable installation
+* Add methods to GuiceBundle builder:
+    - printAvailableInstallers() - diagnostic reporting configured to show only available installers (to easily spot available features)
     
     
 ### 3.3.0 (2016-08-02)
