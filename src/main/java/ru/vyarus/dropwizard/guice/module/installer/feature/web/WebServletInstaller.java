@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.util.WebUtils;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSupport;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
@@ -19,6 +20,8 @@ import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import java.util.Set;
+
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.DenyServletRegistrationWithClash;
 
 /**
  * Search for http servlets annotated with {@link WebServlet} (servlet api annotation). Such servlets will not
@@ -32,7 +35,9 @@ import java.util.Set;
  * For example, for class "MyCoolServlet" generated name will be ".mycool".
  * <p>
  * If servlet mapping clash (partially or completely) with some other servlet then warning log will be printed,
- * but overall process will not fail.
+ * but overall process will not fail. Use
+ * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#DenyServletRegistrationWithClash} to throw
+ * exception instead of warning.
  * <p>
  * By default, everything is installed for main context. Special annotation
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext} must be used to install into admin
@@ -45,11 +50,10 @@ import java.util.Set;
  * @since 06.08.2016
  */
 @Order(90)
-public class WebServletInstaller implements FeatureInstaller<HttpServlet>,
-        InstanceInstaller<HttpServlet>, Ordered {
+public class WebServletInstaller extends InstallerOptionsSupport
+        implements FeatureInstaller<HttpServlet>, InstanceInstaller<HttpServlet>, Ordered {
 
     private final Logger logger = LoggerFactory.getLogger(WebServletInstaller.class);
-
     private final Reporter reporter = new Reporter(WebServletInstaller.class, "servlets =");
 
     @Override
@@ -89,8 +93,14 @@ public class WebServletInstaller implements FeatureInstaller<HttpServlet>,
         final Set<String> clash = mapping
                 .addMapping(annotation.urlPatterns().length > 0 ? annotation.urlPatterns() : annotation.value());
         if (clash != null && !clash.isEmpty()) {
-            logger.warn("Servlet registration {} clash with already installed servlets on paths: {}",
+            final String msg = String.format(
+                    "Servlet registration %s clash with already installed servlets on paths: %s",
                     type.getSimpleName(), Joiner.on(',').join(clash));
+            if (option(DenyServletRegistrationWithClash)) {
+                throw new IllegalStateException(msg);
+            } else {
+                logger.warn(msg);
+            }
         }
         if (annotation.initParams().length > 0) {
             for (WebInitParam param : annotation.initParams()) {

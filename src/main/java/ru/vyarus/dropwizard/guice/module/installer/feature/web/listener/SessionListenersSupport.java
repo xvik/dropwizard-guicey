@@ -24,8 +24,12 @@ import java.util.stream.Collectors;
 public class SessionListenersSupport implements Managed {
     private final Logger logger = LoggerFactory.getLogger(WebListenerInstaller.class);
 
+    private final boolean failWithoutSession;
     private final Multimap<MutableServletContextHandler, EventListener> listeners = LinkedListMultimap.create();
 
+    public SessionListenersSupport(final boolean failWithoutSession) {
+        this.failWithoutSession = failWithoutSession;
+    }
 
     public void add(final MutableServletContextHandler environment, final EventListener listener) {
         listeners.put(environment, listener);
@@ -36,11 +40,17 @@ public class SessionListenersSupport implements Managed {
         for (MutableServletContextHandler environment : listeners.keySet()) {
             final SessionHandler sessionHandler = environment.getSessionHandler();
             if (sessionHandler == null) {
-                logger.warn("Can't register session listeners for " + environment.getDisplayName().toLowerCase()
-                        + " because sessions support is not enabled: "
-                        + Joiner.on(',').join(listeners.get(environment).stream()
-                        .map(it -> FeatureUtils.getInstanceClass(it).getSimpleName())
-                        .collect(Collectors.toList())));
+                final String msg = String.format(
+                        "Can't register session listeners for %s because sessions support is not enabled: %s",
+                        environment.getDisplayName().toLowerCase(),
+                        Joiner.on(',').join(listeners.get(environment).stream()
+                                .map(it -> FeatureUtils.getInstanceClass(it).getSimpleName())
+                                .collect(Collectors.toList())));
+                if (failWithoutSession) {
+                    throw new IllegalStateException(msg);
+                } else {
+                    logger.warn(msg);
+                }
             } else {
                 listeners.get(environment).forEach(sessionHandler::addEventListener);
             }

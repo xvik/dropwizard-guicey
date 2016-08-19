@@ -7,6 +7,9 @@ import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
  * {@linkplain ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#option(Enum) option method}
  * for guicey bundle.
  * <p>
+ * Also used by installers to access options
+ * (see {@link ru.vyarus.dropwizard.guice.module.installer.option.WithOptions}).
+ * <p>
  * IMPORTANT: In contrast to {@link OptionsInfo} (which must be used for reporting only), this bean must be used
  * for real option value usage. Only this bean will correctly return default value for option not used before
  * (no set no gets).

@@ -229,7 +229,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * Options may be set only on application level. Guicey bundles could access option values through
          * {@linkplain ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#option(Enum)
          * bootstrap object}. Guice service could access options through
-         * {@linkplain ru.vyarus.dropwizard.guice.module.context.option.Options options bean}.
+         * {@linkplain ru.vyarus.dropwizard.guice.module.context.option.Options options bean}. Installers
+         * could use {@link ru.vyarus.dropwizard.guice.module.installer.option.WithOptions} to get access to options.
          * Options metadata for reporting is available through
          * {@linkplain ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo guice bean}.
          * <p>
@@ -245,6 +246,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @throws NullPointerException     is null value provided
          * @throws IllegalArgumentException if provided value incompatible with option type
          * @see Option for more details
+         * @see GuiceyOptions
+         * @see ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
          */
         public <K extends Enum & Option> Builder<T> option(final K option, final Object value) {
             bundle.context.setOption(option, value);

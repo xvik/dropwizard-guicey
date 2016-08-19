@@ -7,6 +7,7 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.util.WebUtils;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSupport;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
@@ -22,6 +23,8 @@ import javax.servlet.http.HttpSessionListener;
 import java.util.EventListener;
 import java.util.List;
 
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.DenySessionListenersWithoutSession;
+
 /**
  * Search for servlet and session listeners annotated with {@link WebListener} (servlet api annotation).
  * Such listeners will not be installed by jetty because dropwizard didn't depend on jetty-annotations.
@@ -33,6 +36,8 @@ import java.util.List;
  * IMPORTANT: For session listeners registered for context without sessions support enabled only warning will
  * be showed in logs (and listeners will not be installed). Error is not thrown to let writing more universal
  * bundles with listener extensions (session related extensions will simply not work).
+ * Use {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#DenySessionListenersWithoutSession}
+ * to throw exception instead of warning.
  * <p>
  * By default, everything is installed for main context. Special annotation
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext} must be used to install into admin
@@ -45,8 +50,8 @@ import java.util.List;
  * @since 06.08.2016
  */
 @Order(110)
-public class WebListenerInstaller implements FeatureInstaller<EventListener>,
-        InstanceInstaller<EventListener>, Ordered {
+public class WebListenerInstaller extends InstallerOptionsSupport
+        implements FeatureInstaller<EventListener>, InstanceInstaller<EventListener>, Ordered {
 
     private static final List<Class<? extends EventListener>> CONTEXT_LISTENERS = ImmutableList.of(
             ServletContextListener.class,
@@ -88,7 +93,7 @@ public class WebListenerInstaller implements FeatureInstaller<EventListener>,
         reporter.listener(extType, WebUtils.getContextMarkers(context));
         // lazy init delayed listeners processing
         if (isSessionListener && support == null) {
-            support = new SessionListenersSupport();
+            support = new SessionListenersSupport(option(DenySessionListenersWithoutSession));
             environment.lifecycle().manage(support);
         }
         if (WebUtils.isForMain(context)) {

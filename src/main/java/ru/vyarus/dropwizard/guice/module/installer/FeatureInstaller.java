@@ -5,7 +5,7 @@ package ru.vyarus.dropwizard.guice.module.installer;
  * (in dropwizard or somewhere else). Each installer should work with single feature.
  * <p>Installers are not guice beans: they are instantiated during guice context start and used to register
  * additional beans in guice context.</p>
- * Installer may choose from three possible types of installation:
+ * Installer may use one or more types of installation:
  * <ul>
  * <li>{@link ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller} to apply specific
  * guice bindings (called in process of injector creation, whereas other installer are called after)</li>
@@ -16,9 +16,21 @@ package ru.vyarus.dropwizard.guice.module.installer;
  * <li>{@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller} to register jersey related
  * extension</li>
  * </ul>
- * Even if installer doesn't implement any of these types, extension will be still registered in guice.
+ * If installer will not implement any of this installation types then recognized extension will only be
+ * registered in guice context (default binding).
+ * <p>
+ * Implement {@link ru.vyarus.dropwizard.guice.module.installer.order.Ordered} interface to support extensions
+ * ordering with {@link ru.vyarus.dropwizard.guice.module.installer.order.Order} annotation.
+ * <p>
+ * Implement {@link ru.vyarus.dropwizard.guice.module.installer.option.WithOptions} (or extend from
+ * {@link ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSupport}) to use options in installer
+ * (see {@link ru.vyarus.dropwizard.guice.module.context.option.Option} for more info).
+ * <p>
+ * All installer are ordered according to {@link ru.vyarus.dropwizard.guice.module.installer.order.Order} annotation.
  *
  * @param <T> expected extension type (or Object when no super type (e.g. for annotated beans))
+ * @author Vyacheslav Rusakov
+ * @since 31.08.2014
  */
 public interface FeatureInstaller<T> {
 
