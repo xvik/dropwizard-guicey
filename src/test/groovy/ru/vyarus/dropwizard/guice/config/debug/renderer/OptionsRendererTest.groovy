@@ -43,6 +43,7 @@ class OptionsRendererTest extends Specification {
         UseCoreInstallers              = true
         ConfigureFromDropwizardBundles = false
         InjectorStage                  = PRODUCTION
+        GuiceFilterRegistration        = [REQUEST]
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
@@ -69,6 +70,7 @@ class OptionsRendererTest extends Specification {
         UseCoreInstallers              = true
         ConfigureFromDropwizardBundles = false
         InjectorStage                  = PRODUCTION
+        GuiceFilterRegistration        = [REQUEST]
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)

@@ -1,58 +1,61 @@
 package ru.vyarus.dropwizard.guice.module.jersey;
 
 
-import com.google.inject.servlet.GuiceFilter;
-import com.google.inject.servlet.ServletModule;
+import com.google.inject.AbstractModule;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorProvider;
-import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
-import ru.vyarus.dropwizard.guice.module.installer.internal.AdminGuiceFilter;
+import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule;
+
+import javax.servlet.DispatcherType;
+import java.util.EnumSet;
+
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.GuiceFilterRegistration;
 
 /**
  * Guice jersey2 integration module.
- * <p>Integration is very similar to old jersey-guice: guice context is dominant;
+ * <p>
+ * Integration is very similar to old jersey-guice: guice context is dominant;
  * guice instantiated first; jersey objects directly registered in guice; guice objects directly registered
- * in hk.</p>
+ * in hk.
+ * <p>
+ * Guice {@link com.google.inject.servlet.ServletModule} support is optional and may be disabled, see
+ * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#GuiceFilterRegistration}.
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.jersey.GuiceFeature for integration details
  * @since 31.08.2014
  */
-public class Jersey2Module extends ServletModule {
-
-    /**
-     * Guice filter registration name.
-     */
-    public static final String GUICE_FILTER = "Guice Filter";
-    private static final String ROOT_PATH = "/*";
+public class Jersey2Module extends AbstractModule {
 
     private final Application application;
     private final Environment environment;
-    private final StatsTracker tracker;
+    private final ConfigurationContext context;
 
-    public Jersey2Module(final Application application, final Environment environment, final StatsTracker tracker) {
+    public Jersey2Module(final Application application, final Environment environment,
+                         final ConfigurationContext context) {
         this.application = application;
         this.environment = environment;
-        this.tracker = tracker;
+        this.context = context;
     }
 
     @Override
-    protected void configureServlets() {
+    protected void configure() {
+        final EnumSet<DispatcherType> types = context.option(GuiceFilterRegistration);
+        final boolean guiceServletSupport = !types.isEmpty();
+
         // injector not available at this point, so using provider
         final InjectorProvider provider = new InjectorProvider(application);
-        install(new GuiceBindingsModule(provider));
-        final GuiceFeature component = new GuiceFeature(provider, tracker);
+        install(new GuiceBindingsModule(provider, guiceServletSupport));
+        final GuiceFeature component = new GuiceFeature(provider, context.stat());
         bind(ServiceLocator.class).toProvider(component);
         environment.jersey().register(component);
 
-        final GuiceFilter guiceFilter = new GuiceFilter();
-        environment.servlets().addFilter(GUICE_FILTER, guiceFilter)
-                .addMappingForUrlPatterns(null, false, ROOT_PATH);
-        environment.admin().addFilter(GUICE_FILTER, new AdminGuiceFilter(guiceFilter))
-                .addMappingForUrlPatterns(null, false, ROOT_PATH);
+        if (guiceServletSupport) {
+            install(new GuiceWebModule(environment, types));
+        }
     }
 }
 

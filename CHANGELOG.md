@@ -5,7 +5,6 @@
     - WebServletInstaller installs servlets annotated with java.servlet.annotation.WebServlet
     - WebListenerInstaller installs filters annotated with java.servlet.annotation.WebListener    
 * Add general options mechanism. Used to generify core guicey options, provide runtime options access (for bundles and reporting) and allow 3rd party bundles use it's own low-level options.
-    - GuiceBundle option(option, value) method used to specify options
     - GuiceyBootstrap option(option) method provides access to defined options from bundles
     - Options guice bean provide access to options from guice services
     - Installers could access options by implementing WithOptions interface
@@ -16,9 +15,14 @@
 * (breaking) core installers bundle now always installed (for both auto scan and manual modes)
     - GuiceBundle noDefaultInstallers() shortcut method or GuiceyOptions.UseCoreInstallers option directly may be used to disable installation
 * (breaking) configuration info api (GuiceyConfigurationInfo.getData()) changed to use java8 Predicate instead of guava    
+* Add option (GuiceyOptions.GuiceFilterRegistration) to customize guice filter mapping DispatcherTypes (by default only REQUEST)
+* Add ability to disable guice filter registration and guice servlet modules support (no request and session scopes, but request and response still may be injected in resources) 
+* Jersey request specific services UriInfo, HttpHeaders, SecurityContext, Request, ContainerRequest, AsyncContext no longer bound in request scope (scope controlled by HK)
 * Add methods to GuiceBundle builder:
+    - option(option, value) - used to specify custom option value
     - printAvailableInstallers() - diagnostic reporting configured to show only available installers (to easily spot available features)
     - useWebInstallers() - shortcut for installing WebInstallersBundle
+    - noGuiceFilter() - disables guice filter installation for both contexts and guice servlet modules support 
     
     
 ### 3.3.0 (2016-08-02)

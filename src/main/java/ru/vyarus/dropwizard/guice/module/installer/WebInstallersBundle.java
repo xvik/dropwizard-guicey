@@ -22,6 +22,10 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListe
  * Also bundle assigns application ({@link Environment#getApplicationContext()}) and
  * admin ({@link Environment#getAdminContext()}) contexts display names
  * ({@link MutableServletContextHandler#setDisplayName(String)}). Does not override already assigned name.
+ * <p>
+ * If only annotations used for filters and servlets definitions consider disabling support for guice
+ * {@link com.google.inject.servlet.ServletModule} using
+ * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#GuiceFilterRegistration}.
  *
  * @author Vyacheslav Rusakov
  * @since 06.08.2016

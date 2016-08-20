@@ -3,6 +3,9 @@ package ru.vyarus.dropwizard.guice;
 import com.google.inject.Stage;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 
+import javax.servlet.DispatcherType;
+import java.util.EnumSet;
+
 /**
  * Guicey core options. In most cases, direct option definition is not required because all options are covered
  * with shortcut method in {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder}. Direct option definition
@@ -70,7 +73,29 @@ public enum GuiceyOptions implements Option {
      *
      * @see GuiceBundle.Builder#build(Stage)
      */
-    InjectorStage(Stage.class, Stage.PRODUCTION);
+    InjectorStage(Stage.class, Stage.PRODUCTION),
+
+    /**
+     * GuiceFilter registered for both contexts (application and admin) to provide guice
+     * {@link com.google.inject.servlet.ServletModule} support and allow using request and session scopes.
+     * By default, filter is registered only for direct requests.
+     * Declare other types if required (but note that GuiceFilter does not support ASYNC!).
+     * <p>
+     * To disable guice filter installation use empty set: {@code EnumSet.noneOf(DispatcherType.class)}.
+     * This will completely disable guice servlet modules support because without guice filter, guice web support
+     * is useless (all filters and servlets registered in servlet module are dispatched by guice filter).
+     * <p>
+     * Note that even without guice servlet modules support HttpServletRequest and HttpServletResponse objects will be
+     * still available for injection in resources (through hk bridging). Also, note that guice servlets initialization
+     * took some time and application starts faster without it (~50ms). Use
+     * {@link ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle} to register guice manged servlets
+     * and filters.
+     * IMPORTANT: after disabling guice filter, servlet and request scopes will no longer be available and
+     * installation of guice ServletModule will be impossible (will fail on duplicate binding).
+     * Also it will not be possible to use http request and response injections under filter and servlets
+     * (it will work only with resources).
+     */
+    GuiceFilterRegistration(EnumSet.class, EnumSet.of(DispatcherType.REQUEST));
 
     private Class<?> type;
     private Object value;

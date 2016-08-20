@@ -1,30 +1,15 @@
-/*
- * Copyright 2014 Squarespace, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package ru.vyarus.dropwizard.guice.module.jersey.hk2;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.binder.ScopedBindingBuilder;
-import com.google.inject.servlet.RequestScoped;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider;
 import org.glassfish.jersey.server.internal.process.AsyncContext;
 
 import javax.inject.Provider;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.*;
 import javax.ws.rs.ext.Providers;
 
@@ -43,6 +28,10 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bin
  * <li>{@link org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider}
  * <li>{@link org.glassfish.jersey.server.internal.process.AsyncContext}</li>
  * </ul>
+ * <p>
+ * When guice servlet modules support disabled, enables bindings for http request and response objects,
+ * which will work only within resources (because hk doesn't monitor outer scopes).
+ * <p>
  * {@link org.glassfish.hk2.api.ServiceLocator} is registered by
  * {@link ru.vyarus.dropwizard.guice.module.jersey.GuiceFeature}
  *
@@ -52,9 +41,11 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bin
 public class GuiceBindingsModule extends AbstractModule {
 
     private final Provider<Injector> provider;
+    private final boolean guiceServletSupport;
 
-    public GuiceBindingsModule(final Provider<Injector> provider) {
+    public GuiceBindingsModule(final Provider<Injector> provider, final boolean guiceServletSupport) {
         this.provider = provider;
+        this.guiceServletSupport = guiceServletSupport;
     }
 
     @Override
@@ -63,12 +54,21 @@ public class GuiceBindingsModule extends AbstractModule {
         jerseyToGuice(Application.class);
         jerseyToGuice(Providers.class);
 
-        jerseyToGuice(UriInfo.class).in(RequestScoped.class);
-        jerseyToGuice(HttpHeaders.class).in(RequestScoped.class);
-        jerseyToGuice(SecurityContext.class).in(RequestScoped.class);
-        jerseyToGuice(Request.class).in(RequestScoped.class);
-        jerseyToGuice(ContainerRequest.class).in(RequestScoped.class);
-        jerseyToGuice(AsyncContext.class).in(RequestScoped.class);
+        // request scoped objects, but hk will control their scope
+        // must be used in guice only with Provider
+        jerseyToGuice(UriInfo.class);
+        jerseyToGuice(HttpHeaders.class);
+        jerseyToGuice(SecurityContext.class);
+        jerseyToGuice(Request.class);
+        jerseyToGuice(ContainerRequest.class);
+        jerseyToGuice(AsyncContext.class);
+
+        if (!guiceServletSupport) {
+            // bind request and response objects when guice servlet module not registered
+            // but this will work only for resources
+            jerseyToGuice(HttpServletRequest.class);
+            jerseyToGuice(HttpServletResponse.class);
+        }
     }
 
     private ScopedBindingBuilder jerseyToGuice(final Class<?> type) {

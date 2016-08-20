@@ -77,7 +77,7 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
     protected void configure() {
         bindEnvironment();
         install(new InstallerModule(scanner, context));
-        install(new Jersey2Module(bootstrap.getApplication(), environment, context.stat()));
+        install(new Jersey2Module(bootstrap.getApplication(), environment, context));
 
         // let guice beans use options the same way as bundles (with usage tracking)
         bind(Options.class).toInstance(new Options(context.options()));

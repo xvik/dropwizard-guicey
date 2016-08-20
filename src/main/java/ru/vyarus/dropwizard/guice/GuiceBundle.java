@@ -35,7 +35,9 @@ import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
 
+import javax.servlet.DispatcherType;
 import java.util.Arrays;
+import java.util.EnumSet;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
@@ -352,6 +354,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * reduce default installers count. Web installers use default servlet api annotations to install
          * guice-aware servlets, filters and listeners. In many cases it will be more useful than using
          * guice servlet modules.
+         * <p>
+         * When use web installers to declare servlets and filters, guice servlet modules support may be disabled
+         * with {@link #noGuiceFilter()}. This will safe some startup time and removed extra guice filters.
          *
          * @return builder instance for chained calls
          * @see WebInstallersBundle
@@ -359,6 +364,26 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         public Builder<T> useWebInstallers() {
             bundle.context.registerBundles(new WebInstallersBundle());
             return this;
+        }
+
+        /**
+         * Disables {@link com.google.inject.servlet.GuiceFilter} registration for both application and admin contexts.
+         * Without guice filter registered, guice {@link com.google.inject.servlet.ServletModule} registrations
+         * are useless (because they can't be used). So guice servlet modules support will be disabled:
+         * no request or session scopes may be used and registrations of servlet modules will be denied
+         * (binding already declared exception). Even with disabled guice filter, request and response
+         * objects provider injections still may be used in resources (will work through hk provider).
+         * <p>
+         * Guice servlets initialization took ~50ms, so injector creation will be a bit faster after disabling.
+         * <p>
+         * Enable {@link #useWebInstallers()} web installers to use instead of guice servlet modules for servlets
+         * and filters registration.
+         *
+         * @return builder instance for chained calls
+         * @see GuiceyOptions#GuiceFilterRegistration
+         */
+        public Builder<T> noGuiceFilter() {
+            return option(GuiceFilterRegistration, EnumSet.noneOf(DispatcherType.class));
         }
 
         /**
