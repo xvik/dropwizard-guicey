@@ -38,6 +38,7 @@ import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
 import javax.servlet.DispatcherType;
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.Map;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
@@ -89,7 +90,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
  * @see ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo for configuratio diagnostic
  * @since 31.08.2014
  */
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods", "PMD.ExcessiveClassLength"})
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     private Injector injector;
@@ -253,6 +254,27 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public <K extends Enum & Option> Builder<T> option(final K option, final Object value) {
             bundle.context.setOption(option, value);
+            return this;
+        }
+
+        /**
+         * Sets multiple options at once. No options lookup mechanism provided out of the box (like for bundles),
+         * but it's very easy to implement custom lookup solution (e.g. for providing specific options in tests).
+         * This method would be useful for such lookup implementations.
+         * <p>
+         * Note: {@link Option} type is not mixed with enum in declaration to simplify usage,
+         * but used enums must be correct options.
+         *
+         * @param options options map (not null)
+         * @param <K>     helper type for option signature definition
+         * @return builder instance for chained calls
+         * @throws NullPointerException     is null value provided for any option
+         * @throws IllegalArgumentException if any provided value incompatible with option type
+         * @see #option(Enum, Object) for more info
+         */
+        @SuppressWarnings("unchecked")
+        public <K extends Enum & Option> Builder<T> options(final Map<Enum, Object> options) {
+            ((Map<K, Object>) (Map) options).forEach(this::option);
             return this;
         }
 

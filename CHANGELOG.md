@@ -20,10 +20,10 @@
 * Jersey request specific services UriInfo, HttpHeaders, SecurityContext, Request, ContainerRequest, AsyncContext no longer bound in request scope (scope controlled by HK)
 * Add methods to GuiceBundle builder:
     - option(option, value) - used to specify custom option value
+    - options(Map) - used to provide multiple options at once (for custom options lookup mechanisms)
     - printAvailableInstallers() - diagnostic reporting configured to show only available installers (to easily spot available features)
     - useWebInstallers() - shortcut for installing WebInstallersBundle
-    - noGuiceFilter() - disables guice filter installation for both contexts and guice servlet modules support 
-    
+    - noGuiceFilter() - disables guice filter installation for both contexts and guice servlet modules support  
     
 ### 3.3.0 (2016-08-02)
 * Update to guice 4.1.0
