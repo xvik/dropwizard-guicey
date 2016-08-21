@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
@@ -51,7 +52,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 public class DiagnosticBundle implements GuiceyBundle {
 
     private final Boolean statsConfig;
-    private final Boolean optionsConfig;
+    private final OptionsConfig optionsConfig;
     private final DiagnosticConfig config;
     private final ContextTreeConfig treeConfig;
 
@@ -62,7 +63,10 @@ public class DiagnosticBundle implements GuiceyBundle {
     public DiagnosticBundle() {
         this(builder()
                 .printStartupStats(true)
-                .printOptions(true)
+
+                .printOptions(new OptionsConfig()
+                        .showNotDefinedOptions()
+                        .showNotUsedMarker())
 
                 .printConfiguration(new DiagnosticConfig()
                         .printDefaults())
@@ -111,7 +115,7 @@ public class DiagnosticBundle implements GuiceyBundle {
     public static class Builder {
 
         private Boolean statsConfig;
-        private Boolean optionsConfig;
+        private OptionsConfig optionsConfig;
         private DiagnosticConfig config;
         private ContextTreeConfig treeConfig;
 
@@ -133,12 +137,11 @@ public class DiagnosticBundle implements GuiceyBundle {
         /**
          * Enables options reporting. Some options could be read lazily and so marked as NOT_USED at reporting time.
          *
-         * @param showNotUsedMarker true to show NOT_USED marker for user defined but never read options, false
-         *                          to avoid marker
+         * @param config options section configuration
          * @return builder instance for chained calls
          */
-        public Builder printOptions(final boolean showNotUsedMarker) {
-            this.optionsConfig = showNotUsedMarker;
+        public Builder printOptions(final OptionsConfig config) {
+            this.optionsConfig = config;
             return this;
         }
 

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
@@ -32,7 +33,7 @@ public final class DiagnosticReporter {
     private ContextTreeRenderer contextTreeRenderer;
 
     public void report(final Boolean statsConfig,
-                       final Boolean optionsConfig,
+                       final OptionsConfig optionsConfig,
                        final DiagnosticConfig config,
                        final ContextTreeConfig treeConfig) {
 

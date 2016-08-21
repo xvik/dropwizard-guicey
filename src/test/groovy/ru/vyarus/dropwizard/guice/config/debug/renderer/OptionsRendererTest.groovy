@@ -5,7 +5,9 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.GuiceyOptions
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
+import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRenderer
 import ru.vyarus.dropwizard.guice.module.context.option.Option
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
@@ -28,7 +30,9 @@ class OptionsRendererTest extends Specification {
     def "Check all render"() {
 
         expect:
-        render(true) == """
+        render(new OptionsConfig()
+                .showNotUsedMarker()
+                .showNotDefinedOptions()) == """
 
     BundleX                   (r.v.d.g.c.d.r.OptionsRendererTest\$BundleXOptions)
         DebugFeature                   = false
@@ -55,7 +59,8 @@ class OptionsRendererTest extends Specification {
     def "Check not used marker disable"() {
 
         expect:
-        render(false) == """
+        render(new OptionsConfig()
+                .showNotDefinedOptions()) == """
 
     BundleX                   (r.v.d.g.c.d.r.OptionsRendererTest\$BundleXOptions)
         DebugFeature                   = false
@@ -78,7 +83,72 @@ class OptionsRendererTest extends Specification {
 """ as String;
     }
 
-    String render(boolean config) {
+
+    def "Check custom marker disable"() {
+
+        expect:
+        render(new OptionsConfig()) == """
+
+    BundleX                   (r.v.d.g.c.d.r.OptionsRendererTest\$BundleXOptions)
+        StrictMode                     = true
+
+
+    Guicey                    (r.v.dropwizard.guice.GuiceyOptions)
+        ScanPackages                   = [com.foo, com.bat]
+
+
+    OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
+        Opt1                           = sample
+""" as String;
+    }
+
+    def "Check option hide"() {
+
+        expect:
+        render(new OptionsConfig()
+                .showNotDefinedOptions()
+                .hideOptions(GuiceyOptions.GuiceFilterRegistration)) == """
+
+    BundleX                   (r.v.d.g.c.d.r.OptionsRendererTest\$BundleXOptions)
+        DebugFeature                   = false
+        StrictMode                     = true                           *CUSTOM
+        NullValue                      = null
+        ListValue                      = [one, two]
+
+
+    Guicey                    (r.v.dropwizard.guice.GuiceyOptions)
+        ScanPackages                   = [com.foo, com.bat]             *CUSTOM
+        SearchCommands                 = false
+        UseCoreInstallers              = true
+        ConfigureFromDropwizardBundles = false
+        InjectorStage                  = PRODUCTION
+
+
+    OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
+        Opt1                           = sample                         *CUSTOM
+""" as String;
+    }
+
+    def "Check group hide"() {
+
+        expect:
+        render(new OptionsConfig()
+                .showNotDefinedOptions()
+        .hideGroups(GuiceyOptions)) == """
+
+    BundleX                   (r.v.d.g.c.d.r.OptionsRendererTest\$BundleXOptions)
+        DebugFeature                   = false
+        StrictMode                     = true                           *CUSTOM
+        NullValue                      = null
+        ListValue                      = [one, two]
+
+
+    OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
+        Opt1                           = sample                         *CUSTOM
+""" as String;
+    }
+
+    String render(OptionsConfig config) {
         renderer.renderReport(config).replaceAll("\r", "").replaceAll(" +\n", "\n")
     }
 
@@ -88,7 +158,7 @@ class OptionsRendererTest extends Specification {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .enableAutoConfig("com.foo", "com.bat")
-                    // never used value
+            // never used value
                     .option(OtherOpts.Opt1, "sample")
                     .option(BundleXOptions.StrictMode, true)
                     .modules(new DiagnosticBundle.DiagnosticModule())

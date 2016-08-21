@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.module.context.debug.report.tree;
 
-import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,8 +24,8 @@ import java.util.Set;
  */
 public final class ContextTreeConfig {
 
-    private final Set<ConfigItem> items = Sets.newHashSet();
-    private final Set<Class<?>> scopes = Sets.newHashSet();
+    private final Set<ConfigItem> items = new HashSet<>();
+    private final Set<Class<?>> scopes = new HashSet<>();
     private boolean disables;
     private boolean notUsedInstallers;
     private boolean duplicateRegistrations;

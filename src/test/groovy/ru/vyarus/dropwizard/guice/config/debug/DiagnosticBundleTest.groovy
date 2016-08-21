@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
+import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
@@ -59,14 +60,14 @@ class DiagnosticBundleTest extends AbstractTest {
         when: "all options configured"
         bundle = DiagnosticBundle.builder()
                 .printStartupStats(false)
-                .printOptions(true)
+                .printOptions(new OptionsConfig().showNotUsedMarker().showNotDefinedOptions())
                 .printConfiguration(new DiagnosticConfig().printAll())
                 .printContextTree(new ContextTreeConfig())
                 .build()
 
         then: "configured"
         bundle.statsConfig == false
-        bundle.optionsConfig == true
+        bundle.optionsConfig.isShowNotUsedMarker()
         bundle.config.isPrintBundles()
         bundle.treeConfig.hiddenItems.empty
 
@@ -90,7 +91,7 @@ class DiagnosticBundleTest extends AbstractTest {
                             .searchCommands()
                             .bundles(new Foo2Bundle())
                             .modules(new FooModule())
-                            // intentional duplicate to increment REG
+                    // intentional duplicate to increment REG
                             .extensions(FooBundleResource, FooBundleResource)
                             .disableInstallers(LifeCycleInstaller)
                             .strictScopeControl()

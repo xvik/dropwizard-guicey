@@ -33,7 +33,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * @since 13.08.2016
  */
 @Singleton
-public class OptionsRenderer implements ReportRenderer<Boolean> {
+public class OptionsRenderer implements ReportRenderer<OptionsConfig> {
 
     private static final String POSTFIX = "Options";
 
@@ -47,37 +47,38 @@ public class OptionsRenderer implements ReportRenderer<Boolean> {
     /**
      * Renders options report.
      *
-     * @param showNotUsedMarker true to show NOT_USED marker for set but never read options, false to avoid marker
+     * @param config rendering config
      * @return rendered report
      */
     @Override
-    public String renderReport(final Boolean showNotUsedMarker) {
+    public String renderReport(final OptionsConfig config) {
         final StringBuilder res = new StringBuilder();
-        render(showNotUsedMarker, res);
+        render(config, res);
         return res.toString();
     }
 
-    private void render(final boolean showNotUsedMarker, final StringBuilder res) {
+    private void render(final OptionsConfig config, final StringBuilder res) {
         final List<Class<Enum>> groups = info.getOptions().getOptionGroups();
+        groups.removeAll(config.getHiddenGroups());
         for (Class<Enum> group : groups) {
             res.append(NEWLINE).append(NEWLINE).append(TAB)
                     .append(String.format("%-25s (%s)", groupName(group), RenderUtils.renderClass(group)))
                     .append(NEWLINE);
-            renderOptions(group, showNotUsedMarker, res);
+            renderOptions(group, config, res);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void renderOptions(final Class<Enum> group, final boolean showNotUsedMarker, final StringBuilder res) {
+    private void renderOptions(final Class<Enum> group, final OptionsConfig config, final StringBuilder res) {
         final List<String> markers = Lists.newArrayList();
         for (Enum option : group.getEnumConstants()) {
             final OptionsInfo options = info.getOptions();
-            if (options.knowsOption(option)) {
+            if (!isHidden(option, config)) {
                 markers.clear();
-                if (options.isSet(option)) {
+                if (config.isShowNotDefinedOptions() && options.isSet(option)) {
                     markers.add("CUSTOM");
                 }
-                if (!options.isUsed(option) && showNotUsedMarker) {
+                if (config.isShowNotUsedMarker() && !options.isUsed(option)) {
                     markers.add("NOT_USED");
                 }
                 res.append(TAB).append(TAB)
@@ -93,6 +94,13 @@ public class OptionsRenderer implements ReportRenderer<Boolean> {
             name = name.substring(0, name.length() - POSTFIX.length());
         }
         return name;
+    }
+
+    @SuppressWarnings("PMD.UselessParentheses")
+    private boolean isHidden(final Enum option, final OptionsConfig config) {
+        return config.getHiddenOptions().contains(option)
+                || !info.getOptions().knowsOption(option)
+                || (!config.isShowNotDefinedOptions() && !info.getOptions().isSet(option));
     }
 
     private String valueToString(final Object value) {
