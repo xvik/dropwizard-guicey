@@ -25,7 +25,7 @@ public final class WebUtils {
      * For example, for class "MyCoolFilter" generated name will be ".mycool".
      *
      * @param filter filter annotation
-     * @param type filter type
+     * @param type   filter type
      * @return filter name or generated name if name not provided
      */
     public static String getFilterName(final WebFilter filter, final Class<? extends Filter> type) {
@@ -34,9 +34,8 @@ public final class WebUtils {
     }
 
     /**
-     *
      * @param servlet servlet annotation
-     * @param type servlet type
+     * @param type    servlet type
      * @return servlet name or generated name if name not provided
      */
     public static String getServletName(final WebServlet servlet, final Class<? extends HttpServlet> type) {
@@ -101,8 +100,10 @@ public final class WebUtils {
 
     private static String generateName(final Class<?> type, final String keyword) {
         String probe = '.' + type.getSimpleName().toLowerCase();
-        if (probe.endsWith(keyword)) {
-            probe = probe.substring(0, probe.length() - keyword.length());
+        final int targetLength = probe.length() - keyword.length();
+        // leave prefix if remaining part is too short (and if target name equal prefix)
+        if (probe.endsWith(keyword) && targetLength > 2) {
+            probe = probe.substring(0, targetLength);
         }
         return probe;
     }
