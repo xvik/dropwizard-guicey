@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.context.option;
 
 /**
- * Options used for finer configuration. In contrast to dropwizard configuration, which are user specific,
+ * Options used for finer configuration. In contrast to dropwizard configuration file, which is user specific,
  * options are set during development and represent developer decisions. Options must be grouped with enum
  * (for example, see {@link ru.vyarus.dropwizard.guice.GuiceyOptions}. Usage within enums does not allow
  * using generics for option values checking, so option type set explicitly and used internally to validate
