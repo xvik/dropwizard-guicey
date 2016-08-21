@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.injector.lookup;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.google.inject.Injector;
@@ -8,6 +7,7 @@ import io.dropwizard.Application;
 import io.dropwizard.lifecycle.Managed;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Injector lookup utility. Injectors registered automatically (by GuiceBundle).
@@ -52,7 +52,7 @@ public final class InjectorLookup {
      * @return optional with or without application-bound injector
      */
     public static Optional<Injector> getInjector(final Application application) {
-        return Optional.fromNullable(INJECTORS.get(application));
+        return Optional.ofNullable(INJECTORS.get(application));
     }
 
     /**
