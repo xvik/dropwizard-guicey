@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * If option wasn't used then default value will not be returned (error will be thrown). Option value read will not
  * mark option as used. Do not use it for reading option value (for actual option usage): use {@link Options} instead.
  * <p>
- * Most methods accept simple Enum instead of Enum & Option to simplify generic usage: if not allowed enum
+ * Most methods accept simple Enum instead of Enum &amp; Option to simplify generic usage: if not allowed enum
  * value will be used methods will throw exceptions. {@link #knowsOption(Enum)} method may be used to
  * safely check enum value before calling actual data methods.
  *
