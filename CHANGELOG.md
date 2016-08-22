@@ -1,3 +1,4 @@
+### 4.0.0 (2016-08-22)
 * Update to dropwizard 1.0.0
 * (breaking) Remove AdminServletInstaller and AdminFilterInstaller (replaced with new web bundle)
 * Add WebInstallersBundle (not installed by default) to install servlet and filters in both main and admin contexts:
@@ -12,11 +13,10 @@
     - Options reporting added to DiagnosticBundle
 * (breaking) remove GuiceBunldle methods: searchCommands(boolean), configureFromDropwizardBundles(boolean), bindConfigurationInterfaces(boolean) 
     (use either shortcuts without parameters or generic options method instead)
-* (breaking) core installers bundle now always installed (for both auto scan and manual modes)
-    - GuiceBundle noDefaultInstallers() shortcut method or GuiceyOptions.UseCoreInstallers option directly may be used to disable installation
+* (breaking) core installers bundle now always installed (for both auto scan and manual modes). May be disabled with GuiceyOptions.UseCoreInstallers option 
 * (breaking) configuration info api (GuiceyConfigurationInfo.getData()) changed to use java8 Predicate instead of guava
 * (breaking) InjectorLookup changed to use java8 Optional instead of guava    
-* Add option (GuiceyOptions.GuiceFilterRegistration) to customize guice filter mapping DispatcherTypes (by default only REQUEST)
+* Add ability to customize guice filter mapping DispatcherTypes (by default only REQUEST): GuiceyOptions.GuiceFilterRegistration option 
 * Add ability to disable guice filter registration and guice servlet modules support (no request and session scopes, but request and response still may be injected in resources) 
 * Jersey request specific services UriInfo, HttpHeaders, SecurityContext, Request, ContainerRequest, AsyncContext no longer bound in request scope (scope controlled by HK)
 * Add methods to GuiceBundle builder:
@@ -25,6 +25,7 @@
     - printAvailableInstallers() - diagnostic reporting configured to show only available installers (to easily spot available features)
     - useWebInstallers() - shortcut for installing WebInstallersBundle
     - noGuiceFilter() - disables guice filter installation for both contexts and guice servlet modules support  
+    - noDefaultInstallers() - disables CoreInstallersBundle automatic installation
     
 ### 3.3.0 (2016-08-02)
 * Update to guice 4.1.0
