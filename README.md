@@ -1,10 +1,11 @@
 #Dropwizard guice integration
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/xvik/dropwizard-guicey)
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://www.opensource.org/licenses/MIT)
 [![Build Status](http://img.shields.io/travis/xvik/dropwizard-guicey.svg?style=flat&branch=master)](https://travis-ci.org/xvik/dropwizard-guicey)
 [![Coverage Status](https://img.shields.io/coveralls/xvik/dropwizard-guicey.svg?style=flat)](https://coveralls.io/r/xvik/dropwizard-guicey?branch=master)
 
-> **[Examples repository](https://github.com/xvik/dropwizard-guicey-examples)** | [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey)
+> **[Examples repository](https://github.com/xvik/dropwizard-guicey-examples)** 
+
+Use [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey) or [gitter chat](https://gitter.im/xvik/dropwizard-guicey) to ask questions, discuss current features (general support). 
 
 ### About
 
