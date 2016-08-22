@@ -592,7 +592,7 @@ For example, for class "MyCoolFilter" generated name will be ".mycool".
 
 ##### Web Listener
 
-[WeblistenerInstaller](src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/web/listener/WeblistenerInstaller.java)
+[WebListenerInstaller](src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/web/listener/WebListenerInstaller.java)
 finds classes annotated with `@WebListener` annotation and register them. Support ordering.
 
 Supported listeners (the same as declared in annotation):
@@ -1125,7 +1125,7 @@ The following request-scope objects available for injection:
 * org.glassfish.jersey.server.internal.process.AsyncContext
 
 Note that it's not guice request scope, but HK request scope. So these objects may be resolved only inside resource method.
-Event when guice servlets support disabled (`.noGuiceFilter`) `HttpServletRequest` and `HttpServletResponse` may still be injected
+Event when guice servlets support disabled (`.noGuiceFilter()`) `HttpServletRequest` and `HttpServletResponse` may still be injected
 using provider.
 
 ### Guice ServletModule support
