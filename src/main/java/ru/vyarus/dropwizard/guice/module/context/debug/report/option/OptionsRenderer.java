@@ -96,7 +96,6 @@ public class OptionsRenderer implements ReportRenderer<OptionsConfig> {
         return name;
     }
 
-    @SuppressWarnings("PMD.UselessParentheses")
     private boolean isHidden(final Enum option, final OptionsConfig config) {
         return config.getHiddenOptions().contains(option)
                 || !info.getOptions().knowsOption(option)

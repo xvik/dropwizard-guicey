@@ -43,7 +43,6 @@ public final class DiagnosticReporter {
         report("Configuration context tree = {}", contextTreeRenderer, treeConfig);
     }
 
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private <T> void report(final String name, final ReportRenderer<T> renderer, final T config) {
         if (config != null) {
             logger.info(name, renderer.renderReport(config));

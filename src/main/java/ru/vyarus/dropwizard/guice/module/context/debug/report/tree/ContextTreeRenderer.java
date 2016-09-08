@@ -149,7 +149,6 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param scope  current scope
      * @param bundle bundle class
      */
-    @SuppressWarnings("PMD.UselessParentheses")
     private void renderBundle(final ContextTreeConfig config, final TreeNode root,
                               final Class<?> scope, final Class<Object> bundle) {
         final BundleItemInfo info = service.getData().getInfo(bundle);

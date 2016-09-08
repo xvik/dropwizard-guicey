@@ -8,13 +8,13 @@
     "libPackage": "ru.vyarus.dropwizard.guice",
     "libVersion": "0.1.0",
     "libDesc": "Dropwizard guice integration",
-    "targetJava": "1.7",
+    "targetJava": "1.8",
     "libTags": "dropwizard, guice",
     "bintrayUser": "vyarus",
     "bintrayRepo": "xvik",
     "bintraySignFiles": true,
     "mavenCentralSync": true,
     "enableQualityChecks": true,
-    "usedGeneratorVersion": "2.0.0"
+    "usedGeneratorVersion": "2.1.0"
   }
 }

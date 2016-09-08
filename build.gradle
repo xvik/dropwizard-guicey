@@ -2,12 +2,12 @@ plugins {
     id 'groovy'
     id 'jacoco'
     id 'project-report'
-    id 'ru.vyarus.java-lib' version '1.0.2'
+    id 'ru.vyarus.java-lib' version '1.0.4'
     id 'ru.vyarus.github-info' version '1.1.0'
-    id 'ru.vyarus.quality' version '1.3.0'
+    id 'ru.vyarus.quality' version '2.0.0'
     id 'com.github.kt3k.coveralls' version '2.6.3'
-    id 'com.jfrog.bintray' version '1.6'
-    id 'net.researchgate.release' version '2.4.0'
+    id 'com.jfrog.bintray' version '1.7.1'
+    id 'net.researchgate.release' version '2.4.1'
     id 'com.github.ben-manes.versions' version '0.13.0'
     id "io.spring.dependency-management" version "0.6.0.RELEASE"
 }
@@ -15,7 +15,7 @@ plugins {
 sourceCompatibility = 1.8
 
 wrapper {
-    gradleVersion = 2.14
+    gradleVersion = 3.0
 }
 
 ext {
@@ -59,16 +59,16 @@ github {
 pom {
     developers {
         developer {
-            id "xvik"
-            name "Vyacheslav Rusakov"
-            email "vyarus@gmail.com"
+            id 'xvik'
+            name 'Vyacheslav Rusakov'
+            email 'vyarus@gmail.com'
         }
     }
 }
 
 bintray {
-    user = project.hasProperty('bintrayUser') ? bintrayUser : 'USER'
-    key = project.hasProperty('bintrayKey') ? bintrayKey : 'KEY'
+    user = findProperty('bintrayUser')
+    key = findProperty('bintrayKey')
     publications = ['maven']
     dryRun = false
     publish = true
@@ -81,12 +81,12 @@ bintray {
         version {
             gpg {
                 sign = true
-                passphrase = project.hasProperty('gpgPassphrase') ? gpgPassphrase : ''
+                passphrase = findProperty('gpgPassphrase')
             }
             mavenCentralSync {
                 sync = true
-                user = project.hasProperty('sonatypeUser') ? sonatypeUser : 'USER'
-                password = project.hasProperty('sonatypePassword') ? sonatypePassword : 'PASSWORD'
+                user = findProperty('sonatypeUser')
+                password = findProperty('sonatypePassword')
             }
         }
     }
@@ -101,10 +101,10 @@ afterReleaseBuild {
 
 test {
     testLogging {
-        events "skipped", "failed", "standard_error"
-        exceptionFormat "full"
+        events 'skipped', 'failed', 'standard_error'
+        exceptionFormat 'full'
     }
-    maxHeapSize = "512m"
+    maxHeapSize = '512m'
 }
 
 dependencyUpdates.revision = 'release'
