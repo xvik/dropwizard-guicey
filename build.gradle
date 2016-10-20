@@ -36,6 +36,7 @@ dependencies {
     provided 'org.spockframework:spock-core:1.0-groovy-2.4'
     provided 'com.google.code.findbugs:annotations:3.0.1'
 
+    compile 'com.google.inject:guice'
     compile 'com.google.inject.extensions:guice-servlet'
     compile 'com.google.inject.extensions:guice-multibindings'
     compile 'io.dropwizard:dropwizard-core'

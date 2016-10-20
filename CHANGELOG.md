@@ -1,3 +1,5 @@
+* Fix guice version conflict for maven (#20)
+
 ### 4.0.0 (2016-08-22)
 * Update to dropwizard 1.0.0
 * (breaking) Remove AdminServletInstaller and AdminFilterInstaller (replaced with new web bundle)
