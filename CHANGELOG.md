@@ -1,3 +1,4 @@
+* Update to dropwizard 1.0.5 and fix compatibility (#24)
 * Fix guice version conflict for maven (#20)
 
 ### 4.0.0 (2016-08-22)
