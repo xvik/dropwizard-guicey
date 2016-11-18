@@ -9,7 +9,7 @@ Use [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey) or
 
 ### About
 
-[Dropwizard](http://dropwizard.io/) 1.0 [guice](https://github.com/google/guice) (4.1.0) integration. 
+[Dropwizard](http://dropwizard.io/) 1.0.5 [guice](https://github.com/google/guice) (4.1.0) integration. 
 
 Originally inspired by [dropwizard-guice](https://github.com/HubSpot/dropwizard-guice) and 
 [dropwizardy-guice](https://github.com/jclawson/dropwizardry/tree/master/dropwizardry-guice) 
@@ -18,7 +18,7 @@ Originally inspired by [dropwizard-guice](https://github.com/HubSpot/dropwizard-
 Features:
 * Guice injector created on run phase
 * Compatible with guice restrictive options: `disableCircularProxies`, `requireExactBindingAnnotations` and `requireExplicitBindings`
-* Flexible [HK2](https://hk2.java.net/2.4.0-b34/introduction.html) integration
+* Flexible [HK2](https://hk2.java.net/2.5.0-b05/introduction.html) integration
 * No base classes for application or guice module (only bundle registration required)
 * Configurable [installers](#installers) mechanism: each supported feature (task install, health check install, etc) has it's own installer and may be disabled
 * [Custom feature installers](#writing-custom-installer) could be added
@@ -50,14 +50,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:4.0.0'
+compile 'ru.vyarus:dropwizard-guicey:4.0.1'
 ```
 
 - for dropwizard 0.9 use version 3.3.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.9))
@@ -136,7 +136,6 @@ so there is always a way to understand what where and how was configured.
 * `installers` registers feature [installers](#installers). Used either to add installers from packages not visible by [auto scan](#classpath-scan) or to
 configure installers when auto scan not used.
 * `disableInstallers` disables installers, found with auto scan or registered manually. May be used to override default installer or disable it.
-Note: when auto scan not enabled no installers will be registered automatically.
 * `extensions` manually register classes (for example, when auto scan disabled). Classes will be installed using configured installers.
 * `modules` one or more guice modules to start. Not required: context could start even without custom modules.
 * `option` sets option value ([options](#options) are used by guicey itself and may be used by 3rd party extensions)
@@ -253,7 +252,7 @@ It's not the best example, but it illustrates usage (and such things usually hel
 
 ### Authentication
 
-All [dropwizard authentication](http://www.dropwizard.io/1.0.0/docs/manual/auth.html) 
+All [dropwizard authentication](http://www.dropwizard.io/1.0.5/docs/manual/auth.html) 
 configurations are pretty much the same. Here is an example of oauth configuration:
 
 ```java
@@ -1197,10 +1196,10 @@ Also, disabling servlet module saves some startup time (~50ms).
  
 ### Testing
 
-Tests requires `'io.dropwizard:dropwizard-testing:1.0.0'` dependency.
+Tests requires `'io.dropwizard:dropwizard-testing:1.0.5'` dependency.
 
 For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like 
-[DropwizardAppRule](http://www.dropwizard.io/1.0.0/docs/manual/testing.html),
+[DropwizardAppRule](http://www.dropwizard.io/1.0.5/docs/manual/testing.html),
 but doesn't start jetty (and so jersey and guice web modules will not be initialized). Managed and lifecycle objects 
 supported.
 
