@@ -3,7 +3,7 @@
 [![Build Status](http://img.shields.io/travis/xvik/dropwizard-guicey.svg?style=flat&branch=master)](https://travis-ci.org/xvik/dropwizard-guicey)
 [![Coverage Status](https://img.shields.io/coveralls/xvik/dropwizard-guicey.svg?style=flat)](https://coveralls.io/r/xvik/dropwizard-guicey?branch=master)
 
-> **[Examples repository](https://github.com/xvik/dropwizard-guicey-examples)** 
+> **[Examples](https://github.com/xvik/dropwizard-guicey-examples)**  |  **[Extensions and integrations](https://github.com/xvik/dropwizard-guicey-ext)**
 
 Use [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey) or [gitter chat](https://gitter.im/xvik/dropwizard-guicey) to ask questions, discuss current features (general support). 
 
@@ -43,6 +43,8 @@ and then to maven central (require few days after release to be published).
 
 [![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey/_latestVersion)
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus/dropwizard-guicey.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
+
+May be used through [extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-bom) or directly.
 
 Maven:
 
