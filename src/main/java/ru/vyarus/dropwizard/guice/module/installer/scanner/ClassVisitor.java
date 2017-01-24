@@ -14,5 +14,5 @@ public interface ClassVisitor {
      *
      * @param type type to investigate
      */
-    void visit(final Class<?> type);
+    void visit(Class<?> type);
 }

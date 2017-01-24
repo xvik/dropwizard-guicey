@@ -4,10 +4,10 @@ plugins {
     id 'project-report'
     id 'ru.vyarus.java-lib' version '1.0.4'
     id 'ru.vyarus.github-info' version '1.1.0'
-    id 'ru.vyarus.quality' version '2.0.0'
+    id 'ru.vyarus.quality' version '2.1.0'
     id 'com.github.kt3k.coveralls' version '2.7.1'
     id 'com.jfrog.bintray' version '1.7.3'
-    id 'net.researchgate.release' version '2.4.1'
+    id 'net.researchgate.release' version '2.5.0'
     id 'com.github.ben-manes.versions' version '0.13.0'
     id "io.spring.dependency-management" version "0.6.1.RELEASE"
 }
@@ -15,7 +15,7 @@ plugins {
 sourceCompatibility = 1.8
 
 wrapper {
-    gradleVersion = 3.0
+    gradleVersion = 3.3
 }
 
 ext {
@@ -112,6 +112,8 @@ dependencyUpdates.revision = 'release'
 jacocoTestReport.reports.xml.enabled = true
 
 task showDependenciesTree(dependsOn: 'htmlDependencyReport', group: 'help', description:
-        'Generates dependencies tree report and opens it in browser') << {
-    java.awt.Desktop.getDesktop().open(file('/build/reports/project/dependencies/root.html'))
+        'Generates dependencies tree report and opens it in browser') {
+    doLast {
+        java.awt.Desktop.getDesktop().open(file('build/reports/project/dependencies/root.html'))
+    }
 }
