@@ -16,7 +16,7 @@ automatically without manual configurations (of course, [manual mode](getting-st
 * Developer friendly: 
     - core integrations may be replaced (to better fit needs)
     - rich api for developing [custom integrations](guide/installers.md#writing-custom-installer)
-    - out of the box support for plug-n-play plugins ([auto discoverable](guide/guicey-bundle.md#service-loader-lookup))
+    - out of the box support for plug-n-play plugins ([auto discoverable](guide/bundles.md#service-loader-lookup))
     - self diagnostic tools (configuration process [diagnostic reporting](guide/diagnostic.md)) 
 
 ## How to use docs
