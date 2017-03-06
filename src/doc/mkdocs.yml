@@ -2,7 +2,7 @@ site_name: Dropwizard-guicey
 site_description: 'Dropwizard guice integration'
 site_author: 'Vyacheslav Rusakov'
 site_url: 'https://xvik.github.io/dropwizard-guicey/4.0.1'
-edit_uri: edit/master/src/doc/
+edit_uri: edit/master/src/doc/docs/
 
 # Repository
 repo_name: 'dropwizard-guicey'
