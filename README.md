@@ -7,6 +7,10 @@
 
 Use [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey) or [gitter chat](https://gitter.im/xvik/dropwizard-guicey) to ask questions, discuss current features (general support). 
 
+**DOCUMENTATION**: http://xvik.github.io/dropwizard-guicey/
+
+
+
 ### About
 
 [Dropwizard](http://dropwizard.io/) 1.0.5 [guice](https://github.com/google/guice) (4.1.0) integration. 
