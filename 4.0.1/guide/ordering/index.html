@@ -1,0 +1,967 @@
+
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Dropwizard guice integration">
+      
+      
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/4.0.1/guide/ordering/">
+      
+      
+        <meta name="author" content="Vyacheslav Rusakov">
+      
+      
+        <link rel="shortcut icon" href="../../assets/images/favicon.ico">
+      
+      <meta name="generator" content="mkdocs+mkdocs-material#1.0.3">
+    
+    
+      
+        <title>Ordering - Dropwizard-guicey</title>
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr-facb31f4a3.js"></script>
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application-f3ab63f78a.css">
+      
+      
+    
+    
+  </head>
+  
+  
+  
+  
+    <body>
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="Dropwizard-guicey" class=" md-icon md-icon--home  md-header-nav__button">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+                <span class="md-header-nav__parent">
+                  User guide
+                </span>
+              
+            
+            Ordering
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search">
+  <div class="md-search__overlay"></div>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
+      <label class="md-icon md-search__icon" for="search"></label>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+              
+
+
+  
+
+
+  <a href="https://github.com/xvik/dropwizard-guicey" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      dropwizard-guicey
+    </div>
+  </a>
+
+            
+          </div>
+      </div>
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <i class=" md-icon md-icon--home  md-nav__button">
+      
+    </i>
+    Dropwizard-guicey
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/xvik/dropwizard-guicey" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      dropwizard-guicey
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  <li class="md-nav__item">
+    
+      <a href="../.." title="Home" class="md-nav__link">
+        Home
+      </a>
+    
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item">
+    
+      <a href="../../getting-started/" title="Getting started" class="md-nav__link">
+        Getting started
+      </a>
+    
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      User guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible">
+      <label class="md-nav__title" for="nav-3">
+        User guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../configuration/" title="Configuration" class="md-nav__link">
+        Configuration
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../lifecycle/" title="Integration lifecycle" class="md-nav__link">
+        Integration lifecycle
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../injector/" title="Injector" class="md-nav__link">
+        Injector
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../module-autowiring/" title="Module autowiring" class="md-nav__link">
+        Module autowiring
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../bindings/" title="Bindings" class="md-nav__link">
+        Bindings
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../scan/" title="Classpath scan" class="md-nav__link">
+        Classpath scan
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../installers/" title="Installers" class="md-nav__link">
+        Installers
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Ordering
+      </label>
+    
+    <a href="./" title="Ordering" class="md-nav__link md-nav__link--active">
+      Ordering
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general" title="General" class="md-nav__link">
+    General
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensions-order" title="Extensions order" class="md-nav__link">
+    Extensions order
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installers-order" title="Installers order" class="md-nav__link">
+    Installers order
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bundles-order" title="Bundles order" class="md-nav__link">
+    Bundles order
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modules-order" title="Modules order" class="md-nav__link">
+    Modules order
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../bundles/" title="Bundles (Guicey)" class="md-nav__link">
+        Bundles (Guicey)
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../options/" title="Options" class="md-nav__link">
+        Options
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../diagnostic/" title="Diagnostic" class="md-nav__link">
+        Diagnostic
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../commands/" title="Commands" class="md-nav__link">
+        Commands
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../web/" title="Web" class="md-nav__link">
+        Web
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../test/" title="Test" class="md-nav__link">
+        Test
+      </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Installers
+    </label>
+    <nav class="md-nav" data-md-component="collapsible">
+      <label class="md-nav__title" for="nav-4">
+        Installers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/resource/" title="Resource" class="md-nav__link">
+        Resource
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/task/" title="Task" class="md-nav__link">
+        Task
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/managed/" title="Managed" class="md-nav__link">
+        Managed
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/lifecycle/" title="Lifecycle" class="md-nav__link">
+        Lifecycle
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/healthcheck/" title="Health check" class="md-nav__link">
+        Health check
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/jersey-ext/" title="Jersey extension" class="md-nav__link">
+        Jersey extension
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/jersey-feature/" title="Jersey feature" class="md-nav__link">
+        Jersey feature
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/eager/" title="Eager singleton" class="md-nav__link">
+        Eager singleton
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/plugin/" title="Plugin" class="md-nav__link">
+        Plugin
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/servlet/" title="Web servlet" class="md-nav__link">
+        Web servlet
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/filter/" title="Web filter" class="md-nav__link">
+        Web filter
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/listener/" title="Web listener" class="md-nav__link">
+        Web listener
+      </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible">
+      <label class="md-nav__title" for="nav-5">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
+        Authentication
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../examples/governator/" title="Governator" class="md-nav__link">
+        Governator
+      </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Extras
+    </label>
+    <nav class="md-nav" data-md-component="collapsible">
+      <label class="md-nav__title" for="nav-6">
+        Extras
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../extras/admin-rest/" title="Admin REST" class="md-nav__link">
+        Admin REST
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../extras/bom/" title="BOM" class="md-nav__link">
+        BOM
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../extras/eventbus/" title="Guava EventBus" class="md-nav__link">
+        Guava EventBus
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../extras/jdbi/" title="JDBI" class="md-nav__link">
+        JDBI
+      </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      About
+    </label>
+    <nav class="md-nav" data-md-component="collapsible">
+      <label class="md-nav__title" for="nav-7">
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../about/license/" title="License" class="md-nav__link">
+        License
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../about/history/" title="Release notes" class="md-nav__link">
+        Release notes
+      </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general" title="General" class="md-nav__link">
+    General
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensions-order" title="Extensions order" class="md-nav__link">
+    Extensions order
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installers-order" title="Installers order" class="md-nav__link">
+    Installers order
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bundles-order" title="Bundles order" class="md-nav__link">
+    Bundles order
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modules-order" title="Modules order" class="md-nav__link">
+    Modules order
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+               
+                 <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/docs/guide\ordering.md" title="Edit this page" class="md-icon md-content__edit">edit</a>
+               
+              
+                
+                <h1 id="ordering">Ordering<a class="headerlink" href="#ordering" title="Permanent link">&para;</a></h1>
+<p>Guicey <code>@Order</code> annotation should be used to order extensions and installers.</p>
+<h2 id="general">General<a class="headerlink" href="#general" title="Permanent link">&para;</a></h2>
+<p>Order is natural. For example, <code>@Order(10)</code> will be before <code>@Order(20)</code>.</p>
+<p>When no annotation present, class order set to <code class="codehilite"><span class="n">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span></code>, so
+all classes without order annotation will always goes last.</p>
+<h2 id="extensions-order">Extensions order<a class="headerlink" href="#extensions-order" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Not all extensions supports ordering: look specific installer page for details.
+For example, managed, lifecycle, servlets and filters installers support order.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Installers supporting ordering implement <a href="../installers/#ordering"><code>Ordered</code></a> interface.</p>
+</div>
+<p>The most common case for ordering is ordering managed objects. For example:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Order</span><span class="o">(</span><span class="mi">20</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Managed1</span> <span class="kd">implements</span> <span class="n">Managed</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+
+<span class="nd">@Order</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Managed2</span> <span class="kd">implements</span> <span class="n">Managed</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Managed3</span> <span class="kd">implements</span> <span class="n">Managed</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</pre></div>
+
+
+<p>Will be ordered as: <code>Managed2</code>, <code>Managed1</code>, <code>Managed3</code></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Guicey remembers extensions registration order:
+<div class="codehilite"><pre><span></span><span class="o">.</span><span class="na">extensions</span><span class="o">(</span><span class="n">Ext1</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">Ext2</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</pre></div>
+
+So when no explicit ordering defined (or for elements with the same order value)
+registration order will be preserved.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Console reporters for most extensions report extensions in correct order.
+You can use diagnostic reporting to be sure about actual extensions order. </p>
+</div>
+<h2 id="installers-order">Installers order<a class="headerlink" href="#installers-order" title="Permanent link">&para;</a></h2>
+<p>All bundled <a href="../installers/">installers</a> are ordered from 0 to ~110 with gap 10 between them to let you easily
+put your installers between (if required).</p>
+<p>Use <code>@Order</code> annotation to order custom installer, otherwise it will go after all
+default installers.</p>
+<h2 id="bundles-order">Bundles order<a class="headerlink" href="#bundles-order" title="Permanent link">&para;</a></h2>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Guicey bundles does not support ordering.</p>
+</div>
+<p>It makes no sense to order <a href="../bundles/">guicey bundles</a> because they simply register other extensions and installers.
+You can always order installers and extensions registered by bundles.</p>
+<p>Moreover, bundles are transitive, so it would be extremely hard to understand actual order:
+for example, when bundle registered both transitively and manually.</p>
+<p>There are implicit order of bundle processing:</p>
+<ul>
+<li>Manually registered bundles (including transitive)</li>
+<li>Dropwizard bundles (when recognition enabled)</li>
+<li>Bundles lookup</li>
+</ul>
+<p>But, again, don't count on this order because, for example, bundle resolved through lookup
+mechanism could be also manually registered and so installed as manual bundle.</p>
+<h2 id="modules-order">Modules order<a class="headerlink" href="#modules-order" title="Permanent link">&para;</a></h2>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Guicey does not support modules ordering.</p>
+</div>
+<p>It makes no sense to order guice modules because they simply register bindings.
+According to guice guice: <a href="https://github.com/google/guice/wiki/AvoidConditionalLogicInModules">modules should not contain conditional logic</a></p>
+<p>So all that modules should do is registering bindings and order does not matter in that case.</p>
+<p>Modules, registered directly in guice bundle, must be executed before modules, registered in bundles 
+(because registration order is preserved).</p>
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../installers/" title="Installers" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Installers
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../bundles/" title="Bundles (Guicey)" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Bundles (Guicey)
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2014-2017 Vyacheslav Rusakov
+          </div>
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+      <a href="https://github.com/xvik" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/vyarus" class="md-footer-social__link fa fa-twitter"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application-2afe21e0b2.js"></script>
+      <script>var config={url:{base:"../.."}},app=new Application(config);app.initialize()</script>
+      
+    
+    
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1202 @@
+
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Dropwizard guice integration">
+      
+      
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/4.0.1/about/history/">
+      
+      
+        <meta name="author" content="Vyacheslav Rusakov">
+      
+      
+        <link rel="shortcut icon" href="../../assets/images/favicon.ico">
+      
+      <meta name="generator" content="mkdocs+mkdocs-material#1.0.3">
+    
+    
+      
+        <title>Release notes - Dropwizard-guicey</title>
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr-facb31f4a3.js"></script>
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application-f3ab63f78a.css">
+      
+      
+    
+    
+  </head>
+  
+  
+  
+  
+    <body>
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="../.." title="Dropwizard-guicey" class=" md-icon md-icon--home  md-header-nav__button">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+                <span class="md-header-nav__parent">
+                  About
+                </span>
+              
+            
+            Release notes
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search">
+  <div class="md-search__overlay"></div>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false">
+      <label class="md-icon md-search__icon" for="search"></label>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+              
+
+
+  
+
+
+  <a href="https://github.com/xvik/dropwizard-guicey" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      dropwizard-guicey
+    </div>
+  </a>
+
+            
+          </div>
+      </div>
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <i class=" md-icon md-icon--home  md-nav__button">
+      
+    </i>
+    Dropwizard-guicey
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/xvik/dropwizard-guicey" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      dropwizard-guicey
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  <li class="md-nav__item">
+    
+      <a href="../.." title="Home" class="md-nav__link">
+        Home
+      </a>
+    
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item">
+    
+      <a href="../../getting-started/" title="Getting started" class="md-nav__link">
+        Getting started
+      </a>
+    
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      User guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible">
+      <label class="md-nav__title" for="nav-3">
+        User guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/configuration/" title="Configuration" class="md-nav__link">
+        Configuration
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/lifecycle/" title="Integration lifecycle" class="md-nav__link">
+        Integration lifecycle
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/injector/" title="Injector" class="md-nav__link">
+        Injector
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/module-autowiring/" title="Module autowiring" class="md-nav__link">
+        Module autowiring
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/bindings/" title="Bindings" class="md-nav__link">
+        Bindings
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/scan/" title="Classpath scan" class="md-nav__link">
+        Classpath scan
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/installers/" title="Installers" class="md-nav__link">
+        Installers
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/ordering/" title="Ordering" class="md-nav__link">
+        Ordering
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/bundles/" title="Bundles (Guicey)" class="md-nav__link">
+        Bundles (Guicey)
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/options/" title="Options" class="md-nav__link">
+        Options
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/diagnostic/" title="Diagnostic" class="md-nav__link">
+        Diagnostic
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/commands/" title="Commands" class="md-nav__link">
+        Commands
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/web/" title="Web" class="md-nav__link">
+        Web
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../guide/test/" title="Test" class="md-nav__link">
+        Test
+      </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      Installers
+    </label>
+    <nav class="md-nav" data-md-component="collapsible">
+      <label class="md-nav__title" for="nav-4">
+        Installers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/resource/" title="Resource" class="md-nav__link">
+        Resource
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/task/" title="Task" class="md-nav__link">
+        Task
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/managed/" title="Managed" class="md-nav__link">
+        Managed
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/lifecycle/" title="Lifecycle" class="md-nav__link">
+        Lifecycle
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/healthcheck/" title="Health check" class="md-nav__link">
+        Health check
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/jersey-ext/" title="Jersey extension" class="md-nav__link">
+        Jersey extension
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/jersey-feature/" title="Jersey feature" class="md-nav__link">
+        Jersey feature
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/eager/" title="Eager singleton" class="md-nav__link">
+        Eager singleton
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/plugin/" title="Plugin" class="md-nav__link">
+        Plugin
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/servlet/" title="Web servlet" class="md-nav__link">
+        Web servlet
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/filter/" title="Web filter" class="md-nav__link">
+        Web filter
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../installers/listener/" title="Web listener" class="md-nav__link">
+        Web listener
+      </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible">
+      <label class="md-nav__title" for="nav-5">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
+        Authentication
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../examples/governator/" title="Governator" class="md-nav__link">
+        Governator
+      </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Extras
+    </label>
+    <nav class="md-nav" data-md-component="collapsible">
+      <label class="md-nav__title" for="nav-6">
+        Extras
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../extras/admin-rest/" title="Admin REST" class="md-nav__link">
+        Admin REST
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../extras/bom/" title="BOM" class="md-nav__link">
+        BOM
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../extras/eventbus/" title="Guava EventBus" class="md-nav__link">
+        Guava EventBus
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../../extras/jdbi/" title="JDBI" class="md-nav__link">
+        JDBI
+      </a>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" checked>
+    
+    <label class="md-nav__link" for="nav-7">
+      About
+    </label>
+    <nav class="md-nav" data-md-component="collapsible">
+      <label class="md-nav__title" for="nav-7">
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+  <li class="md-nav__item">
+    
+      <a href="../license/" title="License" class="md-nav__link">
+        License
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Release notes
+      </label>
+    
+    <a href="./" title="Release notes" class="md-nav__link md-nav__link--active">
+      Release notes
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#401-2016-11-18" title="4.0.1 (2016-11-18)" class="md-nav__link">
+    4.0.1 (2016-11-18)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#400-2016-08-22" title="4.0.0 (2016-08-22)" class="md-nav__link">
+    4.0.0 (2016-08-22)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#330-2016-08-02" title="3.3.0 (2016-08-02)" class="md-nav__link">
+    3.3.0 (2016-08-02)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#320-2016-01-23" title="3.2.0 (2016-01-23)" class="md-nav__link">
+    3.2.0 (2016-01-23)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#311-2015-11-24" title="3.1.1 (2015-11-24)" class="md-nav__link">
+    3.1.1 (2015-11-24)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#310-2015-09-06" title="3.1.0 (2015-09-06)" class="md-nav__link">
+    3.1.0 (2015-09-06)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#301-2015-07-04" title="3.0.1 (2015-07-04)" class="md-nav__link">
+    3.0.1 (2015-07-04)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#300-2015-04-26" title="3.0.0 (2015-04-26)" class="md-nav__link">
+    3.0.0 (2015-04-26)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#220-2015-04-17" title="2.2.0 (2015-04-17)" class="md-nav__link">
+    2.2.0 (2015-04-17)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#212-2015-03-03" title="2.1.2 (2015-03-03)" class="md-nav__link">
+    2.1.2 (2015-03-03)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#211-2015-01-25" title="2.1.1 (2015-01-25)" class="md-nav__link">
+    2.1.1 (2015-01-25)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#210-2015-01-04" title="2.1.0 (2015-01-04)" class="md-nav__link">
+    2.1.0 (2015-01-04)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#200-2014-11-25" title="2.0.0 (2014-11-25)" class="md-nav__link">
+    2.0.0 (2014-11-25)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#110-2014-10-23" title="1.1.0 (2014-10-23)" class="md-nav__link">
+    1.1.0 (2014-10-23)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#100-2014-10-14" title="1.0.0 (2014-10-14)" class="md-nav__link">
+    1.0.0 (2014-10-14)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#090-2014-09-05" title="0.9.0 (2014-09-05)" class="md-nav__link">
+    0.9.0 (2014-09-05)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#401-2016-11-18" title="4.0.1 (2016-11-18)" class="md-nav__link">
+    4.0.1 (2016-11-18)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#400-2016-08-22" title="4.0.0 (2016-08-22)" class="md-nav__link">
+    4.0.0 (2016-08-22)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#330-2016-08-02" title="3.3.0 (2016-08-02)" class="md-nav__link">
+    3.3.0 (2016-08-02)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#320-2016-01-23" title="3.2.0 (2016-01-23)" class="md-nav__link">
+    3.2.0 (2016-01-23)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#311-2015-11-24" title="3.1.1 (2015-11-24)" class="md-nav__link">
+    3.1.1 (2015-11-24)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#310-2015-09-06" title="3.1.0 (2015-09-06)" class="md-nav__link">
+    3.1.0 (2015-09-06)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#301-2015-07-04" title="3.0.1 (2015-07-04)" class="md-nav__link">
+    3.0.1 (2015-07-04)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#300-2015-04-26" title="3.0.0 (2015-04-26)" class="md-nav__link">
+    3.0.0 (2015-04-26)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#220-2015-04-17" title="2.2.0 (2015-04-17)" class="md-nav__link">
+    2.2.0 (2015-04-17)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#212-2015-03-03" title="2.1.2 (2015-03-03)" class="md-nav__link">
+    2.1.2 (2015-03-03)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#211-2015-01-25" title="2.1.1 (2015-01-25)" class="md-nav__link">
+    2.1.1 (2015-01-25)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#210-2015-01-04" title="2.1.0 (2015-01-04)" class="md-nav__link">
+    2.1.0 (2015-01-04)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#200-2014-11-25" title="2.0.0 (2014-11-25)" class="md-nav__link">
+    2.0.0 (2014-11-25)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#110-2014-10-23" title="1.1.0 (2014-10-23)" class="md-nav__link">
+    1.1.0 (2014-10-23)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#100-2014-10-14" title="1.0.0 (2014-10-14)" class="md-nav__link">
+    1.0.0 (2014-10-14)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#090-2014-09-05" title="0.9.0 (2014-09-05)" class="md-nav__link">
+    0.9.0 (2014-09-05)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+               
+                 <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/docs/about\history.md" title="Edit this page" class="md-icon md-content__edit">edit</a>
+               
+              
+                
+                  <h1>Release notes</h1>
+                
+                <h3 id="401-2016-11-18">4.0.1 (2016-11-18)<a class="headerlink" href="#401-2016-11-18" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 1.0.5 and fix compatibility (#24)</li>
+<li>Fix guice version conflict for maven (#20)</li>
+</ul>
+<h3 id="400-2016-08-22">4.0.0 (2016-08-22)<a class="headerlink" href="#400-2016-08-22" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 1.0.0</li>
+<li>(breaking) Remove AdminServletInstaller and AdminFilterInstaller (replaced with new web bundle)</li>
+<li>Add WebInstallersBundle (not installed by default) to install servlet and filters in both main and admin contexts:<ul>
+<li>WebFilterInstaller installs filters annotated with java.servlet.annotation.WebFilter</li>
+<li>WebServletInstaller installs servlets annotated with java.servlet.annotation.WebServlet</li>
+<li>WebListenerInstaller installs filters annotated with java.servlet.annotation.WebListener    </li>
+</ul>
+</li>
+<li>Add general options mechanism. Used to generify core guicey options, provide runtime options access (for bundles and reporting) and allow 3<sup>rd</sup> party bundles use it's own low-level options.<ul>
+<li>GuiceyBootstrap option(option) method provides access to defined options from bundles</li>
+<li>Options guice bean provide access to options from guice services</li>
+<li>Installers could access options by implementing WithOptions interface</li>
+<li>OptionsInfo guice bean used for accessing options metadata (also accessible through GuiceyConfigurationInfo.getOptions())</li>
+<li>Options reporting added to DiagnosticBundle</li>
+</ul>
+</li>
+<li>(breaking) remove GuiceBunldle methods: searchCommands(boolean), configureFromDropwizardBundles(boolean), bindConfigurationInterfaces(boolean) 
+    (use either shortcuts without parameters or generic options method instead)</li>
+<li>(breaking) core installers bundle now always installed (for both auto scan and manual modes). May be disabled with GuiceyOptions.UseCoreInstallers option </li>
+<li>(breaking) configuration info api (GuiceyConfigurationInfo.getData()) changed to use java8 Predicate instead of guava</li>
+<li>(breaking) InjectorLookup changed to use java8 Optional instead of guava    </li>
+<li>Add ability to customize guice filter mapping DispatcherTypes (by default only REQUEST): GuiceyOptions.GuiceFilterRegistration option </li>
+<li>Add ability to disable guice filter registration and guice servlet modules support (no request and session scopes, but request and response still may be injected in resources) </li>
+<li>Jersey request specific services UriInfo, HttpHeaders, SecurityContext, Request, ContainerRequest, AsyncContext no longer bound in request scope (scope controlled by HK)</li>
+<li>Add methods to GuiceBundle builder:<ul>
+<li>option(option, value) - used to specify custom option value</li>
+<li>options(Map) - used to provide multiple options at once (for custom options lookup mechanisms)</li>
+<li>printAvailableInstallers() - diagnostic reporting configured to show only available installers (to easily spot available features)</li>
+<li>useWebInstallers() - shortcut for installing WebInstallersBundle</li>
+<li>noGuiceFilter() - disables guice filter installation for both contexts and guice servlet modules support  </li>
+<li>noDefaultInstallers() - disables CoreInstallersBundle automatic installation</li>
+</ul>
+</li>
+</ul>
+<h3 id="330-2016-08-02">3.3.0 (2016-08-02)<a class="headerlink" href="#330-2016-08-02" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to guice 4.1.0</li>
+<li>Update to dropwizard 0.9.3</li>
+<li>Grant compatibility with guice options: disableCircularProxies, requireExactBindingAnnotations and requireExplicitBindings</li>
+<li>ResourceInstaller looks for @Path on directly implemented interface (#10)</li>
+<li>Fix bundles lookup reporting (correct multiline)</li>
+<li>Fix duplicate extensions installation when registered both manually and by auto scan</li>
+<li>Restrict extension installation to one installer (first matching, according to installers order)</li>
+<li>Improve dropwizard configuration class binding:<ul>
+<li>Complete configuration hierarchy bound (root, all classes between root and Configuration and Configuration itself)</li>
+<li>(optional) Bind interfaces directly implemented by classes in configuration hierarchy except interfaces from java and groovy packages 
+ (it's common to use HasSomeConfig interface convention and now interface may be directly used for binding (when bindConfigurationInterfaces()))</li>
+</ul>
+</li>
+<li>Add GuiceyBootstrap methods (extend GuiceyBundle abilities):<ul>
+<li>bundles(): add transitive guicey bundles support (to install other guicey bundles from bundle). Duplicate bundles are detected by type.</li>
+<li>application(): returns current application instance</li>
+</ul>
+</li>
+<li>Rewrite internal configuration mechanism (bundles, installers etc) to generalize it and introduce complete configuration tracking: store registration sources, disabling, used installers and other specific information for each item<ul>
+<li>Add GuiceyConfigurationInfo service to access tracked guicey configuration information (may be used for configuration diagnostic purposes, performing post configuration checks, printing complete configuration tree etc)</li>
+<li>Add DiagnosticBundle to log configuration items diagnostic information. Log format is configurable. Rendering is externalized and may be re-used (e.g. for web page). </li>
+</ul>
+</li>
+<li>Add GuiceBundle builder configuration options:<ul>
+<li>bindConfigurationInterfaces() to enable configuration interface bindings</li>
+<li>strictScopeControl() is shortcut to enable HK2DebugBundle (to control beans creation scope during development and tests)</li>
+<li>printDiagnosticInfo() is shortcut to enable DiagnosticBundle with default preset (enable diagnostic logs)</li>
+<li>shortcut methods for disabled boolean options: searchCommands(), configureFromDropwizardBundles() and bindConfigurationInterfaces()</li>
+</ul>
+</li>
+</ul>
+<p>NOTE: if used FeaturesHolder (internal api bean), now it's renamed to ExtensionsHolder to force upgrade: use new GuiceyConfigurationInfo bean instead (public api)    </p>
+<h3 id="320-2016-01-23">3.2.0 (2016-01-23)<a class="headerlink" href="#320-2016-01-23" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Clear possible duplicate guicey bundle instances</li>
+<li>Add GuiceyBundleLookup to automatically resolve and install guicey bundles from various sources.<ul>
+<li>Default: check 'guicey.bundles' system property and install bundles described there. May be useful for tests to enable debug bundles.</li>
+<li>Default: use ServiceLoader mechanism to load declared GuiceyBundle services. Useful for automatic loading of third party extensions.</li>
+<li>Add builder bundleLookup method to register custom lookup implementation</li>
+<li>Add builder disableBundleLookup to disable default lookups</li>
+<li>Default lookup implementation logs all resolved bundles</li>
+</ul>
+</li>
+<li>Fix JerseyProviderInstaller: prevent hk beans duplicate instantiations; fix DynamicFeature support.</li>
+<li>Add HK2DebugBundle. When enabled, checks that beans are instantiated by guice only and annotated with @HK2Managed 
+are managed by HK2 only. May be used in tests as extra validation.</li>
+<li>Add JerseyFeatureInstaller (included in code bundle) which installs javax.ws.rs.core.Feature. Useful for low level configuration. </li>
+<li>Update to dropwizard 0.9</li>
+<li>Revert system exit on guice injector creation error (added in 3.1.1)</li>
+</ul>
+<h3 id="311-2015-11-24">3.1.1 (2015-11-24)<a class="headerlink" href="#311-2015-11-24" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Exit on guice injector creation error.</li>
+<li>Add classpath scan packages validation for intersection (to prevent duplicate instances)</li>
+</ul>
+<h3 id="310-2015-09-06">3.1.0 (2015-09-06)<a class="headerlink" href="#310-2015-09-06" title="Permanent link">&para;</a></h3>
+<ul>
+<li>JerseyProviderInstaller: </li>
+<li>add support for: ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, ReaderInterceptor, WriterInterceptor,
+  ContainerRequestFilter, ContainerResponseFilter, DynamicFeature, ApplicationEventListener</li>
+<li>support multiple extension interfaces on the same bean</li>
+<li>Introduce bundles (GuiceyBundle) to simplify extensions:</li>
+<li>core installers now registered with CoreInstallersBundle and classpath scan on core installers package is removed</li>
+<li>builder bundles() method to add guicey bundles</li>
+<li>builder configureFromDropwizardBundles method enables all registered dropwizard bundles lookup if they implement GuiceyBundle (unified extension mechanism)</li>
+<li>Add admin context rest support (AdminRestBundle)</li>
+<li>Add request scoped beans support in admin context</li>
+</ul>
+<h3 id="301-2015-07-04">3.0.1 (2015-07-04)<a class="headerlink" href="#301-2015-07-04" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Add DropwizardAwareModule abstract module to remove boilerplate of using all aware interfaces</li>
+</ul>
+<h3 id="300-2015-04-26">3.0.0 (2015-04-26)<a class="headerlink" href="#300-2015-04-26" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix HealthCheckInstaller: now installs only NamedHealthCheck classes and ignore other HealthCheck types (which it can't install properly) </li>
+<li>(breaking) Remove static state from GuiceBundle:</li>
+<li>GuiceBundle.getInjector method remain, but its now instance specific (instead of static)</li>
+<li>Injector could be referenced statically using application instance: InjectorLookup.getInjector(app).get() </li>
+<li>JerseyInstaller interface signature changed: now install method receives injector instance</li>
+</ul>
+<h3 id="220-2015-04-17">2.2.0 (2015-04-17)<a class="headerlink" href="#220-2015-04-17" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix ExceptionMapper registration</li>
+<li>Add installers ordering support with @Order annotation. Default installers are ordered now with indexes from 10 to 100 with gap 10 
+(to simplify custom installers injection between them)</li>
+</ul>
+<h3 id="212-2015-03-03">2.1.2 (2015-03-03)<a class="headerlink" href="#212-2015-03-03" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Spock 1.0 compatibility</li>
+</ul>
+<h3 id="211-2015-01-25">2.1.1 (2015-01-25)<a class="headerlink" href="#211-2015-01-25" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Dropwizard 0.8-rc2 compatibility</li>
+</ul>
+<h3 id="210-2015-01-04">2.1.0 (2015-01-04)<a class="headerlink" href="#210-2015-01-04" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Add ability to customize injector creation (required by some guice third party modules, like governator). Contributed by <a href="https://github.com/segfly">Nicholas Pace</a></li>
+<li>Add spock extensions to use injections directly in specification (like spock-guice do)</li>
+</ul>
+<h3 id="200-2014-11-25">2.0.0 (2014-11-25)<a class="headerlink" href="#200-2014-11-25" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Dropwizard 0.8 integration (as result, no more depends on jersey-guice, but depends on guice-bridge(hk2)).
+Jersey integration completely rewritten.</li>
+<li>Add JerseyInstaller installer type</li>
+<li>Add @LazyBinding annotation, which allows extension not to be registered in guice context (it will be created on first request)</li>
+</ul>
+<h3 id="110-2014-10-23">1.1.0 (2014-10-23)<a class="headerlink" href="#110-2014-10-23" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix interface generics resolution to support nested generics and moved generics resolution into GenericsUtils instead of FeatureUtils</li>
+<li>Drop java 1.6 compatibility, because dropwizard is 1.7 compatible</li>
+<li>Add junit rule for lightweight testing (run guice without starting jetty)</li>
+</ul>
+<h3 id="100-2014-10-14">1.0.0 (2014-10-14)<a class="headerlink" href="#100-2014-10-14" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Add dependency on guice-multibindings</li>
+<li>Installers may choose now from three types of installation (binding, type or instance) or combine them.</li>
+<li>Add PluginInstaller: shortcut for multibindings mechanism</li>
+<li>Updated guice (4.0.beta4 -&gt; 4.0.beta5)</li>
+<li>Force singleton for resources</li>
+<li>@Eager renamed to @EagerSingleton and now forces singleton scope for bean</li>
+<li>Add dropwizard style reporting for installed features (like resources or tasks)</li>
+<li>Removed JerseyInjectableProviderInstaller. Now injectable providers must be annotated with @Provider</li>
+<li>Add extensions ordering support using @Order annotation (by default for LifeCycle and Managed installers)</li>
+<li>Add admin context filter and servlet installers</li>
+<li>Rename bundle options: features -&gt; installers, disabledFeatures -&gt; disabledInstallers, beans -&gt; extensions</li>
+</ul>
+<h3 id="090-2014-09-05">0.9.0 (2014-09-05)<a class="headerlink" href="#090-2014-09-05" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Initial release</li>
+</ul>
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../license/" title="License" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                License
+              </span>
+            </div>
+          </a>
+        
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2014-2017 Vyacheslav Rusakov
+          </div>
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+      <a href="https://github.com/xvik" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/vyarus" class="md-footer-social__link fa fa-twitter"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application-2afe21e0b2.js"></script>
+      <script>var config={url:{base:"../.."}},app=new Application(config);app.initialize()</script>
+      
+    
+    
+      
+    
+  </body>
+</html>
