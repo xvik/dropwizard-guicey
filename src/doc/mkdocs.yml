@@ -1,0 +1,89 @@
+site_name: Dropwizard-guicey
+site_description: 'Dropwizard guice integration'
+site_author: 'Vyacheslav Rusakov'
+site_url: 'https://xvik.github.io/dropwizard-guicey'
+edit_uri: edit/master/src/docs/
+
+# Repository
+repo_name: 'dropwizard-guicey'
+repo_url: 'https://github.com/xvik/dropwizard-guicey'
+
+# Copyright
+copyright: 'Copyright &copy; 2014-2017 Vyacheslav Rusakov'
+
+# Documentation and theme
+theme: 'material'
+
+# Options
+extra:
+#  palette:
+#    primary: 'indigo'
+#    accent: 'indigo'
+
+  social:
+    - type: 'github'
+      link: 'https://github.com/xvik'
+    - type: 'twitter'
+      link: 'https://twitter.com/vyarus'
+
+# Google Analytics
+#google_analytics:
+#  - 'UA-XXXXXXXX-X'
+#  - 'auto'
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite(guess_lang=false)
+  - footnotes
+  - meta
+  - toc(permalink=true)
+  - pymdownx.betterem(smart_enable=all)
+  - pymdownx.caret
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+
+pages:
+    - Home: index.md
+    - Getting started: getting-started.md
+    - User guide:
+      - Configuration: guide/configuration.md
+      - Integration lifecycle: guide/lifecycle.md
+      - Injector: guide/injector.md
+      - Module autowiring: guide/module-autowiring.md
+      - Bindings: guide/bindings.md
+      - Classpath scan: guide/scan.md
+      - Installers: guide/installers.md
+      - Ordering: guide/ordering.md
+      - Bundles (Guicey): guide/bundles.md
+      - Options: guide/options.md
+      - Diagnostic: guide/diagnostic.md
+      - Commands: guide/commands.md
+      - Web: guide/web.md
+      - Test: guide/test.md
+    - Installers:
+      - Resource: installers/resource.md
+      - Task: installers/task.md
+      - Managed: installers/managed.md
+      - Lifecycle: installers/lifecycle.md
+      - Health check: installers/healthcheck.md
+      - Jersey extension: installers/jersey-ext.md
+      - Jersey feature: installers/jersey-feature.md
+      - Eager singleton: installers/eager.md
+      - Plugin: installers/plugin.md
+      - Web servlet: installers/servlet.md
+      - Web filter: installers/filter.md
+      - Web listener: installers/listener.md
+    - Examples:
+      - Authentication: examples/authentication.md
+      - Governator: examples/governator.md
+    - Extras:
+      - Admin REST: extras/admin-rest.md
+      - BOM: extras/bom.md
+      - Guava EventBus: extras/eventbus.md
+      - JDBI: extras/jdbi.md
+    - About:
+      - License: about/license.md
+      - Release notes: about/history.md
