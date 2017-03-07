@@ -80,6 +80,7 @@ pages:
       - Authentication: examples/authentication.md
       - Governator: examples/governator.md
       - Hibernate: examples/hibernate.md
+      - EventBus: examples/eventbus.md
       - JDBI: examples/jdbi.md
     - Extras:
       - Admin REST: extras/admin-rest.md

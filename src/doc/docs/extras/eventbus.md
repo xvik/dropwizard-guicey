@@ -60,7 +60,7 @@ Inject `EventBus` to publish new events.
 ```java
 public class SomeService {
     @Inject
-    private EVentBus eventbus;    
+    private EventBus eventbus;    
     
     public void inSomeMethod() {
         evetbus.post(new MyEvent());
