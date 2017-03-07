@@ -27,9 +27,9 @@ extra:
       link: 'https://twitter.com/vyarus'
 
 # Google Analytics
-#google_analytics:
-#  - 'UA-XXXXXXXX-X'
-#  - 'auto'
+google_analytics:
+  - 'UA-93174150-1'
+  - 'auto'
 
 # Extensions
 markdown_extensions:
