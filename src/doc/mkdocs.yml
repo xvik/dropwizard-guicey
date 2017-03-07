@@ -85,5 +85,6 @@ pages:
       - Guava EventBus: extras/eventbus.md
       - JDBI: extras/jdbi.md
     - About:
-      - License: about/license.md
       - Release notes: about/history.md
+      - Support: about/support.md
+      - License: about/license.md

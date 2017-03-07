@@ -1,6 +1,9 @@
 # Welcome to dropwizard-guicey
 
-[Guice](https://github.com/google/guice) integration for [dropwizard](http://dropwizard.io).
+!!! summary ""
+    [Guice](https://github.com/google/guice) integration for [dropwizard](http://dropwizard.io).
+
+[Release notes](about/history.md) - [Support](about/support.md) - [License](about/license.md)
 
 ## Main features
 
