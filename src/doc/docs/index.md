@@ -27,7 +27,7 @@ automatically without manual configurations (of course, [manual mode](getting-st
 * [**Getting started**](getting-started.md) section covers installation and main concepts. Ideal for introduction.
 * [**User guide**](guide/configuration.md) section contain detailed features descriptions. Good to read, but if no time, read as you need it.
 * [**Installers**](installers/resource.md) section describes all guicey installers. Use it as a *hand book* for extensions declaration.
-* [**Examples**](examples/authentication.md) section contains common example cases.
+* [**Examples**](examples/authentication.md) section contains common example cases. Look also [examples repository](https://github.com/xvik/dropwizard-guicey-examples) for additinoal examples.
 * [**Extras**](extras/admin-rest.md) section covers extra modules: admin rest, 3rd party integrations (event bus, jdbi) provided by guicey itself 
 or extensions project.
 

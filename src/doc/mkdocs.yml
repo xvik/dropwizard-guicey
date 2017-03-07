@@ -79,6 +79,7 @@ pages:
     - Examples:
       - Authentication: examples/authentication.md
       - Governator: examples/governator.md
+      - Hibernate: examples/hibernate.md
     - Extras:
       - Admin REST: extras/admin-rest.md
       - BOM: extras/bom.md
