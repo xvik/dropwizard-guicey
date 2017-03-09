@@ -687,6 +687,17 @@
           
   <li class="md-nav__item">
     
+      <a href="../compatibility/" title="Compatibility" class="md-nav__link">
+        Compatibility
+      </a>
+    
+  </li>
+
+        
+          
+          
+  <li class="md-nav__item">
+    
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
     
     
@@ -999,12 +1010,12 @@
                 
                   <h1>Release notes</h1>
                 
-                <h3 id="401-2016-11-18">4.0.1 (2016-11-18)<a class="headerlink" href="#401-2016-11-18" title="Permanent link">&para;</a></h3>
+                <h3 id="401-2016-11-18"><a href="http://xvik.github.io/dropwizard-guicey/4.0.1">4.0.1</a> (2016-11-18)<a class="headerlink" href="#401-2016-11-18" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Update to dropwizard 1.0.5 and fix compatibility (#24)</li>
 <li>Fix guice version conflict for maven (#20)</li>
 </ul>
-<h3 id="400-2016-08-22">4.0.0 (2016-08-22)<a class="headerlink" href="#400-2016-08-22" title="Permanent link">&para;</a></h3>
+<h3 id="400-2016-08-22"><a href="https://github.com/xvik/dropwizard-guicey/tree/4.0.0">4.0.0</a> (2016-08-22)<a class="headerlink" href="#400-2016-08-22" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Update to dropwizard 1.0.0</li>
 <li>(breaking) Remove AdminServletInstaller and AdminFilterInstaller (replaced with new web bundle)</li>
@@ -1040,7 +1051,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="330-2016-08-02">3.3.0 (2016-08-02)<a class="headerlink" href="#330-2016-08-02" title="Permanent link">&para;</a></h3>
+<h3 id="330-2016-08-02"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.3.0">3.3.0</a> (2016-08-02)<a class="headerlink" href="#330-2016-08-02" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Update to guice 4.1.0</li>
 <li>Update to dropwizard 0.9.3</li>
@@ -1074,7 +1085,7 @@
 </li>
 </ul>
 <p>NOTE: if used FeaturesHolder (internal api bean), now it's renamed to ExtensionsHolder to force upgrade: use new GuiceyConfigurationInfo bean instead (public api)    </p>
-<h3 id="320-2016-01-23">3.2.0 (2016-01-23)<a class="headerlink" href="#320-2016-01-23" title="Permanent link">&para;</a></h3>
+<h3 id="320-2016-01-23"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.2.0">3.2.0</a> (2016-01-23)<a class="headerlink" href="#320-2016-01-23" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Clear possible duplicate guicey bundle instances</li>
 <li>Add GuiceyBundleLookup to automatically resolve and install guicey bundles from various sources.<ul>
@@ -1092,12 +1103,12 @@ are managed by HK2 only. May be used in tests as extra validation.</li>
 <li>Update to dropwizard 0.9</li>
 <li>Revert system exit on guice injector creation error (added in 3.1.1)</li>
 </ul>
-<h3 id="311-2015-11-24">3.1.1 (2015-11-24)<a class="headerlink" href="#311-2015-11-24" title="Permanent link">&para;</a></h3>
+<h3 id="311-2015-11-24"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.1.1">3.1.1</a> (2015-11-24)<a class="headerlink" href="#311-2015-11-24" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Exit on guice injector creation error.</li>
 <li>Add classpath scan packages validation for intersection (to prevent duplicate instances)</li>
 </ul>
-<h3 id="310-2015-09-06">3.1.0 (2015-09-06)<a class="headerlink" href="#310-2015-09-06" title="Permanent link">&para;</a></h3>
+<h3 id="310-2015-09-06"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.1.0">3.1.0</a> (2015-09-06)<a class="headerlink" href="#310-2015-09-06" title="Permanent link">&para;</a></h3>
 <ul>
 <li>JerseyProviderInstaller: </li>
 <li>add support for: ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, ReaderInterceptor, WriterInterceptor,
@@ -1110,11 +1121,11 @@ are managed by HK2 only. May be used in tests as extra validation.</li>
 <li>Add admin context rest support (AdminRestBundle)</li>
 <li>Add request scoped beans support in admin context</li>
 </ul>
-<h3 id="301-2015-07-04">3.0.1 (2015-07-04)<a class="headerlink" href="#301-2015-07-04" title="Permanent link">&para;</a></h3>
+<h3 id="301-2015-07-04"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.0.1">3.0.1</a> (2015-07-04)<a class="headerlink" href="#301-2015-07-04" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Add DropwizardAwareModule abstract module to remove boilerplate of using all aware interfaces</li>
 </ul>
-<h3 id="300-2015-04-26">3.0.0 (2015-04-26)<a class="headerlink" href="#300-2015-04-26" title="Permanent link">&para;</a></h3>
+<h3 id="300-2015-04-26"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.0.0">3.0.0</a> (2015-04-26)<a class="headerlink" href="#300-2015-04-26" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix HealthCheckInstaller: now installs only NamedHealthCheck classes and ignore other HealthCheck types (which it can't install properly) </li>
 <li>(breaking) Remove static state from GuiceBundle:</li>
@@ -1122,39 +1133,39 @@ are managed by HK2 only. May be used in tests as extra validation.</li>
 <li>Injector could be referenced statically using application instance: InjectorLookup.getInjector(app).get() </li>
 <li>JerseyInstaller interface signature changed: now install method receives injector instance</li>
 </ul>
-<h3 id="220-2015-04-17">2.2.0 (2015-04-17)<a class="headerlink" href="#220-2015-04-17" title="Permanent link">&para;</a></h3>
+<h3 id="220-2015-04-17"><a href="https://github.com/xvik/dropwizard-guicey/tree/2.2.0">2.2.0</a> (2015-04-17)<a class="headerlink" href="#220-2015-04-17" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix ExceptionMapper registration</li>
 <li>Add installers ordering support with @Order annotation. Default installers are ordered now with indexes from 10 to 100 with gap 10 
 (to simplify custom installers injection between them)</li>
 </ul>
-<h3 id="212-2015-03-03">2.1.2 (2015-03-03)<a class="headerlink" href="#212-2015-03-03" title="Permanent link">&para;</a></h3>
+<h3 id="212-2015-03-03"><a href="https://github.com/xvik/dropwizard-guicey/tree/2.1.2">2.1.2</a> (2015-03-03)<a class="headerlink" href="#212-2015-03-03" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Spock 1.0 compatibility</li>
 </ul>
-<h3 id="211-2015-01-25">2.1.1 (2015-01-25)<a class="headerlink" href="#211-2015-01-25" title="Permanent link">&para;</a></h3>
+<h3 id="211-2015-01-25"><a href="https://github.com/xvik/dropwizard-guicey/tree/2.1.1">2.1.1</a> (2015-01-25)<a class="headerlink" href="#211-2015-01-25" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Dropwizard 0.8-rc2 compatibility</li>
 </ul>
-<h3 id="210-2015-01-04">2.1.0 (2015-01-04)<a class="headerlink" href="#210-2015-01-04" title="Permanent link">&para;</a></h3>
+<h3 id="210-2015-01-04"><a href="https://github.com/xvik/dropwizard-guicey/tree/2.1.0">2.1.0</a> (2015-01-04)<a class="headerlink" href="#210-2015-01-04" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Add ability to customize injector creation (required by some guice third party modules, like governator). Contributed by <a href="https://github.com/segfly">Nicholas Pace</a></li>
 <li>Add spock extensions to use injections directly in specification (like spock-guice do)</li>
 </ul>
-<h3 id="200-2014-11-25">2.0.0 (2014-11-25)<a class="headerlink" href="#200-2014-11-25" title="Permanent link">&para;</a></h3>
+<h3 id="200-2014-11-25"><a href="https://github.com/xvik/dropwizard-guicey/tree/2.0.0">2.0.0</a> (2014-11-25)<a class="headerlink" href="#200-2014-11-25" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Dropwizard 0.8 integration (as result, no more depends on jersey-guice, but depends on guice-bridge(hk2)).
 Jersey integration completely rewritten.</li>
 <li>Add JerseyInstaller installer type</li>
 <li>Add @LazyBinding annotation, which allows extension not to be registered in guice context (it will be created on first request)</li>
 </ul>
-<h3 id="110-2014-10-23">1.1.0 (2014-10-23)<a class="headerlink" href="#110-2014-10-23" title="Permanent link">&para;</a></h3>
+<h3 id="110-2014-10-23"><a href="https://github.com/xvik/dropwizard-guicey/tree/1.1.0">1.1.0</a> (2014-10-23)<a class="headerlink" href="#110-2014-10-23" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix interface generics resolution to support nested generics and moved generics resolution into GenericsUtils instead of FeatureUtils</li>
 <li>Drop java 1.6 compatibility, because dropwizard is 1.7 compatible</li>
 <li>Add junit rule for lightweight testing (run guice without starting jetty)</li>
 </ul>
-<h3 id="100-2014-10-14">1.0.0 (2014-10-14)<a class="headerlink" href="#100-2014-10-14" title="Permanent link">&para;</a></h3>
+<h3 id="100-2014-10-14"><a href="https://github.com/xvik/dropwizard-guicey/tree/1.0.0">1.0.0</a> (2014-10-14)<a class="headerlink" href="#100-2014-10-14" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Add dependency on guice-multibindings</li>
 <li>Installers may choose now from three types of installation (binding, type or instance) or combine them.</li>
@@ -1168,7 +1179,7 @@ Jersey integration completely rewritten.</li>
 <li>Add admin context filter and servlet installers</li>
 <li>Rename bundle options: features -&gt; installers, disabledFeatures -&gt; disabledInstallers, beans -&gt; extensions</li>
 </ul>
-<h3 id="090-2014-09-05">0.9.0 (2014-09-05)<a class="headerlink" href="#090-2014-09-05" title="Permanent link">&para;</a></h3>
+<h3 id="090-2014-09-05"><a href="https://github.com/xvik/dropwizard-guicey/tree/0.9.0">0.9.0</a> (2014-09-05)<a class="headerlink" href="#090-2014-09-05" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Initial release</li>
 </ul>
@@ -1184,7 +1195,7 @@ Jersey integration completely rewritten.</li>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../../extras/jdbi/" title="JDBI" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../compatibility/" title="Compatibility" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1193,7 +1204,7 @@ Jersey integration completely rewritten.</li>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                JDBI
+                Compatibility
               </span>
             </div>
           </a>
