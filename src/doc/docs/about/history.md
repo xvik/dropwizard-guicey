@@ -1,8 +1,8 @@
-### 4.0.1 (2016-11-18)
+### [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1) (2016-11-18)
 * Update to dropwizard 1.0.5 and fix compatibility (#24)
 * Fix guice version conflict for maven (#20)
 
-### 4.0.0 (2016-08-22)
+### [4.0.0](https://github.com/xvik/dropwizard-guicey/tree/4.0.0) (2016-08-22)
 * Update to dropwizard 1.0.0
 * (breaking) Remove AdminServletInstaller and AdminFilterInstaller (replaced with new web bundle)
 * Add WebInstallersBundle (not installed by default) to install servlet and filters in both main and admin contexts:
@@ -31,7 +31,7 @@
     - noGuiceFilter() - disables guice filter installation for both contexts and guice servlet modules support  
     - noDefaultInstallers() - disables CoreInstallersBundle automatic installation
     
-### 3.3.0 (2016-08-02)
+### [3.3.0](https://github.com/xvik/dropwizard-guicey/tree/3.3.0) (2016-08-02)
 * Update to guice 4.1.0
 * Update to dropwizard 0.9.3
 * Grant compatibility with guice options: disableCircularProxies, requireExactBindingAnnotations and requireExplicitBindings
@@ -57,7 +57,7 @@
 
 NOTE: if used FeaturesHolder (internal api bean), now it's renamed to ExtensionsHolder to force upgrade: use new GuiceyConfigurationInfo bean instead (public api)    
     
-### 3.2.0 (2016-01-23)
+### [3.2.0](https://github.com/xvik/dropwizard-guicey/tree/3.2.0) (2016-01-23)
 * Clear possible duplicate guicey bundle instances
 * Add GuiceyBundleLookup to automatically resolve and install guicey bundles from various sources.
     - Default: check 'guicey.bundles' system property and install bundles described there. May be useful for tests to enable debug bundles.
@@ -72,11 +72,11 @@ are managed by HK2 only. May be used in tests as extra validation.
 * Update to dropwizard 0.9
 * Revert system exit on guice injector creation error (added in 3.1.1)
 
-### 3.1.1 (2015-11-24)
+### [3.1.1](https://github.com/xvik/dropwizard-guicey/tree/3.1.1) (2015-11-24)
 * Exit on guice injector creation error.
 * Add classpath scan packages validation for intersection (to prevent duplicate instances)
 
-### 3.1.0 (2015-09-06)
+### [3.1.0](https://github.com/xvik/dropwizard-guicey/tree/3.1.0) (2015-09-06)
 * JerseyProviderInstaller: 
   - add support for: ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, ReaderInterceptor, WriterInterceptor,
   ContainerRequestFilter, ContainerResponseFilter, DynamicFeature, ApplicationEventListener
@@ -88,43 +88,43 @@ are managed by HK2 only. May be used in tests as extra validation.
 * Add admin context rest support (AdminRestBundle)
 * Add request scoped beans support in admin context
 
-### 3.0.1 (2015-07-04)
+### [3.0.1](https://github.com/xvik/dropwizard-guicey/tree/3.0.1) (2015-07-04)
 * Add DropwizardAwareModule abstract module to remove boilerplate of using all aware interfaces
 
-### 3.0.0 (2015-04-26)
+### [3.0.0](https://github.com/xvik/dropwizard-guicey/tree/3.0.0) (2015-04-26)
 * Fix HealthCheckInstaller: now installs only NamedHealthCheck classes and ignore other HealthCheck types (which it can't install properly) 
 * (breaking) Remove static state from GuiceBundle:
   - GuiceBundle.getInjector method remain, but its now instance specific (instead of static)
   - Injector could be referenced statically using application instance: InjectorLookup.getInjector(app).get() 
   - JerseyInstaller interface signature changed: now install method receives injector instance
 
-### 2.2.0 (2015-04-17)
+### [2.2.0](https://github.com/xvik/dropwizard-guicey/tree/2.2.0) (2015-04-17)
 * Fix ExceptionMapper registration
 * Add installers ordering support with @Order annotation. Default installers are ordered now with indexes from 10 to 100 with gap 10 
 (to simplify custom installers injection between them)
 
-### 2.1.2 (2015-03-03)
+### [2.1.2](https://github.com/xvik/dropwizard-guicey/tree/2.1.2) (2015-03-03)
 * Spock 1.0 compatibility
 
-### 2.1.1 (2015-01-25)
+### [2.1.1](https://github.com/xvik/dropwizard-guicey/tree/2.1.1) (2015-01-25)
 * Dropwizard 0.8-rc2 compatibility
 
-### 2.1.0 (2015-01-04)
+### [2.1.0](https://github.com/xvik/dropwizard-guicey/tree/2.1.0) (2015-01-04)
 * Add ability to customize injector creation (required by some guice third party modules, like governator). Contributed by [Nicholas Pace](https://github.com/segfly)
 * Add spock extensions to use injections directly in specification (like spock-guice do)
 
-### 2.0.0 (2014-11-25)
+### [2.0.0](https://github.com/xvik/dropwizard-guicey/tree/2.0.0) (2014-11-25)
 * Dropwizard 0.8 integration (as result, no more depends on jersey-guice, but depends on guice-bridge(hk2)).
 Jersey integration completely rewritten.
 * Add JerseyInstaller installer type
 * Add @LazyBinding annotation, which allows extension not to be registered in guice context (it will be created on first request)
 
-### 1.1.0 (2014-10-23)
+### [1.1.0](https://github.com/xvik/dropwizard-guicey/tree/1.1.0) (2014-10-23)
 * Fix interface generics resolution to support nested generics and moved generics resolution into GenericsUtils instead of FeatureUtils
 * Drop java 1.6 compatibility, because dropwizard is 1.7 compatible
 * Add junit rule for lightweight testing (run guice without starting jetty)
 
-### 1.0.0 (2014-10-14)
+### [1.0.0](https://github.com/xvik/dropwizard-guicey/tree/1.0.0) (2014-10-14)
 * Add dependency on guice-multibindings
 * Installers may choose now from three types of installation (binding, type or instance) or combine them.
 * Add PluginInstaller: shortcut for multibindings mechanism
@@ -137,6 +137,6 @@ Jersey integration completely rewritten.
 * Add admin context filter and servlet installers
 * Rename bundle options: features -> installers, disabledFeatures -> disabledInstallers, beans -> extensions
 
-### 0.9.0 (2014-09-05)
+### [0.9.0](https://github.com/xvik/dropwizard-guicey/tree/0.9.0) (2014-09-05)
 
 * Initial release
