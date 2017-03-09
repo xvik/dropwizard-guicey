@@ -3,12 +3,17 @@
 [![Build Status](http://img.shields.io/travis/xvik/dropwizard-guicey.svg?style=flat&branch=master)](https://travis-ci.org/xvik/dropwizard-guicey)
 [![Coverage Status](https://img.shields.io/coveralls/xvik/dropwizard-guicey.svg?style=flat)](https://coveralls.io/r/xvik/dropwizard-guicey?branch=master)
 
-> **[Examples](https://github.com/xvik/dropwizard-guicey-examples)**  |  **[Extensions and integrations](https://github.com/xvik/dropwizard-guicey-ext)**
-
-Use [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey) or [gitter chat](https://gitter.im/xvik/dropwizard-guicey) to ask questions, discuss current features (general support). 
-
 **DOCUMENTATION**: http://xvik.github.io/dropwizard-guicey/
 
+Additional repositories:
+
+* [Examples](https://github.com/xvik/dropwizard-guicey-examples)
+* [Extensions and integrations](https://github.com/xvik/dropwizard-guicey-ext)
+
+Support:
+
+* [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey)
+* [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
 
 
 ### About
@@ -66,9 +71,11 @@ Gradle:
 compile 'ru.vyarus:dropwizard-guicey:4.0.1'
 ```
 
-- for dropwizard 0.9 use version 3.3.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.9))
-- for dropwizard 0.8 use version 3.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.8))
-- for dropwizard 0.7 use version 1.1.0 (see [old docs](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7))
+Dropwizard | Guicey
+----------|---------
+0.9 |  [3.3.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.9)
+0.8 | [3.1.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.8)
+0.7 | [1.1.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7)
 
 ##### Snapshots
 
@@ -79,6 +86,9 @@ You can use snapshot versions through [JitPack](https://jitpack.io):
 * Follow displayed instruction: add repository and change dependency (NOTE: due to JitPack convention artifact group will be different)
 
 ### Usage
+
+> **DEPRECATED** All project documentation was moved to [documentation site](http://xvik.github.io/dropwizard-guicey/). 
+Old readme will remain until the next release (after that all these sections will be removed).
 
 You can use [classpath scanning](#classpath-scan) or configure everything manually (or combine both).
 Auto scan configuration [example](https://github.com/xvik/dropwizard-guicey-examples/tree/master/autoconfig-base):
