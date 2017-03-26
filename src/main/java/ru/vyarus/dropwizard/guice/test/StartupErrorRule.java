@@ -74,7 +74,7 @@ public final class StartupErrorRule implements TestRule {
     /**
      * Dropwizard exception will be presented here.
      *
-     * @return content if system.err
+     * @return content of system.err
      */
     public String getError() {
         return clearString(systemErr.getLog());
