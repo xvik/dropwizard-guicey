@@ -36,12 +36,12 @@ dependencies {
     provided 'org.spockframework:spock-core:1.0-groovy-2.4'
     provided 'com.github.stefanbirkner:system-rules:1.16.0'
     provided 'com.google.code.findbugs:annotations:3.0.1'
+    provided "org.glassfish.hk2:guice-bridge:2.5.0-b32"
 
     compile 'com.google.inject:guice'
     compile 'com.google.inject.extensions:guice-servlet'
     compile 'com.google.inject.extensions:guice-multibindings'
     compile 'io.dropwizard:dropwizard-core'
-    compile "org.glassfish.hk2:guice-bridge:2.5.0-b32"
     compile 'ru.vyarus:generics-resolver:2.0.1'
 
     testCompile 'io.dropwizard:dropwizard-auth'

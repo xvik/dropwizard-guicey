@@ -4,10 +4,9 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.ServiceLocatorProvider;
-import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
-import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.InvisibleForScanner;
+import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBridgeActivator;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.InstallerBinder;
 
 import javax.inject.Provider;
@@ -24,10 +23,11 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.HKTime;
  * <p>Feature must be registered in jersey before it's start:
  * {@code environment.jersey().register(new GuiceFeature())}</p>
  * <p>During juice context start special jersey bindings module registered
- * {@link ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule}, which lazily binds jersey specifc
+ * {@link ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule}, which lazily binds jersey specific
  * types to guice context. This types could be used in guice only after actual integration
  * (this feature activation)</p>
- * <p>HK-guice bridge is activated (not bi-directional), but it's not actually required in most cases: it was
+ * <p>HK-guice bridge is activated when {@link ru.vyarus.dropwizard.guice.GuiceyOptions#UseHkBridge} option enabled
+ * (not bi-directional). By default, it's disabled because most cases does not require it: it was
  * developed for cases when bean is created by HK and only need some injections from guice, but here guice
  * controls almost everything and prepared instance is passed to guice. But bridge may be useful together with
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} instances.</p>
@@ -46,11 +46,13 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
 
     private final Provider<Injector> provider;
     private final StatsTracker tracker;
+    private final boolean enableBridge;
     private ServiceLocator locator;
 
-    public GuiceFeature(final Provider<Injector> provider, final StatsTracker tracker) {
+    public GuiceFeature(final Provider<Injector> provider, final StatsTracker tracker, final boolean enableBridge) {
         this.provider = provider;
         this.tracker = tracker;
+        this.enableBridge = enableBridge;
     }
 
     @Override
@@ -59,9 +61,9 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
         locator = ServiceLocatorProvider.getServiceLocator(context);
         final Injector injector = this.provider.get();
 
-        GuiceBridge.getGuiceBridge().initializeGuiceBridge(locator);
-        final GuiceIntoHK2Bridge guiceBridge = locator.getService(GuiceIntoHK2Bridge.class);
-        guiceBridge.bridgeGuiceInjector(injector);
+        if (enableBridge) {
+            new GuiceBridgeActivator(locator, injector).activate();
+        }
 
         context.register(new InstallerBinder(injector, tracker));
         tracker.stopHkTimer(HKTime);

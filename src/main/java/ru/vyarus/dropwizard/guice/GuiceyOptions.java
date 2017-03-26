@@ -95,7 +95,17 @@ public enum GuiceyOptions implements Option {
      * Also it will not be possible to use http request and response injections under filter and servlets
      * (it will work only with resources).
      */
-    GuiceFilterRegistration(EnumSet.class, EnumSet.of(DispatcherType.REQUEST));
+    GuiceFilterRegistration(EnumSet.class, EnumSet.of(DispatcherType.REQUEST)),
+
+    /**
+     * Enables guice bridge for hk to allow hk services to see guice beans. This is not often required and
+     * so disabled by default. For example, it could be required if
+     * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} used to properly instantiate
+     * service by hk when it also depends on guice services.
+     * <p>
+     * IMPORTANT: requires extra dependency on hk2 guice-bridge: 'org.glassfish.hk2:guice-bridge:2.5.0-b32'
+     */
+    UseHkBridge(Boolean.class, false);
 
     private Class<?> type;
     private Object value;

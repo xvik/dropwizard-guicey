@@ -48,6 +48,7 @@ class OptionsRendererTest extends Specification {
         ConfigureFromDropwizardBundles = false
         InjectorStage                  = PRODUCTION
         GuiceFilterRegistration        = [REQUEST]
+        UseHkBridge                    = false
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
@@ -76,6 +77,7 @@ class OptionsRendererTest extends Specification {
         ConfigureFromDropwizardBundles = false
         InjectorStage                  = PRODUCTION
         GuiceFilterRegistration        = [REQUEST]
+        UseHkBridge                    = false
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
@@ -122,6 +124,7 @@ class OptionsRendererTest extends Specification {
         UseCoreInstallers              = true
         ConfigureFromDropwizardBundles = false
         InjectorStage                  = PRODUCTION
+        UseHkBridge                    = false
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)

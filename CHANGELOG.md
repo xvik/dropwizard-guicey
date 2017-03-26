@@ -1,5 +1,7 @@
-* Update to dropwizard 1.1.0 (#28)
+* Update to dropwizard 1.1.0
 * Add StartupErrorRule to simplify dropwizard startup error testing
+* (breaking) HK guice-bridge dependency become optional. New option GuiceyOptions.UseHkBridge could be used 
+to enable bridge (#28)   
 
 ### 4.0.1 (2016-11-18)
 * Update to dropwizard 1.0.5 and fix compatibility (#24)

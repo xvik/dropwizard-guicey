@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule;
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;
 
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseHkBridge;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.GuiceFilterRegistration;
 
 /**
@@ -49,7 +50,7 @@ public class Jersey2Module extends AbstractModule {
         // injector not available at this point, so using provider
         final InjectorProvider provider = new InjectorProvider(application);
         install(new GuiceBindingsModule(provider, guiceServletSupport));
-        final GuiceFeature component = new GuiceFeature(provider, context.stat());
+        final GuiceFeature component = new GuiceFeature(provider, context.stat(), context.option(UseHkBridge));
         bind(ServiceLocator.class).toProvider(component);
         environment.jersey().register(component);
 
