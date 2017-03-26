@@ -1,3 +1,6 @@
+* Update to dropwizard 1.1.0 (#28)
+* Add StartupErrorRule to simplify dropwizard startup error testing
+
 ### 4.0.1 (2016-11-18)
 * Update to dropwizard 1.0.5 and fix compatibility (#24)
 * Fix guice version conflict for maven (#20)

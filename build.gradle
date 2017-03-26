@@ -19,28 +19,29 @@ wrapper {
 }
 
 ext {
-    dropwizard = '1.0.5'
+    dropwizard = '1.1.0'
     guice = '4.1.0'
 }
 
 repositories { jcenter(); mavenCentral(); mavenLocal() }
 dependencyManagement {
     imports {
-        mavenBom "io.dropwizard:dropwizard-bom:$dropwizard"
         mavenBom "com.google.inject:guice-bom:$guice"
+        mavenBom "io.dropwizard:dropwizard-bom:$dropwizard"
     }
 }
 dependencies {
     provided 'junit:junit'
     provided 'io.dropwizard:dropwizard-testing'
     provided 'org.spockframework:spock-core:1.0-groovy-2.4'
+    provided 'com.github.stefanbirkner:system-rules:1.16.0'
     provided 'com.google.code.findbugs:annotations:3.0.1'
 
     compile 'com.google.inject:guice'
     compile 'com.google.inject.extensions:guice-servlet'
     compile 'com.google.inject.extensions:guice-multibindings'
     compile 'io.dropwizard:dropwizard-core'
-    compile "org.glassfish.hk2:guice-bridge:2.5.0-b05"
+    compile "org.glassfish.hk2:guice-bridge:2.5.0-b32"
     compile 'ru.vyarus:generics-resolver:2.0.1'
 
     testCompile 'io.dropwizard:dropwizard-auth'
