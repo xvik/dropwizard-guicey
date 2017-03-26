@@ -28,4 +28,16 @@ class StartupErrorRuleTest extends Specification {
         rule.output == 'sample out'
         rule.error == 'sample err'
     }
+
+    def "Check empty output"() {
+        rule.arm()
+
+        when: "exiting"
+        System.exit(1)
+
+        then: "exit intercepted"
+        thrown(CheckExitCalled)
+        rule.output == ''
+        rule.error == ''
+    }
 }

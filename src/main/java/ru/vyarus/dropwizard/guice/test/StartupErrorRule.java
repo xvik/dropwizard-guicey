@@ -81,9 +81,6 @@ public final class StartupErrorRule implements TestRule {
     }
 
     private String clearString(final String message) {
-        if (message == null) {
-            return null;
-        }
         return message.trim().replaceAll("\r", "");
     }
 }
