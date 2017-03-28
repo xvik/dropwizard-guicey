@@ -21,13 +21,14 @@ public class Reporter {
     // marker to be able switch off reports easily
     private static final Marker MARKER = MarkerFactory.getMarker("installer reporter");
 
-    private Logger logger;
-    private StringBuilder message = new StringBuilder();
+    private final Logger logger;
+    private StringBuilder message;
     private int counter;
     private boolean wasEmptyLine;
 
     public Reporter(final Class<? extends FeatureInstaller> type, final String title) {
         this.logger = LoggerFactory.getLogger(type);
+        this.message = new StringBuilder();
         message.append(title).append(NEWLINE);
         emptyLine();
     }
@@ -87,8 +88,6 @@ public class Reporter {
         if (counter > 0) {
             logger.info(MARKER, message.toString());
         }
-        // free memory
-        message = null;
-        logger = null;
+        message = new StringBuilder();
     }
 }
