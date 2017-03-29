@@ -88,6 +88,7 @@ public class Reporter {
         if (counter > 0) {
             logger.info(MARKER, message.toString());
         }
+        // report could be called multiple times when JRebel used
         message = new StringBuilder();
     }
 }
