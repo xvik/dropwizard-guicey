@@ -38,7 +38,7 @@ Anyway, it is not always possible to hide integration details, especially if you
     * [Managed beans](../installers/managed.md) started
     * **HK2 context creation**
         * `GuiceFeature` (registered earlier) called
-            * Register [hk2-guice bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) (only guice to hk way to let hk managed beans inject guice beans)
+            * [Optionally](configuration.md#hk-bridge) register [hk2-guice bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) (only guice to hk way to let hk managed beans inject guice beans)
             * Run jersey specific installers ([resource](../installers/resource.md), [extension](../installers/jersey-ext.md))
 
 !!! note
@@ -120,6 +120,6 @@ There are two options to solve this:
 
 * use `@LazyBinding`: bean instance will not be created together with guice context (when `MultivaluedParameterExtractorProvider` is not available),
 and creation will be initiated by HK, when binding could be resolved.
-* or use `@HK2Managed` this will delegate instance management to HK, but still guice specific extensions may be used.
+* or use `@HK2Managed` this will delegate instance management to HK, but still guice services [may be injected](configuration.md#hk-bridge).
 
 In other cases simply wrap jersey specific bindings into `Provider`.

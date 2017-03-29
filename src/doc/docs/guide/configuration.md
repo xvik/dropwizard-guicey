@@ -266,6 +266,28 @@ Then configuration could be injected by interface:
     By default, configuration is bound only for [all classes in hierarchy](bindings.md#configuration). In example above it would be 
     `Configuration` and `MyConfiguration`.
 
+### HK bridge
+
+If you need HK services be able to use guice beans, then [hk bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) 
+must be activated. 
+This may be useful when some services are managed by HK (e.g. with [@HK2Managed](lifecycle.md#problematic-cases)).
+
+To activate bridge:
+
+* Add dependency: `org.glassfish.hk2:guice-bridge:2.5.0-b32` (version must match HK version, used by dropwizard)
+* Enable option: `#!java .option(GuiceyOptions.UseHkBridge, true)`
+
+After that, HK beans could inject guice beans:
+
+```java
+@HK2Managed
+public class HkService {
+    
+    @Inject
+    private GuiceService service;
+}
+```
+
 ## Diagnostic
 
 Enable configuration [diagnostic console logs](diagnostic.md) to diagnose configuration problems:

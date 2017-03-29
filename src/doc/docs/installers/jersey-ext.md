@@ -17,7 +17,7 @@ Detects  classes annotated with jersey `@javax.ws.rs.ext.Provider` annotation an
 !!! attention ""
     Extensions registered as **singletons**, even if guice bean scope isn't set.  
 
-Due to specifics of HK integration (TODO link), you may need to use:
+Due to specifics of [HK integration](lifecycle.md), you may need to use:
 
 * `#!java @HK2Managed` to delegate bean creation to HK
 * `#!java @LazyBinding` to delay bean creation to time when all dependencies will be available 

@@ -89,6 +89,7 @@ These bindings available after HK context start:
 Request-scoped bindings:
 
 * `javax.ws.rs.core.UriInfo`
+* `javax.ws.rs.container.ResourceInfo`
 * `javax.ws.rs.core.HttpHeaders`
 * `javax.ws.rs.core.SecurityContext`
 * `javax.ws.rs.core.Request`

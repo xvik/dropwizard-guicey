@@ -318,6 +318,7 @@ These bindings are not immediately available as HK context [starts after guice](
 Request-scoped bindings:
 
 * `javax.ws.rs.core.UriInfo`
+* `javax.ws.rs.container.ResourceInfo`
 * `javax.ws.rs.core.HttpHeaders`
 * `javax.ws.rs.core.SecurityContext`
 * `javax.ws.rs.core.Request`
