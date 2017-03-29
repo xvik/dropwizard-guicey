@@ -3,6 +3,7 @@
 * (breaking) HK guice-bridge dependency become optional. New option GuiceyOptions.UseHkBridge could be used 
 to enable bridge (#28)  
 * Fix NPE when used with JRebel (#29)
+* Add binding for jersey javax.ws.rs.container.ResourceInfo (#26)
 
 ### 4.0.1 (2016-11-18)
 * Update to dropwizard 1.0.5 and fix compatibility (#24)

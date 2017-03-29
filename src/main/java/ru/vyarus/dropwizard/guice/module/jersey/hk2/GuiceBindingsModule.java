@@ -10,6 +10,7 @@ import org.glassfish.jersey.server.internal.process.AsyncContext;
 import javax.inject.Provider;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.*;
 import javax.ws.rs.ext.Providers;
 
@@ -21,6 +22,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bin
  * <li>{@link javax.ws.rs.core.Application}
  * <li>{@link javax.ws.rs.ext.Providers}
  * <li>{@link javax.ws.rs.core.UriInfo}
+ * <li>{@link javax.ws.rs.container.ResourceInfo}
  * <li>{@link javax.ws.rs.core.HttpHeaders}
  * <li>{@link javax.ws.rs.core.SecurityContext}
  * <li>{@link javax.ws.rs.core.Request}
@@ -57,6 +59,7 @@ public class GuiceBindingsModule extends AbstractModule {
         // request scoped objects, but hk will control their scope
         // must be used in guice only with Provider
         jerseyToGuice(UriInfo.class);
+        jerseyToGuice(ResourceInfo.class);
         jerseyToGuice(HttpHeaders.class);
         jerseyToGuice(SecurityContext.class);
         jerseyToGuice(Request.class);

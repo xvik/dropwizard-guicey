@@ -649,7 +649,7 @@ Will install servlet in admin context only.
 If you want to install in both contexts use andMain attribute:
 
 ```java
-@AdminContext(andMain = true
+@AdminContext(andMain = true)
 @WebServlet("/mapped")
 public class MyServlet extneds HttpServlet { ... }
 ```
