@@ -9,7 +9,6 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.OrderComparator;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +87,7 @@ public class ExtensionsHolder {
                 if (extensions == null || extensions.size() <= 1) {
                     continue;
                 }
-                Collections.sort(extensions, comparator);
+                extensions.sort(comparator);
             }
         }
     }

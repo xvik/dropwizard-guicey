@@ -21,7 +21,6 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
-import java.util.Collections;
 import java.util.List;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
@@ -91,7 +90,7 @@ public class InstallerModule extends AbstractModule {
         }
         final List<Class<? extends FeatureInstaller>> installers = context.getInstallers();
         installers.removeAll(context.getDisabledInstallers());
-        Collections.sort(installers, COMPARATOR);
+        installers.sort(COMPARATOR);
         logger.debug("Found {} installers", installers.size());
         return installers;
     }
