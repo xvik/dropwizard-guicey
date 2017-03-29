@@ -50,6 +50,41 @@ If you use [spock framework](http://spockframework.org) you can use spock specif
 
 Both extensions allows using injections directly in specifications (like spock-guice).
 
+### Spock lifecycle hooks
+
+```groovy
+class MyTest extends Specification {
+    
+    @ClassRule @Shared
+    JunitRule sharedRule = new JunitRule()
+    
+    @Rule
+    JunitRule2 rule = new JunitRule2()
+    
+    def setupSpec() {
+    }
+    
+    def setup() {
+    }
+    
+    def "Test method body" () {
+        setup:
+    }
+}
+```
+
+!!! note ""
+    Class rules are applied once per test class (same as `setupSpec`).
+    Rules are applied per test method (same as `setup`).
+
+Setup order:
+
+* Class rule
+* Setup spec method
+* Rule
+* Setup method
+* Test method's setup section
+
 ### @UseGuiceyApp
 
 `@UseGuiceyApp` runs all guice logic without starting jetty (so resources, servlets and filters are not available).
