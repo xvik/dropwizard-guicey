@@ -22,6 +22,7 @@ public class TestCommand<C extends Configuration> extends EnvironmentCommand<C> 
 
     public TestCommand(final Application<C> application) {
         super(application, "guicey-test", "Specific command to run guice context without jetty server");
+        cleanupAsynchronously();
         configurationClass = application.getConfigurationClass();
     }
 
@@ -41,6 +42,7 @@ public class TestCommand<C extends Configuration> extends EnvironmentCommand<C> 
             throw new IllegalStateException("Failed to stop managed objects container", e);
         }
         container.destroy();
+        cleanup();
     }
 
     @Override
