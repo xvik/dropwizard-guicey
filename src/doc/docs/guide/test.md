@@ -15,7 +15,7 @@ Managed and lifecycle objects supported.
 public class MyTest {
 
     @Rule
-    GuiceyAppRule<MyConfiguration> RULE = new GuiceyAppRule<>(MyApplication.class, "path/to/configuration.yaml")
+    GuiceyAppRule<MyConfiguration> RULE = new GuiceyAppRule<>(MyApplication.class, "path/to/configuration.yaml");
     
     public void testSomething() {
         RULE.getBean(MyService.class).doSomething();
@@ -40,6 +40,72 @@ To access guice beans use injector lookup:
 ```java
 InjectorLookup.getInjector(RULE.getApplication()).getBean(MyService.class);
 ```
+
+### Testing startup errors
+
+If exception occur on startup dropwizard will call `#!java System.exit(1)` instead of throwing exception (as it was before 1.1.0).
+System exit could be intercepted with [system rules](http://stefanbirkner.github.io/system-rules/index.html).
+
+Special rule is provided to simplify work with system rules: `StartupErrorRule`.
+It's a combination of exit and out/err outputs interception rules.
+
+To use this rule add dependency: `com.github.stefanbirkner:system-rules:1.16.0`
+
+
+```java
+public class MyErrTest {
+
+    @Rule
+    public StartupErrorRule RULE = StartupErrorRule.create();
+    
+    public void testSomething() {
+        new MyErrApp().main('server');
+    }
+}
+```
+
+This test will pass only if application will throw exception during startup.
+
+In junit it is impossible to apply checks after exit statement, so such checks
+must be registered as a special callback:
+
+```java
+public class MyErrTest {
+
+    @Rule
+    public StartupErrorRule RULE = StartupErrorRule.create((out, err) -> {
+        Assertions.assertTrue(out.contains("some log line"));
+        Assertions.assertTrue(err.contains("expected exception message"));
+    });
+    
+    public void testSomething() {
+        new MyErrApp().main('server');
+    }
+}
+```
+
+Note that err will contain full exception stack trace and so you can check exception type too
+by using contains statement like above.
+
+Check callback(s) may be added after rule creation:
+
+```java
+@Rule
+public StartupErrorRule RULE = StartupErrorRule.create();
+
+public void testSomething() throws Exception {
+    RULE.checkAfterExit((out, err) -> {
+            Assertions.assertTrue(err.contains("expected exception message"));
+        });
+    ...
+}
+``` 
+
+Multiple check callbacks may be registered (even if the first one was registered in rule's 
+create call).
+
+!!! note ""
+    Rule works a bit differently with spock (see below).
 
 ## Spock
 
@@ -139,6 +205,30 @@ class WebModuleTest extends Specification {
 ```
 
 Annotation supports the same configuration options as `@UseGuiceyApp` (see above)
+
+### Dropwizard startup error
+
+`StartupErrorRule` may be used to intercept dropwizard `#!java System.exit(1)` call.
+But it will work different then for junit:
+`then` section is always called with exception (`CheckExitCalled`). 
+Also, `then` section may be used for assertion after exit calls and so there is 
+no need to add custom assertion callbacks (required by junit tests).
+
+```groovy
+class ErrorTest extends Specification {
+
+    @Rule StartupErrorRule RULE = StartupErrorRule.create()
+
+    def "Check startup error"() {
+
+        when: "starting app with error"
+        new MyErrApp().main(['server'])
+        
+        then: "startup failed"
+        thrown(RULE.indicatorExceptionType)
+        RULE.output.contains('stating application')
+        RULE.error.contains('some error occur')
+```
 
 ### Spock extensions details
 
