@@ -3,7 +3,7 @@
 !!! summary ""
     [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi) module
 
-Integrates [JDBI](http://jdbi.org/) with guice. Based on [dropwizard-jdbi](http://www.dropwizard.io/1.0.6/docs/manual/jdbi.html) integration.
+Integrates [JDBI](http://jdbi.org/) with guice. Based on [dropwizard-jdbi](http://www.dropwizard.io/1.1.0/docs/manual/jdbi.html) integration.
  
 Features:
 
@@ -56,7 +56,7 @@ GuiceBundle.builder()
 ```
 
 Here default DBI instance will be created from database configuration (much like it's described in 
-[dropwizard documentation](http://www.dropwizard.io/1.0.6/docs/manual/jdbi.html)).
+[dropwizard documentation](http://www.dropwizard.io/1.1.0/docs/manual/jdbi.html)).
 
 Or build DBI instance yourself:
 

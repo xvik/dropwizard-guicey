@@ -1,13 +1,13 @@
 # Testing
 
-Test support require `io.dropwizard:dropwizard-testing:1.0.6` dependency.
+Test support require `io.dropwizard:dropwizard-testing:1.1.0` dependency.
 
 ## Junit
 
 ### Testing core logic
 
 For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like 
-[DropwizardAppRule](http://www.dropwizard.io/1.0.6/docs/manual/testing.html),
+[DropwizardAppRule](http://www.dropwizard.io/1.1.0/docs/manual/testing.html),
 but doesn't start jetty (and so jersey and guice web modules will not be initialized). 
 Managed and lifecycle objects supported.
 
@@ -33,7 +33,7 @@ new GuiceyAppRule<>(MyApplication.class, null)
 ### Testing web logic
 
 For web component tests (servlets, filters, resources) use 
-[DropwizardAppRule](http://www.dropwizard.io/1.0.6/docs/manual/testing.html).
+[DropwizardAppRule](http://www.dropwizard.io/1.1.0/docs/manual/testing.html).
 
 To access guice beans use injector lookup:
 
