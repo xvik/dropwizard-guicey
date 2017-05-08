@@ -1,9 +1,7 @@
 package ru.vyarus.dropwizard.guice.test
 
 import org.junit.Rule
-import org.junit.contrib.java.lang.system.internal.CheckExitCalled
 import spock.lang.Specification
-
 
 /**
  * @author Vyacheslav Rusakov
@@ -12,11 +10,9 @@ import spock.lang.Specification
 class StartupErrorRuleTest extends Specification {
 
     @Rule
-    StartupErrorRule rule = StartupErrorRule.pending()
+    StartupErrorRule rule = StartupErrorRule.create()
 
     def "Check exit catch"() {
-
-        rule.arm()
 
         when: "exiting"
         System.out.println 'sample out'
@@ -24,19 +20,18 @@ class StartupErrorRuleTest extends Specification {
         System.exit(1)
 
         then: "exit intercepted"
-        thrown(CheckExitCalled)
+        thrown(rule.indicatorExceptionType)
         rule.output == 'sample out'
         rule.error == 'sample err'
     }
 
     def "Check empty output"() {
-        rule.arm()
 
         when: "exiting"
         System.exit(1)
 
         then: "exit intercepted"
-        thrown(CheckExitCalled)
+        thrown(rule.indicatorExceptionType)
         rule.output == ''
         rule.error == ''
     }
