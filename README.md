@@ -18,7 +18,7 @@ Support:
 
 ### About
 
-[Dropwizard](http://dropwizard.io/) 1.0.5 [guice](https://github.com/google/guice) (4.1.0) integration. 
+[Dropwizard](http://dropwizard.io/) 1.1.0 [guice](https://github.com/google/guice) (4.1.0) integration. 
 
 Originally inspired by [dropwizard-guice](https://github.com/HubSpot/dropwizard-guice) and 
 [dropwizardy-guice](https://github.com/jclawson/dropwizardry/tree/master/dropwizardry-guice) 
@@ -123,6 +123,10 @@ You can use snapshot versions through [JitPack](https://jitpack.io):
 * Go to [JitPack project page](https://jitpack.io/#xvik/dropwizard-guicey)
 * Select `Commits` section and click `Get it` on commit you want to use (top one - the most recent)
 * Follow displayed instruction: add repository and change dependency (NOTE: due to JitPack convention artifact group will be different)
+
+### Usage
+
+Read [documentation](http://xvik.github.io/dropwizard-guicey/)
 
 ### Might also like
 
