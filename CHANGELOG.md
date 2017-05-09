@@ -5,6 +5,7 @@ to enable bridge (#28)
 * Fix NPE when used with JRebel (#29)
 * Add binding for jersey javax.ws.rs.container.ResourceInfo (#26)
 * Fix loggers for GuiceyAppRule (junit) and @UseGuiceyApp (spock) (#32)
+* Fix guava conflict in guicey pom. Make guicey pom usable as BOM.
 
 ### 4.0.1 (2016-11-18)
 * Update to dropwizard 1.0.5 and fix compatibility (#24)

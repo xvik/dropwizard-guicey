@@ -2,6 +2,7 @@ plugins {
     id 'groovy'
     id 'jacoco'
     id 'project-report'
+    id "io.spring.dependency-management" version "1.0.2.RELEASE"
     id 'ru.vyarus.java-lib' version '1.0.4'
     id 'ru.vyarus.github-info' version '1.1.0'
     id 'ru.vyarus.quality' version '2.1.0'
@@ -9,7 +10,6 @@ plugins {
     id 'com.jfrog.bintray' version '1.7.3'
     id 'net.researchgate.release' version '2.5.0'
     id 'com.github.ben-manes.versions' version '0.13.0'
-    id "io.spring.dependency-management" version "0.6.1.RELEASE"
 }
 
 sourceCompatibility = 1.8
@@ -21,6 +21,7 @@ wrapper {
 ext {
     dropwizard = '1.1.0'
     guice = '4.1.0'
+    hk2 = '2.5.0-b32'
 }
 
 repositories { jcenter(); mavenCentral(); mavenLocal() }
@@ -29,18 +30,28 @@ dependencyManagement {
         mavenBom "com.google.inject:guice-bom:$guice"
         mavenBom "io.dropwizard:dropwizard-bom:$dropwizard"
     }
+    dependencies {
+        // force guava version from dropwizard bom
+        dependency "com.google.guava:guava:${dependencyManagement.importedProperties['guava.version']}"
+        dependency "org.glassfish.hk2:guice-bridge:$hk2", { exclude 'com.google.inject:guice' }
+        dependency 'org.spockframework:spock-core:1.0-groovy-2.4'
+        dependency 'com.github.stefanbirkner:system-rules:1.16.0'
+    }
 }
 dependencies {
+    def excludeGuava = {exclude group: 'com.google.guava', module: 'guava' }
+    def excludeGuice = { exclude group: 'com.google.inject', module: 'guice' }
+
     provided 'junit:junit'
     provided 'io.dropwizard:dropwizard-testing'
-    provided 'org.spockframework:spock-core:1.0-groovy-2.4'
-    provided 'com.github.stefanbirkner:system-rules:1.16.0'
+    provided 'org.spockframework:spock-core'
+    provided 'com.github.stefanbirkner:system-rules'
     provided 'com.google.code.findbugs:annotations:3.0.1'
-    provided "org.glassfish.hk2:guice-bridge:2.5.0-b32"
+    provided "org.glassfish.hk2:guice-bridge", excludeGuice
 
-    compile 'com.google.inject:guice'
-    compile 'com.google.inject.extensions:guice-servlet'
-    compile 'com.google.inject.extensions:guice-multibindings'
+    compile 'com.google.inject:guice', excludeGuava
+    compile 'com.google.inject.extensions:guice-servlet', excludeGuava
+    compile 'com.google.inject.extensions:guice-multibindings', excludeGuava
     compile 'io.dropwizard:dropwizard-core'
     compile 'ru.vyarus:generics-resolver:2.0.1'
 
@@ -59,6 +70,11 @@ github {
 }
 
 pom {
+    delegate.properties {
+        'guice.version' guice
+        'dropwizard.version' dropwizard
+        'hk2.version' hk2
+    }
     developers {
         developer {
             id 'xvik'
