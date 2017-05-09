@@ -1027,8 +1027,8 @@ must be registered as a special callback:</p>
 
     <span class="nd">@Rule</span>
     <span class="kd">public</span> <span class="n">StartupErrorRule</span> <span class="n">RULE</span> <span class="o">=</span> <span class="n">StartupErrorRule</span><span class="o">.</span><span class="na">create</span><span class="o">((</span><span class="n">out</span><span class="o">,</span> <span class="n">err</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="n">Assertions</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">out</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">&quot;some log line&quot;</span><span class="o">));</span>
-        <span class="n">Assertions</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">err</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">&quot;expected exception message&quot;</span><span class="o">));</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">out</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">&quot;some log line&quot;</span><span class="o">));</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">err</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">&quot;expected exception message&quot;</span><span class="o">));</span>
     <span class="o">});</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testSomething</span><span class="o">()</span> <span class="o">{</span>
@@ -1046,7 +1046,7 @@ by using contains statement like above.</p>
 
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testSomething</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
     <span class="n">RULE</span><span class="o">.</span><span class="na">checkAfterExit</span><span class="o">((</span><span class="n">out</span><span class="o">,</span> <span class="n">err</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
-            <span class="n">Assertions</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">err</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">&quot;expected exception message&quot;</span><span class="o">));</span>
+            <span class="n">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">err</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">&quot;expected exception message&quot;</span><span class="o">));</span>
         <span class="o">});</span>
     <span class="o">...</span>
 <span class="o">}</span>
