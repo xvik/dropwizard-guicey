@@ -30,28 +30,31 @@ dependencyManagement {
         mavenBom "com.google.inject:guice-bom:$guice"
         mavenBom "io.dropwizard:dropwizard-bom:$dropwizard"
     }
+    // exclusions here mostly fixes conflicts for maven projects
     dependencies {
         // force guava version from dropwizard bom
         dependency "com.google.guava:guava:${dependencyManagement.importedProperties['guava.version']}"
-        dependency "org.glassfish.hk2:guice-bridge:$hk2", { exclude 'com.google.inject:guice' }
+        dependency "org.glassfish.hk2:guice-bridge:$hk2", {
+            exclude 'com.google.inject:guice'
+            exclude 'org.glassfish.hk2:hk2-api'
+        }
         dependency 'org.spockframework:spock-core:1.0-groovy-2.4'
         dependency 'com.github.stefanbirkner:system-rules:1.16.0'
+
+        dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
     }
 }
 dependencies {
-    def excludeGuava = {exclude group: 'com.google.guava', module: 'guava' }
-    def excludeGuice = { exclude group: 'com.google.inject', module: 'guice' }
-
     provided 'junit:junit'
     provided 'io.dropwizard:dropwizard-testing'
     provided 'org.spockframework:spock-core'
     provided 'com.github.stefanbirkner:system-rules'
     provided 'com.google.code.findbugs:annotations:3.0.1'
-    provided "org.glassfish.hk2:guice-bridge", excludeGuice
+    provided "org.glassfish.hk2:guice-bridge"
 
-    compile 'com.google.inject:guice', excludeGuava
-    compile 'com.google.inject.extensions:guice-servlet', excludeGuava
-    compile 'com.google.inject.extensions:guice-multibindings', excludeGuava
+    compile 'com.google.inject:guice'
+    compile 'com.google.inject.extensions:guice-servlet'
+    compile 'com.google.inject.extensions:guice-multibindings'
     compile 'io.dropwizard:dropwizard-core'
     compile 'ru.vyarus:generics-resolver:2.0.1'
 
