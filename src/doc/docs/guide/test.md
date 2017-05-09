@@ -74,8 +74,8 @@ public class MyErrTest {
 
     @Rule
     public StartupErrorRule RULE = StartupErrorRule.create((out, err) -> {
-        Assertions.assertTrue(out.contains("some log line"));
-        Assertions.assertTrue(err.contains("expected exception message"));
+        Assert.assertTrue(out.contains("some log line"));
+        Assert.assertTrue(err.contains("expected exception message"));
     });
     
     public void testSomething() {
@@ -95,7 +95,7 @@ public StartupErrorRule RULE = StartupErrorRule.create();
 
 public void testSomething() throws Exception {
     RULE.checkAfterExit((out, err) -> {
-            Assertions.assertTrue(err.contains("expected exception message"));
+            Assert.assertTrue(err.contains("expected exception message"));
         });
     ...
 }
