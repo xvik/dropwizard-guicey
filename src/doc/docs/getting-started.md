@@ -26,7 +26,7 @@ compile 'ru.vyarus:dropwizard-guicey:4.1.0'
 
 ### BOM
 
-Guicey pom may be used as maven BOM:
+Guicey pom may be also used as maven BOM:
 
 ```groovy
 plugins {
@@ -39,13 +39,26 @@ dependencyManagement {
 }
 
 dependencies {
-    compile 'ru.vyarus.guicey:guicey'
+    compile 'ru.vyarus.guicey:guicey:4.1.0'
+   
+    // no need to specify versions
+    compile 'io.dropwizard:dropwizard-auth'
+    compile 'com.google.inject:guice-assistedinject'   
+     
+    testCompile 'io.dropwizard:dropwizard-test'
+    testCompile 'org.spockframework:spock-core'
 }
 ```
 
-It combines guice and dropwizard BOMs.
+Bom includes:
 
-Guicey extensions project provide extended BOM with all guicey modules included. 
+* Dropwizard BOM (io.dropwizard:dropwizard-bom)
+* Guice BOM (com.google.inject:guice-bom)
+* Hk bridge (org.glassfish.hk2:guice-bridge) 
+* System rules, required for StartupErrorRule (com.github.stefanbirkner:system-rules)
+* Spock (org.spockframework:spock-core)
+
+Guicey extensions project provide extended BOM with guicey and all guicey modules included. 
 See [extensions project BOM](extras/bom.md) section for more details of BOM usage.
 
 ## Usage
