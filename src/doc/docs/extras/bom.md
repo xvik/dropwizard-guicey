@@ -54,7 +54,7 @@ Gradle:
 
 ```groovy
 plugins {
-    id "io.spring.dependency-management" version "0.6.1.RELEASE"
+    id "io.spring.dependency-management" version "1.0.2.RELEASE"
 }
 
 dependencyManagement {

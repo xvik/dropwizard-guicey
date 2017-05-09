@@ -14,18 +14,39 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>4.0.1</version>
+  <version>4.1.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:4.0.1'
+compile 'ru.vyarus:dropwizard-guicey:4.1.0'
 ```
 
-!!! note ""
-    You can also use [extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-bom).
+### BOM
+
+Guicey pom may be used as maven BOM:
+
+```groovy
+plugins {
+    id "io.spring.dependency-management" version "1.0.2.RELEASE"
+}
+dependencyManagement {
+    imports {
+        mavenBom 'ru.vyarus.guicey:guicey:4.1.0'
+    }
+}
+
+dependencies {
+    compile 'ru.vyarus.guicey:guicey'
+}
+```
+
+It combines guice and dropwizard BOMs.
+
+Guicey extensions project provide extended BOM with all guicey modules included. 
+See [extensions project BOM](extras/bom.md) section for more details of BOM usage.
 
 ## Usage
 
