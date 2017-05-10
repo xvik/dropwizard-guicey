@@ -9,7 +9,7 @@
         <meta name="description" content="Dropwizard guice integration">
       
       
-        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/4.1.0/extras/eventbus/">
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/4.1.0/extras/spa/">
       
       
         <meta name="author" content="Vyacheslav Rusakov">
@@ -21,7 +21,7 @@
     
     
       
-        <title>Guava EventBus - Dropwizard-guicey</title>
+        <title>SPA - Dropwizard-guicey</title>
       
     
     
@@ -83,7 +83,7 @@
                 </span>
               
             
-            Guava EventBus
+            SPA
           
         </span>
       </div>
@@ -644,87 +644,9 @@
           
   <li class="md-nav__item">
     
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
+      <a href="../eventbus/" title="Guava EventBus" class="md-nav__link">
         Guava EventBus
-      </label>
-    
-    <a href="./" title="Guava EventBus" class="md-nav__link md-nav__link--active">
-      Guava EventBus
-    </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#setup" title="Setup" class="md-nav__link">
-    Setup
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" title="Usage" class="md-nav__link">
-    Usage
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#consuming-multiple-events" title="Consuming multiple events" class="md-nav__link">
-    Consuming multiple events
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#event-bus" title="Event bus" class="md-nav__link">
-    Event bus
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#listeners-recognition" title="Listeners recognition" class="md-nav__link">
-    Listeners recognition
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#console-reporting" title="Console reporting" class="md-nav__link">
-    Console reporting
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#subscribers-info-bean" title="Subscribers info bean" class="md-nav__link">
-    Subscribers info bean
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
+      </a>
     
   </li>
 
@@ -744,9 +666,93 @@
           
   <li class="md-nav__item">
     
-      <a href="../spa/" title="SPA" class="md-nav__link">
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
         SPA
-      </a>
+      </label>
+    
+    <a href="./" title="SPA" class="md-nav__link md-nav__link--active">
+      SPA
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#problem" title="Problem" class="md-nav__link">
+    Problem
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solution" title="Solution" class="md-nav__link">
+    Solution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup" title="Setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" title="Usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#index-page" title="Index page" class="md-nav__link">
+    Index page
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prevent-redirect-regex" title="Prevent redirect regex" class="md-nav__link">
+    Prevent redirect regex
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-with-guicey-bundle" title="Use with guicey bundle" class="md-nav__link">
+    Use with guicey bundle
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -842,6 +848,26 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#problem" title="Problem" class="md-nav__link">
+    Problem
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solution" title="Solution" class="md-nav__link">
+    Solution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#setup" title="Setup" class="md-nav__link">
     Setup
   </a>
@@ -857,42 +883,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#consuming-multiple-events" title="Consuming multiple events" class="md-nav__link">
-    Consuming multiple events
+  <a href="#index-page" title="Index page" class="md-nav__link">
+    Index page
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prevent-redirect-regex" title="Prevent redirect regex" class="md-nav__link">
+    Prevent redirect regex
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-with-guicey-bundle" title="Use with guicey bundle" class="md-nav__link">
+    Use with guicey bundle
   </a>
   
 </li>
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#event-bus" title="Event bus" class="md-nav__link">
-    Event bus
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#listeners-recognition" title="Listeners recognition" class="md-nav__link">
-    Listeners recognition
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#console-reporting" title="Console reporting" class="md-nav__link">
-    Console reporting
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#subscribers-info-bean" title="Subscribers info bean" class="md-nav__link">
-    Subscribers info bean
-  </a>
   
 </li>
       
@@ -907,160 +919,135 @@
           <div class="md-content">
             <article class="md-content__inner md-typeset">
                
-                 <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/extras\eventbus.md" title="Edit this page" class="md-icon md-content__edit">edit</a>
+                 <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/extras\spa.md" title="Edit this page" class="md-icon md-content__edit">edit</a>
                
               
                 
-                <h1 id="guava-eventbus-integration">Guava EventBus integration<a class="headerlink" href="#guava-eventbus-integration" title="Permanent link">&para;</a></h1>
+                <h1 id="single-page-applications-support">Single page applications support<a class="headerlink" href="#single-page-applications-support" title="Permanent link">&para;</a></h1>
 <div class="admonition summary">
-<p><a href="https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-eventbus">Extensions project</a> module</p>
+<p><a href="https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-spa">Extensions project</a> module</p>
 </div>
-<p>Integrates <a href="https://github.com/google/guava/wiki/EventBusExplained">Guava EventBus</a> with guice.</p>
+<p>Provides a replacement for <a href="http://www.dropwizard.io/1.1.0/docs/manual/core.html#serving-assets">dropwizard-assets</a> 
+bundle for single page applications (SPA) to properly
+handle html5 client routing.</p>
 <p>Features:</p>
 <ul>
-<li>EventBus available for injection (to publish events)</li>
-<li>Automatic registration of listener methods (annotated with <code>@Subscribe</code>)</li>
-<li>Console reporting of registered listeners</li>
+<li>Pure dropwizard bundle, but can be used with guicey bundles </li>
+<li>Build above dropwizard-assets servlet</li>
+<li>Support registration on main and admin contexts</li>
+<li>Multiple apps could be registered</li>
+<li>Sets no-cache headers for index page</li>
+<li>Regex could be used to tune routes detection</li>
 </ul>
+<h2 id="problem">Problem<a class="headerlink" href="#problem" title="Permanent link">&para;</a></h2>
+<p>The problem with SPA is html5 routing. For example, suppose your app base url is <code>/app</code>
+and client route url is <code>/app/someroute</code> (before there were no problem because route would
+look like <code>/app/#!/someroute</code>). When user hit refresh (or bookmark) such route, server is actually
+called with route url. Server must recognize it and return index page.</p>
+<p>For example, Angular 2 router use html5 mode my default.</p>
+<h3 id="solution">Solution<a class="headerlink" href="#solution" title="Permanent link">&para;</a></h3>
+<p>The problem consists of two points:</p>
+<ol>
+<li>Correctly process resource calls (css, js, images, etc) and return 404 for missed resources</li>
+<li>Recognize application routes and return index page instead</li>
+</ol>
+<p>Bundles register dropwizard-assets servlet with special filter above it. Filter tries to process
+all incoming urls. This approach grants that all calls to resources will be processed and 
+index page will not be returned instead of resource (solves problem 1).</p>
+<p>If resource is not found - index page returned. To avoid redirection in case of bad resources request,
+filter will redirect only requests accepting 'text/html'. Additional regexp (configurable) 
+is used to recognize most resource calls and avoid redirection (show correct 404).</p>
+<p>From example above, <code>/app/someroute</code> will return index page and <code>/app/css/some.css</code> will return css.
+<code>/app/css/unknown.css</code> will return 404 as resource call will be recognized and css file is not exists.</p>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <p><a href="https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion"><img alt="JCenter" src="https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter" /></a>
-<a href="https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-eventbus"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-eventbus.svg?style=flat" /></a></p>
-<p>Avoid version in dependency declaration below if you use <a href="../bom/">extensions BOM</a>. </p>
+<a href="https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-spa"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-spa.svg?style=flat" /></a></p>
+<p>Avoid version in dependency declaration below if you use <a href="../../guicey-bom">extensions BOM</a>. </p>
 <p>Maven:</p>
 <div class="codehilite"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>ru.vyarus.guicey<span class="nt">&lt;/groupId&gt;</span>
-  <span class="nt">&lt;artifactId&gt;</span>guicey-eventbus<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>guicey-spa<span class="nt">&lt;/artifactId&gt;</span>
   <span class="nt">&lt;version&gt;</span>0.3.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 
 
 <p>Gradle:</p>
-<div class="codehilite"><pre><span></span><span class="n">compile</span> <span class="s1">&#39;ru.vyarus.guicey:guicey-eventbus:0.3.0&#39;</span>
+<div class="codehilite"><pre><span></span><span class="n">compile</span> <span class="s1">&#39;ru.vyarus.guicey:guicey-spa:0.3.0&#39;</span>
 </pre></div>
 
 
 <p>See the most recent version in the badge above.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<p>Register bundle:</p>
-<div class="codehilite"><pre><span></span><span class="n">GuiceBundle</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>        
-        <span class="o">.</span><span class="na">bundles</span><span class="o">(</span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">())</span>
-        <span class="o">...</span>
+<p>Register dropwizard bundle:</p>
+<div class="codehilite"><pre><span></span><span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="n">SpaBundle</span><span class="o">.</span><span class="na">app</span><span class="o">(</span><span class="s">&quot;app&quot;</span><span class="o">,</span> <span class="s">&quot;/app&quot;</span><span class="o">,</span> <span class="s">&quot;/&quot;</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
 </pre></div>
 
 
-<p>Create event:</p>
-<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyEvent</span> <span class="o">{</span>
-    <span class="c1">// some state</span>
-<span class="o">}</span>
+<p>This will register app with name "app" (name is used to name servlets and filters and must be unique).
+Application files are located in "app" package in classpath (e.g. resources inside jar).
+Application is mapped to root context (note that this will work only if rest is mapped 
+to some sub context: e.g. with <code>server.rootPath: '/rest/*'</code> configuration).</p>
+<div class="codehilite"><pre><span></span>http://localhost:8080/ -&gt; app index
+http://loclahost:8080/css/app.css -&gt; application resource, located at /app/css/app.css in classpath
+http://localhost:8080/someroute -&gt; application client route - index page returned
 </pre></div>
 
 
-<p>Inject <code>EventBus</code> to publish new events.</p>
-<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SomeService</span> <span class="o">{</span>
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="n">EventBus</span> <span class="n">eventbus</span><span class="o">;</span>    
+<p>Example registration to admin context:</p>
+<div class="codehilite"><pre><span></span><span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="n">SpaBundle</span><span class="o">.</span><span class="na">adminApp</span><span class="o">(</span><span class="s">&quot;admin&quot;</span><span class="o">,</span> <span class="s">&quot;/com/mycompany/adminapp/&quot;</span><span class="o">,</span> <span class="s">&quot;/manager&quot;</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
+</pre></div>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">inSomeMethod</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">evetbus</span><span class="o">.</span><span class="na">post</span><span class="o">(</span><span class="k">new</span> <span class="n">MyEvent</span><span class="o">());</span>
+
+<p>Register "admin" application with resources in "/com/mycompany/adminapp/" package, served from "manager' 
+admin context (note that admin root is already used by dropwizard admin servlet).</p>
+<div class="codehilite"><pre><span></span>http://localhost:8081/manager -&gt; admin app index
+</pre></div>
+
+
+<p>You can register as many apps as you like. They just must use different urls and have different names:</p>
+<div class="codehilite"><pre><span></span><span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="n">SpaBundle</span><span class="o">.</span><span class="na">app</span><span class="o">(</span><span class="s">&quot;app&quot;</span><span class="o">,</span> <span class="s">&quot;/app&quot;</span><span class="o">,</span> <span class="s">&quot;/&quot;</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
+<span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="n">SpaBundle</span><span class="o">.</span><span class="na">app</span><span class="o">(</span><span class="s">&quot;app2&quot;</span><span class="o">,</span> <span class="s">&quot;/app2&quot;</span><span class="o">,</span> <span class="s">&quot;/&quot;</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
+<span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="n">SpaBundle</span><span class="o">.</span><span class="na">adminApp</span><span class="o">(</span><span class="s">&quot;admin&quot;</span><span class="o">,</span> <span class="s">&quot;/com/mycompany/adminapp/&quot;</span><span class="o">,</span> <span class="s">&quot;/manager&quot;</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
+<span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="n">SpaBundle</span><span class="o">.</span><span class="na">adminApp</span><span class="o">(</span><span class="s">&quot;admin2&quot;</span><span class="o">,</span> <span class="s">&quot;/com/mycompany/adminapp2/&quot;</span><span class="o">,</span> <span class="s">&quot;/manager2&quot;</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
+</pre></div>
+
+
+<h3 id="index-page">Index page<a class="headerlink" href="#index-page" title="Permanent link">&para;</a></h3>
+<p>By default, index page assumed to be "index.html". Could be changed with:</p>
+<div class="codehilite"><pre><span></span><span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="n">SpaBundle</span><span class="o">.</span><span class="na">app</span><span class="o">(</span><span class="s">&quot;app&quot;</span><span class="o">,</span> <span class="s">&quot;/app&quot;</span><span class="o">,</span> <span class="s">&quot;/&quot;</span><span class="o">).</span><span class="na">indexPage</span><span class="o">(</span><span class="s">&quot;main.html&quot;</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
+</pre></div>
+
+
+<h3 id="prevent-redirect-regex">Prevent redirect regex<a class="headerlink" href="#prevent-redirect-regex" title="Permanent link">&para;</a></h3>
+<p>By default, the following regex is used to prevent resources redirection (to not send index for missed resource):</p>
+<div class="codehilite"><pre><span></span>\.(html|css|js|png|jpg|jpeg|gif|ico|xml|rss|txt|eot|svg|ttf|woff|woff2|cur)(\?((r|v|rel|rev)=[\-\.\w]*)?)?$
+</pre></div>
+
+
+<p>Could be changed with:</p>
+<div class="codehilite"><pre><span></span><span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="n">SpaBundle</span><span class="o">.</span><span class="na">app</span><span class="o">(</span><span class="s">&quot;app&quot;</span><span class="o">,</span> <span class="s">&quot;/app&quot;</span><span class="o">,</span> <span class="s">&quot;/&quot;</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">preventRedirectRegex</span><span class="o">(</span><span class="s">&quot;\\.\\w{2,5}(\\?.*)?$&quot;</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">());</span>
+</pre></div>
+
+
+<p>This regexp implements naive assumption that all app routes does not contain "extension".</p>
+<p>Note: regexp is applied with <code>find</code> so use <code>^</code> or <code>$</code> to apply boundaries. </p>
+<h3 id="use-with-guicey-bundle">Use with guicey bundle<a class="headerlink" href="#use-with-guicey-bundle" title="Permanent link">&para;</a></h3>
+<p>Bundle could be used inside guicey bundle:</p>
+<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AppBundle</span> <span class="kd">implements</span> <span class="n">GuiceyBundle</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initialize</span><span class="o">(</span><span class="n">GuiceyBootstrap</span> <span class="n">bootstrap</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">SpaBundle</span><span class="o">.</span><span class="na">app</span><span class="o">(</span><span class="s">&quot;app&quot;</span><span class="o">,</span> <span class="s">&quot;/app&quot;</span><span class="o">,</span> <span class="s">&quot;/&quot;</span><span class="o">).</span><span class="na">register</span><span class="o">(</span><span class="n">bootstrap</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
 
 
-<p>Listen for event:</p>
-<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SomeOtherService</span> <span class="o">{</span>
-
-    <span class="nd">@Subscribe</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onEvent</span><span class="o">(</span><span class="n">MyEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
-         <span class="c1">// handle event   </span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
-
-
-<p>After server start you should see all registered event listeners in log:</p>
-<div class="codehilite"><pre><span></span>INFO  [2016-12-01 12:31:02,819] ru.vyarus.guicey.eventbus.report.EventsReporter: EventBus subscribers = 
-
-    MyEvent
-        com.foo.something.SomeOtherService        
-</pre></div>
-
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Only subscriptions of beans registered at the time of injector startup will be shown.
-For example, if MyBean has subscription method but binding for it not declared (and noone depends on it)
-then JIT binding will be created only somewhere later in time (when bean will be actually used) and 
-so listener registration happen after server startup and will not be shown in console report.</p>
-</div>
-<h3 id="consuming-multiple-events">Consuming multiple events<a class="headerlink" href="#consuming-multiple-events" title="Permanent link">&para;</a></h3>
-<p>Note that you can build event hierarchies and subscribe to some base event to receive any derived event.   </p>
-<p>To receive all events use:</p>
-<div class="codehilite"><pre><span></span><span class="nd">@Subscribe</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onEvent</span><span class="o">(</span><span class="n">Object</span> <span class="n">event</span><span class="o">){</span>    
-<span class="o">}</span>
-</pre></div>
-
-
-<h2 id="event-bus">Event bus<a class="headerlink" href="#event-bus" title="Permanent link">&para;</a></h2>
-<p>By default, events will be handled synchronously (<code>bus.push()</code> waits while all subscribers processed).</p>
-<p>If you want events to be async use custom eventbus:</p>
-<div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">(</span>
-        <span class="k">new</span> <span class="n">AsyncEventBus</span><span class="o">(</span><span class="n">someExecutor</span><span class="o">)</span>
-<span class="o">)</span>
-</pre></div>
-
-
-<p>By default, event listeners considered not thread safe and so no parallel events processing (for single method) 
-will be performed. To mark subscriber as thread safe use <code>@AllowConcurrentEvents</code>:</p>
-<div class="codehilite"><pre><span></span><span class="nd">@Subscribe</span>
-<span class="nd">@AllowConcurrentEvents</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onEvent</span><span class="o">(</span><span class="n">MyEvent</span> <span class="n">event</span><span class="o">)</span>      
-</pre></div>
-
-
-<p>If listener method will fail to process event (throw exception) then other listeners will still be processed
-and failed listener exception will be logged. If you want to change this behaviour set custom exception 
-handler by creating custom eventbus instance:</p>
-<div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">(</span>
-        <span class="k">new</span> <span class="n">EventBus</span><span class="o">(</span><span class="n">customExceptionHandler</span><span class="o">)</span>
-<span class="o">)</span>
-</pre></div>
-
-
-<h2 id="listeners-recognition">Listeners recognition<a class="headerlink" href="#listeners-recognition" title="Permanent link">&para;</a></h2>
-<p>Guice type listener used to intercept all beans instances. Each bean instance is registered in eventbus: 
-it's valid behaviour for eventbus and only beans with actual listener methods will be registered.</p>
-<p>But, it means that each bean class is checked: every method in class hierarchy. This is very fast and
-does not make problems for most of the cases. But, if you want, you can reduce the scope for checking by
-specifying custom class matcher:</p>
-<div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">()</span>
-    <span class="o">.</span><span class="na">withMatcher</span><span class="o">(</span><span class="n">Matchers</span><span class="o">.</span><span class="na">inSubpackage</span><span class="o">(</span><span class="s">&quot;some.package&quot;</span><span class="o">))</span>
-</pre></div>
-
-
-<p>This will only check beans in class and subpackages.</p>
-<p>If you want maximum performance, then you can add extra marker annotation (e.g. <code>@HasEvents</code>) and reduce
-scope to just annotated classes:</p>
-<div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">()</span>
-    <span class="o">.</span><span class="na">withMatcher</span><span class="o">(</span><span class="n">Matchers</span><span class="o">.</span><span class="na">annotatedWith</span><span class="o">(</span><span class="n">HasEvents</span><span class="o">.</span><span class="na">class</span><span class="o">))</span>
-</pre></div>
-
-
-<h2 id="console-reporting">Console reporting<a class="headerlink" href="#console-reporting" title="Permanent link">&para;</a></h2>
-<p>You can switch off console reporting (for example, if you have too much listeners):</p>
-<div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">().</span><span class="na">noReport</span><span class="o">()</span>
-</pre></div>
-
-
-<p>Important moment: reporting has to use reflection to get subscribers list. If reflection will fail with newer guava version
-(not yet supported), then simply disable reporting and everything will work.</p>
-<h2 id="subscribers-info-bean">Subscribers info bean<a class="headerlink" href="#subscribers-info-bean" title="Permanent link">&para;</a></h2>
-<p>Special guice bean registered and available for injection: <code>EventSubscribersInfo</code>.
-With it you can get active listeners and used event types. Reporting use it for console report.
-It may be useful for unit tests.</p>
-<p>As described above, internally it use reflection to access eventbus listeners map. </p>
+<p>This allows you to register application from guicey bundles.
+Together with bundles lookup guicey feature it could be used to auto installation of client apps
+(e.g. admin app) when jar appear in classpath.</p>
               
             </article>
           </div>
@@ -1073,7 +1060,7 @@ It may be useful for unit tests.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../bom/" title="BOM" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../jdbi/" title="JDBI" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1082,19 +1069,19 @@ It may be useful for unit tests.</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                BOM
+                JDBI
               </span>
             </div>
           </a>
         
         
-          <a href="../jdbi/" title="JDBI" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../about/compatibility/" title="Compatibility" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                JDBI
+                Compatibility
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

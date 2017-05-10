@@ -241,6 +241,12 @@
      <changefreq>daily</changefreq>
     </url>
         
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/extras/spa/</loc>
+     <lastmod>2017-05-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
     
 
     
