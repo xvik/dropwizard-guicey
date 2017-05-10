@@ -20,7 +20,7 @@ Added installers:
 * [RepositoryInstaller](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/repository/RepositoryInstaller.java) - sql proxies
 * [MapperInstaller](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/MapperInstaller.java) - result set mappers  
  
-### Setup
+## Setup
 
 [![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion)
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-jdbi.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-jdbi)
@@ -33,14 +33,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi</artifactId>
-  <version>0.2.1</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-jdbi:0.2.1'
+compile 'ru.vyarus.guicey:guicey-jdbi:0.3.0'
 ```
 
 See the most recent version in the badge above.
