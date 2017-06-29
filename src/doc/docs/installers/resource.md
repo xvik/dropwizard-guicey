@@ -40,7 +40,7 @@ interface ResourceContract {
 
     @GET
     @Path("/sample")
-    String latest();
+    String sample();
 }
 
 class SampleResource implements ResourceContract {
