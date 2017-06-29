@@ -6,13 +6,13 @@ Example of [guicey-jdbi](../extras/jdbi.md) extension usage.
     Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/jdbi)
 
 
-[JDBI extension](../extras/jdbi.md) used for:
+The [JDBI extension](../extras/jdbi.md) allows:
 
 * using jdbi proxies as guice beans
-* be able to use injection inside proxies
-* be able to use AOP on proxies
-* use annotations for transaction definition
-* automatic repositories and mapper installation
+* using injection inside proxies
+* using AOP on proxies
+* using annotations for transaction definition
+* automatic repository and mapper installation
 
 ## Configuration
 
@@ -43,7 +43,7 @@ public class JdbiAppConfiguration extends Configuration {
 }
 ```
 
-For simplicity, embedded H2 database used:
+For simplicity, an embedded H2 database is used:
 
 ```yaml
 database:
@@ -83,7 +83,7 @@ GuiceBundle.builder()
 ## Repository definition
 
 !!! warning
-    All jdbi repositories must be annotated with `@JdbiRepository` to let [repository installer](../extras/jdbi.md#repository)
+    All jdbi repositories must be annotated with `@JdbiRepository` to let the [repository installer](../extras/jdbi.md#repository)
     recognize and properly install them.
 
 ```java
@@ -153,10 +153,10 @@ public abstract class Crud<T extends IdEntity> {
 !!! note ""
     You don't necessarily need to use `Crud` - it's an advanced usage example.
     
-Repository is annotated with `@InTransaction` to allow using repositories directly: repository method call is the smallest transaction scope. 
-Transaction scope could be enlarged by using annotation on calling guice beans or 
-[declaring transaction manually](../extras/jdbi.md#manual-transaction-definition).
-In order to better understand how transactions work read [unit of work docs section](../extras/jdbi.md#unit-of-work).
+The repository is annotated with `@InTransaction` to allow direct usage; repository method calls are the smallest transaction scope. 
+The transaction scope can be enlarged by using annotations on calling guice beans or 
+[declaring transactions manually](../extras/jdbi.md#manual-transaction-definition).
+In order to better understand how transactions work, read the [unit of work docs section](../extras/jdbi.md#unit-of-work).
 
 !!! note
     `@InTransaction` is handled with guice AOP, so you can use any other guice aop related features.
@@ -186,15 +186,14 @@ public class UserMapper implements ResultSetMapper<User> {
 }
 ```
 
-Mappers are installed with [mapper installer](../extras/jdbi.md#result-set-mapper).
-If auto scan is enabled then all mappers will be detected automatically and registered in dbi instance.
-Mapper are instantiated as normal guice bean without restrictions: so you can use injection and aop 
+Mappers are installed with the [mapper installer](../extras/jdbi.md#result-set-mapper).
+If auto scan is enabled then all mappers will be detected automatically and registered in the dbi instance.
+Mappers are instantiated as normal guice beans without restrictions which means you can use injection and aop 
 (it's only not shown in example mapper).
 
 !!! note
-    Mapper installer mostly automates (and unifies) registration. If your mapper does not need to be guice bean
-    and you dont want to use auto configuration then you can register it manually in dbi instance 
-    (it's available for injection).
+    The mapper installer mostly automates (and unifies) registration. If your mapper does not need to be guice bean
+    and you dont want to use auto configuration then you can register it manually in dbi instance, making it available for injection.
 
 Also, see complementing binding annotation, used to bind object to query parameters:
 
@@ -249,12 +248,12 @@ public class UserResource {
 }
 ```
 
-`UserMapper` and `UserBind` are used implicitly to convert Pojo into db record and back.
+`UserMapper` and `UserBind` are used implicitly to convert the POJO into a db record and back.
 
 You can use `@InTransaction` on repository method to enlarge transaction scope, but, in contrast
 to hibernate you dont't have to always declare it to avoid lazy initialization exception 
-(because jdbi produce simple pojos).
+(because jdbi produces simple pojos).
 
 !!! note
-    `@InTrasaction` name was used to avoid confusion with commonly used `@Transactional` annotation.
-    You [can bind any annotation class](../extras/jdbi.md#intransaction) if you like to use different name (annotation is just a marker)
+    `@InTrasaction` is named to avoid confusion with the commonly used `@Transactional` annotation.
+    You [can bind any annotation class](../extras/jdbi.md#intransaction) if you like to use a different name (the annotation is just a marker)

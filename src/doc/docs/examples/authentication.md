@@ -45,17 +45,17 @@ public class OAuthDynamicFeature extends AuthDynamicFeature {
 }
 ```
 
-Class recognized with [jersey installer](../installers/jersey-ext.md#dynamicfeature).
+The class is automatically picked up by the [jersey installer](../installers/jersey-ext.md#dynamicfeature).
 `OAuthAuthenticator` and `OAuthAuthorizer` are simple guice beans (no special installation required).
 
-Constructor injection used to obtain required guice managed instances and then configure
+Constructor injection is used to obtain required guice managed instances and then configure
 authentication the same way as described in dropwizard docs.
 
-If auto configuration is enabled, then class will be resolved and installed automatically.
+If auto configuration is enabled, then the class will be resolved and installed automatically.
 
 ## Chained auth
 
-[Chained auth](http://www.dropwizard.io/1.1.0/docs/manual/auth.html#chained-factories) is useful to support different authentication schemes.
+[Chained auth](http://www.dropwizard.io/1.1.0/docs/manual/auth.html#chained-factories) can be used to support different authentication schemes.
 
 Integration approach is the same as in simple case:
 

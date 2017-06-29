@@ -7,7 +7,7 @@ Also, guicey binds some dropwizard and jersey objects.
 
 ## Configuration
 
-`Configuration` bound to guice as:
+`Configuration` bound to guice as: 
 
 * `io.dropwizard.Configuration`
 * Your configuration class (`#!java MyConfiguration extends Configuration`)

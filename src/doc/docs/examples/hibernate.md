@@ -35,7 +35,7 @@ public class HbnBundle extends HibernateBundle<HbnAppConfiguration> {
 ```
 
 !!! note
-    All model classes are configured inside constructor: `#!java super(Sample.class);`
+    All model classes are configured inside the constructor: `#!java super(Sample.class);`
 
 Configuration class:
  
