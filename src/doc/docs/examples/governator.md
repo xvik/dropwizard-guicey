@@ -17,7 +17,7 @@ public class GovernatorInjectorFactory implements InjectorFactory {
 }
 ```
 
-Configure new factory in guice bundle:
+Configure the new factory in the guice bundle:
 
 ```java
 @Override
@@ -66,8 +66,8 @@ public class GovernatorLifecycle implements Managed {
 
 ```
 
-Guicey will find this managed bean, create governator injector (using custom factory), create managed bean instance and register it in dropwizard. 
-This will "bind" governator lifecycle to dropwizard lifecycle.
+Guicey will find this managed bean, create governator injector (using a custom factory), create a managed bean instance and register it in dropwizard. 
+This will "bind" the governator lifecycle to the dropwizard lifecycle.
 
 !!! note
-    If you need to run this managed before or after some other dropwizard managed use guicey [@Order annotation](../guide/ordering.md). 
+    If you need to control the order which the managed beans are started, use the [@Order annotation](../guide/ordering.md). 

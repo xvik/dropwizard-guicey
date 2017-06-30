@@ -17,7 +17,7 @@ Features:
 [![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion)
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-eventbus.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-eventbus)
 
-Avoid version in dependency declaration below if you use [extensions BOM](bom.md). 
+Remove `version` in dependency declaration below if you using [the BOM extensions](bom.md). 
 
 Maven:
 
@@ -80,7 +80,7 @@ public class SomeOtherService {
 }
 ```
 
-After server start you should see all registered event listeners in log:
+After server start you should see all registered event listeners in the log:
 
 ```
 INFO  [2016-12-01 12:31:02,819] ru.vyarus.guicey.eventbus.report.EventsReporter: EventBus subscribers = 
@@ -92,9 +92,8 @@ INFO  [2016-12-01 12:31:02,819] ru.vyarus.guicey.eventbus.report.EventsReporter:
 
 !!! note 
     Only subscriptions of beans registered at the time of injector startup will be shown.
-    For example, if MyBean has subscription method but binding for it not declared (and noone depends on it)
-    then JIT binding will be created only somewhere later in time (when bean will be actually used) and 
-    so listener registration happen after server startup and will not be shown in console report.
+    For example, if MyBean has a subscription method but a binding for it is not declared (and noone depends on it),
+    a JIT binding will be created later in time (when bean will be actually used) and will not be reflected in the logs. 
 
 ### Consuming multiple events
   
@@ -110,7 +109,7 @@ public void onEvent(Object event){
   
 ## Event bus 
 
-By default, events will be handled synchronously (`bus.push()` waits while all subscribers processed).
+By default, events will be handled synchronously (`bus.push()` waits while all subscribers process).
  
 If you want events to be async use custom eventbus:
  
@@ -120,7 +119,7 @@ new EventBusBundle(
 )
 ``` 
 
-By default, event listeners considered not thread safe and so no parallel events processing (for single method) 
+By default, event listeners are not considered thread safe and no parallel events processing (for single method) 
 will be performed. To mark subscriber as thread safe use `@AllowConcurrentEvents`:
 
 ```java
@@ -129,9 +128,9 @@ will be performed. To mark subscriber as thread safe use `@AllowConcurrentEvents
 public void onEvent(MyEvent event)      
 ```
 
-If listener method will fail to process event (throw exception) then other listeners will still be processed
-and failed listener exception will be logged. If you want to change this behaviour set custom exception 
-handler by creating custom eventbus instance:
+If a listener method fails to process an event (throws an exception), then other listeners will still be processed
+and the exception will be logged. If you want to change this behaviour, set a custom exception 
+handler by creating a custom eventbus instance:
 
 ```java
 new EventBusBundle(
@@ -141,21 +140,17 @@ new EventBusBundle(
 
 ## Listeners recognition
 
-Guice type listener used to intercept all beans instances. Each bean instance is registered in eventbus: 
-it's valid behaviour for eventbus and only beans with actual listener methods will be registered.
-
-But, it means that each bean class is checked: every method in class hierarchy. This is very fast and
-does not make problems for most of the cases. But, if you want, you can reduce the scope for checking by
-specifying custom class matcher:
+The guice type listener is used to intercept _all_ bean instances and thus looks at every method in the 
+class hierarchy; however, only beans that actually have `@Subscribe`rs will be registered with the event bus. 
+This process is fast and usually causes no issues. If needed, you can reduce the scope with a 
+custom class matcher:
  
 ```java
 new EventBusBundle()
     .withMatcher(Matchers.inSubpackage("some.package"))
 ```
 
-This will only check beans in class and subpackages.
-
-If you want maximum performance, then you can add extra marker annotation (e.g. `@HasEvents`) and reduce
+If you want maximum performance, then you can add a marker annotation (e.g. `@HasEvents`) and reduce
 scope to just annotated classes:
 
 ```java
@@ -166,19 +161,17 @@ new EventBusBundle()
 
 ## Console reporting
 
-You can switch off console reporting (for example, if you have too much listeners):
+You can switch off console reporting (for example, if you have too many listeners):
 
 ```java
 new EventBusBundle().noReport()
 ```
 
-Important moment: reporting has to use reflection to get subscribers list. If reflection will fail with newer guava version
-(not yet supported), then simply disable reporting and everything will work.
+!!! note
+    Reporting has to use reflection to get subscribers list. If this fails with a newer guava version
+    (not yet supported), then simply disable reporting and everything will work as expected.
 
 ## Subscribers info bean
-
-Special guice bean registered and available for injection: `EventSubscribersInfo`.
-With it you can get active listeners and used event types. Reporting use it for console report.
-It may be useful for unit tests.
-
-As described above, internally it use reflection to access eventbus listeners map. 
+`EventSubscribersInfo` is a registered (available for injection) bean that provides active listeners
+and used event types. As described above, it uses reflection internally to access the eventbus listeners map. 
+It may be useful for testing. 

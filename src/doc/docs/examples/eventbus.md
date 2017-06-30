@@ -5,15 +5,15 @@ Example of [guicey-eventbus](../extras/eventbus.md) extension usage.
 !!! note ""
     Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/eventbus)
     
-[Eventbus extension](../extras/eventbus.md) used for:
+The [eventbus extension](../extras/eventbus.md) is used for:
 
 * automatic listeners registration
-* bind eventbus instance in guice context (for publication)
-* print available listeners to console
+* binding eventbus instance in guice context (for publication)
+* printing available listeners to console
 
 ## Configuration
 
-Additional dependency required:
+An additional dependency is required:
 
 ```groovy
 compile 'ru.vyarus.guicey:guicey-eventbus:0.2.1'
@@ -31,7 +31,7 @@ GuiceBundle.builder()
 
 ## Event
 
-Events are simple POJO. Create event classes with properties you need (or without everything):
+Events are simple POJOs. Create event classes with properties you need (or without everything):
 
 ```java
 public class FooEvent {
@@ -58,11 +58,11 @@ public class BarEvent extends BaseEvent {}
 ```
 
 !!! note ""
-    For simplicity using events without properties.
+    For simplicity, properties are omitted.
 
 ## Publication
 
-Inject eventbus instance for publication:
+Inject the eventbus instance to enable publication:
 
 ```java
 @Inject EventBus eventbus;
@@ -75,7 +75,7 @@ public void someAction() {
 
 ## Listening
 
-Listener method must be annotated with `@Subscribe` and contain only one parameter (target event type):
+Listener methods must be annotated with `@Subscribe` and contain only one parameter of the target event type:
 
 ```java
 @Subscribe
@@ -87,8 +87,8 @@ public void onMultipleEvents(BaseEvent event) {}
 ```
 
 !!! attention
-    Listener method will be registered only for "known" guice beans. That means any extension
+    Listener methods will only be registered for "known" guice beans. That means any extension
     or manually declared guice bean (using module) or bean created with guice AOT (because it's declared
     as dependency for other bean) will be searched for listener methods.
          
-See [complete example](https://github.com/xvik/dropwizard-guicey-examples/tree/master/eventbus)         
+See [a complete example](https://github.com/xvik/dropwizard-guicey-examples/tree/master/eventbus)         
