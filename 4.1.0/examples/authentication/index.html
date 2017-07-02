@@ -886,13 +886,13 @@ Other auth types are configured in similar way.</p>
 </pre></div>
 
 
-<p>Class recognized with <a href="../../installers/jersey-ext/#dynamicfeature">jersey installer</a>.
+<p>The class is automatically picked up by the <a href="../../installers/jersey-ext/#dynamicfeature">jersey installer</a>.
 <code>OAuthAuthenticator</code> and <code>OAuthAuthorizer</code> are simple guice beans (no special installation required).</p>
-<p>Constructor injection used to obtain required guice managed instances and then configure
+<p>Constructor injection is used to obtain required guice managed instances and then configure
 authentication the same way as described in dropwizard docs.</p>
-<p>If auto configuration is enabled, then class will be resolved and installed automatically.</p>
+<p>If auto configuration is enabled, then the class will be resolved and installed automatically.</p>
 <h2 id="chained-auth">Chained auth<a class="headerlink" href="#chained-auth" title="Permanent link">&para;</a></h2>
-<p><a href="http://www.dropwizard.io/1.1.0/docs/manual/auth.html#chained-factories">Chained auth</a> is useful to support different authentication schemes.</p>
+<p><a href="http://www.dropwizard.io/1.1.0/docs/manual/auth.html#chained-factories">Chained auth</a> can be used to support different authentication schemes.</p>
 <p>Integration approach is the same as in simple case:</p>
 <div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ChainedAuthDynamicFeature</span> <span class="kd">extends</span> <span class="n">AuthDynamicFeature</span> <span class="o">{</span>

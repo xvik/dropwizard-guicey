@@ -862,14 +862,14 @@
 <div class="admonition note">
 <p>Example <a href="https://github.com/xvik/dropwizard-guicey-examples/tree/master/eventbus">source code</a></p>
 </div>
-<p><a href="../../extras/eventbus/">Eventbus extension</a> used for:</p>
+<p>The <a href="../../extras/eventbus/">eventbus extension</a> is used for:</p>
 <ul>
 <li>automatic listeners registration</li>
-<li>bind eventbus instance in guice context (for publication)</li>
-<li>print available listeners to console</li>
+<li>binding eventbus instance in guice context (for publication)</li>
+<li>printing available listeners to console</li>
 </ul>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>Additional dependency required:</p>
+<p>An additional dependency is required:</p>
 <div class="codehilite"><pre><span></span><span class="n">compile</span> <span class="s1">&#39;ru.vyarus.guicey:guicey-eventbus:0.2.1&#39;</span>
 </pre></div>
 
@@ -885,7 +885,7 @@
 
 
 <h2 id="event">Event<a class="headerlink" href="#event" title="Permanent link">&para;</a></h2>
-<p>Events are simple POJO. Create event classes with properties you need (or without everything):</p>
+<p>Events are simple POJOs. Create event classes with properties you need (or without everything):</p>
 <div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FooEvent</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">something</span><span class="o">;</span>
 
@@ -910,10 +910,10 @@
 
 
 <div class="admonition note">
-<p>For simplicity using events without properties.</p>
+<p>For simplicity, properties are omitted.</p>
 </div>
 <h2 id="publication">Publication<a class="headerlink" href="#publication" title="Permanent link">&para;</a></h2>
-<p>Inject eventbus instance for publication:</p>
+<p>Inject the eventbus instance to enable publication:</p>
 <div class="codehilite"><pre><span></span><span class="nd">@Inject</span> <span class="n">EventBus</span> <span class="n">eventbus</span><span class="o">;</span>
 
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">someAction</span><span class="o">()</span> <span class="o">{</span>
@@ -924,7 +924,7 @@
 
 
 <h2 id="listening">Listening<a class="headerlink" href="#listening" title="Permanent link">&para;</a></h2>
-<p>Listener method must be annotated with <code>@Subscribe</code> and contain only one parameter (target event type):</p>
+<p>Listener methods must be annotated with <code>@Subscribe</code> and contain only one parameter of the target event type:</p>
 <div class="codehilite"><pre><span></span><span class="nd">@Subscribe</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onFooEvent</span><span class="o">(</span><span class="n">FooEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{}</span>
 
@@ -936,11 +936,11 @@
 
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
-<p>Listener method will be registered only for "known" guice beans. That means any extension
+<p>Listener methods will only be registered for "known" guice beans. That means any extension
 or manually declared guice bean (using module) or bean created with guice AOT (because it's declared
 as dependency for other bean) will be searched for listener methods.</p>
 </div>
-<p>See <a href="https://github.com/xvik/dropwizard-guicey-examples/tree/master/eventbus">complete example</a>         </p>
+<p>See <a href="https://github.com/xvik/dropwizard-guicey-examples/tree/master/eventbus">a complete example</a>         </p>
               
             </article>
           </div>

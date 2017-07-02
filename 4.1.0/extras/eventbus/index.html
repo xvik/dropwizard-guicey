@@ -925,7 +925,7 @@
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
 <p><a href="https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion"><img alt="JCenter" src="https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter" /></a>
 <a href="https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-eventbus"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-eventbus.svg?style=flat" /></a></p>
-<p>Avoid version in dependency declaration below if you use <a href="../bom/">extensions BOM</a>. </p>
+<p>Remove <code>version</code> in dependency declaration below if you using <a href="../bom/">the BOM extensions</a>. </p>
 <p>Maven:</p>
 <div class="codehilite"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>ru.vyarus.guicey<span class="nt">&lt;/groupId&gt;</span>
@@ -979,7 +979,7 @@
 </pre></div>
 
 
-<p>After server start you should see all registered event listeners in log:</p>
+<p>After server start you should see all registered event listeners in the log:</p>
 <div class="codehilite"><pre><span></span>INFO  [2016-12-01 12:31:02,819] ru.vyarus.guicey.eventbus.report.EventsReporter: EventBus subscribers = 
 
     MyEvent
@@ -990,9 +990,8 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Only subscriptions of beans registered at the time of injector startup will be shown.
-For example, if MyBean has subscription method but binding for it not declared (and noone depends on it)
-then JIT binding will be created only somewhere later in time (when bean will be actually used) and 
-so listener registration happen after server startup and will not be shown in console report.</p>
+For example, if MyBean has a subscription method but a binding for it is not declared (and noone depends on it),
+a JIT binding will be created later in time (when bean will be actually used) and will not be reflected in the logs. </p>
 </div>
 <h3 id="consuming-multiple-events">Consuming multiple events<a class="headerlink" href="#consuming-multiple-events" title="Permanent link">&para;</a></h3>
 <p>Note that you can build event hierarchies and subscribe to some base event to receive any derived event.   </p>
@@ -1004,7 +1003,7 @@ so listener registration happen after server startup and will not be shown in co
 
 
 <h2 id="event-bus">Event bus<a class="headerlink" href="#event-bus" title="Permanent link">&para;</a></h2>
-<p>By default, events will be handled synchronously (<code>bus.push()</code> waits while all subscribers processed).</p>
+<p>By default, events will be handled synchronously (<code>bus.push()</code> waits while all subscribers process).</p>
 <p>If you want events to be async use custom eventbus:</p>
 <div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">(</span>
         <span class="k">new</span> <span class="n">AsyncEventBus</span><span class="o">(</span><span class="n">someExecutor</span><span class="o">)</span>
@@ -1012,7 +1011,7 @@ so listener registration happen after server startup and will not be shown in co
 </pre></div>
 
 
-<p>By default, event listeners considered not thread safe and so no parallel events processing (for single method) 
+<p>By default, event listeners are not considered thread safe and no parallel events processing (for single method) 
 will be performed. To mark subscriber as thread safe use <code>@AllowConcurrentEvents</code>:</p>
 <div class="codehilite"><pre><span></span><span class="nd">@Subscribe</span>
 <span class="nd">@AllowConcurrentEvents</span>
@@ -1020,9 +1019,9 @@ will be performed. To mark subscriber as thread safe use <code>@AllowConcurrentE
 </pre></div>
 
 
-<p>If listener method will fail to process event (throw exception) then other listeners will still be processed
-and failed listener exception will be logged. If you want to change this behaviour set custom exception 
-handler by creating custom eventbus instance:</p>
+<p>If a listener method fails to process an event (throws an exception), then other listeners will still be processed
+and the exception will be logged. If you want to change this behaviour, set a custom exception 
+handler by creating a custom eventbus instance:</p>
 <div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">(</span>
         <span class="k">new</span> <span class="n">EventBus</span><span class="o">(</span><span class="n">customExceptionHandler</span><span class="o">)</span>
 <span class="o">)</span>
@@ -1030,18 +1029,16 @@ handler by creating custom eventbus instance:</p>
 
 
 <h2 id="listeners-recognition">Listeners recognition<a class="headerlink" href="#listeners-recognition" title="Permanent link">&para;</a></h2>
-<p>Guice type listener used to intercept all beans instances. Each bean instance is registered in eventbus: 
-it's valid behaviour for eventbus and only beans with actual listener methods will be registered.</p>
-<p>But, it means that each bean class is checked: every method in class hierarchy. This is very fast and
-does not make problems for most of the cases. But, if you want, you can reduce the scope for checking by
-specifying custom class matcher:</p>
+<p>The guice type listener is used to intercept <em>all</em> bean instances and thus looks at every method in the 
+class hierarchy; however, only beans that actually have <code>@Subscribe</code>rs will be registered with the event bus. 
+This process is fast and usually causes no issues. If needed, you can reduce the scope with a 
+custom class matcher:</p>
 <div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">()</span>
     <span class="o">.</span><span class="na">withMatcher</span><span class="o">(</span><span class="n">Matchers</span><span class="o">.</span><span class="na">inSubpackage</span><span class="o">(</span><span class="s">&quot;some.package&quot;</span><span class="o">))</span>
 </pre></div>
 
 
-<p>This will only check beans in class and subpackages.</p>
-<p>If you want maximum performance, then you can add extra marker annotation (e.g. <code>@HasEvents</code>) and reduce
+<p>If you want maximum performance, then you can add a marker annotation (e.g. <code>@HasEvents</code>) and reduce
 scope to just annotated classes:</p>
 <div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">()</span>
     <span class="o">.</span><span class="na">withMatcher</span><span class="o">(</span><span class="n">Matchers</span><span class="o">.</span><span class="na">annotatedWith</span><span class="o">(</span><span class="n">HasEvents</span><span class="o">.</span><span class="na">class</span><span class="o">))</span>
@@ -1049,18 +1046,20 @@ scope to just annotated classes:</p>
 
 
 <h2 id="console-reporting">Console reporting<a class="headerlink" href="#console-reporting" title="Permanent link">&para;</a></h2>
-<p>You can switch off console reporting (for example, if you have too much listeners):</p>
+<p>You can switch off console reporting (for example, if you have too many listeners):</p>
 <div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">EventBusBundle</span><span class="o">().</span><span class="na">noReport</span><span class="o">()</span>
 </pre></div>
 
 
-<p>Important moment: reporting has to use reflection to get subscribers list. If reflection will fail with newer guava version
-(not yet supported), then simply disable reporting and everything will work.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Reporting has to use reflection to get subscribers list. If this fails with a newer guava version
+(not yet supported), then simply disable reporting and everything will work as expected.</p>
+</div>
 <h2 id="subscribers-info-bean">Subscribers info bean<a class="headerlink" href="#subscribers-info-bean" title="Permanent link">&para;</a></h2>
-<p>Special guice bean registered and available for injection: <code>EventSubscribersInfo</code>.
-With it you can get active listeners and used event types. Reporting use it for console report.
-It may be useful for unit tests.</p>
-<p>As described above, internally it use reflection to access eventbus listeners map. </p>
+<p><code>EventSubscribersInfo</code> is a registered (available for injection) bean that provides active listeners
+and used event types. As described above, it uses reflection internally to access the eventbus listeners map. 
+It may be useful for testing. </p>
               
             </article>
           </div>

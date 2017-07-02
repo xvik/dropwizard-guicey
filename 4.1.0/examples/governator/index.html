@@ -831,7 +831,7 @@ so we need to create custom guicey <code>InjectorFactory</code></p>
 </pre></div>
 
 
-<p>Configure new factory in guice bundle:</p>
+<p>Configure the new factory in the guice bundle:</p>
 <div class="codehilite"><pre><span></span><span class="nd">@Override</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initialize</span><span class="o">(</span><span class="n">Bootstrap</span><span class="o">&lt;</span><span class="n">Configuration</span><span class="o">&gt;</span> <span class="n">bootstrap</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="n">GuiceBundle</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
@@ -877,11 +877,11 @@ to control governator lifecycle:</p>
 </pre></div>
 
 
-<p>Guicey will find this managed bean, create governator injector (using custom factory), create managed bean instance and register it in dropwizard. 
-This will "bind" governator lifecycle to dropwizard lifecycle.</p>
+<p>Guicey will find this managed bean, create governator injector (using a custom factory), create a managed bean instance and register it in dropwizard. 
+This will "bind" the governator lifecycle to the dropwizard lifecycle.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If you need to run this managed before or after some other dropwizard managed use guicey <a href="../../guide/ordering/">@Order annotation</a>. </p>
+<p>If you need to control the order which the managed beans are started, use the <a href="../../guide/ordering/">@Order annotation</a>. </p>
 </div>
               
             </article>

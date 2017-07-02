@@ -862,13 +862,13 @@
 <div class="admonition note">
 <p>Example <a href="https://github.com/xvik/dropwizard-guicey-examples/tree/master/jdbi">source code</a></p>
 </div>
-<p><a href="../../extras/jdbi/">JDBI extension</a> used for:</p>
+<p>The <a href="../../extras/jdbi/">JDBI extension</a> allows:</p>
 <ul>
 <li>using jdbi proxies as guice beans</li>
-<li>be able to use injection inside proxies</li>
-<li>be able to use AOP on proxies</li>
-<li>use annotations for transaction definition</li>
-<li>automatic repositories and mapper installation</li>
+<li>using injection inside proxies</li>
+<li>using AOP on proxies</li>
+<li>using annotations for transaction definition</li>
+<li>automatic repository and mapper installation</li>
 </ul>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p>Additional dependencies required:</p>
@@ -897,7 +897,7 @@ and create dbi instance:</p>
 </pre></div>
 
 
-<p>For simplicity, embedded H2 database used:</p>
+<p>For simplicity, an embedded H2 database is used:</p>
 <div class="codehilite"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">database</span><span class="p p-Indicator">:</span>
   <span class="l l-Scalar l-Scalar-Plain">driverClass</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">org.h2.Driver</span>
   <span class="l l-Scalar l-Scalar-Plain">user</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">sa</span>
@@ -936,7 +936,7 @@ using provided db configuration:</p>
 <h2 id="repository-definition">Repository definition<a class="headerlink" href="#repository-definition" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>All jdbi repositories must be annotated with <code>@JdbiRepository</code> to let <a href="../../extras/jdbi/#repository">repository installer</a>
+<p>All jdbi repositories must be annotated with <code>@JdbiRepository</code> to let the <a href="../../extras/jdbi/#repository">repository installer</a>
 recognize and properly install them.</p>
 </div>
 <div class="codehilite"><pre><span></span><span class="nd">@JdbiRepository</span>
@@ -1005,10 +1005,10 @@ recognize and properly install them.</p>
 <div class="admonition note">
 <p>You don't necessarily need to use <code>Crud</code> - it's an advanced usage example.</p>
 </div>
-<p>Repository is annotated with <code>@InTransaction</code> to allow using repositories directly: repository method call is the smallest transaction scope. 
-Transaction scope could be enlarged by using annotation on calling guice beans or 
-<a href="../../extras/jdbi/#manual-transaction-definition">declaring transaction manually</a>.
-In order to better understand how transactions work read <a href="../../extras/jdbi/#unit-of-work">unit of work docs section</a>.</p>
+<p>The repository is annotated with <code>@InTransaction</code> to allow direct usage; repository method calls are the smallest transaction scope. 
+The transaction scope can be enlarged by using annotations on calling guice beans or 
+<a href="../../extras/jdbi/#manual-transaction-definition">declaring transactions manually</a>.
+In order to better understand how transactions work, read the <a href="../../extras/jdbi/#unit-of-work">unit of work docs section</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code>@InTransaction</code> is handled with guice AOP, so you can use any other guice aop related features.</p>
@@ -1037,15 +1037,14 @@ In order to better understand how transactions work read <a href="../../extras/j
 </pre></div>
 
 
-<p>Mappers are installed with <a href="../../extras/jdbi/#result-set-mapper">mapper installer</a>.
-If auto scan is enabled then all mappers will be detected automatically and registered in dbi instance.
-Mapper are instantiated as normal guice bean without restrictions: so you can use injection and aop 
+<p>Mappers are installed with the <a href="../../extras/jdbi/#result-set-mapper">mapper installer</a>.
+If auto scan is enabled then all mappers will be detected automatically and registered in the dbi instance.
+Mappers are instantiated as normal guice beans without restrictions which means you can use injection and aop 
 (it's only not shown in example mapper).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Mapper installer mostly automates (and unifies) registration. If your mapper does not need to be guice bean
-and you dont want to use auto configuration then you can register it manually in dbi instance 
-(it's available for injection).</p>
+<p>The mapper installer mostly automates (and unifies) registration. If your mapper does not need to be guice bean
+and you dont want to use auto configuration then you can register it manually in dbi instance, making it available for injection.</p>
 </div>
 <p>Also, see complementing binding annotation, used to bind object to query parameters:</p>
 <div class="codehilite"><pre><span></span><span class="nd">@BindingAnnotation</span><span class="o">(</span><span class="n">UserBind</span><span class="o">.</span><span class="na">UserBinder</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
@@ -1095,14 +1094,14 @@ and you dont want to use auto configuration then you can register it manually in
 </pre></div>
 
 
-<p><code>UserMapper</code> and <code>UserBind</code> are used implicitly to convert Pojo into db record and back.</p>
+<p><code>UserMapper</code> and <code>UserBind</code> are used implicitly to convert the POJO into a db record and back.</p>
 <p>You can use <code>@InTransaction</code> on repository method to enlarge transaction scope, but, in contrast
 to hibernate you dont't have to always declare it to avoid lazy initialization exception 
-(because jdbi produce simple pojos).</p>
+(because jdbi produces simple pojos).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code>@InTrasaction</code> name was used to avoid confusion with commonly used <code>@Transactional</code> annotation.
-You <a href="../../extras/jdbi/#intransaction">can bind any annotation class</a> if you like to use different name (annotation is just a marker)</p>
+<p><code>@InTrasaction</code> is named to avoid confusion with the commonly used <code>@Transactional</code> annotation.
+You <a href="../../extras/jdbi/#intransaction">can bind any annotation class</a> if you like to use a different name (the annotation is just a marker)</p>
 </div>
               
             </article>
