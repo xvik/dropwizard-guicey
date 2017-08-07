@@ -85,7 +85,6 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
     }
 
     @Override
-    @SuppressWarnings("PMD.NullAssignment")
     protected void after() {
         resetConfigOverrides();
         command.stop();

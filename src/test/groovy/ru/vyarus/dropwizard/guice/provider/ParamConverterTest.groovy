@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.provider
 
-import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.support.provider.paramconv.ParamConverterApp

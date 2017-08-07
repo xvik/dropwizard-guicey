@@ -66,7 +66,6 @@ public class ClasspathScanner {
     /**
      * Should be called to flush scanner cache.
      */
-    @SuppressWarnings("PMD.NullAssignment")
     public void cleanup() {
         scanned = null;
     }

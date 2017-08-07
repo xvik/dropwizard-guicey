@@ -83,7 +83,6 @@ public class Reporter {
     /**
      * Prints composed report into logger or do nothing if no lines were provided.
      */
-    @SuppressWarnings("PMD.NullAssignment")
     public void report() {
         if (counter > 0) {
             logger.info(MARKER, message.toString());

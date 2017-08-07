@@ -92,7 +92,6 @@ public final class ConfigurationContext {
     /**
      * Clears current scope.
      */
-    @SuppressWarnings("PMD.NullAssignment")
     public void closeScope() {
         Preconditions.checkState(currentScope != null, "State error: trying to close not opened scope");
         currentScope = null;
