@@ -13,14 +13,16 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
  */
 class DefaultLookupTest extends AbstractTest {
 
-    String serviceFile = "build/classes/test/META-INF/services/${GuiceyBundle.class.name}"
+    final String SERVICE_FILE = "META-INF/services/${GuiceyBundle.class.name}"
+    String servicesPath
 
     void setup() {
-        new File(serviceFile).parentFile.mkdirs()
+        servicesPath = getClass().getResource("/").toURI().getRawPath() + SERVICE_FILE
+        new File(servicesPath).parentFile.mkdirs()
     }
 
     void cleanup() {
-        File file = new File(serviceFile)
+        File file = new File(servicesPath)
         if (file.exists()) {
             file.delete()
         }
@@ -42,7 +44,7 @@ class DefaultLookupTest extends AbstractTest {
 
         when: "init from both loaders"
         PropertyBundleLookup.enableBundles(HK2DebugBundle)
-        new File(serviceFile) << CoreInstallersBundle.class.name
+        new File(servicesPath) << CoreInstallersBundle.class.name
         res = new DefaultBundleLookup().lookup()
         then: "resolved"
         res.size() == 2

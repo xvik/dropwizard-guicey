@@ -11,14 +11,16 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
  */
 class ServiceLoaderLookupTest extends AbstractTest {
 
-    String serviceFile = "build/classes/test/META-INF/services/${GuiceyBundle.class.name}"
+    final String SERVICE_FILE = "META-INF/services/${GuiceyBundle.class.name}"
+    String servicesPath
 
     void setup() {
-        new File(serviceFile).parentFile.mkdirs()
+        servicesPath = getClass().getResource("/").toURI().getRawPath() + SERVICE_FILE
+        new File(servicesPath).parentFile.mkdirs()
     }
 
     void cleanup() {
-        File file = new File(serviceFile)
+        File file = new File(servicesPath)
         if (file.exists()) {
             file.delete()
         }
@@ -33,7 +35,7 @@ class ServiceLoaderLookupTest extends AbstractTest {
     def "Check service load"() {
 
         when: "services defined"
-        new File(serviceFile) << HK2DebugBundle.class.name
+        new File(servicesPath) << HK2DebugBundle.class.name
         def res = new ServiceLoaderBundleLookup().lookup()
         then: "loaded"
         res.size() == 1
