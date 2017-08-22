@@ -66,7 +66,7 @@ dependencyManagement {
 
 // declare guice and ext modules without versions 
 dependencies {
-    compile 'ru.vyarus.guicey:dropwizard-guicey'
+    compile 'ru.vyarus:dropwizard-guicey'
     // For example, using dropwizard module (without version)
     compile 'io.dropwizard:dropwizard-auth'
     // Example of extension module usage
