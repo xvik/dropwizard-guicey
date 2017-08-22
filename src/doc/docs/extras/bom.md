@@ -9,6 +9,10 @@ Maven BOM containing guicey and guicey ext modules versions. Also includes dropw
     BOM's are useful for versions management. After including bom you can simply include required dependencies
     (dropwizard, guice, guicey, guicey-ext) without versions: bom version will control all versions.
 
+| BOM version | Guicey | Dropwizard | Guice |
+|-------------|--------|------------|-------|
+| 0.3.0       | 4.1.0  | 1.1.0      | 4.1.0 |
+
 ## Setup
 
 [![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion)

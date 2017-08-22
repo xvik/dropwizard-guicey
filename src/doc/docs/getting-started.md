@@ -30,7 +30,7 @@ Guicey pom may be also used as maven BOM:
 
 ```groovy
 plugins {
-    id "io.spring.dependency-management" version "1.0.2.RELEASE"
+    id "io.spring.dependency-management" version "1.0.3.RELEASE"
 }
 dependencyManagement {
     imports {
