@@ -93,7 +93,7 @@ public class GuiceyConfigurationInfo {
      */
     public Set<Class<?>> getActiveScopes() {
         final Set<Class<?>> res = Sets.newHashSet();
-        context.getItems((it) -> {
+        context.getItems(it -> {
             res.addAll(it.getRegisteredBy());
             return true;
         });
