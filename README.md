@@ -18,7 +18,7 @@ Support:
 
 ### About
 
-[Dropwizard](http://dropwizard.io/) 1.1.0 [guice](https://github.com/google/guice) (4.1.0) integration. 
+[Dropwizard](http://dropwizard.io/) 1.1.0 [guice](https://github.com/google/guice) (4.1.0) integration. Compatible with dropwizard 1.2.0 (declare dropwizard manually in your project to override transitive version).
 
 Originally inspired by [dropwizard-guice](https://github.com/HubSpot/dropwizard-guice) and 
 [dropwizardy-guice](https://github.com/jclawson/dropwizardry/tree/master/dropwizardry-guice) 
