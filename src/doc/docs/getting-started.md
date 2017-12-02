@@ -92,12 +92,12 @@ public class SampleApplication extends Application<Configuration> {
     Bundle builder contains shortcuts for all available features, so required function 
     may be found only by looking at available methods (and reading javadoc).
 
-Auto configuration (activated with `enanleAutoConfig`) means that guicey will search for extensions in application package and subpackages.
+Auto configuration (activated with `enableAutoConfig`) means that guicey will search for extensions in application package and subpackages.
 
 !!! tip
     You can declare multiple packages for classpath scan: 
     ```java
-     .enanleAutoConfig("com.mycompany.foo", "com.mycompany.bar")
+     .enableAutoConfig("com.mycompany.foo", "com.mycompany.bar")
     ```
 
 Application could be launched by simply running main class (assume you will use IDE run command):
