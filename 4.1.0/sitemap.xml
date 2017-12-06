@@ -3,16 +3,16 @@
 
     
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/getting-started/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//getting-started/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -20,162 +20,86 @@
     
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/configuration/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/configuration/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/lifecycle/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/lifecycle/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/injector/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/injector/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/module-autowiring/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/module-autowiring/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/bindings/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/bindings/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/scan/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/scan/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/installers/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/installers/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/ordering/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/ordering/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/bundles/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/bundles/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/options/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/options/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/diagnostic/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/diagnostic/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/commands/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/commands/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/web/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/web/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/guide/test/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    
-
-    
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/resource/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/task/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/managed/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/lifecycle/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/healthcheck/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/jersey-ext/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/jersey-feature/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/eager/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/plugin/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/servlet/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/filter/</loc>
-     <lastmod>2017-07-02</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-        
-    <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/installers/listener/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//guide/test/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -184,32 +108,74 @@
     
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/examples/authentication/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/resource/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/examples/governator/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/task/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/examples/hibernate/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/managed/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/examples/eventbus/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/lifecycle/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/examples/jdbi/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/healthcheck/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/jersey-ext/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/jersey-feature/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/eager/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/plugin/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/servlet/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/filter/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//installers/listener/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -218,32 +184,32 @@
     
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/extras/admin-rest/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//examples/authentication/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/extras/bom/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//examples/governator/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/extras/eventbus/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//examples/hibernate/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/extras/jdbi/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//examples/eventbus/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/extras/spa/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//examples/jdbi/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -252,26 +218,60 @@
     
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/about/compatibility/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//extras/admin-rest/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/about/history/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//extras/bom/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/about/support/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//extras/eventbus/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>https://xvik.github.io/dropwizard-guicey/4.1.0/about/license/</loc>
-     <lastmod>2017-07-02</lastmod>
+     <loc>https://xvik.github.io/dropwizard-guicey//extras/jdbi/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//extras/spa/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    
+
+    
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//about/compatibility/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//about/history/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//about/support/</loc>
+     <lastmod>2017-12-06</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>https://xvik.github.io/dropwizard-guicey//about/license/</loc>
+     <lastmod>2017-12-06</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
