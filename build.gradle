@@ -9,7 +9,8 @@ plugins {
     id 'com.jfrog.bintray' version '1.7.3'
     id 'net.researchgate.release' version '2.6.0'
     id 'com.github.ben-manes.versions' version '0.15.0'
-    id "io.spring.dependency-management" version "1.0.3.RELEASE"
+    id 'io.spring.dependency-management' version '1.0.3.RELEASE'
+    id 'ru.vyarus.mkdocs' version '1.0.0'
 }
 
 sourceCompatibility = 1.8
@@ -70,6 +71,11 @@ description = 'Dropwizard guice integration'
 github {
     user = 'xvik'
     license = 'MIT'
+}
+
+mkdocs.publish {
+    docPath = '4.1.0'
+    rootRedirect = true
 }
 
 pom {
