@@ -1,3 +1,6 @@
+* Update to guice 4.2.0
+    - remove guice-multibindings dependency as it's moved to guice core 
+
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0
 * Add StartupErrorRule to simplify dropwizard startup error testing
