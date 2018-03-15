@@ -75,6 +75,7 @@ compile 'ru.vyarus:dropwizard-guicey:4.1.0'
 
 Dropwizard | Guicey
 ----------|---------
+1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
 1.0 | [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1)
 0.9 | [3.3.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.9)
 0.8 | [3.1.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.8)
