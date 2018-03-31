@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -30,13 +29,7 @@ public class ExtensionsHolder {
     public ExtensionsHolder(final List<FeatureInstaller> installers, final StatsTracker tracker) {
         this.installers = installers;
         this.tracker = tracker;
-        this.installerTypes = Lists.transform(installers,
-                new Function<FeatureInstaller, Class<? extends FeatureInstaller>>() {
-                    @Override
-                    public Class<? extends FeatureInstaller> apply(final FeatureInstaller input) {
-                        return input.getClass();
-                    }
-                });
+        this.installerTypes = Lists.transform(installers, FeatureInstaller::getClass);
     }
 
     /**

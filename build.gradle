@@ -4,19 +4,18 @@ plugins {
     id 'project-report'
     id 'ru.vyarus.java-lib' version '1.0.5'
     id 'ru.vyarus.github-info' version '1.1.0'
-    id 'ru.vyarus.quality' version '2.4.0'
-    id 'com.github.kt3k.coveralls' version '2.8.1'
-    id 'com.jfrog.bintray' version '1.7.3'
+    id 'ru.vyarus.quality' version '3.0.0'
+    id 'com.jfrog.bintray' version '1.8.0'
     id 'net.researchgate.release' version '2.6.0'
-    id 'com.github.ben-manes.versions' version '0.15.0'
-    id 'io.spring.dependency-management' version '1.0.3.RELEASE'
+    id 'com.github.ben-manes.versions' version '0.17.0'
+    id 'io.spring.dependency-management' version '1.0.4.RELEASE'
     id 'ru.vyarus.mkdocs' version '1.0.0'
 }
 
 sourceCompatibility = 1.8
 
 wrapper {
-    gradleVersion = '4.1'
+    gradleVersion = '4.6'
 }
 
 ext {
@@ -41,7 +40,7 @@ dependencyManagement {
             exclude 'org.glassfish.hk2:hk2-api'
         }
         dependency 'org.spockframework:spock-core:1.1-groovy-2.4'
-        dependency 'com.github.stefanbirkner:system-rules:1.16.1'
+        dependency 'com.github.stefanbirkner:system-rules:1.17.1'
 
         dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
     }
@@ -51,7 +50,7 @@ dependencies {
     provided 'io.dropwizard:dropwizard-testing'
     provided 'org.spockframework:spock-core'
     provided 'com.github.stefanbirkner:system-rules'
-    provided 'com.google.code.findbugs:annotations:3.0.1'
+    provided 'com.github.spotbugs:spotbugs-annotations:3.1.2'
     provided "org.glassfish.hk2:guice-bridge"
 
     compile 'com.google.inject:guice'
@@ -136,6 +135,7 @@ test {
 
 dependencyUpdates.revision = 'release'
 jacocoTestReport.reports.xml.enabled = true
+
 
 task showDependenciesTree(dependsOn: 'htmlDependencyReport', group: 'help', description:
         'Generates dependencies tree report and opens it in browser') {

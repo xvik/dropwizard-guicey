@@ -103,7 +103,7 @@ public final class JerseyBinding {
         // resolve generics of specific type
         final GenericsContext context = GenericsResolver.resolve(type).type(specificType);
         final List<Type> genericTypes = context.genericTypes();
-        final Type[] generics = genericTypes.toArray(new Type[genericTypes.size()]);
+        final Type[] generics = genericTypes.toArray(new Type[0]);
         final Type binding = generics.length > 0 ? new ParameterizedTypeImpl(specificType, generics)
                 : specificType;
         if (isHK2Managed(type)) {

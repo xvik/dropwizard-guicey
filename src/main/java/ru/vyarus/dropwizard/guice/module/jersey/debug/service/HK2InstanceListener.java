@@ -1,12 +1,10 @@
 package ru.vyarus.dropwizard.guice.module.jersey.debug.service;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.glassfish.hk2.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
@@ -32,20 +30,9 @@ public class HK2InstanceListener implements InstanceLifecycleListener {
 
     @Override
     public Filter getFilter() {
-        final List<String> managedTypes = Lists.transform(contextDebugService.getManagedTypes(),
-                new Function<Class<?>, String>() {
-                    @Override
-                    public String apply(@Nonnull final Class<?> input) {
-                        return input.getName();
-                    }
-                });
-        return new Filter() {
-            @Override
-            public boolean matches(final Descriptor d) {
-                return d.getDescriptorType() == DescriptorType.CLASS
-                        && managedTypes.contains(d.getImplementation());
-            }
-        };
+        final List<String> managedTypes = Lists.transform(contextDebugService.getManagedTypes(), Class::getName);
+        return d -> d.getDescriptorType() == DescriptorType.CLASS
+                && managedTypes.contains(d.getImplementation());
     }
 
     @Override
