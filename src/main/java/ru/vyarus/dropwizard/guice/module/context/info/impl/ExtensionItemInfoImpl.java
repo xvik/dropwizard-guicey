@@ -1,9 +1,12 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
+import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
+
+import java.util.Set;
 
 /**
  * Extension item info implementation.
@@ -16,9 +19,20 @@ public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItem
     private Class<? extends FeatureInstaller> installedBy;
     private boolean lazy;
     private boolean hk2Managed;
+    private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
 
     public ExtensionItemInfoImpl(final Class<?> type) {
         super(ConfigItem.Extension, type);
+    }
+
+    @Override
+    public Set<Class<?>> getDisabledBy() {
+        return disabledBy;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return disabledBy.isEmpty();
     }
 
     @Override

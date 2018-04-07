@@ -1,5 +1,6 @@
 * Update to guice 4.2.0
-    - remove guice-multibindings dependency as it's moved to guice core 
+    - remove guice-multibindings dependency as it's moved to guice core
+* Ability to disable: guicey bundles, guice modules (directly registered) and extensions through bundle builder     
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0

@@ -6,8 +6,8 @@ import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
+import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -113,10 +113,10 @@ public class GuiceyConfigurationInfo {
     // --------------------------------------------------------------------------- BUNDLES
 
     /**
-     * @return types of all installed bundles (including lookup bundles) or empty list
+     * @return types of all installed and enabled bundles (including lookup bundles) or empty list
      */
     public List<Class<GuiceyBundle>> getBundles() {
-        return context.getItems(ConfigItem.Bundle);
+        return context.getItems(ConfigItem.Bundle, Filters.enabled());
     }
 
     /**
@@ -135,13 +135,27 @@ public class GuiceyConfigurationInfo {
         return context.getItems(ConfigItem.Bundle, Filters.dwBundles());
     }
 
+    /**
+     * @return types of manually disabled bundles or empty list
+     */
+    public List<Class<GuiceyBundle>> getBundlesDisabled() {
+        return context.getItems(ConfigItem.Bundle, Filters.enabled().negate());
+    }
+
     // --------------------------------------------------------------------------- MODULES
 
     /**
-     * @return types of all registered guice modules or empty list
+     * @return types of all registered and enabled guice modules or empty list
      */
     public List<Class<Module>> getModules() {
-        return context.getItems(ConfigItem.Module);
+        return context.getItems(ConfigItem.Module, Filters.enabled());
+    }
+
+    /**
+     * @return types of manually disabled modules or empty list
+     */
+    public List<Class<Module>> getModulesDisabled() {
+        return context.getItems(ConfigItem.Module, Filters.enabled().negate());
     }
 
     // --------------------------------------------------------------------------- INSTALLERS
@@ -181,10 +195,10 @@ public class GuiceyConfigurationInfo {
     // --------------------------------------------------------------------------- EXTENSIONS
 
     /**
-     * @return all registered extension types (including resolved with classpath scan) or empty list
+     * @return all registered and enabled extension types (including resolved with classpath scan) or empty list
      */
     public List<Class<Object>> getExtensions() {
-        return context.getItems(ConfigItem.Extension);
+        return context.getItems(ConfigItem.Extension, Filters.enabled());
     }
 
     /**
@@ -196,10 +210,11 @@ public class GuiceyConfigurationInfo {
     }
 
     /**
-     * @return extension types, resolved by classpath scan or empty list
+     * @return enabled extension types, resolved by classpath scan or empty list
      */
     public List<Class<Object>> getExtensionsFromScan() {
-        return context.getItems(ConfigItem.Extension, Filters.<ExtensionItemInfoImpl>fromScan());
+        return context.getItems(ConfigItem.Extension, Filters.<ExtensionItemInfo>enabled()
+                .and(Filters.fromScan()));
     }
 
     /**
@@ -216,4 +231,12 @@ public class GuiceyConfigurationInfo {
         final List<Class<?>> extensions = holder.getExtensions(installer);
         return extensions == null ? Collections.emptyList() : (List) extensions;
     }
+
+    /**
+     * @return types of manually disabled extensions or empty list
+     */
+    public List<Class<Object>> getExtensionsDisabled() {
+        return context.getItems(ConfigItem.Extension, Filters.enabled().negate());
+    }
+
 }

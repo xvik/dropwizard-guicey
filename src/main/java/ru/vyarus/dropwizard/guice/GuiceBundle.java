@@ -173,7 +173,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     @SuppressWarnings("unchecked")
     private void configureModules(final T configuration, final Environment environment) {
-        for (Module mod : context.getModules()) {
+        for (Module mod : context.getEnabledModules()) {
             if (mod instanceof BootstrapAwareModule) {
                 ((BootstrapAwareModule) mod).setBootstrap(bootstrap);
             }
@@ -188,7 +188,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
     private void createInjector(final Environment environment) {
         final Stopwatch timer = context.stat().timer(InjectorCreationTime);
-        injector = injectorFactory.createInjector(context.option(InjectorStage), context.getModules());
+        injector = injectorFactory.createInjector(context.option(InjectorStage), context.getEnabledModules());
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
@@ -409,16 +409,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * @param installers feature installer types to disable
-         * @return builder instance for chained calls
-         */
-        @SafeVarargs
-        public final Builder<T> disableInstallers(final Class<? extends FeatureInstaller>... installers) {
-            bundle.context.disableInstallers(installers);
-            return this;
-        }
-
-        /**
          * Feature installers registered automatically when auto scan enabled,
          * but if you don't want to use it, you can register installers manually (note: without auto scan default
          * installers will not be registered).
@@ -467,6 +457,67 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> bundles(final GuiceyBundle... bundles) {
             bundle.context.registerBundles(bundles);
+            return this;
+        }
+
+        /**
+         * Disabling installer will lead to avoiding all relative installed extensions. If you have manually
+         * registered extensions for disabled installer then remove their registration. Classpath scan extensions
+         * will be ignored (not installed, because no installer to recognize them).
+         * <p>
+         *  Disabling installer may be used to replace some existing installer with modified version (probably fixed):
+         *  disable existing installer and register new custom installer.
+         *
+         * @param installers feature installer types to disable
+         * @return builder instance for chained calls
+         */
+        @SafeVarargs
+        public final Builder<T> disableInstallers(final Class<? extends FeatureInstaller>... installers) {
+            bundle.context.disableInstallers(installers);
+            return this;
+        }
+
+        /**
+         * Extensions disable is mostly useful for testing. In some cases, it could be used to disable some extra
+         * extensions installed with classpath scan or bundle. But, generally, try to avoid manual extensions
+         * disabling for clearer application configuration.
+         *
+         * @param extensions extensions to disable (manually added, registered by bundles or with classpath scan)
+         * @return builder instance for chained calls
+         */
+        public final Builder<T> disableExtensions(final Class<?>... extensions) {
+            bundle.context.disableExtensions(extensions);
+            return this;
+        }
+
+        /**
+         * Modules disable is mostly useful for testing. In some cases, it could be used to disable some extra
+         * modules installed by some bundle. But, generally, try to avoid manual modules disabling for
+         * clearer application configuration.
+         * <p>
+         * NOTE: this option can disable only directly registered modules (with {@link #modules(Module...)}
+         * or in bundle {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#modules(Module...)}.
+         *
+         * @param modules guice modules to disable
+         * @return builder instance for chained calls
+         */
+        @SafeVarargs
+        public final Builder<T> disableModules(final Class<? extends Module>... modules) {
+            bundle.context.disableModules(modules);
+            return this;
+        }
+
+        /**
+         * Bundles disable is mostly useful for testing. In some cases, it could be used to disable some transitive
+         * bundle (bundle installed by some registered bundle with
+         * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#bundles(GuiceyBundle...)}).
+         *
+         * @param bundles guicey bundles to disable
+         * @return builder instance for chained calls
+         */
+        @SafeVarargs
+        public final Builder<T> disableBundles(final Class<? extends GuiceyBundle>... bundles) {
+            bundle.context.disableBundle(bundles);
             return this;
         }
 

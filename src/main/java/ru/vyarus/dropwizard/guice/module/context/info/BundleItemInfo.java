@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.context.info;
 
+import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
+
 /**
  * Bundle configuration information.
  * In contrast to other items, may have 2 more registration contexts:
@@ -14,7 +16,7 @@ package ru.vyarus.dropwizard.guice.module.context.info;
  * @author Vyacheslav Rusakov
  * @since 09.07.2016
  */
-public interface BundleItemInfo extends ItemInfo {
+public interface BundleItemInfo extends ItemInfo, DisableSupport {
 
     /**
      * @return true if bundle resolved by lookup mechanism, false otherwise

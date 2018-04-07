@@ -25,7 +25,7 @@ public enum ConfigItem {
     Bundle,
     /**
      * Guice module.
-     * Note that only directly modules are tracked (if module register other guice module in it's configure
+     * Note that only direct modules are tracked (if module registered by other guice module in it's configure
      * method it would not be tracked - it's pure guice staff).
      */
     Module,
@@ -56,6 +56,9 @@ public enum ConfigItem {
                 break;
             case Command:
                 res = new CommandItemInfoImpl(type);
+                break;
+            case Module:
+                res = new ModuleItemInfoImpl(type);
                 break;
             default:
                 res = new ItemInfoImpl(this, type);

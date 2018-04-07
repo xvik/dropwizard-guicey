@@ -46,14 +46,14 @@ public final class BundleSupport {
     public static void processBundles(final ConfigurationContext context,
                                       final Configuration configuration, final Environment environment,
                                       final Application application) {
-        final List<GuiceyBundle> bundles = context.getBundles();
+        final List<GuiceyBundle> bundles = context.getEnabledBundles();
         final List<Class<? extends GuiceyBundle>> installedBundles = Lists.newArrayList();
         final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(
                 context, bundles, configuration, environment, application);
 
         // iterating while no new bundles registered
         while (!bundles.isEmpty()) {
-            final List<GuiceyBundle> processingBundles = Lists.newArrayList(BundleSupport.removeDuplicates(bundles));
+            final List<GuiceyBundle> processingBundles = Lists.newArrayList(removeDuplicates(bundles));
             bundles.clear();
             for (GuiceyBundle bundle : removeTypes(processingBundles, installedBundles)) {
 
@@ -61,10 +61,15 @@ public final class BundleSupport {
                 Preconditions.checkState(!installedBundles.contains(bundleType),
                         "State error: duplicate bundle '%s' registration", bundleType.getName());
 
-                context.setScope(bundleType);
-                bundle.initialize(guiceyBootstrap);
+                // disabled bundles are not processed (so nothing will be registered from it)
+                // important to check here because transitive bundles may appear to be disabled
+                if (context.isBundleEnabled(bundleType)) {
+                    context.setScope(bundleType);
+                    bundle.initialize(guiceyBootstrap);
+                    context.closeScope();
+                }                 
+
                 installedBundles.add(bundleType);
-                context.closeScope();
             }
         }
     }

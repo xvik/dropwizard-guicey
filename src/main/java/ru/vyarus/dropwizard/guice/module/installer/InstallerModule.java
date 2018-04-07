@@ -7,6 +7,7 @@ import com.google.inject.AbstractModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
@@ -88,8 +89,7 @@ public class InstallerModule extends AbstractModule {
             });
             context.registerInstallersFromScan(installers);
         }
-        final List<Class<? extends FeatureInstaller>> installers = context.getInstallers();
-        installers.removeAll(context.getDisabledInstallers());
+        final List<Class<? extends FeatureInstaller>> installers = context.getEnabledInstallers();
         installers.sort(COMPARATOR);
         logger.debug("Found {} installers", installers.size());
         return installers;
@@ -130,21 +130,18 @@ public class InstallerModule extends AbstractModule {
      */
     private void resolveExtensions(final ExtensionsHolder holder) {
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
-        final List<Class<?>> manual = context.getExtensions();
+        final List<Class<?>> manual = context.getEnabledExtensions();
         for (Class<?> type : manual) {
             Preconditions.checkState(processType(type, holder, false),
                     "No installer found for extension %s", type.getName());
         }
         if (scanner != null) {
-            scanner.scan(new ClassVisitor() {
-                @Override
-                public void visit(final Class<?> type) {
-                    if (manual.contains(type)) {
-                        // avoid duplicate extension installation, but register it's appearance in auto scan scope
-                        context.getOrRegisterExtension(type, true);
-                    } else {
-                        processType(type, holder, true);
-                    }
+            scanner.scan(type -> {
+                if (manual.contains(type)) {
+                    // avoid duplicate extension installation, but register it's appearance in auto scan scope
+                    context.getOrRegisterExtension(type, true);
+                } else {
+                    processType(type, holder, true);
                 }
             });
         }
@@ -152,48 +149,63 @@ public class InstallerModule extends AbstractModule {
     }
 
     private boolean processType(final Class<?> type, final ExtensionsHolder holder, final boolean fromScan) {
-        final boolean lazy = type.isAnnotationPresent(LazyBinding.class);
-        final Class<? extends FeatureInstaller> installer = bindExtension(type, lazy, holder);
-
+        final FeatureInstaller installer = findInstaller(type, holder);
         final boolean recognized = installer != null;
         if (recognized) {
+            // important to force config creation for extension from scan to allow disabling by matcher
             final ExtensionItemInfoImpl info = context.getOrRegisterExtension(type, fromScan);
-            info.setLazy(lazy);
+            info.setLazy(type.isAnnotationPresent(LazyBinding.class));
             info.setHk2Managed(JerseyBinding.isHK2Managed(type));
-            info.setInstalledBy(installer);
+            info.setInstalledBy(installer.getClass());
+
+            // extension from scan could be disabled by matcher
+            if (!fromScan || context.isExtensionEnabled(type)) {
+                bindExtension(info, installer, holder);
+            }
         }
         return recognized;
     }
 
     /**
-     * Only one installer could manage extension. If extension could be matched by multiple installers,
-     * then first matched installer wins (note that installers are ordered).
+     * Search for matching installer. Extension may match multiple installer, but only one will be actually
+     * used (note that installers are ordered)
      *
-     * @param type class to analyze
-     * @return matched installer or null if no matching installer found
+     * @param type   extension type
+     * @param holder extensions holder bean
+     * @return matching installer or null if no matching installer found
      */
     @SuppressWarnings("unchecked")
-    private Class<? extends FeatureInstaller> bindExtension(
-            final Class<?> type, final boolean lazy, final ExtensionsHolder holder) {
-        Class<? extends FeatureInstaller> recognized = null;
+    private FeatureInstaller findInstaller(final Class<?> type, final ExtensionsHolder holder) {
         for (FeatureInstaller installer : holder.getInstallers()) {
             if (installer.matches(type)) {
-                final Class<? extends FeatureInstaller> installerClass = installer.getClass();
-                if (logger.isTraceEnabled()) {
-                    logger.trace("{} extension found: {}",
-                            FeatureUtils.getInstallerExtName(installerClass), type.getName());
-                }
-                holder.register(installerClass, type);
-                if (installer instanceof BindingInstaller) {
-                    ((BindingInstaller) installer).install(binder(), type, lazy);
-                } else if (!lazy) {
-                    // if installer isn't install binding manually, lazy simply disable registration
-                    binder().bind(type);
-                }
-                recognized = installerClass;
-                break;
+                return installer;
             }
         }
-        return recognized;
+        return null;
+    }
+
+    /**
+     * Bind extension to guice context.
+     *
+     * @param item      extension item descriptor
+     * @param installer detected extension installer
+     * @param holder    extensions holder bean
+     */
+    @SuppressWarnings("unchecked")
+    private void bindExtension(final ExtensionItemInfo item, final FeatureInstaller installer,
+                               final ExtensionsHolder holder) {
+        final Class<? extends FeatureInstaller> installerClass = installer.getClass();
+        final Class<?> type = item.getType();
+        if (logger.isTraceEnabled()) {
+            logger.trace("{} extension found: {}",
+                    FeatureUtils.getInstallerExtName(installerClass), type.getName());
+        }
+        holder.register(installerClass, type);
+        if (installer instanceof BindingInstaller) {
+            ((BindingInstaller) installer).install(binder(), type, item.isLazy());
+        } else if (!item.isLazy()) {
+            // if installer isn't install binding manually, lazy simply disable registration
+            binder().bind(type);
+        }
     }
 }

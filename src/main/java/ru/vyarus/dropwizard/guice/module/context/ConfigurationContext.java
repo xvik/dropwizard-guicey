@@ -157,10 +157,33 @@ public final class ConfigurationContext {
     }
 
     /**
+     * Guicey bundle manual disable registration from
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableBundles(Class[])}.
+     *
+     * @param bundles modules to disable
+     */
+    @SuppressWarnings("PMD.UseVarargs")
+    public void disableBundle(final Class<? extends GuiceyBundle>[] bundles) {
+        for (Class<? extends GuiceyBundle> bundle : bundles) {
+            registerDisable(ConfigItem.Bundle, bundle);
+        }
+    }
+
+    /**
      * @return all configured bundles (without duplicates)
      */
-    public List<GuiceyBundle> getBundles() {
-        return getItems(ConfigItem.Bundle);
+    public List<GuiceyBundle> getEnabledBundles() {
+        return getEnabledItems(ConfigItem.Bundle);
+    }
+
+    /**
+     * Bundle must be disabled before it's processing, otherwise disabling will not have effect
+     * (because bundle will be already processed and register all related items).
+     *
+     * @return true if bundle enabled, false otherwise
+     */
+    public boolean isBundleEnabled(final Class<? extends GuiceyBundle> type) {
+        return isEnabled(ConfigItem.Bundle, type);
     }
 
     // --------------------------------------------------------------------------- MODULES
@@ -175,10 +198,23 @@ public final class ConfigurationContext {
     }
 
     /**
-     * @return all configured guice modules (without duplicates)
+     * Guice module manual disable registration from
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableModules(Class[])}.
+     *
+     * @param modules modules to disable
      */
-    public List<Module> getModules() {
-        return getItems(ConfigItem.Module);
+    @SuppressWarnings("PMD.UseVarargs")
+    public void disableModules(final Class<? extends Module>[] modules) {
+        for (Class<? extends Module> module : modules) {
+            registerDisable(ConfigItem.Module, module);
+        }
+    }
+
+    /**
+     * @return all configured and enabled guice modules (without duplicates)
+     */
+    public List<Module> getEnabledModules() {
+        return getEnabledItems(ConfigItem.Module);
     }
 
     // --------------------------------------------------------------------------- INSTALLERS
@@ -224,20 +260,10 @@ public final class ConfigurationContext {
     }
 
     /**
-     * Returns disabled installers too!
-     * If called after {@link #finalizeConfiguration()} then may return never registered but disabled installers.
-     *
-     * @return all configured installers (including resolved by scan)
+     * @return all configured and enabled installers (including resolved by scan)
      */
-    public List<Class<? extends FeatureInstaller>> getInstallers() {
-        return getItems(ConfigItem.Installer);
-    }
-
-    /**
-     * @return all disabled installers (without duplicates)
-     */
-    public List<Class<? extends FeatureInstaller>> getDisabledInstallers() {
-        return getDisabledItems(ConfigItem.Installer);
+    public List<Class<? extends FeatureInstaller>> getEnabledInstallers() {
+        return getEnabledItems(ConfigItem.Installer);
     }
 
     // --------------------------------------------------------------------------- EXTENSIONS
@@ -280,10 +306,31 @@ public final class ConfigurationContext {
     }
 
     /**
+     * Extension manual disable registration from
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableExtensions(Class[])}.
+     *
+     * @param extensions extensions to disable
+     */
+    @SuppressWarnings("PMD.UseVarargs")
+    public void disableExtensions(final Class<?>[] extensions) {
+        for (Class<?> extension : extensions) {
+            registerDisable(ConfigItem.Extension, extension);
+        }
+    }
+
+    /**
+     * @param extension extension type
+     * @return true if extension is enabled, false if disabled
+     */
+    public boolean isExtensionEnabled(final Class<?> extension) {
+        return isEnabled(ConfigItem.Extension, extension);
+    }
+
+    /**
      * @return all configured extensions (including resolved by scan)
      */
-    public List<Class<?>> getExtensions() {
-        return getItems(ConfigItem.Extension);
+    public List<Class<?>> getEnabledExtensions() {
+        return getEnabledItems(ConfigItem.Extension);
     }
 
     // --------------------------------------------------------------------------- OPTIONS
@@ -419,5 +466,15 @@ public final class ConfigurationContext {
     private <T> List<T> getDisabledItems(final ConfigItem type) {
         final Collection<Class<?>> res = disabledItemsHolder.get(type);
         return res.isEmpty() ? Collections.<T>emptyList() : (List<T>) Lists.newArrayList(res);
+    }
+
+    private <T> List<T> getEnabledItems(final ConfigItem type) {
+        final List<T> res = getItems(type);
+        res.removeAll(getDisabledItems(type));
+        return res;
+    }
+
+    private boolean isEnabled(final ConfigItem type, final Class itemType) {
+        return !disabledItemsHolder.get(type).contains(itemType);
     }
 }
