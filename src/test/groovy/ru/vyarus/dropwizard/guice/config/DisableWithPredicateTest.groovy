@@ -8,6 +8,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
+import ru.vyarus.dropwizard.guice.module.context.Disables
 import ru.vyarus.dropwizard.guice.module.context.Filters
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
@@ -17,17 +18,19 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import javax.inject.Inject
 import javax.ws.rs.Path
 
+import static ru.vyarus.dropwizard.guice.module.context.Disables.type
+
 /**
  * @author Vyacheslav Rusakov
- * @since 07.04.2018
+ * @since 09.04.2018
  */
 @UseGuiceyApp(App)
-class DisableItemsTest extends AbstractTest {
+class DisableWithPredicateTest extends AbstractTest {
 
     @Inject
     GuiceyConfigurationInfo info
 
-    def "Check configuration items disabling"() {
+    def "Check configuration items disabling with matcher"() {
 
         expect: "items disabled"
         info.getBundles().contains(SampleBundle2)  // to not specify bundles from test lookup
@@ -46,7 +49,7 @@ class DisableItemsTest extends AbstractTest {
         info.getInstallersDisabled() == [ManagedInstaller]
 
         and: "correct disable scope"
-        info.data.getItems(Filters.disabledBy(Application)) as Set ==
+        info.data.getItems(Filters.disabledBy(Disables)) as Set ==
                 [SampleBundle, SampleModule1, SampleExtension1, ManagedInstaller] as Set
     }
 
@@ -55,14 +58,12 @@ class DisableItemsTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
+                    .disable(type(SampleBundle, SampleModule1, SampleExtension1, ManagedInstaller))
+
                     .bundles(new SampleBundle(), new SampleBundle2())
                     .modules(new SampleModule1(), new SampleModule2())
                     .extensions(SampleExtension1, SampleExtension2)
 
-                    .disableBundles(SampleBundle)
-                    .disableModules(SampleModule1)
-                    .disableExtensions(SampleExtension1)
-                    .disableInstallers(ManagedInstaller)
                     .build())
         }
 

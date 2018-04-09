@@ -21,10 +21,8 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Configuration context used internally to track all registered configuration items.
@@ -42,7 +40,7 @@ import java.util.Map;
  * @see ConfigurationInfo for acessing collected info at runtime
  * @since 06.07.2016
  */
-@SuppressWarnings("PMD.GodClass")
+@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods"})
 public final class ConfigurationContext {
 
     /**
@@ -62,6 +60,10 @@ public final class ConfigurationContext {
      * Holds disable source for disabled items.
      */
     private final Multimap<Class<?>, Class<?>> disabledByHolder = LinkedHashMultimap.create();
+    /**
+     * Disable predicates listen for first item registration and could immediately disable it.
+     */
+    private final List<Predicate<ItemInfo>> disablePredicates = new ArrayList<>();
     /**
      * Current scope hierarchy. The last one is actual scope (application or bundle).
      */
@@ -365,6 +367,15 @@ public final class ConfigurationContext {
 
     // --------------------------------------------------------------------------- GENERAL
 
+    /**
+     * Register disable predicates, used to disable all matched items.
+     *
+     * @param predicates disable predicates
+     */
+    @SuppressWarnings("PMD.UseVarargs")
+    public void registerDisablePredicates(final Predicate<ItemInfo>[] predicates) {
+        disablePredicates.addAll(Arrays.asList(predicates));
+    }
 
     /**
      * Called when context configuration is finished (but extensions installation is not finished yet).
@@ -430,7 +441,24 @@ public final class ConfigurationContext {
         if (info.getRegistrationScope() == null) {
             info.setRegistrationScope(getScope());
         }
+        fireRegistration(info);
         return info;
+    }
+
+    private void fireRegistration(final ItemInfo item) {
+        // fire event only for initial registration and for items which could be disabled
+        if (item instanceof DisableSupport && item.getRegistrationAttempts() == 1) {
+            final Class<?> scope = currentScope;
+            for (Predicate<ItemInfo> predicate : disablePredicates) {
+                if (predicate.test(item)) {
+                    // change scope to indicate predicate as disable source
+                    currentScope = Disables.class;
+                    registerDisable(item.getItemType(), item.getType());
+                    currentScope = scope;
+                    break;
+                }
+            }
+        }
     }
 
     /**

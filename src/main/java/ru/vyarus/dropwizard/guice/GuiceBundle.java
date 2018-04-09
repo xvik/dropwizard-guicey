@@ -22,6 +22,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -39,6 +40,7 @@ import javax.servlet.DispatcherType;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
@@ -465,8 +467,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * registered extensions for disabled installer then remove their registration. Classpath scan extensions
          * will be ignored (not installed, because no installer to recognize them).
          * <p>
-         *  Disabling installer may be used to replace some existing installer with modified version (probably fixed):
-         *  disable existing installer and register new custom installer.
+         * Disabling installer may be used to replace some existing installer with modified version (probably fixed):
+         * disable existing installer and register new custom installer.
          *
          * @param installers feature installer types to disable
          * @return builder instance for chained calls
@@ -518,6 +520,57 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         @SafeVarargs
         public final Builder<T> disableBundles(final Class<? extends GuiceyBundle>... bundles) {
             bundle.context.disableBundle(bundles);
+            return this;
+        }
+
+        /**
+         * Disable items using disable predicate: all matched items will be disabled. Predicate is called
+         * just after first item registration and, if it will evaluate to true, then item marked as disabled.
+         * Predicate receive only disableable items: guicey budle, installer, extension or guice module
+         * (directly registered).
+         * <p>
+         * Mostly useful for testing, but in some cases could be used directly.
+         * <p>
+         * WARNING: disable predicate declaration MUST be before item registration. For example, in case
+         * {@code builder.extension(Some.class).disable(...)} disable predicate will not "see" {@code Some.class}
+         * extension registration (of cause, no one should disable items registered few lines above). In contrast,
+         * "disableSomthing" methods may be called at any time, because they directly disable item and not listen
+         * for registrations.
+         * <p>
+         * Use {@link Predicate#and(Predicate)}, {@link Predicate#or(Predicate)} and {@link Predicate#negate()}
+         * to combine complex predicates from simple ones from
+         * {@link ru.vyarus.dropwizard.guice.module.context.Disables} helper.
+         * <p>
+         * Item passed only one time after initial registration and so item object will have only basic fields:
+         * item type, item class and item registration scope (who register it).
+         * <p>
+         * For example, disable all installers, registered from application root
+         * except SomeInstallerType:
+         * <pre><code>
+         * import static ru.vyarus.dropwizard.guice.module.context.Disables.*
+         *
+         * builder.disable(installer()
+         *             .and(registeredBy(Application.class))
+         *             .and(type(SomeInstallerType.class).negate());
+         * </code></pre>
+         * <p>
+         * Items could be disabled just by class, no matter what type they are:
+         * <pre><code>
+         * import static ru.vyarus.dropwizard.guice.module.context.Disables.*
+         *
+         * builder.disable(type(MyExtension.class,
+         *                      MyInstaller.class,
+         *                      MyBundle.class,
+         *                      MyModule.class));
+         * </code></pre>
+         *
+         * @param predicates disable predicates
+         * @return builder instance for chained calls
+         * @see ru.vyarus.dropwizard.guice.module.context.Disables for common predicates
+         */
+        @SafeVarargs
+        public final Builder<T> disable(final Predicate<ItemInfo>... predicates) {
+            bundle.context.registerDisablePredicates(predicates);
             return this;
         }
 
