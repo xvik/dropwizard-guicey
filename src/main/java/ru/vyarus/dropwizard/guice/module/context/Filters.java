@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context;
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.ScanSupport;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -138,5 +139,16 @@ public final class Filters {
      */
     public static Predicate<ExtensionItemInfo> installedBy(final Class<? extends FeatureInstaller> type) {
         return input -> type.equals(input.getInstalledBy());
+    }
+
+    // --------------------------------------------------------------------------- MODULES
+
+    /**
+     * Filter for overriding modules. Use only for {@link ConfigItem#Module} items.
+     *
+     * @return overriding modules filter
+     */
+    public static Predicate<ModuleItemInfo> overridingModule() {
+        return ModuleItemInfo::isOverriding;
     }
 }

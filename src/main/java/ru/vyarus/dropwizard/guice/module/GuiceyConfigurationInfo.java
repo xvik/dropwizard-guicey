@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -145,10 +146,28 @@ public class GuiceyConfigurationInfo {
     // --------------------------------------------------------------------------- MODULES
 
     /**
-     * @return types of all registered and enabled guice modules or empty list
+     * @return types of all registered and enabled guice modules (including normal and overriding) or empty list
      */
     public List<Class<Module>> getModules() {
         return context.getItems(ConfigItem.Module, Filters.enabled());
+    }
+
+    /**
+     * @return types of all enabled normal guice modules or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(Module...)
+     */
+    public List<Class<Module>> getNormalModules() {
+        return context.getItems(ConfigItem.Module, Filters.<ModuleItemInfo>enabled()
+                .and(Filters.overridingModule().negate()));
+    }
+
+    /**
+     * @return types of all enabled overriding guice modules or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#overrideModules(Module...)
+     */
+    public List<Class<Module>> getOverridingModules() {
+        return context.getItems(ConfigItem.Module, Filters.<ModuleItemInfo>enabled()
+                .and(Filters.overridingModule()));
     }
 
     /**

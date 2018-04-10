@@ -14,10 +14,14 @@ import java.util.Set;
  */
 public class ModuleItemInfoImpl extends ItemInfoImpl implements ModuleItemInfo {
 
+    private static ThreadLocal<Boolean> override = new ThreadLocal<>();
+
     private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
+    private final boolean overriding;
 
     public ModuleItemInfoImpl(final Class<?> type) {
         super(ConfigItem.Module, type);
+        this.overriding = override.get() != null;
     }
 
     @Override
@@ -28,5 +32,26 @@ public class ModuleItemInfoImpl extends ItemInfoImpl implements ModuleItemInfo {
     @Override
     public boolean isEnabled() {
         return disabledBy.isEmpty();
+    }
+
+    @Override
+    public boolean isOverriding() {
+        return overriding;
+    }
+
+    /**
+     * Use to register overriding modules. Such complex approach was used because overriding modules
+     * is the only item that require additional parameter during registration. This parameter may be used
+     * in disable predicate to differentiate overriding modules from normal modules.
+     *
+     * @param action registration action
+     */
+    public static void overrideScope(final Runnable action) {
+        override.set(true);
+        try {
+            action.run();
+        } finally {
+            override.remove();
+        }
     }
 }

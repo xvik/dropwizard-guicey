@@ -11,4 +11,9 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
  * @since 03.04.2018
  */
 public interface ModuleItemInfo extends ItemInfo, DisableSupport {
+
+    /**
+     * @return true if overriding module (module overrides bindings of other modules), false if normal module
+     */
+    boolean isOverriding();
 }

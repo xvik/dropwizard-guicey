@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
+import com.google.inject.util.Modules;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -37,9 +38,7 @@ import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
 
 import javax.servlet.DispatcherType;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
@@ -190,7 +189,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
     private void createInjector(final Environment environment) {
         final Stopwatch timer = context.stat().timer(InjectorCreationTime);
-        injector = injectorFactory.createInjector(context.option(InjectorStage), context.getEnabledModules());
+        final List<Module> normalModules = context.getNormalModules();
+        final List<Module> overridingModules = context.getOverridingModules();
+        injector = injectorFactory.createInjector(context.option(InjectorStage),
+                overridingModules.isEmpty() ? normalModules
+                        : Collections.singletonList(Modules.override(normalModules).with(overridingModules)));
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
@@ -342,6 +345,32 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         public Builder<T> modules(final Module... modules) {
             Preconditions.checkState(modules.length > 0, "Specify at least one module");
             bundle.context.registerModules(modules);
+            return this;
+        }
+
+        /**
+         * Register overriding modules, used to override bindings of normal modules. Internally guice
+         * {@link com.google.inject.util.Modules#override(Module...)} is used. If binding is present in normal module
+         * and overriding module then overriding module binding is used. Bindings in overriding modules, not present
+         * in normal modules are simply added to context (as usual module).
+         * <p>
+         * The main purpose for overriding modules is testing, but it also could be used (in rare cases) to
+         * amend existing guice context (for example, in case when you do not control all bindings, but need
+         * to hot fix something).
+         * <p>
+         * Overriding modules behave the same as normal modules: they are inspected for *AwareModule interfaces
+         * to inject dropwizard objects. Overriding module could be disabled with {@link #disableModules(Class[])} or
+         * generic {@link #disable(Predicate[])}.
+         * <p>
+         * Overriding modules must be of unique types, otherwise only the first instance will be registered.
+         * If registered overriding module type is alredy registered as normal module, then overriding will be ignored.
+         *
+         * @param modules overriding modules
+         * @return builder instance for chained calls
+         * @see #modules(Module...)
+         */
+        public Builder<T> overrideModules(final Module... modules) {
+            bundle.context.registerModulesOverride(modules);
             return this;
         }
 

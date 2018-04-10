@@ -11,8 +11,10 @@ import io.dropwizard.Bundle;
 import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
+import ru.vyarus.dropwizard.guice.module.context.info.impl.ModuleItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
@@ -23,6 +25,7 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Configuration context used internally to track all registered configuration items.
@@ -191,12 +194,23 @@ public final class ConfigurationContext {
     // --------------------------------------------------------------------------- MODULES
 
     /**
-     * @param modules guice module to register
+     * @param modules guice modules to register
      */
     public void registerModules(final Module... modules) {
         for (Module module : modules) {
             register(ConfigItem.Module, module);
         }
+    }
+
+    /**
+     * @param modules overriding guice modules to register
+     */
+    public void registerModulesOverride(final Module... modules) {
+        ModuleItemInfoImpl.overrideScope(() -> {
+            for (Module module : modules) {
+                register(ConfigItem.Module, module);
+            }
+        });
     }
 
     /**
@@ -213,10 +227,30 @@ public final class ConfigurationContext {
     }
 
     /**
+     * NOTE: both normal and overriding modules.
+     *
      * @return all configured and enabled guice modules (without duplicates)
      */
     public List<Module> getEnabledModules() {
         return getEnabledItems(ConfigItem.Module);
+    }
+
+    /**
+     * @return list of all enabled normal guice modules or empty list
+     */
+    public List<Module> getNormalModules() {
+        return getEnabledModules().stream()
+                .filter(mod -> !((ModuleItemInfo) getInfo(mod)).isOverriding())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @return list of all enabled overriding modules or empty list
+     */
+    public List<Module> getOverridingModules() {
+        return getEnabledModules().stream()
+                .filter(mod -> ((ModuleItemInfo) getInfo(mod)).isOverriding())
+                .collect(Collectors.toList());
     }
 
     // --------------------------------------------------------------------------- INSTALLERS
