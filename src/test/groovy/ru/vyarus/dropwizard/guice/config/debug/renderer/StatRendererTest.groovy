@@ -4,8 +4,8 @@ import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.diagnostic.BaseDiagnosticTest
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
@@ -21,7 +21,7 @@ import javax.inject.Inject
  * @since 31.07.2016
  */
 @UseGuiceyApp(App)
-class StatRendererTest extends AbstractTest {
+class StatRendererTest extends BaseDiagnosticTest {
 
     @Inject
     StatsRenderer renderer

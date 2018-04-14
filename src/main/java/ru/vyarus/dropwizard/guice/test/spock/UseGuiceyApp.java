@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.test.spock;
 
 import io.dropwizard.Application;
 import org.spockframework.runtime.extension.ExtensionAnnotation;
+import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
 import ru.vyarus.dropwizard.guice.test.spock.ext.GuiceyAppExtension;
 
 import java.lang.annotation.ElementType;
@@ -18,8 +19,8 @@ import java.lang.annotation.Target;
  * application tear down.</p>
  * <p>Extension behaviour is the same as spock-guice module.</p>
  *
- * @see ru.vyarus.dropwizard.guice.test.GuiceyAppRule for details
  * @author Vyacheslav Rusakov
+ * @see ru.vyarus.dropwizard.guice.test.GuiceyAppRule for details
  * @since 02.01.2015
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -41,4 +42,14 @@ public @interface UseGuiceyApp {
      * @return list of overridden configuration values (may be used even without real configuration)
      */
     ConfigOverride[] configOverride() default {};
+
+    /**
+     * Configurators provide access to guice builder allowing complete customization of application context
+     * in tests.
+     *
+     * @return list of configurators to use
+     * @see UseGuiceyConfigurator to declare base configurators in base test class
+     * @see GuiceyConfigurator for more info
+     */
+    Class<? extends GuiceyConfigurator>[] configurators() default {};
 }

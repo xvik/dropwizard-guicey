@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.diagnostic
 
 import io.dropwizard.Application
-import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.diagnostic.support.ManualAppWithBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.*
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooInstaller
@@ -22,7 +21,7 @@ import javax.inject.Inject
  * @since 26.06.2016
  */
 @UseGuiceyApp(ManualAppWithBundle)
-class ManualModeWithBundleDiagnosticTest extends AbstractTest {
+class ManualModeWithBundleDiagnosticTest extends BaseDiagnosticTest {
 
     @Inject
     GuiceyConfigurationInfo info

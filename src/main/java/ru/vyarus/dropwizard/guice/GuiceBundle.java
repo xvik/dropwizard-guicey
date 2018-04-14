@@ -36,6 +36,8 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
+import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport;
 
 import javax.servlet.DispatcherType;
 import java.util.*;
@@ -223,6 +225,14 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     public static class Builder<T extends Configuration> {
         private final GuiceBundle<T> bundle = new GuiceBundle<T>();
+
+        public Builder() {
+            // Support for external configuration (for tests)
+            // Use special scope to distinguish external configuration
+            bundle.context.setScope(GuiceyConfigurator.class);
+            ConfiguratorsSupport.configure(this);
+            bundle.context.closeScope();
+        }
 
         /**
          * Options is a generic mechanism to provide internal configuration values for guicey and 3rd party bundles.

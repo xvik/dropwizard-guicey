@@ -3,8 +3,10 @@ package ru.vyarus.dropwizard.guice.test.spock.ext;
 import io.dropwizard.testing.ConfigOverride;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.SpecInfo;
+import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
 
 import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  * Base class for guicey spock extensions. Extensions use junit rules inside to avoid duplication.
@@ -24,12 +26,21 @@ public abstract class AbstractAppExtension<T extends Annotation> extends Abstrac
 
     @Override
     public void visitSpec(final SpecInfo spec) {
-        final GuiceyInterceptor interceptor = new GuiceyInterceptor(spec, buildResourceFactory(annotation));
+        final List<GuiceyConfigurator> configurators =
+                GuiceyConfiguratorExtension.instantiate(getConfigurators(annotation));
+        final GuiceyInterceptor interceptor =
+                new GuiceyInterceptor(spec, buildResourceFactory(annotation), configurators);
         final SpecInfo topSpec = spec.getTopSpec();
         topSpec.addSharedInitializerInterceptor(interceptor);
         topSpec.addInitializerInterceptor(interceptor);
         topSpec.addCleanupSpecInterceptor(interceptor);
     }
+
+    /**
+     * @param annotation extension annotation instance
+     * @return configurator classes defined in annotation
+     */
+    protected abstract Class<? extends GuiceyConfigurator>[] getConfigurators(T annotation);
 
     /**
      * @param annotation extension annotation instance

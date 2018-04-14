@@ -10,7 +10,9 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
+import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfigurator
 import spock.lang.Specification
 
 import javax.servlet.FilterRegistration
@@ -22,21 +24,13 @@ import javax.servlet.ServletRegistration
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
+@UseGuiceyConfigurator(GuiceyTestConfigurator)
 abstract class AbstractTest extends Specification {
 
-    static {
-        // setupSpec is too late - app already launched
-        PropertyBundleLookup.enableBundles(HK2DebugBundle, GuiceRestrictedConfigBundle)
-    }
-
-    void setupSpec() {
-        assert System.getProperty(PropertyBundleLookup.BUNDLES_PROPERTY)
-    }
-
     void cleanupSpec() {
+        // some tests are intentionally failing so be sure to remove stale applications
         InjectorLookup.clear()
-        // recover system property after test
-        PropertyBundleLookup.enableBundles(HK2DebugBundle, GuiceRestrictedConfigBundle)
+        System.clearProperty(PropertyBundleLookup.BUNDLES_PROPERTY)
     }
 
     Environment mockEnvironment() {
@@ -53,5 +47,13 @@ abstract class AbstractTest extends Specification {
         environment.lifecycle() >> Mock(LifecycleEnvironment)
         environment.healthChecks() >> Mock(HealthCheckRegistry)
         return environment
+    }
+
+    // common guicey extra extensions used for all tests
+    static class GuiceyTestConfigurator implements GuiceyConfigurator {
+        @Override
+        void configure(GuiceBundle.Builder builder) {
+            builder.bundles(new HK2DebugBundle(), new GuiceRestrictedConfigBundle())
+        }
     }
 }

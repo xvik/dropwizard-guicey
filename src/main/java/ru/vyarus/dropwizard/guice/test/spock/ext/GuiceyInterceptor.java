@@ -6,10 +6,13 @@ import org.junit.rules.ExternalResource;
 import org.spockframework.runtime.extension.AbstractMethodInterceptor;
 import org.spockframework.runtime.extension.IMethodInvocation;
 import org.spockframework.runtime.model.SpecInfo;
+import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport;
+import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
 import spock.lang.Shared;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,6 +30,7 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     private static Method after;
 
     private final ExternalRuleAdapter externalRuleAdapter;
+    private final List<GuiceyConfigurator> configurators;
     private final Set<InjectionPoint> injectionPoints;
     private ExternalResource resource;
 
@@ -42,13 +46,16 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
         }
     }
 
-    public GuiceyInterceptor(final SpecInfo spec, final ExternalRuleAdapter externalRuleAdapter) {
+    public GuiceyInterceptor(final SpecInfo spec, final ExternalRuleAdapter externalRuleAdapter,
+                             final List<GuiceyConfigurator> configurators) {
         this.externalRuleAdapter = externalRuleAdapter;
+        this.configurators = configurators;
         injectionPoints = InjectionPoint.forInstanceMethodsAndFields(spec.getReflection());
     }
 
     @Override
     public void interceptSharedInitializerMethod(final IMethodInvocation invocation) throws Throwable {
+        configurators.forEach(ConfiguratorsSupport::listen);
         if (resource == null) {
             resource = externalRuleAdapter.newResource();
         }
@@ -65,6 +72,8 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
 
     @Override
     public void interceptCleanupSpecMethod(final IMethodInvocation invocation) throws Throwable {
+        // just in case to avoid side-effects
+        ConfiguratorsSupport.reset();
         try {
             invocation.proceed();
         } finally {

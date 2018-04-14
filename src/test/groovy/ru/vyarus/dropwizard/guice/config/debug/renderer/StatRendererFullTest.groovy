@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.config.debug.renderer
 
-import ru.vyarus.dropwizard.guice.AbstractTest
+import ru.vyarus.dropwizard.guice.diagnostic.BaseDiagnosticTest
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
@@ -11,7 +11,7 @@ import javax.inject.Inject
  * @since 31.07.2016
  */
 @UseDropwizardApp(StatRendererTest.App)
-class StatRendererFullTest extends AbstractTest {
+class StatRendererFullTest extends BaseDiagnosticTest {
 
     @Inject
     StatsRenderer renderer

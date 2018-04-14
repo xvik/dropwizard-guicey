@@ -18,7 +18,7 @@ class AutoScanApp extends Application<Configuration> {
     @Override
     void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.builder()
-        // no default test bundles from abstract test
+                // no default test bundles from abstract test
                 .disableBundleLookup()
                 .enableAutoConfig(FooResource.package.name)
                 .searchCommands()

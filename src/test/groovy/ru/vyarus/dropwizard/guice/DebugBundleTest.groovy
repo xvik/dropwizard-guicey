@@ -15,6 +15,7 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugService
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.WrongContextException
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
+import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 import javax.inject.Inject
@@ -71,7 +72,7 @@ class DebugBundleTest extends AbstractTest {
         void initialize(Bootstrap<TestConfiguration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .bundles(new HK2DebugBundle())
-                    .disableBundleLookup()
+                    .disableBundles(GuiceRestrictedConfigBundle)
                     .noDefaultInstallers()
                     .installers(ResourceInstaller, JerseyProviderInstaller)
                     .extensions(GuiceResource, HkResource, GuiceMapper, HkMapper)

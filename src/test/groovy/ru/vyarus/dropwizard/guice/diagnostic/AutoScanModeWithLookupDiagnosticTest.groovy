@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.diagnostic
 
 import io.dropwizard.Application
-import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.diagnostic.support.AutoScanAppWithLookup
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.*
@@ -34,7 +33,7 @@ import javax.inject.Inject
  * @since 26.06.2016
  */
 @UseGuiceyApp(AutoScanAppWithLookup)
-class AutoScanModeWithLookupDiagnosticTest extends AbstractTest {
+class AutoScanModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
 
     @Inject
     GuiceyConfigurationInfo info

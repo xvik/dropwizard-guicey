@@ -2,7 +2,14 @@
     - remove guice-multibindings dependency as it's moved to guice core
 * Ability to disable: guicey bundles, guice modules (directly registered) and extensions through bundle builder
 * Add generic disable method to builder: disable(Predicate)
-* Add direct support for guice bindings override (using Modules.override() internally): bundle_builder.overrideModules()     
+* Add direct support for guice bindings override (using Modules.override() internally): bundle_builder.overrideModules()
+* Support for configuration override in integration tests (#23):
+    - New GuiceyConfigurator interface: configurator receive bundle builder instance before application configuration and so could modify configuration (with new disable* methods)
+    - Junit:
+        * New rule GuiceyConfiguratorRule allows configurator definition 
+    - Spock:
+        * New @UseGuiceyConfigurator extension allows base configrator definitino (in base class)
+        * New attribute configurators in @UseGuiceyApp and @UseDropwizardApp extension to declare test-specific configurators          
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0
