@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -89,13 +90,25 @@ public class GuiceyConfigurationInfo {
     }
 
     /**
+     * @return all ative scopes including disable only scopes
+     * @see #getActiveScopes(boolean)
+     */
+    public Set<Class<?>> getActiveScopes() {
+        return getActiveScopes(true);
+    }
+
+    /**
+     * @param countDisables include scopes with disables only
      * @return all active scopes or empty collection
      * @see ItemInfo#getRegisteredBy() for more info about scopes
      */
-    public Set<Class<?>> getActiveScopes() {
+    public Set<Class<?>> getActiveScopes(final boolean countDisables) {
         final Set<Class<?>> res = Sets.newHashSet();
         context.getItems(it -> {
             res.addAll(it.getRegisteredBy());
+            if (countDisables && it instanceof DisableSupport) {
+                res.addAll(((DisableSupport) it).getDisabledBy());
+            }
             return true;
         });
         return res;

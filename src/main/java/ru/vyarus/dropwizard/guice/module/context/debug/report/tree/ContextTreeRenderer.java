@@ -17,6 +17,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
+import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -52,7 +53,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
     @Override
     public String renderReport(final ContextTreeConfig config) {
 
-        final Set<Class<?>> scopes = service.getActiveScopes();
+        final Set<Class<?>> scopes = service.getActiveScopes(!config.isHideDisables());
 
         final TreeNode root = new TreeNode("APPLICATION");
         renderScopeContent(config, root, Application.class);
@@ -60,6 +61,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         renderSpecialScope(config, scopes, root, "BUNDLES LOOKUP", GuiceyBundleLookup.class);
         renderSpecialScope(config, scopes, root, "DROPWIZARD BUNDLES", Bundle.class);
         renderSpecialScope(config, scopes, root, "CLASSPATH SCAN", ClasspathScanner.class);
+        renderSpecialScope(config, scopes, root, "CONFIGURATORS", GuiceyConfigurator.class);
 
         final StringBuilder res = new StringBuilder().append(Reporter.NEWLINE).append(Reporter.NEWLINE);
         root.render(res);

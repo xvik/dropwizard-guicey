@@ -1,6 +1,8 @@
 package ru.vyarus.dropwizard.guice.config.debug.renderer
 
 import com.google.common.collect.Lists
+import com.google.inject.Binder
+import com.google.inject.Module
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
@@ -14,19 +16,22 @@ import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
+import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
+import javax.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov
  * @since 17.07.2016
  */
-@UseGuiceyApp(App)
+@UseGuiceyApp(value = App, configurators = DisableConfigurator)
 class ContextTreeRendererTest extends Specification {
 
     @Inject
@@ -41,6 +46,7 @@ class ContextTreeRendererTest extends Specification {
     ├── module     DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
     ├── module     GuiceSupportModule           (r.v.d.guice.module)
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
+    ├── -disable   DisabledBundle               (r.v.d.g.c.d.r.ContextTreeRendererTest)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
@@ -71,11 +77,15 @@ class ContextTreeRendererTest extends Specification {
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
     │
-    └── CLASSPATH SCAN
-        ├── installer  FooInstaller                 (r.v.d.g.d.s.features)
-        ├── extension  FooResource                  (r.v.d.g.d.s.features)
-        ├── command    Cli                          (r.v.d.g.d.s.features)
-        └── command    EnvCommand                   (r.v.d.g.d.s.features)
+    ├── CLASSPATH SCAN
+    │   ├── installer  FooInstaller                 (r.v.d.g.d.s.features)
+    │   ├── extension  FooResource                  (r.v.d.g.d.s.features)
+    │   ├── command    Cli                          (r.v.d.g.d.s.features)
+    │   └── command    EnvCommand                   (r.v.d.g.d.s.features)
+    │
+    └── CONFIGURATORS
+        ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
+        └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
     }
 
@@ -88,6 +98,7 @@ class ContextTreeRendererTest extends Specification {
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
+    ├── -disable   DisabledBundle               (r.v.d.g.c.d.r.ContextTreeRendererTest)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
@@ -113,8 +124,12 @@ class ContextTreeRendererTest extends Specification {
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
     │
-    └── CLASSPATH SCAN
-        └── installer  FooInstaller                 (r.v.d.g.d.s.features)
+    ├── CLASSPATH SCAN
+    │   └── installer  FooInstaller                 (r.v.d.g.d.s.features)
+    │
+    └── CONFIGURATORS
+        ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
+        └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
     }
 
@@ -128,6 +143,7 @@ class ContextTreeRendererTest extends Specification {
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
+    ├── -disable   DisabledBundle               (r.v.d.g.c.d.r.ContextTreeRendererTest)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
@@ -137,8 +153,12 @@ class ContextTreeRendererTest extends Specification {
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
     │
-    └── BUNDLES LOOKUP
-        └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
+    ├── BUNDLES LOOKUP
+    │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
+    │
+    └── CONFIGURATORS
+        ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
+        └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
     }
 
@@ -154,9 +174,14 @@ class ContextTreeRendererTest extends Specification {
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
+    ├── -disable   DisabledBundle               (r.v.d.g.c.d.r.ContextTreeRendererTest)
     │
-    └── FooBundle                    (r.v.d.g.d.s.bundle)
-        └── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
+    ├── FooBundle                    (r.v.d.g.d.s.bundle)
+    │   └── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
+    │
+    └── CONFIGURATORS
+        ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
+        └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
     }
 
@@ -171,12 +196,17 @@ class ContextTreeRendererTest extends Specification {
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
+    ├── -disable   DisabledBundle               (r.v.d.g.c.d.r.ContextTreeRendererTest)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   └── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
     │
-    └── BUNDLES LOOKUP
-        └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
+    ├── BUNDLES LOOKUP
+    │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
+    │
+    └── CONFIGURATORS
+        ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
+        └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
     }
 
@@ -226,6 +256,7 @@ class ContextTreeRendererTest extends Specification {
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
+    ├── -disable   DisabledBundle               (r.v.d.g.c.d.r.ContextTreeRendererTest)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
@@ -247,8 +278,12 @@ class ContextTreeRendererTest extends Specification {
     │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
     │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
     │
-    └── CLASSPATH SCAN
-        └── installer  FooInstaller                 (r.v.d.g.d.s.features)
+    ├── CLASSPATH SCAN
+    │   └── installer  FooInstaller                 (r.v.d.g.d.s.features)
+    │
+    └── CONFIGURATORS
+        ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
+        └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
     }
 
@@ -262,6 +297,7 @@ class ContextTreeRendererTest extends Specification {
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
+    ├── -disable   DisabledBundle               (r.v.d.g.c.d.r.ContextTreeRendererTest)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
@@ -276,8 +312,12 @@ class ContextTreeRendererTest extends Specification {
     │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
     │   └── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
     │
-    └── BUNDLES LOOKUP
-        └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
+    ├── BUNDLES LOOKUP
+    │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
+    │
+    └── CONFIGURATORS
+        ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
+        └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
     }
 
@@ -313,6 +353,7 @@ class ContextTreeRendererTest extends Specification {
 
     APPLICATION
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
+    ├── -disable   DisabledBundle               (r.v.d.g.c.d.r.ContextTreeRendererTest)
     │
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   ├── installer  FooBundleInstaller           (r.v.d.g.d.s.bundle)
@@ -324,8 +365,12 @@ class ContextTreeRendererTest extends Specification {
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
     │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
     │
-    └── CLASSPATH SCAN
-        └── installer  FooInstaller                 (r.v.d.g.d.s.features)
+    ├── CLASSPATH SCAN
+    │   └── installer  FooInstaller                 (r.v.d.g.d.s.features)
+    │
+    └── CONFIGURATORS
+        ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
+        └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
     }
 
@@ -352,12 +397,37 @@ class ContextTreeRendererTest extends Specification {
                             new GuiceRestrictedConfigBundle())
                             .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule())
                             .disableInstallers(LifeCycleInstaller)
+                            .disableBundles(DisabledBundle)
                             .strictScopeControl()
                             .build())
         }
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
+        }
+    }
+
+    static class DisabledBundle implements GuiceyBundle {
+        @Override
+        void initialize(GuiceyBootstrap bootstrap) {
+        }
+    }
+
+    static class DisabledModule implements Module {
+        @Override
+        void configure(Binder binder) {
+        }
+    }
+
+    @Path("/")
+    static class DisabledExtension {}
+
+    static class DisableConfigurator implements GuiceyConfigurator {
+        @Override
+        void configure(GuiceBundle.Builder builder) {
+            builder
+                    .disableExtensions(DisabledExtension)
+                    .disableModules(DisabledModule)
         }
     }
 }
