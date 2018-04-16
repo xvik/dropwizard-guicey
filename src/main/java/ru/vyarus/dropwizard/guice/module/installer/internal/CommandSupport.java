@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.Lists;
 import com.google.inject.Injector;
 import io.dropwizard.Application;
 import io.dropwizard.cli.Command;
@@ -15,7 +14,7 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
-import java.util.List;
+import java.util.*;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.CommandTime;
 
@@ -78,7 +77,8 @@ public final class CommandSupport {
      */
     private static class CommandClassVisitor implements ClassVisitor {
         private final Bootstrap bootstrap;
-        private final List<Class<Command>> commands = Lists.newArrayList();
+        // sort commands to unify order on different environments
+        private final Set<Class<Command>> commands = new TreeSet<>(Comparator.comparing(Class::getName));
 
         CommandClassVisitor(final Bootstrap bootstrap) {
             this.bootstrap = bootstrap;
@@ -110,7 +110,7 @@ public final class CommandSupport {
          * @return list of installed commands or empty list
          */
         public List<Class<Command>> getCommands() {
-            return commands;
+            return commands.isEmpty() ? Collections.emptyList() : new ArrayList<>(commands);
         }
     }
 }

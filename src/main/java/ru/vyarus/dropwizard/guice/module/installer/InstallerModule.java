@@ -22,6 +22,7 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
@@ -87,6 +88,8 @@ public class InstallerModule extends AbstractModule {
                     }
                 }
             });
+            // sort to unify order on different systems
+            installers.sort(Comparator.comparing(Class::getName));
             context.registerInstallersFromScan(installers);
         }
         final List<Class<? extends FeatureInstaller>> installers = context.getEnabledInstallers();
