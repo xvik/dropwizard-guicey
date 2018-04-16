@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooInstaller
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
@@ -40,6 +41,7 @@ class ConfigInfoItemsTest extends Specification {
         mi.type == FooModule
         mi.registeredBy == [Application] as Set
         mi.registrationScope == Application
+        mi.registrationScopeType == ConfigScope.Application
         mi.toString() == "$ConfigItem.Module $FooModule.simpleName" as String
 
         and: "bundle info"

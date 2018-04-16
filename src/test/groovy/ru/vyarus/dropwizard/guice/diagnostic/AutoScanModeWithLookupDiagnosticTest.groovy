@@ -97,6 +97,7 @@ class AutoScanModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
         InstallerItemInfo ji = info.data.getInfo(JerseyFeatureInstaller)
         ji.registeredBy == [CoreInstallersBundle, HK2DebugBundle] as Set
         ji.registrationScope == CoreInstallersBundle
+        ji.registrationScopeType == ConfigScope.GuiceyBundle
         ji.registrationAttempts == 2
     }
 }

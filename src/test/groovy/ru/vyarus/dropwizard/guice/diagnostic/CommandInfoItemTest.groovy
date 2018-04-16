@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.diagnostic
 
-import io.dropwizard.Application
 import ru.vyarus.dropwizard.guice.diagnostic.support.AutoScanApp
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.EnvCommand
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.CommandItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -34,6 +34,7 @@ class CommandInfoItemTest extends Specification {
         ci.type == EnvCommand
         ci.registeredBy == [ClasspathScanner] as Set
         ci.registrationScope == ClasspathScanner
+        ci.registrationScopeType == ConfigScope.ClasspathScan
         ci.fromScan
         ci.environmentCommand
         ci.toString() == "$ConfigItem.Command $EnvCommand.simpleName" as String

@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice.module.context.debug.report.tree;
 
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.dropwizard.Application;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
@@ -20,6 +19,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.Set;
+
+import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.*;
 
 /**
  * Renders complete configuration tree.
@@ -53,14 +54,14 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         final Set<Class<?>> scopes = service.getActiveScopes(!config.isHideDisables());
 
         final TreeNode root = new TreeNode("APPLICATION");
-        if (!config.getHiddenScopes().contains(Application.class)) {
-            renderScopeContent(config, root, Application.class);
+        if (!config.getHiddenScopes().contains(Application.getType())) {
+            renderScopeContent(config, root, Application.getType());
         }
 
-        renderSpecialScope(config, scopes, root, "BUNDLES LOOKUP", ConfigScope.BundleLookup);
-        renderSpecialScope(config, scopes, root, "DROPWIZARD BUNDLES", ConfigScope.DropwizardBundle);
-        renderSpecialScope(config, scopes, root, "CLASSPATH SCAN", ConfigScope.ClasspathScan);
-        renderSpecialScope(config, scopes, root, "CONFIGURATORS", ConfigScope.Configurator);
+        renderSpecialScope(config, scopes, root, "BUNDLES LOOKUP", BundleLookup);
+        renderSpecialScope(config, scopes, root, "DROPWIZARD BUNDLES", DropwizardBundle);
+        renderSpecialScope(config, scopes, root, "CLASSPATH SCAN", ClasspathScan);
+        renderSpecialScope(config, scopes, root, "CONFIGURATORS", Configurator);
 
         final StringBuilder res = new StringBuilder().append(Reporter.NEWLINE).append(Reporter.NEWLINE);
         root.render(res);

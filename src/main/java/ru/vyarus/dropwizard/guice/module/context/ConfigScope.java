@@ -37,9 +37,13 @@ public enum ConfigScope {
     /**
      * All configurations done by {@link GuiceyConfigurator} (most likely in integration tests).
      */
-    Configurator(GuiceyConfigurator.class);
-
-    /* For guicey bundles scope type will equal to bundle class */
+    Configurator(GuiceyConfigurator.class),
+    /**
+     * WARNING: guicey bundle scope is bundle class itself. Constant is useless for direct usage!
+     * It was added just for completeness of context recognition logic (see {@link #recognize(Class)})
+     * and to indicate all possible scopes.
+     */
+    GuiceyBundle(ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle.class);
 
 
     private final Class<?> type;
@@ -63,8 +67,24 @@ public enum ConfigScope {
      */
     public static Class[] allExcept(final ConfigScope scope) {
         return Arrays.stream(values())
-                .filter(s -> s != scope)
+                .filter(s -> s != scope && s != ConfigScope.GuiceyBundle)
                 .map(ConfigScope::getType)
                 .toArray(Class[]::new);
+    }
+
+    /**
+     * Scope recognition logic may be used in configration analyzers to easily detect item scope.
+     *
+     * @param type type to recognize scope
+     * @return recognized scope
+     * @throws IllegalStateException is scope is not recognizable
+     */
+    public static ConfigScope recognize(final Class<?> type) {
+        for (ConfigScope scope : values()) {
+            if (scope.getType().isAssignableFrom(type)) {
+                return scope;
+            }
+        }
+        throw new IllegalStateException("Type " + type.getName() + " does not represent configuration scope");
     }
 }

@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context.info.impl;
 import com.google.common.collect.Sets;
 import io.dropwizard.Application;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 
 import java.util.Set;
@@ -58,6 +59,11 @@ public class ItemInfoImpl implements ItemInfo {
     @Override
     public Class<?> getRegistrationScope() {
         return registrationScope;
+    }
+
+    @Override
+    public ConfigScope getRegistrationScopeType() {
+        return ConfigScope.recognize(getRegistrationScope());
     }
 
     public void countRegistrationAttempt() {

@@ -60,6 +60,14 @@ public interface ItemInfo {
     Class<?> getRegistrationScope();
 
     /**
+     * It is essentially the same as {@link #getRegistrationScope()}, but with generified guicey bundle scope.
+     * May be useful for generic reporting.
+     *
+     * @return type of registration scope
+     */
+    ConfigScope getRegistrationScopeType();
+
+    /**
      * It may be 0 for disabled items (e.g. installer disabled but never registered).
      * Also, count may be greater than registration sources count, because the same source could register
      * item multiple times.
