@@ -70,6 +70,7 @@ class DiagnosticRendererTest extends Specification {
     GUICE MODULES =
         FooModule                    (r.v.d.g.d.s.features)
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
+        OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
@@ -123,6 +124,7 @@ class DiagnosticRendererTest extends Specification {
     GUICE MODULES =
         FooModule                    (r.v.d.g.d.s.features)
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
+        OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
@@ -266,6 +268,7 @@ class DiagnosticRendererTest extends Specification {
     GUICE MODULES =
         FooModule                    (r.v.d.g.d.s.features)
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
+        OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
@@ -283,6 +286,7 @@ class DiagnosticRendererTest extends Specification {
     GUICE MODULES =
         FooModule                    (r.v.d.g.d.s.features)
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
+        OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
@@ -313,6 +317,7 @@ class DiagnosticRendererTest extends Specification {
                             .searchCommands()
                             .bundles(new FooBundle(), new GuiceRestrictedConfigBundle(), new DisabledBundle())
                             .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule(), new DisabledModule())
+                            .overrideModules(new OverrideModule())
                             .extensions(LazyExtension, HKExtension, DisabledExtension)
                             .disableInstallers(LifeCycleInstaller)
                             .disableBundles(DisabledBundle)
@@ -377,4 +382,10 @@ class DiagnosticRendererTest extends Specification {
 
     @Path("/")
     static class DisabledExtension {}
+
+    static class OverrideModule implements Module {
+        @Override
+        void configure(Binder binder) {
+        }
+    }
 }

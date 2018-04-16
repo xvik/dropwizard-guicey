@@ -48,7 +48,8 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed})</li>
  * </ul>
  * <p>
- * Guice modules are rendered by type in registration order.
+ * Guice modules are rendered by type in registration order. OVERRIDE marker may appear if module was
+ * registered as overriding.
  * <p>
  * Some extensions may come from different sources. For example, bundle could come from lookup and registered directly.
  * In such cases all markers are shown (indicating all sources), whereas actually only one source was used for
@@ -244,8 +245,11 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         final List<String> markers = Lists.newArrayList();
         for (Class<Module> module : modules) {
             markers.clear();
-            final ItemInfo info = service.getData().getInfo(module);
+            final ModuleItemInfo info = service.getData().getInfo(module);
             commonMarkers(markers, info);
+            if (info.isOverriding()) {
+                markers.add("OVERRIDE");
+            }
             res.append(TAB).append(TAB).append(renderClassLine(module, markers)).append(NEWLINE);
         }
         if (config.isPrintDisabledItems()) {
