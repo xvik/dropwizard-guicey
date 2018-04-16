@@ -35,8 +35,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * </ul>
  * <p>
  * Installers are rendered in execution order. Extensions (if enabled) are rendered relative to used installer.
- * If extension managed by multiple installers it wil appear multiple times. Not used and disabled
- * installers could be rendered too.
+ * Not used and disabled installers could be rendered too.
  * If installer resolved by classpath scan then SCAN marker shown.
  * <p>
  * If extensions print enabled without installers enabled then all extensions are rendered in registration order.
@@ -86,6 +85,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         printBundles(config, res);
         if (config.isPrintInstallers()) {
             printInstallers(config, res);
+            printDisabledExtensions(config, res, true);
         } else {
             printExtensionsOnly(config, res);
         }
@@ -116,13 +116,18 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         // top level bundles
         final List<Class<GuiceyBundle>> bundles = service.getData()
                 .getItems(ConfigItem.Bundle, (BundleItemInfo it) ->
-                        it.isRegisteredDirectly() || it.isFromLookup() || it.isFromDwBundle());
+                        it.isEnabled() && (it.isRegisteredDirectly() || it.isFromLookup() || it.isFromDwBundle()));
         if (!config.isPrintBundles() || bundles.isEmpty()) {
             return;
         }
         res.append(NEWLINE).append(NEWLINE).append(TAB).append("BUNDLES = ").append(NEWLINE);
         for (Class<GuiceyBundle> bundle : bundles) {
             renderBundleRecursive(res, bundle, 1);
+        }
+        if (config.isPrintDisabledItems()) {
+            for (Class<GuiceyBundle> bundle : service.getBundlesDisabled()) {
+                res.append(TAB).append(TAB).append(renderDisabledClassLine(bundle)).append(NEWLINE);
+            }
         }
     }
 
@@ -141,7 +146,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         }
         res.append(renderClassLine(bundle, markers)).append(NEWLINE);
         final List<Class<GuiceyBundle>> bundles = service.getData()
-                .getItems(ConfigItem.Bundle, Filters.registrationScope(bundle));
+                .getItems(ConfigItem.Bundle, Filters.enabled().and(Filters.registrationScope(bundle)));
         for (Class<GuiceyBundle> relative : bundles) {
             renderBundleRecursive(res, relative, level + 1);
         }
@@ -161,7 +166,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
 
         renderInstallers(config, res, installers);
 
-        if (config.isPrintDisabledInstallers()) {
+        if (config.isPrintDisabledItems()) {
             for (Class<FeatureInstaller> installer : service.getInstallersDisabled()) {
                 res.append(TAB).append(TAB).append(renderDisabledInstaller(installer)).append(NEWLINE);
             }
@@ -198,6 +203,22 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         for (Class<Object> ext : extensions) {
             res.append(TAB).append(TAB).append(renderExtension(ext)).append(NEWLINE);
         }
+        printDisabledExtensions(config, res, false);
+    }
+
+    private void printDisabledExtensions(final DiagnosticConfig config, final StringBuilder res,
+                                         final boolean section) {
+        final List<Class<Object>> extensions = service.getExtensionsDisabled();
+        if (!config.isPrintExtensions() || !config.isPrintDisabledItems() || extensions.isEmpty()) {
+            return;
+        }
+
+        if (section) {
+            res.append(NEWLINE).append(NEWLINE).append(TAB).append("DISABLED EXTENSIONS = ").append(NEWLINE);
+        }
+        for (Class<Object> ext : extensions) {
+            res.append(TAB).append(TAB).append(renderDisabledClassLine(ext)).append(NEWLINE);
+        }
     }
 
     private String renderExtension(final Class<Object> extension) {
@@ -226,6 +247,11 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
             final ItemInfo info = service.getData().getInfo(module);
             commonMarkers(markers, info);
             res.append(TAB).append(TAB).append(renderClassLine(module, markers)).append(NEWLINE);
+        }
+        if (config.isPrintDisabledItems()) {
+            for (Class<Module> module : service.getModulesDisabled()) {
+                res.append(TAB).append(TAB).append(renderDisabledClassLine(module)).append(NEWLINE);
+            }
         }
     }
 

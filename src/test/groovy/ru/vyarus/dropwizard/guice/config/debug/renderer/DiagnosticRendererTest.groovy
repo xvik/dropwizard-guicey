@@ -1,6 +1,8 @@
 package ru.vyarus.dropwizard.guice.config.debug.renderer
 
 import com.google.common.collect.Lists
+import com.google.inject.Binder
+import com.google.inject.Module
 import io.dropwizard.Application
 import io.dropwizard.Bundle
 import io.dropwizard.Configuration
@@ -92,6 +94,7 @@ class DiagnosticRendererTest extends Specification {
         HK2DebugBundle               (r.v.d.g.m.j.debug)
         CoreInstallersBundle         (r.v.d.g.m.installer)
         DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
+        -DisabledBundle              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 
 
     INSTALLERS and EXTENSIONS in processing order =
@@ -113,6 +116,10 @@ class DiagnosticRendererTest extends Specification {
         -managed             (r.v.d.g.m.i.feature.ManagedInstaller)
 
 
+    DISABLED EXTENSIONS =
+        -DisabledExtension           (r.v.d.g.c.d.r.DiagnosticRendererTest)
+
+
     GUICE MODULES =
         FooModule                    (r.v.d.g.d.s.features)
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
@@ -120,6 +127,7 @@ class DiagnosticRendererTest extends Specification {
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
         GuiceSupportModule           (r.v.d.guice.module)
+        -DisabledModule              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 """ as String;
     }
 
@@ -135,6 +143,22 @@ class DiagnosticRendererTest extends Specification {
         HK2DebugBundle               (r.v.d.g.m.j.debug)
         CoreInstallersBundle         (r.v.d.g.m.installer)
         DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
+""" as String;
+    }
+
+    def "Check disabled bundles render"() {
+
+        expect:
+        render(new DiagnosticConfig().printBundles().printDisabledItems()) == """
+
+    BUNDLES =
+        FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(2)
+            FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
+        GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
+        HK2DebugBundle               (r.v.d.g.m.j.debug)
+        CoreInstallersBundle         (r.v.d.g.m.installer)
+        DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
+        -DisabledBundle              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 """ as String;
     }
 
@@ -174,7 +198,7 @@ class DiagnosticRendererTest extends Specification {
         expect:
         render(new DiagnosticConfig()
                 .printInstallers()
-                .printDisabledInstallers()) == """
+                .printDisabledItems()) == """
 
     INSTALLERS in processing order =
         jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
@@ -217,6 +241,22 @@ class DiagnosticRendererTest extends Specification {
 """ as String;
     }
 
+    def "Check disabled extensions render"() {
+
+        expect:
+        render(new DiagnosticConfig()
+                .printExtensions().printDisabledItems()) == """
+
+    EXTENSIONS =
+        LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
+        HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK
+        FooBundleResource            (r.v.d.g.d.s.bundle)
+        HK2DebugFeature              (r.v.d.g.m.j.d.service)
+        FooResource                  (r.v.d.g.d.s.features)     *SCAN
+        -DisabledExtension           (r.v.d.g.c.d.r.DiagnosticRendererTest)
+""" as String;
+    }
+
     def "Check modules render"() {
 
         expect:
@@ -230,6 +270,24 @@ class DiagnosticRendererTest extends Specification {
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
         GuiceSupportModule           (r.v.d.guice.module)
+""" as String;
+    }
+
+
+    def "Check disabled modules render"() {
+
+        expect:
+        render(new DiagnosticConfig()
+                .printModules().printDisabledItems()) == """
+
+    GUICE MODULES =
+        FooModule                    (r.v.d.g.d.s.features)
+        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
+        FooBundleModule              (r.v.d.g.d.s.bundle)
+        GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
+        HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
+        GuiceSupportModule           (r.v.d.guice.module)
+        -DisabledModule              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 """ as String;
     }
 
@@ -253,12 +311,13 @@ class DiagnosticRendererTest extends Specification {
                     })
                             .enableAutoConfig(FooResource.package.name)
                             .searchCommands()
-                            .bundles(
-                            new FooBundle(),
-                            new GuiceRestrictedConfigBundle())
-                            .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule())
-                            .extensions(LazyExtension, HKExtension)
+                            .bundles(new FooBundle(), new GuiceRestrictedConfigBundle(), new DisabledBundle())
+                            .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule(), new DisabledModule())
+                            .extensions(LazyExtension, HKExtension, DisabledExtension)
                             .disableInstallers(LifeCycleInstaller)
+                            .disableBundles(DisabledBundle)
+                            .disableModules(DisabledModule)
+                            .disableExtensions(DisabledExtension)
                             .configureFromDropwizardBundles()
                             .strictScopeControl()
                             .build())
@@ -293,4 +352,29 @@ class DiagnosticRendererTest extends Specification {
     @HK2Managed
     @Path("/hk")
     static class HKExtension {}
+
+    static class DisabledBundle implements GuiceyBundle {
+        @Override
+        void initialize(GuiceyBootstrap bootstrap) {
+            // must not appear at all
+            bootstrap.bundles(new DisabledSubBundle())
+        }
+    }
+
+    static class DisabledSubBundle implements GuiceyBundle {
+        @Override
+        void initialize(GuiceyBootstrap bootstrap) {
+
+        }
+    }
+
+    static class DisabledModule implements Module {
+        @Override
+        void configure(Binder binder) {
+
+        }
+    }
+
+    @Path("/")
+    static class DisabledExtension {}
 }

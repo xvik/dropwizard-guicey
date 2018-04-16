@@ -24,7 +24,7 @@ public final class DiagnosticConfig {
     private boolean bundles;
     private boolean installers;
     private boolean notUsedInstallers;
-    private boolean disabledInstallers;
+    private boolean disabled;
     private boolean extensions;
     private boolean modules;
 
@@ -34,7 +34,7 @@ public final class DiagnosticConfig {
     @SuppressWarnings("checkstyle:BooleanExpressionComplexity")
     public boolean isEmptyConfig() {
         return !(commands || bundles || installers || notUsedInstallers
-                || disabledInstallers || extensions || modules);
+                || disabled || extensions || modules);
     }
 
     /**
@@ -59,10 +59,10 @@ public final class DiagnosticConfig {
     }
 
     /**
-     * @return true if disabled installers logging enabled
+     * @return true if disabled items logging enabled
      */
-    public boolean isPrintDisabledInstallers() {
-        return disabledInstallers;
+    public boolean isPrintDisabledItems() {
+        return disabled;
     }
 
     /**
@@ -114,7 +114,7 @@ public final class DiagnosticConfig {
      * <p>
      * Both installers and extensions printed in execution order (sorted).
      * <p>
-     * If disabled installers print enabled ({@link #printDisabledInstallers()}) then they will be printed
+     * If disabled installers print enabled ({@link #printDisabledItems()}) then they will be printed
      * at the end of installers list.
      * <p>
      * All installers printing may be enabled with not used installers ({@link #printNotUsedInstallers()}).
@@ -127,12 +127,13 @@ public final class DiagnosticConfig {
     }
 
     /**
-     * Enables disabled installers print. Requires {@link #printInstallers()} enabled.
+     * Enables disabled items print. Only printed items affected (e.g. installers when {@link #printInstallers()}
+     * enabled).
      *
      * @return config instance for chained calls
      */
-    public DiagnosticConfig printDisabledInstallers() {
-        disabledInstallers = true;
+    public DiagnosticConfig printDisabledItems() {
+        disabled = true;
         return this;
     }
 
@@ -174,7 +175,7 @@ public final class DiagnosticConfig {
      */
     public DiagnosticConfig printAll() {
         printDefaults();
-        printDisabledInstallers();
+        printDisabledItems();
         printNotUsedInstallers();
         return this;
     }

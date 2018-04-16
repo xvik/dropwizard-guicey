@@ -60,12 +60,17 @@ public final class RenderUtils {
      * @return rendered class line
      */
     public static String renderClassLine(final Class<?> type, final List<String> markers) {
-        String name = type.getSimpleName();
-        if (name.isEmpty()) {
-            // for anonymous classes name will be empty instead of e.g. SomeType$1
-            name = type.getName().substring(type.getName().lastIndexOf('.') + 1);
-        }
-        return String.format("%-28s %-26s %s", name, brackets(renderPackage(type)), markers(markers));
+        return String.format("%-28s %-26s %s", getClassName(type), brackets(renderPackage(type)), markers(markers));
+    }
+
+    /**
+     * Render disabled class as: -class-simple-name (class-package).
+     *
+     * @param type class
+     * @return rendered disabled class line
+     */
+    public static String renderDisabledClassLine(final Class<?> type) {
+        return String.format("-%-27s %-26s", getClassName(type), brackets(renderPackage(type)));
     }
 
     /**
@@ -109,5 +114,14 @@ public final class RenderUtils {
             signs = "*" + Joiner.on(", ").join(markers);
         }
         return signs;
+    }
+
+    private static String getClassName(final Class<?> type) {
+        String name = type.getSimpleName();
+        if (name.isEmpty()) {
+            // for anonymous classes name will be empty instead of e.g. SomeType$1
+            name = type.getName().substring(type.getName().lastIndexOf('.') + 1);
+        }
+        return name;
     }
 }
