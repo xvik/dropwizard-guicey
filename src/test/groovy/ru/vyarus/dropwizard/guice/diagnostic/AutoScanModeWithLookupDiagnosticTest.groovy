@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
@@ -71,10 +72,10 @@ class AutoScanModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
 
         and: "correct scopes"
         info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle, FooBundle, GuiceRestrictedConfigBundle, HK2DebugBundle, GuiceyBundleLookup] as Set
-        info.getItemsByScope(Application) as Set == [CoreInstallersBundle, FooBundle, FooModule, GuiceSupportModule] as Set
-        info.getItemsByScope(ClasspathScanner) as Set == [FooInstaller, FooResource] as Set
+        info.getItemsByScope(ConfigScope.Application) as Set == [CoreInstallersBundle, FooBundle, FooModule, GuiceSupportModule] as Set
+        info.getItemsByScope(ConfigScope.ClasspathScan) as Set == [FooInstaller, FooResource] as Set
         info.getItemsByScope(FooBundle) as Set == [FooBundleInstaller, FooBundleResource, FooBundleModule, FooBundleRelativeBundle] as Set
-        info.getItemsByScope(GuiceyBundleLookup) as Set == [GuiceRestrictedConfigBundle, HK2DebugBundle] as Set
+        info.getItemsByScope(ConfigScope.BundleLookup) as Set == [GuiceRestrictedConfigBundle, HK2DebugBundle] as Set
         info.getItemsByScope(GuiceRestrictedConfigBundle) as Set == [GuiceRestrictedConfigBundle.GRestrictModule] as Set
         info.getItemsByScope(HK2DebugBundle) as Set == [JerseyFeatureInstaller, HK2DebugFeature, HK2DebugBundle.HK2DebugModule] as Set
 

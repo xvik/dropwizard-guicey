@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.context.info;
 
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 
 import java.util.Set;
 
@@ -43,6 +44,7 @@ public interface ItemInfo {
      * May not contain elements if item was never registered, but for example, disabled.
      *
      * @return context classes which register item or empty collection
+     * @see ConfigScope for the list of all special scopes
      */
     Set<Class<?>> getRegisteredBy();
 

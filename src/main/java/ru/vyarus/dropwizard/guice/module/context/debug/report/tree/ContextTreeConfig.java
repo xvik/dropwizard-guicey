@@ -118,7 +118,9 @@ public final class ContextTreeConfig {
      * <p>
      * Warning: this can remove entire subtrees (for example, by hiding bundle which installs other bundles)
      * <p>
-     * Application (root scope) can't be hidden (because it would hide entire report).
+     * For showing only one special scope use
+     * {@link ru.vyarus.dropwizard.guice.module.context.ConfigScope#allExcept(
+     *ru.vyarus.dropwizard.guice.module.context.ConfigScope)}.
      *
      * @param avoid scopes to avoid printing
      * @return config instance for chained calls

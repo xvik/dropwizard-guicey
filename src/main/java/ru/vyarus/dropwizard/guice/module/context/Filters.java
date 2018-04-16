@@ -67,6 +67,17 @@ public final class Filters {
     }
 
     /**
+     * Shortcut for {@link #registrationScope(Class)} for special scopes (like classpath scan, bundles lookup etc).
+     *
+     * @param specialScope special scope type
+     * @param <T> expected info container type (if used within single configuration type)
+     * @return items registered in specified context filter
+     */
+    public static <T extends ItemInfo> Predicate<T> registrationScope(final ConfigScope specialScope) {
+        return registrationScope(specialScope.getType());
+    }
+
+    /**
      * Filter for items registered by specified context. Context class could be
      * {@link io.dropwizard.Application}, {@link ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner},
      * {@link io.dropwizard.Bundle}, {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and
@@ -79,9 +90,21 @@ public final class Filters {
      * @param scope scope class
      * @param <T>   expected info container type (if used within single configuration type)
      * @return items registered in specified context filter
+     * @see ConfigScope for the list of all special scopes
      */
     public static <T extends ItemInfo> Predicate<T> registrationScope(final Class<?> scope) {
         return input -> scope.equals(input.getRegistrationScope());
+    }
+
+    /**
+     * Shortcut for {@link #registeredBy(Class)} for special scopes (like classpath scan, bundles lookup etc).
+     *
+     * @param specialScope special scope type
+     * @param <T> expected info container type (if used within single configuration type)
+     * @return  items registered in specified context filter
+     */
+    public static <T extends ItemInfo> Predicate<T> registeredBy(final ConfigScope specialScope) {
+        return registeredBy(specialScope.getType());
     }
 
     /**
@@ -91,6 +114,7 @@ public final class Filters {
      * @param type context class
      * @param <T>  expected info container type (if used within single configuration type)
      * @return items registered in specified context filter
+     * @see ConfigScope for the list of all special scopes
      */
     public static <T extends ItemInfo> Predicate<T> registeredBy(final Class<?> type) {
         return input -> input.getRegisteredBy().contains(type);

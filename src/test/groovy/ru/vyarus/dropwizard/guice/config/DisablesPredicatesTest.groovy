@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.config
 import io.dropwizard.Application
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.Disables
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl
@@ -18,7 +19,7 @@ class DisablesPredicatesTest extends AbstractTest {
     def "Check predicates"() {
 
         expect:
-        Disables.registeredBy(Application).test(item(Extension, Sample))
+        Disables.registeredBy(ConfigScope.Application).test(item(Extension, Sample))
         !Disables.registeredBy(Serializable).test(item(Extension, Sample))
 
         Disables.itemType(Extension, Installer).test(item(Installer, Sample))

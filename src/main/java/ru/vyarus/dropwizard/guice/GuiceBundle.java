@@ -19,6 +19,7 @@ import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
@@ -36,7 +37,6 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
 import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport;
 
 import javax.servlet.DispatcherType;
@@ -229,7 +229,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         public Builder() {
             // Support for external configuration (for tests)
             // Use special scope to distinguish external configuration
-            bundle.context.setScope(GuiceyConfigurator.class);
+            bundle.context.setScope(ConfigScope.Configurator.getType());
             ConfiguratorsSupport.configure(this);
             bundle.context.closeScope();
         }

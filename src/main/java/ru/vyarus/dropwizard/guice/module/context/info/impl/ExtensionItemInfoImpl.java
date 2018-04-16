@@ -2,9 +2,9 @@ package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
 import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
 import java.util.Set;
 
@@ -42,7 +42,7 @@ public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItem
 
     @Override
     public boolean isFromScan() {
-        return getRegisteredBy().contains(ClasspathScanner.class);
+        return getRegisteredBy().contains(ConfigScope.ClasspathScan.getType());
     }
 
     @Override

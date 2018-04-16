@@ -1,9 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
 import com.google.common.collect.Sets;
-import io.dropwizard.Bundle;
-import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
 
 import java.util.Set;
@@ -33,11 +32,11 @@ public class BundleItemInfoImpl extends ItemInfoImpl implements BundleItemInfo {
 
     @Override
     public boolean isFromLookup() {
-        return getRegisteredBy().contains(GuiceyBundleLookup.class);
+        return getRegisteredBy().contains(ConfigScope.BundleLookup.getType());
     }
 
     @Override
     public boolean isFromDwBundle() {
-        return getRegisteredBy().contains(Bundle.class);
+        return getRegisteredBy().contains(ConfigScope.DropwizardBundle.getType());
     }
 }

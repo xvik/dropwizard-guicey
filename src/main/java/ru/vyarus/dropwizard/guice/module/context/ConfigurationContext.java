@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.inject.Module;
-import io.dropwizard.Application;
 import io.dropwizard.Bundle;
 import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
@@ -111,7 +110,7 @@ public final class ConfigurationContext {
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands()
      */
     public void registerCommands(final List<Class<Command>> commands) {
-        setScope(ClasspathScanner.class);
+        setScope(ConfigScope.ClasspathScan.getType());
         for (Class<Command> cmd : commands) {
             register(ConfigItem.Command, cmd);
         }
@@ -127,7 +126,7 @@ public final class ConfigurationContext {
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles()
      */
     public void registerDwBundles(final List<GuiceyBundle> bundles) {
-        setScope(Bundle.class);
+        setScope(ConfigScope.DropwizardBundle.getType());
         for (GuiceyBundle bundle : bundles) {
             register(ConfigItem.Bundle, bundle);
         }
@@ -141,7 +140,7 @@ public final class ConfigurationContext {
      * @see GuiceyBundleLookup
      */
     public void registerLookupBundles(final List<GuiceyBundle> bundles) {
-        setScope(GuiceyBundleLookup.class);
+        setScope(ConfigScope.BundleLookup.getType());
         for (GuiceyBundle bundle : bundles) {
             register(ConfigItem.Bundle, bundle);
         }
@@ -274,7 +273,7 @@ public final class ConfigurationContext {
      * @param installers installers found by classpath scan
      */
     public void registerInstallersFromScan(final List<Class<? extends FeatureInstaller>> installers) {
-        setScope(ClasspathScanner.class);
+        setScope(ConfigScope.ClasspathScan.getType());
         for (Class<? extends FeatureInstaller> installer : installers) {
             register(ConfigItem.Installer, installer);
         }
@@ -330,7 +329,7 @@ public final class ConfigurationContext {
     public ExtensionItemInfoImpl getOrRegisterExtension(final Class<?> extension, final boolean fromScan) {
         final ExtensionItemInfoImpl info;
         if (fromScan) {
-            setScope(ClasspathScanner.class);
+            setScope(ConfigScope.ClasspathScan.getType());
             info = register(ConfigItem.Extension, extension);
             closeScope();
         } else {
@@ -457,7 +456,7 @@ public final class ConfigurationContext {
     }
 
     private Class<?> getScope() {
-        return currentScope == null ? Application.class : currentScope;
+        return currentScope == null ? ConfigScope.Application.getType() : currentScope;
     }
 
     private void registerDisable(final ConfigItem type, final Class<?> item) {

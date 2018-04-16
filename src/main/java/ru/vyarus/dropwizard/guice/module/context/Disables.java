@@ -19,6 +19,16 @@ public final class Disables {
     }
 
     /**
+     * Shortcut for {@link #registeredBy(Class[])} for for special scopes (like classpath scan, bundles lookup etc).
+     *
+     * @param types special scopes
+     * @return items registered in specific contexts predicate
+     */
+    public static Predicate<ItemInfo> registeredBy(final ConfigScope... types) {
+        return registeredBy(Arrays.stream(types).map(ConfigScope::getType).toArray(Class<?>[]::new));
+    }
+
+    /**
      * Check registration source.  Context class could be
      * {@link io.dropwizard.Application}, {@link ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner},
      * {@link io.dropwizard.Bundle}, {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and
@@ -26,6 +36,7 @@ public final class Disables {
      *
      * @param types context class types
      * @return items registered in specific contexts predicate
+     * @see ConfigScope for the list of all special scopes
      */
     public static Predicate<ItemInfo> registeredBy(final Class<?>... types) {
         // in time of disable predicate run registration scope == registered by

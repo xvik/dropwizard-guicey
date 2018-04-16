@@ -3,10 +3,9 @@ package ru.vyarus.dropwizard.guice.module.context.debug.report.tree;
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.Application;
-import io.dropwizard.Bundle;
-import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
@@ -15,9 +14,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -56,12 +53,14 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         final Set<Class<?>> scopes = service.getActiveScopes(!config.isHideDisables());
 
         final TreeNode root = new TreeNode("APPLICATION");
-        renderScopeContent(config, root, Application.class);
+        if (!config.getHiddenScopes().contains(Application.class)) {
+            renderScopeContent(config, root, Application.class);
+        }
 
-        renderSpecialScope(config, scopes, root, "BUNDLES LOOKUP", GuiceyBundleLookup.class);
-        renderSpecialScope(config, scopes, root, "DROPWIZARD BUNDLES", Bundle.class);
-        renderSpecialScope(config, scopes, root, "CLASSPATH SCAN", ClasspathScanner.class);
-        renderSpecialScope(config, scopes, root, "CONFIGURATORS", GuiceyConfigurator.class);
+        renderSpecialScope(config, scopes, root, "BUNDLES LOOKUP", ConfigScope.BundleLookup);
+        renderSpecialScope(config, scopes, root, "DROPWIZARD BUNDLES", ConfigScope.DropwizardBundle);
+        renderSpecialScope(config, scopes, root, "CLASSPATH SCAN", ConfigScope.ClasspathScan);
+        renderSpecialScope(config, scopes, root, "CONFIGURATORS", ConfigScope.Configurator);
 
         final StringBuilder res = new StringBuilder().append(Reporter.NEWLINE).append(Reporter.NEWLINE);
         root.render(res);
@@ -69,10 +68,10 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
     }
 
     private void renderSpecialScope(final ContextTreeConfig config, final Set<Class<?>> scopes,
-                                    final TreeNode root, final String name, final Class<?> scope) {
-        if (isScopeVisible(config, scopes, scope)) {
+                                    final TreeNode root, final String name, final ConfigScope scope) {
+        if (isScopeVisible(config, scopes, scope.getType())) {
             final TreeNode node = new TreeNode(name);
-            renderScopeContent(config, node, scope);
+            renderScopeContent(config, node, scope.getType());
             // scope may be empty due to hide configurations
             if (node.hasChildren()) {
                 root.child(node);

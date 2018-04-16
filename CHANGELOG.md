@@ -9,7 +9,12 @@
         * New rule GuiceyConfiguratorRule allows configurator definition 
     - Spock:
         * New @UseGuiceyConfigurator extension allows base configrator definitino (in base class)
-        * New attribute configurators in @UseGuiceyApp and @UseDropwizardApp extension to declare test-specific configurators          
+        * New attribute configurators in @UseGuiceyApp and @UseDropwizardApp extension to declare test-specific configurators
+* Add ConfigScope enum for special scopes description (to not remember special classes).
+    - Add shortcut methods in config related apis (Filters, Disables, GuiceyConfigurationInfo)        
+* (breaking) Config reporting api changes:
+    - Diagnostic report configuration method rename: DiagnosticConfig.printDisabledInstallers renamed to printDisabledItems and affects now all disabled items
+    - Diagnostic tree report could hide application scope in ContextTreeConfig.hideScopes(ConfigItems.Application)                      
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0

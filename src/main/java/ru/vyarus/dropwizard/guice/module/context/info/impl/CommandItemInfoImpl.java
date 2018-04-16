@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
 import io.dropwizard.cli.EnvironmentCommand;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.CommandItemInfo;
-import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
 /**
  * Command item info implementation.
@@ -19,7 +19,7 @@ public class CommandItemInfoImpl extends ItemInfoImpl implements CommandItemInfo
 
     @Override
     public boolean isFromScan() {
-        return getRegisteredBy().contains(ClasspathScanner.class);
+        return getRegisteredBy().contains(ConfigScope.ClasspathScan.getType());
     }
 
     @Override

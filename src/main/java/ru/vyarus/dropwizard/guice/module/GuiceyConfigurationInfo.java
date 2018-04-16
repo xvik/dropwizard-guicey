@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.google.inject.Module;
 import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
@@ -77,6 +78,16 @@ public class GuiceyConfigurationInfo {
     }
 
     /**
+     * Shortcut for {@link #getItemsByScope(Class)} for special scopes (like classpath scan, bundles lookup etc).
+     *
+     * @param specialScope special scope
+     * @return all enabled items registered in specified scope or empty list
+     */
+    public List<Class<Object>> getItemsByScope(final ConfigScope specialScope) {
+        return getItemsByScope(specialScope.getType());
+    }
+
+    /**
      * NOTE: single item may be registered from multiple scopes! This method will return entity by all it's registered
      * scopes and not just but by first registration. It makes it usable, for example, for configuration tree building.
      * If you need exact registration scope use {@link Filters#registrationScope(Class)} filter.
@@ -84,6 +95,7 @@ public class GuiceyConfigurationInfo {
      * @param scope required scope
      * @return all enabled items registered in specified scope or empty list
      * @see ItemInfo#getRegisteredBy() for more info about scopes
+     * @see ConfigScope for the list of all special scopes
      */
     public List<Class<Object>> getItemsByScope(final Class<?> scope) {
         return context.getItems(Filters.enabled().and(Filters.registeredBy(scope)));
@@ -92,6 +104,7 @@ public class GuiceyConfigurationInfo {
     /**
      * @return all ative scopes including disable only scopes
      * @see #getActiveScopes(boolean)
+     * @see ConfigScope for the list of all special scopes
      */
     public Set<Class<?>> getActiveScopes() {
         return getActiveScopes(true);

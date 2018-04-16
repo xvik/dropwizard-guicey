@@ -4,6 +4,7 @@ import io.dropwizard.Application
 import io.dropwizard.Bundle
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.Filters
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo
@@ -63,7 +64,7 @@ class FiltersTest extends Specification {
     def "Check registrationScope filter"() {
 
         expect: "matched check"
-        Filters.registrationScope(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
+        Filters.registrationScope(ConfigScope.Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
             registrationScope = Application
         })
 
@@ -77,7 +78,7 @@ class FiltersTest extends Specification {
     def "Check registeredBy filter"() {
 
         expect: "matched check"
-        Filters.registeredBy(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
+        Filters.registeredBy(ConfigScope.Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
             registeredBy.add(Application)
         })
 
