@@ -5,9 +5,7 @@ import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.test.spock.ConfigOverride
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
-
 
 /**
  * @author Vyacheslav Rusakov 

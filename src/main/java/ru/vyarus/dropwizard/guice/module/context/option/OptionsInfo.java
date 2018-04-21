@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context.option;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionHolder;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public final class OptionsInfo {
      */
     public List<Class<Enum>> getOptionGroups() {
         return getOptions().stream().<Class<Enum>>map(Enum::getDeclaringClass).distinct()
-                .sorted((one, two) -> one.getSimpleName().compareTo(two.getSimpleName()))
+                .sorted(Comparator.comparing(Class::getSimpleName))
                 .collect(Collectors.toList());
     }
 

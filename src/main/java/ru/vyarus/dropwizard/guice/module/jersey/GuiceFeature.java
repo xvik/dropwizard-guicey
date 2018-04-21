@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.InvisibleForScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBridgeActivator;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.InstallerBinder;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
 
 import javax.inject.Provider;
 import javax.ws.rs.core.Feature;
@@ -46,12 +47,15 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
 
     private final Provider<Injector> provider;
     private final StatsTracker tracker;
+    private final LifecycleSupport lifecycle;
     private final boolean enableBridge;
     private ServiceLocator locator;
 
-    public GuiceFeature(final Provider<Injector> provider, final StatsTracker tracker, final boolean enableBridge) {
+    public GuiceFeature(final Provider<Injector> provider, final StatsTracker tracker,
+                        final LifecycleSupport lifecycle, final boolean enableBridge) {
         this.provider = provider;
         this.tracker = tracker;
+        this.lifecycle = lifecycle;
         this.enableBridge = enableBridge;
     }
 
@@ -59,13 +63,14 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
     public boolean configure(final FeatureContext context) {
         tracker.startHkTimer(HKTime);
         locator = ServiceLocatorProvider.getServiceLocator(context);
+        lifecycle.hkConfiguration(locator);
         final Injector injector = this.provider.get();
 
         if (enableBridge) {
             new GuiceBridgeActivator(locator, injector).activate();
         }
 
-        context.register(new InstallerBinder(injector, tracker));
+        context.register(new InstallerBinder(injector, tracker, lifecycle));
         tracker.stopHkTimer(HKTime);
         return true;
     }

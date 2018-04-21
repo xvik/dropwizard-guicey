@@ -6,7 +6,9 @@ import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyInstallerTime;
@@ -27,10 +29,13 @@ public class InstallerBinder extends AbstractBinder {
 
     private final Injector injector;
     private final StatsTracker tracker;
+    private final LifecycleSupport lifecycle;
 
-    public InstallerBinder(final Injector injector, final StatsTracker tracker) {
+    public InstallerBinder(final Injector injector, final StatsTracker tracker,
+                           final LifecycleSupport lifecycle) {
         this.injector = injector;
         this.tracker = tracker;
+        this.lifecycle = lifecycle;
     }
 
     @Override
@@ -38,6 +43,7 @@ public class InstallerBinder extends AbstractBinder {
     protected void configure() {
         tracker.startHkTimer(JerseyInstallerTime);
         final ExtensionsHolder holder = injector.getInstance(ExtensionsHolder.class);
+        final List<Class<?>> allInstalled = new ArrayList<>();
         for (FeatureInstaller installer : holder.getInstallers()) {
             if (installer instanceof JerseyInstaller) {
                 final List<Class<?>> features = holder.getExtensions(installer.getClass());
@@ -45,10 +51,13 @@ public class InstallerBinder extends AbstractBinder {
                     for (Class<?> type : features) {
                         ((JerseyInstaller) installer).install(this, injector, type);
                     }
+                    allInstalled.addAll(features);
                 }
                 installer.report();
+                lifecycle.hkExtensionsInstalled(installer.getClass(), features);
             }
         }
+        lifecycle.hkExtensionsInstalled(allInstalled);
         tracker.stopHkTimer(JerseyInstallerTime);
     }
 }

@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ExtensionsInstallationTime;
@@ -46,6 +47,7 @@ public class FeatureInstallerExecutor {
     private void installFeatures() {
         final Stopwatch timer = holder.stat().timer(ExtensionsInstallationTime);
         holder.order();
+        final List<Class<?>> allInstalled = new ArrayList<>();
         for (FeatureInstaller installer : holder.getInstallers()) {
             final List<Class<?>> res = holder.getExtensions(installer.getClass());
             if (res != null) {
@@ -63,8 +65,14 @@ public class FeatureInstallerExecutor {
             if (!(installer instanceof JerseyInstaller)) {
                 // jersey installers reporting occurs after jersey context start
                 installer.report();
+                // extensions for jersey installers will be notified after hk context startup
+                holder.lifecycle().extensionsInstalled(installer.getClass(), res);
+                if (res != null) {
+                    allInstalled.addAll(res);
+                }
             }
         }
+        holder.lifecycle().extensionsInstalled(allInstalled);
         timer.stop();
     }
 }

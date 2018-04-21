@@ -22,6 +22,7 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -61,9 +62,10 @@ public class InstallerModule extends AbstractModule {
         final Stopwatch timer = context.stat().timer(InstallersTime);
         final List<Class<? extends FeatureInstaller>> installerClasses = findInstallers();
         final List<FeatureInstaller> installers = prepareInstallers(installerClasses);
+        context.lifecycle().installersResolved(new ArrayList<>(installers));
         timer.stop();
 
-        final ExtensionsHolder holder = new ExtensionsHolder(installers, context.stat());
+        final ExtensionsHolder holder = new ExtensionsHolder(installers, context.stat(), context.lifecycle());
         bind(ExtensionsHolder.class).toInstance(holder);
 
         resolveExtensions(holder);
@@ -88,7 +90,7 @@ public class InstallerModule extends AbstractModule {
                     }
                 }
             });
-            // sort to unify order on different systems
+            // sort to unify registration order on different systems
             installers.sort(Comparator.comparing(Class::getName));
             context.registerInstallersFromScan(installers);
         }
@@ -148,6 +150,7 @@ public class InstallerModule extends AbstractModule {
                 }
             });
         }
+        context.lifecycle().extensionsResolved(context.getEnabledExtensions());
         timer.stop();
     }
 

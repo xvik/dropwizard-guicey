@@ -10,6 +10,7 @@ import com.google.inject.Stage;
 import com.google.inject.util.Modules;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
@@ -19,7 +20,6 @@ import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
-import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
@@ -34,10 +34,11 @@ import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
+import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
+import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
-import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport;
 
 import javax.servlet.DispatcherType;
 import java.util.*;
@@ -120,12 +121,14 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
         // have to remember bootstrap in order to inject it into modules
         this.bootstrap = bootstrap;
+        List<Command> installed = null;
         if (scanEnabled) {
             scanner = new ClasspathScanner(Sets.newHashSet(Arrays.asList(packages)), context.stat());
             if (searchCommands) {
-                CommandSupport.registerCommands(bootstrap, scanner, context);
+                installed = CommandSupport.registerCommands(bootstrap, scanner, context);
             }
         }
+        context.lifecycle().initialization(bootstrap, installed);
         timer.stop();
     }
 
@@ -140,6 +143,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         configureModules(configuration, environment);
         createInjector(environment);
         afterInjectorCreation();
+        context.lifecycle().applicationRun();
         timer.stop();
     }
 
@@ -157,6 +161,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      * @param environment   environment object
      */
     private void configureFromBundles(final T configuration, final Environment environment) {
+        context.lifecycle().runPhase(configuration, environment);
         final Stopwatch timer = context.stat().timer(BundleTime);
         final Stopwatch resolutionTimer = context.stat().timer(BundleResolutionTime);
         if (context.option(ConfigureFromDropwizardBundles)) {
@@ -193,12 +198,16 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         final Stopwatch timer = context.stat().timer(InjectorCreationTime);
         final List<Module> normalModules = context.getNormalModules();
         final List<Module> overridingModules = context.getOverridingModules();
+        // use different lists to avoid possible side effects from listeners (not allowed to exclude or modify order)
+        context.lifecycle()
+                .injectorCreation(new ArrayList<>(normalModules), new ArrayList<>(overridingModules));
         injector = injectorFactory.createInjector(context.option(InjectorStage),
                 overridingModules.isEmpty() ? normalModules
                         : Collections.singletonList(Modules.override(normalModules).with(overridingModules)));
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
+        context.lifecycle().injectorCreated(injector);
         timer.stop();
     }
 
@@ -223,15 +232,39 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      *
      * @param <T> configuration type
      */
+    @SuppressWarnings("checkstyle:ClassDataAbstractionCoupling")
     public static class Builder<T extends Configuration> {
         private final GuiceBundle<T> bundle = new GuiceBundle<T>();
 
-        public Builder() {
-            // Support for external configuration (for tests)
-            // Use special scope to distinguish external configuration
-            bundle.context.setScope(ConfigScope.Configurator.getType());
-            ConfiguratorsSupport.configure(this);
-            bundle.context.closeScope();
+        /**
+         * Guicey broadcast a lot of events in order to indicate lifecycle phases
+         * ({@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle}). This could be useful
+         * for diagnostic logging (like {@link #printLifecyclePhases()}) or to implement special
+         * behaviours on installers, bundles, modules extensions (listeners have access to everything).
+         * For example, {@link ConfigurationAwareModule} like support for guice modules could be implemented
+         * with listeners.
+         * <p>
+         * Configuration items (modules, extensions, bundles) are not aware of each other and listeners
+         * could be used to tie them. For example, to tell bundle if some other bundles registered (limited
+         * applicability, but just for example).
+         * <p>
+         * Listener can't directly affect configuration (can't register or disable extensions, modules etc).
+         * But listener could implement {@link ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator}
+         * interface and it would be registered as configurator automatically. This could be used to register special
+         * extensions required by listener logic (some diagnostic, monitoring or special features support).
+         * <p>
+         * You can also use {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter} when you need to
+         * handle multiple events (it replaces direct events handling with simple methods).
+         *
+         * @param listeners guicey lifecycle listeners (listener could be also configurator)
+         * @return builder instance for chained calls
+         * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
+         * @see ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator
+         * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
+         */
+        public Builder<T> listen(final GuiceyLifecycleListener... listeners) {
+            bundle.context.lifecycle().register(listeners);
+            return this;
         }
 
         /**
@@ -373,7 +406,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * generic {@link #disable(Predicate[])}.
          * <p>
          * Overriding modules must be of unique types, otherwise only the first instance will be registered.
-         * If registered overriding module type is alredy registered as normal module, then overriding will be ignored.
+         * If registered overriding module type is already registered as normal module, then overriding will be ignored
+         * (and vise-versa).
          *
          * @param modules overriding modules
          * @return builder instance for chained calls
@@ -570,12 +604,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * <p>
          * Mostly useful for testing, but in some cases could be used directly.
          * <p>
-         * WARNING: disable predicate declaration MUST be before item registration. For example, in case
-         * {@code builder.extension(Some.class).disable(...)} disable predicate will not "see" {@code Some.class}
-         * extension registration (of cause, no one should disable items registered few lines above). In contrast,
-         * "disableSomthing" methods may be called at any time, because they directly disable item and not listen
-         * for registrations.
-         * <p>
          * Use {@link Predicate#and(Predicate)}, {@link Predicate#or(Predicate)} and {@link Predicate#negate()}
          * to combine complex predicates from simple ones from
          * {@link ru.vyarus.dropwizard.guice.module.context.Disables} helper.
@@ -722,6 +750,20 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
+         * Split logs with major lifecycle stage names. Useful for debugging (to better understand
+         * at what stage your code is executed). Also, could be used for light profiling as
+         * time since startup is printed for each phase (and for shutdown phases). And, of course,
+         * could be used for better guicey understanding.
+         *
+         * @return builder instance for chained calls
+         * @see DebugGuiceyLifecycle
+         */
+        public Builder<T> printLifecyclePhases() {
+            return listen(new DebugGuiceyLifecycle());
+
+        }
+
+        /**
          * @param stage stage to run injector with
          * @return bundle instance
          * @see GuiceyOptions#InjectorStage
@@ -736,6 +778,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see GuiceyOptions#InjectorStage
          */
         public GuiceBundle<T> build() {
+            bundle.context.applyConfigurators(this);
             return bundle;
         }
     }

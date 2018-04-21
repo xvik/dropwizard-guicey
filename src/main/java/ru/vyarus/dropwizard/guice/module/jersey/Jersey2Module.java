@@ -50,7 +50,8 @@ public class Jersey2Module extends AbstractModule {
         // injector not available at this point, so using provider
         final InjectorProvider provider = new InjectorProvider(application);
         install(new GuiceBindingsModule(provider, guiceServletSupport));
-        final GuiceFeature component = new GuiceFeature(provider, context.stat(), context.option(UseHkBridge));
+        final GuiceFeature component =
+                new GuiceFeature(provider, context.stat(), context.lifecycle(), context.option(UseHkBridge));
         bind(ServiceLocator.class).toProvider(component);
         environment.jersey().register(component);
 

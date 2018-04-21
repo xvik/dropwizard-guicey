@@ -3,11 +3,12 @@ package ru.vyarus.dropwizard.guice.module.support.conf;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 
 /**
- * Configurator used to amend guicey configuration BEFORE application configuration. Primarily intended to be
- * used in tests with {@link ru.vyarus.dropwizard.guice.test.GuiceyConfiguratorRule} (junit) and
+ * Configurator used to amend application configuration. Primarily intended to be used in tests with
+ * {@link ru.vyarus.dropwizard.guice.test.GuiceyConfiguratorRule} (junit) and
  * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfigurator} (spock).
  * <p>
- * Multiple listeners could be used (when multiple rules declared).
+ * Also could be used for {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener} (listener,
+ * implementing configurator interface is recognized and registered automatically).
  * <p>
  * Configurators are thread-scoped: it is assumed that registration thread is the same thread where application
  * will start.
@@ -21,8 +22,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle;
 public interface GuiceyConfigurator {
 
     /**
-     * Configuration is applied just after bundle's builder creation (BEFORE application configuration) to be able
-     * to use generic disable predicate.
+     * Configuration is applied just after manual configuration (through bundle's builder in application class).
      * <p>
      * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder} contains special methods for test support:
      * <ul>

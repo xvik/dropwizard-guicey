@@ -1,17 +1,13 @@
 package ru.vyarus.dropwizard.guice.module.support.conf;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Pre configuration mechanism applies external configuration to bundle builder BEFORE application
- * configuration. It is important to do it before because of possible use of generic configurator
- * {@link GuiceBundle.Builder#disable(java.util.function.Predicate[])}. But it also means that it would NOT be possible
- * to override option set by application (because application will always override pre-configured value).
+ * Extra configuration mechanism applies external configuration to bundle builder after manual configuration in
+ * application class.
  * <p>
  * Supposed to be used for integration tests.
  *
@@ -23,14 +19,12 @@ import java.util.Set;
 public final class ConfiguratorsSupport {
     private static final ThreadLocal<Set<GuiceyConfigurator>> CONFIGURATORS = new ThreadLocal<>();
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfiguratorsSupport.class);
-
     private ConfiguratorsSupport() {
     }
 
     /**
-     * Register configurator for current thread. Must be called before application initialization, otherwise will throw
-     * exception to indicate wrong registration time.
+     * Register configurator for current thread. Must be called before application initialization, otherwise will not
+     * be used at all.
      *
      * @param configurator configurator to register
      */
@@ -50,19 +44,20 @@ public final class ConfiguratorsSupport {
     }
 
     /**
-     * Called just after bundle builder creation (before actual application configuration).
-     * Should be used in tests to disable configuration items and (probably) replace them.
+     * Called just after manual application configuration (in application class).
+     * Could be used in tests to disable configuration items and (probably) replace them.
      *
      * @param builder just created builder
+     * @return used configurators
      */
-    public static void configure(final GuiceBundle.Builder builder) {
+    public static Set<GuiceyConfigurator> configure(final GuiceBundle.Builder builder) {
         final Set<GuiceyConfigurator> confs = CONFIGURATORS.get();
         if (confs != null) {
-            LOGGER.info("Processing {} configurators", confs.size());
             confs.forEach(l -> l.configure(builder));
         }
         // clear configurators just after init
         reset();
+        return confs;
     }
 
     /**

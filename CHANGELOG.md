@@ -4,7 +4,7 @@
 * Add generic disable method to builder: disable(Predicate)
 * Add direct support for guice bindings override (using Modules.override() internally): bundle_builder.overrideModules()
 * Support for configuration override in integration tests (#23):
-    - New GuiceyConfigurator interface: configurator receive bundle builder instance before application configuration and so could modify configuration (with new disable* methods)
+    - New GuiceyConfigurator interface: configurator receive bundle builder instance after application configuration and so could modify configuration (with new disable* methods)
     - Junit:
         * New rule GuiceyConfiguratorRule allows configurator definition 
     - Spock:
@@ -15,6 +15,12 @@
 * (breaking) Config reporting api changes:
     - Diagnostic report configuration method rename: DiagnosticConfig.printDisabledInstallers renamed to printDisabledItems and affects now all disabled items
     - Diagnostic tree report could hide application scope in ContextTreeConfig.hideScopes(ConfigItems.Application)                      
+* Add guicey lifecycle events:
+    - New bundle's method `bundle.listen(GuiceyLifecycleListener)` allows listening for guicey lifecyle (16 events).
+      Events provide access to all possible internal state, available at this moment. It may be used to write instance specific
+      features (post processing) or just advaned logging
+    - New bundle's method `bundle.pritLifecyclePhases()` activates new DebugLifecycleListener and shows lifecycle stages directly in 
+      logs. Useful for debugging startup logic (to see when it was executed in lifecyle) and to better understand how guicey works.    
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0

@@ -29,11 +29,7 @@ public final class StatsTracker {
      * @return timer to measure time
      */
     public Stopwatch timer(final Stat name) {
-        Stopwatch watch = timers.get(name);
-        if (watch == null) {
-            watch = Stopwatch.createUnstarted();
-            timers.put(name, watch);
-        }
+        final Stopwatch watch = timers.computeIfAbsent(name, k -> Stopwatch.createUnstarted());
         // if watch was performed before then new time will sum with current
         watch.start();
         return watch;

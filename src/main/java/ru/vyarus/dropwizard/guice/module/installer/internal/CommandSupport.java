@@ -38,14 +38,16 @@ public final class CommandSupport {
      * @param bootstrap bootstrap object
      * @param scanner   configured scanner instance
      * @param context   configuration context
+     * @return list of installed commands
      */
-    public static void registerCommands(final Bootstrap bootstrap, final ClasspathScanner scanner,
+    public static List<Command> registerCommands(final Bootstrap bootstrap, final ClasspathScanner scanner,
                                         final ConfigurationContext context) {
         final Stopwatch timer = context.stat().timer(CommandTime);
         final CommandClassVisitor visitor = new CommandClassVisitor(bootstrap);
         scanner.scan(visitor);
         context.registerCommands(visitor.getCommands());
         timer.stop();
+        return visitor.getCommandList();
     }
 
     /**
@@ -79,6 +81,7 @@ public final class CommandSupport {
         private final Bootstrap bootstrap;
         // sort commands to unify order on different environments
         private final Set<Class<Command>> commands = new TreeSet<>(Comparator.comparing(Class::getName));
+        private final List<Command> commandList = new ArrayList<>();
 
         CommandClassVisitor(final Bootstrap bootstrap) {
             this.bootstrap = bootstrap;
@@ -97,6 +100,7 @@ public final class CommandSupport {
                         cmd = (Command) type.newInstance();
                     }
                     commands.add((Class<Command>) type);
+                    commandList.add(cmd);
                     bootstrap.addCommand(cmd);
                     LOGGER.debug("Command registered: {}", type.getSimpleName());
                 } catch (Exception e) {
@@ -111,6 +115,13 @@ public final class CommandSupport {
          */
         public List<Class<Command>> getCommands() {
             return commands.isEmpty() ? Collections.emptyList() : new ArrayList<>(commands);
+        }
+
+        /**
+         * @return list of registered command instances
+         */
+        public List<Command> getCommandList() {
+            return commandList;
         }
     }
 }

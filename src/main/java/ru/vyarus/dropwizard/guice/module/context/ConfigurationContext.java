@@ -1,13 +1,11 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.*;
 import com.google.inject.Module;
 import io.dropwizard.Bundle;
 import io.dropwizard.cli.Command;
+import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
@@ -16,11 +14,15 @@ import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ModuleItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
+import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
+import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport;
+import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -79,6 +81,10 @@ public final class ConfigurationContext {
      * Used to set and get options within guicey.
      */
     private final OptionsSupport optionsSupport = new OptionsSupport();
+    /**
+     * Guicey lifecycle listeners support.
+     */
+    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new OptionsInfo(optionsSupport));
 
 
     // --------------------------------------------------------------------------- SCOPE
@@ -131,6 +137,7 @@ public final class ConfigurationContext {
             register(ConfigItem.Bundle, bundle);
         }
         closeScope();
+        lifecycle().bundlesFromDwResolved(bundles);
     }
 
     /**
@@ -145,6 +152,8 @@ public final class ConfigurationContext {
             register(ConfigItem.Bundle, bundle);
         }
         closeScope();
+        lifecycle().bundlesFromLookupResolved(bundles);
+        lifecycle().bundlesResolved(getEnabledBundles());
     }
 
     /**
@@ -402,12 +411,31 @@ public final class ConfigurationContext {
 
     /**
      * Register disable predicates, used to disable all matched items.
+     * <p>
+     * After registration predicates are applied to all currently registered items to avoid registration
+     * order influence.
      *
      * @param predicates disable predicates
      */
     @SuppressWarnings("PMD.UseVarargs")
     public void registerDisablePredicates(final Predicate<ItemInfo>[] predicates) {
-        disablePredicates.addAll(Arrays.asList(predicates));
+        final List<Predicate<ItemInfo>> list = Arrays.asList(predicates);
+        disablePredicates.addAll(list);
+        applyPredicatesForRegisteredItems(list);
+    }
+
+    /**
+     * Apply configurators (at the end of manual builder configuration) and fire success event.
+     *
+     * @param builder bundle builder
+     */
+    public void applyConfigurators(final GuiceBundle.Builder builder) {
+        // Support for external configuration (for tests)
+        // Use special scope to distinguish external configuration
+        setScope(ConfigScope.Configurator.getType());
+        final Set<GuiceyConfigurator> configurators = ConfiguratorsSupport.configure(builder);
+        closeScope();
+        lifecycle().configuratorsProcessed(configurators);
     }
 
     /**
@@ -455,8 +483,30 @@ public final class ConfigurationContext {
         return tracker;
     }
 
+    public LifecycleSupport lifecycle() {
+        return lifecycleTracker;
+    }
+
     private Class<?> getScope() {
         return currentScope == null ? ConfigScope.Application.getType() : currentScope;
+    }
+
+    /**
+     * Disable predicate could be registered after some items registration and to make sure that predicate
+     * affects all these items - apply to all currenlty registered items.
+     *
+     * @param predicates new predicates
+     */
+    private void applyPredicatesForRegisteredItems(final List<Predicate<ItemInfo>> predicates) {
+        ImmutableList.builder()
+                .addAll(getEnabledModules())
+                .addAll(getEnabledBundles())
+                .addAll(getEnabledExtensions())
+                .addAll(getEnabledInstallers())
+                .build()
+                .stream()
+                .<ItemInfo>map(this::getInfo)
+                .forEach(item -> applyDisablePredicates(predicates, item));
     }
 
     private void registerDisable(final ConfigItem type, final Class<?> item) {
@@ -481,15 +531,19 @@ public final class ConfigurationContext {
     private void fireRegistration(final ItemInfo item) {
         // fire event only for initial registration and for items which could be disabled
         if (item instanceof DisableSupport && item.getRegistrationAttempts() == 1) {
-            final Class<?> scope = currentScope;
-            for (Predicate<ItemInfo> predicate : disablePredicates) {
-                if (predicate.test(item)) {
-                    // change scope to indicate predicate as disable source
-                    currentScope = Disables.class;
-                    registerDisable(item.getItemType(), item.getType());
-                    currentScope = scope;
-                    break;
-                }
+            applyDisablePredicates(disablePredicates, item);
+        }
+    }
+
+    private void applyDisablePredicates(final List<Predicate<ItemInfo>> predicates, final ItemInfo item) {
+        final Class<?> scope = currentScope;
+        for (Predicate<ItemInfo> predicate : predicates) {
+            if (predicate.test(item)) {
+                // change scope to indicate predicate as disable source
+                currentScope = Disables.class;
+                registerDisable(item.getItemType(), item.getType());
+                currentScope = scope;
+                break;
             }
         }
     }

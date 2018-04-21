@@ -72,6 +72,7 @@ public final class BundleSupport {
                 installedBundles.add(bundleType);
             }
         }
+        context.lifecycle().bundlesProcessed(context.getEnabledBundles());
     }
 
     /**

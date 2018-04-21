@@ -7,6 +7,7 @@ import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.OrderComparator;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
 
 import java.util.List;
 import java.util.Map;
@@ -25,10 +26,13 @@ public class ExtensionsHolder {
     private final List<Class<? extends FeatureInstaller>> installerTypes;
     private final Map<Class<? extends FeatureInstaller>, List<Class<?>>> extensions = Maps.newHashMap();
     private final StatsTracker tracker;
+    private final LifecycleSupport lifecycleTracker;
 
-    public ExtensionsHolder(final List<FeatureInstaller> installers, final StatsTracker tracker) {
+    public ExtensionsHolder(final List<FeatureInstaller> installers, final StatsTracker tracker,
+                            final LifecycleSupport lifecycleTracker) {
         this.installers = installers;
         this.tracker = tracker;
+        this.lifecycleTracker = lifecycleTracker;
         this.installerTypes = Lists.transform(installers, FeatureInstaller::getClass);
     }
 
@@ -93,5 +97,14 @@ public class ExtensionsHolder {
      */
     protected StatsTracker stat() {
         return tracker;
+    }
+
+    /**
+     * Workaround to pass lifecycle tracker instance to executor, without direct registration in context
+     * (aka making it publicly available).
+     * @return lifecycle tracker object
+     */
+    protected LifecycleSupport lifecycle() {
+        return lifecycleTracker;
     }
 }
