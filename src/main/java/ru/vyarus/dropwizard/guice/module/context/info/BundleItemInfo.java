@@ -29,4 +29,11 @@ public interface BundleItemInfo extends ItemInfo, DisableSupport {
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles()
      */
     boolean isFromDwBundle();
+
+    /**
+     * In case when bundle is registered multiple times, bundle will be transitive if all registrations were transitive.
+     *
+     * @return true when bundle was registered only by some other bundle (and never directly)
+     */
+    boolean isTransitive();
 }

@@ -5,6 +5,7 @@ import com.google.inject.Module;
 import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.info.*;
@@ -41,6 +42,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * If extensions print enabled without installers enabled then all extensions are rendered in registration order.
  * Markers:
  * <ul>
+ * <li>CONF when extension installed by {@link ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator}</li>
  * <li>SCAN when extension found by classpath scan</li>
  * <li>LAZY when {@link ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding}
  * annotation set</li>
@@ -115,9 +117,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
 
     private void printBundles(final DiagnosticConfig config, final StringBuilder res) {
         // top level bundles
-        final List<Class<GuiceyBundle>> bundles = service.getData()
-                .getItems(ConfigItem.Bundle, (BundleItemInfo it) ->
-                        it.isEnabled() && (it.isRegisteredDirectly() || it.isFromLookup() || it.isFromDwBundle()));
+        final List<Class<GuiceyBundle>> bundles = service.getDirectBundles();
         if (!config.isPrintBundles() || bundles.isEmpty()) {
             return;
         }
@@ -260,8 +260,11 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
     }
 
     private void commonMarkers(final List<String> markers, final ItemInfo item) {
-        if (item.getRegisteredBy().contains(ClasspathScanner.class)) {
+        if (item.getRegisteredBy().contains(ConfigScope.ClasspathScan.getType())) {
             markers.add("SCAN");
+        }
+        if (item.getRegisteredBy().contains(ConfigScope.Configurator.getType())) {
+            markers.add("CONF");
         }
         if (item.getRegistrationAttempts() > SINGLE) {
             markers.add("REG(" + item.getRegistrationAttempts() + ")");

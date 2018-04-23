@@ -483,6 +483,9 @@ public final class ConfigurationContext {
         return tracker;
     }
 
+    /**
+     * @return lifecycle events broadcaster
+     */
     public LifecycleSupport lifecycle() {
         return lifecycleTracker;
     }

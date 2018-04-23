@@ -25,6 +25,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
 
@@ -137,8 +138,11 @@ public class InstallerModule extends AbstractModule {
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
         final List<Class<?>> manual = context.getEnabledExtensions();
         for (Class<?> type : manual) {
-            Preconditions.checkState(processType(type, holder, false),
-                    "No installer found for extension %s", type.getName());
+            if (!processType(type, holder, false)) {
+                throw new IllegalStateException("No installer found for extension " + type.getName()
+                        + ". Available installers: " + holder.getInstallerTypes()
+                        .stream().map(FeatureUtils::getInstallerExtName).collect(Collectors.joining(", ")));
+            }
         }
         if (scanner != null) {
             scanner.scan(type -> {

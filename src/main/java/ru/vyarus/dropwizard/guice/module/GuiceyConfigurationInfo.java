@@ -7,6 +7,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
+import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
@@ -160,6 +161,14 @@ public class GuiceyConfigurationInfo {
      */
     public List<Class<GuiceyBundle>> getBundlesFromDw() {
         return context.getItems(ConfigItem.Bundle, Filters.dwBundles());
+    }
+
+    /**
+     * @return all enabled top-level bundles (without transitives)
+     */
+    public List<Class<GuiceyBundle>> getDirectBundles() {
+        return context.getItems(ConfigItem.Bundle,
+                Filters.<BundleItemInfo>enabled().and(Filters.transitiveBundles().negate()));
     }
 
     /**

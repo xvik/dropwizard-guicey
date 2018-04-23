@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
 import com.google.common.collect.Sets;
-import io.dropwizard.Application;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
@@ -53,7 +52,7 @@ public class ItemInfoImpl implements ItemInfo {
 
     @Override
     public boolean isRegisteredDirectly() {
-        return getRegisteredBy().contains(Application.class);
+        return getRegisteredBy().contains(ConfigScope.Application.getType());
     }
 
     @Override

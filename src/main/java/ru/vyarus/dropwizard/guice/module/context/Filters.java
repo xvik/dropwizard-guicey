@@ -70,7 +70,7 @@ public final class Filters {
      * Shortcut for {@link #registrationScope(Class)} for special scopes (like classpath scan, bundles lookup etc).
      *
      * @param specialScope special scope type
-     * @param <T> expected info container type (if used within single configuration type)
+     * @param <T>          expected info container type (if used within single configuration type)
      * @return items registered in specified context filter
      */
     public static <T extends ItemInfo> Predicate<T> registrationScope(final ConfigScope specialScope) {
@@ -100,8 +100,8 @@ public final class Filters {
      * Shortcut for {@link #registeredBy(Class)} for special scopes (like classpath scan, bundles lookup etc).
      *
      * @param specialScope special scope type
-     * @param <T> expected info container type (if used within single configuration type)
-     * @return  items registered in specified context filter
+     * @param <T>          expected info container type (if used within single configuration type)
+     * @return items registered in specified context filter
      */
     public static <T extends ItemInfo> Predicate<T> registeredBy(final ConfigScope specialScope) {
         return registeredBy(specialScope.getType());
@@ -151,6 +151,15 @@ public final class Filters {
      */
     public static Predicate<BundleItemInfo> dwBundles() {
         return BundleItemInfo::isFromDwBundle;
+    }
+
+    /**
+     * Filter for transitive bundles: bundles registered only by other bundles (and never directly).
+     *
+     * @return transitive bundled filter
+     */
+    public static Predicate<BundleItemInfo> transitiveBundles() {
+        return BundleItemInfo::isTransitive;
     }
 
     // --------------------------------------------------------------------------- EXTENSIONS
