@@ -23,14 +23,17 @@ import java.util.List;
  */
 public class InstallersResolvedEvent extends RunPhaseEvent {
     private final List<FeatureInstaller> installers;
+    private final List<Class<? extends FeatureInstaller>> disabled;
 
     public InstallersResolvedEvent(final OptionsInfo options,
                                    final Bootstrap bootstrap,
                                    final Configuration configuration,
                                    final Environment environment,
-                                   final List<FeatureInstaller> installers) {
+                                   final List<FeatureInstaller> installers,
+                                   final List<Class<? extends FeatureInstaller>> disabled) {
         super(GuiceyLifecycle.InstallersResolved, options, bootstrap, configuration, environment);
         this.installers = installers;
+        this.disabled = disabled;
     }
 
     /**
@@ -39,5 +42,14 @@ public class InstallersResolvedEvent extends RunPhaseEvent {
      */
     public List<FeatureInstaller> getInstallers() {
         return installers;
+    }
+
+    /**
+     * Disabled installers are never instantiated and so instances are not available.
+     *
+     * @return list of disabled installer types
+     */
+    public List<Class<? extends FeatureInstaller>> getDisabled() {
+        return disabled;
     }
 }

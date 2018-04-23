@@ -67,12 +67,12 @@ public final class BundleSupport {
                     context.setScope(bundleType);
                     bundle.initialize(guiceyBootstrap);
                     context.closeScope();
-                }                 
+                }
 
                 installedBundles.add(bundleType);
             }
         }
-        context.lifecycle().bundlesProcessed(context.getEnabledBundles());
+        context.lifecycle().bundlesProcessed(context.getEnabledBundles(), context.getDisabledBundles());
     }
 
     /**

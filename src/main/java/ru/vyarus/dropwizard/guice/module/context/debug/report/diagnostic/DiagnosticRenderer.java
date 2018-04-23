@@ -11,7 +11,6 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.info.*;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
-import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

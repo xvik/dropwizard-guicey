@@ -83,32 +83,38 @@ public final class LifecycleSupport {
         }
     }
 
-    public void bundlesResolved(final List<GuiceyBundle> bundles) {
-        if (bundles.isEmpty()) {
-            broadcast(new BundlesResolvedEvent(options, bootstrap, configuration, environment, bundles));
-        }
-    }
-
-    public void bundlesProcessed(final List<GuiceyBundle> bundles) {
+    public void bundlesResolved(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
         if (!bundles.isEmpty()) {
-            broadcast(new BundlesProcessedEvent(options, bootstrap, configuration, environment, bundles));
+            broadcast(new BundlesResolvedEvent(options, bootstrap, configuration, environment,
+                    bundles, disabled));
         }
     }
 
-    public void injectorCreation(final List<Module> modules, final List<Module> overriding) {
-        broadcast(new InjectorCreationEvent(options, bootstrap, configuration, environment, modules, overriding));
+    public void bundlesProcessed(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
+        if (!bundles.isEmpty()) {
+            broadcast(new BundlesProcessedEvent(options, bootstrap, configuration, environment,
+                    bundles, disabled));
+        }
     }
 
-    public void installersResolved(final List<FeatureInstaller> installers) {
-        broadcast(new InstallersResolvedEvent(options, bootstrap, configuration, environment, installers));
+    public void injectorCreation(final List<Module> modules, final List<Module> overriding,
+                                 final List<Module> disabled) {
+        broadcast(new InjectorCreationEvent(options, bootstrap, configuration, environment,
+                modules, overriding, disabled));
     }
 
-    public void extensionsResolved(final List<Class<?>> extensions) {
-        broadcast(new ExtensionsResolvedEvent(options, bootstrap, configuration, environment, extensions));
+    public void installersResolved(final List<FeatureInstaller> installers,
+                                   final List<Class<? extends FeatureInstaller>> disabled) {
+        broadcast(new InstallersResolvedEvent(options, bootstrap, configuration, environment,
+                installers, disabled));
     }
 
-    public void injectorCreated(final Injector injector) {
-        broadcast(new InjectorCreatedEvent(options, bootstrap, configuration, environment, injector));
+    public void extensionsResolved(final List<Class<?>> extensions, final List<Class<?>> disabled) {
+        broadcast(new ExtensionsResolvedEvent(options, bootstrap, configuration, environment,
+                extensions, disabled));
+    }
+
+    public void injectorPhase(final Injector injector) {
         this.injector = injector;
     }
 

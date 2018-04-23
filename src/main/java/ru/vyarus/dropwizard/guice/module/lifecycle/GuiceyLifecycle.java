@@ -52,56 +52,53 @@ public enum GuiceyLifecycle {
     BundlesFromLookupResolved(BundlesFromLookupResolvedEvent.class),
     /**
      * Called after {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and resolution form dropwizard
-     * bundles mechanisms when all top-level bundles are resolved. Provides a list of all enabled bundles.
-     * Not called if no bundles registered.
+     * bundles mechanisms when all top-level bundles are resolved. Provides a list of all enabled and list of disabled
+     * bundles. Not called if no bundles registered.
      */
     BundlesResolved(BundlesResolvedEvent.class),
     /**
      * Called after bundles processing. Note that bundles could register other bundles and so resulted
-     * list of installed bundles could be bigger (than in resolution event). Provides a list of all used bundles.
-     * Called even if no bundles were used at all (to indicate major lifecycle point).
+     * list of installed bundles could be bigger (than in resolution event). Provides a list of all used and all
+     * disabled bundles. Called even if no bundles were used at all (to indicate major lifecycle point).
      */
     BundlesProcessed(BundlesProcessedEvent.class),
     /**
-     * Called just before guice injector creation. Provides all configured modules (main and override).
-     * Called even when no modules registered.
+     * Called just before guice injector creation. Provides all configured modules (main and override) and all
+     * disabled modules. Called even when no modules registered.
      */
     InjectorCreation(InjectorCreationEvent.class),
     /**
      * Called when installers resolved (from classpath scan, if enabled) and initialized. Provides list of all
-     * enabled installers (which will be used for extensions recognition and installation). Called even if
-     * no installers are resolved.
+     * enabled and list of all disabled installers (which will be used for extensions recognition and installation).
+     * Called even if no installers are resolved.
      * <p>
      * Guice context is creating at that moment.
      */
     InstallersResolved(InstallersResolvedEvent.class),
     /**
      * Called when all extensions detected (from classpath scan, if enabled). Provides list of all enabled
-     * extension types (instances are not available yet).
+     * and list of disabled extension types (instances are not available yet).
      * <p>
      * Guice context is creating at that moment.
      */
     ExtensionsResolved(ExtensionsResolvedEvent.class),
     /**
-     * Called after injector creation. Note that starting from this event you have access to injector object.
-     * Extensions are not yet installed at this point!
-     */
-    InjectorCreated(InjectorCreatedEvent.class),
-    /**
      * Called when installer installed all related extensions and only for installers actually performed
      * installations (extensions list never empty). Provides installer and installed extensions types.
      * <p>
-     * NOTE: {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller} installers will no be
+     * NOTE: {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller} installers will not be
      * notified here, even if they participate in installation it is considered as incomplete at that point.
      * <p>
-     * Extension instance could be obtained manually from injector.
+     * Extension instance could be obtained manually from injector. Injector is available because it's already
+     * constructed, but singletons initialization is still in progress.
      */
     ExtensionsInstalledBy(ExtensionsInstalledByEvent.class),
     /**
      * Called after all installers install related extensions.
      * Provides list of all used (enabled) extensions. Not called when no extensions installed.
      * <p>
-     * Extension instance could be obtained manually from injector.
+     * Extension instance could be obtained manually from injector. Injector is available because it's already
+     * constructed, but singletons initialization is still in progress.
      */
     ExtensionsInstalled(ExtensionsInstalledEvent.class),
     /**
@@ -111,7 +108,7 @@ public enum GuiceyLifecycle {
      * is't start yet).
      * <p>
      * At this point injection to registered commands is performed (this may be important if custom command
-     * run application instead of "server").
+     * run application instead of "server"). Injector itself is completely initialized - all singletons started.
      * <p>
      * This point is before
      * {@link io.dropwizard.Application#run(io.dropwizard.Configuration, io.dropwizard.setup.Environment)}. Ideal point

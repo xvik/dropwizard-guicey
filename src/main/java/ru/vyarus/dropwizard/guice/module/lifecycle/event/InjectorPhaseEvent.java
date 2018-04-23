@@ -72,7 +72,7 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
          * @return rendered report as string
          */
         public String renderConfigurationSummary(final DiagnosticConfig config) {
-            return getInjector().getInstance(DiagnosticRenderer.class).renderReport(config);
+            return new DiagnosticRenderer(getConfigurationInfo()).renderReport(config);
         }
 
         /**
@@ -82,7 +82,7 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
          * @return rendered report as string
          */
         public String renderConfigurationTree(final ContextTreeConfig config) {
-            return getInjector().getInstance(ContextTreeRenderer.class).renderReport(config);
+            return new ContextTreeRenderer(getConfigurationInfo()).renderReport(config);
         }
 
         /**
@@ -92,7 +92,7 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
          * @return rendered report as string
          */
         public String renderOptions(final OptionsConfig config) {
-            return getInjector().getInstance(OptionsRenderer.class).renderReport(config);
+            return new OptionsRenderer(getConfigurationInfo()).renderReport(config);
         }
 
         /**
@@ -102,7 +102,7 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
          * @return rendered report as string
          */
         public String renderStats(final boolean hideTiny) {
-            return getInjector().getInstance(StatsRenderer.class).renderReport(hideTiny);
+            return new StatsRenderer(getConfigurationInfo()).renderReport(hideTiny);
         }
     }
 }

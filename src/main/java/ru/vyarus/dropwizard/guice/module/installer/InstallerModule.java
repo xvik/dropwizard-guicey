@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.installer;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -63,7 +62,7 @@ public class InstallerModule extends AbstractModule {
         final Stopwatch timer = context.stat().timer(InstallersTime);
         final List<Class<? extends FeatureInstaller>> installerClasses = findInstallers();
         final List<FeatureInstaller> installers = prepareInstallers(installerClasses);
-        context.lifecycle().installersResolved(new ArrayList<>(installers));
+        context.lifecycle().installersResolved(new ArrayList<>(installers), context.getDisabledInstallers());
         timer.stop();
 
         final ExtensionsHolder holder = new ExtensionsHolder(installers, context.stat(), context.lifecycle());
@@ -134,6 +133,7 @@ public class InstallerModule extends AbstractModule {
      *
      * @param holder holder to store found extension classes until injector creation
      */
+    @SuppressWarnings("PMD.PrematureDeclaration")
     private void resolveExtensions(final ExtensionsHolder holder) {
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
         final List<Class<?>> manual = context.getEnabledExtensions();
@@ -154,7 +154,7 @@ public class InstallerModule extends AbstractModule {
                 }
             });
         }
-        context.lifecycle().extensionsResolved(context.getEnabledExtensions());
+        context.lifecycle().extensionsResolved(context.getEnabledExtensions(), context.getDisabledExtensions());
         timer.stop();
     }
 

@@ -8,6 +8,9 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
+import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
+import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 /**
@@ -19,7 +22,7 @@ class LifecycleEventsTest extends AbstractTest {
 
     def "Check lifecycle events"() {
 
-        expect:
+        expect: "app started normally, only visual verification"
         true
     }
 
@@ -30,7 +33,13 @@ class LifecycleEventsTest extends AbstractTest {
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
                     .searchCommands()
                     .modules(new Mod())
+                    .bundles(new HK2DebugBundle())
+                    .disableModules(Mod)
+                    .disableInstallers(JerseyFeatureInstaller)
+                    .disableBundles(HK2DebugBundle)
+                    .disableExtensions(DummyPlugin1)
                     .printLifecyclePhases()
+                    .printDiagnosticInfo()
                     .build())
         }
 

@@ -16,6 +16,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalle
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Debug guicey lifecycle listener. Could be installed with bundle shortcut:
@@ -58,28 +59,23 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
 
     @Override
     protected void bundlesProcessed(final BundlesProcessedEvent event) {
-        log("Configured from %s GuiceyBundles", event.getBundles().size());
+        log("Configured from %s%s GuiceyBundles", event.getBundles().size(), disabled(event.getDisabled()));
     }
 
     @Override
     protected void injectorCreation(final InjectorCreationEvent event) {
-        log("Staring guice with %s/%s modules...",
-                event.getModules().size(), event.getOverridingModules().size());
+        log("Staring guice with %s/%s%s modules...",
+                event.getModules().size(), event.getOverridingModules().size(), disabled(event.getDisabled()));
     }
 
     @Override
     protected void installersResolved(final InstallersResolvedEvent event) {
-        log("%s installers initialized", event.getInstallers().size());
+        log("%s%s installers initialized", event.getInstallers().size(), disabled(event.getDisabled()));
     }
 
     @Override
     protected void extensionsResolved(final ExtensionsResolvedEvent event) {
-        log("%s extensions found", event.getExtensions().size());
-    }
-
-    @Override
-    protected void injectorCreated(final InjectorCreatedEvent event) {
-        log("Guice injector created");
+        log("%s%s extensions found", event.getExtensions().size(), disabled(event.getDisabled()));
     }
 
     @Override
@@ -89,6 +85,7 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
 
     @Override
     protected void applicationRun(final ApplicationRunEvent event) {
+        log("Guice started, app running...");
         event.registerJettyListener(new JettyLifecycleListener());
         event.registerJerseyListener(new JerseyEventListener());
     }
@@ -113,6 +110,10 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
         final String prefix = "__[ " + time + " ]" + String.join("",
                 Collections.nCopies((gap - 6) - time.length(), "_"));
         System.out.println("\n\n" + topLine + "\n" + prefix + "/  " + msg + "  \\____\n");
+    }
+
+    private String disabled(final List items) {
+        return " (-" + items.size() + ")";
     }
 
     /**

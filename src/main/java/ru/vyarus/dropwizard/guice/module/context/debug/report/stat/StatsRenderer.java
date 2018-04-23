@@ -140,8 +140,8 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
                 node.child("using %s jersey installers", installers);
 
                 final int extensions = info.getData()
-                        .getItems(ConfigItem.Extension, (ExtensionItemInfo it) ->
-                                JerseyInstaller.class.isAssignableFrom(it.getInstalledBy())).size();
+                        .getItems(ConfigItem.Extension, (ExtensionItemInfo it) -> it.isEnabled()
+                                && JerseyInstaller.class.isAssignableFrom(it.getInstalledBy())).size();
                 node.child("%s jersey extensions installed in %s",
                         extensions, info.getStats().humanTime(JerseyInstallerTime));
             }

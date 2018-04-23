@@ -16,7 +16,7 @@
     - Diagnostic report configuration method rename: DiagnosticConfig.printDisabledInstallers renamed to printDisabledItems and affects now all disabled items
     - Diagnostic tree report could hide application scope in ContextTreeConfig.hideScopes(ConfigItems.Application)                      
 * Add guicey lifecycle events:
-    - New bundle's method `bundle.listen(GuiceyLifecycleListener)` allows listening for guicey lifecyle (16 events).
+    - New bundle's method `bundle.listen(GuiceyLifecycleListener)` allows listening for guicey lifecyle (15 events).
       Events provide access to all possible internal state, available at this moment. It may be used to write instance specific
       features (post processing) or just advaned logging
     - New bundle's method `bundle.pritLifecyclePhases()` activates new DebugLifecycleListener and shows lifecycle stages directly in 

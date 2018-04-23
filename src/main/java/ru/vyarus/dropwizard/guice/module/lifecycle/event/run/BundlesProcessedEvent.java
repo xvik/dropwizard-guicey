@@ -12,8 +12,8 @@ import java.util.List;
 
 /**
  * Called after bundles processing. Note that bundles could register other bundles and so resulted
- * list of installed bundles could be bigger (than in resolution event). Provides a list of all used bundles.
- * Called even if no bundles were used at all (to indicate major lifecycle point).
+ * list of installed bundles could be bigger (than in resolution event). Provides a list of all used and list of
+ * disabled bundles. Called even if no bundles were used at all (to indicate major lifecycle point).
  * <p>
  * May be used for consultation only as bundles are not used anymore (already processed).
  *
@@ -23,14 +23,17 @@ import java.util.List;
 public class BundlesProcessedEvent extends RunPhaseEvent {
 
     private final List<GuiceyBundle> bundles;
+    private final List<GuiceyBundle> disabled;
 
     public BundlesProcessedEvent(final OptionsInfo options,
                                  final Bootstrap bootstrap,
                                  final Configuration configuration,
                                  final Environment environment,
-                                 final List<GuiceyBundle> bundles) {
+                                 final List<GuiceyBundle> bundles,
+                                 final List<GuiceyBundle> disabled) {
         super(GuiceyLifecycle.BundlesProcessed, options, bootstrap, configuration, environment);
         this.bundles = bundles;
+        this.disabled = disabled;
     }
 
     /**
@@ -39,5 +42,12 @@ public class BundlesProcessedEvent extends RunPhaseEvent {
      */
     public List<GuiceyBundle> getBundles() {
         return bundles;
+    }
+
+    /**
+     * @return list of all disabled bundles or empty list
+     */
+    public List<GuiceyBundle> getDisabled() {
+        return disabled;
     }
 }

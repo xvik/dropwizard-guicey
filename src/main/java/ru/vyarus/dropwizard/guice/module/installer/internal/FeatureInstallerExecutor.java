@@ -48,6 +48,7 @@ public class FeatureInstallerExecutor {
         final Stopwatch timer = holder.stat().timer(ExtensionsInstallationTime);
         holder.order();
         final List<Class<?>> allInstalled = new ArrayList<>();
+        holder.lifecycle().injectorPhase(injector);
         for (FeatureInstaller installer : holder.getInstallers()) {
             final List<Class<?>> res = holder.getExtensions(installer.getClass());
             if (res != null) {

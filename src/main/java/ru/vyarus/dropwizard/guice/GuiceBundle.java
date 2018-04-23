@@ -196,19 +196,23 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
     private void createInjector(final Environment environment) {
         final Stopwatch timer = context.stat().timer(InjectorCreationTime);
-        final List<Module> normalModules = context.getNormalModules();
-        final List<Module> overridingModules = context.getOverridingModules();
-        // use different lists to avoid possible side effects from listeners (not allowed to exclude or modify order)
-        context.lifecycle()
-                .injectorCreation(new ArrayList<>(normalModules), new ArrayList<>(overridingModules));
-        injector = injectorFactory.createInjector(context.option(InjectorStage),
-                overridingModules.isEmpty() ? normalModules
-                        : Collections.singletonList(Modules.override(normalModules).with(overridingModules)));
+        injector = injectorFactory.createInjector(context.option(InjectorStage), prepareModules());
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
-        context.lifecycle().injectorCreated(injector);
         timer.stop();
+    }
+
+    private Iterable<Module> prepareModules() {
+        final List<Module> normalModules = context.getNormalModules();
+        final List<Module> overridingModules = context.getOverridingModules();
+        // use different lists to avoid possible side effects from listeners (not allowed to exclude or modify order)
+        context.lifecycle().injectorCreation(
+                new ArrayList<>(normalModules),
+                new ArrayList<>(overridingModules),
+                context.getDisabledModules());
+        return overridingModules.isEmpty() ? normalModules
+                : Collections.singletonList(Modules.override(normalModules).with(overridingModules));
     }
 
     @SuppressWarnings("unchecked")

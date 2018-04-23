@@ -17,7 +17,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent;
  * isn't start yet).
  * <p>
  * At this point injection to registered commands is performed (this may be important if custom command
- * run application instead of "server").
+ * run application instead of "server"). Injector itseld is completely initialized - all singletons processed.
  * <p>
  * This point is before
  * {@link io.dropwizard.Application#run(io.dropwizard.Configuration, io.dropwizard.setup.Environment)}. Ideal point

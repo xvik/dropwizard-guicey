@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Called when all bundles are resolved (after dw recognition and lookup). Will not be called if no bundles
- * registered at all. Provides list of all top-level enabled bundles.
+ * registered at all. Provides list of all top-level enabled bundles and list of disabled bundles.
  * <p>
  * Bundles may be post-processed here by modifying it's state with some interface (maybe based on other bundles
  * analysis).
@@ -25,14 +25,17 @@ import java.util.List;
 public class BundlesResolvedEvent extends RunPhaseEvent {
 
     private final List<GuiceyBundle> bundles;
+    private final List<GuiceyBundle> disabled;
 
     public BundlesResolvedEvent(final OptionsInfo options,
                                 final Bootstrap bootstrap,
                                 final Configuration configuration,
                                 final Environment environment,
-                                final List<GuiceyBundle> bundles) {
+                                final List<GuiceyBundle> bundles,
+                                final List<GuiceyBundle> disabled) {
         super(GuiceyLifecycle.BundlesResolved, options, bootstrap, configuration, environment);
         this.bundles = bundles;
+        this.disabled = disabled;
     }
 
     /**
@@ -40,5 +43,14 @@ public class BundlesResolvedEvent extends RunPhaseEvent {
      */
     public List<GuiceyBundle> getBundles() {
         return bundles;
+    }
+
+    /**
+     * Note: bundles are not yet processed so more bundles could be disabled later.
+     *
+     * @return list of disabled bundles or empty list
+     */
+    public List<GuiceyBundle> getDisabled() {
+        return disabled;
     }
 }

@@ -153,7 +153,7 @@ public final class ConfigurationContext {
         }
         closeScope();
         lifecycle().bundlesFromLookupResolved(bundles);
-        lifecycle().bundlesResolved(getEnabledBundles());
+        lifecycle().bundlesResolved(getEnabledBundles(), getDisabledBundles());
     }
 
     /**
@@ -187,6 +187,16 @@ public final class ConfigurationContext {
      */
     public List<GuiceyBundle> getEnabledBundles() {
         return getEnabledItems(ConfigItem.Bundle);
+    }
+
+    /**
+     * Note: before configuration finalization this returns all actually disabled bundles and after
+     * finalization all disables (including never registered bundles).
+     *
+     * @return all configured disabled bundles (without duplicates)
+     */
+    public List<GuiceyBundle> getDisabledBundles() {
+        return getDisabledItems(ConfigItem.Bundle);
     }
 
     /**
@@ -261,6 +271,16 @@ public final class ConfigurationContext {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Note: before configuration finalization this returns all actually disabled modules and after
+     * finalization all disables (including never registered modules).
+     *
+     * @return list of disabled modules or empty list
+     */
+    public List<Module> getDisabledModules() {
+        return getDisabledItems(ConfigItem.Module);
+    }
+
     // --------------------------------------------------------------------------- INSTALLERS
 
     /**
@@ -308,6 +328,16 @@ public final class ConfigurationContext {
      */
     public List<Class<? extends FeatureInstaller>> getEnabledInstallers() {
         return getEnabledItems(ConfigItem.Installer);
+    }
+
+    /**
+     * Note: before configuration finalization this returns all actually disabled installers and after
+     * finalization all disables (including never registered installers).
+     *
+     * @return list of disabled installers
+     */
+    public List<Class<? extends FeatureInstaller>> getDisabledInstallers() {
+        return getDisabledItems(ConfigItem.Installer);
     }
 
     // --------------------------------------------------------------------------- EXTENSIONS
@@ -377,6 +407,16 @@ public final class ConfigurationContext {
         return getEnabledItems(ConfigItem.Extension);
     }
 
+    /**
+     * Note: before configuration finalization this returns all actually disabled extensions and after
+     * finalization all disables (including never registered extensions).
+     *
+     * @return list of disabled extensions
+     */
+    public List<Class<?>> getDisabledExtensions() {
+        return getDisabledItems(ConfigItem.Extension);
+    }
+
     // --------------------------------------------------------------------------- OPTIONS
 
     /**
@@ -444,7 +484,7 @@ public final class ConfigurationContext {
      */
     public void finalizeConfiguration() {
         for (ConfigItem type : disabledItemsHolder.keys()) {
-            for (Object item : getDisabledItems(type)) {
+            for (Class<?> item : disabledItemsHolder.get(type)) {
                 final DisableSupport info = getOrCreateInfo(type, item);
                 info.getDisabledBy().addAll(disabledByHolder.get(getType(item)));
             }
@@ -460,6 +500,21 @@ public final class ConfigurationContext {
     public <T> List<T> getItems(final ConfigItem type) {
         final Collection<Object> res = itemsHolder.get(type);
         return res.isEmpty() ? Collections.<T>emptyList() : (List<T>) Lists.newArrayList(res);
+    }
+
+    /**
+     * @param type   config type
+     * @param filter items filter
+     * @param <T>    expected container type
+     * @return list of all items matching filter or empty list
+     */
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getItems(final ConfigItem type, final Predicate<T> filter) {
+        final Collection<T> items = (Collection<T>) itemsHolder.get(type);
+        if (items.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return items.stream().filter(filter).collect(Collectors.toList());
     }
 
     /**
@@ -582,14 +637,15 @@ public final class ConfigurationContext {
 
     @SuppressWarnings("unchecked")
     private <T> List<T> getDisabledItems(final ConfigItem type) {
-        final Collection<Class<?>> res = disabledItemsHolder.get(type);
-        return res.isEmpty() ? Collections.<T>emptyList() : (List<T>) Lists.newArrayList(res);
+        final Collection<Class<?>> disabled = disabledItemsHolder.get(type);
+        return disabled.isEmpty()
+                ? Collections.emptyList() : getItems(type, item -> disabled.contains(getType(item)));
     }
 
     private <T> List<T> getEnabledItems(final ConfigItem type) {
-        final List<T> res = getItems(type);
-        res.removeAll(getDisabledItems(type));
-        return res;
+        final Collection<Class<?>> disabled = disabledItemsHolder.get(type);
+        return disabled.isEmpty()
+                ? getItems(type) : getItems(type, item -> !disabled.contains(getType(item)));
     }
 
     private boolean isEnabled(final ConfigItem type, final Class itemType) {

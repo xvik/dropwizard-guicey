@@ -49,9 +49,6 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case ExtensionsResolved:
                 extensionsResolved((ExtensionsResolvedEvent) event);
                 break;
-            case InjectorCreated:
-                injectorCreated((InjectorCreatedEvent) event);
-                break;
             case ExtensionsInstalledBy:
                 extensionsInstalledBy((ExtensionsInstalledByEvent) event);
                 break;
@@ -106,10 +103,6 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
     }
 
     protected void extensionsResolved(final ExtensionsResolvedEvent event) {
-        // empty
-    }
-
-    protected void injectorCreated(final InjectorCreatedEvent event) {
         // empty
     }
 

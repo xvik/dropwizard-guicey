@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * Called when all extensions detected (from classpath scan, if enabled). Provides list of all enabled
- * extension types.
+ * and list of disabled extension types.
  * <p>
  * All extensions are bound to guice context at that moment either directly (by default, all extensions are registered)
  * or with {@link ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller}.
@@ -24,14 +24,17 @@ import java.util.List;
 public class ExtensionsResolvedEvent extends RunPhaseEvent {
 
     private final List<Class<?>> extensions;
+    private final List<Class<?>> disabled;
 
     public ExtensionsResolvedEvent(final OptionsInfo options,
                                    final Bootstrap bootstrap,
                                    final Configuration configuration,
                                    final Environment environment,
-                                   final List<Class<?>> extensions) {
+                                   final List<Class<?>> extensions,
+                                   final List<Class<?>> disabled) {
         super(GuiceyLifecycle.ExtensionsResolved, options, bootstrap, configuration, environment);
         this.extensions = extensions;
+        this.disabled = disabled;
     }
 
     /**
@@ -39,5 +42,12 @@ public class ExtensionsResolvedEvent extends RunPhaseEvent {
      */
     public List<Class<?>> getExtensions() {
         return extensions;
+    }
+
+    /**
+     * @return list of disabled extensions or empty list
+     */
+    public List<Class<?>> getDisabled() {
+        return disabled;
     }
 }

@@ -11,8 +11,8 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
 import java.util.List;
 
 /**
- * Called just before guice injector creation. Provides all configured modules (main and override).
- * Called even if no modules were used at all (to indicate major lifecycle point).
+ * Called just before guice injector creation. Provides all configured modules (main and override) and
+ * all disabled modules. Called even if no modules were used at all (to indicate major lifecycle point).
  * <p>
  * Modules may be post-processed here (e.g. some special marker interface support may be implemented here).
  *
@@ -23,16 +23,19 @@ public class InjectorCreationEvent extends RunPhaseEvent {
 
     private final List<Module> modules;
     private final List<Module> overriding;
+    private final List<Module> disabled;
 
     public InjectorCreationEvent(final OptionsInfo options,
                                  final Bootstrap bootstrap,
                                  final Configuration configuration,
                                  final Environment environment,
                                  final List<Module> modules,
-                                 final List<Module> overriding) {
+                                 final List<Module> overriding,
+                                 final List<Module> disabled) {
         super(GuiceyLifecycle.InjectorCreation, options, bootstrap, configuration, environment);
         this.modules = modules;
         this.overriding = overriding;
+        this.disabled = disabled;
     }
 
     /**
@@ -48,5 +51,12 @@ public class InjectorCreationEvent extends RunPhaseEvent {
      */
     public List<Module> getOverridingModules() {
         return overriding;
+    }
+
+    /**
+     * @return list of all disabled modules or empty list
+     */
+    public List<Module> getDisabled() {
+        return disabled;
     }
 }
