@@ -48,6 +48,7 @@ class MissedEventsTest extends Specification {
                     .listen(new Listener())
                     .noDefaultInstallers()
                     .printLifecyclePhases()
+                    .disableBundleLookup()
                     .build())
         }
 
@@ -65,6 +66,12 @@ class MissedEventsTest extends Specification {
         void onEvent(GuiceyLifecycleEvent event) {
             if (!events.contains(event.getType())) {
                 events.add(event.getType())
+            }
+            if (event.getType() == GuiceyLifecycle.ConfiguratorsProcessed) {
+                throw new IllegalStateException("Configurators used!")
+            }
+            if (event.getType() == GuiceyLifecycle.BundlesFromLookupResolved) {
+                throw new IllegalStateException("Bundle lookup used!")
             }
         }
     }
