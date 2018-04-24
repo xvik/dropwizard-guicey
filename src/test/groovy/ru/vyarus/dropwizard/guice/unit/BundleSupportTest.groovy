@@ -48,6 +48,12 @@ class BundleSupportTest extends AbstractTest {
         res.size() == 2
         res[0] instanceof SampleBundle
         res[1] instanceof SampleConfiguredBundle
+
+        when: "resolve bundles from wrong field"
+        BundleSupport.resolveBundles(bootstrap, "dsds")
+        then: "err"
+        def ex = thrown(IllegalStateException)
+        ex.message.startsWith("Failed to resolve bootstrap field")
     }
 
     def "Check filtering"() {

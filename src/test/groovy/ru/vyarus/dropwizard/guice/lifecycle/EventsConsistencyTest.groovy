@@ -54,7 +54,9 @@ class EventsConsistencyTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(new DwBundle())
             bootstrap.addBundle(GuiceBundle.builder()
-                    .listen(new Listener())
+                    .listen(new Listener(),
+                    // to call all methods in adapter and make coverage happy
+                    new GuiceyLifecycleAdapter())
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
                     .modules(new XMod())
                     .configureFromDropwizardBundles()

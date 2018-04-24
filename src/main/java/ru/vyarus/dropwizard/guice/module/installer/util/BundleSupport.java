@@ -125,12 +125,7 @@ public final class BundleSupport {
     public static <T> List<T> findBundles(final Bootstrap bootstrap, final Class<T> type) {
         final List bundles = Lists.newArrayList(resolveBundles(bootstrap, "bundles"));
         bundles.addAll(resolveBundles(bootstrap, "configuredBundles"));
-        final Iterator it = bundles.iterator();
-        while (it.hasNext()) {
-            if (!type.isAssignableFrom(it.next().getClass())) {
-                it.remove();
-            }
-        }
+        bundles.removeIf(o -> !type.isAssignableFrom(o.getClass()));
         return bundles;
     }
 
@@ -144,7 +139,7 @@ public final class BundleSupport {
             // in case of mock bootstrap (tests)
             return MoreObjects.firstNonNull(res, Collections.<T>emptyList());
         } catch (Exception e) {
-            throw new IllegalStateException("Failed to resolve bootstrap filed " + field, e);
+            throw new IllegalStateException("Failed to resolve bootstrap field " + field, e);
         }
     }
 }
