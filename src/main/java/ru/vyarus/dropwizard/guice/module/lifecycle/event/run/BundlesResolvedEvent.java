@@ -11,8 +11,8 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
 import java.util.List;
 
 /**
- * Called when all bundles are resolved (after dw recognition and lookup). Will not be called if no bundles
- * registered at all. Provides list of all top-level enabled bundles and list of disabled bundles.
+ * Called when all bundles are resolved (after dw recognition and lookup). Called even if no bundles
+ * registered. Provides list of all top-level enabled bundles and list of disabled bundles.
  * <p>
  * Bundles may be post-processed here by modifying it's state with some interface (maybe based on other bundles
  * analysis).

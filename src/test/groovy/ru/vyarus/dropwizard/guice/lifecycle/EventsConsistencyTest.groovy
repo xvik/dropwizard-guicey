@@ -63,7 +63,7 @@ class EventsConsistencyTest extends AbstractTest {
                     .disableInstallers(JerseyFeatureInstaller)
                     .disableExtensions(DummyPlugin1, HK2DebugFeature)
                     .searchCommands()
-                    .printLifecyclePhases()
+                    .printLifecyclePhasesDetailed()
                     .build())
         }
 

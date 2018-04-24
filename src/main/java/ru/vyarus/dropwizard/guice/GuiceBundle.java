@@ -763,8 +763,16 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see DebugGuiceyLifecycle
          */
         public Builder<T> printLifecyclePhases() {
-            return listen(new DebugGuiceyLifecycle());
+            return listen(new DebugGuiceyLifecycle(false));
+        }
 
+        /**
+         * Same as {@link #printLifecyclePhases}, but also prints resolved and disabled configuration items.
+         * @return builder instance for chained calls
+         * @see DebugGuiceyLifecycle
+         */
+        public Builder<T> printLifecyclePhasesDetailed() {
+            return listen(new DebugGuiceyLifecycle(true));
         }
 
         /**

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Called after bundles processing. Note that bundles could register other bundles and so resulted
  * list of installed bundles could be bigger (than in resolution event). Provides a list of all used and list of
- * disabled bundles. Called even if no bundles were used at all (to indicate major lifecycle point).
+ * disabled bundles. Not called if no bundles were used at all (nothing was processed - no event).
  * <p>
  * May be used for consultation only as bundles are not used anymore (already processed).
  *

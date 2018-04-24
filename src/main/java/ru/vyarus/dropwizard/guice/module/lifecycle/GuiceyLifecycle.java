@@ -53,31 +53,32 @@ public enum GuiceyLifecycle {
     /**
      * Called after {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and resolution form dropwizard
      * bundles mechanisms when all top-level bundles are resolved. Provides a list of all enabled and list of disabled
-     * bundles. Not called if no bundles registered.
+     * bundles. Called even if no bundles registered to indicate configuration state.
      */
     BundlesResolved(BundlesResolvedEvent.class),
     /**
      * Called after bundles processing. Note that bundles could register other bundles and so resulted
      * list of installed bundles could be bigger (than in resolution event). Provides a list of all used and all
-     * disabled bundles. Called even if no bundles were used at all (to indicate major lifecycle point).
+     * disabled bundles. Not called even if no bundles were used at all (no processing - no event).
      */
     BundlesProcessed(BundlesProcessedEvent.class),
     /**
      * Called just before guice injector creation. Provides all configured modules (main and override) and all
-     * disabled modules. Called even when no modules registered.
+     * disabled modules. Called even when no modules registered to indicate configuration state.
      */
     InjectorCreation(InjectorCreationEvent.class),
     /**
      * Called when installers resolved (from classpath scan, if enabled) and initialized. Provides list of all
      * enabled and list of all disabled installers (which will be used for extensions recognition and installation).
-     * Called even if no installers are resolved.
+     * Called even if no installers are resolved to indicate configuration state.
      * <p>
      * Guice context is creating at that moment.
      */
     InstallersResolved(InstallersResolvedEvent.class),
     /**
      * Called when all extensions detected (from classpath scan, if enabled). Provides list of all enabled
-     * and list of disabled extension types (instances are not available yet).
+     * and list of disabled extension types (instances are not available yet). Called even if no extensions
+     * configured to indicate configuration state.
      * <p>
      * Guice context is creating at that moment.
      */

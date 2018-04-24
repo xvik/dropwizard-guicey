@@ -8,6 +8,7 @@ import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.monitoring.RequestEvent;
 import org.glassfish.jersey.server.monitoring.RequestEventListener;
+import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
@@ -15,6 +16,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,50 +34,87 @@ import java.util.List;
  */
 public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
 
+    private static final String DISABLED = "disabled";
+    private static final String NL = "\n";
+
+    private final boolean showDetails;
+
     // counting time from listener creation (~same as bundle registration and app initial configuration)
     private final StopWatch timer = StopWatch.createStarted();
+
+    public DebugGuiceyLifecycle(final boolean showDetails) {
+        this.showDetails = showDetails;
+    }
 
     @Override
     protected void configuratorsProcessed(final ConfiguratorsProcessedEvent event) {
         log("%s configurators processed", event.getConfigurators().size());
+        if (showDetails) {
+            logDetails("configurators", event.getConfigurators());
+        }
     }
 
     @Override
     protected void initialization(final InitializationEvent event) {
         if (!event.getCommands().isEmpty()) {
             log("%s commands installed", event.getCommands().size());
+            if (showDetails) {
+                logDetails("commands", event.getCommands());
+            }
         }
     }
 
     @Override
     protected void dwBundlesResolved(final BundlesFromDwResolvedEvent event) {
         log("%s dw bundles recognized", event.getBundles().size());
+        if (showDetails) {
+            logDetails("dropwizard bundles", event.getBundles());
+        }
     }
 
     @Override
     protected void lookupBundlesResolved(final BundlesFromLookupResolvedEvent event) {
         log("%s lookup bundles recognized", event.getBundles().size());
+        // lookup details not logged because they are explicitly logged before event
     }
 
     @Override
     protected void bundlesProcessed(final BundlesProcessedEvent event) {
-        log("Configured from %s%s GuiceyBundles", event.getBundles().size(), disabled(event.getDisabled()));
+        log("Configured from %s%s GuiceyBundles",
+                event.getBundles().size(), fmtDisabled(event.getDisabled()));
+        if (showDetails) {
+            logDetails("bundles", event.getBundles());
+            logDetails(DISABLED, event.getDisabled());
+        }
     }
 
     @Override
     protected void injectorCreation(final InjectorCreationEvent event) {
         log("Staring guice with %s/%s%s modules...",
-                event.getModules().size(), event.getOverridingModules().size(), disabled(event.getDisabled()));
+                event.getModules().size(), event.getOverridingModules().size(), fmtDisabled(event.getDisabled()));
+        if (showDetails) {
+            logDetails("modules", event.getModules());
+            logDetails("overriding", event.getOverridingModules());
+            logDetails(DISABLED, event.getDisabled());
+        }
     }
 
     @Override
     protected void installersResolved(final InstallersResolvedEvent event) {
-        log("%s%s installers initialized", event.getInstallers().size(), disabled(event.getDisabled()));
+        log("%s%s installers initialized", event.getInstallers().size(), fmtDisabled(event.getDisabled()));
+        if (showDetails) {
+            logDetails("installers", event.getInstallers());
+            logDetails(DISABLED, event.getDisabled());
+        }
     }
 
     @Override
     protected void extensionsResolved(final ExtensionsResolvedEvent event) {
-        log("%s%s extensions found", event.getExtensions().size(), disabled(event.getDisabled()));
+        log("%s%s extensions found", event.getExtensions().size(), fmtDisabled(event.getDisabled()));
+        if (showDetails) {
+            logDetails("extensions", event.getExtensions());
+            logDetails(DISABLED, event.getDisabled());
+        }
     }
 
     @Override
@@ -109,11 +148,26 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
                 + String.join("", Collections.nCopies(msg.length(), "─"));
         final String prefix = "__[ " + time + " ]" + String.join("",
                 Collections.nCopies((gap - 6) - time.length(), "_"));
-        System.out.println("\n\n" + topLine + "\n" + prefix + "/  " + msg + "  \\____\n");
+        System.out.println("\n\n" + topLine + NL + prefix + "/  " + msg + "  \\____\n");
     }
 
-    private String disabled(final List items) {
-        return " (-" + items.size() + ")";
+    private String fmtDisabled(final List items) {
+        return items.isEmpty() ? "" : " (-" + items.size() + ")";
+    }
+
+    @SuppressWarnings("PMD.SystemPrintln")
+    private void logDetails(final String message, final Collection<?> items) {
+        if (items.isEmpty()) {
+            return;
+        }
+        final StringBuilder builder = new StringBuilder()
+                .append("\t").append(message).append(" = \n");
+        for (Object item : items) {
+            builder.append("\t\t").append(RenderUtils
+                    .renderClassLine(item instanceof Class ? (Class) item : item.getClass(), null))
+                    .append(NL);
+        }
+        System.out.println(builder.toString());
     }
 
     /**

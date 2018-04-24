@@ -84,10 +84,8 @@ public final class LifecycleSupport {
     }
 
     public void bundlesResolved(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
-        if (!bundles.isEmpty()) {
-            broadcast(new BundlesResolvedEvent(options, bootstrap, configuration, environment,
-                    bundles, disabled));
-        }
+        broadcast(new BundlesResolvedEvent(options, bootstrap, configuration, environment,
+                bundles, disabled));
     }
 
     public void bundlesProcessed(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
