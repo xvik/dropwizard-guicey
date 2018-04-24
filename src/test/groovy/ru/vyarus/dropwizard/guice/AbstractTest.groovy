@@ -10,7 +10,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfigurator
 import spock.lang.Specification

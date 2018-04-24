@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
 

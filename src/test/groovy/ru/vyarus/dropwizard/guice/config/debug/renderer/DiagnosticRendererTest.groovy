@@ -22,7 +22,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification

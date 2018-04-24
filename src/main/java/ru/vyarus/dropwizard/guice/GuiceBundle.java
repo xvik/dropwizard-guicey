@@ -253,7 +253,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * applicability, but just for example).
          * <p>
          * Listener can't directly affect configuration (can't register or disable extensions, modules etc).
-         * But listener could implement {@link ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator}
+         * But listener could implement {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator}
          * interface and it would be registered as configurator automatically. This could be used to register special
          * extensions required by listener logic (some diagnostic, monitoring or special features support).
          * <p>
@@ -263,7 +263,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param listeners guicey lifecycle listeners (listener could be also configurator)
          * @return builder instance for chained calls
          * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
-         * @see ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator
+         * @see ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
          * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
          */
         public Builder<T> listen(final GuiceyLifecycleListener... listeners) {

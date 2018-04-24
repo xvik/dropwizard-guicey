@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 
 import java.util.Set;
 

@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context;
 import io.dropwizard.Bundle;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 
 import java.util.Arrays;
 

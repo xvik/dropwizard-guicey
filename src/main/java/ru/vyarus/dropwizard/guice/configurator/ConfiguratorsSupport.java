@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.support.conf;
+package ru.vyarus.dropwizard.guice.configurator;
 
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 

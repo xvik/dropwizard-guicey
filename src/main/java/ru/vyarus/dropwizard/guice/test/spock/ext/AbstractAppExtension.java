@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.test.spock.ext;
 import io.dropwizard.testing.ConfigOverride;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.SpecInfo;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 
 import java.lang.annotation.Annotation;
 import java.util.List;

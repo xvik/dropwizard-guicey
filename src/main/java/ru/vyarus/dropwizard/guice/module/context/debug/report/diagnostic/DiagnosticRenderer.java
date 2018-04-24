@@ -41,7 +41,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * If extensions print enabled without installers enabled then all extensions are rendered in registration order.
  * Markers:
  * <ul>
- * <li>CONF when extension installed by {@link ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator}</li>
+ * <li>CONF when extension installed by {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator}</li>
  * <li>SCAN when extension found by classpath scan</li>
  * <li>LAZY when {@link ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding}
  * annotation set</li>

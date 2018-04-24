@@ -22,7 +22,7 @@ public enum GuiceyLifecycle {
     // -- Bundle.initialize()
 
     /**
-     * Called after all registered {@link ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator}
+     * Called after all registered {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator}
      * processing. Provides all instances of executed configurators. Not called if no configurators used.
      */
     ConfiguratorsProcessed(ConfiguratorsProcessedEvent.class),

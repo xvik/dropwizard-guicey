@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.test.spock.ext;
 import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
 import org.junit.rules.ExternalResource;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp;
 

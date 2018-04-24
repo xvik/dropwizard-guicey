@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.test;
 
 import org.junit.rules.ExternalResource;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
-import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
 
 import java.util.Arrays;
 import java.util.List;

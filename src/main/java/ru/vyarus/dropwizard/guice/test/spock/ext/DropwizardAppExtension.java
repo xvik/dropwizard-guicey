@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.rules.ExternalResource;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp;
 
 /**

@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.test.configurator
 
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
 import spock.lang.Specification
 
 /**

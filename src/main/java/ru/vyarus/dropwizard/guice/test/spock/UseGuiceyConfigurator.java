@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.spock;
 
 import org.spockframework.runtime.extension.ExtensionAnnotation;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 import ru.vyarus.dropwizard.guice.test.spock.ext.GuiceyConfiguratorExtension;
 
 import java.lang.annotation.ElementType;

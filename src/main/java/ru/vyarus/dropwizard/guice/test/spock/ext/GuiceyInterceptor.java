@@ -6,8 +6,8 @@ import org.junit.rules.ExternalResource;
 import org.spockframework.runtime.extension.AbstractMethodInterceptor;
 import org.spockframework.runtime.extension.IMethodInvocation;
 import org.spockframework.runtime.model.SpecInfo;
-import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 import spock.lang.Shared;
 
 import java.lang.reflect.Field;

@@ -21,8 +21,8 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
-import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 
 import java.util.*;
 import java.util.function.Predicate;

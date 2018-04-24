@@ -18,8 +18,8 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledByEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
-import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 
 import java.util.*;
 

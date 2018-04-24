@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.test.spock.ext;
 
 import org.spockframework.runtime.extension.AbstractMethodInterceptor;
 import org.spockframework.runtime.extension.IMethodInvocation;
-import ru.vyarus.dropwizard.guice.module.support.conf.ConfiguratorsSupport;
-import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 
 import java.util.List;
 
