@@ -13,6 +13,8 @@ import ru.vyarus.dropwizard.guice.module.context.Filters
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
+import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
+import ru.vyarus.dropwizard.guice.module.support.conf.GuiceyConfigurator
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 import javax.inject.Inject
@@ -58,7 +60,10 @@ class DisableWithPredicateTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .disable(type(SampleBundle, SampleModule1, SampleExtension1, ManagedInstaller))
+                    // listener will call disable AFTER items registration (post processing on predicate registration)
+                    .listen(new Listener())
+                    // predicate registered before items registration and will disable items by event
+                    .disable(type(SampleBundle, SampleModule1))
 
                     .bundles(new SampleBundle(), new SampleBundle2())
                     .modules(new SampleModule1(), new SampleModule2())
@@ -69,6 +74,13 @@ class DisableWithPredicateTest extends AbstractTest {
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
+        }
+    }
+
+    static class Listener extends GuiceyLifecycleAdapter implements GuiceyConfigurator {
+        @Override
+        void configure(GuiceBundle.Builder builder) {
+            builder.disable(type(SampleExtension1, ManagedInstaller))
         }
     }
 
