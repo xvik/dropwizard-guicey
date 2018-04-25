@@ -11,9 +11,10 @@ class DwAwareModule extends DropwizardAwareModule<TestConfiguration> {
 
     @Override
     protected void configure() {
-        assert bootstrap() !=null
-        assert environment() !=null
-        assert configuration() !=null
+        assert bootstrap() != null
+        assert environment() != null
+        assert configuration() != null
         assert appPackage() == this.class.package.name
+        assert options() != null
     }
 }

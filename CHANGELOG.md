@@ -20,7 +20,8 @@
       Events provide access to all possible internal state, available at this moment. It may be used to write instance specific
       features (post processing) or just advaned logging
     - New bundle's methods `bundle.pritLifecyclePhases()` and `bundle.pritLifecyclePhasesDetailed()` activates new DebugLifecycleListener 
-      and shows lifecycle stages directly in logs. Useful for debugging startup logic (to see when it was executed in lifecyle) and to better understand how guicey works.    
+      and shows lifecycle stages directly in logs. Useful for debugging startup logic (to see when it was executed in lifecyle) and to better understand how guicey works.
+* Add OptionsAwareModule interface to let guice modules access options           
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0

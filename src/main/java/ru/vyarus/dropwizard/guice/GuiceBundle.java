@@ -7,7 +7,6 @@ import com.google.common.collect.Sets;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
-import com.google.inject.util.Modules;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.cli.Command;
@@ -33,15 +32,17 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
+import ru.vyarus.dropwizard.guice.module.installer.util.ModulesSupport;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
-import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
 
 import javax.servlet.DispatcherType;
-import java.util.*;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
@@ -140,7 +141,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
         configureFromBundles(configuration, environment);
         context.registerModules(new GuiceSupportModule(scanner, context));
-        configureModules(configuration, environment);
+        ModulesSupport.configureModules(bootstrap, configuration, environment, context);
         createInjector(environment);
         afterInjectorCreation();
         context.lifecycle().applicationRun();
@@ -173,46 +174,14 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         timer.stop();
     }
 
-    /**
-     * Post-process registered modules by injecting bootstrap, configuration and environment objects.
-     *
-     * @param configuration configuration object
-     * @param environment   environment object
-     */
-    @SuppressWarnings("unchecked")
-    private void configureModules(final T configuration, final Environment environment) {
-        for (Module mod : context.getEnabledModules()) {
-            if (mod instanceof BootstrapAwareModule) {
-                ((BootstrapAwareModule) mod).setBootstrap(bootstrap);
-            }
-            if (mod instanceof ConfigurationAwareModule) {
-                ((ConfigurationAwareModule<T>) mod).setConfiguration(configuration);
-            }
-            if (mod instanceof EnvironmentAwareModule) {
-                ((EnvironmentAwareModule) mod).setEnvironment(environment);
-            }
-        }
-    }
-
     private void createInjector(final Environment environment) {
         final Stopwatch timer = context.stat().timer(InjectorCreationTime);
-        injector = injectorFactory.createInjector(context.option(InjectorStage), prepareModules());
+        injector = injectorFactory.createInjector(
+                context.option(InjectorStage), ModulesSupport.prepareModules(context));
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
         timer.stop();
-    }
-
-    private Iterable<Module> prepareModules() {
-        final List<Module> normalModules = context.getNormalModules();
-        final List<Module> overridingModules = context.getOverridingModules();
-        // use different lists to avoid possible side effects from listeners (not allowed to exclude or modify order)
-        context.lifecycle().injectorCreation(
-                new ArrayList<>(normalModules),
-                new ArrayList<>(overridingModules),
-                context.getDisabledModules());
-        return overridingModules.isEmpty() ? normalModules
-                : Collections.singletonList(Modules.override(normalModules).with(overridingModules));
     }
 
     @SuppressWarnings("unchecked")
@@ -387,6 +356,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule
          * @see ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule
          * @see ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule
+         * @see ru.vyarus.dropwizard.guice.module.support.OptionsAwareModule
          * @see ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
          */
         public Builder<T> modules(final Module... modules) {
@@ -774,6 +744,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
         /**
          * Same as {@link #printLifecyclePhases}, but also prints resolved and disabled configuration items.
+         *
          * @return builder instance for chained calls
          * @see DebugGuiceyLifecycle
          */

@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 
 /**
  * Base module to avoid boilerplate. It's not required to extend it, but
@@ -17,11 +18,13 @@ import io.dropwizard.setup.Environment;
 public abstract class DropwizardAwareModule<C extends Configuration> extends AbstractModule implements
         EnvironmentAwareModule,
         BootstrapAwareModule<C>,
-        ConfigurationAwareModule<C> {
+        ConfigurationAwareModule<C>,
+        OptionsAwareModule {
 
     private C configuration;
     private Bootstrap<C> bootstrap;
     private Environment environment;
+    private Options options;
 
     @Override
     public void setConfiguration(final C configuration) {
@@ -36,6 +39,11 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
     @Override
     public void setEnvironment(final Environment environment) {
         this.environment = environment;
+    }
+
+    @Override
+    public void setOptions(final Options options) {
+        this.options = options;
     }
 
     /**
@@ -64,5 +72,12 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      */
     protected String appPackage() {
         return bootstrap().getApplication().getClass().getPackage().getName();
+    }
+
+    /**
+     * @return options accessor object
+     */
+    protected Options options() {
+        return options;
     }
 }

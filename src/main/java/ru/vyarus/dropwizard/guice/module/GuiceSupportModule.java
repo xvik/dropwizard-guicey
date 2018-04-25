@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module;
 
-import com.google.inject.AbstractModule;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -12,9 +11,7 @@ import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.InstallerModule;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module;
-import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
-import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
-import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
+import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
 
 import javax.inject.Singleton;
 
@@ -43,14 +40,10 @@ import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationInterfac
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
-public class GuiceSupportModule<T extends Configuration> extends AbstractModule
-        implements BootstrapAwareModule<T>, EnvironmentAwareModule, ConfigurationAwareModule<T> {
+public class GuiceSupportModule<T extends Configuration> extends DropwizardAwareModule<T> {
 
     private final ClasspathScanner scanner;
     private final ConfigurationContext context;
-    private Bootstrap<T> bootstrap;
-    private T configuration;
-    private Environment environment;
 
     public GuiceSupportModule(final ClasspathScanner scanner,
                               final ConfigurationContext context) {
@@ -59,28 +52,13 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
     }
 
     @Override
-    public void setBootstrap(final Bootstrap<T> bootstrap) {
-        this.bootstrap = bootstrap;
-    }
-
-    @Override
-    public void setConfiguration(final T configuration) {
-        this.configuration = configuration;
-    }
-
-    @Override
-    public void setEnvironment(final Environment environment) {
-        this.environment = environment;
-    }
-
-    @Override
     protected void configure() {
         bindEnvironment();
         install(new InstallerModule(scanner, context));
-        install(new Jersey2Module(bootstrap.getApplication(), environment, context));
+        install(new Jersey2Module(bootstrap().getApplication(), environment(), context));
 
         // let guice beans use options the same way as bundles (with usage tracking)
-        bind(Options.class).toInstance(new Options(context.options()));
+        bind(Options.class).toInstance(options());
 
         // provide access for configuration info collected during startup
         bind(ConfigurationInfo.class).toInstance(new ConfigurationInfo(context));
@@ -94,9 +72,9 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
      * as injectable.
      */
     private void bindEnvironment() {
-        bind(Bootstrap.class).toInstance(bootstrap);
-        bind(Environment.class).toInstance(environment);
-        bindConfig(configuration.getClass());
+        bind(Bootstrap.class).toInstance(bootstrap());
+        bind(Environment.class).toInstance(environment());
+        bindConfig(configuration().getClass());
     }
 
     /**
@@ -107,7 +85,7 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
      */
     @SuppressWarnings("unchecked")
     private void bindConfig(final Class type) {
-        bind(type).toInstance(configuration);
+        bind(type).toInstance(configuration());
         if (type == Configuration.class) {
             return;
         }
@@ -117,7 +95,7 @@ public class GuiceSupportModule<T extends Configuration> extends AbstractModule
                 if (pkg.startsWith("java.") || pkg.startsWith("groovy.")) {
                     continue;
                 }
-                bind(iface).toInstance(configuration);
+                bind(iface).toInstance(configuration());
             }
         }
         bindConfig(type.getSuperclass());
