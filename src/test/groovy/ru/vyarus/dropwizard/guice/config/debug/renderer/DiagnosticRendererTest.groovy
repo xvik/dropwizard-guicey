@@ -336,7 +336,7 @@ class DiagnosticRendererTest extends Specification {
                             .searchCommands()
                             .bundles(new FooBundle(), new GuiceRestrictedConfigBundle(), new DisabledBundle())
                             .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule(), new DisabledModule())
-                            .overrideModules(new OverrideModule())
+                            .modulesOverride(new OverrideModule())
                             .extensions(LazyExtension, HKExtension, DisabledExtension)
                             .disableInstallers(LifeCycleInstaller)
                             .disableBundles(DisabledBundle)

@@ -16,7 +16,7 @@ public interface InjectorFactory {
      * Creates an injector instance.
      * <p>
      * NOTE: if overriding modules were used
-     * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#overrideModules(Module...)}) then modules list will
+     * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(Module...)}) then modules list will
      * contain only one overridden module. {@link com.google.inject.util.Modules#override(Module...)} can be used on
      * this module too, if required.
      *

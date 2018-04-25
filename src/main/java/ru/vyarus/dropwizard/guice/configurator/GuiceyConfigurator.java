@@ -32,7 +32,7 @@ public interface GuiceyConfigurator {
      * <li>Direct disable* method, for example
      * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableExtensions(Class[])}</li>
      * <li>Guice bindings override:
-     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#overrideModules(com.google.inject.Module...)}</li>
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(com.google.inject.Module...)}</li>
      * </ul>
      * All other configuration options are also available, so it is possible to register extra extensions, bundles etc
      * or modify guicey options ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#option(Enum, Object)}).

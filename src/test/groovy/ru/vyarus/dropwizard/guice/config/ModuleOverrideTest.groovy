@@ -47,7 +47,7 @@ class ModuleOverrideTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .modules(new NormalModule())
-                    .overrideModules(new OverridingModule())
+                    .modulesOverride(new OverridingModule())
                     .build())
         }
 

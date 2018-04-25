@@ -198,7 +198,7 @@ public class GuiceyConfigurationInfo {
 
     /**
      * @return types of all enabled overriding guice modules or empty list
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#overrideModules(Module...)
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(Module...)
      */
     public List<Class<Module>> getOverridingModules() {
         return context.getItems(ConfigItem.Module, Filters.<ModuleItemInfo>enabled()

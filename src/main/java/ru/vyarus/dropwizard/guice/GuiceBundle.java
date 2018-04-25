@@ -417,7 +417,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          * @see #modules(Module...)
          */
-        public Builder<T> overrideModules(final Module... modules) {
+        public Builder<T> modulesOverride(final Module... modules) {
             bundle.context.registerModulesOverride(modules);
             return this;
         }

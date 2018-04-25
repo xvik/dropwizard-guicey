@@ -2,7 +2,7 @@
     - remove guice-multibindings dependency as it's moved to guice core
 * Ability to disable: guicey bundles, guice modules (directly registered) and extensions through bundle builder
 * Add generic disable method to builder: disable(Predicate)
-* Add direct support for guice bindings override (using Modules.override() internally): bundle_builder.overrideModules()
+* Add direct support for guice bindings override (using Modules.override() internally): bundle_builder.modulesOverride()
 * Support for configuration override in integration tests (#23):
     - New GuiceyConfigurator interface: configurator receive bundle builder instance after application configuration and so could modify configuration (with new disable* methods)
     - Junit:
