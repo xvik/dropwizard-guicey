@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.installer.util;
+package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
