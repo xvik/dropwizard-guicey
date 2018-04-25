@@ -7,7 +7,9 @@ import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
-import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
+import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
@@ -18,8 +20,6 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledByEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
-import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ import java.util.*;
 @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
 public final class LifecycleSupport {
 
-    private final OptionsInfo options;
+    private final Options options;
     private Bootstrap bootstrap;
     private Configuration configuration;
     private Environment environment;
@@ -41,7 +41,7 @@ public final class LifecycleSupport {
 
     private final List<GuiceyLifecycleListener> listeners = new ArrayList<>();
 
-    public LifecycleSupport(final OptionsInfo options) {
+    public LifecycleSupport(final Options options) {
         this.options = options;
     }
 

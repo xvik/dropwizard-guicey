@@ -4,7 +4,7 @@ import com.google.inject.Injector;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent;
@@ -32,7 +32,7 @@ public class ExtensionsInstalledByEvent extends InjectorPhaseEvent {
     private final Class<? extends FeatureInstaller> installer;
     private final List<Class<?>> installed;
 
-    public ExtensionsInstalledByEvent(final OptionsInfo options,
+    public ExtensionsInstalledByEvent(final Options options,
                                       final Bootstrap bootstrap,
                                       final Configuration configuration,
                                       final Environment environment,

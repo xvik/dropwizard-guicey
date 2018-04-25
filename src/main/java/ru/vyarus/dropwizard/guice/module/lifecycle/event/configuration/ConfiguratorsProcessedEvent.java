@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
-import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 
 import java.util.Set;
 
@@ -23,7 +23,7 @@ public class ConfiguratorsProcessedEvent extends GuiceyLifecycleEvent {
 
     private final Set<GuiceyConfigurator> configurators;
 
-    public ConfiguratorsProcessedEvent(final OptionsInfo options, final Set<GuiceyConfigurator> configurators) {
+    public ConfiguratorsProcessedEvent(final Options options, final Set<GuiceyConfigurator> configurators) {
         super(GuiceyLifecycle.ConfiguratorsProcessed, options);
         this.configurators = configurators;
     }

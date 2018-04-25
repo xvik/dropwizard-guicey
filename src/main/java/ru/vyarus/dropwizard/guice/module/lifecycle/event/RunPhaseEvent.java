@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.module.lifecycle.event;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 
 /**
@@ -20,7 +20,7 @@ public abstract class RunPhaseEvent extends GuiceyLifecycleEvent {
     private final Environment environment;
 
     public RunPhaseEvent(final GuiceyLifecycle type,
-                         final OptionsInfo options,
+                         final Options options,
                          final Bootstrap bootstrap,
                          final Configuration configuration,
                          final Environment environment) {

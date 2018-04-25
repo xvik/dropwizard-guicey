@@ -5,7 +5,7 @@ import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
-import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.HkPhaseEvent;
@@ -36,7 +36,7 @@ public class HkExtensionsInstalledByEvent extends HkPhaseEvent {
     private final List<Class<?>> installed;
 
     @SuppressWarnings("ParameterNumber")
-    public HkExtensionsInstalledByEvent(final OptionsInfo options,
+    public HkExtensionsInstalledByEvent(final Options options,
                                         final Bootstrap bootstrap,
                                         final Configuration configuration,
                                         final Environment environment,

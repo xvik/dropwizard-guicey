@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.module.lifecycle.event.run;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
@@ -25,7 +25,7 @@ public class InstallersResolvedEvent extends RunPhaseEvent {
     private final List<FeatureInstaller> installers;
     private final List<Class<? extends FeatureInstaller>> disabled;
 
-    public InstallersResolvedEvent(final OptionsInfo options,
+    public InstallersResolvedEvent(final Options options,
                                    final Bootstrap bootstrap,
                                    final Configuration configuration,
                                    final Environment environment,

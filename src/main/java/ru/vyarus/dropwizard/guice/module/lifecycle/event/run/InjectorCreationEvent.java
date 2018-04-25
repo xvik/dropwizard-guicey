@@ -4,7 +4,7 @@ import com.google.inject.Module;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
 
@@ -25,7 +25,7 @@ public class InjectorCreationEvent extends RunPhaseEvent {
     private final List<Module> overriding;
     private final List<Module> disabled;
 
-    public InjectorCreationEvent(final OptionsInfo options,
+    public InjectorCreationEvent(final Options options,
                                  final Bootstrap bootstrap,
                                  final Configuration configuration,
                                  final Environment environment,

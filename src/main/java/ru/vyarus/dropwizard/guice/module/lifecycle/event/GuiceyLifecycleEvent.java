@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event;
 
 import com.google.common.base.Preconditions;
-import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 
 /**
@@ -24,10 +24,10 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 public abstract class GuiceyLifecycleEvent {
 
     private final GuiceyLifecycle type;
-    private final OptionsInfo options;
+    private final Options options;
 
 
-    public GuiceyLifecycleEvent(final GuiceyLifecycle type, final OptionsInfo options) {
+    public GuiceyLifecycleEvent(final GuiceyLifecycle type, final Options options) {
         Preconditions.checkState(type.getType().equals(getClass()),
                 "Wrong event type %s used for class %s", type, getClass().getSimpleName());
         this.type = type;
@@ -49,7 +49,7 @@ public abstract class GuiceyLifecycleEvent {
      *
      * @return defined options
      */
-    public OptionsInfo getOptions() {
+    public Options getOptions() {
         return options;
     }
 }

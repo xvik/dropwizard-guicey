@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ModuleItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
-import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -84,7 +84,7 @@ public final class ConfigurationContext {
     /**
      * Guicey lifecycle listeners support.
      */
-    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new OptionsInfo(optionsSupport));
+    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new Options(optionsSupport));
 
 
     // --------------------------------------------------------------------------- SCOPE

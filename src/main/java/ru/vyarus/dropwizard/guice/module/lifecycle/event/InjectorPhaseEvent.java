@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRend
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer;
-import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 
 /**
@@ -28,7 +28,7 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
     private final ReportRenderer reportRenderer = new ReportRenderer();
 
     public InjectorPhaseEvent(final GuiceyLifecycle type,
-                              final OptionsInfo options,
+                              final Options options,
                               final Bootstrap bootstrap,
                               final Configuration configuration,
                               final Environment environment,
