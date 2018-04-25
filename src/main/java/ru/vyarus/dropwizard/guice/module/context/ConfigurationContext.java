@@ -7,6 +7,8 @@ import io.dropwizard.Bundle;
 import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
+import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
+import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
@@ -21,8 +23,6 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
-import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -67,7 +67,7 @@ public final class ConfigurationContext {
     /**
      * Disable predicates listen for first item registration and could immediately disable it.
      */
-    private final List<Predicate<ItemInfo>> disablePredicates = new ArrayList<>();
+    private final List<PredicateHandler> disablePredicates = new ArrayList<>();
     /**
      * Current scope hierarchy. The last one is actual scope (application or bundle).
      */
@@ -459,7 +459,9 @@ public final class ConfigurationContext {
      */
     @SuppressWarnings("PMD.UseVarargs")
     public void registerDisablePredicates(final Predicate<ItemInfo>[] predicates) {
-        final List<Predicate<ItemInfo>> list = Arrays.asList(predicates);
+        final List<PredicateHandler> list = Arrays.stream(predicates)
+                .map(p -> new PredicateHandler(p, getScope()))
+                .collect(Collectors.toList());
         disablePredicates.addAll(list);
         applyPredicatesForRegisteredItems(list);
     }
@@ -555,7 +557,7 @@ public final class ConfigurationContext {
      *
      * @param predicates new predicates
      */
-    private void applyPredicatesForRegisteredItems(final List<Predicate<ItemInfo>> predicates) {
+    private void applyPredicatesForRegisteredItems(final List<PredicateHandler> predicates) {
         ImmutableList.builder()
                 .addAll(getEnabledModules())
                 .addAll(getEnabledBundles())
@@ -593,14 +595,9 @@ public final class ConfigurationContext {
         }
     }
 
-    private void applyDisablePredicates(final List<Predicate<ItemInfo>> predicates, final ItemInfo item) {
-        final Class<?> scope = currentScope;
-        for (Predicate<ItemInfo> predicate : predicates) {
-            if (predicate.test(item)) {
-                // change scope to indicate predicate as disable source
-                currentScope = Disables.class;
-                registerDisable(item.getItemType(), item.getType());
-                currentScope = scope;
+    private void applyDisablePredicates(final List<PredicateHandler> predicates, final ItemInfo item) {
+        for (PredicateHandler predicate : predicates) {
+            if (predicate.disable(item)) {
                 break;
             }
         }
@@ -650,5 +647,38 @@ public final class ConfigurationContext {
 
     private boolean isEnabled(final ConfigItem type, final Class itemType) {
         return !disabledItemsHolder.get(type).contains(itemType);
+    }
+
+    /**
+     * Wraps registered disable predicate on registration to remember it's scope and mark all actually disabled
+     * items as disabled by that scope.
+     */
+    private class PredicateHandler {
+        private final Class<?> predicateScope;
+        private final Predicate<ItemInfo> predicate;
+
+        PredicateHandler(final Predicate<ItemInfo> predicate, final Class<?> predicateScope) {
+            this.predicate = predicate;
+            this.predicateScope = predicateScope;
+        }
+
+        /**
+         * Checks if item matches predicate and if so disables item. Item disable source will be set to
+         * predicate registration source.
+         *
+         * @param item item to check for disabling
+         * @return true if item was disabled, false otherwise
+         */
+        public boolean disable(final ItemInfo item) {
+            final boolean test = predicate.test(item);
+            if (test) {
+                final Class<?> scope = currentScope;
+                // change scope to indicate predicate's registration scope as disable source
+                currentScope = predicateScope;
+                registerDisable(item.getItemType(), item.getType());
+                currentScope = scope;
+            }
+            return test;
+        }
     }
 }

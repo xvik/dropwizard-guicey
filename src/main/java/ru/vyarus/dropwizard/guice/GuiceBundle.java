@@ -606,6 +606,12 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * Predicate receive only disableable items: guicey budle, installer, extension or guice module
          * (directly registered).
          * <p>
+         * Also, predicate is called on registration for all already registered items to make predicate
+         * registration moment not important.
+         * <p>
+         * Essentially, predicates are the same as calling direct disable methods: items, disabled by predicate,
+         * will be marked as disabled by predicate registration context.
+         * <p>
          * Mostly useful for testing, but in some cases could be used directly.
          * <p>
          * Use {@link Predicate#and(Predicate)}, {@link Predicate#or(Predicate)} and {@link Predicate#negate()}
