@@ -301,23 +301,23 @@ First, prepare custom [injector factory](injector.md#injector-factory):
 
 ```java
 public class CustomInjectorFactory implements InjectorFactory {
-     private static ThreadLocal<Modules[]> modules = new ThreadLocal<>();
+    private static ThreadLocal<Module[]> customModules = new ThreadLocal<>();
 
-     @Override
-     public Injector createInjector(Stage stage, Iterable<Module> modules) {
-          Modules[] customModules = modules.get();
-          modules.remove();
-          return Guice.createInjector(stage, customModules == null ? modules 
-                               : Lists.newArrayList(Modules.override(modules).with(customModules)) ) 
-     }
+    @Override
+    public Injector createInjector(Stage stage, Iterable<? extends Module> modules) {
+        Module[] override = customModules.get();
+        customModules.remove();
+        return Guice.createInjector(stage, customModules == null ? modules
+                : Lists.newArrayList(Modules.override(modules).with(override)));
+    }
 
-     public static void override(Module... modules) {
-          customModules.set(modules);
-     }
-     
-     public static void clear() {
-         customModules.remove();
-     }
+    public static void override(Module... modules) {
+        customModules.set(modules);
+    }
+
+    public static void clear() {
+        customModules.remove();
+    }
 }
 ```
 
