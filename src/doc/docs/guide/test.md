@@ -307,7 +307,7 @@ public class CustomInjectorFactory implements InjectorFactory {
     public Injector createInjector(Stage stage, Iterable<? extends Module> modules) {
         Module[] override = customModules.get();
         customModules.remove();
-        return Guice.createInjector(stage, customModules == null ? modules
+        return Guice.createInjector(stage, override == null ? modules
                 : Lists.newArrayList(Modules.override(modules).with(override)));
     }
 
