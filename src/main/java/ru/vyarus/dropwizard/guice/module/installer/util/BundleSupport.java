@@ -3,7 +3,6 @@ package ru.vyarus.dropwizard.guice.module.installer.util;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -41,7 +40,7 @@ public final class BundleSupport {
      * @param context       bundles context
      * @param configuration configuration object
      * @param environment   environment object
-     * @param bootstrap  dropwizard bootstrap instance
+     * @param bootstrap     dropwizard bootstrap instance
      */
     public static void processBundles(final ConfigurationContext context,
                                       final Configuration configuration, final Environment environment,
