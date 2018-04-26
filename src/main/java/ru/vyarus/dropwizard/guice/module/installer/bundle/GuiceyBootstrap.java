@@ -4,10 +4,12 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Module;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +17,18 @@ import java.util.List;
 /**
  * Guicey configuration object. Provides almost the same configuration methods as
  * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder}. Also, contains dropwizard configuration,
- * environment and application objects (in case if they are required).
+ * environment and bootstrap objects (in case if they are required).
+ * <p>
+ * In contrast to main builder, guicey bundle can't:
+ * <ul>
+ * <li>Disable bundles (because at this stage bundles already partly processed)</li>
+ * <li>Use generic disable predicates (to not allow bundles disable, moreover it's tests-oriented feature)</li>
+ * <li>Change options (because some bundles may already apply configuration based on changed option value
+ * which will mean inconsistent state)</li>
+ * <li>Register listener, implementing {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator}
+ * (because it's too late - all configurators were processed)</li>
+ * <li>Register some special objects like custom injector factory or custrom bundles lookup</li>
+ * </ul>
  *
  * @author Vyacheslav Rusakov
  * @since 01.08.2015
@@ -27,16 +40,26 @@ public class GuiceyBootstrap {
     private final List<GuiceyBundle> iterationBundles;
     private final Configuration configuration;
     private final Environment environment;
-    private final Application application;
+    private final Bootstrap bootstrap;
 
     public GuiceyBootstrap(final ConfigurationContext context, final List<GuiceyBundle> iterationBundles,
                            final Configuration configuration, final Environment environment,
-                           final Application application) {
+                           final Bootstrap bootstrap) {
         this.context = context;
         this.iterationBundles = iterationBundles;
         this.configuration = configuration;
         this.environment = environment;
-        this.application = application;
+        this.bootstrap = bootstrap;
+    }
+
+    /**
+     * Note: application is already in run phase, so it's too late to configure dropwizard bootstrap object. Object
+     * provided just for consultation.
+     *
+     * @return dropwizard bootstrap instance
+     */
+    public Bootstrap bootstrap() {
+        return bootstrap;
     }
 
     /**
@@ -68,21 +91,38 @@ public class GuiceyBootstrap {
      * @return dropwizard application instance
      */
     public Application application() {
-        return application;
+        return bootstrap.getApplication();
     }
 
     /**
-     * All registered modules must be of unique type (all modules registered). If two or more modules of the
-     * same type registered, only first instance will be used.
+     * Read option value. Options could be set only in application root
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#option(Enum, Object)}.
+     * If value wasn't set there then default value will be returned. Null may return only if it was default value
+     * and no new value were assigned.
      * <p>
-     * NOTE: if module implements *AwareModule interfaces, objects will be set just before configuration start.
+     * Option access is tracked as option usage (all tracked data is available through
+     * {@link ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo}).
+     *
+     * @param option option enum
+     * @param <V>    option value type
+     * @param <T>    helper type to define option
+     * @return assigned option value or default value
+     * @see Option more options info
+     * @see ru.vyarus.dropwizard.guice.GuiceyOptions options example
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#option(java.lang.Enum, java.lang.Object)
+     * options definition
+     */
+    public <V, T extends Enum & Option> V option(final T option) {
+        return context.option(option);
+    }
+
+    /**
+     * Register guice modules. All registered modules must be of unique type (duplicate instances of the
+     * same type are filtered).
      *
      * @param modules one or more juice modules
-     * @return configurer instance for chained calls
-     * @see ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule
-     * @see ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule
-     * @see ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule
-     * @see ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(com.google.inject.Module...)
      */
     public GuiceyBootstrap modules(final Module... modules) {
         Preconditions.checkState(modules.length > 0, "Specify at least one module");
@@ -91,12 +131,14 @@ public class GuiceyBootstrap {
     }
 
     /**
-     * @param installers feature installer types to disable
-     * @return configurer instance for chained calls
+     * Override modules (using guice {@link com.google.inject.util.Modules#override(Module...)}).
+     *
+     * @param modules overriding modules
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(Module...)
      */
-    @SafeVarargs
-    public final GuiceyBootstrap disableInstallers(final Class<? extends FeatureInstaller>... installers) {
-        context.disableInstallers(installers);
+    public GuiceyBootstrap modulesOverride(final Module... modules) {
+        context.registerModulesOverride(modules);
         return this;
     }
 
@@ -106,7 +148,7 @@ public class GuiceyBootstrap {
      * (duplicate installers registrations will be removed).
      *
      * @param installers feature installer classes to register
-     * @return configurer instance for chained calls
+     * @return bootstrap instance for chained calls
      */
     @SafeVarargs
     public final GuiceyBootstrap installers(final Class<? extends FeatureInstaller>... installers) {
@@ -125,7 +167,7 @@ public class GuiceyBootstrap {
      * injector creation.
      *
      * @param extensionClasses extension bean classes to register
-     * @return configurer instance for chained calls
+     * @return bootstrap instance for chained calls
      */
     public GuiceyBootstrap extensions(final Class<?>... extensionClasses) {
         context.registerExtensions(extensionClasses);
@@ -139,7 +181,7 @@ public class GuiceyBootstrap {
      * (if two or more bundles of the same type detected then only first instance will be processed).
      *
      * @param bundles guicey bundles
-     * @return configurer instance for chained calls
+     * @return bootstrap instance for chained calls
      */
     public GuiceyBootstrap bundles(final GuiceyBundle... bundles) {
         context.registerBundles(bundles);
@@ -148,22 +190,55 @@ public class GuiceyBootstrap {
     }
 
     /**
-     * Read option value. Options could be set only in application root
-     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#option(Enum, Object)}.
-     * If value wasn't set there then default value will be returned. Null may return only if it was default value
-     * and no new value were assigned.
-     * <p>
-     * Option access is tracked as option usage (all tracked data is available through
-     * {@link ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo}).
-     *
-     * @param option option enum
-     * @param <V>    option value type
-     * @param <T>    helper type to define option
-     * @return assigned option value or default value
-     * @see Option for more info about options
-     * @see ru.vyarus.dropwizard.guice.GuiceyOptions for options example
+     * @param installers feature installer types to disable
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableInstallers(Class[])
      */
-    public <V, T extends Enum & Option> V option(final T option) {
-        return context.option(option);
+    @SafeVarargs
+    public final GuiceyBootstrap disableInstallers(final Class<? extends FeatureInstaller>... installers) {
+        context.disableInstallers(installers);
+        return this;
+    }
+
+    /**
+     * @param extensions extensions to disable (manually added, registered by bundles or with classpath scan)
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableExtensions(Class[])
+     */
+    public final GuiceyBootstrap disableExtensions(final Class<?>... extensions) {
+        context.disableExtensions(extensions);
+        return this;
+    }
+
+    /**
+     * Disable both usual and overriding guice modules.
+     *
+     * @param modules guice module types to disable
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableModules(Class[])
+     */
+    @SafeVarargs
+    public final GuiceyBootstrap disableModules(final Class<? extends Module>... modules) {
+        context.disableModules(modules);
+        return this;
+    }
+
+    /**
+     * Guicey broadcast a lot of events in order to indicate lifecycle phases
+     * ({@linkplain ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle}). Listener, registered in bundles
+     * could listen events from {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle#BundlesProcessed}.
+     * <p>
+     * WARNING: don't register listeners implementing
+     * {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator} - such registrations will be rejected
+     * (it is too late - all configurators were already processed, but, as listener requires configurators support,
+     * assuming it can't work without proper configuration).
+     *
+     * @param listeners guicey lifecycle listeners
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(GuiceyLifecycleListener...)
+     */
+    public GuiceyBootstrap listen(final GuiceyLifecycleListener... listeners) {
+        context.lifecycle().register(listeners);
+        return this;
     }
 }

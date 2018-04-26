@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.bundles.bootstrap
 import com.google.inject.Inject
 import com.google.inject.Injector
 import com.google.inject.Key
+import com.google.inject.name.Names
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
@@ -43,5 +44,10 @@ class BootstrapMethodsTest extends AbstractTest {
         then: "managed found"
         info.getExtensions(ManagedInstaller) == [DummyManaged]
         injector.getExistingBinding(Key.get(DummyManaged))
+
+        then: "modules bound"
+        injector.getInstance(Key.get(String, Names.named("sample"))) == 'test str'
+        injector.getInstance(Key.get(String, Names.named("sample2"))) == 'test str override'
+
     }
 }

@@ -17,6 +17,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
  * @see GuiceyLifecycleAdapter
  * @since 17.04.2018
  */
+@FunctionalInterface
 public interface GuiceyLifecycleListener {
 
     /**

@@ -21,7 +21,13 @@
       features (post processing) or just advaned logging
     - New bundle's methods `bundle.pritLifecyclePhases()` and `bundle.pritLifecyclePhasesDetailed()` activates new DebugLifecycleListener 
       and shows lifecycle stages directly in logs. Useful for debugging startup logic (to see when it was executed in lifecyle) and to better understand how guicey works.
-* Add OptionsAwareModule interface to let guice modules access options           
+* Add OptionsAwareModule interface to let guice modules access options 
+* Add methods in GuiceyBundle's bootstrap object:
+    - bootstrap() - dropwizard bootstrap object
+    - modulesOverride(..) - overriding modules registration
+    - disableExtensions(..) - extensions disabling (for possible replacement)
+    - disableModules(..) - guice modules disabling
+    - listen(..) - lifecycle listener registration         
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0

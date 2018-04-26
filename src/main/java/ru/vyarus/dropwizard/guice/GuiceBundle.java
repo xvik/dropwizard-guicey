@@ -170,7 +170,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
         context.registerLookupBundles(bundleLookup.lookup());
         resolutionTimer.stop();
-        BundleSupport.processBundles(context, configuration, environment, bootstrap.getApplication());
+        BundleSupport.processBundles(context, configuration, environment, bootstrap);
         timer.stop();
     }
 
@@ -346,7 +346,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * All registered modules must be of unique type (all modules registered). If two or more modules of the
+         * All registered modules must be of unique type (for all registered modules). If two or more modules of the
          * same type registered, only first instance will be used.
          * <p>
          * NOTE: if module implements *AwareModule interfaces, objects will be set just before configuration start.
@@ -547,7 +547,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * NOTE: this option can disable only directly registered modules (with {@link #modules(Module...)}
          * or in bundle {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#modules(Module...)}.
          *
-         * @param modules guice modules to disable
+         * @param modules guice module types to disable
          * @return builder instance for chained calls
          */
         @SafeVarargs

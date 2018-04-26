@@ -41,15 +41,15 @@ public final class BundleSupport {
      * @param context       bundles context
      * @param configuration configuration object
      * @param environment   environment object
-     * @param application   application instance
+     * @param bootstrap  dropwizard bootstrap instance
      */
     public static void processBundles(final ConfigurationContext context,
                                       final Configuration configuration, final Environment environment,
-                                      final Application application) {
+                                      final Bootstrap bootstrap) {
         final List<GuiceyBundle> bundles = context.getEnabledBundles();
         final List<Class<? extends GuiceyBundle>> installedBundles = Lists.newArrayList();
         final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(
-                context, bundles, configuration, environment, application);
+                context, bundles, configuration, environment, bootstrap);
 
         // iterating while no new bundles registered
         while (!bundles.isEmpty()) {

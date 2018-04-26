@@ -32,6 +32,7 @@ class GBootstrapApplication extends Application<TestConfiguration> {
                     void initialize(GuiceyBootstrap gbootstrap) {
                         assert gbootstrap.configuration() != null
                         assert gbootstrap.environment() != null
+                        assert gbootstrap.bootstrap() != null
                         assert gbootstrap.application() != null
                         assert gbootstrap.option(GuiceyOptions.UseCoreInstallers)
 
@@ -42,7 +43,14 @@ class GBootstrapApplication extends Application<TestConfiguration> {
                             @Override
                             protected void configure() {
                                 bindConstant().annotatedWith(Names.named("sample")).to("test str")
+                                bindConstant().annotatedWith(Names.named("sample2")).to("test str")
                                 bind(DummyService)
+                            }
+                        })
+                                .modulesOverride(new AbstractModule() {
+                            @Override
+                            protected void configure() {
+                                bindConstant().annotatedWith(Names.named("sample2")).to("test str override")
                             }
                         })
                     }

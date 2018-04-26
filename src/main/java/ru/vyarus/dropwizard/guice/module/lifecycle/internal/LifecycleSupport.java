@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.internal;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import io.dropwizard.Configuration;
@@ -12,6 +13,7 @@ import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent;
@@ -38,6 +40,7 @@ public final class LifecycleSupport {
     private Environment environment;
     private Injector injector;
     private ServiceLocator locator;
+    private GuiceyLifecycle currentStage;
 
     private final List<GuiceyLifecycleListener> listeners = new ArrayList<>();
 
@@ -49,6 +52,9 @@ public final class LifecycleSupport {
         Arrays.asList(listeners).forEach(l -> {
             this.listeners.add(l);
             if (l instanceof GuiceyConfigurator) {
+                Preconditions.checkState(isBefore(GuiceyLifecycle.ConfiguratorsProcessed),
+                        "Can't register listener as configurator because configurators "
+                                + "were already processed (current stage is %s).", currentStage);
                 ConfiguratorsSupport.listen((GuiceyConfigurator) l);
             }
         });
@@ -157,7 +163,23 @@ public final class LifecycleSupport {
         }
     }
 
+    /**
+     * @return current lifecycle phase
+     */
+    public GuiceyLifecycle getStage() {
+        return currentStage;
+    }
+
+    /**
+     * @param lifecycle target lifecycle stage
+     * @return true if current lifecycle is before provided stage, false otherwise
+     */
+    public boolean isBefore(final GuiceyLifecycle lifecycle) {
+        return getStage() == null || getStage().ordinal() < lifecycle.ordinal();
+    }
+
     private void broadcast(final GuiceyLifecycleEvent event) {
         listeners.forEach(l -> l.onEvent(event));
+        currentStage = event.getType();
     }
 }
