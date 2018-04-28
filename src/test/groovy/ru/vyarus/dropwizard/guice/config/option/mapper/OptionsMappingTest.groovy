@@ -46,10 +46,10 @@ class OptionsMappingTest extends Specification {
         res[Opts.OptBool] == true
 
         and: "log ok"
-        out.log == """\tenv: VAR                   Opts.OptInt = 1
+        out.log.replace("\r", "") == """\tenv: VAR                   Opts.OptInt = 1
 \tprop: foo                  Opts.OptStr = bar
 \t                           Opts.OptBool = true
-""".replace("\r", "")
+"""
 
         when: "logging disabled"
         out.clearLog()
