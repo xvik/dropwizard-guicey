@@ -27,12 +27,13 @@ import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
 import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
+import ru.vyarus.dropwizard.guice.module.installer.internal.ModulesSupport;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
-import ru.vyarus.dropwizard.guice.module.installer.internal.ModulesSupport;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
@@ -47,6 +48,7 @@ import java.util.function.Predicate;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkExtensionsManagedByGuice;
 
 /**
  * Bundle enables guice integration for dropwizard. Guice context is configured in initialization phase,
@@ -298,7 +300,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * <p>
          * Also, mapper could map generic options definitions from system properties (prefixed):
          * <code><pre>
-         *.options(new OptionsMapper()
+         * .options(new OptionsMapper()
          *                 .props("option.")
          *                 .map())
          * </pre></code>
@@ -689,6 +691,29 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> strictScopeControl() {
             bundle.context.registerBundles(new HK2DebugBundle());
+            return this;
+        }
+
+        /**
+         * Manage jersey extensions (resources, jersey filters etc.) with HK by default instead of guice (the
+         * same effect as if {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} annotation
+         * would be set on all beans). Use this option if you want to use jersey specific resource features
+         * (like @Context bindings) and completely delegate management to HK.
+         * <p>
+         * IMPORTANT: this will activate hk bridge usage (to be able to inject guice beans) and so you will need
+         * to provide bridge dependency (org.glassfish.hk2:guice-bridge:2.5.0-b32). Startup will fail if
+         * dependency is not available.
+         * <p>
+         * WARNING: you will not be able to use guice AOP on beans managed by HK!
+         *
+         * @return builder instance for chained calls
+         * @see InstallersOptions#HkExtensionsManagedByGuice
+         * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+         * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
+         */
+        public Builder<T> useHK2ForJerseyExtensions() {
+            option(HkExtensionsManagedByGuice, false);
+            option(UseHkBridge, true);
             return this;
         }
 

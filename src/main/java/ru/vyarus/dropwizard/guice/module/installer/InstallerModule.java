@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkExtensionsManagedByGuice;
 
 /**
  * Module performs auto configuration using classpath scanning or manually predefined installers and beans.
@@ -133,9 +134,10 @@ public class InstallerModule extends AbstractModule {
     @SuppressWarnings("PMD.PrematureDeclaration")
     private void resolveExtensions(final ExtensionsHolder holder) {
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
+        final boolean guiceFirstMode = context.option(HkExtensionsManagedByGuice);
         final List<Class<?>> manual = context.getEnabledExtensions();
         for (Class<?> type : manual) {
-            if (!processType(type, holder, false)) {
+            if (!processType(type, holder, guiceFirstMode, false)) {
                 throw new IllegalStateException("No installer found for extension " + type.getName()
                         + ". Available installers: " + holder.getInstallerTypes()
                         .stream().map(FeatureUtils::getInstallerExtName).collect(Collectors.joining(", ")));
@@ -147,7 +149,7 @@ public class InstallerModule extends AbstractModule {
                     // avoid duplicate extension installation, but register it's appearance in auto scan scope
                     context.getOrRegisterExtension(type, true);
                 } else {
-                    processType(type, holder, true);
+                    processType(type, holder, guiceFirstMode, true);
                 }
             });
         }
@@ -155,14 +157,15 @@ public class InstallerModule extends AbstractModule {
         timer.stop();
     }
 
-    private boolean processType(final Class<?> type, final ExtensionsHolder holder, final boolean fromScan) {
+    private boolean processType(final Class<?> type, final ExtensionsHolder holder,
+                                final boolean guiceFirstMode, final boolean fromScan) {
         final FeatureInstaller installer = findInstaller(type, holder);
         final boolean recognized = installer != null;
         if (recognized) {
             // important to force config creation for extension from scan to allow disabling by matcher
             final ExtensionItemInfoImpl info = context.getOrRegisterExtension(type, fromScan);
             info.setLazy(type.isAnnotationPresent(LazyBinding.class));
-            info.setHk2Managed(JerseyBinding.isHK2Managed(type));
+            info.setHk2Managed(JerseyBinding.isHK2Managed(type, guiceFirstMode));
             info.setInstalledBy(installer.getClass());
 
             // extension from scan could be disabled by matcher

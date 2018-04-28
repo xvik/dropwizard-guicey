@@ -28,7 +28,15 @@
     - disableExtensions(..) - extensions disabling (for possible replacement)
     - disableModules(..) - guice modules disabling
     - listen(..) - lifecycle listener registration
-* Add OptionsMapper helper to simplify mapping of system properties and environment variables in builder.options()             
+* Add OptionsMapper helper to simplify mapping of system properties and environment variables in builder.options()
+* Add ability to manage jersey extensions with hk by default (#41). 
+    It's like using @HK2Managed on all jersey-related beans (resources, filters etc). 
+    This is useful, for example, if you get common to jersey resources features like @Context injection.   
+    - Add option InstallersOptions.HkExtensionsManagedByGuice set to false enable hk management by default.
+        Hk bridge must be enabled (GuiceyOptions.UseHkBridge) for hk-first mode (exception thrown if not).
+    - Add @GuiceManaged annotation to mark exceptions in hk-first mode (when @HK2Managed become useless).
+       In guice-first mode this annotation is useless.    
+    - Builder shortcut: .useHK2ForJerseyExtensions() to simplify hk-first mode enabling.            
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0

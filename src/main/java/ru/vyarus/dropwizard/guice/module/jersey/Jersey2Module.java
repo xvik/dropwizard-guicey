@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.jersey;
 
 
+import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
@@ -12,8 +13,9 @@ import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule;
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;
 
-import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseHkBridge;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.GuiceFilterRegistration;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseHkBridge;
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkExtensionsManagedByGuice;
 
 /**
  * Guice jersey2 integration module.
@@ -44,6 +46,7 @@ public class Jersey2Module extends AbstractModule {
 
     @Override
     protected void configure() {
+        checkHkFirstMode();
         final EnumSet<DispatcherType> types = context.option(GuiceFilterRegistration);
         final boolean guiceServletSupport = !types.isEmpty();
 
@@ -57,6 +60,22 @@ public class Jersey2Module extends AbstractModule {
 
         if (guiceServletSupport) {
             install(new GuiceWebModule(environment, types));
+        }
+    }
+
+    /**
+     * When HK management for jersey extensions is enabled by default, then guice bridge must be enabled.
+     * Without it guice beans could not be used in resources and other jersey extensions. If this is
+     * expected then guice support is not needed at all.
+     */
+    private void checkHkFirstMode() {
+        final boolean guiceyFirstMode = context.option(HkExtensionsManagedByGuice);
+        if (!guiceyFirstMode) {
+            Preconditions.checkState(context.option(UseHkBridge),
+                    "HK management for jersey extensions is enabled by default "
+                            + "(InstallersOptions.HkExtensionsManagedByGuice), but hk-guice bridge is not "
+                            + "enabled. Use GuiceyOptions.UseHkBridge option to enable bridge "
+                            + "(extra dependency is required)");
         }
     }
 }

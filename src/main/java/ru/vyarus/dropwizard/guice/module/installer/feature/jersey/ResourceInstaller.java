@@ -5,8 +5,6 @@ import com.google.inject.Binder;
 import com.google.inject.Injector;
 import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
@@ -15,8 +13,6 @@ import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
 import javax.inject.Singleton;
 import javax.ws.rs.Path;
-
-import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isHK2Managed;
 
 /**
  * Jersey resource installer.
@@ -30,8 +26,9 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isH
  * @since 01.09.2014
  */
 @Order(40)
-public class ResourceInstaller implements FeatureInstaller<Object>, BindingInstaller, TypeInstaller<Object>,
-        JerseyInstaller<Object> {
+public class ResourceInstaller extends AbstractJerseyInstaller<Object> implements
+        BindingInstaller,
+        TypeInstaller<Object> {
 
     @Override
     public boolean matches(final Class<?> type) {
@@ -40,8 +37,10 @@ public class ResourceInstaller implements FeatureInstaller<Object>, BindingInsta
     }
 
     @Override
-    public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazy) {
-        if (!isHK2Managed(type) && !lazy) {
+    public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazyMarker) {
+        final boolean hkManaged = isHkExtension(type);
+        final boolean lazy = isLazy(type, lazyMarker);
+        if (!hkManaged && !lazy) {
             // force singleton
             binder.bind(type).in(Singleton.class);
         }
@@ -55,7 +54,7 @@ public class ResourceInstaller implements FeatureInstaller<Object>, BindingInsta
 
     @Override
     public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {
-        JerseyBinding.bindComponent(binder, injector, type);
+        JerseyBinding.bindComponent(binder, injector, type, isHkExtension(type));
     }
 
     @Override

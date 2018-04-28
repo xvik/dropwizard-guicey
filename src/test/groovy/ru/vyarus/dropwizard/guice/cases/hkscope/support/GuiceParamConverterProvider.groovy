@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.cases.hkscope.support
 
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
+
 import javax.ws.rs.ext.ParamConverter
 import javax.ws.rs.ext.ParamConverterProvider
 import javax.ws.rs.ext.Provider
@@ -11,6 +13,7 @@ import java.lang.reflect.Type
  * @since 19.01.2016
  */
 @Provider
+@GuiceManaged
 class GuiceParamConverterProvider implements ParamConverterProvider {
 
     @Override

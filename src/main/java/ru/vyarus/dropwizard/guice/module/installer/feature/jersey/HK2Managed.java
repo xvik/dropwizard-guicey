@@ -7,24 +7,33 @@ import java.lang.annotation.Target;
 
 /**
  * Annotate jersey extension to delegate bean creation into hk2.
- * <p>Works for extensions registered by
- * {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}.</p>
- * <p>Guice context is started before HK, but HK related bindings (using service locator instance) will appear
+ * <p>
+ * Works for extensions registered by
+ * {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}.
+ * <p>
+ * Guice context is started before HK, but HK related bindings (using service locator instance) will appear
  * in guice context only after HK context creation. So if bean directly depends on HK services
  * (dependencies can't be wrapped with {@link javax.inject.Provider}, there is no way to properly create
- * it in guice context.</p>
- * <p>Good examples for this are {@link org.glassfish.jersey.server.internal.inject.AbstractValueFactoryProvider}
+ * it in guice context.
+ * <p>
+ * Good examples for this are {@link org.glassfish.jersey.server.internal.inject.AbstractValueFactoryProvider}
  * and {@link org.glassfish.jersey.server.internal.inject.ParamInjectionResolver}. Both are required to implement
- * new parameter annotation and both will start immediately in HK context.</p>
- * <p>Still guice bindings could be used in hk managed bean (especially other extensions, installed by
+ * new parameter annotation and both will start immediately in HK context.
+ * <p>
+ * Still guice bindings could be used in hk managed bean (especially other extensions, installed by
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller}.
  * In case of problems with lifecycle, simply use {@link javax.inject.Provider} to wrap actual binding and
- * delay it's resolution.</p>
- * <p>In fact, using this annotation is the same as registering bean directly in jersey. Installer just
- * simplifies binder definition to simple annotation.</p>
+ * delay it's resolution.
+ * <p>
+ * In fact, using this annotation is the same as registering bean directly in jersey. Installer just
+ * simplifies binder definition to simple annotation.
+ * <p>
+ * Annotation will do nothing if hk-first mode enabled:
+ * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#HkExtensionsManagedByGuice}
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding as alternative solution
+ * @see GuiceManaged
  * @since 21.11.2014
  */
 @Target(ElementType.TYPE)

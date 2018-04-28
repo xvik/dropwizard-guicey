@@ -16,10 +16,10 @@ import javax.ws.rs.ext.Providers
 
 /**
  * @author Vyacheslav Rusakov
- * @since 19.01.2016
+ * @since 28.04.2018
  */
 @UseDropwizardApp(ScopeApplication)
-class HKScopeTest extends AbstractTest {
+class HkFirstModeScopeTest extends AbstractTest {
 
     @Inject
     ContextDebugService debugService
@@ -46,6 +46,7 @@ class HKScopeTest extends AbstractTest {
         void initialize(Bootstrap<TestConfiguration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.cases.hkscope.support")
+                    .useHK2ForJerseyExtensions()
                     .build())
         }
 

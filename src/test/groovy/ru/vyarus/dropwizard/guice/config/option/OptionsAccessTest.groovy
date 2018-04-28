@@ -11,6 +11,7 @@ import ru.vyarus.dropwizard.guice.config.option.support.SampleOptions
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.option.Options
 import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo
+import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
@@ -39,9 +40,9 @@ class OptionsAccessTest extends Specification {
 
         and: "info correct"
         info.options.findAll {
-            it.declaringClass != GuiceyOptions
+            ![GuiceyOptions, InstallersOptions].contains(it.declaringClass)
         } == [SampleOptions.BoolFalse, SampleOptions.BoolTrue, SampleOptions.NullOption] as Set
-        info.optionGroups == [GuiceyOptions, SampleOptions]
+        info.optionGroups == [GuiceyOptions, InstallersOptions, SampleOptions]
 
         and: "set/read option info correct"
         info.getValue(SampleOptions.NullOption) == "SAMPLE"

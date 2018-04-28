@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.cases.hkscope.support
 
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
+
 import javax.ws.rs.ext.ContextResolver
 import javax.ws.rs.ext.Provider
 
@@ -8,6 +10,7 @@ import javax.ws.rs.ext.Provider
  * @since 19.01.2016
  */
 @Provider
+@GuiceManaged
 class GuiceContextResolver implements ContextResolver<Context> {
 
     @Override

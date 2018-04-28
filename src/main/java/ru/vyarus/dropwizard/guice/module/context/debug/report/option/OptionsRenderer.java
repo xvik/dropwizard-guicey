@@ -61,15 +61,19 @@ public class OptionsRenderer implements ReportRenderer<OptionsConfig> {
         final List<Class<Enum>> groups = info.getOptions().getOptionGroups();
         groups.removeAll(config.getHiddenGroups());
         for (Class<Enum> group : groups) {
-            res.append(NEWLINE).append(NEWLINE).append(TAB)
-                    .append(String.format("%-25s (%s)", groupName(group), RenderUtils.renderClass(group)))
-                    .append(NEWLINE);
-            renderOptions(group, config, res);
+            final String optionsRender = renderOptions(group, config);
+            // to avoid empty groups
+            if (!optionsRender.isEmpty()) {
+                res.append(NEWLINE).append(NEWLINE).append(TAB)
+                        .append(String.format("%-25s (%s)", groupName(group), RenderUtils.renderClass(group)))
+                        .append(NEWLINE).append(optionsRender);
+            }
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void renderOptions(final Class<Enum> group, final OptionsConfig config, final StringBuilder res) {
+    private String renderOptions(final Class<Enum> group, final OptionsConfig config) {
+        final StringBuilder res = new StringBuilder();
         final List<String> markers = Lists.newArrayList();
         for (Enum option : group.getEnumConstants()) {
             final OptionsInfo options = info.getOptions();
@@ -86,6 +90,7 @@ public class OptionsRenderer implements ReportRenderer<OptionsConfig> {
                                 valueToString(options.getValue(option)), RenderUtils.markers(markers))).append(NEWLINE);
             }
         }
+        return res.toString();
     }
 
     private String groupName(final Class<Enum> group) {

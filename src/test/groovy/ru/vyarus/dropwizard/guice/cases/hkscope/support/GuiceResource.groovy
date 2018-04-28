@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.cases.hkscope.support
 
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
+
 import javax.ws.rs.GET
 import javax.ws.rs.Path
 
@@ -8,6 +10,7 @@ import javax.ws.rs.Path
  * @since 19.01.2016
  */
 @Path("/guice")
+@GuiceManaged
 class GuiceResource {
 
     @GET

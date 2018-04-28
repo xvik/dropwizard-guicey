@@ -13,7 +13,7 @@ import javax.ws.rs.core.Feature;
  * Jersey feature installer.
  * Search classes implementing {@link Feature}. Directly register instance in jersey context.
  * <p>
- * Installer is useful when guice component need to configure
+ * Installer is useful when guice-managed component required for configuration.
  *
  * @author Vyacheslav Rusakov
  * @since 13.01.2016

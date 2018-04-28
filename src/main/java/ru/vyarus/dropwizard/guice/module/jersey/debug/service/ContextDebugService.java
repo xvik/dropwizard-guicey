@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.jersey.debug.service;
 
 import com.google.common.collect.Lists;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
@@ -12,6 +13,8 @@ import javax.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkExtensionsManagedByGuice;
 
 /**
  * Debug service checks and collect information on jersey (and hk) related types instantiation.
@@ -27,6 +30,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ContextDebugService {
 
     private final Provider<ExtensionsHolder> holder;
+    private final Options options;
     private final List<Class<?>> hkManaged = Lists.newArrayList();
     private final List<Class<?>> guiceManaged = Lists.newArrayList();
 
@@ -34,8 +38,9 @@ public class ContextDebugService {
     private List<Class<?>> managedTypes;
 
     @Inject
-    public ContextDebugService(final Provider<ExtensionsHolder> holder) {
+    public ContextDebugService(final Provider<ExtensionsHolder> holder, final Options options) {
         this.holder = holder;
+        this.options = options;
     }
 
     /**
@@ -61,7 +66,7 @@ public class ContextDebugService {
      * @param type instantiated bean type
      */
     public void hkManage(final Class<?> type) {
-        if (!JerseyBinding.isHK2Managed(type)) {
+        if (!JerseyBinding.isHK2Managed(type, options.get(HkExtensionsManagedByGuice))) {
             throw new WrongContextException("HK2 creates service %s which must be managed by guice.",
                     type.getName());
         }
@@ -74,7 +79,7 @@ public class ContextDebugService {
      * @param type instantiated bean type
      */
     public void guiceManage(final Class<?> type) {
-        if (JerseyBinding.isHK2Managed(type)) {
+        if (JerseyBinding.isHK2Managed(type, options.get(HkExtensionsManagedByGuice))) {
             throw new WrongContextException("Guice creates service %s which must be managed by HK2.",
                     type.getName());
         }

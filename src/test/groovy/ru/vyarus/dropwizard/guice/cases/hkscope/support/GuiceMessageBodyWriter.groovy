@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.cases.hkscope.support
 
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
+
 import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.MultivaluedMap
@@ -12,6 +14,7 @@ import java.lang.annotation.Annotation
  * @since 19.01.2016
  */
 @Provider
+@GuiceManaged
 class GuiceMessageBodyWriter implements MessageBodyWriter<Type> {
 
     @Override

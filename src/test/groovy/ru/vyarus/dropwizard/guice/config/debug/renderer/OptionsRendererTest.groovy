@@ -51,6 +51,10 @@ class OptionsRendererTest extends Specification {
         UseHkBridge                    = false
 
 
+    Installers                (r.v.d.g.m.i.InstallersOptions)
+        HkExtensionsManagedByGuice     = true
+
+
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
         Opt1                           = sample                         *CUSTOM, NOT_USED
 """ as String;
@@ -78,6 +82,10 @@ class OptionsRendererTest extends Specification {
         InjectorStage                  = PRODUCTION
         GuiceFilterRegistration        = [REQUEST]
         UseHkBridge                    = false
+
+
+    Installers                (r.v.d.g.m.i.InstallersOptions)
+        HkExtensionsManagedByGuice     = true
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
@@ -127,6 +135,10 @@ class OptionsRendererTest extends Specification {
         UseHkBridge                    = false
 
 
+    Installers                (r.v.d.g.m.i.InstallersOptions)
+        HkExtensionsManagedByGuice     = true
+
+
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
         Opt1                           = sample                         *CUSTOM
 """ as String;
@@ -144,6 +156,10 @@ class OptionsRendererTest extends Specification {
         StrictMode                     = true                           *CUSTOM
         NullValue                      = null
         ListValue                      = [one, two]
+
+
+    Installers                (r.v.d.g.m.i.InstallersOptions)
+        HkExtensionsManagedByGuice     = true
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)

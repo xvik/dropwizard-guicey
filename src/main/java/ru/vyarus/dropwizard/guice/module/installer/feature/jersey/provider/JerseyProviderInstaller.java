@@ -9,10 +9,7 @@ import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.spi.internal.ValueFactoryProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.AbstractJerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
@@ -38,12 +35,13 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+ * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
  * @see ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
  * @since 10.10.2014
  */
 @Order(30)
-public class JerseyProviderInstaller implements FeatureInstaller<Object>,
-        BindingInstaller, JerseyInstaller<Object> {
+public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> implements
+        BindingInstaller {
 
     private static final Set<Class<?>> EXTENSION_TYPES = ImmutableSet.<Class<?>>of(
             ExceptionMapper.class,
@@ -61,7 +59,6 @@ public class JerseyProviderInstaller implements FeatureInstaller<Object>,
             ApplicationEventListener.class
     );
 
-    private final Logger logger = LoggerFactory.getLogger(JerseyProviderInstaller.class);
     private final ProviderReporter reporter = new ProviderReporter();
 
     @Override
@@ -70,24 +67,23 @@ public class JerseyProviderInstaller implements FeatureInstaller<Object>,
     }
 
     @Override
-    public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazy) {
-        final boolean isHkManaged = isHK2Managed(type);
-        if (isHkManaged && lazy) {
-            logger.warn("@LazyBinding is ignored, because @HK2Managed set: {}", type.getName());
-        }
-        if (!isHkManaged && !lazy) {
+    public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazyMarker) {
+        final boolean hkManaged = isHkExtension(type);
+        final boolean lazy = isLazy(type, lazyMarker);
+        if (!hkManaged && !lazy) {
             // force singleton
             binder.bind(type).in(Singleton.class);
         }
-        reporter.provider(type, isHkManaged, lazy);
+        reporter.provider(type, hkManaged, lazy);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {
+        final boolean hkExtension = isHkExtension(type);
         if (is(type, Factory.class)) {
             // register factory directly (without wrapping)
-            bindFactory(binder, injector, type);
+            bindFactory(binder, injector, type, hkExtension);
 
         } else {
             // support multiple extension interfaces on one type
@@ -95,11 +91,11 @@ public class JerseyProviderInstaller implements FeatureInstaller<Object>,
                     GenericsResolver.resolve(type).getGenericsInfo().getComposingTypes());
             if (!extensions.isEmpty()) {
                 for (Class<?> ext : extensions) {
-                    bindSpecificComponent(binder, injector, type, ext);
+                    bindSpecificComponent(binder, injector, type, ext, hkExtension);
                 }
             } else {
                 // no known extension found
-                bindComponent(binder, injector, type);
+                bindComponent(binder, injector, type, hkExtension);
             }
         }
     }
