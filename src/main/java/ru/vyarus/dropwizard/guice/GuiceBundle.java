@@ -279,12 +279,30 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Sets multiple options at once. No options lookup mechanism provided out of the box (like for bundles),
-         * but it's very easy to implement custom lookup solution (e.g. for providing specific options in tests).
-         * This method would be useful for such lookup implementations.
+         * Sets multiple options at once. Method would be useful for options lookup implementations.
          * <p>
          * Note: {@link Option} type is not mixed with enum in declaration to simplify usage,
          * but used enums must be correct options.
+         * <p>
+         * Use provided {@link ru.vyarus.dropwizard.guice.module.context.option.mapper.OptionsMapper}
+         * utility to map options from system properties or environment variables. It supports basic string conversions.
+         * For example:
+         * <code><pre>
+         *     .options(new OptionsMapper()
+         *                 .env("STAGE", GuiceyOptions.InjectorStage)
+         *                 .map())
+         * </pre></code>
+         * Will set injector stage option from STAGE environment variable. If variable is not set - default value used.
+         * If STAGE set to, for example "DEVELOPMENT" (must be Stage enum value) then Stage.DEVELOPMENT will be
+         * set as option value.
+         * <p>
+         * Also, mapper could map generic options definitions from system properties (prefixed):
+         * <code><pre>
+         *.options(new OptionsMapper()
+         *                 .props("option.")
+         *                 .map())
+         * </pre></code>
+         * See {@link ru.vyarus.dropwizard.guice.module.context.option.mapper.OptionsMapper} for more usage details.
          *
          * @param options options map (not null)
          * @param <K>     helper type for option signature definition
@@ -292,6 +310,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @throws NullPointerException     is null value provided for any option
          * @throws IllegalArgumentException if any provided value incompatible with option type
          * @see #option(Enum, Object) for more info
+         * @see ru.vyarus.dropwizard.guice.module.context.option.mapper.OptionsMapper
          */
         @SuppressWarnings("unchecked")
         public <K extends Enum & Option> Builder<T> options(final Map<Enum, Object> options) {

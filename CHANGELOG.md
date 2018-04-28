@@ -27,7 +27,8 @@
     - modulesOverride(..) - overriding modules registration
     - disableExtensions(..) - extensions disabling (for possible replacement)
     - disableModules(..) - guice modules disabling
-    - listen(..) - lifecycle listener registration         
+    - listen(..) - lifecycle listener registration
+* Add OptionsMapper helper to simplify mapping of system properties and environment variables in builder.options()             
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0

@@ -16,7 +16,7 @@ package ru.vyarus.dropwizard.guice.module.context.option;
  * <p>
  * Option may be accessed in bundle using
  * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#option(Enum)} method or using
- * {@link Options} guice bean. Installers could access optinos using
+ * {@link Options} guice bean. Installers could access options using
  * {@link ru.vyarus.dropwizard.guice.module.installer.option.WithOptions} interface.
  * <p>
  * Option reads and writes are tracked in order to detect useless and default value options. All tracked information
