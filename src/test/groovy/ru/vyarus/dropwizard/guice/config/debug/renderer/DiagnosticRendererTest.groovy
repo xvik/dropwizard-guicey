@@ -80,7 +80,7 @@ class DiagnosticRendererTest extends Specification {
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
-        GuiceSupportModule           (r.v.d.guice.module)
+        GuiceBootstrapModule         (r.v.d.guice.module)
 """ as String;
     }
 
@@ -137,7 +137,7 @@ class DiagnosticRendererTest extends Specification {
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
-        GuiceSupportModule           (r.v.d.guice.module)
+        GuiceBootstrapModule         (r.v.d.guice.module)
         -DisabledModule              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 """ as String;
     }
@@ -290,7 +290,7 @@ class DiagnosticRendererTest extends Specification {
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
-        GuiceSupportModule           (r.v.d.guice.module)
+        GuiceBootstrapModule         (r.v.d.guice.module)
 """ as String;
     }
 
@@ -309,7 +309,7 @@ class DiagnosticRendererTest extends Specification {
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
-        GuiceSupportModule           (r.v.d.guice.module)
+        GuiceBootstrapModule         (r.v.d.guice.module)
         -DisabledModule              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 """ as String;
     }

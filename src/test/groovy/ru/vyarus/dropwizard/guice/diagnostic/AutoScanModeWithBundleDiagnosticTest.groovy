@@ -6,7 +6,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.*
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooInstaller
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
-import ru.vyarus.dropwizard.guice.module.GuiceSupportModule
+import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
@@ -62,11 +62,11 @@ class AutoScanModeWithBundleDiagnosticTest extends BaseDiagnosticTest {
         info.getExtensions(FooBundleInstaller).isEmpty()
 
         and: "correct modules"
-        info.modules as Set == [FooModule, GuiceSupportModule, FooBundleModule] as Set
+        info.modules as Set == [FooModule, GuiceBootstrapModule, FooBundleModule] as Set
 
         and: "correct scopes"
         info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle, FooBundle] as Set
-        info.getItemsByScope(ConfigScope.Application) as Set == [CoreInstallersBundle, FooBundle, FooModule, GuiceSupportModule] as Set
+        info.getItemsByScope(ConfigScope.Application) as Set == [CoreInstallersBundle, FooBundle, FooModule, GuiceBootstrapModule] as Set
         info.getItemsByScope(ConfigScope.ClasspathScan) as Set == [FooInstaller, FooResource] as Set
         info.getItemsByScope(FooBundle) as Set == [FooBundleInstaller, FooBundleResource, FooBundleModule, FooBundleRelativeBundle] as Set
 

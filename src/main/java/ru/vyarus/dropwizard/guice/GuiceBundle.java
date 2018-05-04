@@ -18,7 +18,7 @@ import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
 import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
-import ru.vyarus.dropwizard.guice.module.GuiceSupportModule;
+import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
@@ -142,7 +142,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
             context.registerBundles(new CoreInstallersBundle());
         }
         configureFromBundles(configuration, environment);
-        context.registerModules(new GuiceSupportModule(scanner, context));
+        context.registerModules(new GuiceBootstrapModule(scanner, context));
         ModulesSupport.configureModules(bootstrap, configuration, environment, context);
         createInjector(environment);
         afterInjectorCreation();

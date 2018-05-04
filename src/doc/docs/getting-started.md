@@ -530,7 +530,7 @@ You can see additional logs in console like:
     APPLICATION
     ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       
     ├── module     FooModule                    (r.v.d.g.d.s.features)     
-    ├── module     GuiceSupportModule           (r.v.d.guice.module)       
+    ├── module     GuiceBootstrapModule           (r.v.d.guice.module)       
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)      
     │   
     ├── Foo2Bundle                   (r.v.d.g.d.s.bundle)       

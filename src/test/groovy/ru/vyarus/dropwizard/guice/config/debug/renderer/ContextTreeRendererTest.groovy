@@ -51,7 +51,7 @@ class ContextTreeRendererTest extends Specification {
     ├── module     FooModule                    (r.v.d.g.d.s.features)
     ├── module     DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
     ├── module     DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest) *DISABLED
-    ├── module     GuiceSupportModule           (r.v.d.guice.module)
+    ├── module     GuiceBootstrapModule         (r.v.d.guice.module)
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
     ├── -disable   DisabledExtension2           (r.v.d.g.c.d.r.ContextTreeRendererTest)
     ├── -disable   DisabledBundle               (r.v.d.g.c.d.r.ContextTreeRendererTest)

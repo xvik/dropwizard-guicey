@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.diagnostic
 import io.dropwizard.Application
 import ru.vyarus.dropwizard.guice.diagnostic.support.AutoScanApp
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.*
-import ru.vyarus.dropwizard.guice.module.GuiceSupportModule
+import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
@@ -62,11 +62,11 @@ class AutoScanModeDiagnosticTest extends BaseDiagnosticTest {
         info.getExtensions(ResourceInstaller) == [FooResource]
 
         and: "correct modules"
-        info.modules as Set == [FooModule, GuiceSupportModule] as Set
+        info.modules as Set == [FooModule, GuiceBootstrapModule] as Set
 
         and: "correct scopes"
         info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle] as Set
-        info.getItemsByScope(ConfigScope.Application) as Set == [CoreInstallersBundle, FooModule, GuiceSupportModule] as Set
+        info.getItemsByScope(ConfigScope.Application) as Set == [CoreInstallersBundle, FooModule, GuiceBootstrapModule] as Set
         info.getItemsByScope(ConfigScope.ClasspathScan) as Set == [FooInstaller, FooResource, EnvCommand, Cli] as Set
 
         and: "lifecycle installer was disabled"

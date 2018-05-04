@@ -42,13 +42,13 @@ import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationInterfac
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
-public class GuiceSupportModule<T extends Configuration> extends DropwizardAwareModule<T> {
+public class GuiceBootstrapModule<T extends Configuration> extends DropwizardAwareModule<T> {
 
     private final ClasspathScanner scanner;
     private final ConfigurationContext context;
 
-    public GuiceSupportModule(final ClasspathScanner scanner,
-                              final ConfigurationContext context) {
+    public GuiceBootstrapModule(final ClasspathScanner scanner,
+                                final ConfigurationContext context) {
         this.scanner = scanner;
         this.context = context;
     }

@@ -84,14 +84,14 @@ INFO  [2016-08-01 21:22:50,901] ru.vyarus.dropwizard.guice.module.context.debug.
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle) 
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle) 
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
-        GuiceSupportModule           (r.v.d.guice.module)       
+        GuiceBootstrapModule         (r.v.d.guice.module)       
         
 INFO  [2016-08-01 21:22:50,909] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Configuration context tree = 
 
     APPLICATION
     ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       
     ├── module     FooModule                    (r.v.d.g.d.s.features)     
-    ├── module     GuiceSupportModule           (r.v.d.guice.module)       
+    ├── module     GuiceBootstrapModule         (r.v.d.guice.module)       
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)      
     │   
     ├── Foo2Bundle                   (r.v.d.g.d.s.bundle)       
@@ -338,7 +338,7 @@ The following markers used:
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle) 
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle) 
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
-        GuiceSupportModule           (r.v.d.guice.module)  
+        GuiceBootstrapModule         (r.v.d.guice.module)  
 ```
 
 All registered guice modules.
