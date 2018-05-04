@@ -21,6 +21,11 @@ import javax.ws.rs.Path;
  * which will lead to performance overhead. To ovoid misuse, singleton resources are forced, but
  * not for beans having explicit scope annotation.
  * See {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForHkExtensions}.
+ * <p>
+ * {@link ru.vyarus.dropwizard.guice.module.support.scope.Prototype} annotation may be used to force prototype
+ * scope on guice beans (prevent forced singleton). This may be useful to avoid providers usage and directly
+ * inject request, response and other request specific beans. Note that hk2 managed resources may use direct
+ * injections even in singletons (as hk will use proxies instead of direct dependencies - implicit providers).
  *
  * @author Vyacheslav Rusakov
  * @since 01.09.2014

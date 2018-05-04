@@ -38,7 +38,8 @@
        In guice-first mode this annotation is useless.    
     - Builder shortcut: .useHK2ForJerseyExtensions() to simplify hk-first mode enabling.
 * Singleton scope is not forced for jersey extensions with explicit scoping annotation
-* Add option for disabling forced singletons for jersey extensions: InstallerOptions.ForceSingletonForHkExtensions                
+* Add option for disabling forced singletons for jersey extensions: InstallerOptions.ForceSingletonForHkExtensions
+* Add annotation for guice prototype scope: @Prototype. Useful to declare some jersey extensions as default-scoped even when forced singletons enabled                
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0

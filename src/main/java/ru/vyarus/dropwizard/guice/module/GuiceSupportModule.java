@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module;
 
+import com.google.inject.Scopes;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -12,6 +13,7 @@ import ru.vyarus.dropwizard.guice.module.installer.InstallerModule;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module;
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
+import ru.vyarus.dropwizard.guice.module.support.scope.Prototype;
 
 import javax.inject.Singleton;
 
@@ -53,6 +55,7 @@ public class GuiceSupportModule<T extends Configuration> extends DropwizardAware
 
     @Override
     protected void configure() {
+        bindScope(Prototype.class, Scopes.NO_SCOPE);
         bindEnvironment();
         install(new InstallerModule(scanner, context));
         install(new Jersey2Module(bootstrap().getApplication(), environment(), context));

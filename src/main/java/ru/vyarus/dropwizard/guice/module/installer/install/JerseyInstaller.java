@@ -8,12 +8,22 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
  * Installer will be called in time of jersey start to properly register extensions in HK context.
  * Installer {@code report()} method will be called only after jersey start (so if, for example, environment
  * command is started, jersey specific extensions will not be logged).
- * <p>Installer must support {@code HK2Managed} annotation, which delegates bean creation to HK2.
- * Use {@link ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding} to properly support annotation.</p>
+ * <p>
+ * Installer must support {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} and
+ * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged} annotations, which delegates
+ * bean creation to HK2 or guice (as exception). Default target is declared by
+ * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#HkExtensionsManagedByGuice} option.
+ * <p>
+ * By default, jersey extensions should be registered in singleton scope, unless explicit scoping annotation
+ * is present on bean. Forced singleton could be disabled with
+ * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForHkExtensions} option.
+ * <p>
+ * Use {@link ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding} to properly support annotation.
  *
  * @param <T> expected extension type (or Object when no super type (e.g. for annotated beans))
  * @author Vyacheslav Rusakov
  * @since 16.11.2014
+ * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.AbstractJerseyInstaller base class
  */
 public interface JerseyInstaller<T> {
 

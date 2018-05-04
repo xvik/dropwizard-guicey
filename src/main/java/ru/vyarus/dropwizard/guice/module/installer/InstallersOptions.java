@@ -59,6 +59,8 @@ public enum InstallersOptions implements Option {
      * to avoid redundant objects creation. Enabled by default.
      * <p>
      * Note that forced singleton is not applied to beans with explicit scoping annotation set.
+     * {@link ru.vyarus.dropwizard.guice.module.support.scope.Prototype} annotation may be used to force
+     * default (prototype) scope instead of singleton.
      * <p>
      * When switched off, extension scope will be driven only by scope annotation. Note that by default
      * guice and hk use prototype scope (for example, for resources it means new instance for each request).

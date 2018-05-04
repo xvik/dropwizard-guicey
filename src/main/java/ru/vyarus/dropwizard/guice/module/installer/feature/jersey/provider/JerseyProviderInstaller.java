@@ -36,6 +36,8 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
  * <p>
  * Force singleton scope for extensions, but not for beans having explicit scope annotation.
  * See {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForHkExtensions}.
+ * {@link ru.vyarus.dropwizard.guice.module.support.scope.Prototype} annotation may be used on guice beans
+ * to declare bean in prototype scope (prevent forced singleton).
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed

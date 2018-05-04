@@ -7,6 +7,8 @@ import io.dropwizard.setup.Environment
 import org.glassfish.hk2.api.PerLookup
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import ru.vyarus.dropwizard.guice.module.support.scope.Prototype
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 import javax.ws.rs.GET
@@ -25,8 +27,12 @@ class ForceSingletonOverrideTest extends AbstractTest {
         new URL("http://localhost:8080/hk").getText()
         new URL("http://localhost:8080/hk").getText()
 
+        new URL("http://localhost:8080/guice").getText()
+        new URL("http://localhost:8080/guice").getText()
+
         then: "non singleton"
         Res.cnt == 2
+        GuiceRes.cnt == 2
     }
 
     static class App extends Application<Configuration> {
@@ -34,8 +40,7 @@ class ForceSingletonOverrideTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .useHK2ForJerseyExtensions()
-                    .extensions(Res)
+                    .extensions(Res, GuiceRes)
                     .build())
         }
 
@@ -45,12 +50,32 @@ class ForceSingletonOverrideTest extends AbstractTest {
     }
 
     @Path("/hk")
-    @PerLookup  // annotation prevents forced singleton
+    @HK2Managed
+    @PerLookup
+    // annotation prevents forced singleton
     static class Res {
 
         static int cnt = 0
 
         Res() {
+            cnt++
+        }
+
+        @Path("/")
+        @GET
+        def smth() {
+            ''
+        }
+    }
+
+    @Path("/guice")
+    @Prototype
+    // annotation prevents forced singleton
+    static class GuiceRes {
+
+        static int cnt = 0
+
+        GuiceRes() {
             cnt++
         }
 
