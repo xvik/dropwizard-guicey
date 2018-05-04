@@ -42,6 +42,8 @@ class DebugBundleInHkFistModeTest extends AbstractTest {
     def "Check correct scopes"() {
 
         setup: "need to request hk resource to force instantiation"
+        // no guice rest check because it will lead to resource instantiation by hk, but it shouldn't do it (see qualified declaration)
+//        new URL("http://localhost:8080/guice/foo").getText()
         new URL("http://localhost:8080/hk/foo").getText()
 
         expect:

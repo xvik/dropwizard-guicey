@@ -11,7 +11,6 @@ import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
-import javax.inject.Singleton;
 import javax.ws.rs.Path;
 
 /**
@@ -19,8 +18,9 @@ import javax.ws.rs.Path;
  * Search classes annotated with {@link Path} or implementing interfaces annotated with {@link Path}
  * (only directly implemented). Directly register instance in jersey context to force singleton.
  * If we register it by type, then we could use prototype beans (resource instance created on each request),
- * which will lead to performance overhead. To ovoid misuse, singleton resources are forced. Override installer
- * if you really need prototype resources.
+ * which will lead to performance overhead. To ovoid misuse, singleton resources are forced, but
+ * not for beans having explicit scope annotation.
+ * See {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForHkExtensions}.
  *
  * @author Vyacheslav Rusakov
  * @since 01.09.2014
@@ -40,9 +40,9 @@ public class ResourceInstaller extends AbstractJerseyInstaller<Object> implement
     public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazyMarker) {
         final boolean hkManaged = isHkExtension(type);
         final boolean lazy = isLazy(type, lazyMarker);
+        // register in guice only if not managed by hk and just in time (lazy) binding not requested
         if (!hkManaged && !lazy) {
-            // force singleton
-            binder.bind(type).in(Singleton.class);
+            bindInGuice(binder, type);
         }
     }
 
@@ -54,7 +54,8 @@ public class ResourceInstaller extends AbstractJerseyInstaller<Object> implement
 
     @Override
     public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {
-        JerseyBinding.bindComponent(binder, injector, type, isHkExtension(type));
+        final boolean hkManaged = isHkExtension(type);
+        JerseyBinding.bindComponent(binder, injector, type, hkManaged, isForceSingleton(type, hkManaged));
     }
 
     @Override

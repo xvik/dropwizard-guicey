@@ -42,6 +42,10 @@ public enum InstallersOptions implements Option {
      * useless in this case, instead {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged}
      * annotation could be used.
      * <p>
+     * Note that even managed by hk beans will be singletons. Still this will not block you from using
+     * {@code @Context} annotation injections, because hk will proxy such injections and properly handle
+     * multi-threaded access (implicit provider).
+     * <p>
      * NOTE: guice aop is not applicable for beans managed by hk (because guice aop use class proxies and not
      * instance proxies).
      * <p>
@@ -49,7 +53,17 @@ public enum InstallersOptions implements Option {
      * (see {@link ru.vyarus.dropwizard.guice.GuiceyOptions#UseHkBridge}) because without it you can't inject
      * any guice beans into hk managed instances (and if you don't need to then you don't need guice support at all).
      */
-    HkExtensionsManagedByGuice(Boolean.class, true);
+    HkExtensionsManagedByGuice(Boolean.class, true),
+    /**
+     * Force singleton scope for jersey extensions (including resources). It is highly recommended using singletons
+     * to avoid redundant objects creation. Enabled by default.
+     * <p>
+     * Note that forced singleton is not applied to beans with explicit scoping annotation set.
+     * <p>
+     * When switched off, extension scope will be driven only by scope annotation. Note that by default
+     * guice and hk use prototype scope (for example, for resources it means new instance for each request).
+     */
+    ForceSingletonForHkExtensions(Boolean.class, true);
 
     private Class<?> type;
     private Object value;

@@ -24,6 +24,11 @@ class SingletonResource {
     @Inject
     DummyService service
 
+    static void reset(){
+        creationCounter = 0
+        callCounter = 0
+    }
+
     SingletonResource() {
         creationCounter++
     }

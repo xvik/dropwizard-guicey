@@ -28,4 +28,9 @@ public class GuiceComponentFactory<T> implements Factory<T> {
     public void dispose(final T instance) {
         // do nothing
     }
+
+    @Override
+    public String toString() {
+        return "GuiceComponentFactory for " + type;
+    }
 }

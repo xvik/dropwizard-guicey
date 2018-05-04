@@ -6,6 +6,7 @@ import com.google.inject.binder.ScopedBindingBuilder;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.hk2.utilities.binding.ServiceBindingBuilder;
 import org.glassfish.hk2.utilities.reflection.ParameterizedTypeImpl;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed;
@@ -74,15 +75,20 @@ public final class JerseyBinding {
      * @param injector  guice injector
      * @param type      component type
      * @param hkManaged true if bean must be managed by hk, false to bind guice managed instance
+     * @param singleton true to force singleton scope
      * @see ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory
      */
     public static void bindComponent(final AbstractBinder binder, final Injector injector, final Class<?> type,
-                                     final boolean hkManaged) {
+                                     final boolean hkManaged, final boolean singleton) {
         if (hkManaged) {
-            binder.bindAsContract(type).in(Singleton.class);
+            optionalSingleton(
+                    binder.bindAsContract(type),
+                    singleton);
         } else {
             // default case: simple service registered directly (including resource)
-            binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type);
+            optionalSingleton(
+                    binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type),
+                    singleton);
         }
     }
 
@@ -95,25 +101,26 @@ public final class JerseyBinding {
      * @param injector  guice injector
      * @param type      factory to bind
      * @param hkManaged true if bean must be managed by hk, false to bind guice managed instance
+     * @param singleton true to force singleton scope
      * @param <T>       actual type (used to workaround type checks)
      * @see ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory
      * @see ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory
      */
     @SuppressWarnings("unchecked")
     public static <T> void bindFactory(final AbstractBinder binder, final Injector injector, final Class<?> type,
-                                       final boolean hkManaged) {
+                                       final boolean hkManaged, final boolean singleton) {
         // resolve Factory<T> actual type to bind properly
         final Class<T> res = (Class<T>) GenericsResolver.resolve(type).type(Factory.class).generic(0);
         if (hkManaged) {
-            binder.bindFactory((Class<Factory<T>>) type)
-                    .to(res)
-                    .in(Singleton.class);
+            optionalSingleton(singleton
+                            ? binder.bindFactory((Class<Factory<T>>) type, Singleton.class).to(type).to(res)
+                            : binder.bindFactory((Class<Factory<T>>) type).to(type).to(res),
+                    singleton);
         } else {
-            binder.bindFactory(new LazyGuiceFactory(injector, type))
-                    .to(res);
+            binder.bindFactory(new LazyGuiceFactory(injector, type)).to(res);
             // binding factory type to be able to autowire factory by name
-            binder.bindFactory(new GuiceComponentFactory<>(injector, type))
-                    .to(type);
+            optionalSingleton(binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type),
+                    singleton);
         }
     }
 
@@ -129,29 +136,39 @@ public final class JerseyBinding {
      * @param type         type which implements specific jersey interface or extends class
      * @param specificType specific jersey type (interface or abstract class)
      * @param hkManaged    true if bean must be managed by hk, false to bind guice managed instance
+     * @param singleton    true to force singleton scope
      */
     public static void bindSpecificComponent(final AbstractBinder binder,
                                              final Injector injector,
                                              final Class<?> type,
                                              final Class<?> specificType,
-                                             final boolean hkManaged) {
+                                             final boolean hkManaged,
+                                             final boolean singleton) {
         // resolve generics of specific type
         final GenericsContext context = GenericsResolver.resolve(type).type(specificType);
         final List<Type> genericTypes = context.genericTypes();
         final Type[] generics = genericTypes.toArray(new Type[0]);
-        final Type binding = generics.length > 0 ? new ParameterizedTypeImpl(specificType, generics)
+        final Type bindingType = generics.length > 0 ? new ParameterizedTypeImpl(specificType, generics)
                 : specificType;
         if (hkManaged) {
-            binder.bind(type).to(binding).in(Singleton.class);
+            optionalSingleton(
+                    binder.bind(type).to(type).to(bindingType),
+                    singleton);
         } else {
-            // hk cant find different things in different situations, so uniform registration is impossible
             if (InjectionResolver.class.equals(specificType)) {
-                binder.bindFactory(new GuiceComponentFactory<>(injector, type))
-                        .to(type).in(Singleton.class);
-                binder.bind(type).to(binding).in(Singleton.class);
+                // when one-line binding used, hk always introspects factory and fails
+                // on unrecognizable type T (custom class analyzer is ignored so no other way to register not
+                // properly generified factory)
+                optionalSingleton(
+                        binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type),
+                        singleton);
+                optionalSingleton(
+                        binder.bindAsContract(type).to(bindingType),
+                        singleton);
             } else {
-                binder.bindFactory(new GuiceComponentFactory<>(injector, type))
-                        .to(type).to(binding).in(Singleton.class);
+                optionalSingleton(
+                        binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type).to(bindingType),
+                        singleton);
             }
         }
     }
@@ -171,6 +188,12 @@ public final class JerseyBinding {
     public static <T> ScopedBindingBuilder bindJerseyComponent(final Binder binder, final Provider<Injector> provider,
                                                                final Class<T> type) {
         return binder.bind(type).toProvider(new JerseyComponentProvider<>(provider, type));
+    }
+
+    private static void optionalSingleton(final ServiceBindingBuilder<?> binding, final boolean singleton) {
+        if (singleton) {
+            binding.in(Singleton.class);
+        }
     }
 
 }

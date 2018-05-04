@@ -15,7 +15,6 @@ import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 
-import javax.inject.Singleton;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.DynamicFeature;
@@ -28,10 +27,15 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
 /**
  * Jersey provider installer.
  * Looks for classes annotated with {@code @javax.ws.rs.ext.Provider} and register bindings in HK context.
- * <p>If provider is annotated with {@code HK2Managed} it's instance will be created by HK2, not guice.
+ * <p>
+ * If provider is annotated with {@code HK2Managed} it's instance will be created by HK2, not guice.
  * This is important when extensions directly depends on HK beans (no way to wrap with {@code Provider}
- * or if it's eager extension, which instantiated by HK immediately (when hk-guice contexts not linked yet).</p>
- * <p>In some cases {@code @LazyBinding} could be an alternative to {@code HK2Managed}</p>
+ * or if it's eager extension, which instantiated by HK immediately (when hk-guice contexts not linked yet).
+ * <p>
+ * In some cases {@code @LazyBinding} could be an alternative to {@code HK2Managed}
+ * <p>
+ * Force singleton scope for extensions, but not for beans having explicit scope annotation.
+ * See {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForHkExtensions}.
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
@@ -70,9 +74,9 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
     public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazyMarker) {
         final boolean hkManaged = isHkExtension(type);
         final boolean lazy = isLazy(type, lazyMarker);
+        // register in guice only if not managed by hk and just in time (lazy) binding not requested
         if (!hkManaged && !lazy) {
-            // force singleton
-            binder.bind(type).in(Singleton.class);
+            bindInGuice(binder, type);
         }
         reporter.provider(type, hkManaged, lazy);
     }
@@ -81,9 +85,10 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
     @SuppressWarnings("unchecked")
     public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {
         final boolean hkExtension = isHkExtension(type);
+        final boolean forceSingleton = isForceSingleton(type, hkExtension);
         if (is(type, Factory.class)) {
             // register factory directly (without wrapping)
-            bindFactory(binder, injector, type, hkExtension);
+            bindFactory(binder, injector, type, hkExtension, forceSingleton);
 
         } else {
             // support multiple extension interfaces on one type
@@ -91,11 +96,11 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
                     GenericsResolver.resolve(type).getGenericsInfo().getComposingTypes());
             if (!extensions.isEmpty()) {
                 for (Class<?> ext : extensions) {
-                    bindSpecificComponent(binder, injector, type, ext, hkExtension);
+                    bindSpecificComponent(binder, injector, type, ext, hkExtension, forceSingleton);
                 }
             } else {
                 // no known extension found
-                bindComponent(binder, injector, type, hkExtension);
+                bindComponent(binder, injector, type, hkExtension, forceSingleton);
             }
         }
     }

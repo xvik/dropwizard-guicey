@@ -23,6 +23,11 @@ class PrototypeResource {
     @Inject
     DummyService service
 
+    static void reset(){
+        creationCounter = 0
+        callCounter = 0
+    }
+
     PrototypeResource() {
         creationCounter++
     }
