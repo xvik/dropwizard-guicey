@@ -39,7 +39,8 @@
     - Builder shortcut: .useHK2ForJerseyExtensions() to simplify hk-first mode enabling.
 * Singleton scope is not forced for jersey extensions with explicit scoping annotation
 * Add option for disabling forced singletons for jersey extensions: InstallerOptions.ForceSingletonForHkExtensions
-* Add annotation for guice prototype scope: @Prototype. Useful to declare some jersey extensions as default-scoped even when forced singletons enabled                
+* Add annotation for guice prototype scope: @Prototype. Useful to declare some jersey extensions as default-scoped even when forced singletons enabled
+* Fix guice request scope delegation support (ServletScopes.transferRequest) for jersey-manager request objects (#49)                 
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0

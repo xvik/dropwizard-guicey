@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.jersey.hk2;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.binder.ScopedBindingBuilder;
+import com.google.inject.servlet.RequestScoped;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider;
 import org.glassfish.jersey.server.internal.process.AsyncContext;
@@ -52,12 +53,11 @@ public class GuiceBindingsModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        jerseyToGuice(MultivaluedParameterExtractorProvider.class);
-        jerseyToGuice(Application.class);
-        jerseyToGuice(Providers.class);
+        jerseyToGuiceGlobal(MultivaluedParameterExtractorProvider.class);
+        jerseyToGuiceGlobal(Application.class);
+        jerseyToGuiceGlobal(Providers.class);
 
-        // request scoped objects, but hk will control their scope
-        // must be used in guice only with Provider
+        // request scoped objects
         jerseyToGuice(UriInfo.class);
         jerseyToGuice(ResourceInfo.class);
         jerseyToGuice(HttpHeaders.class);
@@ -74,7 +74,26 @@ public class GuiceBindingsModule extends AbstractModule {
         }
     }
 
-    private ScopedBindingBuilder jerseyToGuice(final Class<?> type) {
-        return bindJerseyComponent(binder(), provider, type);
+    private void jerseyToGuiceGlobal(final Class<?> type) {
+        jerseyToGuiceBinding(type, true);
+    }
+
+    private void jerseyToGuice(final Class<?> type) {
+        jerseyToGuiceBinding(type, false);
+    }
+
+    /**
+     * Important moment: request scoped jersey objects must be bound to guice request scope (if guice web used)
+     * because otherwise scope delegation to other thread will not work
+     * (see {@link com.google.inject.servlet.ServletScopes#transferRequest(java.util.concurrent.Callable)}).
+     *
+     * @param type   jersey type to bind
+     * @param global true for global type binding
+     */
+    private void jerseyToGuiceBinding(final Class<?> type, final boolean global) {
+        final ScopedBindingBuilder binding = bindJerseyComponent(binder(), provider, type);
+        if (!global && guiceServletSupport) {
+            binding.in(RequestScoped.class);
+        }
     }
 }
