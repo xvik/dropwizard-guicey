@@ -86,6 +86,10 @@ public class GuiceBindingsModule extends AbstractModule {
      * Important moment: request scoped jersey objects must be bound to guice request scope (if guice web used)
      * because otherwise scope delegation to other thread will not work
      * (see {@link com.google.inject.servlet.ServletScopes#transferRequest(java.util.concurrent.Callable)}).
+     * <p>
+     * WARNING: bean instance must be obtained in current (request) thread in order to be us used later
+     * inside transferred thread (simply call {@code provider.get()} (for jersey-managed bean like {@link UriInfo})
+     * before {@code ServletScopes.transferRequest()}.
      *
      * @param type   jersey type to bind
      * @param global true for global type binding

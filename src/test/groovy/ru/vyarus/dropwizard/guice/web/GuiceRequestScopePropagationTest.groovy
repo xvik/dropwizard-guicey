@@ -57,6 +57,7 @@ class GuiceRequestScopePropagationTest extends AbstractTest {
 
         @GET
         String ok() {
+            // object must be resolved inside request hk scope so guice could use it's instance later
             uri.get().getRequestUri()
 
             // prepare request scope aware action for execution in other thread
