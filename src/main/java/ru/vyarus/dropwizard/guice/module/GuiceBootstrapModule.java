@@ -4,6 +4,7 @@ import com.google.inject.Scopes;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.GuiceyOptions;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
@@ -14,10 +15,10 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module;
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.scope.Prototype;
+import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigInspector;
+import ru.vyarus.dropwizard.guice.module.yaml.module.ConfigBindingModule;
 
 import javax.inject.Singleton;
-
-import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationInterfaces;
 
 /**
  * Bootstrap integration guice module.
@@ -74,33 +75,11 @@ public class GuiceBootstrapModule<T extends Configuration> extends DropwizardAwa
      * Bind bootstrap, configuration and environment objects to be able to use them
      * as injectable.
      */
+    @SuppressWarnings("deprecation")
     private void bindEnvironment() {
         bind(Bootstrap.class).toInstance(bootstrap());
         bind(Environment.class).toInstance(environment());
-        bindConfig(configuration().getClass());
-    }
-
-    /**
-     * Bind configuration hierarchy: all superclasses and direct interfaces for each level (except interfaces
-     * from java package).
-     *
-     * @param type configuration type
-     */
-    @SuppressWarnings("unchecked")
-    private void bindConfig(final Class type) {
-        bind(type).toInstance(configuration());
-        if (type == Configuration.class) {
-            return;
-        }
-        if (context.option(BindConfigurationInterfaces)) {
-            for (Class iface : type.getInterfaces()) {
-                final String pkg = iface.getPackage().getName();
-                if (pkg.startsWith("java.") || pkg.startsWith("groovy.")) {
-                    continue;
-                }
-                bind(iface).toInstance(configuration());
-            }
-        }
-        bindConfig(type.getSuperclass());
+        install(new ConfigBindingModule(configuration(), YamlConfigInspector.inspect(bootstrap(), configuration()),
+                context.option(GuiceyOptions.BindConfigurationInterfaces)));
     }
 }

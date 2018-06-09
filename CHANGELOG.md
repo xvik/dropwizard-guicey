@@ -40,7 +40,22 @@
 * Singleton scope is not forced for jersey extensions with explicit scoping annotation
 * Add option for disabling forced singletons for jersey extensions: InstallerOptions.ForceSingletonForHkExtensions
 * Add annotation for guice prototype scope: @Prototype. Useful to declare some jersey extensions as default-scoped even when forced singletons enabled
-* Fix guice request scope delegation support (ServletScopes.transferRequest) for jersey-manager request objects (#49)                 
+* Fix guice request scope delegation support (ServletScopes.transferRequest) for jersey-manager request objects (#49)
+* Dropwizard configuration bindings enhanced:
+    - Configuration object could be bound as:
+        - any class from configuration class hierarchy (as before)
+        - any class from hierarchy with @Config qualifier: @Inject @Config Configuration conf
+        - interface, implemented by any class in hierarchy with qualifier: @Inject @Config ConfInterface config
+        - (Deprecated) GuiceyOptions.BindConfigurationInterfaces: when enabled it would bind configuration with interface (as before),
+            but prefer binding interfaces with qualifier (@Config), which is always available.
+            Option will be removed in the future versions
+        - (Deprecated) bundle's builder.bindConfigurationInterfaces()                 
+    - Configuration value (property value) could be bound by path: @Inject @Config("server.serverPush.enabled") Boolean enabledPush
+        Or entire sub configuration object: @Inject @Config("server") ServerFactory serverCfg
+    - Sub configuration objects could be bound without path if object type appear only once in configuration:
+        @Inject @Config ServerFactory serverCfg           
+
+Also, release includes much improved [generics-resolver](https://github.com/xvik/generics-resolver/releases/tag/3.0.0) (3.0.0)                      
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0
@@ -98,7 +113,7 @@ to enable bridge (#28)
     - (optional) Bind interfaces directly implemented by classes in configuration hierarchy except interfaces from java and groovy packages 
  (it's common to use HasSomeConfig interface convention and now interface may be directly used for binding (when bindConfigurationInterfaces()))
 * Add GuiceyBootstrap methods (extend GuiceyBundle abilities):
-    - bundles(): add transitive guicey bundles support (to install other guicey bundles from bundle). Duplicate bundles are detected by type.
+    - bundles(): add transitive guicey bundles support (to install other guicey bundles from bundle). Duplicate bundles are detected by valueType.
     - application(): returns current application instance
 * Rewrite internal configuration mechanism (bundles, installers etc) to generalize it and introduce complete configuration tracking: store registration sources, disabling, used installers and other specific information for each item
     - Add GuiceyConfigurationInfo service to access tracked guicey configuration information (may be used for configuration diagnostic purposes, performing post configuration checks, printing complete configuration tree etc)
@@ -170,7 +185,7 @@ are managed by HK2 only. May be used in tests as extra validation.
 ### 2.0.0 (2014-11-25)
 * Dropwizard 0.8 integration (as result, no more depends on jersey-guice, but depends on guice-bridge(hk2)).
 Jersey integration completely rewritten.
-* Add JerseyInstaller installer type
+* Add JerseyInstaller installer valueType
 * Add @LazyBinding annotation, which allows extension not to be registered in guice context (it will be created on first request)
 
 ### 1.1.0 (2014-10-23)
@@ -180,7 +195,7 @@ Jersey integration completely rewritten.
 
 ### 1.0.0 (2014-10-14)
 * Add dependency on guice-multibindings
-* Installers may choose now from three types of installation (binding, type or instance) or combine them.
+* Installers may choose now from three types of installation (binding, valueType or instance) or combine them.
 * Add PluginInstaller: shortcut for multibindings mechanism
 * Updated guice (4.0.beta4 -> 4.0.beta5)
 * Force singleton for resources

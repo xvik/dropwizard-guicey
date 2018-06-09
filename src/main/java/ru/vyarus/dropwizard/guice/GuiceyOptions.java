@@ -62,9 +62,14 @@ public enum GuiceyOptions implements Option {
     /**
      * Bind all direct interfaces implemented by configuration objects to configuration instance in guice context.
      * Disabled by default.
+     * <p>
+     * Note: interfaces are always bound with qualifier: {@code @Inject @Config ConfInterface config}.
+     * Option only controls if extra binding must be done without qualifier.
      *
+     * @deprecated remains for compatibility, instead bind configuration interfaces with {@code @Config} qualifier
      * @see GuiceBundle.Builder#bindConfigurationInterfaces()
      */
+    @Deprecated
     BindConfigurationInterfaces(Boolean.class, false),
 
     /**

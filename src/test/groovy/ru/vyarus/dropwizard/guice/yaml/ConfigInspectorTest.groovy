@@ -1,0 +1,357 @@
+package ru.vyarus.dropwizard.guice.yaml
+
+import io.dropwizard.Application
+import io.dropwizard.Configuration
+import io.dropwizard.jersey.filter.AllowedMethodsFilter
+import io.dropwizard.jetty.GzipHandlerFactory
+import io.dropwizard.jetty.ServerPushFilterFactory
+import io.dropwizard.logging.DefaultLoggingFactory
+import io.dropwizard.logging.LoggingFactory
+import io.dropwizard.metrics.MetricsFactory
+import io.dropwizard.request.logging.RequestLogFactory
+import io.dropwizard.server.DefaultServerFactory
+import io.dropwizard.server.ServerFactory
+import io.dropwizard.setup.Bootstrap
+import io.dropwizard.setup.Environment
+import io.dropwizard.util.Duration
+import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig
+import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigInspector
+import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigItem
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.yaml.support.*
+import spock.lang.Specification
+
+import javax.inject.Inject
+
+/**
+ * @author Vyacheslav Rusakov
+ * @since 05.05.2018
+ */
+@UseGuiceyApp(App)
+class ConfigInspectorTest extends Specification {
+
+    Object NOT_SET = new Object()
+
+    @Inject
+    Bootstrap bootstrap
+
+    def "Check configuration introspection"() {
+
+        when: "check default config"
+        def res = YamlConfigInspector.inspect(bootstrap, create(Configuration))
+        then:
+        printConfig(res) == """[Configuration] logging (LoggingFactory as DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
+[Configuration] logging.appenders (List<AppenderFactory<ILoggingEvent>> as SingletonImmutableList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+[Configuration] logging.level (String) = "INFO"
+[Configuration] logging.loggers (Map<String, JsonNode> as RegularImmutableMap<String, JsonNode>) = {}
+[Configuration] metrics (MetricsFactory) = MetricsFactory{frequency=1 minute, reporters=[]}
+[Configuration] metrics.frequency (Duration) = 1 minute
+[Configuration] metrics.reporters (List<ReporterFactory> as RegularImmutableList<ReporterFactory>) = []
+[Configuration] server (ServerFactory as DefaultServerFactory) = DefaultServerFactory{applicationConnectors=[io.dropwizard.jetty.HttpConnectorFactory@1111111], adminConnectors=[io.dropwizard.jetty.HttpConnectorFactory@1111111], adminMaxThreads=64, adminMinThreads=1, applicationContextPath=/, adminContextPath=/}
+[Configuration] server.adminConnectors (List<ConnectorFactory> as ArrayList<ConnectorFactory>) = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
+[Configuration] server.adminContextPath (String) = "/"
+[Configuration] server.adminMaxThreads (Integer) = 64
+[Configuration] server.adminMinThreads (Integer) = 1
+[Configuration] server.allowedMethods (Set<String> as HashSet<String>) = [HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]
+[Configuration] server.applicationConnectors (List<ConnectorFactory> as ArrayList<ConnectorFactory>) = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
+[Configuration] server.applicationContextPath (String) = "/"
+[Configuration] server.detailedJsonProcessingExceptionMapper (Boolean) = false
+[Configuration] server.enableThreadNameFilter (Boolean) = true
+[Configuration] server.gid (Integer) = null
+[Configuration] server.group (String) = null
+[Configuration] server.gzip (GzipHandlerFactory) = io.dropwizard.jetty.GzipHandlerFactory@1111111
+[Configuration] server.gzip.bufferSize (Size) = 8 kilobytes
+[Configuration] server.gzip.compressedMimeTypes (Set<String>) = null
+[Configuration] server.gzip.deflateCompressionLevel (Integer) = -1
+[Configuration] server.gzip.enabled (Boolean) = true
+[Configuration] server.gzip.excludedUserAgentPatterns (Set<String> as HashSet<String>) = []
+[Configuration] server.gzip.gzipCompatibleInflation (Boolean) = true
+[Configuration] server.gzip.includedMethods (Set<String>) = null
+[Configuration] server.gzip.minimumEntitySize (Size) = 256 bytes
+[Configuration] server.gzip.syncFlush (Boolean) = false
+[Configuration] server.idleThreadTimeout (Duration) = 1 minute
+[Configuration] server.maxQueuedRequests (Integer) = 1024
+[Configuration] server.maxThreads (Integer) = 1024
+[Configuration] server.minThreads (Integer) = 8
+[Configuration] server.nofileHardLimit (Integer) = null
+[Configuration] server.nofileSoftLimit (Integer) = null
+[Configuration] server.registerDefaultExceptionMappers (Boolean) = true
+[Configuration] server.requestLog (RequestLogFactory<RequestLog> as LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
+[Configuration] server.requestLog.appenders (List<AppenderFactory<IAccessEvent>> as SingletonImmutableList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+[Configuration] server.rootPath (Optional<String>) = Optional.empty
+[Configuration] server.serverPush (ServerPushFilterFactory) = io.dropwizard.jetty.ServerPushFilterFactory@1111111
+[Configuration] server.serverPush.associatePeriod (Duration) = 4 seconds
+[Configuration] server.serverPush.enabled (Boolean) = false
+[Configuration] server.serverPush.maxAssociations (Integer) = 16
+[Configuration] server.serverPush.refererHosts (List<String>) = null
+[Configuration] server.serverPush.refererPorts (List<Integer>) = null
+[Configuration] server.shutdownGracePeriod (Duration) = 30 seconds
+[Configuration] server.startsAsRoot (Boolean) = null
+[Configuration] server.uid (Integer) = null
+[Configuration] server.umask (String) = null
+[Configuration] server.user (String) = null"""
+        res.rootTypes == [Configuration]
+        res.uniqueContentTypes.size() == 6
+        res.contents.size() == 50
+        check(res, "server", DefaultServerFactory)
+        check(res, "server.maxThreads", Integer, 1024)
+        check(res, "server.idleThreadTimeout", Duration, Duration.minutes(1))
+        check(res, "server.allowedMethods", HashSet, AllowedMethodsFilter.DEFAULT_ALLOWED_METHODS, [String] as Class[])
+        check(res, "logging", DefaultLoggingFactory)
+        check(res, "metrics", MetricsFactory)
+
+        when: "check simple config type"
+        res = YamlConfigInspector.inspect(bootstrap, create(SimpleConfig))
+        then:
+        printConfig(res) == """[SimpleConfig] bar (Boolean) = null
+[SimpleConfig] foo (String) = null
+[SimpleConfig] prim (Integer) = 0"""
+        res.rootTypes == [SimpleConfig, Configuration]
+        res.uniqueContentTypes.size() == 6
+        res.contents.size() == 53
+        check(res, "foo", String)
+        check(res, "bar", Boolean)
+        check(res, "prim", Integer)
+
+        when: "object field type"
+        res = YamlConfigInspector.inspect(bootstrap, create(ObjectPropertyConfig))
+        def elt = res.findByPath("sub")
+        then: "Object remain as declared type"
+        printConfig(res) == "[ObjectPropertyConfig] sub (Object) = null"
+        res.rootTypes == [ObjectPropertyConfig, Configuration]
+        res.uniqueContentTypes.size() == 6
+        res.contents.size() == 51
+        check(res, "sub", Object)
+        elt.isObjectDeclaration()
+        elt.declaredType == Object
+        elt.valueType == Object
+        elt.declaredTypeGenericClasses == []
+
+        when: "object wield with non null value"
+        def conf = create(ObjectPropertyConfig)
+        conf.sub = new ArrayList()
+        res = YamlConfigInspector.inspect(bootstrap, conf)
+        elt = res.findByPath("sub")
+        then: "declared type taken from value"
+        printConfig(res) == "[ObjectPropertyConfig] sub (List<Object>* as ArrayList<Object>) = []"
+        check(res, "sub", ArrayList)
+        elt.declaredType == List
+        elt.valueType == ArrayList
+        elt.declaredTypeGenericClasses == [Object]
+        elt.isObjectDeclaration()
+
+        when: "check complex config type"
+        res = YamlConfigInspector.inspect(bootstrap, create(ComplexConfig))
+        then:
+        printConfig(res) == """[ComplexConfig] one (Parametrized<Integer>) = null
+[ComplexConfig] one.list (List<Integer>) = null
+[ComplexConfig] sub (SubConfig) = null
+[ComplexConfig] sub.sub (String) = null
+[ComplexConfig] sub.two (Parametrized<String>) = null
+[ComplexConfig] sub.two.list (List<String>) = null"""
+        res.rootTypes == [ComplexConfig, ComplexConfig.Iface, Configuration]
+        res.uniqueContentTypes.size() == 7
+        res.uniqueContentTypes.find { it.valueType == ComplexConfig.SubConfig } != null
+        res.uniqueContentTypes.find { it.valueType == ComplexConfig.Parametrized } == null
+        res.contents.size() == 56
+        check(res, "sub", ComplexConfig.SubConfig)
+        check(res, "sub.sub", String)
+        check(res, "sub.two", ComplexConfig.Parametrized, null, String)
+        check(res, "sub.two.list", List, null, String)
+        check(res, "one", ComplexConfig.Parametrized, null, Integer)
+        check(res, "one.list", List, null, Integer)
+    }
+
+    def "Check complex generic case"() {
+
+        when: "check field with contradicting generic"
+        def configuration = create(ComplexGenericCase)
+        def value = new ComplexGenericCase.SubImpl<String>()
+        configuration.sub = value
+        def res = YamlConfigInspector.inspect(bootstrap, configuration)
+        then:
+        printConfig(res) == """[ComplexGenericCase] sub (Sub<String> as SubImpl<String>) = ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase\$SubImpl@1111111
+[ComplexGenericCase] sub.smth (String) = "sample"
+[ComplexGenericCase] sub.val (String) = null"""
+        check(res, "sub", ComplexGenericCase.SubImpl, value, String)
+        check(res, "sub.smth", String, "sample")
+        check(res, "sub.val", String, null)
+    }
+
+    def "Check not unique sub config"() {
+
+        when: "config with duplicate sub config usages"
+        def res = YamlConfigInspector.inspect(bootstrap, create(NotUniqueSubConfig))
+        then: "sub config not unique"
+        printConfig(res) == """[NotUniqueSubConfig] sub1 (SubConfig<String>) = null
+[NotUniqueSubConfig] sub1.sub (String) = null
+[NotUniqueSubConfig] sub2 (SubConfig<String>) = null
+[NotUniqueSubConfig] sub2.sub (String) = null
+[NotUniqueSubConfig] sub3 (SubConfig<Integer>) = null
+[NotUniqueSubConfig] sub3.sub (String) = null"""
+        !res.uniqueContentTypes.contains(NotUniqueSubConfig.SubConfig)
+
+        and: "sub config generic recognized"
+        res.findByPath('sub1').declaredTypeGenericClasses == [String]
+        res.findByPath('sub2').declaredTypeGenericClasses == [String]
+        res.findByPath('sub3').declaredTypeGenericClasses == [Integer]
+    }
+
+    def "Check declaration type lowering"() {
+
+        when: "properties declared as list implementation"
+        def res = YamlConfigInspector.inspect(bootstrap, create(TooBroadDeclarationConfig))
+        then: "property types lowered"
+        printConfig(res) == """[TooBroadDeclarationConfig] bar (List<Integer> as ExtraList<String, Integer>) = null
+[TooBroadDeclarationConfig] foo (List<String> as ArrayList<String>) = null"""
+
+        and: "sub config generic recognized"
+        res.findByPath('foo').toStringDeclaredType() == "List<String>"
+        res.findByPath('foo').toStringType() == "ArrayList<String>"
+        res.findByPath('bar').toStringDeclaredType() == "List<Integer>"
+        res.findByPath('bar').toStringType() == "ExtraList<String, Integer>"
+    }
+
+    def "Check configuration lookup methods"() {
+
+        when:
+        def res = YamlConfigInspector.inspect(bootstrap, create(NotUniqueSubConfig))
+        then:
+        res.getUniqueContentTypes().collect { it.getDeclaredType() } as Set ==
+                [ServerPushFilterFactory, LoggingFactory, ServerFactory, GzipHandlerFactory, MetricsFactory, RequestLogFactory] as Set
+        res.findByPath("sub1").getDeclaredType() == NotUniqueSubConfig.SubConfig
+        res.findByPath("sub1.sub").getDeclaredType() == String
+        res.findAllByType(NotUniqueSubConfig.SubConfig).collect {it.path} == ["sub1", "sub2", "sub3"]
+        res.findAllFrom(NotUniqueSubConfig).collect {it.path} == ["sub1", "sub1.sub", "sub2", "sub2.sub", "sub3", "sub3.sub"]
+        res.findAllRootPaths().collect {it.path} == ["sub1", "sub2", "sub3", "logging", "metrics", "server"]
+        res.findAllRootPathsFrom(NotUniqueSubConfig).collect {it.path} == ["sub1", "sub2", "sub3"]
+        res.findAllRootPathsFrom(Configuration).collect {it.path} == ["logging", "metrics", "server"]
+
+
+        when:
+        res = YamlConfigInspector.inspect(bootstrap, create(ComplexConfig))
+        then:
+        res.getUniqueContentTypes().collect { it.getDeclaredType() } as Set ==
+                [ComplexConfig.SubConfig, ServerPushFilterFactory, LoggingFactory, ServerFactory, GzipHandlerFactory, MetricsFactory, RequestLogFactory] as Set
+        res.findByPath("sub").getDeclaredType() == ComplexConfig.SubConfig
+        res.findByPath("sub.sub").getDeclaredType() == String
+        res.findAllByType(ComplexConfig.SubConfig).collect {it.path} == ["sub"]
+        res.findAllByType(ComplexConfig.Parametrized).collect {it.path} == ["one", "sub.two"]
+        res.findAllFrom(ComplexConfig).collect {it.path} == ["one", "one.list", "sub", "sub.sub", "sub.two", "sub.two.list"]
+        res.findAllRootPaths().collect {it.path} == ["one", "sub", "logging", "metrics", "server"]
+        res.findAllRootPathsFrom(ComplexConfig).collect {it.path} == ["one", "sub"]
+        res.findAllRootPathsFrom(Configuration).collect {it.path} == ["logging", "metrics", "server"]
+    }
+
+    def "Check item methods"() {
+
+        when: "1st level path"
+        def res = YamlConfigInspector.inspect(bootstrap, create(NotUniqueSubConfig))
+        def path = res.findByPath("sub1")
+        then:
+        path.root == null
+        path.children.collect {it.path} == ["sub1.sub"]
+        path.declarationClass == NotUniqueSubConfig
+        path.declaredType == NotUniqueSubConfig.SubConfig
+        path.valueType == NotUniqueSubConfig.SubConfig
+        path.declaredTypeGenerics == [String]
+        path.declaredTypeGenericClasses == [String]
+        path.valueTypeGenerics == [String]
+        path.valueTypeGenericClasses == [String]
+        path.path == "sub1"
+        path.value == null
+        path.customType
+        !path.objectDeclaration
+        path.rootDeclarationClass == NotUniqueSubConfig
+        path.toString() == "[NotUniqueSubConfig] sub1 (SubConfig<String>) = null"
+
+        when: "2nd level path"
+        path = res.findByPath("sub1.sub")
+        then:
+        path.root.path == "sub1"
+        path.children.isEmpty()
+        path.declarationClass == NotUniqueSubConfig.SubConfig
+        path.declaredType == String
+        path.valueType == String
+        path.declaredTypeGenerics == []
+        path.declaredTypeGenericClasses == []
+        path.valueTypeGenerics == []
+        path.valueTypeGenericClasses == []
+        path.path == "sub1.sub"
+        path.value == null
+        !path.customType
+        !path.objectDeclaration
+        path.rootDeclarationClass == NotUniqueSubConfig
+        path.toString() == "[NotUniqueSubConfig] sub1.sub (String) = null"
+
+        when: "object property with value"
+        def config = create(ObjectPropertyConfig)
+        config.sub = new ArrayList()
+        res = YamlConfigInspector.inspect(bootstrap, config)
+        path = res.findByPath("sub")
+        then:
+        path.root == null
+        path.children.isEmpty()
+        path.declarationClass == ObjectPropertyConfig
+        path.declaredType == List
+        path.valueType == ArrayList
+        path.declaredTypeGenerics == [Object]
+        path.declaredTypeGenericClasses == [Object]
+        path.valueTypeGenerics == [Object]
+        path.valueTypeGenericClasses == [Object]
+        path.path == "sub"
+        path.value != null
+        !path.customType
+        path.objectDeclaration
+        path.rootDeclarationClass == ObjectPropertyConfig
+        path.toString() == "[ObjectPropertyConfig] sub (List<Object>* as ArrayList<Object>) = []"
+
+    }
+
+    private <T extends Configuration> T create(Class<T> type) {
+        bootstrap.configurationFactoryFactory
+                .create(type, bootstrap.validatorFactory.validator, bootstrap.objectMapper, "dw").build()
+    }
+
+    private boolean check(YamlConfig config, String path, Class type, Object value = NOT_SET, Class[] generics = null) {
+        YamlConfigItem item = config.findByPath(path)
+        assert item != null
+        assert item.valueType == type
+        if (value != NOT_SET) {
+            assert item.value == value
+        }
+        if (generics != null) {
+            assert item.getDeclaredTypeGenerics().toArray(new Class[0]) == generics
+        }
+        true
+    }
+
+    private String printConfig(YamlConfig config) {
+        boolean skipDwConf = config.getRootTypes().size() > 1
+        def res = removePointers(
+                config.contents.sort { one, two -> one.path.compareTo(two.path) }.findAll {
+                    !skipDwConf || it.rootDeclarationClass != Configuration
+                }.join('\n'))
+        println res
+        res
+    }
+
+    private String removePointers(String str) {
+        str.replaceAll('@[^] \n]+', '@1111111')
+    }
+
+
+    static class App extends Application<Configuration> {
+
+        @Override
+        void initialize(Bootstrap<Configuration> bootstrap) {
+            bootstrap.addBundle(GuiceBundle.builder().build())
+        }
+
+        @Override
+        void run(Configuration configuration, Environment environment) throws Exception {
+
+        }
+    }
+}

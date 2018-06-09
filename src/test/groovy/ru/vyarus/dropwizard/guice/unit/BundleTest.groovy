@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.unit
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.inject.Injector
 import io.dropwizard.Application
 import io.dropwizard.Configuration
@@ -24,7 +25,7 @@ class BundleTest extends AbstractTest {
 
         when: "accessing injector after init"
         bundle.initialize(mockBootstrap())
-        bundle.run(Mock(Configuration), mockEnvironment())
+        bundle.run(new Configuration(), mockEnvironment())
         bundle.getInjector()
         then: "injector available"
         true
@@ -37,14 +38,14 @@ class BundleTest extends AbstractTest {
         when: "using default factory"
         GuiceBundle bundle = GuiceBundle.builder().build()
         bundle.initialize(mockBootstrap())
-        bundle.run(Mock(Configuration), mockEnvironment())
+        bundle.run(new Configuration(), mockEnvironment())
         then: "injector is a Guice injector"
         bundle.getInjector() instanceof Injector
 
         when: "using custom factory"
         bundle = GuiceBundle.builder().injectorFactory(mockInjectorFactory).build()
         bundle.initialize(mockBootstrap())
-        bundle.run(Mock(Configuration), mockEnvironment())
+        bundle.run(new Configuration(), mockEnvironment())
         then: "injector factory has been customized"
         1 * mockInjectorFactory.createInjector(*_) >> mockInjector
         bundle.getInjector() == mockInjector
@@ -64,6 +65,7 @@ class BundleTest extends AbstractTest {
     Bootstrap mockBootstrap(){
         def bootstrap = Mock(Bootstrap)
         bootstrap.application >> Mock(Application)
+        bootstrap.objectMapper >> new ObjectMapper()
         return bootstrap
     }
 }

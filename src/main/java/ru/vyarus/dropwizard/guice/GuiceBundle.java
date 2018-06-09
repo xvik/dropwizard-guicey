@@ -668,7 +668,10 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          *
          * @return builder instance for chained calls
          * @see GuiceyOptions#BindConfigurationInterfaces
+         * @deprecated remains for compatibility, instead bind configuration interfaces with {@code @Config}
+         * qualifier (always enabled)
          */
+        @Deprecated
         public Builder<T> bindConfigurationInterfaces() {
             return option(BindConfigurationInterfaces, true);
         }
