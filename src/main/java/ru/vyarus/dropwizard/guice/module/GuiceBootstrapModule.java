@@ -15,8 +15,8 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module;
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.scope.Prototype;
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigInspector;
-import ru.vyarus.dropwizard.guice.module.yaml.module.ConfigBindingModule;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
+import ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule;
 
 import javax.inject.Singleton;
 
@@ -79,7 +79,7 @@ public class GuiceBootstrapModule<T extends Configuration> extends DropwizardAwa
     private void bindEnvironment() {
         bind(Bootstrap.class).toInstance(bootstrap());
         bind(Environment.class).toInstance(environment());
-        install(new ConfigBindingModule(configuration(), YamlConfigInspector.inspect(bootstrap(), configuration()),
+        install(new ConfigBindingModule(configuration(), ConfigTreeBuilder.build(bootstrap(), configuration()),
                 context.option(GuiceyOptions.BindConfigurationInterfaces)));
     }
 }

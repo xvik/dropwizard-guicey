@@ -54,15 +54,15 @@
         Or entire sub configuration object: @Inject @Config("server") ServerFactory serverCfg
     - Sub configuration objects could be bound without path if object type appear only once in configuration:
         @Inject @Config ServerFactory serverCfg
-    - YamlConfig - configuration introspection object is available for direct binding
-        - and from GuiceyConfigurationInfo bean: getYamlConfig()
+    - ConfigurationTree - configuration introspection object is available for direct binding
+        - and from GuiceyConfigurationInfo bean: getConfigurationTree()
 * Alternative configuration access:
     - new configuration access methods available inside GuiceyBundle:
         - configuration(String) - configuration value by path
         - configuration(Class) - unique sub configuration object
         - configurations(Class) - all sub configuration objects with assignable type (on any depth)
-        - yamlConfig() - access raw introspection data for more complex searches                
-    - new YamlConfigAwareModule marker interface for guice modules to access introspected configuration in modules
+        - configurationTree() - access raw introspection data for more complex searches                
+    - new ConfigurationTreeAwareModule marker interface for guice modules to access introspected configuration in modules
         - DropwizardAwareModule implements configuration shortcuts like in guicey bundle
 
 

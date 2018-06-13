@@ -36,7 +36,7 @@ class ConfigInfoItemsTest extends Specification {
         info.getData() != null
         info.getOptions() != null
         info.getStats() != null
-        info.getYamlConfig() != null
+        info.getConfigurationTree() != null
     }
 
     def "Check info objects correctness"() {

@@ -6,9 +6,9 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigInspector
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigItem
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
 
@@ -27,25 +27,25 @@ class ConfigAccessorsTest extends Specification {
     def "Check properties visibility"() {
 
         when: "config without annotations, but with getters"
-        def res = YamlConfigInspector.inspect(bootstrap, create(NoAnnsConfig))
+        def res = ConfigTreeBuilder.build(bootstrap, create(NoAnnsConfig))
         then:
         check(res, 'foo', String)
         check(res, 'bar', Boolean)
 
         when: "config with inconsistent annotations"
-        res = YamlConfigInspector.inspect(bootstrap, create(SimpleConfiguration))
+        res = ConfigTreeBuilder.build(bootstrap, create(SimpleConfiguration))
         then:
         check(res, 'foo', String)
         check(res, 'bar', Boolean)
 
         when: "config with getters only"
-        res = YamlConfigInspector.inspect(bootstrap, create(GetterOnlyConfiguration))
+        res = ConfigTreeBuilder.build(bootstrap, create(GetterOnlyConfiguration))
         then:
         check(res, 'foo', String)
         check(res, 'bar', Boolean)
 
         when: "config with setters only"
-        res = YamlConfigInspector.inspect(bootstrap, create(SetterOnlyConfiguration))
+        res = ConfigTreeBuilder.build(bootstrap, create(SetterOnlyConfiguration))
         then:
         check(res, 'foo', String)
         res.findByPath('bar') == null  // not annotated property not visible
@@ -69,8 +69,8 @@ class ConfigAccessorsTest extends Specification {
                 .create(type, bootstrap.validatorFactory.validator, bootstrap.objectMapper, "dw").build()
     }
 
-    private boolean check(YamlConfig config, String path, Class type) {
-        YamlConfigItem item = config.findByPath(path)
+    private boolean check(ConfigurationTree config, String path, Class type) {
+        ConfigPath item = config.findByPath(path)
         assert item != null
         assert item.valueType == type
         true

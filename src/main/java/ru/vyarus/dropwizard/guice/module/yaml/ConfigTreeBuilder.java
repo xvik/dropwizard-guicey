@@ -45,7 +45,7 @@ import java.util.*;
  * @since 04.05.2018
  */
 @SuppressWarnings("PMD.GodClass")
-public final class YamlConfigInspector {
+public final class ConfigTreeBuilder {
 
     /**
      * Packages to stop types introspection on (for sure non custom pojo types).
@@ -68,7 +68,7 @@ public final class YamlConfigInspector {
             List.class, Set.class, Map.class, Multimap.class
     );
 
-    private YamlConfigInspector() {
+    private ConfigTreeBuilder() {
     }
 
     /**
@@ -78,17 +78,17 @@ public final class YamlConfigInspector {
      * @param configuration configuration instance
      * @return parsed configuration info
      */
-    public static YamlConfig inspect(final Bootstrap bootstrap, final Configuration configuration) {
+    public static ConfigurationTree build(final Bootstrap bootstrap, final Configuration configuration) {
         final List<Class> roots = resolveRootTypes(new ArrayList<>(), configuration.getClass());
-        final List<YamlConfigItem> content = resolveContent(
+        final List<ConfigPath> content = resolvePaths(
                 bootstrap.getObjectMapper().getSerializationConfig(),
                 null,
                 new ArrayList<>(),
                 configuration.getClass(),
                 configuration,
                 GenericsResolver.resolve(configuration.getClass()));
-        final List<YamlConfigItem> uniqueContent = resolveUniqueContent(content);
-        return new YamlConfig(roots, content, uniqueContent);
+        final List<ConfigPath> uniqueContent = resolveUniqueTypePaths(content);
+        return new ConfigurationTree(roots, content, uniqueContent);
     }
 
     /**
@@ -129,12 +129,12 @@ public final class YamlConfigInspector {
      * @param object  analyzed part instance (may be null)
      * @return all configuration paths values
      */
-    private static List<YamlConfigItem> resolveContent(final SerializationConfig config,
-                                                       final YamlConfigItem root,
-                                                       final List<YamlConfigItem> content,
-                                                       final Class type,
-                                                       final Object object,
-                                                       final GenericsContext genericsContext) {
+    private static List<ConfigPath> resolvePaths(final SerializationConfig config,
+                                                 final ConfigPath root,
+                                                 final List<ConfigPath> content,
+                                                 final Class type,
+                                                 final Object object,
+                                                 final GenericsContext genericsContext) {
         final BasicBeanDescription description = config.introspect(
                 config.constructType(type)
         );
@@ -146,7 +146,7 @@ public final class YamlConfigInspector {
             }
             final Object value = object == null ? null : readValue(prop.getAccessor(), object);
 
-            final YamlConfigItem item = createItem(root, prop, value, genericsContext);
+            final ConfigPath item = createItem(root, prop, value, genericsContext);
             content.add(item);
             if (root != null) {
                 root.getChildren().add(item);
@@ -158,7 +158,7 @@ public final class YamlConfigInspector {
                         ? genericsContext.method(prop.getGetter().getAnnotated()).returnTypeAs(item.getValueType())
                         : genericsContext.fieldTypeAs(prop.getField().getAnnotated(), item.getValueType());
 
-                resolveContent(config, item, content, item.getValueType(),
+                resolvePaths(config, item, content, item.getValueType(),
                         item.getValue(), subContext);
             }
         }
@@ -181,10 +181,10 @@ public final class YamlConfigInspector {
      * @param genericsContext generics context
      * @return path item object
      */
-    private static YamlConfigItem createItem(final YamlConfigItem root,
-                                             final BeanPropertyDefinition prop,
-                                             final Object value,
-                                             final GenericsContext genericsContext) {
+    private static ConfigPath createItem(final ConfigPath root,
+                                         final BeanPropertyDefinition prop,
+                                         final Object value,
+                                         final GenericsContext genericsContext) {
         // need generified type to resolve generics manually because jackson's generics resolution
         // couldn't handle all required cases
         final Type type = prop.getGetter() != null
@@ -205,7 +205,7 @@ public final class YamlConfigInspector {
         final List<Type> upperGenerics = lowerType.equals(upperType) ? lowerGenerics
                 : resolveUpperGenerics(genericsContext, type, objectDeclared, upperType);
 
-        return new YamlConfigItem(
+        return new ConfigPath(
                 root,
                 prop.getAccessor().getDeclaringClass(),
                 lowerType,
@@ -289,10 +289,10 @@ public final class YamlConfigInspector {
      * @param items all parsed configuration paths
      * @return list of unique custom configuration objects
      */
-    private static List<YamlConfigItem> resolveUniqueContent(final List<YamlConfigItem> items) {
-        final Map<Class, YamlConfigItem> index = new HashMap<>();
+    private static List<ConfigPath> resolveUniqueTypePaths(final List<ConfigPath> items) {
+        final Map<Class, ConfigPath> index = new HashMap<>();
         final List<Class> duplicates = new ArrayList<>();
-        for (YamlConfigItem item : items) {
+        for (ConfigPath item : items) {
             final Class type = item.getDeclaredType();
             if (!item.isCustomType() || duplicates.contains(type)) {
                 continue;

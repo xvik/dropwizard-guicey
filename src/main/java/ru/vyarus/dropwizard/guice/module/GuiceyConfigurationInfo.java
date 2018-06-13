@@ -17,7 +17,7 @@ import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -40,17 +40,17 @@ public class GuiceyConfigurationInfo {
     private final StatsInfo stats;
     private final OptionsInfo options;
     private final ExtensionsHolder holder;
-    private final YamlConfig yamlConfig;
+    private final ConfigurationTree configurationTree;
 
     @Inject
     public GuiceyConfigurationInfo(final ConfigurationInfo context, final StatsInfo stats,
                                    final OptionsInfo options, final ExtensionsHolder holder,
-                                   final YamlConfig yamlConfig) {
+                                   final ConfigurationTree configurationTree) {
         this.context = context;
         this.stats = stats;
         this.options = options;
         this.holder = holder;
-        this.yamlConfig = yamlConfig;
+        this.configurationTree = configurationTree;
     }
 
     /**
@@ -88,8 +88,8 @@ public class GuiceyConfigurationInfo {
      *
      * @return dropwizard configuration introspection result
      */
-    public YamlConfig getYamlConfig() {
-        return yamlConfig;
+    public ConfigurationTree getConfigurationTree() {
+        return configurationTree;
     }
 
     /**

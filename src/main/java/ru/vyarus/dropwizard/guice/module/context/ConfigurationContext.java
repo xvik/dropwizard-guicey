@@ -26,8 +26,8 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig;
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigInspector;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -55,7 +55,7 @@ public final class ConfigurationContext {
 
     private Bootstrap bootstrap;
     private Configuration configuration;
-    private YamlConfig yamlConfig;
+    private ConfigurationTree configurationTree;
     private Environment environment;
 
 
@@ -505,7 +505,7 @@ public final class ConfigurationContext {
      */
     public void runPhaseStarted(final Configuration configuration, final Environment environment) {
         this.configuration = configuration;
-        this.yamlConfig = YamlConfigInspector.inspect(bootstrap, configuration);
+        this.configurationTree = ConfigTreeBuilder.build(bootstrap, configuration);
         this.environment = environment;
     }
 
@@ -593,8 +593,8 @@ public final class ConfigurationContext {
     /**
      * @return introspected configuration object
      */
-    public YamlConfig getYamlConfig() {
-        return yamlConfig;
+    public ConfigurationTree getConfigurationTree() {
+        return configurationTree;
     }
 
     /**

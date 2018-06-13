@@ -10,7 +10,8 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -73,10 +74,10 @@ public class GuiceyBootstrap {
      * @param yamlPath target value yaml path
      * @param <T> value type
      * @return configuration value by path or null if value is null or path not exists
-     * @see #yamlConfig() for custom configuration searches
+     * @see #configurationTree() for custom configuration searches
      */
     public <T> T configuration(final String yamlPath) {
-        return yamlConfig().valueByPath(yamlPath);
+        return configurationTree().valueByPath(yamlPath);
     }
 
     /**
@@ -101,10 +102,10 @@ public class GuiceyBootstrap {
      * @param <T> declaration type
      * @param <K> required value type (may be the same or extending type)
      * @return unique configuration value or null if value is null or no declaration found
-     * @see #yamlConfig() for custom configuration searches
+     * @see #configurationTree() for custom configuration searches
      */
     public <T, K extends T> K configuration(final Class<T> type) {
-        return yamlConfig().valueByUniqueDeclaredType(type);
+        return configurationTree().valueByUniqueDeclaredType(type);
     }
 
     /**
@@ -124,10 +125,10 @@ public class GuiceyBootstrap {
      * @param type target configuration type
      * @param <T> value type
      * @return list of configuration values with required type or empty list
-     * @see #yamlConfig() for custom configuration searches
+     * @see #configurationTree() for custom configuration searches
      */
     public <T> List<? extends T> configurations(final Class<T> type) {
-        return yamlConfig().valuesByType(type);
+        return configurationTree().valuesByType(type);
     }
 
     /**
@@ -141,11 +142,11 @@ public class GuiceyBootstrap {
      * See find* and value* methods as an examples of how stored paths could be traversed.
      *
      * @return detailed configuration object
-     * @see ru.vyarus.dropwizard.guice.module.yaml.YamlConfigInspector for configuration introspection details
-     * @see ru.vyarus.dropwizard.guice.module.yaml.module.Config for available guice configuration bindings 
+     * @see ConfigTreeBuilder for configuration introspection details
+     * @see ru.vyarus.dropwizard.guice.module.yaml.bind.Config for available guice configuration bindings
      */
-    public YamlConfig yamlConfig() {
-        return context.getYamlConfig();
+    public ConfigurationTree configurationTree() {
+        return context.getConfigurationTree();
     }
 
     /**

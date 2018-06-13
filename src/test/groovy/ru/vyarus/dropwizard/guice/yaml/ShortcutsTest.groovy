@@ -8,7 +8,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigInspector
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase
 import ru.vyarus.dropwizard.guice.yaml.support.NotUniqueSubConfig
@@ -33,9 +33,9 @@ class ShortcutsTest extends Specification {
         def config = create(NotUniqueSubConfig)
         config.sub1 = new NotUniqueSubConfig.SubConfig(sub: "val")
         config.sub2 = new NotUniqueSubConfig.SubConfig()
-        def res = YamlConfigInspector.inspect(bootstrap, config)
+        def res = ConfigTreeBuilder.build(bootstrap, config)
         def mod = new DropwizardAwareModule() {}
-        mod.setYamlConfig(res)
+        mod.setConfigurationTree(res)
         then:
         mod.configuration("not.exists") == null
         mod.configuration("sub1") != null
@@ -46,9 +46,9 @@ class ShortcutsTest extends Specification {
         when: "config with unique custom type"
         config = create(ComplexGenericCase)
         config.sub = new ComplexGenericCase.SubImpl()
-        res = YamlConfigInspector.inspect(bootstrap, config)
+        res = ConfigTreeBuilder.build(bootstrap, config)
         mod = new DropwizardAwareModule() {}
-        mod.setYamlConfig(res)
+        mod.setConfigurationTree(res)
         then:
         mod.configuration("not.exists") == null
         mod.configuration("sub") != null
@@ -64,9 +64,9 @@ class ShortcutsTest extends Specification {
         def config = create(NotUniqueSubConfig)
         config.sub1 = new NotUniqueSubConfig.SubConfig(sub: "val")
         config.sub2 = new NotUniqueSubConfig.SubConfig()
-        def res = YamlConfigInspector.inspect(bootstrap, config)
+        def res = ConfigTreeBuilder.build(bootstrap, config)
         def context = new ConfigurationContext()
-        context.yamlConfig = res
+        context.configurationTree = res
         def bundle = new GuiceyBootstrap(context, [])
         then:
         bundle.configuration("not.exists") == null
@@ -78,9 +78,9 @@ class ShortcutsTest extends Specification {
         when: "config with unique custom type"
         config = create(ComplexGenericCase)
         config.sub = new ComplexGenericCase.SubImpl()
-        res = YamlConfigInspector.inspect(bootstrap, config)
+        res = ConfigTreeBuilder.build(bootstrap, config)
         context = new ConfigurationContext()
-        context.yamlConfig = res
+        context.configurationTree = res
         bundle = new GuiceyBootstrap(context, [])
         then:
         bundle.configuration("not.exists") == null

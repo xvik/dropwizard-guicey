@@ -1,12 +1,12 @@
-package ru.vyarus.dropwizard.guice.module.yaml.module;
+package ru.vyarus.dropwizard.guice.module.yaml.bind;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.util.Providers;
 import io.dropwizard.Configuration;
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig;
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigItem;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath;
 
 /**
  * Binds configuration constants. Bindings are qualified with {@link Config}.
@@ -25,7 +25,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigItem;
  * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#BindConfigurationInterfaces}, but this is deprecated behaviour
  * (remained only for compatibility reasons).
  * <p>
- * {@link YamlConfig} instance is also bound directly to be used for custom configuration analysis.
+ * {@link ConfigurationTree} instance is also bound directly to be used for custom configuration analysis.
  *
  * @author Vyacheslav Rusakov
  * @since 04.05.2018
@@ -34,24 +34,24 @@ import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigItem;
 public class ConfigBindingModule extends AbstractModule {
 
     private final Configuration configuration;
-    private final YamlConfig info;
+    private final ConfigurationTree tree;
     private final boolean bindInterfaces;
 
     public ConfigBindingModule(final Configuration configuration,
-                               final YamlConfig info,
+                               final ConfigurationTree tree,
                                final boolean bindInterfaces) {
         this.configuration = configuration;
-        this.info = info;
+        this.tree = tree;
         this.bindInterfaces = bindInterfaces;
     }
 
     @Override
     protected void configure() {
-        bind(YamlConfig.class).toInstance(info);
+        bind(ConfigurationTree.class).toInstance(tree);
 
         bindRootTypes();
-        bindUniqueContentTypes();
-        bindConstants();
+        bindUniqueSubConfigurations();
+        bindValuePaths();
     }
 
 
@@ -61,7 +61,7 @@ public class ConfigBindingModule extends AbstractModule {
      */
     @SuppressWarnings("unchecked")
     private void bindRootTypes() {
-        for (Class type : info.getRootTypes()) {
+        for (Class type : tree.getRootTypes()) {
             // bind root configuration classes both with and without qualifier
             if (!type.isInterface() || bindInterfaces) {
                 // bind interface as type only when it's allowed
@@ -77,8 +77,8 @@ public class ConfigBindingModule extends AbstractModule {
      * bindings will disappear.
      */
     @SuppressWarnings("unchecked")
-    private void bindUniqueContentTypes() {
-        for (YamlConfigItem item : info.getUniqueContentTypes()) {
+    private void bindUniqueSubConfigurations() {
+        for (ConfigPath item : tree.getUniqueTypePaths()) {
             // bind only with annotation to avoid clashes with direct bindings
             toValue(
                     bind(Key.get(item.getDeclaredTypeWithGenerics(), Config.class)),
@@ -91,8 +91,8 @@ public class ConfigBindingModule extends AbstractModule {
      * Value may be null because if null values would be avoided, bindings will disappear.
      */
     @SuppressWarnings({"unchecked", "PMD.AvoidInstantiatingObjectsInLoops"})
-    private void bindConstants() {
-        for (YamlConfigItem item : info.getPaths()) {
+    private void bindValuePaths() {
+        for (ConfigPath item : tree.getPaths()) {
             toValue(
                     bind(Key.get(item.getDeclaredTypeWithGenerics(), new ConfigImpl(item.getPath()))),
                     item.getValue());

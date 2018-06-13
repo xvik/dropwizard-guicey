@@ -26,12 +26,12 @@ import java.util.stream.Collectors;
  * @author Vyacheslav Rusakov
  * @since 04.05.2018
  */
-public class YamlConfigItem {
+public class ConfigPath {
 
     private static final String QUOTE = "\"";
 
-    private final YamlConfigItem root;
-    private final List<YamlConfigItem> children = new ArrayList<>();
+    private final ConfigPath root;
+    private final List<ConfigPath> children = new ArrayList<>();
     // configuration class where it was declared (may be sub object class)
     private final Class declarationClass;
     // class declaration (except Object case, when type could be resolved from instance)
@@ -46,8 +46,8 @@ public class YamlConfigItem {
     private final boolean objectDeclaration;
 
     @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList"})
-    public YamlConfigItem(
-            final YamlConfigItem root,
+    public ConfigPath(
+            final ConfigPath root,
             final Class declarationClass,
             final Class declaredType,
             final Class valueType,
@@ -74,7 +74,7 @@ public class YamlConfigItem {
      *
      * @return parent config level or null for root level
      */
-    public YamlConfigItem getRoot() {
+    public ConfigPath getRoot() {
         return root;
     }
 
@@ -84,7 +84,7 @@ public class YamlConfigItem {
      *
      * @return list of child properties
      */
-    public List<YamlConfigItem> getChildren() {
+    public List<ConfigPath> getChildren() {
         return children;
     }
 
@@ -214,7 +214,7 @@ public class YamlConfigItem {
      * @return root configuration class where entire path started
      */
     public Class getRootDeclarationClass() {
-        YamlConfigItem res = this;
+        ConfigPath res = this;
         while (res.getRoot() != null) {
             res = res.getRoot();
         }
@@ -283,11 +283,11 @@ public class YamlConfigItem {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof YamlConfigItem)) {
+        if (!(o instanceof ConfigPath)) {
             return false;
         }
 
-        final YamlConfigItem that = (YamlConfigItem) o;
+        final ConfigPath that = (ConfigPath) o;
         // dropwizard application always use only one configuration object so only path is meaningful
         return path.equals(that.path);
     }

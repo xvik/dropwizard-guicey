@@ -11,9 +11,9 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig
-import ru.vyarus.dropwizard.guice.module.yaml.module.Config
-import ru.vyarus.dropwizard.guice.module.yaml.module.ConfigImpl
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
+import ru.vyarus.dropwizard.guice.module.yaml.bind.Config
+import ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigImpl
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 import javax.inject.Inject
@@ -31,7 +31,7 @@ class ConfigBindingsTest extends AbstractTest {
     def "Check configuration bindings"() {
 
         expect: "root bindings"
-        binding(YamlConfig) != null
+        binding(ConfigurationTree) != null
         binding(Configuration) != null
         binding(AppConfig) != null
         binding(ConfIface) == null

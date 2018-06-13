@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.yaml;
 
 import io.dropwizard.Configuration;
+import ru.vyarus.dropwizard.guice.module.support.ConfigurationTreeAwareModule;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,34 +22,34 @@ import java.util.stream.Collectors;
  * Each configuration property descriptor provides access to root and child paths, so tree-like traversals are possible
  * (see find* methods below for examples).
  * <p>
- * Object itself could be injected as guice bean {@code @Inject YamlConfig config}. Note that it did not contains
+ * Object itself could be injected as guice bean {@code @Inject ConfigurationTree config}. Note that it did not contains
  * root configuration instance, only properties tree.
  * <p>
  * Also, object is accessible inside guicey bundles
- * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#yamlConfig()} and guice modules:
- * {@link ru.vyarus.dropwizard.guice.module.support.YamlConfigAwareModule}.
+ * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#configurationTree()} and guice modules:
+ * {@link ConfigurationTreeAwareModule}.
  *
  * @author Vyacheslav Rusakov
- * @see ru.vyarus.dropwizard.guice.module.yaml.module.ConfigBindingModule
+ * @see ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule
  * @since 04.05.2018
  */
-public class YamlConfig {
+public class ConfigurationTree {
 
     private static final String DOT = ".";
 
     // root configuration class, super classes and interfaces
     private final List<Class> rootTypes;
     // all visible internal paths
-    private final List<YamlConfigItem> contents;
+    private final List<ConfigPath> paths;
     // unique custom types from paths (could be bound by type - no duplicates)
-    private final List<YamlConfigItem> uniqueContentTypes;
+    private final List<ConfigPath> uniqueTypePaths;
 
-    public YamlConfig(final List<Class> rootTypes,
-                      final List<YamlConfigItem> contents,
-                      final List<YamlConfigItem> uniqueContentTypes) {
+    public ConfigurationTree(final List<Class> rootTypes,
+                             final List<ConfigPath> paths,
+                             final List<ConfigPath> uniqueTypePaths) {
         this.rootTypes = rootTypes;
-        this.contents = contents;
-        this.uniqueContentTypes = uniqueContentTypes;
+        this.paths = paths;
+        this.uniqueTypePaths = uniqueTypePaths;
         // sort by configuration class and path name for predictable order
         sortContent();
     }
@@ -66,23 +67,27 @@ public class YamlConfig {
      * property setter performs immediate value transformation and bean did not provide getter then such value
      * is impossible to read back from configuration.
      * <p>
-     * Paths are sorted by configration class and path name (so more custom properties will be at the beginning and
+     * Paths are sorted by configuration class and path name (so more custom properties will be at the beginning and
      * dropwizard properties at the end).
      *
-     * @return all configuration value paths
+     * @return all configuration value paths (including all steps, e.g. "sub", "sub.smth")
      */
-    public List<YamlConfigItem> getPaths() {
-        return contents;
+    public List<ConfigPath> getPaths() {
+        return paths;
     }
 
     /**
      * Such unique objects could be used for internal configurations instead of root configuration class
      * (very handy for generic extensions).
+     * <p>
+     * Note that custom type is unique only if it does not appear anywhere else (on any level).
+     * Exact type matching: e.g. if some extending type is declared somewhere it would be considered as different
+     * (as class is different, hierarchy not counted).
      *
-     * @return sublist of all configuration value paths, containing unique custom objects
+     * @return list of all configuration value paths, containing unique custom objects
      */
-    public List<YamlConfigItem> getUniqueContentTypes() {
-        return uniqueContentTypes;
+    public List<ConfigPath> getUniqueTypePaths() {
+        return uniqueTypePaths;
     }
 
 
@@ -94,8 +99,8 @@ public class YamlConfig {
      * @param path path to find descriptor for
      * @return path descriptor or null if not found
      */
-    public YamlConfigItem findByPath(final String path) {
-        return contents.stream()
+    public ConfigPath findByPath(final String path) {
+        return paths.stream()
                 .filter(it -> it.getPath().equalsIgnoreCase(path))
                 .findFirst()
                 .orElse(null);
@@ -114,8 +119,8 @@ public class YamlConfig {
      * @param type type to search for
      * @return all paths with the same or sub type for specified type or empty list
      */
-    public List<YamlConfigItem> findAllByType(final Class<?> type) {
-        return contents.stream()
+    public List<ConfigPath> findAllByType(final Class<?> type) {
+        return paths.stream()
                 // do not allow search for all booleans or integers (completely meaningless)
                 .filter(it -> it.isCustomType() && type.isAssignableFrom(it.getDeclaredType()))
                 .collect(Collectors.toList());
@@ -133,8 +138,8 @@ public class YamlConfig {
      * @param confType configuration type to get all properties from
      * @return all properties declared in (originated in for sub object paths) required configuration class.
      */
-    public List<YamlConfigItem> findAllFrom(final Class<? extends Configuration> confType) {
-        return contents.stream()
+    public List<ConfigPath> findAllFrom(final Class<? extends Configuration> confType) {
+        return paths.stream()
                 .filter(it -> it.getRootDeclarationClass() == confType)
                 .collect(Collectors.toList());
     }
@@ -145,8 +150,8 @@ public class YamlConfig {
      * @return all root objects and direct root values (only paths 1 level paths)
      * @see #findAllRootPathsFrom(Class)
      */
-    public List<YamlConfigItem> findAllRootPaths() {
-        return contents.stream()
+    public List<ConfigPath> findAllRootPaths() {
+        return paths.stream()
                 .filter(it -> !it.getPath().contains(DOT))
                 .collect(Collectors.toList());
     }
@@ -159,8 +164,8 @@ public class YamlConfig {
      * specified configuration class (directly)
      * @see #findAllRootPaths()
      */
-    public List<YamlConfigItem> findAllRootPathsFrom(final Class<? extends Configuration> confType) {
-        return contents.stream()
+    public List<ConfigPath> findAllRootPathsFrom(final Class<? extends Configuration> confType) {
+        return paths.stream()
                 .filter(it -> !it.getPath().contains(DOT) && it.getRootDeclarationClass() == confType)
                 .collect(Collectors.toList());
     }
@@ -185,7 +190,7 @@ public class YamlConfig {
      */
     @SuppressWarnings("unchecked")
     public <T> T valueByPath(final String path) {
-        final YamlConfigItem item = findByPath(path);
+        final ConfigPath item = findByPath(path);
         return item != null ? (T) item.getValue() : null;
     }
 
@@ -211,7 +216,7 @@ public class YamlConfig {
     @SuppressWarnings("unchecked")
     public <T> List<? extends T> valuesByType(final Class<T> type) {
         return (List<? extends T>) findAllByType(type).stream()
-                .map(YamlConfigItem::getValue)
+                .map(ConfigPath::getValue)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
@@ -230,7 +235,7 @@ public class YamlConfig {
      */
     @SuppressWarnings("unchecked")
     public <T, K extends T> K valueByType(final Class<T> type) {
-        final List<YamlConfigItem> items = findAllByType(type)
+        final List<ConfigPath> items = findAllByType(type)
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());
         return items.isEmpty() ? null : (K) items.get(0).getValue();
     }
@@ -260,7 +265,7 @@ public class YamlConfig {
      */
     @SuppressWarnings("unchecked")
     public <T, K extends T> K valueByUniqueDeclaredType(final Class<T> type) {
-        return (K) uniqueContentTypes.stream()
+        return (K) uniqueTypePaths.stream()
                 .filter(it -> type.equals(it.getDeclaredType()))
                 .findFirst()
                 .orElse(null);
@@ -268,7 +273,7 @@ public class YamlConfig {
 
 
     private void sortContent() {
-        contents.sort((o1, o2) -> {
+        paths.sort((o1, o2) -> {
             final int res;
             final Class rootClass1 = o1.getRootDeclarationClass();
             final Class rootClass2 = o2.getRootDeclarationClass();

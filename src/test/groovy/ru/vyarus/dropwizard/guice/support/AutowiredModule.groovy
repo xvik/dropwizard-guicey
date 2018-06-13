@@ -7,8 +7,8 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule
-import ru.vyarus.dropwizard.guice.module.support.YamlConfigAwareModule
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig
+import ru.vyarus.dropwizard.guice.module.support.ConfigurationTreeAwareModule
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
 import ru.vyarus.dropwizard.guice.support.feature.InvisibleResource
 
 /**
@@ -17,14 +17,14 @@ import ru.vyarus.dropwizard.guice.support.feature.InvisibleResource
  * @since 04.09.2014
  */
 class AutowiredModule extends AbstractModule implements BootstrapAwareModule<Configuration>,
-        EnvironmentAwareModule, ConfigurationAwareModule<Configuration>, YamlConfigAwareModule {
+        EnvironmentAwareModule, ConfigurationAwareModule<Configuration>, ConfigurationTreeAwareModule {
 
     static AutowiredModule instance
 
     Bootstrap bootstrap
     Environment environment
     Configuration configuration
-    YamlConfig yamlConfig
+    ConfigurationTree configurationTree
 
     AutowiredModule() {
         instance = this;
@@ -53,7 +53,7 @@ class AutowiredModule extends AbstractModule implements BootstrapAwareModule<Con
     }
 
     @Override
-    void setYamlConfig(YamlConfig yamlConfig) {
-        this.yamlConfig = yamlConfig
+    void setConfigurationTree(ConfigurationTree configurationTree) {
+        this.configurationTree = configurationTree
     }
 }

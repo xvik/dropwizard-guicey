@@ -36,8 +36,8 @@ public final class ModulesSupport {
             if (mod instanceof ConfigurationAwareModule) {
                 ((ConfigurationAwareModule) mod).setConfiguration(context.getConfiguration());
             }
-            if (mod instanceof YamlConfigAwareModule) {
-                ((YamlConfigAwareModule) mod).setYamlConfig(context.getYamlConfig());
+            if (mod instanceof ConfigurationTreeAwareModule) {
+                ((ConfigurationTreeAwareModule) mod).setConfigurationTree(context.getConfigurationTree());
             }
             if (mod instanceof EnvironmentAwareModule) {
                 ((EnvironmentAwareModule) mod).setEnvironment(context.getEnvironment());

@@ -5,7 +5,8 @@ import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
 
 import java.util.List;
 
@@ -22,14 +23,14 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
         EnvironmentAwareModule,
         BootstrapAwareModule<C>,
         ConfigurationAwareModule<C>,
-        YamlConfigAwareModule,
+        ConfigurationTreeAwareModule,
         OptionsAwareModule {
 
     private C configuration;
     private Bootstrap<C> bootstrap;
     private Environment environment;
     private Options options;
-    private YamlConfig yamlConfig;
+    private ConfigurationTree configurationTree;
 
     @Override
     public void setConfiguration(final C configuration) {
@@ -52,8 +53,8 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
     }
 
     @Override
-    public void setYamlConfig(final YamlConfig yamlConfig) {
-        this.yamlConfig = yamlConfig;
+    public void setConfigurationTree(final ConfigurationTree configurationTree) {
+        this.configurationTree = configurationTree;
     }
 
     /**
@@ -79,10 +80,10 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      * @param yamlPath target value yaml path
      * @param <T> value type
      * @return configuration value by path or null if value is null or path not exists
-     * @see #yamlConfig() for custom configuration searches
+     * @see #configurationTree() for custom configuration searches
      */
     public <T> T configuration(final String yamlPath) {
-        return yamlConfig().valueByPath(yamlPath);
+        return configurationTree().valueByPath(yamlPath);
     }
 
     /**
@@ -107,10 +108,10 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      * @param <T> declaration type
      * @param <K> required value type (may be the same or extending type)
      * @return unique configuration value or null if value is null or no declaration found
-     * @see #yamlConfig() for custom configuration searches
+     * @see #configurationTree() for custom configuration searches
      */
     public <T, K extends T> K configuration(final Class<T> type) {
-        return yamlConfig().valueByUniqueDeclaredType(type);
+        return configurationTree().valueByUniqueDeclaredType(type);
     }
 
     /**
@@ -130,10 +131,10 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      * @param type target configuration type
      * @param <T> value type
      * @return list of configuration values with required type or empty list
-     * @see #yamlConfig() for custom configuration searches
+     * @see #configurationTree() for custom configuration searches
      */
     public <T> List<? extends T> configurations(final Class<T> type) {
-        return yamlConfig().valuesByType(type);
+        return configurationTree().valuesByType(type);
     }
 
     /**
@@ -147,11 +148,11 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      * See find* and value* methods as an examples of how stored paths could be traversed.
      *
      * @return detailed configuration object
-     * @see ru.vyarus.dropwizard.guice.module.yaml.YamlConfigInspector for configuration introspection details
-     * @see ru.vyarus.dropwizard.guice.module.yaml.module.Config for available guice configuration bindings
+     * @see ConfigTreeBuilder for configuration introspection details
+     * @see ru.vyarus.dropwizard.guice.module.yaml.bind.Config for available guice configuration bindings
      */
-    protected YamlConfig yamlConfig() {
-        return yamlConfig;
+    protected ConfigurationTree configurationTree() {
+        return configurationTree;
     }
 
     /**

@@ -15,9 +15,9 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import io.dropwizard.util.Duration
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigInspector
-import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigItem
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import ru.vyarus.dropwizard.guice.yaml.support.*
 import spock.lang.Specification
@@ -39,7 +39,7 @@ class ConfigInspectorTest extends Specification {
     def "Check configuration introspection"() {
 
         when: "check default config"
-        def res = YamlConfigInspector.inspect(bootstrap, create(Configuration))
+        def res = ConfigTreeBuilder.build(bootstrap, create(Configuration))
         then:
         printConfig(res) == """[Configuration] logging (LoggingFactory as DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
 [Configuration] logging.appenders (List<AppenderFactory<ILoggingEvent>> as SingletonImmutableList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
@@ -92,7 +92,7 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.umask (String) = null
 [Configuration] server.user (String) = null"""
         res.rootTypes == [Configuration]
-        res.uniqueContentTypes.size() == 6
+        res.uniqueTypePaths.size() == 6
         res.paths.size() == 50
         check(res, "server", DefaultServerFactory)
         check(res, "server.maxThreads", Integer, 1024)
@@ -102,25 +102,25 @@ class ConfigInspectorTest extends Specification {
         check(res, "metrics", MetricsFactory)
 
         when: "check simple config type"
-        res = YamlConfigInspector.inspect(bootstrap, create(SimpleConfig))
+        res = ConfigTreeBuilder.build(bootstrap, create(SimpleConfig))
         then:
         printConfig(res) == """[SimpleConfig] bar (Boolean) = null
 [SimpleConfig] foo (String) = null
 [SimpleConfig] prim (Integer) = 0"""
         res.rootTypes == [SimpleConfig, Configuration]
-        res.uniqueContentTypes.size() == 6
+        res.uniqueTypePaths.size() == 6
         res.paths.size() == 53
         check(res, "foo", String)
         check(res, "bar", Boolean)
         check(res, "prim", Integer)
 
         when: "object field type"
-        res = YamlConfigInspector.inspect(bootstrap, create(ObjectPropertyConfig))
+        res = ConfigTreeBuilder.build(bootstrap, create(ObjectPropertyConfig))
         def elt = res.findByPath("sub")
         then: "Object remain as declared type"
         printConfig(res) == "[ObjectPropertyConfig] sub (Object) = null"
         res.rootTypes == [ObjectPropertyConfig, Configuration]
-        res.uniqueContentTypes.size() == 6
+        res.uniqueTypePaths.size() == 6
         res.paths.size() == 51
         check(res, "sub", Object)
         elt.isObjectDeclaration()
@@ -131,7 +131,7 @@ class ConfigInspectorTest extends Specification {
         when: "object wield with non null value"
         def conf = create(ObjectPropertyConfig)
         conf.sub = new ArrayList()
-        res = YamlConfigInspector.inspect(bootstrap, conf)
+        res = ConfigTreeBuilder.build(bootstrap, conf)
         elt = res.findByPath("sub")
         then: "declared type taken from value"
         printConfig(res) == "[ObjectPropertyConfig] sub (List<Object>* as ArrayList<Object>) = []"
@@ -142,7 +142,7 @@ class ConfigInspectorTest extends Specification {
         elt.isObjectDeclaration()
 
         when: "check complex config type"
-        res = YamlConfigInspector.inspect(bootstrap, create(ComplexConfig))
+        res = ConfigTreeBuilder.build(bootstrap, create(ComplexConfig))
         then:
         printConfig(res) == """[ComplexConfig] one (Parametrized<Integer>) = null
 [ComplexConfig] one.list (List<Integer>) = null
@@ -151,9 +151,9 @@ class ConfigInspectorTest extends Specification {
 [ComplexConfig] sub.two (Parametrized<String>) = null
 [ComplexConfig] sub.two.list (List<String>) = null"""
         res.rootTypes == [ComplexConfig, ComplexConfig.Iface, Configuration]
-        res.uniqueContentTypes.size() == 7
-        res.uniqueContentTypes.find { it.valueType == ComplexConfig.SubConfig } != null
-        res.uniqueContentTypes.find { it.valueType == ComplexConfig.Parametrized } == null
+        res.uniqueTypePaths.size() == 7
+        res.uniqueTypePaths.find { it.valueType == ComplexConfig.SubConfig } != null
+        res.uniqueTypePaths.find { it.valueType == ComplexConfig.Parametrized } == null
         res.paths.size() == 56
         check(res, "sub", ComplexConfig.SubConfig)
         check(res, "sub.sub", String)
@@ -169,7 +169,7 @@ class ConfigInspectorTest extends Specification {
         def configuration = create(ComplexGenericCase)
         def value = new ComplexGenericCase.SubImpl<String>()
         configuration.sub = value
-        def res = YamlConfigInspector.inspect(bootstrap, configuration)
+        def res = ConfigTreeBuilder.build(bootstrap, configuration)
         then:
         printConfig(res) == """[ComplexGenericCase] sub (Sub<String> as SubImpl<String>) = ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase\$SubImpl@1111111
 [ComplexGenericCase] sub.smth (String) = "sample"
@@ -182,7 +182,7 @@ class ConfigInspectorTest extends Specification {
     def "Check not unique sub config"() {
 
         when: "config with duplicate sub config usages"
-        def res = YamlConfigInspector.inspect(bootstrap, create(NotUniqueSubConfig))
+        def res = ConfigTreeBuilder.build(bootstrap, create(NotUniqueSubConfig))
         then: "sub config not unique"
         printConfig(res) == """[NotUniqueSubConfig] sub1 (SubConfig<String>) = null
 [NotUniqueSubConfig] sub1.sub (String) = null
@@ -190,7 +190,7 @@ class ConfigInspectorTest extends Specification {
 [NotUniqueSubConfig] sub2.sub (String) = null
 [NotUniqueSubConfig] sub3 (SubConfig<Integer>) = null
 [NotUniqueSubConfig] sub3.sub (String) = null"""
-        !res.uniqueContentTypes.contains(NotUniqueSubConfig.SubConfig)
+        !res.uniqueTypePaths.contains(NotUniqueSubConfig.SubConfig)
 
         and: "sub config generic recognized"
         res.findByPath('sub1').declaredTypeGenericClasses == [String]
@@ -201,7 +201,7 @@ class ConfigInspectorTest extends Specification {
     def "Check declaration type lowering"() {
 
         when: "properties declared as list implementation"
-        def res = YamlConfigInspector.inspect(bootstrap, create(TooBroadDeclarationConfig))
+        def res = ConfigTreeBuilder.build(bootstrap, create(TooBroadDeclarationConfig))
         then: "property types lowered"
         printConfig(res) == """[TooBroadDeclarationConfig] bar (List<Integer> as ExtraList<String, Integer>) = null
 [TooBroadDeclarationConfig] foo (List<String> as ArrayList<String>) = null"""
@@ -216,9 +216,9 @@ class ConfigInspectorTest extends Specification {
     def "Check configuration lookup methods"() {
 
         when:
-        def res = YamlConfigInspector.inspect(bootstrap, create(NotUniqueSubConfig))
+        def res = ConfigTreeBuilder.build(bootstrap, create(NotUniqueSubConfig))
         then:
-        res.getUniqueContentTypes().collect { it.getDeclaredType() } as Set ==
+        res.getUniqueTypePaths().collect { it.getDeclaredType() } as Set ==
                 [ServerPushFilterFactory, LoggingFactory, ServerFactory, GzipHandlerFactory, MetricsFactory, RequestLogFactory] as Set
         res.findByPath("sub1").getDeclaredType() == NotUniqueSubConfig.SubConfig
         res.findByPath("sub1.sub").getDeclaredType() == String
@@ -236,9 +236,9 @@ class ConfigInspectorTest extends Specification {
         when:
         def config = create(ComplexConfig)
         config.one = new ComplexConfig.Parametrized()
-        res = YamlConfigInspector.inspect(bootstrap, config)
+        res = ConfigTreeBuilder.build(bootstrap, config)
         then:
-        res.getUniqueContentTypes().collect { it.getDeclaredType() } as Set ==
+        res.getUniqueTypePaths().collect { it.getDeclaredType() } as Set ==
                 [ComplexConfig.SubConfig, ServerPushFilterFactory, LoggingFactory, ServerFactory, GzipHandlerFactory, MetricsFactory, RequestLogFactory] as Set
         res.findByPath("sub").getDeclaredType() == ComplexConfig.SubConfig
         res.findByPath("sub.sub").getDeclaredType() == String
@@ -263,7 +263,7 @@ class ConfigInspectorTest extends Specification {
         def config = create(NotUniqueSubConfig)
         config.sub1 = new NotUniqueSubConfig.SubConfig(sub: "val")
         config.sub2 = new NotUniqueSubConfig.SubConfig()
-        def res = YamlConfigInspector.inspect(bootstrap, config)
+        def res = ConfigTreeBuilder.build(bootstrap, config)
         then:
         res.valueByPath("not.exists") == null
         res.valueByPath("sub1") != null
@@ -275,7 +275,7 @@ class ConfigInspectorTest extends Specification {
         when: "config with unique custom type"
         config = create(ComplexGenericCase)
         config.sub = new ComplexGenericCase.SubImpl()
-        res = YamlConfigInspector.inspect(bootstrap, config)
+        res = ConfigTreeBuilder.build(bootstrap, config)
         then:
         res.valueByPath("not.exists") == null
         res.valueByPath("sub") != null
@@ -289,7 +289,7 @@ class ConfigInspectorTest extends Specification {
     def "Check item methods"() {
 
         when: "1st level path"
-        def res = YamlConfigInspector.inspect(bootstrap, create(NotUniqueSubConfig))
+        def res = ConfigTreeBuilder.build(bootstrap, create(NotUniqueSubConfig))
         def path = res.findByPath("sub1")
         then:
         path.root == null
@@ -333,7 +333,7 @@ class ConfigInspectorTest extends Specification {
         when: "object property with value"
         def config = create(ObjectPropertyConfig)
         config.sub = new ArrayList()
-        res = YamlConfigInspector.inspect(bootstrap, config)
+        res = ConfigTreeBuilder.build(bootstrap, config)
         path = res.findByPath("sub")
         then:
         path.root == null
@@ -359,8 +359,8 @@ class ConfigInspectorTest extends Specification {
                 .create(type, bootstrap.validatorFactory.validator, bootstrap.objectMapper, "dw").build()
     }
 
-    private boolean check(YamlConfig config, String path, Class type, Object value = NOT_SET, Class[] generics = null) {
-        YamlConfigItem item = config.findByPath(path)
+    private boolean check(ConfigurationTree config, String path, Class type, Object value = NOT_SET, Class[] generics = null) {
+        ConfigPath item = config.findByPath(path)
         assert item != null
         assert item.valueType == type
         if (value != NOT_SET) {
@@ -372,7 +372,7 @@ class ConfigInspectorTest extends Specification {
         true
     }
 
-    private String printConfig(YamlConfig config) {
+    private String printConfig(ConfigurationTree config) {
         boolean skipDwConf = config.getRootTypes().size() > 1
         def res = removePointers(
                 config.paths.sort { one, two -> one.path.compareTo(two.path) }.findAll {

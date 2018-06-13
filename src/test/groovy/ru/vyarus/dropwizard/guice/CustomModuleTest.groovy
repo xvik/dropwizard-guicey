@@ -24,7 +24,7 @@ class CustomModuleTest extends AbstractTest {
         AutowiredModule.instance.environment
         AutowiredModule.instance.bootstrap
         AutowiredModule.instance.configuration
-        AutowiredModule.instance.yamlConfig
+        AutowiredModule.instance.configurationTree
         !info.getExtensions(ResourceInstaller).contains(InvisibleResource)
     }
 }

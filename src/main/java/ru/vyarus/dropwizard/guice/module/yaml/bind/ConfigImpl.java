@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.yaml.module;
+package ru.vyarus.dropwizard.guice.module.yaml.bind;
 
 import com.google.inject.internal.Annotations;
 
