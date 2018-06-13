@@ -9,9 +9,10 @@ import io.dropwizard.setup.Bootstrap;
  * <p>NOTE: setter will be called on run phase, so bootstrap object may be used only for reference
  * (too late for changes).</p>
  *
- * @author Vyacheslav Rusakov
- * @since 31.08.2014
  * @param <T> configuration type
+ * @author Vyacheslav Rusakov
+ * @see DropwizardAwareModule
+ * @since 31.08.2014
  */
 public interface BootstrapAwareModule<T extends Configuration> {
 

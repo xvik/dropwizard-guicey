@@ -2,15 +2,9 @@ package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
-import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
-import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
-import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
-import ru.vyarus.dropwizard.guice.module.support.OptionsAwareModule;
+import ru.vyarus.dropwizard.guice.module.support.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,26 +24,23 @@ public final class ModulesSupport {
     /**
      * Post-process registered modules by injecting bootstrap, configuration, environment and options objects.
      *
-     * @param bootstrap     bootstrap object
-     * @param configuration configuration object
-     * @param environment   environment object
-     * @param context       configuration context
+     * @param context configuration context
      */
     @SuppressWarnings("unchecked")
-    public static void configureModules(final Bootstrap bootstrap,
-                                        final Configuration configuration,
-                                        final Environment environment,
-                                        final ConfigurationContext context) {
+    public static void configureModules(final ConfigurationContext context) {
         final Options options = new Options(context.options());
         for (Module mod : context.getEnabledModules()) {
             if (mod instanceof BootstrapAwareModule) {
-                ((BootstrapAwareModule) mod).setBootstrap(bootstrap);
+                ((BootstrapAwareModule) mod).setBootstrap(context.getBootstrap());
             }
             if (mod instanceof ConfigurationAwareModule) {
-                ((ConfigurationAwareModule) mod).setConfiguration(configuration);
+                ((ConfigurationAwareModule) mod).setConfiguration(context.getConfiguration());
+            }
+            if (mod instanceof YamlConfigAwareModule) {
+                ((YamlConfigAwareModule) mod).setYamlConfig(context.getYamlConfig());
             }
             if (mod instanceof EnvironmentAwareModule) {
-                ((EnvironmentAwareModule) mod).setEnvironment(environment);
+                ((EnvironmentAwareModule) mod).setEnvironment(context.getEnvironment());
             }
             if (mod instanceof OptionsAwareModule) {
                 ((OptionsAwareModule) mod).setOptions(options);

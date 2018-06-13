@@ -30,6 +30,15 @@ class ConfigInfoItemsTest extends Specification {
     @Inject
     GuiceyConfigurationInfo info
 
+    def "Check core objects accessible"() {
+
+        expect:
+        info.getData() != null
+        info.getOptions() != null
+        info.getStats() != null
+        info.getYamlConfig() != null
+    }
+
     def "Check info objects correctness"() {
 
         expect: "module info"

@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.yaml;
 import io.dropwizard.Configuration;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -19,6 +20,13 @@ import java.util.stream.Collectors;
  * <p>
  * Each configuration property descriptor provides access to root and child paths, so tree-like traversals are possible
  * (see find* methods below for examples).
+ * <p>
+ * Object itself could be injected as guice bean {@code @Inject YamlConfig config}. Note that it did not contains
+ * root configuration instance, only properties tree.
+ * <p>
+ * Also, object is accessible inside guicey bundles
+ * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#yamlConfig()} and guice modules:
+ * {@link ru.vyarus.dropwizard.guice.module.support.YamlConfigAwareModule}.
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.yaml.module.ConfigBindingModule
@@ -63,7 +71,7 @@ public class YamlConfig {
      *
      * @return all configuration value paths
      */
-    public List<YamlConfigItem> getContents() {
+    public List<YamlConfigItem> getPaths() {
         return contents;
     }
 
@@ -76,6 +84,9 @@ public class YamlConfig {
     public List<YamlConfigItem> getUniqueContentTypes() {
         return uniqueContentTypes;
     }
+
+
+    // ---------------------------------------------------------- Structure search (tree traverse examples)
 
     /**
      * Case insensitive exact match.
@@ -101,11 +112,12 @@ public class YamlConfig {
      * field2 value is compatible with requested type.
      *
      * @param type type to search for
-     * @return all paths with the same or subtype for provided or empty list
+     * @return all paths with the same or sub type for specified type or empty list
      */
     public List<YamlConfigItem> findAllByType(final Class<?> type) {
         return contents.stream()
-                .filter(it -> type.isAssignableFrom(it.getValueType()))
+                // do not allow search for all booleans or integers (completely meaningless)
+                .filter(it -> it.isCustomType() && type.isAssignableFrom(it.getDeclaredType()))
                 .collect(Collectors.toList());
     }
 
@@ -152,6 +164,108 @@ public class YamlConfig {
                 .filter(it -> !it.getPath().contains(DOT) && it.getRootDeclarationClass() == confType)
                 .collect(Collectors.toList());
     }
+
+
+    // ---------------------------------------------------------- Value search
+
+
+    /**
+     * <pre>{@code class Config extends Configuration {
+     *          SubConfig sub = { // shown instance contents
+     *              String val = "something"
+     *          }
+     * }}</pre>.
+     * {@code valueByPath("sub.val") == "something"}
+     * <p>
+     * Note: keep in mind that not all values could be accessible (read class javadoc)
+     *
+     * @param path yaml path (case insensitive)
+     * @param <T>  value type
+     * @return configuration value on yaml path or null if value is null or path not found
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T valueByPath(final String path) {
+        final YamlConfigItem item = findByPath(path);
+        return item != null ? (T) item.getValue() : null;
+    }
+
+    /**
+     * Useful to resolve sub configuration objects.
+     * <pre>{@code class Config extends Configuration {
+     *      SubOne sub1 = ...
+     *      SubTwo sub2 = ...
+     *      SubTwo sub2_1 = ...
+     *      SubTwoExt sub2_2 = ... // SubTwoExt extends SubTwo
+     * }}</pre>
+     * {@code valuesByType(SubOne.class) == [<sub1>]}
+     * {@code valuesByType(SubTwo.class) == [<sub2>, <sub2_1>, <sub2_2>]}
+     * <p>
+     * Note that type matching is not exact: any extending types are also accepted. Type is compared with
+     * declaration type (inside configuration class).
+     *
+     * @param type type of required sub configuration objects
+     * @param <T>  value type
+     * @return found sub configurations without nulls (properties with null value)
+     * @see #valueByUniqueDeclaredType(Class) for uniqe objects access
+     */
+    @SuppressWarnings("unchecked")
+    public <T> List<? extends T> valuesByType(final Class<T> type) {
+        return (List<? extends T>) findAllByType(type).stream()
+                .map(YamlConfigItem::getValue)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+    }
+
+    /**
+     * Behaviour is the same as {@link #valuesByType(Class)}, but only first element is returned.
+     * <p>
+     * Note: uniqueness not guaranteed!
+     *
+     * @param type type of required sub configuration object
+     * @param <T>  value type
+     * @param <K>  actual expected sub type (may be the same)
+     * @return value of first compatible type occurrence (first not null value) or null
+     * @see #valueByUniqueDeclaredType(Class) for guaranteed uniquness
+     */
+    @SuppressWarnings("unchecked")
+    public <T, K extends T> K valueByType(final Class<T> type) {
+        final List<YamlConfigItem> items = findAllByType(type)
+                .stream().filter(Objects::nonNull).collect(Collectors.toList());
+        return items.isEmpty() ? null : (K) items.get(0).getValue();
+    }
+
+    /**
+     * Search value by unique type declaration.
+     * <pre>{@code class Config extends Configuration {
+     *      SubOne sub1 = ...
+     *      SubTwo sub2 = ...
+     *      SubTwoExt sub3 = ...  // SubTwoExt extends SubTwo
+     * }}</pre>
+     * {@code valueByUniqueDeclaredType(SubOne.class) == <sub1>},
+     * {@code valueByUniqueDeclaredType(SubTwo.class) == <sub2>}
+     * {@code valueByUniqueDeclaredType(SubTwoExt.class) == <sub3>}
+     * <p>
+     * Note that direct declaration comparison used! For example, {@code valuesByType(SubTwo) == [<sub2>, <sub3>]}
+     * would consider sub2 and sub3 as the same type, but {@code valueByUniqueDeclaredType} will not!
+     * <p>
+     * Type declaration is not unique if somewhere (maybe in some sub-sub configuration object) declaration with
+     * the same type exists. If you need to treat uniqueness only by first path level, then write search
+     * function yourself using {@link #findAllRootPaths()} or {@link #findAllRootPathsFrom(Class)}.
+     *
+     * @param type required target declaration type
+     * @param <T>  value type
+     * @param <K>  actual expected sub type (may be the same)
+     * @return uniquely declared sub configuration object or null if declaration not found or value null
+     */
+    @SuppressWarnings("unchecked")
+    public <T, K extends T> K valueByUniqueDeclaredType(final Class<T> type) {
+        return (K) uniqueContentTypes.stream()
+                .filter(it -> type.equals(it.getDeclaredType()))
+                .findFirst()
+                .orElse(null);
+    }
+
 
     private void sortContent() {
         contents.sort((o1, o2) -> {

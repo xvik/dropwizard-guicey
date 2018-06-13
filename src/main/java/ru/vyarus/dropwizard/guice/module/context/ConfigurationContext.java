@@ -4,7 +4,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.*;
 import com.google.inject.Module;
 import io.dropwizard.Bundle;
+import io.dropwizard.Configuration;
 import io.dropwizard.cli.Command;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
@@ -23,6 +26,8 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
+import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig;
+import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigInspector;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -44,8 +49,15 @@ import java.util.stream.Collectors;
  * @see ConfigurationInfo for acessing collected info at runtime
  * @since 06.07.2016
  */
-@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "checkstyle:ClassFanOutComplexity",
+        "PMD.ExcessiveImports", "PMD.ExcessivePublicCount"})
 public final class ConfigurationContext {
+
+    private Bootstrap bootstrap;
+    private Configuration configuration;
+    private YamlConfig yamlConfig;
+    private Environment environment;
+
 
     /**
      * Configured items (bundles, installers, extensions etc).
@@ -481,6 +493,23 @@ public final class ConfigurationContext {
     }
 
     /**
+     * @param bootstrap dropwizard bootstrap instance
+     */
+    public void initPhaseStarted(final Bootstrap bootstrap) {
+        this.bootstrap = bootstrap;
+    }
+
+    /**
+     * @param configuration dropwizard configuration instance
+     * @param environment   dropwizard environment instance
+     */
+    public void runPhaseStarted(final Configuration configuration, final Environment environment) {
+        this.configuration = configuration;
+        this.yamlConfig = YamlConfigInspector.inspect(bootstrap, configuration);
+        this.environment = environment;
+    }
+
+    /**
      * Called when context configuration is finished (but extensions installation is not finished yet).
      * Merges disabled items configuration with registered items or creates new items to hold disable info.
      */
@@ -545,6 +574,34 @@ public final class ConfigurationContext {
      */
     public LifecycleSupport lifecycle() {
         return lifecycleTracker;
+    }
+
+    /**
+     * @return dropwizard bootstrap object
+     */
+    public Bootstrap getBootstrap() {
+        return bootstrap;
+    }
+
+    /**
+     * @return dropwizard configuration object
+     */
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    /**
+     * @return introspected configuration object
+     */
+    public YamlConfig getYamlConfig() {
+        return yamlConfig;
+    }
+
+    /**
+     * @return dropwizard environment object
+     */
+    public Environment getEnvironment() {
+        return environment;
     }
 
     private Class<?> getScope() {

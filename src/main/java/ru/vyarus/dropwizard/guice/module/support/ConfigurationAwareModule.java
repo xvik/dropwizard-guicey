@@ -8,6 +8,7 @@ import io.dropwizard.Configuration;
  *
  * @param <T> configuration type
  * @author Vyacheslav Rusakov
+ * @see DropwizardAwareModule
  * @since 31.08.2014
  */
 public interface ConfigurationAwareModule<T extends Configuration> {

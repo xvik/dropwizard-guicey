@@ -17,6 +17,7 @@ import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
+import ru.vyarus.dropwizard.guice.module.yaml.YamlConfig;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Public api for internal guicey configuration info ans startup statistics. Provides information about time spent
+ * Public api for internal guicey configuration info and startup statistics. Provides information about time spent
  * for configurations and configuration details like registered bundle types,
  * installers, extensions, disabled installers etc. Registered as guice bean and could be directly injected.
  * <p>
@@ -39,14 +40,17 @@ public class GuiceyConfigurationInfo {
     private final StatsInfo stats;
     private final OptionsInfo options;
     private final ExtensionsHolder holder;
+    private final YamlConfig yamlConfig;
 
     @Inject
     public GuiceyConfigurationInfo(final ConfigurationInfo context, final StatsInfo stats,
-                                   final OptionsInfo options, final ExtensionsHolder holder) {
+                                   final OptionsInfo options, final ExtensionsHolder holder,
+                                   final YamlConfig yamlConfig) {
         this.context = context;
         this.stats = stats;
         this.options = options;
         this.holder = holder;
+        this.yamlConfig = yamlConfig;
     }
 
     /**
@@ -76,6 +80,16 @@ public class GuiceyConfigurationInfo {
      */
     public OptionsInfo getOptions() {
         return options;
+    }
+
+    /**
+     * Note that object is also available for direct injection because, in contrast to other guicey-related
+     * data, configuration properties tree could be used directly in business logic.
+     *
+     * @return dropwizard configuration introspection result
+     */
+    public YamlConfig getYamlConfig() {
+        return yamlConfig;
     }
 
     /**

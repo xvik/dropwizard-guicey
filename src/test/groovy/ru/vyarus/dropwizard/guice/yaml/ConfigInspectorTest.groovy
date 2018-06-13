@@ -93,7 +93,7 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.user (String) = null"""
         res.rootTypes == [Configuration]
         res.uniqueContentTypes.size() == 6
-        res.contents.size() == 50
+        res.paths.size() == 50
         check(res, "server", DefaultServerFactory)
         check(res, "server.maxThreads", Integer, 1024)
         check(res, "server.idleThreadTimeout", Duration, Duration.minutes(1))
@@ -109,7 +109,7 @@ class ConfigInspectorTest extends Specification {
 [SimpleConfig] prim (Integer) = 0"""
         res.rootTypes == [SimpleConfig, Configuration]
         res.uniqueContentTypes.size() == 6
-        res.contents.size() == 53
+        res.paths.size() == 53
         check(res, "foo", String)
         check(res, "bar", Boolean)
         check(res, "prim", Integer)
@@ -121,7 +121,7 @@ class ConfigInspectorTest extends Specification {
         printConfig(res) == "[ObjectPropertyConfig] sub (Object) = null"
         res.rootTypes == [ObjectPropertyConfig, Configuration]
         res.uniqueContentTypes.size() == 6
-        res.contents.size() == 51
+        res.paths.size() == 51
         check(res, "sub", Object)
         elt.isObjectDeclaration()
         elt.declaredType == Object
@@ -154,7 +154,7 @@ class ConfigInspectorTest extends Specification {
         res.uniqueContentTypes.size() == 7
         res.uniqueContentTypes.find { it.valueType == ComplexConfig.SubConfig } != null
         res.uniqueContentTypes.find { it.valueType == ComplexConfig.Parametrized } == null
-        res.contents.size() == 56
+        res.paths.size() == 56
         check(res, "sub", ComplexConfig.SubConfig)
         check(res, "sub.sub", String)
         check(res, "sub.two", ComplexConfig.Parametrized, null, String)
@@ -227,10 +227,16 @@ class ConfigInspectorTest extends Specification {
         res.findAllRootPaths().collect {it.path} == ["sub1", "sub2", "sub3", "logging", "metrics", "server"]
         res.findAllRootPathsFrom(NotUniqueSubConfig).collect {it.path} == ["sub1", "sub2", "sub3"]
         res.findAllRootPathsFrom(Configuration).collect {it.path} == ["logging", "metrics", "server"]
-
+        res.valueByPath("not.exists") == null
+        res.valueByPath("sub1") == null
+        res.valueByType(NotUniqueSubConfig.SubConfig) == null
+        res.valuesByType(NotUniqueSubConfig.SubConfig).isEmpty()
+        res.valueByUniqueDeclaredType(NotUniqueSubConfig.SubConfig) == null
 
         when:
-        res = YamlConfigInspector.inspect(bootstrap, create(ComplexConfig))
+        def config = create(ComplexConfig)
+        config.one = new ComplexConfig.Parametrized()
+        res = YamlConfigInspector.inspect(bootstrap, config)
         then:
         res.getUniqueContentTypes().collect { it.getDeclaredType() } as Set ==
                 [ComplexConfig.SubConfig, ServerPushFilterFactory, LoggingFactory, ServerFactory, GzipHandlerFactory, MetricsFactory, RequestLogFactory] as Set
@@ -242,6 +248,42 @@ class ConfigInspectorTest extends Specification {
         res.findAllRootPaths().collect {it.path} == ["one", "sub", "logging", "metrics", "server"]
         res.findAllRootPathsFrom(ComplexConfig).collect {it.path} == ["one", "sub"]
         res.findAllRootPathsFrom(Configuration).collect {it.path} == ["logging", "metrics", "server"]
+        res.valueByPath("not.exists") == null
+        res.valueByPath("sub") == null
+        res.valueByType(ComplexConfig.SubConfig) == null
+        res.valuesByType(ComplexConfig.SubConfig).isEmpty()
+        res.valueByUniqueDeclaredType(ComplexConfig.SubConfig) != null
+        res.valuesByType(ComplexConfig.Parametrized).size() == 1
+        res.valueByUniqueDeclaredType(ComplexConfig.Parametrized) == null
+    }
+
+    def "Check value accessors"() {
+
+        when: "config with not unique custom type"
+        def config = create(NotUniqueSubConfig)
+        config.sub1 = new NotUniqueSubConfig.SubConfig(sub: "val")
+        config.sub2 = new NotUniqueSubConfig.SubConfig()
+        def res = YamlConfigInspector.inspect(bootstrap, config)
+        then:
+        res.valueByPath("not.exists") == null
+        res.valueByPath("sub1") != null
+        res.valueByPath("sub1.sub") == "val"
+        res.valueByType(NotUniqueSubConfig.SubConfig) != null
+        res.valuesByType(NotUniqueSubConfig.SubConfig).size() == 2
+        res.valueByUniqueDeclaredType(NotUniqueSubConfig.SubConfig) == null
+
+        when: "config with unique custom type"
+        config = create(ComplexGenericCase)
+        config.sub = new ComplexGenericCase.SubImpl()
+        res = YamlConfigInspector.inspect(bootstrap, config)
+        then:
+        res.valueByPath("not.exists") == null
+        res.valueByPath("sub") != null
+        res.valueByPath("sub.smth") == "sample"
+        res.valueByPath("sub.val") == null
+        res.valueByType(ComplexGenericCase.Sub) != null
+        res.valuesByType(ComplexGenericCase.Sub).size() == 1
+        res.valueByUniqueDeclaredType(ComplexGenericCase.Sub) != null
     }
 
     def "Check item methods"() {
@@ -265,6 +307,7 @@ class ConfigInspectorTest extends Specification {
         !path.objectDeclaration
         path.rootDeclarationClass == NotUniqueSubConfig
         path.toString() == "[NotUniqueSubConfig] sub1 (SubConfig<String>) = null"
+        path.equals(path)
 
         when: "2nd level path"
         path = res.findByPath("sub1.sub")
@@ -284,6 +327,8 @@ class ConfigInspectorTest extends Specification {
         !path.objectDeclaration
         path.rootDeclarationClass == NotUniqueSubConfig
         path.toString() == "[NotUniqueSubConfig] sub1.sub (String) = null"
+        !path.equals(res.findByPath("sub1"))
+        path.hashCode() != res.findByPath("sub1").hashCode()
 
         when: "object property with value"
         def config = create(ObjectPropertyConfig)
@@ -330,7 +375,7 @@ class ConfigInspectorTest extends Specification {
     private String printConfig(YamlConfig config) {
         boolean skipDwConf = config.getRootTypes().size() > 1
         def res = removePointers(
-                config.contents.sort { one, two -> one.path.compareTo(two.path) }.findAll {
+                config.paths.sort { one, two -> one.path.compareTo(two.path) }.findAll {
                     !skipDwConf || it.rootDeclarationClass != Configuration
                 }.join('\n'))
         println res

@@ -7,6 +7,7 @@ import io.dropwizard.setup.Environment;
  * configuration method.
  *
  * @author Vyacheslav Rusakov
+ * @see DropwizardAwareModule
  * @since 31.08.2014
  */
 public interface EnvironmentAwareModule {

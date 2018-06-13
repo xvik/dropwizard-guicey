@@ -278,6 +278,26 @@ public class YamlConfigItem {
         return res.toString();
     }
 
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof YamlConfigItem)) {
+            return false;
+        }
+
+        final YamlConfigItem that = (YamlConfigItem) o;
+        // dropwizard application always use only one configuration object so only path is meaningful
+        return path.equals(that.path);
+    }
+
+    @Override
+    public int hashCode() {
+        // dropwizard application always use only one configuration object so only path is meaningful
+        return path.hashCode();
+    }
+
     private List<Class> getClasses(final List<Type> generics) {
         return generics.isEmpty() ? Collections.emptyList()
                 // no type variables could appear inside

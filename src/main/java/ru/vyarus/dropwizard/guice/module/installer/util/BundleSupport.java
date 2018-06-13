@@ -3,9 +3,7 @@ package ru.vyarus.dropwizard.guice.module.installer.util;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
@@ -37,18 +35,12 @@ public final class BundleSupport {
      * </ul>
      * Bundles duplicates are checked by type: only one bundle instance may be registered.
      *
-     * @param context       bundles context
-     * @param configuration configuration object
-     * @param environment   environment object
-     * @param bootstrap     dropwizard bootstrap instance
+     * @param context bundles context
      */
-    public static void processBundles(final ConfigurationContext context,
-                                      final Configuration configuration, final Environment environment,
-                                      final Bootstrap bootstrap) {
+    public static void processBundles(final ConfigurationContext context) {
         final List<GuiceyBundle> bundles = context.getEnabledBundles();
         final List<Class<? extends GuiceyBundle>> installedBundles = Lists.newArrayList();
-        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(
-                context, bundles, configuration, environment, bootstrap);
+        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, bundles);
 
         // iterating while no new bundles registered
         while (!bundles.isEmpty()) {

@@ -24,6 +24,8 @@ import ru.vyarus.dropwizard.guice.module.yaml.YamlConfigItem;
  * with qualifier only by default. Direct interfaces binding could be enabled with
  * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#BindConfigurationInterfaces}, but this is deprecated behaviour
  * (remained only for compatibility reasons).
+ * <p>
+ * {@link YamlConfig} instance is also bound directly to be used for custom configuration analysis.
  *
  * @author Vyacheslav Rusakov
  * @since 04.05.2018
@@ -45,6 +47,8 @@ public class ConfigBindingModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        bind(YamlConfig.class).toInstance(info);
+
         bindRootTypes();
         bindUniqueContentTypes();
         bindConstants();
@@ -88,7 +92,7 @@ public class ConfigBindingModule extends AbstractModule {
      */
     @SuppressWarnings({"unchecked", "PMD.AvoidInstantiatingObjectsInLoops"})
     private void bindConstants() {
-        for (YamlConfigItem item : info.getContents()) {
+        for (YamlConfigItem item : info.getPaths()) {
             toValue(
                     bind(Key.get(item.getDeclaredTypeWithGenerics(), new ConfigImpl(item.getPath()))),
                     item.getValue());

@@ -53,7 +53,18 @@
     - Configuration value (property value) could be bound by path: @Inject @Config("server.serverPush.enabled") Boolean enabledPush
         Or entire sub configuration object: @Inject @Config("server") ServerFactory serverCfg
     - Sub configuration objects could be bound without path if object type appear only once in configuration:
-        @Inject @Config ServerFactory serverCfg           
+        @Inject @Config ServerFactory serverCfg
+    - YamlConfig - configuration introspection object is available for direct binding
+        - and from GuiceyConfigurationInfo bean: getYamlConfig()
+* Alternative configuration access:
+    - new configuration access methods available inside GuiceyBundle:
+        - configuration(String) - configuration value by path
+        - configuration(Class) - unique sub configuration object
+        - configurations(Class) - all sub configuration objects with assignable type (on any depth)
+        - yamlConfig() - access raw introspection data for more complex searches                
+    - new YamlConfigAwareModule marker interface for guice modules to access introspected configuration in modules
+        - DropwizardAwareModule implements configuration shortcuts like in guicey bundle
+
 
 Also, release includes much improved [generics-resolver](https://github.com/xvik/generics-resolver/releases/tag/3.0.0) (3.0.0)                      
 

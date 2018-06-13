@@ -101,11 +101,10 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkEx
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     private Injector injector;
-    private final ConfigurationContext context = new ConfigurationContext();
+    private ConfigurationContext context = new ConfigurationContext();
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
     private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
 
-    private Bootstrap bootstrap;
     private ClasspathScanner scanner;
 
     GuiceBundle() {
@@ -115,6 +114,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @Override
     public void initialize(final Bootstrap bootstrap) {
         final Stopwatch timer = context.stat().timer(GuiceyTime);
+        context.initPhaseStarted(bootstrap);
         final String[] packages = context.option(ScanPackages);
         final boolean searchCommands = context.option(SearchCommands);
         final boolean scanEnabled = packages.length > 0;
@@ -122,8 +122,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
             Preconditions.checkState(scanEnabled,
                     "Commands search could not be performed, because auto scan was not activated");
         }
-        // have to remember bootstrap in order to inject it into modules
-        this.bootstrap = bootstrap;
         List<Command> installed = null;
         if (scanEnabled) {
             scanner = new ClasspathScanner(Sets.newHashSet(Arrays.asList(packages)), context.stat());
@@ -138,12 +136,13 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @Override
     public void run(final T configuration, final Environment environment) throws Exception {
         final Stopwatch timer = context.stat().timer(GuiceyTime);
+        context.runPhaseStarted(configuration, environment);
         if (context.option(UseCoreInstallers)) {
             context.registerBundles(new CoreInstallersBundle());
         }
-        configureFromBundles(configuration, environment);
+        configureFromBundles();
         context.registerModules(new GuiceBootstrapModule(scanner, context));
-        ModulesSupport.configureModules(bootstrap, configuration, environment, context);
+        ModulesSupport.configureModules(context);
         createInjector(environment);
         afterInjectorCreation();
         context.lifecycle().applicationRun();
@@ -159,20 +158,17 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
     /**
      * Apply configuration from registered bundles. If dropwizard bundles support is enabled, lookup them too.
-     *
-     * @param configuration configuration object
-     * @param environment   environment object
      */
-    private void configureFromBundles(final T configuration, final Environment environment) {
-        context.lifecycle().runPhase(configuration, environment);
+    private void configureFromBundles() {
+        context.lifecycle().runPhase(context.getConfiguration(), context.getEnvironment());
         final Stopwatch timer = context.stat().timer(BundleTime);
         final Stopwatch resolutionTimer = context.stat().timer(BundleResolutionTime);
         if (context.option(ConfigureFromDropwizardBundles)) {
-            context.registerDwBundles(BundleSupport.findBundles(bootstrap, GuiceyBundle.class));
+            context.registerDwBundles(BundleSupport.findBundles(context.getBootstrap(), GuiceyBundle.class));
         }
         context.registerLookupBundles(bundleLookup.lookup());
         resolutionTimer.stop();
-        BundleSupport.processBundles(context, configuration, environment, bootstrap);
+        BundleSupport.processBundles(context);
         timer.stop();
     }
 
@@ -182,13 +178,13 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
                 context.option(InjectorStage), ModulesSupport.prepareModules(context));
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
-                InjectorLookup.registerInjector(bootstrap.getApplication(), injector));
+                InjectorLookup.registerInjector(context.getBootstrap().getApplication(), injector));
         timer.stop();
     }
 
     @SuppressWarnings("unchecked")
     private void afterInjectorCreation() {
-        CommandSupport.initCommands(bootstrap.getCommands(), injector, context.stat());
+        CommandSupport.initCommands(context.getBootstrap().getCommands(), injector, context.stat());
         if (scanner != null) {
             scanner.cleanup();
         }

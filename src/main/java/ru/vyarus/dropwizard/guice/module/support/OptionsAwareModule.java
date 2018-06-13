@@ -6,6 +6,7 @@ import ru.vyarus.dropwizard.guice.module.context.option.Options;
  * Guice module, registered in bundle, may implement this to be able to use options in module configuration method.
  *
  * @author Vyacheslav Rusakov
+ * @see DropwizardAwareModule
  * @since 25.04.2018
  */
 public interface OptionsAwareModule {
