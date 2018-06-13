@@ -101,7 +101,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkEx
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     private Injector injector;
-    private ConfigurationContext context = new ConfigurationContext();
+    private final ConfigurationContext context = new ConfigurationContext();
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
     private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
 
