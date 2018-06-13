@@ -7,6 +7,7 @@ import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
 
@@ -26,10 +27,12 @@ public class ExtensionsInstalledEvent extends InjectorPhaseEvent {
     public ExtensionsInstalledEvent(final Options options,
                                     final Bootstrap bootstrap,
                                     final Configuration configuration,
+                                    final ConfigurationTree configurationTree,
                                     final Environment environment,
                                     final Injector injector,
                                     final List<Class<?>> extensions) {
-        super(GuiceyLifecycle.ExtensionsInstalled, options, bootstrap, configuration, environment, injector);
+        super(GuiceyLifecycle.ExtensionsInstalled, options, bootstrap,
+                configuration, configurationTree, environment, injector);
         this.extensions = extensions;
     }
 

@@ -7,6 +7,7 @@ import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 /**
  * Base class for events, started after HK context initialization start. Appears after jetty start, during
@@ -19,14 +20,16 @@ public abstract class HkPhaseEvent extends InjectorPhaseEvent {
 
     private final ServiceLocator locator;
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public HkPhaseEvent(final GuiceyLifecycle type,
                         final Options options,
                         final Bootstrap bootstrap,
                         final Configuration configuration,
+                        final ConfigurationTree configurationTree,
                         final Environment environment,
                         final Injector injector,
                         final ServiceLocator locator) {
-        super(type, options, bootstrap, configuration, environment, injector);
+        super(type, options, bootstrap, configuration, configurationTree, environment, injector);
         this.locator = locator;
     }
 

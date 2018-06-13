@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.HkPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
 
@@ -39,13 +40,14 @@ public class HkExtensionsInstalledByEvent extends HkPhaseEvent {
     public HkExtensionsInstalledByEvent(final Options options,
                                         final Bootstrap bootstrap,
                                         final Configuration configuration,
+                                        final ConfigurationTree configurationTree,
                                         final Environment environment,
                                         final Injector injector,
                                         final ServiceLocator locator,
                                         final Class<? extends FeatureInstaller> installer,
                                         final List<Class<?>> installed) {
-        super(GuiceyLifecycle.HkExtensionsInstalledBy, options, bootstrap, configuration, environment,
-                injector, locator);
+        super(GuiceyLifecycle.HkExtensionsInstalledBy, options, bootstrap,
+                configuration, configurationTree, environment, injector, locator);
         this.installer = installer;
         this.installed = installed;
     }

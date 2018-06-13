@@ -160,7 +160,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      * Apply configuration from registered bundles. If dropwizard bundles support is enabled, lookup them too.
      */
     private void configureFromBundles() {
-        context.lifecycle().runPhase(context.getConfiguration(), context.getEnvironment());
+        context.lifecycle().runPhase(context.getConfiguration(), context.getConfigurationTree(),
+                context.getEnvironment());
         final Stopwatch timer = context.stat().timer(BundleTime);
         final Stopwatch resolutionTimer = context.stat().timer(BundleResolutionTime);
         if (context.option(ConfigureFromDropwizardBundles)) {

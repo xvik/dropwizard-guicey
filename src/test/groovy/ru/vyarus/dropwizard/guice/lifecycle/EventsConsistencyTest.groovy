@@ -229,6 +229,7 @@ class EventsConsistencyTest extends AbstractTest {
             assert event.getBootstrap() != null
             assert event.getEnvironment() != null
             assert event.getConfiguration() != null
+            assert event.getConfigurationTree() != null
         }
 
         private void injectorChecks(InjectorPhaseEvent event) {

@@ -7,6 +7,7 @@ import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
 
@@ -30,10 +31,11 @@ public class BundlesResolvedEvent extends RunPhaseEvent {
     public BundlesResolvedEvent(final Options options,
                                 final Bootstrap bootstrap,
                                 final Configuration configuration,
+                                final ConfigurationTree configurationTree,
                                 final Environment environment,
                                 final List<GuiceyBundle> bundles,
                                 final List<GuiceyBundle> disabled) {
-        super(GuiceyLifecycle.BundlesResolved, options, bootstrap, configuration, environment);
+        super(GuiceyLifecycle.BundlesResolved, options, bootstrap, configuration, configurationTree, environment);
         this.bundles = bundles;
         this.disabled = disabled;
     }

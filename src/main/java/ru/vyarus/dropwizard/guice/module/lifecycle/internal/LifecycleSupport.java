@@ -22,6 +22,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledByEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.*;
 
@@ -37,6 +38,7 @@ public final class LifecycleSupport {
     private final Options options;
     private Bootstrap bootstrap;
     private Configuration configuration;
+    private ConfigurationTree configurationTree;
     private Environment environment;
     private Injector injector;
     private ServiceLocator locator;
@@ -72,50 +74,55 @@ public final class LifecycleSupport {
         this.bootstrap = bootstrap;
     }
 
-    public void runPhase(final Configuration configuration, final Environment environment) {
+    public void runPhase(final Configuration configuration,
+                         final ConfigurationTree configurationTree,
+                         final Environment environment) {
         this.configuration = configuration;
+        this.configurationTree = configurationTree;
         this.environment = environment;
     }
 
     public void bundlesFromDwResolved(final List<GuiceyBundle> bundles) {
         if (!bundles.isEmpty()) {
-            broadcast(new BundlesFromDwResolvedEvent(options, bootstrap, configuration, environment, bundles));
+            broadcast(new BundlesFromDwResolvedEvent(options, bootstrap,
+                    configuration, configurationTree, environment, bundles));
         }
     }
 
     public void bundlesFromLookupResolved(final List<GuiceyBundle> bundles) {
         if (!bundles.isEmpty()) {
-            broadcast(new BundlesFromLookupResolvedEvent(options, bootstrap, configuration, environment, bundles));
+            broadcast(new BundlesFromLookupResolvedEvent(options, bootstrap,
+                    configuration, configurationTree, environment, bundles));
         }
     }
 
     public void bundlesResolved(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
-        broadcast(new BundlesResolvedEvent(options, bootstrap, configuration, environment,
-                bundles, disabled));
+        broadcast(new BundlesResolvedEvent(options, bootstrap,
+                configuration, configurationTree, environment, bundles, disabled));
     }
 
     public void bundlesProcessed(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
         if (!bundles.isEmpty()) {
-            broadcast(new BundlesProcessedEvent(options, bootstrap, configuration, environment,
-                    bundles, disabled));
+            broadcast(new BundlesProcessedEvent(options, bootstrap,
+                    configuration, configurationTree, environment, bundles, disabled));
         }
     }
 
     public void injectorCreation(final List<Module> modules, final List<Module> overriding,
                                  final List<Module> disabled) {
-        broadcast(new InjectorCreationEvent(options, bootstrap, configuration, environment,
-                modules, overriding, disabled));
+        broadcast(new InjectorCreationEvent(options, bootstrap,
+                configuration, configurationTree, environment, modules, overriding, disabled));
     }
 
     public void installersResolved(final List<FeatureInstaller> installers,
                                    final List<Class<? extends FeatureInstaller>> disabled) {
-        broadcast(new InstallersResolvedEvent(options, bootstrap, configuration, environment,
-                installers, disabled));
+        broadcast(new InstallersResolvedEvent(options, bootstrap,
+                configuration, configurationTree, environment, installers, disabled));
     }
 
     public void extensionsResolved(final List<Class<?>> extensions, final List<Class<?>> disabled) {
-        broadcast(new ExtensionsResolvedEvent(options, bootstrap, configuration, environment,
-                extensions, disabled));
+        broadcast(new ExtensionsResolvedEvent(options, bootstrap,
+                configuration, configurationTree, environment, extensions, disabled));
     }
 
     public void injectorPhase(final Injector injector) {
@@ -125,25 +132,27 @@ public final class LifecycleSupport {
     public void extensionsInstalled(final Class<? extends FeatureInstaller> installer,
                                     final List<Class<?>> installed) {
         if (installed != null && !installed.isEmpty()) {
-            broadcast(new ExtensionsInstalledByEvent(options, bootstrap, configuration, environment, injector,
-                    installer, installed));
+            broadcast(new ExtensionsInstalledByEvent(options, bootstrap,
+                    configuration, configurationTree, environment, injector, installer, installed));
         }
     }
 
     public void extensionsInstalled(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
-            broadcast(new ExtensionsInstalledEvent(options, bootstrap, configuration, environment,
-                    injector, extensions));
+            broadcast(new ExtensionsInstalledEvent(options, bootstrap,
+                    configuration, configurationTree, environment, injector, extensions));
         }
     }
 
     public void applicationRun() {
-        broadcast(new ApplicationRunEvent(options, bootstrap, configuration, environment, injector));
+        broadcast(new ApplicationRunEvent(options, bootstrap,
+                configuration, configurationTree, environment, injector));
     }
 
 
     public void hkConfiguration(final ServiceLocator locator) {
-        broadcast(new HkConfigurationEvent(options, bootstrap, configuration, environment, injector, locator));
+        broadcast(new HkConfigurationEvent(options, bootstrap,
+                configuration, configurationTree, environment, injector, locator));
         this.locator = locator;
     }
 
@@ -151,15 +160,15 @@ public final class LifecycleSupport {
     public void hkExtensionsInstalled(final Class<? extends FeatureInstaller> installer,
                                       final List<Class<?>> installed) {
         if (installed != null && !installed.isEmpty()) {
-            broadcast(new HkExtensionsInstalledByEvent(options, bootstrap, configuration, environment,
-                    injector, locator, installer, installed));
+            broadcast(new HkExtensionsInstalledByEvent(options, bootstrap,
+                    configuration, configurationTree, environment, injector, locator, installer, installed));
         }
     }
 
     public void hkExtensionsInstalled(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
-            broadcast(new HkExtensionsInstalledEvent(options, bootstrap, configuration, environment,
-                    injector, locator, extensions));
+            broadcast(new HkExtensionsInstalledEvent(options, bootstrap,
+                    configuration, configurationTree, environment, injector, locator, extensions));
         }
     }
 

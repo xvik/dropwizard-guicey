@@ -14,6 +14,7 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeCo
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 /**
  * Base class from events, started after guice injector creation. Since that moment, finalized guicey configuration
@@ -31,9 +32,10 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
                               final Options options,
                               final Bootstrap bootstrap,
                               final Configuration configuration,
+                              final ConfigurationTree configurationTree,
                               final Environment environment,
                               final Injector injector) {
-        super(type, options, bootstrap, configuration, environment);
+        super(type, options, bootstrap, configuration, configurationTree, environment);
         this.injector = injector;
     }
 

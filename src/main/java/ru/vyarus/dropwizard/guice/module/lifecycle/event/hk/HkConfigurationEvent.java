@@ -8,6 +8,7 @@ import org.glassfish.hk2.api.ServiceLocator;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.HkPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 /**
  * Hk context starting. At this point jersey is starting and jetty is only initializing. Guicey hk configuration
@@ -21,9 +22,11 @@ public class HkConfigurationEvent extends HkPhaseEvent {
     public HkConfigurationEvent(final Options options,
                                 final Bootstrap bootstrap,
                                 final Configuration configuration,
+                                final ConfigurationTree configurationTree,
                                 final Environment environment,
                                 final Injector injector,
                                 final ServiceLocator locator) {
-        super(GuiceyLifecycle.HkConfiguration, options, bootstrap, configuration, environment, injector, locator);
+        super(GuiceyLifecycle.HkConfiguration, options, bootstrap,
+                configuration, configurationTree, environment, injector, locator);
     }
 }

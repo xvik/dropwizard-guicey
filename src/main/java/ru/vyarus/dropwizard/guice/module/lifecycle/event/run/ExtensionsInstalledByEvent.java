@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
 
@@ -32,14 +33,17 @@ public class ExtensionsInstalledByEvent extends InjectorPhaseEvent {
     private final Class<? extends FeatureInstaller> installer;
     private final List<Class<?>> installed;
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public ExtensionsInstalledByEvent(final Options options,
                                       final Bootstrap bootstrap,
                                       final Configuration configuration,
+                                      final ConfigurationTree configurationTree,
                                       final Environment environment,
                                       final Injector injector,
                                       final Class<? extends FeatureInstaller> installer,
                                       final List<Class<?>> installed) {
-        super(GuiceyLifecycle.ExtensionsInstalledBy, options, bootstrap, configuration, environment, injector);
+        super(GuiceyLifecycle.ExtensionsInstalledBy, options, bootstrap,
+                configuration, configurationTree, environment, injector);
         this.installer = installer;
         this.installed = installed;
     }

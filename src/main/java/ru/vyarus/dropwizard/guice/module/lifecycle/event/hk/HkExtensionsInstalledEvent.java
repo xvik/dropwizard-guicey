@@ -8,6 +8,7 @@ import org.glassfish.hk2.api.ServiceLocator;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.HkPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
 
@@ -31,15 +32,17 @@ public class HkExtensionsInstalledEvent extends HkPhaseEvent {
 
     private final List<Class<?>> extensions;
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public HkExtensionsInstalledEvent(final Options options,
                                       final Bootstrap bootstrap,
                                       final Configuration configuration,
+                                      final ConfigurationTree configurationTree,
                                       final Environment environment,
                                       final Injector injector,
                                       final ServiceLocator locator,
                                       final List<Class<?>> extensions) {
-        super(GuiceyLifecycle.HkExtensionsInstalled, options, bootstrap, configuration, environment,
-                injector, locator);
+        super(GuiceyLifecycle.HkExtensionsInstalled, options, bootstrap,
+                configuration, configurationTree, environment, injector, locator);
         this.extensions = extensions;
     }
 

@@ -9,6 +9,7 @@ import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 /**
  * Called after
@@ -32,9 +33,11 @@ public class ApplicationRunEvent extends InjectorPhaseEvent {
     public ApplicationRunEvent(final Options options,
                                final Bootstrap bootstrap,
                                final Configuration configuration,
+                               final ConfigurationTree configurationTree,
                                final Environment environment,
                                final Injector injector) {
-        super(GuiceyLifecycle.ApplicationRun, options, bootstrap, configuration, environment, injector);
+        super(GuiceyLifecycle.ApplicationRun, options, bootstrap,
+                configuration, configurationTree, environment, injector);
     }
 
     /**
