@@ -30,6 +30,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalle
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*
 import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig
 import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
@@ -235,6 +236,7 @@ class EventsConsistencyTest extends AbstractTest {
             assert event.getEnvironment() != null
             assert event.getConfiguration() != null
             assert event.getConfigurationTree() != null
+            assert event.renderConfigurationBindings(new BindingsConfig().showNullValues()) != null
         }
 
         private void injectorChecks(InjectorPhaseEvent event) {

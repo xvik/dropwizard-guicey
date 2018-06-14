@@ -57,6 +57,8 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
      * Renderers provide various views for guicey configuration, which may be used for specific logging.
      *
      * @return access to diagnostic reports renderers
+     * @see #renderConfigurationBindings(ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig) for
+     * configuration bindings report
      */
     public ReportRenderer getReportRenderer() {
         return reportRenderer;
@@ -64,6 +66,8 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
 
     /**
      * Guicey configuration reporting rendederers.
+     * Does not include configuration bindings report because it's available long before these reports
+     * (before guicey configuration process).
      */
     public class ReportRenderer {
 

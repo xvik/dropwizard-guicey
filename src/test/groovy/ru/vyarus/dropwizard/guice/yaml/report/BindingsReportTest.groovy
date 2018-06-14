@@ -300,6 +300,61 @@ class BindingsReportTest extends Specification {
     }
 
 
+    def "Check tree only report"() {
+        expect:
+        render(new BindingsConfig()
+                .showConfigurationTreeOnly()) == """
+
+    ComplexGenericCase (visible paths)
+    │
+    ├── logging: DefaultLoggingFactory
+    │   ├── level: String = "INFO"
+    │   ├── loggers: RegularImmutableMap<String, JsonNode> = {}
+    │   └── appenders: SingletonImmutableList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+    │
+    ├── metrics: MetricsFactory
+    │   ├── frequency: Duration = 1 minute
+    │   └── reporters: RegularImmutableList<ReporterFactory> = []
+    │
+    └── server: DefaultServerFactory
+        ├── maxThreads: Integer = 1024
+        ├── minThreads: Integer = 8
+        ├── maxQueuedRequests: Integer = 1024
+        ├── idleThreadTimeout: Duration = 1 minute
+        ├── registerDefaultExceptionMappers: Boolean = true
+        ├── detailedJsonProcessingExceptionMapper: Boolean = false
+        ├── shutdownGracePeriod: Duration = 30 seconds
+        ├── allowedMethods: HashSet<String> = [HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]
+        ├── enableThreadNameFilter: Boolean = true
+        ├── applicationConnectors: ArrayList<ConnectorFactory> = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
+        ├── adminConnectors: ArrayList<ConnectorFactory> = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
+        ├── adminMaxThreads: Integer = 64
+        ├── adminMinThreads: Integer = 1
+        ├── applicationContextPath: String = "/"
+        ├── adminContextPath: String = "/"
+        │
+        ├── serverPush: ServerPushFilterFactory
+        │   ├── enabled: Boolean = false
+        │   ├── associatePeriod: Duration = 4 seconds
+        │   └── maxAssociations: Integer = 16
+        │
+        ├── rootPath: Optional<String> = Optional.empty
+        │
+        ├── requestLog: LogbackAccessRequestLogFactory
+        │   └── appenders: SingletonImmutableList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+        │
+        └── gzip: GzipHandlerFactory
+            ├── enabled: Boolean = true
+            ├── minimumEntitySize: Size = 256 bytes
+            ├── bufferSize: Size = 8 kilobytes
+            ├── excludedUserAgentPatterns: HashSet<String> = []
+            ├── deflateCompressionLevel: Integer = -1
+            ├── gzipCompatibleInflation: Boolean = true
+            └── syncFlush: Boolean = false
+"""
+    }
+
+
     String render(BindingsConfig config) {
         new ConfigBindingsRenderer(tree).renderReport(config)
                 .replaceAll("\r", "")

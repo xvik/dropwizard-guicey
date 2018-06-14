@@ -11,6 +11,14 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
 
 /**
  * Renders available configuration bindings.
+ * <p>
+ * By default all not null bindings are rendered. Optional renders:
+ * <ul>
+ * <li>With configuration tree</li>
+ * <li>Configuration tree only</li>
+ * <li>Show null values</li>
+ * <li>Hide dropwizard Configuration properties</li>
+ * </ul>
  *
  * @author Vyacheslav Rusakov
  * @since 13.06.2018
@@ -33,9 +41,11 @@ public class ConfigBindingsRenderer implements ReportRenderer<BindingsConfig> {
         if (config.isShowConfigurationTree()) {
             renderConfigurationTree(config, res);
         }
-        renderRootTypes(config, res);
-        renderUniqueSubConfigs(config, res);
-        renderPaths(config, res);
+        if (config.isShowBindings()) {
+            renderRootTypes(config, res);
+            renderUniqueSubConfigs(config, res);
+            renderPaths(config, res);
+        }
         return res.toString();
     }
 

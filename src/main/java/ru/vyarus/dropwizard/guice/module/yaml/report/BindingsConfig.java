@@ -9,6 +9,7 @@ package ru.vyarus.dropwizard.guice.module.yaml.report;
 public class BindingsConfig {
 
     private boolean configurationTree;
+    private boolean bindings = true;
     private boolean nullValues;
     private boolean onlyCustomConfigs;
 
@@ -19,6 +20,17 @@ public class BindingsConfig {
      */
     public BindingsConfig showConfigurationTree() {
         configurationTree = true;
+        return this;
+    }
+
+    /**
+     * Show configuration values tree only without bindings.
+     *
+     * @return config object for chained calls
+     */
+    public BindingsConfig showConfigurationTreeOnly() {
+        showConfigurationTree();
+        bindings = false;
         return this;
     }
 
@@ -47,6 +59,13 @@ public class BindingsConfig {
      */
     public boolean isShowConfigurationTree() {
         return configurationTree;
+    }
+
+    /**
+     * @return true to print bindings, false to avoid (assumed tree is enabled to show only tree)
+     */
+    public boolean isShowBindings() {
+        return bindings;
     }
 
     /**

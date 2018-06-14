@@ -6,6 +6,8 @@ import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig;
+import ru.vyarus.dropwizard.guice.module.yaml.report.ConfigBindingsRenderer;
 
 /**
  * Base class for events, started after {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(Configuration, Environment)}
@@ -61,5 +63,16 @@ public abstract class RunPhaseEvent extends GuiceyLifecycleEvent {
      */
     public Environment getEnvironment() {
         return environment;
+    }
+
+    /**
+     * Configuration report shows configuration binding paths.
+     *
+     * @param config configuration bindings report configuration
+     * @return rendered report
+     * @see InjectorPhaseEvent#getReportRenderer() for configuration reports (available later in lifecycle)
+     */
+    public String renderConfigurationBindings(final BindingsConfig config) {
+        return new ConfigBindingsRenderer(configurationTree).renderReport(config);
     }
 }
