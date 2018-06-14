@@ -15,6 +15,7 @@ automatically without manual configurations (of course, [manual mode](getting-st
     - jee web annotations (@WebServlet, @WebFilter) support ([could be enabled](guide/web.md#web-instalers))
 * Dropwizard style [reporting](guide/installers.md#reporting): detected (and installed) extensions are printed to console to remove uncertainty
 * Admin context [rest emulation](extras/admin-rest.md)
+* Configuration values bindings by path or unique sub objects.  
 * [Test support](guide/test.md): custom junit and [spock](http://spockframework.org) extensions
 * Developer friendly: 
     - core integrations may be replaced (to better fit needs)
@@ -24,6 +25,7 @@ automatically without manual configurations (of course, [manual mode](getting-st
 
 ## How to use docs
 
+* [**Migration from dropwizard-guice**](guide/dg-migration.md) read if you migrating from dropwizard-guice library.
 * [**Getting started**](getting-started.md) section covers installation and main concepts. Ideal for introduction.
 * [**User guide**](guide/configuration.md) section contain detailed features descriptions. Good to read, but if no time, read as you need it.
 * [**Installers**](installers/resource.md) section describes all guicey installers. Use it as a *hand book* for extensions declaration.
@@ -49,3 +51,5 @@ itself might be quite useful.
 
 [BOM module](extras/bom.md) unifies dependencies management for extensions, dropwizard and guice (as it includes boms for them).
 Overall, extensions project is more like spring: growing set of solutions for everything (more "enterprisy").
+
+## Quick index

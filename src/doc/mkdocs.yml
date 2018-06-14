@@ -63,6 +63,7 @@ pages:
       - Commands: guide/commands.md
       - Web: guide/web.md
       - Test: guide/test.md
+      - Migration from dropwizard-guice: guice/dg-migration.md
     - Installers:
       - Resource: installers/resource.md
       - Task: installers/task.md
