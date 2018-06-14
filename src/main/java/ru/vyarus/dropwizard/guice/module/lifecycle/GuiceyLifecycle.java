@@ -41,6 +41,13 @@ public enum GuiceyLifecycle {
     // -- Bundle.run()
 
     /**
+     * Special meta event, called before all guice bundle run phase logic (when configuration and environment are
+     * already available). Could be used to print some diagnostic info before guicey initialization
+     * (for example, available configuration bindings to debug guice injector creation failure due to missed bindings).
+     */
+    BeforeRun(BeforeRunEvent.class),
+
+    /**
      * Called if configuration from dw bundles enabled and at least one bundle recognized. Provides list of
      * recognized bundles (note: some of these bundles could be actually disabled and not used further).
      */

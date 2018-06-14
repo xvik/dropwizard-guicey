@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.yaml;
 
-import org.glassfish.hk2.utilities.reflection.ParameterizedTypeImpl;
+import ru.vyarus.java.generics.resolver.context.container.ParameterizedTypeImpl;
 import ru.vyarus.java.generics.resolver.util.GenericsUtils;
 import ru.vyarus.java.generics.resolver.util.TypeToStringUtils;
 
@@ -239,6 +239,14 @@ public class ConfigPath {
     }
 
     /**
+     * @return last path element (e.g. for "some.long.path" return "path")
+     */
+    public String getLastPathLevel() {
+        final int idx = path.lastIndexOf('.');
+        return idx < 0 ? path : path.substring(idx + 1);
+    }
+
+    /**
      * @return declared type string including generics
      */
     public String toStringDeclaredType() {
@@ -309,6 +317,7 @@ public class ConfigPath {
     private Type getType(final Class<?> type, final List<Type> generics) {
         return generics.isEmpty()
                 ? type
-                : new ParameterizedTypeImpl(type, generics.toArray(new Type[0]));
+                // outer class required for proper guice binding (if current is inner)
+                : new ParameterizedTypeImpl(type, generics.toArray(new Type[0]), type.getEnclosingClass());
     }
 }

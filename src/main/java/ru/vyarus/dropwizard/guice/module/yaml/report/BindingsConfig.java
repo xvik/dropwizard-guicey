@@ -1,0 +1,65 @@
+package ru.vyarus.dropwizard.guice.module.yaml.report;
+
+/**
+ * Configuration for configuration bindings report ({@link ConfigBindingsRenderer}).
+ *
+ * @author Vyacheslav Rusakov
+ * @since 13.06.2018
+ */
+public class BindingsConfig {
+
+    private boolean configurationTree;
+    private boolean nullValues;
+    private boolean onlyCustomConfigs;
+
+    /**
+     * Show visible configuration tree. Note that other options affects tree render.
+     *
+     * @return config object for chained calls
+     */
+    public BindingsConfig showConfigurationTree() {
+        configurationTree = true;
+        return this;
+    }
+
+    /**
+     * Show paths with null values.
+     *
+     * @return config object for chained calls
+     */
+    public BindingsConfig showNullValues() {
+        nullValues = true;
+        return this;
+    }
+
+    /**
+     * Avoid paths from dropwizard {@link io.dropwizard.Configuration} class (only custom configuration paths shown).
+     *
+     * @return config object for chained calls
+     */
+    public BindingsConfig showCustomConfigOnly() {
+        onlyCustomConfigs = true;
+        return this;
+    }
+
+    /**
+     * @return true to print configuration tree, false to avoid
+     */
+    public boolean isShowConfigurationTree() {
+        return configurationTree;
+    }
+
+    /**
+     * @return true to show paths with null values, false to hide null value paths
+     */
+    public boolean isShowNullValues() {
+        return nullValues;
+    }
+
+    /**
+     * @return true to hide dropwizard configuration bindings, false to show all binding paths
+     */
+    public boolean isShowCustomConfigOnly() {
+        return onlyCustomConfigs;
+    }
+}

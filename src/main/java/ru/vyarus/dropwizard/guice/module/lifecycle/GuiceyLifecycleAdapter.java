@@ -28,6 +28,9 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case Initialization:
                 initialization((InitializationEvent) event);
                 break;
+            case BeforeRun:
+                beforeRun((BeforeRunEvent) event);
+                break;
             case BundlesFromDwResolved:
                 dwBundlesResolved((BundlesFromDwResolvedEvent) event);
                 break;
@@ -75,6 +78,10 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
     }
 
     protected void initialization(final InitializationEvent event) {
+        // empty
+    }
+
+    protected void beforeRun(final BeforeRunEvent event) {
         // empty
     }
 

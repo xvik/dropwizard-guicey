@@ -144,11 +144,11 @@ class ConfigInspectorTest extends Specification {
         when: "check complex config type"
         res = ConfigTreeBuilder.build(bootstrap, create(ComplexConfig))
         then:
-        printConfig(res) == """[ComplexConfig] one (Parametrized<Integer>) = null
+        printConfig(res) == """[ComplexConfig] one (ComplexConfig.Parametrized<Integer>) = null
 [ComplexConfig] one.list (List<Integer>) = null
 [ComplexConfig] sub (SubConfig) = null
 [ComplexConfig] sub.sub (String) = null
-[ComplexConfig] sub.two (Parametrized<String>) = null
+[ComplexConfig] sub.two (ComplexConfig.Parametrized<String>) = null
 [ComplexConfig] sub.two.list (List<String>) = null"""
         res.rootTypes == [ComplexConfig, ComplexConfig.Iface, Configuration]
         res.uniqueTypePaths.size() == 7
@@ -171,7 +171,7 @@ class ConfigInspectorTest extends Specification {
         configuration.sub = value
         def res = ConfigTreeBuilder.build(bootstrap, configuration)
         then:
-        printConfig(res) == """[ComplexGenericCase] sub (Sub<String> as SubImpl<String>) = ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase\$SubImpl@1111111
+        printConfig(res) == """[ComplexGenericCase] sub (ComplexGenericCase.Sub<String> as ComplexGenericCase.SubImpl<String>) = ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase\$SubImpl@1111111
 [ComplexGenericCase] sub.smth (String) = "sample"
 [ComplexGenericCase] sub.val (String) = null"""
         check(res, "sub", ComplexGenericCase.SubImpl, value, String)
@@ -184,11 +184,11 @@ class ConfigInspectorTest extends Specification {
         when: "config with duplicate sub config usages"
         def res = ConfigTreeBuilder.build(bootstrap, create(NotUniqueSubConfig))
         then: "sub config not unique"
-        printConfig(res) == """[NotUniqueSubConfig] sub1 (SubConfig<String>) = null
+        printConfig(res) == """[NotUniqueSubConfig] sub1 (NotUniqueSubConfig.SubConfig<String>) = null
 [NotUniqueSubConfig] sub1.sub (String) = null
-[NotUniqueSubConfig] sub2 (SubConfig<String>) = null
+[NotUniqueSubConfig] sub2 (NotUniqueSubConfig.SubConfig<String>) = null
 [NotUniqueSubConfig] sub2.sub (String) = null
-[NotUniqueSubConfig] sub3 (SubConfig<Integer>) = null
+[NotUniqueSubConfig] sub3 (NotUniqueSubConfig.SubConfig<Integer>) = null
 [NotUniqueSubConfig] sub3.sub (String) = null"""
         !res.uniqueTypePaths.contains(NotUniqueSubConfig.SubConfig)
 
@@ -203,14 +203,14 @@ class ConfigInspectorTest extends Specification {
         when: "properties declared as list implementation"
         def res = ConfigTreeBuilder.build(bootstrap, create(TooBroadDeclarationConfig))
         then: "property types lowered"
-        printConfig(res) == """[TooBroadDeclarationConfig] bar (List<Integer> as ExtraList<String, Integer>) = null
+        printConfig(res) == """[TooBroadDeclarationConfig] bar (List<Integer> as TooBroadDeclarationConfig.ExtraList<String, Integer>) = null
 [TooBroadDeclarationConfig] foo (List<String> as ArrayList<String>) = null"""
 
         and: "sub config generic recognized"
         res.findByPath('foo').toStringDeclaredType() == "List<String>"
         res.findByPath('foo').toStringType() == "ArrayList<String>"
         res.findByPath('bar').toStringDeclaredType() == "List<Integer>"
-        res.findByPath('bar').toStringType() == "ExtraList<String, Integer>"
+        res.findByPath('bar').toStringType() == "TooBroadDeclarationConfig.ExtraList<String, Integer>"
     }
 
     def "Check configuration lookup methods"() {
@@ -306,7 +306,7 @@ class ConfigInspectorTest extends Specification {
         path.customType
         !path.objectDeclaration
         path.rootDeclarationClass == NotUniqueSubConfig
-        path.toString() == "[NotUniqueSubConfig] sub1 (SubConfig<String>) = null"
+        path.toString() == "[NotUniqueSubConfig] sub1 (NotUniqueSubConfig.SubConfig<String>) = null"
         path.equals(path)
 
         when: "2nd level path"

@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.yaml;
 import io.dropwizard.Configuration;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationTreeAwareModule;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -273,7 +274,7 @@ public class ConfigurationTree {
 
 
     private void sortContent() {
-        paths.sort((o1, o2) -> {
+        final Comparator<ConfigPath> comparator = (o1, o2) -> {
             final int res;
             final Class rootClass1 = o1.getRootDeclarationClass();
             final Class rootClass2 = o2.getRootDeclarationClass();
@@ -285,6 +286,8 @@ public class ConfigurationTree {
                 res = o1.getPath().compareTo(o2.getPath());
             }
             return res;
-        });
+        };
+        paths.sort(comparator);
+        uniqueTypePaths.sort(comparator);
     }
 }

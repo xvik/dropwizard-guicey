@@ -130,6 +130,11 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
+        protected void beforeRun(BeforeRunEvent event) {
+            runChecks(event)
+        }
+
+        @Override
         protected void dwBundlesResolved(BundlesFromDwResolvedEvent event) {
             runChecks(event)
             assert event.getBundles().size() == 1

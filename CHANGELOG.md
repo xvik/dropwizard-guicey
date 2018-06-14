@@ -8,7 +8,7 @@
     - Junit:
         * New rule GuiceyConfiguratorRule allows configurator definition 
     - Spock:
-        * New @UseGuiceyConfigurator extension allows base configrator definitino (in base class)
+        * New @UseGuiceyConfigurator extension allows base configrator definition (in base class)
         * New attribute configurators in @UseGuiceyApp and @UseDropwizardApp extension to declare test-specific configurators
 * Add ConfigScope enum for special scopes description (to not remember special classes).
     - Add shortcut methods in config related apis (Filters, Disables, GuiceyConfigurationInfo)        
@@ -16,7 +16,7 @@
     - Diagnostic report configuration method rename: DiagnosticConfig.printDisabledInstallers renamed to printDisabledItems and affects now all disabled items
     - Diagnostic tree report could hide application scope in ContextTreeConfig.hideScopes(ConfigItems.Application)                      
 * Add guicey lifecycle events:
-    - New bundle's method `bundle.listen(GuiceyLifecycleListener)` allows listening for guicey lifecyle (15 events).
+    - New bundle's method `bundle.listen(GuiceyLifecycleListener)` allows listening for guicey lifecyle (16 events).
       Events provide access to all possible internal state, available at this moment. It may be used to write instance specific
       features (post processing) or just advaned logging
     - New bundle's methods `bundle.pritLifecyclePhases()` and `bundle.pritLifecyclePhasesDetailed()` activates new DebugLifecycleListener 
@@ -64,6 +64,9 @@
         - configurationTree() - access raw introspection data for more complex searches                
     - new ConfigurationTreeAwareModule marker interface for guice modules to access introspected configuration in modules
         - DropwizardAwareModule implements configuration shortcuts like in guicey bundle
+* Reports to see available config bindings (before injector creation for potential problems solving):
+    - bundle.printConfigurationBindings() - log all bindings (including dropwizard Configuration) 
+    - bundle.printCustomConfigurationBindings() - log only custom bindings (from custom configuration classes)                  
 
 
 Also, release includes much improved [generics-resolver](https://github.com/xvik/generics-resolver/releases/tag/3.0.0) (3.0.0)                      

@@ -38,6 +38,8 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
+import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig;
+import ru.vyarus.dropwizard.guice.module.yaml.report.DebugConfigBindings;
 
 import javax.servlet.DispatcherType;
 import java.util.Arrays;
@@ -771,6 +773,44 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
                                     .hideModules())
                             .build());
             return this;
+        }
+
+        /**
+         * Prints available configuration bindings. Use it to see available bindings or debug missed bindings
+         * as report shown before actual injector start. Use {@link #printCustomConfigurationBindings()} to see only
+         * custom paths (without dropwizard configurations).
+         * <p>
+         * Safe to use with other print* options.
+         * <p>
+         * Info: guicey analyze configuration object (prepared by dropwizard) with jackson serialization api
+         * and binds all readable configuration values by path (e.g. {@code @inject @Config("some.path") String prop;}.
+         * Also, unique sub configuration objects are recognized and may be used directly
+         * ({@code @Inject @Config SubConfig subConf}). Introspected configuration object is accessible from
+         * lifecycle events, gucie modules, guicey bundles and by direct injection.
+         *
+         * @return builder instance for chained calls
+         * @see ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
+         * @see ru.vyarus.dropwizard.guice.module.yaml.bind.Config
+         */
+        public Builder<T> printConfigurationBindings() {
+            return listen(new DebugConfigBindings(
+                    new BindingsConfig()
+                            .showConfigurationTree()
+                            .showNullValues()));
+        }
+
+        /**
+         * The same as {@link #printConfigurationBindings()}, but hides all dropwizard related paths.
+         * Use to see bindings of your custom configuration classes.
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder<T> printCustomConfigurationBindings() {
+            return listen(new DebugConfigBindings(
+                    new BindingsConfig()
+                            .showConfigurationTree()
+                            .showNullValues()
+                            .showCustomConfigOnly()));
         }
 
         /**
