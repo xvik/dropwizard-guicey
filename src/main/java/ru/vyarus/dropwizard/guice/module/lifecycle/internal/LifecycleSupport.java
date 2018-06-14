@@ -77,8 +77,7 @@ public final class LifecycleSupport {
     public void runPhase(final Configuration configuration,
                          final ConfigurationTree configurationTree,
                          final Environment environment) {
-        broadcast(new BeforeRunEvent(GuiceyLifecycle.BeforeRun, options, bootstrap,
-                configuration, configurationTree, environment));
+        broadcast(new BeforeRunEvent(options, bootstrap, configuration, configurationTree, environment));
         this.configuration = configuration;
         this.configurationTree = configurationTree;
         this.environment = environment;

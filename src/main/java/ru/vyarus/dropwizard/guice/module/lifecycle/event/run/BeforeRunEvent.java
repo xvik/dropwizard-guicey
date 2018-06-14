@@ -16,12 +16,11 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
  */
 public class BeforeRunEvent extends RunPhaseEvent {
 
-    public BeforeRunEvent(final GuiceyLifecycle type,
-                          final Options options,
+    public BeforeRunEvent(final Options options,
                           final Bootstrap bootstrap,
                           final Configuration configuration,
                           final ConfigurationTree configurationTree,
                           final Environment environment) {
-        super(type, options, bootstrap, configuration, configurationTree, environment);
+        super(GuiceyLifecycle.BeforeRun, options, bootstrap, configuration, configurationTree, environment);
     }
 }
