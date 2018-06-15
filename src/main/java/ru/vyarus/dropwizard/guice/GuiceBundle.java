@@ -288,21 +288,21 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * Use provided {@link ru.vyarus.dropwizard.guice.module.context.option.mapper.OptionsMapper}
          * utility to map options from system properties or environment variables. It supports basic string conversions.
          * For example:
-         * <code><pre>
+         * <pre>{@code
          *     .options(new OptionsMapper()
          *                 .env("STAGE", GuiceyOptions.InjectorStage)
          *                 .map())
-         * </pre></code>
+         * }</pre>
          * Will set injector stage option from STAGE environment variable. If variable is not set - default value used.
          * If STAGE set to, for example "DEVELOPMENT" (must be Stage enum value) then Stage.DEVELOPMENT will be
          * set as option value.
          * <p>
          * Also, mapper could map generic options definitions from system properties (prefixed):
-         * <code><pre>
+         * <pre>{@code
          * .options(new OptionsMapper()
          *                 .props("option.")
          *                 .map())
-         * </pre></code>
+         * }</pre>
          * See {@link ru.vyarus.dropwizard.guice.module.context.option.mapper.OptionsMapper} for more usage details.
          *
          * @param options options map (not null)

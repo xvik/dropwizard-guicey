@@ -9,9 +9,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Utility class for using {@link Config} annotation as guice bindings qualifier.
- * Supposed internal usage only ({@see ru.vyarus.dropwizard.guice.module.yaml.module.ConfigBindingModule}).
+ * Supposed internal usage only ({@link ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule}).
  * <p>
- * Implementation is the same as core guice's {@link com.google.inject.name.NamedImpl}.
+ * Implementation is the same as core guice's {@code com.google.inject.name.NamedImpl}.
  *
  * @author Vyacheslav Rusakov
  * @since 05.05.2018

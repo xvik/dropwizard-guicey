@@ -44,6 +44,7 @@ public abstract class RunPhaseEvent extends GuiceyLifecycleEvent {
     }
 
     /**
+     * @param <T> configuration type
      * @return configuration object
      */
     @SuppressWarnings("unchecked")

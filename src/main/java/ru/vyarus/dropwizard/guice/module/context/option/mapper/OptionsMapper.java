@@ -18,7 +18,7 @@ import java.util.function.Function;
  * Only existing properties are mapped. If value is null or property is not defined - it's ignored.
  * <p>
  * Example usage:
- * <code><pre>
+ * <pre>{@code
  *     builder.options(new OptionsMapper()
  *                              .env("ENV_PROP", MyOptions.Opt1)
  *                              .env("ENV_PROP_CUST", MyOptions.Opt2, val -> convertVal(val))
@@ -26,27 +26,27 @@ import java.util.function.Function;
  *                              .string(MyOptions.Opt4, "value")
  *                              .map())
  *
- * </pre></code>
+ * }</pre>
  * <p>
  * Only string, boolean, integer, double, short. byte enum by value, enum by class, array and EnumSet option types are
  * directly supported (see {@link StringConverter}). For other types explicit converters must be used.
  * <p>
  * To enable generic options definition from properties use:
- * <code><pre>
- *     .options(new OptionsMapper().props().map())
- * </pre></code>
+ * <pre>
+ * {@code .options(new OptionsMapper().props().map())}
+ * </pre>
  * This will map system properties prefixed with "option." and with full enum class and value. For example,
  * {@code -Doption.ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage=DEVELOPMENT}.
  * <p>
  * In order to apply special conversion for some property (when default converters can't properly convert value)
  * declare manual property binding before mass processing:
- * <code><pre>
+ * <pre>{@code
  * .options(new OptionsMapper()
  *            .prop("option.ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage", GuiceyOptions.InjectorStage,
  *                 val -> someConversion(val))
  *            .props()
  *            .map())
- * </pre></code>
+ * }</pre>
  * And option will be ignored during mass processing (because it's processed manually).
  * <p>
  * To see actual assignments (for debug) use {@link #printMappings()}.
@@ -57,7 +57,7 @@ import java.util.function.Function;
 public class OptionsMapper {
 
     private static final String PROP_PREFIX = "prop: ";
-    
+
     private final Map<Enum, Object> options = new HashMap<>();
     private final Set<String> mappedProps = new HashSet<>();
     private boolean print;
@@ -92,6 +92,8 @@ public class OptionsMapper {
      * If some options require special handling then map them directly using {@link #prop(String, Enum, Function)}
      * and only AFTER that call mass processing.
      *
+     * @param prefix options prefix
+     * @param <T>    helper option type
      * @return mapper instance for chained calls
      */
     public <T extends Enum & Option> OptionsMapper props(final String prefix) {
@@ -129,6 +131,7 @@ public class OptionsMapper {
      * @param option    option
      * @param converter value converter (may be null to use default converters)
      * @param <T>       helper option type
+     * @param <V>       value type
      * @return mapper instance for chained calls
      */
     public <V, T extends Enum & Option> OptionsMapper prop(final String name, final T option,

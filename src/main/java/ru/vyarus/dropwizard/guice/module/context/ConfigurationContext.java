@@ -215,6 +215,7 @@ public final class ConfigurationContext {
      * Bundle must be disabled before it's processing, otherwise disabling will not have effect
      * (because bundle will be already processed and register all related items).
      *
+     * @param type bundle type to check
      * @return true if bundle enabled, false otherwise
      */
     public boolean isBundleEnabled(final Class<? extends GuiceyBundle> type) {
