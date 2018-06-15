@@ -14,7 +14,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
  * {@link ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent}</li>
  * <li>{@link RunPhaseEvent} - all other events (started in bundle run phase and even after it)</li>
  * <li>{@link InjectorPhaseEvent} - all events after guice injector creation</li>
- * <li>{@link HkPhaseEvent} - all events after hk context initialization start (since
+ * <li>{@link HK2PhaseEvent} - all events after hk context initialization start (since
  * {@link org.glassfish.hk2.api.ServiceLocator} become available)</li>
  * </ul>
  *

@@ -16,19 +16,19 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
  * @author Vyacheslav Rusakov
  * @since 19.04.2018
  */
-public abstract class HkPhaseEvent extends InjectorPhaseEvent {
+public abstract class HK2PhaseEvent extends InjectorPhaseEvent {
 
     private final ServiceLocator locator;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
-    public HkPhaseEvent(final GuiceyLifecycle type,
-                        final Options options,
-                        final Bootstrap bootstrap,
-                        final Configuration configuration,
-                        final ConfigurationTree configurationTree,
-                        final Environment environment,
-                        final Injector injector,
-                        final ServiceLocator locator) {
+    public HK2PhaseEvent(final GuiceyLifecycle type,
+                         final Options options,
+                         final Bootstrap bootstrap,
+                         final Configuration configuration,
+                         final ConfigurationTree configurationTree,
+                         final Environment environment,
+                         final Injector injector,
+                         final ServiceLocator locator) {
         super(type, options, bootstrap, configuration, configurationTree, environment, injector);
         this.locator = locator;
     }

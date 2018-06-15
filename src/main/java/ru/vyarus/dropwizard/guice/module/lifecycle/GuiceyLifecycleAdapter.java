@@ -3,9 +3,9 @@ package ru.vyarus.dropwizard.guice.module.lifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledByEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
 /**
@@ -61,14 +61,14 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case ApplicationRun:
                 applicationRun((ApplicationRunEvent) event);
                 break;
-            case HkConfiguration:
-                hkConfiguration((HkConfigurationEvent) event);
+            case HK2Configuration:
+                hk2Configuration((HK2ConfigurationEvent) event);
                 break;
-            case HkExtensionsInstalledBy:
-                hkExtensionsInstalledBy((HkExtensionsInstalledByEvent) event);
+            case HK2ExtensionsInstalledBy:
+                hk2ExtensionsInstalledBy((HK2ExtensionsInstalledByEvent) event);
                 break;
-            case HkExtensionsInstalled:
-                hkExtensionsInstalled((HkExtensionsInstalledEvent) event);
+            case HK2ExtensionsInstalled:
+                hk2ExtensionsInstalled((HK2ExtensionsInstalledEvent) event);
                 break;
         }
     }
@@ -125,15 +125,15 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         // empty
     }
 
-    protected void hkConfiguration(final HkConfigurationEvent event) {
+    protected void hk2Configuration(final HK2ConfigurationEvent event) {
         // empty
     }
 
-    protected void hkExtensionsInstalledBy(final HkExtensionsInstalledByEvent event) {
+    protected void hk2ExtensionsInstalledBy(final HK2ExtensionsInstalledByEvent event) {
         // empty
     }
 
-    protected void hkExtensionsInstalled(final HkExtensionsInstalledEvent event) {
+    protected void hk2ExtensionsInstalled(final HK2ExtensionsInstalledEvent event) {
         // empty
     }
 }

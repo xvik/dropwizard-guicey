@@ -20,14 +20,14 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.HkPhaseEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.HK2PhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkConfigurationEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledByEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*
 import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
 import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig
@@ -205,19 +205,19 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
-        protected void hkConfiguration(HkConfigurationEvent event) {
+        protected void hk2Configuration(HK2ConfigurationEvent event) {
             hkCheck(event)
         }
 
         @Override
-        protected void hkExtensionsInstalledBy(HkExtensionsInstalledByEvent event) {
+        protected void hk2ExtensionsInstalledBy(HK2ExtensionsInstalledByEvent event) {
             hkCheck(event)
             assert event.getInstaller() != null
             assert !event.getInstalled().isEmpty()
         }
 
         @Override
-        protected void hkExtensionsInstalled(HkExtensionsInstalledEvent event) {
+        protected void hk2ExtensionsInstalled(HK2ExtensionsInstalledEvent event) {
             hkCheck(event)
             assert !event.getExtensions().isEmpty()
         }
@@ -250,7 +250,7 @@ class EventsConsistencyTest extends AbstractTest {
             assert event.reportRenderer.renderConfigurationTree(new ContextTreeConfig()) != null
         }
 
-        private void hkCheck(HkPhaseEvent event) {
+        private void hkCheck(HK2PhaseEvent event) {
             injectorChecks(event)
             assert event.getLocator() != null
         }

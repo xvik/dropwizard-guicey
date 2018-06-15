@@ -12,8 +12,8 @@ import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
 import java.util.Collection;
@@ -130,12 +130,12 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     }
 
     @Override
-    protected void hkConfiguration(final HkConfigurationEvent event) {
+    protected void hk2Configuration(final HK2ConfigurationEvent event) {
         log("Configuring HK2...");
     }
 
     @Override
-    protected void hkExtensionsInstalled(final HkExtensionsInstalledEvent event) {
+    protected void hk2ExtensionsInstalled(final HK2ExtensionsInstalledEvent event) {
         log("%s HK2 extensions installed", event.getExtensions().size());
     }
 

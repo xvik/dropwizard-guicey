@@ -64,7 +64,7 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
     public boolean configure(final FeatureContext context) {
         tracker.startHkTimer(HKTime);
         locator = ServiceLocatorProvider.getServiceLocator(context);
-        lifecycle.hkConfiguration(locator);
+        lifecycle.hk2Configuration(locator);
         final Injector injector = this.provider.get();
 
         if (enableBridge) {

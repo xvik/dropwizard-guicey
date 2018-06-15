@@ -54,10 +54,10 @@ public class InstallerBinder extends AbstractBinder {
                     allInstalled.addAll(features);
                 }
                 installer.report();
-                lifecycle.hkExtensionsInstalled(installer.getClass(), features);
+                lifecycle.hk2ExtensionsInstalled(installer.getClass(), features);
             }
         }
-        lifecycle.hkExtensionsInstalled(allInstalled);
+        lifecycle.hk2ExtensionsInstalled(allInstalled);
         tracker.stopHkTimer(JerseyInstallerTime);
     }
 }

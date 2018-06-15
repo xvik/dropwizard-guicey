@@ -7,7 +7,7 @@ import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.HkPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.HK2PhaseEvent;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 /**
@@ -17,16 +17,16 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
  * @author Vyacheslav Rusakov
  * @since 19.04.2018
  */
-public class HkConfigurationEvent extends HkPhaseEvent {
+public class HK2ConfigurationEvent extends HK2PhaseEvent {
 
-    public HkConfigurationEvent(final Options options,
-                                final Bootstrap bootstrap,
-                                final Configuration configuration,
-                                final ConfigurationTree configurationTree,
-                                final Environment environment,
-                                final Injector injector,
-                                final ServiceLocator locator) {
-        super(GuiceyLifecycle.HkConfiguration, options, bootstrap,
+    public HK2ConfigurationEvent(final Options options,
+                                 final Bootstrap bootstrap,
+                                 final Configuration configuration,
+                                 final ConfigurationTree configurationTree,
+                                 final Environment environment,
+                                 final Injector injector,
+                                 final ServiceLocator locator) {
+        super(GuiceyLifecycle.HK2Configuration, options, bootstrap,
                 configuration, configurationTree, environment, injector, locator);
     }
 }

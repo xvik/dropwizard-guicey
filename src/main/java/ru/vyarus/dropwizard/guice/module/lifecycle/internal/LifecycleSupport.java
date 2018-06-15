@@ -18,9 +18,9 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledByEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HkExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
@@ -151,24 +151,24 @@ public final class LifecycleSupport {
     }
 
 
-    public void hkConfiguration(final ServiceLocator locator) {
-        broadcast(new HkConfigurationEvent(options, bootstrap,
+    public void hk2Configuration(final ServiceLocator locator) {
+        broadcast(new HK2ConfigurationEvent(options, bootstrap,
                 configuration, configurationTree, environment, injector, locator));
         this.locator = locator;
     }
 
 
-    public void hkExtensionsInstalled(final Class<? extends FeatureInstaller> installer,
-                                      final List<Class<?>> installed) {
+    public void hk2ExtensionsInstalled(final Class<? extends FeatureInstaller> installer,
+                                       final List<Class<?>> installed) {
         if (installed != null && !installed.isEmpty()) {
-            broadcast(new HkExtensionsInstalledByEvent(options, bootstrap,
+            broadcast(new HK2ExtensionsInstalledByEvent(options, bootstrap,
                     configuration, configurationTree, environment, injector, locator, installer, installed));
         }
     }
 
-    public void hkExtensionsInstalled(final List<Class<?>> extensions) {
+    public void hk2ExtensionsInstalled(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
-            broadcast(new HkExtensionsInstalledEvent(options, bootstrap,
+            broadcast(new HK2ExtensionsInstalledEvent(options, bootstrap,
                     configuration, configurationTree, environment, injector, locator, extensions));
         }
     }

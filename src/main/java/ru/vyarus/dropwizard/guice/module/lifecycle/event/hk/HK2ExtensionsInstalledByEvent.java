@@ -8,7 +8,7 @@ import org.glassfish.hk2.api.ServiceLocator;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.HkPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.HK2PhaseEvent;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
@@ -31,22 +31,22 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 19.04.2018
  */
-public class HkExtensionsInstalledByEvent extends HkPhaseEvent {
+public class HK2ExtensionsInstalledByEvent extends HK2PhaseEvent {
 
     private final Class<? extends FeatureInstaller> installer;
     private final List<Class<?>> installed;
 
     @SuppressWarnings("ParameterNumber")
-    public HkExtensionsInstalledByEvent(final Options options,
-                                        final Bootstrap bootstrap,
-                                        final Configuration configuration,
-                                        final ConfigurationTree configurationTree,
-                                        final Environment environment,
-                                        final Injector injector,
-                                        final ServiceLocator locator,
-                                        final Class<? extends FeatureInstaller> installer,
-                                        final List<Class<?>> installed) {
-        super(GuiceyLifecycle.HkExtensionsInstalledBy, options, bootstrap,
+    public HK2ExtensionsInstalledByEvent(final Options options,
+                                         final Bootstrap bootstrap,
+                                         final Configuration configuration,
+                                         final ConfigurationTree configurationTree,
+                                         final Environment environment,
+                                         final Injector injector,
+                                         final ServiceLocator locator,
+                                         final Class<? extends FeatureInstaller> installer,
+                                         final List<Class<?>> installed) {
+        super(GuiceyLifecycle.HK2ExtensionsInstalledBy, options, bootstrap,
                 configuration, configurationTree, environment, injector, locator);
         this.installer = installer;
         this.installed = installed;
