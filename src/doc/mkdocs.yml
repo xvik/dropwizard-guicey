@@ -60,6 +60,7 @@ pages:
       - Bundles (Guicey): guide/bundles.md
       - Options: guide/options.md
       - Diagnostic: guide/diagnostic.md
+      - Lifecycle events: guide/events.md
       - Commands: guide/commands.md
       - Web: guide/web.md
       - Test: guide/test.md
