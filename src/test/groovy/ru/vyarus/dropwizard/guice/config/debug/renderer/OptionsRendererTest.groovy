@@ -53,7 +53,7 @@ class OptionsRendererTest extends Specification {
 
 
     Installers                (r.v.d.g.m.i.InstallersOptions)
-        HkExtensionsManagedByGuice     = true
+        JerseyExtensionsManagedByGuice = true
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
@@ -87,7 +87,7 @@ class OptionsRendererTest extends Specification {
 
 
     Installers                (r.v.d.g.m.i.InstallersOptions)
-        HkExtensionsManagedByGuice     = true
+        JerseyExtensionsManagedByGuice = true
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
@@ -139,7 +139,7 @@ class OptionsRendererTest extends Specification {
 
 
     Installers                (r.v.d.g.m.i.InstallersOptions)
-        HkExtensionsManagedByGuice     = true
+        JerseyExtensionsManagedByGuice = true
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)
@@ -162,7 +162,7 @@ class OptionsRendererTest extends Specification {
 
 
     Installers                (r.v.d.g.m.i.InstallersOptions)
-        HkExtensionsManagedByGuice     = true
+        JerseyExtensionsManagedByGuice = true
 
 
     OtherOpts                 (r.v.d.g.c.d.r.OptionsRendererTest\$OtherOpts)

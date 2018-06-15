@@ -11,8 +11,8 @@ import javax.ws.rs.ext.Provider
  * @since 20.11.2014
  */
 //@HK2Managed // there are two ways to solve this bean creation: use lazy init (bean will not be created by guice context
-// and will be created after hk binding, so service locator injection will work; another way is to delegate bean creation
-// to hk
+// and will be created after hk2 binding, so service locator injection will work; another way is to delegate bean creation
+// to hk2
 @Provider
 @LazyBinding
 class AuthInjectionResolver extends ParamInjectionResolver<Auth> {

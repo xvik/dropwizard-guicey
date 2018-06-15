@@ -41,7 +41,7 @@ class StatRendererFullTest extends BaseDiagnosticTest {
     │   │
     │   └── 3 extensions installed in 4.170 ms
     │
-    ├── [1,8%] HK bridged in 7.321 ms
+    ├── [1,8%] HK2 bridged in 7.321 ms
     │   ├── using 2 jersey installers
     │   └── 2 jersey extensions installed in 714.9 μs
     │
@@ -75,7 +75,7 @@ class StatRendererFullTest extends BaseDiagnosticTest {
         render.contains("from 7 classes")
         render.contains("3 extensions installed in")
 
-        render.contains("] HK bridged in ")
+        render.contains("] HK2 bridged in ")
         render.contains("using 2 jersey installers")
         render.contains("2 jersey extensions installed in")
 

@@ -29,31 +29,31 @@ public enum InstallersOptions implements Option {
      */
     DenySessionListenersWithoutSession(Boolean.class, false),
     /**
-     * By default, HK related extensions like resources or other jersey specific extensions are managed by
-     * guice (guice-managed instance is registered in hk). This makes some hk-specific features not possible
+     * By default, HK2 related extensions like resources or other jersey specific extensions are managed by
+     * guice (guice-managed instance is registered in HK2). This makes some HK2-specific features not possible
      * (like context injection with @Context annotation).
      * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} annotation could switch
-     * annotated beans to be managed by hk. But in some cases, it is more convenient to always use hk and this
+     * annotated beans to be managed by HK2. But in some cases, it is more convenient to always use HK2 and this
      * option is supposed to be used exactly for such cases.
      * <p>
      * When false value set, all beans, managed by jersey installers
      * ({@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}) should register beans for
-     * hk management. {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} become
+     * HK2 management. {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} become
      * useless in this case, instead {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged}
      * annotation could be used.
      * <p>
-     * Note that even managed by hk beans will be singletons. Still this will not block you from using
-     * {@code @Context} annotation injections, because hk will proxy such injections and properly handle
+     * Note that even managed by HK2 beans will be singletons. Still this will not block you from using
+     * {@code @Context} annotation injections, because HK2 will proxy such injections and properly handle
      * multi-threaded access (implicit provider).
      * <p>
-     * NOTE: guice aop is not applicable for beans managed by hk (because guice aop use class proxies and not
+     * NOTE: guice aop is not applicable for beans managed by HK2 (because guice aop use class proxies and not
      * instance proxies).
      * <p>
-     * Startup will fail if hk bridge is not enabled
+     * Startup will fail if HK2 bridge is not enabled
      * (see {@link ru.vyarus.dropwizard.guice.GuiceyOptions#UseHkBridge}) because without it you can't inject
-     * any guice beans into hk managed instances (and if you don't need to then you don't need guice support at all).
+     * any guice beans into HK2 managed instances (and if you don't need to then you don't need guice support at all).
      */
-    HkExtensionsManagedByGuice(Boolean.class, true),
+    JerseyExtensionsManagedByGuice(Boolean.class, true),
     /**
      * Force singleton scope for jersey extensions (including resources). It is highly recommended using singletons
      * to avoid redundant objects creation. Enabled by default.
@@ -63,9 +63,9 @@ public enum InstallersOptions implements Option {
      * default (prototype) scope instead of singleton.
      * <p>
      * When switched off, extension scope will be driven only by scope annotation. Note that by default
-     * guice and hk use prototype scope (for example, for resources it means new instance for each request).
+     * guice and HK2 use prototype scope (for example, for resources it means new instance for each request).
      */
-    ForceSingletonForHkExtensions(Boolean.class, true);
+    ForceSingletonForJerseyExtensions(Boolean.class, true);
 
     private Class<?> type;
     private Object value;

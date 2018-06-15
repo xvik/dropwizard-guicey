@@ -65,7 +65,7 @@ class DiagnosticRendererTest extends Specification {
             HK2DebugFeature              (r.v.d.g.m.j.d.service)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
             LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
-            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK
+            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
@@ -111,7 +111,7 @@ class DiagnosticRendererTest extends Specification {
         jerseyprovider       (r.v.d.g.m.i.f.j.p.JerseyProviderInstaller)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
             LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
-            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK
+            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
@@ -235,7 +235,7 @@ class DiagnosticRendererTest extends Specification {
             HK2DebugFeature              (r.v.d.g.m.j.d.service)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
             LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
-            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK
+            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
@@ -251,7 +251,7 @@ class DiagnosticRendererTest extends Specification {
 
     EXTENSIONS =
         LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
-        HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK
+        HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
         XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
         FooBundleResource            (r.v.d.g.d.s.bundle)
         HK2DebugFeature              (r.v.d.g.m.j.d.service)
@@ -267,7 +267,7 @@ class DiagnosticRendererTest extends Specification {
 
     EXTENSIONS =
         LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
-        HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK
+        HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
         XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
         FooBundleResource            (r.v.d.g.d.s.bundle)
         HK2DebugFeature              (r.v.d.g.m.j.d.service)

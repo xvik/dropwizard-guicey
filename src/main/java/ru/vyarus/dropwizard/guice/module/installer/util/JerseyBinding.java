@@ -22,7 +22,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
- * HK binding utilities. Supplement {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}.
+ * HK2 binding utilities. Supplement {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}.
  *
  * @author Vyacheslav Rusakov
  * @since 21.11.2014
@@ -33,7 +33,7 @@ public final class JerseyBinding {
     }
 
     /**
-     * @return true if hk bridge is available in classpath, false otherwise
+     * @return true if HK2 bridge is available in classpath, false otherwise
      */
     public static boolean isBridgeAvailable() {
         try {
@@ -46,18 +46,18 @@ public final class JerseyBinding {
 
     /**
      * When guice-first mode used (default) all jersey extensions are instantiated by guice and only if
-     * {@linkplain HK2Managed} annotation set on bean - it will be instantiated by hk.
+     * {@linkplain HK2Managed} annotation set on bean - it will be instantiated by HK2.
      * <p>
-     * When hk-first mode used
-     * ({@linkplain ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#HkExtensionsManagedByGuice})
-     * all jersey extensions are instantiated by hk and only if {@linkplain GuiceManaged} annotation set on bean - it
+     * When HK2-first mode used
+     * ({@linkplain ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsManagedByGuice})
+     * all jersey extensions are instantiated by HK2 and only if {@linkplain GuiceManaged} annotation set on bean - it
      * will be instantiated by guice.
      *
      * @param type           type to check
      * @param guiceFirstMode true when guice used by default for jersey extensions management, false when
-     *                       hk used by default
-     * @return true if type should be managed by hkm false when type should managed by guice.
-     * @see ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#HkExtensionsManagedByGuice
+     *                       HK2 used by default
+     * @return true if type should be managed by HK2, false when type should managed by guice.
+     * @see ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsManagedByGuice
      * @see HK2Managed
      * @see GuiceManaged
      */
@@ -68,13 +68,13 @@ public final class JerseyBinding {
     }
 
     /**
-     * Binds component into HK context. If component is annotated with {@link HK2Managed}, then registers type,
+     * Binds component into HK2 context. If component is annotated with {@link HK2Managed}, then registers type,
      * otherwise register guice "bridge" factory around component.
      *
-     * @param binder    hk binder
+     * @param binder    HK2 binder
      * @param injector  guice injector
      * @param type      component type
-     * @param hkManaged true if bean must be managed by hk, false to bind guice managed instance
+     * @param hkManaged true if bean must be managed by HK2, false to bind guice managed instance
      * @param singleton true to force singleton scope
      * @see ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory
      */
@@ -93,14 +93,14 @@ public final class JerseyBinding {
     }
 
     /**
-     * Binds hk {@link Factory}. If bean is {@link HK2Managed} then registered directly as
+     * Binds HK2 {@link Factory}. If bean is {@link HK2Managed} then registered directly as
      * factory. Otherwise register factory through special "lazy bridge" to delay guice factory bean instantiation.
      * Also registers factory directly (through wrapper to be able to inject factory by its type).
      *
-     * @param binder    hk binder
+     * @param binder    HK2 binder
      * @param injector  guice injector
      * @param type      factory to bind
-     * @param hkManaged true if bean must be managed by hk, false to bind guice managed instance
+     * @param hkManaged true if bean must be managed by HK2, false to bind guice managed instance
      * @param singleton true to force singleton scope
      * @param <T>       actual type (used to workaround type checks)
      * @see ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory
@@ -131,11 +131,11 @@ public final class JerseyBinding {
      * <p> If type is {@link HK2Managed}, binds directly.
      * Otherwise, use guice "bridge" factory to lazily bind type.</p>
      *
-     * @param binder       hk binder
+     * @param binder       HK2 binder
      * @param injector     guice injector
      * @param type         type which implements specific jersey interface or extends class
      * @param specificType specific jersey type (interface or abstract class)
-     * @param hkManaged    true if bean must be managed by hk, false to bind guice managed instance
+     * @param hkManaged    true if bean must be managed by HK2, false to bind guice managed instance
      * @param singleton    true to force singleton scope
      */
     public static void bindSpecificComponent(final AbstractBinder binder,
@@ -156,7 +156,7 @@ public final class JerseyBinding {
                     singleton);
         } else {
             if (InjectionResolver.class.equals(specificType)) {
-                // when one-line binding used, hk always introspects factory and fails
+                // when one-line binding used, HK2 always introspects factory and fails
                 // on unrecognizable type T (custom class analyzer is ignored so no other way to register not
                 // properly generified factory)
                 optionalSingleton(

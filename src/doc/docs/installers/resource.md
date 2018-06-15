@@ -120,8 +120,8 @@ public class MyResource {
 
 ## HK2 managed resource
 
-If resource class is annotated with `#!java @HK2Managed` then jersey HK container will manage bean creation instead of guice. 
-Injection of guice managed beans [could still be possible](../guide/configuration.md#hk-bridge) via registered [hk2-guice-bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html),
+If resource class is annotated with `#!java @HK2Managed` then jersey HK2 container will manage bean creation instead of guice. 
+Injection of guice managed beans [could still be possible](../guide/configuration.md#hk2-bridge) via registered [HK2-guice-bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html),
 but guice aop features will not work.
 
 ```java
@@ -134,7 +134,7 @@ class SampleResource {
 ```
 
 !!! note ""
-    `@Context` annotation on field will work on hk managed bean:
+    `@Context` annotation on field will work on HK2 managed bean:
     ```java
     @Path()
     @HK2Managed

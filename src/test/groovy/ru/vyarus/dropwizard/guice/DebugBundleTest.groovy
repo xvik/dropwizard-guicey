@@ -41,8 +41,8 @@ class DebugBundleTest extends AbstractTest {
 
     def "Check correct scopes"() {
 
-        setup: "need to request hk resource to force instantiation"
-        // no guice rest check because it will lead to resource instantiation by hk, but it shouldn't do it (see qualified declaration)
+        setup: "need to request hk2 resource to force instantiation"
+        // no guice rest check because it will lead to resource instantiation by HK2, but it shouldn't do it (see qualified declaration)
 //        new URL("http://localhost:8080/guice/foo").getText()
         new URL("http://localhost:8080/hk/foo").getText()
 
@@ -54,13 +54,13 @@ class DebugBundleTest extends AbstractTest {
 
     def "Check detection"() {
 
-        when: "forcing guice to create hk bean"
+        when: "forcing guice to create hk2 bean"
         injector.getInstance(HkResource)
         then: "detected"
         def ex = thrown(ProvisionException)
         ex.getCause() instanceof WrongContextException
 
-        when: "force hk to create guice bean"
+        when: "force hk2 to create guice bean"
         locator.get().getService(GuiceResource, "test")
         then:
         ex = thrown(MultiException)

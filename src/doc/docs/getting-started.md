@@ -54,7 +54,7 @@ Bom includes:
 
 * Dropwizard BOM (io.dropwizard:dropwizard-bom)
 * Guice BOM (com.google.inject:guice-bom)
-* Hk bridge (org.glassfish.hk2:guice-bridge) 
+* HK2 bridge (org.glassfish.hk2:guice-bridge) 
 * System rules, required for StartupErrorRule (com.github.stefanbirkner:system-rules)
 * Spock (org.spockframework:spock-core)
 
@@ -342,7 +342,7 @@ public class SampleModule extends DropwizardAwareModule<Configuration> {
 (and, optionally, [interfaces implemented by your configuration class](guide/configuration.md#configuration-binding))
 * `io.dropwizard.setup.Environment`
 
-These bindings are not immediately available as HK context [starts after guice](guide/lifecycle.md):
+These bindings are not immediately available as HK2 context [starts after guice](guide/lifecycle.md):
 
 * `javax.ws.rs.core.Application`
 * `javax.ws.rs.ext.Providers`
@@ -457,7 +457,7 @@ Guicey itself comes with multiple bundles:
 
 * [Core installers bundle](guide/bundles.md#core-installers-bundle) - installers, enabled by default
 * [Web installers bundle](guide/bundles.md#web-installers-bundle) - web annotations installers for servlets and filters
-* [Hk2/guice scope diagnostic bundle](guide/bundles.md#hk-debug-bundle) - enables instantiation tracking to catch extensions instantiation by both (or just not intended) DI
+* [HK2/guice scope diagnostic bundle](guide/bundles.md#hk2-debug-bundle) - enables instantiation tracking to catch extensions instantiation by both (or just not intended) DI
 * [Diagnostics bundle](guide/bundles.md#diagnostic-bundle) - configuration diagnostic reporting to look under the hood of configuration process
 
 [Extensions project](https://github.com/xvik/dropwizard-guicey-ext) contains even more bundles with 3rd party integrations (guava event bus, jdbi, etc.).

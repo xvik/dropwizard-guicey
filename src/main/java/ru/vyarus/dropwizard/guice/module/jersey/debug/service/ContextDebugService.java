@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkExtensionsManagedByGuice;
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
 
 /**
- * Debug service checks and collect information on jersey (and hk) related types instantiation.
- * Actual bean instantiation detection by guice or hk is performed by specific listeners.
+ * Debug service checks and collect information on jersey (and HK2) related types instantiation.
+ * Actual bean instantiation detection by guice or HK2 is performed by specific listeners.
  * Service only checks correctness and tracks instantiated objects.
  * <p>
  * Only objects installed by {@link JerseyInstaller} installers are tracked.
@@ -61,12 +61,12 @@ public class ContextDebugService {
     }
 
     /**
-     * Called by specific hk lifecycle listener to check if bean is properly instantiated by HK.
+     * Called by specific HK2 lifecycle listener to check if bean is properly instantiated by HK2.
      *
      * @param type instantiated bean type
      */
     public void hkManage(final Class<?> type) {
-        if (!JerseyBinding.isHK2Managed(type, options.get(HkExtensionsManagedByGuice))) {
+        if (!JerseyBinding.isHK2Managed(type, options.get(JerseyExtensionsManagedByGuice))) {
             throw new WrongContextException("HK2 creates service %s which must be managed by guice.",
                     type.getName());
         }
@@ -79,7 +79,7 @@ public class ContextDebugService {
      * @param type instantiated bean type
      */
     public void guiceManage(final Class<?> type) {
-        if (JerseyBinding.isHK2Managed(type, options.get(HkExtensionsManagedByGuice))) {
+        if (JerseyBinding.isHK2Managed(type, options.get(JerseyExtensionsManagedByGuice))) {
             throw new WrongContextException("Guice creates service %s which must be managed by HK2.",
                     type.getName());
         }
@@ -87,7 +87,7 @@ public class ContextDebugService {
     }
 
     /**
-     * @return classes of all tracked beans instantiated by hk (so far)
+     * @return classes of all tracked beans instantiated by HK2 (so far)
      */
     public List<Class<?>> getHkManaged() {
         return Lists.newArrayList(hkManaged);

@@ -33,7 +33,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bin
  * </ul>
  * <p>
  * When guice servlet modules support disabled, enables bindings for http request and response objects,
- * which will work only within resources (because hk doesn't monitor outer scopes).
+ * which will work only within resources (because HK2 doesn't monitor outer scopes).
  * <p>
  * {@link org.glassfish.hk2.api.ServiceLocator} is registered by
  * {@link ru.vyarus.dropwizard.guice.module.jersey.GuiceFeature}

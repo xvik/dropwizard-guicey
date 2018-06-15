@@ -6,7 +6,7 @@ import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
 import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
 
 /**
- * Enables hk guice bridge to allow hk services to see guice beans. Bridge installation is enabled by
+ * Enables HK2 guice bridge to allow HK2 services to see guice beans. Bridge installation is enabled by
  * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#UseHkBridge} option.
  * <p>
  * Installation extracted to separate class to isolate bridge dependency usage: when bridge is enabled.
@@ -26,7 +26,7 @@ public class GuiceBridgeActivator {
     }
 
     /**
-     * Activate hk guice bridge.
+     * Activate HK2 guice bridge.
      */
     public void activate() {
         GuiceBridge.getGuiceBridge().initializeGuiceBridge(locator);

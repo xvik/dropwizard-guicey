@@ -35,7 +35,7 @@ Three types of installation supported. Installer should implement one or more of
 * `BindingInstaller` allows custom guice bindings. If installer doesn't implement this interface sinmple `bind(type)` will be called to register in guice.
 * `TypeInstaller` used for registration based on type (no instance created during installation).
 * `InstanceInstaller` used for instance registration. Instance created using `injector.getInstance(type)`.
-* `JerseyInstaller` used for registration of bindings in HK context.
+* `JerseyInstaller` used for registration of bindings in HK2 context.
 
 Note that extensions may use `@LazyBinding` annotation. In general case such extensions will not be registered in guice.
 In case of `BindingInstaller`, special hint will be passed and installer should decide how to handle it (may throw exception as not supported).

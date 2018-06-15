@@ -13,8 +13,8 @@ import javax.inject.Scope;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 
-import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.ForceSingletonForHkExtensions;
-import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkExtensionsManagedByGuice;
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.ForceSingletonForJerseyExtensions;
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
 import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isHK2Managed;
 
 /**
@@ -51,13 +51,13 @@ public abstract class AbstractJerseyInstaller<T> extends InstallerOptionsSupport
      * @return true if extension should be managed by hk, false to manage by guice
      */
     protected boolean isHkExtension(final Class<?> type) {
-        return isHK2Managed(type, option(HkExtensionsManagedByGuice));
+        return isHK2Managed(type, option(JerseyExtensionsManagedByGuice));
     }
 
     /**
      * Bind to guice context. Singleton scope will be forced if it's not disabled (
-     * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForHkExtensions}) and if no
-     * explicit scope is declared with annotation on bean.
+     * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForJerseyExtensions}) and
+     * if no explicit scope is declared with annotation on bean.
      *
      * @param binder guice binder
      * @param type   extension type
@@ -78,7 +78,7 @@ public abstract class AbstractJerseyInstaller<T> extends InstallerOptionsSupport
      * @return true to force singleton bindings for hk extensions (resources, filters etc), false otherwise
      */
     protected boolean isForceSingleton(final Class<?> type, final boolean hkManaged) {
-        return ((Boolean) option(ForceSingletonForHkExtensions)) && !hasScopeAnnotation(type, hkManaged);
+        return ((Boolean) option(ForceSingletonForJerseyExtensions)) && !hasScopeAnnotation(type, hkManaged);
     }
 
     /**

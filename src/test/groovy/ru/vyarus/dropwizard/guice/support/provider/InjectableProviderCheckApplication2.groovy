@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.support.provider.annotatedhkmanaged.AuthFactor
 import ru.vyarus.dropwizard.guice.support.provider.annotatedhkmanaged.AuthInjectionResolverHK
 
 /**
- * Use HK managed beans
+ * Use HK2 managed beans
  * @author Vyacheslav Rusakov 
  * @since 25.11.2014
  */

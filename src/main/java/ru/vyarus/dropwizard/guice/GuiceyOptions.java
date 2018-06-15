@@ -91,7 +91,7 @@ public enum GuiceyOptions implements Option {
      * is useless (all filters and servlets registered in servlet module are dispatched by guice filter).
      * <p>
      * Note that even without guice servlet modules support HttpServletRequest and HttpServletResponse objects will be
-     * still available for injection in resources (through hk bridging). Also, note that guice servlets initialization
+     * still available for injection in resources (through HK2 bridging). Also, note that guice servlets initialization
      * took some time and application starts faster without it (~50ms). Use
      * {@link ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle} to register guice manged servlets
      * and filters.
@@ -103,12 +103,12 @@ public enum GuiceyOptions implements Option {
     GuiceFilterRegistration(EnumSet.class, EnumSet.of(DispatcherType.REQUEST)),
 
     /**
-     * Enables guice bridge for hk to allow hk services to see guice beans. This is not often required and
+     * Enables guice bridge for HK2 to allow HK2 services to see guice beans. This is not often required and
      * so disabled by default. For example, it could be required if
      * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} used to properly instantiate
-     * service by hk when it also depends on guice services.
+     * service by HK2 when it also depends on guice services.
      * <p>
-     * IMPORTANT: requires extra dependency on hk2 guice-bridge: 'org.glassfish.hk2:guice-bridge:2.5.0-b32'
+     * IMPORTANT: requires extra dependency on HK2 guice-bridge: 'org.glassfish.hk2:guice-bridge:2.5.0-b32'
      */
     UseHkBridge(Boolean.class, false);
 

@@ -28,7 +28,7 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2InstanceListene
  * <p>
  * Module intended to be used in tests.
  * {@link ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugService} collects all tracked classes
- * instantiated by both guice and hk2 and may provide lists of classes accordingly. It may be used in test conditions.
+ * instantiated by both guice and HK2 and may provide lists of classes accordingly. It may be used in test conditions.
  *
  * @author Vyacheslav Rusakov
  * @since 15.01.2016

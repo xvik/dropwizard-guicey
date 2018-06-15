@@ -66,7 +66,7 @@ public class FeatureInstallerExecutor {
             if (!(installer instanceof JerseyInstaller)) {
                 // jersey installers reporting occurs after jersey context start
                 installer.report();
-                // extensions for jersey installers will be notified after hk context startup
+                // extensions for jersey installers will be notified after HK2 context startup
                 holder.lifecycle().extensionsInstalled(installer.getClass(), res);
                 if (res != null) {
                     allInstalled.addAll(res);

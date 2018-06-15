@@ -50,7 +50,7 @@ import java.util.function.Predicate;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
-import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkExtensionsManagedByGuice;
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
 
 /**
  * Bundle enables guice integration for dropwizard. Guice context is configured in initialization phase,
@@ -463,7 +463,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * are useless (because they can't be used). So guice servlet modules support will be disabled:
          * no request or session scopes may be used and registrations of servlet modules will be denied
          * (binding already declared exception). Even with disabled guice filter, request and response
-         * objects provider injections still may be used in resources (will work through hk provider).
+         * objects provider injections still may be used in resources (will work through HK2 provider).
          * <p>
          * Guice servlets initialization took ~50ms, so injector creation will be a bit faster after disabling.
          * <p>
@@ -697,24 +697,24 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Manage jersey extensions (resources, jersey filters etc.) with HK by default instead of guice (the
+         * Manage jersey extensions (resources, jersey filters etc.) with HK2 by default instead of guice (the
          * same effect as if {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} annotation
          * would be set on all beans). Use this option if you want to use jersey specific resource features
-         * (like @Context bindings) and completely delegate management to HK.
+         * (like @Context bindings) and completely delegate management to HK2.
          * <p>
-         * IMPORTANT: this will activate hk bridge usage (to be able to inject guice beans) and so you will need
+         * IMPORTANT: this will activate HK2 bridge usage (to be able to inject guice beans) and so you will need
          * to provide bridge dependency (org.glassfish.hk2:guice-bridge:2.5.0-b32). Startup will fail if
          * dependency is not available.
          * <p>
-         * WARNING: you will not be able to use guice AOP on beans managed by HK!
+         * WARNING: you will not be able to use guice AOP on beans managed by HK2!
          *
          * @return builder instance for chained calls
-         * @see InstallersOptions#HkExtensionsManagedByGuice
+         * @see InstallersOptions#JerseyExtensionsManagedByGuice
          * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
          * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
          */
         public Builder<T> useHK2ForJerseyExtensions() {
-            option(HkExtensionsManagedByGuice, false);
+            option(JerseyExtensionsManagedByGuice, false);
             option(UseHkBridge, true);
             return this;
         }

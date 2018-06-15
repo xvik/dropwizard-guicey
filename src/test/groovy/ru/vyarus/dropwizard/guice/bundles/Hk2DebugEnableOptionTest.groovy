@@ -23,7 +23,7 @@ class Hk2DebugEnableOptionTest extends Specification {
     @Inject
     GuiceyConfigurationInfo info
 
-    def "Check hk debug bundle enable option"() {
+    def "Check hk2 debug bundle enable option"() {
 
         expect: "bundle enabled"
         info.bundles == [HK2DebugBundle]

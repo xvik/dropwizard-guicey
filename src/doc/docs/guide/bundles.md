@@ -61,13 +61,13 @@ Bundle is not installed by default to avoid confusion. May be enabled using `.us
 NOTE: If web installers used, then you may not need guice ServletModule support. To remove GuiceFilter registrations and ServletModule support use
 `.noGuiceFilter()`.
 
-### HK debug bundle 
+### HK2 debug bundle 
 
-`HK2DebugBundle` is special debug bundle to check that beans properly instantiated by guice or HK 
+`HK2DebugBundle` is special debug bundle to check that beans properly instantiated by guice or HK2 
 (and no beans are instantiated by both).
 
 Only beans installed by installers implementing `JerseyInstaller` (`ResourceInstaller`, `JerseyProviderInstaller`).
-All beans must be created by guice and only beans annotated with `@HK2Managed` must be instantiated by HK.
+All beans must be created by guice and only beans annotated with `@HK2Managed` must be instantiated by HK2.
 
 Bundle may be used in tests. For example using `guicey.bundles` property (see bundles lookup below).
 
@@ -147,7 +147,7 @@ bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
 System property `guicey.bundles` could contain comma separated list of guicey bundle classes. These bundles 
 must have no-args constructor.
 
-For example, activate HK debug bundle for tests:
+For example, activate HK2 debug bundle for tests:
 
 ```
 java ... -Dguicey.bundles=ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle

@@ -131,12 +131,12 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
 
     @Override
     protected void hkConfiguration(final HkConfigurationEvent event) {
-        log("Configuring HK...");
+        log("Configuring HK2...");
     }
 
     @Override
     protected void hkExtensionsInstalled(final HkExtensionsInstalledEvent event) {
-        log("%s HK extensions installed", event.getExtensions().size());
+        log("%s HK2 extensions installed", event.getExtensions().size());
     }
 
     @SuppressWarnings("PMD.SystemPrintln")

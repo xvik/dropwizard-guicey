@@ -13,7 +13,7 @@ import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 @UseDropwizardApp(ExceptionMapperApp2)
 class HkManagedExceptionMapperTest extends AbstractTest {
 
-    def "Check exception mapper registration through hk"() {
+    def "Check exception mapper registration through hk2"() {
 
         when: "calling resource which trigger io exception"
         new RESTClient("http://localhost:8080/ex/").get([:])

@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
-import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkExtensionsManagedByGuice;
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
 
 /**
  * Module performs auto configuration using classpath scanning or manually predefined installers and beans.
@@ -134,7 +134,7 @@ public class InstallerModule extends AbstractModule {
     @SuppressWarnings("PMD.PrematureDeclaration")
     private void resolveExtensions(final ExtensionsHolder holder) {
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
-        final boolean guiceFirstMode = context.option(HkExtensionsManagedByGuice);
+        final boolean guiceFirstMode = context.option(JerseyExtensionsManagedByGuice);
         final List<Class<?>> manual = context.getEnabledExtensions();
         for (Class<?> type : manual) {
             if (!processType(type, holder, guiceFirstMode, false)) {

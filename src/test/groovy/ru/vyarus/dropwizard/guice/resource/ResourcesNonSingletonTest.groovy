@@ -41,7 +41,7 @@ class ResourcesNonSingletonTest extends AbstractTest {
     static class XConf implements GuiceyConfigurator {
         @Override
         void configure(GuiceBundle.Builder builder) {
-            builder.option(InstallersOptions.ForceSingletonForHkExtensions, false)
+            builder.option(InstallersOptions.ForceSingletonForJerseyExtensions, false)
         }
     }
 }

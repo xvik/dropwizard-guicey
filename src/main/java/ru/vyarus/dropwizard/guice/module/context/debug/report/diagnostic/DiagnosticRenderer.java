@@ -45,7 +45,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * <li>SCAN when extension found by classpath scan</li>
  * <li>LAZY when {@link ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding}
  * annotation set</li>
- * <li>HK when extension managed by HK (annotated with
+ * <li>HK2 when extension managed by HK2 (annotated with
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed})</li>
  * </ul>
  * <p>
@@ -229,7 +229,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
             markers.add("LAZY");
         }
         if (einfo.isHk2Managed()) {
-            markers.add("HK");
+            markers.add("HK2");
         }
         return renderClassLine(extension, markers);
     }

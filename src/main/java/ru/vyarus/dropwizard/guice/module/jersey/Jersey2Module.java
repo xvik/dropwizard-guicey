@@ -15,14 +15,14 @@ import java.util.EnumSet;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.GuiceFilterRegistration;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseHkBridge;
-import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.HkExtensionsManagedByGuice;
+import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
 
 /**
  * Guice jersey2 integration module.
  * <p>
  * Integration is very similar to old jersey-guice: guice context is dominant;
  * guice instantiated first; jersey objects directly registered in guice; guice objects directly registered
- * in hk.
+ * in HK2.
  * <p>
  * Guice {@link com.google.inject.servlet.ServletModule} support is optional and may be disabled, see
  * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#GuiceFilterRegistration}.
@@ -64,16 +64,16 @@ public class Jersey2Module extends AbstractModule {
     }
 
     /**
-     * When HK management for jersey extensions is enabled by default, then guice bridge must be enabled.
+     * When HK2 management for jersey extensions is enabled by default, then guice bridge must be enabled.
      * Without it guice beans could not be used in resources and other jersey extensions. If this is
      * expected then guice support is not needed at all.
      */
     private void checkHkFirstMode() {
-        final boolean guiceyFirstMode = context.option(HkExtensionsManagedByGuice);
+        final boolean guiceyFirstMode = context.option(JerseyExtensionsManagedByGuice);
         if (!guiceyFirstMode) {
             Preconditions.checkState(context.option(UseHkBridge),
-                    "HK management for jersey extensions is enabled by default "
-                            + "(InstallersOptions.HkExtensionsManagedByGuice), but hk-guice bridge is not "
+                    "HK2 management for jersey extensions is enabled by default "
+                            + "(InstallersOptions.JerseyExtensionsManagedByGuice), but HK2-guice bridge is not "
                             + "enabled. Use GuiceyOptions.UseHkBridge option to enable bridge "
                             + "(extra dependency is required)");
         }

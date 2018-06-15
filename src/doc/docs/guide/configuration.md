@@ -5,7 +5,7 @@ Builder `GuiceBundle.builder()` contains shortcuts for all available features, s
 by looking at available methods and reading javadoc.
 
 !!! note "Configuration subjects (vocabulary)"
-    * Installers - used to recognize and install extension (usually encapsulates integration logic: get extension instance from guice injector and register in dropwizard (or jersey, hk, whatever))
+    * Installers - used to recognize and install extension (usually encapsulates integration logic: get extension instance from guice injector and register in dropwizard (or jersey, HK2, whatever))
     * Extensions - actual application parts, written by you (resources, tasks, health checks, servlets etc)
     * Guice modules
     * Guicey bundles - groups installers, extensions, gucie modules and other guicey bundles (represent reusable logic or 
@@ -266,18 +266,18 @@ Then configuration could be injected by interface:
     By default, configuration is bound only for [all classes in hierarchy](bindings.md#configuration). In example above it would be 
     `Configuration` and `MyConfiguration`.
 
-### HK bridge
+### HK2 bridge
 
-If you need HK services be able to use guice beans, then [hk bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) 
+If you need HK2 services be able to use guice beans, then [HK2 bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) 
 must be activated. 
-This may be useful when some services are managed by HK (e.g. with [@HK2Managed](lifecycle.md#problematic-cases)).
+This may be useful when some services are managed by HK2 (e.g. with [@HK2Managed](lifecycle.md#problematic-cases)).
 
 To activate bridge:
 
-* Add dependency: `org.glassfish.hk2:guice-bridge:2.5.0-b32` (version must match HK version, used by dropwizard)
+* Add dependency: `org.glassfish.hk2:guice-bridge:2.5.0-b32` (version must match HK2 version, used by dropwizard)
 * Enable option: `#!java .option(GuiceyOptions.UseHkBridge, true)`
 
-After that, HK beans could inject guice beans:
+After that, HK2 beans could inject guice beans:
 
 ```java
 @HK2Managed
@@ -296,8 +296,8 @@ Enable configuration [diagnostic console logs](diagnostic.md) to diagnose config
 .printDiagnosticInfo()
 ```
 
-In case of doubts about extension owner (guice or HK) and suspicious for duplicate instantiation,
-you can enable [strict control](bundles.md#hk-debug-bundle) which will throw exception in case of wrong owner:
+In case of doubts about extension owner (guice or HK2) and suspicious for duplicate instantiation,
+you can enable [strict control](bundles.md#hk2-debug-bundle) which will throw exception in case of wrong owner:
 
 ```java
 .strictScopeControl()

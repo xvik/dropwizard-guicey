@@ -132,7 +132,7 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
     private long renderHkPart(final TreeNode root, final boolean hideTiny, final double percent) {
         final long hk = info.getStats().time(HKTime);
         if (show(hideTiny, hk)) {
-            final TreeNode node = root.child("[%.2g%%] HK bridged in %s",
+            final TreeNode node = root.child("[%.2g%%] HK2 bridged in %s",
                     hk / percent, info.getStats().humanTime(HKTime));
             final int installers = info.getData()
                     .getItems(ConfigItem.Installer, it -> JerseyInstaller.class.isAssignableFrom(it.getType())).size();

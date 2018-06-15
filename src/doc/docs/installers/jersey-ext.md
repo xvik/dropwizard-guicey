@@ -17,9 +17,9 @@ Detects  classes annotated with jersey `@javax.ws.rs.ext.Provider` annotation an
 !!! attention ""
     Extensions registered as **singletons**, even if guice bean scope isn't set.  
 
-Due to specifics of [HK integration](lifecycle.md), you may need to use:
+Due to specifics of [HK2 integration](lifecycle.md), you may need to use:
 
-* `#!java @HK2Managed` to delegate bean creation to HK
+* `#!java @HK2Managed` to delegate bean creation to HK2
 * `#!java @LazyBinding` to delay bean creation to time when all dependencies will be available 
 * `javax.inject.Provider` as universal workaround (to wrap not immediately available dependency).
 
@@ -114,8 +114,8 @@ public class AuthFactoryProvider extends AbstractValueFactoryProvider {
 
 !!! note
     `#!java @LazyBinding` was used to delay provider creation because required dependency `#!java MultivaluedParameterExtractorProvider`
-    (by super class) will be available only after HK context creation (which is created after guice context). 
-    Another option could be using `#!java @HK2Managed` (instead of lazy) which will delegate bean creation to hk.
+    (by super class) will be available only after HK2 context creation (which is created after guice context). 
+    Another option could be using `#!java @HK2Managed` (instead of lazy) which will delegate bean creation to HK2.
 
 ### InjectionResolver
 
@@ -133,7 +133,7 @@ public class AuthInjectionResolver extends ParamInjectionResolver<Auth> {
 ```
 
 !!! note
-    `#!java @LazyBinding` was used to delay provider creation because super class will require hk service locator, 
+    `#!java @LazyBinding` was used to delay provider creation because super class will require HK2 service locator, 
     which is not yet available. `#!java @HK2Managed` could also be used instead.
 
 ### ParamConverterProvider

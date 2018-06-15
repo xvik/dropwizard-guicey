@@ -4,15 +4,15 @@ Jersey2 guice integration is more complicated than for jersey1, because of [HK2]
 
 !!! note
     Many people ask why not just use HK2 instead of guice as it's already provided. Unfortunately, it's hard to use it 
-    in the same elegant way as we can use guice. HK context is launched too late (after dropwizard run phase).
-    For example, it is impossible to use HK to instantiate dropwizard managed object because managed
-    must be registered before HK context starts.
+    in the same elegant way as we can use guice. HK2 context is launched too late (after dropwizard run phase).
+    For example, it is impossible to use HK2 to instantiate dropwizard managed object because managed
+    must be registered before HK2 context starts.
 
 Guice integration done in guice exclusive way as much as possible: everything should be managed by guice and invisibly integrated into HK2.
 Anyway, it is not always possible to hide integration details, especially if you need to register jersey extensions.
 
 !!! warning ""
-    Guice context starts before HK context.
+    Guice context starts before HK2 context.
 
 ## Lifecycle
 
@@ -38,7 +38,7 @@ Anyway, it is not always possible to hide integration details, especially if you
     * [Managed beans](../installers/managed.md) started
     * **HK2 context creation**
         * `GuiceFeature` (registered earlier) called
-            * [Optionally](configuration.md#hk-bridge) register [hk2-guice bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) (only guice to hk way to let hk managed beans inject guice beans)
+            * [Optionally](configuration.md#hk2-bridge) register [HK2-guice bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) (only guice to hk2 way to let hk2 managed beans inject guice beans)
             * Run jersey specific installers ([resource](../installers/resource.md), [extension](../installers/jersey-ext.md))
 
 !!! note
@@ -52,7 +52,7 @@ Anyway, it is not always possible to hide integration details, especially if you
 
 ### Access jersey beans from guice
 
-To access HK bindings we need HK2 `ServiceLocator`: it's instance is registered by `GuiceFeature` (in time of HK context startup).
+To access HK2 bindings we need HK2 `ServiceLocator`: it's instance is registered by `GuiceFeature` (in time of HK2 context startup).
 
 Jersey components are bound as providers:
 
@@ -60,7 +60,7 @@ Jersey components are bound as providers:
 binder.bind(jerseyType).toProvider(new LazyJerseyProvider(jerseyType));
 ```       
 
-Internally this provider will perform lookup in HK service locator:
+Internally this provider will perform lookup in HK2 service locator:
 
 ```java
 injector.getInstance(ServiceLocator.class).getService(jerseyType);
@@ -76,17 +76,17 @@ See more details in [jersey bindings module](https://github.com/xvik/dropwizard-
 ### Access guice beans from jersey    
 
 !!! note
-    It's almost never required to care about beans visibility from HK side because guicey already did all required
+    It's almost never required to care about beans visibility from HK2 side because guicey already did all required
     bindings.
 
-HK could see all guice beans because of registered guice-bridge. But it doesn't mean HK can analyze 
+HK2 could see all guice beans because of registered guice-bridge. But it doesn't mean HK2 can analyze 
 all guice beans to search for extensions (it can resolve only direct injection).
     
 Specific jersey installers ([resource](../installers/resource.md), [extension](../installers/jersey-ext.md)) 
-create required bindings manually in time of HK context creation.
+create required bindings manually in time of HK2 context creation.
 
 [Jersey extensions installer](../installers/jersey-ext.md) handles most specific installation cases
-(where HK knowledge is required). It uses the same technic, as the other side binding:
+(where HK2 knowledge is required). It uses the same technic, as the other side binding:
 
 ```java
 binder.bindFactory(new LazyGuiceProvider(guiceType)).to(type)
@@ -99,13 +99,13 @@ injector.getInstance(guiceType);
 ```
 
 !!! tip
-    If you just want to add some beans in HK context, annotate such beans with `@Provider` and `@HK2Managed` - provider
-    will be recognized by installer and hk managed annotation will trigger simple registration (overall it's the same
+    If you just want to add some beans in HK2 context, annotate such beans with `@Provider` and `@HK2Managed` - provider
+    will be recognized by installer and HK2 managed annotation will trigger simple registration (overall it's the same
     as write binding manually).
     ```java
     @HK2Managed
     @Provider
-    public class MyBeanMangedByHK { ... }    
+    public class MyBeanMangedByHK2 { ... }    
     ```
 
 For more details look [jersey provider installer](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java)
@@ -119,7 +119,7 @@ direct binding for `MultivaluedParameterExtractorProvider`. So such bean would b
 There are two options to solve this:
 
 * use `@LazyBinding`: bean instance will not be created together with guice context (when `MultivaluedParameterExtractorProvider` is not available),
-and creation will be initiated by HK, when binding could be resolved.
-* or use `@HK2Managed` this will delegate instance management to HK, but still guice services [may be injected](configuration.md#hk-bridge).
+and creation will be initiated by HK2, when binding could be resolved.
+* or use `@HK2Managed` this will delegate instance management to HK2, but still guice services [may be injected](configuration.md#hk2-bridge).
 
 In other cases simply wrap jersey specific bindings into `Provider`.

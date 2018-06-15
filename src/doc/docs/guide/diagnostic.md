@@ -38,7 +38,7 @@ INFO  [2016-08-01 21:22:50,898] ru.vyarus.dropwizard.guice.module.context.debug.
     │   │   
     │   └── 3 extensions installed in 4.188 ms
     │   
-    ├── [1,3%] HK bridged in 6.583 ms
+    ├── [1,3%] HK2 bridged in 6.583 ms
     │   ├── using 2 jersey installers
     │   └── 2 jersey extensions installed in 660.9 μs
     │   
@@ -139,7 +139,7 @@ Default reporting contains 4 sections:
     GUICEY started in 453.3 ms
 ```
 
-Overall guicey time measured: GuiceBundle methods plus part of Hk configuration time (hk started after bundle).
+Overall guicey time measured: GuiceBundle methods plus part of HK2 configuration time (HK2 started after bundle).
 All items below represent guicey time detalization. Items always detail time of direct parent.
 
 Most of this time actually spent on class loading. For example, report above represent [test](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/config/debug/DiagnosticBundleTest.groovy) direct execution. 
@@ -205,15 +205,15 @@ All installers and extensions operations (except jersey related features) perfor
 !!! note
     Most time of injector creation is internal guice logic. You can enable guice logs to see more details (see below)
 
-### HK
+### HK2
 
 ```
-    ├── [1,3%] HK bridged in 6.583 ms
+    ├── [1,3%] HK2 bridged in 6.583 ms
     │   ├── using 2 jersey installers
     │   └── 2 jersey extensions installed in 660.9 μs
 ```
 
-Jersey starts after dropwizard bundles processing and so after GuiceBundle execution. This time is tracked as (overall) guicey time. Here guicey register required HK bindings and (some hk beans in guice) and executes jersey installers (installers implement JerseyInstaller) to process jersey specific features. For example, all resources and jersey extensions installed here (because requires hk specific bindings).
+Jersey starts after dropwizard bundles processing and so after GuiceBundle execution. This time is tracked as (overall) guicey time. Here guicey register required HK2 bindings and (some HK2 beans in guice) and executes jersey installers (installers implement JerseyInstaller) to process jersey specific features. For example, all resources and jersey extensions installed here (because requires HK2 specific bindings).
 
 Note that installation time (`2 jersey extensions installed in 660.9 μs`) is so tiny just because empty resources (without methods) were used. In real application installation time will be bigger.
 
@@ -327,7 +327,7 @@ The following markers used:
 
 * SCAN - item from classpath scan (even if extension or installer were registered manually also to indicate item presence in classpath scan)
 * LAZY - extensions annotated with @LazyBinding
-* HK - extension annotated with @HK2Managed
+* HK2 - extension annotated with @HK2Managed
 
 ### Modules
 

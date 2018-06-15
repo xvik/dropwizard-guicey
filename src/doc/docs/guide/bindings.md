@@ -76,10 +76,10 @@ See also [authentication configuration example](../examples/authentication.md).
 
 ## Jersey specific bindings
 
-Jersey bindings are not immediately available, because HK context starts after guice, 
+Jersey bindings are not immediately available, because HK2 context starts after guice, 
 so use `Provider` to inject these bindings.
 
-These bindings available after HK context start:
+These bindings available after HK2 context start:
 
 * `javax.ws.rs.core.Application`
 * `javax.ws.rs.ext.Providers`
@@ -102,7 +102,7 @@ By default, `GuiceFilter` is enabled on both contexts (admin and main). So you c
 request and response objects and use under filter, servlet or resources calls (guice filter wraps all web interactions).
 
 If you disable guice filter with [.noGuiceFilter()](configuration.md#servletmodule) then
-guicey will bridge objects from HK context:
+guicey will bridge objects from HK2 context:
 
 * `javax.servlet.http.HttpServletRequest`
 * `javax.servlet.http.HttpServletResponse`

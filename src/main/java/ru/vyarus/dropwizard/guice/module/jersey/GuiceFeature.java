@@ -28,14 +28,14 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.HKTime;
  * {@link ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule}, which lazily binds jersey specific
  * types to guice context. This types could be used in guice only after actual integration
  * (this feature activation)</p>
- * <p>HK-guice bridge is activated when {@link ru.vyarus.dropwizard.guice.GuiceyOptions#UseHkBridge} option enabled
+ * <p>HK2-guice bridge is activated when {@link ru.vyarus.dropwizard.guice.GuiceyOptions#UseHkBridge} option enabled
  * (not bi-directional). By default, it's disabled because most cases does not require it: it was
- * developed for cases when bean is created by HK and only need some injections from guice, but here guice
+ * developed for cases when bean is created by HK2 and only need some injections from guice, but here guice
  * controls almost everything and prepared instance is passed to guice. But bridge may be useful together with
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} instances.</p>
- * <p>Feature installs {@code ru.vyarus.dropwizard.guice.module.jersey.hk2.InstallerBinder}, which is HK module.
+ * <p>Feature installs {@code ru.vyarus.dropwizard.guice.module.jersey.hk2.InstallerBinder}, which is HK2 module.
  * Just like with guice ({@code BindingInstaller)}, it asks all {@code JerseyInstaller} to bind extensions into
- * HK context.</p>
+ * HK2 context.</p>
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.jersey.support.JerseyComponentProvider
@@ -69,9 +69,9 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
 
         if (enableBridge) {
             Preconditions.checkState(JerseyBinding.isBridgeAvailable(),
-                    "HK bridge is requested, but dependency not found: "
+                    "HK2 bridge is requested, but dependency not found: "
                             + "'org.glassfish.hk2:guice-bridge:2.5.0-b32' (check that dependency "
-                            + "version match hk version used in your dropwizard)");
+                            + "version match HK2 version used in your dropwizard)");
             new GuiceBridgeActivator(locator, injector).activate();
         }
 

@@ -1,7 +1,7 @@
 ### [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) (2017-05-09)
 * Update to dropwizard 1.1.0
 * Add StartupErrorRule to simplify dropwizard startup error testing
-* (breaking) HK guice-bridge dependency become optional. New option GuiceyOptions.UseHkBridge could be used 
+* (breaking) HK2 guice-bridge dependency become optional. New option GuiceyOptions.UseHkBridge could be used 
 to enable bridge (#28)  
 * Fix NPE when used with JRebel (#29)
 * Add binding for jersey javax.ws.rs.container.ResourceInfo (#26)
@@ -32,7 +32,7 @@ to enable bridge (#28)
 * (breaking) InjectorLookup changed to use java8 Optional instead of guava    
 * Add ability to customize guice filter mapping DispatcherTypes (by default only REQUEST): GuiceyOptions.GuiceFilterRegistration option 
 * Add ability to disable guice filter registration and guice servlet modules support (no request and session scopes, but request and response still may be injected in resources) 
-* Jersey request specific services UriInfo, HttpHeaders, SecurityContext, Request, ContainerRequest, AsyncContext no longer bound in request scope (scope controlled by HK)
+* Jersey request specific services UriInfo, HttpHeaders, SecurityContext, Request, ContainerRequest, AsyncContext no longer bound in request scope (scope controlled by HK2)
 * Add methods to GuiceBundle builder:
     - option(option, value) - used to specify custom option value
     - options(Map) - used to provide multiple options at once (for custom options lookup mechanisms)
@@ -75,7 +75,7 @@ NOTE: if used FeaturesHolder (internal api bean), now it's renamed to Extensions
     - Add builder bundleLookup method to register custom lookup implementation
     - Add builder disableBundleLookup to disable default lookups
     - Default lookup implementation logs all resolved bundles
-* Fix JerseyProviderInstaller: prevent hk beans duplicate instantiations; fix DynamicFeature support.
+* Fix JerseyProviderInstaller: prevent HK2 beans duplicate instantiations; fix DynamicFeature support.
 * Add HK2DebugBundle. When enabled, checks that beans are instantiated by guice only and annotated with @HK2Managed 
 are managed by HK2 only. May be used in tests as extra validation.
 * Add JerseyFeatureInstaller (included in code bundle) which installs javax.ws.rs.core.Feature. Useful for low level configuration. 
@@ -124,7 +124,7 @@ are managed by HK2 only. May be used in tests as extra validation.
 * Add spock extensions to use injections directly in specification (like spock-guice do)
 
 ### [2.0.0](https://github.com/xvik/dropwizard-guicey/tree/2.0.0) (2014-11-25)
-* Dropwizard 0.8 integration (as result, no more depends on jersey-guice, but depends on guice-bridge(hk2)).
+* Dropwizard 0.8 integration (as result, no more depends on jersey-guice, but depends on guice-bridge(HK2)).
 Jersey integration completely rewritten.
 * Add JerseyInstaller installer type
 * Add @LazyBinding annotation, which allows extension not to be registered in guice context (it will be created on first request)

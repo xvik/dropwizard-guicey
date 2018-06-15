@@ -35,7 +35,7 @@ Overall, integration feels transparent and super easy to learn (great!), but wit
 ### Guicey
 
 Guicey prefer guice-first approach when everything is created by guice and registered in jersey as instance
-(so hk2 does not manage services, resources etc.).
+(so HK2 does not manage services, resources etc.).
 
 In contrast to dropwizard-guice, guicey brings a lot of new concepts to better integrate guice.
 This was necessary due to moving injector creation into dropwizard run phase
@@ -133,7 +133,7 @@ First of all, note that resource bound only in guice module will not be discover
 Use either classpath scan to install resources or specify them directly into bundle: `bundle.extensions(Resource1.class, Resoutrce2.class)`.
 
 HK2 managed services (resources, providers) are also supported, but they will lack
-guice aop and require extra dependency - hk2-guice-bridge (official hk guice bridge)
+guice aop and require extra dependency - HK2-guice-bridge (official HK guice bridge)
 
 !!! important
     Resources are singletons by default and so they will initialize with guice context.

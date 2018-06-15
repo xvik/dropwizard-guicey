@@ -5,9 +5,9 @@ import org.glassfish.hk2.api.Factory;
 
 /**
  * Transitive factory helps "bridge" lazily real factories.
- * For example, if hk context is just starting and referenced guice bean depends on some hk bean,
- * we can't instantiate guice bean. This moves guice bean creation into hk init phase (when hk pre-init some factories)
- * or even further (first usage).
+ * For example, if HK2 context is just starting and referenced guice bean depends on some HK2 bean,
+ * we can't instantiate guice bean. This moves guice bean creation into HK2 init phase (when HK2 pre-init some
+ * factories) or even further (first usage).
  *
  * @param <T> injection type
  */

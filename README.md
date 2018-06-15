@@ -113,7 +113,7 @@ Bom includes:
 
 * Dropwizard BOM (io.dropwizard:dropwizard-bom)
 * Guice BOM (com.google.inject:guice-bom)
-* Hk bridge (org.glassfish.hk2:guice-bridge) 
+* HK2 bridge (org.glassfish.hk2:guice-bridge) 
 * System rules, required for StartupErrorRule (com.github.stefanbirkner:system-rules)
 * Spock (org.spockframework:spock-core)
 

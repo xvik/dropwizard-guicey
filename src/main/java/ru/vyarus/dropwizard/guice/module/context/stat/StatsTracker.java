@@ -48,11 +48,11 @@ public final class StatsTracker {
     }
 
     /**
-     * Special methods for tracking time in hk scope.
+     * Special methods for tracking time in HK2 scope.
      * Such complication used to avoid using 3 different trackers in code.
-     * Hk initialization is performed after bundles run and so out of scope of GuiceBundle.
+     * HK2 initialization is performed after bundles run and so out of scope of GuiceBundle.
      *
-     * @param name hk statistics name
+     * @param name HK2 statistics name
      */
     public void startHkTimer(final Stat name) {
         timer(GuiceyTime);
@@ -63,9 +63,9 @@ public final class StatsTracker {
     }
 
     /**
-     * Called to stop currently measured hk metric (also stops main guice and hk timers).
+     * Called to stop currently measured HK2 metric (also stops main guice and HK2 timers).
      *
-     * @param name hk statistic name
+     * @param name HK2 statistic name
      */
     public void stopHkTimer(final Stat name) {
         timers.get(GuiceyTime).stop();

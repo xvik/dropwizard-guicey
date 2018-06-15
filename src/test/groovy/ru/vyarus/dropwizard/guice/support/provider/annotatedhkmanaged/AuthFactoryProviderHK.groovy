@@ -19,7 +19,7 @@ import javax.ws.rs.ext.Provider
  */
 @Provider
 @HK2Managed
-// hk will create bean not guice!
+// hk2 will create bean not guice!
 class AuthFactoryProviderHK extends AbstractValueFactoryProvider {
 
     Factory<User> authFactory;

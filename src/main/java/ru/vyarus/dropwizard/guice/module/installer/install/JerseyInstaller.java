@@ -12,11 +12,11 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
  * Installer must support {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} and
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged} annotations, which delegates
  * bean creation to HK2 or guice (as exception). Default target is declared by
- * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#HkExtensionsManagedByGuice} option.
+ * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsManagedByGuice} option.
  * <p>
  * By default, jersey extensions should be registered in singleton scope, unless explicit scoping annotation
  * is present on bean. Forced singleton could be disabled with
- * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForHkExtensions} option.
+ * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForJerseyExtensions} option.
  * <p>
  * Use {@link ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding} to properly support annotation.
  *

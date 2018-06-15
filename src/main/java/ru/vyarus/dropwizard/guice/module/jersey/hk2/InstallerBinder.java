@@ -14,8 +14,8 @@ import java.util.List;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyInstallerTime;
 
 /**
- * Hk2 module, which must be registered before hk context start (to properly bind resources).
- * Registers all juice extensions into hk2 context as factory, which delegates to guice provider.
+ * HK2 module, which must be registered before HK2 context start (to properly bind resources).
+ * Registers all juice extensions into HK2 context as factory, which delegates to guice provider.
  * Such bridging is required to delegate objects creation to guice and properly use guice scopes.
  * <p>If jersey extension is already a factory (like
  * {@link org.glassfish.jersey.server.internal.inject.AbstractContainerRequestValueFactory}), then factory will

@@ -22,7 +22,7 @@ import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
  * @since 12.07.2016
  */
 @UseDropwizardApp(App)
-// important to track HK part also
+// important to track HK2 part also
 class DiagnosticBundleTest extends AbstractTest {
 
     def "Check logging"() {

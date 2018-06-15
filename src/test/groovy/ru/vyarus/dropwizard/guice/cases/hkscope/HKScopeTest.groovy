@@ -45,7 +45,7 @@ class HKScopeTest extends AbstractTest {
 
     def "Check jersey extensions registration"() {
 
-        setup: "need to request hk resource to force instantiation"
+        setup: "need to request hk2 resource to force instantiation"
         new URL("http://localhost:8080/hk/foo").getText()
         new URL("http://localhost:8080/guice/foo").getText()
 
@@ -71,7 +71,7 @@ class HKScopeTest extends AbstractTest {
             })
         } == null
 
-        and: "all hk beans are in forced singleton scope"
+        and: "all hk2 beans are in forced singleton scope"
         debugService.hkManaged.find {
             def r = locator.get().getBestDescriptor(new Filter() {
                 @Override
@@ -85,7 +85,7 @@ class HKScopeTest extends AbstractTest {
         } == null
 
 
-        and: "all guice beans are registered in hk context as singletons"
+        and: "all guice beans are registered in hk2 context as singletons"
         def list = {
             def r = holder.getExtensions(JerseyProviderInstaller)
             r.removeAll(debugService.hkManaged)
