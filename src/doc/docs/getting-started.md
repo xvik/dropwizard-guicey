@@ -34,12 +34,14 @@ plugins {
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus.guicey:guicey:4.1.0'
+        mavenBom 'ru.vyarus.guicey:guicey:4.1.0'  
+        // uncomment to override dropwizard version    
+        // mavenBom 'io.dropwizard:dropwizard-bom:1.3.4' 
     }
 }
 
 dependencies {
-    compile 'ru.vyarus.guicey:guicey:4.1.0'
+    compile 'ru.vyarus.guicey:guicey'
    
     // no need to specify versions
     compile 'io.dropwizard:dropwizard-auth'
@@ -165,10 +167,15 @@ public class SampleResource {
 
 Now resource will return caller IP.
 
-Also you can inject request specific objects with [as method parameter](installers/resource.md#context-usage)
+Also, you can inject request specific objects [as method parameter](installers/resource.md#context-usage)
 
 !!! note
     Field injection used in examples for simplicity. In real life projects [prefer constructor injection](https://github.com/google/guice/wiki/Injections).    
+
+!!! tip
+    By default, resources are **forced to be singletons**, but you can use scope annotations to change it: 
+    `@RequestScoped` or `@Prototype` (for example, when guice servet modules support is disabled).
+    Also, you can switch all jersey extensions (resources, providers) to be managed by HK2. 
 
 ### Add managed
 
@@ -300,7 +307,8 @@ Multiple modules could be registered:
     ```java
     .modules(new SampleModule(), new SampleModule())
     ```
-    Only one module will be registered. This is intentional restriction to simplify bundles usage.
+    Only one module will be registered. This is intentional restriction to simplify bundles usage
+    (to let you register common modules in different bundles and be sure that only one instance will be used).
     
 In some cases, it could be desired to use different instances of the same module:
 ```java
@@ -325,9 +333,14 @@ public class SampleModule extends DropwizardAwareModule<Configuration> {
 
     @Override
     protected void configure() {
-        configuration()... // access configuration
-        environment()... // access environment
-        bootstrap()...  // access dropwizard bootstrap
+        configuration() // access configuration        
+        environment() // access environment
+        bootstrap()  // access dropwizard bootstrap
+        configuratonTree() // configuration as tree of values
+        confuguration(Class) // unique sub configuration
+        configuration(String) // configuration value by yaml path
+        configurations(Class) // sub configuration objects by type (including subtypes)
+        options() // access guicey options
     }
 }
 ``` 
@@ -338,11 +351,11 @@ public class SampleModule extends DropwizardAwareModule<Configuration> {
 
 ### Available bindings
 
-* Configuration as `io.dropwizard.Configuration`, your configuration class and [any class between them](guide/bindings.md#configuration) 
-(and, optionally, [interfaces implemented by your configuration class](guide/configuration.md#configuration-binding))
+* Configuration as `io.dropwizard.Configuration` or custom configuration class, direct value injections by path 
+or unique sub configuration objects (see [configuration bindings](guide/configuration.md#configuration-binding))
 * `io.dropwizard.setup.Environment`
 
-These bindings are not immediately available as HK2 context [starts after guice](guide/lifecycle.md):
+Bindings below are not immediately available as HK2 context [starts after guice](guide/lifecycle.md):
 
 * `javax.ws.rs.core.Application`
 * `javax.ws.rs.ext.Providers`
@@ -392,7 +405,7 @@ specify all extensions.
     classpath scan could not cover all packages with extensions (e.g. due to too much classes)
     and not covered extensions may be specified manually.    
 
-!!! warning
+!!! important
     Duplicate extensions are filtered. If some extension is registered manually and also found with auto scan
     then only one extension instance will be registered. 
     Even if extension registered multiple times manually,

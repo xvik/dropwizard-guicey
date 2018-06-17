@@ -48,6 +48,7 @@ markdown_extensions:
 pages:
     - Home: index.md
     - Getting started: getting-started.md
+    - Introduction: concepts.md
     - User guide:
       - Configuration: guide/configuration.md
       - Integration lifecycle: guide/lifecycle.md

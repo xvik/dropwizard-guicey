@@ -95,30 +95,37 @@ Special shortcut `.printAvailableInstallers()` register diagnostic bundle config
 ## Dropwizard bundles unification
 
 Guicey bundles and dropwizard bundles may be unified providing single (standard) extension point for both 
-dropwizard and guicey features.
+dropwizard and guicey features:
+
+```java
+public class MixedBundle implements ConfiguredBundle, GuiceyBundle {
+    
+    public void initialize(Bootstrap<?> bootstrap) {
+        // do something in init phase
+    }   
+                  
+    public void initialize(GuiceyBootstrap bootstrap) {
+        // apply guicey configurations
+    } 
+    
+    public void run(T configuration, Environment environment) throws Exception {
+        // not needed because everything could be done in guicey bundle's method
+    } 
+} 
+``` 
 
 Feature is disabled by default, to enable it use `.configureFromDropwizardBundles()` method.
 
 ```java
-bootstrap.addBundle(new XLibBundle());
-bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
+bootstrap.addBundle(new MixedBundle());
+bootstrap.addBundle(GuiceBundle.builder()
         .configureFromDropwizardBundles(true)
         .build()
 );
 ```
 
-where
-
-```java
-public class XLibBundle implements Bundle, GuiceyBundle {
-    public void initialize(Bootstrap<?> bootstrap) {...}
-    public void initialize(GuiceyBootstrap bootstrap){...}
-    public void run(Environment environment) {...}
-}
-```
-
-When active, all registered bundles are checked if they implement `GuiceyBundle`.
-Also, works with dropwizard `ConfiguredBundle`.
+When active, all registered dropwizard bundles are checked if they implement `GuiceyBundle`.
+Works with both `Bundle` and `ConfiguredBundle` dropwizard bundle types. 
 
 !!! warning 
     Don't assume if guicey bundle's `initialize` method will be called before/after dropwizard bundle's `run` method. 
