@@ -47,6 +47,7 @@ like ConfigurationAwareModule to set configuration object into module before inj
 Guicey always apply it's own module (`GuiceBootstrapModule`) to injector. This module 
 adds all extra bindings (for dropwizard and jersey objects).  
 
+* `io.dropwizard.setup.Bootstrap` 
 * `io.dropwizard.Configuration` 
 * `io.dropwizard.setup.Environment`
 
@@ -405,7 +406,7 @@ know what was chosen.
 HK2 usage is highly dependent on HK2-guice-bridge presence and with option we can verify it:
 
 ```java
-Preconditions.checkState(options.option(GuiceyOptions.UseHkBridge), 
+Preconditions.checkState(options.get(GuiceyOptions.UseHkBridge), 
                             "HK2 guice bridge is required!")
 ``` 
 
