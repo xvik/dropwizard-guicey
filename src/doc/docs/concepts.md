@@ -17,19 +17,63 @@ Guicey creates injector at **run phase** to allow using configuration (and envir
 ### Guice module
 
 But gucie modules are registered in initialization phase (modules registered in GuiceBundle), when configuration is
-no available. To overcome this, guicey provides marker interfaces like ConfigurationAwareModule 
-to set configuration object into module before injector creation.
+no available. To overcome this, guicey provides [marker interfaces](guide/module-autowiring.md) 
+like ConfigurationAwareModule to set configuration object into module before injector creation.
 
 !!! tip
-    If possible, use `DropwizardAwareModule` as base module class to avoid boilerplate 
+    If possible, use `DropwizardAwareModule` as base module class to avoid boilerplate
+    ```java
+    public class SampleModule extends DropwizardAwareModule<Configuration> {
+    
+        @Override
+        protected void configure() {
+            configuration() // access configuration        
+            environment() // access environment
+            bootstrap()  // access dropwizard bootstrap
+            configuratonTree() // configuration as tree of values
+            confuguration(Class) // unique sub configuration
+            configuration(String) // configuration value by yaml path
+            configurations(Class) // sub configuration objects by type (including subtypes)
+            options() // access guicey options
+        }
+    }
+    ```  
 
 !!! note
     This works only for top level modules registered in root bundle or guicey bundles. 
 
 ### Bindings
 
-Guicey always apply it's own `GuiceBootstrapModule` to injector. This module 
-adds all extra bindings (dropwizard and jersey objects).  
+Guicey always apply it's own module (`GuiceBootstrapModule`) to injector. This module 
+adds all extra bindings (for dropwizard and jersey objects).  
+
+* `io.dropwizard.Configuration` 
+* `io.dropwizard.setup.Environment`
+
+Bindings below are not immediately available as HK2 context [starts after guice](guide/lifecycle.md):
+
+* `javax.ws.rs.core.Application`
+* `javax.ws.rs.ext.Providers`
+* `org.glassfish.hk2.api.ServiceLocator`
+* `org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider`
+
+Request-scoped bindings:
+
+* `javax.ws.rs.core.UriInfo`
+* `javax.ws.rs.container.ResourceInfo`
+* `javax.ws.rs.core.HttpHeaders`
+* `javax.ws.rs.core.SecurityContext`
+* `javax.ws.rs.core.Request`
+* `org.glassfish.jersey.server.ContainerRequest`
+* `org.glassfish.jersey.server.internal.process.AsyncContext`
+* `javax.servlet.http.HttpServletRequest`
+* `javax.servlet.http.HttpServletResponse`
+
+!!! important ""
+    Request scoped objects must be used through provider:
+    ```java
+    @Inject Provider<HttpServletRequest> requestProvider;
+    ```
 
 ### Configuration bindings
 
@@ -111,6 +155,9 @@ The same way, `MangedInstaller` recognize `MyManaged` as managed extension (by i
 !!! summary
     With classpath scan you dont need to do anything to install extension and in manual mode 
     you only need to specify extension classes. 
+    
+!!! tip
+    Most installer implementations are very simple, so you can easily understand how it works.    
 
 ### Custom extensions
 
@@ -214,6 +261,14 @@ inside project at all.
 
 This makes guicy bundles mostly usable for 3rd party integrations (or core modules extraction for large projects), 
 where you can't (and should not) rely on class path scan and must declare all installers and extensions manually.
+
+Guicey itself comes with multiple bundles: 
+
+* [Core installers bundle](guide/bundles.md#core-installers-bundle) - installers, enabled by default
+* [Web installers bundle](guide/bundles.md#web-installers-bundle) - web annotations installers for servlets and filters
+* [HK2/guice scope diagnostic bundle](guide/bundles.md#hk2-debug-bundle) - enables instantiation tracking to catch extensions instantiation by both (or just not intended) DI
+* [Diagnostics bundle](guide/bundles.md#diagnostic-bundle) - configuration diagnostic reporting to look under the hood of configuration process
+
     
 ### Lookup
 
@@ -324,16 +379,15 @@ Now all guice injector will use your service (FixedXService) instead of XService
   
 ## Options
 
-Dropwizard configuration is user specific (means user may (and should) change it). But sometimes
-developers needs some (probably hidden) low level flags to change code behaviour.
-For example, it could be important opinionated behaviour change or simply enabling 
-debug opions (or test specific features). 
+Dropwizard configuration covers most configuration cases, except development specific cases.
+For example, some trigger may be useful during application testing and be useless on production (so no reason to put it in configuration).
+Other example is an ability of low level tuning for 3rd party bundles.
 
-Most commonly such cases are solved with system properties, environment variables or 
-static boolean flags. Instead, guicey introduce unified options concept.
+!!! note ""
+    [Options](guide/options.md) are developer configurations: either required only for development or triggers set during development 
+    and not intended to be changed later.
 
-* Options are declared with enum (each enum represents options group) to grant safety.
-Also, option declares it's value type.
+* Options are declared with enum (each enum represents options group) with value type declaration to grant safety.
 * Option could be set only in main bundle (in your application class)
 * You can access options anywhere: guice module, guicey bundle, and in any guice service by injecting special service
 * Options report is included into diagnostic report so you can see all option values.
@@ -345,10 +399,10 @@ That means you have access to all these application configurations from anywhere
 
 Another good example is InstallersOptions.JerseyExtensionsManagedByGuice which changes the way 
 jersey extensions are handled: with guice or with HK2. This is developer time solution and must be
-choose by developer (because it affects behaviour a lot). Thanks to generic mechanism other bundles could
+selected by developer (because it affects behaviour a lot). Thanks to generic mechanism other bundles could
 know what was chosen.
 
-HK2 usage is highly dependent on HK2-guice-bridge presence and with option we can prevent running without it:
+HK2 usage is highly dependent on HK2-guice-bridge presence and with option we can verify it:
 
 ```java
 Preconditions.checkState(options.option(GuiceyOptions.UseHkBridge), 
@@ -381,11 +435,11 @@ Now you can run application with `-Dmyprop=value` and this value will be mapped 
     
 ## You don't need to remember all this
 
-Everything guicey can could be revealed from main bundle methods. So you don't 
+All guicey features could be revealed from main bundle methods. So you don't 
 need to remember everything - just look methods.
 
 There is a special group of `print[Something]` methods, which are intended to help
-you understand internal state (and help debugging).
+you understand internal state (and help with debugging).
  
 As you have seen, real life configuration could be quite complex because you may have many extensions, observed with classpath scan,
 bundles, bundles installing other bundles, many gucie modules. Also, some bundles
@@ -398,21 +452,54 @@ Out of the box, guicey could print all this into console, you just need to add `
 
 ```java
 bootstrap.addBundle(GuiceBundle.builder()
-            .modules(new XModule())
             .printDiagnosticInfo()
             .build())
 ```
 
+You can see additional logs in console like:
+
+```
+    GUICEY started in 453.3 ms
+    │   
+    ├── [0,88%] CLASSPATH scanned in 4.282 ms
+    │   ├── scanned 5 classes
+    │   └── recognized 4 classes (80% of scanned)
+    │   
+    ├── [4,2%] COMMANDS processed in 19.10 ms
+    │   └── registered 2 commands
+    │   
+    ├── [6,4%] BUNDLES processed in 29.72 ms
+    │   ├── 2 resolved in 8.149 ms
+    │   └── 6 processed
+    ...
+    
+    
+    APPLICATION
+    ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       
+    ├── module     FooModule                    (r.v.d.g.d.s.features)     
+    ├── module     GuiceBootstrapModule           (r.v.d.guice.module)       
+    ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)      
+    │   
+    ├── Foo2Bundle                   (r.v.d.g.d.s.bundle)       
+    │   ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       *IGNORED
+    │   ├── module     FooBundleModule              (r.v.d.g.d.s.bundle)       
+    │   ├── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)      
+    ...
+```
+
+And [other logs](guide/diagnostic.md) giving you inside look on configuration.
+
 Other helpful reports:
-* printAvailableInstallers() - see all registered installers to know what features you can use
-* printConfigurationBindings() - show possible configuration bindings (by path and unique objects)
-* printCustomConfigurationBindings() - the same as above, but without dropwizard configuration (shorter report)
-* printLifecyclePhases() - indicate running steps in logs
-* printLifecyclePhasesDetailed() - very detailed startup reports 
+* `printAvailableInstallers()` - see all registered installers to know what features you can use
+* `printConfigurationBindings()` - show available configuration bindings (by path and unique objects)
+* `printCustomConfigurationBindings()` - the same as above, but without dropwizard configuration (shorter report)
+* `printLifecyclePhases()` - indicate running steps in logs
+* `printLifecyclePhasesDetailed()` - very detailed startup reports 
 
 ## Not mentioned
 
 * Dropwizard commands support (automatic commands installation with classpath scan)
+* Hiding classes from classpath scan
 * Integration tests support
 * Lifecycle events 
 * Special web installers (to use instead of guice ServletModule)
