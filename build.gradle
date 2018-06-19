@@ -56,7 +56,7 @@ dependencies {
     compile 'com.google.inject:guice'
     compile 'com.google.inject.extensions:guice-servlet'
     compile 'io.dropwizard:dropwizard-core'
-    compile 'ru.vyarus:generics-resolver:3.0.0-SNAPSHOT'
+    compile 'ru.vyarus:generics-resolver:3.0.0'
 
     testCompile 'io.dropwizard:dropwizard-auth'
     testCompile 'org.glassfish.jersey.ext:jersey-proxy-client'
