@@ -110,61 +110,60 @@ class BindingsReportTest extends Specification {
     │   └── smth: String = null
     │
     ├── logging: DefaultLoggingFactory
+    │   ├── appenders: SingletonImmutableList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
     │   ├── level: String = "INFO"
-    │   ├── loggers: RegularImmutableMap<String, JsonNode> = {}
-    │   └── appenders: SingletonImmutableList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+    │   └── loggers: RegularImmutableMap<String, JsonNode> = {}
     │
     ├── metrics: MetricsFactory
     │   ├── frequency: Duration = 1 minute
     │   └── reporters: RegularImmutableList<ReporterFactory> = []
     │
     └── server: DefaultServerFactory
-        ├── maxThreads: Integer = 1024
-        ├── minThreads: Integer = 8
-        ├── maxQueuedRequests: Integer = 1024
-        ├── idleThreadTimeout: Duration = 1 minute
-        ├── nofileSoftLimit: Integer = null
-        ├── nofileHardLimit: Integer = null
-        ├── gid: Integer = null
-        ├── uid: Integer = null
-        ├── user: String = null
-        ├── group: String = null
-        ├── umask: String = null
-        ├── startsAsRoot: Boolean = null
-        ├── registerDefaultExceptionMappers: Boolean = true
-        ├── detailedJsonProcessingExceptionMapper: Boolean = false
-        ├── shutdownGracePeriod: Duration = 30 seconds
-        ├── allowedMethods: HashSet<String> = [HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]
-        ├── enableThreadNameFilter: Boolean = true
-        ├── applicationConnectors: ArrayList<ConnectorFactory> = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
         ├── adminConnectors: ArrayList<ConnectorFactory> = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
+        ├── adminContextPath: String = "/"
         ├── adminMaxThreads: Integer = 64
         ├── adminMinThreads: Integer = 1
+        ├── allowedMethods: HashSet<String> = [HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]
+        ├── applicationConnectors: ArrayList<ConnectorFactory> = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
         ├── applicationContextPath: String = "/"
-        ├── adminContextPath: String = "/"
-        │
-        ├── serverPush: ServerPushFilterFactory
-        │   ├── enabled: Boolean = false
-        │   ├── associatePeriod: Duration = 4 seconds
-        │   ├── maxAssociations: Integer = 16
-        │   ├── refererHosts: List<String> = null
-        │   └── refererPorts: List<Integer> = null
-        │
+        ├── detailedJsonProcessingExceptionMapper: Boolean = false
+        ├── enableThreadNameFilter: Boolean = true
+        ├── gid: Integer = null
+        ├── group: String = null
+        ├── idleThreadTimeout: Duration = 1 minute
+        ├── maxQueuedRequests: Integer = 1024
+        ├── maxThreads: Integer = 1024
+        ├── minThreads: Integer = 8
+        ├── nofileHardLimit: Integer = null
+        ├── nofileSoftLimit: Integer = null
+        ├── registerDefaultExceptionMappers: Boolean = true
         ├── rootPath: Optional<String> = Optional.empty
+        ├── shutdownGracePeriod: Duration = 30 seconds
+        ├── startsAsRoot: Boolean = null
+        ├── uid: Integer = null
+        ├── umask: String = null
+        ├── user: String = null
+        │
+        ├── gzip: GzipHandlerFactory
+        │   ├── bufferSize: Size = 8 kilobytes
+        │   ├── compressedMimeTypes: Set<String> = null
+        │   ├── deflateCompressionLevel: Integer = -1
+        │   ├── enabled: Boolean = true
+        │   ├── excludedUserAgentPatterns: HashSet<String> = []
+        │   ├── gzipCompatibleInflation: Boolean = true
+        │   ├── includedMethods: Set<String> = null
+        │   ├── minimumEntitySize: Size = 256 bytes
+        │   └── syncFlush: Boolean = false
         │
         ├── requestLog: LogbackAccessRequestLogFactory
         │   └── appenders: SingletonImmutableList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
         │
-        └── gzip: GzipHandlerFactory
-            ├── enabled: Boolean = true
-            ├── minimumEntitySize: Size = 256 bytes
-            ├── bufferSize: Size = 8 kilobytes
-            ├── excludedUserAgentPatterns: HashSet<String> = []
-            ├── compressedMimeTypes: Set<String> = null
-            ├── includedMethods: Set<String> = null
-            ├── deflateCompressionLevel: Integer = -1
-            ├── gzipCompatibleInflation: Boolean = true
-            └── syncFlush: Boolean = false
+        └── serverPush: ServerPushFilterFactory
+            ├── associatePeriod: Duration = 4 seconds
+            ├── enabled: Boolean = false
+            ├── maxAssociations: Integer = 16
+            ├── refererHosts: List<String> = null
+            └── refererPorts: List<Integer> = null
 
 
     Configuration object bindings:
@@ -308,49 +307,48 @@ class BindingsReportTest extends Specification {
     ComplexGenericCase (visible paths)
     │
     ├── logging: DefaultLoggingFactory
+    │   ├── appenders: SingletonImmutableList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
     │   ├── level: String = "INFO"
-    │   ├── loggers: RegularImmutableMap<String, JsonNode> = {}
-    │   └── appenders: SingletonImmutableList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+    │   └── loggers: RegularImmutableMap<String, JsonNode> = {}
     │
     ├── metrics: MetricsFactory
     │   ├── frequency: Duration = 1 minute
     │   └── reporters: RegularImmutableList<ReporterFactory> = []
     │
     └── server: DefaultServerFactory
-        ├── maxThreads: Integer = 1024
-        ├── minThreads: Integer = 8
-        ├── maxQueuedRequests: Integer = 1024
-        ├── idleThreadTimeout: Duration = 1 minute
-        ├── registerDefaultExceptionMappers: Boolean = true
-        ├── detailedJsonProcessingExceptionMapper: Boolean = false
-        ├── shutdownGracePeriod: Duration = 30 seconds
-        ├── allowedMethods: HashSet<String> = [HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]
-        ├── enableThreadNameFilter: Boolean = true
-        ├── applicationConnectors: ArrayList<ConnectorFactory> = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
         ├── adminConnectors: ArrayList<ConnectorFactory> = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
+        ├── adminContextPath: String = "/"
         ├── adminMaxThreads: Integer = 64
         ├── adminMinThreads: Integer = 1
+        ├── allowedMethods: HashSet<String> = [HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]
+        ├── applicationConnectors: ArrayList<ConnectorFactory> = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
         ├── applicationContextPath: String = "/"
-        ├── adminContextPath: String = "/"
-        │
-        ├── serverPush: ServerPushFilterFactory
-        │   ├── enabled: Boolean = false
-        │   ├── associatePeriod: Duration = 4 seconds
-        │   └── maxAssociations: Integer = 16
-        │
+        ├── detailedJsonProcessingExceptionMapper: Boolean = false
+        ├── enableThreadNameFilter: Boolean = true
+        ├── idleThreadTimeout: Duration = 1 minute
+        ├── maxQueuedRequests: Integer = 1024
+        ├── maxThreads: Integer = 1024
+        ├── minThreads: Integer = 8
+        ├── registerDefaultExceptionMappers: Boolean = true
         ├── rootPath: Optional<String> = Optional.empty
+        ├── shutdownGracePeriod: Duration = 30 seconds
+        │
+        ├── gzip: GzipHandlerFactory
+        │   ├── bufferSize: Size = 8 kilobytes
+        │   ├── deflateCompressionLevel: Integer = -1
+        │   ├── enabled: Boolean = true
+        │   ├── excludedUserAgentPatterns: HashSet<String> = []
+        │   ├── gzipCompatibleInflation: Boolean = true
+        │   ├── minimumEntitySize: Size = 256 bytes
+        │   └── syncFlush: Boolean = false
         │
         ├── requestLog: LogbackAccessRequestLogFactory
         │   └── appenders: SingletonImmutableList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
         │
-        └── gzip: GzipHandlerFactory
-            ├── enabled: Boolean = true
-            ├── minimumEntitySize: Size = 256 bytes
-            ├── bufferSize: Size = 8 kilobytes
-            ├── excludedUserAgentPatterns: HashSet<String> = []
-            ├── deflateCompressionLevel: Integer = -1
-            ├── gzipCompatibleInflation: Boolean = true
-            └── syncFlush: Boolean = false
+        └── serverPush: ServerPushFilterFactory
+            ├── associatePeriod: Duration = 4 seconds
+            ├── enabled: Boolean = false
+            └── maxAssociations: Integer = 16
 """
     }
 

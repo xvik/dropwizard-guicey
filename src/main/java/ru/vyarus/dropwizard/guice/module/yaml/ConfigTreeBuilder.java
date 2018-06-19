@@ -162,6 +162,10 @@ public final class ConfigTreeBuilder {
                         item.getValue(), subContext);
             }
         }
+        if (root != null) {
+            // simple properties goes up and composite objects go lower (both groups sorted alphabetically)
+            root.getChildren().sort(Comparator.comparing(o -> (o.isCustomType() ? 'b' : 'a') + o.getPath()));
+        }
         return content;
     }
 
