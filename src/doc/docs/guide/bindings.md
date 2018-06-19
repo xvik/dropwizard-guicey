@@ -372,6 +372,41 @@ INFO  [2018-06-18 05:55:03,532] ru.vyarus.dropwizard.guice.module.yaml.report.De
             @Config("server.user") String = null
 ```
 
+### Introspected configuration
+
+`ConfigurationTree` object provides access for introspected configuration tree:
+
+* `getRootTypes()` - all classes in configuration hierarchy (including interfaces)
+* `getPaths()` - all paths (including all steps ("sub", "sub.value"))
+* `getUniqueTypePaths()` - paths of unique sub configuration types
+
+Each path item (`ConfigPath`) contains:
+* Root path reference ("sub.value" reference "sub")
+* Child sub-paths ("sub" reference "sub.value")
+* Declaration class (type used in configuration class)
+* Value type (type of actual value; when value null - declaration type (but they still could be different))
+* Current path name
+* Current path value
+* Generics for declaration and value types (may be incomplete for value type)
+* Custom type marker: contains sub paths or just looks like sub configuration
+* Declaration type (class where last property was declared)
+
+You can traverse up or down from any path (tree structure).
+
+`ConfigurationTree` provides basic search methods (more as usage example):
+* `findByPath(String)` - search path by case-insensitive match
+* `findAllByType(Class)` - find all paths with assignable declared value
+* `findAllFrom(Class<? extends Configuration>)` - find all patsh, started in specified configuration class
+* `findAllRootPaths()` - get all root paths (1st level paths) 
+* `findAllRootPathsFrom(Class<? extends Configuration>)` - all 1st level paths of configuration class
+* `valueByPath(String)` - return path value or null if value null or path not exists
+* `valuesByType(Class)` - all not null values with assignable type
+* `valueByType(Class)` - first not null value with assignable type
+* `valueByUniqueDeclaredType(Class)` - value of unique sub conifguration or null if value is null or config is not unique
+
+Paths are sorted by configuration class (to put custom properties upper) and by path name
+(for predictable paths order).
+
 ## Environment binding
 
 Dropwizard `io.dropwizard.setup.Environment` is bound to guice context.

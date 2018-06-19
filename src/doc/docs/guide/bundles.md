@@ -30,6 +30,10 @@ bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
 );
 ```
 
+!!! tip
+    `GuiceyBootstrap` object used not only for registration, but also provides access to
+    `Bootstrap`, `Configuration`, `ConfigurationTree`, `Environment` and `Options` objects.
+
 Bundles may be used to group application features: e.g. ResourcesBundle, TasksBundle (for example, when auto-scan not enabled to decompose configuration).
 
 Bundles are transitive - bundle can install other bundles. 
@@ -230,3 +234,173 @@ bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
 ```
 
 Here two lookup mechanisms registered (property lookup is not registered and will not be implicitly added).
+
+## Options
+
+[Options](options.md) could be used in guice module to access guicey configurations:
+
+```java
+public class MyModule extends DropwizardAwareModule<MyConfiguration> {
+    @Override
+    protected void configure() {
+        // empty when guicey servlet support is dasabled
+        if (options.<EnumSet>get(GuiceyOptions.GuiceFilterRegistration).isEmtpy()) {
+            // do nothing
+        } else {
+            // register servlet module
+        }
+    }
+}
+``` 
+
+Or it could be some [custom options](options.md#custom-options) usage.
+
+!!! note
+    If you are going to register module inside guicey bundle, you can simply resolve
+    option value inside guicey bundle and pass it to module directly.
+
+## Configuration
+
+### Unique feature config
+
+When working with re-usable bundles, it could be handy to rely on unique configuration 
+object:
+
+```java
+public class XFeatureBundle implements GuiceyBundle {
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {
+        XFeatureConfig conf = bootstrap.configuration(XFeatureConfig.class);
+        ...
+    }
+}
+``` 
+
+Note that this bundle doesn't known exact type of user configuration, it just 
+assumes that XFeatureConfig is declared somewhere in configuration (on any level)
+just once. For example:
+
+```java
+public class MyConfig extends Configuration {
+    
+    @JsonProperty
+    private XFeatureConfig xfeature;
+    
+    ...
+}
+```
+
+!!! important
+    Object uniqueness checked by exact type match, so if configuration also 
+    contains some extending class (`XFeatureConfigExt`) it will be different unique config. 
+
+### Access by path
+
+When you are not sure that configuration is unique, you can rely on exact path definition:
+
+```java
+public class XFeatureBundle implements GuiceyBundle {
+    private String path;
+    
+    public XFeatureBundle(String path) {
+        this.path = path;
+    } 
+        
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {
+        XFeatureConfig conf = bootstrap.configuration(path);
+        ...
+    }
+}
+```
+
+Path is declared by bundle user, who knows required configuration location:
+
+```java
+GuiceBundle.builder()
+    .bundles(new XFeatureBundle("sub.feature"))
+    ...
+    .build()
+``` 
+
+Where 
+
+```java
+public class MyConfig extends Configuration {
+    
+    @JsonProperty
+    private SubConfig sub = { // pseudo code to combine class declarations
+         @JsonProperty
+         private XFeatureConfig feature;   
+    }
+    
+    ...
+}
+```
+
+!!! warning
+    Remember that you can't register 2 bundles with the same class
+
+### Multiple configs
+
+In case, when multiple config objects could be declared in user configuration,
+you can access all of them: 
+
+```java
+public class XFeatureBundle implements GuiceyBundle {
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {
+        List<XFeatureConfig> confs = configurations(XFeatureConfig.class);
+        ...
+    }
+}
+``` 
+
+For configuration
+
+```java
+public class MyConfig extends Configuration {
+    
+    @JsonProperty
+    private XFeatureConfig xfeature;
+    @JsonProperty
+    private XFeatureConfig xfeature2;
+    
+    ...
+}
+```
+
+It wil return both objects: `[xfeature, xfeature2]`
+
+!!! important
+    In contrast to unique configurations, this method returns all subclasses too.
+    So if there are `XFeatureConfigExt` declared somewhere it will also be returned.
+
+### Custom configuration analysis
+
+In all other cases (with more complex requirements) you can use `ConfigurationTree` object which
+represents introspected configuration paths.  
+
+```java
+public class XFeatureBundle implements GuiceyBundle {
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {
+         // get all properties of custom configuration (ignoring properties from base classes)
+        List<ConfigPath> paths = bootstrap.configurationTree()
+                .findAllRootPathsFrom(MyConfig.class);
+    
+        // search for not null values of marked (annotated) classes            
+        List markedTypes = paths.stream()
+            .filter(it -> it.getValue() != null 
+                    && it.getType().getValueType().hasAnnotation(MyMarker.class))
+            .map(it -> it.getValue())
+            .collect(Collectors.toList());
+        ...
+    }
+}
+```
+
+In this example, bundle search for properties declared directly in MyConfig configuration
+class with not null value and annotated (classes annotated, not properties!) with custom marker (`@MyMarker`).  
+
+See introspected configuration [structure description](bindings.md#introspected-configuration)
