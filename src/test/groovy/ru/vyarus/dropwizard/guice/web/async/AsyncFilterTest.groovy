@@ -55,9 +55,14 @@ class AsyncFilterTest extends Specification {
             final String thread = Thread.currentThread().name
             final AsyncContext context = request.startAsync()
             context.start({
-                assert thread != Thread.currentThread().name
-                println "async servlet"
-                context.getResponse().writer.write("done!")
+                Thread.sleep(200)
+                if (thread != Thread.currentThread().name) {
+                    context.getResponse().writer.write("done!")
+                } else {
+                    context.getResponse().writer.write("ERROR: async executed at the same thread " + thread)
+                }
+                println "async filter"
+
                 context.complete()
             })
         }
