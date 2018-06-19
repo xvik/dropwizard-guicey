@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.yaml;
 import io.dropwizard.Configuration;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationTreeAwareModule;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -59,7 +60,7 @@ public class ConfigurationTree {
      * @return configuration hierarchy classes (including {@link io.dropwizard.Configuration}) and custom interfaces
      */
     public List<Class> getRootTypes() {
-        return rootTypes;
+        return new ArrayList<>(rootTypes);
     }
 
     /**
@@ -74,7 +75,7 @@ public class ConfigurationTree {
      * @return all configuration value paths (including all steps, e.g. "sub", "sub.smth")
      */
     public List<ConfigPath> getPaths() {
-        return paths;
+        return new ArrayList<>(paths);
     }
 
     /**
@@ -88,7 +89,7 @@ public class ConfigurationTree {
      * @return list of all configuration value paths, containing unique custom objects
      */
     public List<ConfigPath> getUniqueTypePaths() {
-        return uniqueTypePaths;
+        return new ArrayList<>(uniqueTypePaths);
     }
 
 
