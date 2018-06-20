@@ -117,3 +117,26 @@ INFO  [2016-08-21 23:49:49,535] ru.vyarus.dropwizard.guice.module.installer.feat
         ONE        (ru.vyarus.dropwizard.guice.support.feature.DummyNamedPlugin1)
         TWO        (ru.vyarus.dropwizard.guice.support.feature.DummyNamedPlugin2)
 ```
+
+### Generics
+
+Guicey brings [generics-resolver](https://github.com/xvik/generics-resolver) which you 
+can use in installers implementation.
+
+For example, to get extension interface parametrization:
+
+```java
+interface Extension<V> {}
+
+class ListExtension implements Extension<List<String>> {}
+
+GenericsResolver.resolve(ListExtension.class)
+        .type(Extension.class)
+        .genericType("V") == List<String> // (ParameterizedType) 
+```
+
+Guicey itself use it for:
+* types resolution during configuration introspection (`ConfigTreeBuilder`)
+* to introspect type hierarchy and recognize all jersey extensions (`JerseyProviderInstaller`)
+* format type for console reporting (`ProviderReporter`) 
+* bing jersey extensions to correct types (`JerseyBinding`) 
