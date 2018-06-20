@@ -1,5 +1,15 @@
 # Bindings
 
+!!! note
+    Guicey could be used with the following strict binder options:
+    ```java
+    binder().disableCircularProxies()
+    binder().requireExactBindingAnnotations()
+    binder().requireExplicitBindings()
+    ```
+
+## Registered bindings
+
 Guicey binds:
 
 * Dropwizard objects:
@@ -12,7 +22,7 @@ Guicey binds:
 * Guicey special objects
 
 
-## Configuration
+### Configuration
 
 `Configuration` bound to guice as: 
 
@@ -64,7 +74,7 @@ Interface binding will ignore interfaces in `java.*` or `groovy.*` packages (to 
     Consider using direct sub configuration object binding (see below) instead of marker interface
     if object uniqueness is guaranteed in user configuration.
 
-### Configuration tree
+#### Configuration tree
 
 Guicey introspects configuration instance using jackson serialization api. That means only values
 visible for jackson serialization will be presented.
@@ -94,7 +104,7 @@ It could be used for config analysis, reporting or something else.
 
 For simple cases, direct configuration value bindings could be used (see below).
 
-### Unique sub configuration
+#### Unique sub configuration
 
 It is quite common to group configuration properties into sub objects like:
 
@@ -150,7 +160,7 @@ public class FeatureXService {
     DropwizardAwareModule#configuration(SubConfig.class)
     ```    
 
-### Configuration by path
+#### Configuration by path
 
 All visible configuration paths values are directly bindable:
 
@@ -204,7 +214,7 @@ It is assumed that in such case value would be always present (some sort of prop
     You can declare you own additional bindings using `ConfigurationTree` (accessible from guice module), 
     which contains all paths information (including declaration and actual types with generics).
 
-### Configuration bindings report
+#### Configuration bindings report
 
 You can print all available configuration bindings with values:
 
@@ -372,7 +382,7 @@ INFO  [2018-06-18 05:55:03,532] ru.vyarus.dropwizard.guice.module.yaml.report.De
             @Config("server.user") String = null
 ```
 
-### Introspected configuration
+#### Introspected configuration
 
 `ConfigurationTree` object provides access for introspected configuration tree:
 
@@ -407,7 +417,7 @@ You can traverse up or down from any path (tree structure).
 Paths are sorted by configuration class (to put custom properties upper) and by path name
 (for predictable paths order).
 
-## Environment binding
+### Environment binding
 
 Dropwizard `io.dropwizard.setup.Environment` is bound to guice context.
 
@@ -432,7 +442,7 @@ It's not the best example, but it illustrates usage (and such things usually hel
 
 See also [authentication configuration example](../examples/authentication.md).
 
-## Jersey specific bindings
+### Jersey specific bindings
 
 Jersey bindings are not immediately available, because HK2 context starts after guice, 
 so use `Provider` to inject these bindings.
@@ -454,7 +464,7 @@ Request-scoped bindings:
 * `org.glassfish.jersey.server.ContainerRequest`
 * `org.glassfish.jersey.server.internal.process.AsyncContext`
 
-## Request and response
+### Request and response
 
 By default, `GuiceFilter` is enabled on both contexts (admin and main). So you can inject
 request and response objects and use under filter, servlet or resources calls (guice filter wraps all web interactions).
@@ -475,7 +485,7 @@ Example usage:
 @Inject Provider<HttpServletRequest> requestProvider;
 ```
 
-## Options
+### Options
 
 `ru.vyarus.dropwizard.guice.module.context.option.Options` binding provides access to [guicey options](options.md):
 ```java
@@ -489,7 +499,7 @@ Preconditions.checkState(options.get(GuiceyOptions.UseHkBridge),
                                  "HK2 guice bridge is required!")
 ```
 
-## Guicey configuration
+### Guicey configuration
 
 `ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo` binding provides access
 to [guicey configuration details](diagnostic.md):
@@ -497,3 +507,84 @@ to [guicey configuration details](diagnostic.md):
 ```java
 @Inject GuiceyConfigurationInfo info
 ```
+
+## Binding scope
+
+As you know, guice assume prototype scope by default (when no scope annotation declared).
+
+Guice scope annoattions:
+* `@Singleton` - single instance per context
+* `@RequestScoped` - object per request (if guice filter support is not disabled)
+* `@Prototype` - prototype scope annotation (for jersey services)
+
+Jersey extensions ([resources](../installers/resource.md), [providers](../installers/jersey-ext.md)) **force
+singleton scope** for extensions without explicit binding annotation (but this could be disabled with option).
+Use explicit scope annotations where singletons are not required.
+
+### Request scope transition
+
+!!! note ""
+    This is guice feature, it is just mentioned here.
+
+Guice could access request scoped bindings only in current thread. If you need to access 
+request scoped binding in different thread, you need to transfer request scope into that thread:
+
+```java
+@Singleton 
+public class RequestBean {
+
+    // provider will not work in other thread because of request scope
+    @Inject
+    Provider<UriInfo> uri;
+    
+    public void doSomethingInRequestScope() {
+            // wrap logic that require request scope 
+            Callable<String> action = ServletScopes.transferRequest(() -> {
+                // access request scoped binding in different thread 
+                return uri.get().getQueryParameters().getFirst("q");
+            });            
+            CompletableFuture.runAsync(() -> {
+                try {
+                    // execute action in different thread
+                    action.call();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+    }
+}            
+```
+
+### Extensions initialisation
+
+All guicey extensions are bound to guice context (`.bind(ExtType)`, to be compatible with `.requireExplicitBindings()` strict option) 
+that means that all singleton scoped extensions will be initialized in time of injector creation
+(because by default, `Stage.PRODCUTION` used).
+
+!!! tip
+    You can change guice injector stage to `Stage.DEVELOPMENT` in the main bundle
+    to avoid singletons initialization during context creation (only `.asEagerSingleton()`)
+    bindings will be initialized). But don't do it without a *really good reason*
+    (for example, legacy codebase required development stage).        
+
+Also, you can avoid extension binding by annotating it with `@LazyBinding`: this 
+way extension will not be bound to guice context and so will initialize only
+on first usage (obtaining from context).
+
+### HK2 scope
+
+By default, all jersey extensions (resources, providers) are managed by guice. But you can switch it to be managed by HK2 by default
+
+```java
+GuiceBundle.builder()
+    ...
+   .useHK2ForJerseyExtensions()
+   .build() 
+```
+
+!!! warning
+    You will not be able to use guice AOP on HK2 managed beans. 
+    
+Depening on default mode selected, you can use annotations to change extension DI:
+* `@HK2Managed` - extension managed by hk2 (useful if in default mode when all beans created by guice)
+* `@GuiceManaged` - extension managed by guice (default, useful only when `.useHK2ForJerseyExtensions()` enabled)       
