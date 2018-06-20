@@ -179,7 +179,7 @@ Also, you can inject request specific objects [as method parameter](installers/r
 
 ### Add managed
 
-[Dropwizard managed objects](http://www.dropwizard.io/1.1.0/docs/manual/core.html#managed-objects) are extremely useful for managing resources.
+[Dropwizard managed objects](http://www.dropwizard.io/1.3.0/docs/manual/core.html#managed-objects) are extremely useful for managing resources.
 
 Create simple managed implementation:
 

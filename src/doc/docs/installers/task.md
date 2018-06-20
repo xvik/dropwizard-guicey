@@ -3,7 +3,7 @@
 !!! summary ""
     CoreInstallersBundle / [TaskInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/TaskInstaller.java)        
 
-Installs [dropwizard tasks](http://www.dropwizard.io/1.1.0/docs/manual/core.html#tasks).
+Installs [dropwizard tasks](http://www.dropwizard.io/1.3.0/docs/manual/core.html#tasks).
 
 ## Recognition
 
