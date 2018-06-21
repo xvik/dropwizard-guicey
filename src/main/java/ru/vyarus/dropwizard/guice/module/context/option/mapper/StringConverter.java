@@ -17,7 +17,6 @@ import java.util.stream.StreamSupport;
  * <li>Double</li>
  * <li>Short</li>
  * <li>Byte</li>
- * <li>String</li>
  * <li>Enum type value (when target type is exact enum type and string is enum constant)</li>
  * <li>Enum recognition (when target type is generic Enum and string is "fullEnumClass.constantName"</li>
  * </ul>
