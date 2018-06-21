@@ -1,34 +1,29 @@
 * Update to guice 4.2.0
     - remove guice-multibindings dependency as it's moved to guice core
-* Ability to disable: guicey bundles, guice modules (directly registered) and extensions through bundle builder
-* Add generic disable method to builder: disable(Predicate)
-* Add direct support for guice bindings override (using Modules.override() internally): bundle_builder.modulesOverride()
+* Add more disable items (mostly for tests): guicey bundles, guice modules (directly registered) and extensions:
+    - Guicey bundles disabled through main builder only: .disableBundles() 
+    - Other disable methods available in both main bundle and guicey bundles bootstrap:
+        - .disableModules(Class...) - disable guice modules
+        - .disableExtensions(Class...) - extensions disabling (for possible replacement) 
+        - generic disable method by predicate: .disable(Predicate) (for example, disable all extensions in package or all installed by some bundle etc.)
+* Add direct support for guice bindings override (using Modules.override() internally) to main bundle and guicey bundle bootstrap: 
+    .modulesOverride(Module...)
 * Support for configuration override in integration tests (#23):
     - New GuiceyConfigurator interface: configurator receive bundle builder instance after application configuration and so could modify configuration (with new disable* methods)
     - Junit:
-        * New rule GuiceyConfiguratorRule allows configurator definition 
+        - New rule GuiceyConfiguratorRule allows configurator definition 
     - Spock:
-        * New @UseGuiceyConfigurator extension allows base configrator definition (in base class)
-        * New attribute configurators in @UseGuiceyApp and @UseDropwizardApp extension to declare test-specific configurators
-* Add ConfigScope enum for special scopes description (to not remember special classes).
-    - Add shortcut methods in config related apis (Filters, Disables, GuiceyConfigurationInfo)        
-* (breaking) Config reporting api changes:
-    - Diagnostic report configuration method rename: DiagnosticConfig.printDisabledInstallers renamed to printDisabledItems and affects now all disabled items
-    - Diagnostic tree report could hide application scope in ContextTreeConfig.hideScopes(ConfigItems.Application)                      
-* Add guicey lifecycle events:
-    - New bundle's method `bundle.listen(GuiceyLifecycleListener)` allows listening for guicey lifecyle (16 events).
-      Events provide access to all possible internal state, available at this moment. It may be used to write instance specific
-      features (post processing) or just advaned logging
-    - New bundle's methods `bundle.pritLifecyclePhases()` and `bundle.pritLifecyclePhasesDetailed()` activates new DebugLifecycleListener 
-      and shows lifecycle stages directly in logs. Useful for debugging startup logic (to see when it was executed in lifecyle) and to better understand how guicey works.
-* Add OptionsAwareModule interface to let guice modules access options 
-* Add methods in GuiceyBundle's bootstrap object:
-    - bootstrap() - dropwizard bootstrap object
-    - modulesOverride(..) - overriding modules registration
-    - disableExtensions(..) - extensions disabling (for possible replacement)
-    - disableModules(..) - guice modules disabling
-    - listen(..) - lifecycle listener registration
-* Add OptionsMapper helper to simplify mapping of system properties and environment variables in builder.options()
+        - New @UseGuiceyConfigurator extension allows base configurator definition (in base class)
+        - New attribute configurators in @UseGuiceyApp and @UseDropwizardApp extensions to declare test-specific configurators                      
+* Add guicey lifecycle events (16 events): provide access to all possible internal state, available at this moment. 
+    It may be used to write instance specific features (post processing) or just advanced logging
+    - Add new method in main bundle or guicey bundle bootstrap: .listen(GuiceyLifecycleListener...)      
+    - Add guicey lifecycle phases reporting methods in main bundle (useful for debugging startup logic):
+        - .pritLifecyclePhases() - identify configuration stages in console logs 
+        - .pritLifecyclePhasesDetailed() -  identify lifecycle phases with detailed configuration report (in console logs) 
+* Improve options support:
+    - Add OptionsAwareModule interface to let guice modules access options
+    - Add OptionsMapper helper to simplify mapping of system properties and environment variables in builder.options() 
 * Add ability to manage jersey extensions with HK2 by default (#41). 
     It's like using @HK2Managed on all jersey-related beans (resources, filters etc). 
     This is useful, for example, if you get common to jersey resources features like @Context injection.   
@@ -37,11 +32,18 @@
     - Add @GuiceManaged annotation to mark exceptions in HK2-first mode (when @HK2Managed become useless).
        In guice-first mode this annotation is useless.    
     - Builder shortcut: .useHK2ForJerseyExtensions() to simplify HK2-first mode enabling.
-* Singleton scope is not forced for jersey extensions with explicit scoping annotation
-* Add option for disabling forced singletons for jersey extensions: InstallerOptions.ForceSingletonForJerseyExtensions
-* Add annotation for guice prototype scope: @Prototype. Useful to declare some jersey extensions as default-scoped even when forced singletons enabled
-* Fix guice request scope delegation support (ServletScopes.transferRequest) for jersey-manager request objects (#49)
-* Dropwizard configuration bindings enhanced:
+* Guice beans scope-related improvements:
+    - Singleton scope is not forced for jersey extensions with explicit scoping annotation 
+    - Add option for disabling forced singletons for jersey extensions: InstallerOptions.ForceSingletonForJerseyExtensions
+    - Add annotation for guice prototype scope: @Prototype. Useful to declare some jersey extensions as default-scoped even when forced singletons enabled
+    - Fix guice request scope delegation support (ServletScopes.transferRequest) for jersey-manager request objects (#49)
+* Add Bootstrap object accessible in GuiceyBundle: bootstrap() (return dropwizard bootstrap object)
+* Add ConfigScope enum for special scopes description (to not remember special classes).
+    - Add shortcut methods in config related apis (Filters, Disables, GuiceyConfigurationInfo)        
+* (breaking) Config reporting api changes:
+    - Diagnostic report configuration method rename: DiagnosticConfig.printDisabledInstallers renamed to printDisabledItems and affects now all disabled items
+    - Diagnostic tree report could hide application scope in ContextTreeConfig.hideScopes(ConfigItems.Application)
+* New configuration bindings:
     - Configuration object could be bound as:
         - any class from configuration class hierarchy (as before)
         - any class from hierarchy with @Config qualifier: @Inject @Config Configuration conf
@@ -56,17 +58,15 @@
         @Inject @Config ServerFactory serverCfg
     - ConfigurationTree - configuration introspection object is available for direct binding
         - and from GuiceyConfigurationInfo bean: getConfigurationTree()
-* Alternative configuration access:
-    - new configuration access methods available inside GuiceyBundle:
-        - configuration(String) - configuration value by path
-        - configuration(Class) - unique sub configuration object
-        - configurations(Class) - all sub configuration objects with assignable type (on any depth)
-        - configurationTree() - access raw introspection data for more complex searches                
-    - new ConfigurationTreeAwareModule marker interface for guice modules to access introspected configuration in modules
-        - DropwizardAwareModule implements configuration shortcuts like in guicey bundle
-* Reports to see available config bindings (before injector creation for potential problems solving):
-    - bundle.printConfigurationBindings() - log all bindings (including dropwizard Configuration) 
-    - bundle.printCustomConfigurationBindings() - log only custom bindings (from custom configuration classes)                  
+    - Alternative configuration access:
+        - New configuration access methods available inside GuiceyBundle and module (DropwizardAwareModule):
+            - configuration(String) - configuration value by path
+            - configuration(Class) - unique sub configuration object
+            - configurations(Class) - all sub configuration objects with assignable type (on any depth)
+            - configurationTree() - access raw introspection data for more complex searches                
+    - Reports to see available config bindings (before injector creation for potential problems solving) in main bundle:
+        - .printConfigurationBindings() - log all bindings (including dropwizard Configuration) 
+        - .printCustomConfigurationBindings() - log only custom bindings (from custom configuration classes)                  
 
 
 Also, release includes much improved [generics-resolver](https://github.com/xvik/generics-resolver/releases/tag/3.0.0) (3.0.0)                      
