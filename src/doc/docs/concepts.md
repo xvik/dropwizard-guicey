@@ -336,47 +336,13 @@ bootstrap.addBundle(GuiceBundle.builder()
 
 ## Guice overrides
 
-Guice allows you to override any binding with `Modules.override()`. 
+Guice allows you to [override any binding](guide/configuration.md#override-guice-bindings) with `Modules.override()`. 
 With it you can override any service in context. Guicey provides direct shortcut 
 for using this feature. 
 
 Mostly, this is handful for tests, but could be used to override some service, 
 registered by 3rd party module (probably registered by some bundle).
 
-Suppose we have 3rd party service with a bug, registered by 3rd party module:
-
-```java
-public class XModule extends AbstractModule {
-    protected void configure() {
-        bind(XService.class).asEagerSingleton();
-        ...
-    }
-}
-```
-
-We can override it with fixed version:
-
-```java
-public class FixXServiceModule extends AbstractModule {
-    protected void configure() {
-        // module with only one binding overriding original definition
-        bind(XService.class).to(FixedXService.class);        
-    }
-}
-
-public class FixedXService extends XService {
-    ...
-} 
-```
-
-```java
-bootstrap.addBundle(GuiceBundle.builder()
-            .modules(new XModule())
-            .modulesOverride(new FixXServiceModule())
-            .build())
-``` 
-
-Now all guice injector will use your service (FixedXService) instead of XService.
   
 ## Options
 
@@ -418,7 +384,8 @@ You can bind option to system property in order to introduce special "hidden" ap
 GuiceBuilder.builder()
     ...
     .options(new OptionsMapper()
-                    .prop("myprop", Myoptions.SomeOption))
+                    .prop("myprop", Myoptions.SomeOption)
+                    .map())
     .build()                
 ```
 
@@ -433,6 +400,7 @@ Now you can run application with `-Dmyprop=value` and this value will be mapped 
 !!! note
     You can map options from sys properties, environment variables or strings (obtained somewhere else).
     You can even allow mass binding to allow external definition of any option `.props("prefix")`.
+    See [options lookup](guide/options.md#options-lookup) doc.
     
 ## You don't need to remember all this
 

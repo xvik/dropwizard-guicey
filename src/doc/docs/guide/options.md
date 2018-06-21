@@ -101,13 +101,128 @@ To provide custom option value:
 
 ## Options lookup
 
-There is no lookup mechanism implementation, provided by default (for example, like [bundles lookup mechanism](bundles.md#bundle-lookup))
-because it's hard to do universal implementation considering wide range of possible values.
+Guicey provides simple mapping utility to map properties to system properties, environment variables 
+or simply bind from string (obtained manually somewhere). 
 
-But you can write your own lookup, simplified for your case.
+```java
+GuiceBundle.builder()
+    ...
+    .options(new OptionsMapper()
+                    .prop("myprop", Myoptions.SomeOption)
+                    .env("STAGE", GuiceyOptions.InjectorStage)
+                    .string(Myoptions.SomeOtherOption, "property value")
+                    .map()) 
+    .build()                
+```
 
-If you do, you can use `.options(Map<Enum, Object>)` method to set resolved options (note that contract simplified for just
-Enum, excluding Option for simpler usage, but still only option enums must be provided).
+Here:
+* Myoptions.SomeOption could be changed with "myprop" system property (`-Dmyprop=something`)
+* GuiceyOptions.InjectorStage could be changed with environment variable "STAGE"
+* Myoptions.SomeOtherOption set from string (string could be obtained somewhere else manually) 
+
+!!! important
+    Missed mappings are ignored: e.g. if system property or environment variable is not 
+    defined - option will remain default value (null will not be set!)
+
+### Supported conversions
+
+!!! note ""
+    Each option declares required option type
+
+Mapper could automatically convert string to:
+
+* String
+* Boolean
+* Integer
+* Double
+* Short
+* Byte
+* Enum constant: 
+    - If option type is exact enum then value must be constant name
+    - If option type is generic `Enum` then value must be 'fullEnumClass.constantName'
+* Array or any type (from above): values must be separated by comma ("one, two, three")
+* EnumSet: value must be comma separated list with fully qualified enum constants ('fullEnumClass.constantName')   
+
+!!! tip
+    You can use sting conversion directly somewhere else, if required:
+    `StringConverter.convert(TargetType, stringValue)`
+
+Exception is thrown when type is not supported for conversion. In this case use manual converter:
+
+```java
+new OptionsMapper()
+            .prop("myprop", Myoptions.SomeOption, val -> convertVal(val))
+            .map()
+```
+
+Converter is actually any `java.util.Function` (here, lambda with method call (`::convertVal`)).
+
+### System properties
+
+As shown before, you can bind single system property to option. But you can allso allow
+to set any option with system property:
+
+```java
+new OptionsMapper().props().map()
+```
+
+It will bind all properties in format: `option.enumClasName.enumValue`.
+For example, `-Doption.ru.vyarus.dropwizard.guice.GuiceyOptions.UseHkBridge=true` 
+
+Different prefix could be used: `.props("myprefix")` 
+
+!!! warning
+    All properties with matched prefix must be mappable to option (target enum exists),
+    otherwise error will be thrown.
+
+If any property requires custom value conversion then bind it *before* with converter
+and it will be ignored during mass mapping by prefix:
+
+```java
+new OptionsMapper()
+        .prop("option.ru.vyarus.dropwizard.guice.GuiceyOptions.UseHkBridge", 
+                GuiceyOptions.UseHkBridge, val - > convert(val))
+        .props()
+        .map()
+```
+
+### Debug
+
+You can enable mapped options print with `.printMappings()`:
+
+```java
+new OptionsMapper()
+            .prop("myprop", Myoptions.SomeOption, val -> convertVal(val))
+            .printMappings()
+            .map()
+```
+
+When enabled, all mapped options will be printed to console (logger is not used becuase it's not yet initialized).
+
+Example output:
+```
+	env: VAR                   Opts.OptInt = 1
+	prop: foo                  Opts.OptStr = bar
+	                           Opts.OptBool = true
+```
+
+for mapper:
+```java
+new OptionsMapper()
+        .printMappings()
+        .env("VAR", Opts.OptInt)
+        .env("VAR2", Opts.OptDbl)
+        .prop("foo", Opts.OptStr)
+        .prop("foo2", Opts.OptShort)
+        .string(Opts.OptBool, "true")
+        .map()
+```
+
+Here "VAR2" env. variable and "foo2" system property wasn't declared and so not mapped. 
+
+### Custom lookup
+
+You can directly specify map of options (`.options(Map<Enum, Object>)`) or write your own lookup mechanism:
 
 ```java
     GuiceBundle.builder()
@@ -115,4 +230,6 @@ Enum, excluding Option for simpler usage, but still only option enums must be pr
         ...
 ```
 
-Such mechanism could be used, for example, to change application options in tests or to apply environment specific options.
+!!! note ""
+    `.options()` method contract simplified for just `Enum`, excluding `Option` for 
+    simpler usage, but still only option enums must be provided

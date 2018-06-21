@@ -14,12 +14,20 @@ by looking at available methods and reading javadoc.
     * Commands - dropwizard commands (mentioned because of ability for automatic registration)
 
 !!! warning
-    Configured bundles, modules, installers and extensions are checked for duplicates using class type. Duplicate configurations will be simply ignored.
+    Configured bundles, modules, installers and extensions are checked for duplicates using *class type*. Duplicate configurations will be simply ignored.
     For modules and bundles, which configured using instances, duplicates removes means that if two instances of the same type registered, then second instance will
-    be ignored.
+    be ignored. For example, in case of `.bundles(new MyBundle("one"), new MyBundle("two))`
+    the second bundle will be ignored becuause bundle with the same type is already registered 
+    (no matter that constructor parameters are different - only type matters).
  
 Configuration process is recorded and may be observed with by [diagnostic info](diagnostic.md),
 so there is always a way to understand what and how was configured.
+
+!!! tip
+    You can see used configuration objects by enabling [detailed lifecycle logs](events.md#debug):
+    ```java
+    bundle.printLifecyclePhasesDetailed()
+    ```
 
 ## Auto configuration
 
@@ -44,13 +52,13 @@ In auto configuration mode guicey could also [search and install](commands.md#au
 .searchCommands()
 ```
 
-By default commands scan is disabled because it may confusing. Besides, it's not often needed.
+By default commands scan is disabled because it may be confusing. Besides, it's not often needed.
 
 
 ## Extensions
 
 All features installed with guicey installers are called extensions. When auto configuration is enabled, extensions are discovered
-automatically. Without auto configuratin (manual mode) all extensions must be specified manually.
+automatically. Without auto configuration (manual mode) all extensions must be specified manually.
 
 ```java
 .extensions(MyResource1.class, MyHealthCheck.class)
@@ -63,9 +71,13 @@ classpath scan).
     Each extension could be installed only by one installer: if multiple installers could recognize extension, 
     only one of them will install it (first one according to priority).
 
+!!! tip
+    Any extension could be disabled with `.disableExtension(Extension.class)` 
+    (may be useful to disable not needed extension from 3rd party bundle)
+
 ## Installers
 
-Guicey come with pre-defined set of installers (for common extensions). But you can write your own installers
+Guicey come with pre-defined set of installers (for common extensions). But you can [write your own installers](installers.md#writing-custom-installer)
 (or use some 3rd party ones).
 
 !!! note ""
@@ -80,14 +92,16 @@ Guicey come with pre-defined set of installers (for common extensions). But you 
 !!! tip
     In auto configuration mode, installers are also detected and installed automatically
 
-### Default installers
+### Disable default installers
 
-Guicey come with a set of pre defined installers, enabled by default (for common extensions installation like resource, health check, task, managed etc.).
-You can disable them with:
+You can disable all default installers:
 
 ```java
 .noDefaultInstallers()
 ```
+
+But note that in this case you must register at least one installer
+(it could be one of core installers) because otherwise no extensions could be installed.
 
 ### Web installers
 
@@ -140,6 +154,50 @@ install(new ParametrizableModule("mod1"));
 install(new ParametrizableModule("mod2"));
 ```
 
+### Override guice bindings
+
+Guice allows you to override any binding with `Modules.override()`. 
+With it you can override any service in context. Guicey provides direct shortcut 
+for using this feature. 
+
+Mostly, this is handful for tests, but could be used to override some service, 
+registered by 3rd party module (probably registered by some bundle).
+
+Suppose we have 3rd party service with a bug, registered by 3rd party module:
+
+```java
+public class XModule extends AbstractModule {
+    protected void configure() {
+        bind(XService.class).asEagerSingleton();
+        ...
+    }
+}
+```
+
+We can override it with fixed version:
+
+```java
+public class FixXServiceModule extends AbstractModule {
+    protected void configure() {
+        // module with only one binding overriding original definition
+        bind(XService.class).to(FixedXService.class);        
+    }
+}
+
+public class FixedXService extends XService {
+    ...
+} 
+```
+
+```java
+bootstrap.addBundle(GuiceBundle.builder()
+            .modules(new XModule())
+            .modulesOverride(new FixXServiceModule())
+            .build())
+``` 
+
+Now all guice injector will use your service (`FixedXService`) instead of `XService`.
+
 ## Guicey bundles
 
 In essence, [guicey bundles](bundles.md) are the same as dropwizard bundles: used to install re-usable logic or 
@@ -151,7 +209,7 @@ In essence, [guicey bundles](bundles.md) are the same as dropwizard bundles: use
 
 ### Dropwizard bundles unification
 
-Guice bundles must implement interface (`GuiceyBundle`). Dropwizard bundle could inmplement it too. 
+Guice bundles must implement interface (`GuiceyBundle`). Dropwizard bundle could implement it too. 
 This may be useful for [universal bundles](bundles.md#dropwizard-bundles-unification) when all main features are 
 activated by dropwizard bundle and guicey features are optional (if guicey present).
 
@@ -180,6 +238,17 @@ Shortcut to disable default bundle lookup:
 .disableBundleLookup()
 ```
 
+### Disable bundles
+
+Guicey bundles could be disabled only in root bundle. Bundles can't disable other bundles.  
+
+```java
+.disableBundles(MyBundle.class)
+```
+
+This is mostly usefule for tests, but could also be used to disable some not required transitive bundle, installed by
+3rd party bundle.
+
 ## Options
 
 [Options](options.md) are used for development time configurations (test specific triggers or low level configurations).
@@ -192,11 +261,16 @@ Guicey option enums: `GuiceyOptions` and `InstallersOptions`
 !!! tip
     Options look better with static import: `#!java .option(InjectorStage, DEVELOPMENT)`
 
-To provide multiple options at once (batch options load):
+[Options mapper](options.md#options-lookup) could be used to map option value 
+from system properties, environment variables or simple strings (basic type conversions supported):
 
 ```java
-.options(new MyOptionsLookup().getOptions())
-```
+.options(new OptionsMapper()
+                .prop("myprop", Myoptions.SomeOption)
+                .env("STAGE", GuiceyOptions.InjectorStage)
+                .string("property value", Myoptions.SomeOtherOption)
+                .map())                
+```  
 
 ## Guice
 
