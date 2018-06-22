@@ -471,6 +471,7 @@ Other helpful reports:
 * Hiding classes from classpath scan
 * Integration tests support
 * Lifecycle events 
+* Configurators
 * Special web installers (to use instead of guice ServletModule)
 * Admin rest support
 * Extensions project with 3rd party integrations

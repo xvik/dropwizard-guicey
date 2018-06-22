@@ -154,6 +154,24 @@ install(new ParametrizableModule("mod1"));
 install(new ParametrizableModule("mod2"));
 ```
 
+### Disable guice modules
+
+You can disable guice modules (even if it's not registered)
+
+```java
+.disableInstallers(ModleOne.class, ModuleTwo.class)
+```
+
+!!! important
+    This will affect only modules directly registered in main bundle or guicey bundle.
+    (modules installed inside guice module are not affected).
+    
+This is mostly useful for tests, but could be used to prevent some additional module 
+installation by 3rd party bundle (or may be used to override such module).
+
+!!! tip
+    Note that you can also override some bindings (see below) instead of entire module override    
+
 ### Override guice bindings
 
 Guice allows you to override any binding with `Modules.override()`. 
@@ -246,7 +264,7 @@ Guicey bundles could be disabled only in root bundle. Bundles can't disable othe
 .disableBundles(MyBundle.class)
 ```
 
-This is mostly usefule for tests, but could also be used to disable some not required transitive bundle, installed by
+This is mostly useful for tests, but could also be used to disable some not required transitive bundle, installed by
 3rd party bundle.
 
 ## Options
@@ -271,6 +289,44 @@ from system properties, environment variables or simple strings (basic type conv
                 .string("property value", Myoptions.SomeOtherOption)
                 .map())                
 ```  
+
+## Disable by predicate
+
+There is also a generic disable method using predicate. With it you can disable
+items (bundles, modules, installers, extensions) by package or by installation bundle
+or some other custom condition (e.g. introduce your disabling annotation and handle it with predicate).
+
+Supposed to be used in integration tests, but could be used directly too in specific cases.
+
+```java
+import static ru.vyarus.dropwizard.guice.module.context.Disables.*
+
+.disable(installer()
+         .and(registeredBy(Application.class))
+         .and(type(SomeInstallerType.class).negate());
+```
+
+Disable all installers, directly registered in main bundle except `SomeInstallerType`
+
+```java
+import static ru.vyarus.dropwizard.guice.module.context.Disables.*
+
+.disable(type(MyExtension.class,
+         MyInstaller.class,
+         MyBundle.class,
+         MyModule.class));
+```
+
+Simply disable items by type.
+
+The condition is java `Predicate`. Use `Predicate#and(Predicate)`, `Predicate#or(Predicate)`
+and `Predicate#negate()` to compose complex conditions from simple ones.
+
+Most common predicates could be build with `ru.vyarus.dropwizard.guice.module.context.Disables`
+utility (examples above).
+
+!!! note
+    Disable predicates are also could be registered in guicey bundles
 
 ## Guice
 
@@ -317,11 +373,23 @@ Servlet modules will be rejected in this case. Intended to be used when [web ins
 
 ### Configuration binding
 
+!!! warning "Deprecated"
+    Option remain for compatibility and will be eventually removed.
+    You can always bind configuration by implemented interface [using qualifier](bindings.md#configuration):
+    ```java
+    @Inject @Config HasRequiredConfig config; 
+    ``` 
+    Also, unique configuration sub objects are also [available for injection](bindings.md#unique-sub-configuration) 
+    (much better option rather then marker interface):
+    ```java
+    @Inject @Config RequiredConfig config; 
+    ``` 
+
 It may be useful to bind configuration instance to interface. Suppose some 3rd party requires your configuration
 to implement interface:
 
 ```java
-public class MyConfiguraton extends Configuration implements HasRequiredConfig {...}
+public class MyConfiguration extends Configuration implements HasRequiredConfig {...}
 ```
 
 If binding by interface is enabled:
@@ -335,10 +403,6 @@ Then configuration could be injected by interface:
 ```java
 @Inject HasRequiredConfig conf;
 ```
-
-!!! note
-    By default, configuration is bound only for [all classes in hierarchy](bindings.md#configuration). In example above it would be 
-    `Configuration` and `MyConfiguration`.
 
 ### HK2 bridge
 
@@ -362,7 +426,74 @@ public class HkService {
 }
 ```
 
+### Use HK2 for jersey extensions 
+
+By default, guice is used to construct all extensions, including jersey related (resources, providers)
+which are registered in HK2 context as instances.
+
+If you want to use HK2 for jersey extensions management then use:
+
+```java
+.useHK2ForJerseyExtensions()
+```
+
+(It is the same effect as if you will annotate all jersey extensions with `@HK2Managed`)
+
+After enabling, all jersey extensions will be created by HK2. 
+Option requires HK2-guice bridge (error will be thrown if bridge is not available in classpath)
+to use guice services inside HK2 managed beans.
+
+!!! warning
+    Guice AOP will work only for instances created by guice, so after enabling this option you will not
+    be able to use aop on jersey extensions.
+
+By analogy with `@HK2Managed`, you can use `@GuiceManaged` to mark exceptional extensions,
+which must be still managed by guice.
+
+## Lifecycle events
+
+Guicey broadcast events on all important configuration phases. These events contain
+references to all available environment objects and current context configuration.
+For example, after event with all resolved extension or event with all processed bundles.
+
+Events are used to print lifecycle phases report (see below), but you may use it 
+to modify installers, bundles, extensions (post process instances, but not affect quantity).  
+
+Events are registered with:
+
+```java
+.listen(new MyEventListener())
+```
+
+Read more in [events documentation](events.md).
+
 ## Diagnostic
+
+Startup errors could be debugged with lifecycle logs:
+
+```java
+.printLifecyclePhasesDetailed()
+```
+
+!!! tip
+    Especially helpful when classpath scanner accept classes you don't need because
+    it will prints all resolved extension before injector creation.
+
+!!! tip
+    Report shows disabled items. Use [diagnostic logs](diagnostic.md) to find the disabler.  
+
+!!! note
+    `.printLifecyclePhases()` could be used to just indicate phases in logs without additional details
+    (useful when need to understand initialization order)
+
+If you have problems with [configuration bindings](bindings.md#configuration-tree) (or just need to see available bindings) use:
+
+```java
+.printConfigurationBindings()
+```
+
+!!! note
+    Bindings report is printed before injector creation (in case if startup fails due to missed binding) 
 
 Enable configuration [diagnostic console logs](diagnostic.md) to diagnose configuration problems:
 
@@ -370,9 +501,53 @@ Enable configuration [diagnostic console logs](diagnostic.md) to diagnose config
 .printDiagnosticInfo()
 ```
 
+
 In case of doubts about extension owner (guice or HK2) and suspicious for duplicate instantiation,
 you can enable [strict control](bundles.md#hk2-debug-bundle) which will throw exception in case of wrong owner:
 
 ```java
 .strictScopeControl()
 ```
+
+!!! note
+    When you have duplicate initialization (most likely for jersey related extensions)
+    first check that you are not register extension manually! 
+    Using constructor injection helps preventing such errors (manual places will immediately reveal).
+    
+## Configurators  
+
+There is an external configuration mechanism. It could be used to modify 
+application configuration externally without application modification:
+
+```java
+public interface GuiceyConfigurator {
+    void configure(GuiceBundle.Builder builder);    
+}
+```
+
+Configurator implementation will receive the same builder instance as used in `GuiceBundle` 
+and so it is able to change anything (for example, `GuiceyBundle` abilities are limited).
+
+Configurator could be registered with:
+
+```java
+ConfiguratorsSupport.listen(builder -> { 
+    // do modifications 
+})
+```
+
+All configurators are executed just before guice bundle builder finalization (when you call last `.build()` method).
+Configurators registered after this moment will simply be never used.
+
+!!! note
+    This functionality is intended to be used for integration tests and there is
+    a [special test support](test.md) for it.  
+    
+Configurator can:
+* Change options
+* Disable any bundle, installer, extension, module
+* Register disable predicate (to disable features by package, registration source etc.)
+* Override guice bindings
+* Register additional bundles, extensions, modules (usually test-specific, for example guicey tests register 
+additional guice module with restricted guice options (disableCircularProxies, requireExplicitBindings, requireExactBindingAnnotations))
+       

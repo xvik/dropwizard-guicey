@@ -80,7 +80,7 @@ Guicey introspects configuration instance using jackson serialization api. That 
 visible for jackson serialization will be presented.
 
 !!! note
-    Jackson will see all properties which eather have getter and setter or annotated with `@JsonProperty`. For example,
+    Jackson will see all properties which either have getter and setter or annotated with `@JsonProperty`. For example,
     ```java
     public class MyConfig extends Configuration {
             
