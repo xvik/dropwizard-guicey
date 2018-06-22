@@ -81,7 +81,7 @@ Or it could be some [custom options](options.md#custom-options) usage.
     If you are going to register module inside guicey bundle, you can simply resolve
     option value inside guicey bundle and pass it to module directly.
 
-## Configuration
+## Configuration access
 
 !!! note
     If you are going to register module inside guicey bundle, you can simply resolve

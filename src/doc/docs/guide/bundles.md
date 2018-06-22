@@ -259,7 +259,30 @@ Or it could be some [custom options](options.md#custom-options) usage.
     If you are going to register module inside guicey bundle, you can simply resolve
     option value inside guicey bundle and pass it to module directly.
 
-## Configuration
+## Apply modifications
+
+Bundles could not only register new items, but also disable other.
+
+```java
+bootstrap
+    .disableInstallers(..)
+    .disableExtensions(..)
+    .disableModules()
+```
+
+!!! note
+    Bundles can't disable other bundles (because target bundle could be already processed at this point).
+
+This could be used to register different versions instead of disabled items.
+
+Also, bundle could directly [override guice bindings](configuration.md#override-guice-bindings) with:
+
+```java
+bootstrap
+    .modulesOverride(new OverridingModule())
+```
+
+## Configuration access
 
 ### Unique feature config
 

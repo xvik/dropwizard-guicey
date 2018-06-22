@@ -75,6 +75,20 @@ classpath scan).
     Any extension could be disabled with `.disableExtension(Extension.class)` 
     (may be useful to disable not needed extension from 3rd party bundle)
 
+### Disable extensions
+
+You can disable extensions (even if it's not registered)
+
+```java
+.disableExtensions(ExtensionOne.class, ExtensionTwo.class)
+```
+
+!!! tip
+    This may be used when classpath scanner detected class you don't need to be installed
+    and you can't use `@InvisibleForScanner` annotation on it.
+
+Mostly useful for tests.
+
 ## Installers
 
 Guicey come with pre-defined set of installers (for common extensions). But you can [write your own installers](installers.md#writing-custom-installer)
@@ -114,13 +128,15 @@ To enable web installers:
 .useWebInstallers()
 ```
 
-### Disable installer
+### Disable installers
 
 You can disable installers (even if it's not registered)
 
 ```java
 .disableInstallers(ManagedInstaller.class, ResourceInstaller.class)
 ```
+
+Mostly useful for tests.
 
 ### Debug installers
 
@@ -301,6 +317,15 @@ Supposed to be used in integration tests, but could be used directly too in spec
 ```java
 import static ru.vyarus.dropwizard.guice.module.context.Disables.*
 
+.disable(inPackage("com.foo.feature", "com.foo.feature2"));
+```
+
+Disable all extensions lying in package (or subpackage). It could be extension, bundle, installer, guice module.
+If you use package by feature approach then you can easily switch off entire features in tests.
+
+```java
+import static ru.vyarus.dropwizard.guice.module.context.Disables.*
+
 .disable(installer()
          .and(registeredBy(Application.class))
          .and(type(SomeInstallerType.class).negate());
@@ -324,9 +349,6 @@ and `Predicate#negate()` to compose complex conditions from simple ones.
 
 Most common predicates could be build with `ru.vyarus.dropwizard.guice.module.context.Disables`
 utility (examples above).
-
-!!! note
-    Disable predicates are also could be registered in guicey bundles
 
 ## Guice
 

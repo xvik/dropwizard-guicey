@@ -2,13 +2,116 @@
 
 Test support require `io.dropwizard:dropwizard-testing:1.3.0` dependency.
 
+## General test support
+
+### Configurator
+
+Guice provides [configurators mechanism](configuration.md#configurators) to be able to modify
+application configuration in tests.
+
+Using configurator you can disable installers, extensions, guicey bundles  
+or override guice bindings.
+
+It may also be useful to register additional extensions (e.g. to validate some internal behaviour).
+
+Configurator example:
+
+```java
+public class MuConfigurator implements GuiceyConfigurator {
+    public void configure(GuiceBundle.Builder builder) {
+        builder
+            .disableModules(FeatureXModule.class)
+            .disable(inPackage("com.foo.feature"))
+            .modulesOverride(new MockDaoModule())
+            .option(Myoptions.DebugOption, true);
+    }
+}
+```
+
+!!! note
+    You can modify options in configurator and so could enable some custom
+    debug/monitoring options specifically for test.
+
+There are special spock and junit extensions for configurator registrations.
+
+### Disables
+
+You can use configurator to disable all not needed features in test:
+* [installers](configuration.md#disable-installer) 
+* [extensions](configuration.md#disable-extensions) 
+* [guice modules](configuration.md#disable-guice-modules)
+* [guicey bundles](configuration.md#disable-bundles) 
+
+This way you can isolate (as possible) some feature for testing. 
+
+The most helpful should be bundles disable (if you use bundles for features grouping)
+and guice modules.
+
+Use [predicate disabling](configuration.md#disable-by-predicate).
+
+!!! note
+    It is supposed that disabling will be used instead of mocking - you simply remove what
+    you don't need and register replacements, if required.
+
+### Guice bindings override
+
+It is quite common requirement to override bindings for testing. For example, 
+you may want to mock database access.
+
+Guicey could use guice `Modules.override()` to help you override required bindings.
+To use it prepare module only with changed bindings (bindings that must override existing).
+For example, you want to replace ServiceX. You have few options:
+
+* If it implement interface, implement your own service and bind as 
+`bind(ServiceContract.class).to(MyServiceXImpl.class)`
+* If service is a class, you can modify its behaviour with extended class
+`bind(ServiceX.class).to(MyServiceXExt.class)`
+* Or you can simply register some mock instance
+`bind(ServiceX.class).toInstance(myMockInstance)`
+
+```java
+public class MyOverridingModule extends AbstractModule {
+    
+    protected configure() {
+        bind(ServiceX.class).to(MyServiceXExt.class);        
+    }
+}
+```  
+
+And register overriding module in configurator:
+
+```java
+public class MuConfigurator implements GuiceyConfigurator {
+    public void configure(GuiceBundle.Builder builder) {
+        builder
+            .modulesOverride(new MyOverridingModule())
+    }
+}
+```
+
+### Debug bundles
+
+You can also use special guicey bundles, which modify application behaviour.
+Bundles could contain additional listeners or services to gather additional metrics during
+tests or validate behaviour.
+
+For example, guicey tests use bundle in tests to enable restricted guice options like 
+`disableCircularProxies`.
+
+Bundles are also able to:
+* disable installers, extensions, gucie modules
+* override guice bindings
+
+You can use lookup mechanism to load bundles in tests. For example, 
+[system properties lookup](bundles.md#system-property-lookup). 
+
 ## Junit
 
 ### Testing core logic
 
 For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like 
 [DropwizardAppRule](http://www.dropwizard.io/1.3.0/docs/manual/testing.html),
-but doesn't start jetty (and so jersey and guice web modules will not be initialized). 
+but *doesn't start jetty* (and so jersey and guice web modules will not be initialized). 
 Managed and lifecycle objects supported.
 
 ```java
