@@ -406,6 +406,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param modules overriding modules
          * @return builder instance for chained calls
          * @see #modules(Module...)
+         * @see ru.vyarus.dropwizard.guice.test.binding.BindingsOverrideInjectorFactory to override overridden
+         * bindings in test (edge case(
          */
         public Builder<T> modulesOverride(final Module... modules) {
             bundle.context.registerModulesOverride(modules);

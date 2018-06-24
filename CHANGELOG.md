@@ -8,6 +8,7 @@
         - generic disable method by predicate: .disable(Predicate) (for example, disable all extensions in package or all installed by some bundle etc.)
 * Add direct support for guice bindings override (using Modules.override() internally) to main bundle and guicey bundle bootstrap: 
     .modulesOverride(Module...)
+    - Add BindingsOverrideInjectorFactory to override already overridden bindings (with modulesOverride) in test (edge case)     
 * Add hooks for configuration override in integration tests (#23):
     - New GuiceyConfigurationHook interface: hook receive bundle builder instance after application configuration and so could modify configuration (with new disable* methods)
     - Junit:
