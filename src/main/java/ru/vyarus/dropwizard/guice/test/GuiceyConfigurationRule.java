@@ -15,7 +15,7 @@ import java.util.List;
  * is not predictable:
  * <pre>{@code
  *    static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
- *   {@literal @}ClassRule
+ *    @ClassRule
  *    public static RuleChain chain = RuleChain
  *            .outerRule(new GuiceyConfigurationRule((builder) -> builder.modules(...)))
  *            .around(RULE);
@@ -29,7 +29,7 @@ import java.util.List;
  *
  *     public class SomeTest extends BaseTest {
  *         static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
- *        {@literal @}ClassRule
+ *         @ClassRule
  *         public static RuleChain chain = RuleChain
  *            .outerRule(BASE)
  *            .around(new GuiceyConfigurationRule((builder) -> builder.modules(...)) // optional test-specific staff
