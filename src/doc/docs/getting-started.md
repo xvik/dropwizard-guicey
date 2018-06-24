@@ -167,6 +167,9 @@ public class SampleResource {
 
 Now resource will return caller IP.
 
+!!! important
+    Providers must be used [instead of `@Context` field injections](installers/resource.md#@context-usage) 
+
 Also, you can inject request specific objects [as method parameter](installers/resource.md#context-usage)
 
 !!! note

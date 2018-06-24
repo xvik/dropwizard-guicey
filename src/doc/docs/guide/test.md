@@ -144,6 +144,53 @@ To access guice beans use injector lookup:
 InjectorLookup.getInjector(RULE.getApplication()).getBean(MyService.class);
 ```
 
+### Customizing guicey configuration
+
+As [described above](#configuration-hooks) guicey provides a way to modify it's configuration in tests.
+You can apply configuration hook using rule:
+
+```java
+// there may be exact class instead of lambda
+new GuiceyConfigurationRule((builder) -> builder.modules(...))
+```
+
+To use it with DropwizardAppRule or GuiceyAppRule you will have to apply explicit order:
+
+```java
+static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
+@ClassRule
+public static RuleChain chain = RuleChain
+       .outerRule(new GuiceyConfigurationRule((builder) -> builder.modules(...)))
+       .around(RULE);
+```
+
+!!! attention
+    RuleChain is required because rules execution order is not guaranteed and
+    configuration rule must obviously be executed before application rule. 
+
+If you need to declare configurations common for all tests then declare rule instace
+in base test class and use it in chain (at each test):
+
+```java
+public class BaseTest {
+    // IMPORTANT no @ClassRule annotation here!
+     static GuiceyConfigurationRule BASE = new GuiceyConfigurationRule((builder) -> builder.modules(...))
+ }
+
+ public class SomeTest extends BaseTest {
+     static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
+     @ClassRule
+     public static RuleChain chain = RuleChain
+        .outerRule(BASE)
+        // optional test-specific staff
+        .around(new GuiceyConfigurationRule((builder) -> builder.modules(...)) 
+        .around(RULE);
+ }
+``` 
+
+!!! warning
+    Don't use configuration rule with spock becuase it will not work. Use special spock extension instead.
+
 ### Testing startup errors
 
 If exception occur on startup dropwizard will call `#!java System.exit(1)` instead of throwing exception (as it was before 1.1.0).
@@ -309,6 +356,49 @@ class WebModuleTest extends Specification {
 
 Annotation supports the same configuration options as `@UseGuiceyApp` (see above)
 
+### Customizing guicey configuration
+
+As [described above](#configuration-hooks) guicey provides a way to modify it's configuration in tests.
+You can declare custom configuration hooks directly in extension annotations (described above):
+
+```java
+@UseDropwizardApp(value = MyApplication, hooks = MyHook)
+```
+
+or
+
+```java
+@UseGuiceyApp(value = MyApplication, hooks = MyHook)
+```
+
+Where MyHook is:
+
+```java
+class MyHook implements GuiceyConfigurationHook {}
+```
+
+When you need to register configurations common for all tests, declare hook at the base test class:
+
+```java
+UseGuiceyConfiguration(MyBaseHook)
+class BaseTest extends Specification {
+    
+}
+
+@UseGuiceyApp(App)
+class SomeTest extends BaseTest {}
+``` 
+
+!!! note
+    You **can still use** test specific hooks together with declared base hook
+    (to apply some more test-specific configuration).
+
+!!! warning
+    Only one `@UseGuiceyConfiguration` declaration may be used in test hierarchy:
+    for example, you can's declare it in base class and then another one oi extended class
+    - base for a group of tests. This is spock limitation (only one extension will actually work)
+    but should not be an issue for most cases.
+
 ### Dropwizard startup error
 
 `StartupErrorRule` may be used to intercept dropwizard `#!java System.exit(1)` call.
@@ -396,73 +486,65 @@ class InjectionTest extends Specification {
 }
 ```
 
-## Overriding beans
+## Overriding overridden beans
 
-There is no direct support for bean overrides yet (it is planned), but you can use the following approach.
+Guicey provides [direct support for overriding guice bindings](configuration.md#override-guice-bindings),
+so in most cases you don't need to do anything.
 
-First, prepare custom [injector factory](injector.md#injector-factory):
-
-```java
-public class CustomInjectorFactory implements InjectorFactory {
-    private static ThreadLocal<Module[]> customModules = new ThreadLocal<>();
-
-    @Override
-    public Injector createInjector(Stage stage, Iterable<? extends Module> modules) {
-        Module[] override = customModules.get();
-        customModules.remove();
-        return Guice.createInjector(stage, override == null ? modules
-                : Lists.newArrayList(Modules.override(modules).with(override)));
-    }
-
-    public static void override(Module... modules) {
-        customModules.set(modules);
-    }
-
-    public static void clear() {
-        customModules.remove();
-    }
-}
-```
-
-It allows using guice `Module.overrides()` for bindings substitution.
+But, if you use this to override application bindings need to override such bindings in test (again), then you
+ may use provided custom [injector factory](injector.md#injector-factory):  
 
 Register factory in guice bundle:
 
 ```java
 GuiceBundle.builder()
-    .injectorFactory(new CustomInjectorFactory())
+    .injectorFactory(new BindingsOverrideInjectorFactory())
 ```
 
-Guice Module.overrides forcefully override (substitute) all bindings from override modules.
-So all modules in your application remain the same but you can create new test modules
-with test specific replacements.
 
-For example, suppose we have some service `CustomerService` and it's implementation, defined in appllication
-`CustomerServiceImpl`. To override it we prepare new test module:
+After that you can register overriding bindings (which will override even modules registered in `modulesOverride`)
+with:
 
 ```java
-public class TestModule extends AbstractModule {
+BindingsOverrideInjectorFactory.override(new MyOverridingModule())
+```
+
+!!! important
+    It is assumed that overrding modules registration and application initialization
+    will be at the same thread (thread local used for holding registered modules to allow
+    parallel tests usage). 
+
+For example, suppose we have some service `CustomerService` and it's implementation `CustomerServiceImpl`, 
+defined in some 3rd party module. For some reason we need to override this binding in the application:
+
+```java
+public class OverridingModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(CustomerService.class).to(TestCustomerServiceImpl.class);
+        bind(CustomerService.class).to(CustomCustomerServiceImpl.class);
     }
 }
 ```
 
-Now register overriding module:
+
+If we need to override this binding in test (again):
+
+(Simplified) registration looks like this:
 
 ```java
-CustomInjectorFactory.override(new TestModule());
+GuiceBundle.builder()
+    .injectorFactory(new BindingsOverrideInjectorFactory())
+    .modules(new ThirdPatyModule())
+    // override binding for application needs
+    .modulesOverride(new OverridingModule())
+    ...
+    .build()
+
+// register overriding somewhere
+BindingsOverrideInjectorFactory.override(new TestOverridingModule())    
 ```
 
-!!! warning
-    Overriding modules registration must be performed before guicey start.
+!!! tip
+    [Configuration hook](#configuration-hooks) may be used for static call (as a good integration point)
     
- After startup, application will use overridden customer service version.
-
-Of course this approach is far from ideal, but it's the best option for now.
-
-!!! note
-    Thread local is used to hold overriding modules to allow concurrent tests run.
-    This mean you have to manually clean state after each test to avoid side effects: 
-    `#!java CustomInjectorFactory.clear()` (of course, if overriding is not used for all tests)
+After test startup, application will use customer service binding from TestOverridingModule.

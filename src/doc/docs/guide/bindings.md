@@ -485,6 +485,10 @@ Example usage:
 @Inject Provider<HttpServletRequest> requestProvider;
 ```
 
+!!! note
+    Pay attention, that in guice-managed resources `@Context` field bindings 
+    [must be replaced with providers](../installers/resource.md#@context-usage).
+
 ### Options
 
 `ru.vyarus.dropwizard.guice.module.context.option.Options` binding provides access to [guicey options](options.md):
@@ -587,4 +591,9 @@ GuiceBundle.builder()
     
 Depening on default mode selected, you can use annotations to change extension DI:
 * `@HK2Managed` - extension managed by hk2 (useful if in default mode when all beans created by guice)
-* `@GuiceManaged` - extension managed by guice (default, useful only when `.useHK2ForJerseyExtensions()` enabled)       
+* `@GuiceManaged` - extension managed by guice (default, useful only when `.useHK2ForJerseyExtensions()` enabled)
+
+### Bindings override
+
+Guicey provides direct support for [overriding bindings](configuration.md#override-guice-bindings).
+       
