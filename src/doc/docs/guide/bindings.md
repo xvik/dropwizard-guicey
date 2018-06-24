@@ -464,6 +464,9 @@ Request-scoped bindings:
 * `org.glassfish.jersey.server.ContainerRequest`
 * `org.glassfish.jersey.server.internal.process.AsyncContext`
 
+!!! tip
+    Read about jersey bindings implementation in [lifecycle section](lifecycle.md#access-guice-beans-from-jersey).
+
 ### Request and response
 
 By default, `GuiceFilter` is enabled on both contexts (admin and main). So you can inject
@@ -595,5 +598,6 @@ Depening on default mode selected, you can use annotations to change extension D
 
 ### Bindings override
 
-Guicey provides direct support for [overriding bindings](configuration.md#override-guice-bindings).
+Guicey provides direct support for [overriding bindings](configuration.md#override-guice-bindings)
+and even [override overridden bindings in tests](test.md#overriding-overridden-beans).
        

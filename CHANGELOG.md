@@ -1,5 +1,6 @@
 * Update to guice 4.2.0
     - remove guice-multibindings dependency as it's moved to guice core
+* Update to dropwizard 1.3.4    
 * Add more disable items (mostly for tests): guicey bundles, guice modules (directly registered) and extensions:
     - Guicey bundles disabled through main builder only: .disableBundles() 
     - Other disable methods available in both main bundle and guicey bundles bootstrap:
@@ -20,8 +21,8 @@
     It may be used to write instance specific features (post processing) or just advanced logging
     - Add new method in main bundle or guicey bundle bootstrap: .listen(GuiceyLifecycleListener...)      
     - Add guicey lifecycle phases reporting methods in main bundle (useful for debugging startup logic):
-        - .pritLifecyclePhases() - identify configuration stages in console logs 
-        - .pritLifecyclePhasesDetailed() -  identify lifecycle phases with detailed configuration report (in console logs) 
+        - .printLifecyclePhases() - identify configuration stages in console logs 
+        - .printLifecyclePhasesDetailed() -  identify lifecycle phases with detailed configuration report (in console logs) 
 * Improve options support:
     - Add OptionsAwareModule interface to let guice modules access options
     - Add OptionsMapper helper to simplify mapping of system properties and environment variables in builder.options() 
@@ -70,7 +71,7 @@
         - .printCustomConfigurationBindings() - log only custom bindings (from custom configuration classes)                  
 
 
-Also, release includes much improved [generics-resolver](https://github.com/xvik/generics-resolver/releases/tag/3.0.0) (3.0.0)                      
+Also, release includes much improved [generics-resolver](https://github.com/xvik/generics-resolver/releases/tag/3.0.0)                      
 
 ### 4.1.0 (2017-05-09)
 * Update to dropwizard 1.1.0

@@ -11,15 +11,17 @@ Jersey2 guice integration is more complicated than for jersey1, because of [HK2]
 Guice integration done in guice exclusive way as much as possible: everything should be managed by guice and invisibly integrated into HK2.
 Anyway, it is not always possible to hide integration details, especially if you need to register jersey extensions.
 
-!!! warning ""
-    Guice context starts before HK2 context.
+!!! tip 
+    You can use [guicey lifecycle events](events.md) to see initialization stages in logs:
+    `.printLifecyclePhases()` 
 
 ## Lifecycle
 
-* Dropwizard configuration phase    
-    * Guice bundle registered (in application `initialize` method)
+* Dropwizard configuration phase (`~Application.initialize`)   
+    * Apply [configuration hooks](configuration.md#guicey-configuration-hooks)
+    * Guice bundle registered 
     * Perform [classpath scan for commands](commands.md#automatic-installation) ([optional](configuration.md#commands-search))
-* Dropwizard run phase
+* Dropwizard run phase (`~Application.run`)
     * Dropwizard runs bundles (guice bundle is one of them so guice initialization may be performed between other dropwizard bundles)
     * Search guicey bundles in dropwizard bundles ([optional](configuration.md#dropwizard-bundles-unification)) 
     * [Lookup guicey bundles](bundles.md#bundle-lookup)   
@@ -36,7 +38,7 @@ Anyway, it is not always possible to hide integration details, especially if you
     * Your application's `run` method executed. Injector is already available, so any guice bean could be [accessed](injector.md)          
 * Jersey start
     * [Managed beans](../installers/managed.md) started
-    * **HK2 context creation**
+    * **HK2 context creation** (jersey start)
         * `GuiceFeature` (registered earlier) called
             * [Optionally](configuration.md#hk2-bridge) register [HK2-guice bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) (only guice to hk2 way to let hk2 managed beans inject guice beans)
             * Run jersey specific installers ([resource](../installers/resource.md), [extension](../installers/jersey-ext.md))
@@ -121,5 +123,9 @@ There are two options to solve this:
 * use `@LazyBinding`: bean instance will not be created together with guice context (when `MultivaluedParameterExtractorProvider` is not available),
 and creation will be initiated by HK2, when binding could be resolved.
 * or use `@HK2Managed` this will delegate instance management to HK2, but still guice services [may be injected](configuration.md#hk2-bridge).
+
+!!! note
+    You may use [HK2-first strategy](configuration.md#use-hk2-for-jersey-extensions) and create all jersey 
+    extensions in HK2 instead of guice. In this case you can use `@GuiceManaged` annotation to delegate management back to guice.
 
 In other cases simply wrap jersey specific bindings into `Provider`.

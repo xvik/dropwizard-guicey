@@ -364,12 +364,14 @@ By default, PRODUCTION stage used.
 
 ### Injector 
 
-[Custom guice injector factory](injector.md#injector-factory) may be registered to customize injector creation 
-(e.g. required for [governator](../examples/governator.md)):
+[Custom guice injector factory](injector.md#injector-factory) may be registered to customize injector creation. 
+For example, custom factory is required for [governator](../examples/governator.md) integration:
 
 ```java
 .injectorFactory(new GovernatorInjectorFactory())
 ```
+
+Also, custom factory may be used to [override already overridden guice bindings in tests](test.md#overriding-overridden-beans)
 
 ### ServletModule
 
