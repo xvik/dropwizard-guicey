@@ -13,23 +13,21 @@ import java.util.List;
  * Supposed to be used in conjunction with {@link io.dropwizard.testing.junit.DropwizardAppRule} or
  * {@link GuiceyAppRule}. Must be used ONLY with {@link org.junit.rules.RuleChain} because normally rules order
  * is not predictable:
- * <pre>{@code
- *    static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
- *    @ClassRule
+ * <pre>{@code static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
+ *    {@literal @}ClassRule
  *    public static RuleChain chain = RuleChain
  *            .outerRule(new GuiceyConfigurationRule((builder) -> builder.modules(...)))
  *            .around(RULE);
  * }</pre>
  * To declare common extensions for all tests, declare common rule in test class (without {@code @ClassRule}
  * annotation!) and use it in chain:
- * <pre>{@code
- *     public class BaseTest {
+ * <pre>{@code public class BaseTest {
  *         static GuiceyConfigurationRule BASE = new GuiceyConfigurationRule((builder) -> builder.modules(...))
  *     }
  *
  *     public class SomeTest extends BaseTest {
  *         static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
- *         @ClassRule
+ *         {@literal @}ClassRule
  *         public static RuleChain chain = RuleChain
  *            .outerRule(BASE)
  *            .around(new GuiceyConfigurationRule((builder) -> builder.modules(...)) // optional test-specific staff
