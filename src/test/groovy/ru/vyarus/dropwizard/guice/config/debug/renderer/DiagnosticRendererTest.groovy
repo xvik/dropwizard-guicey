@@ -22,7 +22,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
@@ -34,7 +34,7 @@ import javax.ws.rs.Path
  * @author Vyacheslav Rusakov
  * @since 16.07.2016
  */
-@UseGuiceyApp(value = App, configurators = XConf)
+@UseGuiceyApp(value = App, hooks = XConf)
 class DiagnosticRendererTest extends Specification {
 
     @Inject
@@ -55,7 +55,7 @@ class DiagnosticRendererTest extends Specification {
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
-        XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+        XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
         DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
 
@@ -69,14 +69,14 @@ class DiagnosticRendererTest extends Specification {
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
-            XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+            XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
 
 
     GUICE MODULES =
         FooModule                    (r.v.d.g.d.s.features)
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
         OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
-        XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+        XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
@@ -99,7 +99,7 @@ class DiagnosticRendererTest extends Specification {
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
-        XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+        XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
         DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
         -DisabledBundle              (r.v.d.g.c.d.r.DiagnosticRendererTest)
@@ -115,7 +115,7 @@ class DiagnosticRendererTest extends Specification {
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
-            XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+            XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         healthcheck          (r.v.d.g.m.i.f.h.HealthCheckInstaller)
         task                 (r.v.d.g.m.i.feature.TaskInstaller)
         plugin               (r.v.d.g.m.i.f.plugin.PluginInstaller)
@@ -133,7 +133,7 @@ class DiagnosticRendererTest extends Specification {
         FooModule                    (r.v.d.g.d.s.features)
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
         OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
-        XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+        XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
@@ -152,7 +152,7 @@ class DiagnosticRendererTest extends Specification {
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
-        XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+        XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
         DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
 """ as String;
@@ -168,7 +168,7 @@ class DiagnosticRendererTest extends Specification {
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
         HK2DebugBundle               (r.v.d.g.m.j.debug)
-        XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+        XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
         DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
         -DisabledBundle              (r.v.d.g.c.d.r.DiagnosticRendererTest)
@@ -239,7 +239,7 @@ class DiagnosticRendererTest extends Specification {
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
-            XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+            XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
 """ as String;
     }
 
@@ -252,7 +252,7 @@ class DiagnosticRendererTest extends Specification {
     EXTENSIONS =
         LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
         HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
-        XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+        XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleResource            (r.v.d.g.d.s.bundle)
         HK2DebugFeature              (r.v.d.g.m.j.d.service)
         FooResource                  (r.v.d.g.d.s.features)     *SCAN
@@ -268,7 +268,7 @@ class DiagnosticRendererTest extends Specification {
     EXTENSIONS =
         LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
         HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
-        XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+        XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleResource            (r.v.d.g.d.s.bundle)
         HK2DebugFeature              (r.v.d.g.m.j.d.service)
         FooResource                  (r.v.d.g.d.s.features)     *SCAN
@@ -286,7 +286,7 @@ class DiagnosticRendererTest extends Specification {
         FooModule                    (r.v.d.g.d.s.features)
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
         OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
-        XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+        XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
@@ -305,7 +305,7 @@ class DiagnosticRendererTest extends Specification {
         FooModule                    (r.v.d.g.d.s.features)
         DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
         OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
-        XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *CONF
+        XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleModule              (r.v.d.g.d.s.bundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
@@ -408,7 +408,7 @@ class DiagnosticRendererTest extends Specification {
         }
     }
 
-    static class XConf implements GuiceyConfigurator {
+    static class XConf implements GuiceyConfigurationHook {
 
         @Override
         void configure(GuiceBundle.Builder builder) {

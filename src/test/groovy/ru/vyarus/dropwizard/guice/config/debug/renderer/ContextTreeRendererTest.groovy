@@ -20,7 +20,7 @@ import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
@@ -28,14 +28,14 @@ import spock.lang.Specification
 import javax.inject.Inject
 import javax.ws.rs.Path
 
-import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.Configurator
+import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.Hook
 import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.allExcept
 
 /**
  * @author Vyacheslav Rusakov
  * @since 17.07.2016
  */
-@UseGuiceyApp(value = App, configurators = DisableConfigurator)
+@UseGuiceyApp(value = App, hooks = DisableHook)
 class ContextTreeRendererTest extends Specification {
 
     @Inject
@@ -93,7 +93,7 @@ class ContextTreeRendererTest extends Specification {
     │   ├── command    Cli                          (r.v.d.g.d.s.features)
     │   └── command    EnvCommand                   (r.v.d.g.d.s.features)
     │
-    └── CONFIGURATORS
+    └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
@@ -139,7 +139,7 @@ class ContextTreeRendererTest extends Specification {
     ├── CLASSPATH SCAN
     │   └── installer  FooInstaller                 (r.v.d.g.d.s.features)
     │
-    └── CONFIGURATORS
+    └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
@@ -170,7 +170,7 @@ class ContextTreeRendererTest extends Specification {
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
     │
-    └── CONFIGURATORS
+    └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
@@ -194,7 +194,7 @@ class ContextTreeRendererTest extends Specification {
     ├── FooBundle                    (r.v.d.g.d.s.bundle)
     │   └── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
     │
-    └── CONFIGURATORS
+    └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
@@ -220,7 +220,7 @@ class ContextTreeRendererTest extends Specification {
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
     │
-    └── CONFIGURATORS
+    └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
@@ -299,7 +299,7 @@ class ContextTreeRendererTest extends Specification {
     ├── CLASSPATH SCAN
     │   └── installer  FooInstaller                 (r.v.d.g.d.s.features)
     │
-    └── CONFIGURATORS
+    └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
@@ -335,7 +335,7 @@ class ContextTreeRendererTest extends Specification {
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
     │
-    └── CONFIGURATORS
+    └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
@@ -390,21 +390,21 @@ class ContextTreeRendererTest extends Specification {
     ├── CLASSPATH SCAN
     │   └── installer  FooInstaller                 (r.v.d.g.d.s.features)
     │
-    └── CONFIGURATORS
+    └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
     }
 
 
-    def "Check configurators exclusive render"() {
+    def "Check hooks exclusive render"() {
         expect:
         render(new ContextTreeConfig()
-                .hideScopes(allExcept(Configurator))) == """
+                .hideScopes(allExcept(Hook))) == """
 
     APPLICATION
     │
-    └── CONFIGURATORS
+    └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.c.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.c.d.r.ContextTreeRendererTest)
 """
@@ -458,7 +458,7 @@ class ContextTreeRendererTest extends Specification {
     @Path("/")
     static class DisabledExtension {}
 
-    static class DisableConfigurator implements GuiceyConfigurator {
+    static class DisableHook implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
             builder

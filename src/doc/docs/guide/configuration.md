@@ -536,36 +536,43 @@ you can enable [strict control](bundles.md#hk2-debug-bundle) which will throw ex
     first check that you are not register extension manually! 
     Using constructor injection helps preventing such errors (manual places will immediately reveal).
     
-## Configurators  
+## Guicey configuration hooks  
 
 There is an external configuration mechanism. It could be used to modify 
 application configuration externally without application modification:
 
 ```java
-public interface GuiceyConfigurator {
+public interface GuiceyConfigurationHook {
     void configure(GuiceBundle.Builder builder);    
 }
 ```
 
-Configurator implementation will receive the same builder instance as used in `GuiceBundle` 
+Hook implementation will receive the same builder instance as used in `GuiceBundle` 
 and so it is able to change anything (for example, `GuiceyBundle` abilities are limited).
 
-Configurator could be registered with:
+If hook is a class then it could be registered directly:
 
 ```java
-ConfiguratorsSupport.listen(builder -> { 
+new MyHook().register()
+```
+
+Otherwise lambda may be used:
+
+```java
+ConfigurationHooksSupport.register(builder -> { 
     // do modifications 
 })
 ```
 
-All configurators are executed just before guice bundle builder finalization (when you call last `.build()` method).
-Configurators registered after this moment will simply be never used.
+All hooks are executed just before guice bundle builder finalization (when you call last `.build()` method).
+Hooks registered after this moment will simply be never used.
 
 !!! note
     This functionality is intended to be used for integration tests and there is
     a [special test support](test.md) for it.  
     
-Configurator can:
+In hook you can do all the same as in main application configuration. In context of tests,
+ the most important is:
 * Change options
 * Disable any bundle, installer, extension, module
 * Register disable predicate (to disable features by package, registration source etc.)

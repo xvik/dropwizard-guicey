@@ -1,25 +1,27 @@
-package ru.vyarus.dropwizard.guice.configurator;
+package ru.vyarus.dropwizard.guice.hook;
 
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 
 /**
- * Configurator used to amend application configuration. Primarily intended to be used in tests with
- * {@link ru.vyarus.dropwizard.guice.test.GuiceyConfiguratorRule} (junit) and
- * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfigurator} (spock).
+ * Guicey configuration hook used to amend application configuration. Primarily intended to be used in tests with
+ * {@link ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule} (junit) and
+ * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration} (spock).
  * <p>
- * Also could be used for {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener} (listener,
- * implementing configurator interface is recognized and registered automatically).
+ * Hook could be registered with {@link #register()} method call.
  * <p>
- * Configurators are thread-scoped: it is assumed that registration thread is the same thread where application
+ * Also, could be used with {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener} (listener,
+ * implementing hook interface is recognized and registered automatically).
+ * <p>
+ * Hooks are thread-scoped: it is assumed that registration thread is the same thread where application
  * will start.
  *
  * @author Vyacheslav Rusakov
- * @see ru.vyarus.dropwizard.guice.test.GuiceyConfiguratorRule
- * @see ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfigurator
+ * @see ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule
+ * @see ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration
  * @since 11.04.2018
  */
 @FunctionalInterface
-public interface GuiceyConfigurator {
+public interface GuiceyConfigurationHook {
 
     /**
      * Configuration is applied just after manual configuration (through bundle's builder in application class).
@@ -37,12 +39,19 @@ public interface GuiceyConfigurator {
      * All other configuration options are also available, so it is possible to register extra extensions, bundles etc
      * or modify guicey options ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#option(Enum, Object)}).
      * <p>
-     * All configuration items, registered with configurator will be scoped as {@link GuiceyConfigurator}
+     * All configuration items, registered with hook will be scoped as {@link GuiceyConfigurationHook}
      * instead of {@link io.dropwizard.Application} and so will be clearly distinguishable in configuration logs
      * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#printDiagnosticInfo()}).
      *
      * @param builder just created bundle's builder
-     * @see ru.vyarus.dropwizard.guice.test.GuiceyConfiguratorRule for more information
+     * @see ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule for more information
      */
     void configure(GuiceBundle.Builder builder);
+
+    /**
+     * Register hook. Note that it must be called before guicey bundle creation, otherwise will never be called.
+     */
+    default void register() {
+        ConfigurationHooksSupport.register(this);
+    }
 }

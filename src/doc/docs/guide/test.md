@@ -4,20 +4,20 @@ Test support require `io.dropwizard:dropwizard-testing:1.3.0` dependency.
 
 ## General test support
 
-### Configurator
+### Configuration hooks
 
-Guice provides [configurators mechanism](configuration.md#configurators) to be able to modify
+Guicey provides [hooks mechanism](configuration.md#guicey-configuration-hooks) to be able to modify
 application configuration in tests.
 
-Using configurator you can disable installers, extensions, guicey bundles  
+Using hooks you can disable installers, extensions, guicey bundles  
 or override guice bindings.
 
 It may also be useful to register additional extensions (e.g. to validate some internal behaviour).
 
-Configurator example:
+Example hook:
 
 ```java
-public class MuConfigurator implements GuiceyConfigurator {
+public class MyHook implements GuiceyConfigurationHook {
     public void configure(GuiceBundle.Builder builder) {
         builder
             .disableModules(FeatureXModule.class)
@@ -29,14 +29,14 @@ public class MuConfigurator implements GuiceyConfigurator {
 ```
 
 !!! note
-    You can modify options in configurator and so could enable some custom
+    You can modify options in hook and so could enable some custom
     debug/monitoring options specifically for test.
 
-There are special spock and junit extensions for configurator registrations.
+There are special spock and junit extensions for hooks registrations.
 
 ### Disables
 
-You can use configurator to disable all not needed features in test:
+You can use hooks to disable all not needed features in test:
 * [installers](configuration.md#disable-installer) 
 * [extensions](configuration.md#disable-extensions) 
 * [guice modules](configuration.md#disable-guice-modules)
@@ -78,13 +78,13 @@ public class MyOverridingModule extends AbstractModule {
 }
 ```  
 
-And register overriding module in configurator:
+And register overriding module in hook:
 
 ```java
-public class MuConfigurator implements GuiceyConfigurator {
+public class MyHook implements GuiceyConfigurationHook {
     public void configure(GuiceBundle.Builder builder) {
         builder
-            .modulesOverride(new MyOverridingModule())
+            .modulesOverride(new MyOverridingModule());
     }
 }
 ```

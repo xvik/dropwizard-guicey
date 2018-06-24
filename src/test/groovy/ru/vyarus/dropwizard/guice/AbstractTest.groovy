@@ -10,9 +10,9 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfigurator
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration
 import spock.lang.Specification
 
 import javax.servlet.FilterRegistration
@@ -24,7 +24,7 @@ import javax.servlet.ServletRegistration
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
-@UseGuiceyConfigurator(GuiceyTestConfigurator)
+@UseGuiceyConfiguration(GuiceyTestHook)
 abstract class AbstractTest extends Specification {
 
     void cleanupSpec() {
@@ -50,7 +50,7 @@ abstract class AbstractTest extends Specification {
     }
 
     // common guicey extra extensions used for all tests
-    static class GuiceyTestConfigurator implements GuiceyConfigurator {
+    static class GuiceyTestHook implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
             builder.bundles(new HK2DebugBundle(), new GuiceRestrictedConfigBundle())

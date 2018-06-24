@@ -6,7 +6,7 @@ import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import spock.lang.Specification
 
 /**
@@ -22,7 +22,7 @@ class ScopeRecognitionTest extends Specification {
         ConfigScope.recognize(GuiceyBundleLookup) == ConfigScope.BundleLookup
         ConfigScope.recognize(Bundle) == ConfigScope.DropwizardBundle
         ConfigScope.recognize(ClasspathScanner) == ConfigScope.ClasspathScan
-        ConfigScope.recognize(GuiceyConfigurator) == ConfigScope.Configurator
+        ConfigScope.recognize(GuiceyConfigurationHook) == ConfigScope.Hook
         ConfigScope.recognize(HK2DebugBundle) == ConfigScope.GuiceyBundle
 
         when: "exemining non bundle class"

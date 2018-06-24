@@ -8,15 +8,14 @@ import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
-import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
@@ -53,18 +52,18 @@ public final class LifecycleSupport {
     public void register(final GuiceyLifecycleListener... listeners) {
         Arrays.asList(listeners).forEach(l -> {
             this.listeners.add(l);
-            if (l instanceof GuiceyConfigurator) {
-                Preconditions.checkState(isBefore(GuiceyLifecycle.ConfiguratorsProcessed),
-                        "Can't register listener as configurator because configurators "
+            if (l instanceof GuiceyConfigurationHook) {
+                Preconditions.checkState(isBefore(GuiceyLifecycle.ConfigurationHooksProcessed),
+                        "Can't register listener as hook because hooks "
                                 + "were already processed (current stage is %s).", currentStage);
-                ConfiguratorsSupport.listen((GuiceyConfigurator) l);
+                ((GuiceyConfigurationHook) l).register();
             }
         });
     }
 
-    public void configuratorsProcessed(final Set<GuiceyConfigurator> configurators) {
-        if (configurators != null && !configurators.isEmpty()) {
-            broadcast(new ConfiguratorsProcessedEvent(options, configurators));
+    public void configurationHooksProcessed(final Set<GuiceyConfigurationHook> hooks) {
+        if (hooks != null && !hooks.isEmpty()) {
+            broadcast(new ConfigurationHooksProcessedEvent(options, hooks));
         }
     }
 

@@ -10,7 +10,7 @@ import org.glassfish.jersey.server.monitoring.RequestEvent;
 import org.glassfish.jersey.server.monitoring.RequestEventListener;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
@@ -47,10 +47,10 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     }
 
     @Override
-    protected void configuratorsProcessed(final ConfiguratorsProcessedEvent event) {
-        log("%s configurators processed", event.getConfigurators().size());
+    protected void configurationHooksProcessed(final ConfigurationHooksProcessedEvent event) {
+        log("%s hooks processed", event.getHooks().size());
         if (showDetails) {
-            logDetails("configurators", event.getConfigurators());
+            logDetails("hooks", event.getHooks());
         }
     }
 

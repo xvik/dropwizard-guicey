@@ -27,8 +27,8 @@ import java.util.List;
  * <li>Use generic disable predicates (to not allow bundles disable, moreover it's tests-oriented feature)</li>
  * <li>Change options (because some bundles may already apply configuration based on changed option value
  * which will mean inconsistent state)</li>
- * <li>Register listener, implementing {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator}
- * (because it's too late - all configurators were processed)</li>
+ * <li>Register listener, implementing {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook}
+ * (because it's too late - all hooks were processed)</li>
  * <li>Register some special objects like custom injector factory or custrom bundles lookup</li>
  * </ul>
  *
@@ -307,8 +307,8 @@ public class GuiceyBootstrap {
      * could listen events from {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle#BundlesProcessed}.
      * <p>
      * WARNING: don't register listeners implementing
-     * {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator} - such registrations will be rejected
-     * (it is too late - all configurators were already processed, but, as listener requires configurators support,
+     * {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook} - such registrations will be rejected
+     * (it is too late - all hooks were already processed, but, as listener requires hooks support,
      * assuming it can't work without proper configuration).
      *
      * @param listeners guicey lifecycle listeners

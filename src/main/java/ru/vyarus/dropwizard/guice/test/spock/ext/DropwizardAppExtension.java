@@ -5,7 +5,7 @@ import com.google.inject.Injector;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.rules.ExternalResource;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp;
 
 /**
@@ -39,7 +39,7 @@ public class DropwizardAppExtension extends AbstractAppExtension<UseDropwizardAp
     }
 
     @Override
-    protected Class<? extends GuiceyConfigurator>[] getConfigurators(final UseDropwizardApp annotation) {
-        return annotation.configurators();
+    protected Class<? extends GuiceyConfigurationHook>[] getHooks(final UseDropwizardApp annotation) {
+        return annotation.hooks();
     }
 }

@@ -223,17 +223,17 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * applicability, but just for example).
          * <p>
          * Listener can't directly affect configuration (can't register or disable extensions, modules etc).
-         * But listener could implement {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator}
-         * interface and it would be registered as configurator automatically. This could be used to register special
+         * But listener could implement {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook}
+         * interface and it would be automatically registered. This could be used to register special
          * extensions required by listener logic (some diagnostic, monitoring or special features support).
          * <p>
          * You can also use {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter} when you need to
          * handle multiple events (it replaces direct events handling with simple methods).
          *
-         * @param listeners guicey lifecycle listeners (listener could be also configurator)
+         * @param listeners guicey lifecycle listeners (listener could be also a hook)
          * @return builder instance for chained calls
          * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
-         * @see ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+         * @see ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
          * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
          */
         public Builder<T> listen(final GuiceyLifecycleListener... listeners) {
@@ -851,7 +851,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see GuiceyOptions#InjectorStage
          */
         public GuiceBundle<T> build() {
-            bundle.context.applyConfigurators(this);
+            bundle.context.runHooks(this);
             return bundle;
         }
     }

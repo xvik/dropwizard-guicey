@@ -1,8 +1,8 @@
-package ru.vyarus.dropwizard.guice.test.configurator.unit;
+package ru.vyarus.dropwizard.guice.test.hook.unit;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
-import ru.vyarus.dropwizard.guice.test.GuiceyConfiguratorRule;
+import ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule;
 
 /**
  * @author Vyacheslav Rusakov
@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.test.GuiceyConfiguratorRule;
  */
 public abstract class BaseTest {
 
-    static GuiceyConfiguratorRule BASE_CONF = new GuiceyConfiguratorRule(
+    static GuiceyConfigurationRule BASE_CONF = new GuiceyConfigurationRule(
             (builder) -> builder.modules(new XMod()));
 
 

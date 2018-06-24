@@ -23,13 +23,13 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.HK2PhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig
 import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
@@ -38,7 +38,7 @@ import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
  * @author Vyacheslav Rusakov
  * @since 23.04.2018
  */
-@UseDropwizardApp(value = App, configurators = XConf)
+@UseDropwizardApp(value = App, hooks = XConf)
 class EventsConsistencyTest extends AbstractTest {
 
     def "Check events consistency"() {
@@ -96,7 +96,7 @@ class EventsConsistencyTest extends AbstractTest {
         }
     }
 
-    static class XConf implements GuiceyConfigurator {
+    static class XConf implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
             PropertyBundleLookup.enableBundles(LookupBundle.class)
@@ -115,11 +115,11 @@ class EventsConsistencyTest extends AbstractTest {
         static List<GuiceyLifecycle> called = new ArrayList<>()
 
         @Override
-        protected void configuratorsProcessed(ConfiguratorsProcessedEvent event) {
+        protected void configurationHooksProcessed(ConfigurationHooksProcessedEvent event) {
             baseChecks(event)
-            assert event.configurators.size() == 2
-            assert event.configurators[0] instanceof AbstractTest.GuiceyTestConfigurator
-            assert event.configurators[1] instanceof XConf
+            assert event.hooks.size() == 2
+            assert event.hooks[0] instanceof AbstractTest.GuiceyTestHook
+            assert event.hooks[1] instanceof XConf
         }
 
         @Override

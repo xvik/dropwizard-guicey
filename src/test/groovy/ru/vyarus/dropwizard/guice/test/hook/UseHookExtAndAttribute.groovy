@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.configurator
+package ru.vyarus.dropwizard.guice.test.hook
 
 import com.google.inject.Binder
 import com.google.inject.Module
@@ -8,9 +8,9 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfigurator
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -19,14 +19,14 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 13.04.2018
  */
-@UseGuiceyApp(value = App, configurators = Conf)
-@UseGuiceyConfigurator(Conf2)
-class UseConfiguratorExtAndAttribute extends Specification {
+@UseGuiceyApp(value = App, hooks = Hook)
+@UseGuiceyConfiguration(Hook2)
+class UseHookExtAndAttribute extends Specification {
 
     @Inject
     GuiceyConfigurationInfo info
 
-    def "Check configurator attribute works"() {
+    def "Check hook attribute works"() {
 
         expect: "module registered"
         info.getModules().containsAll(XMod, XMod2)
@@ -43,7 +43,7 @@ class UseConfiguratorExtAndAttribute extends Specification {
         }
     }
 
-    static class Conf implements GuiceyConfigurator {
+    static class Hook implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
             builder.modules(new XMod())
@@ -58,7 +58,7 @@ class UseConfiguratorExtAndAttribute extends Specification {
     }
 
 
-    static class Conf2 implements GuiceyConfigurator {
+    static class Hook2 implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
             builder.modules(new XMod2())

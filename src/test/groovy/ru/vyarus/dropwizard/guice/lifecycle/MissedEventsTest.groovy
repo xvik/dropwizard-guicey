@@ -30,7 +30,7 @@ class MissedEventsTest extends Specification {
 
 
         and: "not called"
-        !Listener.events.contains(GuiceyLifecycle.ConfiguratorsProcessed)
+        !Listener.events.contains(GuiceyLifecycle.ConfigurationHooksProcessed)
         !Listener.events.contains(GuiceyLifecycle.BundlesFromDwResolved)
         !Listener.events.contains(GuiceyLifecycle.BundlesFromLookupResolved)
         !Listener.events.contains(GuiceyLifecycle.BundlesProcessed)
@@ -67,8 +67,8 @@ class MissedEventsTest extends Specification {
             if (!events.contains(event.getType())) {
                 events.add(event.getType())
             }
-            if (event.getType() == GuiceyLifecycle.ConfiguratorsProcessed) {
-                throw new IllegalStateException("Configurators used!")
+            if (event.getType() == GuiceyLifecycle.ConfigurationHooksProcessed) {
+                throw new IllegalStateException("Hooks used!")
             }
             if (event.getType() == GuiceyLifecycle.BundlesFromLookupResolved) {
                 throw new IllegalStateException("Bundle lookup used!")

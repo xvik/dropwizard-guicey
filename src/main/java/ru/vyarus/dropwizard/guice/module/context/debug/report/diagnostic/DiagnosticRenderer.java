@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic;
 import com.google.common.collect.Lists;
 import com.google.inject.Module;
 import io.dropwizard.cli.Command;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
@@ -41,7 +42,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * If extensions print enabled without installers enabled then all extensions are rendered in registration order.
  * Markers:
  * <ul>
- * <li>CONF when extension installed by {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator}</li>
+ * <li>HOOK when extension installed by {@link GuiceyConfigurationHook}</li>
  * <li>SCAN when extension found by classpath scan</li>
  * <li>LAZY when {@link ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding}
  * annotation set</li>
@@ -262,8 +263,8 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         if (item.getRegisteredBy().contains(ConfigScope.ClasspathScan.getType())) {
             markers.add("SCAN");
         }
-        if (item.getRegisteredBy().contains(ConfigScope.Configurator.getType())) {
-            markers.add("CONF");
+        if (item.getRegisteredBy().contains(ConfigScope.Hook.getType())) {
+            markers.add("HOOK");
         }
         if (item.getRegistrationAttempts() > SINGLE) {
             markers.add("REG(" + item.getRegistrationAttempts() + ")");

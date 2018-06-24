@@ -4,16 +4,16 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfigurator
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 14.04.2018
  */
-@UseGuiceyConfigurator(LookupConfigurator)
+@UseGuiceyConfiguration(LookupHook)
 abstract class BaseDiagnosticTest extends Specification {
 
     void setupSpec() {
@@ -25,7 +25,7 @@ abstract class BaseDiagnosticTest extends Specification {
         InjectorLookup.clear()
     }
 
-    static class LookupConfigurator implements GuiceyConfigurator {
+    static class LookupHook implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
             // enable bundles lookup

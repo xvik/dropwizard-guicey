@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.configurator.unit;
+package ru.vyarus.dropwizard.guice.test.hook.unit;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -14,23 +14,23 @@ import org.junit.rules.RuleChain;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
-import ru.vyarus.dropwizard.guice.test.GuiceyConfiguratorRule;
+import ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule;
 
 /**
  * @author Vyacheslav Rusakov
  * @since 13.04.2018
  */
-public class ConfigurerDwAppTest {
+public class ConfigurationHookDwAppTest {
 
-    static DropwizardAppRule RULE = new DropwizardAppRule<>(ConfigurerGuiceyAppTest.App.class);
+    static DropwizardAppRule RULE = new DropwizardAppRule<>(ConfigurationHookGuiceyAppTest.App.class);
 
     @ClassRule
     public static RuleChain chain = RuleChain
-            .outerRule(new GuiceyConfiguratorRule((builder) -> builder.modules(new XMod())))
+            .outerRule(new GuiceyConfigurationRule((builder) -> builder.modules(new XMod())))
             .around(RULE);
 
     @Test
-    public void checkConfigurer() {
+    public void checkHook() {
         final GuiceyConfigurationInfo info = InjectorLookup.getInjector(RULE.getApplication()).get()
                 .getInstance(GuiceyConfigurationInfo.class);
         Assert.assertTrue(info.getModules().contains(XMod.class));

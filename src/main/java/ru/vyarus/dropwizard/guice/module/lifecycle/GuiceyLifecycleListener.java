@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
  * <p>
  * Example usage: {@link ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle}.
  * <p>
- * Listener could also implement {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator}
+ * Listener could also implement {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook}
  * in order to apply special configurations. For example, this could be some diagnostic extensions.
  * There is no other way to modify configuration in listener.
  *

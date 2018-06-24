@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context;
 import io.dropwizard.Bundle;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 
 import java.util.Arrays;
 
@@ -35,9 +35,9 @@ public enum ConfigScope {
      */
     ClasspathScan(ClasspathScanner.class),
     /**
-     * All configurations done by {@link GuiceyConfigurator} (most likely in integration tests).
+     * All configurations done by {@link GuiceyConfigurationHook} (most likely in integration tests).
      */
-    Configurator(GuiceyConfigurator.class),
+    Hook(GuiceyConfigurationHook.class),
     /**
      * WARNING: guicey bundle scope is bundle class itself. Constant is useless for direct usage!
      * It was added just for completeness of context recognition logic (see {@link #recognize(Class)})

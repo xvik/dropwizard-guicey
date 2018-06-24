@@ -8,8 +8,8 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
 
@@ -19,13 +19,13 @@ import spock.lang.Specification
  * @since 24.04.2018
  */
 @UseGuiceyApp(App)
-class ListenerWithConfiguratorTest extends Specification {
+class ListenerWithHookTest extends Specification {
 
-    def "Check listener configurator support"() {
+    def "Check listener hooks support"() {
 
         expect: "both listeners used"
-        Listener.calledConfigurators == 1
-        ListenerInception.calledConfigurators == 1
+        Listener.calledHooks == 1
+        ListenerInception.calledHooks == 1
     }
 
     static class App extends Application<Configuration> {
@@ -43,14 +43,14 @@ class ListenerWithConfiguratorTest extends Specification {
         }
     }
 
-    static class Listener implements GuiceyLifecycleListener, GuiceyConfigurator {
+    static class Listener implements GuiceyLifecycleListener, GuiceyConfigurationHook {
 
-        static int calledConfigurators
+        static int calledHooks
 
         @Override
         void onEvent(GuiceyLifecycleEvent event) {
-            if (event.getType() == GuiceyLifecycle.ConfiguratorsProcessed) {
-                calledConfigurators = ((ConfiguratorsProcessedEvent) event).configurators.size()
+            if (event.getType() == GuiceyLifecycle.ConfigurationHooksProcessed) {
+                calledHooks = ((ConfigurationHooksProcessedEvent) event).hooks.size()
             }
         }
 
@@ -62,12 +62,12 @@ class ListenerWithConfiguratorTest extends Specification {
     }
 
     static class ListenerInception implements GuiceyLifecycleListener {
-        static int calledConfigurators
+        static int calledHooks
 
         @Override
         void onEvent(GuiceyLifecycleEvent event) {
-            if (event.getType() == GuiceyLifecycle.ConfiguratorsProcessed) {
-                calledConfigurators = ((ConfiguratorsProcessedEvent) event).configurators.size()
+            if (event.getType() == GuiceyLifecycle.ConfigurationHooksProcessed) {
+                calledHooks = ((ConfigurationHooksProcessedEvent) event).hooks.size()
             }
         }
     }

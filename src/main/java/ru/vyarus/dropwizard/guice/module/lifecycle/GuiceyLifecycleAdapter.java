@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle;
 
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
@@ -22,8 +22,8 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             "PMD.NcssCount", "PMD.CyclomaticComplexity", "PMD.SwitchStmtsShouldHaveDefault"})
     public void onEvent(final GuiceyLifecycleEvent event) {
         switch (event.getType()) {
-            case ConfiguratorsProcessed:
-                configuratorsProcessed((ConfiguratorsProcessedEvent) event);
+            case ConfigurationHooksProcessed:
+                configurationHooksProcessed((ConfigurationHooksProcessedEvent) event);
                 break;
             case Initialization:
                 initialization((InitializationEvent) event);
@@ -73,7 +73,7 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         }
     }
 
-    protected void configuratorsProcessed(final ConfiguratorsProcessedEvent event) {
+    protected void configurationHooksProcessed(final ConfigurationHooksProcessedEvent event) {
         // empty
     }
 

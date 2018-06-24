@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.test.spock.ext;
 import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
 import org.junit.rules.ExternalResource;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp;
 
@@ -38,7 +38,7 @@ public class GuiceyAppExtension extends AbstractAppExtension<UseGuiceyApp> {
     }
 
     @Override
-    protected Class<? extends GuiceyConfigurator>[] getConfigurators(final UseGuiceyApp annotation) {
-        return annotation.configurators();
+    protected Class<? extends GuiceyConfigurationHook>[] getHooks(final UseGuiceyApp annotation) {
+        return annotation.hooks();
     }
 }

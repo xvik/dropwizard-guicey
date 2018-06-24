@@ -17,7 +17,7 @@ Example output:
 ```
 
                                                                          ─────────────────────────
-__[ 00:00:00.008 ]____________________________________________________/  1 configurators processed  \____
+__[ 00:00:00.008 ]____________________________________________________/  1 hooks processed  \____
 
 
 
@@ -118,11 +118,11 @@ Event listeners are not allowed to modify configuration, only observe it and, if
 post process instances (modules, bundles etc).
 
 But, if listener needs to register any additional extension it can implement `GuiceyConfigrator` interface
-to be automatically registered as configurator:
+to be automatically registered as configuration hook:
 
 ```java
 public class MyDebuggingListener extends GuiceyLifecycleAdapter 
-                                  implements GuiceyConfigurator {
+                                  implements GuiceyConfigurationHook {
     
     @Override
     public void configure(GuiceBundle.Builder builder) {
@@ -160,7 +160,7 @@ Note that some events may not been called - (?).
 Event |  Description  | Possible usage
 ------|---------------|---------------
  **Dropwizard initialization phase** |   |  
-ConfiguratorsProcessed | Called after all registered GuiceyConfigurator processing | Only for info
+HooksProcessed | Called after all registered GuiceyConfigurationHook processing | Only for info
 Initialization |  Called after GuiceBundle initialization. If commands search is enabled then all found commands will be provided in event. | Convenient moment to apply registrations into dropwizard Bootstrap object.
 **Dropwizard run phase** |   |
 BeforeRun | Meta event, called before guicey configuration just to indicate first point where Environment, Configuration and introspected configuration are available | For example, used by `bundle.printConfigurationBindings()` to print configuration bindings before injector start (help with missed bindings debug)

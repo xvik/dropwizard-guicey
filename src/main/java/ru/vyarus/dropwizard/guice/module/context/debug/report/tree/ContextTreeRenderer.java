@@ -61,7 +61,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         renderSpecialScope(config, scopes, root, "BUNDLES LOOKUP", BundleLookup);
         renderSpecialScope(config, scopes, root, "DROPWIZARD BUNDLES", DropwizardBundle);
         renderSpecialScope(config, scopes, root, "CLASSPATH SCAN", ClasspathScan);
-        renderSpecialScope(config, scopes, root, "CONFIGURATORS", Configurator);
+        renderSpecialScope(config, scopes, root, "HOOKS", Hook);
 
         final StringBuilder res = new StringBuilder().append(Reporter.NEWLINE).append(Reporter.NEWLINE);
         root.render(res);

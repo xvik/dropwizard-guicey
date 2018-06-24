@@ -7,8 +7,7 @@ import io.dropwizard.setup.Environment
 import org.junit.runners.model.Statement
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.config.BundleListenerRegistrationFailTest.XListener
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener
@@ -27,7 +26,7 @@ class BundleListenerRegistrationFailTest extends AbstractTest {
         new GuiceyAppRule(App, null).apply({} as Statement, null).evaluate()
         then: "fail"
         def ex = thrown(IllegalStateException)
-        ex.cause.message.startsWith("Can't register listener as configurator because configurators")
+        ex.cause.message.startsWith("Can't register listener as hook because hooks")
 
     }
 
@@ -49,7 +48,7 @@ class BundleListenerRegistrationFailTest extends AbstractTest {
         }
     }
 
-    static class XListener implements GuiceyLifecycleListener, GuiceyConfigurator {
+    static class XListener implements GuiceyLifecycleListener, GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
 

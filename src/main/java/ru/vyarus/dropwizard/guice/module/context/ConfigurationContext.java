@@ -10,8 +10,8 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
-import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
@@ -480,17 +480,17 @@ public final class ConfigurationContext {
     }
 
     /**
-     * Apply configurators (at the end of manual builder configuration) and fire success event.
+     * Runs all registered hooks (at the end of manual builder configuration) and fire success event.
      *
      * @param builder bundle builder
      */
-    public void applyConfigurators(final GuiceBundle.Builder builder) {
+    public void runHooks(final GuiceBundle.Builder builder) {
         // Support for external configuration (for tests)
         // Use special scope to distinguish external configuration
-        setScope(ConfigScope.Configurator.getType());
-        final Set<GuiceyConfigurator> configurators = ConfiguratorsSupport.configure(builder);
+        setScope(ConfigScope.Hook.getType());
+        final Set<GuiceyConfigurationHook> hooks = ConfigurationHooksSupport.run(builder);
         closeScope();
-        lifecycle().configuratorsProcessed(configurators);
+        lifecycle().configurationHooksProcessed(hooks);
     }
 
     /**

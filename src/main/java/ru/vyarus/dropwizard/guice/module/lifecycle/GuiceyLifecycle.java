@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle;
 
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
@@ -22,10 +22,10 @@ public enum GuiceyLifecycle {
     // -- Bundle.initialize()
 
     /**
-     * Called after all registered {@link ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator}
-     * processing. Provides all instances of executed configurators. Not called if no configurators used.
+     * Called after all registered {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook} processing.
+     * Provides all instances of executed hooks. Not called if no hooks used.
      */
-    ConfiguratorsProcessed(ConfiguratorsProcessedEvent.class),
+    ConfigurationHooksProcessed(ConfigurationHooksProcessedEvent.class),
     /**
      * Called after {@link ru.vyarus.dropwizard.guice.GuiceBundle#initialize(io.dropwizard.setup.Bootstrap)} method end.
      * Just a convenient moment to apply registrations into dropwizard {@link io.dropwizard.setup.Bootstrap} object

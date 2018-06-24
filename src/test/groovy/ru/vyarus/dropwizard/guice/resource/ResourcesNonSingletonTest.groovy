@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.resource
 
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
 import ru.vyarus.dropwizard.guice.support.resource.PrototypeResource
 import ru.vyarus.dropwizard.guice.support.resource.ResourceSingletonCheckApplication
@@ -13,7 +13,7 @@ import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
  * @author Vyacheslav Rusakov
  * @since 03.05.2018
  */
-@UseDropwizardApp(value = ResourceSingletonCheckApplication, configurators = XConf)
+@UseDropwizardApp(value = ResourceSingletonCheckApplication, hooks = XConf)
 class ResourcesNonSingletonTest extends AbstractTest {
 
     void cleanupSpec() {
@@ -38,7 +38,7 @@ class ResourcesNonSingletonTest extends AbstractTest {
         SingletonResource.creationCounter == 1
     }
 
-    static class XConf implements GuiceyConfigurator {
+    static class XConf implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
             builder.option(InstallersOptions.ForceSingletonForJerseyExtensions, false)

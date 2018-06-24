@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
  * <ul>
  * <li>{@link GuiceyLifecycleEvent} - lowest level, provides access to options (ideally there should be
  * bootstrap object, which is known for all events, but first event
- * {@link ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfiguratorsProcessedEvent}) simply
+ * {@link ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent}) simply
  * don't have access for it. So bootstrap is only provided in
  * {@link ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent}</li>
  * <li>{@link RunPhaseEvent} - all other events (started in bundle run phase and even after it)</li>

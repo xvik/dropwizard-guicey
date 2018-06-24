@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.test.spock.ext;
 import io.dropwizard.testing.ConfigOverride;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.SpecInfo;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -26,10 +26,10 @@ public abstract class AbstractAppExtension<T extends Annotation> extends Abstrac
 
     @Override
     public void visitSpec(final SpecInfo spec) {
-        final List<GuiceyConfigurator> configurators =
-                GuiceyConfiguratorExtension.instantiate(getConfigurators(annotation));
+        final List<GuiceyConfigurationHook> hooks =
+                GuiceyConfigurationExtension.instantiate(getHooks(annotation));
         final GuiceyInterceptor interceptor =
-                new GuiceyInterceptor(spec, buildResourceFactory(annotation), configurators);
+                new GuiceyInterceptor(spec, buildResourceFactory(annotation), hooks);
         final SpecInfo topSpec = spec.getTopSpec();
         topSpec.addSharedInitializerInterceptor(interceptor);
         topSpec.addInitializerInterceptor(interceptor);
@@ -38,9 +38,9 @@ public abstract class AbstractAppExtension<T extends Annotation> extends Abstrac
 
     /**
      * @param annotation extension annotation instance
-     * @return configurator classes defined in annotation
+     * @return configuration hooks defined in annotation
      */
-    protected abstract Class<? extends GuiceyConfigurator>[] getConfigurators(T annotation);
+    protected abstract Class<? extends GuiceyConfigurationHook>[] getHooks(T annotation);
 
     /**
      * @param annotation extension annotation instance

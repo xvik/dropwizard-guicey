@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.configurator.unit;
+package ru.vyarus.dropwizard.guice.test.hook.unit;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
-import ru.vyarus.dropwizard.guice.test.GuiceyConfiguratorRule;
+import ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule;
 
 import java.util.Arrays;
 
@@ -16,19 +16,19 @@ import java.util.Arrays;
  * @author Vyacheslav Rusakov
  * @since 13.04.2018
  */
-public class MultipleConfiguratorsTest extends BaseTest {
+public class MultipleHooksTest extends BaseTest {
 
-    static GuiceyAppRule RULE = new GuiceyAppRule<>(ConfigurerGuiceyAppTest.App.class, null);
+    static GuiceyAppRule RULE = new GuiceyAppRule<>(ConfigurationHookGuiceyAppTest.App.class, null);
 
     @ClassRule
     public static RuleChain chain = RuleChain
             .outerRule(BASE_CONF)
-            .around(new GuiceyConfiguratorRule((builder) -> builder.modules(new XMod2())))
+            .around(new GuiceyConfigurationRule((builder) -> builder.modules(new XMod2())))
             .around(RULE);
 
 
     @Test
-    public void checkConfigurer() {
+    public void checkHook() {
         final GuiceyConfigurationInfo info = (GuiceyConfigurationInfo) RULE.getBean(GuiceyConfigurationInfo.class);
         Assert.assertTrue(info.getModules()
                 .containsAll(Arrays.asList(BaseTest.XMod.class, XMod2.class)));

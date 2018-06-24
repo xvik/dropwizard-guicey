@@ -7,7 +7,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.Filters
@@ -53,7 +53,7 @@ class DisableWithPredicateTest extends AbstractTest {
         and: "correct disable scope"
         info.data.getItems(Filters.disabledBy(ConfigScope.Application.type)) as Set ==
                 [SampleBundle, SampleModule1] as Set
-        info.data.getItems(Filters.disabledBy(ConfigScope.Configurator.type)) as Set ==
+        info.data.getItems(Filters.disabledBy(ConfigScope.Hook.type)) as Set ==
                 [SampleExtension1, ManagedInstaller] as Set
     }
 
@@ -79,7 +79,7 @@ class DisableWithPredicateTest extends AbstractTest {
         }
     }
 
-    static class Listener extends GuiceyLifecycleAdapter implements GuiceyConfigurator {
+    static class Listener extends GuiceyLifecycleAdapter implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
             builder.disable(type(SampleExtension1, ManagedInstaller))

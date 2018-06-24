@@ -157,7 +157,7 @@ Guicey provides more lightweight alternative to DropwizardAppRule: GuiceyAppRule
 Use it for core business logic integration tests.
 
 Also, note that you may replace any extension or bean in context before test
-(GuiceyConfiguratorRule).
+(GuiceyConfigurationRule).
 
 ## Go on
 

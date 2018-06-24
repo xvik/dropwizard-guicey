@@ -6,8 +6,8 @@ import org.junit.rules.ExternalResource;
 import org.spockframework.runtime.extension.AbstractMethodInterceptor;
 import org.spockframework.runtime.extension.IMethodInvocation;
 import org.spockframework.runtime.model.SpecInfo;
-import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import spock.lang.Shared;
 
 import java.lang.reflect.Field;
@@ -30,7 +30,7 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     private static Method after;
 
     private final ExternalRuleAdapter externalRuleAdapter;
-    private final List<GuiceyConfigurator> configurators;
+    private final List<GuiceyConfigurationHook> hooks;
     private final Set<InjectionPoint> injectionPoints;
     private ExternalResource resource;
 
@@ -47,15 +47,15 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     }
 
     public GuiceyInterceptor(final SpecInfo spec, final ExternalRuleAdapter externalRuleAdapter,
-                             final List<GuiceyConfigurator> configurators) {
+                             final List<GuiceyConfigurationHook> hooks) {
         this.externalRuleAdapter = externalRuleAdapter;
-        this.configurators = configurators;
+        this.hooks = hooks;
         injectionPoints = InjectionPoint.forInstanceMethodsAndFields(spec.getReflection());
     }
 
     @Override
     public void interceptSharedInitializerMethod(final IMethodInvocation invocation) throws Throwable {
-        configurators.forEach(ConfiguratorsSupport::listen);
+        hooks.forEach(GuiceyConfigurationHook::register);
         if (resource == null) {
             resource = externalRuleAdapter.newResource();
         }
@@ -73,7 +73,7 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     @Override
     public void interceptCleanupSpecMethod(final IMethodInvocation invocation) throws Throwable {
         // just in case to avoid side-effects
-        ConfiguratorsSupport.reset();
+        ConfigurationHooksSupport.reset();
         try {
             invocation.proceed();
         } finally {

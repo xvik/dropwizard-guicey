@@ -1,8 +1,9 @@
 package ru.vyarus.dropwizard.guice.test;
 
 import org.junit.rules.ExternalResource;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
-import ru.vyarus.dropwizard.guice.configurator.ConfiguratorsSupport;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,14 +17,14 @@ import java.util.List;
  *    static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
  *   {@literal @}ClassRule
  *    public static RuleChain chain = RuleChain
- *            .outerRule(new GuiceyConfiguratorRule((builder) -> builder.modules(...)))
+ *            .outerRule(new GuiceyConfigurationRule((builder) -> builder.modules(...)))
  *            .around(RULE);
  * }</pre>
  * To declare common extensions for all tests, declare common rule in test class (without {@code @ClassRule}
  * annotation!) and use it in chain:
  * <pre>{@code
  *     public class BaseTest {
- *         static GuiceyConfiguratorRule BASE = new GuiceyConfiguratorRule((builder) -> builder.modules(...))
+ *         static GuiceyConfigurationRule BASE = new GuiceyConfigurationRule((builder) -> builder.modules(...))
  *     }
  *
  *     public class SomeTest extends BaseTest {
@@ -31,14 +32,14 @@ import java.util.List;
  *        {@literal @}ClassRule
  *         public static RuleChain chain = RuleChain
  *            .outerRule(BASE)
- *            .around(new GuiceyConfiguratorRule((builder) -> builder.modules(...)) // optional test-specific staff
+ *            .around(new GuiceyConfigurationRule((builder) -> builder.modules(...)) // optional test-specific staff
  *            .around(RULE);
  *     }
  * }</pre>
  * <p>
  * IMPORTANT: rule will not work with spock extensions (because of lifecycle specifics)! Use
- * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfigurator} or new {@code configurators} attribute in
- * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp} and
+ * {@link UseGuiceyConfiguration} or new {@code hooks} attribute in
+ * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp} or
  * {@link ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp} instead.
  * <p>
  * Rule is thread safe: it is assumed that rule will be applied at the same thread as test application initialization.
@@ -46,22 +47,22 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 11.04.2018
  */
-public class GuiceyConfiguratorRule extends ExternalResource {
+public class GuiceyConfigurationRule extends ExternalResource {
 
-    private final List<GuiceyConfigurator> configurers;
+    private final List<GuiceyConfigurationHook> hooks;
 
-    public GuiceyConfiguratorRule(final GuiceyConfigurator... configurers) {
-        this.configurers = Arrays.asList(configurers);
+    public GuiceyConfigurationRule(final GuiceyConfigurationHook... hooks) {
+        this.hooks = Arrays.asList(hooks);
     }
 
     @Override
     protected void before() throws Throwable {
-        configurers.forEach(ConfiguratorsSupport::listen);
+        hooks.forEach(GuiceyConfigurationHook::register);
     }
 
     @Override
     protected void after() {
         // normally reset is not required, but called to avoid possible state for some failed cases
-        ConfiguratorsSupport.reset();
+        ConfigurationHooksSupport.reset();
     }
 }

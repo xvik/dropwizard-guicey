@@ -8,13 +8,13 @@
         - generic disable method by predicate: .disable(Predicate) (for example, disable all extensions in package or all installed by some bundle etc.)
 * Add direct support for guice bindings override (using Modules.override() internally) to main bundle and guicey bundle bootstrap: 
     .modulesOverride(Module...)
-* Support for configuration override in integration tests (#23):
-    - New GuiceyConfigurator interface: configurator receive bundle builder instance after application configuration and so could modify configuration (with new disable* methods)
+* Add hooks for configuration override in integration tests (#23):
+    - New GuiceyConfigurationHook interface: hook receive bundle builder instance after application configuration and so could modify configuration (with new disable* methods)
     - Junit:
-        - New rule GuiceyConfiguratorRule allows configurator definition 
+        - New rule GuiceyConfigurationRule for hook registration 
     - Spock:
-        - New @UseGuiceyConfigurator extension allows base configurator definition (in base class)
-        - New attribute configurators in @UseGuiceyApp and @UseDropwizardApp extensions to declare test-specific configurators                      
+        - New @UseGuiceyConfiguration extension allows base hook definition (in base class)
+        - New attribute hooks in @UseGuiceyApp and @UseDropwizardApp extensions to declare test-specific hooks                      
 * Add guicey lifecycle events (16 events): provide access to all possible internal state, available at this moment. 
     It may be used to write instance specific features (post processing) or just advanced logging
     - Add new method in main bundle or guicey bundle bootstrap: .listen(GuiceyLifecycleListener...)      

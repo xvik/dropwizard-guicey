@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.test.spock;
 
 import io.dropwizard.Application;
 import org.spockframework.runtime.extension.ExtensionAnnotation;
-import ru.vyarus.dropwizard.guice.configurator.GuiceyConfigurator;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.spock.ext.GuiceyAppExtension;
 
 import java.lang.annotation.ElementType;
@@ -44,12 +44,12 @@ public @interface UseGuiceyApp {
     ConfigOverride[] configOverride() default {};
 
     /**
-     * Configurators provide access to guice builder allowing complete customization of application context
+     * Hooks provide access to guice builder allowing complete customization of application context
      * in tests.
      *
-     * @return list of configurators to use
-     * @see UseGuiceyConfigurator to declare base configurators in base test class
-     * @see GuiceyConfigurator for more info
+     * @return list of hooks to use
+     * @see UseGuiceyConfiguration to declare base hooks in base test class
+     * @see GuiceyConfigurationHook for more info
      */
-    Class<? extends GuiceyConfigurator>[] configurators() default {};
+    Class<? extends GuiceyConfigurationHook>[] hooks() default {};
 }
