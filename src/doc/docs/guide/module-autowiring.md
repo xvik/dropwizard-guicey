@@ -7,6 +7,7 @@ Often `Environment` and `Configuration` objects are also required.
 
 Guicey can automatically inject environment objects into your module if 
 it implements any of (or all of them): 
+
 * `BootstrapAwareModule` - access bootstrap instance 
 * `EnvironmentAwareModule` - access environment instance 
 * `ConfigurationAwareModule` - access configuration instance
@@ -77,13 +78,13 @@ public class MyModule extends DropwizardAwareModule<MyConfiguration> {
 
 Or it could be some [custom options](options.md#custom-options) usage.
 
-!!! note
+!!! tip
     If you are going to register module inside guicey bundle, you can simply resolve
     option value inside guicey bundle and pass it to module directly.
 
 ## Configuration access
 
-!!! note
+!!! tip
     If you are going to register module inside guicey bundle, you can simply resolve
     configuration object inside guicey bundle and pass it to module directly (bundle has 
     absolutely the same configuration access methods)

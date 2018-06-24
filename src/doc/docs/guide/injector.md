@@ -21,7 +21,7 @@ So it is safe to enable them.
 
 In some cases it may be important to get injector instance outside of guice context.
 
-!!! note
+!!! warning
     Injector is created on dropwizard run phase. Attempt to obtain injector before it
     will lead to exception.
 
@@ -53,7 +53,7 @@ public class MyApplication extends Application<Configuration> {
 
 !!! tip
     Most likely, requirement for injector instance means integration with some third party library.
-    Consider writing custom installer in such cases (it will eliminate need for injector instance).
+    Consider [writing custom installer](installers.md#writing-custom-installer) in such cases (it will eliminate need for injector instance).
     
 Inside guice context you can simply inject Injector instance:
 

@@ -27,7 +27,14 @@ class SampleResource {
 ```
 
 !!! attention ""
-    Resources registered as **singletons**, even if guice bean scope isn't set.    
+    Resources registered as **singletons**, when no explicit scope annotation is used.
+    Behaviour could be disabled with [option](../guide/configuration.md#options):
+    ````java
+    .option(InstallerOptions.ForceSingletonForJerseyExtensions, false)
+    ``` 
+
+Special `@Protptype` scope annotation may be used to mark resources in prototype scope.
+It is useful when [guice servlet support is disabled](../guide/web.md#disable-servletmodule-support) (and so `@RequestScoped` could not be used). 
 
 ### Interface recognition
 
@@ -123,6 +130,10 @@ public class MyResource {
 If resource class is annotated with `#!java @HK2Managed` then jersey HK2 container will manage bean creation instead of guice. 
 Injection of guice managed beans [could still be possible](../guide/configuration.md#hk2-bridge) via registered [HK2-guice-bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html),
 but guice aop features will not work.
+
+!!! note
+    You can manage resources with [HK2 by default](../guide/configuration.md#use-hk2-for-jersey-extensions),
+    but this will also affect all [jersey extensions](jersey-ext.md)
 
 ```java
 @Path("/res")

@@ -45,9 +45,9 @@ Then `MyAbstractConfiguration` will be also bound and following injection will w
 !!! note
     Configuration object bindings could be declared with or without qualifier `@Config`.
     So `@Inject @Config MyAbstractConfiguration conf` will also work. It is suggested to always
-    use qualifier (to get in common with direct value bindings), but it's up to your.
+    use qualifier (to get in common with direct value bindings), but it's up to you.
 
-If root configuration classes (on any level) implement interfaces then configuration could be bound by interface.
+If root configuration classes implement interfaces then configuration could be bound by interface.
 This may be used to support common `Has<Something>` configuration interfaces convention used to recognize your extension configuration in configuration object.
 
 ```java
@@ -592,7 +592,7 @@ GuiceBundle.builder()
 !!! warning
     You will not be able to use guice AOP on HK2 managed beans. 
     
-Depening on default mode selected, you can use annotations to change extension DI:
+Depending on default mode selected, you can use annotations to change extension DI:
 * `@HK2Managed` - extension managed by hk2 (useful if in default mode when all beans created by guice)
 * `@GuiceManaged` - extension managed by guice (default, useful only when `.useHK2ForJerseyExtensions()` enabled)
 

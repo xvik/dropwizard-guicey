@@ -1,8 +1,9 @@
 # Getting started
 
 !!! note
-    Getting started guide briefly covers the most important concepts and commonly used features.
-    Advanced description of mentioned topics may be found in user guide.    
+    Getting started guide briefly shows the most commonly used features.
+    Advanced description of guicey concepts may be found in [the concepts section](concepts.md).
+    If you are migrating from dropwizard-guice, read [migration guide](guide/dg-migration.md).    
 
 ## Installation
 
@@ -14,14 +15,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>4.1.0</version>
+  <version>4.2.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:4.1.0'
+compile 'ru.vyarus:dropwizard-guicey:4.2.0'
 ```
 
 ### BOM
@@ -30,11 +31,11 @@ Guicey pom may be also used as maven BOM:
 
 ```groovy
 plugins {
-    id "io.spring.dependency-management" version "1.0.3.RELEASE"
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus.guicey:guicey:4.1.0'  
+        mavenBom 'ru.vyarus.guicey:guicey:4.2.0'  
         // uncomment to override dropwizard version    
         // mavenBom 'io.dropwizard:dropwizard-bom:1.3.4' 
     }
@@ -172,13 +173,11 @@ Now resource will return caller IP.
 
 Also, you can inject request specific objects [as method parameter](installers/resource.md#context-usage)
 
-!!! note
+!!! note ""
     Field injection used in examples for simplicity. In real life projects [prefer constructor injection](https://github.com/google/guice/wiki/Injections).    
 
-!!! tip
-    By default, resources are **forced to be singletons**, but you can use scope annotations to change it: 
-    `@RequestScoped` or `@Prototype` (for example, when guice servet modules support is disabled).
-    Also, you can switch all jersey extensions (resources, providers) to be managed by HK2. 
+!!! warning ""
+    By default, resources are **forced to be singletons** (when no scope annotation defined). 
 
 ### Add managed
 
@@ -289,10 +288,10 @@ Multiple modules could be registered:
         
 !!! tip ""
     If you have at least one module of your own then it's recommended to move 
-    all guice modules registration there to encapsulate guice staff:
+    all guice modules registration there to encapsulate guice staff:    
     ```java
     .modules(new SampleModule())        
-    ```
+    ```    
     ```java
     public class SampleModule extends AbstractModule {
         
@@ -304,6 +303,8 @@ Multiple modules could be registered:
         }
     }
     ```
+    Except when you need to [access dropwizard objects](guide/module-autowiring.md) in module
+    
     
 !!! warning
     Guicey removes duplicate registrations by type. For example, in case:

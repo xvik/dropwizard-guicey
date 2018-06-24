@@ -15,13 +15,23 @@ Installs various jersey extensions, usually annotated with jersey `#!java @Provi
 Detects  classes annotated with jersey `@javax.ws.rs.ext.Provider` annotation and register their instances in jersey.
 
 !!! attention ""
-    Extensions registered as **singletons**, even if guice bean scope isn't set.  
+    Extensions registered as **singletons**, when no explicit scope annotation is used.
+    Behaviour could be disabled with [option](../guide/configuration.md#options):
+    ````java
+    .option(InstallerOptions.ForceSingletonForJerseyExtensions, false)
+    ```   
+
+Special `@Protptype` scope annotation may be used to mark resources in prototype scope.
+It is useful when [guice servlet support is disabled](../guide/web.md#disable-servletmodule-support) (and so `@RequestScoped` could not be used).
 
 Due to specifics of [HK2 integration](lifecycle.md), you may need to use:
 
 * `#!java @HK2Managed` to delegate bean creation to HK2
 * `#!java @LazyBinding` to delay bean creation to time when all dependencies will be available 
 * `javax.inject.Provider` as universal workaround (to wrap not immediately available dependency).
+
+Or you can enable [HK2 management for jersey extensions by default](../guide/configuration.md#use-hk2-for-jersey-extensions).
+Note that this will affect [resources](resource.md) too and guice aop will not work on jersey extensions.
 
 ### Factory
 

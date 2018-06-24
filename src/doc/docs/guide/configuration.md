@@ -179,7 +179,7 @@ You can disable guice modules (even if it's not registered)
 ```
 
 !!! important
-    This will affect only modules directly registered in main bundle or guicey bundle.
+    This will affect only modules directly registered in main bundle or guicey bundle
     (modules installed inside guice module are not affected).
     
 This is mostly useful for tests, but could be used to prevent some additional module 
@@ -575,6 +575,7 @@ Hooks registered after this moment will simply be never used.
     
 In hook you can do all the same as in main application configuration. In context of tests,
  the most important is:
+ 
 * Change options
 * Disable any bundle, installer, extension, module
 * Register disable predicate (to disable features by package, registration source etc.)

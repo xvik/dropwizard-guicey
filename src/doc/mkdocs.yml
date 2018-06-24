@@ -48,7 +48,7 @@ markdown_extensions:
 pages:
     - Home: index.md
     - Getting started: getting-started.md
-    - Introduction: concepts.md
+    - Concepts overview: concepts.md
     - User guide:
       - Configuration: guide/configuration.md
       - Integration lifecycle: guide/lifecycle.md
@@ -65,7 +65,7 @@ pages:
       - Commands: guide/commands.md
       - Web: guide/web.md
       - Test: guide/test.md
-      - Migration from dropwizard-guice: guice/dg-migration.md
+      - Migration from dropwizard-guice: guide/dg-migration.md
     - Installers:
       - Resource: installers/resource.md
       - Task: installers/task.md
