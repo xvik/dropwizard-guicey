@@ -2,8 +2,8 @@
 
 !!! summary 
     Use scan only for application package. When part of application extracted to it's own library (usually already mature part) 
-    create guicey bundle for it with explicit extensions definition. Use manual bundles installation or bundle lookup mechanism 
-    to install custom bundles.
+    create [guicey bundle](bundles.md) for it with explicit extensions definition. Use [manual bundles installation](configuration.md#guicey-bundles) 
+    or [bundle lookup mechanism](bundles.md#bundle-lookup) to install custom bundles.
 
 ## Configuration
 
@@ -60,6 +60,9 @@ public static class FooExceptionMapper extends AbstractExceptionMapper<IOExcepti
 
 In this case `FooExceptionMapper` will be ignored by classpath scanner. But you still can install extension manually.
 
+!!! tip
+    If you can't use annotation on extension for some reson, you can simply [disable extension](configuration.md#disable-extensions) 
+
 ## Motivation
 
 Usually, dropwizard applications are not so big (middle to small) and all classes in application package are used (so you will load all of them in any case). 
@@ -77,5 +80,5 @@ so there should not be any problems for using classpath scan for production too.
     It's a bad idea to use classpath scan for resolving extensions from 3rd party jars. Group extensions from external 
     jars into bundles. Usually, external libraries are well defined and all used extensions are already known and unlikely to change often, 
     so it's better to manually install them through custom guicey bundle: bundle "documents" extensions.
-    If you want plug-n-play behaviour (bundle installed when jar appear in classpath) then use bundle lookup (enabled by default) which could load 
-    bundles with service loader definition (ServiceLoaderBundleLookup).
+    If you want plug-n-play behaviour (bundle installed when jar appear in classpath) then use bundle lookup 
+    (enabled by default) which could load bundles with [service loader definition](bundles.md#service-loader-lookup).

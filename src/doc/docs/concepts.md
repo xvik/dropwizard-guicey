@@ -1,6 +1,6 @@
 # Concepts overview
 
-!!! note
+!!! note ""
     Section briefly describes new concepts introduced by guicey and explains why it was done that way.
     For usage instruction and basic examples see [getting-started section](getting-started.md). 
 
@@ -9,13 +9,20 @@
 Dropwizard declares two phases: 
 
 * initialization (`App.initialize` method) - when dropwizard app must be configured
-* run (`App.run` method) - when configuration is available and extensions could be registered environment
+* run (`App.run` method) - when configuration is available and extensions could be registered in environment
 
 If we create injector in initialization phase then we will not have access to `Configuration` and `Environment`
 in guice modules, but configuration could be required, especially for 3rd party modules, which
-can't be created without known configuration.   
+does not support lazy configuration.   
 
 Guicey creates injector at **run phase** to allow using configuration (and environment) in guice modules.
+
+!!! note ""
+    Many people ask why not just use HK2 instead of guice as it's already provided. 
+    Unfortunately, it's hard to use it in the same elegant way as we can use guice. 
+    HK2 context is launched too late (after dropwizard run phase). For example, it is 
+    impossible to use HK2 to instantiate dropwizard managed object because managed 
+    must be registered before HK2 context starts.
 
 ### Guice module
 
@@ -51,7 +58,7 @@ Guicey always apply it's own module (`GuiceBootstrapModule`) to injector. This m
 adds all extra bindings (for dropwizard and jersey objects).  
 
 * `io.dropwizard.setup.Bootstrap` 
-* `io.dropwizard.Configuration` 
+* `io.dropwizard.Configuration`
 * `io.dropwizard.setup.Environment`
 
 Bindings below are not immediately available as HK2 context [starts after guice](guide/lifecycle.md):
@@ -149,9 +156,9 @@ obtained from guice injector, but it's a boilerplate.
 Instead, guicey introduce `Extension-Installer` concept: you create extension (e.g. `MyResource`)
 and Installer knows how to install it. Guicey only need to know extension class.
 
-If you use classpath scanning, then you don't need to do anything: guicey will recognize extensions and install them.
+If you use [classpath scanning](guide/scan.md), then you don't need to do anything: guicey will recognize extensions and install them.
 
-[`ResourceInstaller`](installers/resource.md) example, for better understanding:
+For example, [`ResourceInstaller`](installers/resource.md) will:
 
 1. recognize `MyResource` class as rest resource by `@Path` annotation
 2. gets instance from injector (`injector.getInstance(MyResource.class)`) and
@@ -285,11 +292,8 @@ installers, extensions, modules and other bundles. Also, it provides access to d
 In dropwizard bundles are helpful not just for extracting re-usable extensions, but for
 separation of application logic.
 
-In guicey, you don't need write registration code and, with auto scan enabled,
-don't need to configure much at all. So usually, there is no necessity to use guicey bundles
-inside project at all.
-
-This makes guicy bundles mostly usable for 3rd party integrations (or core modules extraction for large projects), 
+In guicey, you don't need to write registration code and, with auto scan enabled,
+don't need to configure much at all. This makes guicy bundles mostly usable for 3rd party integrations (or core modules extraction for large projects), 
 where you can't (and should not) rely on class path scan and must declare all installers and extensions manually.
 
 Guicey itself comes with multiple bundles: 
@@ -359,8 +363,8 @@ bootstrap.addBundle(GuiceBundle.builder()
 ```
 
 !!! tip
-    You can even perform [mass overrides with some predicate](guide/configuration.md#disable-by-predicate). 
-    For example, disable all extensions in package:
+    You can even perform [mass disables by predicate](guide/configuration.md#disable-by-predicate). 
+    For example, disable all installations (extensions, bundles etc) from package:
     ```java
     .disable(Disables.inPackage("some.package.here"))
     ```

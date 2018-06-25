@@ -1,6 +1,6 @@
 # Getting started
 
-!!! note
+!!! note ""
     Getting started guide briefly shows the most commonly used features.
     Advanced description of guicey concepts may be found in [the concepts section](concepts.md).
     If you are migrating from dropwizard-guice, read [migration guide](guide/dg-migration.md).    
@@ -37,7 +37,7 @@ dependencyManagement {
     imports {
         mavenBom 'ru.vyarus.guicey:guicey:4.2.0'  
         // uncomment to override dropwizard version    
-        // mavenBom 'io.dropwizard:dropwizard-bom:1.3.4' 
+        // mavenBom 'io.dropwizard:dropwizard-bom:1.3.5' 
     }
 }
 

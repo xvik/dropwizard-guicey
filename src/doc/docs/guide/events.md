@@ -4,8 +4,11 @@ Guicey broadcast lifecycle events in all major points. Each event
 provides access to all available state at this point.
 
 Events could be used for configuration analysis or to add some special post processing
-(e.g. post process modules before injector creation). But events could not modify configuration itself
-(can't add new extensions, installers, bundles or disable anything).   
+(e.g. post process modules before injector creation). 
+
+!!! important
+    Event listeners could not modify configuration itself
+    (can't add new extensions, installers, bundles or disable anything).   
 
 ## Debug
 
@@ -112,6 +115,13 @@ public class MyListener extends GuiceyLifecycleAdapter {
 }
 ```
 
+### Bundles
+
+Event listeners could also be registered in guicey bundle, but not all events will be received by such events
+(as bundles processing is not first lifecycle phase).
+
+Aslo, such bundles can't be configuration hooks (because all hooks are already processed at this point). 
+
 ### Context modification
 
 Event listeners are not allowed to modify configuration, only observe it and, if required, 
@@ -160,7 +170,7 @@ Note that some events may not been called - (?).
 Event |  Description  | Possible usage
 ------|---------------|---------------
  **Dropwizard initialization phase** |   |  
-HooksProcessed | Called after all registered GuiceyConfigurationHook processing | Only for info
+HooksProcessed(?) | Called after all registered GuiceyConfigurationHook processing | Only for info
 Initialization |  Called after GuiceBundle initialization. If commands search is enabled then all found commands will be provided in event. | Convenient moment to apply registrations into dropwizard Bootstrap object.
 **Dropwizard run phase** |   |
 BeforeRun | Meta event, called before guicey configuration just to indicate first point where Environment, Configuration and introspected configuration are available | For example, used by `bundle.printConfigurationBindings()` to print configuration bindings before injector start (help with missed bindings debug)

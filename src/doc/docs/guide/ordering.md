@@ -7,7 +7,7 @@ Guicey `@Order` annotation should be used to order extensions and installers.
 Order is natural. For example, `@Order(10)` will be before `@Order(20)`.
 
 When no annotation present, class order set to `#!java Integer.MAX_VALUE`, so
-all classes without order annotation will always goes last.
+all classes without order annotation are always goes last.
 
 ## Extensions order
 

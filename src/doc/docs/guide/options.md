@@ -4,15 +4,15 @@ Options are low level configurations. In contrast to dropwizard configuration (f
 options are set during development and represent developer decisions. Often, options allow to change opinionated default behaviours.
 
 Options are declared with enums. Enums used to naturally group options (also cause pretty reporting). 
-Enums must implement Option interface (this makes enum declaration more verbose (because it is impossible to use abstract class in enum),
+Enums must implement `Option` interface (this makes enum declaration more verbose (because it is impossible to use abstract class in enum),
 but provides required option info).
 
-Guicey use options to allow other part to know guice bundle configurations (configured packages to scan, search commands enabling etc) through `GuiceyOptions` enum
+Guicey use options to share guice bundle configurations (configured packages to scan, search commands enabling etc) through `GuiceyOptions` enum
 (for simplicity, main guicey options usages are already implemented as shortcut methods in guice bundle).
 Another use is in web installers to change default behaviour though `InstallersOptions` enum. 
 
 Custom options may be defined for 3rd party bundle or even application. Options is a general mechanism providing configuration and access points with 
-standard reporting (part of diagnostic reporting). It may be used as feature triggers (like guicey do), to enable debug behaviour or to specialize
+standard reporting (part of [diagnostic reporting](diagnostic.md)). It may be used as feature triggers (like guicey do), to enable debug behaviour or to specialize
 application state in tests (just to name a few).
 
 ## Usage
@@ -23,14 +23,15 @@ for sure, this will eventually lead to inconsistent behaviour.
 
 Option could not be set to null. Option could be null only if it's default value is null and custom value not set.
 Custom option value is checked for compatibility with option type (from option definition) and error thrown if does not match.
-Of course, type checking is limited to top class and generics are ignored (so List<String> could not be specified and so
-can't be checked), but it's a compromise between complexity and easy of use (the same as Enum & Option pair).
+Of course, type checking is limited to top class and generics are ignored (so `List<String>` could not be specified and so
+can't be checked), but it's a compromise between complexity and easy of use (the same as `Enum & Option` pair).
 
 Options could be accessed by:
 
-* Guicey bundles using `bootstrap.option()` method
-* Installer by implementing `WithOptions` interface (or extend `InstallerOptionsSupport`)
-* Any guice bean could inject `Options` bean and use it to access options.
+* Guicey bundles using [`bootstrap.option()`](bundles.md#options)
+* Installer by implementing [`WithOptions`](installers.md#options) interface 
+* Any guice bean could inject [`Options`](bindings.md#options) bean and use it to access options.
+* Guice module could access options by implementing [`OptionsAwareModule`](module-autowiring.md#options) marker interface
 
 Guicey tracks options definition and usage and report all used options as part of [diagnostic reporting](diagnostic.md).
 Pay attention that defined (value set) but not used (not consumed) options are marked as NOT_USED to indicate possibly redundant options.
@@ -41,7 +42,7 @@ GuiceyOptions.BindConfigurationInterfaces will not appear in report at all if no
 
 ## Custom options
 
-Options must be enum and implement Option interface, like this:
+Options must be enum and implement `Option` interface, like this:
 
 ```java
 enum MyOptions implements Option {
@@ -116,13 +117,14 @@ GuiceBundle.builder()
 ```
 
 Here:
-* Myoptions.SomeOption could be changed with "myprop" system property (`-Dmyprop=something`)
-* GuiceyOptions.InjectorStage could be changed with environment variable "STAGE"
-* Myoptions.SomeOtherOption set from string (string could be obtained somewhere else manually) 
+
+* `Myoptions.SomeOption` could be changed with "myprop" system property (`-Dmyprop=something`)
+* `GuiceyOptions.InjectorStage` could be changed with environment variable "STAGE"
+* `Myoptions.SomeOtherOption` set from string (string could be obtained somewhere else manually) 
 
 !!! important
     Missed mappings are ignored: e.g. if system property or environment variable is not 
-    defined - option will remain default value (null will not be set!)
+    defined - option will remain with default value (null will not be set!)
 
 ### Supported conversions
 

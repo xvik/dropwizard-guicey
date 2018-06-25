@@ -1,7 +1,7 @@
 # Diagnostic info
 
 During startup guicey records startup metrics and remembers all details of configuration process. 
-All this information is available through [GuiceyConfigurationInfo](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/GuiceyConfigurationInfo.java) bean in guice context.
+All this information is available through [GuiceyConfigurationInfo](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/GuiceyConfigurationInfo.java) bean in guice context. 
 
 ## Diagnostic service 
 
@@ -10,6 +10,10 @@ Default diagnostic info rendering is provided to assist configuration problems r
 The simplest way to enable diagnostic reporting is using bundle `.printDiagnosticInfo()` option. 
 This registers [DiagnosticBundle](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/DiagnosticBundle.java) with default reporting configuration. 
 Bundle could be registered directly in order to customize output.
+
+!!! tip
+    You can use diagnostic logs with [lifecycle phases logging](events.md#debug)
+    and [configuration bindings report](bindings.md#configuration-bindings-report)
 
 When `.printDiagnosticInfo()` enabled, the following kind of logs will be printed after server startup:
 
@@ -326,8 +330,9 @@ Both installers and extensions are shown in the processing order (sorted accordi
 The following markers used:
 
 * SCAN - item from classpath scan (even if extension or installer were registered manually also to indicate item presence in classpath scan)
-* LAZY - extensions annotated with @LazyBinding
-* HK2 - extension annotated with @HK2Managed
+* LAZY - extensions annotated with `@LazyBinding`
+* HK2 - extension annotated with `@HK2Managed`
+* HOOK - registered by [configuration hook](configuration.md#guicey-configuration-hooks)
 
 ### Modules
 
@@ -375,6 +380,9 @@ Rendering is performed with 3 beans, available for injection (when bundle regist
 * [OptionsRenderer](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/option/OptionsRenderer.java)
 * [DiagnosticRenderer](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/diagnostic/DiagnosticRenderer.java)
 * [ContextTreeRenderer](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/tree/ContextTreeRenderer.java) 
+
+!!! note
+    Renderers are also available in [event objects](events.md#event-structure) (for events fired after injection creation) 
 
 ## Installers mode
 
@@ -424,7 +432,9 @@ INFO  [2016-08-22 00:49:33,563] ru.vyarus.dropwizard.guice.module.context.debug.
         └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)     
 ```
 
-Comparing to complete diagnostic, it shows all installers (even not used). In diagnostic reporting not used installers are hidden, because usually it means they are not needed.
+!!! important
+    Comparing to complete diagnostic, it shows all installers (*even not used*). 
+    In diagnostic reporting not used installers are hidden, because usually it means they are not needed.
 
 ## Guice injector creation timings
 

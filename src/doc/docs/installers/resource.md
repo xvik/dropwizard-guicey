@@ -29,7 +29,7 @@ class SampleResource {
 !!! attention ""
     Resources registered as **singletons**, when no explicit scope annotation is used.
     Behaviour could be disabled with [option](../guide/configuration.md#options):
-    ````java
+    ```java
     .option(InstallerOptions.ForceSingletonForJerseyExtensions, false)
     ``` 
 

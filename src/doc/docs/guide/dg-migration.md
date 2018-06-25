@@ -30,9 +30,9 @@ Cons:
 * jersey2-guice hacks jersey locator lookup process which could potentially break on future versions
 * Guice child injector created for each request 
 * Not declared services are managed by HK2 and you must be careful if you use guice AOP (as it works ony on beans, managed by guice)
-* Environment and Configuration objects may be used only as Provider in eager singletons (as injector created in 
+* `Environment` and `Configuration` objects may be used only as `Provider` in eager singletons (as injector created in 
 initialization phase when these objects are not available)
-* Admin context not covered by GuiceFilter (no request scope injections under admin context calls).
+* Admin context not covered by `GuiceFilter` (no request scope injections under admin context calls).
 
 Overall, integration feels transparent and super easy to learn (great!), but with a runtime price and caution in service definitions.
 
@@ -62,8 +62,8 @@ Pros:
 * Simple extensions: only extension class required (and no need to know how to install it) 
 * Wider range of supported extensions and ability to add more integrations (custom installers support)
 * Configuration bindings (by yaml path and internal configuration object) 
-* GuiceFilter works on both main and admin contexts
-* Good integration tests support
+* `GuiceFilter` works on both main and admin contexts
+* Integration tests support
 
 Cons:
 
@@ -146,27 +146,30 @@ guice aop and require extra dependency - [HK2-guice-bridge](configuration.md#hk2
 !!! important
     Resources are **singletons** by default and so they will initialize with guice context 
     ([may be disabled](../installers/resource.md#scope)).
-    You may need to wrap some injections with `Provider`. Alternatively, you may use @LazyBinding, @HK2Managed, 
-    set Development stage for guice context or use prototype scope on resources (@Prototype or with global option)
-    
+    You may need to wrap some injections with `Provider`. Alternatively, you may use `@LazyBinding`, `@HK2Managed`, 
+    set `Development` stage for guice context or use prototype scope on resources (`@Prototype` or with [global option](../installers/resource.md))
+                    
 ### Diagnostic
 
-Use `bundle.printDiagnosticInfo()` to see all extensions, installed by classpath scan.
+Use [`.printDiagnosticInfo()`](diagnostic.md) to see all extensions, installed by classpath scan.
+
+Use [`.printLifecyclePhases()`](events.md#debug) to indicate lifecycle phases in logs (split logs to clearly 
+understand onlgoing logic).
 
 ### Injector
 
-Remember that injector is created at runtime phase when Configuration and Environment objects are already present,
-so no need to use Provider for them.  
+Remember that injector is created at runtime phase when `Configuration` and `Environment` objects are already present,
+so no need to use `Provider` for them.  
 
 Also, you may use direct access for configuration values. See: `bundle.printConfigurationBindings()`
 
 ### Testing
 
-Guicey provides more lightweight alternative to DropwizardAppRule: GuiceyAppRule (starts only guice context without jetty). 
-Use it for core business logic integration tests.
+Guicey provides more lightweight alternative to `DropwizardAppRule`: [`GuiceyAppRule`](test.md#testing-core-logic) 
+(starts only guice context without jetty). Use it for core business logic integration tests.
 
 Also, note that you may replace any extension or bean in context before test
-(GuiceyConfigurationRule).
+([`GuiceyConfigurationRule`](test.md#configuration-hooks)).
 
 ## Go on
 

@@ -18,6 +18,7 @@ Example hook:
 
 ```java
 public class MyHook implements GuiceyConfigurationHook {
+    
     public void configure(GuiceBundle.Builder builder) {
         builder
             .disableModules(FeatureXModule.class)
@@ -29,7 +30,7 @@ public class MyHook implements GuiceyConfigurationHook {
 ```
 
 !!! note
-    You can modify options in hook and so could enable some custom
+    You can modify [options](options.md) in hook and so could enable some custom
     debug/monitoring options specifically for test.
 
 There are special spock and junit extensions for hooks registrations.
@@ -37,6 +38,7 @@ There are special spock and junit extensions for hooks registrations.
 ### Disables
 
 You can use hooks to disable all not needed features in test:
+
 * [installers](configuration.md#disable-installer) 
 * [extensions](configuration.md#disable-extensions) 
 * [guice modules](configuration.md#disable-guice-modules)
@@ -95,10 +97,11 @@ You can also use special guicey bundles, which modify application behaviour.
 Bundles could contain additional listeners or services to gather additional metrics during
 tests or validate behaviour.
 
-For example, guicey tests use bundle in tests to enable restricted guice options like 
+For example, guicey tests use bundle to enable restricted guice options like 
 `disableCircularProxies`.
 
 Bundles are also able to:
+
 * disable installers, extensions, gucie modules
 * override guice bindings
 
@@ -154,7 +157,7 @@ You can apply configuration hook using rule:
 new GuiceyConfigurationRule((builder) -> builder.modules(...))
 ```
 
-To use it with DropwizardAppRule or GuiceyAppRule you will have to apply explicit order:
+To use it with `DropwizardAppRule` or `GuiceyAppRule` you will have to apply explicit order:
 
 ```java
 static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
@@ -265,6 +268,9 @@ If you use [spock framework](http://spockframework.org) you can use spock specif
 * `@UseDropwizardApp` - internally use `DropwizardAppRule`
 
 Both extensions allows using injections directly in specifications (like spock-guice).
+
+`@UseGuiceyConfiguration` extension could be used to apply [configuration hook](configuration.md#guicey-configuration-hooks) 
+common for all tests
 
 ### Spock lifecycle hooks
 
@@ -395,7 +401,7 @@ class SomeTest extends BaseTest {}
 
 !!! warning
     Only one `@UseGuiceyConfiguration` declaration may be used in test hierarchy:
-    for example, you can's declare it in base class and then another one oi extended class
+    for example, you can't declare it in base class and then another one on extended class
     - base for a group of tests. This is spock limitation (only one extension will actually work)
     but should not be an issue for most cases.
 

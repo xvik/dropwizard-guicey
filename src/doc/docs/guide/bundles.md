@@ -4,8 +4,8 @@ By analogy with dropwizard bundles, guicey has it's own `GuiceyBundle`. These bu
 main `GuiceBundle` builder. The main purpose is to group installers, extensions and guice modules related to specific 
 feature.
 
-Guicey bundles are initialized during dropwizard `run` phase. All guice modules registered in bundles will also be checked if 
-[dropwizard objects autowiring](module-autowiring.md) required.
+Guicey bundles are initialized during dropwizard `run` phase. All guice modules registered in bundles will also be checked 
+for required [dropwizard objects autowiring](module-autowiring.md).
 
 For example, custom integration with some scheduler framework will require installers to register tasks and guice module
 to configure framework. GuiceyBundle will allow reduce integration to just one bundle installation.
@@ -53,17 +53,19 @@ Guicey ships with few predefined bundles.
 ### Core installers bundle
 
 Default installers are grouped into `CoreInstallersBundle`. This bundle is always installed implicitly (so you always have default installers).
-It may be disabled using `.noDefaultInstallers()` method.
+It may be disabled using [`.noDefaultInstallers()`](configuration.md#disable-default-installers).
 
 ### Web installers bundle
 
-`WebInstallersBundle` provides installers for servlets, filters and listeners installation using servlet api annotations
-(@WebServlet, @WebFilter, @WebListener). 
+`WebInstallersBundle` provides installers for servlets, filters and listeners installation [using servlet api annotations](web.md#web-installers)
+(`@WebServlet`, `@WebFilter`, `@WebListener`). 
 
-Bundle is not installed by default to avoid confusion. May be enabled using `.useWebInstallers()`. 
+!!! warning
+    Bundle is not installed by default to avoid confusion. May be enabled using [`.useWebInstallers()`](configuration.md#web-installers). 
 
-NOTE: If web installers used, then you may not need guice ServletModule support. To remove GuiceFilter registrations and ServletModule support use
-`.noGuiceFilter()`.
+!!! tip
+    If web installers used, then you may not need guice `ServletModule` support. To remove `GuiceFilter` registrations 
+    and `ServletModule` support use [`.noGuiceFilter()`](web.md#disable-servletmodule-support).
 
 ### HK2 debug bundle 
 
@@ -75,7 +77,10 @@ All beans must be created by guice and only beans annotated with `@HK2Managed` m
 
 Bundle may be used in tests. For example using `guicey.bundles` property (see bundles lookup below).
 
-May be enabled by `.strictScopeControl()` shortcut method.
+May be enabled by [`.strictScopeControl()`](configuration.md#diagnostic).
+
+!!! note
+    Works in both guice-first or [HK2-first](configuration.md#use-hk2-for-jersey-extensions) modes.
 
 ### Diagnostic bundle 
 
@@ -237,27 +242,20 @@ Here two lookup mechanisms registered (property lookup is not registered and wil
 
 ## Options
 
-[Options](options.md) could be used in guice module to access guicey configurations:
+[Options](options.md) could be used in guicey bundes:
 
 ```java
-public class MyModule extends DropwizardAwareModule<MyConfiguration> {
+public class MyBundle implements GuiceyBundle {
     @Override
-    protected void configure() {
-        // empty when guicey servlet support is dasabled
-        if (options.<EnumSet>get(GuiceyOptions.GuiceFilterRegistration).isEmtpy()) {
-            // do nothing
-        } else {
-            // register servlet module
-        }
+    public void initialize(GuiceyBootstrap bootstrap) {
+        if (bootstrap.option(GuiceyOptions.UseHkBridge)) {
+            // show warning that bridge required
+        } 
     }
 }
 ``` 
 
 Or it could be some [custom options](options.md#custom-options) usage.
-
-!!! note
-    If you are going to register module inside guicey bundle, you can simply resolve
-    option value inside guicey bundle and pass it to module directly.
 
 ## Apply modifications
 

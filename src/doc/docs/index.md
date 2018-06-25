@@ -31,7 +31,7 @@ automatically without manual configurations (of course, [manual mode](getting-st
     If you are migrating from [dropwizard-guice](https://github.com/HubSpot/dropwizard-guice) read [migration guide](guide/dg-migration.md) first
 
 * [**Getting started**](getting-started.md) guide describes installation and shows core usage examples
-* [**Main concepts**](concepts.md) guide introduce core guicey concepts and explains differences with pure dropwizard usage
+* [**Concepts overview**](concepts.md) guide introduce core guicey concepts and explains differences with pure dropwizard usage
 
 ### Reference
 * [**User guide**](guide/configuration.md) section contain detailed features descriptions. Good to read, but if no time, read as you need it.

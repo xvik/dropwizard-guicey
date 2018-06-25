@@ -1,12 +1,7 @@
 # Bindings
 
 !!! note
-    Guicey could be used with the following strict binder options:
-    ```java
-    binder().disableCircularProxies()
-    binder().requireExactBindingAnnotations()
-    binder().requireExplicitBindings()
-    ```
+    Guicey is compatible with some [guice restrictive options](injector.md#restrictive-options) (like disableCircularProxies)    
 
 ## Registered bindings
 
@@ -64,7 +59,7 @@ public class MyBean {
 ```
 
 !!! important
-    It is required to use qualifier `@Config` for interface binding (to avoid acciden binding clashes).
+    It is required to use qualifier `@Config` for interface binding (to avoid accidental binding clashes).
     There is a **deprecated** bundle option `.bindConfigurationInterfaces()`, which enables direct
     interfaces bindings without qualifier (feature remains for compatibility, prefer qualified interfaces bindings).
 
@@ -182,7 +177,7 @@ public class SubConf {
 ```
 
 !!! note
-    Path bindings is available even for null value. For example, if sub configuration object
+    Path bindings are available even for null values. For example, if sub configuration object
     is null, all it's sub paths will still be available (by class declarations). 
     The only exception is conditional mappin like dropwizard "server" when available paths
     could change, depending on configuration (what configuration class will be used)
@@ -205,8 +200,9 @@ ArrayList<String> value
 
 If, for some (unforgivable) reason, property is declared as Object in configuration,
 then binding type will depend on value presence:
-* `@Config("path") Object val` - without value
-* `@Config("path") ValueType val` - actual value type, when value != null       
+
+* `@Config("path") Object val` - when value is null
+* `@Config("path") ValueType val` - actual value type, when value is not null       
 
 It is assumed that in such case value would be always present (some sort of property-selected binding, like dropwizard "server").
 
@@ -391,22 +387,24 @@ INFO  [2018-06-18 05:55:03,532] ru.vyarus.dropwizard.guice.module.yaml.report.De
 * `getUniqueTypePaths()` - paths of unique sub configuration types
 
 Each path item (`ConfigPath`) contains:
+
 * Root path reference ("sub.value" reference "sub")
 * Child sub-paths ("sub" reference "sub.value")
 * Declaration class (type used in configuration class)
-* Value type (type of actual value; when value null - declaration type (but they still could be different))
+* Value type (type of actual value; when value null - declaration type (but they still could be different for collections))
 * Current path name
 * Current path value
 * Generics for declaration and value types (may be incomplete for value type)
 * Custom type marker: contains sub paths or just looks like sub configuration
-* Declaration type (class where last property was declared)
+* Declaration type (class where property was declared - configuration object containing property)
 
 You can traverse up or down from any path (tree structure).
 
 `ConfigurationTree` provides basic search methods (more as usage example):
+
 * `findByPath(String)` - search path by case-insensitive match
 * `findAllByType(Class)` - find all paths with assignable declared value
-* `findAllFrom(Class<? extends Configuration>)` - find all patsh, started in specified configuration class
+* `findAllFrom(Class<? extends Configuration>)` - find all paths, started in specified configuration class
 * `findAllRootPaths()` - get all root paths (1st level paths) 
 * `findAllRootPathsFrom(Class<? extends Configuration>)` - all 1st level paths of configuration class
 * `valueByPath(String)` - return path value or null if value null or path not exists
@@ -519,13 +517,15 @@ to [guicey configuration details](diagnostic.md):
 
 As you know, guice assume prototype scope by default (when no scope annotation declared).
 
-Guice scope annoattions:
+Guice scope annotations:
+
 * `@Singleton` - single instance per context
-* `@RequestScoped` - object per request (if guice filter support is not disabled)
-* `@Prototype` - prototype scope annotation (for jersey services)
+* `@RequestScoped` - object per request (if guice filter support is [not disabled](web.md#disable-servletmodule-support)
+* `@Prototype` - prototype scope annotation (useful for jersey services to override force singleton scope)
 
 Jersey extensions ([resources](../installers/resource.md), [providers](../installers/jersey-ext.md)) **force
-singleton scope** for extensions without explicit binding annotation (but this could be disabled with option).
+singleton scope** for extensions without explicit binding annotation (but this could be disabled with 
+[an option](../installers/resource.md)).
 Use explicit scope annotations where singletons are not required.
 
 ### Request scope transition
@@ -569,7 +569,7 @@ that means that all singleton scoped extensions will be initialized in time of i
 (because by default, `Stage.PRODCUTION` used).
 
 !!! tip
-    You can change guice injector stage to `Stage.DEVELOPMENT` in the main bundle
+    You can change guice injector stage to `Stage.DEVELOPMENT` in the [main bundle](configuration.md#stage)
     to avoid singletons initialization during context creation (only `.asEagerSingleton()`)
     bindings will be initialized). But don't do it without a *really good reason*
     (for example, legacy codebase required development stage).        
@@ -593,7 +593,8 @@ GuiceBundle.builder()
     You will not be able to use guice AOP on HK2 managed beans. 
     
 Depending on default mode selected, you can use annotations to change extension DI:
-* `@HK2Managed` - extension managed by hk2 (useful if in default mode when all beans created by guice)
+
+* `@HK2Managed` - extension managed by HK2 (useful in default mode when all beans created by guice)
 * `@GuiceManaged` - extension managed by guice (default, useful only when `.useHK2ForJerseyExtensions()` enabled)
 
 ### Bindings override

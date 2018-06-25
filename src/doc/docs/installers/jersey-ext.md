@@ -17,7 +17,7 @@ Detects  classes annotated with jersey `@javax.ws.rs.ext.Provider` annotation an
 !!! attention ""
     Extensions registered as **singletons**, when no explicit scope annotation is used.
     Behaviour could be disabled with [option](../guide/configuration.md#options):
-    ````java
+    ```java
     .option(InstallerOptions.ForceSingletonForJerseyExtensions, false)
     ```   
 

@@ -138,7 +138,7 @@ You can disable installers (even if it's not registered)
 
 Mostly useful for tests.
 
-### Debug installers
+### Availbale installers
 
 Special debug option could [print to console all available installers](diagnostic.md#installers-mode) (with registration sources):
 
@@ -244,8 +244,8 @@ In essence, [guicey bundles](bundles.md) are the same as dropwizard bundles: use
 ### Dropwizard bundles unification
 
 Guice bundles must implement interface (`GuiceyBundle`). Dropwizard bundle could implement it too. 
-This may be useful for [universal bundles](bundles.md#dropwizard-bundles-unification) when all main features are 
-activated by dropwizard bundle and guicey features are optional (if guicey present).
+This may be useful for [universal bundles](bundles.md#dropwizard-bundles-unification) when you can register something 
+in dropwizard bootstrap (or simply directly) and some features in guicey way (extensions).
 
 When:
 
@@ -395,7 +395,7 @@ Servlet modules will be rejected in this case. Intended to be used when [web ins
 !!! note 
     `HttpServletRequest` and `HttpServletResponse` objects will be available for injection only in scope of jersey resources call.
 
-### Configuration binding
+### Configuration binding by interface
 
 !!! warning "Deprecated"
     Option remain for compatibility and will be eventually removed.

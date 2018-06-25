@@ -32,7 +32,7 @@ with `.extensions()` bundle option to detect installer.
 
 Three types of installation supported. Installer should implement one or more of these interfaces:
 
-* `BindingInstaller` allows custom guice bindings. If installer doesn't implement this interface sinmple `bind(type)` will be called to register in guice.
+* `BindingInstaller` allows custom guice bindings. If installer doesn't implement this interface simple `bind(type)` will be called to register in guice.
 * `TypeInstaller` used for registration based on type (no instance created during installation).
 * `InstanceInstaller` used for instance registration. Instance created using `injector.getInstance(type)`.
 * `JerseyInstaller` used for registration of bindings in HK2 context.
@@ -72,7 +72,7 @@ public class CustomInstaller implements FeatureInstaller<CustomFeature>, JerseyI
     
     @Override
     public void install(final AbstractBinder binder, final Class<CustomFeature> type) {
-        JerseyBinding.bindComponent(binder, type);
+        JerseyBinding.bindComponent(binder, type, false, false);
     }
     
     @Override
@@ -81,12 +81,21 @@ public class CustomInstaller implements FeatureInstaller<CustomFeature>, JerseyI
 }
 ```
 
+!!! tip
+    For jersey installers see `AbstractJerseyInstaller` base class, containing common utilities.
+
 ### Ordering
 
 In order to support [ordering](ordering.md), installer must implement `Ordered` interface.
 If installer doesn't implement it extensions will not be sorted, even if extensions has `@Order` annotations. 
 
 As example, see [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ManagedInstaller.java)
+
+### Options
+
+Installer could also use [guicey options](options.md): 
+* it must implement `WithOptions` marker interface
+* or extend form `InstallerOptionsSupport` base class (implemented boilerplate)
 
 ### Reporting
 
@@ -136,6 +145,7 @@ GenericsResolver.resolve(ListExtension.class)
 ```
 
 Guicey itself use it for:
+
 * types resolution during configuration introspection (`ConfigTreeBuilder`)
 * to introspect type hierarchy and recognize all jersey extensions (`JerseyProviderInstaller`)
 * format type for console reporting (`ProviderReporter`) 
