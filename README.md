@@ -19,9 +19,7 @@ Support:
 
 ### About
 
-[Dropwizard](http://dropwizard.io/) 1.1.0 [guice](https://github.com/google/guice) (4.1.0, 4.2.0) integration. Compatible with dropwizard 1.3.0 (declare dropwizard manually in your project to override transitive version).
-
-**Ext jdbi module is not yet compatible with guice 4.2.0. Dropwizard 1.3.0 compatibility for ext modules will be checked soon.** New release should be near April (approx.).
+[Dropwizard](http://dropwizard.io/) 1.3.0 [guice](https://github.com/google/guice) 4.2.0 integration.
 
 Originally inspired by [dropwizard-guice](https://github.com/HubSpot/dropwizard-guice) and 
 [dropwizardy-guice](https://github.com/jclawson/dropwizardry/tree/master/dropwizardry-guice) 
@@ -29,19 +27,14 @@ Originally inspired by [dropwizard-guice](https://github.com/HubSpot/dropwizard-
 
 Features:
 * Guice injector created on run phase
-* Compatible with guice restrictive options: `disableCircularProxies`, `requireExactBindingAnnotations` and `requireExplicitBindings`
+* Auto configuration (classpath scan)
+* Configuration bindings by path or unique sub configuration object 
+* Support guice ServletModule and servlet 3.0 annotations (on both contexts)
+* Dropwizard style reporting
+* Admin context rest emulation
+* Tests support for junit and spock
+* Developer friendly: includes debugging tools and api for extensions
 * Flexible [HK2](https://hk2.java.net/2.5.0-b05/introduction.html) integration
-* No base classes for application or guice module (only bundle registration required)
-* Configurable [installers](#installers) mechanism: each supported feature (task install, health check install, etc) has it's own installer and may be disabled
-* [Custom feature installers](#writing-custom-installer) could be added
-* Optional [classpath scan](#classpath-scan) to search features: resources, tasks, commands, health checks etc (without dependency on reflections library)
-* Injections [works in commands](#commands-support) (environment commands)
-* Support injection of Bootstrap, Environment and Configuration objects into guice modules [before injector creation](#module-autowiring) 
-* Guice [ServletModule](#guice-servletmodule-support) can be used to bind servlets and filters for main context (may be [disabled](#disable-guice-servlets))
-* Dropwizard style [reporting](#reporting) of installed extensions
-* Admin context [rest emulation](#admin-rest)
-* Custom [junit rule](#useguiceyapp) for lightweight integration testing
-* [Spock](http://spockframework.org) [extensions](#spock)
 
 ### Thanks to
 
@@ -64,18 +57,19 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>4.1.0</version>
+  <version>4.2.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:4.1.0'
+compile 'ru.vyarus:dropwizard-guicey:4.2.0'
 ```
 
 Dropwizard | Guicey
 ----------|---------
+1.3| [4.2.0](http://xvik.github.io/dropwizard-guicey/4.2.0)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
 1.0 | [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1)
 0.9 | [3.3.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.9)
@@ -89,16 +83,18 @@ Guicey pom may be also used as maven BOM:
 
 ```groovy
 plugins {
-    id "io.spring.dependency-management" version "1.0.2.RELEASE"
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus.guicey:guicey:4.1.0'
+        mavenBom 'ru.vyarus:dropwizard-guicey:4.2.0'
+        // uncomment to override dropwizard version    
+        // mavenBom 'io.dropwizard:dropwizard-bom:1.3.5' 
     }
 }
 
 dependencies {
-    compile 'ru.vyarus.guicey:guicey:4.1.0'
+    compile 'ru.vyarus:dropwizarf-guicey:4.2.0'
    
     // no need to specify versions
     compile 'io.dropwizard:dropwizard-auth'

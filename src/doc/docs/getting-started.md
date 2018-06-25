@@ -35,14 +35,14 @@ plugins {
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus.guicey:guicey:4.2.0'  
+        mavenBom 'ru.vyarus:dropwizard-guicey:4.2.0'  
         // uncomment to override dropwizard version    
         // mavenBom 'io.dropwizard:dropwizard-bom:1.3.5' 
     }
 }
 
 dependencies {
-    compile 'ru.vyarus.guicey:guicey'
+    compile 'ru.vyarus:dropwizard-guicey'
    
     // no need to specify versions
     compile 'io.dropwizard:dropwizard-auth'

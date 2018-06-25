@@ -1,3 +1,4 @@
+### 4.2.0 (2018-06-25)
 * Update to guice 4.2.0
     - remove guice-multibindings dependency as it's moved to guice core
 * Update to dropwizard 1.3.5    
