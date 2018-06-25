@@ -1,6 +1,6 @@
 * Update to guice 4.2.0
     - remove guice-multibindings dependency as it's moved to guice core
-* Update to dropwizard 1.3.4    
+* Update to dropwizard 1.3.5    
 * Add more disable items (mostly for tests): guicey bundles, guice modules (directly registered) and extensions:
     - Guicey bundles disabled through main builder only: .disableBundles() 
     - Other disable methods available in both main bundle and guicey bundles bootstrap:
