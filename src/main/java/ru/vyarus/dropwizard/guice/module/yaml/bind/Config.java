@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
  * @see ConfigBindingModule for available bindings
  * @since 04.05.2018
  */
-@Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER})
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @BindingAnnotation
 public @interface Config {
