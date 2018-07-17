@@ -110,6 +110,10 @@ bootstrap.addBundle(SpaBundle.adminApp("admin", "/com/mycompany/adminapp/", "/ma
 bootstrap.addBundle(SpaBundle.adminApp("admin2", "/com/mycompany/adminapp2/", "/manager2").build());
 ```
 
+!!! note
+    If you publish SPA application not in the root path, don't forget to set appropriate `<base href="/path/"/>` tag.
+    All modern client side routers rely on it. Pay attention that path in base tag must end with `/`.
+
 ### Index page
 
 By default, index page assumed to be "index.html". Could be changed with:
