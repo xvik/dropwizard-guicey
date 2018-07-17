@@ -354,6 +354,24 @@ class ConfigInspectorTest extends Specification {
 
     }
 
+
+    def "Check failed getter access"() {
+
+        when: "introspecting config with crashing getter"
+        def res = ConfigTreeBuilder.build(bootstrap, new FailedGetterConfig())
+        then:
+        res.findByPath('sample') == null
+    }
+
+    def "Check ignored property"() {
+
+        when: "config with ignored getter"
+        def res = ConfigTreeBuilder.build(bootstrap, new IgnorePathConfig())
+        then:
+        res.findByPath('foo') != null
+        res.findByPath('prop') == null
+    }
+
     private <T extends Configuration> T create(Class<T> type) {
         bootstrap.configurationFactoryFactory
                 .create(type, bootstrap.validatorFactory.validator, bootstrap.objectMapper, "dw").build()

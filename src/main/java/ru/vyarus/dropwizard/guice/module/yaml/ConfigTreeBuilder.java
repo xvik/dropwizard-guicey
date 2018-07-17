@@ -13,6 +13,8 @@ import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.util.Duration;
 import io.dropwizard.util.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 import ru.vyarus.java.generics.resolver.context.GenericsContext;
 
@@ -46,6 +48,7 @@ import java.util.*;
  */
 @SuppressWarnings("PMD.GodClass")
 public final class ConfigTreeBuilder {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigTreeBuilder.class);
 
     /**
      * Packages to stop types introspection on (for sure non custom pojo types).
@@ -144,7 +147,16 @@ public final class ConfigTreeBuilder {
             if (!prop.couldSerialize() || prop.getName().equals("metaClass")) {
                 continue;
             }
-            final Object value = object == null ? null : readValue(prop.getAccessor(), object);
+            final Object value;
+            // if configuration doesn't expect serialization and throws error on access
+            // (like netflix dynamic properties) it should not break app startup
+            try {
+                value = readValue(prop.getAccessor(), object);
+            } catch (Exception ex) {
+                LOGGER.warn("Can't bind configuration path '{}': {}", fullPath(root, prop), ex.getMessage());
+                LOGGER.debug("Complete error: ", ex);
+                continue;
+            }
 
             final ConfigPath item = createItem(root, prop, value, genericsContext);
             content.add(item);
@@ -217,7 +229,8 @@ public final class ConfigTreeBuilder {
                 upperType.isAnonymousClass() ? lowerType : upperType,
                 lowerGenerics,
                 upperGenerics,
-                (root == null ? "" : root.getPath() + ".") + prop.getName(), value,
+                fullPath(root, prop),
+                value,
                 customType,
                 objectDeclared);
     }
@@ -384,6 +397,9 @@ public final class ConfigTreeBuilder {
     }
 
     private static Object readValue(final AnnotatedMember member, final Object object) {
+        if (object == null) {
+            return null;
+        }
         final Object res;
         final AccessibleObject accessor = (AccessibleObject) member.getMember();
         // case: private field
@@ -399,5 +415,9 @@ public final class ConfigTreeBuilder {
             res = member.getValue(object);
         }
         return res;
+    }
+
+    private static String fullPath(final ConfigPath root, final BeanPropertyDefinition prop) {
+        return (root == null ? "" : root.getPath() + ".") + prop.getName();
     }
 }

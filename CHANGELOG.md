@@ -1,3 +1,5 @@
+* Show warning when configuration path's value resolution failed instead of startup fail (#53)
+
 ### 4.2.0 (2018-06-25)
 * Update to guice 4.2.0
     - remove guice-multibindings dependency as it's moved to guice core
