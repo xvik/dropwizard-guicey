@@ -99,6 +99,19 @@ It could be used for config analysis, reporting or something else.
 
 For simple cases, direct configuration value bindings could be used (see below).
 
+!!! tip
+    To prevent binding of configuration property use `@JsonIgnore` on property *getter*
+    ```java
+    private String prop
+    
+    // dropwizard will set value from yaml
+    public void setProp(Stirng prop) { ... }
+
+    // property will not be available as path binding
+    @JsonIgnore    
+    public String getProp() { ... }
+    ```
+
 #### Unique sub configuration
 
 It is quite common to group configuration properties into sub objects like:
