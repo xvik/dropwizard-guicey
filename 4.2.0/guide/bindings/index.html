@@ -1330,6 +1330,19 @@ visible for jackson serialization will be presented.</p>
 <code>ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree</code> object.
 It could be used for config analysis, reporting or something else.</p>
 <p>For simple cases, direct configuration value bindings could be used (see below).</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To prevent binding of configuration property use <code>@JsonIgnore</code> on property <em>getter</em>
+<div class="codehilite"><pre><span></span><span class="kd">private</span> <span class="n">String</span> <span class="n">prop</span>
+
+<span class="c1">// dropwizard will set value from yaml</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setProp</span><span class="o">(</span><span class="n">Stirng</span> <span class="n">prop</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+
+<span class="c1">// property will not be available as path binding</span>
+<span class="nd">@JsonIgnore</span>    
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">getProp</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</pre></div></p>
+</div>
 <h4 id="unique-sub-configuration">Unique sub configuration<a class="headerlink" href="#unique-sub-configuration" title="Permanent link">&para;</a></h4>
 <p>It is quite common to group configuration properties into sub objects like:</p>
 <div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyConfig</span> <span class="kd">extends</span> <span class="n">Configuration</span> <span class="o">{</span>
