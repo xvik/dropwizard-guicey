@@ -15,6 +15,6 @@
     "bintraySignFiles": true,
     "mavenCentralSync": true,
     "enableQualityChecks": true,
-    "usedGeneratorVersion": "2.5.0"
+    "usedGeneratorVersion": "2.6.0"
   }
 }

@@ -28,6 +28,7 @@ public class PropertyBundleLookup implements GuiceyBundleLookup {
 
     public static final String BUNDLES_PROPERTY = "guicey.bundles";
 
+    @Override
     public List<GuiceyBundle> lookup() {
         final String prop = System.getProperty(BUNDLES_PROPERTY);
         List<GuiceyBundle> res = Collections.emptyList();
