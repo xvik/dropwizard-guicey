@@ -8,7 +8,7 @@ plugins {
     id 'com.jfrog.bintray' version '1.8.4'
     id 'net.researchgate.release' version '2.7.0'
     id 'com.github.ben-manes.versions' version '0.20.0'
-    id 'io.spring.dependency-management' version '1.0.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
     id 'ru.vyarus.mkdocs' version '1.0.1'
 }
 
@@ -87,16 +87,6 @@ pom {
             id 'xvik'
             name 'Vyacheslav Rusakov'
             email 'vyarus@gmail.com'
-        }
-    }
-    // add guicey itself to bom to simplify usage
-    dependencyManagement {
-        dependencies {
-            dependency {
-                groupId project.group
-                artifactId project.name
-                version project.version
-            }
         }
     }
 }
