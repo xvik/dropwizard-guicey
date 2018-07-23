@@ -1,6 +1,7 @@
 * Show warning when configuration path's value resolution failed instead of startup fail (#53)
 * Add GuiceyOptions.BindConfigurationByPath to be able to disable configuration introspection (for edge cases) (#53)
 * Fix unique sub configuration object access (#54) 
+* Add guicey itself into resulted bom to simplify usage
 
 ### 4.2.0 (2018-06-25)
 * Update to guice 4.2.0

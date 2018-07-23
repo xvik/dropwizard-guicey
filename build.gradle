@@ -89,6 +89,16 @@ pom {
             email 'vyarus@gmail.com'
         }
     }
+    // add guicey itself to bom to simplify usage
+    dependencyManagement {
+        dependencies {
+            dependency {
+                groupId project.group
+                artifactId project.name
+                version project.version
+            }
+        }
+    }
 }
 
 bintray {
