@@ -1,3 +1,4 @@
+### 4.2.1 (2018-07-23)
 * Show warning when configuration path's value resolution failed instead of startup fail (#53)
 * Add GuiceyOptions.BindConfigurationByPath to be able to disable configuration introspection (for edge cases) (#53)
 * Fix unique sub configuration object access (#54) 
