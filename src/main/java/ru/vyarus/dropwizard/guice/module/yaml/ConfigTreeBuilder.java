@@ -173,7 +173,9 @@ public final class ConfigTreeBuilder {
             try {
                 value = readValue(prop.getAccessor(), object);
             } catch (Exception ex) {
-                LOGGER.warn("Can't bind configuration path '{}': {}", fullPath(root, prop), ex.getMessage());
+                LOGGER.warn("Can't bind configuration path '{}' due to {}: {}. Enable debug logs to see "
+                                + "complete stack trace or use @JsonIgnore on property getter.",
+                        fullPath(root, prop), ex.getClass().getSimpleName(), ex.getMessage());
                 LOGGER.debug("Complete error: ", ex);
                 continue;
             }
