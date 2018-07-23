@@ -41,7 +41,7 @@ class ConfigBindingsTest extends AbstractTest {
         annBinding(AppConfig) != null
         annBinding(ConfIface) != null
 
-        and: "uniqe objects bound"
+        and: "unique objects bound"
         annBinding(SubConf) != null
         annBinding(ServerFactory) != null
 

@@ -30,6 +30,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath;
  * @author Vyacheslav Rusakov
  * @since 04.05.2018
  * @see Config for more info on usage
+ * @see ru.vyarus.dropwizard.guice.GuiceyOptions#BindConfigurationByPath
  */
 public class ConfigBindingModule extends AbstractModule {
 

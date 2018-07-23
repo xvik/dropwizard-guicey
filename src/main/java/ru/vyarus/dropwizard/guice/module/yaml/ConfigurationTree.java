@@ -3,10 +3,7 @@ package ru.vyarus.dropwizard.guice.module.yaml;
 import io.dropwizard.Configuration;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationTreeAwareModule;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +30,7 @@ import java.util.stream.Collectors;
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule
+ * @see ru.vyarus.dropwizard.guice.GuiceyOptions#BindConfigurationByPath
  * @since 04.05.2018
  */
 public class ConfigurationTree {
@@ -45,6 +43,10 @@ public class ConfigurationTree {
     private final List<ConfigPath> paths;
     // unique custom types from paths (could be bound by type - no duplicates)
     private final List<ConfigPath> uniqueTypePaths;
+
+    public ConfigurationTree(final List<Class> rootTypes) {
+        this(rootTypes, Collections.emptyList(), Collections.emptyList());
+    }
 
     public ConfigurationTree(final List<Class> rootTypes,
                              final List<ConfigPath> paths,

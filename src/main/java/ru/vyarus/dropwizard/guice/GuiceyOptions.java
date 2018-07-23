@@ -66,11 +66,30 @@ public enum GuiceyOptions implements Option {
      * Note: interfaces are always bound with qualifier: {@code @Inject @Config ConfInterface config}.
      * Option only controls if extra binding must be done without qualifier.
      *
-     * @deprecated remains for compatibility, instead bind configuration interfaces with {@code @Config} qualifier
      * @see GuiceBundle.Builder#bindConfigurationInterfaces()
+     * @deprecated remains for compatibility, instead bind configuration interfaces with {@code @Config} qualifier
      */
     @Deprecated
     BindConfigurationInterfaces(Boolean.class, false),
+
+    /**
+     * Introspect configuration object (using jackson serialization) and bind all internal values by path
+     * ({@code @Inject @Config("path.to.value") Integer value}). Recognize unique sub configuration objects
+     * for direct binding ({@code @Inject @Config SubConfig conf}). Enabled by default.
+     * <p>
+     * Note that path could be hidden using {@link com.fasterxml.jackson.annotation.JsonIgnore} on property getter.
+     * <p>
+     * Option exists only for edge cases when introspection fails and prevents application startup (should be
+     * impossible) or due to project specific reasons (when internal bindings are not desirable). When
+     * disabled, only configuration object itself would be bound (by all classes in hierarchy and interfaces).
+     * Note that {@link ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree} will also not contain paths - option
+     * disables entire introspection process.
+     *
+     * @see ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
+     * @see ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
+     * @see ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule
+     */
+    BindConfigurationByPath(Boolean.class, true),
 
     /**
      * Guice injector stage used for injector creation.

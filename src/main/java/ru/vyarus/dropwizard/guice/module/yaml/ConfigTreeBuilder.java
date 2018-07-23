@@ -75,23 +75,43 @@ public final class ConfigTreeBuilder {
     }
 
     /**
-     * Analyze configuration object to extract bindable parts.
+     * Shortcut for {@link #build(Bootstrap, Configuration, boolean)} with enabled introspection.
      *
      * @param bootstrap     bootstrap instance
      * @param configuration configuration instance
      * @return parsed configuration info
      */
-    public static ConfigurationTree build(final Bootstrap bootstrap, final Configuration configuration) {
+    public static ConfigurationTree build(final Bootstrap bootstrap,
+                                          final Configuration configuration) {
+        return build(bootstrap, configuration, true);
+    }
+
+    /**
+     * Analyze configuration object to extract bindable parts.
+     *
+     * @param bootstrap     bootstrap instance
+     * @param configuration configuration instance
+     * @param introspect    true to introspect configuration object and extract values by path and unique
+     *                      sub configurations
+     * @return parsed configuration info
+     */
+    public static ConfigurationTree build(final Bootstrap bootstrap,
+                                          final Configuration configuration,
+                                          final boolean introspect) {
         final List<Class> roots = resolveRootTypes(new ArrayList<>(), configuration.getClass());
-        final List<ConfigPath> content = resolvePaths(
-                bootstrap.getObjectMapper().getSerializationConfig(),
-                null,
-                new ArrayList<>(),
-                configuration.getClass(),
-                configuration,
-                GenericsResolver.resolve(configuration.getClass()));
-        final List<ConfigPath> uniqueContent = resolveUniqueTypePaths(content);
-        return new ConfigurationTree(roots, content, uniqueContent);
+        if (introspect) {
+            final List<ConfigPath> content = resolvePaths(
+                    bootstrap.getObjectMapper().getSerializationConfig(),
+                    null,
+                    new ArrayList<>(),
+                    configuration.getClass(),
+                    configuration,
+                    GenericsResolver.resolve(configuration.getClass()));
+            final List<ConfigPath> uniqueContent = resolveUniqueTypePaths(content);
+            return new ConfigurationTree(roots, content, uniqueContent);
+        } else {
+            return new ConfigurationTree(roots);
+        }
     }
 
     /**

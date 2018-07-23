@@ -26,12 +26,14 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationByPath;
 
 /**
  * Configuration context used internally to track all registered configuration items.
@@ -506,7 +508,8 @@ public final class ConfigurationContext {
      */
     public void runPhaseStarted(final Configuration configuration, final Environment environment) {
         this.configuration = configuration;
-        this.configurationTree = ConfigTreeBuilder.build(bootstrap, configuration);
+        this.configurationTree = ConfigTreeBuilder
+                .build(bootstrap, configuration, option(BindConfigurationByPath));
         this.environment = environment;
     }
 

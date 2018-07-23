@@ -4,7 +4,6 @@ import com.google.inject.Scopes;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.GuiceyOptions;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
@@ -15,10 +14,11 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module;
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.scope.Prototype;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
 import ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule;
 
 import javax.inject.Singleton;
+
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationInterfaces;
 
 /**
  * Bootstrap integration guice module.
@@ -79,7 +79,7 @@ public class GuiceBootstrapModule<T extends Configuration> extends DropwizardAwa
     private void bindEnvironment() {
         bind(Bootstrap.class).toInstance(bootstrap());
         bind(Environment.class).toInstance(environment());
-        install(new ConfigBindingModule(configuration(), ConfigTreeBuilder.build(bootstrap(), configuration()),
-                context.option(GuiceyOptions.BindConfigurationInterfaces)));
+        install(new ConfigBindingModule(configuration(), configurationTree(),
+                context.option(BindConfigurationInterfaces)));
     }
 }

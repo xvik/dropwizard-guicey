@@ -388,6 +388,16 @@ class ConfigInspectorTest extends Specification {
         res.findByPath('prop') == null
     }
 
+    def "Check disabled introspection"() {
+
+        when: "check default config"
+        def res = ConfigTreeBuilder.build(bootstrap, create(Configuration), false)
+        then:
+        res.rootTypes.size() > 0
+        res.paths.isEmpty()
+        res.uniqueTypePaths.isEmpty()
+    }
+
     private <T extends Configuration> T create(Class<T> type) {
         bootstrap.configurationFactoryFactory
                 .create(type, bootstrap.validatorFactory.validator, bootstrap.objectMapper, "dw").build()
