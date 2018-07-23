@@ -233,7 +233,7 @@ class ConfigInspectorTest extends Specification {
         res.valuesByType(NotUniqueSubConfig.SubConfig).isEmpty()
         res.valueByUniqueDeclaredType(NotUniqueSubConfig.SubConfig) == null
 
-        when:
+        when: "complex config with null unique"
         def config = create(ComplexConfig)
         config.one = new ComplexConfig.Parametrized()
         res = ConfigTreeBuilder.build(bootstrap, config)
@@ -252,7 +252,22 @@ class ConfigInspectorTest extends Specification {
         res.valueByPath("sub") == null
         res.valueByType(ComplexConfig.SubConfig) == null
         res.valuesByType(ComplexConfig.SubConfig).isEmpty()
+        res.valueByUniqueDeclaredType(ComplexConfig.SubConfig) == null
+        res.valuesByType(ComplexConfig.Parametrized).size() == 1
+        res.valueByUniqueDeclaredType(ComplexConfig.Parametrized) == null
+
+        when: "complex config with non null unique"
+        config = create(ComplexConfig)
+        config.sub = new ComplexConfig.SubConfig()
+        config.sub.two = new ComplexConfig.Parametrized()
+        res = ConfigTreeBuilder.build(bootstrap, config)
+        then:
+        res.valueByPath("sub") != null
+        res.valueByPath("sub") instanceof ComplexConfig.SubConfig
+        res.valuesByType(ComplexConfig.SubConfig).size() == 1
         res.valueByUniqueDeclaredType(ComplexConfig.SubConfig) != null
+        res.valueByUniqueDeclaredType(ComplexConfig.SubConfig) instanceof ComplexConfig.SubConfig
+        res.valueByUniqueDeclaredType(ComplexConfig.SubConfig).two != null
         res.valuesByType(ComplexConfig.Parametrized).size() == 1
         res.valueByUniqueDeclaredType(ComplexConfig.Parametrized) == null
     }
@@ -284,6 +299,7 @@ class ConfigInspectorTest extends Specification {
         res.valueByType(ComplexGenericCase.Sub) != null
         res.valuesByType(ComplexGenericCase.Sub).size() == 1
         res.valueByUniqueDeclaredType(ComplexGenericCase.Sub) != null
+        res.valueByUniqueDeclaredType(ComplexGenericCase.Sub) instanceof ComplexGenericCase.Sub
     }
 
     def "Check item methods"() {

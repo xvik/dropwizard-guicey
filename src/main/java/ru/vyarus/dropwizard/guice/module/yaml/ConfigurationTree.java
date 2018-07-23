@@ -270,6 +270,7 @@ public class ConfigurationTree {
         return (K) uniqueTypePaths.stream()
                 .filter(it -> type.equals(it.getDeclaredType()))
                 .findFirst()
+                .map(ConfigPath::getValue)
                 .orElse(null);
     }
 
