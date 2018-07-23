@@ -1,4 +1,10 @@
-### [4.2.0](http://xvik.github.io/dropwizard-guicey/4.1.0) (2018-06-25)
+### [4.2.0](http://xvik.github.io/dropwizard-guicey/4.2.1) (2018-07-23)
+* Show warning when configuration path's value resolution failed instead of startup fail (#53)
+* Add GuiceyOptions.BindConfigurationByPath to be able to disable configuration introspection (for edge cases) (#53)
+* Fix unique sub configuration object access (#54) 
+* Add guicey itself into resulted bom to simplify usage
+
+### [4.2.0](http://xvik.github.io/dropwizard-guicey/4.2.0) (2018-06-25)
 * Update to guice 4.2.0
     - remove guice-multibindings dependency as it's moved to guice core
 * Update to dropwizard 1.3.5    

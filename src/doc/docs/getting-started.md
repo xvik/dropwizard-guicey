@@ -15,14 +15,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>4.2.0</version>
+  <version>4.2.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:4.2.0'
+compile 'ru.vyarus:dropwizard-guicey:4.2.1'
 ```
 
 ### BOM
@@ -35,14 +35,14 @@ plugins {
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus:dropwizard-guicey:4.2.0'  
+        mavenBom 'ru.vyarus:dropwizard-guicey:4.2.1'  
         // uncomment to override dropwizard version    
         // mavenBom 'io.dropwizard:dropwizard-bom:1.3.5' 
     }
 }
 
 dependencies {
-    compile 'ru.vyarus:dropwizard-guicey:4.2.0'
+    compile 'ru.vyarus:dropwizard-guicey'
    
     // no need to specify versions
     compile 'io.dropwizard:dropwizard-auth'

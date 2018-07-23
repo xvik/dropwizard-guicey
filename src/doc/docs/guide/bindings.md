@@ -428,6 +428,33 @@ You can traverse up or down from any path (tree structure).
 Paths are sorted by configuration class (to put custom properties upper) and by path name
 (for predictable paths order).
 
+#### Disable configuration introspection
+
+Introspection process should not fail application startup. In worse case it will show
+warning log that property can't be introspected:
+
+```
+WARN  [2018-07-23 09:11:13,034] ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder: Can't bind configuration 
+path 'sub.sample' due to IllegalArgumentException: Failed to getValue() with method 
+ru.vyarus.dropwizard.guice.yaml.support.FailedGetterConfig#getSample(0 params): null. Enable debug logs to 
+see complete stack trace or use @JsonIgnore on property getter.
+```
+
+Such warnings could be hidden by using `@JsonIgnore` on property getter.
+
+If this is not enough, or you need to avoid configuration introspection for other reasons,
+you can disable introspection completely with option:
+
+```java
+GuiceBundle.builder()
+    .option(GuiceyOptions.BindConfigurationByPath, false)
+    ...
+``` 
+
+When introspection disabled, only configuration object would be bound and 
+bindings by path would not be available. Note that even `ConfigurationTree` object will not 
+contain configuration paths (option completely disables introspection mechanism).
+
 ### Environment binding
 
 Dropwizard `io.dropwizard.setup.Environment` is bound to guice context.
