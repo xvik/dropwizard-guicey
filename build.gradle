@@ -38,7 +38,7 @@ dependencyManagement {
             exclude 'com.google.inject:guice'
             exclude 'org.glassfish.hk2:hk2-api'
         }
-        dependency 'org.spockframework:spock-core:1.1-groovy-2.4'
+        dependency 'org.spockframework:spock-core:1.2-groovy-2.5'
         dependency 'com.github.stefanbirkner:system-rules:1.17.1'
 
         dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
