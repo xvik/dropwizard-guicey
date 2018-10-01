@@ -1,4 +1,4 @@
-# JDBI integration
+# JDBI3 integration
 
 Example of [guicey-jdbi3](../extras/jdbi3.md) extension usage.
 
