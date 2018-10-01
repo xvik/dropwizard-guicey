@@ -85,6 +85,7 @@ pages:
       - Hibernate: examples/hibernate.md
       - EventBus: examples/eventbus.md
       - JDBI: examples/jdbi.md
+      - JDBI3: examples/jdbi3.md
     - Extras:
       - Admin REST: extras/admin-rest.md
       - BOM: extras/bom.md
