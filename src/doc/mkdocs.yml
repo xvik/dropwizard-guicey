@@ -90,6 +90,7 @@ pages:
       - BOM: extras/bom.md
       - Guava EventBus: extras/eventbus.md
       - JDBI: extras/jdbi.md
+      - JDBI3: extras/jdbi3.md
       - SPA: extras/spa.md
     - About:
       - Compatibility: about/compatibility.md

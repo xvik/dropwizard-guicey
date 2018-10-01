@@ -3,7 +3,7 @@
 !!! summary ""
     [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi) module
 
-Integrates [JDBI](http://jdbi.org/) with guice. Based on [dropwizard-jdbi](http://www.dropwizard.io/1.3.0/docs/manual/jdbi.html) integration.
+Integrates [JDBI2](http://jdbi.org/) with guice. Based on [dropwizard-jdbi](http://www.dropwizard.io/1.3.0/docs/manual/jdbi.html) integration.
  
 Features:
 
