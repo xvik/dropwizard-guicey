@@ -34,14 +34,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi3</artifactId>
-  <version>UNRELEASED</version>
+  <version>0.5.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-jdbi3:UNRELEASED'
+compile 'ru.vyarus.guicey:guicey-jdbi3:0.5.0'
 ```
 
 See the most recent version in the badge above.
@@ -150,7 +150,7 @@ public void nestedAction() {
 ``` 
 
 When `action()` method called new transaction is created with default level
-(usually READ_COMMITTED). When 'nestedAction()' is called exception will be thrown
+(usually READ_COMMITTED). When `nestedAction()` is called exception will be thrown
 because it's transaction level requirement (READ_UNCOMMITTED) contradict with current transaction.
 
 ##### Custom transactional annotation
@@ -170,7 +170,7 @@ JdbiBundle.forDatabase((conf, env) -> conf.getDatabase())
     .withTxAnnotations(InTransaction.class, MyCustomTransactional.class);
 ```
 
-If you need to support transaction configuration with your annotation then:
+If you need to support transaction configuration (level and read only settings) with your annotation then:
  
 1. Add required properties into annotation itself (see `@InTransaction` as example).
 2. Create implementation of `TxConfigFactory` (see `InTransactionTxConfigFactory` as example)
@@ -220,7 +220,8 @@ Declare repository (interface or abstract class) as usual, using DBI annotations
 It only must be annotated with `@JdbiRepository` so installer
 could recognize it and register in guice context.
 
-NOTE: singleton scope will be forced for repositories.
+!!! note
+    singleton scope will be forced for repositories.
 
 ```java
 @JdbiRepository
@@ -233,13 +234,14 @@ public interface MyRepository {
 ```
 
 Note the use of `@InTransaction`: it was used to be able to call repository methods without extra annotations
-(the lowest transaction scope it's repository itself). It will make beans "feel the same" as usual DBI on demand
+(the lowest transaction scope it's repository itself). It will make beans "feel the same" as usual JDBI on demand
 sql object proxies.
 
 `@InTransaction` annotation is handled using guice aop. You can use any other guice aop related features.
 
-*Don't use DBI @Transaction and @CreateSqlObject annotations anymore*: probably they will even work, but they are not
-needed now and may confuse.
+!!! warning 
+    *Don't use JDBI `@Transaction` and `@CreateSqlObject` annotations anymore*: probably they will even work, but they are not
+    needed now and may confuse.
 
 All installed repositories are reported into console:
 
@@ -333,9 +335,9 @@ Repositories could also be called inside such manual unit (as unit of work is co
 
 * Module package changed from `ru.vyarus.guicey.jdbi` to `ru.vyarus.guicey.jdbi3`.
 
-* `Jdbi` object was previously bind as `DBI` insterface. Now it's bound as `Jdbi` (as interface was removed in jdbi3).
+* `Jdbi` object was previously bound as `DBI` insterface. Now it's bound as `Jdbi` (DBI interface was removed in jdbi3).
 
-* New methods in JdbiBundle:
+* New methods in `JdbiBundle`:
     - withPlugins - install custom plugins
     - withConfig - to simplify manual configuration
 
