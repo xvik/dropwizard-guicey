@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.util.OReflectionHelper;
 
+import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -110,7 +111,9 @@ public class ClasspathScanner {
             }
             count += found.size();
             for (Class<?> cls : found) {
-                if (!cls.isAnnotationPresent(InvisibleForScanner.class)) {
+                // only static inner classes are allowed because guice will not be able to instantiate inner class
+                final boolean isInner = cls.getEnclosingClass() != null && !Modifier.isStatic(cls.getModifiers());
+                if (!isInner && !cls.isAnnotationPresent(InvisibleForScanner.class)) {
                     scanned.add(cls);
                 }
             }

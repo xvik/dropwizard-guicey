@@ -1,5 +1,6 @@
 * Update to guice 4.2.1
 * Update to dropwizard 1.3.7
+* Fix inner non static classes detection by classpath scan
 
 ### 4.2.1 (2018-07-23)
 * Show warning when configuration path's value resolution failed instead of startup fail (#53)
