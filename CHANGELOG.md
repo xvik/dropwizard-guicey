@@ -1,4 +1,4 @@
-* Update to guice 4.2.1
+* Update to guice 4.2.2 (java 11 compatible)
 * Update to dropwizard 1.3.7
 * Fix inner non static classes detection by classpath scan
 

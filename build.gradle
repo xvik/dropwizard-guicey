@@ -20,7 +20,7 @@ wrapper {
 
 ext {
     dropwizard = '1.3.7'
-    guice = '4.2.1'
+    guice = '4.2.2'
     hk2 = '2.5.0-b32'
 }
 
