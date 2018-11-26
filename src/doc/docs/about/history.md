@@ -1,4 +1,10 @@
-### [4.2.0](http://xvik.github.io/dropwizard-guicey/4.2.1) (2018-07-23)
+### [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2) (2018-11-26)
+* Update to guice 4.2.2 (java 11 compatible)
+* Update to dropwizard 1.3.7
+* Fix inner non static classes detection by classpath scan
+* Fix lifecycle debug messages decoration (unicode fix)
+
+### [4.2.1](http://xvik.github.io/dropwizard-guicey/4.2.1) (2018-07-23)
 * Show warning when configuration path's value resolution failed instead of startup fail (#53)
 * Add GuiceyOptions.BindConfigurationByPath to be able to disable configuration introspection (for edge cases) (#53)
 * Fix unique sub configuration object access (#54) 

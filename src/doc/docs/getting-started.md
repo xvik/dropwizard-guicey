@@ -15,14 +15,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>4.2.1</version>
+  <version>4.2.2</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:4.2.1'
+compile 'ru.vyarus:dropwizard-guicey:4.2.2'
 ```
 
 ### BOM
@@ -31,18 +31,18 @@ Guicey pom may be also used as maven BOM:
 
 ```groovy
 plugins {
-    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus:dropwizard-guicey:4.2.1'  
+        mavenBom 'ru.vyarus:dropwizard-guicey:4.2.2'  
         // uncomment to override dropwizard version    
-        // mavenBom 'io.dropwizard:dropwizard-bom:1.3.5' 
+        // mavenBom 'io.dropwizard:dropwizard-bom:1.3.7' 
     }
 }
 
 dependencies {
-    compile 'ru.vyarus:dropwizard-guicey:4.2.1'
+    compile 'ru.vyarus:dropwizard-guicey:4.2.2'
    
     // no need to specify versions
     compile 'io.dropwizard:dropwizard-auth'
@@ -181,7 +181,7 @@ Also, you can inject request specific objects [as method parameter](installers/r
 
 ### Add managed
 
-[Dropwizard managed objects](http://www.dropwizard.io/1.3.0/docs/manual/core.html#managed-objects) are extremely useful for managing resources.
+[Dropwizard managed objects](http://www.dropwizard.io/1.3.5/docs/manual/core.html#managed-objects) are extremely useful for managing resources.
 
 Create simple managed implementation:
 
