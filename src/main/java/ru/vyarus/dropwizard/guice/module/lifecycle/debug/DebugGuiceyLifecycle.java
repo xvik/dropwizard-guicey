@@ -145,7 +145,7 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
         final String time = timer.toString();
         final String msg = String.format(message, args);
         final String topLine = String.format("%" + (gap + 3) + "s", "")
-                + String.join("", Collections.nCopies(msg.length(), "─"));
+                + String.join("", Collections.nCopies(msg.length(), "\u2500"));
         final String prefix = "__[ " + time + " ]" + String.join("",
                 Collections.nCopies((gap - 6) - time.length(), "_"));
         System.out.println("\n\n" + topLine + NL + prefix + "/  " + msg + "  \\____\n");
