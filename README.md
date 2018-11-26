@@ -19,7 +19,7 @@ Support:
 
 ### About
 
-[Dropwizard](http://dropwizard.io/) 1.3.5 [guice](https://github.com/google/guice) 4.2.0 integration.
+[Dropwizard](http://dropwizard.io/) 1.3.7 [guice](https://github.com/google/guice) 4.2.2 integration.
 
 Originally inspired by [dropwizard-guice](https://github.com/HubSpot/dropwizard-guice) and 
 [dropwizardy-guice](https://github.com/jclawson/dropwizardry/tree/master/dropwizardry-guice) 
@@ -57,19 +57,19 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>4.2.1</version>
+  <version>4.2.2</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:4.2.1'
+compile 'ru.vyarus:dropwizard-guicey:4.2.2'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-1.3| [4.2.1](http://xvik.github.io/dropwizard-guicey/4.2.1)
+1.3| [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
 1.0 | [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1)
 0.9 | [3.3.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.9)
@@ -87,14 +87,14 @@ plugins {
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus:dropwizard-guicey:4.2.1'
+        mavenBom 'ru.vyarus:dropwizard-guicey:4.2.2'
         // uncomment to override dropwizard version    
-        // mavenBom 'io.dropwizard:dropwizard-bom:1.3.5' 
+        // mavenBom 'io.dropwizard:dropwizard-bom:1.3.7' 
     }
 }
 
 dependencies {
-    compile 'ru.vyarus:dropwizard-guicey:4.2.1'
+    compile 'ru.vyarus:dropwizard-guicey:4.2.2'
    
     // no need to specify versions
     compile 'io.dropwizard:dropwizard-auth'
