@@ -18,8 +18,8 @@ Features:
 
 Added installers:
 
-* [RepositoryInstaller](src/main/java/ru/vyarus/guicey/jdbi3/installer/repository/RepositoryInstaller.java) - sql proxies
-* [MapperInstaller](src/main/java/ru/vyarus/guicey/jdbi3/installer/MapperInstaller.java) - row mappers  
+* [RepositoryInstaller](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/repository/RepositoryInstaller.java) - sql proxies
+* [MapperInstaller](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/MapperInstaller.java) - row mappers  
  
 ## Setup
 

@@ -34,18 +34,21 @@ google_analytics:
 # Extensions
 markdown_extensions:
   - admonition
-  - codehilite(guess_lang=false)
+  - codehilite:
+      guess_lang: false
   - footnotes
   - meta
-  - toc(permalink=true)
-  - pymdownx.betterem(smart_enable=all)
+  - toc:
+      permalink: true
+  - pymdownx.betterem:
+      smart_enable: all
   - pymdownx.caret
   - pymdownx.inlinehilite
   - pymdownx.magiclink
   - pymdownx.smartsymbols
   - pymdownx.superfences
 
-pages:
+nav:
     - Home: index.md
     - Getting started: getting-started.md
     - Concepts overview: concepts.md
