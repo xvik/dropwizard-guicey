@@ -57,14 +57,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-spa</artifactId>
-  <version>0.5.0</version>
+  <version>0.6.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-spa:0.5.0'
+compile 'ru.vyarus.guicey:guicey-spa:0.6.0'
 ```
 
 See the most recent version in the badge above.
