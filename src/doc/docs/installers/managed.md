@@ -26,6 +26,10 @@ public class MyService implements Managed {
 
 It is perfect for implementing guice [service lifecycle](https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree).
 
+!!! tip
+    Alternatively you can use `@PostConstruct` and `@PreDestroy` annotations inside guice beans
+    with [lifecycle-annotations](../extras/lifecycle-annotations.md) extension module.
+
 !!! tip 
     Use guicey `#!java @Order` annotation to order managed objects.
     ```java
