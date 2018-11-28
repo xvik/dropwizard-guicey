@@ -92,6 +92,7 @@ nav:
     - Extras:
       - Admin REST: extras/admin-rest.md
       - BOM: extras/bom.md
+      - Lifecycle annotations: extras/lifecycle-annotations.md
       - Guava EventBus: extras/eventbus.md
       - JDBI: extras/jdbi.md
       - JDBI3: extras/jdbi3.md
