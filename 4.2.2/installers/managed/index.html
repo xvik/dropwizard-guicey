@@ -838,6 +838,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../extras/lifecycle-annotations/" title="Lifecycle annotations" class="md-nav__link">
+      Lifecycle annotations
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../extras/eventbus/" title="Guava EventBus" class="md-nav__link">
       Guava EventBus
     </a>
@@ -1025,6 +1037,11 @@
 </pre></div>
 
 <p>It is perfect for implementing guice <a href="https://github.com/google/guice/wiki/ModulesShouldBeFastAndSideEffectFree">service lifecycle</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Alternatively you can use <code>@PostConstruct</code> and <code>@PreDestroy</code> annotations inside guice beans
+with <a href="../../extras/lifecycle-annotations/">lifecycle-annotations</a> extension module.</p>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Use guicey <code class="codehilite"><span class="nd">@Order</span></code> annotation to order managed objects.
