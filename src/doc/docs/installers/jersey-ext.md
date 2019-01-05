@@ -95,6 +95,15 @@ public class DummyExceptionMapper implements ExceptionMapper<RuntimeException> {
 }
 ```
 
+!!! tip
+    You can also use `ExtendedExceptionMapper` as more flexible alternative. See example usage in
+    [dropwizard-views](https://www.dropwizard.io/1.3.5/docs/manual/views.html#template-errors).
+    
+!!! tip
+    Default exception dropwizard mappers (registered in `io.dropwizard.setup.ExceptionMapperBinder`) could be 
+    [overridden](https://www.dropwizard.io/1.3.5/docs/manual/core.html#overriding-default-exception-mappers)
+    or completely disabled with `server.registerDefaultExceptionMappers` option.    
+
 ### ValueFactoryProvider
 
 Any class implementing `#!java org.glassfish.jersey.server.spi.internal.ValueFactoryProvider` (or extending abstract class implementing it).
