@@ -1,13 +1,14 @@
 plugins {
-    id 'com.gradle.build-scan' version '1.16'
+    id 'com.gradle.build-scan' version '2.0.2'
+    id 'com.github.spotbugs' version '1.6.9'
     id 'groovy'
     id 'jacoco'
     id 'project-report'
     id 'ru.vyarus.java-lib' version '1.1.2'
     id 'ru.vyarus.github-info' version '1.1.0'
-    id 'ru.vyarus.quality' version '3.1.1'
+    id 'ru.vyarus.quality' version '3.3.0'
     id 'com.jfrog.bintray' version '1.8.4'
-    id 'net.researchgate.release' version '2.7.0'
+    id 'net.researchgate.release' version '2.8.0'
     id 'com.github.ben-manes.versions' version '0.20.0'
     id 'io.spring.dependency-management' version '1.0.6.RELEASE'
     id 'ru.vyarus.mkdocs' version '1.1.0'
@@ -16,7 +17,7 @@ plugins {
 sourceCompatibility = 1.8
 
 wrapper {
-    gradleVersion = '4.8.1'
+    gradleVersion = '5.1'
 }
 
 ext {
@@ -127,7 +128,7 @@ afterReleaseBuild {
 
 test {
     testLogging {
-        events 'skipped', 'failed', 'standard_error'
+        events 'skipped', 'failed'
         exceptionFormat 'full'
     }
     maxHeapSize = '512m'
