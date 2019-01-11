@@ -110,6 +110,7 @@ class HKScopeTest extends AbstractTest {
         void initialize(Bootstrap<TestConfiguration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.cases.hkscope.support")
+                    .printLifecyclePhasesDetailed()
                     .build())
         }
 
