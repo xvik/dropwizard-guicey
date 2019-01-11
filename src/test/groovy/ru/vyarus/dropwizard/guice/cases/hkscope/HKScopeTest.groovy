@@ -20,7 +20,6 @@ import ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory
 import ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
-import spock.lang.IgnoreIf
 
 import javax.inject.Inject
 import javax.inject.Provider
@@ -44,8 +43,6 @@ class HKScopeTest extends AbstractTest {
     @Inject
     ExtensionsHolder holder
 
-    // ignore on travis where it doesn't work for unknown reason
-    @IgnoreIf({ System.getenv('TRAVIS') as boolean })
     def "Check jersey extensions registration"() {
 
         setup: "need to request hk2 resource to force instantiation"
