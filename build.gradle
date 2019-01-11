@@ -127,7 +127,6 @@ afterReleaseBuild {
 
 test {
     testLogging {
-        showStandardStreams = true
         events 'skipped', 'failed'
         exceptionFormat 'full'
     }
