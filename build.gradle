@@ -127,7 +127,7 @@ afterReleaseBuild {
 
 test {
     testLogging {
-        events 'skipped', 'failed', 'standard_error'
+        events 'skipped', 'failed'
         exceptionFormat 'full'
     }
     maxHeapSize = '512m'
