@@ -10,7 +10,6 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugServic
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 import spock.lang.IgnoreIf
-import spock.util.environment.OperatingSystem
 
 import javax.inject.Inject
 import javax.inject.Provider
@@ -29,7 +28,7 @@ class HkFirstModeScopeTest extends AbstractTest {
     Provider<ServiceLocator> locator
 
     // ignore on travis where it doesn't work for unknown reason
-    @IgnoreIf({ OperatingSystem.current.linux })
+    @IgnoreIf({ System.getenv('TRAVIS') as boolean })
     def "Check jersey extensions registration"() {
 
         setup: "need to request hk resource to force instantiation"
