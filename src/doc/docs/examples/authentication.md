@@ -53,6 +53,9 @@ authentication the same way as described in dropwizard docs.
 
 If auto configuration is enabled, then the class will be resolved and installed automatically.
 
+!!! note ""
+    Complete [OAuth example source](https://github.com/xvik/dropwizard-guicey-examples/tree/master/auth)
+
 ## Chained auth
 
 [Chained auth](http://www.dropwizard.io/1.3.0/docs/manual/auth.html#chained-factories) can be used to support different authentication schemes.
