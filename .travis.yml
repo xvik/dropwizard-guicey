@@ -1,6 +1,8 @@
 language: java
 jdk: oraclejdk8
 before_install: chmod +x gradlew
+env:
+  - TRAVIS=true
 
 install: ./gradlew assemble --no-daemon
 script: travis_wait 20 ./gradlew check --no-daemon
