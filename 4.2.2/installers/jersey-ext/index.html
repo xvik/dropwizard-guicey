@@ -1307,6 +1307,17 @@ Useful for <a href="http://www.dropwizard.io/1.3.0/docs/manual/core.html#error-h
 <span class="o">}</span>
 </pre></div>
 
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can also use <code>ExtendedExceptionMapper</code> as more flexible alternative. See example usage in
+<a href="https://www.dropwizard.io/1.3.5/docs/manual/views.html#template-errors">dropwizard-views</a>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Default exception dropwizard mappers (registered in <code>io.dropwizard.setup.ExceptionMapperBinder</code>) could be 
+<a href="https://www.dropwizard.io/1.3.5/docs/manual/core.html#overriding-default-exception-mappers">overridden</a>
+or completely disabled with <code>server.registerDefaultExceptionMappers</code> option.    </p>
+</div>
 <h3 id="valuefactoryprovider">ValueFactoryProvider<a class="headerlink" href="#valuefactoryprovider" title="Permanent link">&para;</a></h3>
 <p>Any class implementing <code class="codehilite"><span class="n">org</span><span class="o">.</span><span class="na">glassfish</span><span class="o">.</span><span class="na">jersey</span><span class="o">.</span><span class="na">server</span><span class="o">.</span><span class="na">spi</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">ValueFactoryProvider</span></code> (or extending abstract class implementing it).</p>
 <div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
