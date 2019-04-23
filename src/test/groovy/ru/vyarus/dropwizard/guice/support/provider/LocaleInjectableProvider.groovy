@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.support.provider
 
-import org.glassfish.jersey.server.internal.inject.AbstractContainerRequestValueFactory
 
 import javax.inject.Inject
 import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.ext.Provider
+import java.util.function.Supplier
 
 /**
  * Sample injectable provider which injects Locale instance from request.
@@ -13,7 +13,7 @@ import javax.ws.rs.ext.Provider
  * @since 09.10.2014
  */
 @Provider
-class LocaleInjectableProvider extends AbstractContainerRequestValueFactory<Locale> {
+class LocaleInjectableProvider implements Supplier<Locale> {
     static int creationCounter = 0
     static int callCounter = 0
 
@@ -26,7 +26,7 @@ class LocaleInjectableProvider extends AbstractContainerRequestValueFactory<Loca
     }
 
     @Override
-    Locale provide() {
+    Locale get() {
         callCounter++
         final List<Locale> locales = request.get().getAcceptableLanguages();
         return locales.isEmpty() ? Locale.US : locales.get(0);

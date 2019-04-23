@@ -5,7 +5,7 @@
 
 Installs various jersey extensions, usually annotated with jersey `#!java @Provider` annotation and installed via `#!java environment.jersey().register()`:
 
-    Factory, ExceptionMapper, ValueFactoryProvider, InjectionResolver, 
+    Factory, ExceptionMapper, ValueParamProvider, InjectionResolver, 
     ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, 
     ReaderInterceptor, WriterInterceptor, ContainerRequestFilter, 
     ContainerResponseFilter, DynamicFeature, ApplicationEventListener
@@ -104,9 +104,9 @@ public class DummyExceptionMapper implements ExceptionMapper<RuntimeException> {
     [overridden](https://www.dropwizard.io/1.3.5/docs/manual/core.html#overriding-default-exception-mappers)
     or completely disabled with `server.registerDefaultExceptionMappers` option.    
 
-### ValueFactoryProvider
+### ValueParamProvider
 
-Any class implementing `#!java org.glassfish.jersey.server.spi.internal.ValueFactoryProvider` (or extending abstract class implementing it).
+Any class implementing `#!java org.glassfish.jersey.server.spi.internal.ValueParamProvider` (or extending abstract class implementing it).
 
 ```java
 @Provider

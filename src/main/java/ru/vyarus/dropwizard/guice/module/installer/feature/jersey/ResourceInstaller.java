@@ -4,7 +4,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.jersey;
 import com.google.inject.Binder;
 import com.google.inject.Injector;
 import io.dropwizard.setup.Environment;
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.internal.inject.AbstractBinder;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;

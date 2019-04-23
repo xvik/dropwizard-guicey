@@ -2,9 +2,9 @@ package ru.vyarus.dropwizard.guice.admin;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import io.dropwizard.Bundle;
+import io.dropwizard.Configuration;
+import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.lifecycle.Managed;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import ru.vyarus.dropwizard.guice.admin.rest.AdminRestServlet;
  * @author Vyacheslav Rusakov
  * @since 05.08.2015
  */
-public class AdminRestBundle implements Bundle {
+public class AdminRestBundle implements ConfiguredBundle {
     private static final String ROOT_PATH = "/*";
     private final Logger logger = LoggerFactory.getLogger(AdminRestBundle.class);
 
@@ -50,12 +50,7 @@ public class AdminRestBundle implements Bundle {
     }
 
     @Override
-    public void initialize(final Bootstrap<?> bootstrap) {
-        // not needed
-    }
-
-    @Override
-    public void run(final Environment environment) {
+    public void run(final Configuration configuration, final Environment environment) {
         environment.lifecycle().manage(new ServletRegistration(environment));
     }
 

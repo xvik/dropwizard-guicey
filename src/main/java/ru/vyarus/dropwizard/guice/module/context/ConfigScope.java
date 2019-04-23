@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
-import io.dropwizard.Bundle;
+import io.dropwizard.ConfiguredBundle;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
@@ -29,7 +29,7 @@ public enum ConfigScope {
      * Guicey bundles resolved from (manually) registered dropwizard bundles
      * (not enabled by default).
      */
-    DropwizardBundle(Bundle.class),
+    DropwizardBundle(ConfiguredBundle.class),
     /**
      * Everything resolved with classpath scan.
      */

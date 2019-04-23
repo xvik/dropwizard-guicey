@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.support.provider
 
-import org.glassfish.jersey.server.internal.inject.AbstractContainerRequestValueFactory
 import ru.vyarus.dropwizard.guice.support.feature.CustomFeature
 
 import javax.ws.rs.ext.Provider
+import java.util.function.Supplier
 
 /**
  * Sample injectable provider for CustomFeature type.
@@ -12,7 +12,7 @@ import javax.ws.rs.ext.Provider
  * @since 09.10.2014
  */
 @Provider
-class CustomFeatureInjectableProvider extends AbstractContainerRequestValueFactory<CustomFeature> {
+class CustomFeatureInjectableProvider implements Supplier<CustomFeature> {
 
     static int creationCounter = 0
     static int callCounter = 0
@@ -22,7 +22,7 @@ class CustomFeatureInjectableProvider extends AbstractContainerRequestValueFacto
     }
 
     @Override
-    CustomFeature provide() {
+    CustomFeature get() {
         callCounter++
         return new CustomFeature();
     }

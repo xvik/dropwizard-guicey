@@ -127,7 +127,7 @@ public enum GuiceyOptions implements Option {
      * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} used to properly instantiate
      * service by HK2 when it also depends on guice services.
      * <p>
-     * IMPORTANT: requires extra dependency on HK2 guice-bridge: 'org.glassfish.hk2:guice-bridge:2.5.0-b32'
+     * IMPORTANT: requires extra dependency on HK2 guice-bridge: 'org.glassfish.hk2:guice-bridge:2.5.0'
      */
     UseHkBridge(Boolean.class, false);
 

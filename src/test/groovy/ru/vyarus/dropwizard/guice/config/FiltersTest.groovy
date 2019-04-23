@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.config
 
 import io.dropwizard.Application
 import io.dropwizard.Bundle
+import io.dropwizard.ConfiguredBundle
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
@@ -115,7 +116,7 @@ class FiltersTest extends Specification {
 
         expect: "matched check"
         Filters.dwBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {
-            registeredBy.add(Bundle)
+            registeredBy.add(ConfiguredBundle)
         })
 
         and: "not matched check"

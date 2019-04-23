@@ -42,13 +42,14 @@ class ConfigInspectorTest extends Specification {
         def res = ConfigTreeBuilder.build(bootstrap, create(Configuration))
         then:
         printConfig(res) == """[Configuration] logging (LoggingFactory as DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
-[Configuration] logging.appenders (List<AppenderFactory<ILoggingEvent>> as SingletonImmutableList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+[Configuration] logging.appenders (List<AppenderFactory<ILoggingEvent>> as ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
 [Configuration] logging.level (String) = "INFO"
-[Configuration] logging.loggers (Map<String, JsonNode> as RegularImmutableMap<String, JsonNode>) = {}
-[Configuration] metrics (MetricsFactory) = MetricsFactory{frequency=1 minute, reporters=[]}
+[Configuration] logging.loggers (Map<String, JsonNode> as HashMap<String, JsonNode>) = {}
+[Configuration] metrics (MetricsFactory) = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false}
 [Configuration] metrics.frequency (Duration) = 1 minute
-[Configuration] metrics.reporters (List<ReporterFactory> as RegularImmutableList<ReporterFactory>) = []
-[Configuration] server (ServerFactory as DefaultServerFactory) = DefaultServerFactory{applicationConnectors=[io.dropwizard.jetty.HttpConnectorFactory@1111111], adminConnectors=[io.dropwizard.jetty.HttpConnectorFactory@1111111], adminMaxThreads=64, adminMinThreads=1, applicationContextPath=/, adminContextPath=/}
+[Configuration] metrics.reportOnStop (Boolean) = false
+[Configuration] metrics.reporters (List<ReporterFactory> as ArrayList<ReporterFactory>) = []
+[Configuration] server (ServerFactory as DefaultServerFactory) = DefaultServerFactory{applicationConnectors=[io.dropwizard.jetty.HttpConnectorFactory@1111111], adminConnectors=[io.dropwizard.jetty.HttpConnectorFactory@1111111], adminMaxThreads=64, adminMinThreads=1, applicationContextPath='/', adminContextPath='/'}
 [Configuration] server.adminConnectors (List<ConnectorFactory> as ArrayList<ConnectorFactory>) = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
 [Configuration] server.adminContextPath (String) = "/"
 [Configuration] server.adminMaxThreads (Integer) = 64
@@ -61,14 +62,17 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.gid (Integer) = null
 [Configuration] server.group (String) = null
 [Configuration] server.gzip (GzipHandlerFactory) = io.dropwizard.jetty.GzipHandlerFactory@1111111
-[Configuration] server.gzip.bufferSize (Size) = 8 kilobytes
+[Configuration] server.gzip.bufferSize (DataSize) = 8 kibibytes
 [Configuration] server.gzip.compressedMimeTypes (Set<String>) = null
 [Configuration] server.gzip.deflateCompressionLevel (Integer) = -1
 [Configuration] server.gzip.enabled (Boolean) = true
+[Configuration] server.gzip.excludedMimeTypes (Set<String>) = null
+[Configuration] server.gzip.excludedPaths (Set<String>) = null
 [Configuration] server.gzip.excludedUserAgentPatterns (Set<String> as HashSet<String>) = []
 [Configuration] server.gzip.gzipCompatibleInflation (Boolean) = true
 [Configuration] server.gzip.includedMethods (Set<String>) = null
-[Configuration] server.gzip.minimumEntitySize (Size) = 256 bytes
+[Configuration] server.gzip.includedPaths (Set<String>) = null
+[Configuration] server.gzip.minimumEntitySize (DataSize) = 256 bytes
 [Configuration] server.gzip.syncFlush (Boolean) = false
 [Configuration] server.idleThreadTimeout (Duration) = 1 minute
 [Configuration] server.maxQueuedRequests (Integer) = 1024
@@ -77,8 +81,8 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.nofileHardLimit (Integer) = null
 [Configuration] server.nofileSoftLimit (Integer) = null
 [Configuration] server.registerDefaultExceptionMappers (Boolean) = true
-[Configuration] server.requestLog (RequestLogFactory<RequestLog> as LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
-[Configuration] server.requestLog.appenders (List<AppenderFactory<IAccessEvent>> as SingletonImmutableList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+[Configuration] server.requestLog (RequestLogFactory<Object> as LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
+[Configuration] server.requestLog.appenders (List<AppenderFactory<IAccessEvent>> as ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
 [Configuration] server.rootPath (Optional<String>) = Optional.empty
 [Configuration] server.serverPush (ServerPushFilterFactory) = io.dropwizard.jetty.ServerPushFilterFactory@1111111
 [Configuration] server.serverPush.associatePeriod (Duration) = 4 seconds
@@ -93,7 +97,7 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.user (String) = null"""
         res.rootTypes == [Configuration]
         res.uniqueTypePaths.size() == 6
-        res.paths.size() == 50
+        res.paths.size() == 54
         check(res, "server", DefaultServerFactory)
         check(res, "server.maxThreads", Integer, 1024)
         check(res, "server.idleThreadTimeout", Duration, Duration.minutes(1))
@@ -109,7 +113,7 @@ class ConfigInspectorTest extends Specification {
 [SimpleConfig] prim (Integer) = 0"""
         res.rootTypes == [SimpleConfig, Configuration]
         res.uniqueTypePaths.size() == 6
-        res.paths.size() == 53
+        res.paths.size() == 57
         check(res, "foo", String)
         check(res, "bar", Boolean)
         check(res, "prim", Integer)
@@ -121,7 +125,7 @@ class ConfigInspectorTest extends Specification {
         printConfig(res) == "[ObjectPropertyConfig] sub (Object) = null"
         res.rootTypes == [ObjectPropertyConfig, Configuration]
         res.uniqueTypePaths.size() == 6
-        res.paths.size() == 51
+        res.paths.size() == 55
         check(res, "sub", Object)
         elt.isObjectDeclaration()
         elt.declaredType == Object
@@ -154,7 +158,7 @@ class ConfigInspectorTest extends Specification {
         res.uniqueTypePaths.size() == 7
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.SubConfig } != null
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.Parametrized } == null
-        res.paths.size() == 56
+        res.paths.size() == 60
         check(res, "sub", ComplexConfig.SubConfig)
         check(res, "sub.sub", String)
         check(res, "sub.two", ComplexConfig.Parametrized, null, String)

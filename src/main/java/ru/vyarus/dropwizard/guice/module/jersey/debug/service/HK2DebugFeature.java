@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.jersey.debug.service;
 
 import org.glassfish.hk2.api.InstanceLifecycleListener;
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.internal.inject.AbstractBinder;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

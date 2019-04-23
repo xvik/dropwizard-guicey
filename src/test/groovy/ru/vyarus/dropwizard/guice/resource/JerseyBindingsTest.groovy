@@ -5,9 +5,9 @@ import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
+import org.glassfish.jersey.server.AsyncContext
 import org.glassfish.jersey.server.ContainerRequest
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider
-import org.glassfish.jersey.server.internal.process.AsyncContext
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
@@ -66,6 +66,7 @@ class JerseyBindingsTest extends AbstractTest {
              Request,
              ContainerRequest,
              AsyncContext].each {
+                println it
                 assert injector.getInstance(it) != null
             }
 

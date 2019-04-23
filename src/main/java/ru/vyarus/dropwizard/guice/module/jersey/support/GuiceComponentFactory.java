@@ -1,7 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.jersey.support;
 
 import com.google.inject.Injector;
-import org.glassfish.hk2.api.Factory;
+
+import java.util.function.Supplier;
 
 /**
  * Factory simply delegates object resolution to guice context. This allows to respect scopes.
@@ -9,7 +10,7 @@ import org.glassfish.hk2.api.Factory;
  *
  * @param <T> injection type
  */
-public class GuiceComponentFactory<T> implements Factory<T> {
+public class GuiceComponentFactory<T> implements Supplier<T> {
 
     private final Injector injector;
     private final Class<T> type;
@@ -20,13 +21,8 @@ public class GuiceComponentFactory<T> implements Factory<T> {
     }
 
     @Override
-    public T provide() {
+    public T get() {
         return injector.getInstance(type);
-    }
-
-    @Override
-    public void dispose(final T instance) {
-        // do nothing
     }
 
     @Override

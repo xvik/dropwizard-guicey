@@ -3,11 +3,8 @@ package ru.vyarus.dropwizard.guice.module.installer.util;
 import com.google.inject.Binder;
 import com.google.inject.Injector;
 import com.google.inject.binder.ScopedBindingBuilder;
-import org.glassfish.hk2.api.Factory;
-import org.glassfish.hk2.api.InjectionResolver;
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import org.glassfish.hk2.utilities.binding.ServiceBindingBuilder;
-import org.glassfish.hk2.utilities.reflection.ParameterizedTypeImpl;
+import org.glassfish.jersey.internal.inject.AbstractBinder;
+import org.glassfish.jersey.internal.inject.Binding;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed;
 import ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory;
@@ -15,11 +12,13 @@ import ru.vyarus.dropwizard.guice.module.jersey.support.JerseyComponentProvider;
 import ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 import ru.vyarus.java.generics.resolver.context.GenericsContext;
+import ru.vyarus.java.generics.resolver.context.container.ParameterizedTypeImpl;
 
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * HK2 binding utilities. Supplement {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}.
@@ -93,9 +92,11 @@ public final class JerseyBinding {
     }
 
     /**
-     * Binds HK2 {@link Factory}. If bean is {@link HK2Managed} then registered directly as
+     * Binds HK2 {@link Supplier}. If bean is {@link HK2Managed} then registered directly as
      * factory. Otherwise register factory through special "lazy bridge" to delay guice factory bean instantiation.
      * Also registers factory directly (through wrapper to be able to inject factory by its type).
+     * <p>
+     * NOTE: since jersey 2.26 jersey don't use hk2 directly and so all HK interfaces replaced by java 8 interfaces.
      *
      * @param binder    HK2 binder
      * @param injector  guice injector
@@ -110,11 +111,11 @@ public final class JerseyBinding {
     public static <T> void bindFactory(final AbstractBinder binder, final Injector injector, final Class<?> type,
                                        final boolean hkManaged, final boolean singleton) {
         // resolve Factory<T> actual type to bind properly
-        final Class<T> res = (Class<T>) GenericsResolver.resolve(type).type(Factory.class).generic(0);
+        final Class<T> res = (Class<T>) GenericsResolver.resolve(type).type(Supplier.class).generic(0);
         if (hkManaged) {
             optionalSingleton(singleton
-                            ? binder.bindFactory((Class<Factory<T>>) type, Singleton.class).to(type).to(res)
-                            : binder.bindFactory((Class<Factory<T>>) type).to(type).to(res),
+                            ? binder.bindFactory((Class<Supplier<T>>) type, Singleton.class).to(type).to(res)
+                            : binder.bindFactory((Class<Supplier<T>>) type).to(type).to(res),
                     singleton);
         } else {
             binder.bindFactory(new LazyGuiceFactory(injector, type)).to(res);
@@ -155,21 +156,9 @@ public final class JerseyBinding {
                     binder.bind(type).to(type).to(bindingType),
                     singleton);
         } else {
-            if (InjectionResolver.class.equals(specificType)) {
-                // when one-line binding used, HK2 always introspects factory and fails
-                // on unrecognizable type T (custom class analyzer is ignored so no other way to register not
-                // properly generified factory)
-                optionalSingleton(
-                        binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type),
-                        singleton);
-                optionalSingleton(
-                        binder.bindAsContract(type).to(bindingType),
-                        singleton);
-            } else {
-                optionalSingleton(
-                        binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type).to(bindingType),
-                        singleton);
-            }
+            optionalSingleton(
+                    binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type).to(bindingType),
+                    singleton);
         }
     }
 
@@ -190,7 +179,7 @@ public final class JerseyBinding {
         return binder.bind(type).toProvider(new JerseyComponentProvider<>(provider, type));
     }
 
-    private static void optionalSingleton(final ServiceBindingBuilder<?> binding, final boolean singleton) {
+    private static void optionalSingleton(final Binding<?, ?> binding, final boolean singleton) {
         if (singleton) {
             binding.in(Singleton.class);
         }

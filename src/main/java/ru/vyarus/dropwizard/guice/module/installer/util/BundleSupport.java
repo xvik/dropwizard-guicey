@@ -114,8 +114,7 @@ public final class BundleSupport {
      */
     @SuppressWarnings("unchecked")
     public static <T> List<T> findBundles(final Bootstrap bootstrap, final Class<T> type) {
-        final List bundles = Lists.newArrayList(resolveBundles(bootstrap, "bundles"));
-        bundles.addAll(resolveBundles(bootstrap, "configuredBundles"));
+        final List bundles = Lists.newArrayList(resolveBundles(bootstrap, "configuredBundles"));
         bundles.removeIf(o -> !type.isAssignableFrom(o.getClass()));
         return bundles;
     }

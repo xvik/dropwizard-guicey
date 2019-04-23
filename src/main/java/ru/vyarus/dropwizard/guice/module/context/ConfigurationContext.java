@@ -3,7 +3,6 @@ package ru.vyarus.dropwizard.guice.module.context;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.*;
 import com.google.inject.Module;
-import io.dropwizard.Bundle;
 import io.dropwizard.Configuration;
 import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
@@ -140,7 +139,7 @@ public final class ConfigurationContext {
     // --------------------------------------------------------------------------- BUNDLES
 
     /**
-     * Register bundles, recognized from dropwizard bundles. {@link Bundle} used as context.
+     * Register bundles, recognized from dropwizard bundles. {@link io.dropwizard.ConfiguredBundle} used as context.
      *
      * @param bundles recognized bundles
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles()
@@ -693,7 +692,6 @@ public final class ConfigurationContext {
         return item instanceof Class ? (Class) item : item.getClass();
     }
 
-    @SuppressWarnings("unchecked")
     private <T> List<T> getDisabledItems(final ConfigItem type) {
         final Collection<Class<?>> disabled = disabledItemsHolder.get(type);
         return disabled.isEmpty()

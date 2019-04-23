@@ -500,7 +500,7 @@ Request-scoped bindings:
 * `javax.ws.rs.core.SecurityContext`
 * `javax.ws.rs.core.Request`
 * `org.glassfish.jersey.server.ContainerRequest`
-* `org.glassfish.jersey.server.internal.process.AsyncContext`
+* `org.glassfish.jersey.server.AsyncContext`
 
 !!! tip
     Read about jersey bindings implementation in [lifecycle section](lifecycle.md#access-guice-beans-from-jersey).

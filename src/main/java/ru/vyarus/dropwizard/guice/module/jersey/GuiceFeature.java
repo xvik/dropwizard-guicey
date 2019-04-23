@@ -3,7 +3,8 @@ package ru.vyarus.dropwizard.guice.module.jersey;
 import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
 import org.glassfish.hk2.api.ServiceLocator;
-import org.glassfish.jersey.ServiceLocatorProvider;
+import org.glassfish.jersey.InjectionManagerProvider;
+import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.InvisibleForScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
@@ -63,14 +64,15 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
     @Override
     public boolean configure(final FeatureContext context) {
         tracker.startHkTimer(HKTime);
-        locator = ServiceLocatorProvider.getServiceLocator(context);
+        final InjectionManager manager = InjectionManagerProvider.getInjectionManager(context);
+        locator = manager.getInstance(ServiceLocator.class);
         lifecycle.hk2Configuration(locator);
         final Injector injector = this.provider.get();
 
         if (enableBridge) {
             Preconditions.checkState(JerseyBinding.isBridgeAvailable(),
                     "HK2 bridge is requested, but dependency not found: "
-                            + "'org.glassfish.hk2:guice-bridge:2.5.0-b32' (check that dependency "
+                            + "'org.glassfish.hk2:guice-bridge:2.5.0' (check that dependency "
                             + "version match HK2 version used in your dropwizard)");
             new GuiceBridgeActivator(locator, injector).activate();
         }

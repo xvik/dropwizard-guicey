@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.support.provider.annotated
 
 import org.glassfish.jersey.server.internal.inject.ParamInjectionResolver
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
 
 import javax.ws.rs.ext.Provider

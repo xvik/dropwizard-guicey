@@ -11,19 +11,21 @@ import io.dropwizard.setup.Environment
 import org.glassfish.hk2.api.Descriptor
 import org.glassfish.hk2.api.Filter
 import org.glassfish.hk2.api.ServiceLocator
+import org.glassfish.jersey.inject.hk2.InstanceSupplierFactoryBridge
+import org.glassfish.jersey.internal.inject.InjectionResolver
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugService
-import ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory
-import ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
+import javax.ws.rs.ext.ExceptionMapper
+import javax.ws.rs.ext.ParamConverterProvider
 import javax.ws.rs.ext.Providers
 import java.lang.annotation.Annotation
 
@@ -49,9 +51,13 @@ class HKScopeTest extends AbstractTest {
         new URL("http://localhost:8080/hk/foo").getText()
         new URL("http://localhost:8080/guice/foo").getText()
 
-        and: "force jersey to load custom HKContextResolver"
-        Providers providers = locator.get().getService(Providers.class)
+        and: "force jersey extensions load"
+        //force jersey to load custom HKContextResolver
+        Providers providers = locator.get().getService(Providers)
         providers.getContextResolver(null, null)
+        locator.get().getAllServices(ExceptionMapper)
+        locator.get().getAllServices(ParamConverterProvider)
+        locator.get().getAllServices(InjectionResolver)
 
         expect: "app launched successfully"
         debugService.guiceManaged.size() == debugService.hkManaged.size()
@@ -99,7 +105,8 @@ class HKScopeTest extends AbstractTest {
                 }
             })
             println r.getAdvertisedContracts().join(', ')
-            assert r.implementation == GuiceComponentFactory.name || r.implementation == LazyGuiceFactory.name
+            // actually GuiceComponentFactory or LazyGuiceFactory used, but hk2 wraps them into
+            assert r.implementation == InstanceSupplierFactoryBridge.name
             r.scope != Singleton.name
         } == null
     }

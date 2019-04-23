@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.install;
 
 import com.google.inject.Injector;
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.internal.inject.AbstractBinder;
 
 /**
  * Marker interface for jersey extensions installer.Must be used together with {@code FeatureInstaller}.

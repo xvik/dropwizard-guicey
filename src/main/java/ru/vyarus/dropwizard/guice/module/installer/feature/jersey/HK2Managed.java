@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  * (dependencies can't be wrapped with {@link javax.inject.Provider}, there is no way to properly create
  * it in guice context.
  * <p>
- * Good examples for this are {@link org.glassfish.jersey.server.internal.inject.AbstractValueFactoryProvider}
+ * Good examples for this are {@link org.glassfish.jersey.server.internal.inject.AbstractValueParamProvider}
  * and {@link org.glassfish.jersey.server.internal.inject.ParamInjectionResolver}. Both are required to implement
  * new parameter annotation and both will start immediately in HK2 context.
  * <p>

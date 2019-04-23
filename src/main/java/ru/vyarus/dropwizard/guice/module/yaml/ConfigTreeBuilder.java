@@ -11,8 +11,8 @@ import com.google.common.collect.Multimap;
 import com.google.common.primitives.Primitives;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.util.DataSize;
 import io.dropwizard.util.Duration;
-import io.dropwizard.util.Size;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
@@ -61,7 +61,7 @@ public final class ConfigTreeBuilder {
      * Classes indicating final values (to stop introspection on).
      */
     private static final ImmutableSet<Class> INTROSPECTION_STOP_TYPES = ImmutableSet.of(
-            Iterable.class, Optional.class, Duration.class, Size.class
+            Iterable.class, Optional.class, Duration.class, DataSize.class
     );
 
     /**

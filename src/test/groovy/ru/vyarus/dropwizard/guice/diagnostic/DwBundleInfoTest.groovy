@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.diagnostic
 
-import io.dropwizard.Bundle
+import io.dropwizard.ConfiguredBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.DwBundleApp
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo
@@ -26,7 +26,7 @@ class DwBundleInfoTest extends Specification {
         bi.fromDwBundle
         !bi.fromLookup
         !bi.registeredDirectly
-        bi.registeredBy == [Bundle] as Set
+        bi.registeredBy == [ConfiguredBundle] as Set
 
     }
 }

@@ -1,8 +1,7 @@
 package ru.vyarus.dropwizard.guice.cases.hkscope.support
 
-import org.glassfish.hk2.api.Injectee
-import org.glassfish.hk2.api.InjectionResolver
-import org.glassfish.hk2.api.ServiceHandle
+import org.glassfish.jersey.internal.inject.Injectee
+import org.glassfish.jersey.internal.inject.InjectionResolver
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
 
 import javax.ws.rs.ext.Provider
@@ -16,8 +15,13 @@ import javax.ws.rs.ext.Provider
 class GuiceInjectionResolver implements InjectionResolver<Ann> {
 
     @Override
-    Object resolve(Injectee injectee, ServiceHandle root) {
+    Object resolve(Injectee injectee) {
         return null
+    }
+
+    @Override
+    Class<Ann> getAnnotation() {
+        return Ann.class
     }
 
     @Override

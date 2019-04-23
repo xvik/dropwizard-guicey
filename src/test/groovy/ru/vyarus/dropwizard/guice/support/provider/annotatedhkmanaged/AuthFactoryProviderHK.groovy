@@ -1,17 +1,17 @@
 package ru.vyarus.dropwizard.guice.support.provider.annotatedhkmanaged
 
-import org.glassfish.hk2.api.Factory
-import org.glassfish.hk2.api.ServiceLocator
-import org.glassfish.jersey.server.internal.inject.AbstractValueFactoryProvider
+
+import org.glassfish.jersey.server.ContainerRequest
+import org.glassfish.jersey.server.internal.inject.AbstractValueParamProvider
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider
 import org.glassfish.jersey.server.model.Parameter
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
-import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
 import ru.vyarus.dropwizard.guice.support.provider.annotated.Auth
 import ru.vyarus.dropwizard.guice.support.provider.annotated.User
 
 import javax.inject.Inject
 import javax.ws.rs.ext.Provider
+import java.util.function.Function
 
 /**
  * @author Vyacheslav Rusakov 
@@ -20,20 +20,20 @@ import javax.ws.rs.ext.Provider
 @Provider
 @HK2Managed
 // hk2 will create bean not guice!
-class AuthFactoryProviderHK extends AbstractValueFactoryProvider {
+class AuthFactoryProviderHK extends AbstractValueParamProvider {
 
-    Factory<User> authFactory;
+    Function<ContainerRequest, User> authFactory;
 
     @Inject
-    public AuthFactoryProviderHK(final MultivaluedParameterExtractorProvider extractorProvider,
-                               final Factory<User> factory, // also Provider<AuthFactory> could be used
-                               final ServiceLocator injector) {
-        super(extractorProvider, injector, Parameter.Source.UNKNOWN);
+    public AuthFactoryProviderHK(final javax.inject.Provider<MultivaluedParameterExtractorProvider> extractorProvider,
+                                 // also Provider<AuthFactory> could be used
+                                 final AuthFactoryHK factory) {
+        super(extractorProvider, Parameter.Source.UNKNOWN);
         this.authFactory = factory;
     }
 
     @Override
-    protected Factory<?> createValueFactory(Parameter parameter) {
+    protected Function<ContainerRequest, ?> createValueProvider(Parameter parameter) {
         final Auth auth = parameter.getAnnotation(Auth.class);
         return auth != null ? authFactory : null
     }

@@ -4,9 +4,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.servlet.RequestScoped;
+import org.glassfish.jersey.server.AsyncContext;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider;
-import org.glassfish.jersey.server.internal.process.AsyncContext;
 
 import javax.inject.Provider;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +29,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bin
  * <li>{@link javax.ws.rs.core.Request}
  * <li>{@link org.glassfish.jersey.server.ContainerRequest}
  * <li>{@link org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider}
- * <li>{@link org.glassfish.jersey.server.internal.process.AsyncContext}</li>
+ * <li>{@link org.glassfish.jersey.server.AsyncContext}</li>
  * </ul>
  * <p>
  * When guice servlet modules support disabled, enables bindings for http request and response objects,

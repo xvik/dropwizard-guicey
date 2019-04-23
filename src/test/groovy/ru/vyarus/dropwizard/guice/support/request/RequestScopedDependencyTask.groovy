@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.support.request
 
 import com.google.common.base.Preconditions
-import com.google.common.collect.ImmutableMultimap
 import com.google.inject.Inject
 import com.google.inject.Provider
 import io.dropwizard.servlets.tasks.Task
@@ -29,7 +28,7 @@ class RequestScopedDependencyTask extends Task {
     }
 
     @Override
-    void execute(ImmutableMultimap<String, String> parameters, PrintWriter output) throws Exception {
+    void execute(Map<String, List<String>> parameters, PrintWriter output) throws Exception {
         Preconditions.checkNotNull(requestProvider.get())
         Preconditions.checkNotNull(responseProvider.get())
         Preconditions.checkState(requestScopedBeanProvider.get().foo().equals('foo'));

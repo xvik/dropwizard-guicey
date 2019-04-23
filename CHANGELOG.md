@@ -1,4 +1,40 @@
-* Update to dropwizard 1.3.8
+* Update to dropwizard 2.0.0-rc1
+    - (breaking in jersey 2.26) 
+        * JerseyProviderInstaller (installs classes annotated with `@Provider`) changes:     
+            - `ValueParamProvider` detected instead of `ValueFactoryProvider`  
+            - `Supplier` detected instead `Factory` (Factory implementations are not recognized anymore!)
+            - `org.glassfish.jersey.internal.inject.InjectionResolver` detected instead of `org.glassfish.hk2.api.InjectionResolver`
+        * Guice jersey bindings:
+            - `org.glassfish.jersey.server.AsyncContext` binding used instead of 
+                `org.glassfish.jersey.server.internal.process.AsyncContext`                     
+        * Jersey installers use `org.glassfish.jersey.internal.inject.AbstractBinder`
+            instead of hk specific `org.glassfish.hk2.utilities.binding.AbstractBinder`     
+    - (breaking dw 2.0) deprecated `Bundle` usages replaced with `ConfigurableBundle`
+        (in new dropwizard version `Bundle extends ConfigurableBundle`)
+        * Guicey configuration info (ConfigSope.DropwizardBundle) now use `ConfigurableBundle` class for marking guice 
+            bundle scope instead of `Bundle` 
+
+Main breaking changes were caused by:
+ - jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
+    This allows complete hk2 avoidance in the future. Right now it means that all direct hk2 classes must be replaced
+    by jersey abstractions (but still hk2 is the only production ready integration)
+ - jersey 2.26 implements jax-rs 2.1 which forced it to change some of it's apis.
+    For example, `AsyncContext` class package were changed to match new specification.     
+
+Migration matrix:
+
+Old class | New class
+----------|----------
+org.glassfish.hk2.utilities.binding.AbstractBinder | org.glassfish.jersey.internal.inject.AbstractBinder
+org.glassfish.hk2.utilities.Binder | org.glassfish.jersey.internal.inject.Binder
+org.glassfish.hk2.api.Factory | java.util.function.Supplier
+Factory used for Auth (user provider) | java.util.function.Function<ContainerRequest, ?>
+org.glassfish.jersey.server.internal.process.AsyncContext | org.glassfish.jersey.server.AsyncContext     
+org.glassfish.jersey.server.internal.inject.AbstractValueFactoryProvider | org.glassfish.jersey.server.internal.inject.AbstractValueParamProvider                         
+org.glassfish.jersey.server.spi.internal.ValueFactoryProvider | org.glassfish.jersey.server.spi.internal.ValueParamProvider
+org.glassfish.hk2.api.InjectionResolver | org.glassfish.jersey.internal.inject.InjectionResolver
+io.dropwizard.Bundle | io.dropwizard.ConfiguredBundle (note that interface methods are default now and may not be implemented)
+io.dropwizard.util.Size | io.dropwizard.util.DataSize 
 
 ### 4.2.2 (2018-11-26)
 * Update to guice 4.2.2 (java 11 compatible)

@@ -1,11 +1,13 @@
 package ru.vyarus.dropwizard.guice.cases.hkscope.support.hk
 
-import org.glassfish.hk2.api.Factory
+
+import org.glassfish.jersey.server.ContainerRequest
 import org.glassfish.jersey.server.model.Parameter
-import org.glassfish.jersey.server.spi.internal.ValueFactoryProvider
+import org.glassfish.jersey.server.spi.internal.ValueParamProvider
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
 
 import javax.ws.rs.ext.Provider
+import java.util.function.Function
 
 /**
  * @author Vyacheslav Rusakov
@@ -13,15 +15,15 @@ import javax.ws.rs.ext.Provider
  */
 @Provider
 @HK2Managed
-class HKValueFactoryProvider implements ValueFactoryProvider {
+class HKValueParamProvider implements ValueParamProvider {
 
     @Override
-    Factory<?> getValueFactory(Parameter parameter) {
+    Function<ContainerRequest, ?> getValueProvider(Parameter parameter) {
         return null
     }
 
     @Override
-    ValueFactoryProvider.PriorityType getPriority() {
-        return ValueFactoryProvider.Priority.LOW
+    PriorityType getPriority() {
+        return Priority.LOW
     }
 }

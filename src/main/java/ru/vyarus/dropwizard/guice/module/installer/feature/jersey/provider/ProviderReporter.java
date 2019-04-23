@@ -3,12 +3,12 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
-import org.glassfish.hk2.api.Factory;
-import org.glassfish.hk2.api.InjectionResolver;
+import org.glassfish.jersey.internal.inject.InjectionResolver;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
-import org.glassfish.jersey.server.spi.internal.ValueFactoryProvider;
+import org.glassfish.jersey.server.spi.internal.ValueParamProvider;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
+import ru.vyarus.java.generics.resolver.context.GenericsContext;
 
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseFilter;
@@ -16,6 +16,8 @@ import javax.ws.rs.container.DynamicFeature;
 import javax.ws.rs.ext.*;
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static java.lang.String.format;
 
@@ -28,11 +30,13 @@ import static java.lang.String.format;
 public class ProviderReporter extends Reporter {
     private static final String SIMPLE_FORMAT = TAB + "(%s)";
     private static final String SINGLE_GENERIC_FORMAT = TAB + "%-10s (%s)";
+    private static final String DOUBLE_GENERICS_FORMAT = TAB + "%-10s -> %-10s (%s)";
     private static final String INJECTION_FORMAT = TAB + "@%-10s (%s)";
     private static final String HK_MANAGED = " *HK managed";
 
     private static final Map<Class, ExtDescriptor> DESCRIPTORS = ImmutableMap.<Class, ExtDescriptor>builder()
-            .put(Factory.class, new ExtDescriptor("Factories", SINGLE_GENERIC_FORMAT, 1))
+            .put(Supplier.class, new ExtDescriptor("Suppliers", SINGLE_GENERIC_FORMAT, 1))
+            .put(Function.class, new ExtDescriptor("Functions", DOUBLE_GENERICS_FORMAT, 2))
             .put(ExceptionMapper.class, new ExtDescriptor("Exception mappers", SINGLE_GENERIC_FORMAT, 1))
             .put(ParamConverterProvider.class, new ExtDescriptor("Param converters", SIMPLE_FORMAT, 0))
             .put(ContextResolver.class, new ExtDescriptor("Context resolvers", SINGLE_GENERIC_FORMAT, 1))
@@ -43,7 +47,7 @@ public class ProviderReporter extends Reporter {
             .put(ContainerRequestFilter.class, new ExtDescriptor("Container request filters", SIMPLE_FORMAT, 0))
             .put(ContainerResponseFilter.class, new ExtDescriptor("Container response filters", SIMPLE_FORMAT, 0))
             .put(DynamicFeature.class, new ExtDescriptor("Dynamic features", SIMPLE_FORMAT, 0))
-            .put(ValueFactoryProvider.class, new ExtDescriptor("Value factory providers", SIMPLE_FORMAT, 0))
+            .put(ValueParamProvider.class, new ExtDescriptor("Value factory providers", SIMPLE_FORMAT, 0))
             .put(InjectionResolver.class, new ExtDescriptor("Injection resolvers", INJECTION_FORMAT, 1))
             .put(ApplicationEventListener.class, new ExtDescriptor("Application event listeners", SIMPLE_FORMAT, 0))
             .build();
@@ -84,8 +88,9 @@ public class ProviderReporter extends Reporter {
                               final boolean isHkManaged, final boolean isLazy) {
         final Object[] params = new Object[1 + desc.generics];
         int pos = 0;
+        final GenericsContext generics = GenericsResolver.resolve(provider).type(ext);
         while (pos < desc.generics) {
-            params[pos] = GenericsResolver.resolve(provider).type(ext).genericAsString(pos++);
+            params[pos] = generics.genericAsString(pos++);
         }
         params[pos] = provider.getName();
         return format(desc.format, params) + hkManaged(isHkManaged) + lazy(isLazy);

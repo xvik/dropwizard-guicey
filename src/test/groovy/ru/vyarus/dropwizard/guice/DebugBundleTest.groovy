@@ -7,7 +7,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import org.glassfish.hk2.api.MultiException
 import org.glassfish.hk2.api.ServiceLocator
-import org.glassfish.hk2.utilities.binding.AbstractBinder
+import org.glassfish.jersey.internal.inject.AbstractBinder
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
@@ -45,6 +45,8 @@ class DebugBundleTest extends AbstractTest {
         // no guice rest check because it will lead to resource instantiation by HK2, but it shouldn't do it (see qualified declaration)
 //        new URL("http://localhost:8080/guice/foo").getText()
         new URL("http://localhost:8080/hk/foo").getText()
+        // initialize mappers
+        locator.get().getAllServices(ExceptionMapper)
 
         expect:
         debugService.guiceManaged as Set == [GuiceResource, GuiceMapper] as Set

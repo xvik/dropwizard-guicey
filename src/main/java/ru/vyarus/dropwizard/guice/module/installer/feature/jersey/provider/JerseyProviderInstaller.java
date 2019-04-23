@@ -4,11 +4,10 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.google.inject.Binder;
 import com.google.inject.Injector;
-import org.glassfish.hk2.api.Factory;
-import org.glassfish.hk2.api.InjectionResolver;
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.internal.inject.AbstractBinder;
+import org.glassfish.jersey.internal.inject.InjectionResolver;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
-import org.glassfish.jersey.server.spi.internal.ValueFactoryProvider;
+import org.glassfish.jersey.server.spi.internal.ValueParamProvider;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.AbstractJerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
@@ -20,6 +19,7 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.DynamicFeature;
 import javax.ws.rs.ext.*;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import static ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils.is;
 import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
@@ -60,7 +60,7 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
             ContainerRequestFilter.class,
             ContainerResponseFilter.class,
             DynamicFeature.class,
-            ValueFactoryProvider.class,
+            ValueParamProvider.class,
             InjectionResolver.class,
             ApplicationEventListener.class
     );
@@ -84,11 +84,11 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {
         final boolean hkExtension = isHkExtension(type);
         final boolean forceSingleton = isForceSingleton(type, hkExtension);
-        if (is(type, Factory.class)) {
+        // since jersey 2.26 internal hk Factory class replaced by java 8 Supplier
+        if (is(type, Supplier.class)) {
             // register factory directly (without wrapping)
             bindFactory(binder, injector, type, hkExtension, forceSingleton);
 

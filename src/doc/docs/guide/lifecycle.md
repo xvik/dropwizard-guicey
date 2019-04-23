@@ -115,7 +115,7 @@ For more details look [jersey provider installer](https://github.com/xvik/dropwi
 ## Problematic cases    
 
 The problems may appear with binding of jersey extensions.
-Good example is [`ValueFactoryProvider`](../installers/jersey-ext.md#valuefactoryprovider). Most likely you will use `AbstractValueFactoryProvider` as base class, but it declares
+Good example is [`ValueParamProvider`](../installers/jersey-ext.md#valueparamprovider). Most likely you will use `AbstractValueFactoryProvider` as base class, but it declares
 direct binding for `MultivaluedParameterExtractorProvider`. So such bean would be impossible to create eagerly in guice context.
 
 There are two options to solve this:
