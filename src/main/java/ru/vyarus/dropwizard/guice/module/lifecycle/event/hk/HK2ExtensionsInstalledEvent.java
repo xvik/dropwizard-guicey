@@ -4,7 +4,7 @@ import com.google.inject.Injector;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.HK2PhaseEvent;
@@ -39,7 +39,7 @@ public class HK2ExtensionsInstalledEvent extends HK2PhaseEvent {
                                        final ConfigurationTree configurationTree,
                                        final Environment environment,
                                        final Injector injector,
-                                       final ServiceLocator locator,
+                                       final InjectionManager locator,
                                        final List<Class<?>> extensions) {
         super(GuiceyLifecycle.HK2ExtensionsInstalled, options, bootstrap,
                 configuration, configurationTree, environment, injector, locator);

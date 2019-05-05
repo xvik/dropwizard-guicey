@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.support.provider.annotated
 
-import org.glassfish.hk2.api.Factory
 import org.glassfish.jersey.server.ContainerRequest
 import org.glassfish.jersey.server.internal.inject.AbstractValueParamProvider
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider

@@ -2,14 +2,10 @@ package ru.vyarus.dropwizard.guice.module.jersey;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
-import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.InjectionManagerProvider;
 import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.InvisibleForScanner;
-import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
-import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBridgeActivator;
-import ru.vyarus.dropwizard.guice.module.jersey.hk2.InstallerBinder;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
 
 import javax.inject.Provider;
@@ -25,8 +21,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.HKTime;
  * into jersey config.</p>
  * <p>Feature must be registered in jersey before it's start:
  * {@code environment.jersey().register(new GuiceFeature())}</p>
- * <p>During juice context start special jersey bindings module registered
- * {@link ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule}, which lazily binds jersey specific
+ * <p>During juice context start special jersey bindings module registered, which lazily binds jersey specific
  * types to guice context. This types could be used in guice only after actual integration
  * (this feature activation)</p>
  * <p>HK2-guice bridge is activated when {@link ru.vyarus.dropwizard.guice.GuiceyOptions#UseHkBridge} option enabled
@@ -39,51 +34,36 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.HKTime;
  * HK2 context.</p>
  *
  * @author Vyacheslav Rusakov
- * @see ru.vyarus.dropwizard.guice.module.jersey.support.JerseyComponentProvider
- * @see ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory
- * @see ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory
  * @since 21.11.2014
  */
 @InvisibleForScanner
-public class GuiceFeature implements Feature, Provider<ServiceLocator> {
+public class GuiceFeature implements Feature, Provider<InjectionManager> {
 
     private final Provider<Injector> provider;
     private final StatsTracker tracker;
     private final LifecycleSupport lifecycle;
-    private final boolean enableBridge;
-    private ServiceLocator locator;
+    private InjectionManager locator;
 
     public GuiceFeature(final Provider<Injector> provider, final StatsTracker tracker,
-                        final LifecycleSupport lifecycle, final boolean enableBridge) {
+                        final LifecycleSupport lifecycle) {
         this.provider = provider;
         this.tracker = tracker;
         this.lifecycle = lifecycle;
-        this.enableBridge = enableBridge;
     }
 
     @Override
     public boolean configure(final FeatureContext context) {
         tracker.startHkTimer(HKTime);
-        final InjectionManager manager = InjectionManagerProvider.getInjectionManager(context);
-        locator = manager.getInstance(ServiceLocator.class);
+        locator = InjectionManagerProvider.getInjectionManager(context);
         lifecycle.hk2Configuration(locator);
         final Injector injector = this.provider.get();
-
-        if (enableBridge) {
-            Preconditions.checkState(JerseyBinding.isBridgeAvailable(),
-                    "HK2 bridge is requested, but dependency not found: "
-                            + "'org.glassfish.hk2:guice-bridge:2.5.0' (check that dependency "
-                            + "version match HK2 version used in your dropwizard)");
-            new GuiceBridgeActivator(locator, injector).activate();
-        }
-
-        context.register(new InstallerBinder(injector, tracker, lifecycle));
+        // todo
         tracker.stopHkTimer(HKTime);
         return true;
     }
 
     @Override
-    public ServiceLocator get() {
-        return Preconditions.checkNotNull(locator, "Service locator is not yet available");
+    public InjectionManager get() {
+        return Preconditions.checkNotNull(locator, "Injection manager is not yet available");
     }
 }

@@ -4,7 +4,7 @@ import com.google.inject.Injector;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
@@ -18,7 +18,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
  */
 public abstract class HK2PhaseEvent extends InjectorPhaseEvent {
 
-    private final ServiceLocator locator;
+    private final InjectionManager locator;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     public HK2PhaseEvent(final GuiceyLifecycle type,
@@ -28,7 +28,7 @@ public abstract class HK2PhaseEvent extends InjectorPhaseEvent {
                          final ConfigurationTree configurationTree,
                          final Environment environment,
                          final Injector injector,
-                         final ServiceLocator locator) {
+                         final InjectionManager locator) {
         super(type, options, bootstrap, configuration, configurationTree, environment, injector);
         this.locator = locator;
     }
@@ -40,7 +40,7 @@ public abstract class HK2PhaseEvent extends InjectorPhaseEvent {
      *
      * @return root service locator
      */
-    public ServiceLocator getLocator() {
+    public InjectionManager getLocator() {
         return locator;
     }
 }

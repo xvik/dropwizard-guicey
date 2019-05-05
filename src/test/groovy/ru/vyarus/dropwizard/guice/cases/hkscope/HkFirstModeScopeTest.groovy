@@ -3,7 +3,6 @@ package ru.vyarus.dropwizard.guice.cases.hkscope
 import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import org.glassfish.hk2.api.ServiceLocator
 import org.glassfish.jersey.internal.inject.InjectionResolver
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
@@ -26,8 +25,8 @@ class HkFirstModeScopeTest extends AbstractTest {
 
     @Inject
     ContextDebugService debugService
-    @Inject
-    Provider<ServiceLocator> locator
+//    @Inject
+//    Provider<ServiceLocator> locator
 
     def "Check jersey extensions registration"() {
 

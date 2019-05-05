@@ -5,8 +5,6 @@ import com.google.inject.ProvisionException
 import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import org.glassfish.hk2.api.MultiException
-import org.glassfish.hk2.api.ServiceLocator
 import org.glassfish.jersey.internal.inject.AbstractBinder
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
@@ -36,8 +34,8 @@ class DebugBundleInHkFistModeTest extends AbstractTest {
     ContextDebugService debugService
     @Inject
     Injector injector
-    @Inject
-    javax.inject.Provider<ServiceLocator> locator;
+//    @Inject
+//    javax.inject.Provider<ServiceLocator> locator;
 
     def "Check correct scopes"() {
 

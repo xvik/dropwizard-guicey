@@ -7,7 +7,7 @@ import io.dropwizard.Configuration;
 import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -35,15 +35,14 @@ import java.util.*;
 public final class LifecycleSupport {
 
     private final Options options;
+    private final List<GuiceyLifecycleListener> listeners = new ArrayList<>();
     private Bootstrap bootstrap;
     private Configuration configuration;
     private ConfigurationTree configurationTree;
     private Environment environment;
     private Injector injector;
-    private ServiceLocator locator;
+    private InjectionManager locator;
     private GuiceyLifecycle currentStage;
-
-    private final List<GuiceyLifecycleListener> listeners = new ArrayList<>();
 
     public LifecycleSupport(final Options options) {
         this.options = options;
@@ -150,7 +149,7 @@ public final class LifecycleSupport {
     }
 
 
-    public void hk2Configuration(final ServiceLocator locator) {
+    public void hk2Configuration(final InjectionManager locator) {
         broadcast(new HK2ConfigurationEvent(options, bootstrap,
                 configuration, configurationTree, environment, injector, locator));
         this.locator = locator;

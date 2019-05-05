@@ -33,12 +33,15 @@ dependencyManagement {
     }
     // exclusions here mostly fixes conflicts for maven projects
     dependencies {
+        dependency ("io.dropwizard:dropwizard-jersey:$dropwizard") {
+            exclude "org.glassfish.jersey.inject:jersey-hk2"
+        }
         // force guava version from dropwizard bom
         dependency "com.google.guava:guava:${dependencyManagement.importedProperties['guava.version']}"
-        dependency "org.glassfish.hk2:guice-bridge:$hk2", {
-            exclude 'com.google.inject:guice'
-            exclude 'org.glassfish.hk2:hk2-api'
-        }
+//        dependency "org.glassfish.hk2:guice-bridge:$hk2", {
+//            exclude 'com.google.inject:guice'
+//            exclude 'org.glassfish.hk2:hk2-api'
+//        }
         dependency 'org.spockframework:spock-core:1.2-groovy-2.5'
         dependency 'com.github.stefanbirkner:system-rules:1.17.1'
 
@@ -51,12 +54,12 @@ dependencies {
     provided 'org.spockframework:spock-core'
     provided 'com.github.stefanbirkner:system-rules'
     provided 'com.github.spotbugs:spotbugs-annotations:3.1.2'
-    provided "org.glassfish.hk2:guice-bridge"
+//    provided "org.glassfish.hk2:guice-bridge"
 
     compile 'com.google.inject:guice'
     compile 'com.google.inject.extensions:guice-servlet'
     compile 'io.dropwizard:dropwizard-core'
-    compile 'ru.vyarus:generics-resolver:3.0.0'
+    compile 'ru.vyarus:generics-resolver:3.1.0-SNAPSHOT'
 
     testCompile 'io.dropwizard:dropwizard-auth'
     testCompile 'org.glassfish.jersey.ext:jersey-proxy-client'

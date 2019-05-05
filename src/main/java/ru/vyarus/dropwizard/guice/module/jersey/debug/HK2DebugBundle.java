@@ -8,7 +8,6 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureI
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugService;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.GuiceInstanceListener;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature;
-import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2InstanceListener;
 
 /**
  * Bundle enables debug services to check correct extensions instantiation:
@@ -55,7 +54,7 @@ public class HK2DebugBundle implements GuiceyBundle {
             bindListener(Matchers.any(), listener);
 
             bind(ContextDebugService.class);
-            bind(HK2InstanceListener.class);
+//            bind(HK2InstanceListener.class);
         }
     }
 }

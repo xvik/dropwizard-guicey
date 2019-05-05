@@ -7,9 +7,6 @@ import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.internal.inject.Binding;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed;
-import ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory;
-import ru.vyarus.dropwizard.guice.module.jersey.support.JerseyComponentProvider;
-import ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 import ru.vyarus.java.generics.resolver.context.GenericsContext;
 import ru.vyarus.java.generics.resolver.context.container.ParameterizedTypeImpl;
@@ -75,7 +72,6 @@ public final class JerseyBinding {
      * @param type      component type
      * @param hkManaged true if bean must be managed by HK2, false to bind guice managed instance
      * @param singleton true to force singleton scope
-     * @see ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory
      */
     public static void bindComponent(final AbstractBinder binder, final Injector injector, final Class<?> type,
                                      final boolean hkManaged, final boolean singleton) {
@@ -85,9 +81,9 @@ public final class JerseyBinding {
                     singleton);
         } else {
             // default case: simple service registered directly (including resource)
-            optionalSingleton(
-                    binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type),
-                    singleton);
+//            optionalSingleton(
+//                    binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type),
+//                    singleton);
         }
     }
 
@@ -104,8 +100,6 @@ public final class JerseyBinding {
      * @param hkManaged true if bean must be managed by HK2, false to bind guice managed instance
      * @param singleton true to force singleton scope
      * @param <T>       actual type (used to workaround type checks)
-     * @see ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory
-     * @see ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory
      */
     @SuppressWarnings("unchecked")
     public static <T> void bindFactory(final AbstractBinder binder, final Injector injector, final Class<?> type,
@@ -118,10 +112,10 @@ public final class JerseyBinding {
                             : binder.bindFactory((Class<Supplier<T>>) type).to(type).to(res),
                     singleton);
         } else {
-            binder.bindFactory(new LazyGuiceFactory(injector, type)).to(res);
-            // binding factory type to be able to autowire factory by name
-            optionalSingleton(binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type),
-                    singleton);
+//            binder.bindFactory(new LazyGuiceFactory(injector, type)).to(res);
+//            // binding factory type to be able to autowire factory by name
+//            optionalSingleton(binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type),
+//                    singleton);
         }
     }
 
@@ -156,9 +150,9 @@ public final class JerseyBinding {
                     binder.bind(type).to(type).to(bindingType),
                     singleton);
         } else {
-            optionalSingleton(
-                    binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type).to(bindingType),
-                    singleton);
+//            optionalSingleton(
+//                    binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type).to(bindingType),
+//                    singleton);
         }
     }
 
@@ -176,7 +170,8 @@ public final class JerseyBinding {
      */
     public static <T> ScopedBindingBuilder bindJerseyComponent(final Binder binder, final Provider<Injector> provider,
                                                                final Class<T> type) {
-        return binder.bind(type).toProvider(new JerseyComponentProvider<>(provider, type));
+//        return binder.bind(type).toProvider(new JerseyComponentProvider<>(provider, type));
+        return null;
     }
 
     private static void optionalSingleton(final Binding<?, ?> binding, final boolean singleton) {

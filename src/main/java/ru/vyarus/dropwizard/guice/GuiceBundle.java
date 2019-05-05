@@ -34,7 +34,6 @@ import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ModulesSupport;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
-import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
@@ -675,27 +674,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         @Deprecated
         public Builder<T> bindConfigurationInterfaces() {
             return option(BindConfigurationInterfaces, true);
-        }
-
-        /**
-         * Enables strict control of beans instantiation context: all beans must be instantiated by guice, except
-         * beans annotated with {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed}.
-         * When bean instantiated in wrong context exception would be thrown.
-         * <p>
-         * It is useful if you write your own installers or to simply ensure correctness in doubtful cases.
-         * <p>
-         * Do not use for production! It is intended to be used mostly in tests or to diagnose problems
-         * during development.
-         * <p>
-         * To implicitly enable this check in all tests use
-         * {@code PropertyBundleLookup.enableBundles(HK2DebugBundle.class)}.
-         *
-         * @return builder instance for chained calls
-         * @see HK2DebugBundle
-         */
-        public Builder<T> strictScopeControl() {
-            bundle.context.registerBundles(new HK2DebugBundle());
-            return this;
         }
 
         /**
