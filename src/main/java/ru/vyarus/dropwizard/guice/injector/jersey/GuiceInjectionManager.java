@@ -50,11 +50,8 @@ public class GuiceInjectionManager implements InjectionManager {
         protected void configure() {
         }
     };
-
-    private PreInjector preInjector = new PreInjector(this::getInjector);
-
-
     private Injector injector;
+    private PreInjector preInjector = new PreInjector(this::getInjector);
 
     @Override
     public void completeRegistration() {
@@ -64,12 +61,14 @@ public class GuiceInjectionManager implements InjectionManager {
         logger.debug("Injection registration completed");
 
         // todo servlet module temporary here
-        injector = Guice.createInjector(new JerseyBindingsModule(bindings, contracts), new ServletModule());
+        injector = Guice.createInjector(
+                new JerseyBindingsModule(bindings, contracts, preInjector),
+                new ServletModule());
     }
 
     @Override
     public void shutdown() {
-        logger.debug("Shutdown");
+        logger.debug("SHUTDOWN");
         //todo integrate shutdown notifiaction
     }
 
@@ -127,7 +126,7 @@ public class GuiceInjectionManager implements InjectionManager {
             throw new IllegalArgumentException("Provider can't be class: " + ((Class) provider).getName());
         }
         if (isRegistrable(provider.getClass())) {
-            register((Binder)provider);
+            register((Binder) provider);
         } else {
             throw new UnsupportedOperationException("Provider not supported: " + provider.getClass().getName());
         }
@@ -145,7 +144,7 @@ public class GuiceInjectionManager implements InjectionManager {
         logger.debug("CREATE AND INIT: {}", createMe.getName());
         T instance;
         if (injector == null) {
-            instance = (T) preInjector.create(createMe);
+            instance = preCreate(createMe);
         } else {
             instance = injector.getInstance(createMe);
         }
@@ -246,8 +245,9 @@ public class GuiceInjectionManager implements InjectionManager {
     @Override
     public <T> T getInstance(Class<T> contractOrImpl) {
         logger.debug("GET INSTANCE {}", contractOrImpl.getName());
+        // not normal behaviour for guice, but normal behaviour for hk2 (because it could be eventually configured)
         if (injector == null) {
-            return (T) preInjector.create(contractOrImpl);
+            return preCreate(contractOrImpl);
         }
         List<Key> keys = contracts.findByContract(contractOrImpl);
         Key key = keys.isEmpty() ? Key.get(contractOrImpl) : keys.get(0);
@@ -260,8 +260,9 @@ public class GuiceInjectionManager implements InjectionManager {
             logger.debug("GET INSTANCE {}",
                     TypeToStringUtils.toStringType(contractOrImpl, EmptyGenericsMap.getInstance()));
         }
+        // not normal behaviour for guice, but normal behaviour for hk2 (because it could be eventually configured)
         if (injector == null) {
-            return (T) preInjector.create(GenericsUtils.resolveClass(contractOrImpl, EmptyGenericsMap.getInstance()));
+            return preCreate(GenericsUtils.resolveClass(contractOrImpl, EmptyGenericsMap.getInstance()));
         }
         final Key<?> key = Key.get(contractOrImpl);
         return injector.getExistingBinding(key) != null ? (T) injector.getInstance(key) : null;
@@ -309,7 +310,7 @@ public class GuiceInjectionManager implements InjectionManager {
     public void inject(Object injectMe) {
         logger.debug("INJECT {}", injectMe.getClass().getName());
         if (injector == null) {
-            preInjector.inject(injectMe);
+            preInjector.injectMembers(injectMe);
         } else {
             injector.injectMembers(injectMe);
         }
@@ -331,6 +332,18 @@ public class GuiceInjectionManager implements InjectionManager {
     public <T> T getInstance(Class<T> contractOrImpl, String classAnalyzer) {
         // TODO: Used only in legacy CDI integration.
         throw new UnsupportedOperationException();
+    }
+
+    private <T> T preCreate(Class<?> type) {
+        final Key key = Key.get(type);
+        // create instance only for bounded object (emulation of HK2 behaviour)
+        if (!contracts.containsKey(key)) {
+            logger.debug(
+                    "Note: service {} not bound, but instance creation requested "
+                            +"(accepted behaviour for jersey)",
+                    TypeToStringUtils.toStringType(type));
+        }
+        return (T) preInjector.create(type);
     }
 
     private Injector getInjector() {

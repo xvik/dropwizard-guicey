@@ -12,9 +12,11 @@ import ru.vyarus.dropwizard.guice.injector.jersey.contract.BindingContractsStora
 import ru.vyarus.dropwizard.guice.injector.jersey.scope.ThreadScopeModule;
 import ru.vyarus.dropwizard.guice.injector.jersey.scope.ThreadScoped;
 import ru.vyarus.dropwizard.guice.injector.jersey.util.BindingUtils;
+import ru.vyarus.dropwizard.guice.injector.jersey.util.PreInjector;
 import ru.vyarus.dropwizard.guice.injector.jersey.util.ProviderSupplierAdapter;
 import ru.vyarus.dropwizard.guice.injector.jersey.util.SupplierProvider;
 import ru.vyarus.java.generics.resolver.util.GenericsUtils;
+import ru.vyarus.java.generics.resolver.util.TypeToStringUtils;
 import ru.vyarus.java.generics.resolver.util.map.EmptyGenericsMap;
 
 import javax.inject.Singleton;
@@ -33,6 +35,7 @@ import java.util.List;
 public class JerseyBindingsModule extends AbstractModule {
     private final AbstractBinder bindings;
     private final BindingContractsStorage contracts;
+    private final PreInjector preInjector;
     private Logger logger = LoggerFactory.getLogger(JerseyBindingsModule.class);
 
     private final List<Class<?>> NEVER_BIND_CONTRACT = ImmutableList.of(
@@ -41,9 +44,12 @@ public class JerseyBindingsModule extends AbstractModule {
     ); // todo add other types
 
 
-    public JerseyBindingsModule(AbstractBinder bindings, BindingContractsStorage contracts) {
+    public JerseyBindingsModule(AbstractBinder bindings,
+                                BindingContractsStorage contracts,
+                                PreInjector preInjector) {
         this.bindings = bindings;
         this.contracts = contracts;
+        this.preInjector = preInjector;
     }
 
     /**
@@ -92,19 +98,28 @@ public class JerseyBindingsModule extends AbstractModule {
             ClassBinding bind = (ClassBinding) binding;
 
             final Class service = bind.getService();
-            // look if no default constructor
-            Constructor ctor = findConstructor(service);
-            if (ctor != null) {
-                logger.debug("guice binding: bind({}).toConstructor({})", BindingUtils.toStringKey(key), ctor);
-                builder = bind(key).toConstructor(ctor);
-            } else {
-                if (binding.getImplementationType() != service) {
-                    logger.debug("guice binding: bind({}).to({})", BindingUtils.toStringKey(key), service.getSimpleName());
-                    builder = bind(key).to(service);
 
+            if (preInjector.isManuallyInstantiated(service)) {
+                // service was forced to be created manually (before injector creation)
+                Object instance = preInjector.getManualInstance(service);
+                logger.debug("guice binding: bind({}).toInstance(<{}>) // due to pre-creation",
+                        BindingUtils.toStringKey(key), TypeToStringUtils.toStringType(instance.getClass()));
+                bind(key).toInstance(instance);
+            } else {
+                // look if no default constructor
+                Constructor ctor = findConstructor(service);
+                if (ctor != null) {
+                    logger.debug("guice binding: bind({}).toConstructor({})", BindingUtils.toStringKey(key), ctor);
+                    builder = bind(key).toConstructor(ctor);
                 } else {
-                    logger.debug("guice binding: bind({})", BindingUtils.toStringKey(key));
-                    builder = bind(key);
+                    if (binding.getImplementationType() != service) {
+                        logger.debug("guice binding: bind({}).to({})", BindingUtils.toStringKey(key), service.getSimpleName());
+                        builder = bind(key).to(service);
+
+                    } else {
+                        logger.debug("guice binding: bind({})", BindingUtils.toStringKey(key));
+                        builder = bind(key);
+                    }
                 }
             }
 

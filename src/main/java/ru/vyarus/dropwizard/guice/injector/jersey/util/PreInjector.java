@@ -8,7 +8,9 @@ import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -26,6 +28,11 @@ public class PreInjector {
     private Map<Class<?>, Object> knownServices = new HashMap<>();
     private Supplier<Injector> injector;
 
+    // manually created instances (created objects must be bound!)
+    private Map<Class<?>, Object> instantiated = new HashMap<>();
+    // to avoid duplicate injection
+    private Set<Class<?>> membersInjected = new HashSet<>();
+
     public PreInjector(Supplier<Injector> injector) {
         this.injector = injector;
     }
@@ -40,20 +47,36 @@ public class PreInjector {
         knownServices.put(key, service);
     }
 
-    // todo remember this instance and bind to context later
     public Object create(Class type) {
-        logger.debug("Perform MANUAL instance creation for {}", type.getName());
-        // assume no-args constructors only
-        try {
-            Object res = type.newInstance();
-            inject(res);
-            return res;
-        } catch (Exception e) {
-            throw new IllegalStateException("Failed to create "+type.getName(), e);
+        Object res =  knownServices.get(type);
+        if (res == null) {
+            logger.debug("Perform MANUAL instance creation for {}", type.getName());
+            // assume no-args constructors only
+            try {
+                res = type.newInstance();
+                knownServices.put(type, res);
+                instantiated.put(type, res);
+
+            } catch (Exception e) {
+                throw new IllegalStateException("Failed to create " + type.getName(), e);
+            }
         }
+        // inject members only once
+        if (!membersInjected.contains(type)) {
+            injectMembers(res);
+            membersInjected.add(type);
+        }
+        return res;
+    }
+    public boolean isManuallyInstantiated(Class<?> type) {
+        return instantiated.containsKey(type);
     }
 
-    public void inject(Object service) {
+    public Object getManualInstance(Class<?> type) {
+        return instantiated.get(type);
+    }
+
+    public void injectMembers(Object service) {
         Class<?> key = service.getClass();
         logger.debug("Performing PRE INJECTION for {}", key.getName());
         Class<?> curr = key;
@@ -68,12 +91,12 @@ public class PreInjector {
                         throw new IllegalStateException("Failed to perform injection for "+key.getName()+"."+field.getName()+": no service found for injection");
                     }
 
-                     inject(service, field, inject, key);
+                     injectMember(service, field, inject, key);
                 } else if (field.isAnnotationPresent(Context.class)) {
                     logger.debug("Found @Context {}.{}", key.getSimpleName(), field.getName());
                     // dynamic proxy injection
                     Object inject = ContextProxyFactory.create(injector, field.getType());
-                    inject(service, field, inject, key);
+                    injectMember(service, field, inject, key);
                 }
             }
             curr = curr.getSuperclass();
@@ -90,7 +113,7 @@ public class PreInjector {
         return null;
     }
 
-    private void inject(Object service, Field field, Object value, Class root) {
+    private void injectMember(Object service, Field field, Object value, Class root) {
         boolean acces = field.isAccessible();
         try {
             field.setAccessible(true);
