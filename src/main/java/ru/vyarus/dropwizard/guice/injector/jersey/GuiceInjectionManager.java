@@ -122,7 +122,9 @@ public class GuiceInjectionManager implements InjectionManager {
 
     @Override
     public void register(Object provider) throws IllegalArgumentException {
-        if (provider instanceof Class) {
+        final boolean isClass = provider instanceof Class;
+        logger.debug("REGISTER PROVIDER: {}", isClass ? provider : provider.getClass());
+        if (isClass) {
             throw new IllegalArgumentException("Provider can't be class: " + ((Class) provider).getName());
         }
         if (isRegistrable(provider.getClass())) {
@@ -340,7 +342,7 @@ public class GuiceInjectionManager implements InjectionManager {
         if (!contracts.containsKey(key)) {
             logger.debug(
                     "Note: service {} not bound, but instance creation requested "
-                            +"(accepted behaviour for jersey)",
+                            + "(accepted behaviour for jersey)",
                     TypeToStringUtils.toStringType(type));
         }
         return (T) preInjector.create(type);
