@@ -17,6 +17,7 @@ import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
 import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
+import ru.vyarus.dropwizard.guice.injector.jersey.GuiceyInjectionFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
@@ -181,6 +182,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         // registering as managed to cleanup injector on application stop
         environment.lifecycle().manage(
                 InjectorLookup.registerInjector(context.getBootstrap().getApplication(), injector));
+        GuiceyInjectionFactory.businessContextStarted(injector);
         timer.stop();
     }
 

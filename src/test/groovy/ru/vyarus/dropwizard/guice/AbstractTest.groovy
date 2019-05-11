@@ -53,7 +53,7 @@ abstract class AbstractTest extends Specification {
     static class GuiceyTestHook implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
-            builder.bundles(new HK2DebugBundle(), new GuiceRestrictedConfigBundle())
+            builder.bundles(new GuiceRestrictedConfigBundle())
         }
     }
 }

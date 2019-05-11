@@ -1,10 +1,9 @@
 package ru.vyarus.dropwizard.guice.injector.jersey;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.servlet.ServletModule;
 import org.glassfish.jersey.internal.inject.*;
 import org.glassfish.jersey.process.internal.RequestScope;
 import org.slf4j.Logger;
@@ -41,9 +40,11 @@ import java.util.function.Consumer;
  * @since 23.04.2019
  */
 @Priority(1000) // even if hk2 present in classpath this one will be used
-public class GuiceInjectionManager implements InjectionManager {
-    final BindingContractsStorage contracts = new BindingContractsStorage();
-    private final Logger logger = LoggerFactory.getLogger(GuiceInjectionManager.class);
+public class GuiceyInjectionManager implements InjectionManager {
+
+    private final Injector businessInjector;
+    private final BindingContractsStorage contracts = new BindingContractsStorage();
+    private final Logger logger = LoggerFactory.getLogger(GuiceyInjectionManager.class);
     // Keeps all binders and bindings added to the InjectionManager during the bootstrap.
     private final AbstractBinder bindings = new AbstractBinder() {
         @Override
@@ -53,17 +54,32 @@ public class GuiceInjectionManager implements InjectionManager {
     private Injector injector;
     private PreInjector preInjector = new PreInjector(this::getInjector);
 
+
+    public GuiceyInjectionManager(Injector businessInjector) {
+        this.businessInjector = businessInjector;
+        // jersey to guice bindings translation mechanism
+    }
+
     @Override
     public void completeRegistration() {
+
+        //todo use binder().requireExplicitBindings() to force bindings to live in the injector that created them
+
+        // todo event broadcast
         register(Bindings.service(GuiceRequestScope.class).to(RequestScope.class).in(Singleton.class));
-        register(Bindings.service(this).to(InjectionManager.class));
+//        register(Bindings.service(this).to(InjectionManager.class));
         register(new GuiceContextInjectionResolver.Binder(this::getInjector));
         logger.debug("Injection registration completed");
 
-        // todo servlet module temporary here
-        injector = Guice.createInjector(
-                new JerseyBindingsModule(bindings, contracts, preInjector),
-                new ServletModule());
+
+        //todo timer
+//        final Stopwatch timer = context.stat().timer(InjectorCreationTime);
+        // web injector is child injector (jersey staff isolated from business part, but use all aop and other logic)
+
+        //todo think there must be overrides supported too  (check inside jersey binding if binding is already done (overridden!))
+        injector = businessInjector.createChildInjector(
+                new JerseyBindingsModule(bindings, contracts, preInjector));
+//        timer.stop();
     }
 
     @Override
@@ -349,7 +365,7 @@ public class GuiceInjectionManager implements InjectionManager {
     }
 
     private Injector getInjector() {
-        return injector;
+        return Preconditions.checkNotNull(injector, "Injector is not yet initialized");
     }
 
     private Injector get() {return injector;}

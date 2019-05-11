@@ -5,8 +5,8 @@ import org.glassfish.jersey.internal.inject.*;
 import ru.vyarus.dropwizard.guice.injector.jersey.web.JerseyWeb;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 import ru.vyarus.java.generics.resolver.context.container.ParameterizedTypeImpl;
-import ru.vyarus.java.generics.resolver.util.GenericsUtils;
 import ru.vyarus.java.generics.resolver.util.TypeToStringUtils;
+import ru.vyarus.java.generics.resolver.util.TypeUtils;
 import ru.vyarus.java.generics.resolver.util.map.EmptyGenericsMap;
 
 import javax.servlet.ServletContext;
@@ -153,7 +153,7 @@ public class BindingUtils {
             SupplierClassBinding<?> bind = (SupplierClassBinding) binding;
 
             Class supplier = bind.getSupplierClass();
-            Class type = GenericsResolver.resolve(supplier).type(Supplier.class).generic(0);
+            Type type = GenericsResolver.resolve(supplier).type(Supplier.class).genericType(0);
             // type may be Object, but in this case contracts will be present
             // for sure all types must be compatible so just need to select the most specific type
             type = findSupplierType(type, bind.getContracts());
@@ -170,7 +170,7 @@ public class BindingUtils {
             SupplierInstanceBinding<?> bind = (SupplierInstanceBinding) binding;
 
             Class supplier = bind.getSupplier().getClass();
-            Class type = GenericsResolver.resolve(supplier).type(Supplier.class).generic(0);
+            Type type = GenericsResolver.resolve(supplier).type(Supplier.class).genericType(0);
             // type may be Object, but in this case contracts will be present
             // for sure all types must be compatible so just need to select the most specific type
             type = findSupplierType(type, bind.getContracts());
@@ -210,18 +210,18 @@ public class BindingUtils {
      * @param contracts contracts declared for supplier
      * @return the most generic type
      */
-    private static Class<?> findSupplierType(Class<?> type, Set<Type> contracts) {
-        Class<?> cand = type == Object.class ? null : type;
+    private static Type findSupplierType(Type type, Set<Type> contracts) {
+        Type cand = type == Object.class ? null : type;
         for (Type ctr : contracts) {
-            Class<?> cls = GenericsUtils.resolveClass(ctr, EmptyGenericsMap.getInstance());
-            if (cand == null || cls.isAssignableFrom(cand)) {
-                cand = cls;
+            System.out.println("!!! "+(cand ==null ? "null":TypeToStringUtils.toStringType(cand)) +" "+TypeToStringUtils.toStringType(ctr));
+            if (cand == null || TypeUtils.isMoreSpecific(ctr, cand)) {
+                cand = ctr;
             }
         }
         return cand;
     }
 
-    private static boolean collideServletModule(Class type) {
+    private static boolean collideServletModule(Type type) {
         return type.equals(ServletContext.class)
                 || type.equals(HttpServletRequest.class)
                 || type.equals(HttpServletResponse.class);
@@ -233,7 +233,7 @@ public class BindingUtils {
             res += "@" + key.getAnnotationType().getName();
         }
         final Type type = key.getTypeLiteral().getType();
-        res += TypeToStringUtils.toStringType(type, EmptyGenericsMap.getInstance());
+        res += TypeToStringUtils.toStringType(type);
         return res;
     }
 }

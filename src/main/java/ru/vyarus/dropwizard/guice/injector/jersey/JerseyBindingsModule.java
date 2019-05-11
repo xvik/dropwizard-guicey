@@ -126,7 +126,8 @@ public class JerseyBindingsModule extends AbstractModule {
         } else if (InstanceBinding.class.isAssignableFrom(binding.getClass())) {
             InstanceBinding bind = (InstanceBinding) binding;
 
-            logger.debug("guice binding: bind({}).toInstance(<{}>)", BindingUtils.toStringKey(key), bind.getService().getClass().getSimpleName());
+            logger.debug("guice binding: bind({}).toInstance(<{}>)",
+                    BindingUtils.toStringKey(key), TypeToStringUtils.toStringType(bind.getService().getClass()));
             bind(key).toInstance(bind.getService());
 
         } else if (SupplierClassBinding.class.isAssignableFrom(binding.getClass())) {
@@ -138,7 +139,11 @@ public class JerseyBindingsModule extends AbstractModule {
             Class supplier = bind.getSupplierClass();
 
             final SupplierProvider provider = new SupplierProvider(supplier);
-            logger.debug("guice binding: bind({}).toProvider(<{}>)", BindingUtils.toStringKey(key), supplier.getSimpleName());
+            logger.debug("guice binding: bind({}).toProvider(<{}>)",
+                    BindingUtils.toStringKey(key), TypeToStringUtils.toStringType(supplier));
+            // self-binding is required becuase supplier will get instance inside SupplierProvider
+            // and it will fail if requireExplicitBindings() enabled
+            bind(supplier);
             builder = bind(key).toProvider(provider);
 
             for (Type contract : binding.getContracts()) {

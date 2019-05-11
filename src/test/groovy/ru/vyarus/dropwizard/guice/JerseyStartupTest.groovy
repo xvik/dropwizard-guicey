@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice
 import ch.qos.logback.classic.Level
 import io.dropwizard.Application
 import io.dropwizard.Configuration
+import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.test.spock.ConfigOverride
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
@@ -23,8 +24,15 @@ class JerseyStartupTest extends AbstractTest {
 
     static class App extends Application<Configuration> {
 
+
+        @Override
+        void initialize(Bootstrap<Configuration> bootstrap) {
+            bootstrap.addBundle(GuiceBundle.builder().build())
+        }
+
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
+            println "APP RUN"
         }
 
         @Override
