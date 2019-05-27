@@ -25,7 +25,7 @@ import ru.vyarus.dropwizard.guice.admin.rest.AdminRestServlet;
  * @author Vyacheslav Rusakov
  * @since 05.08.2015
  */
-public class AdminRestBundle implements ConfiguredBundle {
+public class AdminRestBundle implements ConfiguredBundle<Configuration> {
     private static final String ROOT_PATH = "/*";
     private final Logger logger = LoggerFactory.getLogger(AdminRestBundle.class);
 

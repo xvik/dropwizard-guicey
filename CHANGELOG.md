@@ -1,4 +1,4 @@
-* Update to dropwizard 2.0.0-rc1
+* Update to dropwizard 2.0.0-rc2
     - (breaking in jersey 2.26) 
         * JerseyProviderInstaller (installs classes annotated with `@Provider`) changes:     
             - `ValueParamProvider` detected instead of `ValueFactoryProvider`  
