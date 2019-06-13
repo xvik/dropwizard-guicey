@@ -213,7 +213,6 @@ public class BindingUtils {
     private static Type findSupplierType(Type type, Set<Type> contracts) {
         Type cand = type == Object.class ? null : type;
         for (Type ctr : contracts) {
-            System.out.println("!!! "+(cand ==null ? "null":TypeToStringUtils.toStringType(cand)) +" "+TypeToStringUtils.toStringType(ctr));
             if (cand == null || TypeUtils.isMoreSpecific(ctr, cand)) {
                 cand = ctr;
             }

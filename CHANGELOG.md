@@ -11,7 +11,7 @@
             instead of hk specific `org.glassfish.hk2.utilities.binding.AbstractBinder`     
     - (breaking dw 2.0) deprecated `Bundle` usages replaced with `ConfigurableBundle`
         (in new dropwizard version `Bundle extends ConfigurableBundle`)
-        * Guicey configuration info (ConfigSope.DropwizardBundle) now use `ConfigurableBundle` class for marking guice 
+        * Guicey configuration info (ConfigScope.DropwizardBundle) now use `ConfigurableBundle` class for marking guice 
             bundle scope instead of `Bundle` 
 
 Main breaking changes were caused by:
