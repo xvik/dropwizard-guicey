@@ -51,15 +51,6 @@ public enum GuiceyOptions implements Option {
     UseCoreInstallers(Boolean.class, true),
 
     /**
-     * Recognize {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle} from installed
-     * dropwizard bundles.
-     * Disabled by default.
-     *
-     * @see GuiceBundle.Builder#configureFromDropwizardBundles()
-     */
-    ConfigureFromDropwizardBundles(Boolean.class, false),
-
-    /**
      * Bind all direct interfaces implemented by configuration objects to configuration instance in guice context.
      * Disabled by default.
      * <p>

@@ -15,8 +15,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
@@ -67,10 +66,29 @@ public final class LifecycleSupport {
         }
     }
 
-    public void initialization(final Bootstrap bootstrap, final List<Command> installed) {
+    public void initializationStarted(final Bootstrap bootstrap) {
+        this.bootstrap = bootstrap;
+    }
+
+    public void initialization(final List<Command> installed) {
         broadcast(new InitializationEvent(options, bootstrap,
                 installed != null ? installed : Collections.emptyList()));
-        this.bootstrap = bootstrap;
+    }
+
+    public void bundlesFromLookupResolved(final List<GuiceyBundle> bundles) {
+        if (!bundles.isEmpty()) {
+            broadcast(new BundlesFromLookupResolvedEvent(options, bootstrap, bundles));
+        }
+    }
+
+    public void bundlesResolved(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
+        broadcast(new BundlesResolvedEvent(options, bootstrap, bundles, disabled));
+    }
+
+    public void bundlesInitialized(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
+        if (!bundles.isEmpty()) {
+            broadcast(new BundlesInitializedEvent(options, bootstrap, bundles, disabled));
+        }
     }
 
     public void runPhase(final Configuration configuration,
@@ -82,29 +100,10 @@ public final class LifecycleSupport {
         this.environment = environment;
     }
 
-    public void bundlesFromDwResolved(final List<GuiceyBundle> bundles) {
+    public void bundlesStarted(final List<GuiceyBundle> bundles) {
         if (!bundles.isEmpty()) {
-            broadcast(new BundlesFromDwResolvedEvent(options, bootstrap,
+            broadcast(new BundlesStartedEvent(options, bootstrap,
                     configuration, configurationTree, environment, bundles));
-        }
-    }
-
-    public void bundlesFromLookupResolved(final List<GuiceyBundle> bundles) {
-        if (!bundles.isEmpty()) {
-            broadcast(new BundlesFromLookupResolvedEvent(options, bootstrap,
-                    configuration, configurationTree, environment, bundles));
-        }
-    }
-
-    public void bundlesResolved(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
-        broadcast(new BundlesResolvedEvent(options, bootstrap,
-                configuration, configurationTree, environment, bundles, disabled));
-    }
-
-    public void bundlesProcessed(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
-        if (!bundles.isEmpty()) {
-            broadcast(new BundlesProcessedEvent(options, bootstrap,
-                    configuration, configurationTree, environment, bundles, disabled));
         }
     }
 

@@ -6,7 +6,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -67,7 +67,7 @@ class ShortcutsTest extends Specification {
         def res = ConfigTreeBuilder.build(bootstrap, config)
         def context = new ConfigurationContext()
         context.configurationTree = res
-        def bundle = new GuiceyBootstrap(context, [])
+        def bundle = new GuiceyEnvironment(context)
         then:
         bundle.configuration("not.exists") == null
         bundle.configuration("sub1") != null
@@ -81,7 +81,7 @@ class ShortcutsTest extends Specification {
         res = ConfigTreeBuilder.build(bootstrap, config)
         context = new ConfigurationContext()
         context.configurationTree = res
-        bundle = new GuiceyBootstrap(context, [])
+        bundle = new GuiceyEnvironment(context)
         then:
         bundle.configuration("not.exists") == null
         bundle.configuration("sub") != null

@@ -170,14 +170,6 @@ public class GuiceyConfigurationInfo {
     }
 
     /**
-     * @return types of bundles resolved from dropwizard bundles or empty list
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles()
-     */
-    public List<Class<GuiceyBundle>> getBundlesFromDw() {
-        return context.getItems(ConfigItem.Bundle, Filters.dwBundles());
-    }
-
-    /**
      * @return all enabled top-level bundles (without transitives)
      */
     public List<Class<GuiceyBundle>> getDirectBundles() {

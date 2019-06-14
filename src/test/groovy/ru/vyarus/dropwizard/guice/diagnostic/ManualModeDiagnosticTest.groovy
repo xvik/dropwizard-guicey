@@ -29,7 +29,6 @@ class ManualModeDiagnosticTest extends BaseDiagnosticTest {
         expect: "correct bundles info"
         info.bundles.isEmpty()
         info.bundlesFromLookup.isEmpty()
-        info.bundlesFromDw.isEmpty()
 
         and: "correct installers info"
         info.installers == [ResourceInstaller]

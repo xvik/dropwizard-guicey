@@ -12,7 +12,15 @@
     - (breaking dw 2.0) deprecated `Bundle` usages replaced with `ConfigurableBundle`
         (in new dropwizard version `Bundle extends ConfigurableBundle`)
         * Guicey configuration info (ConfigSope.DropwizardBundle) now use `ConfigurableBundle` class for marking guice 
-            bundle scope instead of `Bundle` 
+            bundle scope instead of `Bundle`
+* (breaking) GuiceyBundle changed to match dropwizard lifecycle (and be complete replacement): 
+    - GuiceyBundle now contains two methods `initialize` and `run` and called according to dropwizard lifecycle.
+        Now guicey bundles are complete replacement for dropwizard bundles, but with good interoperability 
+        with pure dropwizard bundles 
+    - Guicey bundles lookup and initialization moved into dropwizard initialization phase
+        (to be able to install dropwizard bundles inside guicey bundles)    
+    - Removed GuiceyOptions.ConfigureFromDropwizardBundles option because it's useless with new bundles lifecycle.
+        (if required, the same behaviour may be implemented with custom bundles lookup)                  
 
 Main breaking changes were caused by:
  - jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.

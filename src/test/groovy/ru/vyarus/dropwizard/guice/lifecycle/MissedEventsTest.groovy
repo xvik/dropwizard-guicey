@@ -31,9 +31,9 @@ class MissedEventsTest extends Specification {
 
         and: "not called"
         !Listener.events.contains(GuiceyLifecycle.ConfigurationHooksProcessed)
-        !Listener.events.contains(GuiceyLifecycle.BundlesFromDwResolved)
         !Listener.events.contains(GuiceyLifecycle.BundlesFromLookupResolved)
-        !Listener.events.contains(GuiceyLifecycle.BundlesProcessed)
+        !Listener.events.contains(GuiceyLifecycle.BundlesInitialized)
+        !Listener.events.contains(GuiceyLifecycle.BundlesStarted)
         !Listener.events.contains(GuiceyLifecycle.ExtensionsInstalledBy)
         !Listener.events.contains(GuiceyLifecycle.ExtensionsInstalled)
         !Listener.events.contains(GuiceyLifecycle.HK2Configuration)

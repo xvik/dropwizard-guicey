@@ -139,21 +139,6 @@ public final class ConfigurationContext {
     // --------------------------------------------------------------------------- BUNDLES
 
     /**
-     * Register bundles, recognized from dropwizard bundles. {@link io.dropwizard.ConfiguredBundle} used as context.
-     *
-     * @param bundles recognized bundles
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#configureFromDropwizardBundles()
-     */
-    public void registerDwBundles(final List<GuiceyBundle> bundles) {
-        setScope(ConfigScope.DropwizardBundle.getType());
-        for (GuiceyBundle bundle : bundles) {
-            register(ConfigItem.Bundle, bundle);
-        }
-        closeScope();
-        lifecycle().bundlesFromDwResolved(bundles);
-    }
-
-    /**
      * Register bundles resolved by lookup mechanism. {@link GuiceyBundleLookup} used as context.
      *
      * @param bundles bundles resolved by lookup mechanism
@@ -499,6 +484,7 @@ public final class ConfigurationContext {
      */
     public void initPhaseStarted(final Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
+        lifecycle().initializationStarted(bootstrap);
     }
 
     /**
@@ -510,6 +496,7 @@ public final class ConfigurationContext {
         this.configurationTree = ConfigTreeBuilder
                 .build(bootstrap, configuration, option(BindConfigurationByPath));
         this.environment = environment;
+        lifecycle().runPhase(configuration, configurationTree, environment);
     }
 
     /**

@@ -10,6 +10,8 @@ import org.glassfish.jersey.server.monitoring.RequestEvent;
 import org.glassfish.jersey.server.monitoring.RequestEventListener;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesFromLookupResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesInitializedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
@@ -55,6 +57,22 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     }
 
     @Override
+    protected void lookupBundlesResolved(final BundlesFromLookupResolvedEvent event) {
+        log("%s lookup bundles recognized", event.getBundles().size());
+        // lookup details not logged because they are explicitly logged before event
+    }
+
+    @Override
+    protected void bundlesInitialized(final BundlesInitializedEvent event) {
+        log("Initialized %s%s GuiceyBundles",
+                event.getBundles().size(), fmtDisabled(event.getDisabled()));
+        if (showDetails) {
+            logDetails("bundles", event.getBundles());
+            logDetails(DISABLED, event.getDisabled());
+        }
+    }
+
+    @Override
     protected void initialization(final InitializationEvent event) {
         if (!event.getCommands().isEmpty()) {
             log("%s commands installed", event.getCommands().size());
@@ -65,27 +83,8 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     }
 
     @Override
-    protected void dwBundlesResolved(final BundlesFromDwResolvedEvent event) {
-        log("%s dw bundles recognized", event.getBundles().size());
-        if (showDetails) {
-            logDetails("dropwizard bundles", event.getBundles());
-        }
-    }
-
-    @Override
-    protected void lookupBundlesResolved(final BundlesFromLookupResolvedEvent event) {
-        log("%s lookup bundles recognized", event.getBundles().size());
-        // lookup details not logged because they are explicitly logged before event
-    }
-
-    @Override
-    protected void bundlesProcessed(final BundlesProcessedEvent event) {
-        log("Configured from %s%s GuiceyBundles",
-                event.getBundles().size(), fmtDisabled(event.getDisabled()));
-        if (showDetails) {
-            logDetails("bundles", event.getBundles());
-            logDetails(DISABLED, event.getDisabled());
-        }
+    protected void bundlesStarted(final BundlesStartedEvent event) {
+        log("Started %s GuiceyBundles", event.getBundles().size());
     }
 
     @Override

@@ -145,15 +145,6 @@ public final class Filters {
     }
 
     /**
-     * Filter for bundles resolved from dropwizard bundles. Use only for {@link ConfigItem#Bundle} items.
-     *
-     * @return bundles resolved from dropwizard bundles filter
-     */
-    public static Predicate<BundleItemInfo> dwBundles() {
-        return BundleItemInfo::isFromDwBundle;
-    }
-
-    /**
      * Filter for transitive bundles: bundles registered only by other bundles (and never directly).
      *
      * @return transitive bundled filter

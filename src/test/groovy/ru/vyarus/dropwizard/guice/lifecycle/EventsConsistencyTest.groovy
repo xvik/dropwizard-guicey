@@ -3,13 +3,13 @@ package ru.vyarus.dropwizard.guice.lifecycle
 import com.google.inject.Binder
 import com.google.inject.Module
 import io.dropwizard.Application
-import io.dropwizard.Bundle
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
@@ -21,15 +21,18 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.HK2PhaseEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.InitPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesFromLookupResolvedEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesInitializedEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesResolvedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*
-import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig
 import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
@@ -53,15 +56,13 @@ class EventsConsistencyTest extends AbstractTest {
     static class App extends Application<Configuration> {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
-            bootstrap.addBundle(new DwBundle())
             bootstrap.addBundle(GuiceBundle.builder()
                     .listen(new Listener(),
-                    // to call all methods in adapter and make coverage happy
-                    new GuiceyLifecycleAdapter())
+                            // to call all methods in adapter and make coverage happy
+                            new GuiceyLifecycleAdapter())
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
                     .modules(new XMod())
-                    .configureFromDropwizardBundles()
-                    .disableBundles(DwBundle, LookupBundle)
+                    .disableBundles(LookupBundle)
                     .disableModules(XMod)
                     .disableInstallers(JerseyFeatureInstaller)
                     .disableExtensions(DummyPlugin1, HK2DebugFeature)
@@ -79,20 +80,6 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         void configure(Binder binder) {
 
-        }
-    }
-
-    static class DwBundle implements Bundle, GuiceyBundle {
-        @Override
-        void initialize(Bootstrap<?> bootstrap) {
-        }
-
-        @Override
-        void run(Environment environment) {
-        }
-
-        @Override
-        void initialize(GuiceyBootstrap bootstrap) {
         }
     }
 
@@ -123,6 +110,28 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
+        protected void lookupBundlesResolved(BundlesFromLookupResolvedEvent event) {
+            initChecks(event)
+            assert event.getBundles().size() == 1
+            assert event.getBundles()[0].class == LookupBundle
+        }
+
+        @Override
+        protected void bundlesResolved(BundlesResolvedEvent event) {
+            initChecks(event)
+            // dw and lookup bundles are disabled
+            assert event.getBundles().size() == 3
+            assert event.getDisabled().size() == 1
+        }
+
+        @Override
+        protected void bundlesInitialized(BundlesInitializedEvent event) {
+            initChecks(event)
+            assert event.getBundles().size() == 3
+            assert event.getDisabled().size() == 1
+        }
+
+        @Override
         protected void initialization(InitializationEvent event) {
             baseChecks(event)
             assert event.getBootstrap() != null
@@ -136,32 +145,9 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
-        protected void dwBundlesResolved(BundlesFromDwResolvedEvent event) {
-            runChecks(event)
-            assert event.getBundles().size() == 1
-            assert event.getBundles()[0].class == DwBundle
-        }
-
-        @Override
-        protected void lookupBundlesResolved(BundlesFromLookupResolvedEvent event) {
-            runChecks(event)
-            assert event.getBundles().size() == 1
-            assert event.getBundles()[0].class == LookupBundle
-        }
-
-        @Override
-        protected void bundlesResolved(BundlesResolvedEvent event) {
-            runChecks(event)
-            // dw and lookup bundles are disabled
-            assert event.getBundles().size() == 3
-            assert event.getDisabled().size() == 2
-        }
-
-        @Override
-        protected void bundlesProcessed(BundlesProcessedEvent event) {
+        protected void bundlesStarted(BundlesStartedEvent event) {
             runChecks(event)
             assert event.getBundles().size() == 3
-            assert event.getDisabled().size() == 2
         }
 
         @Override
@@ -230,9 +216,13 @@ class EventsConsistencyTest extends AbstractTest {
             }
         }
 
-        private void runChecks(RunPhaseEvent event) {
+        private void initChecks(InitPhaseEvent event) {
             baseChecks(event)
             assert event.getBootstrap() != null
+        }
+
+        private void runChecks(RunPhaseEvent event) {
+            initChecks(event)
             assert event.getEnvironment() != null
             assert event.getConfiguration() != null
             assert event.getConfigurationTree() != null

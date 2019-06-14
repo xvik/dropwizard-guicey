@@ -45,7 +45,6 @@ class AutoScanModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
         // assigned in abstract test
         info.bundles as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle, FooBundle, FooBundleRelativeBundle, CoreInstallersBundle] as Set
         info.bundlesFromLookup as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle] as Set
-        info.bundlesFromDw.isEmpty()
 
         and: "correct installers info"
         // feature installer was installed transitively by Hk2DebugBundle

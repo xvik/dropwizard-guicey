@@ -4,7 +4,7 @@ import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.InitPhaseEvent;
 
 import java.util.List;
 
@@ -21,14 +21,12 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 19.04.2018
  */
-public class InitializationEvent extends GuiceyLifecycleEvent {
+public class InitializationEvent extends InitPhaseEvent {
 
-    private final Bootstrap bootstrap;
     private final List<Command> commands;
 
     public InitializationEvent(final Options options, final Bootstrap bootstrap, final List<Command> installed) {
-        super(GuiceyLifecycle.Initialization, options);
-        this.bootstrap = bootstrap;
+        super(GuiceyLifecycle.Initialization, options, bootstrap);
         commands = installed;
     }
 
@@ -37,12 +35,5 @@ public class InitializationEvent extends GuiceyLifecycleEvent {
      */
     public List<Command> getCommands() {
         return commands;
-    }
-
-    /**
-     * @return dropwizard bootstrap object (could be configured)
-     */
-    public Bootstrap getBootstrap() {
-        return bootstrap;
     }
 }

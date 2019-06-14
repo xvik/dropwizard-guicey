@@ -138,9 +138,6 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         if (info.isFromLookup()) {
             markers.add("LOOKUP");
         }
-        if (info.isFromDwBundle()) {
-            markers.add("DW");
-        }
         commonMarkers(markers, info);
         for (int i = 0; i <= level; i++) {
             res.append(TAB);

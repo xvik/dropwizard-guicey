@@ -57,7 +57,6 @@ class DiagnosticRendererTest extends Specification {
         HK2DebugBundle               (r.v.d.g.m.j.debug)
         XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
-        DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
 
 
     INSTALLERS and EXTENSIONS in processing order =
@@ -101,7 +100,6 @@ class DiagnosticRendererTest extends Specification {
         HK2DebugBundle               (r.v.d.g.m.j.debug)
         XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
-        DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
         -DisabledBundle              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 
 
@@ -154,7 +152,6 @@ class DiagnosticRendererTest extends Specification {
         HK2DebugBundle               (r.v.d.g.m.j.debug)
         XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
-        DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
 """ as String;
     }
 
@@ -170,7 +167,6 @@ class DiagnosticRendererTest extends Specification {
         HK2DebugBundle               (r.v.d.g.m.j.debug)
         XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
-        DWBundle                     (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
         -DisabledBundle              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 """ as String;
     }
@@ -323,7 +319,6 @@ class DiagnosticRendererTest extends Specification {
 
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
-            bootstrap.addBundle(new DWBundle())
             bootstrap.addBundle(
                     GuiceBundle.builder()
                             .bundleLookup(new GuiceyBundleLookup() {
@@ -342,30 +337,12 @@ class DiagnosticRendererTest extends Specification {
                             .disableBundles(DisabledBundle)
                             .disableModules(DisabledModule)
                             .disableExtensions(DisabledExtension)
-                            .configureFromDropwizardBundles()
                             .strictScopeControl()
                             .build())
         }
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
-        }
-    }
-
-    static class DWBundle implements Bundle, GuiceyBundle {
-        @Override
-        void initialize(Bootstrap<?> bootstrap) {
-
-        }
-
-        @Override
-        void run(Environment environment) {
-
-        }
-
-        @Override
-        void initialize(GuiceyBootstrap bootstrap) {
-
         }
     }
 

@@ -1,8 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle;
 
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
@@ -25,23 +24,23 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case ConfigurationHooksProcessed:
                 configurationHooksProcessed((ConfigurationHooksProcessedEvent) event);
                 break;
-            case Initialization:
-                initialization((InitializationEvent) event);
-                break;
-            case BeforeRun:
-                beforeRun((BeforeRunEvent) event);
-                break;
-            case BundlesFromDwResolved:
-                dwBundlesResolved((BundlesFromDwResolvedEvent) event);
-                break;
             case BundlesFromLookupResolved:
                 lookupBundlesResolved((BundlesFromLookupResolvedEvent) event);
                 break;
             case BundlesResolved:
                 bundlesResolved((BundlesResolvedEvent) event);
                 break;
-            case BundlesProcessed:
-                bundlesProcessed((BundlesProcessedEvent) event);
+            case BundlesInitialized:
+                bundlesInitialized((BundlesInitializedEvent) event);
+                break;
+            case Initialization:
+                initialization((InitializationEvent) event);
+                break;
+            case BeforeRun:
+                beforeRun((BeforeRunEvent) event);
+                break;
+            case BundlesStarted:
+                bundlesStarted((BundlesStartedEvent) event);
                 break;
             case InjectorCreation:
                 injectorCreation((InjectorCreationEvent) event);
@@ -77,18 +76,6 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         // empty
     }
 
-    protected void initialization(final InitializationEvent event) {
-        // empty
-    }
-
-    protected void beforeRun(final BeforeRunEvent event) {
-        // empty
-    }
-
-    protected void dwBundlesResolved(final BundlesFromDwResolvedEvent event) {
-        // empty
-    }
-
     protected void lookupBundlesResolved(final BundlesFromLookupResolvedEvent event) {
         // empty
     }
@@ -97,7 +84,19 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         // empty
     }
 
-    protected void bundlesProcessed(final BundlesProcessedEvent event) {
+    protected void bundlesInitialized(final BundlesInitializedEvent event) {
+        // empty
+    }
+
+    protected void initialization(final InitializationEvent event) {
+        // empty
+    }
+
+    protected void beforeRun(final BeforeRunEvent event) {
+        // empty
+    }
+
+    protected void bundlesStarted(final BundlesStartedEvent event) {
         // empty
     }
 

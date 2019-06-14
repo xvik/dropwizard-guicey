@@ -36,11 +36,6 @@ public class BundleItemInfoImpl extends ItemInfoImpl implements BundleItemInfo {
     }
 
     @Override
-    public boolean isFromDwBundle() {
-        return getRegisteredBy().contains(ConfigScope.DropwizardBundle.getType());
-    }
-
-    @Override
     public boolean isTransitive() {
         return getRegisteredBy().stream()
                 .noneMatch(type -> ConfigScope.recognize(type) != ConfigScope.GuiceyBundle);

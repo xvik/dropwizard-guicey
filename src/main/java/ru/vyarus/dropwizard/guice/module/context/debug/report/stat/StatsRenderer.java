@@ -87,7 +87,7 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
             final long resolved = info.getStats().time(BundleResolutionTime);
             if (show(hideTiny, resolved)) {
                 node.child("%s resolved in %s",
-                        info.getBundlesFromDw().size() + info.getBundlesFromLookup().size(),
+                        info.getBundlesFromLookup().size(),
                         info.getStats().humanTime(BundleResolutionTime));
             }
             node.child("%s processed", info.getBundles().size());

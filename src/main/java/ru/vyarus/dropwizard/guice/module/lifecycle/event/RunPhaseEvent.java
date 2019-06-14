@@ -16,9 +16,8 @@ import ru.vyarus.dropwizard.guice.module.yaml.report.ConfigBindingsRenderer;
  * @author Vyacheslav Rusakov
  * @since 19.04.2018
  */
-public abstract class RunPhaseEvent extends GuiceyLifecycleEvent {
+public abstract class RunPhaseEvent extends InitPhaseEvent {
 
-    private final Bootstrap bootstrap;
     private final Configuration configuration;
     private final ConfigurationTree configurationTree;
     private final Environment environment;
@@ -29,18 +28,10 @@ public abstract class RunPhaseEvent extends GuiceyLifecycleEvent {
                          final Configuration configuration,
                          final ConfigurationTree configurationTree,
                          final Environment environment) {
-        super(type, options);
-        this.bootstrap = bootstrap;
+        super(type, options, bootstrap);
         this.configuration = configuration;
         this.configurationTree = configurationTree;
         this.environment = environment;
-    }
-
-    /**
-     * @return bootstrap object
-     */
-    public Bootstrap getBootstrap() {
-        return bootstrap;
     }
 
     /**

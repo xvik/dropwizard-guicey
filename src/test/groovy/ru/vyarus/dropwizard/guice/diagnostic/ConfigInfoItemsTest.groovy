@@ -62,7 +62,6 @@ class ConfigInfoItemsTest extends Specification {
         bi.type == FooBundle
         bi.registeredBy == [Application] as Set
         bi.registrationScope == Application
-        !bi.fromDwBundle
         !bi.fromLookup
         bi.toString() == "$ConfigItem.Bundle $FooBundle.simpleName" as String
 

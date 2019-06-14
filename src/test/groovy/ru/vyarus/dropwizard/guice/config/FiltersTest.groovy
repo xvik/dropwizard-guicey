@@ -112,18 +112,6 @@ class FiltersTest extends Specification {
 
     }
 
-    def "Check dwBundles filter"() {
-
-        expect: "matched check"
-        Filters.dwBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {
-            registeredBy.add(ConfiguredBundle)
-        })
-
-        and: "not matched check"
-        !Filters.dwBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {})
-
-    }
-
     def "Check installedBy filter"() {
 
         expect: "matched check"

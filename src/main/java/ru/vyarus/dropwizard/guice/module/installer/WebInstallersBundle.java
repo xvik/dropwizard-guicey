@@ -4,6 +4,7 @@ import io.dropwizard.jetty.MutableServletContextHandler;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebFilterInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebServletInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListenerInstaller;
@@ -39,8 +40,12 @@ public class WebInstallersBundle implements GuiceyBundle {
                 WebServletInstaller.class,
                 WebListenerInstaller.class
         );
-        nameContext(bootstrap.environment().getApplicationContext(), "Application context");
-        nameContext(bootstrap.environment().getAdminContext(), "Admin context");
+    }
+
+    @Override
+    public void run(GuiceyEnvironment environment) {
+        nameContext(environment.environment().getApplicationContext(), "Application context");
+        nameContext(environment.environment().getAdminContext(), "Admin context");
     }
 
     private void nameContext(final MutableServletContextHandler context, final String name) {

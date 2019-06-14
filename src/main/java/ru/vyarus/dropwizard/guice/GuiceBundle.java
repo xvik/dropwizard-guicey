@@ -131,7 +131,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
                 installed = CommandSupport.registerCommands(bootstrap, scanner, context);
             }
         }
-        context.lifecycle().initialization(bootstrap, installed);
+        initializeBundles();
+        context.lifecycle().initialization(installed);
         timer.stop();
     }
 
@@ -139,10 +140,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     public void run(final T configuration, final Environment environment) throws Exception {
         final Stopwatch timer = context.stat().timer(GuiceyTime);
         context.runPhaseStarted(configuration, environment);
-        if (context.option(UseCoreInstallers)) {
-            context.registerBundles(new CoreInstallersBundle());
-        }
-        configureFromBundles();
+        runBundles();
         context.registerModules(new GuiceBootstrapModule(scanner, context));
         ModulesSupport.configureModules(context);
         createInjector(environment);
@@ -159,19 +157,26 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     }
 
     /**
-     * Apply configuration from registered bundles. If dropwizard bundles support is enabled, lookup them too.
+     * Resolve bundles and initialize.
      */
-    private void configureFromBundles() {
-        context.lifecycle().runPhase(context.getConfiguration(), context.getConfigurationTree(),
-                context.getEnvironment());
+    private void initializeBundles() {
         final Stopwatch timer = context.stat().timer(BundleTime);
         final Stopwatch resolutionTimer = context.stat().timer(BundleResolutionTime);
-        if (context.option(ConfigureFromDropwizardBundles)) {
-            context.registerDwBundles(BundleSupport.findBundles(context.getBootstrap(), GuiceyBundle.class));
+        if (context.option(UseCoreInstallers)) {
+            context.registerBundles(new CoreInstallersBundle());
         }
         context.registerLookupBundles(bundleLookup.lookup());
         resolutionTimer.stop();
-        BundleSupport.processBundles(context);
+        BundleSupport.initBundles(context);
+        timer.stop();
+    }
+
+    /**
+     * Run bundles.
+     */
+    private void runBundles() {
+        final Stopwatch timer = context.stat().timer(BundleTime);
+        BundleSupport.runBundles(context);
         timer.stop();
     }
 
@@ -517,10 +522,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * Guicey bundles are mainly useful for extensions (to group installers and extensions installation without
          * auto scan). Its very like dropwizard bundles.
          * <p>
-         * It's also possible to use dropwizard bundles as guicey bundles: bundle must implement
-         * {@link GuiceyBundle} and {@link #configureFromDropwizardBundles()} must be enabled
-         * (disabled by default). This allows using dropwizard bundles as universal extension point.
-         * <p>
          * Duplicate bundles are filtered automatically: bundles of the same type considered duplicate.
          *
          * @param bundles guicey bundles
@@ -641,19 +642,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         public final Builder<T> disable(final Predicate<ItemInfo>... predicates) {
             bundle.context.registerDisablePredicates(predicates);
             return this;
-        }
-
-        /**
-         * Enables registered dropwizard bundles check if they implement {@link GuiceyBundle} and register them as
-         * guicey bundles. This allows using dropwizard bundles as universal extension point.
-         * <p>
-         * Disabled by default.
-         *
-         * @return builder instance for chained calls
-         * @see GuiceyOptions#ConfigureFromDropwizardBundles
-         */
-        public Builder<T> configureFromDropwizardBundles() {
-            return option(ConfigureFromDropwizardBundles, true);
         }
 
         /**

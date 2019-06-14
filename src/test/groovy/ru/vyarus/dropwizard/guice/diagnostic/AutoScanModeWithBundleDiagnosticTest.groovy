@@ -40,7 +40,6 @@ class AutoScanModeWithBundleDiagnosticTest extends BaseDiagnosticTest {
         expect: "correct bundles info"
         info.bundles as Set == [FooBundle, FooBundleRelativeBundle, CoreInstallersBundle] as Set
         info.bundlesFromLookup.isEmpty()
-        info.bundlesFromDw.isEmpty()
 
         and: "correct installers info"
         def classes = [FooInstaller, FooBundleInstaller,

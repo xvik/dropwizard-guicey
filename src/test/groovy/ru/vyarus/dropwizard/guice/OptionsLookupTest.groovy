@@ -24,7 +24,6 @@ class OptionsLookupTest extends AbstractTest {
 
         expect: "options set"
         info.options.getValue(GuiceyOptions.BindConfigurationInterfaces)
-        info.options.getValue(GuiceyOptions.ConfigureFromDropwizardBundles)
     }
 
     static class OLApp extends Application<Configuration> {
@@ -33,7 +32,6 @@ class OptionsLookupTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .options(ImmutableMap.<Enum, Object> builder()
                         .put(GuiceyOptions.BindConfigurationInterfaces, true)
-                        .put(GuiceyOptions.ConfigureFromDropwizardBundles, true)
                         .build())
                     .build())
         }

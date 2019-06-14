@@ -1,8 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle;
 
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
@@ -27,6 +26,23 @@ public enum GuiceyLifecycle {
      */
     ConfigurationHooksProcessed(ConfigurationHooksProcessedEvent.class),
     /**
+     * Called if at least one bundle recognized using bundles lookup. Provides list of recognized bundles
+     * (note: some of these bundles could be disabled and not used further).
+     */
+    BundlesFromLookupResolved(BundlesFromLookupResolvedEvent.class),
+    /**
+     * Called after {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and resolution form dropwizard
+     * bundles mechanisms when all top-level bundles are resolved. Provides a list of all enabled and list of disabled
+     * bundles. Called even if no bundles registered to indicate configuration state.
+     */
+    BundlesResolved(BundlesResolvedEvent.class),
+    /**
+     * Called after bundles processing. Note that bundles could register other bundles and so resulted
+     * list of installed bundles could be bigger (than in resolution event). Provides a list of all used and all
+     * disabled bundles. Not called even if no bundles were used at all (no initialization - no event).
+     */
+    BundlesInitialized(BundlesInitializedEvent.class),
+    /**
      * Called after {@link ru.vyarus.dropwizard.guice.GuiceBundle#initialize(io.dropwizard.setup.Bootstrap)} method end.
      * Just a convenient moment to apply registrations into dropwizard {@link io.dropwizard.setup.Bootstrap} object
      * from listener.
@@ -46,29 +62,11 @@ public enum GuiceyLifecycle {
      * (for example, available configuration bindings to debug guice injector creation failure due to missed bindings).
      */
     BeforeRun(BeforeRunEvent.class),
-
     /**
-     * Called if configuration from dw bundles enabled and at least one bundle recognized. Provides list of
-     * recognized bundles (note: some of these bundles could be actually disabled and not used further).
+     * Called after bundles started (run method call). Not called even if no bundles were used at all
+     * (no processing - no event).
      */
-    BundlesFromDwResolved(BundlesFromDwResolvedEvent.class),
-    /**
-     * Called if at least one bundle recognized using bundles lookup. Provides list of recognized bundles
-     * (note: some of these bundles could be disabled and not used further).
-     */
-    BundlesFromLookupResolved(BundlesFromLookupResolvedEvent.class),
-    /**
-     * Called after {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and resolution form dropwizard
-     * bundles mechanisms when all top-level bundles are resolved. Provides a list of all enabled and list of disabled
-     * bundles. Called even if no bundles registered to indicate configuration state.
-     */
-    BundlesResolved(BundlesResolvedEvent.class),
-    /**
-     * Called after bundles processing. Note that bundles could register other bundles and so resulted
-     * list of installed bundles could be bigger (than in resolution event). Provides a list of all used and all
-     * disabled bundles. Not called even if no bundles were used at all (no processing - no event).
-     */
-    BundlesProcessed(BundlesProcessedEvent.class),
+    BundlesStarted(BundlesStartedEvent.class),
     /**
      * Called just before guice injector creation. Provides all configured modules (main and override) and all
      * disabled modules. Called even when no modules registered to indicate configuration state.

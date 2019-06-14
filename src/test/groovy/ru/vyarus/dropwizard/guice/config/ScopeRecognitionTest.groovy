@@ -20,7 +20,6 @@ class ScopeRecognitionTest extends Specification {
         expect: "recognition"
         ConfigScope.recognize(Application) == ConfigScope.Application
         ConfigScope.recognize(GuiceyBundleLookup) == ConfigScope.BundleLookup
-        ConfigScope.recognize(Bundle) == ConfigScope.DropwizardBundle
         ConfigScope.recognize(ClasspathScanner) == ConfigScope.ClasspathScan
         ConfigScope.recognize(GuiceyConfigurationHook) == ConfigScope.Hook
         ConfigScope.recognize(HK2DebugBundle) == ConfigScope.GuiceyBundle

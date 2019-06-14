@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.GuiceyOptions
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
@@ -30,8 +31,6 @@ class GBootstrapApplication extends Application<TestConfiguration> {
                 new GuiceyBundle() {
                     @Override
                     void initialize(GuiceyBootstrap gbootstrap) {
-                        assert gbootstrap.configuration() != null
-                        assert gbootstrap.environment() != null
                         assert gbootstrap.bootstrap() != null
                         assert gbootstrap.application() != null
                         assert gbootstrap.option(GuiceyOptions.UseCoreInstallers)
@@ -53,6 +52,12 @@ class GBootstrapApplication extends Application<TestConfiguration> {
                                 bindConstant().annotatedWith(Names.named("sample2")).to("test str override")
                             }
                         })
+                    }
+
+                    @Override
+                    void run(GuiceyEnvironment environment) {
+                        assert environment.configuration() != null
+                        assert environment.environment() != null
                     }
                 })
                 .extensions(DummyTask, DummyResource, DummyManaged)
