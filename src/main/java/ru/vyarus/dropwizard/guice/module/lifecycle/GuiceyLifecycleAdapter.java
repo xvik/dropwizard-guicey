@@ -18,6 +18,7 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
 
     @Override
     @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MissingSwitchDefault",
+            "checkstyle:JavaNCSS",
             "PMD.NcssCount", "PMD.CyclomaticComplexity", "PMD.SwitchStmtsShouldHaveDefault"})
     public void onEvent(final GuiceyLifecycleEvent event) {
         switch (event.getType()) {
@@ -33,8 +34,17 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case BundlesInitialized:
                 bundlesInitialized((BundlesInitializedEvent) event);
                 break;
-            case Initialization:
-                initialization((InitializationEvent) event);
+            case CommandsResolved:
+                commandsResolved((CommandsResolvedEvent) event);
+                break;
+            case InstallersResolved:
+                installersResolved((InstallersResolvedEvent) event);
+                break;
+            case ExtensionsResolved:
+                extensionsResolved((ExtensionsResolvedEvent) event);
+                break;
+            case Initialized:
+                initialized((InitializedEvent) event);
                 break;
             case BeforeRun:
                 beforeRun((BeforeRunEvent) event);
@@ -44,12 +54,6 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
                 break;
             case InjectorCreation:
                 injectorCreation((InjectorCreationEvent) event);
-                break;
-            case InstallersResolved:
-                installersResolved((InstallersResolvedEvent) event);
-                break;
-            case ExtensionsResolved:
-                extensionsResolved((ExtensionsResolvedEvent) event);
                 break;
             case ExtensionsInstalledBy:
                 extensionsInstalledBy((ExtensionsInstalledByEvent) event);
@@ -88,7 +92,19 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         // empty
     }
 
-    protected void initialization(final InitializationEvent event) {
+    protected void commandsResolved(final CommandsResolvedEvent event) {
+        // empty
+    }
+
+    protected void installersResolved(final InstallersResolvedEvent event) {
+        // empty
+    }
+
+    protected void extensionsResolved(final ExtensionsResolvedEvent event) {
+        // empty
+    }
+
+    protected void initialized(final InitializedEvent event) {
         // empty
     }
 
@@ -101,14 +117,6 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
     }
 
     protected void injectorCreation(final InjectorCreationEvent event) {
-        // empty
-    }
-
-    protected void installersResolved(final InstallersResolvedEvent event) {
-        // empty
-    }
-
-    protected void extensionsResolved(final ExtensionsResolvedEvent event) {
         // empty
     }
 

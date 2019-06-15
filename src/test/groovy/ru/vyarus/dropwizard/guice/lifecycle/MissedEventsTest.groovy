@@ -21,7 +21,7 @@ class MissedEventsTest extends Specification {
     def "Check missed events"() {
 
         expect: "only few events called"
-        Listener.events.contains(GuiceyLifecycle.Initialization)
+        Listener.events.contains(GuiceyLifecycle.Initialized)
         Listener.events.contains(GuiceyLifecycle.BundlesResolved)
         Listener.events.contains(GuiceyLifecycle.InjectorCreation)
         Listener.events.contains(GuiceyLifecycle.InstallersResolved)
@@ -33,6 +33,7 @@ class MissedEventsTest extends Specification {
         !Listener.events.contains(GuiceyLifecycle.ConfigurationHooksProcessed)
         !Listener.events.contains(GuiceyLifecycle.BundlesFromLookupResolved)
         !Listener.events.contains(GuiceyLifecycle.BundlesInitialized)
+        !Listener.events.contains(GuiceyLifecycle.CommandsResolved)
         !Listener.events.contains(GuiceyLifecycle.BundlesStarted)
         !Listener.events.contains(GuiceyLifecycle.ExtensionsInstalledBy)
         !Listener.events.contains(GuiceyLifecycle.ExtensionsInstalled)

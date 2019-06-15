@@ -13,12 +13,15 @@
         (in new dropwizard version `Bundle extends ConfigurableBundle`)
         * Guicey configuration info (ConfigSope.DropwizardBundle) now use `ConfigurableBundle` class for marking guice 
             bundle scope instead of `Bundle`
-* (breaking) GuiceyBundle changed to match dropwizard lifecycle (and be complete replacement): 
+* (breaking) GuiceyBundle contract and behaviour changed to match dropwizard lifecycle: 
     - GuiceyBundle now contains two methods `initialize` and `run` and called according to dropwizard lifecycle.
         Now guicey bundles are complete replacement for dropwizard bundles, but with good interoperability 
         with pure dropwizard bundles 
-    - Guicey bundles lookup and initialization moved into dropwizard initialization phase
-        (to be able to install dropwizard bundles inside guicey bundles)    
+    - The following guicey initializations were moved into dropwizard configuration phase:
+        - Guicey bundles lookup and initialization (to be able to install dropwizard bundles inside guicey bundles)
+        - Installers classpath search and instantiation
+        - Extensions classpath search and validation (but on run phase it is still possible to disable extensions)    
+    - A lot of guicey lifecycle events obviously changed        
     - Removed GuiceyOptions.ConfigureFromDropwizardBundles option because it's useless with new bundles lifecycle.
         (if required, the same behaviour may be implemented with custom bundles lookup)                  
 

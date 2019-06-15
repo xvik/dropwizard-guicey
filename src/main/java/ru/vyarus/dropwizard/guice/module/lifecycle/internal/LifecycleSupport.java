@@ -22,7 +22,10 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstall
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Lifecycle broadcast internal support.
@@ -70,11 +73,6 @@ public final class LifecycleSupport {
         this.bootstrap = bootstrap;
     }
 
-    public void initialization(final List<Command> installed) {
-        broadcast(new InitializationEvent(options, bootstrap,
-                installed != null ? installed : Collections.emptyList()));
-    }
-
     public void bundlesFromLookupResolved(final List<GuiceyBundle> bundles) {
         if (!bundles.isEmpty()) {
             broadcast(new BundlesFromLookupResolvedEvent(options, bootstrap, bundles));
@@ -89,6 +87,25 @@ public final class LifecycleSupport {
         if (!bundles.isEmpty()) {
             broadcast(new BundlesInitializedEvent(options, bootstrap, bundles, disabled));
         }
+    }
+
+    public void commandsResolved(final List<Command> installed) {
+        if (installed != null && !installed.isEmpty()) {
+            broadcast(new CommandsResolvedEvent(options, bootstrap, installed));
+        }
+    }
+
+    public void installersResolved(final List<FeatureInstaller> installers,
+                                   final List<Class<? extends FeatureInstaller>> disabled) {
+        broadcast(new InstallersResolvedEvent(options, bootstrap, installers, disabled));
+    }
+
+    public void extensionsResolved(final List<Class<?>> extensions, final List<Class<?>> disabled) {
+        broadcast(new ExtensionsResolvedEvent(options, bootstrap, extensions, disabled));
+    }
+
+    public void initialized() {
+        broadcast(new InitializedEvent(options, bootstrap));
     }
 
     public void runPhase(final Configuration configuration,
@@ -111,17 +128,6 @@ public final class LifecycleSupport {
                                  final List<Module> disabled) {
         broadcast(new InjectorCreationEvent(options, bootstrap,
                 configuration, configurationTree, environment, modules, overriding, disabled));
-    }
-
-    public void installersResolved(final List<FeatureInstaller> installers,
-                                   final List<Class<? extends FeatureInstaller>> disabled) {
-        broadcast(new InstallersResolvedEvent(options, bootstrap,
-                configuration, configurationTree, environment, installers, disabled));
-    }
-
-    public void extensionsResolved(final List<Class<?>> extensions, final List<Class<?>> disabled) {
-        broadcast(new ExtensionsResolvedEvent(options, bootstrap,
-                configuration, configurationTree, environment, extensions, disabled));
     }
 
     public void injectorPhase(final Injector injector) {

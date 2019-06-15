@@ -10,7 +10,6 @@ import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.installer.InstallerModule;
-import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module;
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.scope.Prototype;
@@ -45,12 +44,9 @@ import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationInterfac
  */
 public class GuiceBootstrapModule<T extends Configuration> extends DropwizardAwareModule<T> {
 
-    private final ClasspathScanner scanner;
     private final ConfigurationContext context;
 
-    public GuiceBootstrapModule(final ClasspathScanner scanner,
-                                final ConfigurationContext context) {
-        this.scanner = scanner;
+    public GuiceBootstrapModule(final ConfigurationContext context) {
         this.context = context;
     }
 
@@ -58,7 +54,7 @@ public class GuiceBootstrapModule<T extends Configuration> extends DropwizardAwa
     protected void configure() {
         bindScope(Prototype.class, Scopes.NO_SCOPE);
         bindEnvironment();
-        install(new InstallerModule(scanner, context));
+        install(new InstallerModule(context));
         install(new Jersey2Module(bootstrap().getApplication(), environment(), context));
 
         // let guice beans use options the same way as bundles (with usage tracking)

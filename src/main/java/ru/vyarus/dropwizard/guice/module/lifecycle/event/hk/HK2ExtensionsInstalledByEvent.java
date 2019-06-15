@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.HK2PhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
@@ -24,8 +25,7 @@ import java.util.List;
  * from guice context.
  * <p>
  * Installer passed by type to simplify differentiation. If, for some reason, you need to access installer
- * instance then save installers in
- * {@link ru.vyarus.dropwizard.guice.module.lifecycle.event.run.InstallersResolvedEvent} and find by type
+ * instance then save installers in {@link InstallersResolvedEvent} and find by type
  * (only one installer of exact type could be registered).
  *
  * @author Vyacheslav Rusakov

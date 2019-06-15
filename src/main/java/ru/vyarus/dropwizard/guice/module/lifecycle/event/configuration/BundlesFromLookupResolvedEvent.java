@@ -4,7 +4,7 @@ import io.dropwizard.setup.Bootstrap;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.InitPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 21.04.2018
  */
-public class BundlesFromLookupResolvedEvent extends InitPhaseEvent {
+public class BundlesFromLookupResolvedEvent extends ConfigurationPhaseEvent {
 
     private final List<GuiceyBundle> bundles;
 

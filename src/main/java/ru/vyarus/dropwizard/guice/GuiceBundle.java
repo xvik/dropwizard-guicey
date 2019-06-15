@@ -3,13 +3,11 @@ package ru.vyarus.dropwizard.guice;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.Sets;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
@@ -32,8 +30,8 @@ import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ModulesSupport;
-import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
+import ru.vyarus.dropwizard.guice.module.installer.GuiceyInitializer;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
@@ -42,9 +40,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig;
 import ru.vyarus.dropwizard.guice.module.yaml.report.DebugConfigBindings;
 
 import javax.servlet.DispatcherType;
-import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -107,8 +103,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
     private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
 
-    private ClasspathScanner scanner;
-
     GuiceBundle() {
         // Bundle should be instantiated only from builder
     }
@@ -117,22 +111,23 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     public void initialize(final Bootstrap bootstrap) {
         final Stopwatch timer = context.stat().timer(GuiceyTime);
         context.initPhaseStarted(bootstrap);
-        final String[] packages = context.option(ScanPackages);
-        final boolean searchCommands = context.option(SearchCommands);
-        final boolean scanEnabled = packages.length > 0;
-        if (searchCommands) {
-            Preconditions.checkState(scanEnabled,
-                    "Commands search could not be performed, because auto scan was not activated");
-        }
-        List<Command> installed = null;
-        if (scanEnabled) {
-            scanner = new ClasspathScanner(Sets.newHashSet(Arrays.asList(packages)), context.stat());
-            if (searchCommands) {
-                installed = CommandSupport.registerCommands(bootstrap, scanner, context);
-            }
-        }
-        initializeBundles();
-        context.lifecycle().initialization(installed);
+        final GuiceyInitializer starter = new GuiceyInitializer(bootstrap, context);
+
+        // resolve and init all guicey bundles
+        starter.initializeBundles(bundleLookup);
+
+        // when all manual configuration applied (from all bundles) performing classpath scan
+        // (on run phase extensions could be only disabled, but not added)
+
+        // scan for commands (if enabled)
+        starter.findCommands();
+        // scan for installers (if scan enabled) and installers initialization
+        starter.resolveInstallers();
+        // scan for extensions (if scan enabled) and validation of all registered extensions
+        starter.resolveExtensions();
+
+        starter.cleanup();
+        context.lifecycle().initialized();
         timer.stop();
     }
 
@@ -141,7 +136,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         final Stopwatch timer = context.stat().timer(GuiceyTime);
         context.runPhaseStarted(configuration, environment);
         runBundles();
-        context.registerModules(new GuiceBootstrapModule(scanner, context));
+        context.registerModules(new GuiceBootstrapModule(context));
+        context.finalizeConfiguration();
         ModulesSupport.configureModules(context);
         createInjector(environment);
         afterInjectorCreation();
@@ -154,21 +150,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     public Injector getInjector() {
         return Preconditions.checkNotNull(injector, "Guice not initialized");
-    }
-
-    /**
-     * Resolve bundles and initialize.
-     */
-    private void initializeBundles() {
-        final Stopwatch timer = context.stat().timer(BundleTime);
-        final Stopwatch resolutionTimer = context.stat().timer(BundleResolutionTime);
-        if (context.option(UseCoreInstallers)) {
-            context.registerBundles(new CoreInstallersBundle());
-        }
-        context.registerLookupBundles(bundleLookup.lookup());
-        resolutionTimer.stop();
-        BundleSupport.initBundles(context);
-        timer.stop();
     }
 
     /**
@@ -193,9 +174,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @SuppressWarnings("unchecked")
     private void afterInjectorCreation() {
         CommandSupport.initCommands(context.getBootstrap().getCommands(), injector, context.stat());
-        if (scanner != null) {
-            scanner.cleanup();
-        }
     }
 
     /**

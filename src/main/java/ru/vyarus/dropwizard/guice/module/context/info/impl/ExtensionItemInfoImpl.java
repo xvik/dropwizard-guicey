@@ -20,6 +20,8 @@ public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItem
     private boolean lazy;
     private boolean hk2Managed;
     private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
+    // little hack used to preserve installer reference during initialization
+    private FeatureInstaller installer;
 
     public ExtensionItemInfoImpl(final Class<?> type) {
         super(ConfigItem.Extension, type);
@@ -63,7 +65,12 @@ public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItem
         this.hk2Managed = hk2Managed;
     }
 
-    public void setInstalledBy(final Class<? extends FeatureInstaller> installedBy) {
-        this.installedBy = installedBy;
+    public FeatureInstaller getInstaller() {
+        return installer;
+    }
+
+    public void setInstaller(FeatureInstaller installer) {
+        this.installer = installer;
+        this.installedBy = installer.getClass();
     }
 }

@@ -22,7 +22,7 @@ class InstallerRegistrationFailTest extends Specification {
         new GuiceyAppRule(App, null).apply({} as Statement, null).evaluate()
         then: "error"
         def ex = thrown(IllegalStateException)
-        ex.cause.cause.message.startsWith(
+        ex.cause.message.startsWith(
                 "Failed to register installer")
     }
 

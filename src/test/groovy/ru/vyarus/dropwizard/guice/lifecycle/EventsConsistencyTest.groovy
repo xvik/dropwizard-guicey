@@ -21,14 +21,17 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.HK2PhaseEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.InitPhaseEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesFromLookupResolvedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesInitializedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesResolvedEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.CommandsResolvedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ExtensionsResolvedEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializedEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent
@@ -111,14 +114,14 @@ class EventsConsistencyTest extends AbstractTest {
 
         @Override
         protected void lookupBundlesResolved(BundlesFromLookupResolvedEvent event) {
-            initChecks(event)
+            confChecks(event)
             assert event.getBundles().size() == 1
             assert event.getBundles()[0].class == LookupBundle
         }
 
         @Override
         protected void bundlesResolved(BundlesResolvedEvent event) {
-            initChecks(event)
+            confChecks(event)
             // dw and lookup bundles are disabled
             assert event.getBundles().size() == 3
             assert event.getDisabled().size() == 1
@@ -126,17 +129,37 @@ class EventsConsistencyTest extends AbstractTest {
 
         @Override
         protected void bundlesInitialized(BundlesInitializedEvent event) {
-            initChecks(event)
+            confChecks(event)
             assert event.getBundles().size() == 3
             assert event.getDisabled().size() == 1
         }
 
         @Override
-        protected void initialization(InitializationEvent event) {
-            baseChecks(event)
+        protected void commandsResolved(CommandsResolvedEvent event) {
+            confChecks(event)
             assert event.getBootstrap() != null
             assert event.getCommands().size() == 2
             assert event.getBootstrap().getCommands().containsAll(event.getCommands())
+        }
+
+        @Override
+        protected void installersResolved(InstallersResolvedEvent event) {
+            confChecks(event)
+            assert event.installers.size() == 8
+            assert event.disabled.size() == 1
+        }
+
+        @Override
+        protected void extensionsResolved(ExtensionsResolvedEvent event) {
+            confChecks(event)
+            assert event.extensions.size() == 13
+            assert event.disabled.size() == 2
+        }
+
+        @Override
+        protected void initialized(InitializedEvent event) {
+            confChecks(event)
+            assert event.getBootstrap() != null
         }
 
         @Override
@@ -156,20 +179,6 @@ class EventsConsistencyTest extends AbstractTest {
             assert event.modules.size() == 3
             assert event.overridingModules.isEmpty()
             assert event.disabled.size() == 1
-        }
-
-        @Override
-        protected void installersResolved(InstallersResolvedEvent event) {
-            runChecks(event)
-            assert event.installers.size() == 8
-            assert event.disabled.size() == 1
-        }
-
-        @Override
-        protected void extensionsResolved(ExtensionsResolvedEvent event) {
-            runChecks(event)
-            assert event.extensions.size() == 13
-            assert event.disabled.size() == 2
         }
 
         @Override
@@ -216,13 +225,13 @@ class EventsConsistencyTest extends AbstractTest {
             }
         }
 
-        private void initChecks(InitPhaseEvent event) {
+        private void confChecks(ConfigurationPhaseEvent event) {
             baseChecks(event)
             assert event.getBootstrap() != null
         }
 
         private void runChecks(RunPhaseEvent event) {
-            initChecks(event)
+            confChecks(event)
             assert event.getEnvironment() != null
             assert event.getConfiguration() != null
             assert event.getConfigurationTree() != null

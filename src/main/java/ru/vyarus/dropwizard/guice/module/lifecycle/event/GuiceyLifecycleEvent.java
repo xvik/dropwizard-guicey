@@ -10,11 +10,12 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
  * <li>{@link GuiceyLifecycleEvent} - lowest level, provides access to options (ideally there should be
  * bootstrap object, which is known for all events, but first event
  * {@link ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent}) simply
- * don't have access for it. So bootstrap is only provided in
- * {@link ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent}</li>
- * <li>{@link RunPhaseEvent} - all other events (started in bundle run phase and even after it)</li>
+ * don't have access for it.
+ * <li>{@link ConfigurationPhaseEvent} - dropwizard configuration phase events (all have access to dropwizard
+ * {@link io.dropwizard.setup.Bootstrap} object)</li>
+ * <li>{@link RunPhaseEvent} - events started on dropwizard run phase (when configuration is available)</li>
  * <li>{@link InjectorPhaseEvent} - all events after guice injector creation</li>
- * <li>{@link HK2PhaseEvent} - all events after hk context initialization start (since
+ * <li>{@link HK2PhaseEvent} - all events after hk2 context initialization start (since
  * {@link org.glassfish.hk2.api.ServiceLocator} become available)</li>
  * </ul>
  *

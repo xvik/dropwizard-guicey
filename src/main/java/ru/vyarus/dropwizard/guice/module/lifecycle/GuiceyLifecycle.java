@@ -31,9 +31,9 @@ public enum GuiceyLifecycle {
      */
     BundlesFromLookupResolved(BundlesFromLookupResolvedEvent.class),
     /**
-     * Called after {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and resolution form dropwizard
-     * bundles mechanisms when all top-level bundles are resolved. Provides a list of all enabled and list of disabled
-     * bundles. Called even if no bundles registered to indicate configuration state.
+     * Called after {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} mechanisms when all top-level
+     * bundles are resolved. Provides a list of all enabled and list of disabled bundles. Called even if no bundles
+     * registered to indicate configuration state.
      */
     BundlesResolved(BundlesResolvedEvent.class),
     /**
@@ -43,16 +43,33 @@ public enum GuiceyLifecycle {
      */
     BundlesInitialized(BundlesInitializedEvent.class),
     /**
-     * Called after {@link ru.vyarus.dropwizard.guice.GuiceBundle#initialize(io.dropwizard.setup.Bootstrap)} method end.
-     * Just a convenient moment to apply registrations into dropwizard {@link io.dropwizard.setup.Bootstrap} object
-     * from listener.
-     * <p>
-     * If commands search is enabled, then all commands found in classpath will be provided in event.
-     * <p>
-     * Consider this point as somewhere inside of your application's
-     * {@link io.dropwizard.Application#initialize(io.dropwizard.setup.Bootstrap)}.
+     * Called if commands search is enabled ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands()})
+     * and at least one command found (and installed). Not called otherwise.
      */
-    Initialization(InitializationEvent.class),
+    CommandsResolved(CommandsResolvedEvent.class),
+    /**
+     * Called when installers resolved (from classpath scan, if enabled) and initialized. Provides list of all
+     * enabled and list of all disabled installers (which will be used for extensions recognition and installation).
+     * Called even if no installers are resolved to indicate configuration state.
+     */
+    InstallersResolved(InstallersResolvedEvent.class),
+    /**
+     * Called when all extensions detected (from classpath scan, if enabled). Provides list of all enabled
+     * and list of disabled extension types (instances are not available yet). Called even if no extensions
+     * configured to indicate configuration state.
+     * <p>
+     * Guice context is creating at that moment.
+     */
+    ExtensionsResolved(ExtensionsResolvedEvent.class),
+    /**
+     * Called after guicey initialization (includes bundles lookup and initialization,
+     * installers and extensions resolution). Pure marker even, indicating guicey work finished under dropwizard
+     * configuration phase.
+     * <p>
+     * Note: dropwizard bundles, registered after {@link ru.vyarus.dropwizard.guice.GuiceBundle} will be initialized
+     * after this point.
+     */
+    Initialized(InitializedEvent.class),
 
     // -- Bundle.run()
 
@@ -72,22 +89,6 @@ public enum GuiceyLifecycle {
      * disabled modules. Called even when no modules registered to indicate configuration state.
      */
     InjectorCreation(InjectorCreationEvent.class),
-    /**
-     * Called when installers resolved (from classpath scan, if enabled) and initialized. Provides list of all
-     * enabled and list of all disabled installers (which will be used for extensions recognition and installation).
-     * Called even if no installers are resolved to indicate configuration state.
-     * <p>
-     * Guice context is creating at that moment.
-     */
-    InstallersResolved(InstallersResolvedEvent.class),
-    /**
-     * Called when all extensions detected (from classpath scan, if enabled). Provides list of all enabled
-     * and list of disabled extension types (instances are not available yet). Called even if no extensions
-     * configured to indicate configuration state.
-     * <p>
-     * Guice context is creating at that moment.
-     */
-    ExtensionsResolved(ExtensionsResolvedEvent.class),
     /**
      * Called when installer installed all related extensions and only for installers actually performed
      * installations (extensions list never empty). Provides installer and installed extensions types.

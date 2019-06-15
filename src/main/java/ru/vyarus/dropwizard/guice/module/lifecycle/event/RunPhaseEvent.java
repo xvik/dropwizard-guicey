@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.report.ConfigBindingsRenderer;
  * @author Vyacheslav Rusakov
  * @since 19.04.2018
  */
-public abstract class RunPhaseEvent extends InitPhaseEvent {
+public abstract class RunPhaseEvent extends ConfigurationPhaseEvent {
 
     private final Configuration configuration;
     private final ConfigurationTree configurationTree;

@@ -1,13 +1,10 @@
-package ru.vyarus.dropwizard.guice.module.lifecycle.event.run;
+package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
-import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
 
 import java.util.List;
 
@@ -16,24 +13,19 @@ import java.util.List;
  * processing extensions. Provides list of all enabled installers. Called even if no installers are used.
  * <p>
  * May be used to post-process installers (e.g. add some conventional configuration by some marker interface).
- * <p>
- * Guice context is creating at that moment.
  *
  * @author Vyacheslav Rusakov
  * @since 19.04.2018
  */
-public class InstallersResolvedEvent extends RunPhaseEvent {
+public class InstallersResolvedEvent extends ConfigurationPhaseEvent {
     private final List<FeatureInstaller> installers;
     private final List<Class<? extends FeatureInstaller>> disabled;
 
     public InstallersResolvedEvent(final Options options,
                                    final Bootstrap bootstrap,
-                                   final Configuration configuration,
-                                   final ConfigurationTree configurationTree,
-                                   final Environment environment,
                                    final List<FeatureInstaller> installers,
                                    final List<Class<? extends FeatureInstaller>> disabled) {
-        super(GuiceyLifecycle.InstallersResolved, options, bootstrap, configuration, configurationTree, environment);
+        super(GuiceyLifecycle.InstallersResolved, options, bootstrap);
         this.installers = installers;
         this.disabled = disabled;
     }

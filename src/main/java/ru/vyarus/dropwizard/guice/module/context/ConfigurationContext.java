@@ -23,6 +23,7 @@ import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
@@ -58,6 +59,7 @@ public final class ConfigurationContext {
     private Configuration configuration;
     private ConfigurationTree configurationTree;
     private Environment environment;
+    private ExtensionsHolder extensionsHolder;
 
 
     /**
@@ -339,7 +341,25 @@ public final class ConfigurationContext {
         return getDisabledItems(ConfigItem.Installer);
     }
 
+    /**
+     * Called with prepared list of installers to use for extensions recognition and installation.
+     *
+     * @param installers installers to use in correct order
+     */
+    public void installersResolved(List<FeatureInstaller> installers) {
+        this.extensionsHolder = new ExtensionsHolder(installers, tracker, lifecycleTracker);
+        lifecycle().installersResolved(new ArrayList<>(installers), getDisabledInstallers());
+    }
+
     // --------------------------------------------------------------------------- EXTENSIONS
+
+
+    /**
+     * @return extensions holder object
+     */
+    public ExtensionsHolder getExtensionsHolder() {
+        return extensionsHolder;
+    }
 
     /**
      * Usual extension registration from {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#extensions(Class[])}
