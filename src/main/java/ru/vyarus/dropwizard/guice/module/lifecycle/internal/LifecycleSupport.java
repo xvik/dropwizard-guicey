@@ -7,7 +7,7 @@ import io.dropwizard.Configuration;
 import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -42,7 +42,7 @@ public final class LifecycleSupport {
     private ConfigurationTree configurationTree;
     private Environment environment;
     private Injector injector;
-    private ServiceLocator locator;
+    private InjectionManager injectionManager;
     private GuiceyLifecycle currentStage;
 
     private final List<GuiceyLifecycleListener> listeners = new ArrayList<>();
@@ -155,10 +155,10 @@ public final class LifecycleSupport {
     }
 
 
-    public void jerseyConfiguration(final ServiceLocator locator) {
+    public void jerseyConfiguration(final InjectionManager injectionManager) {
         broadcast(new JerseyConfigurationEvent(options, bootstrap,
-                configuration, configurationTree, environment, injector, locator));
-        this.locator = locator;
+                configuration, configurationTree, environment, injector, injectionManager));
+        this.injectionManager = injectionManager;
     }
 
 
@@ -166,14 +166,14 @@ public final class LifecycleSupport {
                                           final List<Class<?>> installed) {
         if (installed != null && !installed.isEmpty()) {
             broadcast(new JerseyExtensionsInstalledByEvent(options, bootstrap,
-                    configuration, configurationTree, environment, injector, locator, installer, installed));
+                    configuration, configurationTree, environment, injector, injectionManager, installer, installed));
         }
     }
 
     public void jerseyExtensionsInstalled(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
             broadcast(new JerseyExtensionsInstalledEvent(options, bootstrap,
-                    configuration, configurationTree, environment, injector, locator, extensions));
+                    configuration, configurationTree, environment, injector, injectionManager, extensions));
         }
     }
 

@@ -4,7 +4,7 @@ import com.google.inject.Injector;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
@@ -44,11 +44,11 @@ public class JerseyExtensionsInstalledByEvent extends JerseyPhaseEvent {
                                             final ConfigurationTree configurationTree,
                                             final Environment environment,
                                             final Injector injector,
-                                            final ServiceLocator locator,
+                                            final InjectionManager injectionManager,
                                             final Class<? extends FeatureInstaller> installer,
                                             final List<Class<?>> installed) {
         super(GuiceyLifecycle.JerseyExtensionsInstalledBy, options, bootstrap,
-                configuration, configurationTree, environment, injector, locator);
+                configuration, configurationTree, environment, injector, injectionManager);
         this.installer = installer;
         this.installed = installed;
     }

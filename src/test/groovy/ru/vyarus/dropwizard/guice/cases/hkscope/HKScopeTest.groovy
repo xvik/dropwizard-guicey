@@ -12,6 +12,7 @@ import org.glassfish.hk2.api.Descriptor
 import org.glassfish.hk2.api.Filter
 import org.glassfish.hk2.api.ServiceLocator
 import org.glassfish.jersey.inject.hk2.InstanceSupplierFactoryBridge
+import org.glassfish.jersey.internal.inject.InjectionManager
 import org.glassfish.jersey.internal.inject.InjectionResolver
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
@@ -39,7 +40,7 @@ class HKScopeTest extends AbstractTest {
     @Inject
     ContextDebugService debugService
     @Inject
-    Provider<ServiceLocator> locator
+    Provider<InjectionManager> locator
     @Inject
     Injector injector
     @Inject
@@ -53,11 +54,11 @@ class HKScopeTest extends AbstractTest {
 
         and: "force jersey extensions load"
         //force jersey to load custom HKContextResolver
-        Providers providers = locator.get().getService(Providers)
+        Providers providers = locator.get().getInstance(Providers)
         providers.getContextResolver(null, null)
-        locator.get().getAllServices(ExceptionMapper)
-        locator.get().getAllServices(ParamConverterProvider)
-        locator.get().getAllServices(InjectionResolver)
+        locator.get().getAllInstances(ExceptionMapper)
+        locator.get().getAllInstances(ParamConverterProvider)
+        locator.get().getAllInstances(InjectionResolver)
 
         expect: "app launched successfully"
         debugService.guiceManaged.size() == debugService.hkManaged.size()
@@ -79,7 +80,7 @@ class HKScopeTest extends AbstractTest {
 
         and: "all hk2 beans are in forced singleton scope"
         debugService.hkManaged.find {
-            def r = locator.get().getBestDescriptor(new Filter() {
+            def r = locator.get().<ServiceLocator>getInstance(ServiceLocator.class).getBestDescriptor(new Filter() {
                 @Override
                 boolean matches(Descriptor d) {
                     d.getImplementation() == it.name
@@ -98,7 +99,7 @@ class HKScopeTest extends AbstractTest {
             r
         }.call()
         list.find {
-            def r = locator.get().getBestDescriptor(new Filter() {
+            def r = locator.get().<ServiceLocator>getInstance(ServiceLocator.class).getBestDescriptor(new Filter() {
                 @Override
                 boolean matches(Descriptor d) {
                     d.getAdvertisedContracts().contains(it.name)

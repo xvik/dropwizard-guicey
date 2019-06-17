@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
-import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorProvider;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule;
@@ -55,7 +55,7 @@ public class Jersey2Module extends AbstractModule {
         install(new GuiceBindingsModule(provider, guiceServletSupport));
         final GuiceFeature component =
                 new GuiceFeature(provider, context.stat(), context.lifecycle(), context.option(UseHkBridge));
-        bind(ServiceLocator.class).toProvider(component);
+        bind(InjectionManager.class).toProvider(component);
         environment.jersey().register(component);
 
         if (guiceServletSupport) {

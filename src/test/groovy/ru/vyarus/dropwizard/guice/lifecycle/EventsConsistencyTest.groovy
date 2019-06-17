@@ -251,7 +251,7 @@ class EventsConsistencyTest extends AbstractTest {
 
         private void jerseyCheck(JerseyPhaseEvent event) {
             injectorChecks(event)
-            assert event.getLocator() != null
+            assert event.getInjectionManager() != null
         }
     }
 }

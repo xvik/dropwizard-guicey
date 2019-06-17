@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.cases.hkscope
 import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import org.glassfish.hk2.api.ServiceLocator
+import org.glassfish.jersey.internal.inject.InjectionManager
 import org.glassfish.jersey.internal.inject.InjectionResolver
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
@@ -27,7 +27,7 @@ class HkFirstModeScopeTest extends AbstractTest {
     @Inject
     ContextDebugService debugService
     @Inject
-    Provider<ServiceLocator> locator
+    Provider<InjectionManager> locator
 
     def "Check jersey extensions registration"() {
 
@@ -37,11 +37,11 @@ class HkFirstModeScopeTest extends AbstractTest {
 
         and: "force jersey extensions load"
         //force jersey to load custom HKContextResolver
-        Providers providers = locator.get().getService(Providers)
+        Providers providers = locator.get().getInstance(Providers)
         providers.getContextResolver(null, null)
-        locator.get().getAllServices(ExceptionMapper)
-        locator.get().getAllServices(ParamConverterProvider)
-        locator.get().getAllServices(InjectionResolver)
+        locator.get().getAllInstances(ExceptionMapper)
+        locator.get().getAllInstances(ParamConverterProvider)
+        locator.get().getAllInstances(InjectionResolver)
 
         expect: "app launched successfully"
         debugService.guiceManaged.size() == debugService.hkManaged.size()

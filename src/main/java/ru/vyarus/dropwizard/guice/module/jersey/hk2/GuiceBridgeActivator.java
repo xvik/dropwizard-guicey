@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.jersey.hk2;
 
 import com.google.inject.Injector;
 import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.internal.inject.InjectionManager;
 import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
 import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
 
@@ -17,11 +18,11 @@ import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
  */
 public class GuiceBridgeActivator {
 
-    private final ServiceLocator locator;
+    private final InjectionManager injectionManager;
     private final Injector injector;
 
-    public GuiceBridgeActivator(final ServiceLocator locator, final Injector injector) {
-        this.locator = locator;
+    public GuiceBridgeActivator(final InjectionManager injectionManager, final Injector injector) {
+        this.injectionManager = injectionManager;
         this.injector = injector;
     }
 
@@ -29,8 +30,9 @@ public class GuiceBridgeActivator {
      * Activate HK2 guice bridge.
      */
     public void activate() {
+        final ServiceLocator locator = injectionManager.getInstance(ServiceLocator.class);
         GuiceBridge.getGuiceBridge().initializeGuiceBridge(locator);
-        final GuiceIntoHK2Bridge guiceBridge = locator.getService(GuiceIntoHK2Bridge.class);
+        final GuiceIntoHK2Bridge guiceBridge = injectionManager.getInstance(GuiceIntoHK2Bridge.class);
         guiceBridge.bridgeGuiceInjector(injector);
     }
 }

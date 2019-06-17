@@ -127,8 +127,8 @@ public enum GuiceyLifecycle {
     // -- Application.run()
 
     /**
-     * HK2 context starting. At this point jersey is starting and jetty is only initializing. Since that point
-     * HK2 {@link org.glassfish.hk2.api.ServiceLocator} is accessible.
+     * Jersey context starting. At this point jersey is starting and jetty is only initializing. Since that point
+     * jersey {@link org.glassfish.jersey.internal.inject.InjectionManager} is accessible.
      */
     JerseyConfiguration(JerseyConfigurationEvent.class),
     /**
@@ -136,7 +136,7 @@ public enum GuiceyLifecycle {
      * related extensions and only for installers actually performed installations (extensions list never empty).
      * Provides installer and installed extensions types.
      * <p>
-     * At this point HK2 is not completely started and so HK2 managed extensions
+     * At this point jersey is not completely started and so jersey managed extensions
      * ({@link JerseyManaged}) couldn't be obtained yet
      * (even though you have access to root service locator). But extensions managed by guice could be obtained
      * from guice context.
@@ -147,12 +147,12 @@ public enum GuiceyLifecycle {
      * related extensions and only when at least one extension was installed. Provides list of all used (enabled)
      * extensions.
      * <p>
-     * At this point HK2 is not completely started and so HK2 managed extensions
+     * At this point jersey is not completely started and so jersey managed extensions
      * ({@link JerseyManaged}) couldn't be obtained yet
      * (even though you have access to root service locator). But extensions managed by guice could be obtained
      * from guice context.
      * <p>
-     * To listen HK2 lifecycle further use jersey events (like in
+     * To listen jersey lifecycle further use jersey events (like in
      * {@link ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle}).
      */
     JerseyExtensionsInstalled(JerseyExtensionsInstalledEvent.class);

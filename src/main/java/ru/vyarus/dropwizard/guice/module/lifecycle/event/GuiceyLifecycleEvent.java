@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
  * <li>{@link RunPhaseEvent} - events started on dropwizard run phase (when configuration is available)</li>
  * <li>{@link InjectorPhaseEvent} - all events after guice injector creation</li>
  * <li>{@link JerseyPhaseEvent} - all events after jersey context initialization start (since
- * {@link org.glassfish.hk2.api.ServiceLocator} become available)</li>
+ * {@link org.glassfish.jersey.internal.inject.InjectionManager} become available)</li>
  * </ul>
  *
  * @author Vyacheslav Rusakov

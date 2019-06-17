@@ -18,7 +18,7 @@ import javax.ws.rs.ext.Providers;
 import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent;
 
 /**
- * Registers important services from HK2 context, making them available for injection in guice beans.
+ * Registers important services from jersey context, making them available for injection in guice beans.
  * <ul>
  * <li>{@link javax.ws.rs.core.Application}
  * <li>{@link javax.ws.rs.ext.Providers}
@@ -35,7 +35,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bin
  * When guice servlet modules support disabled, enables bindings for http request and response objects,
  * which will work only within resources (because HK2 doesn't monitor outer scopes).
  * <p>
- * {@link org.glassfish.hk2.api.ServiceLocator} is registered by
+ * {@link org.glassfish.jersey.internal.inject.InjectionManager} is registered by
  * {@link ru.vyarus.dropwizard.guice.module.jersey.GuiceFeature}
  *
  * @author Vyacheslav Rusakov

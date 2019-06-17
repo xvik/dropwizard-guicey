@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice.module.jersey;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
-import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.InjectionManagerProvider;
 import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
@@ -45,13 +44,13 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyTime;
  * @since 21.11.2014
  */
 @InvisibleForScanner
-public class GuiceFeature implements Feature, Provider<ServiceLocator> {
+public class GuiceFeature implements Feature, Provider<InjectionManager> {
 
     private final Provider<Injector> provider;
     private final StatsTracker tracker;
     private final LifecycleSupport lifecycle;
     private final boolean enableBridge;
-    private ServiceLocator locator;
+    private InjectionManager injectionManager;
 
     public GuiceFeature(final Provider<Injector> provider, final StatsTracker tracker,
                         final LifecycleSupport lifecycle, final boolean enableBridge) {
@@ -64,9 +63,8 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
     @Override
     public boolean configure(final FeatureContext context) {
         tracker.startJerseyTimer(JerseyTime);
-        final InjectionManager manager = InjectionManagerProvider.getInjectionManager(context);
-        locator = manager.getInstance(ServiceLocator.class);
-        lifecycle.jerseyConfiguration(locator);
+        injectionManager = InjectionManagerProvider.getInjectionManager(context);
+        lifecycle.jerseyConfiguration(injectionManager);
         final Injector injector = this.provider.get();
 
         if (enableBridge) {
@@ -74,7 +72,7 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
                     "HK2 bridge is requested, but dependency not found: "
                             + "'org.glassfish.hk2:guice-bridge:2.5.0' (check that dependency "
                             + "version match HK2 version used in your dropwizard)");
-            new GuiceBridgeActivator(locator, injector).activate();
+            new GuiceBridgeActivator(injectionManager, injector).activate();
         }
 
         context.register(new InstallerBinder(injector, tracker, lifecycle));
@@ -83,7 +81,7 @@ public class GuiceFeature implements Feature, Provider<ServiceLocator> {
     }
 
     @Override
-    public ServiceLocator get() {
-        return Preconditions.checkNotNull(locator, "Service locator is not yet available");
+    public InjectionManager get() {
+        return Preconditions.checkNotNull(injectionManager, "Jersey InjectionManager is not yet available");
     }
 }
