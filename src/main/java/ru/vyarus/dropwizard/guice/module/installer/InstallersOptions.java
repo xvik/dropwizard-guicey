@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer;
 
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 
 /**
  * Bundled installers options. Applies for both {@link CoreInstallersBundle} and {@link WebInstallersBundle}
@@ -32,13 +33,13 @@ public enum InstallersOptions implements Option {
      * By default, HK2 related extensions like resources or other jersey specific extensions are managed by
      * guice (guice-managed instance is registered in HK2). This makes some HK2-specific features not possible
      * (like context injection with @Context annotation).
-     * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} annotation could switch
+     * {@link JerseyManaged} annotation could switch
      * annotated beans to be managed by HK2. But in some cases, it is more convenient to always use HK2 and this
      * option is supposed to be used exactly for such cases.
      * <p>
      * When false value set, all beans, managed by jersey installers
      * ({@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}) should register beans for
-     * HK2 management. {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} become
+     * HK2 management. {@link JerseyManaged} become
      * useless in this case, instead {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged}
      * annotation could be used.
      * <p>

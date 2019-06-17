@@ -21,7 +21,7 @@ class ExtensionRecognitionFailTest extends Specification {
         new GuiceyAppRule(App, null).apply({} as Statement, null).evaluate()
         then: "error"
         def ex = thrown(IllegalStateException)
-        ex.cause.cause.message.startsWith(
+        ex.cause.message.startsWith(
                 "No installer found for extension ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1. Available installers:")
     }
 

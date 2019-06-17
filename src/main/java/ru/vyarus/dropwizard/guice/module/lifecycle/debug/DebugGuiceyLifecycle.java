@@ -10,10 +10,9 @@ import org.glassfish.jersey.server.monitoring.RequestEvent;
 import org.glassfish.jersey.server.monitoring.RequestEventListener;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
 import java.util.Collection;
@@ -55,32 +54,14 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     }
 
     @Override
-    protected void initialization(final InitializationEvent event) {
-        if (!event.getCommands().isEmpty()) {
-            log("%s commands installed", event.getCommands().size());
-            if (showDetails) {
-                logDetails("commands", event.getCommands());
-            }
-        }
-    }
-
-    @Override
-    protected void dwBundlesResolved(final BundlesFromDwResolvedEvent event) {
-        log("%s dw bundles recognized", event.getBundles().size());
-        if (showDetails) {
-            logDetails("dropwizard bundles", event.getBundles());
-        }
-    }
-
-    @Override
     protected void lookupBundlesResolved(final BundlesFromLookupResolvedEvent event) {
         log("%s lookup bundles recognized", event.getBundles().size());
         // lookup details not logged because they are explicitly logged before event
     }
 
     @Override
-    protected void bundlesProcessed(final BundlesProcessedEvent event) {
-        log("Configured from %s%s GuiceyBundles",
+    protected void bundlesInitialized(final BundlesInitializedEvent event) {
+        log("Initialized %s%s GuiceyBundles",
                 event.getBundles().size(), fmtDisabled(event.getDisabled()));
         if (showDetails) {
             logDetails("bundles", event.getBundles());
@@ -89,13 +70,12 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     }
 
     @Override
-    protected void injectorCreation(final InjectorCreationEvent event) {
-        log("Staring guice with %s/%s%s modules...",
-                event.getModules().size(), event.getOverridingModules().size(), fmtDisabled(event.getDisabled()));
-        if (showDetails) {
-            logDetails("modules", event.getModules());
-            logDetails("overriding", event.getOverridingModules());
-            logDetails(DISABLED, event.getDisabled());
+    protected void commandsResolved(final CommandsResolvedEvent event) {
+        if (!event.getCommands().isEmpty()) {
+            log("%s commands installed", event.getCommands().size());
+            if (showDetails) {
+                logDetails("commands", event.getCommands());
+            }
         }
     }
 
@@ -118,6 +98,22 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     }
 
     @Override
+    protected void bundlesStarted(final BundlesStartedEvent event) {
+        log("Started %s GuiceyBundles", event.getBundles().size());
+    }
+
+    @Override
+    protected void injectorCreation(final InjectorCreationEvent event) {
+        log("Staring guice with %s/%s%s modules...",
+                event.getModules().size(), event.getOverridingModules().size(), fmtDisabled(event.getDisabled()));
+        if (showDetails) {
+            logDetails("modules", event.getModules());
+            logDetails("overriding", event.getOverridingModules());
+            logDetails(DISABLED, event.getDisabled());
+        }
+    }
+
+    @Override
     protected void extensionsInstalled(final ExtensionsInstalledEvent event) {
         log("%s extensions installed", event.getExtensions().size());
     }
@@ -130,12 +126,12 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     }
 
     @Override
-    protected void hk2Configuration(final HK2ConfigurationEvent event) {
+    protected void jerseyConfiguration(final JerseyConfigurationEvent event) {
         log("Configuring HK2...");
     }
 
     @Override
-    protected void hk2ExtensionsInstalled(final HK2ExtensionsInstalledEvent event) {
+    protected void jerseyExtensionsInstalled(final JerseyExtensionsInstalledEvent event) {
         log("%s HK2 extensions installed", event.getExtensions().size());
     }
 

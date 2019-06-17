@@ -9,7 +9,7 @@ import org.glassfish.jersey.internal.inject.AbstractBinder;
  * Installer {@code report()} method will be called only after jersey start (so if, for example, environment
  * command is started, jersey specific extensions will not be logged).
  * <p>
- * Installer must support {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} and
+ * Installer must support {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged} and
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged} annotations, which delegates
  * bean creation to HK2 or guice (as exception). Default target is declared by
  * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsManagedByGuice} option.
@@ -38,7 +38,7 @@ public interface JerseyInstaller<T> {
      * @param injector guice injector
      * @param type     extension type to register
      * @see ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding
-     * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+     * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
      */
     void install(AbstractBinder binder, Injector injector, Class<T> type);
 }

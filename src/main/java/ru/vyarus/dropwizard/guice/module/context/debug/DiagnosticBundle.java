@@ -14,8 +14,8 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRend
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 
 /**
  * Bundle prints detailed configuration info and startup metrics.
@@ -85,15 +85,15 @@ public class DiagnosticBundle implements GuiceyBundle {
     }
 
     @Override
-    public void initialize(final GuiceyBootstrap bootstrap) {
+    public void run(GuiceyEnvironment environment) {
         // use  listener to work properly for both guicey only test and normal app (to show hk stats)
-        bootstrap.environment().lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+        environment.environment().lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
             @Override
             public void lifeCycleStarted(final LifeCycle event) {
-                report(bootstrap.application());
+                report(environment.application());
             }
         });
-        bootstrap.modules(new DiagnosticModule());
+        environment.modules(new DiagnosticModule());
     }
 
     private void report(final Application app) {

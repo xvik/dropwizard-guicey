@@ -1,13 +1,10 @@
-package ru.vyarus.dropwizard.guice.module.lifecycle.event.run;
+package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
-import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
 
 import java.util.List;
 
@@ -19,23 +16,19 @@ import java.util.List;
  * analysis).
  *
  * @author Vyacheslav Rusakov
- * @see BundlesFromDwResolvedEvent called earlier
  * @see BundlesFromLookupResolvedEvent called earlier
  * @since 19.04.2018
  */
-public class BundlesResolvedEvent extends RunPhaseEvent {
+public class BundlesResolvedEvent extends ConfigurationPhaseEvent {
 
     private final List<GuiceyBundle> bundles;
     private final List<GuiceyBundle> disabled;
 
     public BundlesResolvedEvent(final Options options,
                                 final Bootstrap bootstrap,
-                                final Configuration configuration,
-                                final ConfigurationTree configurationTree,
-                                final Environment environment,
                                 final List<GuiceyBundle> bundles,
                                 final List<GuiceyBundle> disabled) {
-        super(GuiceyLifecycle.BundlesResolved, options, bootstrap, configuration, configurationTree, environment);
+        super(GuiceyLifecycle.BundlesResolved, options, bootstrap);
         this.bundles = bundles;
         this.disabled = disabled;
     }

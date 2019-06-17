@@ -6,6 +6,7 @@ import io.dropwizard.Configuration
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.config.support.ComplexConfigApp
 import ru.vyarus.dropwizard.guice.config.support.conf.*
+import ru.vyarus.dropwizard.guice.module.yaml.bind.Config
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Unroll
 
@@ -28,12 +29,12 @@ class ComplexConfigurationMappingTest extends AbstractTest {
         injector.getBinding(type)
 
         where:
-        type            | _
-        Configuration   | _
-        ConfigLevel2    | _
-        ConfigLevel1    | _
-        Level2Interface | _
-        Level1Interface | _
+        type                             | _
+        Configuration                    | _
+        ConfigLevel2                     | _
+        ConfigLevel1                     | _
+        Key.get(Level2Interface, Config) | _
+        Key.get(Level1Interface, Config) | _
     }
 
     @Unroll
@@ -44,6 +45,8 @@ class ComplexConfigurationMappingTest extends AbstractTest {
 
         where:
         type                    | _
+        Level2Interface         | _
+        Level1Interface         | _
         Level1IndirectInterface | _
         Serializable            | _
         Cloneable               | _

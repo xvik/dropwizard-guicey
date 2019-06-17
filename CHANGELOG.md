@@ -1,5 +1,9 @@
-* Update to dropwizard 2.0.0-rc1
-    - (breaking in jersey 2.26) 
+* Update to dropwizard 2.0.0-rc3
+    - (breaking in jersey 2.26)
+        * Jersey `InjectionManager` now bound to guice context instead of hk2 `ServiceLocator` 
+            (locator still can be retrieved from manager)
+        * Rename HK2 mentions into jersey (because now jersey is not tied to hk2)
+             - @HK2Managed renamed to @JerseyManaged   
         * JerseyProviderInstaller (installs classes annotated with `@Provider`) changes:     
             - `ValueParamProvider` detected instead of `ValueFactoryProvider`  
             - `Supplier` detected instead `Factory` (Factory implementations are not recognized anymore!)
@@ -11,8 +15,20 @@
             instead of hk specific `org.glassfish.hk2.utilities.binding.AbstractBinder`     
     - (breaking dw 2.0) deprecated `Bundle` usages replaced with `ConfigurableBundle`
         (in new dropwizard version `Bundle extends ConfigurableBundle`)
-        * Guicey configuration info (ConfigScope.DropwizardBundle) now use `ConfigurableBundle` class for marking guice 
-            bundle scope instead of `Bundle` 
+        * Guicey configuration info (ConfigSope.DropwizardBundle) now use `ConfigurableBundle` class for marking guice 
+            bundle scope instead of `Bundle`
+* (breaking) GuiceyBundle contract and behaviour changed to match dropwizard lifecycle: 
+    - GuiceyBundle now contains two methods `initialize` and `run` and called according to dropwizard lifecycle.
+        Now guicey bundles are complete replacement for dropwizard bundles, but with good interoperability 
+        with pure dropwizard bundles 
+    - The following guicey initializations were moved into dropwizard configuration phase:
+        - Guicey bundles lookup and initialization (to be able to install dropwizard bundles inside guicey bundles)
+        - Installers classpath search and instantiation
+        - Extensions classpath search and validation (but on run phase it is still possible to disable extensions)    
+    - A lot of guicey lifecycle events obviously changed        
+    - Removed GuiceyOptions.ConfigureFromDropwizardBundles option because it's useless with new bundles lifecycle.
+        (if required, the same behaviour may be implemented with custom bundles lookup)
+* Remove GuiceyOptions.BindConfigurationInterfaces option (interfaces are already bound with @Config qualifier)                        
 
 Main breaking changes were caused by:
  - jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.

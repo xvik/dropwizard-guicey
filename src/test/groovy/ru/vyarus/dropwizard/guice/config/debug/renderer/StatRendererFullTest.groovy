@@ -19,33 +19,34 @@ class StatRendererFullTest extends BaseDiagnosticTest {
     def "Check dropwizard app stats render"() {
         /* render would look like:
 
-     GUICEY started in 425.7 ms
+    GUICEY started in 337.6 ms
     │
-    ├── [0,94%] CLASSPATH scanned in 4.201 ms
+    ├── [0.59%] CLASSPATH scanned in 2.982 ms
     │   ├── scanned 5 classes
     │   └── recognized 4 classes (80% of scanned)
     │
-    ├── [2,8%] COMMANDS processed in 12.65 ms
+    ├── [9.2%] BUNDLES processed in 31.18 ms
+    │   ├── 2 resolved in 15.00 ms
+    │   └── 6 processed
+    │
+    ├── [3.3%] COMMANDS processed in 11.87 ms
     │   └── registered 2 commands
     │
-    ├── [6,8%] BUNDLES processed in 29.55 ms
-    │   ├── 2 resolved in 7.599 ms
-    │   └── 5 processed
+    ├── [4.5%] INSTALLERS initialized in 15.17 ms
+    │   └── registered 9 installers
     │
-    ├── [88%] INJECTOR created in 375.8 ms
-    │   ├── installers prepared in 11.49 ms
-    │   │
-    │   ├── extensions recognized in 9.287 ms
-    │   │   ├── using 11 installers
-    │   │   └── from 7 classes
-    │   │
-    │   └── 3 extensions installed in 4.170 ms
+    ├── [1.5%] EXTENSIONS initialized in 5.029 ms
+    │   └── from 7 classes
     │
-    ├── [1,8%] HK2 bridged in 7.321 ms
+    ├── [69%] INJECTOR created in 233.9 ms
+    │   ├── from 6 guice modules
+    │   └── 3 extensions installed in 3.571 ms
+    │
+    ├── [0.30%] JERSEY bridged in 1.397 ms
     │   ├── using 2 jersey installers
-    │   └── 2 jersey extensions installed in 714.9 μs
+    │   └── 2 jersey extensions installed in 579.3 μs
     │
-    └── [1,2%] remaining 5 ms
+    └── [12%] remaining 39 ms
 
          */
 
@@ -59,23 +60,24 @@ class StatRendererFullTest extends BaseDiagnosticTest {
         render.contains("scanned 5 classes")
         render.contains("recognized 4 classes (80% of scanned)")
 
+        render.contains("] BUNDLES")
+        render.contains("2 resolved in")
+        render.contains("6 processed")
+
         render.contains("] COMMANDS")
         render.contains("registered 2 commands")
 
+        render.contains("] INSTALLERS")
+        render.contains("registered 9 installers")
 
-        render.contains("] BUNDLES")
-        render.contains("2 resolved in")
-        render.contains("5 processed")
-
+        render.contains("] EXTENSIONS")
+        render.contains("from 7 classes")
 
         render.contains("] INJECTOR")
-        render.contains("installers prepared in")
-        render.contains("extensions recognized in")
-        render.contains("using 9 installers")
-        render.contains("from 7 classes")
+        render.contains("from 6 guice modules")
         render.contains("3 extensions installed in")
 
-        render.contains("] HK2 bridged in ")
+        render.contains("] JERSEY bridged in ")
         render.contains("using 2 jersey installers")
         render.contains("2 jersey extensions installed in")
 

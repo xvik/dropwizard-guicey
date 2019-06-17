@@ -5,7 +5,9 @@ import com.google.inject.ProvisionException
 import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
+import org.glassfish.hk2.api.MultiException
 import org.glassfish.jersey.internal.inject.AbstractBinder
+import org.glassfish.jersey.internal.inject.InjectionManager
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
@@ -34,8 +36,8 @@ class DebugBundleInHkFistModeTest extends AbstractTest {
     ContextDebugService debugService
     @Inject
     Injector injector
-//    @Inject
-//    javax.inject.Provider<ServiceLocator> locator;
+    @Inject
+    javax.inject.Provider<InjectionManager> locator;
 
     def "Check correct scopes"() {
 
@@ -44,7 +46,7 @@ class DebugBundleInHkFistModeTest extends AbstractTest {
 //        new URL("http://localhost:8080/guice/foo").getText()
         new URL("http://localhost:8080/hk/foo").getText()
         // initialize exception mappers
-        locator.get().getAllServices(ExceptionMapper)
+        locator.get().getAllInstances(ExceptionMapper)
 
         expect:
         debugService.guiceManaged as Set == [GuiceResource, GuiceMapper] as Set
@@ -61,7 +63,7 @@ class DebugBundleInHkFistModeTest extends AbstractTest {
         ex.getCause() instanceof WrongContextException
 
         when: "force hk to create guice bean"
-        locator.get().getService(GuiceResource, "test")
+        locator.get().getInstance(GuiceResource, "test")
         then:
         ex = thrown(MultiException)
         ex.getErrors()[0] instanceof WrongContextException

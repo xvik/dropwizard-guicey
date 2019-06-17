@@ -21,7 +21,7 @@ class MissedEventsTest extends Specification {
     def "Check missed events"() {
 
         expect: "only few events called"
-        Listener.events.contains(GuiceyLifecycle.Initialization)
+        Listener.events.contains(GuiceyLifecycle.Initialized)
         Listener.events.contains(GuiceyLifecycle.BundlesResolved)
         Listener.events.contains(GuiceyLifecycle.InjectorCreation)
         Listener.events.contains(GuiceyLifecycle.InstallersResolved)
@@ -31,14 +31,15 @@ class MissedEventsTest extends Specification {
 
         and: "not called"
         !Listener.events.contains(GuiceyLifecycle.ConfigurationHooksProcessed)
-        !Listener.events.contains(GuiceyLifecycle.BundlesFromDwResolved)
         !Listener.events.contains(GuiceyLifecycle.BundlesFromLookupResolved)
-        !Listener.events.contains(GuiceyLifecycle.BundlesProcessed)
+        !Listener.events.contains(GuiceyLifecycle.BundlesInitialized)
+        !Listener.events.contains(GuiceyLifecycle.CommandsResolved)
+        !Listener.events.contains(GuiceyLifecycle.BundlesStarted)
         !Listener.events.contains(GuiceyLifecycle.ExtensionsInstalledBy)
         !Listener.events.contains(GuiceyLifecycle.ExtensionsInstalled)
-        !Listener.events.contains(GuiceyLifecycle.HK2Configuration)
-        !Listener.events.contains(GuiceyLifecycle.HK2ExtensionsInstalledBy)
-        !Listener.events.contains(GuiceyLifecycle.HK2ExtensionsInstalled)
+        !Listener.events.contains(GuiceyLifecycle.JerseyConfiguration)
+        !Listener.events.contains(GuiceyLifecycle.JerseyExtensionsInstalledBy)
+        !Listener.events.contains(GuiceyLifecycle.JerseyExtensionsInstalled)
     }
 
     static class App extends Application<Configuration> {

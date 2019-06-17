@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.install.binding;
 
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -22,7 +24,7 @@ import java.lang.annotation.Target;
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller
  * @see ru.vyarus.dropwizard.guice.module.jersey.GuiceFeature
- * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed as alternative for jersey extensions
+ * @see JerseyManaged as alternative for jersey extensions
  * @since 21.11.2014
  */
 @Target(ElementType.TYPE)

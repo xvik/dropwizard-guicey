@@ -15,7 +15,6 @@ class BasicApplication extends Application<Configuration> {
     @Override
     void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.builder()
-                .bindConfigurationInterfaces()
                 .build())
     }
 

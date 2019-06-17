@@ -29,10 +29,10 @@ public interface ExtensionItemInfo extends ItemInfo, ScanSupport, DisableSupport
     boolean isLazy();
 
     /**
-     * Indicates extension management by HK2 instead of guice.
+     * Indicates extension management by jersey instead of guice.
      *
      * @return true if extension annotated with
-     * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed}, false otherwise
+     * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged}, false otherwise
      */
-    boolean isHk2Managed();
+    boolean isJerseyManaged();
 }

@@ -20,8 +20,8 @@ class StringConverterTest extends Specification {
         StringConverter.convert(Double, '-1.1') == -1.1
         StringConverter.convert(Short, '1') == 1
         StringConverter.convert(Byte, '1') == 1
-        StringConverter.convert(GuiceyOptions, GuiceyOptions.ConfigureFromDropwizardBundles.name()) == GuiceyOptions.ConfigureFromDropwizardBundles
-        StringConverter.convert(Enum.class, GuiceyOptions.getName() + "." + GuiceyOptions.ConfigureFromDropwizardBundles.name()) == GuiceyOptions.ConfigureFromDropwizardBundles
+        StringConverter.convert(GuiceyOptions, GuiceyOptions.SearchCommands.name()) == GuiceyOptions.SearchCommands
+        StringConverter.convert(Enum.class, GuiceyOptions.getName() + "." + GuiceyOptions.SearchCommands.name()) == GuiceyOptions.SearchCommands
     }
 
     def "Check collections conversions"() {
@@ -29,9 +29,9 @@ class StringConverterTest extends Specification {
         expect:
         StringConverter.convert(String[], 'sam,ple,gg') == ['sam', 'ple', 'gg'] as String[]
         StringConverter.convert(Integer[], '1,2,3') == [1, 2, 3] as Integer[]
-        StringConverter.convert(EnumSet, [GuiceyOptions.getName() + "." + GuiceyOptions.ConfigureFromDropwizardBundles.name(),
+        StringConverter.convert(EnumSet, [GuiceyOptions.getName() + "." + GuiceyOptions.SearchCommands.name(),
                                           GuiceyOptions.getName() + "." + GuiceyOptions.GuiceFilterRegistration.name()].join(',')) == EnumSet.of(
-                GuiceyOptions.ConfigureFromDropwizardBundles, GuiceyOptions.GuiceFilterRegistration)
+                GuiceyOptions.SearchCommands, GuiceyOptions.GuiceFilterRegistration)
 
     }
 

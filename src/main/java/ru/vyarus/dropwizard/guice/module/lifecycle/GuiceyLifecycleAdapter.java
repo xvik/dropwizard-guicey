@@ -1,11 +1,10 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle;
 
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
 /**
@@ -19,20 +18,12 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
 
     @Override
     @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MissingSwitchDefault",
+            "checkstyle:JavaNCSS",
             "PMD.NcssCount", "PMD.CyclomaticComplexity", "PMD.SwitchStmtsShouldHaveDefault"})
     public void onEvent(final GuiceyLifecycleEvent event) {
         switch (event.getType()) {
             case ConfigurationHooksProcessed:
                 configurationHooksProcessed((ConfigurationHooksProcessedEvent) event);
-                break;
-            case Initialization:
-                initialization((InitializationEvent) event);
-                break;
-            case BeforeRun:
-                beforeRun((BeforeRunEvent) event);
-                break;
-            case BundlesFromDwResolved:
-                dwBundlesResolved((BundlesFromDwResolvedEvent) event);
                 break;
             case BundlesFromLookupResolved:
                 lookupBundlesResolved((BundlesFromLookupResolvedEvent) event);
@@ -40,17 +31,29 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case BundlesResolved:
                 bundlesResolved((BundlesResolvedEvent) event);
                 break;
-            case BundlesProcessed:
-                bundlesProcessed((BundlesProcessedEvent) event);
+            case BundlesInitialized:
+                bundlesInitialized((BundlesInitializedEvent) event);
                 break;
-            case InjectorCreation:
-                injectorCreation((InjectorCreationEvent) event);
+            case CommandsResolved:
+                commandsResolved((CommandsResolvedEvent) event);
                 break;
             case InstallersResolved:
                 installersResolved((InstallersResolvedEvent) event);
                 break;
             case ExtensionsResolved:
                 extensionsResolved((ExtensionsResolvedEvent) event);
+                break;
+            case Initialized:
+                initialized((InitializedEvent) event);
+                break;
+            case BeforeRun:
+                beforeRun((BeforeRunEvent) event);
+                break;
+            case BundlesStarted:
+                bundlesStarted((BundlesStartedEvent) event);
+                break;
+            case InjectorCreation:
+                injectorCreation((InjectorCreationEvent) event);
                 break;
             case ExtensionsInstalledBy:
                 extensionsInstalledBy((ExtensionsInstalledByEvent) event);
@@ -61,31 +64,19 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case ApplicationRun:
                 applicationRun((ApplicationRunEvent) event);
                 break;
-            case HK2Configuration:
-                hk2Configuration((HK2ConfigurationEvent) event);
+            case JerseyConfiguration:
+                jerseyConfiguration((JerseyConfigurationEvent) event);
                 break;
-            case HK2ExtensionsInstalledBy:
-                hk2ExtensionsInstalledBy((HK2ExtensionsInstalledByEvent) event);
+            case JerseyExtensionsInstalledBy:
+                jerseyExtensionsInstalledBy((JerseyExtensionsInstalledByEvent) event);
                 break;
-            case HK2ExtensionsInstalled:
-                hk2ExtensionsInstalled((HK2ExtensionsInstalledEvent) event);
+            case JerseyExtensionsInstalled:
+                jerseyExtensionsInstalled((JerseyExtensionsInstalledEvent) event);
                 break;
         }
     }
 
     protected void configurationHooksProcessed(final ConfigurationHooksProcessedEvent event) {
-        // empty
-    }
-
-    protected void initialization(final InitializationEvent event) {
-        // empty
-    }
-
-    protected void beforeRun(final BeforeRunEvent event) {
-        // empty
-    }
-
-    protected void dwBundlesResolved(final BundlesFromDwResolvedEvent event) {
         // empty
     }
 
@@ -97,11 +88,11 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         // empty
     }
 
-    protected void bundlesProcessed(final BundlesProcessedEvent event) {
+    protected void bundlesInitialized(final BundlesInitializedEvent event) {
         // empty
     }
 
-    protected void injectorCreation(final InjectorCreationEvent event) {
+    protected void commandsResolved(final CommandsResolvedEvent event) {
         // empty
     }
 
@@ -110,6 +101,22 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
     }
 
     protected void extensionsResolved(final ExtensionsResolvedEvent event) {
+        // empty
+    }
+
+    protected void initialized(final InitializedEvent event) {
+        // empty
+    }
+
+    protected void beforeRun(final BeforeRunEvent event) {
+        // empty
+    }
+
+    protected void bundlesStarted(final BundlesStartedEvent event) {
+        // empty
+    }
+
+    protected void injectorCreation(final InjectorCreationEvent event) {
         // empty
     }
 
@@ -125,15 +132,15 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         // empty
     }
 
-    protected void hk2Configuration(final HK2ConfigurationEvent event) {
+    protected void jerseyConfiguration(final JerseyConfigurationEvent event) {
         // empty
     }
 
-    protected void hk2ExtensionsInstalledBy(final HK2ExtensionsInstalledByEvent event) {
+    protected void jerseyExtensionsInstalledBy(final JerseyExtensionsInstalledByEvent event) {
         // empty
     }
 
-    protected void hk2ExtensionsInstalled(final HK2ExtensionsInstalledEvent event) {
+    protected void jerseyExtensionsInstalled(final JerseyExtensionsInstalledEvent event) {
         // empty
     }
 }

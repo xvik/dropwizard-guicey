@@ -23,8 +23,7 @@ class OptionsLookupTest extends AbstractTest {
     def "Test options multi config"() {
 
         expect: "options set"
-        info.options.getValue(GuiceyOptions.BindConfigurationInterfaces)
-        info.options.getValue(GuiceyOptions.ConfigureFromDropwizardBundles)
+        !info.options.getValue(GuiceyOptions.UseCoreInstallers)
     }
 
     static class OLApp extends Application<Configuration> {
@@ -32,8 +31,7 @@ class OptionsLookupTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .options(ImmutableMap.<Enum, Object> builder()
-                        .put(GuiceyOptions.BindConfigurationInterfaces, true)
-                        .put(GuiceyOptions.ConfigureFromDropwizardBundles, true)
+                        .put(GuiceyOptions.UseCoreInstallers, false)
                         .build())
                     .build())
         }

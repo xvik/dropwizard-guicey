@@ -1,7 +1,7 @@
 # Dropwizard guice integration
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://www.opensource.org/licenses/MIT)
-[![Build Status](https://img.shields.io/travis/xvik/dropwizard-guicey.svg?style=flat&branch=master)](https://travis-ci.org/xvik/dropwizard-guicey)
-[![Appveyor build status](https://ci.appveyor.com/api/projects/status/github/xvik/dropwizard-guicey?svg=true)](https://ci.appveyor.com/project/xvik/dropwizard-guicey)
+[![Build Status](https://travis-ci.org/xvik/dropwizard-guicey.svg?branch=master)](https://travis-ci.org/xvik/dropwizard-guicey)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/github/xvik/dropwizard-guicey?svg=true&branch=master)](https://ci.appveyor.com/project/xvik/dropwizard-guicey)
 [![codecov](https://codecov.io/gh/xvik/dropwizard-guicey/branch/master/graph/badge.svg)](https://codecov.io/gh/xvik/dropwizard-guicey)
 
 **DOCUMENTATION**: http://xvik.github.io/dropwizard-guicey/

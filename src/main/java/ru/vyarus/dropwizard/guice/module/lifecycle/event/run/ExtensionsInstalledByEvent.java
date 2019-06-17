@@ -22,8 +22,9 @@ import java.util.List;
  * Extension instance could be obtained manually from injector.
  * <p>
  * Installer passed by type to simplify differentiation. If, for some reason, you need to access installer
- * instance then save installers in {@link InstallersResolvedEvent} and find by type (only one installer of
- * exact type could be registered).
+ * instance then save installers in
+ * {@link ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent} and find by
+ * type (only one installer of exact type could be registered).
  *
  * @author Vyacheslav Rusakov
  * @since 19.04.2018

@@ -32,7 +32,6 @@ class ManualModeWithBundleDiagnosticTest extends BaseDiagnosticTest {
         expect: "correct bundles info"
         info.bundles as Set == [FooBundle, FooBundleRelativeBundle] as Set
         info.bundlesFromLookup.isEmpty()
-        info.bundlesFromDw.isEmpty()
 
         and: "correct installers info"
         info.installers as Set == [ResourceInstaller, FooBundleInstaller] as Set

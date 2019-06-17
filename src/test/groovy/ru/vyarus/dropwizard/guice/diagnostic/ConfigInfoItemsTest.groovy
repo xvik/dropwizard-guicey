@@ -62,7 +62,6 @@ class ConfigInfoItemsTest extends Specification {
         bi.type == FooBundle
         bi.registeredBy == [Application] as Set
         bi.registrationScope == Application
-        !bi.fromDwBundle
         !bi.fromLookup
         bi.toString() == "$ConfigItem.Bundle $FooBundle.simpleName" as String
 
@@ -90,7 +89,7 @@ class ConfigInfoItemsTest extends Specification {
         ei.registeredBy == [FooBundle] as Set
         ei.registrationScope == FooBundle
         !ei.fromScan
-        !ei.hk2Managed
+        !ei.jerseyManaged
         !ei.lazy
         ei.installedBy == ResourceInstaller
         ei.toString() == "$ConfigItem.Extension $FooBundleResource.simpleName" as String

@@ -24,8 +24,8 @@ import javax.ws.rs.Path;
  * <p>
  * {@link ru.vyarus.dropwizard.guice.module.support.scope.Prototype} annotation may be used to force prototype
  * scope on guice beans (prevent forced singleton). This may be useful to avoid providers usage and directly
- * inject request, response and other request specific beans. Note that HK2 managed resources may use direct
- * injections even in singletons (as HK2 will use proxies instead of direct dependencies - implicit providers).
+ * inject request, response and other request specific beans. Note that jersey managed resources may use direct
+ * injections even in singletons (as jersey will use proxies instead of direct dependencies - implicit providers).
  *
  * @author Vyacheslav Rusakov
  * @since 01.09.2014
@@ -43,10 +43,10 @@ public class ResourceInstaller extends AbstractJerseyInstaller<Object> implement
 
     @Override
     public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazyMarker) {
-        final boolean hkManaged = isHkExtension(type);
+        final boolean jerseyManaged = isJerseyExtension(type);
         final boolean lazy = isLazy(type, lazyMarker);
         // register in guice only if not managed by hk and just in time (lazy) binding not requested
-        if (!hkManaged && !lazy) {
+        if (!jerseyManaged && !lazy) {
             bindInGuice(binder, type);
         }
     }
@@ -59,8 +59,8 @@ public class ResourceInstaller extends AbstractJerseyInstaller<Object> implement
 
     @Override
     public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {
-        final boolean hkManaged = isHkExtension(type);
-        JerseyBinding.bindComponent(binder, injector, type, hkManaged, isForceSingleton(type, hkManaged));
+        final boolean jerseyManaged = isJerseyExtension(type);
+        JerseyBinding.bindComponent(binder, injector, type, jerseyManaged, isForceSingleton(type, jerseyManaged));
     }
 
     @Override

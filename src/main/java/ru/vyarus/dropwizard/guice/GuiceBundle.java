@@ -3,13 +3,11 @@ package ru.vyarus.dropwizard.guice;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.Sets;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
@@ -26,14 +24,10 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.Diagnos
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
-import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
-import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
-import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle;
+import ru.vyarus.dropwizard.guice.module.installer.*;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ModulesSupport;
-import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
@@ -42,9 +36,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig;
 import ru.vyarus.dropwizard.guice.module.yaml.report.DebugConfigBindings;
 
 import javax.servlet.DispatcherType;
-import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -107,8 +99,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
     private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
 
-    private ClasspathScanner scanner;
-
     GuiceBundle() {
         // Bundle should be instantiated only from builder
     }
@@ -117,21 +107,23 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     public void initialize(final Bootstrap bootstrap) {
         final Stopwatch timer = context.stat().timer(GuiceyTime);
         context.initPhaseStarted(bootstrap);
-        final String[] packages = context.option(ScanPackages);
-        final boolean searchCommands = context.option(SearchCommands);
-        final boolean scanEnabled = packages.length > 0;
-        if (searchCommands) {
-            Preconditions.checkState(scanEnabled,
-                    "Commands search could not be performed, because auto scan was not activated");
-        }
-        List<Command> installed = null;
-        if (scanEnabled) {
-            scanner = new ClasspathScanner(Sets.newHashSet(Arrays.asList(packages)), context.stat());
-            if (searchCommands) {
-                installed = CommandSupport.registerCommands(bootstrap, scanner, context);
-            }
-        }
-        context.lifecycle().initialization(bootstrap, installed);
+        final GuiceyInitializer starter = new GuiceyInitializer(bootstrap, context);
+
+        // resolve and init all guicey bundles
+        starter.initializeBundles(bundleLookup);
+
+        // when all manual configuration applied (from all bundles) performing classpath scan
+        // (on run phase extensions could be only disabled, but not added)
+
+        // scan for commands (if enabled)
+        starter.findCommands();
+        // scan for installers (if scan enabled) and installers initialization
+        starter.resolveInstallers();
+        // scan for extensions (if scan enabled) and validation of all registered extensions
+        starter.resolveExtensions();
+
+        starter.cleanup();
+        context.lifecycle().initialized();
         timer.stop();
     }
 
@@ -139,11 +131,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     public void run(final T configuration, final Environment environment) throws Exception {
         final Stopwatch timer = context.stat().timer(GuiceyTime);
         context.runPhaseStarted(configuration, environment);
-        if (context.option(UseCoreInstallers)) {
-            context.registerBundles(new CoreInstallersBundle());
-        }
-        configureFromBundles();
-        context.registerModules(new GuiceBootstrapModule(scanner, context));
+        runBundles();
+        context.registerModules(new GuiceBootstrapModule(context));
+        context.finalizeConfiguration();
         ModulesSupport.configureModules(context);
         createInjector(environment);
         afterInjectorCreation();
@@ -159,19 +149,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     }
 
     /**
-     * Apply configuration from registered bundles. If dropwizard bundles support is enabled, lookup them too.
+     * Run bundles.
      */
-    private void configureFromBundles() {
-        context.lifecycle().runPhase(context.getConfiguration(), context.getConfigurationTree(),
-                context.getEnvironment());
+    private void runBundles() {
         final Stopwatch timer = context.stat().timer(BundleTime);
-        final Stopwatch resolutionTimer = context.stat().timer(BundleResolutionTime);
-        if (context.option(ConfigureFromDropwizardBundles)) {
-            context.registerDwBundles(BundleSupport.findBundles(context.getBootstrap(), GuiceyBundle.class));
-        }
-        context.registerLookupBundles(bundleLookup.lookup());
-        resolutionTimer.stop();
-        BundleSupport.processBundles(context);
+        BundleSupport.runBundles(context);
         timer.stop();
     }
 
@@ -189,9 +171,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @SuppressWarnings("unchecked")
     private void afterInjectorCreation() {
         CommandSupport.initCommands(context.getBootstrap().getCommands(), injector, context.stat());
-        if (scanner != null) {
-            scanner.cleanup();
-        }
     }
 
     /**
@@ -518,10 +497,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * Guicey bundles are mainly useful for extensions (to group installers and extensions installation without
          * auto scan). Its very like dropwizard bundles.
          * <p>
-         * It's also possible to use dropwizard bundles as guicey bundles: bundle must implement
-         * {@link GuiceyBundle} and {@link #configureFromDropwizardBundles()} must be enabled
-         * (disabled by default). This allows using dropwizard bundles as universal extension point.
-         * <p>
          * Duplicate bundles are filtered automatically: bundles of the same type considered duplicate.
          *
          * @param bundles guicey bundles
@@ -645,42 +620,29 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Enables registered dropwizard bundles check if they implement {@link GuiceyBundle} and register them as
-         * guicey bundles. This allows using dropwizard bundles as universal extension point.
+         * Enables strict control of beans instantiation context: all beans must be instantiated by guice, except
+         * beans annotated with {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged}.
+         * When bean instantiated in wrong context exception would be thrown.
          * <p>
-         * Disabled by default.
+         * It is useful if you write your own installers or to simply ensure correctness in doubtful cases.
+         * <p>
+         * Do not use for production! It is intended to be used mostly in tests or to diagnose problems
+         * during development.
+         * <p>
+         * To implicitly enable this check in all tests use
+         * {@code PropertyBundleLookup.enableBundles(HK2DebugBundle.class)}.
          *
          * @return builder instance for chained calls
-         * @see GuiceyOptions#ConfigureFromDropwizardBundles
+         * @see HK2DebugBundle
          */
-        public Builder<T> configureFromDropwizardBundles() {
-            return option(ConfigureFromDropwizardBundles, true);
-        }
-
-        /**
-         * Enables binding of interfaces implemented by configuration class to configuration instance
-         * in guice context. Only interfaces directly implemented by any configuration class in configuration
-         * classes hierarchy. Interfaces from java.* and groovy.*  packages are skipped.
-         * This is useful to support {@code HasSomeConfiguration} interfaces convention.
-         * <p>
-         * When disabled, only classes in configuration hierarchy are registered (e.g. in case
-         * {@code MyConfiguration extends MyBaseConfiguration extends Configuration}, all 3 classes would be bound.
-         * <p>
-         * Disabled by default.
-         *
-         * @return builder instance for chained calls
-         * @see GuiceyOptions#BindConfigurationInterfaces
-         * @deprecated remains for compatibility, instead bind configuration interfaces with {@code @Config}
-         * qualifier (always enabled)
-         */
-        @Deprecated
-        public Builder<T> bindConfigurationInterfaces() {
-            return option(BindConfigurationInterfaces, true);
+        public Builder<T> strictScopeControl() {
+            bundle.context.registerBundles(new HK2DebugBundle());
+            return this;
         }
 
         /**
          * Manage jersey extensions (resources, jersey filters etc.) with HK2 by default instead of guice (the
-         * same effect as if {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} annotation
+         * same effect as if {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged} annotation
          * would be set on all beans). Use this option if you want to use jersey specific resource features
          * (like @Context bindings) and completely delegate management to HK2.
          * <p>
@@ -692,7 +654,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          *
          * @return builder instance for chained calls
          * @see InstallersOptions#JerseyExtensionsManagedByGuice
-         * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+         * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
          * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
          */
         public Builder<T> useHK2ForJerseyExtensions() {

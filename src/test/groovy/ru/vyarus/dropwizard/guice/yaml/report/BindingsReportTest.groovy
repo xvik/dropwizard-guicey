@@ -79,6 +79,8 @@ class BindingsReportTest extends Specification {
             @Config("server.applicationConnectors") List<ConnectorFactory> (with actual type ArrayList<ConnectorFactory>) = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
             @Config("server.applicationContextPath") String = "/"
             @Config("server.detailedJsonProcessingExceptionMapper") Boolean = false
+            @Config("server.dumpAfterStart") Boolean = false
+            @Config("server.dumpBeforeStop") Boolean = false
             @Config("server.enableThreadNameFilter") Boolean = true
             @Config("server.gzip") GzipHandlerFactory = io.dropwizard.jetty.GzipHandlerFactory@1111111
             @Config("server.gzip.bufferSize") DataSize = 8 kibibytes
@@ -139,6 +141,8 @@ class BindingsReportTest extends Specification {
         ├── applicationConnectors: ArrayList<ConnectorFactory> = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
         ├── applicationContextPath: String = "/"
         ├── detailedJsonProcessingExceptionMapper: Boolean = false
+        ├── dumpAfterStart: Boolean = false
+        ├── dumpBeforeStop: Boolean = false
         ├── enableThreadNameFilter: Boolean = true
         ├── gid: Integer = null
         ├── group: String = null
@@ -234,6 +238,8 @@ class BindingsReportTest extends Specification {
             @Config("server.applicationConnectors") List<ConnectorFactory> (with actual type ArrayList<ConnectorFactory>) = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
             @Config("server.applicationContextPath") String = "/"
             @Config("server.detailedJsonProcessingExceptionMapper") Boolean = false
+            @Config("server.dumpAfterStart") Boolean = false
+            @Config("server.dumpBeforeStop") Boolean = false
             @Config("server.enableThreadNameFilter") Boolean = true
             @Config("server.gid") Integer = null
             @Config("server.group") String = null
@@ -344,6 +350,8 @@ class BindingsReportTest extends Specification {
         ├── applicationConnectors: ArrayList<ConnectorFactory> = [io.dropwizard.jetty.HttpConnectorFactory@1111111]
         ├── applicationContextPath: String = "/"
         ├── detailedJsonProcessingExceptionMapper: Boolean = false
+        ├── dumpAfterStart: Boolean = false
+        ├── dumpBeforeStop: Boolean = false
         ├── enableThreadNameFilter: Boolean = true
         ├── idleThreadTimeout: Duration = 1 minute
         ├── maxQueuedRequests: Integer = 1024

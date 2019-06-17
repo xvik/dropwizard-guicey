@@ -39,7 +39,7 @@ public class InstallerBinder extends AbstractBinder {
     @Override
     @SuppressWarnings("unchecked")
     protected void configure() {
-        tracker.startHkTimer(JerseyInstallerTime);
+        tracker.startJerseyTimer(JerseyInstallerTime);
         final ExtensionsHolder holder = injector.getInstance(ExtensionsHolder.class);
         final List<Class<?>> allInstalled = new ArrayList<>();
         for (FeatureInstaller installer : holder.getInstallers()) {
@@ -52,10 +52,10 @@ public class InstallerBinder extends AbstractBinder {
                     allInstalled.addAll(features);
                 }
                 installer.report();
-                lifecycle.hk2ExtensionsInstalled(installer.getClass(), features);
+                lifecycle.jerseyExtensionsInstalled(installer.getClass(), features);
             }
         }
-        lifecycle.hk2ExtensionsInstalled(allInstalled);
-        tracker.stopHkTimer(JerseyInstallerTime);
+        lifecycle.jerseyExtensionsInstalled(allInstalled);
+        tracker.stopJerseyTimer(JerseyInstallerTime);
     }
 }

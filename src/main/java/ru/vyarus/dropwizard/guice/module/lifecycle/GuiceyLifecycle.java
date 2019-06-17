@@ -1,11 +1,11 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle;
 
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
 /**
@@ -27,59 +27,31 @@ public enum GuiceyLifecycle {
      */
     ConfigurationHooksProcessed(ConfigurationHooksProcessedEvent.class),
     /**
-     * Called after {@link ru.vyarus.dropwizard.guice.GuiceBundle#initialize(io.dropwizard.setup.Bootstrap)} method end.
-     * Just a convenient moment to apply registrations into dropwizard {@link io.dropwizard.setup.Bootstrap} object
-     * from listener.
-     * <p>
-     * If commands search is enabled, then all commands found in classpath will be provided in event.
-     * <p>
-     * Consider this point as somewhere inside of your application's
-     * {@link io.dropwizard.Application#initialize(io.dropwizard.setup.Bootstrap)}.
-     */
-    Initialization(InitializationEvent.class),
-
-    // -- Bundle.run()
-
-    /**
-     * Special meta event, called before all guice bundle run phase logic (when configuration and environment are
-     * already available). Could be used to print some diagnostic info before guicey initialization
-     * (for example, available configuration bindings to debug guice injector creation failure due to missed bindings).
-     */
-    BeforeRun(BeforeRunEvent.class),
-
-    /**
-     * Called if configuration from dw bundles enabled and at least one bundle recognized. Provides list of
-     * recognized bundles (note: some of these bundles could be actually disabled and not used further).
-     */
-    BundlesFromDwResolved(BundlesFromDwResolvedEvent.class),
-    /**
      * Called if at least one bundle recognized using bundles lookup. Provides list of recognized bundles
      * (note: some of these bundles could be disabled and not used further).
      */
     BundlesFromLookupResolved(BundlesFromLookupResolvedEvent.class),
     /**
-     * Called after {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and resolution form dropwizard
-     * bundles mechanisms when all top-level bundles are resolved. Provides a list of all enabled and list of disabled
-     * bundles. Called even if no bundles registered to indicate configuration state.
+     * Called after {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} mechanisms when all top-level
+     * bundles are resolved. Provides a list of all enabled and list of disabled bundles. Called even if no bundles
+     * registered to indicate configuration state.
      */
     BundlesResolved(BundlesResolvedEvent.class),
     /**
      * Called after bundles processing. Note that bundles could register other bundles and so resulted
      * list of installed bundles could be bigger (than in resolution event). Provides a list of all used and all
-     * disabled bundles. Not called even if no bundles were used at all (no processing - no event).
+     * disabled bundles. Not called even if no bundles were used at all (no initialization - no event).
      */
-    BundlesProcessed(BundlesProcessedEvent.class),
+    BundlesInitialized(BundlesInitializedEvent.class),
     /**
-     * Called just before guice injector creation. Provides all configured modules (main and override) and all
-     * disabled modules. Called even when no modules registered to indicate configuration state.
+     * Called if commands search is enabled ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands()})
+     * and at least one command found (and installed). Not called otherwise.
      */
-    InjectorCreation(InjectorCreationEvent.class),
+    CommandsResolved(CommandsResolvedEvent.class),
     /**
      * Called when installers resolved (from classpath scan, if enabled) and initialized. Provides list of all
      * enabled and list of all disabled installers (which will be used for extensions recognition and installation).
      * Called even if no installers are resolved to indicate configuration state.
-     * <p>
-     * Guice context is creating at that moment.
      */
     InstallersResolved(InstallersResolvedEvent.class),
     /**
@@ -90,6 +62,34 @@ public enum GuiceyLifecycle {
      * Guice context is creating at that moment.
      */
     ExtensionsResolved(ExtensionsResolvedEvent.class),
+    /**
+     * Called after guicey initialization (includes bundles lookup and initialization,
+     * installers and extensions resolution). Pure marker even, indicating guicey work finished under dropwizard
+     * configuration phase.
+     * <p>
+     * Note: dropwizard bundles, registered after {@link ru.vyarus.dropwizard.guice.GuiceBundle} will be initialized
+     * after this point.
+     */
+    Initialized(InitializedEvent.class),
+
+    // -- Bundle.run()
+
+    /**
+     * Special meta event, called before all guice bundle run phase logic (when configuration and environment are
+     * already available). Could be used to print some diagnostic info before guicey initialization
+     * (for example, available configuration bindings to debug guice injector creation failure due to missed bindings).
+     */
+    BeforeRun(BeforeRunEvent.class),
+    /**
+     * Called after bundles started (run method call). Not called even if no bundles were used at all
+     * (no processing - no event).
+     */
+    BundlesStarted(BundlesStartedEvent.class),
+    /**
+     * Called just before guice injector creation. Provides all configured modules (main and override) and all
+     * disabled modules. Called even when no modules registered to indicate configuration state.
+     */
+    InjectorCreation(InjectorCreationEvent.class),
     /**
      * Called when installer installed all related extensions and only for installers actually performed
      * installations (extensions list never empty). Provides installer and installed extensions types.
@@ -127,35 +127,35 @@ public enum GuiceyLifecycle {
     // -- Application.run()
 
     /**
-     * HK2 context starting. At this point jersey is starting and jetty is only initializing. Since that point
-     * HK2 {@link org.glassfish.hk2.api.ServiceLocator} is accessible.
+     * Jersey context starting. At this point jersey is starting and jetty is only initializing. Since that point
+     * jersey {@link org.glassfish.jersey.internal.inject.InjectionManager} is accessible.
      */
-    HK2Configuration(HK2ConfigurationEvent.class),
+    JerseyConfiguration(JerseyConfigurationEvent.class),
     /**
      * Called when {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller} installer installed all
      * related extensions and only for installers actually performed installations (extensions list never empty).
      * Provides installer and installed extensions types.
      * <p>
-     * At this point HK2 is not completely started and so HK2 managed extensions
-     * ({@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed}) couldn't be obtained yet
+     * At this point jersey is not completely started and so jersey managed extensions
+     * ({@link JerseyManaged}) couldn't be obtained yet
      * (even though you have access to root service locator). But extensions managed by guice could be obtained
      * from guice context.
      */
-    HK2ExtensionsInstalledBy(HK2ExtensionsInstalledByEvent.class),
+    JerseyExtensionsInstalledBy(JerseyExtensionsInstalledByEvent.class),
     /**
      * Called after all {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller} installers install
      * related extensions and only when at least one extension was installed. Provides list of all used (enabled)
      * extensions.
      * <p>
-     * At this point HK2 is not completely started and so HK2 managed extensions
-     * ({@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed}) couldn't be obtained yet
+     * At this point jersey is not completely started and so jersey managed extensions
+     * ({@link JerseyManaged}) couldn't be obtained yet
      * (even though you have access to root service locator). But extensions managed by guice could be obtained
      * from guice context.
      * <p>
-     * To listen HK2 lifecycle further use jersey events (like in
+     * To listen jersey lifecycle further use jersey events (like in
      * {@link ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle}).
      */
-    HK2ExtensionsInstalled(HK2ExtensionsInstalledEvent.class);
+    JerseyExtensionsInstalled(JerseyExtensionsInstalledEvent.class);
 
     private final Class<? extends GuiceyLifecycleEvent> type;
 

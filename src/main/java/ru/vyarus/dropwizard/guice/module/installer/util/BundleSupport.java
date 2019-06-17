@@ -7,6 +7,7 @@ import io.dropwizard.setup.Bootstrap;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -26,9 +27,9 @@ public final class BundleSupport {
     }
 
     /**
-     * Process initially registered and all transitive bundles.
+     * Process initialization for initially registered and all transitive bundles.
      * <ul>
-     * <li>Executing initial bundles (registered in {@link ru.vyarus.dropwizard.guice.GuiceBundle}
+     * <li>Executing initial bundles initialization (registered in {@link ru.vyarus.dropwizard.guice.GuiceBundle}
      * and by bundle lookup)</li>
      * <li>During execution bundles may register other bundles (through {@link GuiceyBootstrap})</li>
      * <li>Execute registered bundles and repeat from previous step until no new bundles registered</li>
@@ -37,7 +38,7 @@ public final class BundleSupport {
      *
      * @param context bundles context
      */
-    public static void processBundles(final ConfigurationContext context) {
+    public static void initBundles(final ConfigurationContext context) {
         final List<GuiceyBundle> bundles = context.getEnabledBundles();
         final List<Class<? extends GuiceyBundle>> installedBundles = Lists.newArrayList();
         final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, bundles);
@@ -63,7 +64,20 @@ public final class BundleSupport {
                 installedBundles.add(bundleType);
             }
         }
-        context.lifecycle().bundlesProcessed(context.getEnabledBundles(), context.getDisabledBundles());
+        context.lifecycle().bundlesInitialized(context.getEnabledBundles(), context.getDisabledBundles());
+    }
+
+    /**
+     * Run all enabled bundles.
+     *
+     * @param context bundles context
+     */
+    public static void runBundles(final ConfigurationContext context) {
+        final GuiceyEnvironment env = new GuiceyEnvironment(context);
+        for (GuiceyBundle bundle : context.getEnabledBundles()) {
+            bundle.run(env);
+        }
+        context.lifecycle().bundlesStarted(context.getEnabledBundles());
     }
 
     /**

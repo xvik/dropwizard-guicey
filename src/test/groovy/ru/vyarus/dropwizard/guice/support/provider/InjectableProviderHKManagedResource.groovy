@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.support.provider
 
 import com.google.common.base.Preconditions
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.support.feature.CustomFeature
 import ru.vyarus.dropwizard.guice.support.provider.annotated.Auth
 import ru.vyarus.dropwizard.guice.support.provider.annotated.User
@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response
  */
 @Path("/prototype")
 @Produces("application/json")
-@HK2Managed
+@JerseyManaged
 @javax.inject.Singleton
 class InjectableProviderHKManagedResource {
 

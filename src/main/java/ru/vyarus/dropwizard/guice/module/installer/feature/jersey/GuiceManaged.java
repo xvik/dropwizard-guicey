@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * annotation could be used to mark exceptional beans which still must be managed by guice.
  *
  * @author Vyacheslav Rusakov
- * @see HK2Managed
+ * @see JerseyManaged
  * @since 28.04.2018
  */
 @Target(ElementType.TYPE)

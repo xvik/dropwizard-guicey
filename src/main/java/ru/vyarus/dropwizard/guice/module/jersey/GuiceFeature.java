@@ -12,7 +12,7 @@ import javax.inject.Provider;
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
 
-import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.HKTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyTime;
 
 /**
  * Feature activates guice integration.
@@ -28,7 +28,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.HKTime;
  * (not bi-directional). By default, it's disabled because most cases does not require it: it was
  * developed for cases when bean is created by HK2 and only need some injections from guice, but here guice
  * controls almost everything and prepared instance is passed to guice. But bridge may be useful together with
- * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} instances.</p>
+ * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged} instances.</p>
  * <p>Feature installs {@code ru.vyarus.dropwizard.guice.module.jersey.hk2.InstallerBinder}, which is HK2 module.
  * Just like with guice ({@code BindingInstaller)}, it asks all {@code JerseyInstaller} to bind extensions into
  * HK2 context.</p>
@@ -42,7 +42,7 @@ public class GuiceFeature implements Feature, Provider<InjectionManager> {
     private final Provider<Injector> provider;
     private final StatsTracker tracker;
     private final LifecycleSupport lifecycle;
-    private InjectionManager locator;
+    private InjectionManager injectionManager;
 
     public GuiceFeature(final Provider<Injector> provider, final StatsTracker tracker,
                         final LifecycleSupport lifecycle) {
@@ -53,17 +53,18 @@ public class GuiceFeature implements Feature, Provider<InjectionManager> {
 
     @Override
     public boolean configure(final FeatureContext context) {
-        tracker.startHkTimer(HKTime);
-        locator = InjectionManagerProvider.getInjectionManager(context);
-        lifecycle.hk2Configuration(locator);
+        tracker.startJerseyTimer(JerseyTime);
+        injectionManager = InjectionManagerProvider.getInjectionManager(context);
+        lifecycle.jerseyConfiguration(injectionManager);
         final Injector injector = this.provider.get();
-        // todo
+        // todo required?
+//        context.register(new InstallerBinder(injector, tracker, lifecycle));
         tracker.stopHkTimer(HKTime);
         return true;
     }
 
     @Override
     public InjectionManager get() {
-        return Preconditions.checkNotNull(locator, "Injection manager is not yet available");
+        return Preconditions.checkNotNull(injectionManager, "Jersey InjectionManager is not yet available");
     }
 }

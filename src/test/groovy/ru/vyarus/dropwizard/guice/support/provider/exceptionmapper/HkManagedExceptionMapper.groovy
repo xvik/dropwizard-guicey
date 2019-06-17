@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.support.provider.exceptionmapper
 
 import com.google.inject.Singleton
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
@@ -14,7 +14,7 @@ import javax.ws.rs.ext.Provider
  */
 @Provider
 @Singleton
-@HK2Managed
+@JerseyManaged
 class HkManagedExceptionMapper implements ExceptionMapper<IOException> {
 
     @Override

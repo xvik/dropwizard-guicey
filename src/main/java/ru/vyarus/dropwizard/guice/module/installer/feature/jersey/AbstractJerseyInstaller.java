@@ -15,7 +15,7 @@ import java.lang.annotation.Annotation;
 
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.ForceSingletonForJerseyExtensions;
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
-import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isHK2Managed;
+import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isJerseyManaged;
 
 /**
  * Base class for jersey installers ({@link JerseyInstaller}). Provides common utilities.
@@ -39,7 +39,7 @@ public abstract class AbstractJerseyInstaller<T> extends InstallerOptionsSupport
      * @return lazy marker if guice managed type and false when hk managed.
      */
     protected boolean isLazy(final Class<?> type, final boolean lazy) {
-        if (isHkExtension(type) && lazy) {
+        if (isJerseyExtension(type) && lazy) {
             logger.warn("@LazyBinding is ignored, because @HK2Managed set: {}", type.getName());
             return false;
         }
@@ -50,8 +50,8 @@ public abstract class AbstractJerseyInstaller<T> extends InstallerOptionsSupport
      * @param type extension type
      * @return true if extension should be managed by hk, false to manage by guice
      */
-    protected boolean isHkExtension(final Class<?> type) {
-        return isHK2Managed(type, option(JerseyExtensionsManagedByGuice));
+    protected boolean isJerseyExtension(final Class<?> type) {
+        return isJerseyManaged(type, option(JerseyExtensionsManagedByGuice));
     }
 
     /**

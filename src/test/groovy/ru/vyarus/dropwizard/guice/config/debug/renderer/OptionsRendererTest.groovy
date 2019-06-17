@@ -45,8 +45,6 @@ class OptionsRendererTest extends Specification {
         ScanPackages                   = [com.foo, com.bat]             *CUSTOM
         SearchCommands                 = false
         UseCoreInstallers              = true
-        ConfigureFromDropwizardBundles = false
-        BindConfigurationInterfaces    = false
         BindConfigurationByPath        = true
         InjectorStage                  = PRODUCTION
         GuiceFilterRegistration        = [REQUEST]
@@ -80,8 +78,6 @@ class OptionsRendererTest extends Specification {
         ScanPackages                   = [com.foo, com.bat]             *CUSTOM
         SearchCommands                 = false
         UseCoreInstallers              = true
-        ConfigureFromDropwizardBundles = false
-        BindConfigurationInterfaces    = false
         BindConfigurationByPath        = true
         InjectorStage                  = PRODUCTION
         GuiceFilterRegistration        = [REQUEST]
@@ -134,8 +130,6 @@ class OptionsRendererTest extends Specification {
         ScanPackages                   = [com.foo, com.bat]             *CUSTOM
         SearchCommands                 = false
         UseCoreInstallers              = true
-        ConfigureFromDropwizardBundles = false
-        BindConfigurationInterfaces    = false
         BindConfigurationByPath        = true
         InjectorStage                  = PRODUCTION
         UseHkBridge                    = false

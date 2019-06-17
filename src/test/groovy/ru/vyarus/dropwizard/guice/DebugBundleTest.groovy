@@ -5,8 +5,10 @@ import com.google.inject.ProvisionException
 import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
+import org.glassfish.hk2.api.MultiException
 import org.glassfish.jersey.internal.inject.AbstractBinder
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import org.glassfish.jersey.internal.inject.InjectionManager
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
@@ -34,8 +36,8 @@ class DebugBundleTest extends AbstractTest {
     ContextDebugService debugService
     @Inject
     Injector injector
-//    @Inject
-//    javax.inject.Provider<ServiceLocator> locator;
+    @Inject
+    javax.inject.Provider<InjectionManager> locator;
 
     def "Check correct scopes"() {
 
@@ -44,7 +46,7 @@ class DebugBundleTest extends AbstractTest {
 //        new URL("http://localhost:8080/guice/foo").getText()
         new URL("http://localhost:8080/hk/foo").getText()
         // initialize mappers
-        locator.get().getAllServices(ExceptionMapper)
+        locator.get().getAllInstances(ExceptionMapper)
 
         expect:
         debugService.guiceManaged as Set == [GuiceResource, GuiceMapper] as Set
@@ -61,7 +63,7 @@ class DebugBundleTest extends AbstractTest {
         ex.getCause() instanceof WrongContextException
 
         when: "force hk2 to create guice bean"
-        locator.get().getService(GuiceResource, "test")
+        locator.get().getInstance(GuiceResource, "test")
         then:
         ex = thrown(MultiException)
         ex.getErrors()[0] instanceof WrongContextException
@@ -103,7 +105,7 @@ class DebugBundleTest extends AbstractTest {
     }
 
     @Path("/hk")
-    @HK2Managed
+    @JerseyManaged
     static class HkResource {
         @Path("/foo")
         @GET
@@ -121,7 +123,7 @@ class DebugBundleTest extends AbstractTest {
     }
 
     @Provider
-    @HK2Managed
+    @JerseyManaged
     static class HkMapper implements ExceptionMapper<IOException> {
         @Override
         Response toResponse(IOException exception) {

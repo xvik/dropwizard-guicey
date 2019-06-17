@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.cases.hkscope.support.hk
 
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 
 import javax.ws.rs.ext.ParamConverter
 import javax.ws.rs.ext.ParamConverterProvider
@@ -13,7 +13,7 @@ import java.lang.reflect.Type
  * @since 19.01.2016
  */
 @Provider
-@HK2Managed
+@JerseyManaged
 class HKParamConverterProvider implements ParamConverterProvider {
 
     @Override

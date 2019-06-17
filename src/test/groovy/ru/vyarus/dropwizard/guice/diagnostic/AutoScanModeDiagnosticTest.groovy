@@ -40,7 +40,6 @@ class AutoScanModeDiagnosticTest extends BaseDiagnosticTest {
         and: "correct bundles info"
         info.bundles == [CoreInstallersBundle]
         info.bundlesFromLookup.isEmpty()
-        info.bundlesFromDw.isEmpty()
 
         and: "correct installers info"
         def classes = [FooInstaller,

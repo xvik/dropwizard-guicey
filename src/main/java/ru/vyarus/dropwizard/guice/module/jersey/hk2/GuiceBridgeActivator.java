@@ -13,11 +13,11 @@ package ru.vyarus.dropwizard.guice.module.jersey.hk2;
  */
 public class GuiceBridgeActivator {
 
-//    private final ServiceLocator locator;
+//    private final InjectionManager injectionManager;
 //    private final Injector injector;
 //
-//    public GuiceBridgeActivator(final ServiceLocator locator, final Injector injector) {
-//        this.locator = locator;
+//    public GuiceBridgeActivator(final InjectionManager injectionManager, final Injector injector) {
+//        this.injectionManager = injectionManager;
 //        this.injector = injector;
 //    }
 
@@ -25,8 +25,9 @@ public class GuiceBridgeActivator {
      * Activate HK2 guice bridge.
      */
     public void activate() {
+//        final ServiceLocator locator = injectionManager.getInstance(ServiceLocator.class);
 //        GuiceBridge.getGuiceBridge().initializeGuiceBridge(locator);
-//        final GuiceIntoHK2Bridge guiceBridge = locator.getService(GuiceIntoHK2Bridge.class);
+//        final GuiceIntoHK2Bridge guiceBridge = injectionManager.getInstance(GuiceIntoHK2Bridge.class);
 //        guiceBridge.bridgeGuiceInjector(injector);
     }
 }
