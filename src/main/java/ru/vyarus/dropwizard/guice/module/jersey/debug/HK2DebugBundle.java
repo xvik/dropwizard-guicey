@@ -5,6 +5,7 @@ import com.google.inject.matcher.Matchers;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugService;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.GuiceInstanceListener;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature;
@@ -13,7 +14,7 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2InstanceListene
 /**
  * Bundle enables debug services to check correct extensions instantiation:
  * <ul>
- * <li>{@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} annotated service must be
+ * <li>{@link JerseyManaged} annotated service must be
  * instantiated by HK2 and not guice</li>
  * <li>Other services must be instantiated only in guice</li>
  * </ul>

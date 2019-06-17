@@ -9,6 +9,7 @@ import org.glassfish.jersey.internal.inject.InjectionResolver;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.spi.internal.ValueParamProvider;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.AbstractJerseyInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
@@ -40,7 +41,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
  * to declare bean in prototype scope (prevent forced singleton).
  *
  * @author Vyacheslav Rusakov
- * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+ * @see JerseyManaged
  * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
  * @see ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
  * @since 10.10.2014
@@ -74,7 +75,7 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
 
     @Override
     public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazyMarker) {
-        final boolean hkManaged = isHkExtension(type);
+        final boolean hkManaged = isJerseyExtension(type);
         final boolean lazy = isLazy(type, lazyMarker);
         // register in guice only if not managed by hk and just in time (lazy) binding not requested
         if (!hkManaged && !lazy) {
@@ -85,7 +86,7 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
 
     @Override
     public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {
-        final boolean hkExtension = isHkExtension(type);
+        final boolean hkExtension = isJerseyExtension(type);
         final boolean forceSingleton = isForceSingleton(type, hkExtension);
         // since jersey 2.26 internal hk Factory class replaced by java 8 Supplier
         if (is(type, Supplier.class)) {

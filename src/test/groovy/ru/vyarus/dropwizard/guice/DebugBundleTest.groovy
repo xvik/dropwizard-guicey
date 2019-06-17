@@ -8,7 +8,7 @@ import io.dropwizard.setup.Environment
 import org.glassfish.hk2.api.MultiException
 import org.glassfish.hk2.api.ServiceLocator
 import org.glassfish.jersey.internal.inject.AbstractBinder
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
@@ -105,7 +105,7 @@ class DebugBundleTest extends AbstractTest {
     }
 
     @Path("/hk")
-    @HK2Managed
+    @JerseyManaged
     static class HkResource {
         @Path("/foo")
         @GET
@@ -123,7 +123,7 @@ class DebugBundleTest extends AbstractTest {
     }
 
     @Provider
-    @HK2Managed
+    @JerseyManaged
     static class HkMapper implements ExceptionMapper<IOException> {
         @Override
         Response toResponse(IOException exception) {

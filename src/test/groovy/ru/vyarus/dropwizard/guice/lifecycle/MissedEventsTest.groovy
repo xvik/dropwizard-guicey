@@ -37,9 +37,9 @@ class MissedEventsTest extends Specification {
         !Listener.events.contains(GuiceyLifecycle.BundlesStarted)
         !Listener.events.contains(GuiceyLifecycle.ExtensionsInstalledBy)
         !Listener.events.contains(GuiceyLifecycle.ExtensionsInstalled)
-        !Listener.events.contains(GuiceyLifecycle.HK2Configuration)
-        !Listener.events.contains(GuiceyLifecycle.HK2ExtensionsInstalledBy)
-        !Listener.events.contains(GuiceyLifecycle.HK2ExtensionsInstalled)
+        !Listener.events.contains(GuiceyLifecycle.JerseyConfiguration)
+        !Listener.events.contains(GuiceyLifecycle.JerseyExtensionsInstalledBy)
+        !Listener.events.contains(GuiceyLifecycle.JerseyExtensionsInstalled)
     }
 
     static class App extends Application<Configuration> {

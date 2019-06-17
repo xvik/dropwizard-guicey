@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.lifecycle.event.hk;
+package ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey;
 
 import com.google.inject.Injector;
 import io.dropwizard.Configuration;
@@ -6,8 +6,9 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.HK2PhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.JerseyPhaseEvent;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  * extensions.
  * <p>
  * At this point hk is not completely started and so hk managed extensions
- * ({@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed}) couldn't be obtained yet
+ * ({@link JerseyManaged}) couldn't be obtained yet
  * (even though you have access to root service locator). But extensions managed by guice could be obtained
  * from guice context.
  * <p>
@@ -28,20 +29,20 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 19.04.2018
  */
-public class HK2ExtensionsInstalledEvent extends HK2PhaseEvent {
+public class JerseyExtensionsInstalledEvent extends JerseyPhaseEvent {
 
     private final List<Class<?>> extensions;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
-    public HK2ExtensionsInstalledEvent(final Options options,
-                                       final Bootstrap bootstrap,
-                                       final Configuration configuration,
-                                       final ConfigurationTree configurationTree,
-                                       final Environment environment,
-                                       final Injector injector,
-                                       final ServiceLocator locator,
-                                       final List<Class<?>> extensions) {
-        super(GuiceyLifecycle.HK2ExtensionsInstalled, options, bootstrap,
+    public JerseyExtensionsInstalledEvent(final Options options,
+                                          final Bootstrap bootstrap,
+                                          final Configuration configuration,
+                                          final ConfigurationTree configurationTree,
+                                          final Environment environment,
+                                          final Injector injector,
+                                          final ServiceLocator locator,
+                                          final List<Class<?>> extensions) {
+        super(GuiceyLifecycle.JerseyExtensionsInstalled, options, bootstrap,
                 configuration, configurationTree, environment, injector, locator);
         this.extensions = extensions;
     }

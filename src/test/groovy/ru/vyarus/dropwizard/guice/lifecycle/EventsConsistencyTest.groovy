@@ -20,7 +20,7 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.HK2PhaseEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.JerseyPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent
@@ -32,9 +32,9 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.Configura
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ExtensionsResolvedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*
 import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig
 import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
@@ -200,20 +200,20 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
-        protected void hk2Configuration(HK2ConfigurationEvent event) {
-            hkCheck(event)
+        protected void jerseyConfiguration(JerseyConfigurationEvent event) {
+            jerseyCheck(event)
         }
 
         @Override
-        protected void hk2ExtensionsInstalledBy(HK2ExtensionsInstalledByEvent event) {
-            hkCheck(event)
+        protected void jerseyExtensionsInstalledBy(JerseyExtensionsInstalledByEvent event) {
+            jerseyCheck(event)
             assert event.getInstaller() != null
             assert !event.getInstalled().isEmpty()
         }
 
         @Override
-        protected void hk2ExtensionsInstalled(HK2ExtensionsInstalledEvent event) {
-            hkCheck(event)
+        protected void jerseyExtensionsInstalled(JerseyExtensionsInstalledEvent event) {
+            jerseyCheck(event)
             assert !event.getExtensions().isEmpty()
         }
 
@@ -249,7 +249,7 @@ class EventsConsistencyTest extends AbstractTest {
             assert event.reportRenderer.renderConfigurationTree(new ContextTreeConfig()) != null
         }
 
-        private void hkCheck(HK2PhaseEvent event) {
+        private void jerseyCheck(JerseyPhaseEvent event) {
             injectorChecks(event)
             assert event.getLocator() != null
         }

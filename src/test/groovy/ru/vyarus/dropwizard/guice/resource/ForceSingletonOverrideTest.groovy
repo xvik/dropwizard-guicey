@@ -7,7 +7,7 @@ import io.dropwizard.setup.Environment
 import org.glassfish.hk2.api.PerLookup
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.module.support.scope.Prototype
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
@@ -50,7 +50,7 @@ class ForceSingletonOverrideTest extends AbstractTest {
     }
 
     @Path("/hk")
-    @HK2Managed
+    @JerseyManaged
     @PerLookup
     // annotation prevents forced singleton
     static class Res {

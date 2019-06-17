@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import java.util.Map;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyTime;
-import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.HKTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyTime;
 
 /**
  * Internal object, used to record startup stats. Guava {#Stopwatch} used for time measurements
@@ -48,29 +48,29 @@ public final class StatsTracker {
     }
 
     /**
-     * Special methods for tracking time in HK2 scope.
+     * Special methods for tracking time in jersey scope.
      * Such complication used to avoid using 3 different trackers in code.
-     * HK2 initialization is performed after bundles run and so out of scope of GuiceBundle.
+     * Jersey initialization is performed after bundles run and so out of scope of GuiceBundle.
      *
-     * @param name HK2 statistics name
+     * @param name jersey statistics name
      */
-    public void startHkTimer(final Stat name) {
+    public void startJerseyTimer(final Stat name) {
         timer(GuiceyTime);
-        if (!HKTime.equals(name)) {
-            timer(HKTime);
+        if (!JerseyTime.equals(name)) {
+            timer(JerseyTime);
         }
         timer(name);
     }
 
     /**
-     * Called to stop currently measured HK2 metric (also stops main guice and HK2 timers).
+     * Called to stop currently measured jersey metric (also stops main guice and jersey timers).
      *
-     * @param name HK2 statistic name
+     * @param name jersey statistic name
      */
-    public void stopHkTimer(final Stat name) {
+    public void stopJerseyTimer(final Stat name) {
         timers.get(GuiceyTime).stop();
-        if (!HKTime.equals(name)) {
-            timers.get(HKTime).stop();
+        if (!JerseyTime.equals(name)) {
+            timers.get(JerseyTime).stop();
         }
         timers.get(name).stop();
     }

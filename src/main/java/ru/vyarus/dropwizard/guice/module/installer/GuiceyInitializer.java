@@ -210,7 +210,7 @@ public class GuiceyInitializer {
             // important to force config creation for extension from scan to allow disabling by matcher
             final ExtensionItemInfoImpl info = context.getOrRegisterExtension(type, fromScan);
             info.setLazy(type.isAnnotationPresent(LazyBinding.class));
-            info.setHk2Managed(JerseyBinding.isHK2Managed(type, guiceFirstMode));
+            info.setJerseyManaged(JerseyBinding.isJerseyManaged(type, guiceFirstMode));
             info.setInstaller(installer);
         }
         return recognized;

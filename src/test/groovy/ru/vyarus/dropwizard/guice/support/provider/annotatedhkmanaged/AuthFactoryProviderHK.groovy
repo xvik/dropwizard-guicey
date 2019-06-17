@@ -5,7 +5,7 @@ import org.glassfish.jersey.server.ContainerRequest
 import org.glassfish.jersey.server.internal.inject.AbstractValueParamProvider
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider
 import org.glassfish.jersey.server.model.Parameter
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.support.provider.annotated.Auth
 import ru.vyarus.dropwizard.guice.support.provider.annotated.User
 
@@ -18,7 +18,7 @@ import java.util.function.Function
  * @since 20.11.2014
  */
 @Provider
-@HK2Managed
+@JerseyManaged
 // hk2 will create bean not guice!
 class AuthFactoryProviderHK extends AbstractValueParamProvider {
 

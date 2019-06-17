@@ -1,10 +1,11 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle;
 
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
 /**
@@ -129,32 +130,32 @@ public enum GuiceyLifecycle {
      * HK2 context starting. At this point jersey is starting and jetty is only initializing. Since that point
      * HK2 {@link org.glassfish.hk2.api.ServiceLocator} is accessible.
      */
-    HK2Configuration(HK2ConfigurationEvent.class),
+    JerseyConfiguration(JerseyConfigurationEvent.class),
     /**
      * Called when {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller} installer installed all
      * related extensions and only for installers actually performed installations (extensions list never empty).
      * Provides installer and installed extensions types.
      * <p>
      * At this point HK2 is not completely started and so HK2 managed extensions
-     * ({@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed}) couldn't be obtained yet
+     * ({@link JerseyManaged}) couldn't be obtained yet
      * (even though you have access to root service locator). But extensions managed by guice could be obtained
      * from guice context.
      */
-    HK2ExtensionsInstalledBy(HK2ExtensionsInstalledByEvent.class),
+    JerseyExtensionsInstalledBy(JerseyExtensionsInstalledByEvent.class),
     /**
      * Called after all {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller} installers install
      * related extensions and only when at least one extension was installed. Provides list of all used (enabled)
      * extensions.
      * <p>
      * At this point HK2 is not completely started and so HK2 managed extensions
-     * ({@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed}) couldn't be obtained yet
+     * ({@link JerseyManaged}) couldn't be obtained yet
      * (even though you have access to root service locator). But extensions managed by guice could be obtained
      * from guice context.
      * <p>
      * To listen HK2 lifecycle further use jersey events (like in
      * {@link ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle}).
      */
-    HK2ExtensionsInstalled(HK2ExtensionsInstalledEvent.class);
+    JerseyExtensionsInstalled(JerseyExtensionsInstalledEvent.class);
 
     private final Class<? extends GuiceyLifecycleEvent> type;
 

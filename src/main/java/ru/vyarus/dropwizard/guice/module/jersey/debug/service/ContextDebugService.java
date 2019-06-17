@@ -66,7 +66,7 @@ public class ContextDebugService {
      * @param type instantiated bean type
      */
     public void hkManage(final Class<?> type) {
-        if (!JerseyBinding.isHK2Managed(type, options.get(JerseyExtensionsManagedByGuice))) {
+        if (!JerseyBinding.isJerseyManaged(type, options.get(JerseyExtensionsManagedByGuice))) {
             throw new WrongContextException("HK2 creates service %s which must be managed by guice.",
                     type.getName());
         }
@@ -79,7 +79,7 @@ public class ContextDebugService {
      * @param type instantiated bean type
      */
     public void guiceManage(final Class<?> type) {
-        if (JerseyBinding.isHK2Managed(type, options.get(JerseyExtensionsManagedByGuice))) {
+        if (JerseyBinding.isJerseyManaged(type, options.get(JerseyExtensionsManagedByGuice))) {
             throw new WrongContextException("Guice creates service %s which must be managed by HK2.",
                     type.getName());
         }

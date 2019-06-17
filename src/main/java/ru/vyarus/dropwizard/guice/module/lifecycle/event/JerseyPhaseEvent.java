@@ -10,25 +10,25 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 /**
- * Base class for events, started after HK context initialization start. Appears after jetty start, during
+ * Base class for events, started after jersey context initialization start. Appears after jetty start, during
  * jersey initialization.
  *
  * @author Vyacheslav Rusakov
  * @since 19.04.2018
  */
-public abstract class HK2PhaseEvent extends InjectorPhaseEvent {
+public abstract class JerseyPhaseEvent extends InjectorPhaseEvent {
 
     private final ServiceLocator locator;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
-    public HK2PhaseEvent(final GuiceyLifecycle type,
-                         final Options options,
-                         final Bootstrap bootstrap,
-                         final Configuration configuration,
-                         final ConfigurationTree configurationTree,
-                         final Environment environment,
-                         final Injector injector,
-                         final ServiceLocator locator) {
+    public JerseyPhaseEvent(final GuiceyLifecycle type,
+                            final Options options,
+                            final Bootstrap bootstrap,
+                            final Configuration configuration,
+                            final ConfigurationTree configurationTree,
+                            final Environment environment,
+                            final Injector injector,
+                            final ServiceLocator locator) {
         super(type, options, bootstrap, configuration, configurationTree, environment, injector);
         this.locator = locator;
     }

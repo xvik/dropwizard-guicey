@@ -7,7 +7,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -31,17 +31,17 @@ class ExtensionInfoCasesTest extends Specification {
         expect: "extension info for hk2 managed"
         ExtensionItemInfo hk = info.data.getInfo(HkResource)
         !hk.lazy
-        hk.hk2Managed
+        hk.jerseyManaged
 
         and: "extension info for lazy"
         ExtensionItemInfo lazy = info.data.getInfo(LazyResource)
         lazy.lazy
-        !lazy.hk2Managed
+        !lazy.jerseyManaged
 
     }
 
     @Path("/")
-    @HK2Managed
+    @JerseyManaged
     static class HkResource {}
 
     @Path("/foo")

@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
 public enum Stat {
 
     /**
-     * Overall guicey startup time (including hk part). All other timers represents this timer detalization.
+     * Overall guicey startup time (including jersey part). All other timers represents this timer detalization.
      */
     GuiceyTime(true),
     /**
@@ -56,14 +56,14 @@ public enum Stat {
      */
     ExtensionsInstallationTime(true),
     /**
-     * Guicey initialization time inside HK context. HK is started only when server command used
+     * Guicey initialization time inside jersey context. Jersey is started only when server command used
      * (after guice context startup and so out of scope of guice bundle execution).
      * Part of {@link #GuiceyTime}.
      */
-    HKTime(true),
+    JerseyTime(true),
     /**
      * Time spent by {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller} to install
-     * jersey related features. Part of {@link #HKTime}.
+     * jersey related features. Part of {@link #JerseyTime}.
      */
     JerseyInstallerTime(true);
 

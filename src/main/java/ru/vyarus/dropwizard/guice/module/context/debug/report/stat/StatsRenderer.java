@@ -59,7 +59,7 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         remaining -= renderInstallersRegistration(root, hideTiny, percent);
         remaining -= renderExtensionsRegistration(root, hideTiny, percent);
         remaining -= renderInjectorCreation(root, percent);
-        remaining -= renderHkPart(root, hideTiny, percent);
+        remaining -= renderJerseyPart(root, hideTiny, percent);
         if (show(hideTiny, remaining)) {
             root.child("[%.2g%%] remaining %s ms", remaining / percent, remaining);
         }
@@ -147,11 +147,11 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         return injector;
     }
 
-    private long renderHkPart(final TreeNode root, final boolean hideTiny, final double percent) {
-        final long hk = info.getStats().time(HKTime);
+    private long renderJerseyPart(final TreeNode root, final boolean hideTiny, final double percent) {
+        final long hk = info.getStats().time(JerseyTime);
         if (show(hideTiny, hk)) {
-            final TreeNode node = root.child("[%.2g%%] HK2 bridged in %s",
-                    hk / percent, info.getStats().humanTime(HKTime));
+            final TreeNode node = root.child("[%.2g%%] JERSEY bridged in %s",
+                    hk / percent, info.getStats().humanTime(JerseyTime));
             final int installers = info.getData()
                     .getItems(ConfigItem.Installer, it -> JerseyInstaller.class.isAssignableFrom(it.getType())).size();
             if (installers > 0) {

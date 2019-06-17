@@ -620,7 +620,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
         /**
          * Enables strict control of beans instantiation context: all beans must be instantiated by guice, except
-         * beans annotated with {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed}.
+         * beans annotated with {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged}.
          * When bean instantiated in wrong context exception would be thrown.
          * <p>
          * It is useful if you write your own installers or to simply ensure correctness in doubtful cases.
@@ -641,7 +641,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
         /**
          * Manage jersey extensions (resources, jersey filters etc.) with HK2 by default instead of guice (the
-         * same effect as if {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} annotation
+         * same effect as if {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged} annotation
          * would be set on all beans). Use this option if you want to use jersey specific resource features
          * (like @Context bindings) and completely delegate management to HK2.
          * <p>
@@ -653,7 +653,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          *
          * @return builder instance for chained calls
          * @see InstallersOptions#JerseyExtensionsManagedByGuice
-         * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+         * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
          * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
          */
         public Builder<T> useHK2ForJerseyExtensions() {

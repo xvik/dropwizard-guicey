@@ -11,8 +11,8 @@ import org.glassfish.jersey.server.monitoring.RequestEventListener;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
 import java.util.Collection;
@@ -126,12 +126,12 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     }
 
     @Override
-    protected void hk2Configuration(final HK2ConfigurationEvent event) {
+    protected void jerseyConfiguration(final JerseyConfigurationEvent event) {
         log("Configuring HK2...");
     }
 
     @Override
-    protected void hk2ExtensionsInstalled(final HK2ExtensionsInstalledEvent event) {
+    protected void jerseyExtensionsInstalled(final JerseyExtensionsInstalledEvent event) {
         log("%s HK2 extensions installed", event.getExtensions().size());
     }
 

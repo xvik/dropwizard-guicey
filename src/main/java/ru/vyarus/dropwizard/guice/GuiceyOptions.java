@@ -102,7 +102,7 @@ public enum GuiceyOptions implements Option {
     /**
      * Enables guice bridge for HK2 to allow HK2 services to see guice beans. This is not often required and
      * so disabled by default. For example, it could be required if
-     * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed} used to properly instantiate
+     * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged} used to properly instantiate
      * service by HK2 when it also depends on guice services.
      * <p>
      * IMPORTANT: requires extra dependency on HK2 guice-bridge: 'org.glassfish.hk2:guice-bridge:2.5.0'

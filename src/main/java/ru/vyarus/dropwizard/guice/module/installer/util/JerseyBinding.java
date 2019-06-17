@@ -6,7 +6,7 @@ import com.google.inject.binder.ScopedBindingBuilder;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.internal.inject.Binding;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged;
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed;
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory;
 import ru.vyarus.dropwizard.guice.module.jersey.support.JerseyComponentProvider;
 import ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * HK2 binding utilities. Supplement {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}.
+ * Jersey binding utilities. Supplement {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}.
  *
  * @author Vyacheslav Rusakov
  * @since 21.11.2014
@@ -45,41 +45,41 @@ public final class JerseyBinding {
 
     /**
      * When guice-first mode used (default) all jersey extensions are instantiated by guice and only if
-     * {@linkplain HK2Managed} annotation set on bean - it will be instantiated by HK2.
+     * {@linkplain JerseyManaged} annotation set on bean - it will be instantiated by jersey.
      * <p>
-     * When HK2-first mode used
+     * When jersey-first mode used
      * ({@linkplain ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsManagedByGuice})
-     * all jersey extensions are instantiated by HK2 and only if {@linkplain GuiceManaged} annotation set on bean - it
-     * will be instantiated by guice.
+     * all jersey extensions are instantiated by jersey and only if {@linkplain GuiceManaged} annotation set on
+     * bean - it will be instantiated by guice.
      *
      * @param type           type to check
      * @param guiceFirstMode true when guice used by default for jersey extensions management, false when
-     *                       HK2 used by default
-     * @return true if type should be managed by HK2, false when type should managed by guice.
+     *                       jersey used by default
+     * @return true if type should be managed by jersey, false when type should managed by guice.
      * @see ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsManagedByGuice
-     * @see HK2Managed
+     * @see JerseyManaged
      * @see GuiceManaged
      */
-    public static boolean isHK2Managed(final Class<?> type, final boolean guiceFirstMode) {
+    public static boolean isJerseyManaged(final Class<?> type, final boolean guiceFirstMode) {
         return guiceFirstMode
-                ? type.isAnnotationPresent(HK2Managed.class)
+                ? type.isAnnotationPresent(JerseyManaged.class)
                 : !type.isAnnotationPresent(GuiceManaged.class);
     }
 
     /**
-     * Binds component into HK2 context. If component is annotated with {@link HK2Managed}, then registers type,
+     * Binds component into jersey context. If component is annotated with {@link JerseyManaged}, then registers type,
      * otherwise register guice "bridge" factory around component.
      *
-     * @param binder    HK2 binder
-     * @param injector  guice injector
-     * @param type      component type
-     * @param hkManaged true if bean must be managed by HK2, false to bind guice managed instance
-     * @param singleton true to force singleton scope
+     * @param binder        jersey binder
+     * @param injector      guice injector
+     * @param type          component type
+     * @param jerseyManaged true if bean must be managed by jersey, false to bind guice managed instance
+     * @param singleton     true to force singleton scope
      * @see ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory
      */
     public static void bindComponent(final AbstractBinder binder, final Injector injector, final Class<?> type,
-                                     final boolean hkManaged, final boolean singleton) {
-        if (hkManaged) {
+                                     final boolean jerseyManaged, final boolean singleton) {
+        if (jerseyManaged) {
             optionalSingleton(
                     binder.bindAsContract(type),
                     singleton);
@@ -92,27 +92,27 @@ public final class JerseyBinding {
     }
 
     /**
-     * Binds HK2 {@link Supplier}. If bean is {@link HK2Managed} then registered directly as
+     * Binds jersey {@link Supplier}. If bean is {@link JerseyManaged} then registered directly as
      * factory. Otherwise register factory through special "lazy bridge" to delay guice factory bean instantiation.
      * Also registers factory directly (through wrapper to be able to inject factory by its type).
      * <p>
      * NOTE: since jersey 2.26 jersey don't use hk2 directly and so all HK interfaces replaced by java 8 interfaces.
      *
-     * @param binder    HK2 binder
-     * @param injector  guice injector
-     * @param type      factory to bind
-     * @param hkManaged true if bean must be managed by HK2, false to bind guice managed instance
-     * @param singleton true to force singleton scope
-     * @param <T>       actual type (used to workaround type checks)
+     * @param binder        jersey binder
+     * @param injector      guice injector
+     * @param type          factory to bind
+     * @param jerseyManaged true if bean must be managed by jersey, false to bind guice managed instance
+     * @param singleton     true to force singleton scope
+     * @param <T>           actual type (used to workaround type checks)
      * @see ru.vyarus.dropwizard.guice.module.jersey.support.LazyGuiceFactory
      * @see ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory
      */
     @SuppressWarnings("unchecked")
     public static <T> void bindFactory(final AbstractBinder binder, final Injector injector, final Class<?> type,
-                                       final boolean hkManaged, final boolean singleton) {
+                                       final boolean jerseyManaged, final boolean singleton) {
         // resolve Factory<T> actual type to bind properly
         final Class<T> res = (Class<T>) GenericsResolver.resolve(type).type(Supplier.class).generic(0);
-        if (hkManaged) {
+        if (jerseyManaged) {
             optionalSingleton(singleton
                             ? binder.bindFactory((Class<Supplier<T>>) type, Singleton.class).to(type).to(res)
                             : binder.bindFactory((Class<Supplier<T>>) type).to(type).to(res),
@@ -129,21 +129,21 @@ public final class JerseyBinding {
      * Binds jersey specific component (component implements jersey interface or extends class).
      * Specific binding is required for types directly supported by jersey (e.g. ExceptionMapper).
      * Such types must be bound to target interface directly, otherwise jersey would not be able to resolve them.
-     * <p> If type is {@link HK2Managed}, binds directly.
+     * <p> If type is {@link JerseyManaged}, binds directly.
      * Otherwise, use guice "bridge" factory to lazily bind type.</p>
      *
-     * @param binder       HK2 binder
-     * @param injector     guice injector
-     * @param type         type which implements specific jersey interface or extends class
-     * @param specificType specific jersey type (interface or abstract class)
-     * @param hkManaged    true if bean must be managed by HK2, false to bind guice managed instance
-     * @param singleton    true to force singleton scope
+     * @param binder        jersey binder
+     * @param injector      guice injector
+     * @param type          type which implements specific jersey interface or extends class
+     * @param specificType  specific jersey type (interface or abstract class)
+     * @param jerseyManaged true if bean must be managed by jersey, false to bind guice managed instance
+     * @param singleton     true to force singleton scope
      */
     public static void bindSpecificComponent(final AbstractBinder binder,
                                              final Injector injector,
                                              final Class<?> type,
                                              final Class<?> specificType,
-                                             final boolean hkManaged,
+                                             final boolean jerseyManaged,
                                              final boolean singleton) {
         // resolve generics of specific type
         final GenericsContext context = GenericsResolver.resolve(type).type(specificType);
@@ -151,7 +151,7 @@ public final class JerseyBinding {
         final Type[] generics = genericTypes.toArray(new Type[0]);
         final Type bindingType = generics.length > 0 ? new ParameterizedTypeImpl(specificType, generics)
                 : specificType;
-        if (hkManaged) {
+        if (jerseyManaged) {
             optionalSingleton(
                     binder.bind(type).to(type).to(bindingType),
                     singleton);

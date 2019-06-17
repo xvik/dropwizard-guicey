@@ -16,9 +16,9 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledByEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.hk.HK2ExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
@@ -155,24 +155,24 @@ public final class LifecycleSupport {
     }
 
 
-    public void hk2Configuration(final ServiceLocator locator) {
-        broadcast(new HK2ConfigurationEvent(options, bootstrap,
+    public void jerseyConfiguration(final ServiceLocator locator) {
+        broadcast(new JerseyConfigurationEvent(options, bootstrap,
                 configuration, configurationTree, environment, injector, locator));
         this.locator = locator;
     }
 
 
-    public void hk2ExtensionsInstalled(final Class<? extends FeatureInstaller> installer,
-                                       final List<Class<?>> installed) {
+    public void jerseyExtensionsInstalled(final Class<? extends FeatureInstaller> installer,
+                                          final List<Class<?>> installed) {
         if (installed != null && !installed.isEmpty()) {
-            broadcast(new HK2ExtensionsInstalledByEvent(options, bootstrap,
+            broadcast(new JerseyExtensionsInstalledByEvent(options, bootstrap,
                     configuration, configurationTree, environment, injector, locator, installer, installed));
         }
     }
 
-    public void hk2ExtensionsInstalled(final List<Class<?>> extensions) {
+    public void jerseyExtensionsInstalled(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
-            broadcast(new HK2ExtensionsInstalledEvent(options, bootstrap,
+            broadcast(new JerseyExtensionsInstalledEvent(options, bootstrap,
                     configuration, configurationTree, environment, injector, locator, extensions));
         }
     }

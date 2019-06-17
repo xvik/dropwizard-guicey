@@ -24,7 +24,9 @@
     - A lot of guicey lifecycle events obviously changed        
     - Removed GuiceyOptions.ConfigureFromDropwizardBundles option because it's useless with new bundles lifecycle.
         (if required, the same behaviour may be implemented with custom bundles lookup)
-* Remove GuiceyOptions.BindConfigurationInterfaces option (interfaces are already bound with @Config qualifier)                          
+* Remove GuiceyOptions.BindConfigurationInterfaces option (interfaces are already bound with @Config qualifier)
+* (breaking) Rename HK2 mentions into jersey (because now jersey is not tied to hk2)
+    - @HK2Managed renamed to @JerseyManaged                          
 
 Main breaking changes were caused by:
  - jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.

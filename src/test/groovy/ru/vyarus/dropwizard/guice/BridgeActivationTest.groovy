@@ -9,7 +9,7 @@ import io.dropwizard.testing.junit.DropwizardAppRule
 import org.junit.Rule
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
 import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -74,7 +74,7 @@ class BridgeActivationTest extends Specification {
     }
 
     @Path("/sample/")
-    @HK2Managed
+    @JerseyManaged
     static class HkService {
 
         Injector injector

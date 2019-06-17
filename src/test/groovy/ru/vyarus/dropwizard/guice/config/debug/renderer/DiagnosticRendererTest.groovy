@@ -4,7 +4,6 @@ import com.google.common.collect.Lists
 import com.google.inject.Binder
 import com.google.inject.Module
 import io.dropwizard.Application
-import io.dropwizard.Bundle
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
@@ -20,7 +19,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
-import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed
+import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
@@ -64,7 +63,7 @@ class DiagnosticRendererTest extends Specification {
             HK2DebugFeature              (r.v.d.g.m.j.d.service)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
             LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
-            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
+            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *JERSEY
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
@@ -109,7 +108,7 @@ class DiagnosticRendererTest extends Specification {
         jerseyprovider       (r.v.d.g.m.i.f.j.p.JerseyProviderInstaller)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
             LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
-            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
+            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *JERSEY
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
@@ -231,7 +230,7 @@ class DiagnosticRendererTest extends Specification {
             HK2DebugFeature              (r.v.d.g.m.j.d.service)
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)
             LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
-            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
+            HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *JERSEY
             FooBundleResource            (r.v.d.g.d.s.bundle)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
@@ -247,7 +246,7 @@ class DiagnosticRendererTest extends Specification {
 
     EXTENSIONS =
         LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
-        HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
+        HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *JERSEY
         XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleResource            (r.v.d.g.d.s.bundle)
         HK2DebugFeature              (r.v.d.g.m.j.d.service)
@@ -263,7 +262,7 @@ class DiagnosticRendererTest extends Specification {
 
     EXTENSIONS =
         LazyExtension                (r.v.d.g.c.d.r.DiagnosticRendererTest) *LAZY
-        HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *HK2
+        HKExtension                  (r.v.d.g.c.d.r.DiagnosticRendererTest) *JERSEY
         XExt                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleResource            (r.v.d.g.d.s.bundle)
         HK2DebugFeature              (r.v.d.g.m.j.d.service)
@@ -350,7 +349,7 @@ class DiagnosticRendererTest extends Specification {
     @Path("/lazy")
     static class LazyExtension {}
 
-    @HK2Managed
+    @JerseyManaged
     @Path("/hk")
     static class HKExtension {}
 

@@ -46,8 +46,8 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * <li>SCAN when extension found by classpath scan</li>
  * <li>LAZY when {@link ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding}
  * annotation set</li>
- * <li>HK2 when extension managed by HK2 (annotated with
- * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed})</li>
+ * <li>JERSEY when extension managed by jersey (annotated with
+ * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged})</li>
  * </ul>
  * <p>
  * Guice modules are rendered by type in registration order. OVERRIDE marker may appear if module was
@@ -226,8 +226,8 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         if (einfo.isLazy()) {
             markers.add("LAZY");
         }
-        if (einfo.isHk2Managed()) {
-            markers.add("HK2");
+        if (einfo.isJerseyManaged()) {
+            markers.add("JERSEY");
         }
         return renderClassLine(extension, markers);
     }

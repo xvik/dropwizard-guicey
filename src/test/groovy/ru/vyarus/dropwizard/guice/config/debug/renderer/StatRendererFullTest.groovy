@@ -42,7 +42,7 @@ class StatRendererFullTest extends BaseDiagnosticTest {
     │   ├── from 6 guice modules
     │   └── 3 extensions installed in 3.571 ms
     │
-    ├── [0.30%] HK2 bridged in 1.397 ms
+    ├── [0.30%] JERSEY bridged in 1.397 ms
     │   ├── using 2 jersey installers
     │   └── 2 jersey extensions installed in 579.3 μs
     │
@@ -77,7 +77,7 @@ class StatRendererFullTest extends BaseDiagnosticTest {
         render.contains("from 6 guice modules")
         render.contains("3 extensions installed in")
 
-        render.contains("] HK2 bridged in ")
+        render.contains("] JERSEY bridged in ")
         render.contains("using 2 jersey installers")
         render.contains("2 jersey extensions installed in")
 
