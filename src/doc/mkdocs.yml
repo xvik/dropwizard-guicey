@@ -97,6 +97,7 @@ nav:
       - JDBI: extras/jdbi.md
       - JDBI3: extras/jdbi3.md
       - SPA: extras/spa.md
+      - Server Pages: extras/gsp.md
     - About:
       - Compatibility: about/compatibility.md
       - Release notes: about/history.md
