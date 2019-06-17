@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
 public enum Stat {
 
     /**
-     * Overall guicey startup time (including hk part). All other timers represents this timer detalisation.
+     * Overall guicey startup time (including hk part). All other timers represents this timer detalization.
      */
     GuiceyTime(true),
     /**
@@ -28,29 +28,28 @@ public enum Stat {
      */
     ScanClassesCount(false),
     /**
-     * Bundles resolution and creation time.
+     * Bundles resolution, creation and starting time (combined from both configuration and run phases).
      */
     BundleTime(true),
     /**
-     * Bundles resolution time only (lookup mechanism and searching in dw bundles (if enabled)).
+     * Bundles resolution time only (lookup mechanism).
      * Part of {@link #BundleTime}.
      */
     BundleResolutionTime(true),
     /**
-     * Guice injector creation time.
-     */
-    InjectorCreationTime(true),
-    /**
-     * Installers resolution and instantiation time. Part of {@link #InjectorCreationTime}.
+     * Installers resolution and instantiation time.
      */
     InstallersTime(true),
     /**
      * Time spent on extensions resolution (matching all extension classes with configured installers ).
      * Does not contain classpath scan time, because already use cached scan result (actual scan performed
-     * either for commands search or for installers search).
-     * Part of {@link #InjectorCreationTime}.
+     * before initializations).
      */
     ExtensionsRecognitionTime(true),
+    /**
+     * Guice injector creation time.
+     */
+    InjectorCreationTime(true),
     /**
      * Time spent installing extensions with registered installers.
      * Part of {@link #InjectorCreationTime}.

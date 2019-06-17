@@ -61,6 +61,7 @@ public class GuiceyInitializer {
         this.bootstrap = bootstrap;
         this.context = context;
         final String[] packages = context.option(ScanPackages);
+        // classpath scan performed immediately (if required)
         this.scanner = packages.length > 0
                 ? new ClasspathScanner(Sets.newHashSet(Arrays.asList(packages)), context.stat()) : null;
     }

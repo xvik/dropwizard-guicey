@@ -54,8 +54,10 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         long remaining = info.getStats().time(GuiceyTime);
         final double percent = remaining / 100d;
         remaining -= renderClasspathScanInfo(root, hideTiny, percent);
-        remaining -= renderCommandsRegistration(root, hideTiny, percent);
         remaining -= renderBundlesProcessing(root, hideTiny, percent);
+        remaining -= renderCommandsRegistration(root, hideTiny, percent);
+        remaining -= renderInstallersRegistration(root, hideTiny, percent);
+        remaining -= renderExtensionsRegistration(root, hideTiny, percent);
         remaining -= renderInjectorCreation(root, percent);
         remaining -= renderHkPart(root, hideTiny, percent);
         if (show(hideTiny, remaining)) {
@@ -63,19 +65,18 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         }
     }
 
-    private long renderCommandsRegistration(final TreeNode root, final boolean hideTiny, final double percent) {
-        final long command = info.getStats().time(CommandTime);
-        // most likely if commands search wasn't register then processing time will be less then 1 ms and so
-        // no commands processing will be shown
-        if (show(hideTiny, command)) {
-            final TreeNode node = root.child("[%.2g%%] COMMANDS processed in %s",
-                    command / percent, info.getStats().humanTime(CommandTime));
-            final int registered = info.getCommands().size();
-            if (registered > 0) {
-                node.child("registered %s commands", registered);
-            }
+    private long renderClasspathScanInfo(final TreeNode root, final boolean hideTiny, final double percent) {
+        final long scan = info.getStats().time(ScanTime);
+        if (show(hideTiny, scan)) {
+            final TreeNode node = root.child("[%.2g%%] CLASSPATH scanned in %s",
+                    scan / percent, info.getStats().humanTime(ScanTime));
+            final int classes = info.getStats().count(ScanClassesCount);
+            node.child("scanned %s classes", classes);
+            final int recognized = info.getData().getItems(Filters.fromScan()).size();
+            node.child("recognized %s classes (%.2g%% of scanned)",
+                    recognized, recognized / (classes / 100f));
         }
-        return command;
+        return scan;
     }
 
     private long renderBundlesProcessing(final TreeNode root, final boolean hideTiny, final double percent) {
@@ -95,18 +96,44 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         return bundle;
     }
 
-    private long renderClasspathScanInfo(final TreeNode root, final boolean hideTiny, final double percent) {
-        final long scan = info.getStats().time(ScanTime);
-        if (show(hideTiny, scan)) {
-            final TreeNode node = root.child("[%.2g%%] CLASSPATH scanned in %s",
-                    scan / percent, info.getStats().humanTime(ScanTime));
-            final int classes = info.getStats().count(ScanClassesCount);
-            node.child("scanned %s classes", classes);
-            final int recognized = info.getData().getItems(Filters.fromScan()).size();
-            node.child("recognized %s classes (%.2g%% of scanned)",
-                    recognized, recognized / (classes / 100f));
+    private long renderCommandsRegistration(final TreeNode root, final boolean hideTiny, final double percent) {
+        final long command = info.getStats().time(CommandTime);
+        // most likely if commands search wasn't register then processing time will be less then 1 ms and so
+        // no commands processing will be shown
+        if (show(hideTiny, command)) {
+            final TreeNode node = root.child("[%.2g%%] COMMANDS processed in %s",
+                    command / percent, info.getStats().humanTime(CommandTime));
+            final int registered = info.getCommands().size();
+            if (registered > 0) {
+                node.child("registered %s commands", registered);
+            }
         }
-        return scan;
+        return command;
+    }
+
+    private long renderInstallersRegistration(final TreeNode root, final boolean hideTiny, final double percent) {
+        final long installers = info.getStats().time(InstallersTime);
+        if (show(hideTiny, installers)) {
+            final TreeNode node = root.child("[%.2g%%] INSTALLERS initialized in %s",
+                    installers / percent, info.getStats().humanTime(InstallersTime));
+            final int registered = info.getInstallers().size();
+            if (registered > 0) {
+                node.child("registered %s installers", registered);
+            }
+        }
+        return installers;
+    }
+
+    private long renderExtensionsRegistration(final TreeNode root, final boolean hideTiny, final double percent) {
+        final long extensions = info.getStats().time(ExtensionsRecognitionTime);
+        if (show(hideTiny, extensions)) {
+            final TreeNode node = root.child("[%.2g%%] EXTENSIONS initialized in %s",
+                    extensions / percent, info.getStats().humanTime(ExtensionsRecognitionTime));
+
+            final int manual = info.getExtensions().size() - info.getExtensionsFromScan().size();
+            node.child("from %s classes", info.getStats().count(ScanClassesCount) + manual);
+        }
+        return extensions;
     }
 
     private long renderInjectorCreation(final TreeNode root, final double percent) {
@@ -114,19 +141,10 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         final TreeNode node = root.child("[%.2g%%] INJECTOR created in %s",
                 injector / percent, info.getStats().humanTime(InjectorCreationTime));
 
-        node.child("installers prepared in %s", info.getStats().humanTime(InstallersTime));
-        renderRecognition(
-                node.child("extensions recognized in %s", info.getStats().humanTime(ExtensionsRecognitionTime))
-        );
+        node.child("from %s guice modules", info.getModules().size());
         node.child("%s extensions installed in %s", info.getExtensions().size(),
                 info.getStats().humanTime(ExtensionsInstallationTime));
         return injector;
-    }
-
-    private void renderRecognition(final TreeNode root) {
-        root.child("using %s installers", info.getInstallers().size());
-        final int manual = info.getExtensions().size() - info.getExtensionsFromScan().size();
-        root.child("from %s classes", info.getStats().count(ScanClassesCount) + manual);
     }
 
     private long renderHkPart(final TreeNode root, final boolean hideTiny, final double percent) {

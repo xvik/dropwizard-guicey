@@ -23,15 +23,11 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.Diagnos
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
-import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
-import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
-import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle;
+import ru.vyarus.dropwizard.guice.module.installer.*;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ModulesSupport;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
-import ru.vyarus.dropwizard.guice.module.installer.GuiceyInitializer;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
