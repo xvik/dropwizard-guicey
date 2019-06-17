@@ -178,8 +178,9 @@ public final class JerseyBinding {
      * @see ru.vyarus.dropwizard.guice.injector.lookup.InjectorProvider
      */
     public static <T> ScopedBindingBuilder bindJerseyComponent(final Binder binder, final Provider<Injector> provider,
+                                                               final Class<T> type) {
 
-           //todo not needed for guice                                                    final Class<T> type) {
+           //todo not needed for guice
 //        return binder.bind(type).toProvider(new JerseyComponentProvider<>(provider, type));
         return null;
     }

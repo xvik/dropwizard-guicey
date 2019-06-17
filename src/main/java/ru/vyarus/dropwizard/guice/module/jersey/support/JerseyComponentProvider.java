@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.jersey.support;
 
 import com.google.inject.Injector;
-import org.glassfish.hk2.api.ProxyCtl;
 import org.glassfish.jersey.internal.inject.InjectionManager;
 
 import javax.inject.Provider;
@@ -32,8 +31,10 @@ public class JerseyComponentProvider<T> implements Provider<T> {
         // for example: if guice request scope transfer used ServletScopes.transferRequest and we try to obtain
         // it will try to use proxy instance in separate thread which will perform HK2 checks for request scope
         // and fail. Instead, we always resolve actual instance and let guice properly control scoping
-        final T res = injector.get().getInstance(InjectionManager.class).getInstance(type);
-        return res instanceof ProxyCtl ? (T) ((ProxyCtl) res).__make() : res;
+//        final T res = injector.get().getInstance(InjectionManager.class).getInstance(type);
+//        return res instanceof ProxyCtl ? (T) ((ProxyCtl) res).__make() : res;
+        //todo remove class
+        return null;
     }
 
     @Override

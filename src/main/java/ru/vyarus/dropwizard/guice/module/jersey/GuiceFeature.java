@@ -59,7 +59,7 @@ public class GuiceFeature implements Feature, Provider<InjectionManager> {
         final Injector injector = this.provider.get();
         // todo required?
 //        context.register(new InstallerBinder(injector, tracker, lifecycle));
-        tracker.stopHkTimer(HKTime);
+        tracker.stopJerseyTimer(JerseyTime);
         return true;
     }
 
