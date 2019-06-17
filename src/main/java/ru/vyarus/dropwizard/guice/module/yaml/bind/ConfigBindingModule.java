@@ -21,9 +21,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath;
  * {@code @inject @Config("path") List val} will not).
  * <p>
  * Root configuration objects are bound with and without qualifier, except root interfaces which are bound
- * with qualifier only by default. Direct interfaces binding could be enabled with
- * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#BindConfigurationInterfaces}, but this is deprecated behaviour
- * (remained only for compatibility reasons).
+ * with qualifier only.
  * <p>
  * {@link ConfigurationTree} instance is also bound directly to be used for custom configuration analysis.
  *
@@ -36,14 +34,10 @@ public class ConfigBindingModule extends AbstractModule {
 
     private final Configuration configuration;
     private final ConfigurationTree tree;
-    private final boolean bindInterfaces;
 
-    public ConfigBindingModule(final Configuration configuration,
-                               final ConfigurationTree tree,
-                               final boolean bindInterfaces) {
+    public ConfigBindingModule(final Configuration configuration, final ConfigurationTree tree) {
         this.configuration = configuration;
         this.tree = tree;
-        this.bindInterfaces = bindInterfaces;
     }
 
     @Override
@@ -64,7 +58,7 @@ public class ConfigBindingModule extends AbstractModule {
     private void bindRootTypes() {
         for (Class type : tree.getRootTypes()) {
             // bind root configuration classes both with and without qualifier
-            if (!type.isInterface() || bindInterfaces) {
+            if (!type.isInterface()) {
                 // bind interface as type only when it's allowed
                 bind(type).toInstance(configuration);
             }

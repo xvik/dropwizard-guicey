@@ -15,7 +15,6 @@ class ComplexConfigApp extends Application<ConfigLevel2> {
     @Override
     void initialize(Bootstrap<ConfigLevel2> bootstrap) {
         bootstrap.addBundle(GuiceBundle.builder()
-                .bindConfigurationInterfaces()
                 .build())
     }
 

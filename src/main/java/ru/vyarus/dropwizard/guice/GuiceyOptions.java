@@ -51,19 +51,6 @@ public enum GuiceyOptions implements Option {
     UseCoreInstallers(Boolean.class, true),
 
     /**
-     * Bind all direct interfaces implemented by configuration objects to configuration instance in guice context.
-     * Disabled by default.
-     * <p>
-     * Note: interfaces are always bound with qualifier: {@code @Inject @Config ConfInterface config}.
-     * Option only controls if extra binding must be done without qualifier.
-     *
-     * @see GuiceBundle.Builder#bindConfigurationInterfaces()
-     * @deprecated remains for compatibility, instead bind configuration interfaces with {@code @Config} qualifier
-     */
-    @Deprecated
-    BindConfigurationInterfaces(Boolean.class, false),
-
-    /**
      * Introspect configuration object (using jackson serialization) and bind all internal values by path
      * ({@code @Inject @Config("path.to.value") Integer value}). Recognize unique sub configuration objects
      * for direct binding ({@code @Inject @Config SubConfig conf}). Enabled by default.

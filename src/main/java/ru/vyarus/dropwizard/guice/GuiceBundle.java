@@ -619,27 +619,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Enables binding of interfaces implemented by configuration class to configuration instance
-         * in guice context. Only interfaces directly implemented by any configuration class in configuration
-         * classes hierarchy. Interfaces from java.* and groovy.*  packages are skipped.
-         * This is useful to support {@code HasSomeConfiguration} interfaces convention.
-         * <p>
-         * When disabled, only classes in configuration hierarchy are registered (e.g. in case
-         * {@code MyConfiguration extends MyBaseConfiguration extends Configuration}, all 3 classes would be bound.
-         * <p>
-         * Disabled by default.
-         *
-         * @return builder instance for chained calls
-         * @see GuiceyOptions#BindConfigurationInterfaces
-         * @deprecated remains for compatibility, instead bind configuration interfaces with {@code @Config}
-         * qualifier (always enabled)
-         */
-        @Deprecated
-        public Builder<T> bindConfigurationInterfaces() {
-            return option(BindConfigurationInterfaces, true);
-        }
-
-        /**
          * Enables strict control of beans instantiation context: all beans must be instantiated by guice, except
          * beans annotated with {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.HK2Managed}.
          * When bean instantiated in wrong context exception would be thrown.

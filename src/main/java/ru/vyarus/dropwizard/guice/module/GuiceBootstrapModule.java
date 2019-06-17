@@ -17,8 +17,6 @@ import ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule;
 
 import javax.inject.Singleton;
 
-import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationInterfaces;
-
 /**
  * Bootstrap integration guice module.
  * <ul>
@@ -36,7 +34,6 @@ import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationInterfac
  * <li>All interfaces implemented directly by classes in configuration hierarchy except interfaces from
  * 'java' package (e.g. {@code MyBaseConfiguration implements HasMyOtherConfig})</li>
  * </ul>
- * Interface binding could be disabled using {@code bindConfigurationInterfaces} bundle option.
  *
  * @param <T> configuration type
  * @author Vyacheslav Rusakov
@@ -75,7 +72,6 @@ public class GuiceBootstrapModule<T extends Configuration> extends DropwizardAwa
     private void bindEnvironment() {
         bind(Bootstrap.class).toInstance(bootstrap());
         bind(Environment.class).toInstance(environment());
-        install(new ConfigBindingModule(configuration(), configurationTree(),
-                context.option(BindConfigurationInterfaces)));
+        install(new ConfigBindingModule(configuration(), configurationTree()));
     }
 }
