@@ -1,7 +1,7 @@
 # Guicey Server Pages
 
 !!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-gsp) module
+    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-server-pages) module
 
 Brings the simplicity of JSP to dropwizard-views. 
 Basement for pluggable and extendable ui applications (like dashboards).
@@ -130,7 +130,7 @@ dropwizard-views such things should be implemented manually, which is not good f
 ## Setup 
 
 [![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion)
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-gsp.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-gsp)
+[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-server-pages.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-gsp)
 
 Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 
 
@@ -139,7 +139,7 @@ Maven:
 ```xml
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
-  <artifactId>guicey-gsp</artifactId>
+  <artifactId>guicey-server-pages</artifactId>
   <version>0.7.0</version>
 </dependency>
 ```
@@ -147,7 +147,7 @@ Maven:
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-gsp:0.7.0'
+compile 'ru.vyarus.guicey:guicey-server-pages:0.7.0'
 ```
 
 See the most recent version in the badge above.
