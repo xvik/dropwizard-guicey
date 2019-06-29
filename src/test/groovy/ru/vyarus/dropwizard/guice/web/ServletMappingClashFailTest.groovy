@@ -33,7 +33,6 @@ class ServletMappingClashFailTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .useWebInstallers()
                     .extensions(Servlet1, Servlet2)
                     .option(DenyServletRegistrationWithClash, true)
                     .build())

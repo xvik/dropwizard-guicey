@@ -31,7 +31,7 @@ class BootstrapMethodsTest extends AbstractTest {
         when: "application started"
 
         then: "all registered installers found"
-        info.installers.size() == 7
+        info.installers.size() == 10
 
         then: "task found"
         info.getExtensions(TaskInstaller) == [DummyTask]

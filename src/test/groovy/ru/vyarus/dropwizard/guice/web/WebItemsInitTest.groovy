@@ -58,7 +58,6 @@ class WebItemsInitTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .enableAutoConfig(InitParamsFilter.package.name)
-                    .useWebInstallers()
                     .build())
         }
 

@@ -36,7 +36,6 @@ class AsyncServletTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .useWebInstallers()
                     .extensions(AsyncServlet)
                     .build())
         }

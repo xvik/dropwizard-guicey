@@ -18,7 +18,6 @@ class ServletsApplication extends Application<TestConfiguration> {
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.web.feature")
-                .useWebInstallers()
                 .modules(new WebModule(), new BindModule(DummyService))
                 .build()
         );

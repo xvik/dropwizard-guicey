@@ -412,30 +412,14 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Disables automatic {@link CoreInstallersBundle} registration (no installers will be registered by default).
+         * Disables automatic {@link CoreInstallersBundle} and {@link WebInstallersBundle} registration
+         * (no installers will be registered by default).
          *
          * @return builder instance for chained calls
          * @see GuiceyOptions#UseCoreInstallers
          */
         public Builder<T> noDefaultInstallers() {
             return option(UseCoreInstallers, false);
-        }
-
-        /**
-         * Shortcut to install {@link WebInstallersBundle}. Web installers are not available by default to
-         * reduce default installers count. Web installers use default servlet api annotations to install
-         * guice-aware servlets, filters and listeners. In many cases it will be more useful than using
-         * guice servlet modules.
-         * <p>
-         * When use web installers to declare servlets and filters, guice servlet modules support may be disabled
-         * with {@link #noGuiceFilter()}. This will safe some startup time and removed extra guice filters.
-         *
-         * @return builder instance for chained calls
-         * @see WebInstallersBundle
-         */
-        public Builder<T> useWebInstallers() {
-            bundle.context.registerBundles(new WebInstallersBundle());
-            return this;
         }
 
         /**
@@ -447,9 +431,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * objects provider injections still may be used in resources (will work through HK2 provider).
          * <p>
          * Guice servlets initialization took ~50ms, so injector creation will be a bit faster after disabling.
-         * <p>
-         * Enable {@link #useWebInstallers()} web installers to use instead of guice servlet modules for servlets
-         * and filters registration.
          *
          * @return builder instance for chained calls
          * @see GuiceyOptions#GuiceFilterRegistration

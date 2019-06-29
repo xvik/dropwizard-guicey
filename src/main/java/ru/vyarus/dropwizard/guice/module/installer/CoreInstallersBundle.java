@@ -13,7 +13,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.Jerse
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller;
 
 /**
- * Core installers bundle.
+ * Core installers bundle. Installs {@link WebInstallersBundle}.
  *
  * @author Vyacheslav Rusakov
  * @since 02.08.2015
@@ -33,5 +33,6 @@ public class CoreInstallersBundle implements GuiceyBundle {
                 TaskInstaller.class,
                 PluginInstaller.class
         );
+        bootstrap.bundles(new WebInstallersBundle());
     }
 }

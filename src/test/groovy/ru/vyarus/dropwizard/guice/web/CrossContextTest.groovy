@@ -48,7 +48,6 @@ class CrossContextTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .useWebInstallers()
                     .extensions(CrossContextFilter, CrossContextServlet, CrossContextListener)
                     .build())
         }

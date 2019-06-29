@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
+import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
@@ -17,6 +18,9 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureI
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebFilterInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebServletInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListenerInstaller
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
@@ -38,7 +42,7 @@ class AutoScanModeDiagnosticTest extends BaseDiagnosticTest {
         info.commands as Set == [Cli, EnvCommand] as Set
 
         and: "correct bundles info"
-        info.bundles == [CoreInstallersBundle]
+        info.bundles == [CoreInstallersBundle, WebInstallersBundle]
         info.bundlesFromLookup.isEmpty()
 
         and: "correct installers info"
@@ -50,7 +54,10 @@ class AutoScanModeDiagnosticTest extends BaseDiagnosticTest {
                        EagerSingletonInstaller,
                        HealthCheckInstaller,
                        TaskInstaller,
-                       PluginInstaller]
+                       PluginInstaller,
+                       WebFilterInstaller,
+                       WebServletInstaller,
+                       WebListenerInstaller]
         info.installers as Set == classes as Set
         info.installersDisabled == [LifeCycleInstaller]
         info.installersFromScan == [FooInstaller]
@@ -64,7 +71,7 @@ class AutoScanModeDiagnosticTest extends BaseDiagnosticTest {
         info.modules as Set == [FooModule, GuiceBootstrapModule] as Set
 
         and: "correct scopes"
-        info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle] as Set
+        info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle, WebInstallersBundle] as Set
         info.getItemsByScope(ConfigScope.Application) as Set == [CoreInstallersBundle, FooModule, GuiceBootstrapModule] as Set
         info.getItemsByScope(ConfigScope.ClasspathScan) as Set == [FooInstaller, FooResource, EnvCommand, Cli] as Set
 

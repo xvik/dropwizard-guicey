@@ -130,7 +130,7 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         protected void bundlesInitialized(BundlesInitializedEvent event) {
             confChecks(event)
-            assert event.getBundles().size() == 3
+            assert event.getBundles().size() == 4
             assert event.getDisabled().size() == 1
         }
 
@@ -145,7 +145,7 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         protected void installersResolved(InstallersResolvedEvent event) {
             confChecks(event)
-            assert event.installers.size() == 8
+            assert event.installers.size() == 11
             assert event.disabled.size() == 1
         }
 
@@ -170,7 +170,7 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         protected void bundlesStarted(BundlesStartedEvent event) {
             runChecks(event)
-            assert event.getBundles().size() == 3
+            assert event.getBundles().size() == 4
         }
 
         @Override

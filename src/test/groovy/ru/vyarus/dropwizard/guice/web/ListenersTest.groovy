@@ -34,7 +34,6 @@ class ListenersTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .enableAutoConfig(ContextListener.package.name)
-                    .useWebInstallers()
                     .build())
         }
 

@@ -21,7 +21,6 @@ class OrderedInstallersApplication extends Application<TestConfiguration> {
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.installerorder")
-                .useWebInstallers()
                 // at least one resource required
                 .extensions(DummyResource)
                 .modules(new BindModule(DummyService))

@@ -82,7 +82,12 @@ class ContextTreeRendererTest extends Specification {
     │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
     │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
     │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
+    │   ├── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
+    │   │
+    │   └── WebInstallersBundle          (r.v.d.g.m.installer)
+    │       ├── installer  WebFilterInstaller           (r.v.d.g.m.i.f.web)
+    │       ├── installer  WebServletInstaller          (r.v.d.g.m.i.f.web)
+    │       └── installer  WebListenerInstaller         (r.v.d.g.m.i.f.w.listener)
     │
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
@@ -131,7 +136,12 @@ class ContextTreeRendererTest extends Specification {
     │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
     │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
     │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
+    │   ├── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
+    │   │
+    │   └── WebInstallersBundle          (r.v.d.g.m.installer)
+    │       ├── installer  WebFilterInstaller           (r.v.d.g.m.i.f.web)
+    │       ├── installer  WebServletInstaller          (r.v.d.g.m.i.f.web)
+    │       └── installer  WebListenerInstaller         (r.v.d.g.m.i.f.w.listener)
     │
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
@@ -165,7 +175,9 @@ class ContextTreeRendererTest extends Specification {
     ├── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
     ├── DisabledBundle               (r.v.d.g.c.d.r.ContextTreeRendererTest) *DISABLED
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)
+    │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
+    │   └── WebInstallersBundle          (r.v.d.g.m.installer)
     │
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
@@ -252,7 +264,12 @@ class ContextTreeRendererTest extends Specification {
     │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
     │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
     │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
+    │   ├── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
+    │   │
+    │   └── WebInstallersBundle          (r.v.d.g.m.installer)
+    │       ├── installer  WebFilterInstaller           (r.v.d.g.m.i.f.web)
+    │       ├── installer  WebServletInstaller          (r.v.d.g.m.i.f.web)
+    │       └── installer  WebListenerInstaller         (r.v.d.g.m.i.f.w.listener)
     │
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
@@ -294,7 +311,12 @@ class ContextTreeRendererTest extends Specification {
     │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
     │   ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)
     │   ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)
-    │   └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
+    │   ├── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)
+    │   │
+    │   └── WebInstallersBundle          (r.v.d.g.m.installer)
+    │       ├── installer  WebFilterInstaller           (r.v.d.g.m.i.f.web)
+    │       ├── installer  WebServletInstaller          (r.v.d.g.m.i.f.web)
+    │       └── installer  WebListenerInstaller         (r.v.d.g.m.i.f.w.listener)
     │
     ├── CLASSPATH SCAN
     │   └── installer  FooInstaller                 (r.v.d.g.d.s.features)
@@ -330,7 +352,8 @@ class ContextTreeRendererTest extends Specification {
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
     │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
-    │   └── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
+    │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
+    │   └── WebInstallersBundle          (r.v.d.g.m.installer)
     │
     ├── BUNDLES LOOKUP
     │   └── FooBundle                    (r.v.d.g.d.s.bundle)       *IGNORED
