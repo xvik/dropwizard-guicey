@@ -48,6 +48,7 @@ public class GuiceyBootstrap {
      * Note: application is already in run phase, so it's too late to configure dropwizard bootstrap object. Object
      * provided just for consultation.
      *
+     * @param <T> configuration type
      * @return dropwizard bootstrap instance
      */
     @SuppressWarnings("unchecked")

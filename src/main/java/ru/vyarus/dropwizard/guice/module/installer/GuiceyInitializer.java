@@ -68,6 +68,8 @@ public class GuiceyInitializer {
 
     /**
      * Resolve bundles and initialize.
+     *
+     * @param bundleLookup bundle lookup object
      */
     public void initializeBundles(final GuiceyBundleLookup bundleLookup) {
         final Stopwatch timer = context.stat().timer(BundleTime);
