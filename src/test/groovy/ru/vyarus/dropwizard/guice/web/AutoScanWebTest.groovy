@@ -64,7 +64,6 @@ class AutoScanWebTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .useWebInstallers()
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.web.feature")
                     .modules(new BindModule(DummyService))
                     .build())

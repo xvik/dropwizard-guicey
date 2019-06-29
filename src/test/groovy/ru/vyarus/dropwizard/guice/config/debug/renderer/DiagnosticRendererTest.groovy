@@ -56,6 +56,7 @@ class DiagnosticRendererTest extends Specification {
         HK2DebugBundle               (r.v.d.g.m.j.debug)
         XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
+            WebInstallersBundle          (r.v.d.g.m.installer)
 
 
     INSTALLERS and EXTENSIONS in processing order =
@@ -99,6 +100,7 @@ class DiagnosticRendererTest extends Specification {
         HK2DebugBundle               (r.v.d.g.m.j.debug)
         XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
+            WebInstallersBundle          (r.v.d.g.m.installer)
         -DisabledBundle              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 
 
@@ -116,6 +118,9 @@ class DiagnosticRendererTest extends Specification {
         healthcheck          (r.v.d.g.m.i.f.h.HealthCheckInstaller)
         task                 (r.v.d.g.m.i.feature.TaskInstaller)
         plugin               (r.v.d.g.m.i.f.plugin.PluginInstaller)
+        webservlet           (r.v.d.g.m.i.f.w.WebServletInstaller)
+        webfilter            (r.v.d.g.m.i.f.web.WebFilterInstaller)
+        weblistener          (r.v.d.g.m.i.f.w.l.WebListenerInstaller)
         foobundle            (r.v.d.g.d.s.b.FooBundleInstaller)
         foo                  (r.v.d.g.d.s.features.FooInstaller)    *SCAN
         -lifecycle           (r.v.d.g.m.i.f.LifeCycleInstaller)
@@ -151,6 +156,7 @@ class DiagnosticRendererTest extends Specification {
         HK2DebugBundle               (r.v.d.g.m.j.debug)
         XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
+            WebInstallersBundle          (r.v.d.g.m.installer)
 """ as String;
     }
 
@@ -166,6 +172,7 @@ class DiagnosticRendererTest extends Specification {
         HK2DebugBundle               (r.v.d.g.m.j.debug)
         XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
+            WebInstallersBundle          (r.v.d.g.m.installer)
         -DisabledBundle              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 """ as String;
     }
@@ -197,6 +204,9 @@ class DiagnosticRendererTest extends Specification {
         healthcheck          (r.v.d.g.m.i.f.h.HealthCheckInstaller)
         task                 (r.v.d.g.m.i.feature.TaskInstaller)
         plugin               (r.v.d.g.m.i.f.plugin.PluginInstaller)
+        webservlet           (r.v.d.g.m.i.f.w.WebServletInstaller)
+        webfilter            (r.v.d.g.m.i.f.web.WebFilterInstaller)
+        weblistener          (r.v.d.g.m.i.f.w.l.WebListenerInstaller)
         foobundle            (r.v.d.g.d.s.b.FooBundleInstaller)
         foo                  (r.v.d.g.d.s.features.FooInstaller)    *SCAN
 """ as String;

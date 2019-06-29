@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
+import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
@@ -21,6 +22,9 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureI
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebFilterInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebServletInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListenerInstaller
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
@@ -43,7 +47,7 @@ class AutoScanModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
 
         expect: "correct bundles info"
         // assigned in abstract test
-        info.bundles as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle, FooBundle, FooBundleRelativeBundle, CoreInstallersBundle] as Set
+        info.bundles as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle, FooBundle, FooBundleRelativeBundle, CoreInstallersBundle, WebInstallersBundle] as Set
         info.bundlesFromLookup as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle] as Set
 
         and: "correct installers info"
@@ -55,7 +59,10 @@ class AutoScanModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
                        EagerSingletonInstaller,
                        HealthCheckInstaller,
                        TaskInstaller,
-                       PluginInstaller]
+                       PluginInstaller,
+                       WebServletInstaller,
+                       WebFilterInstaller,
+                       WebListenerInstaller]
         info.installers as Set == classes as Set
         info.installersDisabled as Set == [LifeCycleInstaller, ManagedInstaller] as Set
         info.installersFromScan == [FooInstaller]
@@ -70,7 +77,7 @@ class AutoScanModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
         info.modules as Set == [FooModule, FooBundleModule, GuiceBootstrapModule, HK2DebugBundle.HK2DebugModule, GuiceRestrictedConfigBundle.GRestrictModule] as Set
 
         and: "correct scopes"
-        info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle, FooBundle, GuiceRestrictedConfigBundle, HK2DebugBundle, GuiceyBundleLookup] as Set
+        info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle, WebInstallersBundle, FooBundle, GuiceRestrictedConfigBundle, HK2DebugBundle, GuiceyBundleLookup] as Set
         info.getItemsByScope(ConfigScope.Application) as Set == [CoreInstallersBundle, FooBundle, FooModule, GuiceBootstrapModule] as Set
         info.getItemsByScope(ConfigScope.ClasspathScan) as Set == [FooInstaller, FooResource] as Set
         info.getItemsByScope(FooBundle) as Set == [FooBundleInstaller, FooBundleResource, FooBundleModule, FooBundleRelativeBundle] as Set

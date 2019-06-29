@@ -50,7 +50,7 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(TestConfiguration))
 
         then: "all installers found"
-        info.installers.size() == 9
+        info.installers.size() == 12
 
         then: "command found"
         bootstrap.getCommands().size() == 2

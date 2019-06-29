@@ -60,7 +60,6 @@ class SessionListenerTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .useWebInstallers()
                     .extensions(SessionListener)
                     .build())
         }
@@ -76,7 +75,6 @@ class SessionListenerTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .useWebInstallers()
                     .extensions(SessionListener)
                     .option(DenySessionListenersWithoutSession, true)
                     .build())
@@ -98,7 +96,6 @@ class SessionListenerTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .useWebInstallers()
                     .extensions(SessionListener)
                     .build())
         }

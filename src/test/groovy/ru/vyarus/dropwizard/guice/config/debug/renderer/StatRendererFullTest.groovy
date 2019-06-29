@@ -62,13 +62,13 @@ class StatRendererFullTest extends BaseDiagnosticTest {
 
         render.contains("] BUNDLES")
         render.contains("2 resolved in")
-        render.contains("6 processed")
+        render.contains("7 processed")
 
         render.contains("] COMMANDS")
         render.contains("registered 2 commands")
 
         render.contains("] INSTALLERS")
-        render.contains("registered 9 installers")
+        render.contains("registered 12 installers")
 
         render.contains("] EXTENSIONS")
         render.contains("from 7 classes")

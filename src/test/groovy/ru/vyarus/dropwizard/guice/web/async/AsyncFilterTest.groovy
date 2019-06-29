@@ -39,7 +39,6 @@ class AsyncFilterTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .useWebInstallers()
                     .extensions(AsyncFilter)
                     .build())
         }

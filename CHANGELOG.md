@@ -1,4 +1,4 @@
-* Update to dropwizard 2.0.0-rc3
+* Update to dropwizard 2.0.0-rc4
     - (breaking in jersey 2.26)
         * Jersey `InjectionManager` now bound to guice context instead of hk2 `ServiceLocator` 
             (locator still can be retrieved from manager)
@@ -28,7 +28,9 @@
     - A lot of guicey lifecycle events obviously changed        
     - Removed GuiceyOptions.ConfigureFromDropwizardBundles option because it's useless with new bundles lifecycle.
         (if required, the same behaviour may be implemented with custom bundles lookup)
-* Remove GuiceyOptions.BindConfigurationInterfaces option (interfaces are already bound with @Config qualifier)                        
+* Remove `GuiceyOptions.BindConfigurationInterfaces` option (interfaces are already bound with `@Config` qualifier)
+* (breaking) Guicey web installers (`WebInstallersBundle`) enabled by default. 
+    `GuiceBundle.builder()#useWebInstallers()` option removed                        
 
 Main breaking changes were caused by:
  - jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.

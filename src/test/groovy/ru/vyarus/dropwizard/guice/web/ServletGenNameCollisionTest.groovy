@@ -39,7 +39,6 @@ class ServletGenNameCollisionTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .useWebInstallers()
                     .extensions(OServlet, Servlet)
                     .build())
         }

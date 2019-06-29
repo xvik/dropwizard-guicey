@@ -37,13 +37,13 @@ class StatRendererTest extends BaseDiagnosticTest {
     │
     ├── [9.2%] BUNDLES processed in 31.18 ms
     │   ├── 2 resolved in 15.00 ms
-    │   └── 6 processed
+    │   └── 7 processed
     │
     ├── [3.3%] COMMANDS processed in 11.87 ms
     │   └── registered 2 commands
     │
     ├── [4.5%] INSTALLERS initialized in 15.17 ms
-    │   └── registered 9 installers
+    │   └── registered 12 installers
     │
     ├── [1.5%] EXTENSIONS initialized in 5.029 ms
     │   └── from 7 classes
@@ -72,13 +72,13 @@ class StatRendererTest extends BaseDiagnosticTest {
 
         render.contains("] BUNDLES")
         render.contains("2 resolved in")
-        render.contains("6 processed")
+        render.contains("7 processed")
 
         render.contains("] COMMANDS")
         render.contains("registered 2 commands")
 
         render.contains("] INSTALLERS")
-        render.contains("registered 9 installers")
+        render.contains("registered 12 installers")
 
         render.contains("] EXTENSIONS")
         render.contains("from 7 classes")
@@ -106,8 +106,7 @@ class StatRendererTest extends BaseDiagnosticTest {
                     GuiceBundle.builder()
                             .enableAutoConfig(FooResource.package.name)
                             .searchCommands()
-                            .bundles(
-                            new FooBundle())
+                            .bundles(new FooBundle())
                             .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule())
                             .disableInstallers(LifeCycleInstaller)
                             .strictScopeControl()
