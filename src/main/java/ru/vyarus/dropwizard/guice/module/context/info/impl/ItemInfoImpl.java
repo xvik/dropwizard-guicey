@@ -1,11 +1,14 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
-import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Item info implementation.
@@ -16,8 +19,8 @@ import java.util.Set;
 public class ItemInfoImpl implements ItemInfo {
     private final ConfigItem itemType;
     private final Class<?> type;
-    private final Set<Class<?>> registeredBy = Sets.newLinkedHashSet();
-    private Class<?> registrationScope;
+    private final Set<Class<?>> registeredBy = new LinkedHashSet<>();
+    private final List<Class<?>> registrationScopes = new ArrayList<>();
     private int registrationAttempts;
 
     public ItemInfoImpl(final ConfigItem itemType, final Class<?> type) {
@@ -56,21 +59,21 @@ public class ItemInfoImpl implements ItemInfo {
     }
 
     @Override
-    public Class<?> getRegistrationScope() {
-        return registrationScope;
+    public List<Class<?>> getRegistrationScopes() {
+        return registrationScopes;
     }
 
     @Override
-    public ConfigScope getRegistrationScopeType() {
-        return ConfigScope.recognize(getRegistrationScope());
+    public List<ConfigScope> getRegistrationScopeTypes() {
+        return getRegistrationScopes().stream().map(ConfigScope::recognize).collect(Collectors.toList());
     }
 
     public void countRegistrationAttempt() {
         registrationAttempts++;
     }
 
-    public void setRegistrationScope(final Class<?> registrationScope) {
-        this.registrationScope = registrationScope;
+    public void addRegistrationScope(final Class<?> registrationScope) {
+        this.registrationScopes.add(registrationScope);
     }
 
     @Override

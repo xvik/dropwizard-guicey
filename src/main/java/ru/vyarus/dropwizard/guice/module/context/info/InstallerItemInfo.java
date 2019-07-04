@@ -10,6 +10,6 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.ScanSupport;
  * @author Vyacheslav Rusakov
  * @since 09.07.2016
  */
-public interface InstallerItemInfo extends ItemInfo, ScanSupport, DisableSupport {
+public interface InstallerItemInfo extends ClassItemInfo, ScanSupport, DisableSupport {
 
 }

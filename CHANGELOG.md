@@ -30,7 +30,21 @@
         (if required, the same behaviour may be implemented with custom bundles lookup)
 * Remove `GuiceyOptions.BindConfigurationInterfaces` option (interfaces are already bound with `@Config` qualifier)
 * (breaking) Guicey web installers (`WebInstallersBundle`) enabled by default. 
-    `GuiceBundle.builder()#useWebInstallers()` option removed                        
+    `GuiceBundle.builder()#useWebInstallers()` option removed
+* (breaking) Allow registration of multiple instances for guice modules and guicey bundles 
+    (multiple instances of the same class)
+    - New concept of `DuplicateConfigDetector` introduced, which decide if configuration items (of the same type) are duplicate.
+        In default implementation, only equal objects are considered duplicate (so to avoid
+        multiple installations of some bundle or module - implement properly equals method).
+        Custom duplicates detector could be registered with `GuiceBundle.Builder#duplicateConfigDetector()` and
+        used to filter duplicate registration of bundles or modules (without equals implementation).
+    - Legacy behaviour could be simulated with: `.duplicateConfigDetector(new LegacyModeDuplicatesDetector())`
+    - Due to multiple registration scopes configuration model changed (`ItemInfo`):
+        - "Class<?> getRegistrationScope()" is now "List<Class<?>> getRegistrationScopes()"
+        - "ConfigScope getRegistrationScopeType()" is now "List<ConfigScope> getRegistrationScopeTypes()"
+        - `ClassItemInfo` and `InstallerItemInfo` contain old (singular) method signatures 
+            (as class items could be registered just once)                                     
+
 
 Main breaking changes were caused by:
  - jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.

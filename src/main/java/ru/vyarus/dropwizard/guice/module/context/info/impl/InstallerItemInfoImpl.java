@@ -13,7 +13,7 @@ import java.util.Set;
  * @author Vyacheslav Rusakov
  * @since 06.07.2016
  */
-public class InstallerItemInfoImpl extends ItemInfoImpl implements InstallerItemInfo {
+public class InstallerItemInfoImpl extends ClassItemInfoImpl implements InstallerItemInfo {
     private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
 
     public InstallerItemInfoImpl(final Class<?> type) {

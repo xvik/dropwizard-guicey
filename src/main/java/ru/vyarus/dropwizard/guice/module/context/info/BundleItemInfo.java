@@ -15,7 +15,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
  * @author Vyacheslav Rusakov
  * @since 09.07.2016
  */
-public interface BundleItemInfo extends ItemInfo, DisableSupport {
+public interface BundleItemInfo extends InstanceItemInfo, DisableSupport {
 
     /**
      * @return true if bundle resolved by lookup mechanism, false otherwise

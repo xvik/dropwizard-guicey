@@ -14,7 +14,7 @@ import java.util.Set;
  * @author Vyacheslav Rusakov
  * @since 06.07.2016
  */
-public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItemInfo {
+public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements ExtensionItemInfo {
 
     private Class<? extends FeatureInstaller> installedBy;
     private boolean lazy;

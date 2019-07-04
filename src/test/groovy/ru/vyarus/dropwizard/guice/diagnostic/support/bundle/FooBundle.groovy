@@ -19,4 +19,10 @@ class FooBundle implements GuiceyBundle {
                 .modules(new FooBundleModule())
                 .disableInstallers(ManagedInstaller)
     }
+
+    @Override
+    boolean equals(Object obj) {
+        // only one FooBundle registration allowed
+        return obj.getClass().equals(FooBundle.class)
+    }
 }

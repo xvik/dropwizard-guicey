@@ -3,10 +3,11 @@ package ru.vyarus.dropwizard.guice.module.context.info;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 
+import java.util.List;
 import java.util.Set;
 
 /**
- * Base interface for item info objects. Combines common signs for all configuration items.
+ * Base interface for instance item info objects. Combines common signs for all configuration items.
  * Items may be registered by application (direct registration through {@link ru.vyarus.dropwizard.guice.GuiceBundle},
  * by classpath scan or by {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}.
  * <p>
@@ -37,9 +38,8 @@ public interface ItemInfo {
      * is stored as context. For registrations by
      * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}, actual bundle class is stored
      * as context.
-     * Bundle items may also have {@link io.dropwizard.Bundle} and
-     * {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} as context classes for bundles recognized from
-     * dropwizard bundles or resolved by lookup mechanism.
+     * Bundle items may also have {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} as context classe for
+     * bundles resolved by lookup mechanism.
      * <p>
      * May not contain elements if item was never registered, but for example, disabled.
      *
@@ -49,23 +49,28 @@ public interface ItemInfo {
     Set<Class<?>> getRegisteredBy();
 
     /**
-     * Item may be registered multiple times, but only first scope will be actual registration scope
-     * (registrations from other scopes will be simply ignored).
+     * Item may be registered multiple times. For class items (e.g. extension) only first scope will be actual
+     * registration scope (and registrations from other scopes will be simply ignored), but instance items
+     * (bundle, module) may be registered in multiple scopes (note that duplicates detection for instances is
+     * implemented by {@link ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector}).
      * <p>
-     * May be null for never registered but disabled items!
+     * May be empty list for never registered but disabled items!
      *
      * @return registration scope
      * @see #getRegisteredBy() for all scopes performing registratoin
      */
-    Class<?> getRegistrationScope();
+    List<Class<?>> getRegistrationScopes();
 
     /**
-     * It is essentially the same as {@link #getRegistrationScope()}, but with generified guicey bundle scope.
+     * It is essentially the same as {@link #getRegistrationScopes()}, but with generified guicey bundle scope.
      * May be useful for generic reporting.
+     * <p>
+     * Note that only instance items (bundle, module) may contain multiple scopes, class items (extensions, installer)
+     * will always have only one scope (or no scope at all if item was disabled but not registered).
      *
-     * @return type of registration scope
+     * @return list of registration scopes types or empty list
      */
-    ConfigScope getRegistrationScopeType();
+    List<ConfigScope> getRegistrationScopeTypes();
 
     /**
      * It may be 0 for disabled items (e.g. installer disabled but never registered).

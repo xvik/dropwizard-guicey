@@ -60,7 +60,7 @@ class DisablesPredicatesTest extends AbstractTest {
     ItemInfo item(ConfigItem type, Class cls, Class from = Application) {
         ItemInfo info = new ItemInfoImpl(type, cls)
         info.registeredBy.add(from)
-        info.registrationScope = from
+        info.registrationScopes.add(from)
         return info;
     }
 

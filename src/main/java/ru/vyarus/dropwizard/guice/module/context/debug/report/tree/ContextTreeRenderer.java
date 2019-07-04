@@ -252,6 +252,6 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * false otherwise
      */
     private boolean isDuplicateRegistration(final ItemInfo item, final Class<?> scope) {
-        return !scope.equals(item.getRegistrationScope());
+        return !item.getRegistrationScopes().contains(scope);
     }
 }

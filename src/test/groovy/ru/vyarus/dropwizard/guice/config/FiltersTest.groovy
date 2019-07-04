@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.config
 
 import io.dropwizard.Application
-import io.dropwizard.Bundle
 import io.dropwizard.ConfiguredBundle
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
@@ -42,7 +41,7 @@ class FiltersTest extends Specification {
 
         and: "not matched check"
         !Filters.disabledBy(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            disabledBy.add(Bundle)
+            disabledBy.add(ConfiguredBundle)
         })
 
     }
@@ -66,12 +65,12 @@ class FiltersTest extends Specification {
 
         expect: "matched check"
         Filters.registrationScope(ConfigScope.Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            registrationScope = Application
+            registrationScopes.add(Application)
         })
 
         and: "not matched check"
         !Filters.registrationScope(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            registrationScope = Bundle
+            registrationScopes.add(ConfiguredBundle)
         })
 
     }
@@ -85,7 +84,7 @@ class FiltersTest extends Specification {
 
         and: "not matched check"
         !Filters.registeredBy(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            registeredBy.add(Bundle)
+            registeredBy.add(ConfiguredBundle)
         })
 
     }

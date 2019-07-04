@@ -13,7 +13,7 @@ import java.util.Set;
  * @author Vyacheslav Rusakov
  * @since 06.07.2016
  */
-public class BundleItemInfoImpl extends ItemInfoImpl implements BundleItemInfo {
+public class BundleItemInfoImpl extends InstanceItemInfoImpl implements BundleItemInfo {
     private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
 
     public BundleItemInfoImpl(final Class<?> type) {

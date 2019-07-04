@@ -23,6 +23,8 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.Diagnos
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
+import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
+import ru.vyarus.dropwizard.guice.module.context.unique.EqualDuplicatesDetector;
 import ru.vyarus.dropwizard.guice.module.installer.*;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
@@ -342,6 +344,36 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         public Builder<T> enableAutoConfig(final String... basePackages) {
             Preconditions.checkState(basePackages.length > 0, "Specify at least one package to scan");
             return option(ScanPackages, basePackages);
+        }
+
+        /**
+         * Duplicate configuration detector decides what configuration items, registered as instance (guicey bundle,
+         * guice module) to consider duplicate (and so avoid duplicates installation). By default, multiple instances
+         * of the same type allowed (the same as with dropwizard bundles - you can register multiple instances
+         * of the same bundle).
+         * <p>
+         * Suppose one common bundle (or guice module) is used by two other bundles, so it would be registered in two
+         * bundles, but, if these bundles would be used together, then two instances of common bundle would be
+         * registered, which is often not desired. To workaround such case, default duplicates detector implementation
+         * consider only equal objects as duplicate, so if common bundle will correctly implement
+         * {@link Object#equals(Object)} method then duplicate bundle will not be registered.
+         * <p>
+         * Custom duplicates detector implementation may be useful if you need to resolve duplicate objects
+         * without proper equals method implementation (for example, registered by some existing 3rd party bundles).
+         * <p>
+         * Use {@link ru.vyarus.dropwizard.guice.module.context.unique.LegacyModeDuplicatesDetector} to simulate
+         * legacy guicey behaviour (when only one instance of bundle is allowed), if old behaviour is important.
+         * <p>
+         * WARNING: items, registered before this call will use default duplicates detector! So to avoid confusion,
+         * register custom detector before any other builder methods calls.
+         *
+         * @param detector detector implementation
+         * @return builder instance for chained calls
+         * @see EqualDuplicatesDetector as default implementation
+         */
+        public Builder<T> duplicateConfigDetector(final DuplicateConfigDetector detector) {
+            bundle.context.setDuplicatesDetector(detector);
+            return this;
         }
 
         /**

@@ -15,8 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Utility class to work with registered {@link io.dropwizard.Bundle} and {@link io.dropwizard.ConfiguredBundle}
- * objects within dropwizard {@link Bootstrap} object.
+ * Utility class to work with registered {@link io.dropwizard.ConfiguredBundle} objects within dropwizard
+ * {@link Bootstrap} object.
  *
  * @author Vyacheslav Rusakov
  * @since 01.08.2015

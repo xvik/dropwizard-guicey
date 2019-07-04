@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
  * @author Vyacheslav Rusakov
  * @since 09.07.2016
  */
-public interface ExtensionItemInfo extends ItemInfo, ScanSupport, DisableSupport {
+public interface ExtensionItemInfo extends ClassItemInfo, ScanSupport, DisableSupport {
 
     /**
      * Each extension is always registered by single installer. If extension is recognizable by multiple installers

@@ -1,9 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
-import io.dropwizard.ConfiguredBundle;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
-import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
 import java.util.Arrays;
 
@@ -25,11 +24,6 @@ public enum ConfigScope {
      * Lookup scope contains all bundles, resolved with lookup mechanism.
      */
     BundleLookup(GuiceyBundleLookup.class),
-    /**
-     * Guicey bundles resolved from (manually) registered dropwizard bundles
-     * (not enabled by default).
-     */
-    DropwizardBundle(ConfiguredBundle.class),
     /**
      * Everything resolved with classpath scan.
      */

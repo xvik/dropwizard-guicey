@@ -31,8 +31,8 @@ public final class Disables {
     /**
      * Check registration source.  Context class could be
      * {@link io.dropwizard.Application}, {@link ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner},
-     * {@link io.dropwizard.Bundle}, {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and
-     * classes implementing {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}.
+     * {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and classes implementing
+     * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}.
      *
      * @param types context class types
      * @return items registered in specific contexts predicate
@@ -40,7 +40,7 @@ public final class Disables {
      */
     public static Predicate<ItemInfo> registeredBy(final Class<?>... types) {
         // in time of disable predicate run registration scope == registered by
-        return input -> Arrays.asList(types).contains(input.getRegistrationScope());
+        return input -> Arrays.stream(types).anyMatch(input.getRegistrationScopes()::contains);
     }
 
     /**

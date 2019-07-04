@@ -14,6 +14,7 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
+import ru.vyarus.dropwizard.guice.module.context.info.impl.InstanceItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ModuleItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
@@ -21,6 +22,8 @@ import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
+import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
+import ru.vyarus.dropwizard.guice.module.context.unique.EqualDuplicatesDetector;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
@@ -55,6 +58,7 @@ import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationByPath;
         "PMD.ExcessiveImports", "PMD.ExcessivePublicCount"})
 public final class ConfigurationContext {
 
+    private DuplicateConfigDetector duplicates = new EqualDuplicatesDetector();
     private Bootstrap bootstrap;
     private Configuration configuration;
     private ConfigurationTree configurationTree;
@@ -67,6 +71,12 @@ public final class ConfigurationContext {
      * Preserve registration order.
      */
     private final Multimap<ConfigItem, Object> itemsHolder = LinkedHashMultimap.create();
+    /**
+     * Multiple instances of the same type could be registered for bundles or modules. Holds all registered
+     * items by type to simplify duplicates detector calls.
+     * Preserve registration order.
+     */
+    private final Multimap<Class<?>, Object> instanceItemsIndex = LinkedHashMultimap.create();
     /**
      * Configuration details (stored mostly for diagnostics).
      */
@@ -100,6 +110,16 @@ public final class ConfigurationContext {
      * Guicey lifecycle listeners support.
      */
     private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new Options(optionsSupport));
+
+
+    /**
+     * Change default duplicates detector.
+     *
+     * @param detector new policy
+     */
+    public void setDuplicatesDetector(final DuplicateConfigDetector detector) {
+        this.duplicates = detector;
+    }
 
 
     // --------------------------------------------------------------------------- SCOPE
@@ -644,12 +664,37 @@ public final class ConfigurationContext {
 
     private <T extends ItemInfoImpl> T register(final ConfigItem type, final Object item) {
         final T info = getOrCreateInfo(type, item);
+        final Class<?> scope = getScope();
+
+        // for instance types actual instances must be registered (otherwise impossible to build report)
+        if (type.isInstanceConfig()) {
+            if (info.getRegistrationAttempts() == 0) {
+                // initial registration
+                ((InstanceItemInfoImpl) info).addRegisteredInstance(scope, item);
+            } else {
+                // check if duplicate is allowed and register it
+                if (!duplicates.isDuplicate(info, instanceItemsIndex.get(info.getType()), item)) {
+                    itemsHolder.put(type, item);
+                    instanceItemsIndex.put(info.getType(), item);
+                    ((InstanceItemInfoImpl) info).addRegisteredInstance(scope, item);
+                    // when multiple instances of the same type registered all scopes must be preserved
+                    // (in contrast to class items where scope is always unique because others are duplicates)
+                    if (!info.getRegistrationScopes().contains(scope)) {
+                        info.addRegistrationScope(scope);
+                    }
+                } else {
+                    // register duplicate
+                    ((InstanceItemInfoImpl) info).addDuplicateInstance(scope, item);
+                }
+            }
+        }
+
         // if registered multiple times in one scope attempts will reveal it
         info.countRegistrationAttempt();
-        info.getRegisteredBy().add(getScope());
-        // first registration scope stored
-        if (info.getRegistrationScope() == null) {
-            info.setRegistrationScope(getScope());
+        info.getRegisteredBy().add(scope);
+        // first registration scope stored (for class items)
+        if (info.getRegistrationScopes().isEmpty()) {
+            info.addRegistrationScope(scope);
         }
         fireRegistration(info);
         return info;
@@ -683,14 +728,17 @@ public final class ConfigurationContext {
     private <T extends ItemInfoImpl> T getOrCreateInfo(final ConfigItem type, final Object item) {
         final Class<?> itemType = getType(item);
         final T info;
-        // details holder allows to implicitly filter by type and avoid duplicate registration
         if (detailsHolder.containsKey(itemType)) {
-            // no duplicate registration
+            // duplicate registration (by type)
             info = (T) detailsHolder.get(itemType);
         } else {
+            // initial registration
             itemsHolder.put(type, item);
             info = type.newContainer(itemType);
             detailsHolder.put(itemType, info);
+            if (type.isInstanceConfig()) {
+                instanceItemsIndex.put(itemType, item);
+            }
         }
         return info;
     }

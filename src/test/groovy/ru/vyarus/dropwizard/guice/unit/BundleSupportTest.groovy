@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.unit
 
 import com.google.common.collect.Lists
-import io.dropwizard.Bundle
+import io.dropwizard.Configuration
 import io.dropwizard.ConfiguredBundle
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
@@ -68,13 +68,13 @@ class BundleSupportTest extends AbstractTest {
         res*.class == [CoreInstallersBundle, HK2DebugBundle, SampleConfiguredBundle]
     }
 
-    static class SampleBundle implements Bundle, GuiceyBundle {
+    static class SampleBundle implements ConfiguredBundle<Configuration>, GuiceyBundle {
         @Override
         void initialize(Bootstrap<?> bootstrap) {
         }
 
         @Override
-        void run(Environment environment) {
+        void run(Configuration conf, Environment environment) {
         }
 
         @Override

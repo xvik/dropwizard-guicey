@@ -33,8 +33,8 @@ class CommandInfoItemTest extends Specification {
         ci.itemType == ConfigItem.Command
         ci.type == EnvCommand
         ci.registeredBy == [ClasspathScanner] as Set
-        ci.registrationScope == ClasspathScanner
-        ci.registrationScopeType == ConfigScope.ClasspathScan
+        ci.registrationScopes == [ClasspathScanner]
+        ci.registrationScopeTypes == [ConfigScope.ClasspathScan]
         ci.fromScan
         ci.environmentCommand
         ci.toString() == "$ConfigItem.Command $EnvCommand.simpleName" as String

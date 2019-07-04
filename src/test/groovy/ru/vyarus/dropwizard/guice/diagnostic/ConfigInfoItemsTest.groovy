@@ -49,8 +49,8 @@ class ConfigInfoItemsTest extends Specification {
         mi.itemType == ConfigItem.Module
         mi.type == FooModule
         mi.registeredBy == [Application] as Set
-        mi.registrationScope == Application
-        mi.registrationScopeType == ConfigScope.Application
+        mi.registrationScopes == [Application]
+        mi.registrationScopeTypes == [ConfigScope.Application]
         mi.toString() == "$ConfigItem.Module $FooModule.simpleName" as String
 
         and: "bundle info"
@@ -61,7 +61,7 @@ class ConfigInfoItemsTest extends Specification {
         bi.itemType == ConfigItem.Bundle
         bi.type == FooBundle
         bi.registeredBy == [Application] as Set
-        bi.registrationScope == Application
+        bi.registrationScopes == [Application]
         !bi.fromLookup
         bi.toString() == "$ConfigItem.Bundle $FooBundle.simpleName" as String
 
@@ -73,7 +73,7 @@ class ConfigInfoItemsTest extends Specification {
         ii.itemType == ConfigItem.Installer
         ii.type == ResourceInstaller
         ii.registeredBy == [Application] as Set
-        ii.registrationScope == Application
+        ii.registrationScopes == [Application]
         !ii.fromScan
         ii.enabled
         ii.disabledBy.isEmpty()
@@ -87,7 +87,7 @@ class ConfigInfoItemsTest extends Specification {
         ei.itemType == ConfigItem.Extension
         ei.type == FooBundleResource
         ei.registeredBy == [FooBundle] as Set
-        ei.registrationScope == FooBundle
+        ei.registrationScopes == [FooBundle]
         !ei.fromScan
         !ei.jerseyManaged
         !ei.lazy
@@ -106,7 +106,7 @@ class ConfigInfoItemsTest extends Specification {
         dii.itemType == ConfigItem.Installer
         dii.type == FooInstaller
         dii.registeredBy == [Application] as Set
-        dii.registrationScope == Application
+        dii.registrationScopes == [Application]
         !dii.fromScan
         !dii.enabled
         dii.disabledBy == [Application] as Set
