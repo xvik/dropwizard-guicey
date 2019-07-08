@@ -26,7 +26,7 @@ Guicey creates injector at **run phase** to allow using configuration (and envir
 
 ### Guice module
 
-But gucie modules are still registered in initialization phase (in `GuiceBundle`), when configuration is
+But guice modules are still registered in initialization phase (in `GuiceBundle`), when configuration is
 not available. To overcome this, guicey provides [marker interfaces](guide/module-autowiring.md) 
 like `ConfigurationAwareModule` to set configuration object into module before injector creation.
 
