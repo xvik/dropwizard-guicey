@@ -5,6 +5,7 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.Disables
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl
 
@@ -58,9 +59,8 @@ class DisablesPredicatesTest extends AbstractTest {
     }
 
     ItemInfo item(ConfigItem type, Class cls, Class from = Application) {
-        ItemInfo info = new ItemInfoImpl(type, cls)
-        info.registeredBy.add(from)
-        info.registrationScopes.add(from)
+        ItemInfoImpl info = new ItemInfoImpl(type, ItemId.from(cls))
+        info.countRegistrationAttempt(ItemId.from(from))
         return info;
     }
 

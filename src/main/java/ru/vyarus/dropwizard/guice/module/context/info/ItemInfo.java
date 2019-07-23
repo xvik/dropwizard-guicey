@@ -3,11 +3,10 @@ package ru.vyarus.dropwizard.guice.module.context.info;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 
-import java.util.List;
 import java.util.Set;
 
 /**
- * Base interface for instance item info objects. Combines common signs for all configuration items.
+ * Base interface for item info objects. Combines common signs for all configuration items.
  * Items may be registered by application (direct registration through {@link ru.vyarus.dropwizard.guice.GuiceBundle},
  * by classpath scan or by {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}.
  * <p>
@@ -20,6 +19,14 @@ import java.util.Set;
  * @since 09.07.2016
  */
 public interface ItemInfo {
+
+    /**
+     * Items could be registered by class and by instance. In case of instance registration, multiple instances
+     * could be provided with the same class. For class registrations item id is equal to pure class.
+     *
+     * @return item identity
+     */
+    ItemId getId();
 
     /**
      * @return configuration item type (e.g. installer, bundle, extension etc)
@@ -42,35 +49,35 @@ public interface ItemInfo {
      * bundles resolved by lookup mechanism.
      * <p>
      * May not contain elements if item was never registered, but for example, disabled.
+     * <p>
+     * To quick check if exact scope class is present use {@code ItemId.from(class)}, which will match
+     * any class instance related scope key.
      *
      * @return context classes which register item or empty collection
      * @see ConfigScope for the list of all special scopes
      */
-    Set<Class<?>> getRegisteredBy();
+    Set<ItemId> getRegisteredBy();
 
     /**
      * Item may be registered multiple times. For class items (e.g. extension) only first scope will be actual
-     * registration scope (and registrations from other scopes will be simply ignored), but instance items
-     * (bundle, module) may be registered in multiple scopes (note that duplicates detection for instances is
-     * implemented by {@link ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector}).
+     * registration scope (and registrations from other scopes will be simply ignored). For instance items
+     * (bundle, module), different objects of the same type will be registered according to
+     * {@link ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector}).
      * <p>
-     * May be empty list for never registered but disabled items!
+     * May be null for never registered but disabled items!
      *
      * @return registration scope
      * @see #getRegisteredBy() for all scopes performing registratoin
      */
-    List<Class<?>> getRegistrationScopes();
+    ItemId getRegistrationScope();
 
     /**
-     * It is essentially the same as {@link #getRegistrationScopes()}, but with generified guicey bundle scope.
+     * It is essentially the same as {@link #getRegistrationScope()}, but with generified guicey bundle scope.
      * May be useful for generic reporting.
-     * <p>
-     * Note that only instance items (bundle, module) may contain multiple scopes, class items (extensions, installer)
-     * will always have only one scope (or no scope at all if item was disabled but not registered).
      *
-     * @return list of registration scopes types or empty list
+     * @return type of registration scope
      */
-    List<ConfigScope> getRegistrationScopeTypes();
+    ConfigScope getRegistrationScopeType();
 
     /**
      * It may be 0 for disabled items (e.g. installer disabled but never registered).
@@ -93,4 +100,23 @@ public interface ItemInfo {
      * false otherwise.
      */
     boolean isRegisteredDirectly();
+
+    /**
+     * Required to show ignored items in the same scope as actual registration.
+     * <p>
+     * When checked bundles by class only item ({@code ItemId.from(Bundle.class)}) it wil return sum
+     * of registrations for all instances of type.
+     *
+     * @param scope scope
+     * @return number of ignored items in scope
+     */
+    int getIgnoresByScope(ItemId scope);
+
+    /**
+     * Shortcut for {@link #getIgnoresByScope(ItemId)}.
+     *
+     * @param scope scope type to check ignores
+     * @return number of ignored items in all scopes of specified type
+     */
+    int getIgnoresByScope(Class<?> scope);
 }

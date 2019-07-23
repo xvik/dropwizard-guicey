@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 
 import java.util.Arrays;
@@ -40,7 +41,12 @@ public final class Disables {
      */
     public static Predicate<ItemInfo> registeredBy(final Class<?>... types) {
         // in time of disable predicate run registration scope == registered by
-        return input -> Arrays.stream(types).anyMatch(input.getRegistrationScopes()::contains);
+        return input -> Arrays.asList(types).contains(input.getRegistrationScope().getType());
+    }
+
+    public static Predicate<ItemInfo> registeredBy(final ItemId... scopes) {
+        // in time of disable predicate run registration scope == registered by
+        return input -> Arrays.asList(scopes).contains(input.getRegistrationScope());
     }
 
     /**

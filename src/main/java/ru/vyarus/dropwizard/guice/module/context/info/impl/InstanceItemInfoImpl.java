@@ -1,9 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.info.InstanceItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,35 +15,42 @@ import java.util.List;
  */
 public class InstanceItemInfoImpl extends ItemInfoImpl implements InstanceItemInfo {
 
-    private int registrations;
-    private final Multimap<Class<?>, Object> registered = LinkedHashMultimap.create();
-    private final Multimap<Class<?>, Object> duplicates = LinkedHashMultimap.create();
+    private final Object instance;
+    private int instanceCount;
+    private List<ItemId> duplicates = new ArrayList<>();
 
-    public InstanceItemInfoImpl(final ConfigItem itemType, final Class<?> type) {
-        super(itemType, type);
+    // special constructor for disable-only items (without actual registration)
+    public InstanceItemInfoImpl(final ConfigItem itemType, final Class type) {
+        super(itemType, ItemId.from(type));
+        this.instance = null;
+    }
+
+    public InstanceItemInfoImpl(final ConfigItem itemType, final Object instance) {
+        super(itemType, ItemId.from(instance));
+        this.instance = instance;
     }
 
     @Override
-    public List<Object> getRegistrationsByScope(final Class<?> scope) {
-        return new ArrayList<>(registered.get(scope));
+    public Object getInstance() {
+        return instance;
     }
 
     @Override
-    public List<Object> getDuplicatesByScope(final Class<?> scope) {
-        return new ArrayList<>(duplicates.get(scope));
+    public int getInstanceCount() {
+        return instanceCount;
+    }
+
+    public void setInstanceCount(final int instanceCount) {
+        this.instanceCount = instanceCount;
     }
 
     @Override
-    public int getRegistrations() {
-        return registrations;
+    public List<ItemId> getDuplicates() {
+        return duplicates;
     }
 
-    public void addRegisteredInstance(final Class<?> scope, final Object instance) {
-        registered.put(scope, instance);
-        registrations++;
-    }
-
-    public void addDuplicateInstance(final Class<?> scope, final Object instance) {
-        duplicates.put(scope, instance);
+    @Override
+    public String toString() {
+        return super.toString() + (getInstanceCount() > 0 ? " (#" + getInstanceCount() + ")" : "");
     }
 }

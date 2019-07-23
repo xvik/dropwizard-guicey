@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context.info.impl;
 import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 
@@ -19,7 +20,7 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
     private Class<? extends FeatureInstaller> installedBy;
     private boolean lazy;
     private boolean jerseyManaged;
-    private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
+    private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
     // little hack used to preserve installer reference during initialization
     private FeatureInstaller installer;
 
@@ -28,7 +29,7 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
     }
 
     @Override
-    public Set<Class<?>> getDisabledBy() {
+    public Set<ItemId> getDisabledBy() {
         return disabledBy;
     }
 
@@ -44,7 +45,7 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
 
     @Override
     public boolean isFromScan() {
-        return getRegisteredBy().contains(ConfigScope.ClasspathScan.getType());
+        return getRegisteredBy().contains(ConfigScope.ClasspathScan.getKey());
     }
 
     @Override

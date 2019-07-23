@@ -33,17 +33,18 @@
     `GuiceBundle.builder()#useWebInstallers()` option removed
 * (breaking) Allow registration of multiple instances for guice modules and guicey bundles 
     (multiple instances of the same class)
-    - New concept of `DuplicateConfigDetector` introduced, which decide if configuration items (of the same type) are duplicate.
-        In default implementation, only equal objects are considered duplicate (so to avoid
-        multiple installations of some bundle or module - implement properly equals method).
-        Custom duplicates detector could be registered with `GuiceBundle.Builder#duplicateConfigDetector()` and
-        used to filter duplicate registration of bundles or modules (without equals implementation).
-    - Legacy behaviour could be simulated with: `.duplicateConfigDetector(new LegacyModeDuplicatesDetector())`
-    - Due to multiple registration scopes configuration model changed (`ItemInfo`):
-        - "Class<?> getRegistrationScope()" is now "List<Class<?>> getRegistrationScopes()"
-        - "ConfigScope getRegistrationScopeType()" is now "List<ConfigScope> getRegistrationScopeTypes()"
-        - `ClassItemInfo` and `InstallerItemInfo` contain old (singular) method signatures 
-            (as class items could be registered just once)                                     
+    - By default, equal instances of the same type considered duplicate (only one registered).
+        So, to grant uniqueness of bundle or module, implement correct equals method.
+        For custom cases (when custom equals method is impossible), `DuplicateConfigDetector` may be implemented 
+        and registered with `GuiceBundle.Builder#duplicateConfigDetector()` 
+    - Legacy behaviour (1 instance per type) could be simulated with: `.duplicateConfigDetector(new LegacyModeDuplicatesDetector())`
+    - ItemId is now used as identity instead of pure Class. ItemId compute object hash string
+        and preserve it for instance identification. Class types does not contain hash in id.
+        Required because even scopes, represented previously as classes now could be duplicated
+        as multiple instances of the same bundle class could be registered. For simplicity,
+        ItemId equals method consider class-only id's equal to any type instance id.
+    - Add bundle loops detection: as multiple bundle instances allowed loops are highly possible
+        Entire bundle chain is provided in exception to simplify fixing loops.                                             
 
 
 Main breaking changes were caused by:

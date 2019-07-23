@@ -3,9 +3,10 @@ package ru.vyarus.dropwizard.guice.module.context.info;
 import java.util.List;
 
 /**
- * Base interface for instance configurations (bundles, modules). Multiple instances could be actually registered
- * and so item info have to hold all registered instances (because otherwise it would be impossible to preserve
- * information about duplicates and actually used items).
+ * Base interface for instance configurations (bundles, modules). Multiple instances of the same type could be
+ * actually registered and different objects will have different item info objects. Only direct registrations
+ * of the same instance or equal objects will be considered as duplicate (second registration attempt will be just
+ * registered in existing item info).
  *
  * @author Vyacheslav Rusakov
  * @since 03.07.2019
@@ -13,23 +14,22 @@ import java.util.List;
 public interface InstanceItemInfo extends ItemInfo {
 
     /**
-     * Note: all affected scopes could be revealed with {@link #getRegistrationScopes()}.
-     *
-     * @param scope items scope (see {@link ru.vyarus.dropwizard.guice.module.context.ConfigScope})
-     * @return list of registered item instances or empty list if no items registered in scope
+     * @return configuration object instance
      */
-    List<Object> getRegistrationsByScope(Class<?> scope);
+    Object getInstance();
 
     /**
-     * Note: all affected scopes could be revealed with {@link #getRegistrationScopes()}.
+     * For example, if multiple bundles registered: {@code .bundles(new Bundle(), new Bundle(), new Bundle()}
+     * then their counts would be 1, 2 and 3 in order of registration. For the same instances counts will be the same.
+     * This number is required to differentiate instances in reporting.
      *
-     * @param scope items scope (see {@link ru.vyarus.dropwizard.guice.module.context.ConfigScope})
-     * @return list of duplicate (not installed) item instances or empty list if no duplicates in scope
+     * @return instance registration count number (starting from 0)
      */
-    List<Object> getDuplicatesByScope(Class<?> scope);
+    int getInstanceCount();
 
     /**
-     * @return count of registered items (without duplicates)
+     * Duplicate instances are completely ignored. Information is provided for diagnostic.
+     * @return list of detected duplicate instances for current
      */
-    int getRegistrations();
+    List<ItemId> getDuplicates();
 }

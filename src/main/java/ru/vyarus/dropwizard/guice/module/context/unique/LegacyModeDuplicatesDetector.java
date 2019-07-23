@@ -1,8 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context.unique;
 
-import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
-
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Duplicates detector, implementing legacy guicey behaviour: only one instance of class is allowed.
@@ -15,9 +13,9 @@ import java.util.Collection;
 public class LegacyModeDuplicatesDetector implements DuplicateConfigDetector {
 
     @Override
-    public boolean isDuplicate(final ItemInfo info,
-                               final Collection<Object> registered,
-                               final Object newItem) {
-        return true;
+    public Object getDuplicateItem(final List<Object> registered,
+                                   final Object newItem) {
+        // method will be called only if instance of the same type is already registered
+        return registered.get(0);
     }
 }

@@ -1,18 +1,22 @@
 package ru.vyarus.dropwizard.guice.module.installer.util;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import io.dropwizard.setup.Bootstrap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Utility class to work with registered {@link io.dropwizard.ConfiguredBundle} objects within dropwizard
@@ -22,6 +26,7 @@ import java.util.List;
  * @since 01.08.2015
  */
 public final class BundleSupport {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BundleSupport.class);
 
     private BundleSupport() {
     }
@@ -40,30 +45,13 @@ public final class BundleSupport {
      */
     public static void initBundles(final ConfigurationContext context) {
         final List<GuiceyBundle> bundles = context.getEnabledBundles();
-        final List<Class<? extends GuiceyBundle>> installedBundles = Lists.newArrayList();
         final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, bundles);
-
-        // iterating while no new bundles registered
-        while (!bundles.isEmpty()) {
-            final List<GuiceyBundle> processingBundles = Lists.newArrayList(removeDuplicates(bundles));
-            bundles.clear();
-            for (GuiceyBundle bundle : removeTypes(processingBundles, installedBundles)) {
-
-                final Class<? extends GuiceyBundle> bundleType = bundle.getClass();
-                Preconditions.checkState(!installedBundles.contains(bundleType),
-                        "State error: duplicate bundle '%s' registration", bundleType.getName());
-
-                // disabled bundles are not processed (so nothing will be registered from it)
-                // important to check here because transitive bundles may appear to be disabled
-                if (context.isBundleEnabled(bundleType)) {
-                    context.setScope(bundleType);
-                    bundle.initialize(guiceyBootstrap);
-                    context.closeScope();
-                }
-
-                installedBundles.add(bundleType);
-            }
+        
+        for (GuiceyBundle bundle : new ArrayList<>(bundles)) {
+            // iterating bundles as tree in order to detect cycles
+            initBundle(Collections.emptyList(), bundle, bundles, context, guiceyBootstrap);
         }
+
         context.lifecycle().bundlesInitialized(context.getEnabledBundles(), context.getDisabledBundles());
     }
 
@@ -131,6 +119,40 @@ public final class BundleSupport {
         final List bundles = Lists.newArrayList(resolveBundles(bootstrap, "configuredBundles"));
         bundles.removeIf(o -> !type.isAssignableFrom(o.getClass()));
         return bundles;
+    }
+
+    private static void initBundle(final List<Class<? extends GuiceyBundle>> path,
+                                   final GuiceyBundle bundle,
+                                   final List<GuiceyBundle> wrk,
+                                   final ConfigurationContext context,
+                                   final GuiceyBootstrap bootstrap) {
+        wrk.clear();
+        final Class<? extends GuiceyBundle> bundleType = bundle.getClass();
+
+        if (path.contains(bundleType)) {
+            final String name = bundleType.getSimpleName();
+            throw new IllegalStateException(String.format("Bundles registration loop detected: %s ) -> %s ...",
+                    path.stream().map(Class::getSimpleName).collect(Collectors.joining(" -> "))
+                            .replace(name, "( " + name), name));
+        }
+        LOGGER.debug("Initializing bundle ({} level): {}", path.size() + 1, bundleType.getName());
+
+        // disabled bundles are not processed (so nothing will be registered from it)
+        // important to check here because transitive bundles may appear to be disabled
+        final ItemId id = ItemId.from(bundle);
+        if (context.isBundleEnabled(id)) {
+            context.setScope(id);
+            bundle.initialize(bootstrap);
+            context.closeScope();
+        }
+
+        if (!wrk.isEmpty()) {
+            final List<Class<? extends GuiceyBundle>> nextPath = new ArrayList<>(path);
+            nextPath.add(bundleType);
+            for (GuiceyBundle nextBundle : new ArrayList<>(wrk)) {
+                initBundle(nextPath, nextBundle, wrk, context, bootstrap);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")

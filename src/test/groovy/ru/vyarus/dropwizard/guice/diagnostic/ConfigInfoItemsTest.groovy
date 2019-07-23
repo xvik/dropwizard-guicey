@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
@@ -42,52 +43,52 @@ class ConfigInfoItemsTest extends Specification {
     def "Check info objects correctness"() {
 
         expect: "module info"
-        ItemInfo mi = info.data.getInfo(FooModule)
+        ItemInfo mi = info.getInfo(FooModule)
         mi.registeredDirectly
         mi.registered
         mi.registrationAttempts == 1
         mi.itemType == ConfigItem.Module
         mi.type == FooModule
-        mi.registeredBy == [Application] as Set
-        mi.registrationScopes == [Application]
-        mi.registrationScopeTypes == [ConfigScope.Application]
-        mi.toString() == "$ConfigItem.Module $FooModule.simpleName" as String
+        mi.registeredBy == [ItemId.from(Application)] as Set
+        mi.registrationScope == ItemId.from(Application)
+        mi.registrationScopeType == ConfigScope.Application
+        mi.toString() ==~ /$ConfigItem.Module $FooModule.simpleName@[\w]+ \(#1\)/
 
         and: "bundle info"
-        BundleItemInfo bi = info.data.getInfo(FooBundle)
+        BundleItemInfo bi = info.getInfo(FooBundle)
         bi.registeredDirectly
         bi.registered
         bi.registrationAttempts == 1
         bi.itemType == ConfigItem.Bundle
         bi.type == FooBundle
-        bi.registeredBy == [Application] as Set
-        bi.registrationScopes == [Application]
+        bi.registeredBy == [ItemId.from(Application)] as Set
+        bi.registrationScope == ItemId.from(Application)
         !bi.fromLookup
-        bi.toString() == "$ConfigItem.Bundle $FooBundle.simpleName" as String
+        bi.toString() ==~ /$ConfigItem.Bundle $FooBundle.simpleName@[\w]+ \(#1\)/
 
         and: "installer info"
-        InstallerItemInfo ii = info.data.getInfo(ResourceInstaller)
+        InstallerItemInfo ii = info.getInfo(ResourceInstaller)
         ii.registeredDirectly
         ii.registered
         ii.registrationAttempts == 1
         ii.itemType == ConfigItem.Installer
         ii.type == ResourceInstaller
-        ii.registeredBy == [Application] as Set
-        ii.registrationScopes == [Application]
+        ii.registeredBy == [ItemId.from(Application)] as Set
+        ii.registrationScope == ItemId.from(Application)
         !ii.fromScan
         ii.enabled
         ii.disabledBy.isEmpty()
         ii.toString() == "$ConfigItem.Installer $ResourceInstaller.simpleName" as String
 
         and: "extensions info"
-        ExtensionItemInfo ei = info.data.getInfo(FooBundleResource)
+        ExtensionItemInfo ei = info.getInfo(FooBundleResource)
         !ei.registeredDirectly
         ei.registered
         ei.registrationAttempts == 1
         ei.itemType == ConfigItem.Extension
         ei.type == FooBundleResource
-        ei.registeredBy == [FooBundle] as Set
-        ei.registrationScopes == [FooBundle]
+        ei.registeredBy == [ItemId.from(FooBundle)] as Set
+        ei.registrationScope.getType() == FooBundle
         !ei.fromScan
         !ei.jerseyManaged
         !ei.lazy
@@ -99,21 +100,21 @@ class ConfigInfoItemsTest extends Specification {
     def "Check disabled installer cases"() {
 
         expect: "disabled installer info"
-        InstallerItemInfo dii = info.data.getInfo(FooInstaller)
+        InstallerItemInfo dii = info.getInfo(FooInstaller)
         dii.registeredDirectly
         dii.registered
         dii.registrationAttempts == 1
         dii.itemType == ConfigItem.Installer
         dii.type == FooInstaller
-        dii.registeredBy == [Application] as Set
-        dii.registrationScopes == [Application]
+        dii.registeredBy == [ItemId.from(Application)] as Set
+        dii.registrationScope == ItemId.from(Application)
         !dii.fromScan
         !dii.enabled
-        dii.disabledBy == [Application] as Set
+        dii.disabledBy == [ItemId.from(Application)] as Set
         dii.toString() == "$ConfigItem.Installer $FooInstaller.simpleName" as String
 
         and: "disabled never registered installer info"
-        InstallerItemInfo dnr = info.data.getInfo(ManagedInstaller)
+        InstallerItemInfo dnr = info.getInfo(ManagedInstaller)
         !dnr.registeredDirectly
         !dnr.registered
         dnr.registrationAttempts == 0
@@ -122,7 +123,7 @@ class ConfigInfoItemsTest extends Specification {
         dnr.registeredBy.isEmpty()
         !dnr.fromScan
         !dnr.enabled
-        dnr.disabledBy == [FooBundle] as Set
+        dnr.disabledBy == [ItemId.from(FooBundle)] as Set
         dnr.toString() == "$ConfigItem.Installer $ManagedInstaller.simpleName" as String
 
     }

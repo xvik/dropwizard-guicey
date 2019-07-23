@@ -21,6 +21,7 @@ import javax.inject.Inject
 import javax.ws.rs.Path
 
 import static ru.vyarus.dropwizard.guice.module.context.Disables.type
+import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
 
 /**
  * @author Vyacheslav Rusakov
@@ -51,9 +52,9 @@ class DisableWithPredicateTest extends AbstractTest {
         info.getInstallersDisabled() == [ManagedInstaller]
 
         and: "correct disable scope"
-        info.data.getItems(Filters.disabledBy(ConfigScope.Application.type)) as Set ==
+        typesOnly(info.data.getItems(Filters.disabledBy(ConfigScope.Application.type))) as Set ==
                 [SampleBundle, SampleModule1] as Set
-        info.data.getItems(Filters.disabledBy(ConfigScope.Hook.type)) as Set ==
+        typesOnly(info.data.getItems(Filters.disabledBy(ConfigScope.Hook.type))) as Set ==
                 [SampleExtension1, ManagedInstaller] as Set
     }
 

@@ -1,10 +1,13 @@
 package ru.vyarus.dropwizard.guice
 
+import ch.qos.logback.classic.Level
 import com.codahale.metrics.health.HealthCheckRegistry
 import io.dropwizard.jersey.setup.JerseyEnvironment
 import io.dropwizard.jetty.MutableServletContextHandler
 import io.dropwizard.jetty.setup.ServletEnvironment
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment
+import io.dropwizard.logging.BootstrapLogging
+import io.dropwizard.logging.LoggingUtil
 import io.dropwizard.setup.AdminEnvironment
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
@@ -26,6 +29,12 @@ import javax.servlet.ServletRegistration
  */
 @UseGuiceyConfiguration(GuiceyTestHook)
 abstract class AbstractTest extends Specification {
+
+    static {
+        BootstrapLogging.bootstrap(Level.DEBUG); // bootstrap set threshold filter!
+        LoggingUtil.getLoggerContext().getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME).setLevel(Level.WARN);
+        LoggingUtil.getLoggerContext().getLogger("ru.vyarus.dropwizard.guice").setLevel(Level.INFO);
+    }
 
     void cleanupSpec() {
         // some tests are intentionally failing so be sure to remove stale applications

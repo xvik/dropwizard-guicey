@@ -5,9 +5,7 @@ import com.google.inject.Module;
 import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
-import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
-import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.info.*;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -15,6 +13,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils.*;
@@ -106,7 +105,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         final List<String> markers = Lists.newArrayList();
         for (Class<Command> command : commands) {
             markers.clear();
-            final CommandItemInfo info = service.getData().getInfo(command);
+            final CommandItemInfo info = service.getInfo(command);
             commonMarkers(markers, info);
             if (info.isEnvironmentCommand()) {
                 markers.add("GUICE_ENABLED");
@@ -122,8 +121,11 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
             return;
         }
         res.append(NEWLINE).append(NEWLINE).append(TAB).append("BUNDLES = ").append(NEWLINE);
+        // bundles must be rendered just once, no matter that different instances of the same type could be registered
+        // in different places - this report is per class
+        final List<Class> rendered = new ArrayList<>();
         for (Class<GuiceyBundle> bundle : bundles) {
-            renderBundleRecursive(res, bundle, 1);
+            renderBundleRecursive(res, bundle, 1, rendered);
         }
         if (config.isPrintDisabledItems()) {
             for (Class<GuiceyBundle> bundle : service.getBundlesDisabled()) {
@@ -132,8 +134,11 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         }
     }
 
-    private void renderBundleRecursive(final StringBuilder res, final Class<GuiceyBundle> bundle, final int level) {
-        final BundleItemInfo info = service.getData().getInfo(bundle);
+    private void renderBundleRecursive(final StringBuilder res,
+                                       final Class<GuiceyBundle> bundle,
+                                       final int level,
+                                       final List<Class> rendered) {
+        final BundleItemInfo info = service.getInfo(bundle);
         final List<String> markers = Lists.newArrayList();
         if (info.isFromLookup()) {
             markers.add("LOOKUP");
@@ -143,10 +148,13 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
             res.append(TAB);
         }
         res.append(renderClassLine(bundle, markers)).append(NEWLINE);
-        final List<Class<GuiceyBundle>> bundles = service.getData()
-                .getItems(ConfigItem.Bundle, Filters.enabled().and(Filters.registrationScope(bundle)));
+        final List<Class<GuiceyBundle>> bundles = service.getRelativelyInstalledBundles(bundle);
+
+        rendered.add(bundle);
         for (Class<GuiceyBundle> relative : bundles) {
-            renderBundleRecursive(res, relative, level + 1);
+            if (!rendered.contains(relative)) {
+                renderBundleRecursive(res, relative, level + 1, rendered);
+            }
         }
     }
 
@@ -179,7 +187,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
             if (extensions.isEmpty() && !config.isPrintNotUsedInstallers()) {
                 continue;
             }
-            final InstallerItemInfo info = service.getData().getInfo(installer);
+            final InstallerItemInfo info = service.getInfo(installer);
             markers.clear();
             commonMarkers(markers, info);
             res.append(TAB).append(TAB).append(renderInstaller(installer, markers)).append(NEWLINE);
@@ -220,7 +228,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
     }
 
     private String renderExtension(final Class<Object> extension) {
-        final ExtensionItemInfo einfo = service.getData().getInfo(extension);
+        final ExtensionItemInfo einfo = service.getInfo(extension);
         final List<String> markers = Lists.newArrayList();
         commonMarkers(markers, einfo);
         if (einfo.isLazy()) {
@@ -242,7 +250,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         final List<String> markers = Lists.newArrayList();
         for (Class<Module> module : modules) {
             markers.clear();
-            final ModuleItemInfo info = service.getData().getInfo(module);
+            final ModuleItemInfo info = service.getInfo(module);
             commonMarkers(markers, info);
             if (info.isOverriding()) {
                 markers.add("OVERRIDE");
@@ -257,14 +265,30 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
     }
 
     private void commonMarkers(final List<String> markers, final ItemInfo item) {
-        if (item.getRegisteredBy().contains(ConfigScope.ClasspathScan.getType())) {
+        if (item.getRegisteredBy().contains(ConfigScope.ClasspathScan.getKey())) {
             markers.add("SCAN");
         }
-        if (item.getRegisteredBy().contains(ConfigScope.Hook.getType())) {
+        if (item.getRegisteredBy().contains(ConfigScope.Hook.getKey())) {
             markers.add("HOOK");
         }
-        if (item.getRegistrationAttempts() > SINGLE) {
-            markers.add("REG(" + item.getRegistrationAttempts() + ")");
+        if (item.getItemType().isInstanceConfig()) {
+            // for instance types all registrations are aggregated into one record
+            final List<ItemInfo> allItems = service.getData().getInfos(item.getType());
+            // avoid printing number for single registration, but show duplicate cases even for 1 item
+            if (allItems.size() > 1 || (allItems.size() == 1 && allItems.get(0).getRegistrationAttempts() > 1)) {
+                int registrations = 0;
+                for (ItemInfo info : allItems) {
+                    registrations += info.getRegistrationAttempts();
+                }
+                markers.add(formatReg(allItems.size(), registrations));
+            }
+        } else if (item.getRegistrationAttempts() > SINGLE) {
+            // for class based items only show registrations
+            markers.add(formatReg(1, item.getRegistrationAttempts()));
         }
+    }
+
+    private String formatReg(int used, int registered) {
+        return String.format("REG(%s/%s)", used, registered);
     }
 }

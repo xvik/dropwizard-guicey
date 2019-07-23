@@ -9,10 +9,13 @@ import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 import javax.inject.Inject
+
+import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
 
 /**
  * @author Vyacheslav Rusakov
@@ -44,14 +47,14 @@ class ManualModeDiagnosticTest extends BaseDiagnosticTest {
         info.modules as Set == [FooModule, GuiceBootstrapModule] as Set
 
         and: "correct scopes"
-        info.getActiveScopes() == [Application] as Set
-        info.getItemsByScope(ConfigScope.Application) as Set == [FooModule, ResourceInstaller, FooResource, GuiceBootstrapModule] as Set
+        typesOnly(info.getActiveScopes()) as Set == [Application] as Set
+        typesOnly(info.getItemsByScope(ConfigScope.Application)) as Set == [FooModule, ResourceInstaller, FooResource, GuiceBootstrapModule] as Set
 
         and: "foo installer was disabled"
-        !info.getItemsByScope(ConfigScope.Application).contains(FooInstaller)
-        InstallerItemInfo fi = info.data.getInfo(FooInstaller)
+        !info.getItemsByScope(ConfigScope.Application).contains(ItemId.from(FooInstaller))
+        InstallerItemInfo fi = info.getInfo(FooInstaller)
         !fi.enabled
-        fi.disabledBy == [Application] as Set
+        fi.disabledBy == [ItemId.from(Application)] as Set
         fi.registered
         fi.registeredDirectly
     }

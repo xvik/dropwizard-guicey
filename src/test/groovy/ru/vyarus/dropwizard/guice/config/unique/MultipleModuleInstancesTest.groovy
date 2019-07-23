@@ -9,7 +9,9 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo
+import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueModule
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -27,29 +29,44 @@ class MultipleModuleInstancesTest extends AbstractTest {
     def "Check duplicates allowed and equals handling"() {
 
         expect: "Mod module registered two times"
-        ModuleItemInfo mod = info.data.getInfo(Mod)
-        with(mod) {
-            registrationScopes == [Application, MiddleBundle]
-            registrations == 2
+        List<ModuleItemInfo> mods = info.getInfos(Mod)
+        with(mods[0]) {
+            registrationScope == ItemId.from(Application)
+            registeredBy == [ItemId.from(Application)] as Set
+            registrationAttempts == 1
 
-            getRegistrationsByScope(Application).size() == 1
-            getDuplicatesByScope(Application).size() == 0
+            getInstance() instanceof Mod
+            getInstanceCount() == 1
 
-            getRegistrationsByScope(MiddleBundle).size() == 1
-            getDuplicatesByScope(MiddleBundle).size() == 0
+            getIgnoresByScope(Application) == 0
+            getIgnoresByScope(MiddleBundle) == 0
+        }
+
+        with(mods[1]) {
+            registrationScope == ItemId.from(MiddleBundle)
+            registeredBy == [ItemId.from(MiddleBundle)] as Set
+            registrationAttempts == 1
+
+            getInstance() instanceof Mod
+            getInstance() != mods[0].getInstance()
+            getInstanceCount() == 2
+
+            getIgnoresByScope(Application) == 0
+            getIgnoresByScope(MiddleBundle) == 0
         }
 
         and: "Foo registered just once"
-        ModuleItemInfo umod = info.data.getInfo(UniqueMod)
+        ModuleItemInfo umod = info.getInfo(UniqueMod)
         with(umod) {
-            registrationScopes == [Application]
-            registrations == 1
+            registrationScope == ItemId.from(Application)
+            registeredBy == [ItemId.from(Application), ItemId.from(MiddleBundle)] as Set
+            registrationAttempts == 2
 
-            getRegistrationsByScope(Application).size() == 1
-            getDuplicatesByScope(Application).size() == 0
+            getInstance() instanceof UniqueMod
+            getInstanceCount() == 1
 
-            getRegistrationsByScope(MiddleBundle).size() == 0
-            getDuplicatesByScope(MiddleBundle).size() == 1
+            getIgnoresByScope(Application) == 0
+            getIgnoresByScope(MiddleBundle) == 1
         }
     }
 
@@ -78,10 +95,5 @@ class MultipleModuleInstancesTest extends AbstractTest {
 
     static class Mod extends AbstractModule {}
 
-    static class UniqueMod extends AbstractModule {
-        @Override
-        boolean equals(Object obj) {
-            return obj.getClass().equals(getClass())
-        }
-    }
+    static class UniqueMod extends UniqueModule {}
 }

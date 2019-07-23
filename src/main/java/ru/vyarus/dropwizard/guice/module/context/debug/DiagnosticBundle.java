@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context.debug;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.AbstractModule;
 import io.dropwizard.Application;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
@@ -14,6 +13,7 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRend
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer;
+import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueModule;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 
@@ -191,7 +191,7 @@ public class DiagnosticBundle implements GuiceyBundle {
     /**
      * Guicey configuration diagnostic module.
      */
-    public static class DiagnosticModule extends AbstractModule {
+    public static class DiagnosticModule extends UniqueModule {
         @Override
         protected void configure() {
             bind(StatsRenderer.class);

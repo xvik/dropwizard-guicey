@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.module.jersey.debug;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.Matchers;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugService;
@@ -34,7 +34,7 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2InstanceListene
  * @author Vyacheslav Rusakov
  * @since 15.01.2016
  */
-public class HK2DebugBundle implements GuiceyBundle {
+public class HK2DebugBundle extends UniqueGuiceyBundle {
 
     @Override
     public void initialize(final GuiceyBootstrap bootstrap) {

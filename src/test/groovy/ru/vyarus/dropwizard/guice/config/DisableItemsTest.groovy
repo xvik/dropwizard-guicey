@@ -17,6 +17,8 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import javax.inject.Inject
 import javax.ws.rs.Path
 
+import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
+
 /**
  * @author Vyacheslav Rusakov
  * @since 07.04.2018
@@ -46,7 +48,7 @@ class DisableItemsTest extends AbstractTest {
         info.getInstallersDisabled() == [ManagedInstaller]
 
         and: "correct disable scope"
-        info.data.getItems(Filters.disabledBy(Application)) as Set ==
+        typesOnly(info.data.getItems(Filters.disabledBy(Application))) as Set ==
                 [SampleBundle, SampleModule1, SampleExtension1, ManagedInstaller] as Set
     }
 

@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.module.installer;
 
 import io.dropwizard.jetty.MutableServletContextHandler;
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebFilterInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebServletInstaller;
@@ -31,7 +31,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListe
  * @author Vyacheslav Rusakov
  * @since 06.08.2016
  */
-public class WebInstallersBundle implements GuiceyBundle {
+public class WebInstallersBundle extends UniqueGuiceyBundle {
 
     @Override
     public void initialize(final GuiceyBootstrap bootstrap) {

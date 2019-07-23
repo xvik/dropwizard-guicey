@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.context;
 
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
 import java.util.Arrays;
@@ -10,7 +11,9 @@ import java.util.Arrays;
  * Enum with type constants used for marking special configuration scopes. Guicey bundles are also
  * scopes: all items registered by guicey bunlde is scoped with bundle type.
  * <p>
- * Scope represents configuration source (configuration entry point).
+ * Scope represents configuration source (configuration entry point). Because bundle could be installed multiple
+ * times - it would multiple scopes with the same class and to identify scopes special abstraction is used:
+ * {@link ItemId}:combination of type + instance identity.
  *
  * @author Vyacheslav Rusakov
  * @since 16.04.2018
@@ -54,6 +57,13 @@ public enum ConfigScope {
     }
 
     /**
+     * @return scope key
+     */
+    public ItemId getKey() {
+        return ItemId.from(getType());
+    }
+
+    /**
      * Useful for hiding all special scopes except one in diagnostic report.
      *
      * @param scope scope to exclude
@@ -67,7 +77,17 @@ public enum ConfigScope {
     }
 
     /**
-     * Scope recognition logic may be used in configration analyzers to easily detect item scope.
+     * Shortcut for {@link #recognize(Class)}.
+     *
+     * @param id scope key
+     * @return recognized scope type
+     */
+    public static ConfigScope recognize(final ItemId id) {
+        return recognize(id.getType());
+    }
+
+    /**
+     * Scope recognition logic may be used in configuration analyzers to easily detect item scope.
      *
      * @param type type to recognize scope
      * @return recognized scope

@@ -1,27 +1,22 @@
 package ru.vyarus.dropwizard.guice.bundles.transitive
 
+import org.junit.runners.model.Statement
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.bundles.transitive.support.loop2.LoopApp2
-import ru.vyarus.dropwizard.guice.bundles.transitive.support.loop2.LoopBundle1
-import ru.vyarus.dropwizard.guice.bundles.transitive.support.loop2.LoopBundle2
-import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
-
-import javax.inject.Inject
+import ru.vyarus.dropwizard.guice.test.GuiceyAppRule
 
 /**
  * @author Vyacheslav Rusakov
  * @since 26.06.2016
  */
-@UseGuiceyApp(LoopApp2)
 class LoopPrevention2Test extends AbstractTest {
-
-    @Inject
-    GuiceyConfigurationInfo info
 
     def "Check loop prevention"() {
 
-        expect: "two bundles registered"
-        info.bundles.containsAll([LoopBundle1, LoopBundle2])
+        when: "starting app"
+        new GuiceyAppRule(LoopApp2, null).apply({} as Statement, null).evaluate()
+        then: "startup failed"
+        def ex = thrown(IllegalStateException)
+        ex.getCause().getMessage() == "Bundles registration loop detected: ( LoopBundle1 -> LoopBundle2 ) -> LoopBundle1 ..."
     }
 }

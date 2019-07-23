@@ -1,8 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context.unique;
 
-import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
-
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Configuration items may be registered by class (extension, installer) or by instance (guicey bundle, guice module).
@@ -12,12 +10,10 @@ import java.util.Collection;
  * there are common bundles (or guice modules), used by multiple other bundles (and so declared by all of them).
  * In this case it would be desirable to register common bundle just once (and avoid duplicate).
  * <p>
- * This is exactly the case why duplicates detector exists: when multiple instances of the same class detected
- * (guicey bundle, guice module) detector is asked to decide if multiple instances are allowed.
- * Custom implementations may be used to resolve existing duplicates (e.g. registered by different 3rd party modules).
+ * Default deduplication logic for instances will consider equal objects as duplicate. In cases, when it is impossible
+ * to properly implement equals method (e.g. 3rd party class), custom deduplication detector could be implemented.
  *
  * @author Vyacheslav Rusakov
- * @see EqualDuplicatesDetector as default implementation
  * @see LegacyModeDuplicatesDetector with legacy guicey behaviour implementation (always one instance per class)
  * @since 03.07.2019
  */
@@ -25,15 +21,15 @@ public interface DuplicateConfigDetector {
 
     /**
      * Called every time when configured object (guicey bundle or guice module) of the same type is already registered.
-     * Used to resolve duplicate registrations: decide to allow another instance or not.
+     * Note that method is called only if new instance is not equal to any registered instances of the same type.
+     * Method must return duplicate object from already registered.
      * <p>
-     * If 3 or more instances of the same type are registered then method would be called for each new configured
-     * instance (in case of 3 registrations - 2 method calls).
+     * For example, if 3 or more instances of the same type are registered then method would be called for each new
+     * configured instance (in case of 3 registrations - 2 method calls, assuming that instances are not equal).
      *
-     * @param info       item descriptor
      * @param registered already registered items
      * @param newItem    new item to check
-     * @return true to prevent item registration, false to allow registration
+     * @return duplicate object from already registered (to mark this one as duplicate to already registered)
      */
-    boolean isDuplicate(ItemInfo info, Collection<Object> registered, Object newItem);
+    Object getDuplicateItem(List<Object> registered, Object newItem);
 }

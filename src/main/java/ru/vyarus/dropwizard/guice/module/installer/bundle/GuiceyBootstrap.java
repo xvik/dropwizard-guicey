@@ -11,7 +11,6 @@ import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -95,8 +94,7 @@ public class GuiceyBootstrap {
     }
 
     /**
-     * Register guice modules. All registered modules must be of unique type (duplicate instances of the
-     * same type are filtered).
+     * Register guice modules.
      *
      * @param modules one or more juice modules
      * @return bootstrap instance for chained calls
@@ -127,6 +125,7 @@ public class GuiceyBootstrap {
      *
      * @param installers feature installer classes to register
      * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#installers(Class[])
      */
     @SafeVarargs
     public final GuiceyBootstrap installers(final Class<? extends FeatureInstaller>... installers) {
@@ -146,6 +145,7 @@ public class GuiceyBootstrap {
      *
      * @param extensionClasses extension bean classes to register
      * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#extensions(Class[])
      */
     public GuiceyBootstrap extensions(final Class<?>... extensionClasses) {
         context.registerExtensions(extensionClasses);
@@ -155,15 +155,15 @@ public class GuiceyBootstrap {
     /**
      * Register other guicey bundles for installation.
      * <p>
-     * Duplicate bundles will be filtered automatically: bundles of the same type considered duplicate
-     * (if two or more bundles of the same type detected then only first instance will be processed).
+     * Equal instances of the same type will be considered as duplicate.
      *
      * @param bundles guicey bundles
      * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#bundles(GuiceyBundle...)
      */
     public GuiceyBootstrap bundles(final GuiceyBundle... bundles) {
-        context.registerBundles(bundles);
-        iterationBundles.addAll(Arrays.asList(bundles));
+        // remember only non duplicate bundles
+        iterationBundles.addAll(context.registerBundles(bundles));
         return this;
     }
 

@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer;
 
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller;
@@ -18,7 +18,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstalle
  * @author Vyacheslav Rusakov
  * @since 02.08.2015
  */
-public class CoreInstallersBundle implements GuiceyBundle {
+public class CoreInstallersBundle extends UniqueGuiceyBundle {
 
     @Override
     public void initialize(final GuiceyBootstrap bootstrap) {

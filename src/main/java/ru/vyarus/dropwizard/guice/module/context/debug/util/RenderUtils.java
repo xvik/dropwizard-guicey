@@ -60,7 +60,22 @@ public final class RenderUtils {
      * @return rendered class line
      */
     public static String renderClassLine(final Class<?> type, final List<String> markers) {
-        return String.format("%-28s %-26s %s", getClassName(type), brackets(renderPackage(type)), markers(markers));
+        return renderClassLine(type, 0, markers);
+    }
+
+    /**
+     * Renders scope as: class-simple-name#pos (class-package) *markers.
+     * For position 1 position is not rendered.
+     *
+     * @param type    instance class
+     * @param pos     instance position number (registration order) in scope
+     * @param markers markers
+     * @return rendered scope line
+     */
+    public static String renderClassLine(final Class<?> type, final int pos, final List<String> markers) {
+        final String position = pos > 1 ? "#" + pos : "";
+        return String.format("%-28s %-26s %s", getClassName(type) + position,
+                brackets(renderPackage(type)), markers(markers));
     }
 
     /**

@@ -11,6 +11,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -29,29 +30,40 @@ class MultipleBundleInstancesTest extends AbstractTest {
 
 
         expect: "Foo2 bundle registered two times"
-        BundleItemInfo foo2 = info.data.getInfo(Foo2Bundle)
-        with(foo2) {
-            registrationScopes == [Application, MiddleBundle]
-            registrations == 2
+        List<BundleItemInfo> foo2s = info.getInfos(Foo2Bundle)
+        with(foo2s[0]) {
+            registrationScope == ItemId.from(Application)
+            registeredBy == [ItemId.from(Application)] as Set
+            registrationAttempts == 1
 
-            getRegistrationsByScope(Application).size() == 1
-            getDuplicatesByScope(Application).size() == 0
+            getInstance() instanceof Foo2Bundle
+            getInstanceCount() == 1
 
-            getRegistrationsByScope(MiddleBundle).size() == 1
-            getDuplicatesByScope(MiddleBundle).size() == 0
+            getIgnoresByScope(Application) == 0
+            getIgnoresByScope(MiddleBundle) == 0
+        }
+        with(foo2s[1]) {
+            registrationScope == ItemId.from(MiddleBundle)
+            registeredBy == [ItemId.from(MiddleBundle)] as Set
+            registrationAttempts == 1
+
+            getInstance() instanceof Foo2Bundle
+            getInstance() != foo2s[0].getInstance()
+            getInstanceCount() == 2
         }
 
         and: "Foo registered just once"
-        BundleItemInfo foo = info.data.getInfo(FooBundle)
+        BundleItemInfo foo = info.getInfo(FooBundle)
         with(foo) {
-            registrationScopes == [Application]
-            registrations == 1
+            registrationScope == ItemId.from(Application)
+            registeredBy == [ItemId.from(Application), ItemId.from(MiddleBundle)] as Set
+            registrationAttempts == 2
 
-            getRegistrationsByScope(Application).size() == 1
-            getDuplicatesByScope(Application).size() == 0
+            getInstance() instanceof FooBundle
+            getInstanceCount() == 1
 
-            getRegistrationsByScope(MiddleBundle).size() == 0
-            getDuplicatesByScope(MiddleBundle).size() == 1
+            getIgnoresByScope(Application) == 0
+            getIgnoresByScope(MiddleBundle) == 1
         }
     }
 

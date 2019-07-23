@@ -11,6 +11,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.context.unique.LegacyModeDuplicatesDetector
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
@@ -30,29 +31,29 @@ class LegacyDuplicatesPolicyTest extends AbstractTest {
 
 
         expect: "Foo2 bundle registered just once"
-        BundleItemInfo foo2 = info.data.getInfo(Foo2Bundle)
+        BundleItemInfo foo2 = info.getInfo(Foo2Bundle)
         with(foo2) {
-            registrationScopes == [Application]
-            registrations == 1
+            registrationScope == ItemId.from(Application)
+            registrationAttempts == 2
 
-            getRegistrationsByScope(Application).size() == 1
-            getDuplicatesByScope(Application).size() == 0
+            getInstance() instanceof Foo2Bundle
+            getInstanceCount() == 1
 
-            getRegistrationsByScope(MiddleBundle).size() == 0
-            getDuplicatesByScope(MiddleBundle).size() == 1
+            getIgnoresByScope(Application) == 0
+            getIgnoresByScope(MiddleBundle) == 1
         }
 
         and: "Foo registered just once"
-        BundleItemInfo foo = info.data.getInfo(FooBundle)
+        BundleItemInfo foo = info.getInfo(FooBundle)
         with(foo) {
-            registrationScopes == [Application]
-            registrations == 1
+            registrationScope == ItemId.from(Application)
+            registrationAttempts == 2
 
-            getRegistrationsByScope(Application).size() == 1
-            getDuplicatesByScope(Application).size() == 0
+            getInstance() instanceof FooBundle
+            getInstanceCount() == 1
 
-            getRegistrationsByScope(MiddleBundle).size() == 0
-            getDuplicatesByScope(MiddleBundle).size() == 1
+            getIgnoresByScope(Application) == 0
+            getIgnoresByScope(MiddleBundle) == 1
         }
     }
 

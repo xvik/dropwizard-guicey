@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.bundle;
 
 import io.dropwizard.ConfiguredBundle;
+import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 
 /**
@@ -28,6 +29,13 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
  * Bundles could be installed automatically with bundle lookups mechanism
  * {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup}. For example, it could be service loader based
  * lookup which automatically installs bundle when it appears in classpath.
+ * <p>
+ * Multiple instances of the same bundle could be registered (like with dropwizard bundles). But guicey duplicates
+ * mechanism will consider equal bundles as duplicate (and register only one). So in order to grant bundle
+ * uniqueness simply properly implement equals method or use
+ * {@link ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle}. See
+ * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#duplicateConfigDetector(DuplicateConfigDetector)}
+ * for more info duplicates detection mechanism.
  *
  * @author Vyacheslav Rusakov
  * @since 01.08.2015

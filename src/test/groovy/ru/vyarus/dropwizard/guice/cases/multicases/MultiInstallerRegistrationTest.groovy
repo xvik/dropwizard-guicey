@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.cases.multicases.support.CustomInstaller
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -30,8 +31,8 @@ class MultiInstallerRegistrationTest extends Specification {
     def "Check duplicate installer registration"() {
 
         expect:
-        InstallerItemInfo item = info.getData().getInfo(CustomInstaller.class)
-        item.registeredBy == [Application, ClasspathScanner] as Set
+        InstallerItemInfo item = info.getInfo(CustomInstaller.class)
+        item.registeredBy == [ItemId.from(Application), ItemId.from(ClasspathScanner)] as Set
         item.registrationAttempts == 2
         holder.getInstallers().findAll { it.class == CustomInstaller }.size() == 1
 

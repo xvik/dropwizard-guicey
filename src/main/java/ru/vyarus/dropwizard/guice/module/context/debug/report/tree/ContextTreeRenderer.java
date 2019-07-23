@@ -10,6 +10,8 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.TreeNode;
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.InstanceItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -51,11 +53,11 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
     @Override
     public String renderReport(final ContextTreeConfig config) {
 
-        final Set<Class<?>> scopes = service.getActiveScopes(!config.isHideDisables());
+        final Set<ItemId> scopes = service.getActiveScopes(!config.isHideDisables());
 
         final TreeNode root = new TreeNode("APPLICATION");
         if (!config.getHiddenScopes().contains(Application.getType())) {
-            renderScopeContent(config, root, Application.getType());
+            renderScopeContent(config, root, Application.getKey());
         }
 
         renderSpecialScope(config, scopes, root, "BUNDLES LOOKUP", BundleLookup);
@@ -67,11 +69,11 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         return res.toString();
     }
 
-    private void renderSpecialScope(final ContextTreeConfig config, final Set<Class<?>> scopes,
+    private void renderSpecialScope(final ContextTreeConfig config, final Set<ItemId> scopes,
                                     final TreeNode root, final String name, final ConfigScope scope) {
-        if (isScopeVisible(config, scopes, scope.getType())) {
+        if (isScopeVisible(config, scopes, scope.getKey())) {
             final TreeNode node = new TreeNode(name);
-            renderScopeContent(config, node, scope.getType());
+            renderScopeContent(config, node, scope.getKey());
             // scope may be empty due to hide configurations
             if (node.hasChildren()) {
                 root.child(node);
@@ -87,13 +89,13 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param root   root node
      * @param scope  scope to render
      */
-    private void renderScopeContent(final ContextTreeConfig config, final TreeNode root, final Class<?> scope) {
+    private void renderScopeContent(final ContextTreeConfig config, final TreeNode root, final ItemId scope) {
         renderScopeItems(config, root, scope);
 
-        final List<Class<Object>> bundles = service.getData()
+        final List<ItemId<Object>> bundles = service.getData()
                 .getItems(Filters.registeredBy(scope).and(Filters.type(ConfigItem.Bundle)));
 
-        for (Class<Object> bundle : bundles) {
+        for (ItemId<Object> bundle : bundles) {
             renderBundle(config, root, scope, bundle);
         }
     }
@@ -105,27 +107,53 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param root   root node
      * @param scope  current scope
      */
-    private void renderScopeItems(final ContextTreeConfig config, final TreeNode root, final Class<?> scope) {
-        final List<Class<Object>> items = service.getData()
+    private void renderScopeItems(final ContextTreeConfig config, final TreeNode root, final ItemId scope) {
+        final List<ItemId<Object>> items = service.getData()
                 .getItems(Filters.registeredBy(scope).and(Filters.type(ConfigItem.Bundle).negate()));
 
         final List<String> markers = Lists.newArrayList();
-        for (Class<?> item : items) {
-            markers.clear();
+        for (ItemId<?> item : items) {
             final ItemInfo info = service.getData().getInfo(item);
-            if (isHidden(config, info, scope)) {
-                continue;
+            if (!isHidden(config, info, scope)) {
+                renderItem(root, scope, info, markers, false);
             }
-            fillCommonMarkers(info, markers, scope);
-            renderLeaf(root, info.getItemType().name().toLowerCase(), item, markers);
+            // check if item is ignored in the same scope as registration and render ignores
+            if (!config.isHideDuplicateRegistrations()
+                    && scope.equals(info.getRegistrationScope())
+                    && info.getIgnoresByScope(scope) > 0) {
+                renderItem(root, scope, info, markers, true);
+            }
         }
 
         if (!config.isHideDisables()) {
-            final List<Class<Object>> disabled = service.getData().getItems(Filters.disabledBy(scope));
-            for (Class<?> item : disabled) {
-                renderLeaf(root, "-disable", item, null);
+            final List<ItemId<Object>> disabled = service.getData().getItems(Filters.disabledBy(scope));
+            for (ItemId<?> item : disabled) {
+                renderLeaf(root, "-disable", item, 0, null);
             }
         }
+    }
+
+    /**
+     * Render ignored or not scope item.
+     *
+     * @param root     root node
+     * @param scope    current scope
+     * @param info     item descriptor
+     * @param markers  markers
+     * @param asIgnore true for ignored item render
+     */
+    private void renderItem(final TreeNode root,
+                            final ItemId scope,
+                            final ItemInfo info,
+                            final List<String> markers,
+                            final boolean asIgnore) {
+        markers.clear();
+        fillCommonMarkers(info, markers, scope, asIgnore);
+        renderLeaf(root,
+                info.getItemType().name().toLowerCase(),
+                info.getId(),
+                info.getItemType().isInstanceConfig() ? ((InstanceItemInfo) info).getInstanceCount() : 0,
+                markers);
     }
 
     /**
@@ -134,12 +162,13 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param root    root node
      * @param name    child node name
      * @param item    reference item class
+     * @param pos     item registration position in scope
      * @param markers markers (may be null)
      */
     @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
     private void renderLeaf(final TreeNode root, final String name,
-                            final Class<?> item, final List<String> markers) {
-        root.child(String.format("%-10s ", name) + RenderUtils.renderClassLine(item, markers));
+                            final ItemId<?> item, final int pos, final List<String> markers) {
+        root.child(String.format("%-10s ", name) + RenderUtils.renderClassLine(item.getType(), pos, markers));
     }
 
     /**
@@ -150,29 +179,43 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param scope  current scope
      * @param bundle bundle class
      */
+    @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
     private void renderBundle(final ContextTreeConfig config, final TreeNode root,
-                              final Class<?> scope, final Class<Object> bundle) {
+                              final ItemId<?> scope, final ItemId<Object> bundle) {
         final BundleItemInfo info = service.getData().getInfo(bundle);
-        if (isHidden(config, info, scope)) {
-            return;
-        }
         final List<String> markers = Lists.newArrayList();
-        fillCommonMarkers(info, markers, scope);
-        final TreeNode node = new TreeNode(RenderUtils.renderClassLine(bundle, markers));
-        // avoid duplicate bundle content render
-        if (!isDuplicateRegistration(info, scope)) {
-            renderScopeContent(config, node, bundle);
+        if (!isHidden(config, info, scope)) {
+            fillCommonMarkers(info, markers, scope, false);
+            final TreeNode node = new TreeNode(RenderUtils
+                    .renderClassLine(bundle.getType(), info.getInstanceCount(), markers));
+            // avoid duplicate bundle content render
+            if (!isDuplicateRegistration(info, scope)) {
+                renderScopeContent(config, node, bundle);
+            }
+            // avoid showing empty bundle line if configured to hide (but show if bundle is ignored as duplicate)
+            if (node.hasChildren() || !config.isHideEmptyBundles()
+                    || (!config.isHideDisables() && markers.contains(IGNORED))) {
+                root.child(node);
+            }
         }
-        // avoid showing empty bundle line if configured to hide (but show if bundle is ignored as duplicate)
-        if (node.hasChildren() || !config.isHideEmptyBundles()
-                || (!config.isHideDisables() && markers.contains(IGNORED))) {
-            root.child(node);
+
+        // check if bundle is also ignored in this scope and show it
+        if (!config.isHideDuplicateRegistrations()
+                && scope.equals(info.getRegistrationScope())
+                && info.getIgnoresByScope(scope) > 0) {
+            markers.clear();
+            fillCommonMarkers(info, markers, scope, true);
+            root.child(RenderUtils.renderClassLine(bundle.getType(), info.getInstanceCount(), markers));
         }
     }
 
-    private void fillCommonMarkers(final ItemInfo info, final List<String> markers, final Class<?> scope) {
-        if (isDuplicateRegistration(info, scope)) {
-            markers.add(IGNORED);
+    private void fillCommonMarkers(final ItemInfo info,
+                                   final List<String> markers,
+                                   final ItemId scope,
+                                   final boolean asIgnore) {
+        if (asIgnore || isDuplicateRegistration(info, scope)) {
+            final int cnt = info.getIgnoresByScope(scope);
+            markers.add(IGNORED + (cnt > 1 ? "(" + cnt + ")" : ""));
         }
         if (isDisabled(info)) {
             markers.add("DISABLED");
@@ -185,8 +228,10 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param scope  scope to check
      * @return true if scope visible, false otherwise
      */
-    private boolean isScopeVisible(final ContextTreeConfig config, final Set<Class<?>> scopes, final Class<?> scope) {
-        return !config.getHiddenScopes().contains(scope)
+    private boolean isScopeVisible(final ContextTreeConfig config,
+                                   final Set<ItemId> scopes,
+                                   final ItemId scope) {
+        return !config.getHiddenScopes().contains(scope.getType())
                 && (scopes == null || scopes.contains(scope));
     }
 
@@ -200,7 +245,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @return true if item is hidden, false otherwise
      */
     @SuppressWarnings("checkstyle:BooleanExpressionComplexity")
-    private boolean isHidden(final ContextTreeConfig config, final ItemInfo info, final Class<?> scope) {
+    private boolean isHidden(final ContextTreeConfig config, final ItemInfo info, final ItemId scope) {
         // item explicitly hidden
         final boolean hidden = config.getHiddenItems().contains(info.getItemType());
         // installer disabled
@@ -224,7 +269,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @return true if item is bundle and its hidden by config, false otherwise
      */
     private boolean isHiddenBundle(final ContextTreeConfig config, final ItemInfo info) {
-        return ConfigItem.Bundle.equals(info.getItemType()) && !isScopeVisible(config, null, info.getType());
+        return ConfigItem.Bundle.equals(info.getItemType()) && !isScopeVisible(config, null, info.getId());
     }
 
     /**
@@ -251,7 +296,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @return true if item was not registered in provided scope (scope performed duplicate registration),
      * false otherwise
      */
-    private boolean isDuplicateRegistration(final ItemInfo item, final Class<?> scope) {
-        return !item.getRegistrationScopes().contains(scope);
+    private boolean isDuplicateRegistration(final ItemInfo item, final ItemId scope) {
+        return !scope.equals(item.getRegistrationScope());
     }
 }

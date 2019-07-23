@@ -4,6 +4,8 @@ import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 
 import java.util.Set;
 
@@ -14,14 +16,19 @@ import java.util.Set;
  * @since 06.07.2016
  */
 public class BundleItemInfoImpl extends InstanceItemInfoImpl implements BundleItemInfo {
-    private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
+    private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
 
-    public BundleItemInfoImpl(final Class<?> type) {
+    // disable only
+    public BundleItemInfoImpl(final Class<? extends GuiceyBundle> type) {
         super(ConfigItem.Bundle, type);
     }
 
+    public BundleItemInfoImpl(final GuiceyBundle bundle) {
+        super(ConfigItem.Bundle, bundle);
+    }
+
     @Override
-    public Set<Class<?>> getDisabledBy() {
+    public Set<ItemId> getDisabledBy() {
         return disabledBy;
     }
 
@@ -32,7 +39,7 @@ public class BundleItemInfoImpl extends InstanceItemInfoImpl implements BundleIt
 
     @Override
     public boolean isFromLookup() {
-        return getRegisteredBy().contains(ConfigScope.BundleLookup.getType());
+        return getRegisteredBy().contains(ConfigScope.BundleLookup.getKey());
     }
 
     @Override

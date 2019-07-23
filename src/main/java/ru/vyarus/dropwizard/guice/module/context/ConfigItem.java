@@ -1,7 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.*;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 
 /**
  * Guicey configurable item types.
@@ -32,7 +34,7 @@ public enum ConfigItem {
     /**
      * Dropwizard command. Commands could be resolved with classpath scan and installed (by default disabled).
      */
-    Command(true);
+    Command(false);
 
     private boolean instanceConfig;
 
@@ -50,31 +52,35 @@ public enum ConfigItem {
     /**
      * Creates info container for configuration item.
      *
-     * @param type item class
+     * @param item item instance or item class (for class based configurations)
      * @param <T>  type of required info container
      * @return info container instance
      */
     @SuppressWarnings("unchecked")
-    public <T extends ItemInfoImpl> T newContainer(final Class<?> type) {
+    public <T extends ItemInfoImpl> T newContainer(final Object item) {
         final ItemInfo res;
         switch (this) {
             case Installer:
-                res = new InstallerItemInfoImpl(type);
+                res = new InstallerItemInfoImpl((Class) item);
                 break;
             case Extension:
-                res = new ExtensionItemInfoImpl(type);
+                res = new ExtensionItemInfoImpl((Class) item);
                 break;
             case Bundle:
-                res = new BundleItemInfoImpl(type);
+                res = item instanceof Class
+                        ? new BundleItemInfoImpl((Class<GuiceyBundle>) item)
+                        : new BundleItemInfoImpl((GuiceyBundle) item);
                 break;
             case Command:
-                res = new CommandItemInfoImpl(type);
+                res = new CommandItemInfoImpl((Class) item);
                 break;
             case Module:
-                res = new ModuleItemInfoImpl(type);
+                res = item instanceof Class
+                        ? new ModuleItemInfoImpl((Class<com.google.inject.Module>) item)
+                        : new ModuleItemInfoImpl((com.google.inject.Module) item);
                 break;
             default:
-                res = new ItemInfoImpl(this, type);
+                res = new ItemInfoImpl(this, ItemId.from(item));
                 break;
         }
         return (T) res;

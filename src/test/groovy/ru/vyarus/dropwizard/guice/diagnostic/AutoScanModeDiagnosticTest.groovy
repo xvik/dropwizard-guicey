@@ -7,6 +7,7 @@ import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
@@ -25,6 +26,8 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 import javax.inject.Inject
+
+import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
 
 /**
  * @author Vyacheslav Rusakov
@@ -71,15 +74,15 @@ class AutoScanModeDiagnosticTest extends BaseDiagnosticTest {
         info.modules as Set == [FooModule, GuiceBootstrapModule] as Set
 
         and: "correct scopes"
-        info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle, WebInstallersBundle] as Set
-        info.getItemsByScope(ConfigScope.Application) as Set == [CoreInstallersBundle, FooModule, GuiceBootstrapModule] as Set
-        info.getItemsByScope(ConfigScope.ClasspathScan) as Set == [FooInstaller, FooResource, EnvCommand, Cli] as Set
+        typesOnly(info.getActiveScopes()) as Set == [Application, ClasspathScanner, CoreInstallersBundle, WebInstallersBundle] as Set
+        typesOnly(info.getItemsByScope(ConfigScope.Application)) as Set == [CoreInstallersBundle, FooModule, GuiceBootstrapModule] as Set
+        typesOnly(info.getItemsByScope(ConfigScope.ClasspathScan)) as Set == [FooInstaller, FooResource, EnvCommand, Cli] as Set
 
         and: "lifecycle installer was disabled"
         !info.getItemsByScope(CoreInstallersBundle).contains(LifeCycleInstaller)
-        InstallerItemInfo li = info.data.getInfo(LifeCycleInstaller)
+        InstallerItemInfo li = info.getInfo(LifeCycleInstaller)
         !li.enabled
-        li.disabledBy == [Application] as Set
+        li.disabledBy == [ItemId.from(Application)] as Set
         li.registered
     }
 }

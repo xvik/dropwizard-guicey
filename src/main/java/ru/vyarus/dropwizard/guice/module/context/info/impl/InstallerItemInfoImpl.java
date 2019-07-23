@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context.info.impl;
 import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo;
 
 import java.util.Set;
@@ -14,14 +15,14 @@ import java.util.Set;
  * @since 06.07.2016
  */
 public class InstallerItemInfoImpl extends ClassItemInfoImpl implements InstallerItemInfo {
-    private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
+    private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
 
     public InstallerItemInfoImpl(final Class<?> type) {
         super(ConfigItem.Installer, type);
     }
 
     @Override
-    public Set<Class<?>> getDisabledBy() {
+    public Set<ItemId> getDisabledBy() {
         return disabledBy;
     }
 
@@ -32,6 +33,6 @@ public class InstallerItemInfoImpl extends ClassItemInfoImpl implements Installe
 
     @Override
     public boolean isFromScan() {
-        return getRegisteredBy().contains(ConfigScope.ClasspathScan.getType());
+        return getRegisteredBy().contains(ConfigScope.ClasspathScan.getKey());
     }
 }
