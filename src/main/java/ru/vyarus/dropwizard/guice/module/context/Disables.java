@@ -83,6 +83,15 @@ public final class Disables {
     }
 
     /**
+     * Note that only directly registered dropwizard bundles are covered.
+     *
+     * @return guicey dropwizard bundle item predicate
+     */
+    public static Predicate<ItemInfo> dropwizardBundle() {
+        return itemType(ConfigItem.DropwizardBundle);
+    }
+
+    /**
      * @return installer item predicate
      */
     public static Predicate<ItemInfo> installer() {

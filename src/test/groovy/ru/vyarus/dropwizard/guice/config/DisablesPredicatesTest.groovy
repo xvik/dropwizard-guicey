@@ -38,6 +38,9 @@ class DisablesPredicatesTest extends AbstractTest {
         Disables.bundle().test(item(Bundle, Sample))
         !Disables.bundle().test(item(Extension, Sample))
 
+        Disables.dropwizardBundle().test(item(DropwizardBundle, Sample))
+        !Disables.dropwizardBundle().test(item(Bundle, Sample))
+
         Disables.type(Sample).test(item(Extension, Sample))
         !Disables.type(Sample).test(item(Extension, Sample2))
 

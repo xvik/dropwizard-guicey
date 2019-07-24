@@ -8,9 +8,10 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
  * {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup}.
  * <p>
  * Note that the same bundle may be registered by different mechanism simultaneously.
- * For example: by lookup and manually in application class. Bundle will actually be registered only once, but it's info
- * will contain 2 context classes ({@link io.dropwizard.Application} and
- * {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup}) and {@link #isFromLookup()} will be true.
+ * For example: by lookup and manually in application class. Bundle will actually be registered either only once
+ * (if correct equals method implemented) and it's info will contain 2 context classes
+ * ({@link io.dropwizard.Application} and {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup})
+ * (and {@link #isFromLookup()} will be true) or as separate instances.
  *
  * @author Vyacheslav Rusakov
  * @since 09.07.2016

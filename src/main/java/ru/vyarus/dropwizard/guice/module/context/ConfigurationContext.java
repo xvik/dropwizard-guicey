@@ -6,6 +6,7 @@ import com.google.common.collect.*;
 import com.google.inject.Module;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.Configuration;
+import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -238,6 +239,49 @@ public final class ConfigurationContext {
      */
     public boolean isBundleEnabled(final ItemId id) {
         return isEnabled(ConfigItem.Bundle, id);
+    }
+
+    // --------------------------------------------------------------------------- DROPWIZARD BUNDLES
+
+    /**
+     * Direct dropwizard bundle registration from
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#dropwizardBundles(ConfiguredBundle...)}
+     * or {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#dropwizardBundles(
+     *ConfiguredBundle[])}.
+     * Context class is set to currently processed bundle.
+     */
+    @SuppressWarnings("unchecked")
+    public void registerDropwizardBundles(final ConfiguredBundle... bundles) {
+        for (ConfiguredBundle bundle : bundles) {
+            final DropwizardBundleItemInfo info = register(ConfigItem.DropwizardBundle, bundle);
+            // register only non duplicate bundles
+            if (info.getRegistrationAttempts() == 1) {
+                // bundles, registered in root GuiceBundle will be registered as soon as bootstrap would be available
+                if (bootstrap != null) {
+                    bootstrap.addBundle(bundle);
+                }
+            }
+        }
+    }
+
+    /**
+     * Guicey bundle manual disable registration from
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableBundles(Class[])}.
+     *
+     * @param bundles modules to disable
+     */
+    @SuppressWarnings("PMD.UseVarargs")
+    public void disableDropwizardBundle(final Class<? extends ConfiguredBundle>[] bundles) {
+        for (Class<? extends ConfiguredBundle> bundle : bundles) {
+            registerDisable(ConfigItem.DropwizardBundle, ItemId.from(bundle));
+        }
+    }
+
+    /**
+     * @return all configured dropwizard bundles (without duplicates)
+     */
+    public List<ConfiguredBundle> getEnabledDropwizardBundles() {
+        return getEnabledItems(ConfigItem.DropwizardBundle);
     }
 
     // --------------------------------------------------------------------------- MODULES
@@ -524,9 +568,14 @@ public final class ConfigurationContext {
     /**
      * @param bootstrap dropwizard bootstrap instance
      */
+    @SuppressWarnings("unchecked")
     public void initPhaseStarted(final Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
         lifecycle().initializationStarted(bootstrap);
+        // delayed init of registered dropwizard bundles
+        for (ConfiguredBundle bundle : getEnabledDropwizardBundles()) {
+            bootstrap.addBundle(bundle);
+        }
     }
 
     /**

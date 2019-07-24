@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
+import io.dropwizard.ConfiguredBundle;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.*;
@@ -25,6 +26,10 @@ public enum ConfigItem {
      * Note that guicey bundle installs other items and all of them are tracked too.
      */
     Bundle(true),
+    /**
+     * {@link io.dropwizard.ConfiguredBundle}. Only bundles directly registered through guicey api are tracked.
+     */
+    DropwizardBundle(true),
     /**
      * Guice module.
      * Note that only direct modules are tracked (if module registered by other guice module in it's configure
@@ -70,6 +75,11 @@ public enum ConfigItem {
                 res = item instanceof Class
                         ? new BundleItemInfoImpl((Class<GuiceyBundle>) item)
                         : new BundleItemInfoImpl((GuiceyBundle) item);
+                break;
+            case DropwizardBundle:
+                res = item instanceof Class
+                        ? new DropwizardBundleItemInfoImpl((Class<ConfiguredBundle>) item)
+                        : new DropwizardBundleItemInfoImpl((ConfiguredBundle) item);
                 break;
             case Command:
                 res = new CommandItemInfoImpl((Class) item);

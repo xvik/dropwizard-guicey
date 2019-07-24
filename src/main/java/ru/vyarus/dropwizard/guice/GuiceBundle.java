@@ -516,6 +516,27 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
+         * Dropwizard bundles registration. There is no difference with direct bundles registration (with
+         * {@link Bootstrap#addBundle(ConfiguredBundle)}, which is actually called almost immediately),
+         * except guicey tracking (registered bundles are showed in diagnostic report), ability to disable bundle and
+         * automatic duplicates detection (see {@link #duplicateConfigDetector(DuplicateConfigDetector)}).
+         * <p>
+         * Only bundles registered with guicey api are checked! For example, if you register one instance of the same
+         * bundle directly into bootstrap and another one with guicey api - guicey will not be able to track duplicate
+         * registration. So it's better to register all bundles through guicey api.
+         * <p>
+         * be aware that guicey is not able to track transitive bundles (when registered bundle registers another
+         * bundle).
+         *
+         * @param bundles guicey bundles
+         * @return builder instance for chained calls
+         */
+        public Builder<T> dropwizardBundles(final ConfiguredBundle... bundles) {
+            bundle.context.registerDropwizardBundles(bundles);
+            return this;
+        }
+
+        /**
          * Disabling installer will lead to avoiding all relative installed extensions. If you have manually
          * registered extensions for disabled installer then remove their registration. Classpath scan extensions
          * will be ignored (not installed, because no installer to recognize them).
@@ -573,6 +594,19 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         @SafeVarargs
         public final Builder<T> disableBundles(final Class<? extends GuiceyBundle>... bundles) {
             bundle.context.disableBundle(bundles);
+            return this;
+        }
+
+        /**
+         * Dropwizard bundles disable is mostly useful for testing. Note that it can disable only bundles directly
+         * registered through guicey api (transitive bundles are unreachable).
+         *
+         * @param bundles guicey bundles to disable
+         * @return builder instance for chained calls
+         */
+        @SafeVarargs
+        public final Builder<T> disableDropwizardBundles(final Class<? extends ConfiguredBundle>... bundles) {
+            bundle.context.disableDropwizardBundle(bundles);
             return this;
         }
 

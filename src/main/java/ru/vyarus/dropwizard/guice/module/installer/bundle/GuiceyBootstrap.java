@@ -168,18 +168,16 @@ public class GuiceyBootstrap {
     }
 
     /**
-     * Shortcut for dropwizard bundles registration (instead of {@code bootstrap().addBundle()}).
-     * Be careful because in contrast to guicey bundles, dropwizard bundles does not
-     * check duplicate registrations.
+     * Shortcut for dropwizard bundles registration (instead of {@code bootstrap().addBundle()}), but with
+     * duplicates detection and tracking in diagnostic reporting. Dropwizard bundle is immediately initialized.
      *
      * @param bundles dropwizard bundles to register
      * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#dropwizardBundles(ConfiguredBundle...)
      */
     @SuppressWarnings("unchecked")
-    public GuiceyBootstrap bundles(final ConfiguredBundle... bundles) {
-        for (ConfiguredBundle bundle : bundles) {
-            bootstrap().addBundle(bundle);
-        }
+    public GuiceyBootstrap dropwizardBundles(final ConfiguredBundle... bundles) {
+        context.registerDropwizardBundles(bundles);
         return this;
     }
 
