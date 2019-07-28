@@ -525,8 +525,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * bundle directly into bootstrap and another one with guicey api - guicey will not be able to track duplicate
          * registration. So it's better to register all bundles through guicey api.
          * <p>
-         * be aware that guicey is not able to track transitive bundles (when registered bundle registers another
-         * bundle).
+         * By default, guicey will also track transitive bundles registrations (when registered bundle register
+         * other bundles) so disable and deduplication logic will apply to them too. Tracking could be disabled
+         * with {@link GuiceyOptions#TrackDropwizardBundles} option.
          *
          * @param bundles guicey bundles
          * @return builder instance for chained calls
@@ -599,7 +600,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
         /**
          * Dropwizard bundles disable is mostly useful for testing. Note that it can disable only bundles directly
-         * registered through guicey api (transitive bundles are unreachable).
+         * registered through guicey api or bundles registered by them (if dropwizard bundles tracking
+         * not disabled with {@link GuiceyOptions#TrackDropwizardBundles}).
          *
          * @param bundles guicey bundles to disable
          * @return builder instance for chained calls

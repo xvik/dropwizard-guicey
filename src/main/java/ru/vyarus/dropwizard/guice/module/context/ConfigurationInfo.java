@@ -83,6 +83,7 @@ public final class ConfigurationInfo {
      *
      * @param type   configuration item type
      * @param filter predicate to filter definitions
+     * @param <T>    expected class
      * @param <K>    expected info container class
      * @return registered item ids in registration order, filtered with provided filter or empty list
      */

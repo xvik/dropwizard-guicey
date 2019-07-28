@@ -1,6 +1,8 @@
 package ru.vyarus.dropwizard.guice;
 
 import com.google.inject.Stage;
+import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.setup.Bootstrap;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 
 import javax.servlet.DispatcherType;
@@ -68,6 +70,24 @@ public enum GuiceyOptions implements Option {
      * @see ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule
      */
     BindConfigurationByPath(Boolean.class, true),
+
+    /**
+     * Track transitive dropwizard bundles registration. Affects only dropwizard bundles registered through
+     * guicey api ({@link GuiceBundle.Builder#dropwizardBundles(ConfiguredBundle[])} (direct registration) and
+     * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#dropwizardBundles(ConfiguredBundle[])}
+     * (registration within guicey bundle)). When enabled, registered dropwizard bundles would be registered in
+     * dropwizard with decorated (to track execution) object and receive proxied bootstrap object instead
+     * of raw bootstrap into {@link ConfiguredBundle#initialize(Bootstrap)}. This should not cause any problems
+     * with normal bundles usage.
+     * <p>
+     * When disabled, guicey will be able to "see" only directly registered bundles (and so will be able to disable
+     * and deduplicate only them).
+     * <p>
+     * NOTE: dropwizard bundles registered directly into bootstrap object (in application or in guicey bundle)
+     * are not tracked in any case. It is assumed that guicey api would be used for bundles registration when
+     * you want to track them.
+     */
+    TrackDropwizardBundles(Boolean.class, true),
 
     /**
      * Guice injector stage used for injector creation.

@@ -13,9 +13,12 @@ import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.GuiceyOptions;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.module.context.bootstrap.BootstrapProxyFactory;
+import ru.vyarus.dropwizard.guice.module.context.bootstrap.DropwizardBundleTracker;
 import ru.vyarus.dropwizard.guice.module.context.info.*;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.InstanceItemInfoImpl;
@@ -64,6 +67,7 @@ public final class ConfigurationContext {
 
     private DuplicateConfigDetector duplicates;
     private Bootstrap bootstrap;
+    private Bootstrap bootstrapProxy;
     private Configuration configuration;
     private ConfigurationTree configurationTree;
     private Environment environment;
@@ -133,9 +137,21 @@ public final class ConfigurationContext {
      *
      * @param scope scope key
      */
-    public void setScope(final ItemId scope) {
+    public void openScope(final ItemId scope) {
         Preconditions.checkState(currentScope == null, "State error: current scope not closed");
         currentScope = scope;
+    }
+
+    /**
+     * Declares possibly sub-configuration context. For example, to track dropwizard bundles initialization scope.
+     *
+     * @param scope scope key
+     * @return previous scope or null (for application scope)
+     */
+    public ItemId replaceContextScope(final ItemId scope) {
+        final ItemId current = currentScope;
+        currentScope = scope;
+        return current;
     }
 
     /**
@@ -155,7 +171,7 @@ public final class ConfigurationContext {
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands()
      */
     public void registerCommands(final List<Class<Command>> commands) {
-        setScope(ConfigScope.ClasspathScan.getKey());
+        openScope(ConfigScope.ClasspathScan.getKey());
         for (Class<Command> cmd : commands) {
             register(ConfigItem.Command, cmd);
         }
@@ -171,7 +187,7 @@ public final class ConfigurationContext {
      * @see GuiceyBundleLookup
      */
     public void registerLookupBundles(final List<GuiceyBundle> bundles) {
-        setScope(ConfigScope.BundleLookup.getKey());
+        openScope(ConfigScope.BundleLookup.getKey());
         for (GuiceyBundle bundle : bundles) {
             register(ConfigItem.Bundle, bundle);
         }
@@ -249,8 +265,9 @@ public final class ConfigurationContext {
      * or {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#dropwizardBundles(
      *ConfiguredBundle[])}.
      * Context class is set to currently processed bundle.
+     *
+     * @param bundles dropwizard bundles
      */
-    @SuppressWarnings("unchecked")
     public void registerDropwizardBundles(final ConfiguredBundle... bundles) {
         for (ConfiguredBundle bundle : bundles) {
             final DropwizardBundleItemInfo info = register(ConfigItem.DropwizardBundle, bundle);
@@ -258,7 +275,7 @@ public final class ConfigurationContext {
             if (info.getRegistrationAttempts() == 1) {
                 // bundles, registered in root GuiceBundle will be registered as soon as bootstrap would be available
                 if (bootstrap != null) {
-                    bootstrap.addBundle(bundle);
+                    registerDropwizardBundle(bundle);
                 }
             }
         }
@@ -282,6 +299,16 @@ public final class ConfigurationContext {
      */
     public List<ConfiguredBundle> getEnabledDropwizardBundles() {
         return getEnabledItems(ConfigItem.DropwizardBundle);
+    }
+
+    /**
+     * @return bootstrap proxy object
+     */
+    public Bootstrap getBootstrapProxy() {
+        if (bootstrapProxy == null) {
+            bootstrapProxy = BootstrapProxyFactory.create(bootstrap, this);
+        }
+        return bootstrapProxy;
     }
 
     // --------------------------------------------------------------------------- MODULES
@@ -377,7 +404,7 @@ public final class ConfigurationContext {
      * @param installers installers found by classpath scan
      */
     public void registerInstallersFromScan(final List<Class<? extends FeatureInstaller>> installers) {
-        setScope(ConfigScope.ClasspathScan.getKey());
+        openScope(ConfigScope.ClasspathScan.getKey());
         for (Class<? extends FeatureInstaller> installer : installers) {
             register(ConfigItem.Installer, installer);
         }
@@ -461,7 +488,7 @@ public final class ConfigurationContext {
     public ExtensionItemInfoImpl getOrRegisterExtension(final Class<?> extension, final boolean fromScan) {
         final ExtensionItemInfoImpl info;
         if (fromScan) {
-            setScope(ConfigScope.ClasspathScan.getKey());
+            openScope(ConfigScope.ClasspathScan.getKey());
             info = register(ConfigItem.Extension, extension);
             closeScope();
         } else {
@@ -559,7 +586,7 @@ public final class ConfigurationContext {
     public void runHooks(final GuiceBundle.Builder builder) {
         // Support for external configuration (for tests)
         // Use special scope to distinguish external configuration
-        setScope(ConfigScope.Hook.getKey());
+        openScope(ConfigScope.Hook.getKey());
         final Set<GuiceyConfigurationHook> hooks = ConfigurationHooksSupport.run(builder);
         closeScope();
         lifecycle().configurationHooksProcessed(hooks);
@@ -574,7 +601,7 @@ public final class ConfigurationContext {
         lifecycle().initializationStarted(bootstrap);
         // delayed init of registered dropwizard bundles
         for (ConfiguredBundle bundle : getEnabledDropwizardBundles()) {
-            bootstrap.addBundle(bundle);
+            registerDropwizardBundle(bundle);
         }
     }
 
@@ -874,6 +901,14 @@ public final class ConfigurationContext {
 
     private boolean isEnabled(final ConfigItem type, final ItemId itemId) {
         return !disabledItemsHolder.get(type).contains(itemId);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void registerDropwizardBundle(final ConfiguredBundle bundle) {
+        // register decorated dropwizard bundle to track transitive bundles
+        // or bundle directly if tracking disabled
+        bootstrap.addBundle(option(GuiceyOptions.TrackDropwizardBundles)
+                ? new DropwizardBundleTracker(bundle, this) : bundle);
     }
 
     /**

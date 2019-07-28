@@ -46,8 +46,10 @@
     - Add bundle loops detection: as multiple bundle instances allowed loops are highly possible
         Entire bundle chain is provided in exception to simplify fixing loops.
 * Add support for dropwizard bundles tracking: they could be registered in guice bundle (with `.dropwizardBundles()`)
-    and in guicey bundle. Registered bundles could be disabled in main bundle (with .disableDropwizardBundle or 
-    custom predicate) and checked for duplicates (same as guicey bundles and guice modules)                                                     
+    and in guicey bundle. Registered bundles could be disabled in main bundle (with `.disableDropwizardBundle` or 
+    custom predicate) and checked for duplicates (same as guicey bundles and guice modules).
+    - Transitive dropwizard bundles registrations are also tracked 
+       (tracking may be disabled with GuieyOptions.TrackDropwizardBundles option)                                                     
 
 
 Main breaking changes were caused by:

@@ -47,7 +47,7 @@ public interface GuiceyBundle {
      * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder}, which allows to register installers, extensions
      * and guice modules. Existing installer could be replaced by disabling old one and registering new.
      * <p>
-     * Dropwizard bundles could be also registered with {@link GuiceyBootstrap#bundles(ConfiguredBundle[])}
+     * Dropwizard bundles could be also registered with {@link GuiceyBootstrap#dropwizardBundles(ConfiguredBundle[])}
      * shortcut (or by directly accessing dropwizard bootstrap object: {@link GuiceyBootstrap#bootstrap()}
      * <p>
      * As bundles could be registered only during initialization phase, it is not possible to

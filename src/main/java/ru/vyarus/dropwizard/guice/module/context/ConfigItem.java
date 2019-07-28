@@ -27,7 +27,7 @@ public enum ConfigItem {
      */
     Bundle(true),
     /**
-     * {@link io.dropwizard.ConfiguredBundle}. Only bundles directly registered through guicey api are tracked.
+     * {@link io.dropwizard.ConfiguredBundle}. Only bundles registered through guicey api are tracked.
      */
     DropwizardBundle(true),
     /**

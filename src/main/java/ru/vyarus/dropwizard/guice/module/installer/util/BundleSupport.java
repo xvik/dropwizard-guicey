@@ -141,7 +141,7 @@ public final class BundleSupport {
         // important to check here because transitive bundles may appear to be disabled
         final ItemId id = ItemId.from(bundle);
         if (context.isBundleEnabled(id)) {
-            context.setScope(id);
+            context.openScope(id);
             bundle.initialize(bootstrap);
             context.closeScope();
         }
