@@ -9,6 +9,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.DropwizardBundleItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -56,6 +57,8 @@ class TransitiveDropwizardBundlesTest extends AbstractTest {
             registrationScope == ItemId.from(MiddleBundle)
             registeredBy == [ItemId.from(MiddleBundle)] as Set
             registrationAttempts == 1
+            registrationScopeType == ConfigScope.DropwizardBundle
+            isTransitive()
 
             getInstance() instanceof DBundle
             getInstanceCount() == 3

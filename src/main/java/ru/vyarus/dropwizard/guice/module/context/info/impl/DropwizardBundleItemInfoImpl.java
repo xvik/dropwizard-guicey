@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context.info.impl;
 import com.google.common.collect.Sets;
 import io.dropwizard.ConfiguredBundle;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.DropwizardBundleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 
@@ -37,4 +38,9 @@ public class DropwizardBundleItemInfoImpl extends InstanceItemInfoImpl implement
         return disabledBy.isEmpty();
     }
 
+    @Override
+    public boolean isTransitive() {
+        return getRegisteredBy().stream()
+                .noneMatch(type -> ConfigScope.recognize(type) != ConfigScope.DropwizardBundle);
+    }
 }

@@ -40,7 +40,13 @@ public enum ConfigScope {
      * It was added just for completeness of context recognition logic (see {@link #recognize(Class)})
      * and to indicate all possible scopes.
      */
-    GuiceyBundle(ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle.class);
+    GuiceyBundle(ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle.class),
+    /**
+     * WARNING: dropwizard bundle scope is bundle class itself. Constant is useless for direct usage!
+     * It was added just for completeness of context recognition logic (see {@link #recognize(Class)})
+     * and to indicate all possible scopes.
+     */
+    DropwizardBundle(io.dropwizard.ConfiguredBundle.class);
 
 
     private final Class<?> type;
@@ -71,7 +77,7 @@ public enum ConfigScope {
      */
     public static Class[] allExcept(final ConfigScope scope) {
         return Arrays.stream(values())
-                .filter(s -> s != scope && s != ConfigScope.GuiceyBundle)
+                .filter(s -> s != scope && s != ConfigScope.GuiceyBundle && s != ConfigScope.DropwizardBundle)
                 .map(ConfigScope::getType)
                 .toArray(Class[]::new);
     }

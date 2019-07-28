@@ -11,4 +11,11 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
  * @since 24.07.2019
  */
 public interface DropwizardBundleItemInfo extends InstanceItemInfo, DisableSupport {
+
+    /**
+     * In case when bundle is registered multiple times, bundle will be transitive if all registrations were transitive.
+     *
+     * @return true when bundle was registered only by some other bundle (and never directly)
+     */
+    boolean isTransitive();
 }
