@@ -163,8 +163,9 @@ public final class Filters {
      *
      * @param types item types to match
      * @return items of type filter
+     * @param <T> expected info container type (if used within single configuration type)
      */
-    public static Predicate<ItemInfo> type(final ConfigItem... types) {
+    public static <T extends ItemInfo> Predicate<T> type(final ConfigItem... types) {
         final List<ConfigItem> target = Arrays.asList(types);
         return input -> target.contains(input.getItemType());
     }
@@ -174,8 +175,9 @@ public final class Filters {
      *
      * @param type item class
      * @return items of class filter
+     * @param <T> expected info container type (if used within single configuration type)
      */
-    public static Predicate<ItemInfo> type(final Class<?> type) {
+    public static <T extends ItemInfo> Predicate<T> type(final Class<?> type) {
         return input -> input.getType().equals(type);
     }
 
@@ -186,17 +188,28 @@ public final class Filters {
      *
      * @return bundles resolved by lookup filter
      */
-    public static Predicate<BundleItemInfo> lookupBundles() {
-        return BundleItemInfo::isFromLookup;
+    public static Predicate<GuiceyBundleItemInfo> lookupBundles() {
+        return GuiceyBundleItemInfo::isFromLookup;
     }
 
     /**
      * Filter for transitive bundles: bundles registered only by other bundles (and never directly).
+     * Applied to both guicey and dropwizard bundles.
      *
      * @return transitive bundled filter
      */
     public static Predicate<BundleItemInfo> transitiveBundles() {
         return BundleItemInfo::isTransitive;
+    }
+
+    /**
+     * Guicey and dropwizard bundles are pretty much unified and likely to be queried together for reporting.
+     *
+     * @param <T> expected info container type (if used within single configuration type)
+     * @return bundle predicate (guicey or dropwizard)
+     */
+    public static <T extends BundleItemInfo> Predicate<T> bundles() {
+        return Filters.<T>type(ConfigItem.Bundle).or(type(ConfigItem.DropwizardBundle));
     }
 
     // --------------------------------------------------------------------------- EXTENSIONS

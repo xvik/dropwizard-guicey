@@ -36,7 +36,7 @@ class ManualModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
 
         expect: "correct bundles info"
         // assigned in abstract test
-        info.bundles as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle] as Set
+        info.guiceyBundles as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle] as Set
         info.bundlesFromLookup as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle] as Set
 
         and: "correct installers info"

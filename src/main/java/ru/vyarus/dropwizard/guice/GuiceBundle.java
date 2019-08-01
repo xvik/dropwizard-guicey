@@ -107,6 +107,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     @Override
     public void initialize(final Bootstrap bootstrap) {
         final Stopwatch timer = context.stat().timer(GuiceyTime);
+        // this will also trigger registered dropwizard bundles initialization
+        // (so dropwizard bundles init before guicey bundles)
         context.initPhaseStarted(bootstrap);
         final GuiceyInitializer starter = new GuiceyInitializer(bootstrap, context);
 

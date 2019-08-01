@@ -49,7 +49,14 @@
     and in guicey bundle. Registered bundles could be disabled in main bundle (with `.disableDropwizardBundle` or 
     custom predicate) and checked for duplicates (same as guicey bundles and guice modules).
     - Transitive dropwizard bundles registrations are also tracked 
-       (tracking may be disabled with GuieyOptions.TrackDropwizardBundles option)                                                     
+       (tracking may be disabled with GuieyOptions.TrackDropwizardBundles option)
+* Diagnostic report changes (mostly required to identify instance deduplication):
+    - Show both dropwizard and guicey bundles together (dropwizard bundles marked with DW)
+    - Always show "empty" bundles (bundles without sub registrations) - important for dw bundles
+    - Add "-" before ignored or disabled items (to visually differentiate from accepted items)
+    - Instead of registrations count (REG(2)) show exact counter of all registered and accepted items: REG(5/12)
+    - Show ignored items even in context where items of the same type were accepted
+    - Show exact number of ignored items in context (IGNORE(3))                                                              
 
 
 Main breaking changes were caused by:

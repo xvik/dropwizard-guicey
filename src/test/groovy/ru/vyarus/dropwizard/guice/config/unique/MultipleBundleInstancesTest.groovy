@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.GuiceyBundleItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
@@ -30,7 +30,7 @@ class MultipleBundleInstancesTest extends AbstractTest {
 
 
         expect: "Foo2 bundle registered two times"
-        List<BundleItemInfo> foo2s = info.getInfos(Foo2Bundle)
+        List<GuiceyBundleItemInfo> foo2s = info.getInfos(Foo2Bundle)
         with(foo2s[0]) {
             registrationScope == ItemId.from(Application)
             registeredBy == [ItemId.from(Application)] as Set
@@ -53,7 +53,7 @@ class MultipleBundleInstancesTest extends AbstractTest {
         }
 
         and: "Foo registered just once"
-        BundleItemInfo foo = info.getInfo(FooBundle)
+        GuiceyBundleItemInfo foo = info.getInfo(FooBundle)
         with(foo) {
             registrationScope == ItemId.from(Application)
             registeredBy == [ItemId.from(Application), ItemId.from(MiddleBundle)] as Set

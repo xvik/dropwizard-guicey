@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.config
 import com.google.inject.AbstractModule
 import io.dropwizard.Application
 import io.dropwizard.Configuration
+import io.dropwizard.ConfiguredBundle
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
@@ -32,9 +33,10 @@ class DisableItemsTest extends AbstractTest {
     def "Check configuration items disabling"() {
 
         expect: "items disabled"
-        info.getBundles().contains(SampleBundle2)  // to not specify bundles from test lookup
-        !info.getBundles().contains(SampleBundle)
-        info.getBundlesDisabled() == [SampleBundle]
+        !info.getDropwizardBundles().contains(DBundle)
+        info.getGuiceyBundles().contains(SampleBundle2)  // to not specify bundles from test lookup
+        !info.getGuiceyBundles().contains(SampleBundle)
+        info.getBundlesDisabled() as Set == [DBundle, SampleBundle] as Set
 
         info.getModules().contains(SampleModule2)
         !info.getModules().contains(SampleModule1)
@@ -49,7 +51,7 @@ class DisableItemsTest extends AbstractTest {
 
         and: "correct disable scope"
         typesOnly(info.data.getItems(Filters.disabledBy(Application))) as Set ==
-                [SampleBundle, SampleModule1, SampleExtension1, ManagedInstaller] as Set
+                [SampleBundle, SampleModule1, SampleExtension1, ManagedInstaller, DBundle] as Set
     }
 
     static class App extends Application<Configuration> {
@@ -57,10 +59,12 @@ class DisableItemsTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
+                    .dropwizardBundles(new DBundle())
                     .bundles(new SampleBundle(), new SampleBundle2())
                     .modules(new SampleModule1(), new SampleModule2())
                     .extensions(SampleExtension1, SampleExtension2)
 
+                    .disableDropwizardBundles(DBundle)
                     .disableBundles(SampleBundle)
                     .disableModules(SampleModule1)
                     .disableExtensions(SampleExtension1)
@@ -91,6 +95,8 @@ class DisableItemsTest extends AbstractTest {
     static class SampleModule1 extends AbstractModule {}
 
     static class SampleModule2 extends AbstractModule {}
+
+    static class DBundle implements ConfiguredBundle {}
 
     @Path('/1')
     static class SampleExtension1 {}

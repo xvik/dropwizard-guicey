@@ -207,7 +207,7 @@ public final class ConfigurationContext {
     public List<GuiceyBundle> registerBundles(final GuiceyBundle... bundles) {
         final List<GuiceyBundle> res = new ArrayList<>();
         for (GuiceyBundle bundle : bundles) {
-            final BundleItemInfo info = register(ConfigItem.Bundle, bundle);
+            final GuiceyBundleItemInfo info = register(ConfigItem.Bundle, bundle);
             // avoid duplicates (equal or same instances)
             if (info.getRegistrationAttempts() == 1) {
                 res.add(bundle);

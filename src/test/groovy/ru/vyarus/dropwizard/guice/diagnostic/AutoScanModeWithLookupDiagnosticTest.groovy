@@ -50,7 +50,7 @@ class AutoScanModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
 
         expect: "correct bundles info"
         // assigned in abstract test
-        info.bundles as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle, FooBundle, FooBundleRelativeBundle, CoreInstallersBundle, WebInstallersBundle] as Set
+        info.guiceyBundles as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle, FooBundle, FooBundleRelativeBundle, CoreInstallersBundle, WebInstallersBundle] as Set
         info.bundlesFromLookup as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle] as Set
 
         and: "correct installers info"

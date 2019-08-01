@@ -5,6 +5,7 @@ import com.google.inject.Binder
 import com.google.inject.Module
 import io.dropwizard.Application
 import io.dropwizard.Configuration
+import io.dropwizard.ConfiguredBundle
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
@@ -50,6 +51,7 @@ class DiagnosticRendererTest extends Specification {
 
 
     BUNDLES =
+        DBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
         FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(1/2)
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
@@ -94,6 +96,7 @@ class DiagnosticRendererTest extends Specification {
 
 
     BUNDLES =
+        DBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
         FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(1/2)
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
@@ -101,6 +104,7 @@ class DiagnosticRendererTest extends Specification {
         XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
             WebInstallersBundle          (r.v.d.g.m.installer)
+        -DisabledDBundle             (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
         -DisabledBundle              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 
 
@@ -150,6 +154,7 @@ class DiagnosticRendererTest extends Specification {
         render(new DiagnosticConfig().printBundles()) == """
 
     BUNDLES =
+        DBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
         FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(1/2)
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
@@ -166,6 +171,7 @@ class DiagnosticRendererTest extends Specification {
         render(new DiagnosticConfig().printBundles().printDisabledItems()) == """
 
     BUNDLES =
+        DBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
         FooBundle                    (r.v.d.g.d.s.bundle)       *LOOKUP, REG(1/2)
             FooBundleRelativeBundle      (r.v.d.g.d.s.bundle)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)
@@ -173,6 +179,7 @@ class DiagnosticRendererTest extends Specification {
         XBundle                      (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
             WebInstallersBundle          (r.v.d.g.m.installer)
+        -DisabledDBundle             (r.v.d.g.c.d.r.DiagnosticRendererTest) *DW
         -DisabledBundle              (r.v.d.g.c.d.r.DiagnosticRendererTest)
 """ as String;
     }
@@ -338,6 +345,7 @@ class DiagnosticRendererTest extends Specification {
                     })
                             .enableAutoConfig(FooResource.package.name)
                             .searchCommands()
+                            .dropwizardBundles(new DBundle(), new DisabledDBundle())
                             .bundles(new FooBundle(), new GuiceRestrictedConfigBundle(), new DisabledBundle())
                             .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule(), new DisabledModule())
                             .modulesOverride(new OverrideModule())
@@ -346,6 +354,7 @@ class DiagnosticRendererTest extends Specification {
                             .disableBundles(DisabledBundle)
                             .disableModules(DisabledModule)
                             .disableExtensions(DisabledExtension)
+                            .disableDropwizardBundles(DisabledDBundle)
                             .strictScopeControl()
                             .build())
         }
@@ -421,4 +430,8 @@ class DiagnosticRendererTest extends Specification {
     @EagerSingleton
     static class XExt {
     }
+
+    static class DBundle implements ConfiguredBundle {}
+
+    static class DisabledDBundle implements ConfiguredBundle {}
 }

@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.config
 import com.google.inject.AbstractModule
 import io.dropwizard.Application
 import io.dropwizard.Configuration
+import io.dropwizard.ConfiguredBundle
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
@@ -36,9 +37,10 @@ class DisableWithPredicateTest extends AbstractTest {
     def "Check configuration items disabling with matcher"() {
 
         expect: "items disabled"
-        info.getBundles().contains(SampleBundle2)  // to not specify bundles from test lookup
-        !info.getBundles().contains(SampleBundle)
-        info.getBundlesDisabled() == [SampleBundle]
+        !info.getDropwizardBundles().contains(DBundle)
+        info.getGuiceyBundles().contains(SampleBundle2)  // to not specify bundles from test lookup
+        !info.getGuiceyBundles().contains(SampleBundle)
+        info.getBundlesDisabled() as Set == [SampleBundle, DBundle] as Set
 
         info.getModules().contains(SampleModule2)
         !info.getModules().contains(SampleModule1)
@@ -53,7 +55,7 @@ class DisableWithPredicateTest extends AbstractTest {
 
         and: "correct disable scope"
         typesOnly(info.data.getItems(Filters.disabledBy(ConfigScope.Application.type))) as Set ==
-                [SampleBundle, SampleModule1] as Set
+                [SampleBundle, SampleModule1, DBundle] as Set
         typesOnly(info.data.getItems(Filters.disabledBy(ConfigScope.Hook.type))) as Set ==
                 [SampleExtension1, ManagedInstaller] as Set
     }
@@ -66,8 +68,9 @@ class DisableWithPredicateTest extends AbstractTest {
             // listener will call disable AFTER items registration (post processing on predicate registration)
                     .listen(new Listener())
             // predicate registered before items registration and will disable items by event
-                    .disable(type(SampleBundle, SampleModule1))
+                    .disable(type(SampleBundle, SampleModule1, DBundle))
 
+                    .dropwizardBundles(new DBundle())
                     .bundles(new SampleBundle(), new SampleBundle2())
                     .modules(new SampleModule1(), new SampleModule2())
                     .extensions(SampleExtension1, SampleExtension2)
@@ -105,6 +108,8 @@ class DisableWithPredicateTest extends AbstractTest {
     static class SampleModule1 extends AbstractModule {}
 
     static class SampleModule2 extends AbstractModule {}
+
+    static class DBundle implements ConfiguredBundle {}
 
     @Path('/1')
     static class SampleExtension1 {}

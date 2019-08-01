@@ -34,6 +34,7 @@ import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.*;
 public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
 
     private static final String IGNORED = "IGNORED";
+    private static final String DISABLED = "DISABLED";
 
     private final GuiceyConfigurationInfo service;
 
@@ -93,7 +94,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         renderScopeItems(config, root, scope);
 
         final List<ItemId<Object>> bundles = service.getData()
-                .getItems(Filters.registeredBy(scope).and(Filters.type(ConfigItem.Bundle)));
+                .getItems(Filters.bundles().and(Filters.registeredBy(scope)));
 
         for (ItemId<Object> bundle : bundles) {
             renderBundle(config, root, scope, bundle);
@@ -109,7 +110,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      */
     private void renderScopeItems(final ContextTreeConfig config, final TreeNode root, final ItemId scope) {
         final List<ItemId<Object>> items = service.getData()
-                .getItems(Filters.registeredBy(scope).and(Filters.type(ConfigItem.Bundle).negate()));
+                .getItems(Filters.bundles().negate().and(Filters.registeredBy(scope)));
 
         final List<String> markers = Lists.newArrayList();
         for (ItemId<?> item : items) {
@@ -168,7 +169,11 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
     @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
     private void renderLeaf(final TreeNode root, final String name,
                             final ItemId<?> item, final int pos, final List<String> markers) {
-        root.child(String.format("%-10s ", name) + RenderUtils.renderClassLine(item.getType(), pos, markers));
+        final boolean ignored = markers != null
+                && markers.stream().anyMatch(it -> it.equals(DISABLED) || it.startsWith(IGNORED));
+        root.child(String.format("%-10s ", name) + (ignored
+                ? RenderUtils.renderDisabledClassLine(item.getType(), pos, markers)
+                : RenderUtils.renderClassLine(item.getType(), pos, markers)));
     }
 
     /**
@@ -180,21 +185,24 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param bundle bundle class
      */
     @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
     private void renderBundle(final ContextTreeConfig config, final TreeNode root,
                               final ItemId<?> scope, final ItemId<Object> bundle) {
         final BundleItemInfo info = service.getData().getInfo(bundle);
         final List<String> markers = Lists.newArrayList();
         if (!isHidden(config, info, scope)) {
             fillCommonMarkers(info, markers, scope, false);
-            final TreeNode node = new TreeNode(RenderUtils
-                    .renderClassLine(bundle.getType(), info.getInstanceCount(), markers));
+            // ignores could contain counter (e.g. IGNORED(2))
+            final boolean ignored = markers.stream().anyMatch(it -> it.startsWith(IGNORED));
+            final TreeNode node = new TreeNode(ignored || markers.contains(DISABLED)
+                    ? RenderUtils.renderDisabledClassLine(bundle.getType(), info.getInstanceCount(), markers)
+                    : RenderUtils.renderClassLine(bundle.getType(), info.getInstanceCount(), markers));
             // avoid duplicate bundle content render
             if (!isDuplicateRegistration(info, scope)) {
                 renderScopeContent(config, node, bundle);
             }
             // avoid showing empty bundle line if configured to hide (but show if bundle is ignored as duplicate)
-            if (node.hasChildren() || !config.isHideEmptyBundles()
-                    || (!config.isHideDisables() && markers.contains(IGNORED))) {
+            if (node.hasChildren() || !config.isHideEmptyBundles() || (!config.isHideDisables() && ignored)) {
                 root.child(node);
             }
         }
@@ -205,7 +213,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
                 && info.getIgnoresByScope(scope) > 0) {
             markers.clear();
             fillCommonMarkers(info, markers, scope, true);
-            root.child(RenderUtils.renderClassLine(bundle.getType(), info.getInstanceCount(), markers));
+            root.child(RenderUtils.renderDisabledClassLine(bundle.getType(), info.getInstanceCount(), markers));
         }
     }
 
@@ -213,12 +221,16 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
                                    final List<String> markers,
                                    final ItemId scope,
                                    final boolean asIgnore) {
+        if (info.getItemType() == ConfigItem.DropwizardBundle) {
+            // dropwizard bundle marker
+            markers.add("DW");
+        }
         if (asIgnore || isDuplicateRegistration(info, scope)) {
             final int cnt = info.getIgnoresByScope(scope);
             markers.add(IGNORED + (cnt > 1 ? "(" + cnt + ")" : ""));
         }
         if (isDisabled(info)) {
-            markers.add("DISABLED");
+            markers.add(DISABLED);
         }
     }
 

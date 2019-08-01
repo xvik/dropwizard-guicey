@@ -66,21 +66,21 @@ class DuplicateModulesReportingTest extends AbstractTest {
     APPLICATION
     ├── module     Module                       (r.v.d.g.c.u.DuplicateModulesReportingTest)
     ├── module     Module#2                     (r.v.d.g.c.u.DuplicateModulesReportingTest)
-    ├── module     Module#2                     (r.v.d.g.c.u.DuplicateModulesReportingTest) *IGNORED
+    ├── module     -Module#2                    (r.v.d.g.c.u.DuplicateModulesReportingTest) *IGNORED
     ├── module     Module#3                     (r.v.d.g.c.u.DuplicateModulesReportingTest)
     ├── module     DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
     ├── module     GuiceBootstrapModule         (r.v.d.guice.module)
     │
     ├── MiddleBundle                 (r.v.d.g.c.u.DuplicateModulesReportingTest)
-    │   ├── module     Module#2                     (r.v.d.g.c.u.DuplicateModulesReportingTest) *IGNORED
+    │   ├── module     -Module#2                    (r.v.d.g.c.u.DuplicateModulesReportingTest) *IGNORED
     │   ├── module     Module#4                     (r.v.d.g.c.u.DuplicateModulesReportingTest)
-    │   ├── module     Module#4                     (r.v.d.g.c.u.DuplicateModulesReportingTest) *IGNORED
+    │   ├── module     -Module#4                    (r.v.d.g.c.u.DuplicateModulesReportingTest) *IGNORED
     │   └── module     Module#5                     (r.v.d.g.c.u.DuplicateModulesReportingTest)
     │
     ├── DiagnosticBundle             (r.v.d.g.m.c.debug)
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED
     │   ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)
     │   ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)
     │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)

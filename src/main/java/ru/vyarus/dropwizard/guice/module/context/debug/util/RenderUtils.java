@@ -73,8 +73,7 @@ public final class RenderUtils {
      * @return rendered scope line
      */
     public static String renderClassLine(final Class<?> type, final int pos, final List<String> markers) {
-        final String position = pos > 1 ? "#" + pos : "";
-        return String.format("%-28s %-26s %s", getClassName(type) + position,
+        return String.format("%-28s %-26s %s", getClassName(type) + renderPositionPostfix(pos),
                 brackets(renderPackage(type)), markers(markers));
     }
 
@@ -85,7 +84,20 @@ public final class RenderUtils {
      * @return rendered disabled class line
      */
     public static String renderDisabledClassLine(final Class<?> type) {
-        return String.format("-%-27s %-26s", getClassName(type), brackets(renderPackage(type)));
+        return renderDisabledClassLine(type, 0, null);
+    }
+
+    /**
+     * Render disabled class as: -class-simple-name#pos (class-package) *markers.
+     *
+     * @param type    class
+     * @param pos     instance position
+     * @param markers markers (may be null)
+     * @return rendered disabled class line
+     */
+    public static String renderDisabledClassLine(final Class<?> type, final int pos, final List<String> markers) {
+        return String.format("-%-27s %-26s %s", getClassName(type) + renderPositionPostfix(pos),
+                brackets(renderPackage(type)), markers(markers));
     }
 
     /**
@@ -138,5 +150,9 @@ public final class RenderUtils {
             name = type.getName().substring(type.getName().lastIndexOf('.') + 1);
         }
         return name;
+    }
+
+    private static String renderPositionPostfix(int pos) {
+        return pos > 1 ? "#" + pos : "";
     }
 }

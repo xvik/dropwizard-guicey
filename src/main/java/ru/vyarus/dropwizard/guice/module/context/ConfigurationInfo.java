@@ -104,7 +104,7 @@ public final class ConfigurationInfo {
      * @return registered item ids in registration order, filtered with provided filter or empty list
      */
     @SuppressWarnings("unchecked")
-    public List<ItemId<Object>> getItems(final Predicate<ItemInfo> filter) {
+    public List<ItemId<Object>> getItems(final Predicate<? extends ItemInfo> filter) {
         final List<ItemId<Object>> items = new ArrayList(itemsHolder.values());
         return filter(items, filter);
     }

@@ -45,7 +45,7 @@ class AutoScanModeDiagnosticTest extends BaseDiagnosticTest {
         info.commands as Set == [Cli, EnvCommand] as Set
 
         and: "correct bundles info"
-        info.bundles == [CoreInstallersBundle, WebInstallersBundle]
+        info.guiceyBundles == [CoreInstallersBundle, WebInstallersBundle]
         info.bundlesFromLookup.isEmpty()
 
         and: "correct installers info"

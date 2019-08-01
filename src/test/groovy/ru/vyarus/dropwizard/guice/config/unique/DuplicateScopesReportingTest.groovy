@@ -77,49 +77,49 @@ class DuplicateScopesReportingTest extends AbstractTest {
     ├── Bundle                       (r.v.d.g.c.u.DuplicateScopesReportingTest)
     │   ├── extension  Ext                          (r.v.d.g.c.u.DuplicateScopesReportingTest)
     │   ├── module     Module                       (r.v.d.g.c.u.DuplicateScopesReportingTest)
-    │   ├── module     Module                       (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   ├── module     -Module                      (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │   ├── module     Module#2                     (r.v.d.g.c.u.DuplicateScopesReportingTest)
     │   └── module     Module#3                     (r.v.d.g.c.u.DuplicateScopesReportingTest)
     │
-    ├── Bundle                       (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    ├── -Bundle                      (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │
     ├── MiddleBundle                 (r.v.d.g.c.u.DuplicateScopesReportingTest)
-    │   ├── module     Module#2                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   ├── module     -Module#2                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │   ├── module     Module#4                     (r.v.d.g.c.u.DuplicateScopesReportingTest)
-    │   ├── module     Module#4                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   ├── module     -Module#4                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │   ├── module     Module#5                     (r.v.d.g.c.u.DuplicateScopesReportingTest)
-    │   ├── Bundle#2                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   ├── -Bundle#2                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │   │
     │   ├── Bundle#4                     (r.v.d.g.c.u.DuplicateScopesReportingTest)
-    │   │   ├── extension  Ext                          (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
-    │   │   ├── module     Module                       (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED(2)
-    │   │   ├── module     Module#2                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
-    │   │   └── module     Module#3                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   │   ├── extension  -Ext                         (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   │   ├── module     -Module                      (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED(2)
+    │   │   ├── module     -Module#2                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   │   └── module     -Module#3                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │   │
-    │   ├── Bundle#4                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   ├── -Bundle#4                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │   │
     │   └── Bundle#5                     (r.v.d.g.c.u.DuplicateScopesReportingTest)
-    │       ├── extension  Ext                          (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
-    │       ├── module     Module                       (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED(2)
-    │       ├── module     Module#2                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
-    │       └── module     Module#3                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │       ├── extension  -Ext                         (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │       ├── module     -Module                      (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED(2)
+    │       ├── module     -Module#2                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │       └── module     -Module#3                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │
     ├── Bundle#2                     (r.v.d.g.c.u.DuplicateScopesReportingTest)
-    │   ├── extension  Ext                          (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
-    │   ├── module     Module                       (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED(2)
-    │   ├── module     Module#2                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
-    │   └── module     Module#3                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   ├── extension  -Ext                         (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   ├── module     -Module                      (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED(2)
+    │   ├── module     -Module#2                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   └── module     -Module#3                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │
     ├── Bundle#3                     (r.v.d.g.c.u.DuplicateScopesReportingTest)
-    │   ├── extension  Ext                          (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
-    │   ├── module     Module                       (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED(2)
-    │   ├── module     Module#2                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
-    │   └── module     Module#3                     (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   ├── extension  -Ext                         (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   ├── module     -Module                      (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED(2)
+    │   ├── module     -Module#2                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
+    │   └── module     -Module#3                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │
     ├── DiagnosticBundle             (r.v.d.g.m.c.debug)
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED
     │   ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)
     │   ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)
     │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)

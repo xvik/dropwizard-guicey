@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.config.unique
 
 import io.dropwizard.Application
 import io.dropwizard.Configuration
+import io.dropwizard.ConfiguredBundle
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
@@ -18,10 +19,10 @@ import javax.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov
- * @since 08.07.2019
+ * @since 28.07.2019
  */
 @UseGuiceyApp(App)
-class DuplicateBundlesReportingTest extends AbstractTest {
+class DuplicateDropwizardBundlesReportingTest extends AbstractTest {
 
     @Inject
     DiagnosticRenderer renderer
@@ -35,8 +36,8 @@ class DuplicateBundlesReportingTest extends AbstractTest {
         cleanupReport(renderer.renderReport(new DiagnosticConfig().printDefaults())) == """
 
     BUNDLES =
-        Bundle                       (r.v.d.g.c.u.DuplicateBundlesReportingTest) *REG(5/10)
-        MiddleBundle                 (r.v.d.g.c.u.DuplicateBundlesReportingTest)
+        DBundle                      (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW, REG(7/12)
+        MiddleBundle                 (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest)
         DiagnosticBundle             (r.v.d.g.m.c.debug)
         HK2DebugBundle               (r.v.d.g.m.j.debug)        *HOOK
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     *HOOK
@@ -65,16 +66,21 @@ class DuplicateBundlesReportingTest extends AbstractTest {
     APPLICATION
     ├── module     DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
     ├── module     GuiceBootstrapModule         (r.v.d.guice.module)
-    ├── Bundle                       (r.v.d.g.c.u.DuplicateBundlesReportingTest)
-    ├── -Bundle                      (r.v.d.g.c.u.DuplicateBundlesReportingTest) *IGNORED(2)
-    ├── Bundle#2                     (r.v.d.g.c.u.DuplicateBundlesReportingTest)
-    ├── Bundle#3                     (r.v.d.g.c.u.DuplicateBundlesReportingTest)
+    ├── DBundle                      (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
+    ├── -DBundle                     (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW, IGNORED(2)
+    ├── DBundle#2                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
     │
-    ├── MiddleBundle                 (r.v.d.g.c.u.DuplicateBundlesReportingTest)
-    │   ├── -Bundle#2                    (r.v.d.g.c.u.DuplicateBundlesReportingTest) *IGNORED
-    │   ├── Bundle#4                     (r.v.d.g.c.u.DuplicateBundlesReportingTest)
-    │   ├── -Bundle#4                    (r.v.d.g.c.u.DuplicateBundlesReportingTest) *IGNORED(2)
-    │   └── Bundle#5                     (r.v.d.g.c.u.DuplicateBundlesReportingTest)
+    ├── DBundle#3                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
+    │   └── DBundle#4                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
+    │
+    ├── MiddleBundle                 (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest)
+    │   ├── -DBundle#2                   (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW, IGNORED
+    │   │
+    │   ├── DBundle#5                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
+    │   │   └── DBundle#6                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
+    │   │
+    │   ├── -DBundle#5                   (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW, IGNORED(2)
+    │   └── DBundle#7                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
     │
     ├── DiagnosticBundle             (r.v.d.g.m.c.debug)
     │
@@ -115,8 +121,7 @@ class DuplicateBundlesReportingTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-            // 1 duplicate
-                    .bundles(new Bundle(1), new Bundle(1), new Bundle(2), new Bundle(3), new Bundle(1))
+                    .dropwizardBundles(new DBundle(1), new DBundle(1), new DBundle(2), new DBundle(3), new DBundle(1))
                     .bundles(new MiddleBundle())
                     .printDiagnosticInfo()
                     .build()
@@ -128,25 +133,31 @@ class DuplicateBundlesReportingTest extends AbstractTest {
         }
     }
 
-    static class MiddleBundle implements GuiceyBundle {
+
+    static class DBundle implements ConfiguredBundle {
+
+        int num
+
+        DBundle(int num) {
+            this.num = num
+        }
+
         @Override
-        void initialize(GuiceyBootstrap bootstrap) {
-            // 3 duplicates
-            bootstrap.bundles(new Bundle(2), new Bundle(4), new Bundle(4), new Bundle(5), new Bundle(4))
+        void initialize(Bootstrap bootstrap) {
+            if (num == 3 || num == 4) {
+                bootstrap.addBundle(new DBundle(num * 10))
+            }
+        }
+
+        boolean equals(o) {
+            return o instanceof DBundle && num == o.num
         }
     }
 
-    static class Bundle implements GuiceyBundle {
-
-        int value;
-
-        Bundle(int value) {
-            this.value = value
-        }
-
+    static class MiddleBundle implements GuiceyBundle {
         @Override
-        boolean equals(Object obj) {
-            return obj instanceof Bundle && value.equals(obj.value)
+        void initialize(GuiceyBootstrap bootstrap) {
+            bootstrap.dropwizardBundles(new DBundle(2), new DBundle(4), new DBundle(4), new DBundle(5), new DBundle(4))
         }
     }
 }

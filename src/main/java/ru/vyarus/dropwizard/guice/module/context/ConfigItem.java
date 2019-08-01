@@ -22,14 +22,16 @@ public enum ConfigItem {
      */
     Extension(false),
     /**
-     * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}.
+     * {@link io.dropwizard.ConfiguredBundle}. Only bundles registered through guicey api are tracked.
+     */
+    // NOTE dropwizard bundle goes before guicey bundle because dropwizard bundles are actually register first
+    DropwizardBundle(true),
+    /**
+     * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle} or
+     * {@link io.dropwizard.ConfiguredBundle}
      * Note that guicey bundle installs other items and all of them are tracked too.
      */
     Bundle(true),
-    /**
-     * {@link io.dropwizard.ConfiguredBundle}. Only bundles registered through guicey api are tracked.
-     */
-    DropwizardBundle(true),
     /**
      * Guice module.
      * Note that only direct modules are tracked (if module registered by other guice module in it's configure
@@ -71,15 +73,15 @@ public enum ConfigItem {
             case Extension:
                 res = new ExtensionItemInfoImpl((Class) item);
                 break;
-            case Bundle:
-                res = item instanceof Class
-                        ? new BundleItemInfoImpl((Class<GuiceyBundle>) item)
-                        : new BundleItemInfoImpl((GuiceyBundle) item);
-                break;
             case DropwizardBundle:
                 res = item instanceof Class
                         ? new DropwizardBundleItemInfoImpl((Class<ConfiguredBundle>) item)
                         : new DropwizardBundleItemInfoImpl((ConfiguredBundle) item);
+                break;
+            case Bundle:
+                res = item instanceof Class
+                        ? new GuiceyBundleItemInfoImpl((Class<GuiceyBundle>) item)
+                        : new GuiceyBundleItemInfoImpl((GuiceyBundle) item);
                 break;
             case Command:
                 res = new CommandItemInfoImpl((Class) item);

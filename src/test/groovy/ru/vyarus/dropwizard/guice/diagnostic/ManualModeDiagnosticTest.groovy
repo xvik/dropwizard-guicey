@@ -30,7 +30,7 @@ class ManualModeDiagnosticTest extends BaseDiagnosticTest {
     def "Check diagnostic info correctness"() {
 
         expect: "correct bundles info"
-        info.bundles.isEmpty()
+        info.guiceyBundles.isEmpty()
         info.bundlesFromLookup.isEmpty()
 
         and: "correct installers info"

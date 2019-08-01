@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.GuiceyBundleItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.context.unique.LegacyModeDuplicatesDetector
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
@@ -31,7 +31,7 @@ class LegacyDuplicatesPolicyTest extends AbstractTest {
 
 
         expect: "Foo2 bundle registered just once"
-        BundleItemInfo foo2 = info.getInfo(Foo2Bundle)
+        GuiceyBundleItemInfo foo2 = info.getInfo(Foo2Bundle)
         with(foo2) {
             registrationScope == ItemId.from(Application)
             registrationAttempts == 2
@@ -44,7 +44,7 @@ class LegacyDuplicatesPolicyTest extends AbstractTest {
         }
 
         and: "Foo registered just once"
-        BundleItemInfo foo = info.getInfo(FooBundle)
+        GuiceyBundleItemInfo foo = info.getInfo(FooBundle)
         with(foo) {
             registrationScope == ItemId.from(Application)
             registrationAttempts == 2

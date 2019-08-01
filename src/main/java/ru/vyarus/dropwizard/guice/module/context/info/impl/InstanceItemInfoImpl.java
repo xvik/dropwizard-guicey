@@ -13,7 +13,7 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 04.07.2019
  */
-public class InstanceItemInfoImpl extends ItemInfoImpl implements InstanceItemInfo {
+public abstract class InstanceItemInfoImpl extends ItemInfoImpl implements InstanceItemInfo {
 
     private final Object instance;
     private int instanceCount;

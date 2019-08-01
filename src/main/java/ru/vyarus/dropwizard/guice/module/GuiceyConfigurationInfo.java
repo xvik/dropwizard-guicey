@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module;
 
 import com.google.common.collect.Sets;
 import com.google.inject.Module;
+import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
@@ -17,7 +18,9 @@ import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly;
 
@@ -199,8 +202,18 @@ public class GuiceyConfigurationInfo {
      *
      * @return types of all installed and enabled bundles (including lookup bundles) or empty list
      */
-    public List<Class<GuiceyBundle>> getBundles() {
+    public List<Class<GuiceyBundle>> getGuiceyBundles() {
         return typesOnly(context.getItems(ConfigItem.Bundle, Filters.enabled()));
+    }
+
+    /**
+     * Note that multiple instances could be installed for some bundles, but returned list will contain just
+     * bundle type (no matter how many instances were actually installed).
+     *
+     * @return types of all installed and enabled dropwizard bundles or empty list
+     */
+    public List<Class<ConfiguredBundle>> getDropwizardBundles() {
+        return typesOnly(context.getItems(ConfigItem.DropwizardBundle, Filters.enabled()));
     }
 
     /**
@@ -215,11 +228,12 @@ public class GuiceyConfigurationInfo {
     }
 
     /**
-     * @return all enabled top-level bundles (without transitives)
+     * @return all (guicey and dropwizard) enabled top-level bundles (without transitives)
      */
-    public List<Class<GuiceyBundle>> getDirectBundles() {
-        return typesOnly(context.getItems(ConfigItem.Bundle,
-                Filters.<BundleItemInfo>enabled().and(Filters.transitiveBundles().negate())));
+    public List<Class<Object>> getDirectBundles() {
+        return typesOnly(context.getItems(Filters.bundles()
+                .and(Filters.enabled())
+                .and(Filters.transitiveBundles().negate())));
     }
 
     /**
@@ -228,17 +242,20 @@ public class GuiceyConfigurationInfo {
      *
      * @return types of manually disabled bundles or empty list
      */
-    public List<Class<GuiceyBundle>> getBundlesDisabled() {
-        return typesOnly(context.getItems(ConfigItem.Bundle, Filters.enabled().negate()));
+    public List<Class<Object>> getBundlesDisabled() {
+        return typesOnly(context.getItems(Filters.bundles()
+                .and(Filters.enabled().negate())));
     }
 
     /**
      * @param bundle bundle
-     * @return types of bundles registered from provided bundle avoiding disabled bundles or empty list
+     * @return types of bundles (guicey and dropwizard) registered from provided bundle avoiding disabled bundles
+     * or empty list
      */
-    public List<Class<GuiceyBundle>> getRelativelyInstalledBundles(final Class<? extends GuiceyBundle> bundle) {
-        return typesOnly(context.getItems(ConfigItem.Bundle,
-                Filters.enabled().and(Filters.registrationScope(bundle))));
+    public List<Class<Object>> getRelativelyInstalledBundles(final Class<?> bundle) {
+        return typesOnly(context.getItems(Filters.bundles()
+                .and(Filters.enabled())
+                .and(Filters.registrationScope(bundle))));
     }
 
     // --------------------------------------------------------------------------- MODULES

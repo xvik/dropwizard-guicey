@@ -91,7 +91,7 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
                         info.getBundlesFromLookup().size(),
                         info.getStats().humanTime(BundleResolutionTime));
             }
-            node.child("%s processed", info.getBundles().size());
+            node.child("%s processed", info.getGuiceyBundles().size());
         }
         return bundle;
     }

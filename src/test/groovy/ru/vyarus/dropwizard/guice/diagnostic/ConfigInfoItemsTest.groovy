@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
-import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.GuiceyBundleItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
@@ -55,7 +55,7 @@ class ConfigInfoItemsTest extends Specification {
         mi.toString() ==~ /$ConfigItem.Module $FooModule.simpleName@[\w]+ \(#1\)/
 
         and: "bundle info"
-        BundleItemInfo bi = info.getInfo(FooBundle)
+        GuiceyBundleItemInfo bi = info.getInfo(FooBundle)
         bi.registeredDirectly
         bi.registered
         bi.registrationAttempts == 1

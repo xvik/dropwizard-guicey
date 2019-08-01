@@ -45,7 +45,7 @@ class AutoScanModeWithBundleDiagnosticTest extends BaseDiagnosticTest {
     def "Check diagnostic info correctness"() {
 
         expect: "correct bundles info"
-        info.bundles as Set == [FooBundle, FooBundleRelativeBundle, CoreInstallersBundle, WebInstallersBundle] as Set
+        info.guiceyBundles as Set == [FooBundle, FooBundleRelativeBundle, CoreInstallersBundle, WebInstallersBundle] as Set
         info.bundlesFromLookup.isEmpty()
 
         and: "correct installers info"

@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Module;
+import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
@@ -9,11 +10,11 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.info.*;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils.*;
@@ -27,11 +28,14 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * classpath scanning. Environment commands are also marked with GUICE_ENABLED to indicate that only
  * these commands may use guice injections.
  * <p>
- * Bundles rendered as tree to indicate transitive installations.
+ * Bundles rendered as tree to indicate transitive installations. Dropwizard and guicey bundles are rendered together:
+ * first dropwizard bundles (because they actually register first) and then guicey.
  * Possible markers:
  * <ul>
  * <li>LOOKUP when bundle come from lookup mechanism</li>
- * <li>DW when bundle recognized from dropwizard bundle (disabled by default)</li>
+ * <li>DW when bundle is dropwizard bundles</li>
+ * <li>IGNORED if bundle was ignored because of deduplication logic</li>
+ * <li>DISABLED if bundle was manually disabled</li>
  * </ul>
  * <p>
  * Installers are rendered in execution order. Extensions (if enabled) are rendered relative to used installer.
@@ -52,11 +56,9 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * Guice modules are rendered by type in registration order. OVERRIDE marker may appear if module was
  * registered as overriding.
  * <p>
- * Some extensions may come from different sources. For example, bundle could come from lookup and registered directly.
- * In such cases all markers are shown (indicating all sources), whereas actually only one source was used for
- * configuration and other sources were ignored.
- * <p>
- * When item registered multiple times marker REG(N) shown where N - registrations count.
+ * When item registered multiple times marker REG(N/M) shown where N - accepted registrations count and M -
+ * overall registrations count. For class based registarions it would always be REG(1/M). For instance registrations
+ * any items count could be accepted (according to deduplication logic).
  *
  * @author Vyacheslav Rusakov
  * @see GuiceyConfigurationInfo for diagnostic data source
@@ -66,6 +68,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
 public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
 
     private static final int SINGLE = 1;
+    private static final String DW = "DW";
 
     private final GuiceyConfigurationInfo service;
 
@@ -115,32 +118,40 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
     }
 
     private void printBundles(final DiagnosticConfig config, final StringBuilder res) {
-        // top level bundles
-        final List<Class<GuiceyBundle>> bundles = service.getDirectBundles();
+        // top level bundles (dropwizard bundles first, then guicey - correct order)
+        final List<Class<Object>> bundles = service.getDirectBundles();
         if (!config.isPrintBundles() || bundles.isEmpty()) {
             return;
         }
         res.append(NEWLINE).append(NEWLINE).append(TAB).append("BUNDLES = ").append(NEWLINE);
         // bundles must be rendered just once, no matter that different instances of the same type could be registered
         // in different places - this report is per class
-        final List<Class> rendered = new ArrayList<>();
-        for (Class<GuiceyBundle> bundle : bundles) {
+        // all root bundles must be rendered at root scope, no matter if they appear transitively
+        // NOTE: dropwizard and guicey bundle lists are not ordered in registration order - instead all guicey bundles
+        // go first and next all dropwizard bundles
+        final List<Class> rendered = new ArrayList<>(bundles);
+        for (Class<Object> bundle : bundles) {
             renderBundleRecursive(res, bundle, 1, rendered);
         }
         if (config.isPrintDisabledItems()) {
-            for (Class<GuiceyBundle> bundle : service.getBundlesDisabled()) {
-                res.append(TAB).append(TAB).append(renderDisabledClassLine(bundle)).append(NEWLINE);
+            final List<String> dwMarker = Collections.singletonList(DW);
+            for (Class<Object> bundle : service.getBundlesDisabled()) {
+                res.append(TAB).append(TAB).append(renderDisabledClassLine(bundle, 0,
+                        ConfiguredBundle.class.isAssignableFrom(bundle) ? dwMarker : null))
+                        .append(NEWLINE);
             }
         }
     }
 
     private void renderBundleRecursive(final StringBuilder res,
-                                       final Class<GuiceyBundle> bundle,
+                                       final Class<Object> bundle,
                                        final int level,
                                        final List<Class> rendered) {
         final BundleItemInfo info = service.getInfo(bundle);
         final List<String> markers = Lists.newArrayList();
-        if (info.isFromLookup()) {
+        if (info.isDropwizard()) {
+            markers.add(DW);
+        } else if (((GuiceyBundleItemInfo) info).isFromLookup()) {
             markers.add("LOOKUP");
         }
         commonMarkers(markers, info);
@@ -148,10 +159,11 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
             res.append(TAB);
         }
         res.append(renderClassLine(bundle, markers)).append(NEWLINE);
-        final List<Class<GuiceyBundle>> bundles = service.getRelativelyInstalledBundles(bundle);
+        // dropwizrd bundles first (as they register immediately, then guicey
+        final List<Class<Object>> bundles = service.getRelativelyInstalledBundles(bundle);
 
         rendered.add(bundle);
-        for (Class<GuiceyBundle> relative : bundles) {
+        for (Class<Object> relative : bundles) {
             if (!rendered.contains(relative)) {
                 renderBundleRecursive(res, relative, level + 1, rendered);
             }
