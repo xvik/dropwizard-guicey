@@ -6,7 +6,6 @@ import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
-import ru.vyarus.dropwizard.guice.module.installer.internal.FeatureInstallerExecutor;
 
 /**
  * Module performs auto configuration using classpath scanning or manually predefined installers and beans.
@@ -31,9 +30,7 @@ public class InstallerModule extends AbstractModule {
     @Override
     @SuppressWarnings("unchecked")
     protected void configure() {
-        // called just after injector creation to process instance installers
-        bind(FeatureInstallerExecutor.class).asEagerSingleton();
-
+        // bound for internal usage
         bind(ExtensionsHolder.class).toInstance(context.getExtensionsHolder());
 
         for (Class<?> ext : context.getEnabledExtensions()) {

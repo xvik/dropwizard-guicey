@@ -56,7 +56,9 @@
     - Add "-" before ignored or disabled items (to visually differentiate from accepted items)
     - Instead of registrations count (REG(2)) show exact counter of all registered and accepted items: REG(5/12)
     - Show ignored items even in context where items of the same type were accepted
-    - Show exact number of ignored items in context (IGNORE(3))                                                              
+    - Show exact number of ignored items in context (IGNORE(3))    
+* Extensions initialization moved outside injector creation scope. It will affect time report and, in case of
+  extension installation error, exception will be thrown directly instead of Guice's CreationException.                                                                
 
 
 Main breaking changes were caused by:

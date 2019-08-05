@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.installer;
+package ru.vyarus.dropwizard.guice.module;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
@@ -13,6 +13,8 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
+import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
+import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;

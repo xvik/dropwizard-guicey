@@ -15,8 +15,8 @@ import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
 import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
-import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
-import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule;
+import ru.vyarus.dropwizard.guice.module.GuiceyInitializer;
+import ru.vyarus.dropwizard.guice.module.GuiceyRunner;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
@@ -27,8 +27,6 @@ import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
 import ru.vyarus.dropwizard.guice.module.installer.*;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
-import ru.vyarus.dropwizard.guice.module.installer.internal.ModulesSupport;
-import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
@@ -92,7 +90,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Jers
  * @see ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo for configuratio diagnostic
  * @since 31.08.2014
  */
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods", "PMD.ExcessiveClassLength"})
+@SuppressWarnings("PMD.ExcessiveClassLength")
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     private Injector injector;
@@ -134,12 +132,18 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     public void run(final T configuration, final Environment environment) throws Exception {
         final Stopwatch timer = context.stat().timer(GuiceyTime);
         context.runPhaseStarted(configuration, environment);
-        runBundles();
-        context.registerModules(new GuiceBootstrapModule(context));
-        context.finalizeConfiguration();
-        ModulesSupport.configureModules(context);
-        createInjector(environment);
-        afterInjectorCreation();
+        final GuiceyRunner runner = new GuiceyRunner(context);
+        // process guicey bundles
+        runner.runBundles();
+        // prepare guice modules for injector creation
+        runner.prepareModules();
+        // create injector
+        injector = runner.createInjector(injectorFactory);
+        // install extensions by instance
+        runner.installExtensions();
+        // inject command fields
+        runner.injectCommands();
+
         context.lifecycle().applicationRun();
         timer.stop();
     }
@@ -149,30 +153,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     public Injector getInjector() {
         return Preconditions.checkNotNull(injector, "Guice not initialized");
-    }
-
-    /**
-     * Run bundles.
-     */
-    private void runBundles() {
-        final Stopwatch timer = context.stat().timer(BundleTime);
-        BundleSupport.runBundles(context);
-        timer.stop();
-    }
-
-    private void createInjector(final Environment environment) {
-        final Stopwatch timer = context.stat().timer(InjectorCreationTime);
-        injector = injectorFactory.createInjector(
-                context.option(InjectorStage), ModulesSupport.prepareModules(context));
-        // registering as managed to cleanup injector on application stop
-        environment.lifecycle().manage(
-                InjectorLookup.registerInjector(context.getBootstrap().getApplication(), injector));
-        timer.stop();
-    }
-
-    @SuppressWarnings("unchecked")
-    private void afterInjectorCreation() {
-        CommandSupport.initCommands(context.getBootstrap().getCommands(), injector, context.stat());
     }
 
     /**

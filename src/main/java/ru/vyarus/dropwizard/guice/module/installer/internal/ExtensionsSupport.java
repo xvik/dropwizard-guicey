@@ -1,11 +1,10 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.common.base.Stopwatch;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
-import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
@@ -18,48 +17,42 @@ import java.util.List;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ExtensionsInstallationTime;
 
 /**
- * Installs all extensions found during classpath scanning.
+ * Extensions installation utility.
  *
  * @author Vyacheslav Rusakov
  * @since 01.09.2014
  */
-public class FeatureInstallerExecutor {
-    private final Logger logger = LoggerFactory.getLogger(FeatureInstallerExecutor.class);
+public final class ExtensionsSupport {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExtensionsSupport.class);
 
-    private final ExtensionsHolder holder;
-    private final Environment environment;
-    private final Injector injector;
-
-    @Inject
-    public FeatureInstallerExecutor(
-            final ExtensionsHolder holder,
-            final Environment environment,
-            final Injector injector) {
-
-        this.holder = holder;
-        this.environment = environment;
-        this.injector = injector;
-
-        installFeatures();
+    private ExtensionsSupport() {
     }
 
+    /**
+     * Installs extensions by instance and type. Note that jersey extensions will be processed later after jersey
+     * startup.
+     *
+     * @param context  configuration context
+     * @param injector guice injector
+     */
     @SuppressWarnings("unchecked")
-    private void installFeatures() {
-        final Stopwatch timer = holder.stat().timer(ExtensionsInstallationTime);
+    public static void installExtensions(final ConfigurationContext context, final Injector injector) {
+        final Stopwatch timer = context.stat().timer(ExtensionsInstallationTime);
+        final ExtensionsHolder holder = context.getExtensionsHolder();
         holder.order();
         final List<Class<?>> allInstalled = new ArrayList<>();
-        holder.lifecycle().injectorPhase(injector);
+        context.lifecycle().injectorPhase(injector);
         for (FeatureInstaller installer : holder.getInstallers()) {
             final List<Class<?>> res = holder.getExtensions(installer.getClass());
             if (res != null) {
                 for (Class inst : res) {
                     if (installer instanceof TypeInstaller) {
-                        ((TypeInstaller) installer).install(environment, inst);
+                        ((TypeInstaller) installer).install(context.getEnvironment(), inst);
                     }
                     if (installer instanceof InstanceInstaller) {
-                        ((InstanceInstaller) installer).install(environment, injector.getInstance(inst));
+                        ((InstanceInstaller) installer).install(context.getEnvironment(), injector.getInstance(inst));
                     }
-                    logger.trace("{} extension installed: {}",
+                    LOGGER.trace("{} extension installed: {}",
                             FeatureUtils.getInstallerExtName(installer.getClass()), inst.getName());
                 }
             }
@@ -67,13 +60,13 @@ public class FeatureInstallerExecutor {
                 // jersey installers reporting occurs after jersey context start
                 installer.report();
                 // extensions for jersey installers will be notified after HK2 context startup
-                holder.lifecycle().extensionsInstalled(installer.getClass(), res);
+                context.lifecycle().extensionsInstalled(installer.getClass(), res);
                 if (res != null) {
                     allInstalled.addAll(res);
                 }
             }
         }
-        holder.lifecycle().extensionsInstalled(allInstalled);
+        context.lifecycle().extensionsInstalled(allInstalled);
         timer.stop();
     }
 }

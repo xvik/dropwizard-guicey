@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.web
 
-import com.google.inject.CreationException
+
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
@@ -24,8 +24,8 @@ class ServletMappingClashFailTest extends AbstractTest {
         when: "starting app with servlets clash"
         new DropwizardAppRule(ClashApp).before()
         then: "exception thrown"
-        def ex = thrown(CreationException)
-        ex.cause.message == "Servlet registration Servlet2 clash with already installed servlets on paths: /sam"
+        def ex = thrown(IllegalStateException)
+        ex.message == "Servlet registration Servlet2 clash with already installed servlets on paths: /sam"
     }
 
     static class ClashApp extends Application<Configuration> {

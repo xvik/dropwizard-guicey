@@ -88,23 +88,4 @@ public class ExtensionsHolder {
             }
         }
     }
-
-    /**
-     * Workaround to pass stats tracker instance to installer executor, without direct registration in context
-     * (aka making it publicly available).
-     *
-     * @return stats tracker object
-     */
-    protected StatsTracker stat() {
-        return tracker;
-    }
-
-    /**
-     * Workaround to pass lifecycle tracker instance to executor, without direct registration in context
-     * (aka making it publicly available).
-     * @return lifecycle tracker object
-     */
-    protected LifecycleSupport lifecycle() {
-        return lifecycleTracker;
-    }
 }
