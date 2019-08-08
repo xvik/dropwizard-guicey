@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.context;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.*;
 import com.google.inject.Module;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -43,6 +44,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationByPath;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.DropwizardBundleInitTime;
 
 /**
  * Configuration context used internally to track all registered configuration items.
@@ -595,14 +598,17 @@ public final class ConfigurationContext {
     /**
      * @param bootstrap dropwizard bootstrap instance
      */
-    @SuppressWarnings("unchecked")
     public void initPhaseStarted(final Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
         lifecycle().initializationStarted(bootstrap);
         // delayed init of registered dropwizard bundles
+        final Stopwatch time = stat().timer(BundleTime);
+        final Stopwatch dwtime = stat().timer(DropwizardBundleInitTime);
         for (ConfiguredBundle bundle : getEnabledDropwizardBundles()) {
             registerDropwizardBundle(bundle);
         }
+        dwtime.stop();
+        time.stop();
     }
 
     /**

@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
-import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,6 @@ import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ExtensionsInstallationTime;
 
 /**
  * Extensions installation utility.
@@ -37,7 +34,6 @@ public final class ExtensionsSupport {
      */
     @SuppressWarnings("unchecked")
     public static void installExtensions(final ConfigurationContext context, final Injector injector) {
-        final Stopwatch timer = context.stat().timer(ExtensionsInstallationTime);
         final ExtensionsHolder holder = context.getExtensionsHolder();
         holder.order();
         final List<Class<?>> allInstalled = new ArrayList<>();
@@ -67,6 +63,5 @@ public final class ExtensionsSupport {
             }
         }
         context.lifecycle().extensionsInstalled(allInstalled);
-        timer.stop();
     }
 }

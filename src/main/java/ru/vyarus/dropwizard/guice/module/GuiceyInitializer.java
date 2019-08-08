@@ -38,14 +38,14 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Jers
 /**
  * Guicey initialization logic performed under dropwizard configuration phase.
  * <ul>
- *     <li>Bundles lookup and initialization</li>
- *     <li>Classpath scan:
- *     <ul>
- *         <li>Commands search</li>
- *         <li>Installers search</li>
- *         <li>Extensions search</li>
- *     </ul>
- *     </li>
+ * <li>Bundles lookup and initialization</li>
+ * <li>Classpath scan:
+ * <ul>
+ * <li>Commands search</li>
+ * <li>Installers search</li>
+ * <li>Extensions search</li>
+ * </ul>
+ * </li>
  * </ul>
  *
  * @author Vyacheslav Rusakov
@@ -55,11 +55,21 @@ public class GuiceyInitializer {
     private static final OrderComparator COMPARATOR = new OrderComparator();
     private final Logger logger = LoggerFactory.getLogger(GuiceyInitializer.class);
 
+    private final Stopwatch guiceyTimer;
+    private final Stopwatch confTimer;
+
     private final Bootstrap bootstrap;
     private final ConfigurationContext context;
     private final ClasspathScanner scanner;
 
     public GuiceyInitializer(final Bootstrap bootstrap, final ConfigurationContext context) {
+        guiceyTimer = context.stat().timer(GuiceyTime);
+        confTimer = context.stat().timer(ConfigurationTime);
+
+        // this will also trigger registered dropwizard bundles initialization
+        // (so dropwizard bundles init before guicey bundles)
+        context.initPhaseStarted(bootstrap);
+
         this.bootstrap = bootstrap;
         this.context = context;
         final String[] packages = context.option(ScanPackages);
@@ -81,7 +91,9 @@ public class GuiceyInitializer {
         }
         context.registerLookupBundles(bundleLookup.lookup());
         resolutionTimer.stop();
+        final Stopwatch btime = context.stat().timer(GuiceyBundleInitTime);
         BundleSupport.initBundles(context);
+        btime.stop();
         timer.stop();
     }
 
@@ -116,6 +128,7 @@ public class GuiceyInitializer {
      */
     @SuppressWarnings("PMD.PrematureDeclaration")
     public void resolveExtensions() {
+        final Stopwatch itimer = context.stat().timer(InstallersTime);
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
         final ExtensionsHolder holder = context.getExtensionsHolder();
         final boolean guiceFirstMode = context.option(JerseyExtensionsManagedByGuice);
@@ -140,15 +153,20 @@ public class GuiceyInitializer {
         }
         context.lifecycle().extensionsResolved(context.getEnabledExtensions(), context.getDisabledExtensions());
         timer.stop();
+        itimer.stop();
     }
 
     /**
-     * Flush classpath scan cache.
+     * Init lifecycle end. Flush classpath scan cache.
      */
-    public void cleanup() {
+    public void initFinished() {
         if (scanner != null) {
             scanner.cleanup();
         }
+        context.lifecycle().initialized();
+
+        confTimer.stop();
+        guiceyTimer.stop();
     }
 
     /**

@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice;
 
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
@@ -24,7 +23,10 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeCo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
-import ru.vyarus.dropwizard.guice.module.installer.*;
+import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
+import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
+import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
@@ -40,7 +42,6 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
-import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
 
 /**
@@ -104,18 +105,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
     @Override
     public void initialize(final Bootstrap bootstrap) {
-        final Stopwatch timer = context.stat().timer(GuiceyTime);
-        // this will also trigger registered dropwizard bundles initialization
-        // (so dropwizard bundles init before guicey bundles)
-        context.initPhaseStarted(bootstrap);
+        // perform classpath scan if required, register dropwizard bundles
         final GuiceyInitializer starter = new GuiceyInitializer(bootstrap, context);
 
         // resolve and init all guicey bundles
         starter.initializeBundles(bundleLookup);
-
-        // when all manual configuration applied (from all bundles) performing classpath scan
-        // (on run phase extensions could be only disabled, but not added)
-
         // scan for commands (if enabled)
         starter.findCommands();
         // scan for installers (if scan enabled) and installers initialization
@@ -123,16 +117,14 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         // scan for extensions (if scan enabled) and validation of all registered extensions
         starter.resolveExtensions();
 
-        starter.cleanup();
-        context.lifecycle().initialized();
-        timer.stop();
+        starter.initFinished();
     }
 
     @Override
     public void run(final T configuration, final Environment environment) throws Exception {
-        final Stopwatch timer = context.stat().timer(GuiceyTime);
-        context.runPhaseStarted(configuration, environment);
-        final GuiceyRunner runner = new GuiceyRunner(context);
+        // deep configuration parsing (config paths resolution)
+        final GuiceyRunner runner = new GuiceyRunner(context, configuration, environment);
+
         // process guicey bundles
         runner.runBundles();
         // prepare guice modules for injector creation
@@ -144,8 +136,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         // inject command fields
         runner.injectCommands();
 
-        context.lifecycle().applicationRun();
-        timer.stop();
+        runner.runFinished();
     }
 
     /**
