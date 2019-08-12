@@ -66,7 +66,7 @@ public final class ItemId<T> {
      * @return identity string (hash)
      */
     public static String identity(final Object instance) {
-        return Integer.toHexString(instance.hashCode());
+        return Integer.toHexString(System.identityHashCode(instance));
     }
 
     /**
