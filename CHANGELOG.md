@@ -1,4 +1,4 @@
-* Update to dropwizard 2.0.0-rc4
+* Update to dropwizard 2.0.0-rc5
     - (breaking in jersey 2.26)
         * Jersey `InjectionManager` now bound to guice context instead of hk2 `ServiceLocator` 
             (locator still can be retrieved from manager)
