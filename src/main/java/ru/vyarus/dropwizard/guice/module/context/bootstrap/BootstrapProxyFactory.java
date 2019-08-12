@@ -14,6 +14,10 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
  * {@link Bootstrap} proxy delegates all calls directly to bootstrap object, except bundle addition. Instead,
  * bundle addition is replaced with guicey bundle registration so disable and deduplication rules could be
  * applied for transitive dropwizard bundles.
+ * <p>
+ * Bootstrap proxy object creation adds ~200ms startup overhead, which is clearly visible on
+ * stats diagnostic report. Class directly extending {@link Bootstrap} would be much more effective, but it would
+ * require overriding of all methods and would be very vulnerable for future bootstrap object changes.
  *
  * @author Vyacheslav Rusakov
  * @since 07.05.2019

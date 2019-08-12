@@ -86,6 +86,10 @@ public enum GuiceyOptions implements Option {
      * NOTE: dropwizard bundles registered directly into bootstrap object (in application or in guicey bundle)
      * are not tracked in any case. It is assumed that guicey api would be used for bundles registration when
      * you want to track them.
+     * <p>
+     * {@link Bootstrap} object proxy creation results in ~200ms overhead, clearly visible on diagnostics report
+     * (stats). But it's the only way to track transitive dropwizard bundles (not so big price).
+     * Proxy object is not created if no dropwizard bundles registered through guicey api.
      */
     TrackDropwizardBundles(Boolean.class, true),
 
