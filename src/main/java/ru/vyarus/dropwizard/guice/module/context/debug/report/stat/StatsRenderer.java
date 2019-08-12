@@ -97,17 +97,16 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
                         info.getBundlesFromLookup().size(),
                         info.getStats().humanTime(BundleResolutionTime));
             }
+            final int guiceyBundles = info.getGuiceyBundles().size();
+            if (guiceyBundles > 0) {
+                node.child("%s initialized in %s", guiceyBundles,
+                        info.getStats().humanTime(GuiceyBundleInitTime));
+            }
             final int dwBundles = info.getDropwizardBundles().size();
             if (dwBundles > 0) {
                 node.child("%s dropwizard bundles initialized in %s", dwBundles,
                         info.getStats().humanTime(DropwizardBundleInitTime));
             }
-            final int guiceyBundles = info.getGuiceyBundles().size();
-            if (guiceyBundles > 0) {
-                node.child("%s bundles initialized in %s", guiceyBundles,
-                        info.getStats().humanTime(GuiceyBundleInitTime));
-            }
-
         }
         return bundle;
     }

@@ -38,8 +38,8 @@ class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
     │
     ├── [44%] BUNDLES processed in 278.4 ms
     │   ├── 2 resolved in 12.72 ms
-    │   ├── 1 dropwizard bundles initialized in 245.2 ms
-    │   └── 7 bundles initialized in 19.79 ms
+    │   ├── 7 initialized in 205.7 μs
+    │   └── 1 dropwizard bundles initialized in 19.79 ms
     │
     ├── [1.8%] COMMANDS processed in 11.48 ms
     │   └── registered 2 commands
@@ -75,8 +75,8 @@ class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
 
         render.contains("] BUNDLES")
         render.contains("2 resolved in")
+        render.contains("7 initialized in")
         render.contains("1 dropwizard bundles initialized in")
-        render.contains("7 bundles initialized in")
 
         render.contains("] COMMANDS")
         render.contains("registered 2 commands")

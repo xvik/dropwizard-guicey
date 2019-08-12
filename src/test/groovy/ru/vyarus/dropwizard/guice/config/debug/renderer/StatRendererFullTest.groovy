@@ -27,7 +27,7 @@ class StatRendererFullTest extends BaseDiagnosticTest {
     │
     ├── [8.9%] BUNDLES processed in 28.19 ms
     │   ├── 2 resolved in 12.26 ms
-    │   └── 7 bundles initialized in 15.23 ms
+    │   └── 7 initialized in 15.23 ms
     │
     ├── [3.2%] COMMANDS processed in 10.59 ms
     │   └── registered 2 commands
@@ -63,7 +63,7 @@ class StatRendererFullTest extends BaseDiagnosticTest {
 
         render.contains("] BUNDLES")
         render.contains("2 resolved in")
-        render.contains("7 bundles initialized in")
+        render.contains("7 initialized in")
 
         render.contains("] COMMANDS")
         render.contains("registered 2 commands")
