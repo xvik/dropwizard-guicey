@@ -51,6 +51,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
  */
 public class DiagnosticBundle implements GuiceyBundle {
 
+    private final String reportTitle;
     private final Boolean statsConfig;
     private final OptionsConfig optionsConfig;
     private final DiagnosticConfig config;
@@ -77,6 +78,7 @@ public class DiagnosticBundle implements GuiceyBundle {
     }
 
     DiagnosticBundle(final Builder builder) {
+        this.reportTitle = builder.reportTitle;
         this.statsConfig = builder.statsConfig;
         this.optionsConfig = builder.optionsConfig;
         this.config = builder.config;
@@ -98,14 +100,19 @@ public class DiagnosticBundle implements GuiceyBundle {
     private void report(final Application app) {
         final DiagnosticReporter reporter = new DiagnosticReporter();
         InjectorLookup.getInjector(app).get().injectMembers(reporter);
-        reporter.report(statsConfig, optionsConfig, config, treeConfig);
+        reporter.report(reportTitle, statsConfig, optionsConfig, config, treeConfig);
+    }
+
+    public static Builder builder() {
+        return new Builder("Diagnostic report");
     }
 
     /**
+     * @param reportTitle report name for logs
      * @return builder for bundle configuration
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(final String reportTitle) {
+        return new Builder(Preconditions.checkNotNull(reportTitle, "Report title required"));
     }
 
     /**
@@ -113,10 +120,15 @@ public class DiagnosticBundle implements GuiceyBundle {
      */
     public static class Builder {
 
+        private final String reportTitle;
         private Boolean statsConfig;
         private OptionsConfig optionsConfig;
         private DiagnosticConfig config;
         private ContextTreeConfig treeConfig;
+
+        public Builder(String reportTitle) {
+            this.reportTitle = reportTitle;
+        }
 
         /**
          * Enables startup statistic reporting. Stats shows internal guicey timings and some details of configuration

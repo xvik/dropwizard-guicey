@@ -10,6 +10,7 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRend
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer;
+import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
 import javax.inject.Inject;
 
@@ -32,20 +33,28 @@ public final class DiagnosticReporter {
     @Inject
     private ContextTreeRenderer contextTreeRenderer;
 
-    public void report(final Boolean statsConfig,
+    public void report(final String reportTitle,
+                       final Boolean statsConfig,
                        final OptionsConfig optionsConfig,
                        final DiagnosticConfig config,
                        final ContextTreeConfig treeConfig) {
 
-        report("Startup stats = {}", statsRenderer, statsConfig);
-        report("Options = {}", optionsRenderer, optionsConfig);
-        report("Configuration diagnostic info = {}", diagnosticRenderer, config);
-        report("Configuration context tree = {}", contextTreeRenderer, treeConfig);
+        final StringBuilder res = new StringBuilder(reportTitle);
+        report("STARTUP STATS", statsRenderer, statsConfig, res);
+        report("OPTIONS", optionsRenderer, optionsConfig, res);
+        report("CONFIGURATION", diagnosticRenderer, config, res);
+        report("CONFIGURATION TREE", contextTreeRenderer, treeConfig, res);
+        logger.info(res.toString());
     }
 
-    private <T> void report(final String name, final ReportRenderer<T> renderer, final T config) {
+    private <T> void report(final String name,
+                            final ReportRenderer<T> renderer,
+                            final T config,
+                            final StringBuilder res) {
         if (config != null) {
-            logger.info(name, renderer.renderReport(config));
+            res.append(Reporter.NEWLINE).append(Reporter.NEWLINE)
+                    .append("---------------------------------------------------------------------------[")
+                    .append(name).append("]").append(renderer.renderReport(config));
         }
     }
 }

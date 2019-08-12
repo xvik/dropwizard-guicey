@@ -10,6 +10,11 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.info.*;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.option.WithOptions;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -42,6 +47,15 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * Not used and disabled installers could be rendered too.
  * If installer resolved by classpath scan then SCAN marker shown.
  * <p>
+ * Installer report could contain installer interface markers in order to indicate installer abilities:
+ * <ul>
+ * <li>TYPE - install extension by type</li>
+ * <li>OBJECT - install extension by instance</li>
+ * <li>BIND - creates custom guicey bindings</li>
+ * <li>JERSEY - applies custom jersey configuration</li>
+ * <li>OPTIONS - supports options</li>
+ * </ul>
+ * <p>
  * If extensions print enabled without installers enabled then all extensions are rendered in registration order.
  * Markers:
  * <ul>
@@ -69,6 +83,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
 
     private static final int SINGLE = 1;
     private static final String DW = "DW";
+    private static final String JERSEY = "JERSEY";
 
     private final GuiceyConfigurationInfo service;
 
@@ -202,7 +217,9 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
             final InstallerItemInfo info = service.getInfo(installer);
             markers.clear();
             commonMarkers(markers, info);
-            res.append(TAB).append(TAB).append(renderInstaller(installer, markers)).append(NEWLINE);
+            final String prefix = config.isPrintInstallerInterfaceMarkers()
+                    ? renderInstallerMarkers(installer) : "";
+            res.append(TAB).append(TAB).append(prefix).append(renderInstaller(installer, markers)).append(NEWLINE);
 
             if (config.isPrintExtensions()) {
                 for (Class<Object> ext : extensions) {
@@ -247,7 +264,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
             markers.add("LAZY");
         }
         if (einfo.isJerseyManaged()) {
-            markers.add("JERSEY");
+            markers.add(JERSEY);
         }
         return renderClassLine(extension, markers);
     }
@@ -302,5 +319,25 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
 
     private String formatReg(int used, int registered) {
         return String.format("REG(%s/%s)", used, registered);
+    }
+
+    private String renderInstallerMarkers(final Class type) {
+        final List<String> markers = new ArrayList<>();
+        if (TypeInstaller.class.isAssignableFrom(type)) {
+            markers.add("TYPE");
+        }
+        if (InstanceInstaller.class.isAssignableFrom(type)) {
+            markers.add("OBJECT");
+        }
+        if (JerseyInstaller.class.isAssignableFrom(type)) {
+            markers.add(JERSEY);
+        }
+        if (BindingInstaller.class.isAssignableFrom(type)) {
+            markers.add("BIND");
+        }
+        if (WithOptions.class.isAssignableFrom(type)) {
+            markers.add("OPTIONS");
+        }
+        return String.format("%-30s ", String.join(", ", markers));
     }
 }

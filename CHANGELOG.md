@@ -58,7 +58,11 @@
     - Show ignored items even in context where items of the same type were accepted
     - Show exact number of ignored items in context (IGNORE(3))    
 * Extensions initialization moved outside injector creation scope. It will affect time report and, in case of
-  extension installation error, exception will be thrown directly instead of Guice's CreationException.                                                                
+  extension installation error, exception will be thrown directly instead of Guice's CreationException.
+* Show installer marker interfaces in printAvailableInstallers() report to indicate installer actions
+    (installation by type or instance, custom guice or jersey bindings, options support).
+* Report all diagnostic reports as one log message in order to differentiate .printDiagnosticReport() 
+    and .printAvailableInstallers() reports when both active                                                                       
 
 
 Main breaking changes were caused by:

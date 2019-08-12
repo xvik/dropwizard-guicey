@@ -24,6 +24,7 @@ public final class DiagnosticConfig {
     private boolean bundles;
     private boolean installers;
     private boolean notUsedInstallers;
+    private boolean showInstallerInterfaces;
     private boolean disabled;
     private boolean extensions;
     private boolean modules;
@@ -70,6 +71,13 @@ public final class DiagnosticConfig {
      */
     public boolean isPrintNotUsedInstallers() {
         return notUsedInstallers;
+    }
+
+    /**
+     * @return true to show additional installer markers indicating implemented interfaces
+     */
+    public boolean isPrintInstallerInterfaceMarkers() {
+        return showInstallerInterfaces;
     }
 
     /**
@@ -144,6 +152,17 @@ public final class DiagnosticConfig {
      */
     public DiagnosticConfig printNotUsedInstallers() {
         notUsedInstallers = true;
+        return this;
+    }
+
+    /**
+     * Enables installer markers interfaces indication. Useful to understand what installer will do (e.g. install
+     * extension by type or by instance or if it performs custom bindings).
+     *
+     * @return config instance for chained calls
+     */
+    public DiagnosticConfig printInstallerInterfaceMarkers() {
+        showInstallerInterfaces = true;
         return this;
     }
 

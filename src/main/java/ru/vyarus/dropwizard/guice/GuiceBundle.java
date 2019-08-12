@@ -696,8 +696,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * <p>
          * Bundle could be enabled indirectly with bundle lookup mechanism (e.g. with system property
          * {@code PropertyBundleLookup.enableBundles(DiagnosticBundle.class)}).
-         * <p>
-         * NOTE: Can't be used together with {@link #printAvailableInstallers()}.
          *
          * @return builder instance for chained calls
          * @see DiagnosticBundle
@@ -715,21 +713,20 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * In contrast to {@link #printDiagnosticInfo()} shows all installers (including installers not used by
          * application extensions). Installers report intended only to show available installers and will not
          * show duplicate installers registrations or installers disabling (use diagnostic reporting for
-         * all configuration aspects).
-         * <p>
-         * NOTE: Can't be used together with {@link #printDiagnosticInfo()}. Both serve different purposes:
-         * available installers - to see what can be used and diagnostic info - to solve configuration problems
-         * or better understand current configuration.
+         * all configuration aspects). Also, report will indicate installers marker interfaces and so it will
+         * be obvious what installer did: install by type or by object, perform custom guice bindings or perform
+         * jersey specific installations.
          *
          * @return builder instance for chained calls
          * @see DiagnosticBundle
          */
         public Builder<T> printAvailableInstallers() {
             bundle.context.registerBundles(
-                    DiagnosticBundle.builder()
+                    DiagnosticBundle.builder("Available installers report")
                             .printConfiguration(new DiagnosticConfig()
                                     .printInstallers()
-                                    .printNotUsedInstallers())
+                                    .printNotUsedInstallers()
+                                    .printInstallerInterfaceMarkers())
                             .printContextTree(new ContextTreeConfig()
                                     .hideCommands()
                                     .hideDuplicateRegistrations()
