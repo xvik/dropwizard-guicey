@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import io.dropwizard.Configuration;
+import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -69,8 +70,13 @@ public final class LifecycleSupport {
         }
     }
 
-    public void initializationStarted(final Bootstrap bootstrap) {
+    public void initializationStarted(final Bootstrap bootstrap,
+                                      final List<ConfiguredBundle> bundles,
+                                      final List<ConfiguredBundle> disabled) {
         this.bootstrap = bootstrap;
+        if (!bundles.isEmpty()) {
+            broadcast(new DropwizardBundlesInitializedEvent(options, bootstrap, bundles, disabled));
+        }
     }
 
     public void bundlesFromLookupResolved(final List<GuiceyBundle> bundles) {

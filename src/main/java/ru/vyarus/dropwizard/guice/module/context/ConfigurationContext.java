@@ -305,6 +305,16 @@ public final class ConfigurationContext {
     }
 
     /**
+     *
+     * @return all disabled dropwizard bundles
+     */
+    public List<ConfiguredBundle> getDisabledDropwizardBundles() {
+        return getDisabledItems(ConfigItem.DropwizardBundle);
+    }
+
+    /**
+     * Proxy object created on first access because of ~200ms creation overhead.
+     *
      * @return bootstrap proxy object
      */
     public Bootstrap getBootstrapProxy() {
@@ -600,13 +610,13 @@ public final class ConfigurationContext {
      */
     public void initPhaseStarted(final Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
-        lifecycle().initializationStarted(bootstrap);
         // delayed init of registered dropwizard bundles
         final Stopwatch time = stat().timer(BundleTime);
         final Stopwatch dwtime = stat().timer(DropwizardBundleInitTime);
         for (ConfiguredBundle bundle : getEnabledDropwizardBundles()) {
             registerDropwizardBundle(bundle);
         }
+        lifecycle().initializationStarted(bootstrap, getEnabledDropwizardBundles(), getDisabledDropwizardBundles());
         dwtime.stop();
         time.stop();
     }

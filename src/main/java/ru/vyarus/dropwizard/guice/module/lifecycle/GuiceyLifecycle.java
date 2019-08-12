@@ -27,6 +27,11 @@ public enum GuiceyLifecycle {
      */
     ConfigurationHooksProcessed(ConfigurationHooksProcessedEvent.class),
     /**
+     * Called after dropwizard bundles initialization (for dropwizard bundles registered through guicey api).
+     * Not called if no bundles were registered.
+     */
+    DropwizardBundlesInitialized(DropwizardBundlesInitializedEvent.class),
+    /**
      * Called if at least one bundle recognized using bundles lookup. Provides list of recognized bundles
      * (note: some of these bundles could be disabled and not used further).
      */
@@ -64,7 +69,7 @@ public enum GuiceyLifecycle {
     ExtensionsResolved(ExtensionsResolvedEvent.class),
     /**
      * Called after guicey initialization (includes bundles lookup and initialization,
-     * installers and extensions resolution). Pure marker even, indicating guicey work finished under dropwizard
+     * installers and extensions resolution). Pure marker event, indicating guicey work finished under dropwizard
      * configuration phase.
      * <p>
      * Note: dropwizard bundles, registered after {@link ru.vyarus.dropwizard.guice.GuiceBundle} will be initialized
@@ -75,14 +80,17 @@ public enum GuiceyLifecycle {
     // -- Bundle.run()
 
     /**
-     * Special meta event, called before all guice bundle run phase logic (when configuration and environment are
-     * already available). Could be used to print some diagnostic info before guicey initialization
-     * (for example, available configuration bindings to debug guice injector creation failure due to missed bindings).
+     * Special meta event, called before all {@link ru.vyarus.dropwizard.guice.GuiceBundle} run phase logic
+     * (when configuration and environment are already available). Could be used to print some diagnostic info before
+     * guicey initialization (for example, available configuration bindings to debug guice injector creation failure
+     * due to missed bindings).
      */
     BeforeRun(BeforeRunEvent.class),
     /**
      * Called after bundles started (run method call). Not called even if no bundles were used at all
      * (no processing - no event).
+     * Note that dropwizard bundles are not yet started because dropwizard will call it's run method after
+     * guice bundle processing.
      */
     BundlesStarted(BundlesStartedEvent.class),
     /**
@@ -98,7 +106,7 @@ public enum GuiceyLifecycle {
      * notified here, even if they participate in installation it is considered as incomplete at that point.
      * <p>
      * Extension instance could be obtained manually from injector. Injector is available because it's already
-     * constructed, but singletons initialization is still in progress.
+     * constructed.
      */
     ExtensionsInstalledBy(ExtensionsInstalledByEvent.class),
     /**
@@ -106,7 +114,7 @@ public enum GuiceyLifecycle {
      * Provides list of all used (enabled) extensions. Not called when no extensions installed.
      * <p>
      * Extension instance could be obtained manually from injector. Injector is available because it's already
-     * constructed, but singletons initialization is still in progress.
+     * constructed.
      */
     ExtensionsInstalled(ExtensionsInstalledEvent.class),
     /**

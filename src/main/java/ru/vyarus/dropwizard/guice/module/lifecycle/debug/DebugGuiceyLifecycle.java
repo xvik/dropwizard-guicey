@@ -33,6 +33,7 @@ import java.util.List;
  */
 public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
 
+    private static final String BUNDLES = "bundles";
     private static final String DISABLED = "disabled";
     private static final String NL = "\n";
 
@@ -54,6 +55,16 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     }
 
     @Override
+    protected void dropwizardBundlesInitialized(final DropwizardBundlesInitializedEvent event) {
+        log("Initialized %s%s dropwizard bundles",
+                event.getBundles().size(), fmtDisabled(event.getDisabled()));
+        if (showDetails) {
+            logDetails(BUNDLES, event.getBundles());
+            logDetails(DISABLED, event.getDisabled());
+        }
+    }
+
+    @Override
     protected void lookupBundlesResolved(final BundlesFromLookupResolvedEvent event) {
         log("%s lookup bundles recognized", event.getBundles().size());
         // lookup details not logged because they are explicitly logged before event
@@ -64,7 +75,7 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
         log("Initialized %s%s GuiceyBundles",
                 event.getBundles().size(), fmtDisabled(event.getDisabled()));
         if (showDetails) {
-            logDetails("bundles", event.getBundles());
+            logDetails(BUNDLES, event.getBundles());
             logDetails(DISABLED, event.getDisabled());
         }
     }
@@ -127,12 +138,12 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
 
     @Override
     protected void jerseyConfiguration(final JerseyConfigurationEvent event) {
-        log("Configuring HK2...");
+        log("Configuring Jersey...");
     }
 
     @Override
     protected void jerseyExtensionsInstalled(final JerseyExtensionsInstalledEvent event) {
-        log("%s HK2 extensions installed", event.getExtensions().size());
+        log("%s Jersey extensions installed", event.getExtensions().size());
     }
 
     @SuppressWarnings("PMD.SystemPrintln")

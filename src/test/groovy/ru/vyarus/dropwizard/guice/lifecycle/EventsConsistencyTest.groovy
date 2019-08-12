@@ -4,6 +4,7 @@ import com.google.inject.Binder
 import com.google.inject.Module
 import io.dropwizard.Application
 import io.dropwizard.Configuration
+import io.dropwizard.ConfiguredBundle
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
@@ -19,19 +20,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureI
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.JerseyPhaseEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesFromLookupResolvedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesInitializedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesResolvedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.CommandsResolvedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ExtensionsResolvedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.*
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent
@@ -64,6 +54,7 @@ class EventsConsistencyTest extends AbstractTest {
                             // to call all methods in adapter and make coverage happy
                             new GuiceyLifecycleAdapter())
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
+                    .dropwizardBundles(new DBundle())
                     .modules(new XMod())
                     .disableBundles(LookupBundle)
                     .disableModules(XMod)
@@ -78,6 +69,8 @@ class EventsConsistencyTest extends AbstractTest {
         void run(Configuration configuration, Environment environment) throws Exception {
         }
     }
+
+    static class DBundle implements ConfiguredBundle {}
 
     static class XMod implements Module {
         @Override
@@ -110,6 +103,13 @@ class EventsConsistencyTest extends AbstractTest {
             assert event.hooks.size() == 2
             assert event.hooks[0] instanceof AbstractTest.GuiceyTestHook
             assert event.hooks[1] instanceof XConf
+        }
+
+        @Override
+        protected void dropwizardBundlesInitialized(DropwizardBundlesInitializedEvent event) {
+            confChecks(event)
+            assert event.getBundles().size() == 1
+            assert event.getBundles()[0].class == DBundle
         }
 
         @Override

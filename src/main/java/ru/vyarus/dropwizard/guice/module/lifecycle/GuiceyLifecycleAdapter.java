@@ -25,6 +25,9 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case ConfigurationHooksProcessed:
                 configurationHooksProcessed((ConfigurationHooksProcessedEvent) event);
                 break;
+            case DropwizardBundlesInitialized:
+                dropwizardBundlesInitialized((DropwizardBundlesInitializedEvent) event);
+                break;
             case BundlesFromLookupResolved:
                 lookupBundlesResolved((BundlesFromLookupResolvedEvent) event);
                 break;
@@ -77,6 +80,10 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
     }
 
     protected void configurationHooksProcessed(final ConfigurationHooksProcessedEvent event) {
+        // empty
+    }
+
+    protected void dropwizardBundlesInitialized(final DropwizardBundlesInitializedEvent event) {
         // empty
     }
 
