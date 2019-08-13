@@ -15,6 +15,7 @@ import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.option.WithOptions;
+import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -65,6 +66,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * annotation set</li>
  * <li>JERSEY when extension managed by jersey (annotated with
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged})</li>
+ * <li>ORDER when installer supports ordering</li>
  * </ul>
  * <p>
  * Guice modules are rendered by type in registration order. OVERRIDE marker may appear if module was
@@ -337,6 +339,9 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         }
         if (WithOptions.class.isAssignableFrom(type)) {
             markers.add("OPTIONS");
+        }
+        if (Ordered.class.isAssignableFrom(type)) {
+            markers.add("ORDER");
         }
         return String.format("%-30s ", String.join(", ", markers));
     }
