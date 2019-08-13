@@ -62,7 +62,8 @@
 * Show installer marker interfaces in printAvailableInstallers() report to indicate installer actions
     (installation by type or instance, custom guice or jersey bindings, options support).
 * Report all diagnostic reports as one log message in order to differentiate .printDiagnosticReport() 
-    and .printAvailableInstallers() reports when both active                                                                       
+    and .printAvailableInstallers() reports when both active
+* Show guice internal stat logs in stats diagnostic report (intercept guice logs)                                                                           
 
 
 Main breaking changes were caused by:

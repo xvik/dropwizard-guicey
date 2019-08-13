@@ -30,36 +30,47 @@ class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
     def "Check guicey app stats render"() {
         /* render would look like:
 
-    GUICEY started in 628.8 ms (320.9 ms config / 307.9 ms run / 0 jersey)
+    GUICEY started in 630.2 ms (328.4 ms config / 301.8 ms run / 0 jersey)
     │
-    ├── [0.64%] CLASSPATH scanned in 4.304 ms
+    ├── [0.48%] CLASSPATH scanned in 3.116 ms
     │   ├── scanned 5 classes
     │   └── recognized 4 classes (80% of scanned)
     │
-    ├── [44%] BUNDLES processed in 278.4 ms
-    │   ├── 2 resolved in 12.72 ms
-    │   ├── 7 initialized in 205.7 μs
-    │   └── 1 dropwizard bundles initialized in 19.79 ms
+    ├── [45%] BUNDLES processed in 284.8 ms
+    │   ├── 2 resolved in 12.81 ms
+    │   ├── 7 initialized in 17.19 ms
+    │   └── 1 dropwizard bundles initialized in 253.8 ms
     │
-    ├── [1.8%] COMMANDS processed in 11.48 ms
+    ├── [1.7%] COMMANDS processed in 11.89 ms
     │   └── registered 2 commands
     │
-    ├── [4.1%] INSTALLERS executed in 26.35 ms
+    ├── [4.4%] INSTALLERS executed in 28.80 ms
     │   ├── registered 12 installers
-    │   └── 3 extensions recognized from 7 classes in 6.614 ms
+    │   └── 3 extensions recognized from 7 classes in 6.967 ms
     │
-    ├── [44%] INJECTOR created in 276.0 ms
-    │   └── from 6 guice modules
+    ├── [42%] INJECTOR created in 263.6 ms
+    │   ├── from 6 guice modules
+    │   │
+    │   └── injector log
+    │       ├── Module execution: 178 ms
+    │       ├── Interceptors creation: 1 ms
+    │       ├── TypeListeners & ProvisionListener creation: 2 ms
+    │       ├── Scopes creation: 1 ms
+    │       ├── Module annotated method scanners creation: 1 ms
+    │       ├── Binding initialization: 29 ms
+    │       ├── Collecting injection requests: 2 ms
+    │       ├── Static validation: 4 ms
+    │       ├── Instance member validation: 4 ms
+    │       ├── Provider verification: 1 ms
+    │       ├── Static member injection: 9 ms
+    │       ├── Instance injection: 3 ms
+    │       └── Preloading singletons: 5 ms
     │
-    ├── [0.48%] EXTENSIONS installed in 3.762 ms
+    ├── [0.48%] EXTENSIONS installed in 3.837 ms
     │   ├── 2 by type
     │   └── 1 by instance
     │
-    ├── [0.0%] JERSEY bridged in 0
-    │   ├── using 2 jersey installers
-    │   └── 2 jersey extensions installed in 0
-    │
-    └── [4.9%] remaining 31 ms
+    └── [6.0%] remaining 38 ms
 
          */
 
@@ -87,6 +98,8 @@ class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
 
         render.contains("] INJECTOR")
         render.contains("from 6 guice modules")
+        render.contains("injector log")
+        render.contains("Module execution")
 
         render.contains("] EXTENSIONS")
         render.contains("2 by type")

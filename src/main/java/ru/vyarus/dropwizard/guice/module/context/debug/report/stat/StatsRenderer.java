@@ -153,6 +153,10 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
                 injector / percent, info.getStats().humanTime(InjectorCreationTime));
 
         node.child("from %s guice modules", info.getModules().size());
+
+        // guice internal logging
+        final TreeNode guice = node.child("injector log");
+        info.getStats().getGuiceStats().forEach(it -> guice.child(it));
         return injector;
     }
 

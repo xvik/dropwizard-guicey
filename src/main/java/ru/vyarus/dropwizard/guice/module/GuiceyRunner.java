@@ -69,8 +69,11 @@ public class GuiceyRunner {
      */
     public Injector createInjector(final InjectorFactory injectorFactory) {
         final Stopwatch timer = context.stat().timer(InjectorCreationTime);
+        // intercept detailed guice initialization stats from guice logs
+        context.stat().getGuiceStats().injectLogsInterceptor();
         injector = injectorFactory.createInjector(
                 context.option(InjectorStage), ModulesSupport.prepareModules(context));
+        context.stat().getGuiceStats().resetStatsLogger();
         // registering as managed to cleanup injector on application stop
         context.getEnvironment().lifecycle().manage(
                 InjectorLookup.registerInjector(context.getBootstrap().getApplication(), injector));
