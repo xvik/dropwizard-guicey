@@ -26,7 +26,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurat
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*
-import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig
+import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.BindingsConfig
 import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 

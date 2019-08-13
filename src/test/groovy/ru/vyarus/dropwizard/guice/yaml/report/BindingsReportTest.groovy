@@ -5,8 +5,8 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
-import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig
-import ru.vyarus.dropwizard.guice.module.yaml.report.ConfigBindingsRenderer
+import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.BindingsConfig
+import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.ConfigBindingsRenderer
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase
 import spock.lang.Specification

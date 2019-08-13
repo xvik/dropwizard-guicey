@@ -33,8 +33,8 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
-import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig;
-import ru.vyarus.dropwizard.guice.module.yaml.report.DebugConfigBindings;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.BindingsConfig;
+import ru.vyarus.dropwizard.guice.module.context.debug.YamlBindingsDiagnostic;
 
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;
@@ -755,7 +755,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see ru.vyarus.dropwizard.guice.module.yaml.bind.Config
          */
         public Builder<T> printConfigurationBindings() {
-            return listen(new DebugConfigBindings(
+            return listen(new YamlBindingsDiagnostic(
                     new BindingsConfig()
                             .showConfigurationTree()
                             .showNullValues()));
@@ -768,7 +768,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          */
         public Builder<T> printCustomConfigurationBindings() {
-            return listen(new DebugConfigBindings(
+            return listen(new YamlBindingsDiagnostic(
                     new BindingsConfig()
                             .showConfigurationTree()
                             .showNullValues()

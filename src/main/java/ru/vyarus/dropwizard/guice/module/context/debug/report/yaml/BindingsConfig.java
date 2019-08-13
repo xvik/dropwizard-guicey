@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.yaml.report;
+package ru.vyarus.dropwizard.guice.module.context.debug.report.yaml;
 
 /**
  * Configuration for configuration bindings report ({@link ConfigBindingsRenderer}).

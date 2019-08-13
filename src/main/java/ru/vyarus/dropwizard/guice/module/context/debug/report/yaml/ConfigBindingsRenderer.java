@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.module.yaml.report;
+package ru.vyarus.dropwizard.guice.module.context.debug.report.yaml;
 
 import io.dropwizard.Configuration;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;

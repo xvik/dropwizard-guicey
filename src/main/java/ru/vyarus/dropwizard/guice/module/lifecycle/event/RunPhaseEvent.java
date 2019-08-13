@@ -6,8 +6,8 @@ import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
-import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig;
-import ru.vyarus.dropwizard.guice.module.yaml.report.ConfigBindingsRenderer;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.BindingsConfig;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.ConfigBindingsRenderer;
 
 /**
  * Base class for events, started after {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(Configuration, Environment)}

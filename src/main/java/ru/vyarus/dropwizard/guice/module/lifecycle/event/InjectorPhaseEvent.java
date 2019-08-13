@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRend
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.BindingsConfig;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
@@ -57,7 +58,7 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
      * Renderers provide various views for guicey configuration, which may be used for specific logging.
      *
      * @return access to diagnostic reports renderers
-     * @see #renderConfigurationBindings(ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig) for
+     * @see #renderConfigurationBindings(BindingsConfig) for
      * configuration bindings report
      */
     public ReportRenderer getReportRenderer() {
