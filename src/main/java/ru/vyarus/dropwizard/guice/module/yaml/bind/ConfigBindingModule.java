@@ -85,7 +85,7 @@ public class ConfigBindingModule extends AbstractModule {
      * Bind configuration paths. Available for injection like {@code @Inject @Code("path.sub") Integer conf}.
      * Value may be null because if null values would be avoided, bindings will disappear.
      */
-    @SuppressWarnings({"unchecked", "PMD.AvoidInstantiatingObjectsInLoops"})
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void bindValuePaths() {
         for (ConfigPath item : tree.getPaths()) {
             toValue(
