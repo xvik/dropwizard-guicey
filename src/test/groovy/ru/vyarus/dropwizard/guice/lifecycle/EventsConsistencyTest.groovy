@@ -22,6 +22,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.*
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent
@@ -215,6 +216,11 @@ class EventsConsistencyTest extends AbstractTest {
         protected void jerseyExtensionsInstalled(JerseyExtensionsInstalledEvent event) {
             jerseyCheck(event)
             assert !event.getExtensions().isEmpty()
+        }
+
+        @Override
+        protected void applicationStarted(ApplicationStartedEvent event) {
+            jerseyCheck(event)
         }
 
         private void baseChecks(GuiceyLifecycleEvent event) {

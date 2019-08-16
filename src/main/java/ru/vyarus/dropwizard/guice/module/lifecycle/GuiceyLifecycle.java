@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.lifecycle;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
@@ -163,7 +164,17 @@ public enum GuiceyLifecycle {
      * To listen jersey lifecycle further use jersey events (like in
      * {@link ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle}).
      */
-    JerseyExtensionsInstalled(JerseyExtensionsInstalledEvent.class);
+    JerseyExtensionsInstalled(JerseyExtensionsInstalledEvent.class),
+    /**
+     * Called after complete dropwizard startup. Actually the same as jetty lifecycle started event
+     * ({@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStarted(
+     * org.eclipse.jetty.util.component.LifeCycle)}), which is called after complete jetty startup.
+     * <p>
+     * May be used as assured "started" point (after all initializations). For example, to report something. This event
+     * also will be fired in guicey tests ({@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule}) which does not
+     * start the web part.
+     */
+    ApplicationStarted(ApplicationStartedEvent.class);
 
     private final Class<? extends GuiceyLifecycleEvent> type;
 

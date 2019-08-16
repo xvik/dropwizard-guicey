@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.lifecycle;
 
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
@@ -14,6 +15,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
  * @author Vyacheslav Rusakov
  * @since 18.04.2018
  */
+@SuppressWarnings("checkstyle:ClassFanOutComplexity")
 public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
 
     @Override
@@ -75,6 +77,9 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
                 break;
             case JerseyExtensionsInstalled:
                 jerseyExtensionsInstalled((JerseyExtensionsInstalledEvent) event);
+                break;
+            case ApplicationStarted:
+                applicationStarted((ApplicationStartedEvent) event);
                 break;
         }
     }
@@ -148,6 +153,10 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
     }
 
     protected void jerseyExtensionsInstalled(final JerseyExtensionsInstalledEvent event) {
+        // empty
+    }
+
+    protected void applicationStarted(final ApplicationStartedEvent event) {
         // empty
     }
 }

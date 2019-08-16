@@ -8,6 +8,8 @@ import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.util.component.AbstractLifeCycle;
+import org.eclipse.jetty.util.component.LifeCycle;
 import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
@@ -17,6 +19,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
@@ -121,6 +124,13 @@ public final class LifecycleSupport {
         this.configuration = configuration;
         this.configurationTree = configurationTree;
         this.environment = environment;
+        // fire after complete initialization (final meta-event)
+        environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+            @Override
+            public void lifeCycleStarted(LifeCycle event) {
+                applicationStarted();
+            }
+        });
     }
 
     public void bundlesStarted(final List<GuiceyBundle> bundles) {
@@ -201,5 +211,10 @@ public final class LifecycleSupport {
     private void broadcast(final GuiceyLifecycleEvent event) {
         listeners.forEach(l -> l.onEvent(event));
         currentStage = event.getType();
+    }
+
+    private void applicationStarted() {
+        broadcast(new ApplicationStartedEvent(options, bootstrap,
+                configuration, configurationTree, environment, injector, injectionManager));
     }
 }
