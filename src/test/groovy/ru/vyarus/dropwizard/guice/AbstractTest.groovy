@@ -15,7 +15,7 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks
 import spock.lang.Specification
 
 import javax.servlet.FilterRegistration
@@ -27,7 +27,7 @@ import javax.servlet.ServletRegistration
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
-@UseGuiceyConfiguration(GuiceyTestHook)
+@UseGuiceyHooks(GuiceyTestHook)
 abstract class AbstractTest extends Specification {
 
     static {

@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -20,7 +20,7 @@ import javax.inject.Inject
  * @since 13.04.2018
  */
 @UseGuiceyApp(App)
-@UseGuiceyConfiguration(Hook)
+@UseGuiceyHooks(Hook)
 class UseHookExtTest extends Specification {
 
     @Inject

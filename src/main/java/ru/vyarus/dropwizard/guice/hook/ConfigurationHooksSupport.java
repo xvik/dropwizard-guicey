@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.hook;
 
 import ru.vyarus.dropwizard.guice.GuiceBundle;
-import ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule;
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration;
+import ru.vyarus.dropwizard.guice.test.GuiceyHooksRule;
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -14,8 +14,8 @@ import java.util.Set;
  * Supposed to be used for integration tests.
  *
  * @author Vyacheslav Rusakov
- * @see GuiceyConfigurationRule
- * @see UseGuiceyConfiguration
+ * @see GuiceyHooksRule
+ * @see UseGuiceyHooks
  * @since 11.04.2018
  */
 public final class ConfigurationHooksSupport {

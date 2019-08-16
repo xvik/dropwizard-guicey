@@ -48,7 +48,7 @@ public @interface UseGuiceyApp {
      * in tests.
      *
      * @return list of hooks to use
-     * @see UseGuiceyConfiguration to declare base hooks in base test class
+     * @see UseGuiceyHooks to declare base hooks in base test class
      * @see GuiceyConfigurationHook for more info
      */
     Class<? extends GuiceyConfigurationHook>[] hooks() default {};

@@ -6,14 +6,14 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 14.04.2018
  */
-@UseGuiceyConfiguration(LookupHook)
+@UseGuiceyHooks(LookupHook)
 abstract class BaseDiagnosticTest extends Specification {
 
     void setupSpec() {

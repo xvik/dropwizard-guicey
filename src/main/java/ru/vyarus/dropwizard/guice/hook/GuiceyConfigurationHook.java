@@ -1,11 +1,13 @@
 package ru.vyarus.dropwizard.guice.hook;
 
 import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.test.GuiceyHooksRule;
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks;
 
 /**
  * Guicey configuration hook used to amend application configuration. Primarily intended to be used in tests with
- * {@link ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule} (junit) and
- * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration} (spock).
+ * {@link GuiceyHooksRule} (junit) and
+ * {@link UseGuiceyHooks} (spock).
  * <p>
  * Hook could be registered with {@link #register()} method call.
  * <p>
@@ -16,8 +18,8 @@ import ru.vyarus.dropwizard.guice.GuiceBundle;
  * will start.
  *
  * @author Vyacheslav Rusakov
- * @see ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule
- * @see ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration
+ * @see GuiceyHooksRule
+ * @see UseGuiceyHooks
  * @since 11.04.2018
  */
 @FunctionalInterface
@@ -44,7 +46,7 @@ public interface GuiceyConfigurationHook {
      * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#printDiagnosticInfo()}).
      *
      * @param builder just created bundle's builder
-     * @see ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule for more information
+     * @see GuiceyHooksRule for more information
      */
     void configure(GuiceBundle.Builder builder);
 

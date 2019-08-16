@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
-import ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule;
+import ru.vyarus.dropwizard.guice.test.GuiceyHooksRule;
 
 import java.util.Arrays;
 
@@ -23,7 +23,7 @@ public class MultipleHooksTest extends BaseTest {
     @ClassRule
     public static RuleChain chain = RuleChain
             .outerRule(BASE_CONF)
-            .around(new GuiceyConfigurationRule((builder) -> builder.modules(new XMod2())))
+            .around(new GuiceyHooksRule((builder) -> builder.modules(new XMod2())))
             .around(RULE);
 
 

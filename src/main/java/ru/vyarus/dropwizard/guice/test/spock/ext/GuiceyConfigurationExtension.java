@@ -3,24 +3,24 @@ package ru.vyarus.dropwizard.guice.test.spock.ext;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.SpecInfo;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyConfiguration;
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * {@link UseGuiceyConfiguration} extension implementation.
+ * {@link UseGuiceyHooks} extension implementation.
  *
  * @author Vyacheslav Rusakov
  * @since 12.04.2018
  */
-public class GuiceyConfigurationExtension extends AbstractAnnotationDrivenExtension<UseGuiceyConfiguration> {
+public class GuiceyConfigurationExtension extends AbstractAnnotationDrivenExtension<UseGuiceyHooks> {
 
     private Class<? extends GuiceyConfigurationHook>[] confs;
 
     @Override
-    public void visitSpecAnnotation(final UseGuiceyConfiguration annotation, final SpecInfo spec) {
+    public void visitSpecAnnotation(final UseGuiceyHooks annotation, final SpecInfo spec) {
         confs = annotation.value();
     }
 

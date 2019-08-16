@@ -67,7 +67,10 @@
 * Add guicey ApplicationStarted event: always fired after complete dropwizard startup. 
     Supposed to be used to simplify diagnostic reporting.
 * (breaking) DiagnosticBundle bundle become ConfigurationDiagnostic guicey listener.
-    Reporters are no more bound to guice context (they could always be constructed manually).                                                                                     
+    Reporters are no more bound to guice context (they could always be constructed manually).
+* (breaking) Rename test extensions for guicey hooks registration: 
+    - GuiceyConfigurationRule into GuiceyHooksRule and
+    - @UseGuiceyConfiguration into @UseGuiceyHooks                                                                                         
 
 
 Main breaking changes were caused by:

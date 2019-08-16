@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * with debug  extensions, common for all tests). In actual tests use {@code hooks} attribute of
  * {@link UseGuiceyApp} or {@link UseDropwizardApp} extensions to apply test-specific configurations.
  * <p>
- * WARNING: only one {@link UseGuiceyConfiguration} annotation could be used in test hierarchy. For example,
+ * WARNING: only one {@link UseGuiceyHooks} annotation could be used in test hierarchy. For example,
  * you can't use it in both base class and test class. This is spock limitation, but should not be an issue for
  * most cases.
  *
@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @ExtensionAnnotation(GuiceyConfigurationExtension.class)
-public @interface UseGuiceyConfiguration {
+public @interface UseGuiceyHooks {
 
     /**
      * @return list of hooks to use
