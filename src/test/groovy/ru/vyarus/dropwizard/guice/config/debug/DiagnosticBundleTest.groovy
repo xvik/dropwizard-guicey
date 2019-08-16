@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundleResource
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
-import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
+import ru.vyarus.dropwizard.guice.module.context.debug.ConfigurationDiagnostic
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
@@ -38,7 +38,7 @@ class DiagnosticBundleTest extends AbstractTest {
     def "Check empty config detection"() {
 
         when: "empty config provided"
-        DiagnosticBundle.builder()
+        ConfigurationDiagnostic.builder()
                 .printConfiguration(new DiagnosticConfig())
 
         then: "error"
@@ -49,7 +49,7 @@ class DiagnosticBundleTest extends AbstractTest {
     def "Diagnostic bundle builder test"() {
 
         when: "bundle configured with builder"
-        DiagnosticBundle bundle = DiagnosticBundle.builder().printStartupStats(true).build()
+        ConfigurationDiagnostic bundle = ConfigurationDiagnostic.builder().printStartupStats(true).build()
 
         then: "configured"
         bundle.statsConfig == true
@@ -58,7 +58,7 @@ class DiagnosticBundleTest extends AbstractTest {
         bundle.treeConfig == null
 
         when: "all options configured"
-        bundle = DiagnosticBundle.builder()
+        bundle = ConfigurationDiagnostic.builder()
                 .printStartupStats(false)
                 .printOptions(new OptionsConfig().showNotUsedMarker().showNotDefinedOptions())
                 .printConfiguration(new DiagnosticConfig().printAll())
@@ -72,7 +72,7 @@ class DiagnosticBundleTest extends AbstractTest {
         bundle.treeConfig.hiddenItems.empty
 
         when: "no options configured"
-        bundle = DiagnosticBundle.builder().build()
+        bundle = ConfigurationDiagnostic.builder().build()
 
         then: "nothing enabled"
         bundle.statsConfig == null

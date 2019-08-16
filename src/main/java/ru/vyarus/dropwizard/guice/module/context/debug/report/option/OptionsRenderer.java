@@ -7,8 +7,6 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,14 +30,12 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * @author Vyacheslav Rusakov
  * @since 13.08.2016
  */
-@Singleton
 public class OptionsRenderer implements ReportRenderer<OptionsConfig> {
 
     private static final String POSTFIX = "Options";
 
     private final GuiceyConfigurationInfo info;
 
-    @Inject
     public OptionsRenderer(final GuiceyConfigurationInfo info) {
         this.info = info;
     }

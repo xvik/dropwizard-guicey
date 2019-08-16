@@ -6,7 +6,7 @@ import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.Filters
-import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
+import ru.vyarus.dropwizard.guice.module.context.debug.ConfigurationDiagnostic
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
@@ -103,12 +103,12 @@ class FiltersTest extends Specification {
     def "Check lookupBundles filter"() {
 
         expect: "matched check"
-        Filters.lookupBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {
+        Filters.lookupBundles().test(item(ConfigItem.Bundle, ConfigurationDiagnostic) {
             registeredBy.add(ItemId.from(GuiceyBundleLookup))
         })
 
         and: "not matched check"
-        !Filters.lookupBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {})
+        !Filters.lookupBundles().test(item(ConfigItem.Bundle, ConfigurationDiagnostic) {})
 
     }
 

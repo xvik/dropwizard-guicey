@@ -17,8 +17,6 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +28,6 @@ import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.*;
  * @author Vyacheslav Rusakov
  * @since 17.07.2016
  */
-@Singleton
 public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
 
     private static final String IGNORED = "IGNORED";
@@ -38,7 +35,6 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
 
     private final GuiceyConfigurationInfo service;
 
-    @Inject
     public ContextTreeRenderer(final GuiceyConfigurationInfo service) {
         this.service = service;
     }

@@ -17,8 +17,6 @@ import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstal
 import ru.vyarus.dropwizard.guice.module.installer.option.WithOptions;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -80,7 +78,6 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * @see GuiceyConfigurationInfo for diagnostic data source
  * @since 22.06.2016
  */
-@Singleton
 public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
 
     private static final int SINGLE = 1;
@@ -89,7 +86,6 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
 
     private final GuiceyConfigurationInfo service;
 
-    @Inject
     public DiagnosticRenderer(final GuiceyConfigurationInfo service) {
         this.service = service;
     }

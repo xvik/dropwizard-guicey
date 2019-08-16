@@ -7,6 +7,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
@@ -27,10 +28,14 @@ import javax.ws.rs.Path
 class DuplicateScopesReportingTest extends AbstractTest {
 
     @Inject
+    GuiceyConfigurationInfo info
     DiagnosticRenderer renderer
-    @Inject
     ContextTreeRenderer treeRenderer
 
+    void setup() {
+        renderer = new DiagnosticRenderer(info)
+        treeRenderer = new ContextTreeRenderer(info)
+    }
 
     def "Check diagnostic info render"() {
 
@@ -42,7 +47,6 @@ class DuplicateScopesReportingTest extends AbstractTest {
     BUNDLES =
         Bundle                       (r.v.d.g.c.u.DuplicateScopesReportingTest) *REG(5/8)
         MiddleBundle                 (r.v.d.g.c.u.DuplicateScopesReportingTest)
-        DiagnosticBundle             (r.v.d.g.m.c.debug)
         HK2DebugBundle               (r.v.d.g.m.j.debug)        *HOOK
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
@@ -60,7 +64,6 @@ class DuplicateScopesReportingTest extends AbstractTest {
         Module                       (r.v.d.g.c.u.DuplicateScopesReportingTest) *REG(5/24)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
-        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
         GuiceBootstrapModule         (r.v.d.guice.module)
 """ as String;
     }
@@ -71,7 +74,6 @@ class DuplicateScopesReportingTest extends AbstractTest {
         cleanupReport(treeRenderer.renderReport(new ContextTreeConfig())) == """
 
     APPLICATION
-    ├── module     DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
     ├── module     GuiceBootstrapModule         (r.v.d.guice.module)
     │
     ├── Bundle                       (r.v.d.g.c.u.DuplicateScopesReportingTest)
@@ -115,8 +117,6 @@ class DuplicateScopesReportingTest extends AbstractTest {
     │   ├── module     -Module                      (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED(2)
     │   ├── module     -Module#2                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
     │   └── module     -Module#3                    (r.v.d.g.c.u.DuplicateScopesReportingTest) *IGNORED
-    │
-    ├── DiagnosticBundle             (r.v.d.g.m.c.debug)
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
     │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED

@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.config.debug.renderer
 
 import ru.vyarus.dropwizard.guice.diagnostic.BaseDiagnosticTest
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
@@ -14,7 +15,12 @@ import javax.inject.Inject
 class StatRendererFullTest extends BaseDiagnosticTest {
 
     @Inject
+    GuiceyConfigurationInfo info
     StatsRenderer renderer
+
+    void setup() {
+        renderer = new StatsRenderer(info)
+    }
 
     def "Check dropwizard app stats render"() {
         /* render would look like:
@@ -27,7 +33,7 @@ class StatRendererFullTest extends BaseDiagnosticTest {
     │
     ├── [11%] BUNDLES processed in 38.65 ms
     │   ├── 2 resolved in 18.13 ms
-    │   └── 7 initialized in 19.53 ms
+    │   └── 6 initialized in 19.53 ms
     │
     ├── [2.8%] COMMANDS processed in 10.92 ms
     │   └── registered 2 commands
@@ -37,7 +43,7 @@ class StatRendererFullTest extends BaseDiagnosticTest {
     │   └── 3 extensions recognized from 7 classes in 7.647 ms
     │
     ├── [66%] INJECTOR created in 234.9 ms
-    │   ├── from 6 guice modules
+    │   ├── from 5 guice modules
     │   │
     │   └── injector log
     │       ├── Module execution: 141 ms
@@ -79,7 +85,7 @@ class StatRendererFullTest extends BaseDiagnosticTest {
 
         render.contains("] BUNDLES")
         render.contains("2 resolved in")
-        render.contains("7 initialized in")
+        render.contains("6 initialized in")
 
         render.contains("] COMMANDS")
         render.contains("registered 2 commands")
@@ -89,7 +95,7 @@ class StatRendererFullTest extends BaseDiagnosticTest {
         render.contains("3 extensions recognized from 7 classes in")
 
         render.contains("] INJECTOR")
-        render.contains("from 6 guice modules")
+        render.contains("from 5 guice modules")
         render.contains("injector log")
         render.contains("Module execution")
 

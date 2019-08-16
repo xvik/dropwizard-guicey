@@ -1,11 +1,10 @@
 package ru.vyarus.dropwizard.guice.module.context.debug;
 
 import com.google.common.base.Preconditions;
-import io.dropwizard.Application;
-import org.eclipse.jetty.util.component.AbstractLifeCycle;
-import org.eclipse.jetty.util.component.LifeCycle;
-import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
-import ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig;
@@ -13,12 +12,15 @@ import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRend
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer;
-import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueModule;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
+import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
+import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
 
 /**
- * Bundle prints detailed configuration info and startup metrics.
+ * Guicey configuration diagnostic listener. Must be registered with
+ * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(
+ *ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}. Prints detailed configuration info and
+ * startup metrics.
  * <p>
  * Sections:
  * <ul>
@@ -33,7 +35,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
  * Reporting is highly configurable. Default configuration shows most valuable (but not all possible) info.
  * To create bundle with custom configuration use builder:
  * <pre><code>
- *      DiagnosticBundle.builder()
+ *      GuiceyDiagnostic.builder()
  *          .printStartupStats(true)
  *          .printConfiguration(new DiagnosticConfig().printAll())
  *          .build();
@@ -44,12 +46,14 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
  * on web page.
  * <p>
  * Reporting is performed after context startup (pure guicey context (in tests) or entire web context) and so
- * does not affect collected statistics.
+ * does not affect collected statistics (timings).
  *
  * @author Vyacheslav Rusakov
- * @since 21.06.2016
+ * @since 16.08.2019
  */
-public class DiagnosticBundle implements GuiceyBundle {
+@SuppressWarnings("checkstyle:ClassDataAbstractionCoupling")
+public class ConfigurationDiagnostic extends GuiceyLifecycleAdapter {
+    private final Logger logger = LoggerFactory.getLogger(ConfigurationDiagnostic.class);
 
     private final String reportTitle;
     private final Boolean statsConfig;
@@ -61,7 +65,7 @@ public class DiagnosticBundle implements GuiceyBundle {
      * Initialize bundle with default diagnostic configuration. Configures most commonly required info.
      * Suitable for bundle usage with lookup mechanism.
      */
-    public DiagnosticBundle() {
+    public ConfigurationDiagnostic() {
         this(builder()
                 .printStartupStats(true)
 
@@ -77,7 +81,7 @@ public class DiagnosticBundle implements GuiceyBundle {
                         .hideCommands()));
     }
 
-    DiagnosticBundle(final Builder builder) {
+    ConfigurationDiagnostic(final Builder builder) {
         this.reportTitle = builder.reportTitle;
         this.statsConfig = builder.statsConfig;
         this.optionsConfig = builder.optionsConfig;
@@ -86,21 +90,16 @@ public class DiagnosticBundle implements GuiceyBundle {
     }
 
     @Override
-    public void run(GuiceyEnvironment environment) {
-        // use  listener to work properly for both guicey only test and normal app (to show hk stats)
-        environment.environment().lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
-            @Override
-            public void lifeCycleStarted(final LifeCycle event) {
-                report(environment.application());
-            }
-        });
-        environment.modules(new DiagnosticModule());
-    }
+    protected void applicationStarted(final ApplicationStartedEvent event) {
+        final StringBuilder res = new StringBuilder(reportTitle);
+        final GuiceyConfigurationInfo info = event.getConfigurationInfo();
 
-    private void report(final Application app) {
-        final DiagnosticReporter reporter = new DiagnosticReporter();
-        InjectorLookup.getInjector(app).get().injectMembers(reporter);
-        reporter.report(reportTitle, statsConfig, optionsConfig, config, treeConfig);
+        report("STARTUP STATS", new StatsRenderer(info), statsConfig, res);
+        report("OPTIONS", new OptionsRenderer(info), optionsConfig, res);
+        report("CONFIGURATION", new DiagnosticRenderer(info), config, res);
+        report("CONFIGURATION TREE", new ContextTreeRenderer(info), treeConfig, res);
+
+        logger.info(res.toString());
     }
 
     public static Builder builder() {
@@ -113,6 +112,17 @@ public class DiagnosticBundle implements GuiceyBundle {
      */
     public static Builder builder(final String reportTitle) {
         return new Builder(Preconditions.checkNotNull(reportTitle, "Report title required"));
+    }
+
+    private <T> void report(final String name,
+                            final ReportRenderer<T> renderer,
+                            final T config,
+                            final StringBuilder res) {
+        if (config != null) {
+            res.append(Reporter.NEWLINE).append(Reporter.NEWLINE)
+                    .append("---------------------------------------------------------------------------[")
+                    .append(name).append("]").append(renderer.renderReport(config));
+        }
     }
 
     /**
@@ -192,23 +202,10 @@ public class DiagnosticBundle implements GuiceyBundle {
         }
 
         /**
-         * @return configured bundle instance
+         * @return configured listener instance
          */
-        public DiagnosticBundle build() {
-            return new DiagnosticBundle(this);
-        }
-    }
-
-    /**
-     * Guicey configuration diagnostic module.
-     */
-    public static class DiagnosticModule extends UniqueModule {
-        @Override
-        protected void configure() {
-            bind(StatsRenderer.class);
-            bind(OptionsRenderer.class);
-            bind(DiagnosticRenderer.class);
-            bind(ContextTreeRenderer.class);
+        public ConfigurationDiagnostic build() {
+            return new ConfigurationDiagnostic(this);
         }
     }
 }

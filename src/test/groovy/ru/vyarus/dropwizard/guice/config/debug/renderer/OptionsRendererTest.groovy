@@ -6,7 +6,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.GuiceyOptions
-import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsRenderer
 import ru.vyarus.dropwizard.guice.module.context.option.Option
@@ -25,7 +25,12 @@ import javax.inject.Inject
 class OptionsRendererTest extends Specification {
 
     @Inject
+    GuiceyConfigurationInfo info
     OptionsRenderer renderer
+
+    void setup() {
+        renderer = new OptionsRenderer(info)
+    }
 
     def "Check all render"() {
 
@@ -149,7 +154,7 @@ class OptionsRendererTest extends Specification {
         expect:
         render(new OptionsConfig()
                 .showNotDefinedOptions()
-        .hideGroups(GuiceyOptions)) == """
+                .hideGroups(GuiceyOptions)) == """
 
     BundleX                   (r.v.d.g.c.d.r.OptionsRendererTest\$BundleXOptions)
         DebugFeature                   = false
@@ -180,16 +185,15 @@ class OptionsRendererTest extends Specification {
             // never used value
                     .option(OtherOpts.Opt1, "sample")
                     .option(BundleXOptions.StrictMode, true)
-                    .modules(new DiagnosticBundle.DiagnosticModule())
                     .bundles(new GuiceyBundle() {
-                @Override
-                void initialize(GuiceyBootstrap bs) {
-                    bs.option(BundleXOptions.DebugFeature)
-                    bs.option(BundleXOptions.StrictMode)
-                    bs.option(BundleXOptions.NullValue)
-                    bs.option(BundleXOptions.ListValue)
-                }
-            })
+                        @Override
+                        void initialize(GuiceyBootstrap bs) {
+                            bs.option(BundleXOptions.DebugFeature)
+                            bs.option(BundleXOptions.StrictMode)
+                            bs.option(BundleXOptions.NullValue)
+                            bs.option(BundleXOptions.ListValue)
+                        }
+                    })
                     .build())
         }
 

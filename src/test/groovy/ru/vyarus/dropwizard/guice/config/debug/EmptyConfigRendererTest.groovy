@@ -6,6 +6,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -22,7 +23,12 @@ import javax.inject.Inject
 class EmptyConfigRendererTest extends Specification {
 
     @Inject
+    GuiceyConfigurationInfo info
     DiagnosticRenderer renderer
+
+    void setup() {
+        renderer = new DiagnosticRenderer(info)
+    }
 
     def "Check empty bundles"() {
 

@@ -17,9 +17,11 @@ import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.module.GuiceyInitializer;
 import ru.vyarus.dropwizard.guice.module.GuiceyRunner;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
-import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle;
+import ru.vyarus.dropwizard.guice.module.context.debug.ConfigurationDiagnostic;
+import ru.vyarus.dropwizard.guice.module.context.debug.YamlBindingsDiagnostic;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.BindingsConfig;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
@@ -33,8 +35,6 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
-import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.BindingsConfig;
-import ru.vyarus.dropwizard.guice.module.context.debug.YamlBindingsDiagnostic;
 
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;
@@ -692,17 +692,13 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * useful for configuration problems resolution.
          * Also, logs useful for better understanding how guicey works.
          * <p>
-         * If custom logging format is required use {@link DiagnosticBundle} directly.
-         * <p>
-         * Bundle could be enabled indirectly with bundle lookup mechanism (e.g. with system property
-         * {@code PropertyBundleLookup.enableBundles(DiagnosticBundle.class)}).
+         * If custom logging format is required use {@link ConfigurationDiagnostic} directly.
          *
          * @return builder instance for chained calls
-         * @see DiagnosticBundle
+         * @see ConfigurationDiagnostic
          */
         public Builder<T> printDiagnosticInfo() {
-            bundle.context.registerBundles(new DiagnosticBundle());
-            return this;
+            return listen(new ConfigurationDiagnostic());
         }
 
         /**
@@ -718,23 +714,21 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * jersey specific installations.
          *
          * @return builder instance for chained calls
-         * @see DiagnosticBundle
+         * @see ConfigurationDiagnostic
          */
         public Builder<T> printAvailableInstallers() {
-            bundle.context.registerBundles(
-                    DiagnosticBundle.builder("Available installers report")
-                            .printConfiguration(new DiagnosticConfig()
-                                    .printInstallers()
-                                    .printNotUsedInstallers()
-                                    .printInstallerInterfaceMarkers())
-                            .printContextTree(new ContextTreeConfig()
-                                    .hideCommands()
-                                    .hideDuplicateRegistrations()
-                                    .hideEmptyBundles()
-                                    .hideExtensions()
-                                    .hideModules())
-                            .build());
-            return this;
+            return listen(ConfigurationDiagnostic.builder("Available installers report")
+                    .printConfiguration(new DiagnosticConfig()
+                            .printInstallers()
+                            .printNotUsedInstallers()
+                            .printInstallerInterfaceMarkers())
+                    .printContextTree(new ContextTreeConfig()
+                            .hideCommands()
+                            .hideDuplicateRegistrations()
+                            .hideEmptyBundles()
+                            .hideExtensions()
+                            .hideModules())
+                    .build());
         }
 
         /**
@@ -755,10 +749,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see ru.vyarus.dropwizard.guice.module.yaml.bind.Config
          */
         public Builder<T> printConfigurationBindings() {
-            return listen(new YamlBindingsDiagnostic(
-                    new BindingsConfig()
-                            .showConfigurationTree()
-                            .showNullValues()));
+            return listen(new YamlBindingsDiagnostic());
         }
 
         /**

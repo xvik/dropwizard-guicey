@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.BaseDiagnosticTest
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
-import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.debug.report.stat.StatsRenderer
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -24,7 +24,12 @@ import javax.inject.Inject
 class StatRendererTest extends BaseDiagnosticTest {
 
     @Inject
+    GuiceyConfigurationInfo info
     StatsRenderer renderer
+
+    void setup() {
+        renderer = new StatsRenderer(info)
+    }
 
     def "Check guicey app stats render"() {
         /* render would look like:
@@ -37,7 +42,7 @@ class StatRendererTest extends BaseDiagnosticTest {
     │
     ├── [9.4%] BUNDLES processed in 33.32 ms
     │   ├── 2 resolved in 13.06 ms
-    │   └── 7 initialized in 19.52 ms
+    │   └── 6 initialized in 19.52 ms
     │
     ├── [3.4%] COMMANDS processed in 12.96 ms
     │   └── registered 2 commands
@@ -47,7 +52,7 @@ class StatRendererTest extends BaseDiagnosticTest {
     │   └── 3 extensions recognized from 7 classes in 6.743 ms
     │
     ├── [69%] INJECTOR created in 242.6 ms
-    │   ├── from 6 guice modules
+    │   ├── from 5 guice modules
     │   │
     │   └── injector log
     │       ├── Module execution: 151 ms
@@ -82,7 +87,7 @@ class StatRendererTest extends BaseDiagnosticTest {
 
         render.contains("] BUNDLES")
         render.contains("2 resolved in")
-        render.contains("7 initialized in")
+        render.contains("6 initialized in")
 
         render.contains("] COMMANDS")
         render.contains("registered 2 commands")
@@ -92,7 +97,7 @@ class StatRendererTest extends BaseDiagnosticTest {
         render.contains("3 extensions recognized from 7 classes in")
 
         render.contains("] INJECTOR")
-        render.contains("from 6 guice modules")
+        render.contains("from 5 guice modules")
         render.contains("injector log")
         render.contains("Module execution")
 
@@ -120,7 +125,7 @@ class StatRendererTest extends BaseDiagnosticTest {
                             .enableAutoConfig(FooResource.package.name)
                             .searchCommands()
                             .bundles(new FooBundle())
-                            .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule())
+                            .modules(new FooModule())
                             .disableInstallers(LifeCycleInstaller)
                             .strictScopeControl()
                             .printDiagnosticInfo()

@@ -63,7 +63,11 @@
     (installation by type or instance, custom guice or jersey bindings, options support).
 * Report all diagnostic reports as one log message in order to differentiate .printDiagnosticReport() 
     and .printAvailableInstallers() reports when both active
-* Show guice internal stat logs in stats diagnostic report (intercept guice logs)                                                                           
+* Show guice internal stat logs in stats diagnostic report (intercept guice logs)
+* Add guicey ApplicationStarted event: always fired after complete dropwizard startup. 
+    Supposed to be used to simplify diagnostic reporting.
+* (breaking) DiagnosticBundle bundle become ConfigurationDiagnostic guicey listener.
+    Reporters are no more bound to guice context (they could always be constructed manually).                                                                                     
 
 
 Main breaking changes were caused by:

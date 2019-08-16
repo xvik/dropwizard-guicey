@@ -11,9 +11,6 @@ import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
 import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
 
@@ -27,13 +24,11 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
  * @author Vyacheslav Rusakov
  * @since 28.07.2016
  */
-@Singleton
 @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
 public class StatsRenderer implements ReportRenderer<Boolean> {
 
     private final GuiceyConfigurationInfo info;
 
-    @Inject
     public StatsRenderer(final GuiceyConfigurationInfo info) {
         this.info = info;
     }

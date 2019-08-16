@@ -12,15 +12,15 @@ import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.Disables
-import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
-import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
@@ -39,7 +39,12 @@ import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.allExcept
 class ContextTreeRendererTest extends Specification {
 
     @Inject
+    GuiceyConfigurationInfo info
     ContextTreeRenderer renderer
+
+    void setup() {
+        renderer = new ContextTreeRenderer(info)
+    }
 
     def "Check full render"() {
         expect:
@@ -49,7 +54,6 @@ class ContextTreeRendererTest extends Specification {
     ├── extension  -DisabledExtension           (r.v.d.g.c.d.r.ContextTreeRendererTest) *DISABLED
     ├── extension  -DisabledExtension2          (r.v.d.g.c.d.r.ContextTreeRendererTest) *DISABLED
     ├── module     FooModule                    (r.v.d.g.d.s.features)
-    ├── module     DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
     ├── module     -DisabledModule              (r.v.d.g.c.d.r.ContextTreeRendererTest) *DISABLED
     ├── module     GuiceBootstrapModule         (r.v.d.guice.module)
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)
@@ -444,15 +448,15 @@ class ContextTreeRendererTest extends Specification {
             bootstrap.addBundle(
                     GuiceBundle.builder()
                             .bundleLookup(new GuiceyBundleLookup() {
-                        @Override
-                        List<GuiceyBundle> lookup() {
-                            return Lists.asList(new FooBundle())
-                        }
-                    })
+                                @Override
+                                List<GuiceyBundle> lookup() {
+                                    return Lists.asList(new FooBundle())
+                                }
+                            })
                             .enableAutoConfig(FooResource.package.name)
                             .searchCommands()
                             .bundles(new FooBundle(), new GuiceRestrictedConfigBundle(), new DisabledBundle())
-                            .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule(), new DisabledModule())
+                            .modules(new FooModule(), new DisabledModule())
                             .extensions(DisabledExtension, DisabledExtension2)
                             .disableInstallers(LifeCycleInstaller)
                             .disableBundles(DisabledBundle)

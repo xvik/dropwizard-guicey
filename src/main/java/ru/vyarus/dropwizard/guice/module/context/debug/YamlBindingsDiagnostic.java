@@ -25,6 +25,12 @@ public class YamlBindingsDiagnostic extends GuiceyLifecycleAdapter {
 
     private final BindingsConfig config;
 
+    public YamlBindingsDiagnostic() {
+        this(new BindingsConfig()
+                .showConfigurationTree()
+                .showNullValues());
+    }
+
     public YamlBindingsDiagnostic(final BindingsConfig config) {
         this.config = config;
     }

@@ -7,6 +7,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
@@ -25,10 +26,14 @@ import javax.inject.Inject
 class DuplicateModulesReportingTest extends AbstractTest {
 
     @Inject
+    GuiceyConfigurationInfo info
     DiagnosticRenderer renderer
-    @Inject
     ContextTreeRenderer treeRenderer
 
+    void setup() {
+        renderer = new DiagnosticRenderer(info)
+        treeRenderer = new ContextTreeRenderer(info)
+    }
 
     def "Check diagnostic info render"() {
 
@@ -37,7 +42,6 @@ class DuplicateModulesReportingTest extends AbstractTest {
 
     BUNDLES =
         MiddleBundle                 (r.v.d.g.c.u.DuplicateModulesReportingTest)
-        DiagnosticBundle             (r.v.d.g.m.c.debug)
         HK2DebugBundle               (r.v.d.g.m.j.debug)        *HOOK
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)
@@ -53,7 +57,6 @@ class DuplicateModulesReportingTest extends AbstractTest {
         Module                       (r.v.d.g.c.u.DuplicateModulesReportingTest) *REG(5/8)
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)
-        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
         GuiceBootstrapModule         (r.v.d.guice.module)
 """ as String;
     }
@@ -68,7 +71,6 @@ class DuplicateModulesReportingTest extends AbstractTest {
     ├── module     Module#2                     (r.v.d.g.c.u.DuplicateModulesReportingTest)
     ├── module     -Module#2                    (r.v.d.g.c.u.DuplicateModulesReportingTest) *IGNORED
     ├── module     Module#3                     (r.v.d.g.c.u.DuplicateModulesReportingTest)
-    ├── module     DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
     ├── module     GuiceBootstrapModule         (r.v.d.guice.module)
     │
     ├── MiddleBundle                 (r.v.d.g.c.u.DuplicateModulesReportingTest)
@@ -76,8 +78,6 @@ class DuplicateModulesReportingTest extends AbstractTest {
     │   ├── module     Module#4                     (r.v.d.g.c.u.DuplicateModulesReportingTest)
     │   ├── module     -Module#4                    (r.v.d.g.c.u.DuplicateModulesReportingTest) *IGNORED
     │   └── module     Module#5                     (r.v.d.g.c.u.DuplicateModulesReportingTest)
-    │
-    ├── DiagnosticBundle             (r.v.d.g.m.c.debug)
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
     │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED

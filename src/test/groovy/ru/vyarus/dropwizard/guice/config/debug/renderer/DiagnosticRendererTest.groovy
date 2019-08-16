@@ -13,7 +13,7 @@ import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
-import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
@@ -38,7 +38,12 @@ import javax.ws.rs.Path
 class DiagnosticRendererTest extends Specification {
 
     @Inject
+    GuiceyConfigurationInfo info
     DiagnosticRenderer renderer
+
+    void setup() {
+        renderer = new DiagnosticRenderer(info)
+    }
 
     def "Check default render"() {
 
@@ -75,7 +80,6 @@ class DiagnosticRendererTest extends Specification {
 
     GUICE MODULES =
         FooModule                    (r.v.d.g.d.s.features)
-        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
         OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
         XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleModule              (r.v.d.g.d.s.bundle)
@@ -137,7 +141,6 @@ class DiagnosticRendererTest extends Specification {
 
     GUICE MODULES =
         FooModule                    (r.v.d.g.d.s.features)
-        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
         OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
         XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleModule              (r.v.d.g.d.s.bundle)
@@ -296,7 +299,6 @@ class DiagnosticRendererTest extends Specification {
 
     GUICE MODULES =
         FooModule                    (r.v.d.g.d.s.features)
-        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
         OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
         XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleModule              (r.v.d.g.d.s.bundle)
@@ -315,7 +317,6 @@ class DiagnosticRendererTest extends Specification {
 
     GUICE MODULES =
         FooModule                    (r.v.d.g.d.s.features)
-        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle)
         OverrideModule               (r.v.d.g.c.d.r.DiagnosticRendererTest) *OVERRIDE
         XMod                         (r.v.d.g.c.d.r.DiagnosticRendererTest) *HOOK
         FooBundleModule              (r.v.d.g.d.s.bundle)
@@ -347,7 +348,7 @@ class DiagnosticRendererTest extends Specification {
                             .searchCommands()
                             .dropwizardBundles(new DBundle(), new DisabledDBundle())
                             .bundles(new FooBundle(), new GuiceRestrictedConfigBundle(), new DisabledBundle())
-                            .modules(new FooModule(), new DiagnosticBundle.DiagnosticModule(), new DisabledModule())
+                            .modules(new FooModule(), new DisabledModule())
                             .modulesOverride(new OverrideModule())
                             .extensions(LazyExtension, HKExtension, DisabledExtension)
                             .disableInstallers(LifeCycleInstaller)
