@@ -220,6 +220,10 @@ public class GuiceyBootstrap {
      * ({@linkplain ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle}). Listener, registered in bundles
      * could listen events from {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle#BundlesInitialized}.
      * <p>
+     * Listener is not registered if equal listener was already registered ({@link java.util.Set} used as
+     * listeners storage), so if you need to be sure that only one instance of some listener will be used
+     * implement {@link Object#equals(Object)}.
+     * <p>
      * WARNING: don't register listeners implementing
      * {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook} - such registrations will be rejected
      * (it is too late - all hooks were already processed, but, as listener requires hooks support,

@@ -11,6 +11,8 @@ import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.glassfish.jersey.internal.inject.InjectionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -26,10 +28,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensions
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Lifecycle broadcast internal support.
@@ -39,6 +38,7 @@ import java.util.Set;
  */
 @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
 public final class LifecycleSupport {
+    private final Logger logger = LoggerFactory.getLogger(LifecycleSupport.class);
 
     private final Options options;
     private Bootstrap bootstrap;
@@ -49,7 +49,7 @@ public final class LifecycleSupport {
     private InjectionManager injectionManager;
     private GuiceyLifecycle currentStage;
 
-    private final List<GuiceyLifecycleListener> listeners = new ArrayList<>();
+    private final Set<GuiceyLifecycleListener> listeners = new LinkedHashSet<>();
 
     public LifecycleSupport(final Options options) {
         this.options = options;
@@ -57,7 +57,9 @@ public final class LifecycleSupport {
 
     public void register(final GuiceyLifecycleListener... listeners) {
         Arrays.asList(listeners).forEach(l -> {
-            this.listeners.add(l);
+            if (this.listeners.add(l)) {
+                logger.info("IGNORE duplicate lifecycle listener registration: {}", l.getClass().getName());
+            }
             if (l instanceof GuiceyConfigurationHook) {
                 Preconditions.checkState(isBefore(GuiceyLifecycle.ConfigurationHooksProcessed),
                         "Can't register listener as hook because hooks "

@@ -27,6 +27,8 @@ import java.util.List;
  * more clarity.
  * <p>
  * Split logs with current phase name and startup timer. This should clarify custom logic execution times.
+ * <p>
+ * If multiple listeners registered, only first registered will be actually used (allow safe multiple registrations).
  *
  * @author Vyacheslav Rusakov
  * @since 17.04.2018
@@ -144,6 +146,18 @@ public class DebugGuiceyLifecycle extends GuiceyLifecycleAdapter {
     @Override
     protected void jerseyExtensionsInstalled(final JerseyExtensionsInstalledEvent event) {
         log("%s Jersey extensions installed", event.getExtensions().size());
+    }
+
+
+    @Override
+    public boolean equals(final Object obj) {
+        // allow only one listener instance
+        return obj instanceof DebugGuiceyLifecycle;
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 
     @SuppressWarnings("PMD.SystemPrintln")

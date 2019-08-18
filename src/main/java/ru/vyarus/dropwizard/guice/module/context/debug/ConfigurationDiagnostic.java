@@ -47,6 +47,8 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStart
  * <p>
  * Reporting is performed after context startup (pure guicey context (in tests) or entire web context) and so
  * does not affect collected statistics (timings).
+ * <p>
+ * Only one listener with the same title will be registered to allow safe multiple registrations (de-duplication).
  *
  * @author Vyacheslav Rusakov
  * @since 16.08.2019
@@ -100,6 +102,18 @@ public class ConfigurationDiagnostic extends GuiceyLifecycleAdapter {
         report("CONFIGURATION TREE", new ContextTreeRenderer(info), treeConfig, res);
 
         logger.info(res.toString());
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        // allow only one instance with the same title
+        return obj instanceof ConfigurationDiagnostic
+                && reportTitle.equals(((ConfigurationDiagnostic) obj).reportTitle);
+    }
+
+    @Override
+    public int hashCode() {
+        return reportTitle.hashCode();
     }
 
     public static Builder builder() {

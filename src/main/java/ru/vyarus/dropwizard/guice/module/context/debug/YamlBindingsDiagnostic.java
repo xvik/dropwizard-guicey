@@ -13,6 +13,8 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.BeforeRunEvent;
  * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(
  *ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
  * Could be configured to filter out not required info.
+ * <p>
+ * If multiple listeners registered, only first registered will be actually used (allow safe multiple registrations).
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#printConfigurationBindings()
@@ -46,5 +48,16 @@ public class YamlBindingsDiagnostic extends GuiceyLifecycleAdapter {
         }
         logger.info("Available {}configuration bindings = {}",
                 customOnly ? "custom " : "", report);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        // allow only one reporter
+        return obj instanceof YamlBindingsDiagnostic;
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

@@ -75,7 +75,9 @@
     Hook alias may be used instead of class name if alias registered with `GuiceBundle.builder()#hookAlias()` method
 * Add diagnostic hook, which enables diagnostic report and lifecycle logs. 
     Could be enabled with system property: -Dguicey.hooks=diagnostic 
-    (useful to enable diagnostic logs on compiled (deployed) application).                                                                                               
+    (useful to enable diagnostic logs on compiled (deployed) application).    
+* Support lifecycle listeners deduplication for correct report behaviour in case of multiple registrations.
+    Set used as listeners holder, so only proper equals method implementation is required for deduplication                                                                                              
 
 
 Main breaking changes were caused by:

@@ -187,6 +187,10 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * <p>
          * You can also use {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter} when you need to
          * handle multiple events (it replaces direct events handling with simple methods).
+         * <p>
+         * Listener is not registered if equal listener were already registered ({@link java.util.Set} used as
+         * listeners storage), so if you need to be sure that only one instance of some listener will be used
+         * implement {@link Object#equals(Object)}.
          *
          * @param listeners guicey lifecycle listeners (listener could be also a hook)
          * @return builder instance for chained calls
