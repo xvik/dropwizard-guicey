@@ -65,7 +65,7 @@ public class GuiceStatsTracker {
         public void publish(final LogRecord record) {
             final String msg = record.getMessage();
             // skip phases without time (too fast) to reduce amount of logs
-            if (!msg.endsWith("0ms")) {
+            if (!msg.endsWith(" 0ms")) {
                 // add space between number and ms
                 messages.add(msg.substring(0, msg.length() - 2) + " ms");
             }
