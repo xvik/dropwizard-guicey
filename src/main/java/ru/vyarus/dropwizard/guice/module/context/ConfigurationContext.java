@@ -597,6 +597,9 @@ public final class ConfigurationContext {
      * @param builder bundle builder
      */
     public void runHooks(final GuiceBundle.Builder builder) {
+        // lookup hooks from system property "guicey.hooks" (lookup executed after builder configuration to
+        // let user declare alias hooks)
+        ConfigurationHooksSupport.loadSystemHooks();
         // Support for external configuration (for tests)
         // Use special scope to distinguish external configuration
         openScope(ConfigScope.Hook.getKey());

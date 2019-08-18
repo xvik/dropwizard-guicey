@@ -70,7 +70,12 @@
     Reporters are no more bound to guice context (they could always be constructed manually).
 * (breaking) Rename test extensions for guicey hooks registration: 
     - GuiceyConfigurationRule into GuiceyHooksRule and
-    - @UseGuiceyConfiguration into @UseGuiceyHooks                                                                                         
+    - @UseGuiceyConfiguration into @UseGuiceyHooks
+* Add guicey hooks lookup from system property "guicey.hooks" as comma-separated list of classes.
+    Hook alias may be used instead of class name if alias registered with `GuiceBundle.builder()#hookAlias()` method
+* Add diagnostic hook, which enables diagnostic report and lifecycle logs. 
+    Could be enabled with system property: -Dguicey.hooks=diagnostic 
+    (useful to enable diagnostic logs on compiled (deployed) application).                                                                                               
 
 
 Main breaking changes were caused by:

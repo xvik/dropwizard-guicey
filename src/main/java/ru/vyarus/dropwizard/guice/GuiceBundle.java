@@ -12,6 +12,9 @@ import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
+import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.hook.DiagnosticHook;
 import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.module.GuiceyInitializer;
@@ -151,7 +154,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      * @return builder instance to construct bundle
      */
     public static <T extends Configuration> Builder<T> builder() {
-        return new Builder<T>();
+        return new Builder<T>()
+                // allow enabling diagnostic logs with system property (on compiled app): -Dguicey.hooks=diagnostic
+                .hookAlias("diagnostic", DiagnosticHook.class);
     }
 
     /**
@@ -693,6 +698,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * Also, logs useful for better understanding how guicey works.
          * <p>
          * If custom logging format is required use {@link ConfigurationDiagnostic} directly.
+         * <p>
+         * May be enabled on compiled application with a system property: {@code -Dguicey.hooks=diagnostic}
+         * (hook will also enable some other reports).
          *
          * @return builder instance for chained calls
          * @see ConfigurationDiagnostic
@@ -781,12 +789,32 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
 
         /**
          * Same as {@link #printLifecyclePhases}, but also prints resolved and disabled configuration items.
+         * <p>
+         * May be enabled on compiled application with a system property: {@code -Dguicey.hooks=diagnostic}
+         * (hook will also enable some other reports).
          *
          * @return builder instance for chained calls
          * @see DebugGuiceyLifecycle
          */
         public Builder<T> printLifecyclePhasesDetailed() {
             return listen(new DebugGuiceyLifecycle(true));
+        }
+
+        /**
+         * Guicey hooks ({@link GuiceyConfigurationHook}) may be loaded with system property "guicey.hooks". But
+         * it may be not comfortable to always declare full class name (e.g. -Dguicey.hooks=com.foo.bar.Hook,..).
+         * Instead short alias name may be used: -Dguicey.hooks=alias1, alias2.
+         * <p>
+         * By default, diagnostic hook is aliased as "diagnostic" in order to be able to enable diagnostic reporting
+         * for compiled application ({@code -Dguicey.hooks=diagnostic}).
+         *
+         * @param name alias name
+         * @param hook hook class to alias
+         * @return builder instance for chained calls
+         */
+        public Builder<T> hookAlias(final String name, final Class<? extends GuiceyConfigurationHook> hook) {
+            ConfigurationHooksSupport.registerSystemHookAlias(name, hook);
+            return this;
         }
 
         /**
