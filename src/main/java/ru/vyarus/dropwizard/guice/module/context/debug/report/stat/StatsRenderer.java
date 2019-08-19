@@ -17,9 +17,6 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
 /**
  * Renders startup statistics. Overall guicey time is composed from bundle time and hk time and so
  * Hk execution time is shown also below guicey.
- * <p>
- * Installers implementing {@link JerseyInstaller} are executed (also) as part of jersey context startup
- * and so reported separately.
  *
  * @author Vyacheslav Rusakov
  * @since 28.07.2016
