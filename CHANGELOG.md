@@ -78,6 +78,7 @@
     (useful to enable diagnostic logs on compiled (deployed) application).    
 * Support lifecycle listeners deduplication for correct report behaviour in case of multiple registrations.
     Set used as listeners holder, so only proper equals method implementation is required for deduplication                                                                                              
+* Add guice bindings report (`printGuiceBindings()` and `printAllGuiceBindings()` methods on main bundle)
 
 
 Main breaking changes were caused by:

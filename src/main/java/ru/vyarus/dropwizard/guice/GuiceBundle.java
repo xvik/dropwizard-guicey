@@ -13,16 +13,18 @@ import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
-import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.hook.DiagnosticHook;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.module.GuiceyInitializer;
 import ru.vyarus.dropwizard.guice.module.GuiceyRunner;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.debug.ConfigurationDiagnostic;
+import ru.vyarus.dropwizard.guice.module.context.debug.GuiceBindingsDiagnostic;
 import ru.vyarus.dropwizard.guice.module.context.debug.YamlBindingsDiagnostic;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.GuiceConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.BindingsConfig;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
@@ -164,7 +166,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      *
      * @param <T> configuration type
      */
-    @SuppressWarnings("checkstyle:ClassDataAbstractionCoupling")
+    @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
     public static class Builder<T extends Configuration> {
         private final GuiceBundle<T> bundle = new GuiceBundle<T>();
 
@@ -776,6 +778,29 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
                             .showConfigurationTree()
                             .showNullValues()
                             .showCustomConfigOnly()));
+        }
+
+        /**
+         * Prints guice bindings configured in user-provided modules.
+         * Identifies bindings overrides from overriding modules, aop and JIT bindings.
+         *
+         * @return builder instance for chained calls
+         * @see #printAllGuiceBindings() to show entire injector state
+         */
+        public Builder<T> printGuiceBindings() {
+            return listen(new GuiceBindingsDiagnostic(new GuiceConfig()
+                    .hideGuiceBindings()
+                    .hideGuiceyBindings()));
+        }
+
+        /**
+         * Prints all bindings in guice injector.
+         *
+         * @return builder instance for chained calls
+         * @see #printGuiceBindings() to show only user-provided bindings
+         */
+        public Builder<T> printAllGuiceBindings() {
+            return listen(new GuiceBindingsDiagnostic(new GuiceConfig()));
         }
 
         /**
