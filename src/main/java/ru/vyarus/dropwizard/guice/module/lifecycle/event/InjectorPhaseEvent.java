@@ -4,15 +4,17 @@ import com.google.inject.Injector;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticRenderer;
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceBindingsRenderer;
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig;
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig;
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig;
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
@@ -95,7 +97,7 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
         /**
          * Options report.
          *
-         * @param config config opbject
+         * @param config config object
          * @return rendered report as string
          */
         public String renderOptions(final OptionsConfig config) {
@@ -110,6 +112,16 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
          */
         public String renderStats(final boolean hideTiny) {
             return new StatsRenderer(getConfigurationInfo()).renderReport(hideTiny);
+        }
+
+        /**
+         * Render guice bindings report.
+         *
+         * @param config config object
+         * @return rendered report as string
+         */
+        public String renderGuiceBindings(final GuiceConfig config) {
+            return new GuiceBindingsRenderer(getInjector()).renderReport(config);
         }
     }
 }

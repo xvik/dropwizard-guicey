@@ -3,11 +3,10 @@ package ru.vyarus.dropwizard.guice.module.installer.internal;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
+import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.OrderComparator;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
-import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
 
 import java.util.List;
 import java.util.Map;
@@ -23,30 +22,39 @@ import java.util.Map;
  */
 public class ExtensionsHolder {
     private final List<FeatureInstaller> installers;
+    private List<ExtensionItemInfoImpl> extensionsData;
     private final List<Class<? extends FeatureInstaller>> installerTypes;
     private final Map<Class<? extends FeatureInstaller>, List<Class<?>>> extensions = Maps.newHashMap();
-    private final StatsTracker tracker;
-    private final LifecycleSupport lifecycleTracker;
 
-    public ExtensionsHolder(final List<FeatureInstaller> installers, final StatsTracker tracker,
-                            final LifecycleSupport lifecycleTracker) {
+    public ExtensionsHolder(final List<FeatureInstaller> installers) {
         this.installers = installers;
-        this.tracker = tracker;
-        this.lifecycleTracker = lifecycleTracker;
         this.installerTypes = Lists.transform(installers, FeatureInstaller::getClass);
     }
 
     /**
-     * @param installer installer type
-     * @param extension feature type to store
+     * Prepare known extensions for installation.
+     *
+     * @param extensionsData extensions data
      */
-    public void register(final Class<? extends FeatureInstaller> installer, final Class extension) {
-        Preconditions.checkArgument(installerTypes.contains(installer), "Installer %s not registered",
-                installer.getSimpleName());
-        if (!extensions.containsKey(installer)) {
-            extensions.put(installer, Lists.<Class<?>>newArrayList());
+    public void registerExtensions(final List<ExtensionItemInfoImpl> extensionsData) {
+        this.extensionsData = extensionsData;
+        // distribute extensions by installer for initialization
+        for (ExtensionItemInfoImpl ext : extensionsData) {
+            final Class<? extends FeatureInstaller> installer = ext.getInstalledBy();
+            Preconditions.checkArgument(installerTypes.contains(installer), "Installer %s not registered",
+                    installer.getSimpleName());
+            if (!extensions.containsKey(installer)) {
+                extensions.put(installer, Lists.<Class<?>>newArrayList());
+            }
+            extensions.get(installer).add(ext.getType());
         }
-        extensions.get(installer).add(extension);
+    }
+
+    /**
+     * @return registered extensions objects
+     */
+    public List<ExtensionItemInfoImpl> getExtensionsData() {
+        return extensionsData;
     }
 
     /**

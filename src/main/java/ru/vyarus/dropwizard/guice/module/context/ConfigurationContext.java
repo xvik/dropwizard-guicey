@@ -305,7 +305,6 @@ public final class ConfigurationContext {
     }
 
     /**
-     *
      * @return all disabled dropwizard bundles
      */
     public List<ConfiguredBundle> getDisabledDropwizardBundles() {
@@ -461,7 +460,7 @@ public final class ConfigurationContext {
      * @param installers installers to use in correct order
      */
     public void installersResolved(List<FeatureInstaller> installers) {
-        this.extensionsHolder = new ExtensionsHolder(installers, tracker, lifecycleTracker);
+        this.extensionsHolder = new ExtensionsHolder(installers);
         lifecycle().installersResolved(new ArrayList<>(installers), getDisabledInstallers());
     }
 
@@ -641,6 +640,7 @@ public final class ConfigurationContext {
      * Merges disabled items configuration with registered items or creates new items to hold disable info.
      */
     public void finalizeConfiguration() {
+        // process disabled items
         for (ConfigItem type : disabledItemsHolder.keys()) {
             for (ItemId item : disabledItemsHolder.get(type)) {
                 final Collection<Object> instances = instanceItemsIndex.get(item.getType());
@@ -661,6 +661,13 @@ public final class ConfigurationContext {
                 }
             }
         }
+
+        // prepare extensions for installation
+        final List<ExtensionItemInfoImpl> exts = new ArrayList<>();
+        for (Class<?> ext : getEnabledExtensions()) {
+            exts.add(getInfo(ext));
+        }
+        extensionsHolder.registerExtensions(exts);
     }
 
     /**

@@ -10,6 +10,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
@@ -253,6 +254,7 @@ class EventsConsistencyTest extends AbstractTest {
             assert event.reportRenderer.renderOptions(new OptionsConfig()) != null
             assert event.reportRenderer.renderConfigurationSummary(new DiagnosticConfig()) != null
             assert event.reportRenderer.renderConfigurationTree(new ContextTreeConfig()) != null
+            assert event.reportRenderer.renderGuiceBindings(new GuiceConfig()) != null
         }
 
         private void jerseyCheck(JerseyPhaseEvent event) {

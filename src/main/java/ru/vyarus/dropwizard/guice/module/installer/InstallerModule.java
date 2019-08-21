@@ -8,14 +8,10 @@ import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstal
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 
 /**
- * Module performs auto configuration using classpath scanning or manually predefined installers and beans.
- * First search provided packages for registered installers
- * {@link FeatureInstaller}. Then scan classpath one more time with installers to apply extensions.
+ * Module binds all discovered extensions to guice context: either perform default binding or
+ * call installer if it supports custom bindings.
  * <p>
  * Feature installers can be disabled from bundle config.
- * <p>
- * NOTE: Classpath scan will load all found classes in configured packages. Try to reduce scan scope
- * as much as possible.
  *
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
@@ -28,14 +24,12 @@ public class InstallerModule extends AbstractModule {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void configure() {
         // bound for internal usage
         bind(ExtensionsHolder.class).toInstance(context.getExtensionsHolder());
 
-        for (Class<?> ext : context.getEnabledExtensions()) {
-            final ExtensionItemInfoImpl info = context.getInfo(ext);
-            bindExtension(info, info.getInstaller(), context.getExtensionsHolder());
+        for (ExtensionItemInfoImpl ext : context.getExtensionsHolder().getExtensionsData()) {
+            bindExtension(ext, ext.getInstaller());
         }
     }
 
@@ -44,14 +38,9 @@ public class InstallerModule extends AbstractModule {
      *
      * @param item      extension item descriptor
      * @param installer detected extension installer
-     * @param holder    extensions holder bean
      */
-    @SuppressWarnings("unchecked")
-    private void bindExtension(final ExtensionItemInfo item, final FeatureInstaller installer,
-                               final ExtensionsHolder holder) {
-        final Class<? extends FeatureInstaller> installerClass = installer.getClass();
+    private void bindExtension(final ExtensionItemInfo item, final FeatureInstaller installer) {
         final Class<?> type = item.getType();
-        holder.register(installerClass, type);
         if (installer instanceof BindingInstaller) {
             ((BindingInstaller) installer).install(binder(), type, item.isLazy());
         } else if (!item.isLazy()) {
