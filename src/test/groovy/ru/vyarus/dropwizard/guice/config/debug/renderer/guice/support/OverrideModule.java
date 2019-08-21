@@ -1,7 +1,7 @@
-package ru.vyarus.dropwizard.guice.config.debug.renderer.support;
+package ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support;
 
 import com.google.inject.AbstractModule;
-import ru.vyarus.dropwizard.guice.config.debug.renderer.GuiceRendererCasesTest;
+import ru.vyarus.dropwizard.guice.config.debug.renderer.guice.GuiceRendererCasesTest;
 
 /**
  * @author Vyacheslav Rusakov

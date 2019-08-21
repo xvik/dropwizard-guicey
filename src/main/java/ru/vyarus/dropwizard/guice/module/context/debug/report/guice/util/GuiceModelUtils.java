@@ -92,7 +92,9 @@ public final class GuiceModelUtils {
             res.append("@").append(key.getAnnotationType().getSimpleName());
             for (Method method : key.getAnnotationType().getMethods()) {
                 if (method.getName().equals("value") && method.getReturnType().equals(String.class)) {
+                    final boolean accessible = method.isAccessible();
                     try {
+                        method.setAccessible(true);
                         final String qualifier = (String) method.invoke(key.getAnnotation());
                         if (qualifier != null && !qualifier.isEmpty()) {
                             res.append("(\"").append(qualifier).append("\")");
@@ -100,6 +102,8 @@ public final class GuiceModelUtils {
                         break;
                     } catch (Exception e) {
                         throw new IllegalStateException("Failed to inspect annotation", e);
+                    } finally {
+                        method.setAccessible(accessible);
                     }
                 }
             }

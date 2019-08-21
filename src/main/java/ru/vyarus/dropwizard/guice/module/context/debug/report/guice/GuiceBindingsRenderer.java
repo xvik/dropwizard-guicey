@@ -1,15 +1,13 @@
 package ru.vyarus.dropwizard.guice.module.context.debug.report.guice;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Binding;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
+import com.google.inject.*;
 import com.google.inject.spi.Elements;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.model.BindingDeclaration;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.model.DeclarationType;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.model.ModuleDeclaration;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.util.GuiceModelParser;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.util.GuiceModelUtils;
@@ -71,14 +69,15 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
     public String renderReport(final GuiceConfig config) {
         // analyze modules
         final List<ModuleDeclaration> moduleItems = filter(
-                GuiceModelParser.parse(injector, Elements.getElements(modules)), config);
+                GuiceModelParser.parse(injector, Elements.getElements(Stage.TOOL, modules)), config);
         final Map<Key, BindingDeclaration> moduleBindings = GuiceModelUtils.index(moduleItems);
 
         markExtensions(moduleBindings);
 
         // analyze overrides
         final List<ModuleDeclaration> overrideItems = filter(overridden.isEmpty()
-                ? Collections.emptyList() : GuiceModelParser.parse(injector, Elements.getElements(overridden)), config);
+                ? Collections.emptyList() : GuiceModelParser.parse(injector,
+                Elements.getElements(Stage.TOOL, overridden)), config);
         final Map<Key, BindingDeclaration> overrideBindings = GuiceModelUtils.index(overrideItems);
 
         markOverrides(moduleBindings, overrideBindings);
@@ -132,12 +131,18 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         // all bindings contains not only all declared + pure jit bindings, but also second sides for providerkey
         // and linkkey bindings. providerkeys are filtered automatically and link key removed below
         final Map<Key<?>, Binding<?>> jitBindings = new HashMap<>(injector.getAllBindings());
+        // remove non JIT bindings (from guice point of view).. there will be some technical bindings
+        // not mentioned in report (usually right parts of declarations)
         for (Key<?> key : injector.getBindings().keySet()) {
             jitBindings.remove(key);
         }
-        // remove "JIT" bindings from key declaration: bind(A.class).to(B.class) will lead to jit binding creation
-        // for B class, but we dont need to know about it - only pure JIT bindings required
         for (BindingDeclaration dec : moduleBindings.values()) {
+            // remove extension bindings (for example, servlet or filter extensions)
+            if (dec.getKey() != null) {
+                jitBindings.remove(dec.getKey());
+            }
+            // remove "JIT" bindings from key declaration: bind(A.class).to(B.class) will lead to jit binding creation
+            // for B class, but we dont need to know about it - only pure JIT bindings required
             if (dec.getTarget() != null) {
                 jitBindings.remove(dec.getTarget());
             }
@@ -149,6 +154,10 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
                 final List<BindingDeclaration> declarations = jits.get(0).getDeclarations();
                 final TreeNode root = new TreeNode("%s UNDECLARED bindings", declarations.size());
                 for (BindingDeclaration dec : declarations) {
+                    if (dec.getKey() != null) {
+                        // this could be constant conversion bindings, which should be shown in chains report
+                        moduleBindings.put(dec.getKey(), dec);
+                    }
                     root.child(String.format("%-28s %-26s", renderElement(dec),
                             RenderUtils.brackets(RenderUtils.renderPackage(dec.getKey().getTypeLiteral().getRawType())))
                     );
@@ -258,12 +267,19 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
     }
 
     private String renderElement(final BindingDeclaration declaration) {
-        final String res;
-        if (declaration.getSpecial() != null) {
+        String res;
+        if (declaration.getKey() == null && declaration.getSpecial() != null) {
+            // special binding without key (listeners, scopes)
             res = declaration.getSpecial().stream()
-                    .map(it -> it.getClass().getSimpleName()).collect(Collectors.joining(","));
+                    .map(it -> RenderUtils.getClassName(it.getClass()))
+                    .collect(Collectors.joining(","));
+
         } else {
             res = GuiceModelUtils.renderKey(declaration.getKey());
+            if (declaration.getSpecial() != null) {
+                res += " (" + declaration.getSpecial()
+                        .stream().map(Object::toString).collect(Collectors.joining(", ")) + ")";
+            }
         }
         return res;
     }
@@ -278,7 +294,9 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
             while (curr != null && (curr.getTarget() != null || curr.getProvidedBy() != null)) {
                 final Key link = curr.getTarget();
                 if (link != null) {
-                    line.append("  --[linked]-->  ").append(GuiceModelUtils.renderKey(link));
+                    final String tag = curr.getType().equals(DeclarationType.ConvertedConstant)
+                            ? "converted" : "linked";
+                    line.append("  --[").append(tag).append("]-->  ").append(GuiceModelUtils.renderKey(link));
                 } else {
                     line.append("  --[provided]-->  ").append(curr.getProvidedBy());
                 }

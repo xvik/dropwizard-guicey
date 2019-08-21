@@ -1,21 +1,25 @@
 package ru.vyarus.dropwizard.guice.module.context.debug.report.guice.util;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.*;
+import com.google.inject.Binding;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
 import com.google.inject.internal.util.StackTraceElements;
-import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
-import com.google.inject.servlet.ServletScopes;
-import com.google.inject.servlet.SessionScoped;
-import com.google.inject.spi.*;
+import com.google.inject.spi.ConstructorBinding;
+import com.google.inject.spi.Element;
+import com.google.inject.spi.ElementSource;
+import com.google.inject.spi.PrivateElements;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.model.BindingDeclaration;
-import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.model.DeclarationType;
 import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.model.ModuleDeclaration;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.util.visitor.GuiceElementVisitor;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.util.visitor.GuiceScopingVisitor;
+import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.util.visitor.PrivateModuleException;
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton;
-import ru.vyarus.dropwizard.guice.module.support.scope.Prototype;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -31,7 +35,8 @@ import java.util.*;
 public final class GuiceModelParser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GuiceModelParser.class);
-    private static final ClassDefaultBindingScopingVisitor SCOPE_DETECTOR = new ClassDefaultBindingScopingVisitor();
+    private static final GuiceScopingVisitor SCOPE_DETECTOR = new GuiceScopingVisitor();
+    private static final GuiceElementVisitor ELEMENT_VISITOR = new GuiceElementVisitor();
     private static final String JIT_MODULE = "JIT";
 
     private GuiceModelParser() {
@@ -80,37 +85,102 @@ public final class GuiceModelParser {
      * @return parsed descriptor or null if element is not supported (or intentionally skipped)
      */
     public static BindingDeclaration parseElement(final Injector injector, final Element element) {
-        final DeclarationType type = DeclarationType.detect(element.getClass());
-        if (type == null) {
-            LOGGER.debug("Unknown element type: {}", element);
-            return null;
+        final BindingDeclaration dec = element.acceptVisitor(ELEMENT_VISITOR);
+
+        if (dec != null) {
+            fillDeclaration(dec, injector);
+            fillSource(dec, element.getSource());
+            dec.setModule(getModules(element).get(0));
+
+            if (dec.getKey() != null) {
+                final Class ann = dec.getKey().getAnnotationType();
+                if (ann != null) {
+                    if (ann.getName().equals("com.google.inject.internal.Element")) {
+                        dec.setSpecial(Collections.singletonList("multibinding"));
+                    }
+                    if (ann.getName().startsWith("com.google.inject.internal.RealOptionalBinder")) {
+                        dec.setSpecial(Collections.singletonList("optional binding"));
+                    }
+                }
+            }
         }
-        // provider binding is synthetic binding when do bind().toProvider() (right part)
-        // we need to show only actual bindings so skipping it
-        return type == DeclarationType.ProviderBinding ? null : buildDeclaration(type, element, injector);
+
+        return dec;
     }
 
     private static Map<String, ModuleDeclaration> indexElements(final Injector injector,
                                                                 final Collection<? extends Element> elements) {
         final Map<String, ModuleDeclaration> index = new LinkedHashMap<>();
         for (Element element : elements) {
-            final List<String> modules;
-            if (element.getSource() instanceof ElementSource) {
-                modules = ((ElementSource) element.getSource()).getModuleClassNames();
-            } else {
-                // consider JIT binding
-                modules = Collections.singletonList(JIT_MODULE);
+            try {
+                final BindingDeclaration dec = parseElement(injector, element);
+                if (dec == null) {
+                    continue;
+                }
+                // create modules for entire modules chains
+                final ModuleDeclaration mod = initModules(index, getModules(element));
+                mod.getDeclarations().add(dec);
+            } catch (PrivateModuleException ex) {
+                // private module appeared
+                indexPrivate(index, injector, ex.getElements());
             }
-
-            final BindingDeclaration dec = parseElement(injector, element);
-            if (dec == null) {
-                continue;
-            }
-            // create modules for entire modules chains
-            final ModuleDeclaration mod = initModules(index, modules);
-            mod.getDeclarations().add(dec);
         }
         return index;
+    }
+
+    private static void indexPrivate(final Map<String, ModuleDeclaration> index, final Injector injector,
+                                     final PrivateElements elements) {
+        // indicate module where private module was registered
+        final String declaringModule = ((ElementSource) elements.getSource()).getModuleClassNames().get(0);
+        // private modules structure
+        final Map<String, ModuleDeclaration> privateIndex =
+                indexElements(injector, elements.getElements());
+        final Set<Key<?>> exposed = elements.getExposedKeys();
+
+        for (Map.Entry<String, ModuleDeclaration> entry : privateIndex.entrySet()) {
+            final String key = entry.getKey();
+            // skip already known above hierarchy
+            if (index.containsKey(key)) {
+                continue;
+            }
+            final ModuleDeclaration mod = entry.getValue();
+            if (declaringModule.equals(key)) {
+                // mark as private ONLY private module registration point
+                mod.setPrivateModule(true);
+                mod.getMarkers().add("PRIVATE");
+            }
+
+            // indicate exposed bindings (even though explicit expose items will be shown additionally)
+            GuiceModelUtils.visitBindings(Collections.singletonList(mod), it -> {
+                if (it.getKey() != null && exposed.contains(it.getKey())) {
+                    it.getMarkers().add("EXPOSED");
+                }
+            });
+
+            // add module to main index
+            index.put(key, mod);
+        }
+
+        // exposed bindings are not available for modules analysis.. manually adding them
+        for (Key<?> key : exposed) {
+            final Binding<?> existingBinding = injector.getExistingBinding(key);
+            // may be null if multiple private module levels appear - only first level exposure shown
+            if (existingBinding != null) {
+                final BindingDeclaration dec = parseElement(injector, existingBinding);
+                index.get(dec.getModule()).getDeclarations().add(dec);
+            }
+        }
+    }
+
+    private static List<String> getModules(final Element element) {
+        final List<String> modules;
+        if (element.getSource() instanceof ElementSource) {
+            modules = ((ElementSource) element.getSource()).getModuleClassNames();
+        } else {
+            // consider JIT binding
+            modules = Collections.singletonList(JIT_MODULE);
+        }
+        return modules;
     }
 
     @SuppressFBWarnings("NP_NULL_PARAM_DEREF")
@@ -159,87 +229,27 @@ public final class GuiceModelParser {
         return mod;
     }
 
-    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:ExecutableStatementCount",
-            "checkstyle:JavaNCSS"})
-    private static BindingDeclaration buildDeclaration(final DeclarationType type,
-                                                       final Element element,
-                                                       final Injector injector) {
-        final BindingDeclaration dec = new BindingDeclaration(type);
-        Key key = null;
-
-        switch (dec.getType()) {
-            case Scope:
-                final ScopeBinding scopeBinding = (ScopeBinding) element;
-                dec.setScope(scopeBinding.getAnnotationType());
-                break;
-            case Instance:
-                final InstanceBinding instanceBinding = (InstanceBinding) element;
-                key = instanceBinding.getKey();
-                break;
-            case InstanceProvider:
-                final ProviderInstanceBinding providerInstanceBinding = (ProviderInstanceBinding) element;
-                key = providerInstanceBinding.getKey();
-                dec.setProvidedBy(providerInstanceBinding.getUserSuppliedProvider().toString());
-                break;
-            case LinkedKey:
-                final LinkedKeyBinding keyBinding = (LinkedKeyBinding) element;
-                key = keyBinding.getKey();
-                dec.setTarget(keyBinding.getLinkedKey());
-                break;
-            case KeyProvider:
-                final ProviderKeyBinding providerKeyBinding = (ProviderKeyBinding) element;
-                key = providerKeyBinding.getKey();
-                dec.setProvidedBy(GuiceModelUtils.renderKey(providerKeyBinding.getProviderKey()));
-                break;
-            case Untargetted:
-                final UntargettedBinding untargettedBinding = (UntargettedBinding) element;
-                key = untargettedBinding.getKey();
-                break;
-            case Aop:
-                final InterceptorBinding interceptorBinding = (InterceptorBinding) element;
-                dec.setSpecial(interceptorBinding.getInterceptors());
-                break;
-            case TypeListener:
-                final TypeListenerBinding typeListenerBinding = (TypeListenerBinding) element;
-                dec.setSpecial(Collections.singletonList(typeListenerBinding.getListener()));
-                break;
-            case ProvisionListener:
-                final ProvisionListenerBinding provisionListenerBinding = (ProvisionListenerBinding) element;
-                dec.setSpecial(provisionListenerBinding.getListeners());
-                break;
-            case ProviderBinding:
-                final ProviderBinding providerBinding = (ProviderBinding) element;
-                key = providerBinding.getProvidedKey();
-                break;
-            case Binding:
-                // case appear only with analyzing bindings from injector (in contrast to direct module elements
-                // analysis). Here bindings are not differentiated by untargetted/key etc .. it's just binding.
-                // And so the reports from Elements.getElements(modules) and injector.getAllBindings() would be
-                // different (in bindings types only)
-                final Binding binding = (Binding) element;
-                key = binding.getKey();
-                break;
-            default:
-                throw new IllegalStateException("Unsupported type: " + dec.getType());
-        }
-        dec.setKey(key);
-        fillDeclaration(dec, injector);
-        fillSource(dec, element);
-        return dec;
-    }
-
     @SuppressWarnings("unchecked")
     private static void fillDeclaration(final BindingDeclaration dec, final Injector injector) {
         if (dec.getKey() != null) {
             // use binding from injector to get actually configured scope (for cases when element come from modules
             // analysis)
-            final Binding existingBinding = injector.getExistingBinding(dec.getKey());
+            Binding existingBinding = injector.getExistingBinding(dec.getKey());
+            if (existingBinding == null) {
+                // could happen with servlet modules
+                if (dec.getElement() instanceof Binding) {
+                    existingBinding = (Binding) dec.getElement();
+                } else {
+                    return;
+                }
+            }
             Class<? extends Annotation> scope =
                     (Class<? extends Annotation>) existingBinding.acceptScopingVisitor(SCOPE_DETECTOR);
             if (scope != null && scope.equals(EagerSingleton.class)) {
                 scope = javax.inject.Singleton.class;
             }
             dec.setScope(scope);
+            // important for untargetted bindings to look existing binding
             if (existingBinding instanceof ConstructorBinding) {
                 final int aops = ((ConstructorBinding) existingBinding).getMethodInterceptors().size();
                 if (aops > 0) {
@@ -249,66 +259,25 @@ public final class GuiceModelParser {
         }
     }
 
-    private static void fillSource(final BindingDeclaration dec, final Element element) {
-        if (element.getSource() instanceof ElementSource) {
-            final ElementSource source = (ElementSource) element.getSource();
+    private static void fillSource(final BindingDeclaration dec, final Object source) {
+        if (source instanceof ElementSource) {
+            final ElementSource src = (ElementSource) source;
             StackTraceElement traceElement = null;
-            if (source.getDeclaringSource() instanceof StackTraceElement) {
-                traceElement = (StackTraceElement) source.getDeclaringSource();
-            } else if (source.getDeclaringSource() instanceof Method) {
-                traceElement = (StackTraceElement) StackTraceElements.forMember((Method) source.getDeclaringSource());
+            if (src.getDeclaringSource() instanceof StackTraceElement) {
+                traceElement = (StackTraceElement) src.getDeclaringSource();
+            } else if (src.getDeclaringSource() instanceof Method) {
+                traceElement = (StackTraceElement) StackTraceElements.forMember((Method) src.getDeclaringSource());
             }
             if (traceElement != null) {
                 // using full stacktrace element to grant proper link highlight in idea
                 dec.setSource(traceElement.toString());
                 dec.setSourceLine(traceElement.getLineNumber());
             }
-        } else if (element.getSource() instanceof Class) {
-            dec.setSource(((Class) element.getSource()).getName());
+        } else if (source instanceof Class) {
+            dec.setSource(((Class) source).getName());
         } else {
-            LOGGER.warn("Unknown element source: {}", element);
+            LOGGER.warn("Unknown element '{}' source: {}", dec, source);
         }
     }
 
-    /**
-     * Guice binding scope analyzer. Does not support custom scopes.
-     */
-    private static class ClassDefaultBindingScopingVisitor
-            extends DefaultBindingScopingVisitor<Class<? extends Annotation>> {
-
-        @Override
-        public Class<? extends Annotation> visitEagerSingleton() {
-            return EagerSingleton.class;
-        }
-
-        @Override
-        public Class<? extends Annotation> visitScope(final Scope scope) {
-            Class<? extends Annotation> res = null;
-            if (scope == Scopes.SINGLETON) {
-                res = javax.inject.Singleton.class;
-            }
-            if (scope == Scopes.NO_SCOPE) {
-                res = Prototype.class;
-            }
-            if (scope == ServletScopes.REQUEST) {
-                res = RequestScoped.class;
-            }
-            if (scope == ServletScopes.SESSION) {
-                res = SessionScoped.class;
-            }
-            // not supporting custom scopes
-            return res;
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public Class<? extends Annotation> visitScopeAnnotation(final Class scopeAnnotation) {
-            return scopeAnnotation;
-        }
-
-        @Override
-        public Class<? extends Annotation> visitNoScoping() {
-            return Prototype.class;
-        }
-    }
 }

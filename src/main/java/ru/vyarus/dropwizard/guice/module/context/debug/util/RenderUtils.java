@@ -143,7 +143,13 @@ public final class RenderUtils {
         return signs;
     }
 
-    private static String getClassName(final Class<?> type) {
+    /**
+     * Should be used instead of {@link Class#getSimpleName()}  because for anonymous classes it leads to empty string.
+     *
+     * @param type type to get class name from
+     * @return class name
+     */
+    public static String getClassName(final Class<?> type) {
         String name = type.getSimpleName();
         if (name.isEmpty()) {
             // for anonymous classes name will be empty instead of e.g. SomeType$1

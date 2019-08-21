@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.config.debug.renderer
+package ru.vyarus.dropwizard.guice.config.debug.renderer.guice
 
 
 import com.google.inject.Injector
@@ -14,8 +14,8 @@ import org.aopalliance.intercept.MethodInterceptor
 import org.aopalliance.intercept.MethodInvocation
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
-import ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule
-import ru.vyarus.dropwizard.guice.config.debug.renderer.support.OverrideModule
+import ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule
+import ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.OverrideModule
 import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.GuiceBindingsRenderer
 import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.GuiceConfig
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
@@ -52,24 +52,24 @@ class GuiceRendererCasesTest extends Specification {
 
     1 MODULES with 3 bindings
     │
-    └── CasesModule                  (r.v.d.g.c.d.r.support)
-        ├── <typelistener>                        CustomTypeListener                              at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:19)
-        ├── <provisionlistener>                   CustomProvisionListener                         at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:26)
-        ├── <aop>                                 CustomAop                                       at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:33)
-        ├── untargetted          [@Singleton]     AopedService                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:36) *AOP
-        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
-        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:38) *OVERRIDDEN
+    └── CasesModule                  (r.v.d.g.c.d.r.g.support)
+        ├── <typelistener>                        CustomTypeListener                              at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:19)
+        ├── <provisionlistener>                   CustomProvisionListener                         at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:26)
+        ├── <aop>                                 CustomAop                                       at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:33)
+        ├── untargetted          [@Singleton]     AopedService                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:36) *AOP
+        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
+        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:38) *OVERRIDDEN
 
 
     1 OVERRIDING MODULES with 2 bindings
     │
-    └── OverrideModule               (r.v.d.g.c.d.r.support)
-        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.config.debug.renderer.support.OverrideModule.configure(OverrideModule.java:14) *OVERRIDE
-        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.support.OverrideModule.configure(OverrideModule.java:15) *OVERRIDE
+    └── OverrideModule               (r.v.d.g.c.d.r.g.support)
+        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:14) *OVERRIDE
+        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:15) *OVERRIDE
 
 
     1 UNDECLARED bindings
-    └── JitService                   (r.v.d.g.c.d.r.GuiceRendererCasesTest)
+    └── JitService                   (r.v.d.g.c.d.r.g.GuiceRendererCasesTest)
 
 
     BINDING CHAINS
@@ -85,13 +85,13 @@ class GuiceRendererCasesTest extends Specification {
 
     6 MODULES with 87 bindings
     │
-    ├── CasesModule                  (r.v.d.g.c.d.r.support)
-    │   ├── <typelistener>                        CustomTypeListener                              at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:19)
-    │   ├── <provisionlistener>                   CustomProvisionListener                         at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:26)
-    │   ├── <aop>                                 CustomAop                                       at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:33)
-    │   ├── untargetted          [@Singleton]     AopedService                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:36) *AOP
-    │   ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
-    │   └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.support.CasesModule.configure(CasesModule.java:38) *OVERRIDDEN
+    ├── CasesModule                  (r.v.d.g.c.d.r.g.support)
+    │   ├── <typelistener>                        CustomTypeListener                              at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:19)
+    │   ├── <provisionlistener>                   CustomProvisionListener                         at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:26)
+    │   ├── <aop>                                 CustomAop                                       at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:33)
+    │   ├── untargetted          [@Singleton]     AopedService                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:36) *AOP
+    │   ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
+    │   └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:38) *OVERRIDDEN
     │
     └── GuiceBootstrapModule         (r.v.d.guice.module)
         ├── <scope>              [@Prototype]     -                                               at ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule.configure(GuiceBootstrapModule.java:51)
@@ -107,19 +107,19 @@ class GuiceRendererCasesTest extends Specification {
         │   └── instance             [@Singleton]     ExtensionsHolder                                at ru.vyarus.dropwizard.guice.module.installer.InstallerModule.configure(InstallerModule.java:34)
         │
         ├── Jersey2Module                (r.v.d.g.m.jersey)
-        │   ├── instanceprovider     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:58)
+        │   ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:58)
         │   │
         │   └── GuiceBindingsModule          (r.v.d.g.m.jersey.hk2)
-        │       ├── instanceprovider     [@Prototype]     MultivaluedParameterExtractorProvider           at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
-        │       ├── instanceprovider     [@Prototype]     Application                                     at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
-        │       ├── instanceprovider     [@Prototype]     Providers                                       at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
-        │       ├── instanceprovider     [@RequestScoped] UriInfo                                         at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
-        │       ├── instanceprovider     [@RequestScoped] ResourceInfo                                    at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
-        │       ├── instanceprovider     [@RequestScoped] HttpHeaders                                     at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
-        │       ├── instanceprovider     [@RequestScoped] SecurityContext                                 at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
-        │       ├── instanceprovider     [@RequestScoped] Request                                         at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
-        │       ├── instanceprovider     [@RequestScoped] ContainerRequest                                at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
-        │       └── instanceprovider     [@RequestScoped] AsyncContext                                    at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+        │       ├── providerinstance     [@Prototype]     MultivaluedParameterExtractorProvider           at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+        │       ├── providerinstance     [@Prototype]     Application                                     at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+        │       ├── providerinstance     [@Prototype]     Providers                                       at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+        │       ├── providerinstance     [@RequestScoped] UriInfo                                         at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+        │       ├── providerinstance     [@RequestScoped] ResourceInfo                                    at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+        │       ├── providerinstance     [@RequestScoped] HttpHeaders                                     at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+        │       ├── providerinstance     [@RequestScoped] SecurityContext                                 at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+        │       ├── providerinstance     [@RequestScoped] Request                                         at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+        │       ├── providerinstance     [@RequestScoped] ContainerRequest                                at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+        │       └── providerinstance     [@RequestScoped] AsyncContext                                    at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
         │
         └── ConfigBindingModule          (r.v.d.g.m.yaml.bind)
             ├── instance             [@Singleton]     ConfigurationTree                               at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.configure(ConfigBindingModule.java:45)
@@ -172,32 +172,32 @@ class GuiceRendererCasesTest extends Specification {
             ├── instance             [@Singleton]     @Config("server.serverPush.enabled") Boolean    at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
             ├── instance             [@Singleton]     @Config("server.serverPush.maxAssociations") Integer   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
             ├── instance             [@Singleton]     @Config("server.shutdownGracePeriod") Duration   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.gid") Integer                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.group") String                  at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.gzip.compressedMimeTypes") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.gzip.excludedMimeTypes") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.gzip.excludedPaths") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.gzip.includedMethods") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.gzip.includedPaths") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.nofileHardLimit") Integer       at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.nofileSoftLimit") Integer       at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.serverPush.refererHosts") List<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.serverPush.refererPorts") List<Integer>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.startsAsRoot") Boolean          at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.uid") Integer                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            ├── instanceprovider     [@Prototype]     @Config("server.umask") String                  at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
-            └── instanceprovider     [@Prototype]     @Config("server.user") String                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.gid") Integer                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.group") String                  at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.gzip.compressedMimeTypes") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.gzip.excludedMimeTypes") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.gzip.excludedPaths") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.gzip.includedMethods") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.gzip.includedPaths") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.nofileHardLimit") Integer       at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.nofileSoftLimit") Integer       at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.serverPush.refererHosts") List<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.serverPush.refererPorts") List<Integer>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.startsAsRoot") Boolean          at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.uid") Integer                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            ├── providerinstance     [@Prototype]     @Config("server.umask") String                  at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
+            └── providerinstance     [@Prototype]     @Config("server.user") String                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:92)
 
 
     1 OVERRIDING MODULES with 2 bindings
     │
-    └── OverrideModule               (r.v.d.g.c.d.r.support)
-        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.config.debug.renderer.support.OverrideModule.configure(OverrideModule.java:14) *OVERRIDE
-        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.support.OverrideModule.configure(OverrideModule.java:15) *OVERRIDE
+    └── OverrideModule               (r.v.d.g.c.d.r.g.support)
+        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:14) *OVERRIDE
+        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.config.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:15) *OVERRIDE
 
 
     1 UNDECLARED bindings
-    └── JitService                   (r.v.d.g.c.d.r.GuiceRendererCasesTest)
+    └── JitService                   (r.v.d.g.c.d.r.g.GuiceRendererCasesTest)
 
 
     BINDING CHAINS

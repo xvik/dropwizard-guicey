@@ -1,5 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.context.debug.report.guice.model;
 
+import com.google.inject.servlet.InstanceFilterBinding;
+import com.google.inject.servlet.InstanceServletBinding;
+import com.google.inject.servlet.LinkedFilterBinding;
+import com.google.inject.servlet.LinkedServletBinding;
 import com.google.inject.spi.*;
 
 /**
@@ -22,7 +26,7 @@ public enum DeclarationType {
     /**
      * Bound provider instance ({@code bind(Smth.class).toProvider(obj)}).
      */
-    InstanceProvider(ProviderInstanceBinding.class, true),
+    ProviderInstance(ProviderInstanceBinding.class, true),
     /**
      * Linked binding declaration ({@code bind(Smth.class).to(Other.class),}, where Other may be alreadt declared
      * beforeas separate binding).
@@ -31,7 +35,7 @@ public enum DeclarationType {
     /**
      * Provider by key ({@code bind(Smth.class).toProvider(DmthProv.class)}).
      */
-    KeyProvider(ProviderKeyBinding.class, true),
+    ProviderKey(ProviderKeyBinding.class, true),
     /**
      * Untargetted binding ({@code bind(Smth.class)}). Appear only for module elements analysis.
      * When queried binding from injector these bindings would be {@link ConstructorBinding}
@@ -50,18 +54,59 @@ public enum DeclarationType {
      * {@link ProvisionListener} registration ({@code bindListener(..)}). Appear only for module elements analysis.
      */
     ProvisionListener(ProvisionListenerBinding.class, false),
+    /**
+     * {@link TypeConverter} registration. Appear only for module elements analysis.
+     */
+    TypeConverter(TypeConverterBinding.class, false),
+    /**
+     * Provider method in module (annotated with {@link com.google.inject.Provides}).
+     */
+    ProviderMethod(ModuleAnnotatedMethodScannerBinding.class, true),
+    /**
+     * Exposed binding from private module.
+     * NOTE: only first level of exposed bindings are shown and so if private module use private module inside
+     * of it - second level exposures will not be visible in report! (logic: can't use - no need to see).
+     * Anyway, even on lower levels bindings will be marked as exposed (with a marker at the end).
+     */
+    Exposed(ExposedBinding.class, true),
 
-    // types below appear only for real bindings analysis (from injector) and never during module elements analysis
+
+    // EXTENSIONS (only servlets and multibindings extensions supported)
 
     /**
-     * Synthetic provider binding appearing from declaration like {@code bind(..).toProvider(..)} (for right part).
-     * This type is declared only to be able to ignore it as only direct bindings are reported.
+     * Http filter registration by class. This is not real binding, it could only be revealed with extensions target
+     * visitor. Real binding in injector is ignored (it's marked as internal).
      */
-    ProviderBinding(com.google.inject.spi.ProviderBinding.class, true),
+    FilterKey(LinkedFilterBinding.class, false),
     /**
-     * Used for {@link #Untargetted} bindings or bindings of other types.
+     * Http filter registration by instance. This is not real binding, it could only be revealed with extensions target
+     * visitor. Real binding in injector is ignored (it's marked as internal).
      */
-    Binding(com.google.inject.Binding.class, true);
+    FilterInstance(InstanceFilterBinding.class, false),
+    /**
+     * Http servlet registration by class. This is not real binding, it could only be revealed with extensions target
+     * visitor. Real binding in injector is ignored (it's marked as internal).
+     */
+    ServletKey(LinkedServletBinding.class, false),
+    /**
+     * Http servlet registration by instance. This is not real binding, it could only be revealed with extensions target
+     * visitor. Real binding in injector is ignored (it's marked as internal).
+     */
+    ServletInstance(InstanceServletBinding.class, false),
+
+    // INJECTOR TYPES (appear only for bindings from injector and never appeared during module elements analysis)
+
+    // com.google.inject.spi.ProviderBinding is intentionally skipped as not useful for report!
+
+    /**
+     * Used for all types, instantiated by guice (mostly right sides). Appear instead of {@link #Untargetted}
+     * bindings for bindings requested from injector.
+     */
+    Binding(ConstructorBinding.class, true),
+    /**
+     * Dynamic binding, constructed from bound string constant (using {@link TypeConverter}).
+     */
+    ConvertedConstant(ConvertedConstantBinding.class, true);
 
 
     private final Class<?> type;
@@ -77,6 +122,13 @@ public enum DeclarationType {
      */
     public boolean isRuntimeBinding() {
         return runtimeBinding;
+    }
+
+    /**
+     * @return binding type
+     */
+    public Class<?> getType() {
+        return type;
     }
 
     /**
