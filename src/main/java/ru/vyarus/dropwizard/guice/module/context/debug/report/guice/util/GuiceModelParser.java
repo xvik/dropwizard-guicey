@@ -65,7 +65,9 @@ public final class GuiceModelParser {
             // sort declarations according to declaration order (in module)
             mod.getDeclarations().sort(Comparator
                     .comparingInt(BindingDeclaration::getSourceLine)
-                    .thenComparing(BindingDeclaration::getType));
+                    .thenComparing(BindingDeclaration::getType)
+                    .thenComparing(it -> it.getScope() != null ? it.getScope().getSimpleName() : "")
+                    .thenComparing(it -> it.getKey() != null ? GuiceModelUtils.renderKey(it.getKey()) : ""));
         }
 
         // sort entire tree by module name for predictable order
