@@ -7,8 +7,8 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import io.dropwizard.testing.junit.DropwizardAppRule
 import org.junit.Rule
-import ru.vyarus.dropwizard.guice.module.context.debug.ConfigurationDiagnostic
-import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig
+import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic
+import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import spock.lang.Specification
 

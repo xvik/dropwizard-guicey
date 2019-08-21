@@ -162,7 +162,7 @@ public enum GuiceyLifecycle {
      * from guice context.
      * <p>
      * To listen jersey lifecycle further use jersey events (like in
-     * {@link ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle}).
+     * {@link ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic}).
      */
     JerseyExtensionsInstalled(JerseyExtensionsInstalledEvent.class),
     /**

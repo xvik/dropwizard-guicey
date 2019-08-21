@@ -23,9 +23,9 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks;
  * {@link GuiceBundle.Builder#hookAlias(String, Class)}.
  * <p>
  * Enabling hooks from system property may be used for enabling reporting or additional tooling on already
- * compiled applications. For example, bundled {@link DiagnosticHook} could enable guicey diagnostic reports (enabled
- * during development with print* methods on {@link GuiceBundle}) with system property:
- * {@code -Dguicey.hooks=diagnostic}.
+ * compiled applications. For example, bundled {@link ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook} could
+ * enable guicey diagnostic reports (enabled during development with print* methods on {@link GuiceBundle}) with
+ * system property: {@code -Dguicey.hooks=diagnostic}.
  *
  * @author Vyacheslav Rusakov
  * @see GuiceyHooksRule

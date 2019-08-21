@@ -25,7 +25,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
  * for jersey and jetty listeners installation  (use shortcut methods in event for registration).
  *
  * @author Vyacheslav Rusakov
- * @see ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle for listeners usage example
+ * @see ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic for listeners usage example
  * @since 19.04.2018
  */
 public class ApplicationRunEvent extends InjectorPhaseEvent {

@@ -11,9 +11,9 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
-import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
-import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig
-import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
+import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
+import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
+import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
@@ -27,7 +27,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurat
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*
-import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.BindingsConfig
+import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
 import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 

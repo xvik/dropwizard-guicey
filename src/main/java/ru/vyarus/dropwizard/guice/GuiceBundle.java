@@ -13,20 +13,20 @@ import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
-import ru.vyarus.dropwizard.guice.hook.DiagnosticHook;
+import ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.module.GuiceyInitializer;
 import ru.vyarus.dropwizard.guice.module.GuiceyRunner;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
-import ru.vyarus.dropwizard.guice.module.context.debug.ConfigurationDiagnostic;
-import ru.vyarus.dropwizard.guice.module.context.debug.GuiceBindingsDiagnostic;
-import ru.vyarus.dropwizard.guice.module.context.debug.YamlBindingsDiagnostic;
-import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig;
-import ru.vyarus.dropwizard.guice.module.context.debug.report.guice.GuiceConfig;
-import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig;
-import ru.vyarus.dropwizard.guice.module.context.debug.report.yaml.BindingsConfig;
+import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.YamlBindingsDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig;
+import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig;
+import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
@@ -38,7 +38,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
-import ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle;
+import ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 
 import javax.servlet.DispatcherType;
@@ -757,6 +757,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * Also, unique sub configuration objects are recognized and may be used directly
          * ({@code @Inject @Config SubConfig subConf}). Introspected configuration object is accessible from
          * lifecycle events, gucie modules, guicey bundles and by direct injection.
+         * <p>
+         * May be enabled on compiled application with a system property: {@code -Dguicey.hooks=diagnostic}
+         * (hook will also enable some other reports).
          *
          * @return builder instance for chained calls
          * @see ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
@@ -781,8 +784,11 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         }
 
         /**
-         * Prints guice bindings configured in user-provided modules.
-         * Identifies bindings overrides from overriding modules, aop and JIT bindings.
+         * Prints guice bindings configured in user-provided modules (excluding guicey and guice own bindings).
+         * Identifies bindings overrides from overriding modules, aop and undeclared (JIT) bindings.
+         * <p>
+         * May be enabled on compiled application with a system property: {@code -Dguicey.hooks=diagnostic}
+         * (hook will also enable some other reports).
          *
          * @return builder instance for chained calls
          * @see #printAllGuiceBindings() to show entire injector state
@@ -810,10 +816,10 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * could be used for better guicey understanding.
          *
          * @return builder instance for chained calls
-         * @see DebugGuiceyLifecycle
+         * @see LifecycleDiagnostic
          */
         public Builder<T> printLifecyclePhases() {
-            return listen(new DebugGuiceyLifecycle(false));
+            return listen(new LifecycleDiagnostic(false));
         }
 
         /**
@@ -823,10 +829,10 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * (hook will also enable some other reports).
          *
          * @return builder instance for chained calls
-         * @see DebugGuiceyLifecycle
+         * @see LifecycleDiagnostic
          */
         public Builder<T> printLifecyclePhasesDetailed() {
-            return listen(new DebugGuiceyLifecycle(true));
+            return listen(new LifecycleDiagnostic(true));
         }
 
         /**

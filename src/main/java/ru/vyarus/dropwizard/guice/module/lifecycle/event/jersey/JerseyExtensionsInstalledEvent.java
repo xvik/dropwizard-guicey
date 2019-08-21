@@ -24,7 +24,7 @@ import java.util.List;
  * from guice context.
  * <p>
  * To listen hk lifecycle further use jersey events (like in
- * {@link ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle}).
+ * {@link ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic}).
  *
  * @author Vyacheslav Rusakov
  * @since 19.04.2018

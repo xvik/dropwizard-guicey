@@ -6,7 +6,7 @@ import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.Filters
-import ru.vyarus.dropwizard.guice.module.context.debug.ConfigurationDiagnostic
+import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller

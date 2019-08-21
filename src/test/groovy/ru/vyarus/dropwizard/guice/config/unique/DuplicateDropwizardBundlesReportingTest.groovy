@@ -8,10 +8,10 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
-import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticRenderer
-import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
-import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeRenderer
+import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
+import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticRenderer
+import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
+import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeRenderer
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp

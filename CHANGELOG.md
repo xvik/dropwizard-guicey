@@ -79,7 +79,8 @@
 * Support lifecycle listeners deduplication for correct report behaviour in case of multiple registrations.
     Set used as listeners holder, so only proper equals method implementation is required for deduplication                                                                                              
 * Add guice bindings report (`printGuiceBindings()` and `printAllGuiceBindings()` methods on main bundle)
-
+* (breaking) `DebugGuiceyLifecycle` listener renamed into `LifecycleDiagnostic`
+* (breaking) All diagnostic reports moved into one top-level "debug" package.
 
 Main breaking changes were caused by:
  - jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
