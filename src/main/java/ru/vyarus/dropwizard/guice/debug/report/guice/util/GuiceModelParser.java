@@ -71,7 +71,8 @@ public final class GuiceModelParser {
         }
 
         // sort entire tree by module name for predictable order
-        final Comparator<ModuleDeclaration> moduleComparator = Comparator.comparing(it -> it.getType().getName());
+        final Comparator<ModuleDeclaration> moduleComparator = Comparator.comparing(ModuleDeclaration::isJitModule)
+                .thenComparing(it -> it.getType().getName());
         res.sort(moduleComparator);
         GuiceModelUtils.visit(res, it -> it.getChildren().sort(moduleComparator));
 

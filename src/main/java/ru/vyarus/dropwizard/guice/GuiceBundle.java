@@ -12,21 +12,20 @@ import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
-import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
+import ru.vyarus.dropwizard.guice.debug.*;
 import ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook;
+import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig;
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig;
+import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig;
+import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig;
+import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.DefaultInjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.module.GuiceyInitializer;
 import ru.vyarus.dropwizard.guice.module.GuiceyRunner;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
-import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic;
-import ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic;
-import ru.vyarus.dropwizard.guice.debug.YamlBindingsDiagnostic;
-import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
-import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig;
-import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig;
-import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
@@ -38,7 +37,6 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
-import ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 
 import javax.servlet.DispatcherType;
@@ -807,6 +805,32 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> printAllGuiceBindings() {
             return listen(new GuiceBindingsDiagnostic(new GuiceConfig()));
+        }
+
+        /**
+         * Prints all configured guice AOP interceptors and how they apply to methods.
+         * In most cases this general report will be not useful as it will contain too much information. It's
+         * better to use {@link #printGuiceAopMap(GuiceAopConfig)} and filter all non interesting bindings.
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder<T> printGuiceAopMap() {
+            return printGuiceAopMap(new GuiceAopConfig());
+        }
+
+        /**
+         * Supposed to be used to understand how guice AOP works (the most often reasons: check aop applied to method
+         * and check interceptors order). In contrast to other reports, this one is more a specialized tool for
+         * development.
+         * <p>
+         * Multiple reports could be configured (in some cases it is simpler to declare few different but simple
+         * configurations rather then one complex).
+         *
+         * @param config report configuration
+         * @return builder instance for chained calls
+         */
+        public Builder<T> printGuiceAopMap(final GuiceAopConfig config) {
+            return listen(new GuiceAopDiagnostic(config));
         }
 
         /**
