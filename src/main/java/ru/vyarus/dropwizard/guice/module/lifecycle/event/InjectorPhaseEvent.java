@@ -6,6 +6,8 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticRenderer;
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig;
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopMapRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceBindingsRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig;
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig;
@@ -122,6 +124,16 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
          */
         public String renderGuiceBindings(final GuiceConfig config) {
             return new GuiceBindingsRenderer(getInjector()).renderReport(config);
+        }
+
+        /**
+         * Render guice aop map report.
+         *
+         * @param config config object
+         * @return rendered report as string
+         */
+        public String renderGuiceAop(final GuiceAopConfig config) {
+            return new GuiceAopMapRenderer(getInjector()).renderReport(config);
         }
     }
 }
