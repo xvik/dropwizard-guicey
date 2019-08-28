@@ -90,7 +90,7 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         renderOverrides(res, overrideItems, overrideBindings);
         moduleBindings.putAll(overrideBindings);
 
-        renderJitBindings(res, moduleBindings, config);
+        renderJitBindings(res, moduleBindings, config, extensions);
         renderBindingChains(res, moduleBindings);
         return res.toString();
     }
@@ -127,7 +127,8 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
     @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
     private void renderJitBindings(final StringBuilder res,
                                    final Map<Key, BindingDeclaration> moduleBindings,
-                                   final GuiceConfig config) {
+                                   final GuiceConfig config,
+                                   final List<Class<Object>> extensions) {
         // all bindings contains not only all declared + pure jit bindings, but also second sides for providerkey
         // and linkkey bindings. providerkeys are filtered automatically and link key removed below
         final Map<Key<?>, Binding<?>> jitBindings = new HashMap<>(injector.getAllBindings());
@@ -147,6 +148,8 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
                 jitBindings.remove(dec.getTarget());
             }
         }
+        // remove extension bindings (may remain from complex mappings like plugins)
+        jitBindings.keySet().removeIf(key -> extensions.contains(key.getTypeLiteral().getRawType()));
         if (!jitBindings.isEmpty()) {
             final List<ModuleDeclaration> jits = filter(GuiceModelParser.parse(injector, jitBindings.values()), config);
             if (!jits.isEmpty()) {
