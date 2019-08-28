@@ -404,6 +404,37 @@ class ConfigInspectorTest extends Specification {
         res.uniqueTypePaths.isEmpty()
     }
 
+    def "Check recursive property"() {
+
+        when: "config with recursive property"
+        def res = ConfigTreeBuilder.build(bootstrap, new RecursiveConfig())
+        then:
+        res.findByPath('customProperty') != null
+        res.findByPath('customProperty.value') != null
+        res.findByPath('customProperty.customProperty') != null
+        res.findByPath('customProperty.customProperty.customProperty') == null
+
+        when: "config with non null object on recursion path"
+        res = ConfigTreeBuilder.build(bootstrap, new RecursiveConfig(
+                customProperty: new RecursiveConfig.CustomProperty(customProperty: new RecursiveConfig.CustomProperty())))
+        then:
+        res.findByPath('customProperty') != null
+        res.findByPath('customProperty.value') != null
+        res.findByPath('customProperty.customProperty') != null
+        res.findByPath('customProperty.customProperty.value') != null
+        res.findByPath('customProperty.customProperty.customProperty') != null
+        res.findByPath('customProperty.customProperty.customProperty.value') == null
+
+        when: "recursion is indirect"
+        res = ConfigTreeBuilder.build(bootstrap, new RecursiveIndirectlyConfig())
+        then:
+        res.findByPath('next') != null
+        res.findByPath('next.value') != null
+        res.findByPath('next.next') != null
+        res.findByPath('next.next.next') != null
+        res.findByPath('next.next.next.next') == null
+    }
+
     private <T extends Configuration> T create(Class<T> type) {
         bootstrap.configurationFactoryFactory
                 .create(type, bootstrap.validatorFactory.validator, bootstrap.objectMapper, "dw").build()

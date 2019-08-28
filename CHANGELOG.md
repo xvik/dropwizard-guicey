@@ -82,6 +82,7 @@
 * (breaking) `DebugGuiceyLifecycle` listener renamed into `LifecycleDiagnostic`
 * (breaking) All diagnostic reports moved into one top-level "debug" package.
 * Add guice aop appliance report
+* Fix configuration bindings for recursive configuration object declarations (#60)
 
 Main breaking changes were caused by:
  - jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
