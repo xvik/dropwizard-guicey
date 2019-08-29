@@ -10,21 +10,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
-import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
+import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsSupport;
 import ru.vyarus.dropwizard.guice.module.installer.option.WithOptions;
 import ru.vyarus.dropwizard.guice.module.installer.order.OrderComparator;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
-import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -33,7 +31,6 @@ import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
-import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
 
 /**
  * Guicey initialization logic performed under dropwizard configuration phase.
@@ -131,10 +128,9 @@ public class GuiceyInitializer {
         final Stopwatch itimer = context.stat().timer(InstallersTime);
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
         final ExtensionsHolder holder = context.getExtensionsHolder();
-        final boolean guiceFirstMode = context.option(JerseyExtensionsManagedByGuice);
         final List<Class<?>> manual = context.getEnabledExtensions();
         for (Class<?> type : manual) {
-            if (!processType(type, holder, guiceFirstMode, false)) {
+            if (!ExtensionsSupport.registerExtension(context, type, false)) {
                 throw new IllegalStateException("No installer found for extension " + type.getName()
                         + ". Available installers: " + holder.getInstallerTypes()
                         .stream().map(FeatureUtils::getInstallerExtName).collect(Collectors.joining(", ")));
@@ -147,7 +143,7 @@ public class GuiceyInitializer {
                     context.getOrRegisterExtension(type, true);
                 } else {
                     // if matching installer found - extension recognized, otherwise - not an extension
-                    processType(type, holder, guiceFirstMode, true);
+                    ExtensionsSupport.registerExtension(context, type, true);
                 }
             });
         }
@@ -224,35 +220,4 @@ public class GuiceyInitializer {
     }
 
 
-    private boolean processType(final Class<?> type, final ExtensionsHolder holder,
-                                final boolean guiceFirstMode, final boolean fromScan) {
-        final FeatureInstaller installer = findInstaller(type, holder);
-        final boolean recognized = installer != null;
-        if (recognized) {
-            // important to force config creation for extension from scan to allow disabling by matcher
-            final ExtensionItemInfoImpl info = context.getOrRegisterExtension(type, fromScan);
-            info.setLazy(type.isAnnotationPresent(LazyBinding.class));
-            info.setJerseyManaged(JerseyBinding.isJerseyManaged(type, guiceFirstMode));
-            info.setInstaller(installer);
-        }
-        return recognized;
-    }
-
-    /**
-     * Search for matching installer. Extension may match multiple installer, but only one will be actually
-     * used (note that installers are ordered)
-     *
-     * @param type   extension type
-     * @param holder extensions holder bean
-     * @return matching installer or null if no matching installer found
-     */
-    @SuppressWarnings("unchecked")
-    private FeatureInstaller findInstaller(final Class<?> type, final ExtensionsHolder holder) {
-        for (FeatureInstaller installer : holder.getInstallers()) {
-            if (installer.matches(type)) {
-                return installer;
-            }
-        }
-        return null;
-    }
 }

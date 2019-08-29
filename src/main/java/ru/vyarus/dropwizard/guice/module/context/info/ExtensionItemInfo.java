@@ -35,4 +35,13 @@ public interface ExtensionItemInfo extends ClassItemInfo, ScanSupport, DisableSu
      * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged}, false otherwise
      */
     boolean isJerseyManaged();
+
+    /**
+     * Indicates extensions, recognized from guice modules. Extension might be found both by classpath scan
+     * (or registered manually) and be detected as binding declaration and in this case no automatic guice
+     * binding would be performed.
+     *
+     * @return true if extension detected in guice bindings, false otherwise (for direct-only extension)
+     */
+    boolean isGuiceBinding();
 }

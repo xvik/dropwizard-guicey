@@ -94,6 +94,24 @@ public enum GuiceyOptions implements Option {
     TrackDropwizardBundles(Boolean.class, true),
 
     /**
+     * Search for extensions in supplied guice modules (registration from guice module). Overriding modules
+     * are not taken into account.
+     * <p>
+     * Normally extension class is registered directly (or found by classpath scan), recognized by installer, bound
+     * to guice context (with a default binding) and installed in dropwizard. When option is enabled, the same is done
+     * with guice bindings (declared in modules): binding classes analyzed by installers to detect extensions and
+     * then extensions are installed. Overall it's the same, except no default bindings applied by framework.
+     * <p>
+     * It is ok if the same extension would be registered manually or detected by classpath scan and be declared
+     * in guice module manually - guicey will gust avoid default binding.
+     * <p>
+     * Extensions, detected from guice modules may be disabled the same way as usual extensions. It is possible
+     * because bindings are analyzed before injector creation (using guice SPI) and so disabled bindings could
+     * be simply excluded.
+     */
+    ConfigureFromGuiceModules(Boolean.class, true),
+
+    /**
      * Guice injector stage used for injector creation.
      * Production by default.
      *

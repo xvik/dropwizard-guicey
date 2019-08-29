@@ -3,8 +3,8 @@ package ru.vyarus.dropwizard.guice.module.context.info.impl;
 import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
-import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 
 import java.util.Set;
@@ -20,6 +20,7 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
     private Class<? extends FeatureInstaller> installedBy;
     private boolean lazy;
     private boolean jerseyManaged;
+    private boolean guiceBinding;
     private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
     // little hack used to preserve installer reference during initialization
     private FeatureInstaller installer;
@@ -58,6 +59,11 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
         return jerseyManaged;
     }
 
+    @Override
+    public boolean isGuiceBinding() {
+        return guiceBinding;
+    }
+
     public void setLazy(final boolean lazy) {
         this.lazy = lazy;
     }
@@ -66,11 +72,15 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
         this.jerseyManaged = jerseyManaged;
     }
 
+    public void setGuiceBinding(final boolean guiceBinding) {
+        this.guiceBinding = guiceBinding;
+    }
+
     public FeatureInstaller getInstaller() {
         return installer;
     }
 
-    public void setInstaller(FeatureInstaller installer) {
+    public void setInstaller(final FeatureInstaller installer) {
         this.installer = installer;
         this.installedBy = installer.getClass();
     }

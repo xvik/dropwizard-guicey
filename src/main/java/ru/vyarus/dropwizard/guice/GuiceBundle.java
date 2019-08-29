@@ -133,7 +133,8 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         // prepare guice modules for injector creation
         runner.prepareModules();
         // create injector
-        injector = runner.createInjector(injectorFactory);
+        injector = runner.createInjector(injectorFactory,
+                runner.analyzeAndRepackageBindings());
         // install extensions by instance
         runner.installExtensions();
         // inject command fields

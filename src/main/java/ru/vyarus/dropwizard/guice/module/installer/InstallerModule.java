@@ -29,7 +29,10 @@ public class InstallerModule extends AbstractModule {
         bind(ExtensionsHolder.class).toInstance(context.getExtensionsHolder());
 
         for (ExtensionItemInfoImpl ext : context.getExtensionsHolder().getExtensionsData()) {
-            bindExtension(ext, ext.getInstaller());
+            if (!ext.isGuiceBinding()) {
+                // perform default binding only if not already bound manually by user
+                bindExtension(ext, ext.getInstaller());
+            }
         }
     }
 

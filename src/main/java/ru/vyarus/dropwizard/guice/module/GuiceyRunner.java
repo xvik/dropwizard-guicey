@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module;
 
 import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
@@ -58,8 +59,29 @@ public class GuiceyRunner {
     public void prepareModules() {
         // dropwizard specific bindings and jersey integration
         context.registerModules(new GuiceBootstrapModule(context));
-        context.finalizeConfiguration();
         ModulesSupport.configureModules(context);
+    }
+
+    /**
+     * If configuration from guice bindings is enabled, configured guice modules will be repackaged in order to
+     * resolve all configured bindings (and filter disabled bindings to simulate common extensions disable behaviour).
+     * <p>
+     * Note that analysis step use guice elements SPI, which guice will use in any case. And to avoid duplicate work
+     * on injector creation, analyzed elements are packaged into synthetic guice module and passed to injector
+     * instead of original modules.
+     * <p>
+     * After bindings analysis all extensions are finally registered and entire configuration info is finalized.
+     * <p>
+     * When bindings configuration is disabled (with
+     * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#ConfigureFromGuiceModules}), no modules repackaging is applied
+     * (exact legacy guicey behavior). It may also be useful to disable feature to check for side effects.
+     *
+     * @return modules to use
+     */
+    public Iterable<Module> analyzeAndRepackageBindings() {
+        final Iterable<Module> res = ModulesSupport.prepareModules(context);
+        context.finalizeConfiguration();
+        return res;
     }
 
 
@@ -67,12 +89,12 @@ public class GuiceyRunner {
      * @param injectorFactory configured injector factory
      * @return created injector
      */
-    public Injector createInjector(final InjectorFactory injectorFactory) {
+    public Injector createInjector(final InjectorFactory injectorFactory, final Iterable<Module> modules) {
         final Stopwatch timer = context.stat().timer(InjectorCreationTime);
         // intercept detailed guice initialization stats from guice logs
         context.stat().getGuiceStats().injectLogsInterceptor();
         injector = injectorFactory.createInjector(
-                context.option(InjectorStage), ModulesSupport.prepareModules(context));
+                context.option(InjectorStage), modules);
         context.stat().getGuiceStats().resetStatsLogger();
         // registering as managed to cleanup injector on application stop
         context.getEnvironment().lifecycle().manage(

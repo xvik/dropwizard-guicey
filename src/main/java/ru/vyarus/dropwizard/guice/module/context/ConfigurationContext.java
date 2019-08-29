@@ -512,6 +512,27 @@ public final class ConfigurationContext {
     }
 
     /**
+     * Registration of extension detected from guice binding. Descriptor for extension may already exists.
+     * <p>
+     * Top guice module must be used because it's the only module, known by guicey configuration model and so
+     * the only way to show it properly on configuration report. Guice report can show extensions in correct
+     * positions, if required.
+     *
+     * @param extension extension class
+     * @param topScope  top module in registration modules hierarchy
+     * @return extension info container
+     */
+    public ExtensionItemInfoImpl getOrRegisterBindingExtension(final Class<?> extension,
+                                                               final Class<? extends Module> topScope) {
+        openScope(ItemId.from(topScope));
+        // extension could be already registered by classpath scan or manually and in this case just registration
+        // attempt will be registered
+        final ExtensionItemInfoImpl info = register(ConfigItem.Extension, extension);
+        closeScope();
+        return info;
+    }
+
+    /**
      * Extension manual disable registration from
      * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableExtensions(Class[])}.
      *
@@ -522,6 +543,14 @@ public final class ConfigurationContext {
         for (Class<?> extension : extensions) {
             registerDisable(ConfigItem.Extension, ItemId.from(extension));
         }
+    }
+
+    /**
+     * @param extension extension type
+     * @return true if extension is enabled, false if disabled
+     */
+    public boolean isExtensionEnabled(final Class<?> extension) {
+        return isEnabled(ConfigItem.Extension, ItemId.from(extension));
     }
 
     /**

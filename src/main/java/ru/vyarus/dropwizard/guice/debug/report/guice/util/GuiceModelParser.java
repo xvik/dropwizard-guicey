@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.Module;
 import com.google.inject.internal.util.StackTraceElements;
 import com.google.inject.servlet.ServletModule;
 import com.google.inject.spi.ConstructorBinding;
@@ -20,6 +19,7 @@ import ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor.GuiceElementVi
 import ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor.GuiceScopingVisitor;
 import ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor.PrivateModuleException;
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton;
+import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -37,7 +37,6 @@ public final class GuiceModelParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(GuiceModelParser.class);
     private static final GuiceScopingVisitor SCOPE_DETECTOR = new GuiceScopingVisitor();
     private static final GuiceElementVisitor ELEMENT_VISITOR = new GuiceElementVisitor();
-    private static final String JIT_MODULE = "JIT";
 
     private GuiceModelParser() {
     }
@@ -93,7 +92,7 @@ public final class GuiceModelParser {
         if (dec != null) {
             fillDeclaration(dec, injector);
             fillSource(dec, element.getSource());
-            dec.setModule(getModules(element).get(0));
+            dec.setModule(BindingUtils.getModules(element).get(0));
 
             if (dec.getKey() != null) {
                 final Class ann = dec.getKey().getAnnotationType();
@@ -121,7 +120,7 @@ public final class GuiceModelParser {
                     continue;
                 }
                 // create modules for entire modules chains
-                final ModuleDeclaration mod = initModules(index, getModules(element));
+                final ModuleDeclaration mod = initModules(index, BindingUtils.getModules(element));
                 mod.getDeclarations().add(dec);
             } catch (PrivateModuleException ex) {
                 // private module appeared
@@ -175,17 +174,6 @@ public final class GuiceModelParser {
         }
     }
 
-    private static List<String> getModules(final Element element) {
-        final List<String> modules;
-        if (element.getSource() instanceof ElementSource) {
-            modules = ((ElementSource) element.getSource()).getModuleClassNames();
-        } else {
-            // consider JIT binding
-            modules = Collections.singletonList(JIT_MODULE);
-        }
-        return modules;
-    }
-
     @SuppressFBWarnings("NP_NULL_PARAM_DEREF")
     private static ModuleDeclaration initModules(final Map<String, ModuleDeclaration> index,
                                                  final List<String> path) {
@@ -214,16 +202,7 @@ public final class GuiceModelParser {
         ModuleDeclaration mod = index.get(name);
         if (mod == null) {
             mod = new ModuleDeclaration();
-            if (!name.equals(JIT_MODULE)) {
-                try {
-                    mod.setType(Class.forName(name));
-                } catch (ClassNotFoundException e) {
-                    throw new IllegalStateException("Failed to resolve module class", e);
-                }
-            } else {
-                // for JIT bindings use pure interface as module name
-                mod.setType(Module.class);
-            }
+            mod.setType(BindingUtils.getModuleClass(name));
             if (ServletModule.class.isAssignableFrom(mod.getType())) {
                 mod.getMarkers().add("WEB");
             }

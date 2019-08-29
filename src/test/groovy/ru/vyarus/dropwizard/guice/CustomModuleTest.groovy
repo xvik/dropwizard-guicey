@@ -25,6 +25,7 @@ class CustomModuleTest extends AbstractTest {
         AutowiredModule.instance.bootstrap
         AutowiredModule.instance.configuration
         AutowiredModule.instance.configurationTree
-        !info.getExtensions(ResourceInstaller).contains(InvisibleResource)
+        // direct guice binding
+        info.getExtensions(ResourceInstaller).contains(InvisibleResource)
     }
 }
