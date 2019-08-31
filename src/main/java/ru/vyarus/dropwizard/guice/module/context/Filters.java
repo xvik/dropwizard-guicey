@@ -55,7 +55,7 @@ public final class Filters {
      * Shortcut for {@link #disabledBy(ItemId)}.
      *
      * @param type target scope type
-     * @param <T>   expected info container type (if used within single configuration type)
+     * @param <T>  expected info container type (if used within single configuration type)
      * @return items disabled in scope filter
      */
     public static <T extends ItemInfo> Predicate<T> disabledBy(final Class<?> type) {
@@ -114,7 +114,7 @@ public final class Filters {
      * all bundle instances will be returned (will affect multiple scopes).
      *
      * @param type scope type
-     * @param <T>          expected info container type (if used within single configuration type)
+     * @param <T>  expected info container type (if used within single configuration type)
      * @return items registered in specified context filter
      */
     public static <T extends ItemInfo> Predicate<T> registrationScope(final Class<?> type) {
@@ -162,8 +162,8 @@ public final class Filters {
      * {@link Predicate#negate()}.
      *
      * @param types item types to match
+     * @param <T>   expected info container type (if used within single configuration type)
      * @return items of type filter
-     * @param <T> expected info container type (if used within single configuration type)
      */
     public static <T extends ItemInfo> Predicate<T> type(final ConfigItem... types) {
         final List<ConfigItem> target = Arrays.asList(types);
@@ -174,8 +174,8 @@ public final class Filters {
      * Filter used for instance items (bundle, module) selection by type.
      *
      * @param type item class
+     * @param <T>  expected info container type (if used within single configuration type)
      * @return items of class filter
-     * @param <T> expected info container type (if used within single configuration type)
      */
     public static <T extends ItemInfo> Predicate<T> type(final Class<?> type) {
         return input -> input.getType().equals(type);
@@ -222,6 +222,15 @@ public final class Filters {
      */
     public static Predicate<ExtensionItemInfo> installedBy(final Class<? extends FeatureInstaller> type) {
         return input -> type.equals(input.getInstalledBy());
+    }
+
+    /**
+     * Filter for extensions detected from guice bindings. Use only for {@link ConfigItem#Extension} items.
+     *
+     * @return extensions resolved from binding filter
+     */
+    public static Predicate<ExtensionItemInfo> fromBinding() {
+        return ExtensionItemInfo::isGuiceBinding;
     }
 
     // --------------------------------------------------------------------------- MODULES

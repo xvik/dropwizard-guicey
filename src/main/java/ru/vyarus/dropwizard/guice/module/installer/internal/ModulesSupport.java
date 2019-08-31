@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
+import com.google.common.base.Stopwatch;
 import com.google.inject.Binding;
 import com.google.inject.Key;
 import com.google.inject.Module;
@@ -12,6 +13,7 @@ import ru.vyarus.dropwizard.guice.GuiceyOptions;
 import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
+import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
 import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.support.*;
 
@@ -19,6 +21,8 @@ import java.util.*;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.ConfigureFromGuiceModules;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ModulesProcessingTime;
 
 /**
  * Helper class for guice modules processing.
@@ -67,6 +71,7 @@ public final class ModulesSupport {
      * @return modules for injector creation
      */
     public static Iterable<Module> prepareModules(final ConfigurationContext context) {
+        final Stopwatch timer = context.stat().timer(ModulesProcessingTime);
         List<Module> normalModules = context.getNormalModules();
         final List<Module> overridingModules = context.getOverridingModules();
         // use different lists to avoid possible side effects from listeners (not allowed to exclude or modify order)
@@ -76,9 +81,11 @@ public final class ModulesSupport {
                 context.getDisabledModules());
 
         // repackage normal modules to reveal all guice extensions
-        normalModules = analyzeModules(context);
-        return overridingModules.isEmpty() ? normalModules
+        normalModules = analyzeModules(context, timer);
+        final Iterable<Module> res = overridingModules.isEmpty() ? normalModules
                 : Collections.singletonList(Modules.override(normalModules).with(overridingModules));
+        timer.stop();
+        return res;
     }
 
     /**
@@ -93,7 +100,8 @@ public final class ModulesSupport {
      * @param context configuration context
      * @return list of repackaged modules to use
      */
-    private static List<Module> analyzeModules(final ConfigurationContext context) {
+    private static List<Module> analyzeModules(final ConfigurationContext context,
+                                               final Stopwatch modulesTimer) {
         List<Module> modules = context.getNormalModules();
         final Boolean configureFromGuice = context.option(ConfigureFromGuiceModules);
         // one module mean no user modules registered
@@ -102,7 +110,15 @@ public final class ModulesSupport {
             final GuiceBootstrapModule bootstrap = (GuiceBootstrapModule) modules.remove(modules.size() - 1);
             try {
                 // find extensions and remove bindings if required (disabled extensions)
-                final List<Element> elements = analyzeBindings(context, modules);
+                final Stopwatch gtime = context.stat().timer(Stat.BindingsResolutionTime);
+                final List<Element> elements = Elements.getElements(context.option(InjectorStage), modules);
+                gtime.stop();
+
+                // exclude analysis time from modules processing time (it's installer time)
+                modulesTimer.stop();
+                analyzeAndFilterBindings(context, elements);
+                modulesTimer.start();
+
                 // wrap raw elements into module to avoid duplicate work on guice startup and put back bootstrap
                 modules = Arrays.asList(Elements.getModule(elements), bootstrap);
             } catch (Exception ex) {
@@ -114,21 +130,27 @@ public final class ModulesSupport {
                         + ConfigureFromGuiceModules.name() + " option.", ex);
                 // recover and use original modules
                 modules.add(bootstrap);
+                if (!modulesTimer.isRunning()) {
+                    modulesTimer.start();
+                }
             }
         }
         return modules;
     }
 
-    private static List<Element> analyzeBindings(final ConfigurationContext context, final List<Module> modules) {
-        final List<Element> elements = Elements.getElements(context.option(InjectorStage), modules);
+    private static void analyzeAndFilterBindings(final ConfigurationContext context, final List<Element> elements) {
+        final Stopwatch itimer = context.stat().timer(InstallersTime);
+        final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
         final Iterator<Element> it = elements.iterator();
         while (it.hasNext()) {
             final Element element = it.next();
             // filter constants, listeners, aop etc.
             if (element instanceof Binding) {
+                context.stat().count(Stat.BindingsCount, 1);
                 final Key key = ((Binding) element).getKey();
                 // extensions bindings may be only unqualified, class only (no generified types)
                 if (key.getAnnotation() == null && key.getTypeLiteral().getType() instanceof Class) {
+                    context.stat().count(Stat.AnalyzedBindingsCount, 1);
                     final Class type = key.getTypeLiteral().getRawType();
                     if (ExtensionsSupport.registerExtensionBinding(context, type,
                             BindingUtils.getTopDeclarationModule(element))) {
@@ -136,11 +158,13 @@ public final class ModulesSupport {
                         if (!context.isExtensionEnabled(type)) {
                             it.remove();
                             LOGGER.debug("Removed disabled extension binding: {}", type.getSimpleName());
+                            context.stat().count(Stat.RemovedBindingsCount, 1);
                         }
                     }
                 }
             }
         }
-        return elements;
+        timer.stop();
+        itimer.stop();
     }
 }

@@ -59,8 +59,11 @@ class GuiceAopRendererTest extends Specification {
     │   ├── getExtensions()                                                   Interceptor1
     │   ├── getExtensions(Class<? extends FeatureInstaller>)                  Interceptor1
     │   ├── getExtensionsDisabled()                                           Interceptor1
+    │   ├── getExtensionsFromBindings()                                       Interceptor1
     │   ├── getExtensionsFromScan()                                           Interceptor1
     │   ├── getExtensionsOrdered(Class<? extends FeatureInstaller>)           Interceptor1
+    │   ├── getExtensionsRegisteredManauallyOnly()                            Interceptor1
+    │   ├── getExtensionsRegisteredManually()                                 Interceptor1
     │   ├── getGuiceyBundles()                                                Interceptor1
     │   ├── getInfo(Class<? extends Object>)                                  Interceptor1
     │   ├── getInfos(Class<? extends Object>)                                 Interceptor1
@@ -130,8 +133,11 @@ class GuiceAopRendererTest extends Specification {
     │   ├── getExtensions()                                                   Interceptor1
     │   ├── getExtensions(Class<? extends FeatureInstaller>)                  Interceptor1
     │   ├── getExtensionsDisabled()                                           Interceptor1
+    │   ├── getExtensionsFromBindings()                                       Interceptor1
     │   ├── getExtensionsFromScan()                                           Interceptor1
     │   ├── getExtensionsOrdered(Class<? extends FeatureInstaller>)           Interceptor1
+    │   ├── getExtensionsRegisteredManauallyOnly()                            Interceptor1
+    │   ├── getExtensionsRegisteredManually()                                 Interceptor1
     │   ├── getGuiceyBundles()                                                Interceptor1
     │   ├── getInfos(Class<? extends Object>)                                 Interceptor1
     │   ├── getInstallers()                                                   Interceptor1

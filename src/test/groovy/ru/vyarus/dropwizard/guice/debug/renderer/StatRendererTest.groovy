@@ -34,44 +34,48 @@ class StatRendererTest extends BaseDiagnosticTest {
     def "Check guicey app stats render"() {
         /* render would look like:
 
-    GUICEY started in 350.8 ms (77.28 ms config / 273.5 ms run / 0 jersey)
+    GUICEY started in 328.0 ms (84.14 ms config / 243.8 ms run / 0 jersey)
     │
-    ├── [0.86%] CLASSPATH scanned in 3.222 ms
+    ├── [1.2%] CLASSPATH scanned in 4.656 ms
     │   ├── scanned 5 classes
     │   └── recognized 4 classes (80% of scanned)
     │
-    ├── [9.4%] BUNDLES processed in 33.32 ms
-    │   ├── 2 resolved in 13.06 ms
-    │   └── 6 initialized in 19.52 ms
+    ├── [11%] BUNDLES processed in 35.12 ms
+    │   ├── 2 resolved in 17.16 ms
+    │   └── 6 initialized in 17.49 ms
     │
-    ├── [3.4%] COMMANDS processed in 12.96 ms
+    ├── [4.6%] COMMANDS processed in 15.94 ms
     │   └── registered 2 commands
     │
-    ├── [7.4%] INSTALLERS executed in 26.88 ms
+    ├── [9.2%] MODULES processed in 30.42 ms
+    │   ├── 5 modules autowired
+    │   ├── 2 bindings found in 4 user modules in 26.18 ms
+    │   └── 0 extensions detected from 2 acceptable bindings
+    │
+    ├── [9.2%] INSTALLERS processed in 30.49 ms
     │   ├── registered 12 installers
-    │   └── 3 extensions recognized from 7 classes in 6.743 ms
+    │   └── 3 extensions recognized from 9 classes in 9.072 ms
     │
-    ├── [69%] INJECTOR created in 242.6 ms
-    │   ├── from 5 guice modules
-    │   │
-    │   └── injector log
-    │       ├── Module execution: 151 ms
-    │       ├── Interceptors creation: 1 ms
-    │       ├── TypeListeners & ProvisionListener creation: 1 ms
-    │       ├── Scopes creation: 1 ms
-    │       ├── Binding initialization: 33 ms
-    │       ├── Collecting injection requests: 2 ms
-    │       ├── Static validation: 5 ms
-    │       ├── Instance member validation: 5 ms
-    │       ├── Static member injection: 11 ms
-    │       ├── Instance injection: 3 ms
-    │       └── Preloading singletons: 7 ms
+    ├── [54%] INJECTOR created in 176.9 ms
+    │   ├── Module execution: 105 ms
+    │   ├── Interceptors creation: 1 ms
+    │   ├── TypeListeners & ProvisionListener creation: 1 ms
+    │   ├── Scopes creation: 1 ms
+    │   ├── Binding creation: 18 ms
+    │   ├── Binding initialization: 26 ms
+    │   ├── Collecting injection requests: 1 ms
+    │   ├── Static validation: 3 ms
+    │   ├── Instance member validation: 3 ms
+    │   ├── Provider verification: 1 ms
+    │   ├── Static member injection: 7 ms
+    │   ├── Instance injection: 3 ms
+    │   └── Preloading singletons: 4 ms
     │
-    ├── [0.86%] EXTENSIONS installed in 3.497 ms
-    │   ├── 2 by type
-    │   └── 1 by instance
+    ├── [0.92%] EXTENSIONS installed in 3.262 ms
+    │   ├── using 3 enabled extensions
+    │   └── from 2 manual, 1 classpath and 0 binding extension declarations
     │
-    └── [8.9%] remaining 31 ms
+    └── [10%] remaining 34 ms
 
          */
 
@@ -92,18 +96,21 @@ class StatRendererTest extends BaseDiagnosticTest {
         render.contains("] COMMANDS")
         render.contains("registered 2 commands")
 
+        render.contains("] MODULES")
+        render.contains("5 modules autowired")
+        render.contains("2 bindings found in 4 user modules in")
+        render.contains("0 extensions detected from 2 acceptable bindings")
+
         render.contains("] INSTALLERS")
         render.contains("registered 12 installers")
-        render.contains("3 extensions recognized from 7 classes in")
+        render.contains("3 extensions recognized from 9 classes in")
 
         render.contains("] INJECTOR")
-        render.contains("from 5 guice modules")
-        render.contains("injector log")
         render.contains("Module execution")
 
         render.contains("] EXTENSIONS")
-        render.contains("2 by type")
-        render.contains("1 by instance")
+        render.contains("using 3 enabled extensions")
+        render.contains("from 2 manual, 1 classpath and 0 binding extension declarations")
 
         render.contains("] JERSEY bridged in ")
         render.contains("using 2 jersey installers")

@@ -1,15 +1,13 @@
 package ru.vyarus.dropwizard.guice.debug.report.stat;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
+import ru.vyarus.dropwizard.guice.debug.util.TreeNode;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
-import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
-import ru.vyarus.dropwizard.guice.debug.util.TreeNode;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
-import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
-import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
 import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
@@ -54,7 +52,8 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         remaining -= renderClasspathScanInfo(root, hideTiny, percent);
         remaining -= renderBundlesProcessing(root, hideTiny, percent);
         remaining -= renderCommandsRegistration(root, hideTiny, percent);
-        remaining -= renderInstallersRegistration(root, hideTiny, percent);
+        remaining -= renderModulesProcessing(root, percent);
+        remaining -= renderInstallersProcessing(root, hideTiny, percent);
         remaining -= renderInjectorCreation(root, percent);
         remaining -= renderExtensionsInstallation(root, hideTiny, percent);
         remaining -= renderJerseyPart(root, hideTiny, percent);
@@ -118,10 +117,35 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         return command;
     }
 
-    private long renderInstallersRegistration(final TreeNode root, final boolean hideTiny, final double percent) {
+    private long renderModulesProcessing(final TreeNode root, final double percent) {
+        final long modules = info.getStats().time(ModulesProcessingTime);
+        final TreeNode node = root.child("[%.2g%%] MODULES processed in %s",
+                modules / percent, info.getStats().humanTime(ModulesProcessingTime));
+
+        node.child("%s modules autowired", info.getModules().size());
+
+        // identify if analysis were performed
+        final int bindings = info.getStats().count(AnalyzedBindingsCount);
+        if (bindings > 0) {
+            node.child("%s bindings found in %s user modules in %s",
+                    // -1 because guicey bootstrap module is ignored
+                    info.getStats().count(BindingsCount), info.getNormalModules().size() - 1,
+                    info.getStats().humanTime(BindingsResolutionTime));
+            final int found = info.getData().getItems(ConfigItem.Extension, Filters.fromBinding()).size();
+            node.child("%s extensions detected from %s acceptable bindings", found, bindings);
+
+            final int removed = info.getStats().count(RemovedBindingsCount);
+            if (removed > 0) {
+                node.child("%s bindings removed (for disabled items)", removed);
+            }
+        }
+        return modules;
+    }
+
+    private long renderInstallersProcessing(final TreeNode root, final boolean hideTiny, final double percent) {
         final long installers = info.getStats().time(InstallersTime);
         if (show(hideTiny, installers)) {
-            final TreeNode node = root.child("[%.2g%%] INSTALLERS executed in %s",
+            final TreeNode node = root.child("[%.2g%%] INSTALLERS processed in %s",
                     installers / percent, info.getStats().humanTime(InstallersTime));
             final int registered = info.getInstallers().size();
             if (registered > 0) {
@@ -129,9 +153,11 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
 
                 final long extensions = info.getStats().time(ExtensionsRecognitionTime);
                 if (show(hideTiny, extensions)) {
-                    final int manual = info.getExtensions().size() - info.getExtensionsFromScan().size();
+                    final int manual = info.getExtensionsRegisteredManauallyOnly().size();
                     node.child("%s extensions recognized from %s classes in %s",
-                            info.getExtensions().size(), info.getStats().count(ScanClassesCount) + manual,
+                            info.getExtensions().size(),
+                            info.getStats().count(ScanClassesCount)
+                                    + info.getStats().count(AnalyzedBindingsCount) + manual,
                             info.getStats().humanTime(ExtensionsRecognitionTime));
                 }
             }
@@ -143,12 +169,7 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         final long injector = info.getStats().time(InjectorCreationTime);
         final TreeNode node = root.child("[%.2g%%] INJECTOR created in %s",
                 injector / percent, info.getStats().humanTime(InjectorCreationTime));
-
-        node.child("from %s guice modules", info.getModules().size());
-
-        // guice internal logging
-        final TreeNode guice = node.child("injector log");
-        info.getStats().getGuiceStats().forEach(it -> guice.child(it));
+        info.getStats().getGuiceStats().forEach(it -> node.child(it));
         return injector;
     }
 
@@ -158,19 +179,11 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
             final TreeNode node = root.child("[%.2g%%] EXTENSIONS installed in %s",
                     extensions / percent, info.getStats().humanTime(ExtensionsInstallationTime));
 
-            final int typeExt = info.getData()
-                    .getItems(ConfigItem.Extension, (ExtensionItemInfo it) -> it.isEnabled()
-                            && TypeInstaller.class.isAssignableFrom(it.getInstalledBy())).size();
-            if (typeExt > 0) {
-                node.child("%s by type", typeExt);
-            }
-
-            final int instExt = info.getData()
-                    .getItems(ConfigItem.Extension, (ExtensionItemInfo it) -> it.isEnabled()
-                            && InstanceInstaller.class.isAssignableFrom(it.getInstalledBy())).size();
-            if (instExt > 0) {
-                node.child("%s by instance", instExt);
-            }
+            node.child("using %s enabled extensions", info.getExtensions().size());
+            node.child("from %s manual, %s classpath and %s binding extension declarations",
+                    info.getExtensionsRegisteredManually().size(),
+                    info.getExtensionsFromScan().size(),
+                    info.getExtensionsFromBindings().size());
         }
         return extensions;
     }

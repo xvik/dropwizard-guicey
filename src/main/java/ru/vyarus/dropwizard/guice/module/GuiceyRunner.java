@@ -57,9 +57,11 @@ public class GuiceyRunner {
      * Prepare guice modules for injector creation.
      */
     public void prepareModules() {
+        final Stopwatch timer = context.stat().timer(ModulesProcessingTime);
         // dropwizard specific bindings and jersey integration
         context.registerModules(new GuiceBootstrapModule(context));
         ModulesSupport.configureModules(context);
+        timer.stop();
     }
 
     /**

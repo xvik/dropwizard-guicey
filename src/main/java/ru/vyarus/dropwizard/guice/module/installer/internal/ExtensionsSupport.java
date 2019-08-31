@@ -78,11 +78,11 @@ public final class ExtensionsSupport {
             info.setJerseyManaged(JerseyBinding.isJerseyManaged(type, context.option(JerseyExtensionsManagedByGuice)));
 
             Preconditions.checkState(!info.isLazy(),
-                    "@%s annotation must not be used on manually bound extensions",
-                    LazyBinding.class.getSimpleName());
+                    "@%s annotation must not be used on manually bound extension: %s",
+                    LazyBinding.class.getSimpleName(), type.getName());
             Preconditions.checkState(!info.isJerseyManaged(),
-                    "Extension manually bound in guice module can't be marked as jersey managed (@%s)",
-                    JerseyManaged.class.getSimpleName());
+                    "Extension manually bound in guice module can't be marked as jersey managed (@%s): %s",
+                    JerseyManaged.class.getSimpleName(), type.getName());
 
             info.setGuiceBinding(true);
             info.setInstaller(installer);

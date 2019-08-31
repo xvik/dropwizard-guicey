@@ -35,47 +35,49 @@ class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
     def "Check guicey app stats render"() {
         /* render would look like:
 
-    GUICEY started in 630.2 ms (328.4 ms config / 301.8 ms run / 0 jersey)
+    GUICEY started in 672.1 ms (390.1 ms config / 282.0 ms run / 0 jersey)
     │
-    ├── [0.48%] CLASSPATH scanned in 3.116 ms
+    ├── [0.60%] CLASSPATH scanned in 4.377 ms
     │   ├── scanned 5 classes
     │   └── recognized 4 classes (80% of scanned)
     │
-    ├── [45%] BUNDLES processed in 284.8 ms
-    │   ├── 2 resolved in 12.81 ms
-    │   ├── 7 initialized in 17.19 ms
-    │   └── 1 dropwizard bundles initialized in 253.8 ms
+    ├── [51%] BUNDLES processed in 345.1 ms
+    │   ├── 2 resolved in 16.80 ms
+    │   ├── 6 initialized in 23.29 ms
+    │   └── 1 dropwizard bundles initialized in 304.7 ms
     │
-    ├── [1.7%] COMMANDS processed in 11.89 ms
+    ├── [2.1%] COMMANDS processed in 14.72 ms
     │   └── registered 2 commands
     │
-    ├── [4.4%] INSTALLERS executed in 28.80 ms
+    ├── [3.9%] MODULES processed in 26.17 ms
+    │   ├── 5 modules autowired
+    │   ├── 2 bindings found in 4 user modules in 23.23 ms
+    │   └── 0 extensions detected from 2 acceptable bindings
+    │
+    ├── [4.0%] INSTALLERS processed in 27.22 ms
     │   ├── registered 12 installers
-    │   └── 3 extensions recognized from 7 classes in 6.967 ms
+    │   └── 3 extensions recognized from 9 classes in 8.074 ms
     │
-    ├── [42%] INJECTOR created in 263.6 ms
-    │   ├── from 5 guice modules
-    │   │
-    │   └── injector log
-    │       ├── Module execution: 178 ms
-    │       ├── Interceptors creation: 1 ms
-    │       ├── TypeListeners & ProvisionListener creation: 2 ms
-    │       ├── Scopes creation: 1 ms
-    │       ├── Module annotated method scanners creation: 1 ms
-    │       ├── Binding initialization: 29 ms
-    │       ├── Collecting injection requests: 2 ms
-    │       ├── Static validation: 4 ms
-    │       ├── Instance member validation: 4 ms
-    │       ├── Provider verification: 1 ms
-    │       ├── Static member injection: 9 ms
-    │       ├── Instance injection: 3 ms
-    │       └── Preloading singletons: 5 ms
+    ├── [33%] INJECTOR created in 224.0 ms
+    │   ├── Module execution: 155 ms
+    │   ├── Interceptors creation: 1 ms
+    │   ├── TypeListeners & ProvisionListener creation: 2 ms
+    │   ├── Scopes creation: 1 ms
+    │   ├── Binding creation: 17 ms
+    │   ├── Private environment creation: 1 ms
+    │   ├── Binding initialization: 24 ms
+    │   ├── Collecting injection requests: 1 ms
+    │   ├── Static validation: 3 ms
+    │   ├── Instance member validation: 3 ms
+    │   ├── Static member injection: 8 ms
+    │   ├── Instance injection: 2 ms
+    │   └── Preloading singletons: 4 ms
     │
-    ├── [0.48%] EXTENSIONS installed in 3.837 ms
-    │   ├── 2 by type
-    │   └── 1 by instance
+    ├── [0.45%] EXTENSIONS installed in 3.300 ms
+    │   ├── using 3 enabled extensions
+    │   └── from 2 manual, 1 classpath and 0 binding extension declarations
     │
-    └── [6.0%] remaining 38 ms
+    └── [4.3%] remaining 29 ms
 
          */
 
@@ -97,18 +99,21 @@ class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
         render.contains("] COMMANDS")
         render.contains("registered 2 commands")
 
+        render.contains("] MODULES")
+        render.contains("5 modules autowired")
+        render.contains("2 bindings found in 4 user modules in")
+        render.contains("0 extensions detected from 2 acceptable bindings")
+
         render.contains("] INSTALLERS")
         render.contains("registered 12 installers")
-        render.contains("3 extensions recognized from 7 classes in")
+        render.contains("3 extensions recognized from 9 classes in")
 
         render.contains("] INJECTOR")
-        render.contains("from 5 guice modules")
-        render.contains("injector log")
         render.contains("Module execution")
 
         render.contains("] EXTENSIONS")
-        render.contains("2 by type")
-        render.contains("1 by instance")
+        render.contains("using 3 enabled extensions")
+        render.contains("from 2 manual, 1 classpath and 0 binding extension declarations")
 
         render.contains("] JERSEY bridged in ")
         render.contains("using 2 jersey installers")

@@ -8,7 +8,10 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
-import ru.vyarus.dropwizard.guice.module.context.info.*;
+import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
@@ -352,6 +355,39 @@ public class GuiceyConfigurationInfo {
     public List<Class<Object>> getExtensionsFromScan() {
         return typesOnly(context.getItems(ConfigItem.Extension,
                 Filters.<ExtensionItemInfo>enabled().and(Filters.fromScan())));
+    }
+
+    /**
+     * @return enabled extension types, resolved by guice bindings scan or empty list
+     */
+    public List<Class<Object>> getExtensionsFromBindings() {
+        return typesOnly(context.getItems(ConfigItem.Extension,
+                Filters.<ExtensionItemInfo>enabled().and(Filters.fromBinding())));
+    }
+
+    /**
+     * Returned extensions may be also found by classpath scan or in guice bindings.
+     *
+     * @return enabled extensions which was registered manually or empty list
+     */
+    public List<Class<Object>> getExtensionsRegisteredManually() {
+        return typesOnly(context.getItems(ConfigItem.Extension,
+                Filters.<ExtensionItemInfo>enabled()
+                        .and(it -> it.getRegistrationScopeType().equals(ConfigScope.Application)
+                                || it.getRegistrationScopeType().equals(ConfigScope.GuiceyBundle))));
+    }
+
+    /**
+     * One extension could be installed manually then found by classpath scan and then found from guice binding.
+     * This method returns only extensions configured manually and never detected by other methods.
+     *
+     * @return list of enabled extensions, registered only manually or empty list
+     */
+    public List<Class<Object>> getExtensionsRegisteredManauallyOnly() {
+        return typesOnly(context.getItems(ConfigItem.Extension,
+                Filters.<ExtensionItemInfo>enabled()
+                        .and(Filters.fromScan().negate())
+                        .and(Filters.fromBinding().negate())));
     }
 
     /**

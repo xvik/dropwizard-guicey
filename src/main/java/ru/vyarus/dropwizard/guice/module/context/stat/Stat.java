@@ -52,7 +52,8 @@ public enum Stat {
      */
     GuiceyBundleInitTime(true),
     /**
-     * Installers resolution and instantiation time. Part of {@link #ConfigurationTime}.
+     * Installers resolution, instantiation and execution time. Contains time from both initialization and run
+     * phases.
      */
     InstallersTime(true),
     /**
@@ -66,6 +67,34 @@ public enum Stat {
      * Guicey time in dropwizard run phase (without jersey time). Part of {@link #GuiceyTime}.
      */
     RunTime(true),
+    /**
+     * Modules pre processing time (include Aware* interfaces processing and bindings analysis).
+     * Also includes part of {@link #ExtensionsRecognitionTime}.
+     * Part of {@link #RunTime}.
+     */
+    ModulesProcessingTime(true),
+    /**
+     * Count of bindings found in user modules. Not all these bindings were analyzed because only pure class
+     * bindings are checked.
+     */
+    BindingsCount(false),
+    /**
+     * Count of bindings from registered modules which were analyzed for extensions. As analysis may be switched off by
+     * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#ConfigureFromGuiceModules}, this counter indicates if
+     * analysis was performed or not.
+     */
+    AnalyzedBindingsCount(false),
+    /**
+     * IF extension, declared in guice module, is disabled then it's binding is simply removed. Counter indicates
+     * amount of removed bindings.
+     */
+    RemovedBindingsCount(false),
+    /**
+     * Guice SPI time of modules elements resolution. When bindings inspection is disabled with
+     * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#ConfigureFromGuiceModules}, this time become a part of
+     * overall injector creation time.
+     */
+    BindingsResolutionTime(true),
     /**
      * Guice injector creation time. Part of {@link #RunTime}.
      */
