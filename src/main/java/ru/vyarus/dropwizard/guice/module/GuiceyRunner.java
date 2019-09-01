@@ -13,6 +13,8 @@ import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ModulesSupport;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 
+import java.util.ArrayList;
+
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
 
@@ -83,6 +85,7 @@ public class GuiceyRunner {
     public Iterable<Module> analyzeAndRepackageBindings() {
         final Iterable<Module> res = ModulesSupport.prepareModules(context);
         context.finalizeConfiguration();
+        context.lifecycle().extensionsResolved(context.getEnabledExtensions(), context.getDisabledExtensions());
         return res;
     }
 
@@ -93,6 +96,10 @@ public class GuiceyRunner {
      */
     public Injector createInjector(final InjectorFactory injectorFactory, final Iterable<Module> modules) {
         final Stopwatch timer = context.stat().timer(InjectorCreationTime);
+        context.lifecycle().injectorCreation(
+                new ArrayList<>(context.getNormalModules()),
+                new ArrayList<>(context.getOverridingModules()),
+                context.getDisabledModules());
         // intercept detailed guice initialization stats from guice logs
         context.stat().getGuiceStats().injectLogsInterceptor();
         injector = injectorFactory.createInjector(

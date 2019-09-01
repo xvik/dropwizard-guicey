@@ -45,8 +45,11 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case InstallersResolved:
                 installersResolved((InstallersResolvedEvent) event);
                 break;
-            case ExtensionsResolved:
-                extensionsResolved((ExtensionsResolvedEvent) event);
+            case ManualExtensionsValidated:
+                manualExtensionsValidated((ManualExtensionsValidatedEvent) event);
+                break;
+            case ClasspathExtensionsResolved:
+                classpathExtensionsResolved((ClasspathExtensionsResolvedEvent) event);
                 break;
             case Initialized:
                 initialized((InitializedEvent) event);
@@ -56,6 +59,12 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
                 break;
             case BundlesStarted:
                 bundlesStarted((BundlesStartedEvent) event);
+                break;
+            case BindingExtensionsResolved:
+                bindingExtensionsResolved((BindingExtensionsResolvedEvent) event);
+                break;
+            case ExtensionsResolved:
+                extensionsResolved((ExtensionsResolvedEvent) event);
                 break;
             case InjectorCreation:
                 injectorCreation((InjectorCreationEvent) event);
@@ -112,7 +121,11 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         // empty
     }
 
-    protected void extensionsResolved(final ExtensionsResolvedEvent event) {
+    protected void manualExtensionsValidated(final ManualExtensionsValidatedEvent event) {
+        // empty
+    }
+
+    protected void classpathExtensionsResolved(final ClasspathExtensionsResolvedEvent event) {
         // empty
     }
 
@@ -125,6 +138,14 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
     }
 
     protected void bundlesStarted(final BundlesStartedEvent event) {
+        // empty
+    }
+
+    protected void bindingExtensionsResolved(final BindingExtensionsResolvedEvent event) {
+        // empty
+    }
+
+    protected void extensionsResolved(final ExtensionsResolvedEvent event) {
         // empty
     }
 

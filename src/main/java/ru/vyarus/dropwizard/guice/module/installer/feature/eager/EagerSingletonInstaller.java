@@ -9,6 +9,9 @@ import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 /**
  * Search for classes with {@code @EagerSingleton} annotation and register them in guice context.
  * This may be useful for outstanding classes (not injected by other beans and so not registered with guice.
@@ -23,6 +26,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 @Order(50)
 public class EagerSingletonInstaller implements FeatureInstaller<Object>, BindingInstaller {
     private final Reporter reporter = new Reporter(EagerSingletonInstaller.class, "eager singletons =");
+    private final Set<String> prerender = new LinkedHashSet<>();
 
     @Override
     public boolean matches(final Class<?> type) {
@@ -33,11 +37,16 @@ public class EagerSingletonInstaller implements FeatureInstaller<Object>, Bindin
     public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazy) {
         Preconditions.checkArgument(!lazy, "Eager bean can't be annotated as lazy: %s", type.getName());
         binder.bind(type).asEagerSingleton();
-        reporter.line("(%s)", type.getName());
+        // may be called multiple times if bindings report enabled, but log must be counted just once
+        prerender.add(String.format("(%s)", type.getName()));
     }
 
     @Override
     public void report() {
+        for (String line : prerender) {
+            reporter.line(line);
+        }
+        prerender.clear();
         reporter.report();
     }
 }

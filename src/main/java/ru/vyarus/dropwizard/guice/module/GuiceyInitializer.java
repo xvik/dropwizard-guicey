@@ -9,6 +9,7 @@ import io.dropwizard.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
+import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
@@ -24,6 +25,7 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -136,18 +138,23 @@ public class GuiceyInitializer {
                         .stream().map(FeatureUtils::getInstallerExtName).collect(Collectors.joining(", ")));
             }
         }
+        context.lifecycle().manualExtensionsValidated(context.getItems(ConfigItem.Extension), manual);
         if (scanner != null) {
+            final List<Class<?>> extensions = new ArrayList<>();
             scanner.scan(type -> {
                 if (manual.contains(type)) {
                     // avoid duplicate extension installation, but register it's appearance in auto scan scope
                     context.getOrRegisterExtension(type, true);
+                    extensions.add(type);
                 } else {
                     // if matching installer found - extension recognized, otherwise - not an extension
-                    ExtensionsSupport.registerExtension(context, type, true);
+                    if (ExtensionsSupport.registerExtension(context, type, true)) {
+                        extensions.add(type);
+                    }
                 }
             });
+            context.lifecycle().classpathExtensionsResolved(extensions);
         }
-        context.lifecycle().extensionsResolved(context.getEnabledExtensions(), context.getDisabledExtensions());
         timer.stop();
         itimer.stop();
     }

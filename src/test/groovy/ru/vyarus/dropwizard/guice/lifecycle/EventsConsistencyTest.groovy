@@ -31,6 +31,8 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensions
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
 import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
+import ru.vyarus.dropwizard.guice.support.feature.DummyTask
+import ru.vyarus.dropwizard.guice.support.util.BindModule
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 /**
@@ -58,7 +60,7 @@ class EventsConsistencyTest extends AbstractTest {
                             new GuiceyLifecycleAdapter())
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
                     .dropwizardBundles(new DBundle())
-                    .modules(new XMod())
+                    .modules(new XMod(), new BindModule(DummyTask))
                     .disableBundles(LookupBundle)
                     .disableModules(XMod)
                     .disableInstallers(JerseyFeatureInstaller)
@@ -153,10 +155,16 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
-        protected void extensionsResolved(ExtensionsResolvedEvent event) {
+        protected void manualExtensionsValidated(ManualExtensionsValidatedEvent event) {
             confChecks(event)
-            assert event.extensions.size() == 13
-            assert event.disabled.size() == 2
+            assert event.extensions.size() == 1
+            assert event.validated.size() == 0
+        }
+
+        @Override
+        protected void classpathExtensionsResolved(ClasspathExtensionsResolvedEvent event) {
+            confChecks(event)
+            assert event.extensions.size() == 14
         }
 
         @Override
@@ -177,9 +185,22 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
+        protected void bindingExtensionsResolved(BindingExtensionsResolvedEvent event) {
+            runChecks(event)
+            assert event.getExtensions().size() == 1
+        }
+
+        @Override
+        protected void extensionsResolved(ExtensionsResolvedEvent event) {
+            runChecks(event)
+            assert event.extensions.size() == 13
+            assert event.disabled.size() == 2
+        }
+
+        @Override
         protected void injectorCreation(InjectorCreationEvent event) {
             runChecks(event)
-            assert event.modules.size() == 3
+            assert event.modules.size() == 4
             assert event.overridingModules.isEmpty()
             assert event.disabled.size() == 1
         }

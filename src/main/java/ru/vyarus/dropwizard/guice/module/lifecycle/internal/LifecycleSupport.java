@@ -57,7 +57,7 @@ public final class LifecycleSupport {
 
     public void register(final GuiceyLifecycleListener... listeners) {
         Arrays.asList(listeners).forEach(l -> {
-            if (this.listeners.add(l)) {
+            if (!this.listeners.add(l)) {
                 logger.info("IGNORE duplicate lifecycle listener registration: {}", l.getClass().getName());
             }
             if (l instanceof GuiceyConfigurationHook) {
@@ -111,8 +111,16 @@ public final class LifecycleSupport {
         broadcast(new InstallersResolvedEvent(options, bootstrap, installers, disabled));
     }
 
-    public void extensionsResolved(final List<Class<?>> extensions, final List<Class<?>> disabled) {
-        broadcast(new ExtensionsResolvedEvent(options, bootstrap, extensions, disabled));
+    public void manualExtensionsValidated(final List<Class<?>> extensions, final List<Class<?>> validated) {
+        if (!extensions.isEmpty()) {
+            broadcast(new ManualExtensionsValidatedEvent(options, bootstrap, extensions, validated));
+        }
+    }
+
+    public void classpathExtensionsResolved(final List<Class<?>> extensions) {
+        if (!extensions.isEmpty()) {
+            broadcast(new ClasspathExtensionsResolvedEvent(options, bootstrap, extensions));
+        }
     }
 
     public void initialized() {
@@ -140,6 +148,18 @@ public final class LifecycleSupport {
             broadcast(new BundlesStartedEvent(options, bootstrap,
                     configuration, configurationTree, environment, bundles));
         }
+    }
+
+    public void bindingExtensionsResolved(final List<Class<?>> extensions) {
+        if (!extensions.isEmpty()) {
+            broadcast(new BindingExtensionsResolvedEvent(options, bootstrap,
+                    configuration, configurationTree, environment, extensions));
+        }
+    }
+
+    public void extensionsResolved(final List<Class<?>> extensions, final List<Class<?>> disabled) {
+        broadcast(new ExtensionsResolvedEvent(options, bootstrap,
+                configuration, configurationTree, environment, extensions, disabled));
     }
 
     public void injectorCreation(final List<Module> modules, final List<Module> overriding,

@@ -15,6 +15,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurat
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -33,11 +34,14 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 17.04.2018
  */
+@SuppressWarnings("checkstyle:ClassFanOutComplexity")
 public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
 
     private static final String BUNDLES = "bundles";
     private static final String DISABLED = "disabled";
     private static final String NL = "\n";
+    private static final String EXTENSIONS = "extensions";
+    private static final String INSTALLED_EXTENSIONS = "installed extensions";
 
     private final boolean showDetails;
 
@@ -69,7 +73,9 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
     @Override
     protected void lookupBundlesResolved(final BundlesFromLookupResolvedEvent event) {
         log("%s lookup bundles recognized", event.getBundles().size());
-        // lookup details not logged because they are explicitly logged before event
+        if (showDetails) {
+            logDetails(BUNDLES, event.getBundles());
+        }
     }
 
     @Override
@@ -102,17 +108,48 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
     }
 
     @Override
-    protected void extensionsResolved(final ExtensionsResolvedEvent event) {
-        log("%s%s extensions found", event.getExtensions().size(), fmtDisabled(event.getDisabled()));
+    protected void manualExtensionsValidated(final ManualExtensionsValidatedEvent event) {
+        log("%s manual extensions validated (of %s registered)",
+                event.getValidated().size(), event.getExtensions().size());
         if (showDetails) {
-            logDetails("extensions", event.getExtensions());
-            logDetails(DISABLED, event.getDisabled());
+            logDetails("validated", event.getValidated());
+            final List<Class<?>> ignored = new ArrayList<>(event.getExtensions());
+            ignored.removeAll(event.getValidated());
+            logDetails("ignored", ignored);
+        }
+    }
+
+    @Override
+    protected void classpathExtensionsResolved(final ClasspathExtensionsResolvedEvent event) {
+        log("%s classpath extensions detected", event.getExtensions().size());
+        if (showDetails) {
+            logDetails(EXTENSIONS, event.getExtensions());
         }
     }
 
     @Override
     protected void bundlesStarted(final BundlesStartedEvent event) {
         log("Started %s GuiceyBundles", event.getBundles().size());
+        if (showDetails) {
+            logDetails(BUNDLES, event.getBundles());
+        }
+    }
+
+    @Override
+    protected void bindingExtensionsResolved(BindingExtensionsResolvedEvent event) {
+        log("%s binding extensions detected", event.getExtensions().size());
+        if (showDetails) {
+            logDetails(EXTENSIONS, event.getExtensions());
+        }
+    }
+
+    @Override
+    protected void extensionsResolved(final ExtensionsResolvedEvent event) {
+        log("%s%s extensions found", event.getExtensions().size(), fmtDisabled(event.getDisabled()));
+        if (showDetails) {
+            logDetails(EXTENSIONS, event.getExtensions());
+            logDetails(DISABLED, event.getDisabled());
+        }
     }
 
     @Override
@@ -129,6 +166,9 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
     @Override
     protected void extensionsInstalled(final ExtensionsInstalledEvent event) {
         log("%s extensions installed", event.getExtensions().size());
+        if (showDetails) {
+            logDetails(INSTALLED_EXTENSIONS, event.getExtensions());
+        }
     }
 
     @Override
@@ -146,6 +186,9 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
     @Override
     protected void jerseyExtensionsInstalled(final JerseyExtensionsInstalledEvent event) {
         log("%s Jersey extensions installed", event.getExtensions().size());
+        if (showDetails) {
+            logDetails(INSTALLED_EXTENSIONS, event.getExtensions());
+        }
     }
 
 

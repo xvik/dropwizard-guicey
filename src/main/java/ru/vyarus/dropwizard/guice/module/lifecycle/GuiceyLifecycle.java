@@ -61,13 +61,16 @@ public enum GuiceyLifecycle {
      */
     InstallersResolved(InstallersResolvedEvent.class),
     /**
-     * Called when all extensions detected (from classpath scan, if enabled). Provides list of all enabled
-     * and list of disabled extension types (instances are not available yet). Called even if no extensions
-     * configured to indicate configuration state.
-     * <p>
-     * Guice context is creating at that moment.
+     * Called when all manually registered extension classes are recognized by installers (validated). But only
+     * extensions, known to be enabled at that time are actually validated (this way it is possible to exclude
+     * extensions for non existing installers). Called only if at least one manual extension registered.
      */
-    ExtensionsResolved(ExtensionsResolvedEvent.class),
+    ManualExtensionsValidated(ManualExtensionsValidatedEvent.class),
+    /**
+     * Called when classes from classpath scan analyzed and all extensions detected.
+     * Called only if classpath scan is enabled and at least one extension detected.
+     */
+    ClasspathExtensionsResolved(ClasspathExtensionsResolvedEvent.class),
     /**
      * Called after guicey initialization (includes bundles lookup and initialization,
      * installers and extensions resolution). Pure marker event, indicating guicey work finished under dropwizard
@@ -94,6 +97,17 @@ public enum GuiceyLifecycle {
      * guice bundle processing.
      */
     BundlesStarted(BundlesStartedEvent.class),
+    /**
+     * Called when guice bindings analyzed and all extensions detected.
+     * Called only if bindings analysis is enabled and at least one extension detected.
+     */
+    BindingExtensionsResolved(BindingExtensionsResolvedEvent.class),
+    /**
+     * Called when all extensions detected (from classpath scan and guice modules). Provides list of all enabled
+     * and list of disabled extension types (instances are not available yet). Called even if no extensions
+     * configured to indicate configuration state.
+     */
+    ExtensionsResolved(ExtensionsResolvedEvent.class),
     /**
      * Called just before guice injector creation. Provides all configured modules (main and override) and all
      * disabled modules. Called even when no modules registered to indicate configuration state.

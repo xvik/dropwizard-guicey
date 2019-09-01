@@ -20,6 +20,8 @@ public interface BindingInstaller {
      * Called to apply custom binding for installed feature.
      * All found features installed as {@code binder.install(type)} by default, so
      * implement it only if some custom binding required.
+     * <p>
+     * WARNING: may be called multiple times due to enabled bindings reporting! Be sure to produce correct logs.
      *
      * @param binder guice binder
      * @param type   extension class

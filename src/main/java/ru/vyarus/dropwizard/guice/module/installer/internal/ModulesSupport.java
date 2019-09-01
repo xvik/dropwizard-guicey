@@ -72,16 +72,10 @@ public final class ModulesSupport {
      */
     public static Iterable<Module> prepareModules(final ConfigurationContext context) {
         final Stopwatch timer = context.stat().timer(ModulesProcessingTime);
-        List<Module> normalModules = context.getNormalModules();
         final List<Module> overridingModules = context.getOverridingModules();
-        // use different lists to avoid possible side effects from listeners (not allowed to exclude or modify order)
-        context.lifecycle().injectorCreation(
-                new ArrayList<>(normalModules),
-                new ArrayList<>(overridingModules),
-                context.getDisabledModules());
-
         // repackage normal modules to reveal all guice extensions
-        normalModules = analyzeModules(context, timer);
+        final List<Module> normalModules = analyzeModules(context, timer);
+
         final Iterable<Module> res = overridingModules.isEmpty() ? normalModules
                 : Collections.singletonList(Modules.override(normalModules).with(overridingModules));
         timer.stop();
@@ -142,6 +136,7 @@ public final class ModulesSupport {
         final Stopwatch itimer = context.stat().timer(InstallersTime);
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
         final Iterator<Element> it = elements.iterator();
+        final List<Class<?>> extensions = new ArrayList<>();
         while (it.hasNext()) {
             final Element element = it.next();
             // filter constants, listeners, aop etc.
@@ -155,6 +150,7 @@ public final class ModulesSupport {
                     if (ExtensionsSupport.registerExtensionBinding(context, type,
                             BindingUtils.getTopDeclarationModule(element))) {
                         LOGGER.debug("Extension detected from guice binding: {}", type.getSimpleName());
+                        extensions.add(type);
                         if (!context.isExtensionEnabled(type)) {
                             it.remove();
                             LOGGER.debug("Removed disabled extension binding: {}", type.getSimpleName());
@@ -164,6 +160,7 @@ public final class ModulesSupport {
                 }
             }
         }
+        context.lifecycle().bindingExtensionsResolved(extensions);
         timer.stop();
         itimer.stop();
     }
