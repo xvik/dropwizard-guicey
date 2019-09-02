@@ -104,7 +104,7 @@ class GuiceRendererCasesTest extends Specification {
         ├── instance             [@Singleton]     Environment                                     at ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule.bindEnvironment(GuiceBootstrapModule.java:72)
         │
         ├── InstallerModule              (r.v.d.g.m.installer)
-        │   └── instance             [@Singleton]     ExtensionsHolder                                at ru.vyarus.dropwizard.guice.module.installer.InstallerModule.configure(InstallerModule.java:29)
+        │   └── instance             [@Singleton]     ExtensionsHolder                                at ru.vyarus.dropwizard.guice.module.installer.InstallerModule.configure(InstallerModule.java:30)
         │
         ├── Jersey2Module                (r.v.d.g.m.jersey)
         │   ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:58)

@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import org.slf4j.Logger;
@@ -61,11 +62,13 @@ public final class ExtensionsSupport {
      *
      * @param context              configuration context
      * @param type                 extension type
+     * @param manualBinding        guice binding from module
      * @param topDeclarationModule top declaration module (which was manually added by user)
      * @return true if extension recognized by installers, false otherwise
      */
     public static boolean registerExtensionBinding(final ConfigurationContext context,
                                                    final Class<?> type,
+                                                   final Binding<?> manualBinding,
                                                    final Class<? extends Module> topDeclarationModule) {
         final FeatureInstaller installer = findInstaller(type, context.getExtensionsHolder());
         final boolean recognized = installer != null;
@@ -84,7 +87,7 @@ public final class ExtensionsSupport {
                     "Extension manually bound in guice module can't be marked as jersey managed (@%s): %s",
                     JerseyManaged.class.getSimpleName(), type.getName());
 
-            info.setGuiceBinding(true);
+            info.setManualBinding(manualBinding);
             info.setInstaller(installer);
         }
         return recognized;

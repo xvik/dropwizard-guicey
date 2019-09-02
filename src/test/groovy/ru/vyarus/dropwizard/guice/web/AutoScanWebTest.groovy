@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.web
 
+import com.google.inject.Binder
 import com.google.inject.Inject
 import com.google.inject.Injector
 import io.dropwizard.Application
@@ -14,7 +15,6 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebServletInstall
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListenerInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.AdminGuiceFilter
 import ru.vyarus.dropwizard.guice.support.feature.DummyService
-import ru.vyarus.dropwizard.guice.support.util.BindModule
 import ru.vyarus.dropwizard.guice.support.web.feature.*
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
@@ -65,7 +65,12 @@ class AutoScanWebTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.web.feature")
-                    .modules(new BindModule(DummyService))
+                    .modules(new com.google.inject.Module() {
+                        @Override
+                        void configure(Binder binder) {
+                            binder.bind(DummyService).asEagerSingleton()
+                        }
+                    })
                     .build())
         }
 

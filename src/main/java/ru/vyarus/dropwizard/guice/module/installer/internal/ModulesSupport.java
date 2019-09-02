@@ -148,7 +148,7 @@ public final class ModulesSupport {
                     context.stat().count(Stat.AnalyzedBindingsCount, 1);
                     final Class type = key.getTypeLiteral().getRawType();
                     if (ExtensionsSupport.registerExtensionBinding(context, type,
-                            BindingUtils.getTopDeclarationModule(element))) {
+                            (Binding<?>) element, BindingUtils.getTopDeclarationModule(element))) {
                         LOGGER.debug("Extension detected from guice binding: {}", type.getSimpleName());
                         extensions.add(type);
                         if (!context.isExtensionEnabled(type)) {

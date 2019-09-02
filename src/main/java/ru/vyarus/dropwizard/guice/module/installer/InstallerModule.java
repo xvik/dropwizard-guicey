@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Binding;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
@@ -29,24 +30,36 @@ public class InstallerModule extends AbstractModule {
         bind(ExtensionsHolder.class).toInstance(context.getExtensionsHolder());
 
         for (ExtensionItemInfoImpl ext : context.getExtensionsHolder().getExtensionsData()) {
-            if (!ext.isGuiceBinding()) {
-                // perform default binding only if not already bound manually by user
-                bindExtension(ext, ext.getInstaller());
-            }
+            bindExtension(ext, ext.getInstaller(), ext.getManualBinding());
         }
     }
 
     /**
-     * Bind extension to guice context.
+     * Bind extension to guice context. If extension already resolved from guice binding then default binding
+     * is not performed, but still {@link BindingInstaller} may require to perform additional operations even
+     * with existing binding.
      *
-     * @param item      extension item descriptor
-     * @param installer detected extension installer
+     * @param item          extension item descriptor
+     * @param installer     detected extension installer
+     * @param manualBinding manual binding from guice module
      */
-    private void bindExtension(final ExtensionItemInfo item, final FeatureInstaller installer) {
+    @SuppressWarnings("unchecked")
+    private void bindExtension(final ExtensionItemInfo item,
+                               final FeatureInstaller installer,
+                               final Binding manualBinding) {
         final Class<?> type = item.getType();
         if (installer instanceof BindingInstaller) {
-            ((BindingInstaller) installer).install(binder(), type, item.isLazy());
-        } else if (!item.isLazy()) {
+            final BindingInstaller bindingInstaller = (BindingInstaller) installer;
+            if (manualBinding != null) {
+                bindingInstaller.checkBinding(binder(), type, manualBinding);
+            } else {
+                // perform default binding only if not already bound manually by user
+                bindingInstaller.bindExtension(binder(), type, item.isLazy());
+            }
+            // advanced bindings logic, common for both branches
+            bindingInstaller.installBinding(binder(), type);
+
+        } else if (manualBinding == null && !item.isLazy()) {
             // if installer isn't install binding manually, lazy simply disable registration
             binder().bind(type);
         }

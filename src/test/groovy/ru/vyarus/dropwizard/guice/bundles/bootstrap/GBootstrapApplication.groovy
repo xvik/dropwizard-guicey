@@ -43,7 +43,7 @@ class GBootstrapApplication extends Application<TestConfiguration> {
                             protected void configure() {
                                 bindConstant().annotatedWith(Names.named("sample")).to("test str")
                                 bindConstant().annotatedWith(Names.named("sample2")).to("test str")
-                                bind(DummyService)
+                                bind(DummyService).asEagerSingleton()
                             }
                         })
                                 .modulesOverride(new AbstractModule() {

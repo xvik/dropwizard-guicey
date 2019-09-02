@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.plugin;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
+import com.google.inject.Binding;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -36,12 +37,22 @@ public class PluginInstaller implements FeatureInstaller<Object>, BindingInstall
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazy) {
+    public void bindExtension(final Binder binder, final Class<?> type, final boolean lazy) {
         Preconditions.checkArgument(!lazy, "Plugin bean can't be lazy: %s", type.getName());
+    }
+
+    @Override
+    public <T> void checkBinding(final Binder binder, final Class<T> type, final Binding<T> manualBinding) {
+        // manually bound - nothing to do
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void installBinding(final Binder binder, final Class<?> type) {
+        // multibindings registration (common for both registration types)
         final Plugin annotation = FeatureUtils.getAnnotation(type, Plugin.class);
         if (annotation != null) {
-            final Class<T> pluginType = (Class<T>) annotation.value();
+            final Class pluginType = annotation.value();
             reporter.simple(pluginType, type);
             Multibinder.newSetBinder(binder, pluginType).addBinding().to(type);
         } else {

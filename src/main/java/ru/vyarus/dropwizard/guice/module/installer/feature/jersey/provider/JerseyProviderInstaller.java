@@ -1,8 +1,10 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.google.inject.Binder;
+import com.google.inject.Binding;
 import com.google.inject.Injector;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.internal.inject.InjectionResolver;
@@ -74,15 +76,31 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
     }
 
     @Override
-    public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazyMarker) {
+    public void bindExtension(final Binder binder, final Class<?> type, final boolean lazyMarker) {
         final boolean hkManaged = isJerseyExtension(type);
         final boolean lazy = isLazy(type, lazyMarker);
         // register in guice only if not managed by hk and just in time (lazy) binding not requested
         if (!hkManaged && !lazy) {
             bindInGuice(binder, type);
         }
-        reporter.provider(type, hkManaged, lazy);
     }
+
+    @Override
+    public <T> void checkBinding(final Binder binder, final Class<T> type, final Binding<T> manualBinding) {
+        // no need to bind in case of manual binding
+        final boolean hkManaged = isJerseyExtension(type);
+        Preconditions.checkState(!hkManaged,
+                "Provider annotated as jersey managed is declared manually in guice: %s",
+                type.getName());
+    }
+
+    @Override
+    public void installBinding(Binder binder, Class<?> type) {
+        // reporting (common for both registration types)
+        final boolean hkManaged = isJerseyExtension(type);
+        reporter.provider(type, hkManaged, false);
+    }
+
 
     @Override
     public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {

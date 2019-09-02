@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
 import com.google.common.collect.Sets;
+import com.google.inject.Binding;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
@@ -20,7 +21,7 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
     private Class<? extends FeatureInstaller> installedBy;
     private boolean lazy;
     private boolean jerseyManaged;
-    private boolean guiceBinding;
+    private Binding manualBinding;
     private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
     // little hack used to preserve installer reference during initialization
     private FeatureInstaller installer;
@@ -61,7 +62,7 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
 
     @Override
     public boolean isGuiceBinding() {
-        return guiceBinding;
+        return manualBinding != null;
     }
 
     public void setLazy(final boolean lazy) {
@@ -72,8 +73,12 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
         this.jerseyManaged = jerseyManaged;
     }
 
-    public void setGuiceBinding(final boolean guiceBinding) {
-        this.guiceBinding = guiceBinding;
+    public void setManualBinding(final Binding manualBinding) {
+        this.manualBinding = manualBinding;
+    }
+
+    public Binding getManualBinding() {
+        return manualBinding;
     }
 
     public FeatureInstaller getInstaller() {

@@ -84,6 +84,9 @@
 * (breaking) `DebugGuiceyLifecycle` listener renamed into `LifecycleDiagnostic`
 * (breaking) All diagnostic reports moved into one top-level "debug" package.
 * Add guice aop appliance report
+* (breaking) BindingInstaller interface changed (because of direct guice bindings): 
+    it now contains 3 methods for class binding, manual binding validation and extra installations, 
+    common for both types (or universal reporting)
 * Support extensions recognition from guice modules: 
     - extensions are detected from declaration in specified guice modules 
         (essentially same as classpath scan, but from bindings)
