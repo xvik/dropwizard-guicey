@@ -20,7 +20,7 @@ wrapper {
 }
 
 ext {
-    dropwizard = '2.0.0-rc5'
+    dropwizard = '2.0.0-rc9'
     guice = '4.2.2'
     hk2 = '2.5.0'
 }
@@ -30,6 +30,7 @@ dependencyManagement {
     imports {
         mavenBom "com.google.inject:guice-bom:$guice"
         mavenBom "io.dropwizard:dropwizard-bom:$dropwizard"
+        mavenBom "io.dropwizard:dropwizard-dependencies:$dropwizard"
     }
     // exclusions here mostly fixes conflicts for maven projects
     dependencies {

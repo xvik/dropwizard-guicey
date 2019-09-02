@@ -1,4 +1,4 @@
-* Update to dropwizard 2.0.0-rc5
+* Update to dropwizard 2.0.0-rc9
     - (breaking in jersey 2.26)
         * Jersey `InjectionManager` now bound to guice context instead of hk2 `ServiceLocator` 
             (locator still can be retrieved from manager)
@@ -17,6 +17,8 @@
         (in new dropwizard version `Bundle extends ConfigurableBundle`)
         * Guicey configuration info (ConfigSope.DropwizardBundle) now use `ConfigurableBundle` class for marking guice 
             bundle scope instead of `Bundle`
+    - (breaking dw 2.0) `dropwizard-bom` now includes only dropwizard modules. All 3rd party dependencies are moved to
+            `dropwizard-dependencies` package. So you'll have to update two boms now in order to update dropwizard version.    
 * (breaking) GuiceyBundle contract and behaviour changed to match dropwizard lifecycle: 
     - GuiceyBundle now contains two methods `initialize` and `run` and called according to dropwizard lifecycle.
         Now guicey bundles are complete replacement for dropwizard bundles, but with good interoperability 
