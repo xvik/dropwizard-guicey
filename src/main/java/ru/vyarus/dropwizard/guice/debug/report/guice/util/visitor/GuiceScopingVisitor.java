@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor;
 
 import com.google.inject.Scope;
 import com.google.inject.Scopes;
+import com.google.inject.Singleton;
 import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletScopes;
 import com.google.inject.servlet.SessionScoped;
@@ -44,6 +45,10 @@ public class GuiceScopingVisitor
     @Override
     @SuppressWarnings("unchecked")
     public Class<? extends Annotation> visitScopeAnnotation(final Class scopeAnnotation) {
+        // always return javax.inject annotation to simplify checks
+        if (scopeAnnotation.equals(Singleton.class)) {
+            return javax.inject.Singleton.class;
+        }
         return scopeAnnotation;
     }
 

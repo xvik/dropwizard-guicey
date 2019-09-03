@@ -1,9 +1,12 @@
 package ru.vyarus.dropwizard.guice.module.installer.util;
 
+import com.google.inject.Binding;
 import com.google.inject.Module;
+import com.google.inject.internal.util.StackTraceElements;
 import com.google.inject.spi.Element;
 import com.google.inject.spi.ElementSource;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
@@ -79,5 +82,31 @@ public final class BindingUtils {
         final List<String> modulesStack = getModules(element);
         // top most element is top most module (registered by user)
         return getModuleClass(modulesStack.get(modulesStack.size() - 1));
+    }
+
+    /**
+     * Resolve binding declaration source string, if possible.
+     *
+     * @param binding binding
+     * @return binding declaration source
+     */
+    public static String getDeclarationSource(final Binding binding) {
+        String res = "UNKNOWN";
+        final Object source = binding.getSource();
+        if (source instanceof ElementSource) {
+            final ElementSource src = (ElementSource) source;
+            StackTraceElement traceElement = null;
+            if (src.getDeclaringSource() instanceof StackTraceElement) {
+                traceElement = (StackTraceElement) src.getDeclaringSource();
+            } else if (src.getDeclaringSource() instanceof Method) {
+                traceElement = (StackTraceElement) StackTraceElements.forMember((Method) src.getDeclaringSource());
+            }
+            if (traceElement != null) {
+                res = traceElement.toString();
+            }
+        } else if (source instanceof Class) {
+            res = ((Class) source).getName();
+        }
+        return res;
     }
 }

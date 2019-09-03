@@ -10,6 +10,7 @@ import org.glassfish.jersey.internal.inject.AbstractBinder;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
+import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
@@ -58,8 +59,9 @@ public class ResourceInstaller extends AbstractJerseyInstaller<Object> implement
         // no need to bind in case of manual binding
         final boolean hkManaged = isJerseyExtension(type);
         Preconditions.checkState(!hkManaged,
-                "Resource annotated as jersey managed is declared manually in guice: %s",
-                type.getName());
+                // intentially no "at" before stacktrtace because idea may hide error in some cases
+                "Resource annotated as jersey managed is declared manually in guice: %s (%s)",
+                type.getName(), BindingUtils.getDeclarationSource(manualBinding));
     }
 
     @Override

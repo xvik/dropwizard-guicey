@@ -4,13 +4,17 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.eager;
 import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
 import com.google.inject.Binding;
-import com.google.inject.spi.DefaultBindingScopingVisitor;
+import com.google.inject.Stage;
+import ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor.GuiceScopingVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
+import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
+import javax.inject.Singleton;
+import java.lang.annotation.Annotation;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -27,7 +31,7 @@ import java.util.Set;
  */
 @Order(50)
 public class EagerSingletonInstaller implements FeatureInstaller<Object>, BindingInstaller {
-    private static final ScopingVisitor VISITOR = new ScopingVisitor();
+    private static final GuiceScopingVisitor VISITOR = new GuiceScopingVisitor();
 
     private final Reporter reporter = new Reporter(EagerSingletonInstaller.class, "eager singletons =");
     private final Set<String> prerender = new LinkedHashSet<>();
@@ -47,8 +51,14 @@ public class EagerSingletonInstaller implements FeatureInstaller<Object>, Bindin
     public <T> void checkBinding(final Binder binder, final Class<T> type, final Binding<T> manualBinding) {
         // we can only validate existing binding here (actually entire extension is pretty useless in case of manual
         // binding)
-        Preconditions.checkArgument(manualBinding.acceptScopingVisitor(VISITOR),
-                "Eager bean, declared manually is not marked .asEagerSingleton(): %s", type.getName());
+        final Class<? extends Annotation> scope = manualBinding.acceptScopingVisitor(VISITOR);
+        // in production all services will work as eager singletons, for report (TOOL stage) consider also valid
+        Preconditions.checkArgument(scope.equals(EagerSingleton.class)
+                        || (!binder.currentStage().equals(Stage.DEVELOPMENT)
+                        && scope.equals(Singleton.class)),
+                // intentially no "at" before stacktrtace because idea may hide error in some cases
+                "Eager bean, declared manually is not marked .asEagerSingleton(): %s (%s)",
+                type.getName(), BindingUtils.getDeclarationSource(manualBinding));
     }
 
     @Override
@@ -64,20 +74,5 @@ public class EagerSingletonInstaller implements FeatureInstaller<Object>, Bindin
         }
         prerender.clear();
         reporter.report();
-    }
-
-    /**
-     * Visitor detects eager singleton configuration on binding.
-     */
-    private static class ScopingVisitor extends DefaultBindingScopingVisitor<Boolean> {
-        @Override
-        protected Boolean visitOther() {
-            return false;
-        }
-
-        @Override
-        public Boolean visitEagerSingleton() {
-            return true;
-        }
     }
 }

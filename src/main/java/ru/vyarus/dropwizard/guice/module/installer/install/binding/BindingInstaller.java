@@ -59,6 +59,8 @@ public interface BindingInstaller {
      * @param type          extension class
      * @param manualBinding binding declaration from guice module
      * @param <T>           extension type, used to connect extension class with binding
+     * @see ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils#getDeclarationSource(Binding)
+     * for errors reporting
      */
     <T> void checkBinding(Binder binder, Class<T> type, Binding<T> manualBinding);
 

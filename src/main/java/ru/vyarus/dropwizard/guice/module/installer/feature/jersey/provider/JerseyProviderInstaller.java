@@ -14,6 +14,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.AbstractJersey
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
+import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 
@@ -90,8 +91,9 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
         // no need to bind in case of manual binding
         final boolean hkManaged = isJerseyExtension(type);
         Preconditions.checkState(!hkManaged,
-                "Provider annotated as jersey managed is declared manually in guice: %s",
-                type.getName());
+                // intentially no "at" before stacktrtace because idea may hide error in some cases
+                "Provider annotated as jersey managed is declared manually in guice: %s (%s)",
+                type.getName(), BindingUtils.getDeclarationSource(manualBinding));
     }
 
     @Override
