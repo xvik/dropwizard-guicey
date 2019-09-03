@@ -13,6 +13,8 @@ import ru.vyarus.dropwizard.guice.debug.report.guice.util.GuiceModelParser;
 import ru.vyarus.dropwizard.guice.debug.report.guice.util.GuiceModelUtils;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.debug.util.TreeNode;
+import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
@@ -37,6 +39,7 @@ import java.util.stream.Collectors;
  * Used markers:
  * <ul>
  * <li>EXTENSION - extension binding</li>
+ * <li>REMOVED - extension disabled and binding removed</li>
  * <li>AOP - bean affected by guice AOP</li>
  * <li>OVERRIDDEN (only in modules tree) - binding is overridden with binding from overriding module</li>
  * <li>OVERRIDES (only in overriding modules tree) - binding override something in main modules</li>
@@ -52,6 +55,7 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
     private final List<Module> modules;
     private final List<Module> overridden;
     private final List<Class<Object>> extensions;
+    private final List<Class<Object>> disabled;
 
     public GuiceBindingsRenderer(final Injector injector) {
         this.injector = injector;
@@ -62,7 +66,8 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         this.overridden = info.getOverridingModules().stream()
                 .map(it -> (Module) ((ModuleItemInfo) info.getInfo(it)).getInstance())
                 .collect(Collectors.toList());
-        this.extensions = info.getExtensions();
+        this.extensions = ItemId.typesOnly(info.getData().getItems(ConfigItem.Extension));
+        this.disabled = info.getExtensionsDisabled();
     }
 
     @Override
@@ -179,6 +184,10 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         final List<BindingDeclaration> chains = new ArrayList<>();
         final List<Key> targetKeys = new ArrayList<>();
         for (BindingDeclaration dec : bindings.values()) {
+            // ignore removed bindings (because analysis performed on original modules)
+            if (dec.getKey() != null && disabled.contains(dec.getKey().getTypeLiteral().getRawType())) {
+                continue;
+            }
             // select only links because direct providers are easily visible on main tree
             if (dec.getTarget() != null) {
                 chains.add(dec);
@@ -251,6 +260,12 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         final TreeNode next = root.child(RenderUtils.renderClassLine(mod.getType(), mod.getMarkers()));
 
         for (BindingDeclaration dec : mod.getDeclarations()) {
+            // we don't need to know if binding analysis is enabled, because if it's disabled then
+            // default binding would be created for extensions and guice context fail to start due to
+            // manual binding conflict
+            if (dec.getKey() != null && disabled.contains(dec.getKey().getTypeLiteral().getRawType())) {
+                dec.getMarkers().add("REMOVED");
+            }
             final String type = dec.getType().isRuntimeBinding()
                     ? dec.getType().name().toLowerCase() : "<" + dec.getType().name().toLowerCase() + ">";
             String msg = String.format("%-20s %-16s %-45s   at %s",

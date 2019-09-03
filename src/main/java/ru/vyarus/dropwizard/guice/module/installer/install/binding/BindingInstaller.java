@@ -23,7 +23,7 @@ import com.google.inject.Binding;
  * may not be declared as lazy (this will be detected automatically).
  * <p>
  * Installer may be called multiple times if guice bindings or aop report is enabled. If required, report execution
- * may be detected by used stage: {@code binder().currentStage() == Stage.TOOL}.
+ * may be detected by used stage: {@code binder.currentStage() == Stage.TOOL}.
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
