@@ -74,8 +74,8 @@ class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
     │   └── Preloading singletons: 4 ms
     │
     ├── [0.45%] EXTENSIONS installed in 3.300 ms
-    │   ├── using 3 enabled extensions
-    │   └── from 2 manual, 1 classpath and 0 binding extension declarations
+    │   ├── 3 extensions installed
+    │   └── declared as: 2 manual, 1 scan, 0 binding
     │
     └── [4.3%] remaining 29 ms
 
@@ -112,8 +112,8 @@ class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
         render.contains("Module execution")
 
         render.contains("] EXTENSIONS")
-        render.contains("using 3 enabled extensions")
-        render.contains("from 2 manual, 1 classpath and 0 binding extension declarations")
+        render.contains("3 extensions installed")
+        render.contains("declared as: 2 manual, 1 scan, 0 binding")
 
         render.contains("] JERSEY bridged in ")
         render.contains("using 2 jersey installers")

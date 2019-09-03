@@ -54,7 +54,7 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         remaining -= renderCommandsRegistration(root, hideTiny, percent);
         remaining -= renderModulesProcessing(root, percent);
         remaining -= renderInstallersProcessing(root, hideTiny, percent);
-        remaining -= renderInjectorCreation(root, percent);
+        remaining -= renderInjectorCreation(root, hideTiny, percent);
         remaining -= renderExtensionsInstallation(root, hideTiny, percent);
         remaining -= renderJerseyPart(root, hideTiny, percent);
         if (show(hideTiny, remaining)) {
@@ -155,7 +155,7 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
                 if (show(hideTiny, extensions)) {
                     final int manual = info.getExtensionsRegisteredManauallyOnly().size();
                     node.child("%s extensions recognized from %s classes in %s",
-                            info.getExtensions().size(),
+                            info.getData().getItems(ConfigItem.Extension).size(),
                             info.getStats().count(ScanClassesCount)
                                     + info.getStats().count(AnalyzedBindingsCount) + manual,
                             info.getStats().humanTime(ExtensionsRecognitionTime));
@@ -165,11 +165,15 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         return installers;
     }
 
-    private long renderInjectorCreation(final TreeNode root, final double percent) {
+    private long renderInjectorCreation(final TreeNode root, final boolean hideTiny, final double percent) {
         final long injector = info.getStats().time(InjectorCreationTime);
         final TreeNode node = root.child("[%.2g%%] INJECTOR created in %s",
                 injector / percent, info.getStats().humanTime(InjectorCreationTime));
-        info.getStats().getGuiceStats().forEach(it -> node.child(it));
+        info.getStats().getGuiceStats().forEach(it -> {
+            if (!hideTiny || !it.endsWith(" 0 ms")) {
+                node.child(it);
+            }
+        });
         return injector;
     }
 
@@ -179,8 +183,9 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
             final TreeNode node = root.child("[%.2g%%] EXTENSIONS installed in %s",
                     extensions / percent, info.getStats().humanTime(ExtensionsInstallationTime));
 
-            node.child("using %s enabled extensions", info.getExtensions().size());
-            node.child("from %s manual, %s classpath and %s binding extension declarations",
+            node.child("%s extensions installed",
+                    info.getExtensions().size());
+            node.child("declared as: %s manual, %s scan, %s binding",
                     info.getExtensionsRegisteredManually().size(),
                     info.getExtensionsFromScan().size(),
                     info.getExtensionsFromBindings().size());
