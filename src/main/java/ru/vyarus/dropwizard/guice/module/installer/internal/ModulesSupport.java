@@ -105,7 +105,8 @@ public final class ModulesSupport {
             try {
                 // find extensions and remove bindings if required (disabled extensions)
                 final Stopwatch gtime = context.stat().timer(Stat.BindingsResolutionTime);
-                final List<Element> elements = Elements.getElements(context.option(InjectorStage), modules);
+                final List<Element> elements = new ArrayList<>(
+                        Elements.getElements(context.option(InjectorStage), modules));
                 gtime.stop();
 
                 // exclude analysis time from modules processing time (it's installer time)
