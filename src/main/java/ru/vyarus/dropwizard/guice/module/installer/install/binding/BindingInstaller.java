@@ -21,6 +21,9 @@ import com.google.inject.Binding;
  * If extension is annotated with {@code LazyBinding} boolean hint is passed and installer must decide
  * what to do with it (preferably support or fail, not ignore). Bindings extensions (resolved from guice modules)
  * may not be declared as lazy (this will be detected automatically).
+ * <p>
+ * Installer may be called multiple times if guice bindings or aop report is enabled. If required, report execution
+ * may be detected by used stage: {@code binder().currentStage() == Stage.TOOL}.
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
