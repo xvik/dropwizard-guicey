@@ -2,17 +2,14 @@ package ru.vyarus.dropwizard.guice.debug.report.tree;
 
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
+import ru.vyarus.dropwizard.guice.debug.util.TreeNode;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
-import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
-import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
-import ru.vyarus.dropwizard.guice.debug.util.TreeNode;
-import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.InstanceItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
-import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.*;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
@@ -59,6 +56,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
 
         renderSpecialScope(config, scopes, root, "BUNDLES LOOKUP", BundleLookup);
         renderSpecialScope(config, scopes, root, "CLASSPATH SCAN", ClasspathScan);
+        renderGuiceBindings(config, scopes, root);
         renderSpecialScope(config, scopes, root, "HOOKS", Hook);
 
         final StringBuilder res = new StringBuilder().append(Reporter.NEWLINE).append(Reporter.NEWLINE);
@@ -75,6 +73,37 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
             if (node.hasChildren()) {
                 root.child(node);
             }
+        }
+    }
+
+    /**
+     * As it is impossible to track binding to exact module instance, recognized guice bindings are shown separately.
+     *
+     * @param config tree config
+     * @param scopes active scopes
+     * @param root   root render tree node
+     */
+    private void renderGuiceBindings(final ContextTreeConfig config,
+                                     final Set<ItemId> scopes,
+                                     final TreeNode root) {
+        if (config.getHiddenScopes().contains(ConfigScope.Module.getType())
+                || config.getHiddenItems().contains(ConfigItem.Module)) {
+            return;
+        }
+        final TreeNode bindings = new TreeNode("GUICE BINDINGS");
+        for (final ItemId scope : scopes) {
+            if (ConfigScope.recognize(scope).equals(Module)) {
+                final TreeNode module = new TreeNode(RenderUtils.renderClassLine(scope.getType(), null));
+                // note that items may actually be bound by submodules, but they always show under the top module
+                // (only top module is visible in configuration)
+                renderScopeItems(config, module, scope);
+                if (module.hasChildren()) {
+                    bindings.child(module);
+                }
+            }
+        }
+        if (bindings.hasChildren()) {
+            root.child(bindings);
         }
     }
 

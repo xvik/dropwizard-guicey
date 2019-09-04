@@ -83,10 +83,7 @@ public enum ConfigScope {
      */
     public static Class[] allExcept(final ConfigScope scope) {
         return Arrays.stream(values())
-                .filter(s -> s != scope
-                        && s != ConfigScope.GuiceyBundle
-                        && s != ConfigScope.DropwizardBundle
-                        && s != ConfigScope.Module)
+                .filter(s -> s != scope)
                 .map(ConfigScope::getType)
                 .toArray(Class[]::new);
     }

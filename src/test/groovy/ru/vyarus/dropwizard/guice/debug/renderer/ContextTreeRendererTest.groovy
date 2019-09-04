@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.debug.renderer
 
 import com.google.common.collect.Lists
+import com.google.inject.AbstractModule
 import com.google.inject.Binder
 import com.google.inject.Module
 import io.dropwizard.Application
@@ -21,6 +22,7 @@ import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
+import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import spock.lang.Specification
@@ -51,8 +53,10 @@ class ContextTreeRendererTest extends Specification {
         render(new ContextTreeConfig()) == """
 
     APPLICATION
+    ├── extension  MultiRegExt                  (r.v.d.g.d.r.ContextTreeRendererTest)
     ├── extension  -DisabledExtension           (r.v.d.g.d.r.ContextTreeRendererTest) *DISABLED
     ├── extension  -DisabledExtension2          (r.v.d.g.d.r.ContextTreeRendererTest) *DISABLED
+    ├── module     BindModule                   (r.v.d.g.d.r.ContextTreeRendererTest)
     ├── module     FooModule                    (r.v.d.g.d.s.features)
     ├── module     -DisabledModule              (r.v.d.g.d.r.ContextTreeRendererTest) *DISABLED
     ├── module     GuiceBootstrapModule         (r.v.d.guice.module)
@@ -102,8 +106,17 @@ class ContextTreeRendererTest extends Specification {
     │   ├── command    Cli                          (r.v.d.g.d.s.features)
     │   └── command    EnvCommand                   (r.v.d.g.d.s.features)
     │
+    ├── GUICE BINDINGS
+    │   │
+    │   └── BindModule                   (r.v.d.g.d.r.ContextTreeRendererTest)
+    │       ├── extension  -MultiRegExt                 (r.v.d.g.d.r.ContextTreeRendererTest) *IGNORED
+    │       ├── extension  DeepExt                      (r.v.d.g.d.r.ContextTreeRendererTest)
+    │       ├── extension  Ext                          (r.v.d.g.d.r.ContextTreeRendererTest)
+    │       └── extension  -DisabledExt                 (r.v.d.g.d.r.ContextTreeRendererTest) *DISABLED
+    │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
+        ├── -disable   DisabledExt                  (r.v.d.g.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.d.r.ContextTreeRendererTest)
 """
     }
@@ -155,6 +168,7 @@ class ContextTreeRendererTest extends Specification {
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
+        ├── -disable   DisabledExt                  (r.v.d.g.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.d.r.ContextTreeRendererTest)
 """
     }
@@ -188,6 +202,7 @@ class ContextTreeRendererTest extends Specification {
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
+        ├── -disable   DisabledExt                  (r.v.d.g.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.d.r.ContextTreeRendererTest)
 """
     }
@@ -212,6 +227,7 @@ class ContextTreeRendererTest extends Specification {
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
+        ├── -disable   DisabledExt                  (r.v.d.g.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.d.r.ContextTreeRendererTest)
 """
     }
@@ -238,6 +254,7 @@ class ContextTreeRendererTest extends Specification {
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
+        ├── -disable   DisabledExt                  (r.v.d.g.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.d.r.ContextTreeRendererTest)
 """
     }
@@ -327,6 +344,7 @@ class ContextTreeRendererTest extends Specification {
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
+        ├── -disable   DisabledExt                  (r.v.d.g.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.d.r.ContextTreeRendererTest)
 """
     }
@@ -357,6 +375,7 @@ class ContextTreeRendererTest extends Specification {
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
     │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED
     │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
+    │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
     │   └── WebInstallersBundle          (r.v.d.g.m.installer)
     │
     ├── BUNDLES LOOKUP
@@ -364,6 +383,7 @@ class ContextTreeRendererTest extends Specification {
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
+        ├── -disable   DisabledExt                  (r.v.d.g.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.d.r.ContextTreeRendererTest)
 """
     }
@@ -385,7 +405,8 @@ class ContextTreeRendererTest extends Specification {
     │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
     │
     └── CoreInstallersBundle         (r.v.d.g.m.installer)
-        └── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
+        ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
+        └── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
 """
     }
 
@@ -419,6 +440,7 @@ class ContextTreeRendererTest extends Specification {
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
+        ├── -disable   DisabledExt                  (r.v.d.g.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.d.r.ContextTreeRendererTest)
 """
     }
@@ -433,6 +455,7 @@ class ContextTreeRendererTest extends Specification {
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
+        ├── -disable   DisabledExt                  (r.v.d.g.d.r.ContextTreeRendererTest)
         └── -disable   DisabledModule               (r.v.d.g.d.r.ContextTreeRendererTest)
 """
     }
@@ -455,8 +478,9 @@ class ContextTreeRendererTest extends Specification {
                             })
                             .enableAutoConfig(FooResource.package.name)
                             .searchCommands()
+                            .extensions(MultiRegExt)
                             .bundles(new FooBundle(), new GuiceRestrictedConfigBundle(), new DisabledBundle())
-                            .modules(new FooModule(), new DisabledModule())
+                            .modules(new BindModule(), new FooModule(), new DisabledModule())
                             .extensions(DisabledExtension, DisabledExtension2)
                             .disableInstallers(LifeCycleInstaller)
                             .disableBundles(DisabledBundle)
@@ -489,11 +513,41 @@ class ContextTreeRendererTest extends Specification {
         @Override
         void configure(GuiceBundle.Builder builder) {
             builder
-                    .disableExtensions(DisabledExtension)
+                    .disableExtensions(DisabledExtension, DisabledExt)
                     .disableModules(DisabledModule)
         }
     }
 
     @Path("/")
     static class DisabledExtension2 {}
+
+
+    static class BindModule extends AbstractModule {
+        @Override
+        protected void configure() {
+            install(new DeepBindModule())
+            bind(Ext).asEagerSingleton()
+            bind(MultiRegExt).asEagerSingleton()
+            bind(DisabledExt).asEagerSingleton()
+        }
+    }
+
+    static class DeepBindModule extends AbstractModule {
+        @Override
+        protected void configure() {
+            bind(DeepExt).asEagerSingleton()
+        }
+    }
+
+    @EagerSingleton
+    static class Ext {}
+
+    @EagerSingleton
+    static class DeepExt {}
+
+    @EagerSingleton
+    static class MultiRegExt {}
+
+    @EagerSingleton
+    static class DisabledExt {}
 }
