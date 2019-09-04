@@ -562,8 +562,13 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * modules installed by some bundle. But, generally, try to avoid manual modules disabling for
          * clearer application configuration.
          * <p>
-         * NOTE: this option can disable only directly registered modules (with {@link #modules(Module...)}
-         * or in bundle {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#modules(Module...)}.
+         * Option could also disable inner modules (registered by modules transitively), but only if bindings analysis
+         * is not disabled (by {@link GuiceyOptions#ConfigureFromGuiceModules}). Inner modules can't be removed from
+         * overriding modules, because only normal modules are analyzed.
+         * <p>
+         * When bindings analysis is disabled this option can disable only directly registered modules
+         * (with {@link #modules(Module...)} or in bundle
+         * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#modules(Module...)}.
          *
          * @param modules guice module types to disable
          * @return builder instance for chained calls

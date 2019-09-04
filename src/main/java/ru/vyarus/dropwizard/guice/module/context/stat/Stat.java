@@ -74,7 +74,8 @@ public enum Stat {
      */
     ModulesProcessingTime(true),
     /**
-     * Count of bindings found in user modules. Not all these bindings were analyzed because only pure class
+     * Count of elements found in user modules (note that element is wider then binding and include listeners and
+     * other configurations). Not all these elements were analyzed because only pure class
      * bindings are checked.
      */
     BindingsCount(false),
@@ -85,10 +86,15 @@ public enum Stat {
      */
     AnalyzedBindingsCount(false),
     /**
-     * IF extension, declared in guice module, is disabled then it's binding is simply removed. Counter indicates
-     * amount of removed bindings.
+     * Removed configuration elements count. It may be disabled extension or entire inner module (all binding,
+     * related to this module are removed).
      */
     RemovedBindingsCount(false),
+    /**
+     * Count of removed inner guice modules. Usual disable module may declare any inner guice module and all bindings
+     * related to this module will be removed. Counter shows only how many disabled module types were affected.
+     */
+    RemovedInnerModules(false),
     /**
      * Guice SPI time of modules elements resolution. When bindings inspection is disabled with
      * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#ConfigureFromGuiceModules}, this time become a part of

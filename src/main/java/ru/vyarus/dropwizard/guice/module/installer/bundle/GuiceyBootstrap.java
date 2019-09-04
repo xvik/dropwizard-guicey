@@ -210,6 +210,9 @@ public class GuiceyBootstrap {
 
     /**
      * Disable both usual and overriding guice modules.
+     * <p>
+     * If bindings analysis is not disabled, could also disable inner (transitive) modules, but only inside
+     * normal modules.
      *
      * @param modules guice module types to disable
      * @return bootstrap instance for chained calls

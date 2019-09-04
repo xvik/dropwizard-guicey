@@ -136,13 +136,21 @@ public final class ModulesSupport {
     private static void analyzeAndFilterBindings(final ConfigurationContext context, final List<Element> elements) {
         final Stopwatch itimer = context.stat().timer(InstallersTime);
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
+        context.stat().count(Stat.BindingsCount, elements.size());
+        final List<String> disabledModules = prepareDisabledModules(context);
+        final Set<String> actuallyDisbaledModules = new HashSet<>();
         final Iterator<Element> it = elements.iterator();
         final List<Class<?>> extensions = new ArrayList<>();
         while (it.hasNext()) {
             final Element element = it.next();
+            if (isInDisabledModule(element, disabledModules, actuallyDisbaledModules)) {
+                // remove all bindings under disabled modules
+                it.remove();
+                context.stat().count(Stat.RemovedBindingsCount, 1);
+                continue;
+            }
             // filter constants, listeners, aop etc.
             if (element instanceof Binding) {
-                context.stat().count(Stat.BindingsCount, 1);
                 final Key key = ((Binding) element).getKey();
                 // extensions bindings may be only unqualified, class only (no generified types)
                 if (key.getAnnotation() == null && key.getTypeLiteral().getType() instanceof Class) {
@@ -154,15 +162,40 @@ public final class ModulesSupport {
                         extensions.add(type);
                         if (!context.isExtensionEnabled(type)) {
                             it.remove();
-                            LOGGER.debug("Removed disabled extension binding: {}", type.getSimpleName());
                             context.stat().count(Stat.RemovedBindingsCount, 1);
                         }
                     }
                 }
             }
         }
+        if (actuallyDisbaledModules.size() > 0) {
+            LOGGER.debug("Removed inner modules: {}", actuallyDisbaledModules);
+        }
+        context.stat().count(Stat.RemovedInnerModules, actuallyDisbaledModules.size());
         context.lifecycle().bindingExtensionsResolved(extensions);
         timer.stop();
         itimer.stop();
+    }
+
+    private static List<String> prepareDisabledModules(final ConfigurationContext context) {
+        final List<String> res = new ArrayList<>();
+        for (Class cls : context.getDisabledModuleTypes()) {
+            res.add(cls.getName());
+        }
+        return res;
+    }
+
+    private static boolean isInDisabledModule(final Element element,
+                                              final List<String> disabled,
+                                              final Set<String> actuallyDisabled) {
+        if (!disabled.isEmpty()) {
+            for (String mod : BindingUtils.getModules(element)) {
+                if (disabled.contains(mod)) {
+                    actuallyDisabled.add(mod);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

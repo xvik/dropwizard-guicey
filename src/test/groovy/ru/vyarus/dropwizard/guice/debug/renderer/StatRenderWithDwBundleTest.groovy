@@ -35,49 +35,49 @@ class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
     def "Check guicey app stats render"() {
         /* render would look like:
 
-    GUICEY started in 672.1 ms (390.1 ms config / 282.0 ms run / 0 jersey)
+    GUICEY started in 624.6 ms (313.5 ms config / 311.0 ms run / 0 jersey)
     │
-    ├── [0.60%] CLASSPATH scanned in 4.377 ms
+    ├── [0.48%] CLASSPATH scanned in 3.158 ms
     │   ├── scanned 5 classes
     │   └── recognized 4 classes (80% of scanned)
     │
-    ├── [51%] BUNDLES processed in 345.1 ms
-    │   ├── 2 resolved in 16.80 ms
-    │   ├── 6 initialized in 23.29 ms
-    │   └── 1 dropwizard bundles initialized in 304.7 ms
+    ├── [43%] BUNDLES processed in 270.0 ms
+    │   ├── 2 resolved in 11.67 ms
+    │   ├── 6 initialized in 17.82 ms
+    │   └── 1 dropwizard bundles initialized in 240.1 ms
     │
-    ├── [2.1%] COMMANDS processed in 14.72 ms
+    ├── [1.9%] COMMANDS processed in 12.73 ms
     │   └── registered 2 commands
     │
-    ├── [3.9%] MODULES processed in 26.17 ms
+    ├── [5.1%] MODULES processed in 32.14 ms
     │   ├── 5 modules autowired
-    │   ├── 2 bindings found in 4 user modules in 23.23 ms
+    │   ├── 7 elements found in 4 user modules in 27.39 ms
     │   └── 0 extensions detected from 2 acceptable bindings
     │
-    ├── [4.0%] INSTALLERS processed in 27.22 ms
+    ├── [4.6%] INSTALLERS processed in 29.92 ms
     │   ├── registered 12 installers
-    │   └── 3 extensions recognized from 9 classes in 8.074 ms
+    │   └── 3 extensions recognized from 9 classes in 9.009 ms
     │
-    ├── [33%] INJECTOR created in 224.0 ms
-    │   ├── Module execution: 155 ms
+    ├── [39%] INJECTOR created in 243.3 ms
+    │   ├── Module execution: 161 ms
     │   ├── Interceptors creation: 1 ms
     │   ├── TypeListeners & ProvisionListener creation: 2 ms
     │   ├── Scopes creation: 1 ms
-    │   ├── Binding creation: 17 ms
-    │   ├── Private environment creation: 1 ms
-    │   ├── Binding initialization: 24 ms
-    │   ├── Collecting injection requests: 1 ms
+    │   ├── Binding creation: 22 ms
+    │   ├── Binding initialization: 27 ms
+    │   ├── Collecting injection requests: 2 ms
     │   ├── Static validation: 3 ms
     │   ├── Instance member validation: 3 ms
-    │   ├── Static member injection: 8 ms
-    │   ├── Instance injection: 2 ms
-    │   └── Preloading singletons: 4 ms
+    │   ├── Provider verification: 1 ms
+    │   ├── Static member injection: 10 ms
+    │   ├── Instance injection: 3 ms
+    │   └── Preloading singletons: 5 ms
     │
-    ├── [0.45%] EXTENSIONS installed in 3.300 ms
+    ├── [0.64%] EXTENSIONS installed in 4.007 ms
     │   ├── 3 extensions installed
     │   └── declared as: 2 manual, 1 scan, 0 binding
     │
-    └── [4.3%] remaining 29 ms
+    └── [5.1%] remaining 32 ms
 
          */
 
@@ -101,7 +101,7 @@ class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
 
         render.contains("] MODULES")
         render.contains("5 modules autowired")
-        render.contains("2 bindings found in 4 user modules in")
+        render.contains("7 elements found in 4 user modules in")
         render.contains("0 extensions detected from 2 acceptable bindings")
 
         render.contains("] INSTALLERS")

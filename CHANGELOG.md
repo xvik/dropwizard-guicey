@@ -95,7 +95,9 @@
     - extensions registered directly (or found by classpath scan) and also bound manually in guice module 
         will not conflict anymore (as manual declaration would be detected) and so @LazyBinding workaround is not needed
     - enabled by default, but can be disabled with `GuiceyOptions.ConfigureFromGuiceModules`
-    - extensions declared in guice module may be also disabled (guicey will remove binding declaration in this case)    
+    - extensions declared in guice module may be also disabled (guicey will remove binding declaration in this case)
+    - Inner gucie modules (installed by other modules) may be disabled with usual `disableModules()`
+        (but only if guice bindings analysis is not disabled)    
 * Fix configuration bindings for recursive configuration object declarations (#60)
 
 Main breaking changes were caused by:

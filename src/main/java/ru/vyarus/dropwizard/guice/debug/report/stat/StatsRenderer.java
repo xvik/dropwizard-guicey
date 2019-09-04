@@ -127,7 +127,7 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
         // identify if analysis were performed
         final int bindings = info.getStats().count(AnalyzedBindingsCount);
         if (bindings > 0) {
-            node.child("%s bindings found in %s user modules in %s",
+            node.child("%s elements found in %s user modules in %s",
                     // -1 because guicey bootstrap module is ignored
                     info.getStats().count(BindingsCount), info.getNormalModules().size() - 1,
                     info.getStats().humanTime(BindingsResolutionTime));
@@ -136,7 +136,12 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
 
             final int removed = info.getStats().count(RemovedBindingsCount);
             if (removed > 0) {
-                node.child("%s bindings removed (for disabled items)", removed);
+                node.child("%s elements removed", removed);
+            }
+            final int removedModules = info.getStats().count(RemovedInnerModules);
+            if (removedModules > 0) {
+                // multiple instance of the same module could be registered, but in stat it will be as 1 type
+                node.child("%s inner modules removed (types)", removedModules);
             }
         }
         return modules;

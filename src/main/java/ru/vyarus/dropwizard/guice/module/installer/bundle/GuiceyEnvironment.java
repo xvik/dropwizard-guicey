@@ -213,6 +213,9 @@ public class GuiceyEnvironment {
 
     /**
      * Disable both usual and overriding guice modules.
+     * <p>
+     * If bindings analysis is not disabled, could also disable inner (transitive) modules, but only inside
+     * normal modules.
      *
      * @param modules guice module types to disable
      * @return environment instance for chained calls

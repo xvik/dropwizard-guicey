@@ -34,48 +34,50 @@ class StatRendererTest extends BaseDiagnosticTest {
     def "Check guicey app stats render"() {
         /* render would look like:
 
-    GUICEY started in 328.0 ms (84.14 ms config / 243.8 ms run / 0 jersey)
+    GUICEY started in 441.1 ms (104.8 ms config / 336.2 ms run / 0 jersey)
     │
-    ├── [1.2%] CLASSPATH scanned in 4.656 ms
+    ├── [0.91%] CLASSPATH scanned in 4.245 ms
     │   ├── scanned 5 classes
     │   └── recognized 4 classes (80% of scanned)
     │
-    ├── [11%] BUNDLES processed in 35.12 ms
-    │   ├── 2 resolved in 17.16 ms
-    │   └── 6 initialized in 17.49 ms
+    ├── [10%] BUNDLES processed in 46.23 ms
+    │   ├── 2 resolved in 19.40 ms
+    │   └── 6 initialized in 26.31 ms
     │
-    ├── [4.6%] COMMANDS processed in 15.94 ms
+    ├── [3.6%] COMMANDS processed in 16.81 ms
     │   └── registered 2 commands
     │
-    ├── [9.2%] MODULES processed in 30.42 ms
+    ├── [7.7%] MODULES processed in 34.95 ms
     │   ├── 5 modules autowired
-    │   ├── 2 bindings found in 4 user modules in 26.18 ms
+    │   ├── 7 elements found in 4 user modules in 30.22 ms
     │   └── 0 extensions detected from 2 acceptable bindings
     │
-    ├── [9.2%] INSTALLERS processed in 30.49 ms
+    ├── [9.1%] INSTALLERS processed in 40.61 ms
     │   ├── registered 12 installers
-    │   └── 3 extensions recognized from 9 classes in 9.072 ms
+    │   └── 3 extensions recognized from 9 classes in 13.05 ms
     │
-    ├── [54%] INJECTOR created in 176.9 ms
-    │   ├── Module execution: 105 ms
+    ├── [54%] INJECTOR created in 236.6 ms
+    │   ├── Module execution: 143 ms
     │   ├── Interceptors creation: 1 ms
-    │   ├── TypeListeners & ProvisionListener creation: 1 ms
+    │   ├── TypeListeners & ProvisionListener creation: 2 ms
     │   ├── Scopes creation: 1 ms
-    │   ├── Binding creation: 18 ms
-    │   ├── Binding initialization: 26 ms
-    │   ├── Collecting injection requests: 1 ms
-    │   ├── Static validation: 3 ms
+    │   ├── Binding creation: 22 ms
+    │   ├── Private environment creation: 1 ms
+    │   ├── Binding initialization: 35 ms
+    │   ├── Binding indexing: 1 ms
+    │   ├── Collecting injection requests: 2 ms
+    │   ├── Static validation: 4 ms
     │   ├── Instance member validation: 3 ms
     │   ├── Provider verification: 1 ms
-    │   ├── Static member injection: 7 ms
-    │   ├── Instance injection: 3 ms
-    │   └── Preloading singletons: 4 ms
+    │   ├── Static member injection: 10 ms
+    │   ├── Instance injection: 2 ms
+    │   └── Preloading singletons: 6 ms
     │
-    ├── [0.92%] EXTENSIONS installed in 3.262 ms
+    ├── [0.91%] EXTENSIONS installed in 4.549 ms
     │   ├── 3 extensions installed
     │   └── declared as: 2 manual, 1 scan, 0 binding
     │
-    └── [10%] remaining 34 ms
+    └── [14%] remaining 61 ms
 
          */
 
@@ -98,7 +100,7 @@ class StatRendererTest extends BaseDiagnosticTest {
 
         render.contains("] MODULES")
         render.contains("5 modules autowired")
-        render.contains("2 bindings found in 4 user modules in")
+        render.contains("7 elements found in 4 user modules in")
         render.contains("0 extensions detected from 2 acceptable bindings")
 
         render.contains("] INSTALLERS")

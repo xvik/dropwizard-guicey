@@ -395,6 +395,15 @@ public final class ConfigurationContext {
         return getDisabledItems(ConfigItem.Module);
     }
 
+    /**
+     * @return all disabled module types, including never registered
+     */
+    @SuppressWarnings("unchecked")
+    public List<Class<Object>> getDisabledModuleTypes() {
+        final Collection disabledIds = disabledItemsHolder.get(ConfigItem.Module);
+        return ItemId.typesOnly((Collection<ItemId<Object>>) disabledIds);
+    }
+
     // --------------------------------------------------------------------------- INSTALLERS
 
     /**
