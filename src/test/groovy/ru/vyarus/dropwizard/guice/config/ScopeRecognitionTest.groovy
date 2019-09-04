@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.config
 import io.dropwizard.Application
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
+import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
@@ -24,6 +25,7 @@ class ScopeRecognitionTest extends Specification {
         ConfigScope.recognize(GuiceyConfigurationHook) == ConfigScope.Hook
         ConfigScope.recognize(HK2DebugBundle) == ConfigScope.GuiceyBundle
         ConfigScope.recognize(GuiceBundle) == ConfigScope.DropwizardBundle
+        ConfigScope.recognize(GuiceBootstrapModule) == ConfigScope.Module
 
         when: "exemining non bundle class"
         ConfigScope.recognize(Object)

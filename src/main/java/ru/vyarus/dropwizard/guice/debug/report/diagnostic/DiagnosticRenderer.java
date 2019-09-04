@@ -62,9 +62,9 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * <li>SCAN when extension found by classpath scan</li>
  * <li>LAZY when {@link ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding}
  * annotation set</li>
+ * <li>BINDING when extension detected in manual guice bindings (possibly not only there)</li>
  * <li>JERSEY when extension managed by jersey (annotated with
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged})</li>
- * <li>ORDER when installer supports ordering</li>
  * </ul>
  * <p>
  * Guice modules are rendered by type in registration order. OVERRIDE marker may appear if module was
@@ -83,6 +83,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
     private static final int SINGLE = 1;
     private static final String DW = "DW";
     private static final String JERSEY = "JERSEY";
+    private static final String BINDING = "BINDING";
 
     private final GuiceyConfigurationInfo service;
 
@@ -249,8 +250,14 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         if (section) {
             res.append(NEWLINE).append(NEWLINE).append(TAB).append("DISABLED EXTENSIONS = ").append(NEWLINE);
         }
+        final List<String> markers = new ArrayList<>();
         for (Class<Object> ext : extensions) {
-            res.append(TAB).append(TAB).append(renderDisabledClassLine(ext)).append(NEWLINE);
+            final ExtensionItemInfo einfo = service.getInfo(ext);
+            if (einfo.isGuiceBinding()) {
+                markers.add(BINDING);
+            }
+            res.append(TAB).append(TAB).append(renderDisabledClassLine(ext, 0, markers)).append(NEWLINE);
+            markers.clear();
         }
     }
 
@@ -263,6 +270,9 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         }
         if (einfo.isJerseyManaged()) {
             markers.add(JERSEY);
+        }
+        if (einfo.isGuiceBinding()) {
+            markers.add(BINDING);
         }
         return renderClassLine(extension, markers);
     }

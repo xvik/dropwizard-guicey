@@ -76,6 +76,7 @@ class DiagnosticRendererTest extends Specification {
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
             XExt                         (r.v.d.g.d.r.DiagnosticRendererTest) *HOOK
+            BindExt                      (r.v.d.g.d.r.DiagnosticRendererTest) *BINDING
 
 
     GUICE MODULES =
@@ -123,6 +124,7 @@ class DiagnosticRendererTest extends Specification {
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
             XExt                         (r.v.d.g.d.r.DiagnosticRendererTest) *HOOK
+            BindExt                      (r.v.d.g.d.r.DiagnosticRendererTest) *BINDING
         healthcheck          (r.v.d.g.m.i.f.h.HealthCheckInstaller)
         task                 (r.v.d.g.m.i.feature.TaskInstaller)
         plugin               (r.v.d.g.m.i.f.plugin.PluginInstaller)
@@ -137,6 +139,7 @@ class DiagnosticRendererTest extends Specification {
 
     DISABLED EXTENSIONS =
         -DisabledExtension           (r.v.d.g.d.r.DiagnosticRendererTest)
+        -BindExtDisabled             (r.v.d.g.d.r.DiagnosticRendererTest) *BINDING
 
 
     GUICE MODULES =
@@ -255,6 +258,7 @@ class DiagnosticRendererTest extends Specification {
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
         eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
             XExt                         (r.v.d.g.d.r.DiagnosticRendererTest) *HOOK
+            BindExt                      (r.v.d.g.d.r.DiagnosticRendererTest) *BINDING
 """ as String;
     }
 
@@ -271,6 +275,7 @@ class DiagnosticRendererTest extends Specification {
         FooBundleResource            (r.v.d.g.d.s.bundle)
         HK2DebugFeature              (r.v.d.g.m.j.d.service)
         FooResource                  (r.v.d.g.d.s.features)     *SCAN
+        BindExt                      (r.v.d.g.d.r.DiagnosticRendererTest) *BINDING
 """ as String;
     }
 
@@ -287,7 +292,9 @@ class DiagnosticRendererTest extends Specification {
         FooBundleResource            (r.v.d.g.d.s.bundle)
         HK2DebugFeature              (r.v.d.g.m.j.d.service)
         FooResource                  (r.v.d.g.d.s.features)     *SCAN
+        BindExt                      (r.v.d.g.d.r.DiagnosticRendererTest) *BINDING
         -DisabledExtension           (r.v.d.g.d.r.DiagnosticRendererTest)
+        -BindExtDisabled             (r.v.d.g.d.r.DiagnosticRendererTest) *BINDING
 """ as String;
     }
 
@@ -354,9 +361,10 @@ class DiagnosticRendererTest extends Specification {
                             .disableInstallers(LifeCycleInstaller)
                             .disableBundles(DisabledBundle)
                             .disableModules(DisabledModule)
-                            .disableExtensions(DisabledExtension)
+                            .disableExtensions(DisabledExtension, BindExtDisabled)
                             .disableDropwizardBundles(DisabledDBundle)
                             .strictScopeControl()
+                            .printDiagnosticInfo()
                             .build())
         }
 
@@ -417,7 +425,8 @@ class DiagnosticRendererTest extends Specification {
     static class XMod implements Module {
         @Override
         void configure(Binder binder) {
-
+            binder.bind(BindExt).asEagerSingleton()
+            binder.bind(BindExtDisabled).asEagerSingleton()
         }
     }
 
@@ -435,4 +444,10 @@ class DiagnosticRendererTest extends Specification {
     static class DBundle implements ConfiguredBundle {}
 
     static class DisabledDBundle implements ConfiguredBundle {}
+
+    @EagerSingleton
+    static class BindExt {}
+
+    @EagerSingleton
+    static class BindExtDisabled {}
 }

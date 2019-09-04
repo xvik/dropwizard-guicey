@@ -46,7 +46,13 @@ public enum ConfigScope {
      * It was added just for completeness of context recognition logic (see {@link #recognize(Class)})
      * and to indicate all possible scopes.
      */
-    DropwizardBundle(io.dropwizard.ConfiguredBundle.class);
+    DropwizardBundle(io.dropwizard.ConfiguredBundle.class),
+    /**
+     * WARNING: binding extension scope is guice module name itself (not direct module, but topmost registered
+     * module - visible in configuration). It was added just for completeness of context recognition logic
+     * (see {@link #recognize(Class)}) and to indicate all possible scopes.
+     */
+    Module(com.google.inject.Module.class);
 
 
     private final Class<?> type;
@@ -77,7 +83,10 @@ public enum ConfigScope {
      */
     public static Class[] allExcept(final ConfigScope scope) {
         return Arrays.stream(values())
-                .filter(s -> s != scope && s != ConfigScope.GuiceyBundle && s != ConfigScope.DropwizardBundle)
+                .filter(s -> s != scope
+                        && s != ConfigScope.GuiceyBundle
+                        && s != ConfigScope.DropwizardBundle
+                        && s != ConfigScope.Module)
                 .map(ConfigScope::getType)
                 .toArray(Class[]::new);
     }
