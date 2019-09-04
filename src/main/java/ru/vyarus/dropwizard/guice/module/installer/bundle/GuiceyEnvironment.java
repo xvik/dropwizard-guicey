@@ -169,10 +169,17 @@ public class GuiceyEnvironment {
     }
 
     /**
-     * Register guice modules. All registered modules must be of unique type (duplicate instances of the
-     * same type are filtered).
+     * Register guice modules.
+     * <p>
+     * Note that this registration appear in run phase and so you already have access
+     * to environment and configuration (and don't need to use Aware* interfaces, but if you will they will also
+     * work, of course). This may look like misconception because configuration appear not in configuration phase,
+     * but it's not: for example, in pure dropwizard you can register jersey configuration modules in run phase too.
+     * Also, this brings more grained control because you can register modules, for example requiring configuration,
+     * directly (without wrapping it with {@link ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule})
+     * and so be able to disable exactly this module, if required (using {@link #disableModules(Class[])}).
      *
-     * @param modules one or more juice modules
+     * @param modules one or more guice modules
      * @return environment instance for chained calls
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(com.google.inject.Module...)
      */

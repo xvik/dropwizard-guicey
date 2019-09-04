@@ -15,7 +15,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyInstalle
 
 /**
  * HK2 module, which must be registered before HK2 context start (to properly bind resources).
- * Registers all juice extensions into HK2 context as factory, which delegates to guice provider.
+ * Registers all guice extensions into HK2 context as factory, which delegates to guice provider.
  * Such bridging is required to delegate objects creation to guice and properly use guice scopes.
  * <p>If jersey extension is already a factory, then factory will be registered directly.</p>
  *

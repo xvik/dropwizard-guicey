@@ -34,6 +34,7 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
 import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
@@ -360,9 +361,15 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * equals implementation or implement custom deduplication logic in
          * {@link #duplicateConfigDetector(DuplicateConfigDetector)}.
          * <p>
-         * NOTE: if module implements *AwareModule interfaces, objects will be set just before configuration start.
+         * These modules are registered under initialization phase where you don't have access for configuration
+         * or environment objects. To workaround this you can use *AwareModule interfaces, or extend from
+         * {@link ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule} and required objects will be set
+         * just before configuration start. Another option is to register module inside
+         * {@link GuiceyBundle#run(GuiceyEnvironment)}, which is called under run phase. This way you get more
+         * granular configuration (more modules could be registered directly, without wrapper) and so more
+         * detailed reports and better abilities to disable modules.
          *
-         * @param modules one or more juice modules
+         * @param modules one or more guice modules
          * @return builder instance for chained calls
          * @see ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule
          * @see ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule

@@ -95,10 +95,16 @@ public class GuiceyBootstrap {
 
     /**
      * Register guice modules.
+     * <p>
+     * Note that this registration appear under initialization phase and so neither configuration nor environment
+     * objects are not available yet. If you need them for module, then you can wrap it with
+     * {@link ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule} or register modules in run phase
+     * (inside {@link GuiceyBundle#run(GuiceyEnvironment)}).
      *
-     * @param modules one or more juice modules
+     * @param modules one or more guice modules
      * @return bootstrap instance for chained calls
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(com.google.inject.Module...)
+     * @see ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
      */
     public GuiceyBootstrap modules(final Module... modules) {
         Preconditions.checkState(modules.length > 0, "Specify at least one module");
