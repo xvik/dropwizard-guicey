@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.debug;
 
+import com.google.inject.Binding;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.time.StopWatch;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
@@ -9,6 +10,7 @@ import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.monitoring.RequestEvent;
 import org.glassfish.jersey.server.monitoring.RequestEventListener;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
+import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Debug guicey lifecycle listener. Could be installed with bundle shortcut:
@@ -136,10 +139,24 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
     }
 
     @Override
-    protected void bindingExtensionsResolved(BindingExtensionsResolvedEvent event) {
+    protected void modulesAnalyzed(ModulesAnalyzedEvent event) {
         log("%s binding extensions detected", event.getExtensions().size());
         if (showDetails) {
             logDetails(EXTENSIONS, event.getExtensions());
+            logDetails("removed inner modules", event.getInnerModulesRemoved());
+
+            if (!event.getBindingsRemoved().isEmpty()) {
+                final List<String> bindings = new ArrayList<>();
+                for (Binding binding : event.getBindingsRemoved()) {
+                    final List<String> modules = BindingUtils.getModules(binding).stream()
+                            .sorted(Collections.reverseOrder())
+                            .map(it -> it.substring(it.lastIndexOf(".") + 1))
+                            .collect(Collectors.toList());
+                    bindings.add(String.join("/", modules) + " | " + RenderUtils
+                            .renderClassLine(binding.getKey().getTypeLiteral().getRawType(), null));
+                }
+                logDetails("removed extension bindings", bindings);
+            }
         }
     }
 
@@ -227,8 +244,8 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
         final StringBuilder builder = new StringBuilder()
                 .append("\t").append(message).append(" = \n");
         for (Object item : items) {
-            builder.append("\t\t").append(RenderUtils
-                    .renderClassLine(item instanceof Class ? (Class) item : item.getClass(), null))
+            builder.append("\t\t").append(item instanceof String ? item
+                    : RenderUtils.renderClassLine(item instanceof Class ? (Class) item : item.getClass(), null))
                     .append(NL);
         }
         System.out.println(builder.toString());

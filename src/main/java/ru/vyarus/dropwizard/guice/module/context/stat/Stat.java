@@ -81,7 +81,7 @@ public enum Stat {
     BindingsCount(false),
     /**
      * Count of bindings from registered modules which were analyzed for extensions. As analysis may be switched off by
-     * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#ConfigureFromGuiceModules}, this counter indicates if
+     * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#AnalyzeGuiceModules}, this counter indicates if
      * analysis was performed or not.
      */
     AnalyzedBindingsCount(false),
@@ -97,7 +97,7 @@ public enum Stat {
     RemovedInnerModules(false),
     /**
      * Guice SPI time of modules elements resolution. When bindings inspection is disabled with
-     * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#ConfigureFromGuiceModules}, this time become a part of
+     * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#AnalyzeGuiceModules}, this time become a part of
      * overall injector creation time.
      */
     BindingsResolutionTime(true),

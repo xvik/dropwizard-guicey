@@ -95,7 +95,8 @@ public enum GuiceyOptions implements Option {
 
     /**
      * Search for extensions in supplied guice modules (registration from guice module). Overriding modules
-     * are not taken into account.
+     * are not taken into account. Also, removes disabled modules from inner module registrations (transitive
+     * modules).
      * <p>
      * Normally extension class is registered directly (or found by classpath scan), recognized by installer, bound
      * to guice context (with a default binding) and installed in dropwizard. When option is enabled, the same is done
@@ -105,11 +106,16 @@ public enum GuiceyOptions implements Option {
      * It is ok if the same extension would be registered manually or detected by classpath scan and be declared
      * in guice module manually - guicey will gust avoid default binding.
      * <p>
-     * Extensions, detected from guice modules may be disabled the same way as usual extensions. It is possible
-     * because bindings are analyzed before injector creation (using guice SPI) and so disabled bindings could
-     * be simply excluded.
+     * Extensions, detected from guice modules may be disabled the same way as usual extensions (bindings
+     * will be removed).
+     * <p>
+     * When modules analysis is enabled, guicey performs modules configuration (using SPI api) before actual injector
+     * creation and, to avoid duplicate work by injector, parsed modules are repackaged (to preserve parsed
+     * information). You can see on stats report that modules analysis time is cut off from injector creation time
+     * (creation time grows if option disabled). Also repackaging is the only way to properly handle disables for
+     * existing bindings.
      */
-    ConfigureFromGuiceModules(Boolean.class, true),
+    AnalyzeGuiceModules(Boolean.class, true),
 
     /**
      * Guice injector stage used for injector creation.

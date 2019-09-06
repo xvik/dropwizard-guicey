@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.internal;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import io.dropwizard.Configuration;
@@ -28,7 +29,10 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensions
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Lifecycle broadcast internal support.
@@ -150,11 +154,13 @@ public final class LifecycleSupport {
         }
     }
 
-    public void bindingExtensionsResolved(final List<Class<?>> extensions) {
-        if (!extensions.isEmpty()) {
-            broadcast(new BindingExtensionsResolvedEvent(options, bootstrap,
-                    configuration, configurationTree, environment, extensions));
-        }
+    public void modulesAnalyzed(final List<Module> modules,
+                                final List<Class<?>> extensions,
+                                final List<Class<? extends Module>> innerModulesRemoved,
+                                final List<Binding> bindingsRemoved) {
+        broadcast(new ModulesAnalyzedEvent(options, bootstrap,
+                configuration, configurationTree, environment,
+                modules, extensions, innerModulesRemoved, bindingsRemoved));
     }
 
     public void extensionsResolved(final List<Class<?>> extensions, final List<Class<?>> disabled) {

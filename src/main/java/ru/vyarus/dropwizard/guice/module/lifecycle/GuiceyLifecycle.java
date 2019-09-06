@@ -98,10 +98,10 @@ public enum GuiceyLifecycle {
      */
     BundlesStarted(BundlesStartedEvent.class),
     /**
-     * Called when guice bindings analyzed and all extensions detected.
-     * Called only if bindings analysis is enabled and at least one extension detected.
+     * Called after guice modules analysis and repackaging. Reveals all detected extensions and removed bindings info.
+     * Called only if bindings analysis is enabled.
      */
-    BindingExtensionsResolved(BindingExtensionsResolvedEvent.class),
+    ModulesAnalyzed(ModulesAnalyzedEvent.class),
     /**
      * Called when all extensions detected (from classpath scan and guice modules). Provides list of all enabled
      * and list of disabled extension types (instances are not available yet). Called even if no extensions
@@ -110,7 +110,10 @@ public enum GuiceyLifecycle {
     ExtensionsResolved(ExtensionsResolvedEvent.class),
     /**
      * Called just before guice injector creation. Provides all configured modules (main and override) and all
-     * disabled modules. Called even when no modules registered to indicate configuration state.
+     * disabled modules. Note that provided configured module instances were already processed (during bindings
+     * analysis) and so it makes no sense to modify them (only overriding modules will be actually used because
+     * they are not used during bindings analysis).
+     * Called even when no modules registered to indicate configuration state.
      */
     InjectorCreation(InjectorCreationEvent.class),
     /**

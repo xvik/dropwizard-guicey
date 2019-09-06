@@ -19,7 +19,7 @@ import ru.vyarus.dropwizard.guice.module.support.*;
 
 import java.util.*;
 
-import static ru.vyarus.dropwizard.guice.GuiceyOptions.ConfigureFromGuiceModules;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.AnalyzeGuiceModules;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ModulesProcessingTime;
@@ -97,7 +97,7 @@ public final class ModulesSupport {
     private static List<Module> analyzeModules(final ConfigurationContext context,
                                                final Stopwatch modulesTimer) {
         List<Module> modules = context.getNormalModules();
-        final Boolean configureFromGuice = context.option(ConfigureFromGuiceModules);
+        final Boolean configureFromGuice = context.option(AnalyzeGuiceModules);
         // one module mean no user modules registered
         if (modules.size() > 1 && configureFromGuice) {
             // analyzing only user bindings (excluding overrides and guicey technical bindings)
@@ -111,7 +111,7 @@ public final class ModulesSupport {
 
                 // exclude analysis time from modules processing time (it's installer time)
                 modulesTimer.stop();
-                analyzeAndFilterBindings(context, elements);
+                analyzeAndFilterBindings(context, modules, elements);
                 modulesTimer.start();
 
                 // wrap raw elements into module to avoid duplicate work on guice startup and put back bootstrap
@@ -122,7 +122,7 @@ public final class ModulesSupport {
                 // error as last error in logs.
                 LOGGER.error("Failed to analyze guice bindings - skipping this step. Note that configuration"
                         + " from bindings may be switched off with " + GuiceyOptions.class.getSimpleName() + "."
-                        + ConfigureFromGuiceModules.name() + " option.", ex);
+                        + AnalyzeGuiceModules.name() + " option.", ex);
                 // recover and use original modules
                 modules.add(bootstrap);
                 if (!modulesTimer.isRunning()) {
@@ -133,12 +133,15 @@ public final class ModulesSupport {
         return modules;
     }
 
-    private static void analyzeAndFilterBindings(final ConfigurationContext context, final List<Element> elements) {
+    private static void analyzeAndFilterBindings(final ConfigurationContext context,
+                                                 final List<Module> analyzedModules,
+                                                 final List<Element> elements) {
         final Stopwatch itimer = context.stat().timer(InstallersTime);
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
         context.stat().count(Stat.BindingsCount, elements.size());
         final List<String> disabledModules = prepareDisabledModules(context);
         final Set<String> actuallyDisbaledModules = new HashSet<>();
+        final List<Binding> removedBindings = new ArrayList<>();
         final Iterator<Element> it = elements.iterator();
         final List<Class<?>> extensions = new ArrayList<>();
         while (it.hasNext()) {
@@ -162,17 +165,19 @@ public final class ModulesSupport {
                         extensions.add(type);
                         if (!context.isExtensionEnabled(type)) {
                             it.remove();
-                            context.stat().count(Stat.RemovedBindingsCount, 1);
+                            removedBindings.add((Binding) element);
                         }
                     }
                 }
             }
         }
         if (actuallyDisbaledModules.size() > 0) {
-            LOGGER.debug("Removed inner modules: {}", actuallyDisbaledModules);
+            LOGGER.debug("Removed inner guice modules: {}", actuallyDisbaledModules);
         }
         context.stat().count(Stat.RemovedInnerModules, actuallyDisbaledModules.size());
-        context.lifecycle().bindingExtensionsResolved(extensions);
+        context.stat().count(Stat.RemovedBindingsCount, removedBindings.size());
+        context.lifecycle().modulesAnalyzed(analyzedModules, extensions, toModuleClasses(actuallyDisbaledModules),
+                removedBindings);
         timer.stop();
         itimer.stop();
     }
@@ -189,7 +194,10 @@ public final class ModulesSupport {
                                               final List<String> disabled,
                                               final Set<String> actuallyDisabled) {
         if (!disabled.isEmpty()) {
-            for (String mod : BindingUtils.getModules(element)) {
+            final List<String> modules = BindingUtils.getModules(element);
+            // need to check from top modules to lower, otherwise removed modules list will be incorrect
+            for (int i = modules.size() - 1; i >= 0; i--) {
+                final String mod = modules.get(i);
                 if (disabled.contains(mod)) {
                     actuallyDisabled.add(mod);
                     return true;
@@ -197,5 +205,16 @@ public final class ModulesSupport {
             }
         }
         return false;
+    }
+
+    private static List<Class<? extends Module>> toModuleClasses(final Set<String> modules) {
+        if (modules.isEmpty()) {
+            return Collections.emptyList();
+        }
+        final List<Class<? extends Module>> res = new ArrayList<>();
+        for (String mod : modules) {
+            res.add(BindingUtils.getModuleClass(mod));
+        }
+        return res;
     }
 }

@@ -35,6 +35,8 @@ import ru.vyarus.dropwizard.guice.support.feature.DummyTask
 import ru.vyarus.dropwizard.guice.support.util.BindModule
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
+import javax.ws.rs.Path
+
 /**
  * @author Vyacheslav Rusakov
  * @since 23.04.2018
@@ -60,11 +62,11 @@ class EventsConsistencyTest extends AbstractTest {
                             new GuiceyLifecycleAdapter())
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
                     .dropwizardBundles(new DBundle())
-                    .modules(new XMod(), new BindModule(DummyTask))
+                    .modules(new XMod(), new YMod(), new BindModule(DummyTask))
                     .disableBundles(LookupBundle)
-                    .disableModules(XMod)
+                    .disableModules(XMod, InnerModule)
                     .disableInstallers(JerseyFeatureInstaller)
-                    .disableExtensions(DummyPlugin1, HK2DebugFeature)
+                    .disableExtensions(DummyPlugin1, HK2DebugFeature, BindEx)
                     .searchCommands()
                     .printLifecyclePhasesDetailed()
                     .build())
@@ -80,9 +82,27 @@ class EventsConsistencyTest extends AbstractTest {
     static class XMod implements Module {
         @Override
         void configure(Binder binder) {
-
         }
     }
+
+    static class YMod implements Module {
+        @Override
+        void configure(Binder binder) {
+            binder.install(new InnerModule());
+            binder.bind(BindEx)
+        }
+    }
+
+    static class InnerModule implements Module {
+        @Override
+        void configure(Binder binder) {
+            // need any binding to detect module removal
+             binder.bind(DummyTask)
+        }
+    }
+
+    @Path("/")
+    static class BindEx {}
 
     static class XConf implements GuiceyConfigurationHook {
         @Override
@@ -185,24 +205,27 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
-        protected void bindingExtensionsResolved(BindingExtensionsResolvedEvent event) {
+        protected void modulesAnalyzed(ModulesAnalyzedEvent event) {
             runChecks(event)
-            assert event.getExtensions().size() == 1
+            assert event.getAnalyzedModules().size() == 4
+            assert event.getExtensions().size() == 2
+            assert event.getInnerModulesRemoved().size() == 1
+            assert event.getBindingsRemoved().size() == 1
         }
 
         @Override
         protected void extensionsResolved(ExtensionsResolvedEvent event) {
             runChecks(event)
             assert event.extensions.size() == 13
-            assert event.disabled.size() == 2
+            assert event.disabled.size() == 3
         }
 
         @Override
         protected void injectorCreation(InjectorCreationEvent event) {
             runChecks(event)
-            assert event.modules.size() == 4
+            assert event.modules.size() == 5
             assert event.overridingModules.isEmpty()
-            assert event.disabled.size() == 1
+            assert event.disabled.size() == 2
         }
 
         @Override

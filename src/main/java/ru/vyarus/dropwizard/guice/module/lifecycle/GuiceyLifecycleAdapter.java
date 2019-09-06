@@ -60,8 +60,8 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case BundlesStarted:
                 bundlesStarted((BundlesStartedEvent) event);
                 break;
-            case BindingExtensionsResolved:
-                bindingExtensionsResolved((BindingExtensionsResolvedEvent) event);
+            case ModulesAnalyzed:
+                modulesAnalyzed((ModulesAnalyzedEvent) event);
                 break;
             case ExtensionsResolved:
                 extensionsResolved((ExtensionsResolvedEvent) event);
@@ -141,7 +141,7 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         // empty
     }
 
-    protected void bindingExtensionsResolved(final BindingExtensionsResolvedEvent event) {
+    protected void modulesAnalyzed(final ModulesAnalyzedEvent event) {
         // empty
     }
 

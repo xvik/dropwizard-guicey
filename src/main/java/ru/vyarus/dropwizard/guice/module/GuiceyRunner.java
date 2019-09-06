@@ -77,7 +77,7 @@ public class GuiceyRunner {
      * After bindings analysis all extensions are finally registered and entire configuration info is finalized.
      * <p>
      * When bindings configuration is disabled (with
-     * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#ConfigureFromGuiceModules}), no modules repackaging is applied
+     * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#AnalyzeGuiceModules}), no modules repackaging is applied
      * (exact legacy guicey behavior). It may also be useful to disable feature to check for side effects.
      *
      * @return modules to use

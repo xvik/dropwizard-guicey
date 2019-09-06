@@ -42,6 +42,11 @@ public class InjectorCreationEvent extends RunPhaseEvent {
     }
 
     /**
+     * NOTE: if bindings analysis is enabled
+     * ({@link ru.vyarus.dropwizard.guice.GuiceyOptions#AnalyzeGuiceModules}) then these modules were already
+     * processed and repackaged (in order to remove disabled inner modules and extensions). This list is useful for
+     * information only and any modifications to module instances makes no sense.
+     *
      * @return list of all enabled guice modules or empty list if no modules registered or all of them were disabled
      */
     public List<Module> getModules() {
@@ -49,6 +54,9 @@ public class InjectorCreationEvent extends RunPhaseEvent {
     }
 
     /**
+     * In contrast to normal modules, which are repackaged during bindings analysis, overriding modules are always
+     * used as is and so instances may be modified (modules configuration called after this event).
+     *
      * @return list of all overriding guice modules or empty list if not overriding modules registered or all of them
      * were disabled
      */

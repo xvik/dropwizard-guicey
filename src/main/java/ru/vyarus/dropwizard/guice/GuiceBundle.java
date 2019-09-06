@@ -563,7 +563,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * clearer application configuration.
          * <p>
          * Option could also disable inner modules (registered by modules transitively), but only if bindings analysis
-         * is not disabled (by {@link GuiceyOptions#ConfigureFromGuiceModules}). Inner modules can't be removed from
+         * is not disabled (by {@link GuiceyOptions#AnalyzeGuiceModules}). Inner modules can't be removed from
          * overriding modules, because only normal modules are analyzed.
          * <p>
          * When bindings analysis is disabled this option can disable only directly registered modules
