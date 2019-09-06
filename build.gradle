@@ -44,6 +44,9 @@ dependencyManagement {
         dependency 'com.github.stefanbirkner:system-rules:1.17.1'
 
         dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
+
+        // add guicey itself to BOM (for version management)
+        dependency 'ru.vyarus:dropwizard-guicey:${project.version}'
     }
 }
 dependencies {

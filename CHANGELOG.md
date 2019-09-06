@@ -99,6 +99,7 @@
     - Inner gucie modules (installed by other modules) may be disabled with usual `disableModules()`
         (but only if guice bindings analysis is not disabled)    
 * Fix configuration bindings for recursive configuration object declarations (#60)
+* Guicey version added into BOM (dependencyManagement section in guicey pom) to avoid duplicate versions declarations
 
 Main breaking changes were caused by:
  - jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
