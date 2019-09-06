@@ -1,8 +1,11 @@
 package ru.vyarus.dropwizard.guice.hook;
 
 import com.google.common.base.Preconditions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.module.installer.util.PropertyUtils;
+import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 import ru.vyarus.dropwizard.guice.test.GuiceyHooksRule;
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks;
 
@@ -24,6 +27,8 @@ public final class ConfigurationHooksSupport {
      * Guiey hooks list system property.
      */
     public static final String HOOKS_PROPERTY = "guicey.hooks";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationHooksSupport.class);
 
     private static final ThreadLocal<Set<GuiceyConfigurationHook>> HOOKS = new ThreadLocal<>();
     private static final ThreadLocal<Map<String, String>> ALIASES = new ThreadLocal<>();
@@ -70,6 +75,21 @@ public final class ConfigurationHooksSupport {
      */
     public static Map<String, String> getSystemHookAliases() {
         return ALIASES.get() != null ? ALIASES.get() : Collections.emptyMap();
+    }
+
+    /**
+     * Log registered hook aliases.
+     */
+    public static void logRegisteredAliases() {
+        if (!getSystemHookAliases().isEmpty()) {
+            final StringBuilder res = new StringBuilder()
+                    .append(Reporter.NEWLINE).append(Reporter.NEWLINE);
+            for (Map.Entry<String, String> entry : getSystemHookAliases().entrySet()) {
+                res.append(Reporter.TAB).append(String.format("%-30s", entry.getKey()))
+                        .append(entry.getValue()).append(Reporter.NEWLINE);
+            }
+            LOGGER.info("Available hook aliases [ -D{}=alias ]: {}", HOOKS_PROPERTY, res.toString());
+        }
     }
 
     /**

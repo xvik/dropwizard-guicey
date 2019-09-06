@@ -16,7 +16,7 @@ public class DiagnosticHook implements GuiceyConfigurationHook {
     public void configure(final GuiceBundle.Builder builder) {
         builder.printDiagnosticInfo()
                 .printLifecyclePhasesDetailed()
-                .printConfigurationBindings()
+                .printCustomConfigurationBindings()
                 .printGuiceBindings();
     }
 }
