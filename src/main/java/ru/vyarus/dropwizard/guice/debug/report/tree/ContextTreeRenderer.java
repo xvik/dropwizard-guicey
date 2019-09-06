@@ -9,7 +9,10 @@ import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
-import ru.vyarus.dropwizard.guice.module.context.info.*;
+import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.InstanceItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
@@ -21,6 +24,43 @@ import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.*;
 
 /**
  * Renders complete configuration tree.
+ * <p>
+ * Different instance items of the same type are marker by "#N" numbers. The only exception is duplicates - original
+ * registered item name used (which this ignored instance is equal to) to indicate duplicate.
+ * <p>
+ * Report tries to preserve registration order but only within extension types. The only exception is ignored
+ * instances, which are printed directly after original item appearance, even if they were registered further
+ * in this scope.
+ * For example, for registration like this:
+ * <pre>{@code
+ *      bundle
+ *          .extensions(Ext1.class)
+ *          .modules(new Mod(1), new OtherMod()
+ *          .extensions(Ext2.class)
+ *          .modules(new Mod(2), new Mod(1))
+ * }</pre>
+ * will be reported as
+ * <pre>
+ *    extension     Ext1
+ *    extension     Ext2
+ *    module        Mod
+ *    module        -Mod        *IGNORED
+ *    module        OtherMod
+ *    module        Mod#2
+ * </pre>
+ * Which should be enough to associate with real configuration.
+ * <p>
+ * Used markers:
+ * <ul>
+ * <li>DW - marks dropwizard bundles</li>
+ * <li>DISABLED - item disabled (by user)</li>
+ * <li>IGNORED - item considered as duplicate by deduplication mechanism and ignored. If contains number
+ * ("IGNORED(3)") then multiple instances were considered duplicate in this scope and ignored. </li>
+ * </ul>
+ * <p>
+ * Recognized guice bindings are shown as separate subtree "GUICE BINDINGS" and not under modules in configuration
+ * tree because it is impossible to associate binding with exact module instance (and multiple instances of the same
+ * module could be registered). So bindings report is a "projection on class level".
  *
  * @author Vyacheslav Rusakov
  * @since 17.07.2016
