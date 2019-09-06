@@ -25,6 +25,7 @@ public class InjectorCreationEvent extends RunPhaseEvent {
     private final List<Module> modules;
     private final List<Module> overriding;
     private final List<Module> disabled;
+    private final List<Module> ignored;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     public InjectorCreationEvent(final Options options,
@@ -34,11 +35,13 @@ public class InjectorCreationEvent extends RunPhaseEvent {
                                  final Environment environment,
                                  final List<Module> modules,
                                  final List<Module> overriding,
-                                 final List<Module> disabled) {
+                                 final List<Module> disabled,
+                                 final List<Module> ignored) {
         super(GuiceyLifecycle.InjectorCreation, options, bootstrap, configuration, configurationTree, environment);
         this.modules = modules;
         this.overriding = overriding;
         this.disabled = disabled;
+        this.ignored = ignored;
     }
 
     /**
@@ -69,5 +72,12 @@ public class InjectorCreationEvent extends RunPhaseEvent {
      */
     public List<Module> getDisabled() {
         return disabled;
+    }
+
+    /**
+     * @return list of all ignored modules (duplicates) or empty list
+     */
+    public List<Module> getIgnored() {
+        return ignored;
     }
 }

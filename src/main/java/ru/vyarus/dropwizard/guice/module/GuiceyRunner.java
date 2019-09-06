@@ -7,6 +7,7 @@ import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
+import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsSupport;
@@ -99,7 +100,8 @@ public class GuiceyRunner {
         context.lifecycle().injectorCreation(
                 new ArrayList<>(context.getNormalModules()),
                 new ArrayList<>(context.getOverridingModules()),
-                context.getDisabledModules());
+                context.getDisabledModules(),
+                context.getIgnoredItems(ConfigItem.Module));
         // intercept detailed guice initialization stats from guice logs
         context.stat().getGuiceStats().injectLogsInterceptor();
         injector = injectorFactory.createInjector(

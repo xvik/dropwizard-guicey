@@ -23,14 +23,17 @@ public class BundlesInitializedEvent extends ConfigurationPhaseEvent {
 
     private final List<GuiceyBundle> bundles;
     private final List<GuiceyBundle> disabled;
+    private final List<GuiceyBundle> ignored;
 
     public BundlesInitializedEvent(final Options options,
                                    final Bootstrap bootstrap,
                                    final List<GuiceyBundle> bundles,
-                                   final List<GuiceyBundle> disabled) {
+                                   final List<GuiceyBundle> disabled,
+                                   final List<GuiceyBundle> ignored) {
         super(GuiceyLifecycle.BundlesInitialized, options, bootstrap);
         this.bundles = bundles;
         this.disabled = disabled;
+        this.ignored = ignored;
     }
 
     /**
@@ -46,5 +49,12 @@ public class BundlesInitializedEvent extends ConfigurationPhaseEvent {
      */
     public List<GuiceyBundle> getDisabled() {
         return disabled;
+    }
+
+    /**
+     * @return list of ignored bundles (duplicates) or empty list
+     */
+    public List<GuiceyBundle> getIgnored() {
+        return ignored;
     }
 }

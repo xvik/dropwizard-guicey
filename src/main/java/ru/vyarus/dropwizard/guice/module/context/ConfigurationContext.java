@@ -101,6 +101,10 @@ public final class ConfigurationContext {
      */
     private final Multimap<ItemId, ItemId> disabledByHolder = LinkedHashMultimap.create();
     /**
+     * Holds all instances considered as duplicates (and so ignored).
+     */
+    private final Multimap<ConfigItem, Object> duplicatesHolder = LinkedHashMultimap.create();
+    /**
      * Disable predicates listen for first item registration and could immediately disable it.
      */
     private final List<PredicateHandler> disablePredicates = new ArrayList<>();
@@ -196,7 +200,7 @@ public final class ConfigurationContext {
         }
         closeScope();
         lifecycle().bundlesFromLookupResolved(bundles);
-        lifecycle().bundlesResolved(getEnabledBundles(), getDisabledBundles());
+        lifecycle().bundlesResolved(getEnabledBundles(), getDisabledBundles(), getIgnoredItems(ConfigItem.Bundle));
     }
 
     /**
@@ -656,7 +660,8 @@ public final class ConfigurationContext {
         for (ConfiguredBundle bundle : getEnabledDropwizardBundles()) {
             registerDropwizardBundle(bundle);
         }
-        lifecycle().initializationStarted(bootstrap, getEnabledDropwizardBundles(), getDisabledDropwizardBundles());
+        lifecycle().initializationStarted(bootstrap, getEnabledDropwizardBundles(),
+                getDisabledDropwizardBundles(), getIgnoredItems(ConfigItem.DropwizardBundle));
         dwtime.stop();
         time.stop();
     }
@@ -710,7 +715,7 @@ public final class ConfigurationContext {
 
     /**
      * @param type config type
-     * @param <T>  expected container type
+     * @param <T>  expected items type
      * @return list of all registered items of type or empty list
      */
     @SuppressWarnings("unchecked")
@@ -722,7 +727,7 @@ public final class ConfigurationContext {
     /**
      * @param type   config type
      * @param filter items filter
-     * @param <T>    expected container type
+     * @param <T>    expected items type
      * @return list of all items matching filter or empty list
      */
     @SuppressWarnings("unchecked")
@@ -732,6 +737,17 @@ public final class ConfigurationContext {
             return Collections.emptyList();
         }
         return items.stream().filter(filter).collect(Collectors.toList());
+    }
+
+    /**
+     * @param type config type
+     * @param <T>  expected items type
+     * @return list of all detected duplicates of this configuration type
+     */
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getIgnoredItems(final ConfigItem type) {
+        final Collection<Object> res = duplicatesHolder.get(type);
+        return res.isEmpty() ? Collections.<T>emptyList() : (List<T>) Lists.newArrayList(res);
     }
 
     /**
@@ -905,6 +921,7 @@ public final class ConfigurationContext {
                     type, getScope().getType().getSimpleName(), ItemId.from(item),
                     originalInfo.getRegistrationScope().getType().getSimpleName(),
                     originalId, originalInfo.getInstanceCount());
+            duplicatesHolder.put(type, item);
         }
         return original;
     }

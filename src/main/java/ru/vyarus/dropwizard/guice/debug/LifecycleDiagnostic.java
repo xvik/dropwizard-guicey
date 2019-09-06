@@ -42,6 +42,7 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
 
     private static final String BUNDLES = "bundles";
     private static final String DISABLED = "disabled";
+    private static final String IGNORED_DUPLICATES = "ignored duplicate instances";
     private static final String NL = "\n";
     private static final String EXTENSIONS = "extensions";
     private static final String INSTALLED_EXTENSIONS = "installed extensions";
@@ -70,6 +71,7 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
         if (showDetails) {
             logDetails(BUNDLES, event.getBundles());
             logDetails(DISABLED, event.getDisabled());
+            logDetails(IGNORED_DUPLICATES, event.getIgnored());
         }
     }
 
@@ -88,6 +90,7 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
         if (showDetails) {
             logDetails(BUNDLES, event.getBundles());
             logDetails(DISABLED, event.getDisabled());
+            logDetails(IGNORED_DUPLICATES, event.getIgnored());
         }
     }
 
@@ -177,6 +180,7 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
             logDetails("modules", event.getModules());
             logDetails("overriding", event.getOverridingModules());
             logDetails(DISABLED, event.getDisabled());
+            logDetails(IGNORED_DUPLICATES, event.getIgnored());
         }
     }
 

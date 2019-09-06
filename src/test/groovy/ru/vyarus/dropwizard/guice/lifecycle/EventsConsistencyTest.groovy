@@ -16,6 +16,8 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
+import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle
+import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueModule
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
@@ -61,12 +63,14 @@ class EventsConsistencyTest extends AbstractTest {
                             // to call all methods in adapter and make coverage happy
                             new GuiceyLifecycleAdapter())
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
-                    .dropwizardBundles(new DBundle())
-                    .modules(new XMod(), new YMod(), new BindModule(DummyTask))
+                    .bundles(new GBundle(), new GBundle())
+                    .dropwizardBundles(new DBundle(), new DBundle(), new DBundleDisabled())
+                    .modules(new XMod(), new YMod(), new YMod(), new BindModule(DummyTask))
                     .disableBundles(LookupBundle)
                     .disableModules(XMod, InnerModule)
                     .disableInstallers(JerseyFeatureInstaller)
                     .disableExtensions(DummyPlugin1, HK2DebugFeature, BindEx)
+                    .disableDropwizardBundles(DBundleDisabled)
                     .searchCommands()
                     .printLifecyclePhasesDetailed()
                     .build())
@@ -77,7 +81,15 @@ class EventsConsistencyTest extends AbstractTest {
         }
     }
 
-    static class DBundle implements ConfiguredBundle {}
+    static class DBundle implements ConfiguredBundle {
+        @Override
+        public boolean equals(final Object obj) {
+            // only one debug module instance allowed
+            return obj != null && getClass().equals(obj.getClass());
+        }
+    }
+
+    static class DBundleDisabled implements ConfiguredBundle {}
 
     static class XMod implements Module {
         @Override
@@ -85,11 +97,11 @@ class EventsConsistencyTest extends AbstractTest {
         }
     }
 
-    static class YMod implements Module {
+    static class YMod extends UniqueModule {
         @Override
-        void configure(Binder binder) {
-            binder.install(new InnerModule());
-            binder.bind(BindEx)
+        protected void configure() {
+            install(new InnerModule());
+            bind(BindEx)
         }
     }
 
@@ -118,6 +130,8 @@ class EventsConsistencyTest extends AbstractTest {
         }
     }
 
+    static class GBundle extends UniqueGuiceyBundle {}
+
     static class Listener extends GuiceyLifecycleAdapter {
 
         static List<GuiceyLifecycle> called = new ArrayList<>()
@@ -135,6 +149,8 @@ class EventsConsistencyTest extends AbstractTest {
             confChecks(event)
             assert event.getBundles().size() == 1
             assert event.getBundles()[0].class == DBundle
+            assert event.getDisabled().size() == 1
+            assert event.getIgnored().size() == 1
         }
 
         @Override
@@ -148,15 +164,17 @@ class EventsConsistencyTest extends AbstractTest {
         protected void bundlesResolved(BundlesResolvedEvent event) {
             confChecks(event)
             // dw and lookup bundles are disabled
-            assert event.getBundles().size() == 3
+            assert event.getBundles().size() == 4
             assert event.getDisabled().size() == 1
+            assert event.getIgnored().size() == 1
         }
 
         @Override
         protected void bundlesInitialized(BundlesInitializedEvent event) {
             confChecks(event)
-            assert event.getBundles().size() == 4
+            assert event.getBundles().size() == 5
             assert event.getDisabled().size() == 1
+            assert event.getIgnored().size() == 1
         }
 
         @Override
@@ -201,7 +219,7 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         protected void bundlesStarted(BundlesStartedEvent event) {
             runChecks(event)
-            assert event.getBundles().size() == 4
+            assert event.getBundles().size() == 5
         }
 
         @Override
@@ -226,6 +244,7 @@ class EventsConsistencyTest extends AbstractTest {
             assert event.modules.size() == 5
             assert event.overridingModules.isEmpty()
             assert event.disabled.size() == 2
+            assert event.ignored.size() == 1
         }
 
         @Override

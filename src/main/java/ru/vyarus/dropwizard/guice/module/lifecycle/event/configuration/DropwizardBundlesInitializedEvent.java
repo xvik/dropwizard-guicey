@@ -22,14 +22,17 @@ public class DropwizardBundlesInitializedEvent extends ConfigurationPhaseEvent {
 
     private final List<ConfiguredBundle> bundles;
     private final List<ConfiguredBundle> disabled;
+    private final List<ConfiguredBundle> ignored;
 
     public DropwizardBundlesInitializedEvent(final Options options,
                                              final Bootstrap bootstrap,
                                              final List<ConfiguredBundle> bundles,
-                                             final List<ConfiguredBundle> disabled) {
+                                             final List<ConfiguredBundle> disabled,
+                                             final List<ConfiguredBundle> ignored) {
         super(GuiceyLifecycle.DropwizardBundlesInitialized, options, bootstrap);
         this.bundles = bundles;
         this.disabled = disabled;
+        this.ignored = ignored;
     }
 
     /**
@@ -47,5 +50,12 @@ public class DropwizardBundlesInitializedEvent extends ConfigurationPhaseEvent {
      */
     public List<ConfiguredBundle> getDisabled() {
         return disabled;
+    }
+
+    /**
+     * @return ignored dropwizard bundles (duplicates) or empty list
+     */
+    public List<ConfiguredBundle> getIgnored() {
+        return ignored;
     }
 }

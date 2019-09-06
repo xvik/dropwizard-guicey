@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import io.dropwizard.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
@@ -52,7 +53,8 @@ public final class BundleSupport {
             initBundle(Collections.emptyList(), bundle, bundles, context, guiceyBootstrap);
         }
 
-        context.lifecycle().bundlesInitialized(context.getEnabledBundles(), context.getDisabledBundles());
+        context.lifecycle().bundlesInitialized(context.getEnabledBundles(), context.getDisabledBundles(),
+                context.getIgnoredItems(ConfigItem.Bundle));
     }
 
     /**

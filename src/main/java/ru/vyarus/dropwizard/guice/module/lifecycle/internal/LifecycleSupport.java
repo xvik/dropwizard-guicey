@@ -81,10 +81,11 @@ public final class LifecycleSupport {
 
     public void initializationStarted(final Bootstrap bootstrap,
                                       final List<ConfiguredBundle> bundles,
-                                      final List<ConfiguredBundle> disabled) {
+                                      final List<ConfiguredBundle> disabled,
+                                      final List<ConfiguredBundle> ignored) {
         this.bootstrap = bootstrap;
         if (!bundles.isEmpty()) {
-            broadcast(new DropwizardBundlesInitializedEvent(options, bootstrap, bundles, disabled));
+            broadcast(new DropwizardBundlesInitializedEvent(options, bootstrap, bundles, disabled, ignored));
         }
     }
 
@@ -94,13 +95,17 @@ public final class LifecycleSupport {
         }
     }
 
-    public void bundlesResolved(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
-        broadcast(new BundlesResolvedEvent(options, bootstrap, bundles, disabled));
+    public void bundlesResolved(final List<GuiceyBundle> bundles,
+                                final List<GuiceyBundle> disabled,
+                                final List<GuiceyBundle> ignored) {
+        broadcast(new BundlesResolvedEvent(options, bootstrap, bundles, disabled, ignored));
     }
 
-    public void bundlesInitialized(final List<GuiceyBundle> bundles, final List<GuiceyBundle> disabled) {
+    public void bundlesInitialized(final List<GuiceyBundle> bundles,
+                                   final List<GuiceyBundle> disabled,
+                                   final List<GuiceyBundle> ignored) {
         if (!bundles.isEmpty()) {
-            broadcast(new BundlesInitializedEvent(options, bootstrap, bundles, disabled));
+            broadcast(new BundlesInitializedEvent(options, bootstrap, bundles, disabled, ignored));
         }
     }
 
@@ -168,10 +173,12 @@ public final class LifecycleSupport {
                 configuration, configurationTree, environment, extensions, disabled));
     }
 
-    public void injectorCreation(final List<Module> modules, final List<Module> overriding,
-                                 final List<Module> disabled) {
+    public void injectorCreation(final List<Module> modules,
+                                 final List<Module> overriding,
+                                 final List<Module> disabled,
+                                 final List<Module> ignored) {
         broadcast(new InjectorCreationEvent(options, bootstrap,
-                configuration, configurationTree, environment, modules, overriding, disabled));
+                configuration, configurationTree, environment, modules, overriding, disabled, ignored));
     }
 
     public void injectorPhase(final Injector injector) {
