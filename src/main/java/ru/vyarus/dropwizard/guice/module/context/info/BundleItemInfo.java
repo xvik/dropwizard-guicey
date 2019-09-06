@@ -12,6 +12,8 @@ public interface BundleItemInfo extends InstanceItemInfo, DisableSupport {
 
     /**
      * In case when bundle is registered multiple times, bundle will be transitive if all registrations were transitive.
+     * Reminder: bundle is registered by instance, but same instance may be registered multiple times. Also,
+     * deduplication mechanism could consider different instances as the same bundle (equal objects, by default).
      *
      * @return true when bundle was registered only by some other bundle (and never directly)
      */
