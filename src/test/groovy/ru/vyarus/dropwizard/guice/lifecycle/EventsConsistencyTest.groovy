@@ -209,7 +209,7 @@ class EventsConsistencyTest extends AbstractTest {
             runChecks(event)
             assert event.getAnalyzedModules().size() == 4
             assert event.getExtensions().size() == 2
-            assert event.getInnerModulesRemoved().size() == 1
+            assert event.getTransitiveModulesRemoved().size() == 1
             assert event.getBindingsRemoved().size() == 1
         }
 

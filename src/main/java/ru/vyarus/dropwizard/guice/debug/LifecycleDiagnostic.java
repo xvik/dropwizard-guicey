@@ -143,7 +143,7 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
         log("%s binding extensions detected", event.getExtensions().size());
         if (showDetails) {
             logDetails(EXTENSIONS, event.getExtensions());
-            logDetails("removed inner modules", event.getInnerModulesRemoved());
+            logDetails("removed transitive modules", event.getTransitiveModulesRemoved());
 
             if (!event.getBindingsRemoved().isEmpty()) {
                 final List<String> bindings = new ArrayList<>();

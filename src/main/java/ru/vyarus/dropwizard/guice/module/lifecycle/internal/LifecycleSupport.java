@@ -156,11 +156,11 @@ public final class LifecycleSupport {
 
     public void modulesAnalyzed(final List<Module> modules,
                                 final List<Class<?>> extensions,
-                                final List<Class<? extends Module>> innerModulesRemoved,
+                                final List<Class<? extends Module>> transitiveModulesRemoved,
                                 final List<Binding> bindingsRemoved) {
         broadcast(new ModulesAnalyzedEvent(options, bootstrap,
                 configuration, configurationTree, environment,
-                modules, extensions, innerModulesRemoved, bindingsRemoved));
+                modules, extensions, transitiveModulesRemoved, bindingsRemoved));
     }
 
     public void extensionsResolved(final List<Class<?>> extensions, final List<Class<?>> disabled) {

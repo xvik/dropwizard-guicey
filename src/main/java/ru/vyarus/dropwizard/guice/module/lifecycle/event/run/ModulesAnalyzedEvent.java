@@ -14,7 +14,8 @@ import java.util.List;
 
 /**
  * Called when guice bindings analyzed and all extensions detected. Provides list of all recognized binding extensions
- * (including disabled), disabled inner modules and extension bindings. Called only if bindings analysis is enabled.
+ * (including disabled), disabled transitive modules and extension bindings. Called only if bindings analysis is
+ * enabled.
  * <p>
  * May be used for consultation only. Extension instances are not yet available (guice context is not created).
  *
@@ -25,7 +26,7 @@ public class ModulesAnalyzedEvent extends RunPhaseEvent {
 
     private final List<Module> analyzedModules;
     private final List<Class<?>> extensions;
-    private final List<Class<? extends Module>> innerModulesRemoved;
+    private final List<Class<? extends Module>> transitiveModulesRemoved;
     private final List<Binding> bindingsRemoved;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
@@ -36,13 +37,13 @@ public class ModulesAnalyzedEvent extends RunPhaseEvent {
                                 final Environment environment,
                                 final List<Module> analyzedModules,
                                 final List<Class<?>> extensions,
-                                final List<Class<? extends Module>> innerModulesRemoved,
+                                final List<Class<? extends Module>> transitiveModulesRemoved,
                                 final List<Binding> bindingsRemoved) {
         super(GuiceyLifecycle.ModulesAnalyzed,
                 options, bootstrap, configuration, configurationTree, environment);
         this.analyzedModules = analyzedModules;
         this.extensions = extensions;
-        this.innerModulesRemoved = innerModulesRemoved;
+        this.transitiveModulesRemoved = transitiveModulesRemoved;
         this.bindingsRemoved = bindingsRemoved;
     }
 
@@ -68,8 +69,8 @@ public class ModulesAnalyzedEvent extends RunPhaseEvent {
      *
      * @return removed inner guice modules (after bindings analysis) or empty list
      */
-    public List<Class<? extends Module>> getInnerModulesRemoved() {
-        return innerModulesRemoved;
+    public List<Class<? extends Module>> getTransitiveModulesRemoved() {
+        return transitiveModulesRemoved;
     }
 
     /**

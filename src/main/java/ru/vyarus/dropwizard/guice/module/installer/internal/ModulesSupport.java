@@ -140,13 +140,13 @@ public final class ModulesSupport {
         final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
         context.stat().count(Stat.BindingsCount, elements.size());
         final List<String> disabledModules = prepareDisabledModules(context);
-        final Set<String> actuallyDisbaledModules = new HashSet<>();
+        final Set<String> actuallyDisabledModules = new HashSet<>();
         final List<Binding> removedBindings = new ArrayList<>();
         final Iterator<Element> it = elements.iterator();
         final List<Class<?>> extensions = new ArrayList<>();
         while (it.hasNext()) {
             final Element element = it.next();
-            if (isInDisabledModule(element, disabledModules, actuallyDisbaledModules)) {
+            if (isInDisabledModule(element, disabledModules, actuallyDisabledModules)) {
                 // remove all bindings under disabled modules
                 it.remove();
                 context.stat().count(Stat.RemovedBindingsCount, 1);
@@ -171,12 +171,12 @@ public final class ModulesSupport {
                 }
             }
         }
-        if (actuallyDisbaledModules.size() > 0) {
-            LOGGER.debug("Removed inner guice modules: {}", actuallyDisbaledModules);
+        if (actuallyDisabledModules.size() > 0) {
+            LOGGER.debug("Removed inner guice modules: {}", actuallyDisabledModules);
         }
-        context.stat().count(Stat.RemovedInnerModules, actuallyDisbaledModules.size());
+        context.stat().count(Stat.RemovedInnerModules, actuallyDisabledModules.size());
         context.stat().count(Stat.RemovedBindingsCount, removedBindings.size());
-        context.lifecycle().modulesAnalyzed(analyzedModules, extensions, toModuleClasses(actuallyDisbaledModules),
+        context.lifecycle().modulesAnalyzed(analyzedModules, extensions, toModuleClasses(actuallyDisabledModules),
                 removedBindings);
         timer.stop();
         itimer.stop();
