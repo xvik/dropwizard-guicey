@@ -44,7 +44,7 @@ import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.*;
  *    extension     Ext1
  *    extension     Ext2
  *    module        Mod
- *    module        -Mod        *IGNORED
+ *    module        -Mod        *DUPLICATE
  *    module        OtherMod
  *    module        Mod#2
  * </pre>
@@ -54,8 +54,8 @@ import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.*;
  * <ul>
  * <li>DW - marks dropwizard bundles</li>
  * <li>DISABLED - item disabled (by user)</li>
- * <li>IGNORED - item considered as duplicate by deduplication mechanism and ignored. If contains number
- * ("IGNORED(3)") then multiple instances were considered duplicate in this scope and ignored. </li>
+ * <li>DUPLICATE - item considered as duplicate by deduplication mechanism and ignored. If contains number
+ * ("DUPLICATE(3)") then multiple instances were considered duplicate in this scope and ignored. </li>
  * </ul>
  * <p>
  * Recognized guice bindings are shown as separate subtree "GUICE BINDINGS" and not under modules in configuration
@@ -67,7 +67,7 @@ import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.*;
  */
 public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
 
-    private static final String IGNORED = "IGNORED";
+    private static final String DUPLICATE = "DUPLICATE";
     private static final String DISABLED = "DISABLED";
 
     private final GuiceyConfigurationInfo service;
@@ -235,7 +235,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
     private void renderLeaf(final TreeNode root, final String name,
                             final ItemId<?> item, final int pos, final List<String> markers) {
         final boolean ignored = markers != null
-                && markers.stream().anyMatch(it -> it.equals(DISABLED) || it.startsWith(IGNORED));
+                && markers.stream().anyMatch(it -> it.equals(DISABLED) || it.startsWith(DUPLICATE));
         root.child(String.format("%-10s ", name) + (ignored
                 ? RenderUtils.renderDisabledClassLine(item.getType(), pos, markers)
                 : RenderUtils.renderClassLine(item.getType(), pos, markers)));
@@ -257,9 +257,9 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         final List<String> markers = Lists.newArrayList();
         if (!isHidden(config, info, scope)) {
             fillCommonMarkers(info, markers, scope, false);
-            // ignores could contain counter (e.g. IGNORED(2))
-            final boolean ignored = markers.stream().anyMatch(it -> it.startsWith(IGNORED));
-            final TreeNode node = new TreeNode(ignored || markers.contains(DISABLED)
+            // duplicates could contain counter (e.g. DUPLICATE(2))
+            final boolean duplicate = markers.stream().anyMatch(it -> it.startsWith(DUPLICATE));
+            final TreeNode node = new TreeNode(duplicate || markers.contains(DISABLED)
                     ? RenderUtils.renderDisabledClassLine(bundle.getType(), info.getInstanceCount(), markers)
                     : RenderUtils.renderClassLine(bundle.getType(), info.getInstanceCount(), markers));
             // avoid duplicate bundle content render
@@ -267,7 +267,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
                 renderScopeContent(config, node, bundle);
             }
             // avoid showing empty bundle line if configured to hide (but show if bundle is ignored as duplicate)
-            if (node.hasChildren() || !config.isHideEmptyBundles() || (!config.isHideDisables() && ignored)) {
+            if (node.hasChildren() || !config.isHideEmptyBundles() || (!config.isHideDisables() && duplicate)) {
                 root.child(node);
             }
         }
@@ -292,7 +292,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         }
         if (asIgnore || isDuplicateRegistration(info, scope)) {
             final int cnt = info.getIgnoresByScope(scope);
-            markers.add(IGNORED + (cnt > 1 ? "(" + cnt + ")" : ""));
+            markers.add(DUPLICATE + (cnt > 1 ? "(" + cnt + ")" : ""));
         }
         if (isDisabled(info)) {
             markers.add(DISABLED);

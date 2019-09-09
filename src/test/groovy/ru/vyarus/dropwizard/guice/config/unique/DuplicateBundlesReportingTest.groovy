@@ -68,18 +68,18 @@ class DuplicateBundlesReportingTest extends AbstractTest {
     APPLICATION
     ├── module     GuiceBootstrapModule         (r.v.d.guice.module)
     ├── Bundle                       (r.v.d.g.c.u.DuplicateBundlesReportingTest)
-    ├── -Bundle                      (r.v.d.g.c.u.DuplicateBundlesReportingTest) *IGNORED(2)
+    ├── -Bundle                      (r.v.d.g.c.u.DuplicateBundlesReportingTest) *DUPLICATE(2)
     ├── Bundle#2                     (r.v.d.g.c.u.DuplicateBundlesReportingTest)
     ├── Bundle#3                     (r.v.d.g.c.u.DuplicateBundlesReportingTest)
     │
     ├── MiddleBundle                 (r.v.d.g.c.u.DuplicateBundlesReportingTest)
-    │   ├── -Bundle#2                    (r.v.d.g.c.u.DuplicateBundlesReportingTest) *IGNORED
+    │   ├── -Bundle#2                    (r.v.d.g.c.u.DuplicateBundlesReportingTest) *DUPLICATE
     │   ├── Bundle#4                     (r.v.d.g.c.u.DuplicateBundlesReportingTest)
-    │   ├── -Bundle#4                    (r.v.d.g.c.u.DuplicateBundlesReportingTest) *IGNORED(2)
+    │   ├── -Bundle#4                    (r.v.d.g.c.u.DuplicateBundlesReportingTest) *DUPLICATE(2)
     │   └── Bundle#5                     (r.v.d.g.c.u.DuplicateBundlesReportingTest)
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *DUPLICATE
     │   ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)
     │   ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)
     │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)

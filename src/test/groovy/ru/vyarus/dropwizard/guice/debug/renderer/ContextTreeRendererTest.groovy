@@ -82,7 +82,7 @@ class ContextTreeRendererTest extends Specification {
     │   └── module     HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle)
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *DUPLICATE
     │   ├── installer  -LifeCycleInstaller          (r.v.d.g.m.i.feature)      *DISABLED
     │   ├── installer  -ManagedInstaller            (r.v.d.g.m.i.feature)      *DISABLED
     │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
@@ -98,7 +98,7 @@ class ContextTreeRendererTest extends Specification {
     │       └── installer  WebListenerInstaller         (r.v.d.g.m.i.f.w.listener)
     │
     ├── BUNDLES LOOKUP
-    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *IGNORED
+    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *DUPLICATE
     │
     ├── CLASSPATH SCAN
     │   ├── installer  FooInstaller                 (r.v.d.g.d.s.features)
@@ -109,7 +109,7 @@ class ContextTreeRendererTest extends Specification {
     ├── GUICE BINDINGS
     │   │
     │   └── BindModule                   (r.v.d.g.d.r.ContextTreeRendererTest)
-    │       ├── extension  -MultiRegExt                 (r.v.d.g.d.r.ContextTreeRendererTest) *IGNORED
+    │       ├── extension  -MultiRegExt                 (r.v.d.g.d.r.ContextTreeRendererTest) *DUPLICATE
     │       ├── extension  DeepExt                      (r.v.d.g.d.r.ContextTreeRendererTest)
     │       ├── extension  Ext                          (r.v.d.g.d.r.ContextTreeRendererTest)
     │       └── extension  -DisabledExt                 (r.v.d.g.d.r.ContextTreeRendererTest) *DISABLED
@@ -145,7 +145,7 @@ class ContextTreeRendererTest extends Specification {
     │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *DUPLICATE
     │   ├── installer  -LifeCycleInstaller          (r.v.d.g.m.i.feature)      *DISABLED
     │   ├── installer  -ManagedInstaller            (r.v.d.g.m.i.feature)      *DISABLED
     │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
@@ -161,7 +161,7 @@ class ContextTreeRendererTest extends Specification {
     │       └── installer  WebListenerInstaller         (r.v.d.g.m.i.f.w.listener)
     │
     ├── BUNDLES LOOKUP
-    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *IGNORED
+    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *DUPLICATE
     │
     ├── CLASSPATH SCAN
     │   └── installer  FooInstaller                 (r.v.d.g.d.s.features)
@@ -198,7 +198,7 @@ class ContextTreeRendererTest extends Specification {
     │   └── WebInstallersBundle          (r.v.d.g.m.installer)
     │
     ├── BUNDLES LOOKUP
-    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *IGNORED
+    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *DUPLICATE
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
@@ -250,7 +250,7 @@ class ContextTreeRendererTest extends Specification {
     │   └── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)
     │
     ├── BUNDLES LOOKUP
-    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *IGNORED
+    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *DUPLICATE
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)
@@ -279,7 +279,7 @@ class ContextTreeRendererTest extends Specification {
     │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *DUPLICATE
     │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)
     │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
     │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
@@ -293,7 +293,7 @@ class ContextTreeRendererTest extends Specification {
     │       └── installer  WebListenerInstaller         (r.v.d.g.m.i.f.w.listener)
     │
     ├── BUNDLES LOOKUP
-    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *IGNORED
+    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *DUPLICATE
     │
     └── CLASSPATH SCAN
         └── installer  FooInstaller                 (r.v.d.g.d.s.features)
@@ -373,13 +373,13 @@ class ContextTreeRendererTest extends Specification {
     │   └── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *DUPLICATE
     │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)
     │   ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)
     │   └── WebInstallersBundle          (r.v.d.g.m.installer)
     │
     ├── BUNDLES LOOKUP
-    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *IGNORED
+    │   └── -FooBundle                   (r.v.d.g.d.s.bundle)       *DUPLICATE
     │
     └── HOOKS
         ├── -disable   DisabledExtension            (r.v.d.g.d.r.ContextTreeRendererTest)

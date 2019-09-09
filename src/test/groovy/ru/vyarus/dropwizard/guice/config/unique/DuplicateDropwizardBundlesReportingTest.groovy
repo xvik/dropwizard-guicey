@@ -69,23 +69,23 @@ class DuplicateDropwizardBundlesReportingTest extends AbstractTest {
     APPLICATION
     ├── module     GuiceBootstrapModule         (r.v.d.guice.module)
     ├── DBundle                      (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
-    ├── -DBundle                     (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW, IGNORED(2)
+    ├── -DBundle                     (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW, DUPLICATE(2)
     ├── DBundle#2                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
     │
     ├── DBundle#3                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
     │   └── DBundle#4                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
     │
     ├── MiddleBundle                 (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest)
-    │   ├── -DBundle#2                   (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW, IGNORED
+    │   ├── -DBundle#2                   (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW, DUPLICATE
     │   │
     │   ├── DBundle#5                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
     │   │   └── DBundle#6                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
     │   │
-    │   ├── -DBundle#5                   (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW, IGNORED(2)
+    │   ├── -DBundle#5                   (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW, DUPLICATE(2)
     │   └── DBundle#7                    (r.v.d.g.c.u.DuplicateDropwizardBundlesReportingTest) *DW
     │
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)
-    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *DUPLICATE
     │   ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)
     │   ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)
     │   ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider)

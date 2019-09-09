@@ -57,9 +57,9 @@ class Simple2DeduplicationReportTest extends AbstractTest {
 
     APPLICATION
     ├── module     Mod                          (r.v.d.g.c.u.Simple2DeduplicationReportTest)
-    ├── module     -Mod                         (r.v.d.g.c.u.Simple2DeduplicationReportTest) *IGNORED
+    ├── module     -Mod                         (r.v.d.g.c.u.Simple2DeduplicationReportTest) *DUPLICATE
     ├── module     Mod#2                        (r.v.d.g.c.u.Simple2DeduplicationReportTest)
-    ├── module     -Mod#2                       (r.v.d.g.c.u.Simple2DeduplicationReportTest) *IGNORED
+    ├── module     -Mod#2                       (r.v.d.g.c.u.Simple2DeduplicationReportTest) *DUPLICATE
     └── module     GuiceBootstrapModule         (r.v.d.guice.module)
 """ as String;
     }

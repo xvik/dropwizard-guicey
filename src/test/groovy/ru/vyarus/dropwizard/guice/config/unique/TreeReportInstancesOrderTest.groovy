@@ -44,7 +44,7 @@ class TreeReportInstancesOrderTest extends AbstractTest {
     ├── extension  Ext1                         (r.v.d.g.c.u.TreeReportInstancesOrderTest)
     ├── extension  Ext2                         (r.v.d.g.c.u.TreeReportInstancesOrderTest)
     ├── module     Mod                          (r.v.d.g.c.u.TreeReportInstancesOrderTest)
-    ├── module     -Mod                         (r.v.d.g.c.u.TreeReportInstancesOrderTest) *IGNORED
+    ├── module     -Mod                         (r.v.d.g.c.u.TreeReportInstancesOrderTest) *DUPLICATE
     ├── module     OtherMod                     (r.v.d.g.c.u.TreeReportInstancesOrderTest)
     ├── module     Mod#2                        (r.v.d.g.c.u.TreeReportInstancesOrderTest)
     └── module     GuiceBootstrapModule         (r.v.d.guice.module)
