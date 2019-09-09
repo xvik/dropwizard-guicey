@@ -14,7 +14,7 @@ import java.util.Collections;
  * @since 21.08.2019
  */
 @SuppressWarnings("checkstyle:ClassFanOutComplexity")
-public class GuiceElementVisitor implements ElementVisitor<BindingDeclaration> {
+public class GuiceElementVisitor extends DefaultElementVisitor<BindingDeclaration> {
     private static final GuiceBindingVisitor BINDING_VISITOR = new GuiceBindingVisitor();
 
     @Override
@@ -44,36 +44,6 @@ public class GuiceElementVisitor implements ElementVisitor<BindingDeclaration> {
     }
 
     @Override
-    public BindingDeclaration visit(final InjectionRequest<?> request) {
-        // not structure
-        return null;
-    }
-
-    @Override
-    public BindingDeclaration visit(final StaticInjectionRequest request) {
-        // not structure
-        return null;
-    }
-
-    @Override
-    public <T> BindingDeclaration visit(final ProviderLookup<T> lookup) {
-        // not structure
-        return null;
-    }
-
-    @Override
-    public <T> BindingDeclaration visit(final MembersInjectorLookup<T> lookup) {
-        // not structure
-        return null;
-    }
-
-    @Override
-    public BindingDeclaration visit(final Message message) {
-        // not structure
-        return null;
-    }
-
-    @Override
     public BindingDeclaration visit(final PrivateElements elements) {
         // analyze private modules in parallel
         throw new PrivateModuleException(elements);
@@ -94,6 +64,55 @@ public class GuiceElementVisitor implements ElementVisitor<BindingDeclaration> {
     }
 
     @Override
+    protected BindingDeclaration visitOther(Element element) {
+        return null;
+    }
+
+    // other not covered cases
+
+    /*@Override
+    public <T> BindingDeclaration visit(final ProviderLookup<T> lookup) {
+        // not structure
+        return null;
+    }
+
+    @Override
+    public <T> BindingDeclaration visit(final MembersInjectorLookup<T> lookup) {
+        // not structure
+        return null;
+    }
+
+    @Override
+    public BindingDeclaration visit(final Message message) {
+        // not structure
+        return null;
+    }
+
+    @Override
+    public BindingDeclaration visit(final InjectionRequest<?> request) {
+        // not structure
+        return null;
+    }
+
+    @Override
+    public BindingDeclaration visit(final StaticInjectionRequest request) {
+        // not structure
+        return null;
+    }
+
+    @Override
+    public BindingDeclaration visit(final RequireAtInjectOnConstructorsOption option) {
+        // ignore options
+        return null;
+    }
+
+    @Override
+    public BindingDeclaration visit(final ModuleAnnotatedMethodScannerBinding binding) {
+        // ignore options
+        return null;
+    }
+
+    @Override
     public BindingDeclaration visit(final RequireExplicitBindingsOption option) {
         // ignore options
         return null;
@@ -106,20 +125,8 @@ public class GuiceElementVisitor implements ElementVisitor<BindingDeclaration> {
     }
 
     @Override
-    public BindingDeclaration visit(final RequireAtInjectOnConstructorsOption option) {
-        // ignore options
-        return null;
-    }
-
-    @Override
     public BindingDeclaration visit(final RequireExactBindingAnnotationsOption option) {
         // ignore options
         return null;
-    }
-
-    @Override
-    public BindingDeclaration visit(final ModuleAnnotatedMethodScannerBinding binding) {
-        // ignore options
-        return null;
-    }
+    }*/
 }

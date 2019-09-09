@@ -13,7 +13,8 @@ import ru.vyarus.dropwizard.guice.module.support.scope.Prototype;
 import java.lang.annotation.Annotation;
 
 /**
- * Guice binding scope analyzer. Does not support custom scopes.
+ * Guice binding scope analyzer. Does not support custom scopes. Works correctly only on bindings from injector
+ * (for module element only manually declared scopes are visible and not annotations).
  */
 public class GuiceScopingVisitor
         extends DefaultBindingScopingVisitor<Class<? extends Annotation>> {
