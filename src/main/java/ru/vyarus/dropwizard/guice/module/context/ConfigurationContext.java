@@ -105,6 +105,10 @@ public final class ConfigurationContext {
      */
     private final Multimap<ConfigItem, Object> duplicatesHolder = LinkedHashMultimap.create();
     /**
+     * Holds used classes (extensions, modules etc) in order to detect same classes from different class loaders.
+     */
+    private final Map<String, Class<?>> usedClassesHolder = new HashMap<>();
+    /**
      * Disable predicates listen for first item registration and could immediately disable it.
      */
     private final List<PredicateHandler> disablePredicates = new ArrayList<>();
@@ -867,6 +871,14 @@ public final class ConfigurationContext {
      * duplicate by some other meaning (by default if objects are equal). If duplicate is detected then
      * object must not be used for new configuration item creation, instead it must be tracked as another
      * registration attempt to already registered item.
+     * <p>
+     * Instances of the same class, but loaded with different class loaders must be properly checked for deduplication
+     * in equals method (for example, {@link ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle}
+     * use class name instead of class itself for correct handling of multi class loaders case).
+     * <p>
+     * For class types, registered class is checked by name in order to detect already registered extension, but
+     * from different class loader. In case of detection, original class will be used instead of provied to prevent
+     * duplicate extension loading.
      *
      * @param type item type
      * @param item item instance
@@ -876,17 +888,59 @@ public final class ConfigurationContext {
     private Object detectDuplicate(final ConfigItem type, final Object item) {
         Object original = null;
         if (type.isInstanceConfig()) {
-            final Collection<Object> registeredInstances = instanceItemsIndex.get(item.getClass());
+            final Class clsFromOtherCL = detectClassFromDifferentClassLoader(item.getClass());
+            // use correct class in order to correctly detect registered instances of the same type..
+            // this way instances could rely only on properly implemented equals (or external deduplicator)
+            final Collection<Object> registeredInstances = instanceItemsIndex
+                    .get(clsFromOtherCL != null ? clsFromOtherCL : item.getClass());
             // when at least one instance of the same type registered - check for duplicates
             if (!registeredInstances.isEmpty()) {
                 original = findDuplicateInstance(type, registeredInstances, item);
+                if (clsFromOtherCL != null && original == null) {
+                    // important to warn in case of incomplete equals implementation (for cases when it's not intended)
+                    logger.warn("Registered instances of class {} use different class loaders and may not be "
+                                    + "properly checked for duplicates: {}, {}",
+                            clsFromOtherCL.getName(), clsFromOtherCL.getClassLoader().toString(),
+                            item.getClass().getClassLoader().toString());
+                    // NOTE in configuration items class will not be unified, so care must be taken when building
+                    // reports (or perform other configuration analysis)
+                }
             }
             if (original == null) {
                 // register item as accepted
                 instanceItemsIndex.put(item.getClass(), item);
             }
+        } else {
+            final Class clsFromOtherCL = detectClassFromDifferentClassLoader((Class) item);
+            if (clsFromOtherCL != null) {
+                // use already registered class to avoid duplicate extensions registrations
+                // (from different classloaders)
+                original = clsFromOtherCL;
+            }
         }
         return MoreObjects.firstNonNull(original, item);
+    }
+
+    /**
+     * Checks if class with the same name was already registered, but from different class loader. This is important
+     * for extensions deduplication because installers reporting will not reveal duplicate classes (they usually hide
+     * duplicates appeared from guice reportings).
+     *
+     * @param cls class to check
+     * @return already registered class from different class loader or null
+     */
+    private Class detectClassFromDifferentClassLoader(final Class cls) {
+        final String clsName = cls.getName();
+        final Class reg = usedClassesHolder.get(clsName);
+
+        // detected already registered class, but loaded by different class loader
+        if (reg != null && !reg.equals(cls)) {
+            return reg;
+        } else {
+            // remember class for future comparisons
+            usedClassesHolder.put(clsName, cls);
+        }
+        return null;
     }
 
     private Object findDuplicateInstance(final ConfigItem type,
