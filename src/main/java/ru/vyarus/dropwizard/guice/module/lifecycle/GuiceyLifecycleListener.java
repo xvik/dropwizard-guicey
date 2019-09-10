@@ -15,9 +15,9 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
  * <p>
  * Listener is not registered if equal listener were already registered ({@link java.util.Set} used as
  * listeners storage), so if you need to be sure that only one instance of some listener will be used
- * implement {@link Object#equals(Object)}. For example, this is used to resolve case wher
- * {@link ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook} installed and some reports were already enabled in
- * bundle directly: thanks to correct equals in reports, user will not see duplicate reports.
+ * implement {@link Object#equals(Object)} and {@link Object#hashCode()}. For example, this is used to resolve case
+ * where {@link ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook} installed and some reports were already enabled
+ * in bundle directly: thanks to correct equals in reports, user will not see duplicate reports.
  *
  * @author Vyacheslav Rusakov
  * @see GuiceyLifecycleAdapter
