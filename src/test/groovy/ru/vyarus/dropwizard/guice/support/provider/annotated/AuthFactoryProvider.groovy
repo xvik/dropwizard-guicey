@@ -17,7 +17,7 @@ import java.util.function.Function
  */
 @Provider
 @LazyBinding
-// @HK2Managed may be used as alternative
+// @JerseyManaged may be used as alternative
 class AuthFactoryProvider extends AbstractValueParamProvider {
 
     Function<ContainerRequest, User> authFactory;

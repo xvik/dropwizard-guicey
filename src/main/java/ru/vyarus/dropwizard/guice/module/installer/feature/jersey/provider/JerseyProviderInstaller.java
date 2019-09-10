@@ -30,13 +30,14 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
 
 /**
  * Jersey provider installer.
- * Looks for classes annotated with {@code @javax.ws.rs.ext.Provider} and register bindings in HK context.
+ * Looks for classes annotated with {@link javax.ws.rs.ext.Provider} and register bindings in HK context.
  * <p>
- * If provider is annotated with {@code HK2Managed} it's instance will be created by HK2, not guice.
- * This is important when extensions directly depends on HK beans (no way to wrap with {@code Provider}
+ * If provider is annotated with {@link JerseyManaged} it's instance will be created by HK2, not guice.
+ * This is important when extensions directly depends on HK beans (no way to wrap with {@link Provider}
  * or if it's eager extension, which instantiated by HK immediately (when hk-guice contexts not linked yet).
  * <p>
- * In some cases {@code @LazyBinding} could be an alternative to {@code HK2Managed}
+ * In some cases {@link ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding} could
+ * be an alternative to {@link JerseyManaged}
  * <p>
  * Force singleton scope for extensions, but not for beans having explicit scope annotation.
  * See {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForJerseyExtensions}.
