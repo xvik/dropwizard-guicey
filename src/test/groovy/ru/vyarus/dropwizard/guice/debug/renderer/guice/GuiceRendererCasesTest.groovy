@@ -77,6 +77,68 @@ class GuiceRendererCasesTest extends Specification {
 """ as String;
     }
 
+    def "Check no yaml bindings render"() {
+
+        expect:
+        render(new GuiceConfig()
+                .hideGuiceBindings()
+                .hideYamlBindings()) == """
+
+    5 MODULES with 22 bindings
+    │
+    ├── CasesModule                  (r.v.d.g.d.r.g.support)
+    │   ├── <typelistener>                        CustomTypeListener                              at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:19)
+    │   ├── <provisionlistener>                   CustomProvisionListener                         at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:26)
+    │   ├── <aop>                                 CustomAop                                       at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:33)
+    │   ├── untargetted          [@Singleton]     AopedService                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:36) *AOP
+    │   ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
+    │   └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:38) *OVERRIDDEN
+    │
+    └── GuiceBootstrapModule         (r.v.d.guice.module)
+        ├── <scope>              [@Prototype]     -                                               at ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule.configure(GuiceBootstrapModule.java:51)
+        ├── instance             [@Singleton]     Options                                         at ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule.configure(GuiceBootstrapModule.java:57)
+        ├── instance             [@Singleton]     ConfigurationInfo                               at ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule.configure(GuiceBootstrapModule.java:60)
+        ├── instance             [@Singleton]     StatsInfo                                       at ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule.configure(GuiceBootstrapModule.java:61)
+        ├── instance             [@Singleton]     OptionsInfo                                     at ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule.configure(GuiceBootstrapModule.java:62)
+        ├── untargetted          [@Singleton]     GuiceyConfigurationInfo                         at ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule.configure(GuiceBootstrapModule.java:63)
+        ├── instance             [@Singleton]     Bootstrap                                       at ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule.bindEnvironment(GuiceBootstrapModule.java:71)
+        ├── instance             [@Singleton]     Environment                                     at ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule.bindEnvironment(GuiceBootstrapModule.java:72)
+        │
+        ├── InstallerModule              (r.v.d.g.m.installer)
+        │   └── instance             [@Singleton]     ExtensionsHolder                                at ru.vyarus.dropwizard.guice.module.installer.InstallerModule.configure(InstallerModule.java:30)
+        │
+        └── Jersey2Module                (r.v.d.g.m.jersey)
+            ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:58)
+            │
+            └── GuiceBindingsModule          (r.v.d.g.m.jersey.hk2)
+                ├── providerinstance     [@Prototype]     Application                                     at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+                ├── providerinstance     [@Prototype]     MultivaluedParameterExtractorProvider           at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+                ├── providerinstance     [@Prototype]     Providers                                       at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+                ├── providerinstance     [@RequestScoped] AsyncContext                                    at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+                ├── providerinstance     [@RequestScoped] ContainerRequest                                at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+                ├── providerinstance     [@RequestScoped] HttpHeaders                                     at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+                ├── providerinstance     [@RequestScoped] Request                                         at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+                ├── providerinstance     [@RequestScoped] ResourceInfo                                    at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+                ├── providerinstance     [@RequestScoped] SecurityContext                                 at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+                └── providerinstance     [@RequestScoped] UriInfo                                         at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
+
+
+    1 OVERRIDING MODULES with 2 bindings
+    │
+    └── OverrideModule               (r.v.d.g.d.r.g.support)
+        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:14) *OVERRIDE
+        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:15) *OVERRIDE
+
+
+    1 UNDECLARED bindings
+    └── JitService                   (r.v.d.g.d.r.g.GuiceRendererCasesTest)
+
+
+    BINDING CHAINS
+    └── BindService  --[linked]-->  OverrideService
+""" as String;
+    }
+
 
     def "Check all render"() {
 

@@ -33,6 +33,11 @@ class DisableDropwizardBundleTest extends AbstractTest {
         with(bundles[0]) {
             disabledBy == [ItemId.from(Application)] as Set
         }
+
+        and: "never registered bundle disabled"
+        List<DropwizardBundleItemInfo> disabled = info.getInfos(DBundle2)
+        bundles.size() == 1
+        !disabled[0].isRegistered()
     }
 
     static class App extends Application<Configuration> {
@@ -41,7 +46,7 @@ class DisableDropwizardBundleTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .dropwizardBundles(new DBundle())
-                    .disableDropwizardBundles(DBundle)
+                    .disableDropwizardBundles(DBundle, DBundle2)
                     .build()
             );
         }
@@ -61,4 +66,6 @@ class DisableDropwizardBundleTest extends AbstractTest {
             executed++
         }
     }
+
+    static class DBundle2 implements ConfiguredBundle {}
 }
