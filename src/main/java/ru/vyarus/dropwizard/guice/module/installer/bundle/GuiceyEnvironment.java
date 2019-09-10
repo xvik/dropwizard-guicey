@@ -228,7 +228,7 @@ public class GuiceyEnvironment {
     }
 
     /**
-     * Shortcut for {@code environment().jerset().register()} for direct registration of jersey extensions.
+     * Shortcut for {@code environment().jersey().register()} for direct registration of jersey extensions.
      * For the most cases prefer automatic installation of jersey extensions with guicey installer.
      *
      * @param items jersey extension instances to install
@@ -242,7 +242,7 @@ public class GuiceyEnvironment {
     }
 
     /**
-     * Shortcut for {@code environment().jerset().register()} for direct registration of jersey extensions.
+     * Shortcut for {@code environment().jersey().register()} for direct registration of jersey extensions.
      * For the most cases prefer automatic installation of jersey extensions with guicey installer.
      *
      * @param items jersey extension instances to install
