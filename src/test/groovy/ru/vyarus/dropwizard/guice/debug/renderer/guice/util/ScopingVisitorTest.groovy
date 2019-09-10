@@ -28,6 +28,8 @@ class ScopingVisitorTest extends Specification {
         then: "scoped correctly detected"
         scope(injector, Eager) == EagerSingleton
         scope(injector, Single) == Singleton
+        scope(injector, Single2) == Singleton
+        scope(injector, Proto) == Prototype
         scope(injector, NoScope) == Prototype
         scope(injector, NoScope2) == Prototype
         scope(injector, Req) == RequestScoped
@@ -53,6 +55,8 @@ class ScopingVisitorTest extends Specification {
 
             bind(Eager).asEagerSingleton()
             bind(Single).in(Scopes.SINGLETON)
+            bind(Single2).in(Singleton)
+            bind(Proto).in(Prototype)
             bind(NoScope).in(Scopes.NO_SCOPE)
             bind(NoScope2)
             bind(Req).in(ServletScopes.REQUEST)
@@ -70,9 +74,15 @@ class ScopingVisitorTest extends Specification {
 
     static class Single {}
 
+    static class Single2 {}
+
+    static class Proto {}
+
     static class NoScope {}
 
     static class NoScope2 {}
+
+    static class NoScope3 {}
 
     static class Req {}
 
