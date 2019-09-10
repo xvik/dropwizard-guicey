@@ -58,6 +58,9 @@ class GBootstrapApplication extends Application<TestConfiguration> {
                     void run(GuiceyEnvironment environment) {
                         assert environment.configuration() != null
                         assert environment.environment() != null
+                        assert environment.configurationTree() != null
+                        assert environment.application() != null
+                        assert environment.option(GuiceyOptions.UseCoreInstallers)
                     }
                 })
                 .extensions(DummyTask, DummyResource, DummyManaged)

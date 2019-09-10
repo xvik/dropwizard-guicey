@@ -21,7 +21,9 @@ class DisablesPredicatesTest extends AbstractTest {
 
         expect:
         Disables.registeredBy(ConfigScope.Application).test(item(Extension, Sample))
+        Disables.registeredBy(ConfigScope.Application.getKey()).test(item(Extension, Sample))
         !Disables.registeredBy(Serializable).test(item(Extension, Sample))
+        !Disables.registeredBy(ItemId.from(Serializable)).test(item(Extension, Sample))
 
         Disables.itemType(Extension, Installer).test(item(Installer, Sample))
         !Disables.itemType(Extension, Installer).test(item(Bundle, Sample))

@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.module.context.Filters
 import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo
+import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
@@ -94,9 +95,11 @@ class FiltersTest extends Specification {
 
         expect: "matched check"
         Filters.type(ConfigItem.Installer).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
+        Filters.type(JerseyFeatureInstaller).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
 
         and: "not matched check"
         !Filters.type(ConfigItem.Bundle).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
+        !Filters.type(HealthCheckInstaller).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
 
     }
 
