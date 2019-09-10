@@ -5,6 +5,8 @@ import com.google.inject.servlet.RequestScoped
 import com.google.inject.servlet.ServletModule
 import com.google.inject.servlet.ServletScopes
 import com.google.inject.servlet.SessionScoped
+import com.google.inject.spi.Element
+import com.google.inject.spi.Elements
 import ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor.GuiceScopingVisitor
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.module.support.scope.Prototype
@@ -23,7 +25,7 @@ class ScopingVisitorTest extends Specification {
 
     def "Check scope detection"() {
 
-        when: "parse elements"
+        when: "parse injector"
         Injector injector = Guice.createInjector(new Module())
         then: "scoped correctly detected"
         scope(injector, Eager) == EagerSingleton
@@ -42,8 +44,53 @@ class ScopingVisitorTest extends Specification {
         scope(injector, SessAnn) == SessionScoped
     }
 
+    def "Check declaration scope detection"() {
+        // this is never used, but just to see how it will work in this case
+        when: "parse elements"
+        List<Element> elements = Elements.getElements(new Module())
+        then: "scoped correctly detected"
+        scope(elements, Eager) == EagerSingleton
+        scope(elements, Single) == Singleton
+        scope(elements, Single2) == Singleton
+        scope(elements, Proto) == Prototype
+        scope(elements, NoScope) == Prototype
+        scope(elements, NoScope2) == Prototype
+        scope(elements, Req) == RequestScoped
+        scope(elements, Sess) == SessionScoped
+
+        // guice dont lookup annotations for elements
+        scope(elements, SingAnn) == Prototype
+        scope(elements, SingAnn2) == Prototype
+        scope(elements, ProtAnn) == Prototype
+        scope(elements, ReqAnn) == Prototype
+        scope(elements, SessAnn) == Prototype
+    }
+
+    def "Check direct visitor cases"() {
+
+        expect: "correct scope annotations"
+        visitor.visitNoScoping() == Prototype
+        visitor.visitEagerSingleton() == EagerSingleton
+
+        visitor.visitScope(Scopes.SINGLETON) == Singleton
+        visitor.visitScope(Scopes.NO_SCOPE) == Prototype
+        visitor.visitScope(ServletScopes.REQUEST) == RequestScoped
+        visitor.visitScope(ServletScopes.SESSION) == SessionScoped
+
+        visitor.visitScopeAnnotation(Singleton) == Singleton
+        visitor.visitScopeAnnotation(com.google.inject.Singleton) == Singleton
+        visitor.visitScopeAnnotation(Prototype) == Prototype
+        visitor.visitScopeAnnotation(RequestScoped) == RequestScoped
+        visitor.visitScopeAnnotation(SessionScoped) == SessionScoped
+    }
+
     Class<? extends Annotation> scope(Injector injector, Class type) {
         injector.getExistingBinding(Key.get(type)).acceptScopingVisitor(visitor)
+    }
+
+    Class<? extends Annotation> scope(List<Element> elements, Class type) {
+        (elements.find { it instanceof Binding && (it as Binding).getKey().getTypeLiteral().getRawType() == type } as Binding)
+                .acceptScopingVisitor(visitor)
     }
 
     static class Module extends AbstractModule {

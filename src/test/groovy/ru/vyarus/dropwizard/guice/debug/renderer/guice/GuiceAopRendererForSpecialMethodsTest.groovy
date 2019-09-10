@@ -1,0 +1,113 @@
+package ru.vyarus.dropwizard.guice.debug.renderer.guice
+
+import com.google.inject.AbstractModule
+import com.google.inject.Injector
+import com.google.inject.matcher.Matchers
+import io.dropwizard.Application
+import io.dropwizard.Configuration
+import io.dropwizard.setup.Bootstrap
+import io.dropwizard.setup.Environment
+import org.aopalliance.intercept.MethodInterceptor
+import org.aopalliance.intercept.MethodInvocation
+import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopMapRenderer
+import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import spock.lang.Specification
+
+import javax.inject.Inject
+
+/**
+ * @author Vyacheslav Rusakov
+ * @since 10.09.2019
+ */
+@UseDropwizardApp(App)
+class GuiceAopRendererForSpecialMethodsTest extends Specification {
+
+    static {
+        System.clearProperty(PropertyBundleLookup.BUNDLES_PROPERTY)
+    }
+
+    @Inject
+    Injector injector
+    GuiceAopMapRenderer renderer
+
+    void setup() {
+        renderer = new GuiceAopMapRenderer(injector)
+    }
+
+    def "Check aop render"() {
+
+        expect:
+        render(new GuiceAopConfig()) == """
+
+    1 AOP handlers declared
+    └── GuiceAopRendererForSpecialMethodsTest\$App\$1/GuiceAopRendererForSpecialMethodsTest\$App\$1\$2    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+
+
+    1 bindings affected by AOP
+    │
+    └── Service    (r.v.d.g.d.r.g.GuiceAopRendererForSpecialMethodsTest)
+        ├── [SYNTHETIC] \$getStaticMetaClass()                                 GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── compare(Integer, Integer)                                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── [SYNTHETIC] compare(Object, Object)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── [SYNTHETIC] getMetaClass()                                        GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── [SYNTHETIC] getProperty(String)                                   GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── [SYNTHETIC] invokeMethod(String, Object)                          GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── [SYNTHETIC] methodMissing(String, Object)                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── [SYNTHETIC] propertyMissing(String)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── [SYNTHETIC] propertyMissing(String, Object)                       GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── reversed()                                                        GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── [SYNTHETIC] setMetaClass(MetaClass)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── [SYNTHETIC] setProperty(String, Object)                           GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── thenComparing(Comparator<? super Object>)                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── thenComparing(Function<? super Object, ? extends Object>)         GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── thenComparing(Function<? super Object, ? extends Object>, Comparator<? super Object>)      GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── thenComparingDouble(ToDoubleFunction<? super Object>)             GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── thenComparingInt(ToIntFunction<? super Object>)                   GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        └── thenComparingLong(ToLongFunction<? super Object>)                 GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+""" as String;
+    }
+
+    static class App extends Application<Configuration> {
+
+        @Override
+        void initialize(Bootstrap<Configuration> bootstrap) {
+            bootstrap.addBundle(GuiceBundle.builder()
+                    .modules(new AbstractModule() {
+                        @Override
+                        protected void configure() {
+                            bind(Service)
+                            bindInterceptor(Matchers.subclassesOf(Service), Matchers.any(), new MethodInterceptor() {
+                                @Override
+                                Object invoke(MethodInvocation invocation) throws Throwable {
+                                    return null
+                                }
+                            })
+                        }
+                    })
+                    .printGuiceAopMap()
+                    .build())
+        }
+
+        @Override
+        void run(Configuration configuration, Environment environment) throws Exception {
+        }
+    }
+
+
+    String render(GuiceAopConfig config) {
+        renderer.renderReport(config).replaceAll("\r", "").replaceAll(" +\n", "\n")
+    }
+
+    // synthetic methods would be provided by groovy methods
+    static class Service implements Comparator<Integer> {
+
+        // force bridge, ignored by guice
+        @Override
+        int compare(Integer o1, Integer o2) {
+            return 0
+        }
+    }
+}

@@ -175,9 +175,9 @@ public class GuiceyEnvironment {
      * to environment and configuration (and don't need to use Aware* interfaces, but if you will they will also
      * work, of course). This may look like misconception because configuration appear not in configuration phase,
      * but it's not: for example, in pure dropwizard you can register jersey configuration modules in run phase too.
-     * Also, this brings more grained control because you can register modules, for example requiring configuration,
-     * directly (without wrapping it with {@link ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule})
-     * and so be able to disable exactly this module, if required (using {@link #disableModules(Class[])}).
+     * This brings the simplicity of use: 3rd party guice modules often require configuration values to
+     * be passed directly to constructor, which is impossible in initialization phase (and so you have to use Aware*
+     * workarounds).
      *
      * @param modules one or more guice modules
      * @return environment instance for chained calls

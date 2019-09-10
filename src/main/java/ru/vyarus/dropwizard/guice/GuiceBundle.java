@@ -365,9 +365,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * or environment objects. To workaround this you can use *AwareModule interfaces, or extend from
          * {@link ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule} and required objects will be set
          * just before configuration start. Another option is to register module inside
-         * {@link GuiceyBundle#run(GuiceyEnvironment)}, which is called under run phase. This way you get more
-         * granular configuration (more modules could be registered directly, without wrapper) and so more
-         * detailed reports and better abilities to disable modules.
+         * {@link GuiceyBundle#run(GuiceyEnvironment)}, which is called under run phase.
          *
          * @param modules one or more guice modules
          * @return builder instance for chained calls

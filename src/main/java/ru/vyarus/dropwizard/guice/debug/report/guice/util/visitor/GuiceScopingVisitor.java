@@ -55,6 +55,9 @@ public class GuiceScopingVisitor
 
     @Override
     public Class<? extends Annotation> visitNoScoping() {
+        // special case: when checking direct module elements guice know only directly configured scope info and
+        // ignore annotations.. so instead of correct scope from annotation no scope is returned
+
         return Prototype.class;
     }
 }

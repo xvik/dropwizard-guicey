@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.debug.renderer.guice.util
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
+import com.google.inject.Key
 import com.google.inject.PrivateModule
 import com.google.inject.spi.ConstructorBinding
 import com.google.inject.spi.Element
@@ -41,6 +42,31 @@ class GuiceModelTest extends Specification {
         mod1.equals(mod2)
         mod1.hashCode() == mod2.hashCode()
         mod1.toString() == mod2.toString()
+    }
+
+    def "Check declaration model to string"() {
+
+        when: "unbounded declaration"
+        List<Element> res = Elements.getElements(new Module())
+        BindingDeclaration dec = new BindingDeclaration(DeclarationType.LinkedKey, res[0])
+        then: "simple to string"
+        dec.toString() == "linkedkey -"
+
+        when: "add key"
+        dec.setKey(Key.get(Ext))
+        then: "more info"
+        dec.toString() == "linkedkey Ext"
+
+        when: "add module"
+        dec.setModule(Module.name)
+        then: "full"
+        dec.toString() == "linkedkey Ext (from module $Module.name)"
+
+        when: "module declaration"
+        ModuleDeclaration mod = new ModuleDeclaration(type: Module)
+        then: "to string"
+        mod.toString() == "Module"
+
     }
 
     def "Check declaration model"() {

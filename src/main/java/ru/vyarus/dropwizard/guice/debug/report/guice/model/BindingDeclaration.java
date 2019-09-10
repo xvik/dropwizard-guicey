@@ -120,7 +120,7 @@ public class BindingDeclaration {
 
     @Override
     public String toString() {
-        String res = type.name() + " " + GuiceModelUtils.renderKey(key);
+        String res = type.name().toLowerCase() + " " + GuiceModelUtils.renderKey(key);
         if (module != null) {
             res += " (from module " + module + ")";
         }

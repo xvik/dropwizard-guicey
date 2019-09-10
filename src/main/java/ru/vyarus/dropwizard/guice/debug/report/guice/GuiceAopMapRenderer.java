@@ -104,8 +104,6 @@ public class GuiceAopMapRenderer implements ReportRenderer<GuiceAopConfig> {
                     String warn = "";
                     if (method.isSynthetic()) {
                         warn = "[SYNTHETIC] ";
-                    } else if (method.isBridge()) {
-                        warn = "[BRIDGE] ";
                     }
                     String methodName = TypeToStringUtils.toStringMethod(method, IgnoreGenericsMap.getInstance());
                     // cut off return type
