@@ -93,6 +93,7 @@ public class GuiceyRunner {
 
     /**
      * @param injectorFactory configured injector factory
+     * @param modules         guice modules to use for injector
      * @return created injector
      */
     public Injector createInjector(final InjectorFactory injectorFactory, final Iterable<Module> modules) {

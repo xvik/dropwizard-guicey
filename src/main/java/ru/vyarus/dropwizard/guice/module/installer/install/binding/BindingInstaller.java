@@ -8,7 +8,6 @@ import com.google.inject.Binding;
  * Used for installers which requires custom bindings for extension.
  * Note: {@code binder.bind(type)} is not called by default for binding installer, assuming installer will
  * specify proper binding itself.
- * <p>
  * <ul>
  * <li>{@link #bindExtension(Binder, Class, boolean)} called for extensions not manually bound in guice</li>
  * <li>{@link #checkBinding(Binder, Class, Binding)} called for extensions, resolved from manual guice binding</li>
