@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.jersey.support;
 import com.google.inject.Injector;
 import org.glassfish.hk2.api.ProxyCtl;
 import org.glassfish.jersey.internal.inject.InjectionManager;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 
 import javax.inject.Provider;
 
@@ -38,6 +39,6 @@ public class JerseyComponentProvider<T> implements Provider<T> {
 
     @Override
     public String toString() {
-        return "JerseyComponentProvider for " + type;
+        return "JerseyComponentProvider for " + RenderUtils.getClassName(type);
     }
 }

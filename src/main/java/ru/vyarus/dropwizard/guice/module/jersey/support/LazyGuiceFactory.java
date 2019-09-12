@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.jersey.support;
 
 import com.google.inject.Injector;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 
 import java.util.function.Supplier;
 
@@ -29,6 +30,6 @@ public class LazyGuiceFactory<T> implements Supplier<T> {
 
     @Override
     public String toString() {
-        return "LazyGuiceFactory for " + type;
+        return "LazyGuiceFactory for " + RenderUtils.getClassName(type);
     }
 }
