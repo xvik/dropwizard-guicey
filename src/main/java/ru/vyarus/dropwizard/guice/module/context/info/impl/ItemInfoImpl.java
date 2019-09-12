@@ -132,8 +132,21 @@ public class ItemInfoImpl implements ItemInfo {
         }
 
         public int getCount(final ItemId type) {
-            final Integer res = counts.get(type);
-            return res == null ? 0 : res;
+            int res = 0;
+            if (type.getIdentity() != null) {
+                final Integer count = counts.get(type);
+                if (count != null) {
+                    res = count;
+                }
+            } else {
+                // for class searches manually checking keys because otherwise first instance id may be selected
+                for (ItemId id : getScopes()) {
+                    if (id.getIdentity() == null && id.equals(type)) {
+                        res = counts.get(id);
+                    }
+                }
+            }
+            return res;
         }
 
         public Set<ItemId> getScopes() {
