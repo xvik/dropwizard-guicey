@@ -32,7 +32,7 @@ public class ProviderReporter extends Reporter {
     private static final String SINGLE_GENERIC_FORMAT = TAB + "%-10s (%s)";
     private static final String DOUBLE_GENERICS_FORMAT = TAB + "%-10s -> %-10s (%s)";
     private static final String INJECTION_FORMAT = TAB + "@%-10s (%s)";
-    private static final String HK_MANAGED = " *HK managed";
+    private static final String JERSEY_MANAGED = " *jersey managed";
 
     private static final Map<Class, ExtDescriptor> DESCRIPTORS = ImmutableMap.<Class, ExtDescriptor>builder()
             .put(Supplier.class, new ExtDescriptor("Suppliers", SINGLE_GENERIC_FORMAT, 1))
@@ -97,7 +97,7 @@ public class ProviderReporter extends Reporter {
     }
 
     private String hkManaged(final boolean isHkManaged) {
-        return isHkManaged ? HK_MANAGED : "";
+        return isHkManaged ? JERSEY_MANAGED : "";
     }
 
     private void printAll(final Collection<String> lines) {
