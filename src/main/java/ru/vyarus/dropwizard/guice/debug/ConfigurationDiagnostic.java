@@ -135,7 +135,7 @@ public class ConfigurationDiagnostic extends GuiceyLifecycleAdapter {
         if (config != null) {
             res.append(Reporter.NEWLINE).append(Reporter.NEWLINE)
                     .append("---------------------------------------------------------------------------[")
-                    .append(name).append("]").append(renderer.renderReport(config));
+                    .append(name).append(']').append(renderer.renderReport(config));
         }
     }
 
@@ -150,7 +150,7 @@ public class ConfigurationDiagnostic extends GuiceyLifecycleAdapter {
         private DiagnosticConfig config;
         private ContextTreeConfig treeConfig;
 
-        public Builder(String reportTitle) {
+        public Builder(final String reportTitle) {
             this.reportTitle = reportTitle;
         }
 

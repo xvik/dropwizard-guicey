@@ -64,7 +64,7 @@ public class GuiceElementVisitor extends DefaultElementVisitor<BindingDeclaratio
     }
 
     @Override
-    protected BindingDeclaration visitOther(Element element) {
+    protected BindingDeclaration visitOther(final Element element) {
         return null;
     }
 

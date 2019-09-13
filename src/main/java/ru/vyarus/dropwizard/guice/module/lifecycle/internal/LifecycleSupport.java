@@ -40,7 +40,8 @@ import java.util.Set;
  * @author Vyacheslav Rusakov
  * @since 17.04.2018
  */
-@SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
+@SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity",
+        "PMD.ExcessiveImports", "PMD.TooManyMethods"})
 public final class LifecycleSupport {
     private final Logger logger = LoggerFactory.getLogger(LifecycleSupport.class);
 
@@ -146,7 +147,7 @@ public final class LifecycleSupport {
         // fire after complete initialization (final meta-event)
         environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
             @Override
-            public void lifeCycleStarted(LifeCycle event) {
+            public void lifeCycleStarted(final LifeCycle event) {
                 applicationStarted();
             }
         });

@@ -156,7 +156,7 @@ public class GuiceAopMapRenderer implements ReportRenderer<GuiceAopConfig> {
      */
     private static class AopDeclaration {
         private final Key key;
-        private Map<Method, List<Class<? extends MethodInterceptor>>> interceptors =
+        private final Map<Method, List<Class<? extends MethodInterceptor>>> interceptors =
                 new TreeMap<>(Comparator.comparing(Method::getName)
                         .thenComparing(Method::getParameterCount)
                         .thenComparing(it -> it.getParameterTypes().length == 0 ? "A"
@@ -166,11 +166,11 @@ public class GuiceAopMapRenderer implements ReportRenderer<GuiceAopConfig> {
             this.key = key;
         }
 
-        Key getKey() {
+        protected Key getKey() {
             return key;
         }
 
-        Map<Method, List<Class<? extends MethodInterceptor>>> getInterceptors() {
+        protected Map<Method, List<Class<? extends MethodInterceptor>>> getInterceptors() {
             return interceptors;
         }
     }

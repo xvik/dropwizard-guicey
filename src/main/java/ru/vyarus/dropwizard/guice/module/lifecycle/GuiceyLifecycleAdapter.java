@@ -15,7 +15,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
  * @author Vyacheslav Rusakov
  * @since 18.04.2018
  */
-@SuppressWarnings("checkstyle:ClassFanOutComplexity")
+@SuppressWarnings({"checkstyle:ClassFanOutComplexity", "PMD.TooManyMethods"})
 public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
 
     @Override

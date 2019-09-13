@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.inject.*;
 import com.google.inject.spi.Elements;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.BindingDeclaration;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.DeclarationType;
@@ -13,6 +12,7 @@ import ru.vyarus.dropwizard.guice.debug.report.guice.util.GuiceModelParser;
 import ru.vyarus.dropwizard.guice.debug.report.guice.util.GuiceModelUtils;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.debug.util.TreeNode;
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
@@ -256,6 +256,7 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
     }
 
     @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
+    @SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops", "PMD.ConsecutiveLiteralAppends"})
     private void render(final TreeNode root, final ModuleDeclaration mod) {
         final TreeNode next = root.child(RenderUtils.renderClassLine(mod.getType(), mod.getMarkers()));
 
@@ -268,15 +269,15 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
             }
             final String type = dec.getType().isRuntimeBinding()
                     ? dec.getType().name().toLowerCase() : "<" + dec.getType().name().toLowerCase() + ">";
-            String msg = String.format("%-20s %-16s %-45s   at %s",
+            final StringBuilder msg = new StringBuilder(String.format("%-20s %-16s %-45s",
                     type,
                     dec.getScope() != null ? "[@" + dec.getScope().getSimpleName() + "]" : "",
-                    renderElement(dec),
-                    dec.getSource());
+                    renderElement(dec)));
+            msg.append("   at ").append(dec.getSource());
             if (!dec.getMarkers().isEmpty()) {
-                msg += " " + RenderUtils.markers(dec.getMarkers());
+                msg.append(' ').append(RenderUtils.markers(dec.getMarkers()));
             }
-            next.child(msg);
+            next.child(msg.toString());
         }
 
         for (ModuleDeclaration child : mod.getChildren()) {
@@ -284,6 +285,7 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         }
     }
 
+    @SuppressWarnings("PMD.UseStringBufferForStringAppends")
     private String renderElement(final BindingDeclaration declaration) {
         String res;
         if (declaration.getKey() == null && declaration.getSpecial() != null) {
@@ -302,7 +304,7 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         return res;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "PMD.AvoidInstantiatingObjectsInLoops"})
     private List<String> renderChainLines(final List<BindingDeclaration> roots,
                                           final Map<Key, BindingDeclaration> bindings) {
         final List<String> lines = new ArrayList<>();

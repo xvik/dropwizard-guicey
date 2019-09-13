@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class GuiceConfig {
 
-    private List<String> ignorePackages = new ArrayList<>();
-    private List<Class<? extends Module>> ignoreModules = new ArrayList<>();
+    private final List<String> ignorePackages = new ArrayList<>();
+    private final List<Class<? extends Module>> ignoreModules = new ArrayList<>();
 
     /**
      * @param pkgs packages to hide bindings and modules from

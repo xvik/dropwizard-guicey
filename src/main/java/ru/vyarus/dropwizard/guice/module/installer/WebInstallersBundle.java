@@ -43,7 +43,7 @@ public class WebInstallersBundle extends UniqueGuiceyBundle {
     }
 
     @Override
-    public void run(GuiceyEnvironment environment) {
+    public void run(final GuiceyEnvironment environment) {
         nameContext(environment.environment().getApplicationContext(), "Application context");
         nameContext(environment.environment().getAdminContext(), "Admin context");
     }

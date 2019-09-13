@@ -12,7 +12,6 @@ import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
-import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
@@ -50,6 +49,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
  * @author Vyacheslav Rusakov
  * @since 14.06.2019
  */
+@SuppressWarnings("PMD.ExcessiveImports")
 public class GuiceyInitializer {
     private static final OrderComparator COMPARATOR = new OrderComparator();
     private final Logger logger = LoggerFactory.getLogger(GuiceyInitializer.class);
@@ -128,7 +128,7 @@ public class GuiceyInitializer {
     @SuppressWarnings("PMD.PrematureDeclaration")
     public void resolveExtensions() {
         final Stopwatch itimer = context.stat().timer(InstallersTime);
-        final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
+        final Stopwatch timer = context.stat().timer(ExtensionsRecognitionTime);
         final ExtensionsHolder holder = context.getExtensionsHolder();
         final List<Class<?>> manual = context.getEnabledExtensions();
         for (Class<?> type : manual) {

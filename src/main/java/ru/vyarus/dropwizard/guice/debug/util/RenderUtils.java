@@ -158,7 +158,7 @@ public final class RenderUtils {
         return name;
     }
 
-    private static String renderPositionPostfix(int pos) {
+    private static String renderPositionPostfix(final int pos) {
         return pos > 1 ? "#" + pos : "";
     }
 }

@@ -31,12 +31,12 @@ import java.util.*;
 public final class ItemId<T> {
 
     private final Class<T> type;
-    private final String identity;
+    private final String id;
 
     @SuppressWarnings("unchecked")
     private ItemId(final Class<?> type, final String identity) {
         this.type = (Class<T>) Preconditions.checkNotNull(type);
-        this.identity = identity;
+        this.id = identity;
     }
 
     /**
@@ -50,12 +50,12 @@ public final class ItemId<T> {
      * @return object instance hash or null
      */
     public String getIdentity() {
-        return identity;
+        return id;
     }
 
     @Override
     public String toString() {
-        return type.getSimpleName() + (identity == null ? "" : "@" + identity);
+        return type.getSimpleName() + (id == null ? "" : "@" + id);
     }
 
     /**
@@ -117,8 +117,8 @@ public final class ItemId<T> {
     }
 
     @Override
-    @SuppressWarnings("checkstyle:NeedBraces")
-    public boolean equals(Object o) {
+    @SuppressWarnings({"checkstyle:NeedBraces", "PMD.ControlStatementBraces"})
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof ItemId)) return false;
 
@@ -126,8 +126,7 @@ public final class ItemId<T> {
 
         if (!type.equals(key.type)) return false;
         // identity ignore is allowed for type only searches so pure class id is equal to any instance id
-        return Objects.equals(identity, key.identity)
-                || identity == null || key.getIdentity() == null;
+        return Objects.equals(id, key.id) || id == null || key.getIdentity() == null;
     }
 
     @Override

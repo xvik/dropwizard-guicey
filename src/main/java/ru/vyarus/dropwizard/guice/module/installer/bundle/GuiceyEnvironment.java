@@ -234,7 +234,7 @@ public class GuiceyEnvironment {
      * @param items jersey extension instances to install
      * @return environment instance for chained calls
      */
-    public GuiceyEnvironment register(Object... items) {
+    public GuiceyEnvironment register(final Object... items) {
         for (Object item : items) {
             environment().jersey().register(item);
         }
@@ -248,7 +248,7 @@ public class GuiceyEnvironment {
      * @param items jersey extension instances to install
      * @return environment instance for chained calls
      */
-    public GuiceyEnvironment register(Class<?>... items) {
+    public GuiceyEnvironment register(final Class<?>... items) {
         for (Class<?> item : items) {
             environment().jersey().register(item);
         }

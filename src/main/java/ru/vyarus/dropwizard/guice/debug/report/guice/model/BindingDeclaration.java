@@ -18,9 +18,9 @@ import java.util.Objects;
  */
 public class BindingDeclaration {
 
-    private DeclarationType type;
+    private final DeclarationType type;
     // not Element because extensions (servlets, multibindings) use different declaration types
-    private Object element;
+    private final Object element;
     private Key key;
     private Key target;
     private String providedBy;
@@ -119,6 +119,7 @@ public class BindingDeclaration {
     }
 
     @Override
+    @SuppressWarnings("PMD.UseStringBufferForStringAppends")
     public String toString() {
         String res = type.name().toLowerCase() + " " + GuiceModelUtils.renderKey(key);
         if (module != null) {

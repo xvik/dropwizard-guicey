@@ -17,7 +17,7 @@ public abstract class InstanceItemInfoImpl extends ItemInfoImpl implements Insta
 
     private final Object instance;
     private int instanceCount;
-    private List<ItemId> duplicates = new ArrayList<>();
+    private final List<ItemId> duplicates = new ArrayList<>();
 
     // special constructor for disable-only items (without actual registration)
     public InstanceItemInfoImpl(final ConfigItem itemType, final Class type) {

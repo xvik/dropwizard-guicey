@@ -95,7 +95,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Jers
  * @see ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo for configuratio diagnostic
  * @since 31.08.2014
  */
-@SuppressWarnings("PMD.ExcessiveClassLength")
+@SuppressWarnings({"PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.TooManyMethods"})
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
     private Injector injector;
@@ -168,7 +168,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
      */
     @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
     public static class Builder<T extends Configuration> {
-        private final GuiceBundle<T> bundle = new GuiceBundle<T>();
+        private final GuiceBundle<T> bundle = new GuiceBundle<>();
 
         /**
          * Guicey broadcast a lot of events in order to indicate lifecycle phases

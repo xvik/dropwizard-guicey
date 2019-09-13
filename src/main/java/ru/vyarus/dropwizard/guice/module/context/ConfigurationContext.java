@@ -64,7 +64,8 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.DropwizardBund
  * @since 06.07.2016
  */
 @SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "checkstyle:ClassFanOutComplexity",
-        "PMD.ExcessiveImports", "PMD.ExcessivePublicCount"})
+        "PMD.ExcessiveImports", "PMD.ExcessivePublicCount", "PMD.NcssCount", "PMD.CyclomaticComplexity",
+        "PMD.TooManyFields"})
 public final class ConfigurationContext {
     private final Logger logger = LoggerFactory.getLogger(ConfigurationContext.class);
 
@@ -215,6 +216,7 @@ public final class ConfigurationContext {
      * @param bundles bundles to register
      * @return list of actually registered bundles (without duplicates)
      */
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     public List<GuiceyBundle> registerBundles(final GuiceyBundle... bundles) {
         final List<GuiceyBundle> res = new ArrayList<>();
         for (GuiceyBundle bundle : bundles) {
@@ -279,15 +281,14 @@ public final class ConfigurationContext {
      *
      * @param bundles dropwizard bundles
      */
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     public void registerDropwizardBundles(final ConfiguredBundle... bundles) {
         for (ConfiguredBundle bundle : bundles) {
             final DropwizardBundleItemInfo info = register(ConfigItem.DropwizardBundle, bundle);
             // register only non duplicate bundles
-            if (info.getRegistrationAttempts() == 1) {
-                // bundles, registered in root GuiceBundle will be registered as soon as bootstrap would be available
-                if (bootstrap != null) {
-                    registerDropwizardBundle(bundle);
-                }
+            // bundles, registered in root GuiceBundle will be registered as soon as bootstrap would be available
+            if (info.getRegistrationAttempts() == 1 && bootstrap != null) {
+                registerDropwizardBundle(bundle);
             }
         }
     }
@@ -476,7 +477,7 @@ public final class ConfigurationContext {
      *
      * @param installers installers to use in correct order
      */
-    public void installersResolved(List<FeatureInstaller> installers) {
+    public void installersResolved(final List<FeatureInstaller> installers) {
         this.extensionsHolder = new ExtensionsHolder(installers);
         lifecycle().installersResolved(new ArrayList<>(installers), getDisabledInstallers());
     }
@@ -943,6 +944,7 @@ public final class ConfigurationContext {
         return null;
     }
 
+    @SuppressWarnings("PMD.CompareObjectsWithEquals")
     private Object findDuplicateInstance(final ConfigItem type,
                                          final Collection<Object> registeredInstances,
                                          final Object item) {

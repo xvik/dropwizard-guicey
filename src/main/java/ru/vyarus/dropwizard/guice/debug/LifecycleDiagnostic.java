@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * @author Vyacheslav Rusakov
  * @since 17.04.2018
  */
-@SuppressWarnings("checkstyle:ClassFanOutComplexity")
+@SuppressWarnings({"checkstyle:ClassFanOutComplexity", "PMD.TooManyMethods"})
 public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
 
     private static final String BUNDLES = "bundles";
@@ -142,7 +142,7 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
     }
 
     @Override
-    protected void modulesAnalyzed(ModulesAnalyzedEvent event) {
+    protected void modulesAnalyzed(final ModulesAnalyzedEvent event) {
         log("%s binding extensions detected", event.getExtensions().size());
         if (showDetails) {
             logDetails(EXTENSIONS, event.getExtensions());

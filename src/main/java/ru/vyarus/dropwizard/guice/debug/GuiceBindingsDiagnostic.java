@@ -21,7 +21,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStart
 public class GuiceBindingsDiagnostic extends GuiceyLifecycleAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(GuiceBindingsDiagnostic.class);
-    private GuiceConfig config;
+    private final GuiceConfig config;
 
     public GuiceBindingsDiagnostic(final GuiceConfig config) {
         this.config = config;

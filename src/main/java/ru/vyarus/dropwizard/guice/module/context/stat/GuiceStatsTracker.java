@@ -11,6 +11,7 @@ import java.util.logging.Logger;
  * Guice logs internal stats with java util logger ({@link com.google.inject.internal.util.Stopwatch}). In order to
  * intercept these messages, append custom handler to this logger, but just for injector creation time.
  */
+@SuppressWarnings("PMD.MoreThanOneLogger")
 public class GuiceStatsTracker {
 
     private final List<String> messages = new ArrayList<>();

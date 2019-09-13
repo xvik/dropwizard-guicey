@@ -98,7 +98,7 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
     }
 
     @Override
-    public void installBinding(Binder binder, Class<?> type) {
+    public void installBinding(final Binder binder, final Class<?> type) {
         // reporting (common for both registration types)
         final boolean hkManaged = isJerseyExtension(type);
         reporter.provider(type, hkManaged, false);

@@ -19,7 +19,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStart
 public class GuiceAopDiagnostic extends GuiceyLifecycleAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(GuiceAopDiagnostic.class);
-    private GuiceAopConfig config;
+    private final GuiceAopConfig config;
 
     public GuiceAopDiagnostic(final GuiceAopConfig config) {
         this.config = config;

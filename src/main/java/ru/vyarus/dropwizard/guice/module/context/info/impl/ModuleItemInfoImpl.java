@@ -22,7 +22,7 @@ public class ModuleItemInfoImpl extends InstanceItemInfoImpl implements ModuleIt
     private final boolean overriding;
 
     // disable only item
-    public ModuleItemInfoImpl(Class<? extends Module> type) {
+    public ModuleItemInfoImpl(final Class<? extends Module> type) {
         super(ConfigItem.Module, type);
         this.overriding = false;
     }

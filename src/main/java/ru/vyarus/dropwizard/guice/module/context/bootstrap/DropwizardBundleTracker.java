@@ -19,10 +19,10 @@ import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
  */
 public class DropwizardBundleTracker<T extends Configuration> implements ConfiguredBundle<T> {
 
-    private ConfiguredBundle<? super T> bundle;
-    private ConfigurationContext context;
+    private final ConfiguredBundle<? super T> bundle;
+    private final ConfigurationContext context;
 
-    public DropwizardBundleTracker(ConfiguredBundle<? super T> bundle, ConfigurationContext context) {
+    public DropwizardBundleTracker(final ConfiguredBundle<? super T> bundle, final ConfigurationContext context) {
         this.bundle = bundle;
         this.context = context;
     }

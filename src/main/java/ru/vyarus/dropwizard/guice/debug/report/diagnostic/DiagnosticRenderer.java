@@ -325,7 +325,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         }
     }
 
-    private String formatReg(int used, int registered) {
+    private String formatReg(final int used, final int registered) {
         return String.format("REG(%s/%s)", used, registered);
     }
 

@@ -153,25 +153,12 @@ public final class ModulesSupport {
                 continue;
             }
             // filter constants, listeners, aop etc.
-            if (element instanceof Binding) {
-                final Key key = ((Binding) element).getKey();
-                // extensions bindings may be only unqualified, class only (no generified types)
-                if (key.getAnnotation() == null && key.getTypeLiteral().getType() instanceof Class) {
-                    context.stat().count(Stat.AnalyzedBindingsCount, 1);
-                    final Class type = key.getTypeLiteral().getRawType();
-                    if (ExtensionsSupport.registerExtensionBinding(context, type,
-                            (Binding<?>) element, BindingUtils.getTopDeclarationModule(element))) {
-                        LOGGER.debug("Extension detected from guice binding: {}", type.getSimpleName());
-                        extensions.add(type);
-                        if (!context.isExtensionEnabled(type)) {
-                            it.remove();
-                            removedBindings.add((Binding) element);
-                        }
-                    }
-                }
+            if (element instanceof Binding && checkBindingRemoveRequired(context, (Binding) element, extensions)) {
+                it.remove();
+                removedBindings.add((Binding) element);
             }
         }
-        if (actuallyDisabledModules.size() > 0) {
+        if (!actuallyDisabledModules.isEmpty()) {
             LOGGER.debug("Removed inner guice modules: {}", actuallyDisabledModules);
         }
         context.stat().count(Stat.RemovedInnerModules, actuallyDisabledModules.size());
@@ -180,6 +167,24 @@ public final class ModulesSupport {
                 removedBindings);
         timer.stop();
         itimer.stop();
+    }
+
+    private static boolean checkBindingRemoveRequired(final ConfigurationContext context,
+                                                      final Binding binding,
+                                                      final List<Class<?>> extensions) {
+        final Key key = binding.getKey();
+        // extensions bindings may be only unqualified, class only (no generified types)
+        if (key.getAnnotation() == null && key.getTypeLiteral().getType() instanceof Class) {
+            context.stat().count(Stat.AnalyzedBindingsCount, 1);
+            final Class type = key.getTypeLiteral().getRawType();
+            if (ExtensionsSupport.registerExtensionBinding(context, type,
+                    binding, BindingUtils.getTopDeclarationModule(binding))) {
+                LOGGER.debug("Extension detected from guice binding: {}", type.getSimpleName());
+                extensions.add(type);
+                return !context.isExtensionEnabled(type);
+            }
+        }
+        return false;
     }
 
     private static List<String> prepareDisabledModules(final ConfigurationContext context) {

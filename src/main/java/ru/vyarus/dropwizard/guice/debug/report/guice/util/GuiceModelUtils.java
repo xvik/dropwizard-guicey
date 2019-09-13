@@ -89,7 +89,7 @@ public final class GuiceModelUtils {
         }
         final StringBuilder res = new StringBuilder();
         if (key.getAnnotationType() != null) {
-            res.append("@").append(key.getAnnotationType().getSimpleName());
+            res.append('@').append(key.getAnnotationType().getSimpleName());
             for (Method method : key.getAnnotationType().getMethods()) {
                 if (method.getName().equals("value") && method.getReturnType().equals(String.class)) {
                     final boolean accessible = method.isAccessible();
@@ -107,7 +107,7 @@ public final class GuiceModelUtils {
                     }
                 }
             }
-            res.append(" ");
+            res.append(' ');
         }
         res.append(TypeToStringUtils.toStringType(key.getTypeLiteral().getType(), EmptyGenericsMap.getInstance()));
         return res.toString();

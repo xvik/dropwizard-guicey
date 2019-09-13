@@ -123,6 +123,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param scopes active scopes
      * @param root   root render tree node
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void renderGuiceBindings(final ContextTreeConfig config,
                                      final Set<ItemId> scopes,
                                      final TreeNode root) {
@@ -132,7 +133,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         }
         final TreeNode bindings = new TreeNode("GUICE BINDINGS");
         for (final ItemId scope : scopes) {
-            if (ConfigScope.recognize(scope).equals(Module)) {
+            if (recognize(scope).equals(Module)) {
                 final TreeNode module = new TreeNode(RenderUtils.renderClassLine(scope.getType(), null));
                 // note that items may actually be bound by submodules, but they always show under the top module
                 // (only top module is visible in configuration)

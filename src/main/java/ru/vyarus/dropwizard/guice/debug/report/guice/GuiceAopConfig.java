@@ -21,7 +21,7 @@ public class GuiceAopConfig {
     private Matcher<? super Class<?>> typeMatcher;
     // hide Object methods by default
     private Matcher<? super Method> methodMatcher = new NonObjectMethodMatcher();
-    private Set<Class<? extends MethodInterceptor>> showOnly = new HashSet<>();
+    private final Set<Class<? extends MethodInterceptor>> showOnly = new HashSet<>();
 
     /**
      * Hide available interceptors block.
