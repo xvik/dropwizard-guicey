@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.debug.util
 
-import com.google.inject.Binder
-import com.google.inject.Module
+
+import ru.vyarus.dropwizard.guice.debug.util.support.WithAnonymous
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import spock.lang.Specification
 
@@ -11,12 +11,6 @@ import spock.lang.Specification
  */
 class RendererUtilsTest extends Specification {
 
-    static Module ANONYMOUS = new Module() {
-        @Override
-        void configure(Binder binder) {
-        }
-    };
-
     def "Check installer render"() {
 
         expect:
@@ -24,7 +18,7 @@ class RendererUtilsTest extends Specification {
         RenderUtils.renderDisabledInstaller(type).trim() == disabled
 
         where:
-        type              | render                                                                 | disabled
+        type              | render                                                                  | disabled
         ResourceInstaller | "resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    *TEST, SM" | "-resource            (r.v.d.g.m.i.f.j.ResourceInstaller)"
     }
 
@@ -34,10 +28,10 @@ class RendererUtilsTest extends Specification {
         RenderUtils.renderClass(type) == render
 
         where:
-        type                 | render
-        ResourceInstaller    | "r.v.d.g.m.i.f.j.ResourceInstaller"
-        InnerClass           | "r.v.d.g.d.u.RendererUtilsTest\$InnerClass"
-        ANONYMOUS.getClass() | "r.v.d.g.d.util.RendererUtilsTest\$1"
+        type                               | render
+        ResourceInstaller                  | "r.v.d.g.m.i.f.j.ResourceInstaller"
+        InnerClass                         | "r.v.d.g.d.u.RendererUtilsTest\$InnerClass"
+        WithAnonymous.ANONYMOUS.getClass() | "r.v.d.g.d.u.support.WithAnonymous\$1"
     }
 
     def "Check package render"() {
@@ -46,10 +40,10 @@ class RendererUtilsTest extends Specification {
         RenderUtils.renderPackage(type) == render
 
         where:
-        type                 | render
-        ResourceInstaller    | "r.v.d.g.m.i.f.jersey"
-        InnerClass           | "r.v.d.g.d.u.RendererUtilsTest"
-        ANONYMOUS.getClass() | "r.v.d.g.debug.util"
+        type                               | render
+        ResourceInstaller                  | "r.v.d.g.m.i.f.jersey"
+        InnerClass                         | "r.v.d.g.d.u.RendererUtilsTest"
+        WithAnonymous.ANONYMOUS.getClass() | "r.v.d.g.d.u.support"
     }
 
     def "Check class line render"() {
@@ -58,10 +52,10 @@ class RendererUtilsTest extends Specification {
         RenderUtils.renderClassLine(type, ["TEST", "SM"]) == render
 
         where:
-        type                 | render
-        ResourceInstaller    | "ResourceInstaller            (r.v.d.g.m.i.f.jersey)     *TEST, SM"
-        InnerClass           | "InnerClass                   (r.v.d.g.d.u.RendererUtilsTest) *TEST, SM"
-        ANONYMOUS.getClass() | "RendererUtilsTest\$1          (r.v.d.g.debug.util)       *TEST, SM"
+        type                               | render
+        ResourceInstaller                  | "ResourceInstaller            (r.v.d.g.m.i.f.jersey)     *TEST, SM"
+        InnerClass                         | "InnerClass                   (r.v.d.g.d.u.RendererUtilsTest) *TEST, SM"
+        WithAnonymous.ANONYMOUS.getClass() | "WithAnonymous\$1              (r.v.d.g.d.u.support)      *TEST, SM"
     }
 
     def "Check markers"() {

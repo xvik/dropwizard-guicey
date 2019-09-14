@@ -23,6 +23,7 @@ ext {
     dropwizard = '2.0.0-rc9'
     guice = '4.2.2'
     hk2 = '2.5.0'
+    groovy = '2.5.7'
 }
 
 repositories { jcenter(); mavenCentral(); mavenLocal() }
@@ -41,6 +42,16 @@ dependencyManagement {
             exclude 'org.glassfish.hk2:hk2-api'
         }
         dependency 'org.spockframework:spock-core:1.2-groovy-2.5'
+        // groovy bundled with spock (2.5.2) does not work well with java 11
+        dependency "org.codehaus.groovy:groovy:$groovy"
+        dependency "org.codehaus.groovy:groovy-json:$groovy"
+        dependency "org.codehaus.groovy:groovy-macro:$groovy"
+        dependency "org.codehaus.groovy:groovy-nio:$groovy"
+        dependency "org.codehaus.groovy:groovy-sql:$groovy"
+        dependency "org.codehaus.groovy:groovy-templates:$groovy"
+        dependency "org.codehaus.groovy:groovy-test:$groovy"
+        dependency "org.codehaus.groovy:groovy-xml:$groovy"
+
         dependency 'com.github.stefanbirkner:system-rules:1.19.0'
 
         dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
@@ -64,7 +75,7 @@ dependencies {
 
     testCompile 'io.dropwizard:dropwizard-auth'
     testCompile 'org.glassfish.jersey.ext:jersey-proxy-client'
-    testCompile 'cglib:cglib-nodep:3.2.0'
+    testCompile 'cglib:cglib-nodep:3.2.9'
     testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
 }
 

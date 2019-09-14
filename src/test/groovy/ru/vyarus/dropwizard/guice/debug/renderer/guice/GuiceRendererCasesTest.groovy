@@ -64,12 +64,12 @@ class GuiceRendererCasesTest extends Specification {
     1 OVERRIDING MODULES with 2 bindings
     │
     └── OverrideModule               (r.v.d.g.d.r.g.support)
-        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:14) *OVERRIDE
-        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:15) *OVERRIDE
+        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:16) *OVERRIDE
+        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:17) *OVERRIDE
 
 
     1 UNDECLARED bindings
-    └── JitService                   (r.v.d.g.d.r.g.GuiceRendererCasesTest)
+    └── JitService                   (r.v.d.g.d.r.g.s.exts)
 
 
     BINDING CHAINS
@@ -126,12 +126,12 @@ class GuiceRendererCasesTest extends Specification {
     1 OVERRIDING MODULES with 2 bindings
     │
     └── OverrideModule               (r.v.d.g.d.r.g.support)
-        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:14) *OVERRIDE
-        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:15) *OVERRIDE
+        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:16) *OVERRIDE
+        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:17) *OVERRIDE
 
 
     1 UNDECLARED bindings
-    └── JitService                   (r.v.d.g.d.r.g.GuiceRendererCasesTest)
+    └── JitService                   (r.v.d.g.d.r.g.s.exts)
 
 
     BINDING CHAINS
@@ -254,12 +254,12 @@ class GuiceRendererCasesTest extends Specification {
     1 OVERRIDING MODULES with 2 bindings
     │
     └── OverrideModule               (r.v.d.g.d.r.g.support)
-        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:14) *OVERRIDE
-        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:15) *OVERRIDE
+        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:16) *OVERRIDE
+        └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:17) *OVERRIDE
 
 
     1 UNDECLARED bindings
-    └── JitService                   (r.v.d.g.d.r.g.GuiceRendererCasesTest)
+    └── JitService                   (r.v.d.g.d.r.g.s.exts)
 
 
     BINDING CHAINS
@@ -288,42 +288,4 @@ class GuiceRendererCasesTest extends Specification {
     String render(GuiceConfig config) {
         renderer.renderReport(config).replaceAll("\r", "").replaceAll(" +\n", "\n")
     }
-
-    static class CustomTypeListener implements TypeListener {
-        @Override
-        def <I> void hear(TypeLiteral<I> type, TypeEncounter<I> encounter) {
-
-        }
-    }
-
-    static class CustomProvisionListener implements ProvisionListener {
-        @Override
-        def <T> void onProvision(ProvisionInvocation<T> provision) {
-
-        }
-    }
-
-    static class CustomAop implements MethodInterceptor {
-        @Override
-        Object invoke(MethodInvocation invocation) throws Throwable {
-            return invocation.proceed()
-        }
-    }
-
-    @Singleton
-    static class AopedService {
-        @Inject
-        JitService service
-    }
-
-    @Singleton
-    static class JitService {}
-
-    static interface BindService {}
-
-    static interface BindService2 {}
-
-    static class OverriddenService implements BindService {}
-
-    static class OverrideService implements BindService {}
 }

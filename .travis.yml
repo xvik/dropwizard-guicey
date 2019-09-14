@@ -1,5 +1,11 @@
 language: java
-jdk: openjdk8
+dist: xenial
+
+matrix:
+  include:
+    - jdk: openjdk8
+    - jdk: openjdk11
+
 before_install: chmod +x gradlew
 env:
   - TRAVIS=true

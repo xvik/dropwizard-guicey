@@ -54,7 +54,8 @@ public final class OptionsInfo {
      * @return list of used option enums sorted by name
      */
     public List<Class<Enum>> getOptionGroups() {
-        return getOptions().stream().<Class<Enum>>map(Enum::getDeclaringClass).distinct()
+        // java 11 compilation workaround (for cannot infer type error)
+        return (List<Class<Enum>>) (List) getOptions().stream().map(Enum::getDeclaringClass).distinct()
                 .sorted(Comparator.comparing(Class::getSimpleName))
                 .collect(Collectors.toList());
     }

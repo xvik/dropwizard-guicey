@@ -98,7 +98,9 @@ class GuiceAopRendererForSpecialMethodsTest extends Specification {
 
 
     String render(GuiceAopConfig config) {
-        renderer.renderReport(config).replaceAll("\r", "").replaceAll(" +\n", "\n")
+        renderer.renderReport(config).replace("\r", "").replaceAll(" +\n", "\n")
+        // unify package name for jdk 9 and above
+        .replace('java.base/jdk.internal', 'sun')
     }
 
     // synthetic methods would be provided by groovy methods

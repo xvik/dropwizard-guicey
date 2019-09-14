@@ -34,7 +34,7 @@ class DisablesPredicatesTest extends AbstractTest {
         Disables.installer().test(item(Installer, Sample))
         !Disables.installer().test(item(Extension, Sample))
 
-        Disables.module().test(item(Module, Sample))
+        Disables.module().test(item(ConfigItem.Module, Sample))
         !Disables.module().test(item(Extension, Sample))
 
         Disables.bundle().test(item(Bundle, Sample))

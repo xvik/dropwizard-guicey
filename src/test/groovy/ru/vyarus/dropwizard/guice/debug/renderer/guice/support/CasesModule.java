@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matchers;
-import ru.vyarus.dropwizard.guice.debug.renderer.guice.GuiceRendererCasesTest;
+import ru.vyarus.dropwizard.guice.debug.renderer.guice.support.exts.*;
 
 /**
  * Have to use java class because otherwise guice can't correctly resolve source line, which makes test
@@ -21,20 +21,20 @@ public class CasesModule extends AbstractModule {
             public boolean matches(TypeLiteral<?> typeLiteral) {
                 return false;
             }
-        }, new GuiceRendererCasesTest.CustomTypeListener());
+        }, new CustomTypeListener());
 
         bindListener(new AbstractMatcher<Object>() {
             @Override
             public boolean matches(Object o) {
                 return false;
             }
-        }, new GuiceRendererCasesTest.CustomProvisionListener());
+        }, new CustomProvisionListener());
 
-        bindInterceptor(Matchers.subclassesOf(GuiceRendererCasesTest.AopedService.class), Matchers.any(),
-                new GuiceRendererCasesTest.CustomAop());
+        bindInterceptor(Matchers.subclassesOf(AopedService.class), Matchers.any(),
+                new CustomAop());
 
-        bind(GuiceRendererCasesTest.AopedService.class);
-        bind(GuiceRendererCasesTest.BindService.class).to(GuiceRendererCasesTest.OverriddenService.class);
-        bind(GuiceRendererCasesTest.BindService2.class).toInstance(new GuiceRendererCasesTest.BindService2() {});
+        bind(AopedService.class);
+        bind(BindService.class).to(OverriddenService.class);
+        bind(BindService2.class).toInstance(new BindService2() {});
     }
 }
