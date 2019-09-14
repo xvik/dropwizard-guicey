@@ -101,7 +101,7 @@
 * Fix configuration bindings for recursive configuration object declarations (#60)
 * Guicey version added into BOM (dependencyManagement section in guicey pom) to avoid duplicate versions declarations
 * Detect classes loaded by different class loader to correctly detect duplicate extensions
-* Java 11 compatibility (binary only - no modules declared)
+* Java 11 compatibility. Automatic module name (in meta-inf): `dropwizard-guicey.core`
 
 Main breaking changes were caused by:
  - jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.

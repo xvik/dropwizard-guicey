@@ -107,6 +107,12 @@ pom {
     }
 }
 
+jar {
+    manifest {
+        attributes 'Automatic-Module-Name': 'dropwizard-guicey.core'
+    }
+}
+
 bintray {
     user = findProperty('bintrayUser')
     key = findProperty('bintrayKey')
