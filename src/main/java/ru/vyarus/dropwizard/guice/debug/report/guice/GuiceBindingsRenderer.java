@@ -1,6 +1,9 @@
 package ru.vyarus.dropwizard.guice.debug.report.guice;
 
 import com.google.common.base.Preconditions;
+// CHECKSTYLE:OFF
+import com.google.inject.Module; // NOPMD
+// CHECKSTYLE:ON
 import com.google.inject.*;
 import com.google.inject.spi.Elements;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;

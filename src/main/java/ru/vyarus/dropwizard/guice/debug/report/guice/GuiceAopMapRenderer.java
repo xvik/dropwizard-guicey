@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.debug.report.guice;
-
+// CHECKSTYLE:OFF
+import com.google.inject.Module; // NOPMD
+// CHECKSTYLE:ON
 import com.google.inject.*;
 import com.google.inject.spi.ConstructorBinding;
 import com.google.inject.spi.Element;
