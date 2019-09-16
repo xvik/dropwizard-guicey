@@ -1,0 +1,1623 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Dropwizard guice integration">
+      
+      
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/5.0.0.RC1/extras/jdbi3/">
+      
+      
+        <meta name="author" content="Vyacheslav Rusakov">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+    
+    
+      
+        <title>JDBI3 - Dropwizard-guicey</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="../../#jdbi3-integration" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://xvik.github.io/dropwizard-guicey/5.0.0.RC1" title="Dropwizard-guicey" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                Dropwizard-guicey
+              </span>
+              <span class="md-header-nav__topic">
+                JDBI3
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      dropwizard-guicey
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://xvik.github.io/dropwizard-guicey/5.0.0.RC1" title="Dropwizard-guicey" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Dropwizard-guicey
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      dropwizard-guicey
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../getting-started/" title="Getting started" class="md-nav__link">
+      Getting started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../concepts/" title="Concepts overview" class="md-nav__link">
+      Concepts overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      User guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        User guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/configuration/" title="Configuration" class="md-nav__link">
+      Configuration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/lifecycle/" title="Integration lifecycle" class="md-nav__link">
+      Integration lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/injector/" title="Injector" class="md-nav__link">
+      Injector
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/module-autowiring/" title="Module autowiring" class="md-nav__link">
+      Module autowiring
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/bindings/" title="Bindings" class="md-nav__link">
+      Bindings
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/scan/" title="Classpath scan" class="md-nav__link">
+      Classpath scan
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/installers/" title="Installers" class="md-nav__link">
+      Installers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/ordering/" title="Ordering" class="md-nav__link">
+      Ordering
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/bundles/" title="Bundles (Guicey)" class="md-nav__link">
+      Bundles (Guicey)
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/options/" title="Options" class="md-nav__link">
+      Options
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/diagnostic/" title="Diagnostic" class="md-nav__link">
+      Diagnostic
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/events/" title="Lifecycle events" class="md-nav__link">
+      Lifecycle events
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/commands/" title="Commands" class="md-nav__link">
+      Commands
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/web/" title="Web" class="md-nav__link">
+      Web
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/test/" title="Test" class="md-nav__link">
+      Test
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/dg-migration/" title="Migration from dropwizard-guice" class="md-nav__link">
+      Migration from dropwizard-guice
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Installers
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Installers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/resource/" title="Resource" class="md-nav__link">
+      Resource
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/task/" title="Task" class="md-nav__link">
+      Task
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/managed/" title="Managed" class="md-nav__link">
+      Managed
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/lifecycle/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/healthcheck/" title="Health check" class="md-nav__link">
+      Health check
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/jersey-ext/" title="Jersey extension" class="md-nav__link">
+      Jersey extension
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/jersey-feature/" title="Jersey feature" class="md-nav__link">
+      Jersey feature
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/eager/" title="Eager singleton" class="md-nav__link">
+      Eager singleton
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/plugin/" title="Plugin" class="md-nav__link">
+      Plugin
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/servlet/" title="Web servlet" class="md-nav__link">
+      Web servlet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/filter/" title="Web filter" class="md-nav__link">
+      Web filter
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/listener/" title="Web listener" class="md-nav__link">
+      Web listener
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
+      Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/governator/" title="Governator" class="md-nav__link">
+      Governator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/hibernate/" title="Hibernate" class="md-nav__link">
+      Hibernate
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/eventbus/" title="EventBus" class="md-nav__link">
+      EventBus
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi/" title="JDBI" class="md-nav__link">
+      JDBI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi3/" title="JDBI3" class="md-nav__link">
+      JDBI3
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" checked>
+    
+    <label class="md-nav__link" for="nav-7">
+      Extras
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Extras
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../admin-rest/" title="Admin REST" class="md-nav__link">
+      Admin REST
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../bom/" title="BOM" class="md-nav__link">
+      BOM
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../lifecycle-annotations/" title="Lifecycle annotations" class="md-nav__link">
+      Lifecycle annotations
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../eventbus/" title="Guava EventBus" class="md-nav__link">
+      Guava EventBus
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../jdbi/" title="JDBI" class="md-nav__link">
+      JDBI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        JDBI3
+      </label>
+    
+    <a href="./" title="JDBI3" class="md-nav__link md-nav__link--active">
+      JDBI3
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setup" title="Setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" title="Usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unit-of-work" title="Unit of work" class="md-nav__link">
+    Unit of work
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intransaction" title="@InTransaction" class="md-nav__link">
+    @InTransaction
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transaction-configuration" title="Transaction configuration" class="md-nav__link">
+    Transaction configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-transactional-annotation" title="Custom transactional annotation" class="md-nav__link">
+    Custom transactional annotation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-handle" title="Context Handle" class="md-nav__link">
+    Context Handle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-transaction-definition" title="Manual transaction definition" class="md-nav__link">
+    Manual transaction definition
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repository" title="Repository" class="md-nav__link">
+    Repository
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guice-beans-access" title="Guice beans access" class="md-nav__link">
+    Guice beans access
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#row-mapper" title="Row mapper" class="md-nav__link">
+    Row mapper
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manual-unit-of-work-definition" title="Manual unit of work definition" class="md-nav__link">
+    Manual unit of work definition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-from-guice-jdbi-jdbi2" title="Migration from guice-jdbi (jdbi2)" class="md-nav__link">
+    Migration from guice-jdbi (jdbi2)
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../spa/" title="SPA" class="md-nav__link">
+      SPA
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../gsp/" title="Server Pages" class="md-nav__link">
+      Server Pages
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
+    
+    <label class="md-nav__link" for="nav-8">
+      About
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-8">
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/compatibility/" title="Compatibility" class="md-nav__link">
+      Compatibility
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/history/" title="Release notes" class="md-nav__link">
+      Release notes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/support/" title="Support" class="md-nav__link">
+      Support
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setup" title="Setup" class="md-nav__link">
+    Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" title="Usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unit-of-work" title="Unit of work" class="md-nav__link">
+    Unit of work
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intransaction" title="@InTransaction" class="md-nav__link">
+    @InTransaction
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#transaction-configuration" title="Transaction configuration" class="md-nav__link">
+    Transaction configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-transactional-annotation" title="Custom transactional annotation" class="md-nav__link">
+    Custom transactional annotation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-handle" title="Context Handle" class="md-nav__link">
+    Context Handle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-transaction-definition" title="Manual transaction definition" class="md-nav__link">
+    Manual transaction definition
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repository" title="Repository" class="md-nav__link">
+    Repository
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guice-beans-access" title="Guice beans access" class="md-nav__link">
+    Guice beans access
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#row-mapper" title="Row mapper" class="md-nav__link">
+    Row mapper
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manual-unit-of-work-definition" title="Manual unit of work definition" class="md-nav__link">
+    Manual unit of work definition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-from-guice-jdbi-jdbi2" title="Migration from guice-jdbi (jdbi2)" class="md-nav__link">
+    Migration from guice-jdbi (jdbi2)
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/extras/jdbi3.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="jdbi3-integration">JDBI3 integration<a class="headerlink" href="#jdbi3-integration" title="Permanent link">&para;</a></h1>
+<div class="admonition summary">
+<p><a href="https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3">Extensions project</a> module</p>
+</div>
+<p>Integrates <a href="http://jdbi.org/">JDBI3</a> with guice. Based on <a href="http://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html">dropwizard-jdbi3</a> integration.</p>
+<p>Features:</p>
+<ul>
+<li>JDBI instance available for injection</li>
+<li>Introduce unit of work concept, which is managed by annotations and guice aop (very like spring's @Transactional)</li>
+<li>Repositories (JDBI proxies for interfaces):<ul>
+<li>installed automatically (when classpath scan enabled)</li>
+<li>are normal guice beans, supporting aop and participating in global (thread bound) transaction.</li>
+<li>no need to compose repositories anymore (e.g. with @CreateSqlObject) to gain single transaction.</li>
+<li>can reference guice beans (with annotated getters)</li>
+</ul>
+</li>
+<li>Automatic installation for custom <code>RowMapper</code> </li>
+</ul>
+<p>Added installers:</p>
+<ul>
+<li><a href="https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/repository/RepositoryInstaller.java">RepositoryInstaller</a> - sql proxies</li>
+<li><a href="https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/MapperInstaller.java">MapperInstaller</a> - row mappers  </li>
+</ul>
+<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
+<p><a href="https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion"><img alt="JCenter" src="https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter" /></a>
+<a href="https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-jdbi3"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-jdbi3.svg?style=flat" /></a></p>
+<p>Avoid version in dependency declaration below if you use <a href="../guicey-bom">extensions BOM</a>. </p>
+<p>Maven:</p>
+<div class="codehilite"><pre><span></span><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>ru.vyarus.guicey<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>guicey-jdbi3<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>0.7.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<p>Gradle:</p>
+<div class="codehilite"><pre><span></span><span class="n">compile</span> <span class="s1">&#39;ru.vyarus.guicey:guicey-jdbi3:0.7.0&#39;</span>
+</pre></div>
+
+<p>See the most recent version in the badge above.</p>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<p>Register bundle:</p>
+<div class="codehilite"><pre><span></span><span class="n">GuiceBundle</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>        
+        <span class="o">.</span><span class="na">bundles</span><span class="o">(</span><span class="n">JdbiBundle</span><span class="o">.&lt;</span><span class="n">ConfType</span><span class="o">&gt;</span><span class="n">forDatabase</span><span class="o">((</span><span class="n">conf</span><span class="o">,</span> <span class="n">env</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">conf</span><span class="o">.</span><span class="na">getDatabase</span><span class="o">()))</span>
+        <span class="o">...</span>
+</pre></div>
+
+<p>Here default JDBI instance will be created from database configuration (much like it's described in 
+<a href="http://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html">dropwizard documentation</a>).</p>
+<p>Or build JDBI instance yourself:</p>
+<div class="codehilite"><pre><span></span><span class="n">JdbiBundle</span><span class="o">.</span><span class="na">forDbi</span><span class="o">((</span><span class="n">conf</span><span class="o">,</span> <span class="n">env</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">locateDbi</span><span class="o">())</span>
+</pre></div>
+
+<p>Jdbi3 introduce plugins concept. Dropwizard will automatically register <code>SqlObjectPlugin</code>, <code>GuavaPlugin</code>, <code>JodaTimePlugin</code>.
+If you need to install custom plugin:</p>
+<div class="codehilite"><pre><span></span><span class="n">JdbiBundle</span><span class="o">.</span><span class="na">forDbi</span><span class="o">((</span><span class="n">conf</span><span class="o">,</span> <span class="n">env</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">locateDbi</span><span class="o">())</span>
+    <span class="o">.</span><span class="na">withPlugins</span><span class="o">(</span><span class="k">new</span> <span class="n">H2DatabasePlugin</span><span class="o">())</span>
+</pre></div>
+
+<p>Also, If custom registration must be performed on jdbi instance:</p>
+<div class="codehilite"><pre><span></span><span class="n">JdbiBundle</span><span class="o">.</span><span class="na">forDbi</span><span class="o">((</span><span class="n">conf</span><span class="o">,</span> <span class="n">env</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">locateDbi</span><span class="o">())</span>
+    <span class="o">.</span><span class="na">withConfig</span><span class="o">((</span><span class="n">jdbi</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="n">jdbi</span><span class="o">.</span><span class="na">callSomething</span><span class="o">()</span> <span class="o">})</span>
+</pre></div>
+
+<p>Such configuration block will be called just after jdbi instance creation (but before injector creation).</p>
+<h3 id="unit-of-work">Unit of work<a class="headerlink" href="#unit-of-work" title="Permanent link">&para;</a></h3>
+<p>Unit of work concept states for: every database related operation must be performed inside unit of work.</p>
+<p>In JDBI such approach was implicit: you were always tied to initial handle. This lead to cumbersome usage of
+sql object proxies: if you create it on-demand it would always create new handle; if you want to combine
+multiple objects in one transaction, you have to always create them manually for each transaction.</p>
+<p>Integration removes these restrictions: dao (repository) objects are normal guice beans and transaction
+scope is controlled by <code>@InTransaction</code> annotation (note that such name was intentional to avoid confusion with
+JDBI own's Transaction annotation and more common Transactional annotations).</p>
+<p>At the beginning of unit of work, JDBI handle is created and bound to thread (thread local).
+All repositories are simply using this bound handle and so share transaction inside unit of work.</p>
+<h4 id="intransaction">@InTransaction<a class="headerlink" href="#intransaction" title="Permanent link">&para;</a></h4>
+<p>Annotation on method or class declares transactional scope. For example:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Inject</span> <span class="n">MyDAO</span> <span class="n">dao</span>
+
+<span class="nd">@InTransaction</span>
+<span class="kd">public</span> <span class="n">Result</span> <span class="nf">doSomething</span><span class="o">()</span> <span class="o">{</span>
+   <span class="n">dao</span><span class="o">.</span><span class="na">select</span><span class="o">();</span>
+   <span class="o">...</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>Transaction opened before doSomething() method and closed after it. 
+Dao call is also performed inside transaction.
+If exception appears during execution, it's propagated and transaction rolled back.</p>
+<p>Nested annotations are allowed (they simply ignored).</p>
+<p>Note that unit of work is not the same as transaction scope (transaction scope could be less or equal to unit of work). 
+But, for simplicity, you may think of it as the same things, if you always use <code>@InTransaction</code> annotation. </p>
+<h5 id="transaction-configuration">Transaction configuration<a class="headerlink" href="#transaction-configuration" title="Permanent link">&para;</a></h5>
+<p>Transaction isolation level and readonly flag could be defined with annotation:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@InTransaction</span><span class="o">(</span><span class="n">TransactionIsolationLevel</span><span class="o">.</span><span class="na">READ_UNCOMMITTED</span><span class="o">)</span>
+
+<span class="nd">@InTransaction</span><span class="o">(</span><span class="n">readOnly</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+</pre></div>
+
+<p>In case of nested transactions error will be thrown if:</p>
+<ul>
+<li>Current transaction level is different then nested one</li>
+<li>Current transaction is read only and nexted one is not  (note that some drivers, like h2, ignore readOnly flag completely)</li>
+</ul>
+<p>For example:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@InTransaction</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">action</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">nestedAction</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="nd">@InTransaction</span><span class="o">(</span><span class="n">TransactionIsolationLevel</span><span class="o">.</span><span class="na">READ_UNCOMMITTED</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">nestedAction</span><span class="o">()</span> <span class="o">{</span>
+<span class="o">...</span>    
+<span class="o">}</span>
+</pre></div>
+
+<p>When <code>action()</code> method called new transaction is created with default level
+(usually READ_COMMITTED). When <code>nestedAction()</code> is called exception will be thrown
+because it's transaction level requirement (READ_UNCOMMITTED) contradict with current transaction.</p>
+<h5 id="custom-transactional-annotation">Custom transactional annotation<a class="headerlink" href="#custom-transactional-annotation" title="Permanent link">&para;</a></h5>
+<p>If required, you may use your own annotation for transaction definition:</p>
+<div class="codehilite"><pre><span></span><span class="n">JdbiBundle</span><span class="o">.</span><span class="na">forDatabase</span><span class="o">((</span><span class="n">conf</span><span class="o">,</span> <span class="n">env</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">conf</span><span class="o">.</span><span class="na">getDatabase</span><span class="o">())</span>
+    <span class="o">.</span><span class="na">withTxAnnotations</span><span class="o">(</span><span class="n">MyCustomTransactional</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</pre></div>
+
+<p>Note that this will override default annotation support. If you want to support multiple annotations then specify
+all of them:</p>
+<div class="codehilite"><pre><span></span><span class="n">JdbiBundle</span><span class="o">.</span><span class="na">forDatabase</span><span class="o">((</span><span class="n">conf</span><span class="o">,</span> <span class="n">env</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">conf</span><span class="o">.</span><span class="na">getDatabase</span><span class="o">())</span>
+    <span class="o">.</span><span class="na">withTxAnnotations</span><span class="o">(</span><span class="n">InTransaction</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">MyCustomTransactional</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</pre></div>
+
+<p>If you need to support transaction configuration (level and read only settings) with your annotation then:</p>
+<ol>
+<li>Add required properties into annotation itself (see <code>@InTransaction</code> as example).</li>
+<li>Create implementation of <code>TxConfigFactory</code> (see <code>InTransactionTxConfigFactory</code> as example)</li>
+<li>Register factory inside your annotation with <code>@TxConfigSupport(MyCustomAnnotationTxConfigFactory.class)</code> </li>
+</ol>
+<p>Your factory will be instantiated as guice bean so annotate it as Singleton, if possible
+to avoid redundant instances creation.</p>
+<p>Configuration is resolved just once for each method, so yur factory will be called just once 
+for each annotated (with your custom annotation) method. </p>
+<h4 id="context-handle">Context Handle<a class="headerlink" href="#context-handle" title="Permanent link">&para;</a></h4>
+<p>Inside unit of work you may reference current handle by using:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Inject</span> <span class="n">Provider</span><span class="o">&lt;</span><span class="n">Handle</span><span class="o">&gt;</span>
+</pre></div>
+
+<h4 id="manual-transaction-definition">Manual transaction definition<a class="headerlink" href="#manual-transaction-definition" title="Permanent link">&para;</a></h4>
+<p>You may define transaction (with unit of work) without annotation using:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Inject</span> <span class="n">TransactionTempate</span> <span class="n">template</span><span class="o">;</span>
+<span class="o">...</span>
+<span class="n">template</span><span class="o">.</span><span class="na">inTrasansaction</span><span class="o">((</span><span class="n">handle</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">doSomething</span><span class="o">())</span>
+</pre></div>
+
+<p>Note that inside such manual scope you may also call any repository bean, as it's absolutely the same definition as 
+with annotation.</p>
+<p>You can also specify transaction config (if required):</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Inject</span> <span class="n">TransactionTempate</span> <span class="n">template</span><span class="o">;</span>
+<span class="o">...</span>
+<span class="n">template</span><span class="o">.</span><span class="na">inTrasansaction</span><span class="o">(</span>
+        <span class="k">new</span> <span class="n">TxConfig</span><span class="o">().</span><span class="na">level</span><span class="o">(</span><span class="n">TransactionIsolationLevel</span><span class="o">.</span><span class="na">READ_UNCOMMITTED</span><span class="o">),</span> 
+        <span class="o">(</span><span class="n">handle</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">doSomething</span><span class="o">())</span>
+</pre></div>
+
+<h3 id="repository">Repository<a class="headerlink" href="#repository" title="Permanent link">&para;</a></h3>
+<p>Declare repository (interface or abstract class) as usual, using DBI annotations. 
+It only must be annotated with <code>@JdbiRepository</code> so installer
+could recognize it and register in guice context.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>singleton scope will be forced for repositories.</p>
+</div>
+<div class="codehilite"><pre><span></span><span class="nd">@JdbiRepository</span>
+<span class="nd">@InTransaction</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MyRepository</span> <span class="o">{</span>     
+
+    <span class="nd">@SqlQuery</span><span class="o">(</span><span class="s">&quot;select name from something where id = :id&quot;</span><span class="o">)</span>
+    <span class="n">String</span> <span class="nf">findNameById</span><span class="o">(</span><span class="nd">@Bind</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>Note the use of <code>@InTransaction</code>: it was used to be able to call repository methods without extra annotations
+(the lowest transaction scope it's repository itself). It will make beans "feel the same" as usual JDBI on demand
+sql object proxies.</p>
+<p><code>@InTransaction</code> annotation is handled using guice aop. You can use any other guice aop related features.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><em>Don't use JDBI <code>@Transaction</code> and <code>@CreateSqlObject</code> annotations anymore</em>: probably they will even work, but they are not
+needed now and may confuse.</p>
+</div>
+<p>All installed repositories are reported into console:</p>
+<div class="codehilite"><pre><span></span>INFO  [2016-12-05 19:42:27,374] ru.vyarus.guicey.jdbi3.installer.repository.RepositoryInstaller: repositories = 
+
+    (ru.vyarus.guicey.jdbi3.support.repository.SampleRepository)
+</pre></div>
+
+<h3 id="guice-beans-access">Guice beans access<a class="headerlink" href="#guice-beans-access" title="Permanent link">&para;</a></h3>
+<p>You can access guice beans by annotating getter with <code>@Inject</code> (javax or guice):</p>
+<div class="codehilite"><pre><span></span><span class="nd">@JdbiRepository</span>
+<span class="nd">@InTransaction</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MyRepository</span> <span class="o">{</span>     
+
+    <span class="nd">@Inject</span>
+    <span class="n">MyOtherRepository</span> <span class="nf">getOtherRepo</span><span class="o">();</span>
+
+    <span class="nd">@SqlQuery</span><span class="o">(</span><span class="s">&quot;select name from something where id = :id&quot;</span><span class="o">)</span>
+    <span class="n">String</span> <span class="nf">findNameById</span><span class="o">(</span><span class="nd">@Bind</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">);</span>
+
+    <span class="k">default</span> <span class="n">String</span> <span class="nf">doSomething</span><span class="o">(</span><span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">findNameById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">getOtherRepo</span><span class="o">().</span><span class="na">doSOmethingWithName</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>Here call to <code>getOtherRepo()</code> will return <code>MyOtherRepository</code> guice bean, which is actually
+another proxy.  </p>
+<h3 id="row-mapper">Row mapper<a class="headerlink" href="#row-mapper" title="Permanent link">&para;</a></h3>
+<p>If you have custom implementations of <code>RowMapper</code>, it may be registered automatically. 
+You will be able to use injections there because mappers become ususal guice beans (singletons).
+When classpath scan is enabled, such classes will be searched and installed automatically.</p>
+<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomMapper</span> <span class="kd">implements</span> <span class="n">RowMapper</span><span class="o">&lt;</span><span class="n">Custom</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="n">Custom</span> <span class="nf">map</span><span class="o">(</span><span class="n">ResultSet</span> <span class="n">rs</span><span class="o">,</span> <span class="n">StatementContext</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+        <span class="c1">// mapping here</span>
+        <span class="k">return</span> <span class="n">custom</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>And now Custom type could be used for queries:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@JdbiRepository</span>
+<span class="nd">@InTransaction</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">CustomRepository</span> <span class="o">{</span>     
+
+    <span class="nd">@SqlQuery</span><span class="o">(</span><span class="s">&quot;select * from custom where id = :id&quot;</span><span class="o">)</span>
+    <span class="n">Custom</span> <span class="nf">findNameById</span><span class="o">(</span><span class="nd">@Bind</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>All installed mappers are reported to console:</p>
+<div class="codehilite"><pre><span></span>INFO  [2016-12-05 20:02:25,399] ru.vyarus.guicey.jdbi3.installer.MapperInstaller: jdbi mappers = 
+
+    Sample               (ru.vyarus.guicey.jdbi3.support.mapper.SampleMapper)
+</pre></div>
+
+<h2 id="manual-unit-of-work-definition">Manual unit of work definition<a class="headerlink" href="#manual-unit-of-work-definition" title="Permanent link">&para;</a></h2>
+<p>If, for some reason, you don't need transaction at some place, you can declare raw unit of work and use 
+assigned handle directly:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Inject</span> <span class="n">UnitManager</span> <span class="n">manager</span><span class="o">;</span>
+
+<span class="n">manager</span><span class="o">.</span><span class="na">beginUnit</span><span class="o">();</span>
+<span class="k">try</span> <span class="o">{</span>
+    <span class="n">Handle</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+    <span class="c1">// logic executed in unit of work but without transaction</span>
+<span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+    <span class="n">manager</span><span class="o">.</span><span class="na">endUnit</span><span class="o">();</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>Repositories could also be called inside such manual unit (as unit of work is correctly started).</p>
+<h2 id="migration-from-guice-jdbi-jdbi2">Migration from guice-jdbi (jdbi2)<a class="headerlink" href="#migration-from-guice-jdbi-jdbi2" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>Module package changed from <code>ru.vyarus.guicey.jdbi</code> to <code>ru.vyarus.guicey.jdbi3</code>.</p>
+</li>
+<li>
+<p><code>Jdbi</code> object was previously bound as <code>DBI</code> insterface. Now it's bound as <code>Jdbi</code> (DBI interface was removed in jdbi3).</p>
+</li>
+<li>
+<p>New methods in <code>JdbiBundle</code>:</p>
+<ul>
+<li>withPlugins - install custom plugins</li>
+<li>withConfig - to simplify manual configuration</li>
+</ul>
+</li>
+<li>
+<p>In jdbi3 <code>ResultSetMapper</code> was changed to <code>RowMapper</code> (and ColumnMapper). Installer supports RowMapper automatic installation.</p>
+</li>
+<li>
+<p>If you were using binding annotations then:</p>
+<ul>
+<li><code>@BindingAnnotation</code> -&gt; <code>@SqlStatementCustomizingAnnotation</code></li>
+<li><code>BindingFactory</code> -&gt;  <code>SqlStatementCustomizerFactory</code></li>
+</ul>
+</li>
+<li>
+<p>Sql obect proxies must be interfaces now (jdbi3 restriction). But as java 8 interfaces support default methods,
+its not a big problem</p>
+<ul>
+<li>instead of field injection (to access other proxies), now getter annotated with @Inject must be used.</li>
+</ul>
+</li>
+</ul>
+<p>See <a href="http://jdbi.org/#_upgrading_from_v2_to_v3">jdbi3 migration gude</a> for other (pure jdbi related) differences        </p>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../jdbi/" title="JDBI" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                JDBI
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../spa/" title="SPA" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                SPA
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2014-2019 Vyacheslav Rusakov
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/xvik" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/vyarus" class="md-footer-social__link fa fa-twitter"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+    
+      
+        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-93174150-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
+      
+    
+  </body>
+</html>

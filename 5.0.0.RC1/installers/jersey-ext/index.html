@@ -1,0 +1,1634 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Dropwizard guice integration">
+      
+      
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/5.0.0.RC1/installers/jersey-ext/">
+      
+      
+        <meta name="author" content="Vyacheslav Rusakov">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+    
+    
+      
+        <title>Jersey extension - Dropwizard-guicey</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="../../#jersey-extension-installer" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://xvik.github.io/dropwizard-guicey/5.0.0.RC1" title="Dropwizard-guicey" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                Dropwizard-guicey
+              </span>
+              <span class="md-header-nav__topic">
+                Jersey extension
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      dropwizard-guicey
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://xvik.github.io/dropwizard-guicey/5.0.0.RC1" title="Dropwizard-guicey" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Dropwizard-guicey
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      dropwizard-guicey
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../getting-started/" title="Getting started" class="md-nav__link">
+      Getting started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../concepts/" title="Concepts overview" class="md-nav__link">
+      Concepts overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      User guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        User guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/configuration/" title="Configuration" class="md-nav__link">
+      Configuration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/lifecycle/" title="Integration lifecycle" class="md-nav__link">
+      Integration lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/injector/" title="Injector" class="md-nav__link">
+      Injector
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/module-autowiring/" title="Module autowiring" class="md-nav__link">
+      Module autowiring
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/bindings/" title="Bindings" class="md-nav__link">
+      Bindings
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/scan/" title="Classpath scan" class="md-nav__link">
+      Classpath scan
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/installers/" title="Installers" class="md-nav__link">
+      Installers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/ordering/" title="Ordering" class="md-nav__link">
+      Ordering
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/bundles/" title="Bundles (Guicey)" class="md-nav__link">
+      Bundles (Guicey)
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/options/" title="Options" class="md-nav__link">
+      Options
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/diagnostic/" title="Diagnostic" class="md-nav__link">
+      Diagnostic
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/events/" title="Lifecycle events" class="md-nav__link">
+      Lifecycle events
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/commands/" title="Commands" class="md-nav__link">
+      Commands
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/web/" title="Web" class="md-nav__link">
+      Web
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/test/" title="Test" class="md-nav__link">
+      Test
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/dg-migration/" title="Migration from dropwizard-guice" class="md-nav__link">
+      Migration from dropwizard-guice
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+    
+    <label class="md-nav__link" for="nav-5">
+      Installers
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Installers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../resource/" title="Resource" class="md-nav__link">
+      Resource
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../task/" title="Task" class="md-nav__link">
+      Task
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../managed/" title="Managed" class="md-nav__link">
+      Managed
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../lifecycle/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../healthcheck/" title="Health check" class="md-nav__link">
+      Health check
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Jersey extension
+      </label>
+    
+    <a href="./" title="Jersey extension" class="md-nav__link md-nav__link--active">
+      Jersey extension
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#recognition" title="Recognition" class="md-nav__link">
+    Recognition
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#factory" title="Factory" class="md-nav__link">
+    Factory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exceptionmapper" title="ExceptionMapper" class="md-nav__link">
+    ExceptionMapper
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#valueparamprovider" title="ValueParamProvider" class="md-nav__link">
+    ValueParamProvider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injectionresolver" title="InjectionResolver" class="md-nav__link">
+    InjectionResolver
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paramconverterprovider" title="ParamConverterProvider" class="md-nav__link">
+    ParamConverterProvider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contextresolver" title="ContextResolver" class="md-nav__link">
+    ContextResolver
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#messagebodyreader" title="MessageBodyReader" class="md-nav__link">
+    MessageBodyReader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#messagebodywriter" title="MessageBodyWriter" class="md-nav__link">
+    MessageBodyWriter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readerinterceptor" title="ReaderInterceptor" class="md-nav__link">
+    ReaderInterceptor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#writerinterceptor" title="WriterInterceptor" class="md-nav__link">
+    WriterInterceptor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#containerrequestfilter" title="ContainerRequestFilter" class="md-nav__link">
+    ContainerRequestFilter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#containerresponsefilter" title="ContainerResponseFilter" class="md-nav__link">
+    ContainerResponseFilter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamicfeature" title="DynamicFeature" class="md-nav__link">
+    DynamicFeature
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applicationeventlistener" title="ApplicationEventListener" class="md-nav__link">
+    ApplicationEventListener
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../jersey-feature/" title="Jersey feature" class="md-nav__link">
+      Jersey feature
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../eager/" title="Eager singleton" class="md-nav__link">
+      Eager singleton
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../plugin/" title="Plugin" class="md-nav__link">
+      Plugin
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../servlet/" title="Web servlet" class="md-nav__link">
+      Web servlet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../filter/" title="Web filter" class="md-nav__link">
+      Web filter
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../listener/" title="Web listener" class="md-nav__link">
+      Web listener
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
+    
+    <label class="md-nav__link" for="nav-6">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-6">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
+      Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/governator/" title="Governator" class="md-nav__link">
+      Governator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/hibernate/" title="Hibernate" class="md-nav__link">
+      Hibernate
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/eventbus/" title="EventBus" class="md-nav__link">
+      EventBus
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi/" title="JDBI" class="md-nav__link">
+      JDBI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi3/" title="JDBI3" class="md-nav__link">
+      JDBI3
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Extras
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Extras
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/admin-rest/" title="Admin REST" class="md-nav__link">
+      Admin REST
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/bom/" title="BOM" class="md-nav__link">
+      BOM
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/lifecycle-annotations/" title="Lifecycle annotations" class="md-nav__link">
+      Lifecycle annotations
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/eventbus/" title="Guava EventBus" class="md-nav__link">
+      Guava EventBus
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/jdbi/" title="JDBI" class="md-nav__link">
+      JDBI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/jdbi3/" title="JDBI3" class="md-nav__link">
+      JDBI3
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/spa/" title="SPA" class="md-nav__link">
+      SPA
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/gsp/" title="Server Pages" class="md-nav__link">
+      Server Pages
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
+    
+    <label class="md-nav__link" for="nav-8">
+      About
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-8">
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/compatibility/" title="Compatibility" class="md-nav__link">
+      Compatibility
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/history/" title="Release notes" class="md-nav__link">
+      Release notes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/support/" title="Support" class="md-nav__link">
+      Support
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#recognition" title="Recognition" class="md-nav__link">
+    Recognition
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#factory" title="Factory" class="md-nav__link">
+    Factory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exceptionmapper" title="ExceptionMapper" class="md-nav__link">
+    ExceptionMapper
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#valueparamprovider" title="ValueParamProvider" class="md-nav__link">
+    ValueParamProvider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injectionresolver" title="InjectionResolver" class="md-nav__link">
+    InjectionResolver
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paramconverterprovider" title="ParamConverterProvider" class="md-nav__link">
+    ParamConverterProvider
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#contextresolver" title="ContextResolver" class="md-nav__link">
+    ContextResolver
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#messagebodyreader" title="MessageBodyReader" class="md-nav__link">
+    MessageBodyReader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#messagebodywriter" title="MessageBodyWriter" class="md-nav__link">
+    MessageBodyWriter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readerinterceptor" title="ReaderInterceptor" class="md-nav__link">
+    ReaderInterceptor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#writerinterceptor" title="WriterInterceptor" class="md-nav__link">
+    WriterInterceptor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#containerrequestfilter" title="ContainerRequestFilter" class="md-nav__link">
+    ContainerRequestFilter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#containerresponsefilter" title="ContainerResponseFilter" class="md-nav__link">
+    ContainerResponseFilter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamicfeature" title="DynamicFeature" class="md-nav__link">
+    DynamicFeature
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#applicationeventlistener" title="ApplicationEventListener" class="md-nav__link">
+    ApplicationEventListener
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/installers/jersey-ext.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="jersey-extension-installer">Jersey extension installer<a class="headerlink" href="#jersey-extension-installer" title="Permanent link">&para;</a></h1>
+<div class="admonition summary">
+<p>CoreInstallersBundle / <a href="https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java">JerseyProviderInstaller</a>        </p>
+</div>
+<p>Installs various jersey extensions, usually annotated with jersey <code class="codehilite"><span class="nd">@Provider</span></code> annotation and installed via <code class="codehilite"><span class="n">environment</span><span class="o">.</span><span class="na">jersey</span><span class="o">().</span><span class="na">register</span><span class="o">()</span></code>:</p>
+<div class="codehilite"><pre><span></span>Factory, ExceptionMapper, ValueParamProvider, InjectionResolver, 
+ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, 
+ReaderInterceptor, WriterInterceptor, ContainerRequestFilter, 
+ContainerResponseFilter, DynamicFeature, ApplicationEventListener
+</pre></div>
+
+
+<h2 id="recognition">Recognition<a class="headerlink" href="#recognition" title="Permanent link">&para;</a></h2>
+<p>Detects  classes annotated with jersey <code>@javax.ws.rs.ext.Provider</code> annotation and register their instances in jersey.</p>
+<div class="admonition attention">
+<p>Extensions registered as <strong>singletons</strong>, when no explicit scope annotation is used.
+Behaviour could be disabled with <a href="../../guide/configuration/#options">option</a>:
+<div class="codehilite"><pre><span></span><span class="o">.</span><span class="na">option</span><span class="o">(</span><span class="n">InstallerOptions</span><span class="o">.</span><span class="na">ForceSingletonForJerseyExtensions</span><span class="o">,</span> <span class="kc">false</span><span class="o">)</span>
+</pre></div></p>
+</div>
+<p>Special <code>@Protptype</code> scope annotation may be used to mark resources in prototype scope.
+It is useful when <a href="../../guide/web/#disable-servletmodule-support">guice servlet support is disabled</a> (and so <code>@RequestScoped</code> could not be used).</p>
+<p>Due to specifics of <a href="../lifecycle/">HK2 integration</a>, you may need to use:</p>
+<ul>
+<li><code class="codehilite"><span class="nd">@HK2Managed</span></code> to delegate bean creation to HK2</li>
+<li><code class="codehilite"><span class="nd">@LazyBinding</span></code> to delay bean creation to time when all dependencies will be available </li>
+<li><code>javax.inject.Provider</code> as universal workaround (to wrap not immediately available dependency).</li>
+</ul>
+<p>Or you can enable <a href="../../guide/configuration/#use-hk2-for-jersey-extensions">HK2 management for jersey extensions by default</a>.
+Note that this will affect <a href="../resource/">resources</a> too and guice aop will not work on jersey extensions.</p>
+<h3 id="factory">Factory<a class="headerlink" href="#factory" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <code class="codehilite"><span class="n">org</span><span class="o">.</span><span class="na">glassfish</span><span class="o">.</span><span class="na">hk2</span><span class="o">.</span><span class="na">api</span><span class="o">.</span><span class="na">Factory</span></code> (or extending abstract class implementing it).</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AuthFactory</span> <span class="kd">implements</span> <span class="n">Factory</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">User</span> <span class="nf">provide</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">User</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">dispose</span><span class="o">(</span><span class="n">User</span> <span class="n">instance</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<div class="admonition tip">
+<p>Factories in essence are very like guice (or javax.inject) providers (<code class="codehilite"><span class="n">Provider</span></code>).</p>
+</div>
+<p>Example of using jersey abstract class instead of direct implementation:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LocaleInjectableProvider</span> <span class="kd">extends</span> <span class="n">AbstractContainerRequestValueFactory</span><span class="o">&lt;</span><span class="n">Locale</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">javax</span><span class="o">.</span><span class="na">inject</span><span class="o">.</span><span class="na">Provider</span><span class="o">&lt;</span><span class="n">HttpHeaders</span><span class="o">&gt;</span> <span class="n">request</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Locale</span> <span class="nf">provide</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Locale</span><span class="o">&gt;</span> <span class="n">locales</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">getAcceptableLanguages</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">locales</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="n">Locale</span><span class="o">.</span><span class="na">US</span> <span class="o">:</span> <span class="n">locales</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3 id="exceptionmapper">ExceptionMapper<a class="headerlink" href="#exceptionmapper" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">ExceptionMapper</span></code> (or extending abstract class implementing it). 
+Useful for <a href="http://www.dropwizard.io/1.3.0/docs/manual/core.html#error-handling">error handling customization</a>.</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DummyExceptionMapper</span> <span class="kd">implements</span> <span class="n">ExceptionMapper</span><span class="o">&lt;</span><span class="n">RuntimeException</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">DummyExceptionMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Response</span> <span class="nf">toResponse</span><span class="o">(</span><span class="n">RuntimeException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">&quot;Problem while executing&quot;</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="o">.</span><span class="na">status</span><span class="o">(</span><span class="n">Response</span><span class="o">.</span><span class="na">Status</span><span class="o">.</span><span class="na">BAD_REQUEST</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">type</span><span class="o">(</span><span class="n">MediaType</span><span class="o">.</span><span class="na">TEXT_PLAIN</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">entity</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</pre></div>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can also use <code>ExtendedExceptionMapper</code> as more flexible alternative. See example usage in
+<a href="https://www.dropwizard.io/1.3.5/docs/manual/views.html#template-errors">dropwizard-views</a>.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Default exception dropwizard mappers (registered in <code>io.dropwizard.setup.ExceptionMapperBinder</code>) could be 
+<a href="https://www.dropwizard.io/1.3.5/docs/manual/core.html#overriding-default-exception-mappers">overridden</a>
+or completely disabled with <code>server.registerDefaultExceptionMappers</code> option.    </p>
+</div>
+<h3 id="valueparamprovider">ValueParamProvider<a class="headerlink" href="#valueparamprovider" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <code class="codehilite"><span class="n">org</span><span class="o">.</span><span class="na">glassfish</span><span class="o">.</span><span class="na">jersey</span><span class="o">.</span><span class="na">server</span><span class="o">.</span><span class="na">spi</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">ValueParamProvider</span></code> (or extending abstract class implementing it).</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="nd">@LazyBinding</span> 
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AuthFactoryProvider</span> <span class="kd">extends</span> <span class="n">AbstractValueFactoryProvider</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Factory</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">authFactory</span><span class="o">;</span>
+
+    <span class="nd">@Inject</span>
+    <span class="kd">public</span> <span class="nf">AuthFactoryProvider</span><span class="o">(</span><span class="kd">final</span> <span class="n">MultivaluedParameterExtractorProvider</span> <span class="n">extractorProvider</span><span class="o">,</span>
+                               <span class="kd">final</span> <span class="n">AuthFactory</span> <span class="n">factory</span><span class="o">,</span> 
+                               <span class="kd">final</span> <span class="n">ServiceLocator</span> <span class="n">injector</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">extractorProvider</span><span class="o">,</span> <span class="n">injector</span><span class="o">,</span> <span class="n">Parameter</span><span class="o">.</span><span class="na">Source</span><span class="o">.</span><span class="na">UNKNOWN</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">authFactory</span> <span class="o">=</span> <span class="n">factory</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">Factory</span><span class="o">&lt;?&gt;</span> <span class="n">createValueFactory</span><span class="o">(</span><span class="n">Parameter</span> <span class="n">parameter</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">Auth</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">parameter</span><span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">Auth</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">auth</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">authFactory</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="codehilite"><span class="nd">@LazyBinding</span></code> was used to delay provider creation because required dependency <code class="codehilite"><span class="n">MultivaluedParameterExtractorProvider</span></code>
+(by super class) will be available only after HK2 context creation (which is created after guice context). 
+Another option could be using <code class="codehilite"><span class="nd">@HK2Managed</span></code> (instead of lazy) which will delegate bean creation to HK2.</p>
+</div>
+<h3 id="injectionresolver">InjectionResolver<a class="headerlink" href="#injectionresolver" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <code class="codehilite"><span class="n">org</span><span class="o">.</span><span class="na">glassfish</span><span class="o">.</span><span class="na">hk2</span><span class="o">.</span><span class="na">api</span><span class="o">.</span><span class="na">InjectionResolver</span></code> (or extending abstract class implementing it).</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="nd">@LazyBinding</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AuthInjectionResolver</span> <span class="kd">extends</span> <span class="n">ParamInjectionResolver</span><span class="o">&lt;</span><span class="n">Auth</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nf">AuthInjectionResolver</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">AuthFactoryProvider</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="codehilite"><span class="nd">@LazyBinding</span></code> was used to delay provider creation because super class will require HK2 service locator, 
+which is not yet available. <code class="codehilite"><span class="nd">@HK2Managed</span></code> could also be used instead.</p>
+</div>
+<h3 id="paramconverterprovider">ParamConverterProvider<a class="headerlink" href="#paramconverterprovider" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ParamConverterProvider.html"><code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">ParamConverterProvider</span></code></a> (or extending abstract class implementing it).</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FooParamConverter</span> <span class="kd">implements</span> <span class="n">ParamConverterProvider</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">ParamConverter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">getConverter</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">rawType</span><span class="o">,</span> <span class="n">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">Foo</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">rawType</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">(</span><span class="n">ParamConverter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;)</span> <span class="k">new</span> <span class="n">FooConverter</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">FooConverter</span> <span class="kd">implements</span> <span class="n">ParamConverter</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="n">Foo</span> <span class="nf">fromString</span><span class="o">(</span><span class="n">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">Foo</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">(</span><span class="n">Foo</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3 id="contextresolver">ContextResolver<a class="headerlink" href="#contextresolver" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ContextResolver.html"><code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">ContextResolver</span></code></a> (or extending abstract class implementing it).</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyContextResolver</span> <span class="kd">implements</span> <span class="n">ContextResolver</span><span class="o">&lt;</span><span class="n">Context</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Context</span> <span class="nf">getContext</span><span class="o">(</span><span class="n">Class</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">Context</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Context</span> <span class="o">{}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3 id="messagebodyreader">MessageBodyReader<a class="headerlink" href="#messagebodyreader" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/MessageBodyReader.html"><code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">MessageBodyReader</span></code></a> (or extending abstract class implementing it).
+Useful for <a href="http://www.dropwizard.io/1.3.0/docs/manual/core.html#custom-representations">custom representations</a>.</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TypeMessageBodyReader</span> <span class="kd">implements</span> <span class="n">MessageBodyReader</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isReadable</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">reflect</span><span class="o">.</span><span class="na">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Type</span> <span class="nf">readFrom</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">reflect</span><span class="o">.</span><span class="na">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">httpHeaders</span><span class="o">,</span> <span class="n">InputStream</span> <span class="n">entityStream</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Type</span> <span class="o">{}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3 id="messagebodywriter">MessageBodyWriter<a class="headerlink" href="#messagebodywriter" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/MessageBodyWriter.html"><code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">MessageBodyWriter</span></code></a> (or extending abstract class implementing it).
+Useful for <a href="http://www.dropwizard.io/1.3.0/docs/manual/core.html#custom-representations">custom representations</a>.</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TypeMessageBodyWriter</span> <span class="kd">implements</span> <span class="n">MessageBodyWriter</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isWriteable</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type</span><span class="o">,</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">reflect</span><span class="o">.</span><span class="na">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">getSize</span><span class="o">(</span><span class="n">Type</span> <span class="n">type</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type2</span><span class="o">,</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">reflect</span><span class="o">.</span><span class="na">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeTo</span><span class="o">(</span><span class="n">Type</span> <span class="n">type</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">type2</span><span class="o">,</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">reflect</span><span class="o">.</span><span class="na">Type</span> <span class="n">genericType</span><span class="o">,</span> <span class="n">Annotation</span><span class="o">[]</span> <span class="n">annotations</span><span class="o">,</span> <span class="n">MediaType</span> <span class="n">mediaType</span><span class="o">,</span> <span class="n">MultivaluedMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">httpHeaders</span><span class="o">,</span> <span class="n">OutputStream</span> <span class="n">entityStream</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Type</span> <span class="o">{}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3 id="readerinterceptor">ReaderInterceptor<a class="headerlink" href="#readerinterceptor" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ReaderInterceptor.html"><code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">ReaderInterceptor</span></code></a> (or extending abstract class implementing it).</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyReaderInterceptor</span> <span class="kd">implements</span> <span class="n">ReaderInterceptor</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">aroundReadFrom</span><span class="o">(</span><span class="n">ReaderInterceptorContext</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3 id="writerinterceptor">WriterInterceptor<a class="headerlink" href="#writerinterceptor" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/WriterInterceptor.html"><code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">WriterInterceptor</span></code></a> (or extending abstract class implementing it).</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyWriterInterceptor</span> <span class="kd">implements</span> <span class="n">WriterInterceptor</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kt">void</span> <span class="nf">aroundWriteTo</span><span class="o">(</span><span class="n">WriterInterceptorContext</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">WebApplicationException</span> <span class="o">{</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3 id="containerrequestfilter">ContainerRequestFilter<a class="headerlink" href="#containerrequestfilter" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/ContainerRequestFilter.html"><code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">container</span><span class="o">.</span><span class="na">ContainerRequestFilter</span></code></a> (or extending abstract class implementing it).
+Useful for <a href="http://www.dropwizard.io/1.3.0/docs/manual/core.html#jersey-filters">request modifications</a>.</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyContainerRequestFilter</span> <span class="kd">implements</span> <span class="n">ContainerRequestFilter</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">filter</span><span class="o">(</span><span class="n">ContainerRequestContext</span> <span class="n">requestContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3 id="containerresponsefilter">ContainerResponseFilter<a class="headerlink" href="#containerresponsefilter" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/ContainerResponseFilter.html"><code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">container</span><span class="o">.</span><span class="na">ContainerResponseFilter</span></code></a> (or extending abstract class implementing it).
+Useful for <a href="http://www.dropwizard.io/1.3.0/docs/manual/core.html#jersey-filters">response modifications</a>.</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyContainerResponseFilter</span> <span class="kd">implements</span> <span class="n">ContainerResponseFilter</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">filter</span><span class="o">(</span><span class="n">ContainerRequestContext</span> <span class="n">requestContext</span><span class="o">,</span> <span class="n">ContainerResponseContext</span> <span class="n">responseContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3 id="dynamicfeature">DynamicFeature<a class="headerlink" href="#dynamicfeature" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/DynamicFeature.html"><code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">container</span><span class="o">.</span><span class="na">DynamicFeature</span></code></a> (or extending abstract class implementing it).
+Useful for conditional <a href="http://www.dropwizard.io/1.3.0/docs/manual/core.html#jersey-filters">activation of filters</a>.</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyDynamicFeature</span> <span class="kd">implements</span> <span class="n">DynamicFeature</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">configure</span><span class="o">(</span><span class="n">ResourceInfo</span> <span class="n">resourceInfo</span><span class="o">,</span> <span class="n">FeatureContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3 id="applicationeventlistener">ApplicationEventListener<a class="headerlink" href="#applicationeventlistener" title="Permanent link">&para;</a></h3>
+<p>Any class implementing <a href="https://jersey.java.net/apidocs/2.9/jersey/org/glassfish/jersey/server/monitoring/ApplicationEventListener.html"><code class="codehilite"><span class="n">org</span><span class="o">.</span><span class="na">glassfish</span><span class="o">.</span><span class="na">jersey</span><span class="o">.</span><span class="na">server</span><span class="o">.</span><span class="na">monitoring</span><span class="o">.</span><span class="na">ApplicationEventListener</span></code></a> (or extending abstract class implementing it).</p>
+<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyApplicationEventListener</span> <span class="kd">implements</span> <span class="n">ApplicationEventListener</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onEvent</span><span class="o">(</span><span class="n">ApplicationEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">RequestEventListener</span> <span class="nf">onRequest</span><span class="o">(</span><span class="n">RequestEvent</span> <span class="n">requestEvent</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../healthcheck/" title="Health check" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Health check
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../jersey-feature/" title="Jersey feature" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Jersey feature
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2014-2019 Vyacheslav Rusakov
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/xvik" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/vyarus" class="md-footer-social__link fa fa-twitter"></a>
+    
+  </div>
+
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+    
+    
+      
+        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-93174150-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
+      
+    
+  </body>
+</html>
