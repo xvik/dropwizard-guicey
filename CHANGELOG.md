@@ -1,3 +1,4 @@
+### 5.0.0 (unreleased)
 * Update to dropwizard 2.0.0-rc9
     - (breaking in jersey 2.26)
         * Jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
@@ -38,13 +39,13 @@
             - Add special `ApplicationStarted` event: always fired after complete dropwizard startup. 
                 Supposed to be used to simplify diagnostic reporting.
             - Support lifecycle listeners deduplication for correct report behaviour in case of multiple registrations.
-               `Set` used as listeners holder, so only proper equals and hashcode methods implementation is required for deduplication          
+               `LinkedHashSet` used as listeners holder, so only proper equals and hashcode methods implementation is required for deduplication          
         * Removed `GuiceyOptions.ConfigureFromDropwizardBundles` option because it's useless with new bundles lifecycle.
             (if required, the same behaviour may be implemented with custom bundles lookup)
     - Removed `GuiceyOptions.BindConfigurationInterfaces` option (interfaces are already bound with `@Config` qualifier)
     - Guicey web installers (`WebInstallersBundle`) enabled by default. 
       `GuiceBundle.builder()#useWebInstallers()` option removed
-    - Direct dropwizard bundles support: they could be registered directly in with main bundle (`GuiceBundle.dropwizardBundles()`)
+    - Direct dropwizard bundles support: bundles could be registered directly in main bundle (`GuiceBundle.dropwizardBundles()`)
       or inside guicey bundle (`GuiceyBundle.dropwizardBundles()`). These bundles could be disabled (same as guicey bundles - with 
       `.disableDropwizardBundles()` methods) and are show in reporting.
         * Transitive dropwizard bundles tracking: all dropwizard bundles registered through guicey api are tracked for
@@ -66,7 +67,7 @@
             ItemId equals method consider class-only id's equal to any type instance id.
         * Add bundle loops detection: as multiple bundle instances allowed loops are highly possible
             Entire bundle chain is provided in exception to simplify fixing loops.
-        * Add base classes for uniqu bundles and modules (with correct equals and hash code implementations):
+        * Add base classes for unique bundles and modules (with correct equals and hash code implementations):
           `UniqueGuiceyBundle` and `UniqueModule` (use class name strings for comparison to correctly detect even
           instances of classes from different class loaders). 
           Note: no such class for dropwizard bundle because it's useless (if you use guicey - use GuiceyBundle instead 
@@ -96,7 +97,7 @@
         Useful to enable diagnostic logs on compiled (deployed) application.                     
 * (breaking) Test support changes
     - Rename test extensions for guicey hooks registration: 
-        * `GuiceyConfigurationRule` into `GuiceyHooksRule` and
+        * `GuiceyConfigurationRule` into `GuiceyHooksRule` 
         * `@UseGuiceyConfiguration` (spock extension) into `@UseGuiceyHooks`
 * (breaking) Reporting changes
     - All reports moved into one top-level `debug` package.

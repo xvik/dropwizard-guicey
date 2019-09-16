@@ -88,8 +88,8 @@ github {
 }
 
 mkdocs.publish {
-    docPath = '4.2.2'
-    rootRedirect = true
+    docPath = '5.0.0.RC1'
+    rootRedirect = false
 }
 
 pom {

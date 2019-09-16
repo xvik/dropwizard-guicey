@@ -15,14 +15,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>4.2.2</version>
+  <version>5.0.0.RC1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:4.2.2'
+compile 'ru.vyarus:dropwizard-guicey:5.0.0.RC1'
 ```
 
 ### BOM
@@ -31,11 +31,11 @@ Guicey pom may be also used as maven BOM:
 
 ```groovy
 plugins {
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "io.spring.dependency-management" version "1.0.8.RELEASE"
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus:dropwizard-guicey:4.2.2'  
+        mavenBom 'ru.vyarus:dropwizard-guicey:5.0.0.RC1'  
         // uncomment to override dropwizard version    
         // mavenBom 'io.dropwizard:dropwizard-bom:1.3.7' 
     }

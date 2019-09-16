@@ -1,3 +1,141 @@
+### 5.0.0 (unreleased)
+* Update to dropwizard 2.0.0-rc9
+    - (breaking in jersey 2.26)
+        * Jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
+          This allows complete hk2 avoidance in the future. Right now it means that all direct hk2 classes must be replaced
+          by jersey abstractions (but still hk2 is the only production ready integration)
+            - Jersey `InjectionManager` now bound to guice context instead of hk2 `ServiceLocator` 
+                (locator still can be retrieved from manager)
+            - Rename HK2 mentions into jersey (because now jersey is not tied to hk2)
+                 * `@HK2Managed` renamed to `@JerseyManaged`   
+            - JerseyProviderInstaller (installs classes annotated with `@Provider`) changes:     
+                * `ValueParamProvider` detected instead of `ValueFactoryProvider`  
+                * `Supplier` detected instead `Factory` (Factory implementations are not recognized anymore!)
+                * `org.glassfish.jersey.internal.inject.InjectionResolver` detected instead of `org.glassfish.hk2.api.InjectionResolver`
+            - Jersey installers use `org.glassfish.jersey.internal.inject.AbstractBinder`
+              instead of hk specific `org.glassfish.hk2.utilities.binding.AbstractBinder`    
+        * Jersey 2.26 implements jax-rs 2.1 which forced it to change some of it's apis.
+            - `org.glassfish.jersey.server.AsyncContext` binding used instead of 
+                `org.glassfish.jersey.server.internal.process.AsyncContext`                                  
+    - (breaking dw 2.0) 
+        * Deprecated `Bundle` usages replaced with `ConfigurableBundle`
+           (in new dropwizard version `Bundle extends ConfigurableBundle`)
+            - Guicey configuration scope `ConfigSope.DropwizardBundle` now use `ConfigurableBundle` class for marking guice 
+               bundle scope instead of `Bundle`
+        * `dropwizard-bom` now includes only dropwizard modules. All 3rd party dependencies are moved to
+            `dropwizard-dependencies` package. So you'll have to update two boms now in order to update dropwizard version.    
+* (breaking) Guicey configuration and lifecycle changes:
+    - `GuiceyBundle` contract and behaviour changed to match dropwizard lifecycle: 
+        * GuiceyBundle now contains two methods `initialize` and `run` and called according to dropwizard lifecycle.
+            Now guicey bundles are complete replacement for dropwizard bundles, but with good interoperability 
+            with pure dropwizard bundles 
+        * The following guicey initializations were moved into dropwizard configuration phase:
+            - Guicey bundles lookup and initialization (to be able to install dropwizard bundles inside guicey bundles)
+            - Installers classpath search and instantiation
+            - Extensions classpath search and validation (but on run phase it is still possible to disable extensions)
+        * Extensions initialization moved outside injector creation scope. It will affect time report and, in case of
+           extension installation error, exception will be thrown directly instead of Guice's CreationException.        
+        * A lot of guicey lifecycle events obviously changed (and new added) 
+            - Add special `ApplicationStarted` event: always fired after complete dropwizard startup. 
+                Supposed to be used to simplify diagnostic reporting.
+            - Support lifecycle listeners deduplication for correct report behaviour in case of multiple registrations.
+               `Set` used as listeners holder, so only proper equals and hashcode methods implementation is required for deduplication          
+        * Removed `GuiceyOptions.ConfigureFromDropwizardBundles` option because it's useless with new bundles lifecycle.
+            (if required, the same behaviour may be implemented with custom bundles lookup)
+    - Removed `GuiceyOptions.BindConfigurationInterfaces` option (interfaces are already bound with `@Config` qualifier)
+    - Guicey web installers (`WebInstallersBundle`) enabled by default. 
+      `GuiceBundle.builder()#useWebInstallers()` option removed
+    - Direct dropwizard bundles support: bundles could be registered directly in main bundle (`GuiceBundle.dropwizardBundles()`)
+      or inside guicey bundle (`GuiceyBundle.dropwizardBundles()`). These bundles could be disabled (same as guicey bundles - with 
+      `.disableDropwizardBundles()` methods) and are show in reporting.
+        * Transitive dropwizard bundles tracking: all dropwizard bundles registered through guicey api are tracked for
+          transitive registration with bootstrap proxy. That means that all transitive bundles are shown in reports and 
+          any transitive bundle could be disabled (with `.disableDropwizardBundle` or custom predicate). Also, deduplication checks 
+          will work (same as for guicey bundles and guice modules).
+          Tracking may be disabled with `GuieyOptions.TrackDropwizardBundles` option.  
+    - Allow registration of multiple instances for guice modules and guicey bundles 
+        (multiple instances of the same class)
+        * By default, equal instances of the same type considered duplicate (only one registered).
+            So, to grant uniqueness of bundle or module, implement correct equals method.
+            For custom cases (when custom equals method is impossible), `DuplicateConfigDetector` may be implemented 
+            and registered with `GuiceBundle.Builder#duplicateConfigDetector()` 
+        * Legacy behaviour (1 instance per type) could be simulated with: `.duplicateConfigDetector(new LegacyModeDuplicatesDetector())`
+        * `ItemId` is now used as identity instead of pure `Class`. ItemId compute object hash string
+            and preserve it for instance identification. Class types does not contain hash in id.
+            Required because even scopes, represented previously as classes now could be duplicated
+            as multiple instances of the same bundle class could be registered. For simplicity,
+            ItemId equals method consider class-only id's equal to any type instance id.
+        * Add bundle loops detection: as multiple bundle instances allowed loops are highly possible
+            Entire bundle chain is provided in exception to simplify fixing loops.
+        * Add base classes for uniqu bundles and modules (with correct equals and hash code implementations):
+          `UniqueGuiceyBundle` and `UniqueModule` (use class name strings for comparison to correctly detect even
+          instances of classes from different class loaders). 
+          Note: no such class for dropwizard bundle because it's useless (if you use guicey - use GuiceyBundle instead 
+          and if you need dropwizard bundle - it shouldn't be dependent on guicey classes)     
+    - Support extensions recognition from guice modules (jersey1-guice style): 
+        * extensions are detected from declaration in specified guice modules 
+            (essentially same as classpath scan, but from bindings)
+        * support only direct type bindings (all generified or qualified declarations ignored)    
+        * all extension registration types may work together (classpath scan, manual declaration and binding declaration)    
+        * extensions registered directly (or found by classpath scan) and also bound manually in guice module 
+            will not conflict anymore (as manual declaration would be detected) and so @LazyBinding workaround is not needed        
+        * extensions declared in guice module may be also disabled (guicey will remove binding declaration in this case)
+        * Transitive gucie modules (installed by other modules) may be disabled with usual `disableModules()`
+            (but only if guice bindings analysis is not disabled).
+        * enabled by default, but can be disabled with `GuiceyOptions.AnalyzeModules` option
+        * `BindingInstaller` interface changed (because of direct guice bindings): 
+            it now contains 3 methods for class binding, manual binding validation and extra installations, 
+            common for both types (or universal reporting)
+    - Extension classes loaded by different class loaders now detected as duplicate extension registration        
+* Guicey hooks, initially supposed to be used for testing only, now considered to be also used for
+    diagnostic tools
+    - Add guicey hooks lookup from system property `guicey.hooks` as comma-separated list of classes.
+    - Add hook aliases support: alias name assumed to be used instead of full class name in system property (`-Dguicey.hooks`).
+      Alias registered with `GuiceBundle.builder()#hookAlias()`. All registered aliases are logged at startup.
+    - Add diagnostic hook, which enables diagnostic reports and lifecycle logs. 
+        Could be enabled with system property: `-Dguicey.hooks=diagnostic` (where diagnostic is pre-registered hook alias) 
+        Useful to enable diagnostic logs on compiled (deployed) application.                     
+* (breaking) Test support changes
+    - Rename test extensions for guicey hooks registration: 
+        * `GuiceyConfigurationRule` into `GuiceyHooksRule` and
+        * `@UseGuiceyConfiguration` (spock extension) into `@UseGuiceyHooks`
+* (breaking) Reporting changes
+    - All reports moved into one top-level `debug` package.
+    - All guicey reports are now guicey lifecycle listeners
+        * `DiagnosticBundle` bundle become `ConfigurationDiagnostic` guicey listener.
+            Reporters are no more bound to guice context (they could always be constructed manually).
+        * `DebugGuiceyLifecycle` listener renamed into `LifecycleDiagnostic`
+        * Guicey reports (listeners) properly implement equals and hashcode in order to 
+          use new deduplicatation mechanism and avoid reports duplication (for example,
+          if `.printDiagnosticReport()` would be called multiple times, only one report would be shown;
+          but still different configurations will be reported separately (e.g. list `.printDiagnosticReport()` and 
+          `.printAvailableInstallers()` which internally use one listener))
+    - Report all diagnostic reports as one log message in order to differentiate `.printDiagnosticReport()` 
+        and `.printAvailableInstallers()` reports when both active      
+    - Diagnostic report changes (`.printDiagnosticReport()`):         
+        * Show both dropwizard and guicey bundles together (dropwizard bundles marked with DW)
+        * Always show "empty" bundles (bundles without sub registrations) - important for dw bundles
+        * Add "-" before ignored or disabled items (to visually differentiate from accepted items)
+        * Identify instance deduplication:
+            - Instead of registrations count (REG(2)) show exact counter of all registered and accepted items: REG(5/12)
+            - Show ignored items even in context where items of the same type were accepted
+            - Show exact number of ignored items in context (DUPLICATE(3))
+        * Show extension recognized from guice bindings (as sub report)
+        * Stats report improved:
+            - Show guice internal stat logs in stats diagnostic report (intercept guice logs)
+            - Show guicey time by phases (init/run/jersey)
+            - Show guice modules analysis stats                      
+    - Show installer marker interfaces in `printAvailableInstallers()` report to indicate installer actions
+        (installation by type or instance, custom guice or jersey bindings, options support).
+    - Detailed lifecycle report (`.printLifecyclePhasesDetailed`) show context data for each event                                                                                                     
+    - Add guice bindings report (`printGuiceBindings()` or `printAllGuiceBindings()`)
+    - Add guice aop appliance report (`.printGuiceAopMap()`). This report supposed to be used as "a tool" to look exact 
+      services and so configurable method version is directly available: 
+      `.printGuiceAopMap(new GuiceAopConfig().types(...).methods(...))`      
+* Fix configuration bindings for recursive configuration object declarations (#60)
+* Guicey version added into BOM (dependencyManagement section in guicey pom) to avoid duplicate versions declarations
+* Java 11 compatibility. Automatic module name (in meta-inf): `dropwizard-guicey.core`  
+
 ### [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2) (2018-11-26)
 * Update to guice 4.2.2 (java 11 compatible)
 * Update to dropwizard 1.3.7

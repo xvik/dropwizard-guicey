@@ -3,7 +3,12 @@
 !!! summary ""
     [Guice](https://github.com/google/guice) integration for [dropwizard](http://dropwizard.io).
 
-[Release notes](about/history.md) - [Support](about/support.md) - [License](about/license.md)
+[Version history](about/history.md) - [Support](about/support.md) - [License](about/license.md)
+
+
+!!! warning 
+    Documentation is in process of actualization.
+    See **[5.0.0 release notes](release-notes.md)** for actual changes.
 
 ## Main features
 
