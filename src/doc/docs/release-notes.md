@@ -551,6 +551,25 @@ Statistics sub report now includes guice startup logs (previously required to be
     │   ├── Static member injection: 10 ms
     │   ├── Instance injection: 2 ms
     │   └── Preloading singletons: 6 ms
+```   
+
+`.printAvailableInstallers()` report shows installer markers by implemented interfaces (like `TypeInstaller`, 
+`BindingInstaller`, etc.):
+
+```
+INSTALLERS in processing order = 
+        OBJECT, ORDER                  lifecycle            (r.v.d.g.m.i.f.LifeCycleInstaller)     
+        OBJECT, ORDER                  managed              (r.v.d.g.m.i.feature.ManagedInstaller) 
+        OBJECT                         jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) 
+        JERSEY, BIND, OPTIONS          jerseyprovider       (r.v.d.g.m.i.f.j.p.JerseyProviderInstaller) 
+        TYPE, JERSEY, BIND, OPTIONS    resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    
+        BIND                           eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller) 
+        OBJECT                         healthcheck          (r.v.d.g.m.i.f.h.HealthCheckInstaller) 
+        OBJECT                         task                 (r.v.d.g.m.i.feature.TaskInstaller)    
+        BIND                           plugin               (r.v.d.g.m.i.f.plugin.PluginInstaller) 
+        OBJECT, OPTIONS, ORDER         webservlet           (r.v.d.g.m.i.f.w.WebServletInstaller)  
+        OBJECT, ORDER                  webfilter            (r.v.d.g.m.i.f.web.WebFilterInstaller) 
+        OBJECT, OPTIONS, ORDER         weblistener          (r.v.d.g.m.i.f.w.l.WebListenerInstaller) 
 ```
 
 If you were using `DiagnosticBundle` directly it is now `ConfigurationDiagnostic` listener.
