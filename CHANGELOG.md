@@ -24,7 +24,7 @@
                bundle scope instead of `Bundle`
         * `dropwizard-bom` now includes only dropwizard modules. All 3rd party dependencies are moved to
             `dropwizard-dependencies` package. So you'll have to update two boms now in order to update dropwizard version.
-    - Update hk-bridge to 2.6.1            
+    - Update hk2 guice-bridge to 2.6.1            
 * (breaking) Guicey configuration and lifecycle changes:
     - `GuiceyBundle` contract and behaviour changed to match dropwizard lifecycle: 
         * GuiceyBundle now contains two methods `initialize` and `run` and called according to dropwizard lifecycle.
