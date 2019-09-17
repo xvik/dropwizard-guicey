@@ -436,7 +436,7 @@ This may be useful when some services are managed by HK2 (e.g. with [@HK2Managed
 
 To activate bridge:
 
-* Add dependency: `org.glassfish.hk2:guice-bridge:2.5.0` (version must match HK2 version, used by dropwizard)
+* Add dependency: `org.glassfish.hk2:guice-bridge:2.6.1` (version must match HK2 version, used by dropwizard)
 * Enable option: `#!java .option(GuiceyOptions.UseHkBridge, true)`
 
 After that, HK2 beans could inject guice beans:

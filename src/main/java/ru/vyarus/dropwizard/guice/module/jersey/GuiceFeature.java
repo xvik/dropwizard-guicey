@@ -75,7 +75,7 @@ public class GuiceFeature implements Feature, Provider<InjectionManager> {
         if (enableBridge) {
             Preconditions.checkState(JerseyBinding.isBridgeAvailable(),
                     "HK2 bridge is requested, but dependency not found: "
-                            + "'org.glassfish.hk2:guice-bridge:2.5.0' (check that dependency "
+                            + "'org.glassfish.hk2:guice-bridge:2.6.1' (check that dependency "
                             + "version match HK2 version used in your dropwizard)");
             new GuiceBridgeActivator(injectionManager, injector).activate();
         }

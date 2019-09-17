@@ -688,7 +688,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * (like @Context bindings) and completely delegate management to HK2.
          * <p>
          * IMPORTANT: this will activate HK2 bridge usage (to be able to inject guice beans) and so you will need
-         * to provide bridge dependency (org.glassfish.hk2:guice-bridge:2.5.0). Startup will fail if
+         * to provide bridge dependency (org.glassfish.hk2:guice-bridge:2.6.1). Startup will fail if
          * dependency is not available.
          * <p>
          * WARNING: you will not be able to use guice AOP on beans managed by HK2!
