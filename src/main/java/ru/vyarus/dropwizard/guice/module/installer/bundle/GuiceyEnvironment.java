@@ -4,7 +4,11 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Module;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
+import io.dropwizard.lifecycle.Managed;
+import io.dropwizard.lifecycle.ServerLifecycleListener;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.util.component.AbstractLifeCycle;
+import org.eclipse.jetty.util.component.LifeCycle;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
@@ -253,5 +257,110 @@ public class GuiceyEnvironment {
             environment().jersey().register(item);
         }
         return this;
+    }
+
+    /**
+     * Shortcut for manual registration of {@link Managed} objects.
+     * <p>
+     * Pay attention that managed objects are not called for commands.
+     *
+     * @param managed managed to register
+     * @return environment instance for chained calls
+     */
+    public GuiceyEnvironment manage(final Managed managed) {
+        environment().lifecycle().manage(managed);
+        return this;
+    }
+
+    /**
+     * Shortcut for {@link ServerLifecycleListener} registration.
+     * <p>
+     * Note that server listener is called only when jetty starts up and so will no be called with lightweight
+     * guicey test helpers {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
+     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp}. Prefer using {@link #onStartup(StartupListener)}
+     * to be correctly called in tests (of course, if not server only execution is desired).
+     * <p>
+     * Obviously not called for custom command execution.
+     *
+     * @param listener server startup listener.
+     * @return environment instance for chained calls
+     */
+    public GuiceyEnvironment listen(final ServerLifecycleListener listener) {
+        environment().lifecycle().addServerLifecycleListener(listener);
+        return this;
+    }
+
+    /**
+     * Shortcut for jetty lifecycle listener {@link LifeCycle.Listener listener} registration.
+     * <p>
+     * Lifecycle listeners are called with lightweight guicey test helpers
+     * {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
+     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp} which makes them perfectly suitable for reporting.
+     * <p>
+     * If only startup event is required, prefer {@link #onStartup(StartupListener)} method as more expressive and
+     * easier to use.
+     * <p>
+     * Listeners are not called on custom command execution.
+     *
+     * @param listener jetty
+     * @return environment instance for chained calls
+     * @see AbstractLifeCycle.AbstractLifeCycleListener adapter
+     */
+    public GuiceyEnvironment listen(final LifeCycle.Listener listener) {
+        environment().lifecycle().addLifeCycleListener(listener);
+        return this;
+    }
+
+    /**
+     * Code to execute after complete startup. This is actually a shortcut for jetty lifecycle listener, which
+     * may be declared with java lambda (much easier to use).
+     * <p>
+     * Will also be called with lightweight guicey test helpers {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule}
+     * or {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp} which makes them perfectly suitable for reporting.
+     * If you need to listen only for real server startup then use {@link #listen(ServerLifecycleListener)} instead.
+     * <p>
+     * Not called on custom command execution.
+     *
+     * @param listener listener to call on server startup
+     * @return environment instance for chained calls
+     */
+    public GuiceyEnvironment onStartup(final StartupListener listener) {
+        return listen(new StartupListenerLifecycleAdapter(listener));
+    }
+
+    /**
+     * Guicey application complete startup listener. Useful for delayed code execution after server startup.
+     * Supposed to be used instead of {@link ServerLifecycleListener} because it is called for guicey lightweight
+     * tests too and instead of {@link LifeCycle.Listener} in cases when only startup event detection required
+     * (easier to use).
+     */
+    @FunctionalInterface
+    public interface StartupListener {
+
+        /**
+         * Called after server startup or after guicey initialization in guicey-only tests.
+         */
+        void started();
+    }
+
+    /**
+     * {@link StartupListener} adapter for jetty lifecycle listener.
+     */
+    public static class StartupListenerLifecycleAdapter extends AbstractLifeCycle.AbstractLifeCycleListener {
+        private final StartupListener listener;
+
+        public StartupListenerLifecycleAdapter(final StartupListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void lifeCycleStarted(final LifeCycle event) {
+            listener.started();
+        }
+
+        @Override
+        public String toString() {
+            return "LifecycleListener(" + listener.getClass().getSimpleName() + ")";
+        }
     }
 }
