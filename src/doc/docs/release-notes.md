@@ -9,11 +9,7 @@ As dropwizard 2.0 already introduce many breaking changes (new jersey actually),
 all conceptual guicey mistakes. 
 
 Please read [dropwizard 2.0 upgrade guide](https://github.com/dropwizard/dropwizard/blob/master/docs/source/manual/upgrade-notes/upgrade-notes-2_0_x.rst) first.
-
-See [Migration Guide](#migration-guide) for migration-only instructions.
-    
-## Summary
-
+   
 * [General changes](#general-changes)
 * [New guicey lifecycle](#new-guicey-lifecycle)
 * [Multiple bundles and modules of the same type support](#multiple-bundles-and-modules-of-the-same-type-support)
@@ -25,6 +21,8 @@ See [Migration Guide](#migration-guide) for migration-only instructions.
 * [Guicey hooks changes](#guicey-hooks-changes)
 * [Guicey BOM includes guicey itself](#guicey-bom-includes-guicey-itself)
 * [Java 11 compatibility](#java-11-compatibility)
+
+**[Migration Guide](#migration-guide)**.
 
 ## General changes
 
@@ -430,7 +428,7 @@ New guice bindings report `.printGuiceBindings()`:
     └── BindService  --[linked]-->  OverrideService
 ``` 
 
-Shows all bindings in user modules (wihthout overriding modules)
+Shows all bindings in user modules (without overriding modules)
 
 !!! tip
     `.printAllGuiceBindings()` shows also guicey's own bindings and guice internal bindings.
@@ -749,30 +747,80 @@ Move all registrations (extensions, modules, bundles) into first method. Guice m
 
 ### Multiple instances registration (bundles, modules)
 
-Before, guicey allow only one instance of type. So if you register (possibly in different bundles) 
+!!! warning
+    This change most likely will be the cause of your app behaviour change. So start investigating from here.
+     
+This version accepts registration of 
+[multiple instances of bundles and modules of the same type](#multiple-bundles-and-modules-of-the-same-type-support) 
+(before only 1 instance of type was allowed).  
+
+If you rely on this deduplication behaviour then most likely you will have now
+duplicate bundle or module registrations.
+
+!!! important
+    So if you see very strange behaviour on new version then recover old behavior with:
+    ```java
+    GuiceBundle.builder()
+        .duplicateConfigDetector(new LegacyModeDuplicatesDetector())
+    ```
+    And check again. If weird behaviour disappear then you have duplicate configurationsб
+    if not - check if it's [module analysis issue](#guicey-bindings-analysis)
+    
+In case of problems you can either stay in legacy mode or find the root cause.
+To find duplicate registrations enable diagnostic reports:
 
 ```java
-.modules(new MyModule(), new MyModule())
+.printDiagnosticReports()
+```      
+    
+In configuration summary section pay attention to `REG(n/m)` markers, like this:
+
+```
+GUICE MODULES =
+        VMod                          (com.mycompany) *REG(2/4) 
 ```
 
-You could be sure that only one module (`MyModule`) instance is used.
+In this example, guice module VMod was registered 4 timed, but only 2 instances were accepted.
+Most likely in your case numbers would be equal (meaning all instances were used).  
 
-Now, guicey will register all provided instances. This allows you to avoid
-workarounds when multiple instances were indeed required, but may bring unexpected
-behaviour if you rely on previous instance policy for deduplication (assure that only one instance would be used even
-if registered in multiple places).
+Next, look into configuration tree in order to find configuration sources, and look for 
+duplicated item registration. You should see something like:
 
-You can recover previous behaviour with:
+```
+    APPLICATION
+    ├── module     VMod                       (com.mycompany) 
+    ...   
+    │   
+    ├── SomeBundle                 (com.mycompany) 
+    │   ├── module     VMod#2                    (com.mycompany)
+    ...  
+```    
+
+After that it should be clear how multiple instances appear.
+
+!!! note "Possible scenario"
+    As an example of what can happen: if you're using bundles lookup and were assuming before
+    that if bundle will be registered manually - lookup will be simply ignored. But now it's not
+    and multiple bundles will appear.
+
+In order to fix multiple instances, correct equals method must be implemented.
+Equals logic depends on your needs: you may need always only one instance, like before
+or just remove instances with duplicate confiurations (with the same constructor parameters).
+
+For "only 1 allowed" case, you can simply use provided `UniqueGuiceyBundle` or `UniqueModule` as base classes.
+For example:
 
 ```java
-.duplicateConfigDetector(new LegacyModeDuplicatesDetector())
-``` 
+public class VMod extends UiqueModule {...}
+```         
+
+or
 
 Or you can simply properly implement equals method. For example, if you want only one instance of
 some guice module to be used then implement it's equals as 
 
 ```java
-public class MyModule extends AbstractModule {
+public class VMod extends AbstractModule {
     ...
     
     @Override
@@ -782,45 +830,62 @@ public class MyModule extends AbstractModule {
 }
 ```   
 
-Special base classes provided with already implementing proper equals:
-`UniqueGuiceyBundle` and `UniqueModule` for guicey bundles and guice modules accordingly. 
+And with this change, duplicates will be correctly avoided:
 
-For 3rd party modules (where you can't implement equals) custom duplicates detector could be implemented:
+```
+    APPLICATION
+    ├── module     VMod                       (com.mycompany) 
+    ...   
+    │   
+    ├── SomeBundle                 (com.mycompany) 
+    │   ├── module     -VMod                    (com.mycompany) *DUPLICATE
+    ...  
+```
+
+For 3rd party modules (where you can't implement equals) custom duplicates detector could be implemented.
+Suppose we can't change VMod and add correct equals, then:
 
 ```java
 .duplicateConfigDetector((List<Object> registered, Object newItem) -> {
-     if (newItem isntanceof Some3rdPartyModule) {
+     if (newItem isntanceof VMod) {
          // decide if item collide with provided registered instances (of the same type)
-         return detectedDuplicate // instance that registered is duplicate to or null to accept item
+         return registered.get(0);
      }           
      // allow instance registration
      return null;    
 })
 ```
 
-!!! tip
-    Use `.printDiagnosticReport()` to see all accepted configuration instances.
+Detector in all cases when another instance of already registered type appear and
+equals check did not reveal duplicates (custom config called only after check if new item is equal to 
+any of registered items).
+
+Detector receive all accepted instances of this type and new item. It must return either "original item"
+to mark this new as duplicate for it, or null to allow registration.
+
 
 ### Guicey bindings analysis
 
-By default, guicey now analyze bindings from registered guice modules. This may lead
-to unexpected extensions appearance. For example, if you have some resource directly
-registered
+!!! warning
+    Another point of potential migration problems
+
+As guicey now [analyze bindings from registered guice modules](#guicey-bindings-analysis) it could 
+detect and install new extensions, declared in bindings. For example,
 
 ```java
 public void configure() {
-    bind(MyResources.class);
+    bind(MyResource.class);
 }
 ``` 
 
-It will now be recognized and installed as extensions. This affects all supported extension types.
+MyResource will now be recognized and installed as extension  (this affects all supported extension types).
 
-Disables are also applied now for such extensions. So if you disable extension, directly bound in guice module
-with `.disableExtensions(MyResources.class)`, guicey will remove binding (extension will not appear in injector). 
+Also, `.disableExtension()` and `.disableModule()` could now affect internal bindings.
 
-Before, modules disabling `.disableModule(MyModule.class)` would disable only directly 
-registered modules (registered with `.modules(new MyModule())`), now it will find and disable
-also all transitive modules. For example,
+For example, if before some "extension" was detected as bean in guice module (like above) and
+you have `.desableExtensions(MyResource.class)` then bindings will disappear now (but before nothing happens).
+
+The same for modules:
 
 ```java
 public class MyModule extends AbstractModule {
@@ -833,17 +898,73 @@ GuiceBundle.builder()
     .disableModules(OtherMyModule.class)    
 ```
 
-will detect and remove all bindings of `OtherMyModule` (and all possible transitive module registrations).
+Before, nothing happen and now `OtherMyModule` would be removed (all bindings of module).
 
-!!! tip
-    Use new guice report `.pringGuiceBindings()` to see all actually registered modules
-    and recognized extensions. 
+!!! important 
+    If you have strange behaviour and it's not caused by [configuration instances duplicates](#multiple-instances-registration-bundles-modules)
+    then it's probably new modules processing. Recover old behaviour with
+    ```java
+    .option(GuiceyOptions.AnalyzeModules, false)
+    ``` 
+    And check again. If weird behaviour disappear then you have either new recognized extensions 
+    or removed bindings (driven by disabled extensions or modules).
 
-All new guice related behaviours could be disabled with option:
-
+To investigate this problems use `.pringGuiceBindings()` report (with enabled analysis ofc.).
+For example:
+    
 ```java
-.option(GuiceyOptions.AnalyzeModules, false)
+public class TransitiveModule extends AbstractModule {
+
+    @Override
+    protected void configure() {
+        bind(Ext1.class);
+        bind(Ext2.class);
+        install(new InnerModule());
+    }
+
+    public static class InnerModule extends AbstractModule {
+        @Override
+        protected void configure() {
+            bind(Ext3.class);
+        }
+    }
+} 
+
+GuiceBundle.builder()                     
+    .modules(new TransitiveModule())
+    .disableModules(InnerModule.class)
+    .disableExtensions(Ext2.class)   
+    .pringGuiceBindings()
+```  
+
+will report:
+
+```
+2 MODULES with 2 bindings
+    │   
+    └── TransitiveModule             (com.mycompany)    
+        ├── untargetted          [@Prototype]     Ext1                                            at com.mycompany.TransitiveModule.configure(TransitiveModule.java:15) *EXTENSION
+        ├── untargetted          [@Prototype]     Ext2                                            at com.mycompany.TransitiveModule.configure(TransitiveModule.java:16) *EXTENSION, REMOVED
+        └── InnerModule                   (com.mycompany.TransitiveModule) *REMOVED
+```
+
+`InnerModule` and all of it's bindings were removed. `Ext2` was also removed (as disabled extension).
+
+Or you can see only recognized bindings in configuration tree report `.printDiagnosticResport()`:
+
+```
+GUICE BINDINGS
+        │   
+        └── TransitiveModule             (com.mycompany)    
+            ├── extension  Ext1                         (com.mycompany.TransitiveModule) 
+            └── extension  -Ext2                        (com.mycompany.TransitiveModule) *DISABLED
 ```        
+
+!!! note
+    On diagnostic report extensions will appear below the top-level module
+    because this report shows everything registered by user. Detailed location could
+    be viewed in guice report (`.printGuiceBindings()`). 
+    
 
 ### Test hooks
 
