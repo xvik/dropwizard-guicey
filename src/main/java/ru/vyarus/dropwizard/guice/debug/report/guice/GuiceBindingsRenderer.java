@@ -7,6 +7,7 @@ import com.google.inject.Module; // NOPMD
 import com.google.inject.*;
 import com.google.inject.spi.Elements;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import ru.vyarus.dropwizard.guice.GuiceyOptions;
 import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.BindingDeclaration;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.DeclarationType;
@@ -42,7 +43,7 @@ import java.util.stream.Collectors;
  * Used markers:
  * <ul>
  * <li>EXTENSION - extension binding</li>
- * <li>REMOVED - extension disabled and binding removed</li>
+ * <li>REMOVED - extension or module disabled and binding(s) removed</li>
  * <li>AOP - bean affected by guice AOP</li>
  * <li>OVERRIDDEN (only in modules tree) - binding is overridden with binding from overriding module</li>
  * <li>OVERRIDES (only in overriding modules tree) - binding override something in main modules</li>
@@ -54,11 +55,15 @@ import java.util.stream.Collectors;
  */
 public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
 
+    private static final String REMOVED = "REMOVED";
+
     private final Injector injector;
     private final List<Module> modules;
     private final List<Module> overridden;
     private final List<Class<Object>> extensions;
     private final List<Class<Object>> disabled;
+    private final List<Class<Module>> modulesDisabled;
+    private final boolean analysisEnabled;
 
     public GuiceBindingsRenderer(final Injector injector) {
         this.injector = injector;
@@ -71,6 +76,9 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
                 .collect(Collectors.toList());
         this.extensions = ItemId.typesOnly(info.getData().getItems(ConfigItem.Extension));
         this.disabled = info.getExtensionsDisabled();
+        // when module analysis disabled show entire context (because nothing would be removed)
+        this.analysisEnabled = info.getOptions().getValue(GuiceyOptions.AnalyzeGuiceModules);
+        this.modulesDisabled = analysisEnabled ? info.getModulesDisabled() : Collections.emptyList();
     }
 
     @Override
@@ -80,7 +88,10 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
                 GuiceModelParser.parse(injector, Elements.getElements(Stage.TOOL, modules)), config);
         final Map<Key, BindingDeclaration> moduleBindings = GuiceModelUtils.index(moduleItems);
 
-        markExtensions(moduleBindings);
+        // don't show extensions if no guice module analysis actually performed
+        if (analysisEnabled) {
+            markExtensions(moduleBindings);
+        }
 
         // analyze overrides
         final List<ModuleDeclaration> overrideItems = filter(overridden.isEmpty()
@@ -220,8 +231,15 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         modules.removeIf(it -> config.getIgnoreModules().contains(it.getType())
                 || (!it.isJITBindings() && filter(it.getType().getName(), config.getIgnorePackages())));
         for (ModuleDeclaration mod : modules) {
-            mod.getDeclarations().removeIf(it -> it.getKey() != null && filter(
-                    it.getKey().getTypeLiteral().getRawType().getName(), config.getIgnorePackages()));
+            if (modulesDisabled.contains(mod.getType())) {
+                // ignore removed module's subtree
+                mod.getDeclarations().clear();
+                mod.getMarkers().add(REMOVED);
+                mod.getChildren().clear();
+            } else {
+                mod.getDeclarations().removeIf(it -> it.getKey() != null && filter(
+                        it.getKey().getTypeLiteral().getRawType().getName(), config.getIgnorePackages()));
+            }
             filter(mod.getChildren(), config);
         }
         return modules;
@@ -264,11 +282,9 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         final TreeNode next = root.child(RenderUtils.renderClassLine(mod.getType(), mod.getMarkers()));
 
         for (BindingDeclaration dec : mod.getDeclarations()) {
-            // we don't need to know if binding analysis is enabled, because if it's disabled then
-            // default binding would be created for extensions and guice context fail to start due to
-            // manual binding conflict
-            if (dec.getKey() != null && disabled.contains(dec.getKey().getTypeLiteral().getRawType())) {
-                dec.getMarkers().add("REMOVED");
+            if (analysisEnabled && dec.getKey() != null
+                    && disabled.contains(dec.getKey().getTypeLiteral().getRawType())) {
+                dec.getMarkers().add(REMOVED);
             }
             final String type = dec.getType().isRuntimeBinding()
                     ? dec.getType().name().toLowerCase() : "<" + dec.getType().name().toLowerCase() + ">";
