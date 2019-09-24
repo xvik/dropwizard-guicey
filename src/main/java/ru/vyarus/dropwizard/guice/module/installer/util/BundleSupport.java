@@ -47,7 +47,7 @@ public final class BundleSupport {
     public static void initBundles(final ConfigurationContext context) {
         final List<GuiceyBundle> bundles = context.getEnabledBundles();
         final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, bundles);
-        
+
         for (GuiceyBundle bundle : new ArrayList<>(bundles)) {
             // iterating bundles as tree in order to detect cycles
             initBundle(Collections.emptyList(), bundle, bundles, context, guiceyBootstrap);
@@ -61,8 +61,9 @@ public final class BundleSupport {
      * Run all enabled bundles.
      *
      * @param context bundles context
+     * @throws Exception if something goes wrong
      */
-    public static void runBundles(final ConfigurationContext context) {
+    public static void runBundles(final ConfigurationContext context) throws Exception {
         final GuiceyEnvironment env = new GuiceyEnvironment(context);
         for (GuiceyBundle bundle : context.getEnabledBundles()) {
             bundle.run(env);

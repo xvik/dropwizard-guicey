@@ -77,8 +77,9 @@ public interface GuiceyBundle {
      * {@link GuiceyEnvironment#configurationTree()}.
      *
      * @param environment guicey environment object
+     * @throws Exception if something goes wrong
      */
-    default void run(GuiceyEnvironment environment) {
+    default void run(GuiceyEnvironment environment) throws Exception {
         // void
     }
 }

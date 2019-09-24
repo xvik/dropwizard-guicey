@@ -49,8 +49,10 @@ public class GuiceyRunner {
      * Note: dropwizard bundles registered after {@link ru.vyarus.dropwizard.guice.GuiceBundle} (or within it) will
      * be processed after that point (because they will be registered after guice bundle and so dropwizard will call
      * their run methods after guice bundle's run).
+     *
+     * @throws Exception if something goes wrong
      */
-    public void runBundles() {
+    public void runBundles() throws Exception {
         final Stopwatch timer = context.stat().timer(BundleTime);
         BundleSupport.runBundles(context);
         timer.stop();
