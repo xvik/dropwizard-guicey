@@ -61,6 +61,8 @@
             For custom cases (when custom equals method is impossible), `DuplicateConfigDetector` may be implemented 
             and registered with `GuiceBundle.Builder#duplicateConfigDetector()` 
         * Legacy behaviour (1 instance per type) could be simulated with: `.duplicateConfigDetector(new LegacyModeDuplicatesDetector())`
+          OR method `GuiceBundle.Builder#uniqueItems(Class...)` may be used to specify
+          exact items to grant uniqueness for 
         * `ItemId` is now used as identity instead of pure `Class`. ItemId compute object hash string
             and preserve it for instance identification. Class types does not contain hash in id.
             Required because even scopes, represented previously as classes now could be duplicated

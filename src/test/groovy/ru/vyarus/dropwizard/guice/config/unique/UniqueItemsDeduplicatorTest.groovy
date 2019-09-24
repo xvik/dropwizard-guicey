@@ -10,51 +10,28 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.module.context.info.GuiceyBundleItemInfo
-import ru.vyarus.dropwizard.guice.module.context.info.ItemId
-import ru.vyarus.dropwizard.guice.module.context.unique.LegacyModeDuplicatesDetector
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov
- * @since 04.07.2019
+ * @since 24.09.2019
  */
 @UseGuiceyApp(App)
-class LegacyDuplicatesPolicyTest extends AbstractTest {
+class UniqueItemsDeduplicatorTest extends AbstractTest {
 
     @Inject
     GuiceyConfigurationInfo info
 
-    def "Check duplicates not allowed"() {
+    def "Check duplicates not allowed for selected types"() {
 
 
-        expect: "Foo2 bundle registered just once"
-        GuiceyBundleItemInfo foo2 = info.getInfo(Foo2Bundle)
-        with(foo2) {
-            registrationScope == ItemId.from(Application)
-            registrationAttempts == 2
-
-            getInstance() instanceof Foo2Bundle
-            getInstanceCount() == 1
-
-            getIgnoresByScope(Application) == 0
-            getIgnoresByScope(MiddleBundle) == 1
-        }
+        expect: "Foo2 bundle registered twice"
+        info.getInfos(Foo2Bundle).size() == 2
 
         and: "Foo registered just once"
-        GuiceyBundleItemInfo foo = info.getInfo(FooBundle)
-        with(foo) {
-            registrationScope == ItemId.from(Application)
-            registrationAttempts == 2
-
-            getInstance() instanceof FooBundle
-            getInstanceCount() == 1
-
-            getIgnoresByScope(Application) == 0
-            getIgnoresByScope(MiddleBundle) == 1
-        }
+        info.getInfo(FooBundle).registrationAttempts == 2
     }
 
     static class App extends Application<Configuration> {
@@ -62,8 +39,8 @@ class LegacyDuplicatesPolicyTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    // with legacy mode only 1 registration will occur
-                    .duplicateConfigDetector(new LegacyModeDuplicatesDetector())
+            // with legacy mode only 1 registration will occur
+                    .uniqueItems(FooBundle)
                     .bundles(new FooBundle(), new Foo2Bundle(), new MiddleBundle())
                     .build()
             );

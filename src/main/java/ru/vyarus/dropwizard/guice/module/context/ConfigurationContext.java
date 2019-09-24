@@ -138,6 +138,10 @@ public final class ConfigurationContext {
      * @param detector new policy
      */
     public void setDuplicatesDetector(final DuplicateConfigDetector detector) {
+        if (duplicates != null) {
+            logger.warn("Configured duplicates detector {} is overridden with {}",
+                    duplicates.getClass().getSimpleName(), detector.getClass().getSimpleName());
+        }
         this.duplicates = detector;
     }
 

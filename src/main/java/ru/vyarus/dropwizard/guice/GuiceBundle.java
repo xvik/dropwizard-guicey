@@ -29,6 +29,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
+import ru.vyarus.dropwizard.guice.module.context.unique.UniqueItemsDuplicatesDetector;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
@@ -346,6 +347,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * <p>
          * Use {@link ru.vyarus.dropwizard.guice.module.context.unique.LegacyModeDuplicatesDetector} to simulate
          * legacy guicey behaviour when only one instance of type is allowed (if old behaviour is important).
+         * Use {@link #uniqueItems(Class[])} to grant uniqueness for some items only.
          *
          * @param detector detector implementation
          * @return builder instance for chained calls
@@ -353,6 +355,27 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         public Builder<T> duplicateConfigDetector(final DuplicateConfigDetector detector) {
             bundle.context.setDuplicatesDetector(detector);
             return this;
+        }
+
+        /**
+         * Grant uniqueness for specified instance items: guicey bundles, guice modules and dropwizard bundles,
+         * registered through guicey api ({@link #dropwizardBundles(ConfiguredBundle[])} and
+         * {@link GuiceyOptions#TrackDropwizardBundles}). That means that if multiple instances
+         * of specified type would be registered, only one instance will actually be used (and other would be
+         * considered as duplicate configurations).
+         * <p>
+         * Method actually registers custom detector implementation
+         * {@link #duplicateConfigDetector(DuplicateConfigDetector)} and so can't be used together with other
+         * custom duplicates detector.
+         * <p>
+         * Warning: in contrast to other builder methods, configurations from multiple method calls are not
+         * aggregated (each new call to overrides previous configuration), so specify all unique items in one call.
+         *
+         * @param configurationItems instance configuration items (bundles or modules) to grant uniqueness
+         * @return builder instance for chained calls
+         */
+        public Builder<T> uniqueItems(final Class<?>... configurationItems) {
+            return duplicateConfigDetector(new UniqueItemsDuplicatesDetector(configurationItems));
         }
 
         /**

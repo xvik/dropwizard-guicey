@@ -22,10 +22,14 @@ public interface DuplicateConfigDetector {
     /**
      * Called every time when configured object (guicey bundle or guice module) of the same type is already registered.
      * Note that method is called only if new instance is not equal to any registered instances of the same type.
-     * Method must return duplicate object from already registered.
+     * Method must return duplicate object from already registered instances (or null to allow new registration).
      * <p>
      * For example, if 3 or more instances of the same type are registered then method would be called for each new
      * configured instance (in case of 3 registrations - 2 method calls, assuming that instances are not equal).
+     * <p>
+     * Provided instances will always be of the same class (no polymorphic checks). Classes loaded from different
+     * class loaders will be recognized as same class (and so provided instances may be instances of the same class
+     * but from different class loaders).
      *
      * @param registered already registered items
      * @param newItem    new item to check
