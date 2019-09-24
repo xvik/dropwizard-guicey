@@ -147,7 +147,17 @@ public class CommonBundle implements GuiceyBundle {
     `UniqueGuiceyBundle` for unique bundles and `UniqueModule` for unique guice modules
 
 But, it may be impossible to implement correct equals method for some 3rd party bundle or module used.
-In this case manual deduplication implementation may be registered:
+In this case unique objects may be marked with:
+
+```java
+GuiceBundle.builder()
+    .uniqueItems(Some3rdPartyBundle.class, 
+                 Some3rdPartyModule.class)
+```
+
+ 
+For complex cases (e.g. when only some kinds of objects must be unique), manual deduplication 
+implementation may be registered:
 
 ```java
 GuiceBundle.builder()
@@ -842,8 +852,14 @@ And with this change, duplicates will be correctly avoided:
     ...  
 ```
 
-For 3rd party modules (where you can't implement equals) custom duplicates detector could be implemented.
-Suppose we can't change VMod and add correct equals, then:
+3rd party modules (where you can't implement equals method) may be deduplicated with
+
+```java
+.uniqueItems(Some3rdPathyModuel.class)
+```
+
+Or (for special cases) completely custom implementation could be provided.
+E.g. suppose we can't change VMod and add correct equals, then:
 
 ```java
 .duplicateConfigDetector((List<Object> registered, Object newItem) -> {

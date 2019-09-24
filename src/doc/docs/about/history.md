@@ -1,5 +1,5 @@
 ### 5.0.0 (unreleased)
-* Update to dropwizard 2.0.0-rc9
+* Update to dropwizard 2.0.0-rc10
     - (breaking in jersey 2.26)
         * Jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
           This allows complete hk2 avoidance in the future. Right now it means that all direct hk2 classes must be replaced
@@ -23,7 +23,8 @@
             - Guicey configuration scope `ConfigSope.DropwizardBundle` now use `ConfigurableBundle` class for marking guice 
                bundle scope instead of `Bundle`
         * `dropwizard-bom` now includes only dropwizard modules. All 3rd party dependencies are moved to
-            `dropwizard-dependencies` package. So you'll have to update two boms now in order to update dropwizard version.    
+            `dropwizard-dependencies` package. So you'll have to update two boms now in order to update dropwizard version.
+    - Update hk2 guice-bridge to 2.6.1            
 * (breaking) Guicey configuration and lifecycle changes:
     - `GuiceyBundle` contract and behaviour changed to match dropwizard lifecycle: 
         * GuiceyBundle now contains two methods `initialize` and `run` and called according to dropwizard lifecycle.
@@ -39,7 +40,7 @@
             - Add special `ApplicationStarted` event: always fired after complete dropwizard startup. 
                 Supposed to be used to simplify diagnostic reporting.
             - Support lifecycle listeners deduplication for correct report behaviour in case of multiple registrations.
-               `Set` used as listeners holder, so only proper equals and hashcode methods implementation is required for deduplication          
+               `LinkedHashSet` used as listeners holder, so only proper equals and hashcode methods implementation is required for deduplication          
         * Removed `GuiceyOptions.ConfigureFromDropwizardBundles` option because it's useless with new bundles lifecycle.
             (if required, the same behaviour may be implemented with custom bundles lookup)
     - Removed `GuiceyOptions.BindConfigurationInterfaces` option (interfaces are already bound with `@Config` qualifier)
@@ -60,6 +61,8 @@
             For custom cases (when custom equals method is impossible), `DuplicateConfigDetector` may be implemented 
             and registered with `GuiceBundle.Builder#duplicateConfigDetector()` 
         * Legacy behaviour (1 instance per type) could be simulated with: `.duplicateConfigDetector(new LegacyModeDuplicatesDetector())`
+          OR method `GuiceBundle.Builder#uniqueItems(Class...)` may be used to specify
+          exact items to grant uniqueness for 
         * `ItemId` is now used as identity instead of pure `Class`. ItemId compute object hash string
             and preserve it for instance identification. Class types does not contain hash in id.
             Required because even scopes, represented previously as classes now could be duplicated
@@ -67,7 +70,7 @@
             ItemId equals method consider class-only id's equal to any type instance id.
         * Add bundle loops detection: as multiple bundle instances allowed loops are highly possible
             Entire bundle chain is provided in exception to simplify fixing loops.
-        * Add base classes for uniqu bundles and modules (with correct equals and hash code implementations):
+        * Add base classes for unique bundles and modules (with correct equals and hash code implementations):
           `UniqueGuiceyBundle` and `UniqueModule` (use class name strings for comparison to correctly detect even
           instances of classes from different class loaders). 
           Note: no such class for dropwizard bundle because it's useless (if you use guicey - use GuiceyBundle instead 
@@ -97,7 +100,7 @@
         Useful to enable diagnostic logs on compiled (deployed) application.                     
 * (breaking) Test support changes
     - Rename test extensions for guicey hooks registration: 
-        * `GuiceyConfigurationRule` into `GuiceyHooksRule` and
+        * `GuiceyConfigurationRule` into `GuiceyHooksRule` 
         * `@UseGuiceyConfiguration` (spock extension) into `@UseGuiceyHooks`
 * (breaking) Reporting changes
     - All reports moved into one top-level `debug` package.
@@ -134,7 +137,7 @@
       `.printGuiceAopMap(new GuiceAopConfig().types(...).methods(...))`      
 * Fix configuration bindings for recursive configuration object declarations (#60)
 * Guicey version added into BOM (dependencyManagement section in guicey pom) to avoid duplicate versions declarations
-* Java 11 compatibility. Automatic module name (in meta-inf): `dropwizard-guicey.core`  
+* Java 11 compatibility. Automatic module name (in meta-inf): `dropwizard-guicey.core` 
 
 ### [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2) (2018-11-26)
 * Update to guice 4.2.2 (java 11 compatible)
