@@ -43,13 +43,20 @@ class SystemHooksTest extends Specification {
         ConfigurationHooksSupport.count() == 1
 
         when: "declare duplicate alias"
-        ConfigurationHooksSupport.registerSystemHookAlias("hook", Hook)
-        then: "err"
-        thrown(IllegalStateException)
+        ConfigurationHooksSupport.registerSystemHookAlias("hook", HookOverride)
+        then: "ok, just warning printed"
+        true
 
     }
 
     static class Hook implements GuiceyConfigurationHook {
+        @Override
+        void configure(GuiceBundle.Builder builder) {
+
+        }
+    }
+
+    static class HookOverride implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
 

@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.hook;
 
-import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
@@ -63,9 +62,13 @@ public final class ConfigurationHooksSupport {
             aliases = new HashMap<>();
             ALIASES.set(aliases);
         }
-        Preconditions.checkState(!aliases.containsKey(alias), "Can't register alias '%s' for hook %s "
-                + "because it's already registered for hook %s", alias, hook, aliases.get(alias));
-        aliases.put(alias, hook.getName());
+        final String hookName = hook.getName();
+        final String registeredHookName = aliases.get(alias);
+        // log overrides, but allow duplicate registrations
+        if (registeredHookName != null && !hookName.equals(registeredHookName)) {
+            LOGGER.warn("Hook {} alias '{}' registration overridden with hook {}", registeredHookName, alias, hookName);
+        }
+        aliases.put(alias, hookName);
     }
 
     /**
