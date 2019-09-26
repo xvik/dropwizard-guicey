@@ -66,7 +66,7 @@ public final class ConfigurationHooksSupport {
         final String registeredHookName = aliases.get(alias);
         // log overrides, but allow duplicate registrations
         if (registeredHookName != null && !hookName.equals(registeredHookName)) {
-            LOGGER.warn("Hook {} alias '{}' registration overridden with hook {}", registeredHookName, alias, hookName);
+            LOGGER.info("Hook {} alias '{}' registration overridden with hook {}", registeredHookName, alias, hookName);
         }
         aliases.put(alias, hookName);
     }
