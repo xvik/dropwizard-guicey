@@ -7,8 +7,6 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
-import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
@@ -50,6 +48,10 @@ class UniqueItemsDeduplicatorTest extends AbstractTest {
         void run(Configuration configuration, Environment environment) throws Exception {
         }
     }
+
+    static class FooBundle implements GuiceyBundle {}
+
+    static class Foo2Bundle implements GuiceyBundle {}
 
     static class MiddleBundle implements GuiceyBundle {
         @Override

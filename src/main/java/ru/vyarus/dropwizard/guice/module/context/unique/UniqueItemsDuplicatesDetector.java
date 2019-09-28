@@ -22,12 +22,16 @@ public class UniqueItemsDuplicatesDetector implements DuplicateConfigDetector {
         // use strings to correctly detect class from different class loaders (as core mechanism will correctly
         // detect them)
         for (Class<?> cls : uniqueItems) {
-            items.add(cls.getName());
+            items.add(id(cls));
         }
     }
 
     @Override
     public Object getDuplicateItem(final List<Object> registered, final Object newItem) {
-        return items.contains(newItem.getClass().toString()) ? registered.get(0) : null;
+        return items.contains(id(newItem.getClass())) ? registered.get(0) : null;
+    }
+
+    private String id(final Class<?> cls) {
+        return cls.getName();
     }
 }
