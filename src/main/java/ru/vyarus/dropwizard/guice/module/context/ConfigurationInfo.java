@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Public api for collected guicey configuration info. In contrast to {@link ConfigurationContext},
  * used during configuration, contains only configuration item ids (item ids used instead of pure classes
- * because multiple instances of teh same type could be registered (e.g. multiple bundles or modules)).
+ * because multiple instances of the same type could be registered (e.g. multiple bundles or modules)).
  * <p>
  * Configuration info may be used for any kind of diagnostics: configuration logging, configuration tree rendering,
  * automatic configuration warnings generation etc.
