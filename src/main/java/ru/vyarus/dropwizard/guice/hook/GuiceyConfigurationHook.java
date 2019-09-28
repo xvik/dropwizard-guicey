@@ -11,9 +11,6 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks;
  * <p>
  * Hook could be registered with {@link #register()} method call.
  * <p>
- * Also, could be used with {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener} (listener,
- * implementing hook interface is recognized and registered automatically).
- * <p>
  * Hooks are thread-scoped: it is assumed that registration thread is the same thread where application
  * will start.
  * <p>

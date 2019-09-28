@@ -30,7 +30,7 @@ public class GuiceyConfigurationHookInterceptor extends AbstractMethodIntercepto
     @Override
     public void interceptCleanupSpecMethod(final IMethodInvocation invocation) throws Throwable {
         // for case when base test is used without actual application start and so listeners will never be used
-        // cleanup state after tests to nt affect other tests
+        // cleanup state after tests to not affect other tests
         ConfigurationHooksSupport.reset();
         invocation.proceed();
     }

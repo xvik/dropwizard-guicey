@@ -15,8 +15,8 @@ import ru.vyarus.dropwizard.guice.module.context.Filters
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
-import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks
 
 import javax.inject.Inject
 import javax.ws.rs.Path
@@ -29,6 +29,7 @@ import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
  * @since 09.04.2018
  */
 @UseGuiceyApp(App)
+@UseGuiceyHooks(DisableHook)
 class DisableWithPredicateTest extends AbstractTest {
 
     @Inject
@@ -65,16 +66,12 @@ class DisableWithPredicateTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-            // listener will call disable AFTER items registration (post processing on predicate registration)
-                    .listen(new Listener())
             // predicate registered before items registration and will disable items by event
                     .disable(type(SampleBundle, SampleModule1, DBundle))
-
                     .dropwizardBundles(new DBundle())
                     .bundles(new SampleBundle(), new SampleBundle2())
                     .modules(new SampleModule1(), new SampleModule2())
                     .extensions(SampleExtension1, SampleExtension2)
-
                     .build())
         }
 
@@ -83,7 +80,7 @@ class DisableWithPredicateTest extends AbstractTest {
         }
     }
 
-    static class Listener extends GuiceyLifecycleAdapter implements GuiceyConfigurationHook {
+    static class DisableHook implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
             builder.disable(type(SampleExtension1, ManagedInstaller))
@@ -101,7 +98,8 @@ class DisableWithPredicateTest extends AbstractTest {
     static class SampleBundle2 implements GuiceyBundle {
         @Override
         void initialize(GuiceyBootstrap bootstrap) {
-            bootstrap.extensions(InstalledExtension)
+            bootstrap
+                    .extensions(InstalledExtension)
         }
     }
 

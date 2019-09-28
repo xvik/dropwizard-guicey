@@ -97,7 +97,8 @@
       Alias registered with `GuiceBundle.builder()#hookAlias()`. All registered aliases are logged at startup.
     - Add diagnostic hook, which enables diagnostic reports and lifecycle logs. 
         Could be enabled with system property: `-Dguicey.hooks=diagnostic` (where diagnostic is pre-registered hook alias) 
-        Useful to enable diagnostic logs on compiled (deployed) application.                     
+        Useful to enable diagnostic logs on compiled (deployed) application.
+    - (breaking) Removed hooks recognition on registered GuiceyLifecycleLister (as it was very confusing feature)                         
 * Add shared configuration state (for special configuration-time needs like bundles communication). 
     This is required only in very special cases. But such unified place will replace all current and future hacks.
     - Static access: `SharedConfigurationState.get(app)` or `SharedConfigurationState.lookup(app, key)` 

@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.internal;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -64,12 +63,6 @@ public final class LifecycleSupport {
         Arrays.asList(listeners).forEach(l -> {
             if (!this.listeners.add(l)) {
                 logger.info("IGNORE duplicate lifecycle listener registration: {}", l.getClass().getName());
-            }
-            if (l instanceof GuiceyConfigurationHook) {
-                Preconditions.checkState(isBefore(GuiceyLifecycle.ConfigurationHooksProcessed),
-                        "Can't register listener as hook because hooks "
-                                + "were already processed (current stage is %s).", currentStage);
-                ((GuiceyConfigurationHook) l).register();
             }
         });
     }
@@ -234,14 +227,6 @@ public final class LifecycleSupport {
      */
     public GuiceyLifecycle getStage() {
         return currentStage;
-    }
-
-    /**
-     * @param lifecycle target lifecycle stage
-     * @return true if current lifecycle is before provided stage, false otherwise
-     */
-    public boolean isBefore(final GuiceyLifecycle lifecycle) {
-        return getStage() == null || getStage().ordinal() < lifecycle.ordinal();
     }
 
     private void broadcast(final GuiceyLifecycleEvent event) {

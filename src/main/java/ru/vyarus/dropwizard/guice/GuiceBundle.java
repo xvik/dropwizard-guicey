@@ -189,11 +189,6 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * could be used to tie them. For example, to tell bundle if some other bundles registered (limited
          * applicability, but just for example).
          * <p>
-         * Listener can't directly affect configuration (can't register or disable extensions, modules etc).
-         * But listener could implement {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook}
-         * interface and it would be automatically registered. This could be used to register special
-         * extensions required by listener logic (some diagnostic, monitoring or special features support).
-         * <p>
          * You can also use {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter} when you need to
          * handle multiple events (it replaces direct events handling with simple methods).
          * <p>
@@ -201,10 +196,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * listeners storage), so if you need to be sure that only one instance of some listener will be used
          * implement {@link Object#equals(Object)} and {@link Object#hashCode()}.
          *
-         * @param listeners guicey lifecycle listeners (listener could be also a hook)
+         * @param listeners guicey lifecycle listeners
          * @return builder instance for chained calls
          * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
-         * @see ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
          * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
          */
         public Builder<T> listen(final GuiceyLifecycleListener... listeners) {
