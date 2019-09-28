@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.bundles
 
+
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.lifecycle.Managed
@@ -28,6 +29,7 @@ class EnvironmentListenersShortcutsTest extends Specification {
         Mng.called
         LListener.called
         SListener.called
+        Bundle.onGuiceyStartup
         Bundle.onStartup
     }
 
@@ -46,13 +48,23 @@ class EnvironmentListenersShortcutsTest extends Specification {
 
     static class Bundle implements GuiceyBundle {
         static boolean onStartup
+        static boolean onGuiceyStartup
 
         @Override
         void run(GuiceyEnvironment environment) {
             environment.manage(new Mng())
             environment.listen(new LListener())
             environment.listen(new SListener())
-            environment.onStartup({ onStartup = true })
+            environment.onGuiceyStartup({cfg, env, inj ->
+                onGuiceyStartup = true
+                assert cfg != null
+                assert env != null
+                assert inj != null
+            })
+            environment.onApplicationStartup({ inj ->
+                onStartup = true
+                assert inj != null
+            })
         }
     }
 
