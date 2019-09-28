@@ -17,6 +17,7 @@ Please read [dropwizard 2.0 upgrade guide](https://github.com/dropwizard/dropwiz
 * [Configuration from guice bindings (jersey1-guice style)](#configuration-from-guice-bindings-jersey1-guice-style)
 * [Multiple classloaders support](#multiple-classloaders-support)
 * [Guicey listeners changes](#guicey-listeners-changes)
+* [New shared configuration state](#new-shared-lifecycle-state)
 * [Reporting changes](#reporting-changes)
 * [Guicey hooks changes](#guicey-hooks-changes)
 * [Guicey BOM includes guicey itself](#guicey-bom-includes-guicey-itself)
@@ -527,6 +528,84 @@ Supported events were changed (due to lifecycle changes). More information
 One special event added `ApplicationStarted` which is always called after dropwizard startup 
 (including jersey start). It would be fired even in tests when `GuiceyAppRule` used 
 (which does not start jersey). Supposed to be used to simplify diagnostic reporting.
+
+## New shared configuration state
+
+!!! warning "" This feature is intended to be used for very special cases only. It was added to 
+remove current and future hacks for implementing global application state or bundles communication
+and avoid testing side effects. 
+
+Sometimes, it is required to share some "global" state between multiple bundles. In this cases
+developer have to introduce static or TreadLocal hacks in order to share required state.
+This usually leads to problems in tests where application instances may run concurrently.
+
+Guicey provides now universal shared state mechanism. It is supposed to be used mainly by bundles.
+For example, case with one main bundle (which register global scope) and other bundles, appending info into it:
+
+```java
+public class MainBundle implements GuiceyBundle {
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {                   
+        // make GlobalConfig instance available for other bundles
+        bootstrap.shareState(MainBundle.class, new GlobalConfig());
+    }
+}                                                                
+
+public class RelativeBundle implements GuiceyBundle {
+    @Override
+    publicvoid initialize(GuiceyBootstrap bootstrap) {                   
+        // access global state
+        GlobalConfig config = bootstrap.sharedStateOrFail(MainBundle.class, 
+                "No global config found, register main bundle");
+    }
+}
+```
+
+Another example, when equal bundles need to share some context:
+ 
+```java
+public class SomeBundle implements GuiceyBundle {
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {                   
+        // either get shared config or register new one (first accessed bundle init state) 
+        SharedConfig config = bootstrap
+                .sharedState(SomeBundle.class, () -> new SharedConfig());
+    }
+}
+```
+
+Restrictions:
+
+* State is accessed by class only to avoid dummy key mistakes. It is advised to use bundle name for key.
+* State can be set only once to avoid hard to track re-assignments. Null not allowed.
+* GuiceyBundle provide state assignment methods only in initialization phase. It is advised to 
+    assign values only there to be sure value is available in run phase (avoid errors caused by registration order) 
+
+Shared state could be accessed statically anywhere with application instance:
+
+```java
+GlobalConfig config = SharedConfigurationState
+        .lookupOrFail(application, GlobalBundle.class, "Bundle not registered");
+```
+
+Guicey hooks could also access shared state with callback:
+
+```java
+public class XHook implements GuiceyConfigurationHook {
+        @Override
+        public void configure(GuiceBundle.Builder builder) {
+            builder.withSharedState({
+                it.put(XHook, "12")
+            });
+        }
+    }
+```   
+
+But this is only useful for special states initialization (because bundles are not
+executed yet). 
+
+!!! note
+    Guicey itself use this state for Injector storage and in extended bundles (gsp, spa). 
 
 
 ## Reporting changes
