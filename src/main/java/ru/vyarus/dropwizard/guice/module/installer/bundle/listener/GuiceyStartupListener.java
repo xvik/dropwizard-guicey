@@ -20,10 +20,10 @@ public interface GuiceyStartupListener<T extends Configuration> {
      * <p>
      * Any thrown exception would shutdown startup.
      *
-     * @param configuration configuration object
-     * @param environment   environment object
+     * @param config configuration object
+     * @param env   environment object
      * @param injector      guice injector
      * @throws Exception in case of errors
      */
-    void configure(T configuration, Environment environment, Injector injector) throws Exception;
+    void configure(T config, Environment env, Injector injector) throws Exception;
 }
