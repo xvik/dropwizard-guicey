@@ -98,6 +98,19 @@ extension installation errors.
     ```
     (configuration phase / run phase / extensions installation during jersey startup)
 
+### Run phase shortcuts
+
+GuiceyEnvironment almost not allow guicey items registrations (except modules), but 
+provide many shortcuts:
+
+* `register()` for `environment().jersey().register()`
+* `manage()` for `environment().lifecycle().manage()` 
+* `listen()` for `environment().lifecycle().addLifeCycleListener()` and `environment().lifecycle().addServerLifecycleListener()`
+* `onGuiceyStartup()` - special callback called after guicey start to perform manual registrations in 
+    dropwizard environment with provided injector
+* `onApplicationStartup()` - special callback called after complete application startup (in guicey lightweight tests too)
+    (with provided injector)     
+
 
 ## Multiple bundles and modules of the same type support
 
