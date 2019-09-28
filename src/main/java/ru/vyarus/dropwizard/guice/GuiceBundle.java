@@ -26,6 +26,7 @@ import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.module.GuiceyInitializer;
 import ru.vyarus.dropwizard.guice.module.GuiceyRunner;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
@@ -44,6 +45,7 @@ import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
@@ -99,7 +101,6 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Jers
 @SuppressWarnings({"PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.TooManyMethods"})
 public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
 
-    private Injector injector;
     private final ConfigurationContext context = new ConfigurationContext();
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
     private GuiceyBundleLookup bundleLookup = new DefaultBundleLookup();
@@ -135,7 +136,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
         // prepare guice modules for injector creation
         runner.prepareModules();
         // create injector
-        injector = runner.createInjector(injectorFactory,
+        runner.createInjector(injectorFactory,
                 runner.analyzeAndRepackageBindings());
         // install extensions by instance
         runner.installExtensions();
@@ -146,10 +147,15 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     }
 
     /**
+     * Note that injector could be accessed statically anywhere with
+     * {@link ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup#getInjector(io.dropwizard.Application)}.
+     *
      * @return created injector instance or fail if injector not yet created
+     * @throws IllegalStateException if injector is not yet created
      */
     public Injector getInjector() {
-        return Preconditions.checkNotNull(injector, "Guice not initialized");
+        // InjectorLookup not used because it requires application instance, which may not be available yet
+        return context.getSharedState().getOrFail(Injector.class, "Guice not initialized");
     }
 
     /**
@@ -907,6 +913,26 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          */
         public Builder<T> hookAlias(final String name, final Class<? extends GuiceyConfigurationHook> hook) {
             ConfigurationHooksSupport.registerSystemHookAlias(name, hook);
+            return this;
+        }
+
+        /**
+         * Guicey manage application-wide shared state object to simplify cases when such state is required during
+         * configuration. It may be used by bundles or hooks to "communicate". For example, server pages bundles
+         * use this to unify global configuration. Unified place intended to replace all separate "hacks" and
+         * so simplify testing. Shared application state could be access statically anywhere during application
+         * life.
+         * <p>
+         * Caution: this is intended to be used only in cases when there is no other option except global state.
+         * <p>
+         * This method could be useful for possible hook needы (maybe hooks communications) because there is no
+         * other way to access shared state by hooks (bundles may use special api or reference by application instance)
+         *
+         * @param stateAction state action
+         * @return builder instance for chained calls
+         */
+        public Builder<T> withSharedState(final Consumer<SharedConfigurationState> stateAction) {
+            stateAction.accept(bundle.context.getSharedState());
             return this;
         }
 

@@ -15,6 +15,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Guicey environment object. Provides almost the same configuration methods as
@@ -309,6 +310,38 @@ public class GuiceyEnvironment {
     public GuiceyEnvironment listen(final LifeCycle.Listener listener) {
         environment().lifecycle().addLifeCycleListener(listener);
         return this;
+    }
+
+    /**
+     * Use to access shared state value and immediately fail if value not yet set (most likely due to incorrect
+     * configuration order).
+     * <p>
+     * Note: shared state value assumed to be initialized under initialization phase (but you can workaround
+     * this limitation by accessing shared state statically)
+     *
+     * @param key     shared object key
+     * @param message exception message (could use {@link String#format(String, Object...)} placeholders)
+     * @param args    placeholder arguments for error message
+     * @param <T>     shared object type
+     * @return shared object
+     * @throws IllegalStateException if not value available
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> T sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
+        return context.getSharedState().getOrFail(key, message, args);
+    }
+
+    /**
+     * Access shared value. Shared state value assumed to be initialized under initialization phase  (but you
+     * can workaround this limitation by accessing shared state statically)
+     *
+     * @param key shared object key
+     * @param <T> shared object type
+     * @return shared object (possibly just created)
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> Optional<T> sharedState(final Class<?> key) {
+        return Optional.ofNullable(context.getSharedState().get(key));
     }
 
     /**

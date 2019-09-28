@@ -65,10 +65,11 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.DropwizardBund
  */
 @SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "checkstyle:ClassFanOutComplexity",
         "PMD.ExcessiveImports", "PMD.ExcessivePublicCount", "PMD.NcssCount", "PMD.CyclomaticComplexity",
-        "PMD.TooManyFields"})
+        "PMD.TooManyFields", "PMD.ClassDataAbstractionCoupling", "checkstyle:ClassDataAbstractionCoupling"})
 public final class ConfigurationContext {
     private final Logger logger = LoggerFactory.getLogger(ConfigurationContext.class);
 
+    private final SharedConfigurationState sharedState = new SharedConfigurationState();
     private DuplicateConfigDetector duplicates;
     private Bootstrap bootstrap;
     private Bootstrap bootstrapProxy;
@@ -664,6 +665,7 @@ public final class ConfigurationContext {
      */
     public void initPhaseStarted(final Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
+        this.sharedState.assignTo(bootstrap.getApplication());
         // delayed init of registered dropwizard bundles
         final Stopwatch time = stat().timer(BundleTime);
         final Stopwatch dwtime = stat().timer(DropwizardBundleInitTime);
@@ -685,6 +687,7 @@ public final class ConfigurationContext {
         this.configurationTree = ConfigTreeBuilder
                 .build(bootstrap, configuration, option(BindConfigurationByPath));
         this.environment = environment;
+        this.sharedState.listen(environment);
         lifecycle().runPhase(configuration, configurationTree, environment);
     }
 
@@ -810,6 +813,13 @@ public final class ConfigurationContext {
      */
     public Environment getEnvironment() {
         return environment;
+    }
+
+    /**
+     * @return application-wide registry object
+     */
+    public SharedConfigurationState getSharedState() {
+        return sharedState;
     }
 
     private ItemId getScope() {

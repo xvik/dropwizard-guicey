@@ -11,9 +11,9 @@ import io.dropwizard.logging.LoggingUtil
 import io.dropwizard.setup.AdminEnvironment
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
-import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
-import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
+import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks
 import spock.lang.Specification
@@ -38,7 +38,7 @@ abstract class AbstractTest extends Specification {
 
     void cleanupSpec() {
         // some tests are intentionally failing so be sure to remove stale applications
-        InjectorLookup.clear()
+        SharedConfigurationState.clear()
         System.clearProperty(PropertyBundleLookup.BUNDLES_PROPERTY)
     }
 

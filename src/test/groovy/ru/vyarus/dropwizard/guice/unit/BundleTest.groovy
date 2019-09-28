@@ -21,7 +21,7 @@ class BundleTest extends AbstractTest {
         GuiceBundle bundle = GuiceBundle.builder().build()
         bundle.getInjector()
         then: "fail"
-        thrown(NullPointerException)
+        thrown(IllegalStateException)
 
         when: "accessing injector after init"
         bundle.initialize(mockBootstrap())

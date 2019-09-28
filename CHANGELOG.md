@@ -98,6 +98,13 @@
     - Add diagnostic hook, which enables diagnostic reports and lifecycle logs. 
         Could be enabled with system property: `-Dguicey.hooks=diagnostic` (where diagnostic is pre-registered hook alias) 
         Useful to enable diagnostic logs on compiled (deployed) application.                     
+* Add shared configuration state (for special configuration-time needs like bundles communication). 
+    This is required only in very special cases. But such unified place will replace all current and future hacks.
+    - Static access: `SharedConfigurationState.get(app)` or `SharedConfigurationState.lookup(app, key)` 
+    - Value access from guicey bundle: `boostrap.sharedState(key, defSupplier)`, `environment.sharedState(key)`
+    - Hooks can use `GuiceBundle.Builder.withSharedState` to access application state.
+    - (breaking) `InjectorLookup` now use global shared state        
+        * `clear()` method removed, but `SharedConfigurationState.clear()` could be used instead   
 * (breaking) Test support changes
     - Rename test extensions for guicey hooks registration: 
         * `GuiceyConfigurationRule` into `GuiceyHooksRule` 

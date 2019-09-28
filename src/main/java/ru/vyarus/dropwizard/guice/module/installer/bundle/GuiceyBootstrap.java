@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Guicey initialization object. Provides almost the same configuration methods as
@@ -245,5 +246,58 @@ public class GuiceyBootstrap {
     public GuiceyBootstrap listen(final GuiceyLifecycleListener... listeners) {
         context.lifecycle().register(listeners);
         return this;
+    }
+
+    /**
+     * Share global state to be used in other bundles (during configuration). This was added for very special cases
+     * when shared state is unavoidable to not re-invent the wheel each time!
+     * <p>
+     * Internally, state is linked to application instance so it would be safe to use with concurrent tests.
+     * Value could be accessed statically with application instance:
+     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#lookup(Application, Class)}.
+     * <p>
+     * Use bundle class as key. Value could be set only once (to prevent hard to track situations).
+     * <p>
+     * If initialization point could vary (first access should initialize it) use {@link #sharedState(Class, Supplier)}
+     * instead.
+     *
+     * @param key   shared object key
+     * @param value shared object
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public GuiceyBootstrap shareState(final Class<?> key, final Object value) {
+        context.getSharedState().put(key, value);
+        return this;
+    }
+
+    /**
+     * Alternative shared value initialization for cases when first accessed bundle should init state value
+     * and all other just use it.
+     *
+     * @param key          shared object key
+     * @param defaultValue default object provider
+     * @param <T>          shared object type
+     * @return shared object (possibly just created)
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> T sharedState(final Class<?> key, final Supplier<T> defaultValue) {
+        return context.getSharedState().get(key, defaultValue);
+    }
+
+    /**
+     * Use to access shared state value and immediately fail if value not yet set (most likely due to incorrect
+     * configuration order).
+     *
+     * @param key     shared object key
+     * @param message exception message (could use {@link String#format(String, Object...)} placeholders)
+     * @param args    placeholder arguments for error message
+     * @param <T>     shared object type
+     * @return shared object
+     * @throws IllegalStateException if no value available
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> T sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
+        return context.getSharedState().getOrFail(key, message, args);
     }
 }

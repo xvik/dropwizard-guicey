@@ -1,14 +1,13 @@
 package ru.vyarus.dropwizard.guice.test
 
+import com.google.inject.Injector
 import io.dropwizard.setup.Environment
 import org.junit.Rule
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
+import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import spock.lang.Specification
-
-import java.lang.reflect.Field
-
 
 /**
  * @author Vyacheslav Rusakov 
@@ -24,16 +23,15 @@ class MultipleRulesTest extends Specification {
 
     void setup() {
         // check injectors registered
-        Field injectors = InjectorLookup.getDeclaredField("INJECTORS")
-        injectors.setAccessible(true)
-        assert injectors.get(null).size() == 2
+        assert SharedConfigurationState.statesCount() == 2
+        def inj1 = SharedConfigurationState.lookup(RULE.getApplication(), Injector).get()
+        def inj2 = SharedConfigurationState.lookup(RULE2.getApplication(), Injector).get()
+        assert inj1 != inj2
     }
 
     void cleanupSpec() {
         // check injectors correctly unregistered
-        Field injectors = InjectorLookup.getDeclaredField("INJECTORS")
-        injectors.setAccessible(true)
-        assert injectors.get(null).size() == 0
+        assert SharedConfigurationState.statesCount() == 0
     }
 
     def "Check multiple rules"() {

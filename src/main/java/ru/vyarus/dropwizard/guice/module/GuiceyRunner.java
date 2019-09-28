@@ -96,9 +96,8 @@ public class GuiceyRunner {
     /**
      * @param injectorFactory configured injector factory
      * @param modules         guice modules to use for injector
-     * @return created injector
      */
-    public Injector createInjector(final InjectorFactory injectorFactory, final Iterable<Module> modules) {
+    public void createInjector(final InjectorFactory injectorFactory, final Iterable<Module> modules) {
         final Stopwatch timer = context.stat().timer(InjectorCreationTime);
         context.lifecycle().injectorCreation(
                 new ArrayList<>(context.getNormalModules()),
@@ -110,11 +109,8 @@ public class GuiceyRunner {
         injector = injectorFactory.createInjector(
                 context.option(InjectorStage), modules);
         context.stat().getGuiceStats().resetStatsLogger();
-        // registering as managed to cleanup injector on application stop
-        context.getEnvironment().lifecycle().manage(
-                InjectorLookup.registerInjector(context.getBootstrap().getApplication(), injector));
+        InjectorLookup.registerInjector(context.getBootstrap().getApplication(), injector);
         timer.stop();
-        return injector;
     }
 
     /**
