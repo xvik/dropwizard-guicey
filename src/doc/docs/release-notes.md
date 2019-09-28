@@ -542,6 +542,10 @@ One special event added `ApplicationStarted` which is always called after dropwi
 (including jersey start). It would be fired even in tests when `GuiceyAppRule` used 
 (which does not start jersey). Supposed to be used to simplify diagnostic reporting.
 
+Listeners are no longer checked to be hooks (for automatic hook registration). This was
+very confusing feature. Now when hooks are more "open", custom hook should register listener
+and not opposite.
+
 ## New shared configuration state
 
 !!! warning "" This feature is intended to be used for very special cases only. It was added to 
