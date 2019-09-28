@@ -21,6 +21,7 @@ class UniqueItemsEqualsTest extends Specification {
         b1.hashCode() == b2.hashCode()
         !b1.equals(null)
         !b2.equals(null)
+        !b1.equals(new Module())
     }
 
     def "Check unique module equals"() {
@@ -34,6 +35,7 @@ class UniqueItemsEqualsTest extends Specification {
         m1.hashCode() == m2.hashCode()
         !m1.equals(null)
         !m2.equals(null)
+        !m1.equals(new Bundle())
     }
 
     static class Bundle extends UniqueGuiceyBundle {}
