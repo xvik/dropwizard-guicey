@@ -106,11 +106,11 @@ public class SharedConfigurationState {
      * @param value shared value (usually configuration object)
      */
     public void put(final Class<?> key, final Object value) {
-        Preconditions.checkArgument(key != null, "Registry key can't be null");
+        Preconditions.checkArgument(key != null, "Shared state key can't be null");
         // just to avoid dummy mistakes
-        Preconditions.checkArgument(value != null, "Registry does not accept null values");
+        Preconditions.checkArgument(value != null, "Shared state does not accept null values");
         final String name = key.getName();
-        Preconditions.checkState(!state.containsKey(name), "Global state for key %s already defined", name);
+        Preconditions.checkState(!state.containsKey(name), "Shared state for key %s already defined", name);
         state.put(name, value);
     }
 
@@ -137,7 +137,7 @@ public class SharedConfigurationState {
     protected void assignTo(final Application application) {
         this.application = application;
         Preconditions.checkState(!STATE.containsKey(application),
-                "Global state already associated with application %s", application.getClass().getName());
+                "Shared state already associated with application %s", application.getClass().getName());
         STATE.put(application, this);
     }
 

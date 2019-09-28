@@ -79,6 +79,36 @@ class SharedStateTest extends Specification {
 
     }
 
+    def "Check edge cases"() {
+        setup:
+        Application app = new App()
+        SharedConfigurationState state = new SharedConfigurationState()
+
+        when: "put with null key"
+        state.put(null, app)
+        then: "err"
+        def ex = thrown(IllegalArgumentException)
+        ex.message == 'Shared state key can\'t be null'
+
+        when: "put with null value"
+        state.put(App, null)
+        then: "err"
+        def ex2 = thrown(IllegalArgumentException)
+        ex2.message == 'Shared state does not accept null values'
+
+        when: "get with null supplier"
+        def res = state.get(App, null)
+        then: "behave as usual get"
+        res == null
+
+        when: "duplicate assign"
+        state.assignTo app
+        state.assignTo app
+        then: "err"
+        def ex3 = thrown(IllegalStateException)
+        ex3.message == "Shared state already associated with application $App.name"
+    }
+
     static class App extends Application<Configuration> {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
