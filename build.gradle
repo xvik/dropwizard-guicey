@@ -89,7 +89,7 @@ github {
 }
 
 mkdocs.publish {
-    docPath = '5.0.0-rc.1'
+    docPath = '5.0.0-rc.2'
     rootRedirect = false
 }
 

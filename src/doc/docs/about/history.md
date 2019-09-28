@@ -97,7 +97,15 @@
       Alias registered with `GuiceBundle.builder()#hookAlias()`. All registered aliases are logged at startup.
     - Add diagnostic hook, which enables diagnostic reports and lifecycle logs. 
         Could be enabled with system property: `-Dguicey.hooks=diagnostic` (where diagnostic is pre-registered hook alias) 
-        Useful to enable diagnostic logs on compiled (deployed) application.                     
+        Useful to enable diagnostic logs on compiled (deployed) application.
+    - (breaking) Removed hooks recognition on registered GuiceyLifecycleLister (as it was very confusing feature)                         
+* Add shared configuration state (for special configuration-time needs like bundles communication). 
+    This is required only in very special cases. But such unified place will replace all current and future hacks.
+    - Static access: `SharedConfigurationState.get(app)` or `SharedConfigurationState.lookup(app, key)` 
+    - Value access from guicey bundle: `boostrap.sharedState(key, defSupplier)`, `environment.sharedState(key)`
+    - Hooks can use `GuiceBundle.Builder.withSharedState` to access application state.
+    - (breaking) `InjectorLookup` now use global shared state        
+        * `clear()` method removed, but `SharedConfigurationState.clear()` could be used instead   
 * (breaking) Test support changes
     - Rename test extensions for guicey hooks registration: 
         * `GuiceyConfigurationRule` into `GuiceyHooksRule` 
@@ -137,7 +145,7 @@
       `.printGuiceAopMap(new GuiceAopConfig().types(...).methods(...))`      
 * Fix configuration bindings for recursive configuration object declarations (#60)
 * Guicey version added into BOM (dependencyManagement section in guicey pom) to avoid duplicate versions declarations
-* Java 11 compatibility. Automatic module name (in meta-inf): `dropwizard-guicey.core` 
+* Java 11 compatibility. Automatic module name (in meta-inf): `dropwizard-guicey.core`  
 
 ### [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2) (2018-11-26)
 * Update to guice 4.2.2 (java 11 compatible)
