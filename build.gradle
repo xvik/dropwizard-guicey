@@ -119,7 +119,7 @@ bintray {
     key = findProperty('bintrayKey')
     publications = ['maven']
     dryRun = false
-    publish = true
+    publish = false
     pkg {
         repo = 'xvik'
         name = project.name
