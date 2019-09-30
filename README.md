@@ -16,8 +16,10 @@ Support:
 * [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey)
 * [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
 
+**NOTE** Dropwizard 2.0.0 compatible [release candidate is ready](https://github.com/xvik/dropwizard-guicey/issues/61#issuecomment-536259075). 
+Please try it and [share your feedback](https://github.com/xvik/dropwizard-guicey/issues/61).
 
-### About
+### About 
 
 [Dropwizard](http://dropwizard.io/) 1.3.7 [guice](https://github.com/google/guice) 4.2.2 integration.
 
