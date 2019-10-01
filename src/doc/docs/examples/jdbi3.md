@@ -19,12 +19,12 @@ The [JDBI3 extension](../extras/jdbi3.md) allows:
 Additional dependencies required:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-jdbi3:0.6.0'
-compile 'com.h2database:h2:1.4.193'
+compile 'ru.vyarus.guicey:guicey-jdbi3:5.0.0-0-rc.1'
+compile 'com.h2database:h2:1.4.199'
 ```
 
 !!! note
-    guicey-jdbi version could be managed with [BOM](../extras/bom.md)
+    Both versions are managed by [BOM](../extras/bom.md)
 
 [dropwizard-jdbi3](http://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html) is used to configure 
 and create dbi instance:

@@ -16,7 +16,7 @@ The [eventbus extension](../extras/eventbus.md) is used for:
 An additional dependency is required:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-eventbus:0.6.0'
+compile 'ru.vyarus.guicey:guicey-eventbus:5.0.0-0-rc.1'
 ```
 
 !!! note

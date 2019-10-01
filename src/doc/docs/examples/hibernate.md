@@ -11,11 +11,13 @@ Additional dependencies required:
 
 ```groovy
     compile 'io.dropwizard:dropwizard-hibernate:1.3.0'
-    compile 'com.h2database:h2:1.4.193'
-```
+    compile 'com.h2database:h2:1.4.199'
+```  
 
-!!! note ""
-    H2 used as the simplest example.
+!!! note
+    Both versions are managed by [BOM](../extras/bom.md)
+
+For simplicity, an embedded H2 database is used.
 
 Overall configuration is exactly the same as described in [dropwizard docs](http://www.dropwizard.io/1.3.0/docs/manual/hibernate.html), 
 but extracted to separate class for simplicity:
