@@ -5,17 +5,18 @@
 
 [Version history](about/history.md) - [Support](about/support.md) - [License](about/license.md)
 
-
 !!! warning 
     Documentation is in process of actualization.
     See **[5.0.0 release notes](release-notes.md)** for actual changes.
+    
+Targets dropwizard 2.0.0, guice 4.2.2.
+Compiled for java 8, binary compatible with java 11.    
 
 ## Main features
 
-* [Auto configuration](guide/configuration.md#auto-configuration): use classpath scan to find and install extensions 
-automatically without manual configurations (of course, [manual mode](getting-started.md#manual-mode) is also possible)  
+* Auto configuraton from [classpath scan](guide/configuration.md#auto-configuration) and guice bindings.  
 * [Configuration values bindings](guide/bindings.md#configuration-by-path) by path or unique sub objects. 
-* [Web](guide/web.md) (servlets, filters):
+* [Web](guide/web.md) (servlets, filters, listeners):
     - supports both contexts (main and admin)
     - guice ServletModule support is enabled by default ([could be disabled](guide/web.md#disable-servletmodule-support))
     - jee web annotations (@WebServlet, @WebFilter) support ([could be enabled](guide/web.md#web-instalers))
@@ -52,9 +53,8 @@ or extensions project.
 
 [The main repository](https://github.com/xvik/dropwizard-guicey) contains library itself and this documentation sources.
 
-Guicey stays as feature complete library with commonly used core integrations and 
-rich api for building custom integrations (for specific needs). 
-It's very close to guice philosophy of being simple and stable.
+Guicey core. Provides rich api for building custom integrations (for specific needs). 
+Only core version follow semantic versioning.
 
 [Examples repository](https://github.com/xvik/dropwizard-guicey-examples) holds examples of main features usage, dropwizard bundles 
 integrations and extensions samples.
@@ -62,8 +62,9 @@ integrations and extensions samples.
 [Extensions repository](https://github.com/xvik/dropwizard-guicey-ext) contains guicey external integrations. 
 
 Extensions project shows what is possible to achieve based on guicey. Besides, provided integrations 
-itself might be quite useful.
+itself might be quite useful. Version scheme is the same as dropwizard modules: guiceyVersion-releaseNumber
+(no semantic versioning).
 
-[BOM module](extras/bom.md) unifies dependencies management for extensions, dropwizard and guice (as it includes boms for them).
-Overall, extensions project is more like spring: growing set of solutions for everything (more "enterprisy").
+* [BOM module](extras/bom.md) unifies dependencies management for extensions, dropwizard and guice (as it includes boms for them).
+   Overall, extensions project is more like spring: growing set of solutions for everything (more "enterprisy").
 
