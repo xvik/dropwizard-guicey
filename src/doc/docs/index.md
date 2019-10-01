@@ -7,7 +7,7 @@
 
 !!! warning 
     Documentation is in process of actualization.
-    See **[5.0.0 release notes](release-notes.md)** for actual changes.
+    See **[5.0.0 release notes](about/release-notes.md)** for actual changes.
     
 Targets dropwizard 2.0.0, guice 4.2.2.
 Compiled for java 8, binary compatible with java 11.    

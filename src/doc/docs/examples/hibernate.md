@@ -2,7 +2,7 @@
 
 Example of [dropwizard-hibernate](http://www.dropwizard.io/1.3.0/docs/manual/hibernate.html) bundle usage with guicey.
 
-!!! note ""
+!!! abstract ""
     Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/hibernate)
 
 ## Configuration

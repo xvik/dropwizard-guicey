@@ -2,7 +2,7 @@
 
 Example of [guicey-jdbi3](../extras/jdbi3.md) extension usage.
 
-!!! note ""
+!!! abstract ""
     Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/jdbi3)
 
 

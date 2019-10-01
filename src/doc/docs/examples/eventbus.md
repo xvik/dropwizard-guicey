@@ -2,7 +2,7 @@
 
 Example of [guicey-eventbus](../extras/eventbus.md) extension usage.
 
-!!! note ""
+!!! abstract ""
     Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/eventbus)
     
 The [eventbus extension](../extras/eventbus.md) is used for:
