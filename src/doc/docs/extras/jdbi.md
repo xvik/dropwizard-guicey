@@ -3,6 +3,10 @@
 !!! summary ""
     [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi) module
 
+!!! warning ""
+    **DEPRECATED**: because jdbi2 dropwizard module is deprecated and moved [outside of core modules](https://github.com/dropwizard/dropwizard-jdbi).
+    Migrate [to jdbi3](#migration-to-jdbi3) 
+
 Integrates [JDBI2](http://jdbi.org/) with guice. Based on [dropwizard-jdbi](http://www.dropwizard.io/1.3.0/docs/manual/jdbi.html) integration.
  
 Features:
@@ -33,14 +37,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi</artifactId>
-  <version>0.7.0</version>
+  <version>5.0.0-0-rc.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-jdbi:0.7.0'
+compile 'ru.vyarus.guicey:guicey-jdbi:5.0.0-0-rc.1'
 ```
 
 See the most recent version in the badge above.
@@ -239,3 +243,27 @@ try {
 ```
 
 Repositories could also be called inside such manual unit (as unit of work is correctly started).
+
+## Migration to jdbi3
+
+* Use [guicey-jdbi3](jdbi3.md)
+
+* Module package changed from `ru.vyarus.guicey.jdbi` to `ru.vyarus.guicey.jdbi3`.
+
+* `Jdbi` object was previously bind as `DBI` interface. Now it's bound as `Jdbi` (as interface was removed in jdbi3).
+
+* New methods in JdbiBundle:
+    - withPlugins - install custom plugins
+    - withConfig - to simplify manual configuration
+
+* In jdbi3 `ResultSetMapper` was changed to `RowMapper` (and ColumnMapper). Installer supports RowMapper automatic installation.
+
+* If you were using binding annotations then:
+    - `@BindingAnnotation` -> `@SqlStatementCustomizingAnnotation`
+    - `BindingFactory` ->  `SqlStatementCustomizerFactory`
+
+* Sql object proxies must be interfaces now (jdbi3 restriction). But as java 8 interfaces support default methods,
+its not a big problem
+    - instead of field injection (to access other proxies), now getter annotated with @Inject must be used.
+        
+See [jdbi3 migration gude](http://jdbi.org/#_upgrading_from_v2_to_v3) for other (pure jdbi related) differences

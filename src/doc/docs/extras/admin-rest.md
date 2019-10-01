@@ -3,7 +3,7 @@
 All rest resources could be "published" in the admin context too.  This is just an emulation of rest: the same resources 
 are accessible in both contexts. On admin side special servlet simply redirects all incoming requests into the jersey context.
 
-Such an approach is better than registering a completely separate jersey context for admin rest because
+Such approach is better than registering a completely separate jersey context for admin rest because
 of no overhead and the simplicity of jersey extensions management.
 
 ## Configuration

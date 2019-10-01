@@ -57,24 +57,25 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-spa</artifactId>
-  <version>0.7.0</version>
+  <version>5.0.0-0-rc.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-spa:0.7.0'
+compile 'ru.vyarus.guicey:guicey-spa:5.0.0-0-rc.1'
 ```
 
 See the most recent version in the badge above.
 
 ## Usage
 
-Register dropwizard bundle:
+Register bundle:
 
 ```java
-bootstrap.addBundle(SpaBundle.app("app", "/app", "/").build());
+GuiceBundle.builder()
+    .bundles(SpaBundle.app("app", "/app", "/").build());
 ```
 
 This will register app with name "app" (name is used to name servlets and filters and must be unique).
@@ -91,7 +92,7 @@ http://localhost:8080/someroute -> application client route - index page returne
 Example registration to admin context:
 
 ```java
-bootstrap.addBundle(SpaBundle.adminApp("admin", "/com/mycompany/adminapp/", "/manager").build());
+.bundles(SpaBundle.adminApp("admin", "/com/mycompany/adminapp/", "/manager").build());
 ```
 
 Register "admin" application with resources in "/com/mycompany/adminapp/" package, served from "manager' 
@@ -104,10 +105,10 @@ http://localhost:8081/manager -> admin app index
 You can register as many apps as you like. They just must use different urls and have different names:
 
 ```java
-bootstrap.addBundle(SpaBundle.app("app", "/app", "/").build());
-bootstrap.addBundle(SpaBundle.app("app2", "/app2", "/").build());
-bootstrap.addBundle(SpaBundle.adminApp("admin", "/com/mycompany/adminapp/", "/manager").build());
-bootstrap.addBundle(SpaBundle.adminApp("admin2", "/com/mycompany/adminapp2/", "/manager2").build());
+.bundles(SpaBundle.app("app", "/app", "/").build(),
+         SpaBundle.app("app2", "/app2", "/").build(),
+         SpaBundle.adminApp("admin", "/com/mycompany/adminapp/", "/manager").build(),
+         SpaBundle.adminApp("admin2", "/com/mycompany/adminapp2/", "/manager2").build());
 ```
 
 !!! note
@@ -119,7 +120,7 @@ bootstrap.addBundle(SpaBundle.adminApp("admin2", "/com/mycompany/adminapp2/", "/
 By default, index page assumed to be "index.html". Could be changed with:
 
 ```java
-bootstrap.addBundle(SpaBundle.app("app", "/app", "/").indexPage("main.html").build());
+.bundles(SpaBundle.app("app", "/app", "/").indexPage("main.html").build());
 ```
 
 ### Prevent redirect regex
@@ -133,7 +134,7 @@ By default, the following regex is used to prevent resources redirection (to not
 Could be changed with:
 
 ```java
-bootstrap.addBundle(SpaBundle.app("app", "/app", "/")
+.bundles(SpaBundle.app("app", "/app", "/")
         .preventRedirectRegex("\\.\\w{2,5}(\\?.*)?$")
         .build());
 ```
@@ -141,20 +142,3 @@ bootstrap.addBundle(SpaBundle.app("app", "/app", "/")
 This regexp implements naive assumption that all app routes does not contain "extension".
 
 Note: regexp is applied with `find` so use `^` or `$` to apply boundaries. 
-
-### Use with guicey bundle
-
-Bundle could be used inside guicey bundle:
-
-```java
-public class AppBundle implements GuiceyBundle {
-    @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
-        SpaBundle.app("app", "/app", "/").register(bootstrap);
-    }
-}
-```
-
-This allows you to register application from guicey bundles.
-Together with bundles lookup guicey feature it could be used to auto installation of client apps
-(e.g. admin app) when jar appear in classpath.
