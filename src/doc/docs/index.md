@@ -3,7 +3,7 @@
 !!! summary ""
     [Guice](https://github.com/google/guice) integration for [dropwizard](http://dropwizard.io).
 
-[Version history](about/history.md) - [Support](about/support.md) - [License](about/license.md)
+[Version history](about/history.md) - [Support](about/support.md) - [License](about/license.md) - [Javadoc](https://javadoc.io/doc/ru.vyarus/dropwizard-guicey/)
 
 !!! warning 
     Documentation is in process of actualization.
