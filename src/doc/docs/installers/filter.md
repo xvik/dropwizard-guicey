@@ -3,9 +3,6 @@
 !!! summary ""
     WebInstallersBundle / [WebFilterInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/web/WebFilterInstaller.java)        
 
-!!! warning ""
-    [Web installers](../guide/web.md#web-installers) are not enabled by default. Enable it with `#!java bundle.useWebInstallers()`.
-
 Register new filter in main or admin contexts.
 
 ## Recognition

@@ -88,6 +88,10 @@ github {
     vcsUrl = 'https://github.com/xvik/dropwizard-guicey'
 }
 
+python.pip 'mkdocs:1.0.4',
+        'mkdocs-material:4.4.2',
+        'WeasyPrint:49', // bug in version 50 (https://github.com/Kozea/WeasyPrint/issues/953)
+        'mkdocs-pdf-export-plugin:0.5.5'
 mkdocs.publish {
     docPath = '5.0.0-rc.2'
     rootRedirect = false

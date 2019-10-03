@@ -12,7 +12,10 @@ repo_url: 'https://github.com/xvik/dropwizard-guicey'
 copyright: 'Copyright &copy; 2014-2019 Vyacheslav Rusakov'
 
 # Documentation and theme
-theme: 'material'
+theme:
+  name: 'material'
+  feature:
+    tabs: true
 
 # Options
 extra:
@@ -25,6 +28,12 @@ extra:
       link: 'https://github.com/xvik'
     - type: 'twitter'
       link: 'https://twitter.com/vyarus'
+
+plugins:
+  - search
+  - pdf-export:
+      verbose: false
+      combined: false
 
 # Google Analytics
 google_analytics:
@@ -82,14 +91,7 @@ nav:
       - Web servlet: installers/servlet.md
       - Web filter: installers/filter.md
       - Web listener: installers/listener.md
-    - Examples:
-      - Authentication: examples/authentication.md
-      - Governator: examples/governator.md
-      - Hibernate: examples/hibernate.md
-      - EventBus: examples/eventbus.md
-      - JDBI: examples/jdbi.md
-      - JDBI3: examples/jdbi3.md
-    - Extras:
+    - Extensions:
       - Admin REST: extras/admin-rest.md
       - BOM: extras/bom.md
       - Lifecycle annotations: extras/lifecycle-annotations.md
@@ -98,9 +100,16 @@ nav:
       - JDBI3: extras/jdbi3.md
       - SPA: extras/spa.md
       - Server Pages: extras/gsp.md
+    - Examples:
+      - Authentication: examples/authentication.md
+      - Governator: examples/governator.md
+      - Hibernate: examples/hibernate.md
+      - EventBus: examples/eventbus.md
+      - JDBI: examples/jdbi.md
+      - JDBI3: examples/jdbi3.md
     - About:
-      - Compatibility: about/compatibility.md
       - Release notes: about/release-notes.md
+      - Compatibility: about/compatibility.md
       - Version history: about/history.md
       - Support: about/support.md
       - License: about/license.md
