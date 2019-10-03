@@ -22,6 +22,8 @@ Please read [dropwizard 2.0 upgrade guide](https://github.com/dropwizard/dropwiz
 * [Guicey hooks changes](#guicey-hooks-changes)
 * [Guicey BOM includes guicey itself](#guicey-bom-includes-guicey-itself)
 * [Java 11 compatibility](#java-11-compatibility)
+* [Extension modules](#extension-modules)
+* [Fixed issues](#fixes-issues)
 
 **[Migration Guide](#migration-guide)**.
 
@@ -798,11 +800,33 @@ dependencies {
 
 ## Java 11 compatibility
 
-Guicey is binary compatible with java 11. 
+Guicey (and extensions) is binary compatible with java 11. 
 Declared `Automatic-Module-Name`: `dropwizard-guicey.core` (META-INF).
 
 Still, guicey releases will be build with java 8, but CI tools will detect any future incompatibilities.
 
+## Extension modules
+
+Extension modules version now aligned with guicey version: guiceyVersion-Number. For example,
+`5.0.0-0` will be the first extensions release for guicey 5.0.0. 
+
+All extension bundles are guicey bundles now (thanks to lifecycles unification): `SpaBundle`, `ServerPagesBundle` (and relative bundles).
+
+## BOM
+
+`H2` and `dropwizard-flyway` versions are added to bom. 
+
+### GSP
+
+`ServerPagesBundle.extendApp` now also returns bundle which must be registered. But there are also
+direct shortcut on application builder: `ServerPagesBundle.app(...).attachPaths(...)`.
+
+ServerPagesBundle lifecycle is more predictable now as all configuration appear under initialization phase
+and only limited to guicey bundles.
+
+### JDBI2
+
+JDBI 2 module is deprecated because dropwizard deprecated it'd jdbi bundle and moved to [separate repository](https://github.com/dropwizard/dropwizard-jdbi) 
 
 ## Fixes issues                             
 
@@ -1106,3 +1130,11 @@ All reports were moved into top-level package "debug".
 
 You don't need to enable guice statistics (injector creation) logs manually now: they would be 
 intercepted automatically and show under diagnostics stats sub reprot (`.printDiagnosticReport()`)
+
+### Extension modules
+
+`SpaBundle` and `ServerPagesBundle` are guicey bundles now, so register them accordingly.
+
+`ServerPagesBundle.extendApp` is not just a static call anymore: now returned guicey bundle must be also registered.
+If application is extended in the same bundle with registration (required extenions), it may now
+be scpecified directly in application builder: `ServerPagesBundle.app(...).attachPaths(...)`
