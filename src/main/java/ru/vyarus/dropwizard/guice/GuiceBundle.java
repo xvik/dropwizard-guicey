@@ -470,7 +470,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          *
          * @return builder instance for chained calls
          * @see GuiceyOptions#GuiceFilterRegistration
+         * @deprecated in the next version HK2 support will be removed and guice request scope will be mandatory
          */
+        @Deprecated
         public Builder<T> noGuiceFilter() {
             return option(GuiceFilterRegistration, EnumSet.noneOf(DispatcherType.class));
         }
@@ -698,7 +700,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          *
          * @return builder instance for chained calls
          * @see HK2DebugBundle
+         * @deprecated in the next version HK2 support will be removed and option will become useless
          */
+        @Deprecated
         public Builder<T> strictScopeControl() {
             bundle.context.registerBundles(new HK2DebugBundle());
             return this;
@@ -720,7 +724,9 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see InstallersOptions#JerseyExtensionsManagedByGuice
          * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
          * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
+         * @deprecated in the next version HK2 support will be removed
          */
+        @Deprecated
         public Builder<T> useHK2ForJerseyExtensions() {
             option(JerseyExtensionsManagedByGuice, false);
             option(UseHkBridge, true);

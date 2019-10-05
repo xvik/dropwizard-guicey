@@ -33,7 +33,9 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2InstanceListene
  *
  * @author Vyacheslav Rusakov
  * @since 15.01.2016
+ * @deprecated in the next version HK2 support will be removed and bundle will become useless
  */
+@Deprecated
 public class HK2DebugBundle extends UniqueGuiceyBundle {
 
     @Override

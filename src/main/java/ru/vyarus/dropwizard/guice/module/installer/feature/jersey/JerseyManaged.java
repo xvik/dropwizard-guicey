@@ -35,8 +35,10 @@ import java.lang.annotation.Target;
  * @see ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding as alternative solution
  * @see GuiceManaged
  * @since 21.11.2014
+ * @deprecated in the next version HK2 support will be removed and annotation will become useless
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface JerseyManaged {
 }
