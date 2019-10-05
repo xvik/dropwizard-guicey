@@ -30,13 +30,15 @@ Please read [dropwizard 2.0 upgrade guide](https://github.com/dropwizard/dropwiz
 ## General changes
 
 Jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
-This allows complete hk2 avoidance in the future. Right now it means that all direct hk2 classes must be replaced
-by jersey abstractions (see [migration matrix](#dropwizard-related) below)
+Right now all direct hk2 classes must be replaced by jersey abstractions (see [migration matrix](#dropwizard-related) below)
 
 Note that `org.glassfish.hk2.api.ServiceLocator` must be replaced with `org.glassfish.jersey.internal.inject.InjectionManager`.
 The later may be used to obtain locator, but be aware that HK2 supposed to be completely dropped in the next guicey version.
 
 `@HK2Managed` guicey annotation was renamed to `@JerseyManaged` to point on possible absence of HK2.
+
+!!! warning
+    In the next version guicey will get rid of HK2 and so all HK2-related methods and options *were marked as deprecated*.
 
 `GuiceBundle.builder()#useWebInstallers()` was removed because `WebInstallersBundle` is 
 activated by default and so you don't need to activate it manually anymore. 
@@ -550,9 +552,10 @@ and not opposite.
 
 ## New shared configuration state
 
-!!! warning "" This feature is intended to be used for very special cases only. It was added to 
-remove current and future hacks for implementing global application state or bundles communication
-and avoid testing side effects. 
+!!! warning 
+    This feature is intended to be used for very special cases only. It was added to 
+    remove current and future hacks for implementing global application state or bundles communication
+    and avoid testing side effects. 
 
 Sometimes, it is required to share some "global" state between multiple bundles. In this cases
 developer have to introduce static or TreadLocal hacks in order to share required state.
@@ -812,7 +815,7 @@ Extension modules version now aligned with guicey version: guiceyVersion-Number.
 
 All extension bundles are guicey bundles now (thanks to lifecycles unification): `SpaBundle`, `ServerPagesBundle` (and relative bundles).
 
-## BOM
+### BOM
 
 `H2` and `dropwizard-flyway` versions are added to bom. 
 

@@ -63,8 +63,8 @@ Bom includes:
 * System rules, required for StartupErrorRule (com.github.stefanbirkner:system-rules)
 * Spock (org.spockframework:spock-core)
 
-Guicey extensions project provide extended BOM with all guicey modules included. 
-See [extensions project BOM](extras/bom.md) section for more details of BOM usage.
+!!! tip
+    Guicey extensions project provide [extended BOM](extras/bom.md) with all guicey modules included. 
 
 ## Usage
 

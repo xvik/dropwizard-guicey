@@ -47,6 +47,7 @@ markdown_extensions:
       guess_lang: false
   - footnotes
   - meta
+  - def_list
   - toc:
       permalink: true
   - pymdownx.betterem:
@@ -62,7 +63,8 @@ nav:
     - Getting started: getting-started.md
     - Concepts overview: concepts.md
     - User guide:
-      - Configuration: guide/configuration.md
+      - Configuration: guide/configuration2.md
+      - Configuration_old: guide/configuration.md
       - Integration lifecycle: guide/lifecycle.md
       - Injector: guide/injector.md
       - Module autowiring: guide/module-autowiring.md

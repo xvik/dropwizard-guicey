@@ -13,7 +13,8 @@
                 * `Supplier` detected instead `Factory` (Factory implementations are not recognized anymore!)
                 * `org.glassfish.jersey.internal.inject.InjectionResolver` detected instead of `org.glassfish.hk2.api.InjectionResolver`
             - Jersey installers use `org.glassfish.jersey.internal.inject.AbstractBinder`
-              instead of hk specific `org.glassfish.hk2.utilities.binding.AbstractBinder`    
+              instead of hk specific `org.glassfish.hk2.utilities.binding.AbstractBinder`
+            - Mark all hk2-related methods and options as deprecated (to be removed in the next version)             
         * Jersey 2.26 implements jax-rs 2.1 which forced it to change some of it's apis.
             - `org.glassfish.jersey.server.AsyncContext` binding used instead of 
                 `org.glassfish.jersey.server.internal.process.AsyncContext`                                  
