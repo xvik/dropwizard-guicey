@@ -342,6 +342,7 @@ Guicey listeners:
 
 `#!java .onApplicationStartup(ApplicationStartupListener listener)`
 :   Shortcut for manual actions after complete application start (jetty started) 
+
     !!! note ""
         It is also called after guicey initialization in lightweight guicey tests
 
