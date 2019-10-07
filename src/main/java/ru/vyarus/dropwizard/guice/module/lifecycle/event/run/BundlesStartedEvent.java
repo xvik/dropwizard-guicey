@@ -12,8 +12,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 import java.util.List;
 
 /**
- * Called after bundles start (run method call). Not called if no bundles were used at all
- * (nothing was processed - no event).
+ * Called after bundles start (run method call). Not called if no bundles were used at all.
  * <p>
  * May be used for consultation only as bundles are not used anymore (already processed).
  *

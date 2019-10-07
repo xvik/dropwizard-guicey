@@ -91,8 +91,7 @@ public enum GuiceyLifecycle {
      */
     BeforeRun(BeforeRunEvent.class),
     /**
-     * Called after bundles started (run method call). Not called even if no bundles were used at all
-     * (no processing - no event).
+     * Called after bundles started (run method call). Not called if no bundles were used at all.
      * Note that dropwizard bundles are not yet started because dropwizard will call it's run method after
      * guice bundle processing.
      */

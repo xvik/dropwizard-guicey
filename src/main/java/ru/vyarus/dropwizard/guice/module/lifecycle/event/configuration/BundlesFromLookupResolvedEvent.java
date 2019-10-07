@@ -9,8 +9,8 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent
 import java.util.List;
 
 /**
- * Called if at least one bundle recognized using bundles lookup (not called at all (!) if
- * nothing found). Provides list of found bundles.
+ * Called if at least one bundle recognized using bundles lookup. Not called at if
+ * nothing found. Provides list of found bundles.
  * <p>
  * Note: some of these bundles could be actually disabled and not used further.
  *
