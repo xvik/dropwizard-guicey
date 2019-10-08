@@ -69,7 +69,7 @@ Guicey performs `Configuration` [object introspection](#yaml-config-introspectio
 configured yaml values by path or through sub-objects.
 
 !!! warning
-    Additional configuration objects are not bound when yaml introspection [is disabled](yaml-introspection.md#disable-configuration-introspection)
+    Additional configuration objects are not bound when yaml introspection [is disabled](../yaml-introspection.md#disable-configuration-introspection)
 
 Raw introspection result could be injected directly (for reporting or analysis):
 
@@ -209,7 +209,7 @@ public class MyBean {
 
 It's not the best example, but it illustrates usage (and such things usually helps to quick-test something). 
 
-See also [authentication configuration example](../examples/authentication.md).
+See also [authentication configuration example](../../examples/authentication.md).
 
 ### Jersey specific bindings
 
@@ -234,14 +234,14 @@ Request-scoped bindings:
 * `org.glassfish.jersey.server.AsyncContext`
 
 !!! tip
-    Read about jersey bindings implementation in [lifecycle section](lifecycle.md#access-guice-beans-from-jersey).
+    Read about jersey bindings implementation in [lifecycle section](../lifecycle.md#access-guice-beans-from-jersey).
 
 ### Request and response
 
 By default, `GuiceFilter` is enabled on both contexts (admin and main). So you can inject
 request and response objects and use under filter, servlet or resources calls (guice filter wraps all web interactions).
 
-If you disable guice filter with [.noGuiceFilter()](configuration.md#servletmodule) then
+If you disable guice filter with [.noGuiceFilter()](../configuration.md#servletmodule) then
 guicey will bridge objects from HK2 context:
 
 * `javax.servlet.http.HttpServletRequest`
@@ -259,11 +259,11 @@ Example usage:
 
 !!! note
     Pay attention, that in guice-managed resources `@Context` field bindings 
-    [must be replaced with providers](../installers/resource.md#@context-usage).
+    [must be replaced with providers](../../installers/resource.md#@context-usage).
 
 ### Options
 
-`ru.vyarus.dropwizard.guice.module.context.option.Options` binding provides access to [guicey options](options.md):
+`ru.vyarus.dropwizard.guice.module.context.option.Options` binding provides access to [guicey options](../options.md):
 ```java
 @Inject Options options;
 ``` 
@@ -278,7 +278,7 @@ Preconditions.checkState(options.get(GuiceyOptions.UseHkBridge),
 ### Guicey configuration
 
 `ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo` binding provides access
-to [guicey configuration details](diagnostic.md):
+to [guicey configuration details](../diagnostic.md):
 
 ```java
 @Inject GuiceyConfigurationInfo info
@@ -295,12 +295,12 @@ all extensions with untargetted binding: `binder().bind(YourExtension.class)`.
 
 But there are three exceptions:
 
-* Installers with custom binding logic (like [plugins installer](../installers/plugin.md))
+* Installers with custom binding logic (like [plugins installer](../../installers/plugin.md))
 * If extension was detected from binding (obviously binding already exists)
 * If extension is annotated with`@LazyBinding`
 
 As injector is created in `Stage.PRODUCTION`, all singleton extensions will be instantiated
-in time of injector startup (injector stage could be changed in [main bundle](configuration2.md#main-bundle)).
+in time of injector startup (injector stage could be changed in [main bundle](../configuration2.md#main-bundle)).
 
 ## Binding scope
 
@@ -309,12 +309,12 @@ As you know, guice assume prototype scope by default (when no scope annotation d
 Guice scope annotations:
 
 * `@Singleton` - single instance per context
-* `@RequestScoped` - object per request (if guice filter support is [not disabled](web.md#disable-servletmodule-support)
+* `@RequestScoped` - object per request (if guice filter support is [not disabled](../web.md#disable-servletmodule-support)
 * `@Prototype` - prototype scope annotation (useful for jersey services to override force singleton scope)
 
-Jersey extensions ([resources](../installers/resource.md), [providers](../installers/jersey-ext.md)) **force
+Jersey extensions ([resources](../../installers/resource.md), [providers](../../installers/jersey-ext.md)) **force
 singleton scope** for extensions without explicit binding annotation (but this could be disabled with 
-[an option](../installers/resource.md)).
+[an option](../../installers/resource.md)).
 Use explicit scope annotations where singletons are not required.
 
 ### Request scope transition
@@ -372,6 +372,6 @@ Depending on default mode selected, you can use annotations to change extension 
 
 ### Bindings override
 
-Guicey provides direct support for [overriding bindings](configuration.md#override-guice-bindings)
-and even [override overridden bindings in tests](test.md#overriding-overridden-beans).
+Guicey provides direct support for [overriding bindings](../configuration.md#override-guice-bindings)
+and even [override overridden bindings in tests](../test.md#overriding-overridden-beans).
        

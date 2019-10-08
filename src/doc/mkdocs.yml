@@ -31,9 +31,9 @@ extra:
 
 plugins:
   - search
-  - pdf-export:
-      verbose: false
-      combined: false
+#  - pdf-export:
+#      verbose: false
+#      combined: false
 
 # Google Analytics
 google_analytics:
@@ -67,10 +67,11 @@ nav:
       - Configuration_old: guide/configuration.md
       - Integration lifecycle: guide/lifecycle.md
       - Yaml config introspection: guide/yaml-introspection.md
-      - Injector: guide/injector.md
-      - Module autowiring: guide/module-autowiring.md
-      - Bindings: guide/bindings.md
       - Classpath scan: guide/scan.md
+      - Guice:
+          - Injector: guide/guice/injector.md
+          - Bindings: guide/guice/bindings.md
+          - Module autowiring: guide/guice/module-autowiring.md
       - Installers: guide/installers.md
       - Ordering: guide/ordering.md
       - Bundles (Guicey): guide/bundles.md

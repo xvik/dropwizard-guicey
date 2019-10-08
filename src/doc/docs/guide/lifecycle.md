@@ -26,8 +26,8 @@ Anyway, it is not always possible to hide integration details, especially if you
     * Search guicey bundles in dropwizard bundles ([optional](configuration.md#dropwizard-bundles-unification)) 
     * [Lookup guicey bundles](bundles.md#bundle-lookup)   
     * Apply configuration from guicey bundles
-    * **Injector creation** ([using factory](injector.md#injector-factory))
-        * [Bind dropwizard objects](bindings.md): Environment, Configuration, Bootstrap
+    * **Injector creation** ([using factory](guice/injector.md#injector-factory))
+        * [Bind dropwizard objects](guice/bindings.md): Environment, Configuration, Bootstrap
         * Scan for installers (in auto configuration mode)
         * Scan for extensions (in auto configuration mode)
         * Register `GuiceFeature` in environment (jersey `Feature` which will trigger jersey side installations)
@@ -35,7 +35,7 @@ Anyway, it is not always possible to hide integration details, especially if you
         * Activate [guice servlet support](web.md), register GuiceFilter on admin and main contexts ([could be disabled](configuration.md#servletmodule))
     * Injector created
         * Call installers to register extensions
-    * Your application's `run` method executed. Injector is already available, so any guice bean could be [accessed](injector.md)          
+    * Your application's `run` method executed. Injector is already available, so any guice bean could be [accessed](guice/injector.md)          
 * Jersey start
     * [Managed beans](../installers/managed.md) started
     * **HK2 context creation** (jersey start)

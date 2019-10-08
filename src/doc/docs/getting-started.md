@@ -278,7 +278,7 @@ Multiple modules could be registered at once:
 !!! note
     Registration above occur in dropwizard initialization phase, when neither `Configuration`
     nor `Environment` objects are available, but if you need them in module then either
-    register module in guicey bundle's run method or use [marker interfaces](guide/module-autowiring.md)
+    register module in guicey bundle's run method or use [marker interfaces](guide/guice/module-autowiring.md)
         
 ## Manual mode
 

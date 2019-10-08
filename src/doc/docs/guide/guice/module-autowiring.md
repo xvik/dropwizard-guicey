@@ -60,7 +60,7 @@ public class MyModule extends DropwizardAwareModule<MyConfiguration> {
 
 ## Options
 
-[Options](options.md) could be used in guice module to access guicey configurations:
+[Options](../options.md) could be used in guice module to access guicey configurations:
 
 ```java
 public class MyModule extends DropwizardAwareModule<MyConfiguration> {
@@ -76,7 +76,7 @@ public class MyModule extends DropwizardAwareModule<MyConfiguration> {
 }
 ``` 
 
-Or it could be some [custom options](options.md#custom-options) usage.
+Or it could be some [custom options](../options.md#custom-options) usage.
 
 !!! tip
     If you are going to register module inside guicey bundle, you can simply resolve

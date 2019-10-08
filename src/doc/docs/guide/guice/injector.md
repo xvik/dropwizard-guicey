@@ -51,7 +51,7 @@ public class MyApplication extends Application<Configuration> {
 
 !!! tip
     Most likely, requirement for injector instance means integration with some third party library.
-    Consider [writing custom installer](installers.md#writing-custom-installer) in such cases (it will eliminate need for injector instance).
+    Consider [writing custom installer](../installers.md#writing-custom-installer) in such cases (it will eliminate need for injector instance).
     
 Inside guice context you can simply inject Injector instance:
 
@@ -77,7 +77,7 @@ public class DefaultInjectorFactory implements InjectorFactory {
 
 Injector creation customization may be required by some 3rd party library.
 For example, [netflix governator](https://github.com/Netflix/governator) 
-owns injector creation ([see example](../examples/governator.md)).
+owns injector creation ([see example](../../examples/governator.md)).
 
 Custom injector factory could be registered in guice bundle builder:
 

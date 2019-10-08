@@ -364,7 +364,7 @@ By default, PRODUCTION stage used.
 
 ### Injector 
 
-[Custom guice injector factory](injector.md#injector-factory) may be registered to customize injector creation. 
+[Custom guice injector factory](guice/injector.md#injector-factory) may be registered to customize injector creation. 
 For example, custom factory is required for [governator](../examples/governator.md) integration:
 
 ```java
@@ -399,11 +399,11 @@ Servlet modules will be rejected in this case. Intended to be used when [web ins
 
 !!! warning "Deprecated"
     Option remain for compatibility and will be eventually removed.
-    You can always bind configuration by implemented interface [using qualifier](bindings.md#configuration):
+    You can always bind configuration by implemented interface [using qualifier](guice/bindings.md#configuration):
     ```java
     @Inject @Config HasRequiredConfig config; 
     ``` 
-    Also, unique configuration sub objects are also [available for injection](bindings.md#unique-sub-configuration) 
+    Also, unique configuration sub objects are also [available for injection](guice/bindings.md#unique-sub-configuration) 
     (much better option rather then marker interface):
     ```java
     @Inject @Config RequiredConfig config; 
@@ -510,7 +510,7 @@ Startup errors could be debugged with lifecycle logs:
     `.printLifecyclePhases()` could be used to just indicate phases in logs without additional details
     (useful when need to understand initialization order)
 
-If you have problems with [configuration bindings](bindings.md#configuration-tree) (or just need to see available bindings) use:
+If you have problems with [configuration bindings](guice/bindings.md#configuration-tree) (or just need to see available bindings) use:
 
 ```java
 .printConfigurationBindings()

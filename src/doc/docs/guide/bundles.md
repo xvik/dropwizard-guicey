@@ -5,7 +5,7 @@ main `GuiceBundle` builder. The main purpose is to group installers, extensions 
 feature.
 
 Guicey bundles are initialized during dropwizard `run` phase. All guice modules registered in bundles will also be checked 
-for required [dropwizard objects autowiring](module-autowiring.md).
+for required [dropwizard objects autowiring](guice/module-autowiring.md).
 
 For example, custom integration with some scheduler framework will require installers to register tasks and guice module
 to configure framework. GuiceyBundle will allow reduce integration to just one bundle installation.
@@ -424,4 +424,4 @@ public class XFeatureBundle implements GuiceyBundle {
 In this example, bundle search for properties declared directly in MyConfig configuration
 class with not null value and annotated (classes annotated, not properties!) with custom marker (`@MyMarker`).  
 
-See introspected configuration [structure description](bindings.md#introspected-configuration)
+See introspected configuration [structure description](guice/bindings.md#introspected-configuration)

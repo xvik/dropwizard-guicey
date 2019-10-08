@@ -13,7 +13,7 @@ Bundle could be registered directly in order to customize output.
 
 !!! tip
     You can use diagnostic logs with [lifecycle phases logging](events.md#debug)
-    and [configuration bindings report](bindings.md#configuration-bindings-report)
+    and [configuration bindings report](guice/bindings.md#configuration-bindings-report)
 
 When `.printDiagnosticInfo()` enabled, the following kind of logs will be printed after server startup:
 

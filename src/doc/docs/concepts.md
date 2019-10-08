@@ -53,7 +53,7 @@ This separation of initialization and run phases makes configuration more predic
 In the main `GuiceBundle` guice modules registration appears under initialization phase (when
 neither `Configuration` nor `Environment` objects are available). If module require these objects 
 and it's registration can't be moved to guicey bundle's run method, then use 
-[marker interfaces](guide/module-autowiring.md). For example, `ConfigurationAwareModule` will lead 
+[marker interfaces](guide/guice/module-autowiring.md). For example, `ConfigurationAwareModule` will lead 
 to configuration object set into module before injector creation.
 
 !!! tip
@@ -394,7 +394,7 @@ It may be more convenient to bind it directly, instead of full configuration:
     it's configuration object would be used only once in your configuration - it could
     inject it directly, without dealing with your root configuration class.     
 
-You can see all available bindings from your configuration using [configuration report](guide/bindings.md#configuration-bindings-report).    
+You can see all available bindings from your configuration using [configuration report](guide/guice/bindings.md#configuration-bindings-report).    
 
 
 ## Disabling items

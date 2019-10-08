@@ -94,7 +94,7 @@ class SampleResource {
     }
 ```
 
-See [jersey objects, available for injection](../guide/bindings.md#jersey-specific-bindings).
+See [jersey objects, available for injection](../guide/guice/bindings.md#jersey-specific-bindings).
 
 ## @Context usage
 

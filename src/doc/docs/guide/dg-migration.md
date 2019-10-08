@@ -140,7 +140,7 @@ First of all, note that resource bound only in guice module will not be discover
 guice declaration like it was in jersey1 guice integration).
 Use either classpath scan to install resources or specify them directly into bundle: `bundle.extensions(Resource1.class, Resoutrce2.class)`.
 
-You can still [delegate jersey extensions (resources, providers) management to HK2](bindings.md#hk2-scope), but they will lack
+You can still [delegate jersey extensions (resources, providers) management to HK2](guice/bindings.md#hk2-scope), but they will lack
 guice aop and require extra dependency - [HK2-guice-bridge](configuration.md#hk2-bridge) (official HK guice bridge)
 
 !!! important

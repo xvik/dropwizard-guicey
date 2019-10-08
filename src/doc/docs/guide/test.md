@@ -498,7 +498,7 @@ Guicey provides [direct support for overriding guice bindings](configuration.md#
 so in most cases you don't need to do anything.
 
 But, if you use this to override application bindings need to override such bindings in test (again), then you
- may use provided custom [injector factory](injector.md#injector-factory):  
+ may use provided custom [injector factory](guice/injector.md#injector-factory):  
 
 Register factory in guice bundle:
 

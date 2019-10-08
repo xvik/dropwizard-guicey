@@ -15,7 +15,7 @@ Compiled for java 8, binary compatible with java 11.
 ## Main features
 
 * Auto configuraton from [classpath scan](guide/configuration.md#auto-configuration) and guice bindings.  
-* [Configuration values bindings](guide/bindings.md#configuration-by-path) by path or unique sub objects. 
+* [Configuration values bindings](guide/guice/bindings.md#configuration-by-path) by path or unique sub objects. 
 * [Web](guide/web.md) (servlets, filters, listeners):
     - supports both contexts (main and admin)
     - guice ServletModule support is enabled by default ([could be disabled](guide/web.md#disable-servletmodule-support))
@@ -27,7 +27,7 @@ Compiled for java 8, binary compatible with java 11.
     - core integrations [may be replaced](guide/configuration.md#disable-installers) (to better fit needs)
     - rich api for developing [custom integrations](guide/installers.md#writing-custom-installer), [custom behaviours](guide/events.md#events) and [configuration modification](guide/configuration.md#guicey-configuration-hooks) 
     - out of the box support for plug-n-play plugins ([auto discoverable](guide/bundles.md#service-loader-lookup))
-    - self diagnostic tools ([configuration diagnostic report](guide/diagnostic.md), [bindable configuration paths](guide/bindings.md#configuration-bindings-report), [lifecycle stages](guide/configuration.md#lifecycle-events)) 
+    - self diagnostic tools ([configuration diagnostic report](guide/diagnostic.md), [bindable configuration paths](guide/guice/bindings.md#configuration-bindings-report), [lifecycle stages](guide/configuration.md#lifecycle-events)) 
 
 ## How to use docs
 
