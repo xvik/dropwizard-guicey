@@ -66,6 +66,7 @@ nav:
       - Configuration: guide/configuration2.md
       - Configuration_old: guide/configuration.md
       - Integration lifecycle: guide/lifecycle.md
+      - Yaml config introspection: guide/yaml-introspection.md
       - Injector: guide/injector.md
       - Module autowiring: guide/module-autowiring.md
       - Bindings: guide/bindings.md

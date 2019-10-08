@@ -2,7 +2,7 @@
 
 ## Restrictive options
 
-Guicey itself is compatible with the following guice restrictive options:
+Guicey is compatible with the following guice restrictive options:
 
 ```java
 public class MyModule extends AbstractModule {
@@ -15,8 +15,6 @@ public class MyModule extends AbstractModule {
     }
 ```
 
-So it is safe to enable them.
-
 ## Access injector
 
 In some cases it may be important to get injector instance outside of guice context.
@@ -27,10 +25,10 @@ In some cases it may be important to get injector instance outside of guice cont
 
 Injector instance could be resolved with:
 
-* `getInjector()` method on GuiceBundle instance (NPE will be thrown if injector not initialized)
-* `InjectorLookup.getInjector(app).get()` static call using application instance (lookup returns `Optional` for null safety).
+* `#!java GuiceBundle#getInjector()` method on instance (exception thrown if not yet started)
+* `#!java InjectorLookup.getInjector(app).get()` static call using application instance (lookup returns `Optional` for null safety).
 
-If you need lazy injector reference, you can use `InjectorProvider` class (it's actually `Provider<Injector>`):
+If you need lazy injector reference, you can use `InjectorProvider` class (`#!java Provider<Injector>`):
 
 ```java
 Provider<Injector> provider = new InjectorProvider(app);
