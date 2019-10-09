@@ -156,44 +156,16 @@ Guicey generic options mechanism may be used for guicey (or other 3rd party bund
     In the next version guicey will get rid of HK2 and so all HK2 related options will be removed
     (only guice will be used). Also, `.noGuiceFilter()` will be removed because request scope will be required.  
 
-### Diagnostic
+### Diagnostic tools
 
 Guicey provide many bundled console reports to help with problems diagnostic (or to simply clarify how application works)
-during development.
+during development, like:
 
-`#!java .printDiagnosticInfo()`  
-:   Detailed guicey configuration information
+```java 
+.printDiagnosticInfo()
+```  
 
-`#!java .printAvailableInstallers()`
-:   Shows what types of extensions are supported
-  
-`#!java .printConfigurationBindings()` 
-:   Show bindings from configuration object
- 
-`#!java .printCustomConfigurationBindings()`
-:   Show only your configuration classes bindings (ignore properties from `Configuration`)
-  
-`#!java .printGuiceBindings()`
-:   Your guice bindings (without guicey bindings)
-  
-`#!java .printAllGuiceBindings()`  
-:   All guice bindings
-
-`#!java .printGuiceAopMap()`
-:   All aop-affected guice beans
-  
-`#!java .printGuiceAopMap(GuiceAopConfig config)`
-:   Filtered aop-affected guice beans
-  
-`#!java .printLifecyclePhases()`  
-:   Log guicey lifecycle stages (separates logs to clearly see what messages relates to what phase)
-
-`#!java .printLifecyclePhasesDetailed()`
-:   Log guicey lifecycle stages with detailed info (log all used items on this stage)
-
-!!! tip
-    Main configuration reports could be activated with a system property: `-Dguicey.hooks=diagnostic` 
-    (on compiled application)
+See [diagnostic section](diagnostic/diagnostic-tools.md) for a full list of available reports.
 
 ### Hooks-related
 

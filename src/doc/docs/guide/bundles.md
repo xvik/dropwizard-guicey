@@ -44,7 +44,7 @@ Duplicate bundles are detected using bundle type, so infinite configuration loop
     first registration will be actually used and other instance ignored. Note that application configurations (using main GuiceBundle methods) 
     performed before bundles processing and so bundle instance with correct parameters could be registered there.
  
-Transitive bundles (or simply a lot of bundles) may cause confusion. Use [diagnostic info](diagnostic.md) to see how guicey was actually configured.  
+Transitive bundles (or simply a lot of bundles) may cause confusion. Use [diagnostic info](diagnostic/configuration-report.md) to see how guicey was actually configured.  
 
 ## Predefined bundles
 
@@ -84,7 +84,7 @@ May be enabled by [`.strictScopeControl()`](configuration.md#diagnostic).
 
 ### Diagnostic bundle 
 
-Bundle renders collected guicey [diagnostic information](diagnostic.md).
+Bundle renders collected guicey [diagnostic information](diagnostic/configuration-report.md).
  
 Output is highly configurable, use: `DiagnosticBundle.builder()` to configure reporting (if required).
  
@@ -96,7 +96,7 @@ PropertyBundleLookup.enableBundles(DiagnosticBundle.class);
  
 May be enabled by `.printDiagnosticInfo()` shortcut method.
 
-Special shortcut `.printAvailableInstallers()` register diagnostic bundle configured for [showing only installers](diagnostic.md#installers-mode). Useful when you looking for available features.
+Special shortcut `.printAvailableInstallers()` register diagnostic bundle configured for [showing only installers](diagnostic/configuration-report.md#installers-mode). Useful when you looking for available features.
 
 !!! attention ""
     Only one bundle instance accepted, both options can't be enabled at the same time.

@@ -151,7 +151,7 @@ guice aop and require extra dependency - [HK2-guice-bridge](configuration.md#hk2
                     
 ### Diagnostic
 
-Use [`.printDiagnosticInfo()`](diagnostic.md) to see all extensions, installed by classpath scan.
+Use [`.printDiagnosticInfo()`](diagnostic/configuration-report.md) to see all extensions, installed by classpath scan.
 
 Use [`.printLifecyclePhases()`](events.md#debug) to indicate lifecycle phases in logs (split logs to clearly 
 understand onlgoing logic).

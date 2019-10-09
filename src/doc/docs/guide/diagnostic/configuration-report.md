@@ -1,64 +1,103 @@
-# Diagnostic info
+# Configuration report
 
-During startup guicey records startup metrics and remembers all details of configuration process. 
-All this information is available through [GuiceyConfigurationInfo](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/GuiceyConfigurationInfo.java) bean in guice context. 
+!!! note
+    During startup guicey records startup metrics and remembers all details of configuration process. 
+    All this information is available through GuiceyConfigurationInfo bean:
+    
+    ```java
+    @Inject GuiceyConfigurationInfo info;
+    ``` 
 
-## Diagnostic service 
+Configuration diagnostic report is the most commonly used report allowing you to see guicey startup and 
+configuration details (the last is especially important for de-duplication logic diagnostic).
 
-Default diagnostic info rendering is provided to assist configuration problems resolution and better guicey internals understanding.
+```java
+GuiceBundle.builder() 
+    ...
+    .printDiagnosticInfo()
+    .build());
+```   
 
-The simplest way to enable diagnostic reporting is using bundle `.printDiagnosticInfo()` option. 
-This registers [DiagnosticBundle](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/DiagnosticBundle.java) with default reporting configuration. 
-Bundle could be registered directly in order to customize output.
+Report intended to answer:
 
-!!! tip
-    You can use diagnostic logs with [lifecycle phases logging](events.md#debug)
-    and [configuration bindings report](guice/bindings.md#configuration-bindings-report)
+* [How guicey spent time](#timings)
+* [What options used](#used-options)
+* [What was configured](#configuration-summary)
+* [From where configuration items come from](#configuration-tree)
 
-When `.printDiagnosticInfo()` enabled, the following kind of logs will be printed after server startup:
+
+Example report:
 
 ```    
-INFO  [2016-08-01 21:22:50,898] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Startup stats = 
+INFO  [2019-10-09 04:34:33,624] ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic: Diagnostic report
 
-    GUICEY started in 453.3 ms
+---------------------------------------------------------------------------[STARTUP STATS]
+
+    GUICEY started in 377.9 ms (68.23 ms config / 307.8 ms run / 1.901 ms jersey)
     │   
-    ├── [0,88%] CLASSPATH scanned in 4.282 ms
+    ├── [0.80%] CLASSPATH scanned in 3.621 ms
     │   ├── scanned 5 classes
     │   └── recognized 4 classes (80% of scanned)
     │   
-    ├── [4,2%] COMMANDS processed in 19.10 ms
+    ├── [5.6%] BUNDLES processed in 21.32 ms
+    │   └── 6 initialized in 20.17 ms
+    │   
+    ├── [2.9%] COMMANDS processed in 11.86 ms
     │   └── registered 2 commands
     │   
-    ├── [6,4%] BUNDLES processed in 29.72 ms
-    │   ├── 2 resolved in 8.149 ms
-    │   └── 6 processed
+    ├── [12%] MODULES processed in 45.50 ms
+    │   ├── 5 modules autowired
+    │   ├── 7 elements found in 4 user modules in 41.13 ms
+    │   └── 0 extensions detected from 2 acceptable bindings
     │   
-    ├── [86%] INJECTOR created in 390.3 ms
-    │   ├── installers prepared in 13.79 ms
-    │   │   
-    │   ├── extensions recognized in 9.259 ms
-    │   │   ├── using 11 installers
-    │   │   └── from 7 classes
-    │   │   
-    │   └── 3 extensions installed in 4.188 ms
+    ├── [8.8%] INSTALLERS processed in 33.21 ms
+    │   ├── registered 12 installers
+    │   └── 3 extensions recognized from 9 classes in 10.49 ms
     │   
-    ├── [1,3%] HK2 bridged in 6.583 ms
+    ├── [58%] INJECTOR created in 218.9 ms
+    │   ├── Module execution: 136 ms
+    │   ├── Interceptors creation: 1 ms
+    │   ├── TypeListeners & ProvisionListener creation: 2 ms
+    │   ├── Converters creation: 1 ms
+    │   ├── Binding creation: 21 ms
+    │   ├── Binding initialization: 31 ms
+    │   ├── Collecting injection requests: 2 ms
+    │   ├── Static validation: 3 ms
+    │   ├── Instance member validation: 4 ms
+    │   ├── Static member injection: 8 ms
+    │   ├── Instance injection: 2 ms
+    │   └── Preloading singletons: 5 ms
+    │   
+    ├── [1.3%] EXTENSIONS installed in 5.424 ms
+    │   ├── 3 extensions installed
+    │   └── declared as: 2 manual, 1 scan, 0 binding
+    │   
+    ├── [0.27%] JERSEY bridged in 1.901 ms
     │   ├── using 2 jersey installers
-    │   └── 2 jersey extensions installed in 660.9 μs
+    │   └── 2 jersey extensions installed in 739.5 μs
     │   
-    └── [1,1%] remaining 5 ms
-    
-INFO  [2016-08-01 21:22:50,901] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Options = 
+    └── [11%] remaining 40 ms
+
+
+---------------------------------------------------------------------------[OPTIONS]
 
     Guicey                    (r.v.dropwizard.guice.GuiceyOptions)
         ScanPackages                   = [ru.vyarus.dropwizard.guice.diagnostic.support.features] *CUSTOM
         SearchCommands                 = true                           *CUSTOM
         UseCoreInstallers              = true                           
-        ConfigureFromDropwizardBundles = false                          
+        BindConfigurationByPath        = true                           
+        AnalyzeGuiceModules            = true                           
         InjectorStage                  = PRODUCTION                     
-        GuiceFilterRegistration        = [REQUEST]                 
-  
-INFO  [2016-08-01 21:22:50,901] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Configuration diagnostic info = 
+        GuiceFilterRegistration        = [REQUEST]                      
+        UseHkBridge                    = false                          
+
+
+    Installers                (r.v.d.g.m.i.InstallersOptions)
+        JerseyExtensionsManagedByGuice = true                           
+        ForceSingletonForJerseyExtensions = true                           
+
+
+---------------------------------------------------------------------------[CONFIGURATION]
 
     COMMANDS = 
         Cli                          (r.v.d.g.d.s.features)     *SCAN
@@ -66,74 +105,66 @@ INFO  [2016-08-01 21:22:50,901] ru.vyarus.dropwizard.guice.module.context.debug.
 
 
     BUNDLES = 
-        CoreInstallersBundle         (r.v.d.g.m.installer)      
         Foo2Bundle                   (r.v.d.g.d.s.bundle)       
             FooBundleRelative2Bundle     (r.v.d.g.d.s.bundle)       
-        HK2DebugBundle               (r.v.d.g.m.j.debug)        *LOOKUP, REG(2)
-        DiagnosticBundle             (r.v.d.g.m.c.debug)        
-        GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     *LOOKUP
+        HK2DebugBundle               (r.v.d.g.m.j.debug)        *HOOK, REG(1/2)
+        GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     *HOOK
+        CoreInstallersBundle         (r.v.d.g.m.installer)      
+            WebInstallersBundle          (r.v.d.g.m.installer)      
 
 
     INSTALLERS and EXTENSIONS in processing order = 
-        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(1/2)
             HK2DebugFeature              (r.v.d.g.m.j.d.service)    
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    
-            FooBundleResource            (r.v.d.g.d.s.bundle)       *REG(3)
+            FooBundleResource            (r.v.d.g.d.s.bundle)       *REG(1/3)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
 
 
     GUICE MODULES = 
-        FooModule                    (r.v.d.g.d.s.features)     *REG(2)
+        FooModule                    (r.v.d.g.d.s.features)     *REG(2/2)
         FooBundleModule              (r.v.d.g.d.s.bundle)       
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle) 
-        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle) 
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
         GuiceBootstrapModule         (r.v.d.guice.module)       
-        
-INFO  [2016-08-01 21:22:50,909] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Configuration context tree = 
+
+
+---------------------------------------------------------------------------[CONFIGURATION TREE]
 
     APPLICATION
     ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       
+    ├── extension  -FooBundleResource           (r.v.d.g.d.s.bundle)       *DUPLICATE
     ├── module     FooModule                    (r.v.d.g.d.s.features)     
     ├── module     GuiceBootstrapModule         (r.v.d.guice.module)       
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)      
     │   
     ├── Foo2Bundle                   (r.v.d.g.d.s.bundle)       
-    │   ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       *IGNORED
+    │   ├── extension  -FooBundleResource           (r.v.d.g.d.s.bundle)       *DUPLICATE
     │   ├── module     FooBundleModule              (r.v.d.g.d.s.bundle)       
     │   ├── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)      
     │   │   
     │   └── FooBundleRelative2Bundle     (r.v.d.g.d.s.bundle)       
-    │       └── module     FooModule                    (r.v.d.g.d.s.features)     *IGNORED
+    │       └── module     FooModule#2                  (r.v.d.g.d.s.features)     
     │   
     ├── HK2DebugBundle               (r.v.d.g.m.j.debug)        
     │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     
     │   ├── extension  HK2DebugFeature              (r.v.d.g.m.j.d.service)    
     │   └── module     HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle) 
     │   
-    ├── DiagnosticBundle             (r.v.d.g.m.c.debug)        
-    │   └── module     DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle) 
-    │   
     ├── CoreInstallersBundle         (r.v.d.g.m.installer)      
-    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
-    │   └── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)     
+    │   ├── installer  -JerseyFeatureInstaller      (r.v.d.g.m.i.f.jersey)     *DUPLICATE
+    │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)     
+    │   └── WebInstallersBundle          (r.v.d.g.m.installer)      
     │   
-    ├── BUNDLES LOOKUP
-    │   ├── HK2DebugBundle               (r.v.d.g.m.j.debug)        *IGNORED
-    │   │   
-    │   └── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     
-    │       └── module     GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
+    ├── CLASSPATH SCAN
+    │   └── extension  FooResource                  (r.v.d.g.d.s.features)     
     │   
-    └── CLASSPATH SCAN
-        └── extension  FooResource                  (r.v.d.g.d.s.features)  
+    └── HOOKS
+        ├── -HK2DebugBundle              (r.v.d.g.m.j.debug)        *DUPLICATE
+        │   
+        └── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     
+            └── module     GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
 ```
-
-Default reporting contains 4 sections:
-
-* How guicey spent time
-* What options used
-* What was configured
-* From where configuration items come from
 
 ## Timings
 
@@ -251,7 +282,7 @@ Used markers:
 Not used marker just indicated that option is "not yet" used. Options may be consumed lazilly by application logic, so
 it is possible that its not used at reporting time. There is no such cases with guicey options, but may be with your custom options (it all depends on usage scenario).
 
-## Configuration diagnostic info
+## Configuration summary
 
 Section intended to compactly show all configuration (to quickly see what was configured).
 
@@ -332,7 +363,7 @@ The following markers used:
 * SCAN - item from classpath scan (even if extension or installer were registered manually also to indicate item presence in classpath scan)
 * LAZY - extensions annotated with `@LazyBinding`
 * HK2 - extension annotated with `@HK2Managed`
-* HOOK - registered by [configuration hook](configuration.md#guicey-configuration-hooks)
+* HOOK - registered by [configuration hook](../configuration.md#guicey-configuration-hooks)
 
 ### Modules
 
@@ -348,7 +379,7 @@ The following markers used:
 
 All registered guice modules.
 
-## Configuration context tree
+## Configuration tree
 
 Configuration tree is useful to understand from where configuration items come from.
 
@@ -382,59 +413,8 @@ Rendering is performed with 3 beans, available for injection (when bundle regist
 * [ContextTreeRenderer](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/tree/ContextTreeRenderer.java) 
 
 !!! note
-    Renderers are also available in [event objects](events.md#event-structure) (for events fired after injection creation) 
+    Renderers are also available in [event objects](../events.md#event-structure) (for events fired after injection creation) 
 
-## Installers mode
-
-There is a special option in GuiceBundle `.printAvailableInstallers()` for printing only installers information. 
-It also use DiagnosticBundle, but with different configuration. 
-
-!!! warning 
-    Both options can't be used together (but it should never be required as they serve different purposes).
-
-Example output:
-
-```
-INFO  [2016-08-22 00:49:33,557] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Configuration diagnostic info = 
-
-    INSTALLERS in processing order = 
-        lifecycle            (r.v.d.g.m.i.f.LifeCycleInstaller)     
-        managed              (r.v.d.g.m.i.feature.ManagedInstaller) 
-        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) 
-        jerseyprovider       (r.v.d.g.m.i.f.j.p.JerseyProviderInstaller) 
-        resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    
-        eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller) 
-        healthcheck          (r.v.d.g.m.i.f.h.HealthCheckInstaller) 
-        task                 (r.v.d.g.m.i.feature.TaskInstaller)    
-        plugin               (r.v.d.g.m.i.f.plugin.PluginInstaller) 
-        webservlet           (r.v.d.g.m.i.f.w.WebServletInstaller)  
-        webfilter            (r.v.d.g.m.i.f.web.WebFilterInstaller) 
-        weblistener          (r.v.d.g.m.i.f.w.l.WebListenerInstaller) 
-
-INFO  [2016-08-22 00:49:33,563] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Configuration context tree = 
-
-    APPLICATION
-    │   
-    ├── WebInstallersBundle          (r.v.d.g.m.installer)      
-    │   ├── installer  WebFilterInstaller           (r.v.d.g.m.i.f.web)        
-    │   ├── installer  WebServletInstaller          (r.v.d.g.m.i.f.web)        
-    │   └── installer  WebListenerInstaller         (r.v.d.g.m.i.f.w.listener) 
-    │   
-    └── CoreInstallersBundle         (r.v.d.g.m.installer)      
-        ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)      
-        ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)      
-        ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     
-        ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider) 
-        ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)     
-        ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)      
-        ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)     
-        ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)      
-        └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)     
-```
-
-!!! important
-    Comparing to complete diagnostic, it shows all installers (*even not used*). 
-    In diagnostic reporting not used installers are hidden, because usually it means they are not needed.
 
 ## Guice injector creation timings
 
@@ -473,67 +453,3 @@ DEBUG [2016-08-03 21:09:46,427] com.google.inject.internal.util.Stopwatch: Prelo
 
 !!! note 
     'Preloading singletons' line will be logged **long after** other guice log messages, so search it at the end of your startup log.
-
-## Lifecycle event
-
-Use `bundle.printLifecyclePhases()` to see lifecycle events in logs.
-Could be very helpful during problems investigation. Also, it shows startup timer to easily see where most startup time is spent.
-
-Example output:
-
-```
-
-                                                                         ─────────────────────────
-__[ 00:00:00.008 ]____________________________________________________/  1 hooks processed  \____
-
-
-
-                                                                         ────────────────────
-__[ 00:00:00.104 ]____________________________________________________/  2 commands installed  \____
-
-INFO  [2018-06-15 04:09:56,978] io.dropwizard.server.DefaultServerFactory: Registering jersey handler with root path prefix: /
-INFO  [2018-06-15 04:09:56,981] io.dropwizard.server.DefaultServerFactory: Registering admin handler with root path prefix: /
-
-
-                                                                         ────────────────────────────────────
-__[ 00:00:00.881 ]____________________________________________________/  Configured from 3 (-1) GuiceyBundles  \____
-
-
-
-                                                                         ──────────────────────────────────────
-__[ 00:00:00.886 ]____________________________________________________/  Staring guice with 3/0 (-1) modules...  \____
-
-
-
-                                                                         ─────────────────────────────
-__[ 00:00:00.980 ]____________________________________________________/  8 (-1) installers initialized  \____
-
-
-
-                                                                         ────────────────────────
-__[ 00:00:01.008 ]____________________________________________________/  13 (-1) extensions found  \____
-
-...
-```
-
-Note that `(-1)` in some events means disabled items and actual displayed count did not count disabled items.
-Use detailed output (`bundle.printLifecyclePhasesDetailed()`) to see more details. 
-
-Example detailed output (for one event):
-
-```
-                                                                         ────────────────────────────────────
-__[ 00:00:00.893 ]____________________________________________________/  Configured from 3 (-1) GuiceyBundles  \____
-
-	bundles = 
-		DiagnosticBundle             (r.v.d.g.m.c.debug)        
-		GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     
-		CoreInstallersBundle         (r.v.d.g.m.installer)      
-
-	disabled = 
-		HK2DebugBundle               (r.v.d.g.m.j.debug)      
-``` 
-
-!!! important
-    Lifecycle logs are printed to system out instead of logger because logger is not yet initialized on first events. 
-    Anyway, these logs intended to be used for problems resolution and so console only output should not be a problem. 

@@ -559,7 +559,7 @@ Other example is an ability of low level tuning for 3rd party bundles.
 * Options are [declared with enum](guide/options.md#custom-options) (each enum represents options group) with value type declaration to grant safety.
 * Option could be set only [in main bundle](guide/configuration.md#options) (in your application class)
 * You can access options [anywhere](guide/options.md): guice module, guicey bundle, and in any guice service by injecting special service
-* Options report is included into [diagnostic report](guide/diagnostic.md) so you can see all option values.
+* Options report is included into [diagnostic report](guide/diagnostic/configuration-report.md) so you can see all option values.
 
 For example, guicey use two option groups: `GuiceyOptions` and `InstallersOptions`.
 `GuiceyOptions` used for storing main bundle configurations like packages to scan, injector stage, HK2 bridge usage etc.
@@ -645,7 +645,7 @@ bootstrap.addBundle(GuiceBundle.builder()
             .build())
 ```
 
-And [other logs](guide/diagnostic.md) giving you inside look on configuration.
+And [other logs](guide/diagnostic/diagnostic-tools.md) giving you inside look on configuration.
 
 ### Not mentioned
 

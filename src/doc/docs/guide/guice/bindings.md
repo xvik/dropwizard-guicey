@@ -69,7 +69,7 @@ Guicey performs `Configuration` [object introspection](#yaml-config-introspectio
 configured yaml values by path or through sub-objects.
 
 !!! warning
-    Additional configuration objects are not bound when yaml introspection [is disabled](../yaml-introspection.md#disable-configuration-introspection)
+    Additional configuration objects are not bound when yaml introspection [is disabled](../yaml-values.md#disable-configuration-introspection)
 
 Raw introspection result could be injected directly (for reporting or analysis):
 
@@ -278,7 +278,7 @@ Preconditions.checkState(options.get(GuiceyOptions.UseHkBridge),
 ### Guicey configuration
 
 `ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo` binding provides access
-to [guicey configuration details](../diagnostic.md):
+to [guicey configuration details](../diagnostic/configuration-report.md):
 
 ```java
 @Inject GuiceyConfigurationInfo info

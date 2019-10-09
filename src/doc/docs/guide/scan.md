@@ -73,7 +73,7 @@ In general cases, it is better solution, but, as we use all application classes 
 Moreover, operations with loaded classes are much simpler then working with class structure (and so installers matching logic becomes very simple).
 
 Using classpath scan is very handy during development: you simply add features (resources, tasks, servlets etc) and they are automatically discovered and installer.
-Actual application configuration could always be checked with [diagnostic output](diagnostic.md)),
+Actual application configuration could always be checked with [diagnostic output](diagnostic/configuration-report.md)),
 so there should not be any problems for using classpath scan for production too.
 
 !!! warning 

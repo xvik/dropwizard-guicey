@@ -66,7 +66,7 @@ nav:
       - Configuration: guide/configuration2.md
       - Configuration_old: guide/configuration.md
       - Integration lifecycle: guide/lifecycle.md
-      - Yaml config introspection: guide/yaml-introspection.md
+      - Yaml values: guide/yaml-values.md
       - Classpath scan: guide/scan.md
       - Guice:
           - Injector: guide/guice/injector.md
@@ -76,7 +76,14 @@ nav:
       - Ordering: guide/ordering.md
       - Bundles (Guicey): guide/bundles.md
       - Options: guide/options.md
-      - Diagnostic: guide/diagnostic.md
+      - Diagnostic:
+        - Tools: guide/diagnostic/diagnostic-tools.md
+        - Configuration: guide/diagnostic/configuration-report.md
+        - Installers: guide/diagnostic/installers-report.md
+        - Yaml values: guide/diagnostic/yaml-values-report.md
+        - Lifecycle: guide/diagnostic/lifecycle-report.md
+        - Guice: guide/diagnostic/guice-report.md
+        - AOP: guide/diagnostic/aop-report.md
       - Events: guide/events.md
       - Commands: guide/commands.md
       - Web: guide/web.md

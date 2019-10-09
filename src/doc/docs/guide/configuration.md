@@ -20,7 +20,7 @@ by looking at available methods and reading javadoc.
     the second bundle will be ignored becuause bundle with the same type is already registered 
     (no matter that constructor parameters are different - only type matters).
  
-Configuration process is recorded and may be observed with by [diagnostic info](diagnostic.md),
+Configuration process is recorded and may be observed with by [diagnostic info](diagnostic/configuration-report.md),
 so there is always a way to understand what and how was configured.
 
 !!! tip
@@ -140,7 +140,7 @@ Mostly useful for tests.
 
 ### Availbale installers
 
-Special debug option could [print to console all available installers](diagnostic.md#installers-mode) (with registration sources):
+Special debug option could [print to console all available installers](diagnostic/configuration-report.md#installers-mode) (with registration sources):
 
 ```java
 .printAvailableInstallers()
@@ -504,7 +504,7 @@ Startup errors could be debugged with lifecycle logs:
     it will prints all resolved extension before injector creation.
 
 !!! tip
-    Report shows disabled items. Use [diagnostic logs](diagnostic.md) to find the disabler.  
+    Report shows disabled items. Use [diagnostic logs](diagnostic/configuration-report.md) to find the disabler.  
 
 !!! note
     `.printLifecyclePhases()` could be used to just indicate phases in logs without additional details
@@ -519,7 +519,7 @@ If you have problems with [configuration bindings](guice/bindings.md#configurati
 !!! note
     Bindings report is printed before injector creation (in case if startup fails due to missed binding) 
 
-Enable configuration [diagnostic console logs](diagnostic.md) to diagnose configuration problems:
+Enable configuration [diagnostic console logs](diagnostic/configuration-report.md) to diagnose configuration problems:
 
 ```java
 .printDiagnosticInfo()
