@@ -1,4 +1,4 @@
-# Release Notes
+# 5.0.0 Release Notes
 
 Release contains many breaking changes due to:
 
@@ -39,6 +39,8 @@ The later may be used to obtain locator, but be aware that HK2 supposed to be co
 
 !!! warning
     In the next version guicey will get rid of HK2 and so all HK2-related methods and options *were marked as deprecated*.
+    There is no alternatives now for deprecated methods so you can continue using them if required.
+    Deprecation simply indicates what will be removed in the future version.
 
 `GuiceBundle.builder()#useWebInstallers()` was removed because `WebInstallersBundle` is 
 activated by default and so you don't need to activate it manually anymore. 
