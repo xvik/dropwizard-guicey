@@ -62,14 +62,14 @@ INFO  [2019-10-11 06:09:06,085] ru.vyarus.dropwizard.guice.debug.ConfigurationDi
 Also, it indicated used installer features. For example, looking at
 
 ```
-OBJECT, ORDER                  lifecycle            (r.v.d.g.m.i.f.LifeCycleInstaller)
+OBJECT, ORDER                  managed              (r.v.d.g.m.i.feature.ManagedInstaller) 
 ```
 
-You could see that lifecycle installer (responsible for `Managed` objects installation)
-use objects for installation (obtains extension instance from guice and registers it)
-and supprts ordering (so extensions could use `@Order` annotation). 
+You could see that managed installer (responsible for `Managed` objects installation)
+use objects for installation (obtains extension instance from guice and registers it).
+Also it supports ordering (so extensions could use `@Order` annotation). 
 
-And, by looking  at `@EagerSingleton` installer:
+By looking  at `@EagerSingleton` installer:
 
 ```
 BIND                           eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller)
