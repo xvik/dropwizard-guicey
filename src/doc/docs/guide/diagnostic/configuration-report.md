@@ -29,54 +29,58 @@ Report intended to answer:
 Example report:
 
 ```    
-INFO  [2019-10-09 04:34:33,624] ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic: Diagnostic report
+INFO  [2019-10-11 04:25:47,022] ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic: Diagnostic report
 
 ---------------------------------------------------------------------------[STARTUP STATS]
 
-    GUICEY started in 377.9 ms (68.23 ms config / 307.8 ms run / 1.901 ms jersey)
+    GUICEY started in 431.2 ms (150.2 ms config / 279.4 ms run / 1.594 ms jersey)
     │   
-    ├── [0.80%] CLASSPATH scanned in 3.621 ms
+    ├── [0.70%] CLASSPATH scanned in 3.088 ms
     │   ├── scanned 5 classes
     │   └── recognized 4 classes (80% of scanned)
     │   
-    ├── [5.6%] BUNDLES processed in 21.32 ms
-    │   └── 6 initialized in 20.17 ms
+    ├── [24%] BUNDLES processed in 105.8 ms
+    │   ├── 1 resolved in 12.22 ms
+    │   ├── 7 initialized in 23.75 ms
+    │   └── 1 dropwizard bundles initialized in 69.58 ms
     │   
-    ├── [2.9%] COMMANDS processed in 11.86 ms
+    ├── [2.6%] COMMANDS processed in 11.34 ms
     │   └── registered 2 commands
     │   
-    ├── [12%] MODULES processed in 45.50 ms
-    │   ├── 5 modules autowired
-    │   ├── 7 elements found in 4 user modules in 41.13 ms
-    │   └── 0 extensions detected from 2 acceptable bindings
+    ├── [9.3%] MODULES processed in 40.14 ms
+    │   ├── 7 modules autowired
+    │   ├── 8 elements found in 5 user modules in 36.53 ms
+    │   └── 1 extensions detected from 3 acceptable bindings
     │   
-    ├── [8.8%] INSTALLERS processed in 33.21 ms
+    ├── [7.4%] INSTALLERS processed in 32.60 ms
     │   ├── registered 12 installers
-    │   └── 3 extensions recognized from 9 classes in 10.49 ms
+    │   └── 4 extensions recognized from 10 classes in 11.63 ms
     │   
-    ├── [58%] INJECTOR created in 218.9 ms
-    │   ├── Module execution: 136 ms
-    │   ├── Interceptors creation: 1 ms
+    ├── [47%] INJECTOR created in 204.2 ms
+    │   ├── Module execution: 124 ms
+    │   ├── Interceptors creation: 2 ms
     │   ├── TypeListeners & ProvisionListener creation: 2 ms
-    │   ├── Converters creation: 1 ms
-    │   ├── Binding creation: 21 ms
-    │   ├── Binding initialization: 31 ms
+    │   ├── Scopes creation: 1 ms
+    │   ├── Binding creation: 20 ms
+    │   ├── Module annotated method scanners creation: 1 ms
+    │   ├── Binding initialization: 29 ms
     │   ├── Collecting injection requests: 2 ms
     │   ├── Static validation: 3 ms
-    │   ├── Instance member validation: 4 ms
-    │   ├── Static member injection: 8 ms
-    │   ├── Instance injection: 2 ms
-    │   └── Preloading singletons: 5 ms
+    │   ├── Instance member validation: 3 ms
+    │   ├── Provider verification: 1 ms
+    │   ├── Static member injection: 7 ms
+    │   ├── Instance injection: 3 ms
+    │   └── Preloading singletons: 4 ms
     │   
-    ├── [1.3%] EXTENSIONS installed in 5.424 ms
-    │   ├── 3 extensions installed
-    │   └── declared as: 2 manual, 1 scan, 0 binding
+    ├── [0.70%] EXTENSIONS installed in 3.594 ms
+    │   ├── 4 extensions installed
+    │   └── declared as: 2 manual, 1 scan, 1 binding
     │   
-    ├── [0.27%] JERSEY bridged in 1.901 ms
+    ├── [0.23%] JERSEY bridged in 1.594 ms
     │   ├── using 2 jersey installers
-    │   └── 2 jersey extensions installed in 739.5 μs
+    │   └── 3 jersey extensions installed in 501.8 μs
     │   
-    └── [11%] remaining 40 ms
+    └── [7.4%] remaining 32 ms
 
 
 ---------------------------------------------------------------------------[OPTIONS]
@@ -86,6 +90,7 @@ INFO  [2019-10-09 04:34:33,624] ru.vyarus.dropwizard.guice.debug.ConfigurationDi
         SearchCommands                 = true                           *CUSTOM
         UseCoreInstallers              = true                           
         BindConfigurationByPath        = true                           
+        TrackDropwizardBundles         = true                           
         AnalyzeGuiceModules            = true                           
         InjectorStage                  = PRODUCTION                     
         GuiceFilterRegistration        = [REQUEST]                      
@@ -105,12 +110,14 @@ INFO  [2019-10-09 04:34:33,624] ru.vyarus.dropwizard.guice.debug.ConfigurationDi
 
 
     BUNDLES = 
+        FooDwBundle                  (r.v.d.g.d.s.dwbundle)     *DW
         Foo2Bundle                   (r.v.d.g.d.s.bundle)       
             FooBundleRelative2Bundle     (r.v.d.g.d.s.bundle)       
         HK2DebugBundle               (r.v.d.g.m.j.debug)        *HOOK, REG(1/2)
         GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     *HOOK
         CoreInstallersBundle         (r.v.d.g.m.installer)      
             WebInstallersBundle          (r.v.d.g.m.installer)      
+        LookupBundle                 (r.v.d.g.d.s.bundle)       *LOOKUP
 
 
     INSTALLERS and EXTENSIONS in processing order = 
@@ -119,13 +126,16 @@ INFO  [2019-10-09 04:34:33,624] ru.vyarus.dropwizard.guice.debug.ConfigurationDi
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    
             FooBundleResource            (r.v.d.g.d.s.bundle)       *REG(1/3)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
+            ModuleFeature                (r.v.d.g.d.s.m.ModuleWithExtensions) *BINDING
 
 
     GUICE MODULES = 
         FooModule                    (r.v.d.g.d.s.features)     *REG(2/2)
+        ModuleWithExtensions         (r.v.d.g.d.s.module)       
         FooBundleModule              (r.v.d.g.d.s.bundle)       
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle) 
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
+        OverridingModule             (r.v.d.g.d.s.module)       *OVERRIDE
         GuiceBootstrapModule         (r.v.d.guice.module)       
 
 
@@ -135,8 +145,10 @@ INFO  [2019-10-09 04:34:33,624] ru.vyarus.dropwizard.guice.debug.ConfigurationDi
     ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       
     ├── extension  -FooBundleResource           (r.v.d.g.d.s.bundle)       *DUPLICATE
     ├── module     FooModule                    (r.v.d.g.d.s.features)     
+    ├── module     ModuleWithExtensions         (r.v.d.g.d.s.module)       
     ├── module     GuiceBootstrapModule         (r.v.d.guice.module)       
     ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)      
+    ├── FooDwBundle                  (r.v.d.g.d.s.dwbundle)     *DW
     │   
     ├── Foo2Bundle                   (r.v.d.g.d.s.bundle)       
     │   ├── extension  -FooBundleResource           (r.v.d.g.d.s.bundle)       *DUPLICATE
@@ -156,135 +168,260 @@ INFO  [2019-10-09 04:34:33,624] ru.vyarus.dropwizard.guice.debug.ConfigurationDi
     │   ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)     
     │   └── WebInstallersBundle          (r.v.d.g.m.installer)      
     │   
+    ├── BUNDLES LOOKUP
+    │   │   
+    │   └── LookupBundle                 (r.v.d.g.d.s.bundle)       
+    │       └── module     OverridingModule             (r.v.d.g.d.s.module)       
+    │   
     ├── CLASSPATH SCAN
     │   └── extension  FooResource                  (r.v.d.g.d.s.features)     
+    │   
+    ├── GUICE BINDINGS
+    │   │   
+    │   └── ModuleWithExtensions         (r.v.d.g.d.s.module)       
+    │       └── extension  ModuleFeature                (r.v.d.g.d.s.m.ModuleWithExtensions) 
     │   
     └── HOOKS
         ├── -HK2DebugBundle              (r.v.d.g.m.j.debug)        *DUPLICATE
         │   
         └── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     
-            └── module     GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
+            └── module     GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle)     
 ```
 
 ## Timings
 
+!!! note
+    There are also another ["time-report"](lifecycle-report.md) available which shows entire
+    application startup timings.
+
 ### Startup timings
 
 ```
-    GUICEY started in 453.3 ms
+    GUICEY started in 431.2 ms (150.2 ms config / 279.4 ms run / 1.594 ms jersey)
 ```
 
-Overall guicey time measured: GuiceBundle methods plus part of HK2 configuration time (HK2 started after bundle).
-All items below represent guicey time detalization. Items always detail time of direct parent.
+Guicey time (`431.2 ms`) is measured as `GuiceBundle` methods plus part of jersey configuration time (jersey started after bundle).
+It also show time spent on each application starting phase: `150.2 ms` configuration (initialization), `279.4 ms` run and `1.594 ms` during jersey startup.
 
-Most of this time actually spent on class loading. For example, report above represent [test](https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/config/debug/DiagnosticBundleTest.groovy) direct execution. 
-But when this test executed as part of suit time become  `GUICEY started in 52.95 ms` because most classes were pre-loaded by other tests.
+All items below represent guicey time detalization. Tree childs always detail time of direct parent.                                                                     
+
+!!! tip
+    Application startup during development may be improved with VM options:
+    ```
+    -XX:TieredStopAtLevel=1 -noverify
+    ```
+    It does not show a big difference on test sample, but it's already a notable change (~20% faster):
+    ```
+    GUICEY started in 304.0 ms (88.18 ms config / 214.6 ms run / 1.130 ms jersey)
+    ``` 
 
 ### Classpath scan
 
 ```
-    ├── [0,88%] CLASSPATH scanned in 4.282 ms
+    ├── [0.70%] CLASSPATH scanned in 3.088 ms
     │   ├── scanned 5 classes
     │   └── recognized 4 classes (80% of scanned)
 ```
 
-Classpath scan performed just once. Represents only time spent resolving all classes in configured packages. Guicey will later use this resolved classes to search commands (if enabled), installers and extensions. 
+Classpath scan performed just once. Represents only time spent resolving all classes in configured packages. 
+Guicey will later use this resolved classes to search commands (if enabled), installers and extensions. 
 
-`scanned 5 classes` means that 5 classed were found (overall) in configured packages. `recognized 4 classes` Show effectiveness of classpath scanning (how many classes were actually used as installer, extension or command).
+`scanned 5 classes` 
+:   means that 5 classed were found (overall) in configured packages.
+   
+`recognized 4 classes` 
+:   show effectiveness of classpath scanning (how many classes were actually used as installer, extension or command).
 
-NOTE: classpath scan time will be obviously bigger for larger classes count. But most of this time are actually class loading time. If you use all these classes then they will be loaded in any case. If you disable classpath scan to save time then this time move to other some place (for example, to injector creation). 
-
-### Commands
-
-```
-    ├── [4,2%] COMMANDS processed in 19.10 ms
-    │   └── registered 2 commands
-```
-
-Commands time includes time spent on commands search (in classes from classpath scan; if enabled .searchCommands()) and calling .injectMemebers on configured environment commands (last part is always performed, but it's very fast so most likely commands section will not appear if .searchCommands() is not enabled)
+!!! note 
+    Classpath scan time will be obviously bigger for real applications (with larger classes count). 
+    But most of this time spent on class loading (becauase guicey loads all classes during scan and not 
+    just parse class structure). If you use all these classes then they will be loaded 
+    in any case. If you disable classpath scan to save time then this time will just move to other places
+    (where classes are used). 
 
 ### Bundles
 
 ```
-    ├── [6,4%] BUNDLES processed in 29.72 ms
-    │   ├── 2 resolved in 8.149 ms
-    │   └── 6 processed
+    ├── [24%] BUNDLES processed in 105.8 ms
+    │   ├── 1 resolved in 12.22 ms
+    │   ├── 7 initialized in 23.75 ms
+    │   └── 1 dropwizard bundles initialized in 69.58 ms
 ```
 
-Bundles time includes bundles lookup time (if not .disableBundleLookup()), dropwizard bunles lookup (if .configureFromDropwizardBundles()) and bundles execution.
+Bundles time includes bundles lookup time (if not .disableBundleLookup()), bundles execution (both init and run)
+and dropwizard bundles (known by guicey) init time (run time is not tracked because it appears after 
+`GuiceBundle.run`).
 
-`2 resolved in 8.149 ms` indicated bundles resolved with guicey bundle lookup or from dropwizard bundles.
-`6 processed` - overall processed bundles (all registered bundles, including just resolved).
+`1 resolved` 
+:   indicated bundles resolved with guicey bundle lookup.
+  
+`7 initialized` 
+:   overall processed bundles (all registered bundles, including transitives). Time cover both init and run.
+
+`1 dropwizard bundles initialized`
+:   dropwizard bundles (registered through guicey api!) initialization time.
+    !!! note ""
+        Dropwizard bundles always include ~50ms overhead of Bootstrap object proxying,
+        required for transitive bundles tracking.
+
+### Commands
+
+```
+    ├── [2.6%] COMMANDS processed in 11.34 ms
+    │   └── registered 2 commands
+```
+
+Commands time includes time spent on commands search (in classes from already performed classpath scan), 
+and calling `.injectMemebers` on found environment commands (last part is always performed, but it's very fast so most likely commands section will not appear 
+if `.searchCommands()` is not enabled)
+
+!!! note
+    Most of commands time will be command objects instantiation (reflection).
+
+### Modules
+
+```
+    ├── [9.3%] MODULES processed in 40.14 ms
+    │   ├── 7 modules autowired
+    │   ├── 8 elements found in 5 user modules in 36.53 ms
+    │   └── 1 extensions detected from 3 acceptable bindings
+```             
+
+`7 modules autowired`
+:    `Aware*` interfaces processing for registered modules (user modules + overrides + 1 guicey module) 
+
+`8 elements found in 5 user modules`
+:   Guicey performs modules introspection before injector creation (with guice SPI) and shows all found elements. 
+    Only user modules are introspected (except override and guicey module).
+
+`1 extensions detected from 3 acceptable bindings`
+:   Shows detected extensions from bindings. Note that overall modules elements count include
+    aop, listeners etc. Also, bindings are searched only in direct class bindings, so
+    acceptable elements count will almost always be lower then overall elements count.
+
+### Installers
+
+```
+    ├── [7.4%] INSTALLERS processed in 32.60 ms
+    │   ├── registered 12 installers
+    │   └── 4 extensions recognized from 10 classes in 11.63 ms
+```   
+
+Shows installers initialization and processing time.
+
+`registered 12 installers`
+:   Overall count of used installers (core and custom, without disables).
+
+`4 extensions recognized from 10 classes`
+:   Overall recognition time (potential extension classes introspection time).
+    Includes class from classpath scan, all manual extension classes and checked (acceptable) bindings.
 
 ### Injector
 
 ```
-    ├── [86%] INJECTOR created in 390.3 ms
-    │   ├── installers prepared in 13.79 ms
-    │   │   
-    │   ├── extensions recognized in 9.259 ms
-    │   │   ├── using 11 installers
-    │   │   └── from 7 classes
-    │   │   
-    │   └── 3 extensions installed in 4.188 ms
+    ├── [47%] INJECTOR created in 204.2 ms
+    │   ├── Module execution: 124 ms
+    │   ├── Interceptors creation: 2 ms
+    │   ├── TypeListeners & ProvisionListener creation: 2 ms
+    │   ├── Scopes creation: 1 ms
+    │   ├── Binding creation: 20 ms
+    │   ├── Module annotated method scanners creation: 1 ms
+    │   ├── Binding initialization: 29 ms
+    │   ├── Collecting injection requests: 2 ms
+    │   ├── Static validation: 3 ms
+    │   ├── Instance member validation: 3 ms
+    │   ├── Provider verification: 1 ms
+    │   ├── Static member injection: 7 ms
+    │   ├── Instance injection: 3 ms
+    │   └── Preloading singletons: 4 ms
 ```
 
-All installers and extensions operations (except jersey related features) performed inside of guice module and so included into overall injector creation time.
+Pure injector creation time. Sub logs are intercepted guice internal logs (from
+`com.google.inject.internal.util`). Only lines with non 0 time are shown.
 
-`installers prepared in 13.79 ms` include installers search in classpath (if scan enabled), instantiation and preparing for usage (remove duplicates, sort).
-
-`extensions recognized in 9.259 ms` - all manually configured extensions and all classes from classpath scan (`from 7 classes`) are recognized by all registered installers (`using 11 installers`) using installer match method. Recognized installers bound to guice context (or custom action performed for binding installers).
-
-`3 extensions installed in 4.188 ms` - all recognized extensions are installed with installers install methods.
-
-!!! note
-    Most time of injector creation is internal guice logic. You can enable guice logs to see more details (see below)
-
-### HK2
+### Extensions
 
 ```
-    ├── [1,3%] HK2 bridged in 6.583 ms
+    ├── [0.70%] EXTENSIONS installed in 3.594 ms
+    │   ├── 4 extensions installed
+    │   └── declared as: 2 manual, 1 scan, 1 binding
+``` 
+
+Extensions are installed just after injector creation. Time represent installers
+installation logic time. 
+
+`4 extensions installed`
+:   All used (installed, not disabled) extensions
+
+`declared as: 2 manual, 1 scan, 1 binding`
+:   Extensions sources: manual registration, classpath scan, bindings in guice modules.
+    One extension could appear multiple times in counters (if it was detected in multiple sources)
+
+### Jersey
+
+```
+    ├── [0.23%] JERSEY bridged in 1.594 ms
     │   ├── using 2 jersey installers
-    │   └── 2 jersey extensions installed in 660.9 μs
+    │   └── 3 jersey extensions installed in 501.8 μs
 ```
 
-Jersey starts after dropwizard bundles processing and so after GuiceBundle execution. This time is tracked as (overall) guicey time. Here guicey register required HK2 bindings and (some HK2 beans in guice) and executes jersey installers (installers implement JerseyInstaller) to process jersey specific features. For example, all resources and jersey extensions installed here (because requires HK2 specific bindings).
+Jersey starts after dropwizard bundles processing and so after `GuiceBundle` execution. 
+Guicey register required HK2 bindings (and some HK2 beans in guice) and executes jersey 
+installers (installers implementing `JerseyInstaller`) to process jersey specific features. 
+For example, all resources and jersey extensions installed here (because requires HK2 specific bindings).
 
-Note that installation time (`2 jersey extensions installed in 660.9 μs`) is so tiny just because empty resources (without methods) were used. In real application installation time will be bigger.
+`using 2 jersey installers`
+:   All jersey feature installers (not disabled)    
+
+`3 jersey extensions installed`
+:   All jersey extensions (not disabled)
+
+Note that extensions installation time is so tiny (`501.8 μs`) just because empty resources (without methods) were used. 
+In real application installation time will be bigger.
 
 ### Remaining
 
 ```
-    └── [1,1%] remaining 5 ms
+    └── [7.4%] remaining 32 ms
 ```
 
 Represent not explicitly tracked time, spent by guicey for other small operations. Shown on tree to indicate that all major parts were shown.
 
 ## Used options
 
-Shows all set or requested (by application logic) options. If you use your own options here they will also be printed.
+Shows all guicey options set or requested (by application logic). If you use your own options here they will also be printed.
 
 ``` 
     Guicey                    (r.v.dropwizard.guice.GuiceyOptions)
         ScanPackages                   = [ru.vyarus.dropwizard.guice.diagnostic.support.features] *CUSTOM
         SearchCommands                 = true                           *CUSTOM
         UseCoreInstallers              = true                           
-        ConfigureFromDropwizardBundles = false                          
+        BindConfigurationByPath        = true                           
+        TrackDropwizardBundles         = true                           
+        AnalyzeGuiceModules            = true                           
         InjectorStage                  = PRODUCTION                     
-        GuiceFilterRegistration        = [REQUEST]     
-        
+        GuiceFilterRegistration        = [REQUEST]                      
+        UseHkBridge                    = false                          
+
+
+    Installers                (r.v.d.g.m.i.InstallersOptions)
+        JerseyExtensionsManagedByGuice = true                           
+        ForceSingletonForJerseyExtensions = true 
 ```
 
 Used markers:
-* CUSTOM - option value set by user
-* NOT_USED - option was set by user but never used
 
-Not used marker just indicated that option is "not yet" used. Options may be consumed lazilly by application logic, so
-it is possible that its not used at reporting time. There is no such cases with guicey options, but may be with your custom options (it all depends on usage scenario).
+* `CUSTOM` - option value set by user
+* `NOT_USED` - option was set by user but never used
+
+!!! note
+    `NOT_USED` marker just indicates that option is "not yet" used. Options may be consumed lazilly by application logic, so
+    it is possible that its not used at reporting time. There is no such cases with guicey options, 
+    but may be with your custom options (it all depends on usage scenario).
 
 ## Configuration summary
 
-Section intended to compactly show all configuration (to quickly see what was configured).
+Section intended to show all configuration summary (to quickly see what was configured).
 
 This and the next sections used condensed package notion:
 
@@ -292,164 +429,220 @@ This and the next sections used condensed package notion:
 CoreInstallersBundle         (r.v.d.g.m.installer)    
 ```
 
-Assumed that all classes in application will be uniquely identifiable by name and package info shown just to be able to 
+Assumed that all classes in application will be uniquely identifiable by name so package info shown just to be able to 
 understand exact class location. Logback shrinker used.
 
-Report also indicates duplicate registrations by REG(N) marker, where N - amount of installations 
-(ignored installations will be visible in configuration tree). Counted:
-
-* item registration in different places (e.g. different bundles)
-* duplicate registrations in simgle place (e.g. `.extensions(MyExt.class, MyExt.class)`)
-
-### General
-
-All configuration items (commands, modules, installers, extension, bundles) are identified by class. Duplicate entities are not allowed and simply ignored.
-
-For example, if extension registered manually and by classpath scan then it will be registered once, but internally guicey will remember both configuration sources.
-
-In contrast to other items, bundles and modules are registered by instance, but still uniqueness is checked by type: only first instance registered and other instances considered as duplicate.
+Report indicates duplicate registrations and items of the same type registrations: `REG(1/3)`,
+where first number is accepted instances count and last number is overall registrations count.
+For extensions it's always `1/N`, but for instances (modules, bundles) it indicates 
+de-duplication mechanism work. 
 
 ### Commands
 
 ```
     COMMANDS = 
         Cli                          (r.v.d.g.d.s.features)     *SCAN
-        EnvCommand                   (r.v.d.g.d.s.features)     *SCAN,GUICE_ENABLED
+        EnvCommand                   (r.v.d.g.d.s.features)     *SCAN, GUICE_ENABLED
 ```
 
-Shows commands resolved with classpath scan (enabled with .searchCommands()).
+Shows commands resolved with classpath scan (enabled with `.searchCommands()`).
 
 The following markers used:
 
-* SCAN - item from classpath scan (always)
-* GUICE_ENABLED - marks environment command, which could contain guice injections (other commands simply doesn't trigger application run and so injector never starts)
+* `SCAN` - item from classpath scan (always)
+* `GUICE_ENABLED` - marks environment command, which could contain guice injections (other commands simply doesn't trigger application run and so injector never starts)
 
 ### Bundles
 
 ```
     BUNDLES = 
-        CoreInstallersBundle         (r.v.d.g.m.installer)      
+        FooDwBundle                  (r.v.d.g.d.s.dwbundle)     *DW
         Foo2Bundle                   (r.v.d.g.d.s.bundle)       
             FooBundleRelative2Bundle     (r.v.d.g.d.s.bundle)       
-        HK2DebugBundle               (r.v.d.g.m.j.debug)        *LOOKUP, REG(2)
-        DiagnosticBundle             (r.v.d.g.m.c.debug)        
-        GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     *LOOKUP
+        HK2DebugBundle               (r.v.d.g.m.j.debug)        *HOOK, REG(1/2)
+        GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     *HOOK
+        CoreInstallersBundle         (r.v.d.g.m.installer)      
+            WebInstallersBundle          (r.v.d.g.m.installer)      
+        LookupBundle                 (r.v.d.g.d.s.bundle)       *LOOKUP
 ```
 
 All registered bundles are shown as a tree (to indicate transitive bundles).
 
-The following markers used:
+Markers used:
 
-* LOOKUP - bundle resolved with bundle lookup mechanism
-* DW - bundle recognized from registered dropwizard bundle
+* `LOOKUP` - bundle resolved with bundle lookup mechanism
+* `DW` - dropwizard bundle
+* `HOOK` - registered by [configuration hook](../configuration.md#guicey-configuration-hooks)
 
 ### Installers and extensions
 
 ```
     INSTALLERS and EXTENSIONS in processing order = 
-        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(1/2)
             HK2DebugFeature              (r.v.d.g.m.j.d.service)    
         resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    
-            FooBundleResource            (r.v.d.g.d.s.bundle)       *REG(3)
+            FooBundleResource            (r.v.d.g.d.s.bundle)       *REG(1/3)
             FooResource                  (r.v.d.g.d.s.features)     *SCAN
+            ModuleFeature                (r.v.d.g.d.s.m.ModuleWithExtensions) *BINDING
 ```
 
 Shows used installers (only installers which install extensions) and installed extensions. 
 
-Both installers and extensions are shown in the processing order (sorted according to @Order annotations).
+Both installers and extensions are shown in the processing order (sorted according to `@Order` annotations).
 
-The following markers used:
+Markers used:
 
-* SCAN - item from classpath scan (even if extension or installer were registered manually also to indicate item presence in classpath scan)
-* LAZY - extensions annotated with `@LazyBinding`
-* HK2 - extension annotated with `@HK2Managed`
-* HOOK - registered by [configuration hook](../configuration.md#guicey-configuration-hooks)
+* `SCAN` - item from classpath scan (even if extension or installer were registered manually also to indicate item presence in classpath scan)
+* `LAZY` - extensions annotated with `@LazyBinding`
+* `JERSEY` - extension annotated with `@JerseyManaged`
+* `HOOK` - registered by [configuration hook](../configuration.md#guicey-configuration-hooks)
+* `BINDING` - extension recognized from guice binding
 
 ### Modules
 
 ```
     GUICE MODULES = 
-        FooModule                    (r.v.d.g.d.s.features)     *REG(2)
+        FooModule                    (r.v.d.g.d.s.features)     *REG(2/2)
+        ModuleWithExtensions         (r.v.d.g.d.s.module)       
         FooBundleModule              (r.v.d.g.d.s.bundle)       
         HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle) 
-        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle) 
         GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
-        GuiceBootstrapModule         (r.v.d.guice.module)  
+        OverridingModule             (r.v.d.g.d.s.module)       *OVERRIDE
+        GuiceBootstrapModule         (r.v.d.guice.module) 
 ```
 
-All registered guice modules.
+All registered guice modules: user modules + override modules + guicey `GuiceBootstrapModule`.
+Overriding modules are marked with `OVERRIDE`.
 
 ## Configuration tree
 
 Configuration tree is useful to understand from where configuration items come from.
 
-Installer disables are shown like:
+!!! note
+    Configuration tree shows both guicey bundles and dropwizard bundle trees (for dropwizard
+    bundles, registered through guicey api). Dropwizard bundles are identified with marker `DW`.
+
+There are several sections in tree:
+
+* `APPLICATION` - for everything registered in `GuiceBundle`
+* `BUNDLES LOOKUP` - for bundles resolved with lookup mechanism
+* `CLASSPATH SCAN` - for items resolved by classpath scan
+* `GUICE BINDINGS` - for extensions resolved from guice module bindings
+* `HOOKS` - for registered hooks
+
+Markers:
+
+* `DW` - dropwizard bundle
+* `DISABLED` - item manually disabled
+* `DUPLICATE` - item considered as duplicate for already registered item
+
+### Disables
+
+Manual disable is identified (to quickly understand who disabled item) as:
 
 ```
-    ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature) 
+    ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)  
 ```
 
-Duplicate registrations (ignored by guicey) are shown like:
+And disabled items would be also identified:
 
 ```
-    │   ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       *IGNORED
+    ├── installer  -LifeCycleInstaller           (r.v.d.g.m.i.feature)         *DISABLED  
 ```
 
-If number in configuration report (e.g.REG(3)) doesn't match registration appearances, then item registered
-multiple times in one of this places.
+Disabled bundles are shown without context (to identify disable):
 
-Note that CoreInstallersBundle are always below all other bundles. This is because it always registered last 
-(to be able to disable it's registration). It doesn't affect anything other than reporting (because bundles order does 
-not change anything except this tree).
+```
+    -HK2DebugBundle              (r.v.d.g.m.j.debug)        *DISABLED
+```
 
-## Re-using
+### De-duplication
 
-Diagnostic info rendering may be used for custom rendering (showing in web page or some other staff).
-Rendering is performed with 3 beans, available for injection (when bundle registered):
+Duplicate registration or instance de-duplications are identified as:
 
-* [StatsRenderer](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/stat/StatsRenderer.java)
-* [OptionsRenderer](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/option/OptionsRenderer.java)
-* [DiagnosticRenderer](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/diagnostic/DiagnosticRenderer.java)
-* [ContextTreeRenderer](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/tree/ContextTreeRenderer.java) 
+```
+    ├── extension  -FooBundleResource           (r.v.d.g.d.s.bundle)       *DUPLICATE
+```
+
+If extension is registered more then once in the same context, it would be identified:
+
+```
+    ├── extension  FooBundleResource           (r.v.d.g.d.s.bundle) 
+    ├── extension  -FooBundleResource           (r.v.d.g.d.s.bundle)       *DUPLICATE
+```    
+
+If more then one instance (in this context) is considered to be duplicate then number will appear:
+
+```
+    ├── extension  -FooBundleResource           (r.v.d.g.d.s.bundle)       *DUPLICATE(3)
+```    
+
+When multiple instances of the same type is registered (form modules or bundles), they would be numbered
+in order of registration (to differentiate):
+
+``` 
+    APPLICATION
+    ├── module     FooModule                    (r.v.d.g.d.s.features)
+    ... 
+    │   └── FooBundleRelative2Bundle     (r.v.d.g.d.s.bundle)       
+    │       └── module     FooModule#2                  (r.v.d.g.d.s.features) 
+```
+
+In order to better track duplicates, items, recognized as duplicates, will be shown with
+registered instance they considered to be duplicate to. For example, for above sample,
+if another `FooModule` registered and it would be considered as duplicate to second instance,
+it would be printed as:
+
+```
+└── module     -FooModule#2                 (r.v.d.g.d.s.features)  *DUPLICATE
+```
+
+### Guice bindings
+
+Extensions detected from guice bindings are shown as a sub tree:
+
+```
+    ├── GUICE BINDINGS
+    │   │   
+    │   └── ModuleWithExtensions         (r.v.d.g.d.s.module)       
+    │       └── extension  ModuleFeature                (r.v.d.g.d.s.m.ModuleWithExtensions) 
+    
+```    
 
 !!! note
-    Renderers are also available in [event objects](../events.md#event-structure) (for events fired after injection creation) 
+    Extensions are shown relative to top-most registered modules!
 
+    For example, if `ModuleWithExtensions` internally install module `ExtensionModule` which 
+    actually contains extension bingind, then still `ExtensionModule` will not be shown and 
+    extension will remain under `ModuleWithExtensions` (on report).
+    
+    This was done to not confuse users: report shows guicey configration and user must clearly
+    see configuration source.    
 
-## Guice injector creation timings
+Bindings are not shown under main configuration tree (where modules are registered) because
+guicey know only module class, but actually moduliple module instances could be registered
+and so it is impossible to known what module instance extension is related to.
 
-You will see in guicey timings that almost all time spent creating guice injector. 
-To see some guice internal timings enable guice debug logs:
+!!! tip
+    Detailed guice modules tree could be seen on [guice report](guice-report.md)
+    
+## Customization
 
-```
-logging:
-  loggers:
-    com.google.inject.internal.util: DEBUG
-```
+`.printDiagnosticInfo()` shortcut register report with default settings. If you need customized
+report then register report listener directly. For example, [installers report](installers-report.md) is a 
+configured configuration report:
 
-Logs will be something like this:
-
-```
-DEBUG [2016-08-03 21:09:45,963] com.google.inject.internal.util.Stopwatch: Module execution: 272ms
-DEBUG [2016-08-03 21:09:45,963] com.google.inject.internal.util.Stopwatch: Interceptors creation: 1ms
-DEBUG [2016-08-03 21:09:45,965] com.google.inject.internal.util.Stopwatch: TypeListeners & ProvisionListener creation: 2ms
-DEBUG [2016-08-03 21:09:45,966] com.google.inject.internal.util.Stopwatch: Scopes creation: 1ms
-DEBUG [2016-08-03 21:09:45,966] com.google.inject.internal.util.Stopwatch: Converters creation: 0ms
-DEBUG [2016-08-03 21:09:45,992] com.google.inject.internal.util.Stopwatch: Binding creation: 26ms
-DEBUG [2016-08-03 21:09:45,992] com.google.inject.internal.util.Stopwatch: Module annotated method scanners creation: 0ms
-DEBUG [2016-08-03 21:09:45,993] com.google.inject.internal.util.Stopwatch: Private environment creation: 1ms
-DEBUG [2016-08-03 21:09:45,993] com.google.inject.internal.util.Stopwatch: Injector construction: 0ms
-DEBUG [2016-08-03 21:09:46,170] com.google.inject.internal.util.Stopwatch: Binding initialization: 177ms
-DEBUG [2016-08-03 21:09:46,171] com.google.inject.internal.util.Stopwatch: Binding indexing: 1ms
-DEBUG [2016-08-03 21:09:46,172] com.google.inject.internal.util.Stopwatch: Collecting injection requests: 1ms
-DEBUG [2016-08-03 21:09:46,179] com.google.inject.internal.util.Stopwatch: Binding validation: 7ms
-DEBUG [2016-08-03 21:09:46,183] com.google.inject.internal.util.Stopwatch: Static validation: 4ms
-DEBUG [2016-08-03 21:09:46,191] com.google.inject.internal.util.Stopwatch: Instance member validation: 8ms
-DEBUG [2016-08-03 21:09:46,192] com.google.inject.internal.util.Stopwatch: Provider verification: 1ms
-DEBUG [2016-08-03 21:09:46,201] com.google.inject.internal.util.Stopwatch: Static member injection: 9ms
-DEBUG [2016-08-03 21:09:46,204] com.google.inject.internal.util.Stopwatch: Instance injection: 3ms
-DEBUG [2016-08-03 21:09:46,427] com.google.inject.internal.util.Stopwatch: Preloading singletons: 223ms
-```
-
-!!! note 
-    'Preloading singletons' line will be logged **long after** other guice log messages, so search it at the end of your startup log.
+```java
+.listen(ConfigurationDiagnostic.builder("Available installers report")
+                    .printConfiguration(new DiagnosticConfig()
+                            .printInstallers()
+                            .printNotUsedInstallers()
+                            .printInstallerInterfaceMarkers())
+                    .printContextTree(new ContextTreeConfig()
+                            .hideCommands()
+                            .hideDuplicateRegistrations()
+                            .hideEmptyBundles()
+                            .hideExtensions()
+                            .hideModules())
+                    .build());
+```        
