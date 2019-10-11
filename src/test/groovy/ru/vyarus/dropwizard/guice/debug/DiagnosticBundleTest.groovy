@@ -6,13 +6,17 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundleResource
+import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.LookupBundle
+import ru.vyarus.dropwizard.guice.diagnostic.support.dwbundle.FooDwBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
+import ru.vyarus.dropwizard.guice.diagnostic.support.module.ModuleWithExtensions
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
@@ -84,12 +88,16 @@ class DiagnosticBundleTest extends AbstractTest {
 
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
+            // just to show lookup in report
+            PropertyBundleLookup.enableBundles(LookupBundle)
+
             bootstrap.addBundle(
                     GuiceBundle.builder()
                             .enableAutoConfig(FooResource.package.name)
                             .searchCommands()
                             .bundles(new Foo2Bundle())
-                            .modules(new FooModule())
+                            .modules(new FooModule(), new ModuleWithExtensions())
+                            .dropwizardBundles(new FooDwBundle())
                     // intentional duplicate to increment REG
                             .extensions(FooBundleResource, FooBundleResource)
                             .disableInstallers(LifeCycleInstaller)

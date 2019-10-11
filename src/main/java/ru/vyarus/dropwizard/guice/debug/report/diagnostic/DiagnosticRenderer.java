@@ -38,8 +38,6 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * <ul>
  * <li>LOOKUP when bundle come from lookup mechanism</li>
  * <li>DW when bundle is dropwizard bundles</li>
- * <li>IGNORED if bundle was ignored because of deduplication logic</li>
- * <li>DISABLED if bundle was manually disabled</li>
  * </ul>
  * <p>
  * Installers are rendered in execution order. Extensions (if enabled) are rendered relative to used installer.
