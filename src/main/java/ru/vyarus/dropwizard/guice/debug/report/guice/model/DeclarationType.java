@@ -28,8 +28,8 @@ public enum DeclarationType {
      */
     ProviderInstance(ProviderInstanceBinding.class, true),
     /**
-     * Linked binding declaration ({@code bind(Smth.class).to(Other.class),}, where Other may be alreadt declared
-     * beforeas separate binding).
+     * Linked binding declaration ({@code bind(Smth.class).to(Other.class),}, where Other may be already declared
+     * before as separate binding).
      */
     LinkedKey(LinkedKeyBinding.class, true),
     /**
@@ -55,7 +55,7 @@ public enum DeclarationType {
      */
     ProvisionListener(ProvisionListenerBinding.class, false),
     /**
-     * {@link TypeConverter} registration. Appear only for module elements analysis.
+     * {@link TypeConverter} registration ({@code convertToTypes(,,)}). Appear only for module elements analysis.
      */
     TypeConverter(TypeConverterBinding.class, false),
     /**
