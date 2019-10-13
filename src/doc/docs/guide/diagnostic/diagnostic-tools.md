@@ -54,7 +54,7 @@ public class DiagnosticHook implements GuiceyConfigurationHook {
 
 ## Reports implementation
 
-All reports are implemented as guicey [event listeners](../events.md). All reports provide additional configuration
+Report is implemented as guicey [event listener](../events.md). All sub-reports provide additional configuration
 options, so if default configuration (from shortcut methods above) does not fit your needs
 you can register listener directly with required configuration.
 

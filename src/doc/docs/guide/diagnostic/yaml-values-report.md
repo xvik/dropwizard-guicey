@@ -1,6 +1,6 @@
 # Yaml values report
 
-You can print all available configuration bindings with values:
+Prints all available [direct yaml values](../yaml-values.md):
 
 ```java
 GuiceBundle.builder()
@@ -164,4 +164,82 @@ INFO  [2018-06-18 05:55:03,532] ru.vyarus.dropwizard.guice.module.yaml.report.De
             @Config("server.uid") Integer = null
             @Config("server.umask") String = null
             @Config("server.user") String = null
+```     
+
+Here you can see:
+
+* All visible configuration values (as tree).
+* Types and interfaces for configuration object
+* Unique sub configuration objects
+* Values bound to guice context
+
+## Guice
+
+Report is mostly intended to be used to see available guice bindings and that's why 
+`@Config` annotation is shown almsot everywhere. For example, 
+
 ```
+@Config("server.serverPush.enabled") Boolean = false
+```
+
+means that the following injection will work:
+
+```java
+@Inject @Config("server.serverPush.enabled") Boolean pushEnabled;
+```
+
+And it will be set to "false". 
+
+!!! tip
+    Report is printed before guice injector creation to let you review all available bindings
+    when injector creation fails due to incorrect configuration value binding. 
+
+The same for unique objects:
+
+```
+Configuration.logging
+            @Config LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1b7332a7]}
+```
+
+Means available injection:
+
+```java
+@Inject @Config LoggingFactory logginFactory;
+```
+
+!!! note
+    Declaration type is always used (`LoggingFactory`) even when runtype type is known
+    (`(with actual type DefaultLoggingFactory)`). This is important to keep 
+    bindings consistent (otherwise they would always change, depending on actual config value).
+
+## Direct values access
+
+But report is also handful for direct values access (through `ConfigurationTree` [object](../yaml-values.md#introspected-configuration)).
+
+For example, accessing value by path:
+
+```java
+tree.valueByPath("logging.level") == INFO
+```
+
+Or unique object access:
+
+```java
+tree.valueByUniqueDeclaredType(MetricsFactory.class) == <factory instance>
+```                        
+
+## Report customization
+
+Report is implemented as guicey [event listener](../events.md) and provide additional customization 
+options, so if default configuration (from shortcut methods above) does not fit your needs
+you can register listener directly with required configuration.
+ 
+For example, custom bindings report is configured like this:
+ 
+```java
+listen(new YamlBindingsDiagnostic(
+            new BindingsConfig()
+                    .showConfigurationTree()
+                    .showNullValues()
+                    .showCustomConfigOnly()));
+```          
