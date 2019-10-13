@@ -268,4 +268,11 @@ For example, guice bindings report without library bindings is configured like t
 listen(new GuiceBindingsDiagnostic(new GuiceConfig()
                     .hideGuiceBindings()
                     .hideGuiceyBindings())
-```    
+```             
+
+Report rendering logic may also be used directly as report provide separate renderer object
+implementing `ReportRenderer`. Renderer not bound to guice context and assume direct instantiation. 
+
+For examples of direct renderer usage see [events](../events.md) implementation:
+
+* `InjectorPhaseEvent.ReportRenderer` 

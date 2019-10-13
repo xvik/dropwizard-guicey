@@ -645,4 +645,11 @@ configured configuration report:
                             .hideExtensions()
                             .hideModules())
                     .build());
-```        
+```
+
+Report rendering logic may also be used directly as all sub-reports provide separate renderer object
+implementing `ReportRenderer`. Renderers not bound to guice context and assume direct instantiation. 
+
+For examples of direct renderers usage see [events](../events.md) implementation:
+
+* `InjectorPhaseEvent.ReportRenderer`         
