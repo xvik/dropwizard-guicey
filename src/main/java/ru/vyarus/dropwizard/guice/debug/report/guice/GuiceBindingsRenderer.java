@@ -48,6 +48,7 @@ import java.util.stream.Collectors;
  * <li>OVERRIDDEN (only in modules tree) - binding is overridden with binding from overriding module</li>
  * <li>OVERRIDES (only in overriding modules tree) - binding override something in main modules</li>
  * <li>WEB - indicates guice {@link com.google.inject.servlet.ServletModule}s</li>
+ * <li>PRIVATE - indicates private module</li>
  * </ul>
  *
  * @author Vyacheslav Rusakov
