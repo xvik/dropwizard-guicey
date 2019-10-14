@@ -1,6 +1,9 @@
 # Testing
 
-Test support require `io.dropwizard:dropwizard-testing:1.3.0` dependency.
+Test support require `io.dropwizard:dropwizard-testing:2.0.0` dependency.
+
+!!! warning
+    Guicey does not provide junit 5 extensions: only junit 4 rules. Support will be added later.
 
 ## General test support
 

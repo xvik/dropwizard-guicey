@@ -89,6 +89,7 @@ nav:
       - Commands: guide/commands.md
       - Web: guide/web.md
       - De-duplication: guide/deduplication.md
+      - Hooks: guide/hooks.md
       - Test: guide/test.md
     - Installers:
       - Resource: installers/resource.md

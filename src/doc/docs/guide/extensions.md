@@ -19,6 +19,30 @@ Declaration sources:
     
     Some extensins support order declaration with `@Order()` - see report.
 
+
+!!! note
+    If you have problems with injection inside extensions (NPE errors) first check that you did not register extension manually!  
+    It is a quite often **mistake** (especially with jersey extensions):
+    
+    ```java
+    environment.jersey().register(new MyResource())
+    ```
+    This way `MyResource` will not be managed by guice and so injections inside it **will not work**
+     
+    Use constructor injection to prevent such errors (manual places will reveal immediately):
+    ```java
+    @Path("/")
+    public class MyResource {
+        private final MyService service;
+        
+        @Inject
+        public MyResource(MyService service) {
+            this.service = service;
+        }
+    }
+    ```
+   
+
 ## Resource
 
 ```java
@@ -187,4 +211,6 @@ of manual `#!java bind(MyService.class).asEagerSingleton()`.
 
 !!! note
     This was only subset of supported extensions - see [installers](../installers/resource.md) 
-    section. 
+    section.
+         
+    You can add additional extensions support with a [custom installer](installers.md#writing-custom-installer).

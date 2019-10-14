@@ -25,6 +25,10 @@ during development. All reports may be enabled on main guice bundle:
 `#!java .printLifecyclePhasesDetailed()`  
 :   [Guicey lifecycle stages](lifecycle-report.md) (separates logs to clearly see what messages relates to what phase)
 
+`#!java .strictScopeControl()`
+:   In case of doubts about extension owner (guice or HK2) and suspicious for duplicate instantiation, 
+    you can enable strict control which will throw exception in case of wrong owner.   
+
 ## Diagnostic hook
 
 It is obviously impossible to enable diagnostic reports without application re-compilation. 
