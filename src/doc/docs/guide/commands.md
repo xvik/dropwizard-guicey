@@ -2,7 +2,7 @@
 
 ## Guice injections
 
-Guicey calls `injector.injectMembers(command)` for all registered `EnvironmentCommand`'s, so you can inject guice beans directly:
+Guicey calls `injector.injectMembers(command)` for all registered `EnvironmentCommand`s, so you can inject guice beans directly:
 
 ```java
 public class MyCommand extends EnvironmentCommand<MyConfiguration> {
@@ -27,7 +27,7 @@ public class MyCommand extends EnvironmentCommand<MyConfiguration> {
     It doesn't matter if command was registered manually, by some bundle or with commands search (see below).
 
 !!! warning
-    You can use guice injections only in `EnvironmentCommand`'s because only these commands start bundles (and so launch guice context creation).
+    You can use guice injections only in `EnvironmentCommand`s because only these commands start bundles (and so launch guice context creation).
 
 ## Automatic installation
 

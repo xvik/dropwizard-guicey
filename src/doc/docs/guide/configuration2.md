@@ -117,6 +117,28 @@ Guicey generic options mechanism may be used for guicey (or other 3rd party bund
 `#!java .options(Map<Enum, Object> options)`
 :   Set multiple options at once (e.g. map system properties as option values)
 
+#### GuiceyOptions
+
+!!! note
+    Some options are configured through main bundle shortcut methods and so they are not 
+    shown in the table below.
+
+Option | Type | Default |Description
+-----------|---|---|----
+BindConfigurationByPath | Boolean | true | [Introspect configuration](yaml-values.md) to be able to bind separate values
+TrackDropwizardBundles | Boolean | true | Recognize transitive dropwizard bundles (for bundles registered through guicey api)
+AnalyzeGuiceModules | Boolean | true | Extension recognition in guice bindings, transitive modules disable support
+GuiceFilterRegistration | `EnumSet<DispatcherType>` | [REQUEST] | Guice filter registration options
+UseHkBridge | Boolean | false | Activates HK2-guice bridge (bridge dependency must be avaiable in classpath)  
+
+#### InstallersOptions
+
+Option | Type | Default |Description
+-----------|---|---|----
+DenyServletRegistrationWithClash | Boolean | false | Throw error if `@WebServlet` annotated servlets clash with already registered servlets
+DenySessionListenersWithoutSession | Boolean | false | Throw error for registered `SessionListener` (annotated `@WebListener`) if sessions support not enabled (default)
+ForceSingletonForJerseyExtensions | Boolean | true | Force singleton scope for registered jersey extensions (resources, exception handlers etc) if no explicit scope declared
+
 ### Injector
 
 `#!java .injectorFactory(InjectorFactory injectorFactory)`
