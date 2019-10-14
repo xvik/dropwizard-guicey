@@ -91,6 +91,7 @@ nav:
       - De-duplication: guide/deduplication.md
       - Hooks: guide/hooks.md
       - Test: guide/test.md
+      - HK2: guide/hk2.md
     - Installers:
       - Resource: installers/resource.md
       - Task: installers/task.md
