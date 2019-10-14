@@ -65,6 +65,7 @@ nav:
     - User guide:
       - Configuration: guide/configuration2.md
       - Configuration_old: guide/configuration.md
+      - Extensions: guide/extensions.md
       - Integration lifecycle: guide/lifecycle.md
       - Yaml values: guide/yaml-values.md
       - Classpath scan: guide/scan.md
