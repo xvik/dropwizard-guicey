@@ -2,8 +2,7 @@
 
 !!! note ""
     Getting started guide briefly shows the most commonly used features.
-    Advanced description of guicey concepts may be found in [the concepts section](concepts.md).
-    If you are migrating from dropwizard-guice, read [migration guide](guide/dg-migration.md).    
+    Advanced description of guicey concepts may be found in [the concepts section](concepts.md).    
 
 ## Installation
 
