@@ -73,6 +73,7 @@ nav:
           - Injector: guide/guice/injector.md
           - Bindings: guide/guice/bindings.md
           - Module autowiring: guide/guice/module-autowiring.md
+          - Modules analysis: guide/guice/module-analysis.md
       - Installers: guide/installers.md
       - Ordering: guide/ordering.md
       - Bundles: guide/bundles.md
