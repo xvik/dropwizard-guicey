@@ -3,8 +3,8 @@
 Before injector start, guicey parse registered modules with guice SPI in order to:
 
 * [Recognize extensions from bindings](#extensions-recognition)
-* Remove disabled extensions bindings
-* Remove bindings of disabled modules
+* [Remove disabled extensions bindings](#disabled-extensions)
+* [Remove bindings of disabled modules](#transitive-modules)
 
 !!! tip
     Use [guice report](../diagnostic/guice-report.md) to see all available bindings
@@ -90,6 +90,11 @@ To completely switch off analysis use option:
     [transitive modules disables](../disables.md#disable-guice-modules) will not work anymore!    
 
 With disabled analysis [injector factory](injector.md) will receive user provided modules directly (instead of pre-parsed synthetic module).
+
+!!! important
+    Enabled analysis completely prevent situations when default binding, created by guciey, conflict
+    with manual binding existing in module. In such case startup will fail. Before modules analysis
+    it was only possible to solve such issue with `@LazyBinding` annotation.  
 
 ## Reporting
 

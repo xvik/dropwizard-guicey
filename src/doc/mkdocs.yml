@@ -74,6 +74,7 @@ nav:
           - Bindings: guide/guice/bindings.md
           - Module autowiring: guide/guice/module-autowiring.md
           - Modules analysis: guide/guice/module-analysis.md
+          - Override bindings: guide/guice/override.md
       - Installers: guide/installers.md
       - Ordering: guide/ordering.md
       - Bundles: guide/bundles.md
