@@ -75,7 +75,7 @@ nav:
           - Module autowiring: guide/guice/module-autowiring.md
       - Installers: guide/installers.md
       - Ordering: guide/ordering.md
-      - Bundles (Guicey): guide/bundles.md
+      - Bundles: guide/bundles.md
       - Options: guide/options.md
       - Diagnostic:
         - Tools: guide/diagnostic/diagnostic-tools.md
@@ -88,6 +88,7 @@ nav:
       - Events: guide/events.md
       - Commands: guide/commands.md
       - Web: guide/web.md
+      - Disables: guide/disables.md
       - De-duplication: guide/deduplication.md
       - Hooks: guide/hooks.md
       - Test: guide/test.md

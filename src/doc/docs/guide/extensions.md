@@ -6,6 +6,7 @@ section for details.
 
 !!! warning
     Extension is recognized only by one installer (according to installers order), even if it contains multiple signs!
+    See [installers report](diagnostic/installers-report.md) for installers order.
 
 Declaration sources:
 
