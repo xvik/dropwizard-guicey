@@ -113,7 +113,10 @@ and [providers](../installers/jersey-ext.md)) which are registered in HK2 contex
 If you want to delegate all jersey extensions to HK2 then use:
 
 ```java
-.useHK2ForJerseyExtensions()
+GuiceBundle.builder()
+    ...
+   .useHK2ForJerseyExtensions()
+   .build() 
 ```
 
 (It is the same as if you annotate all jersey extensions with `@JerseyManaged`)

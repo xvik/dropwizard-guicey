@@ -72,6 +72,7 @@ nav:
       - Guice:
           - Injector: guide/guice/injector.md
           - Bindings: guide/guice/bindings.md
+          - Scopes: guide/guice/scopes.md
           - Module autowiring: guide/guice/module-autowiring.md
           - Modules analysis: guide/guice/module-analysis.md
           - Override bindings: guide/guice/override.md
