@@ -5,6 +5,10 @@ By default, [GuiceFilter](https://github.com/google/guice/wiki/Servlets) is regi
 * [ServletModule](https://github.com/google/guice/wiki/ServletModule) can be used for filters and servlets declaration 
 * [Request (and session) scope](scopes.md#request) is available in both contexts
 
+!!! note
+    Actually, the same `GuiceFilter` instance is used for both contexts. This way request scope works properly
+    on both contexts, but registrations through `ServeletModule` are available only in main context.
+
 Example of servlet and filter registration through guice module:
 
 ```java
@@ -30,6 +34,9 @@ GuiceBundle.builder()
     server:
         rootPath: '/rest/*'
     ```
+
+!!! note
+    With guice you can map servlets and filters [using regexps](https://github.com/google/guice/wiki/ServletRegexKeyMapping) 
     
 !!! tip
     It may be more handy to use [web extensions](../web.md) instead of direct registrations.

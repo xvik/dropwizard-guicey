@@ -1,5 +1,9 @@
 # Extensions
 
+!!! summary ""
+    Extensions mechanism supposed to be used in guicey for all dropwizard specific features registration
+    (instead of manual registrations). 
+
 All extensions are recognized and installed with appropriate [installer](installers.md). This page supposed
 to reference declaration examples of most common extensions. See [installers](../installers/resource.md) 
 section for details.
@@ -10,9 +14,9 @@ section for details.
 
 Declaration sources:
 
-* Classpath scan
-* Manual declaration
-* Guice binding
+* [Classpath scan](scan.md)
+* [Manual declaration](configuration2.md#configuration-items)
+* [Guice binding](guice/module-analysis.md#extensions-recognition)
 
 !!! tip
     More installers (and so supported extensions types) could be available due to installed [extension bundles](../extras/bom.md).
@@ -177,6 +181,14 @@ public class MyContainerRequestFilter implements ContainerRequestFilter {
 ```java
 @WebServlet("/mapped")
 public class MyServlet extends HttpServlet { ... }
+```       
+
+Or to admin context:
+
+```java
+@WebServlet("/mapped")
+@AdminContext
+public class MyServlet extends HttpServlet { ... }
 ```   
 
 [Recognized](../installers/servlet.md) by `@WebServlet` annotation. 
@@ -195,8 +207,9 @@ public class MyListener implements ServletContextListener {...}
 
 [Recognized](../installers/listener.md) by `@WebListener` annotation.
 
-!!! note
-    Servlets and filters could be also registered through guice `ServletModule`
+!!! tip
+     Servlets and filters could be also registered through guice `ServletModule`. 
+     Read more about [web features usage](web.md).
     
 ## Eager singleton
 

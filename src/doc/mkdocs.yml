@@ -66,6 +66,7 @@ nav:
       - Configuration: guide/configuration2.md
       - Configuration_old: guide/configuration.md
       - Extensions: guide/extensions.md
+      - Web: guide/web.md
       - Integration lifecycle: guide/lifecycle.md
       - Yaml values: guide/yaml-values.md
       - Classpath scan: guide/scan.md
@@ -91,7 +92,6 @@ nav:
         - AOP: guide/diagnostic/aop-report.md
       - Events: guide/events.md
       - Commands: guide/commands.md
-      - Web: guide/web.md
       - Disables: guide/disables.md
       - De-duplication: guide/deduplication.md
       - Hooks: guide/hooks.md

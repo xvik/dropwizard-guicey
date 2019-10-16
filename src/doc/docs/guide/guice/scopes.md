@@ -104,3 +104,20 @@ public class RequestBean {
     }
 }            
 ```
+
+
+## Eager singleton
+
+By default, guicey create injector in `PRODUCTION` stage, so all registered singletons
+will be instantiated immediately.
+
+But if you rely on guice JIT (instantiation by injection) it may defer bean creation 
+(until it will be requested first time).
+
+To always start beans (even in `DEVELOPMENT` stage) guice provide eager singleton option:
+`bind(MyService.class).asEagerSingleton()`.
+
+For cases when you don't want to manually declare bean, but require it to start with guice context
+you can either implement [Managed](../../installers/managed.md) or mark bean 
+as [@EagerSingleton](../../installers/eager.md) (the latter will simply bind annotated bean as
+guice eager singleton instead of you).
