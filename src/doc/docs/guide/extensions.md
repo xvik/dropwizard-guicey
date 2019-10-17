@@ -175,41 +175,6 @@ public class MyContainerRequestFilter implements ContainerRequestFilter {
     }
 }
 ```        
-
-## Web
-
-```java
-@WebServlet("/mapped")
-public class MyServlet extends HttpServlet { ... }
-```       
-
-Or to admin context:
-
-```java
-@WebServlet("/mapped")
-@AdminContext
-public class MyServlet extends HttpServlet { ... }
-```   
-
-[Recognized](../installers/servlet.md) by `@WebServlet` annotation. 
-
-```java
-@WebFilter("/some/*")
-public class MyFilter implements Filter { ... }
-```
-
-[Recognized](../installers/filter.md) by `@WebFilter` annotation. 
-
-```java
-@WebListener
-public class MyListener implements ServletContextListener {...}
-```
-
-[Recognized](../installers/listener.md) by `@WebListener` annotation.
-
-!!! tip
-     Servlets and filters could be also registered through guice `ServletModule`. 
-     Read more about [web features usage](web.md).
     
 ## Eager singleton
 
