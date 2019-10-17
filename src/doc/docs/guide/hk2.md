@@ -131,3 +131,25 @@ to use guice services inside HK2 managed beans.
 
 By analogy with `@JerseyManaged`, you can use `@GuiceManaged` to mark exceptional extensions,
 which must be still managed by guice.
+
+## HK2 scope debug
+
+Special `HK2DebugBundle` bundle is provided to check that beans properly instantiated by guice or HK2 
+(and no beans are instantiated by both).
+
+It could be activated with shortcut:
+
+```java
+.strictScopeControl();
+```
+
+Affects only beans installed by installers implementing `JerseyInstaller` (`ResourceInstaller`, `JerseyProviderInstaller` etc)
+because other extensions does not support delegation to HK2.
+
+Checks that beans annotated with `@GuiceManaged` are instantiated by guice and beans
+annotated with `@JerseyManaged` are created by HK2.
+
+In default guice-first mode non annotated beans are assumed to be instantiated in guice (and so error thrown
+if bean created in HK2 context). 
+
+In [HK2-first](#use-hk2-for-jersey-extensions) mode, error will be thrown if non annotated jersey extension is created by guice.

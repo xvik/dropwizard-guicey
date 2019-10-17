@@ -1,248 +1,183 @@
 # Guicey bundles
 
 By analogy with dropwizard bundles, guicey has it's own `GuiceyBundle`. These bundles contains almost the same options as 
-main `GuiceBundle` builder. The main purpose is to group installers, extensions and guice modules related to specific 
-feature.
-
-Guicey bundles are initialized during dropwizard `run` phase. All guice modules registered in bundles will also be checked 
-for required [dropwizard objects autowiring](guice/module-autowiring.md).
-
-For example, custom integration with some scheduler framework will require installers to register tasks and guice module
-to configure framework. GuiceyBundle will allow reduce integration to just one bundle installation.
-
-```java
-public class XLibIntegrationBundle implements GuiceyBundle {
-
-    @Override
-    public void initialize(final GuiceyBootstrap bootstrap) {
-        bootstrap.installers(
-                XLibFeature1Installer.class,
-                XLibFeature2Installer.class,                
-        )
-        .modules(new XLibGuiceModule());
-    }
-}
-
-bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
-        .bundles(new XLibIntegrationBundle())
-        .enableAutoConfig("package.to.scan")
-        .build()
-);
-```
-
-!!! tip
-    `GuiceyBootstrap` object used not only for registration, but also provides access to
-    `Bootstrap`, `Configuration`, `ConfigurationTree`, `Environment` and `Options` objects.
-
-Bundles may be used to group application features: e.g. ResourcesBundle, TasksBundle (for example, when auto-scan not enabled to decompose configuration).
-
-Bundles are transitive - bundle can install other bundles. 
-Duplicate bundles are detected using bundle type, so infinite configuration loops or duplicate configurations are not possible.
-
-!!! warning 
-    Be careful if bundle is parameterizable (requires constructor arguments). If two such bundles will be registered, only
-    first registration will be actually used and other instance ignored. Note that application configurations (using main GuiceBundle methods) 
-    performed before bundles processing and so bundle instance with correct parameters could be registered there.
- 
-Transitive bundles (or simply a lot of bundles) may cause confusion. Use [diagnostic info](diagnostic/configuration-report.md) to see how guicey was actually configured.  
-
-## Predefined bundles
-
-Guicey ships with few predefined bundles.
-
-### Core installers bundle
-
-Default installers are grouped into `CoreInstallersBundle`. This bundle is always installed implicitly (so you always have default installers).
-It may be disabled using [`.noDefaultInstallers()`](configuration.md#disable-default-installers).
-
-### Web installers bundle
-
-`WebInstallersBundle` provides installers for servlets, filters and listeners installation [using servlet api annotations](web.md#web-installers)
-(`@WebServlet`, `@WebFilter`, `@WebListener`). 
-
-!!! warning
-    Bundle is not installed by default to avoid confusion. May be enabled using [`.useWebInstallers()`](configuration.md#web-installers). 
-
-!!! tip
-    If web installers used, then you may not need guice `ServletModule` support. To remove `GuiceFilter` registrations 
-    and `ServletModule` support use [`.noGuiceFilter()`](web.md#disable-servletmodule-support).
-
-### HK2 debug bundle 
-
-`HK2DebugBundle` is special debug bundle to check that beans properly instantiated by guice or HK2 
-(and no beans are instantiated by both).
-
-Only beans installed by installers implementing `JerseyInstaller` (`ResourceInstaller`, `JerseyProviderInstaller`).
-All beans must be created by guice and only beans annotated with `@HK2Managed` must be instantiated by HK2.
-
-Bundle may be used in tests. For example using `guicey.bundles` property (see bundles lookup below).
-
-May be enabled by [`.strictScopeControl()`](configuration.md#diagnostic).
+main `GuiceBundle` [builder](configuration2.md#main-bundle). The main purpose is the same as dropwizard bundles: incapsulate logic by grouping installers, 
+extensions and guice modules related to specific feature.
 
 !!! note
-    Works in both guice-first or [HK2-first](configuration.md#use-hk2-for-jersey-extensions) modes.
-
-### Diagnostic bundle 
-
-Bundle renders collected guicey [diagnostic information](diagnostic/configuration-report.md).
- 
-Output is highly configurable, use: `DiagnosticBundle.builder()` to configure reporting (if required).
- 
-Bundle may be registered with [bundle lookup mechanism](bundles.md#bundle-lookup). For example:
-
-```java
-PropertyBundleLookup.enableBundles(DiagnosticBundle.class);
-``` 
- 
-May be enabled by `.printDiagnosticInfo()` shortcut method.
-
-Special shortcut `.printAvailableInstallers()` register diagnostic bundle configured for [showing only installers](diagnostic/configuration-report.md#installers-mode). Useful when you looking for available features.
-
-!!! attention ""
-    Only one bundle instance accepted, both options can't be enabled at the same time.
-
-## Dropwizard bundles unification
-
-Guicey bundles and dropwizard bundles may be unified providing single (standard) extension point for both 
-dropwizard and guicey features:
-
-```java
-public class MixedBundle implements ConfiguredBundle, GuiceyBundle {
+    Guicey bundles are assumed to be used **instead** of dropwizard bundles in guicey-powered application.
     
-    public void initialize(Bootstrap<?> bootstrap) {
-        // do something in init phase
-    }   
-                  
+    It does not mean that drowpizard bundles can't be used - of course they can! There are many
+    [existing dropwizard bundles](https://modules.dropwizard.io/thirdparty/) and it would be insance to get rid of them.
+    
+    It is just not possible to register guice modules and use many guicey features from dropwizard bundles.       
+
+Guicey and dropwizard bundles share **the same lifecycle**:
+
+```java     
+public interface ConfiguredBundle<T> {
+    default void initialize(Bootstrap<?> bootstrap) {}    
+    default void run(T configuration, Environment environment) throws Exception {}
+}
+
+public interface GuiceyBundle {
+    default void initialize(GuiceyBootstrap bootstrap) {} 
+    default void run(GuiceyEnvironment environment) throws Exception {}
+}
+```
+
+Guicey bundles is an extension to dropwizard bundles (without restrictions), 
+so it is extremely simple to switch from dropwizard bundles.
+
+!!! tip
+    With guicey bundles it is possible to implement [plug-and-play](#service-loader-lookup) bundles:
+    to automatically install bundle when it's jar appear on classpath. 
+
+Example guicey bundle:
+
+```java
+public class MyFeatureBundle implements GuiceyBundle {
+
+    @Override
     public void initialize(GuiceyBootstrap bootstrap) {
-        // apply guicey configurations
-    } 
+        bootstrap
+            .installers(MyFeatureExtensionInstaller.class)
+            // dropwizard bundle usage
+            .dropwizardBundle(new RequiredDwBundle())
+            .modules(new MyFeatureModule());     
+                                                                 
+        // dropwizard bootstrap access
+        bootstrap.bootstrap().addCommand(new MyFeatureCommand());
+    }   
+
+    @Override    
+    public void run(GuiceyEnvironment environment) throws Exception {
+        // configuration access
+        environment
+            .modules(new SpecialModle(environment.configuration().getSomeValue()))
+            .onApplicationStartup(() -> logger.info("Application started!"));
     
-    public void run(T configuration, Environment environment) throws Exception {
-        // not needed because everything could be done in guicey bundle's method
-    } 
-} 
-``` 
+        // dropwizard environment access        
+        environment.environment().setValidator(new MyCustomValudatior());
+    }
+}
 
-Feature is disabled by default, to enable it use `.configureFromDropwizardBundles()` method.
-
-```java
-bootstrap.addBundle(new MixedBundle());
-bootstrap.addBundle(GuiceBundle.builder()
-        .configureFromDropwizardBundles(true)
+bootstrap.addBundle(GuiceBundle.builder()                        
+        .bundles(new MyFeatureBundle())
         .build()
 );
 ```
 
-When active, all registered dropwizard bundles are checked if they implement `GuiceyBundle`.
-Works with both `Bundle` and `ConfiguredBundle` dropwizard bundle types. 
+Example bundles could by found in guicey itself:
 
-!!! warning 
-    Don't assume if guicey bundle's `initialize` method will be called before/after dropwizard bundle's `run` method. 
-    Both are possible (it depends if bundle registered before or after GuiceBundle).
+* `CoreInstallersBundle` - all default installers
+* `WebInstallersBundle` - servlet and filter annotations support
+* `HK2DebugBundle` - guice - HK2 [scope debug tool](hk2.md#hk2-scope-debug)
 
-## Bundle lookup
+Even more examples are in [extensions modules](../extras/bom.md)
 
-Bundle lookup mechanism used to lookup guicey bundles in various sources. It may be used to activate specific bundles
-in tests (e.g. HK2DebugBundle) or to install 3rd party extensions from classpath.
+## Configuration
 
-Bundle lookup is equivalent to registering bundle directly using builder `bundles` method.
+See all [bundle configuration options](configuration2.md#guicey-bundle)
 
-By default, 2 lookup mechanisms active. All found bundles are logged into console.
-Duplicate bundles are removed (using bundle class to detect duplicate).
+!!! note
+    Almost all configurations appear under initialization phase only. This was done in order
+    to follow dropwizard conventions (all configuration under init and all initialization under run).
 
-To disable default lookups use `disableBundleLookup`:
+The only exception is guice modules: it is allowed to register modules in both phases. 
+Modules are often require direct configuration values and without this exception it would
+be too often required to create wrapper [guicey-aware](guice/module-autowiring.md) modules
+for proper registration. Besides, in dropwizard itself HK2 modules could only be registered in run phase.   
 
-```java
-bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
-        .disableBundleLookup()
-        .build()
-```
+## De-duplication
 
-### System property lookup
+Your bundle may be installed multiple times and you must always think what is **expected behaviour**
+in this case.
 
-System property `guicey.bundles` could contain comma separated list of guicey bundle classes. These bundles 
-must have no-args constructor.
-
-For example, activate HK2 debug bundle for tests:
-
-```
-java ... -Dguicey.bundles=ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
-```
-
-Alternatively, system property may be set in code:
+For example:
 
 ```java
-PropertyBundleLookup.enableBundles(HK2DebugBundle.class)
+.bundles(new MyBundle(), new MuBundle())
 ```
 
-### Service loader lookup
+Bundles are often intended to be used multiple times (for example, [spa bundle](../extras/spa.md)).
 
-Using default java [ServiceLoader](https://docs.oracle.com/javase/7/docs/api/java/util/ServiceLoader.html) 
-mechanism, loads all GuiceyBundle services.
+But in some cases, only one bundle instance must be installed. For example, [eventbus bundle](../extras/eventbus.md)
+must be installed just once. Or it may be some common bundle, installed by multiple other bundles.
 
-This is useful for automatically install 3rd party extensions (additional installers, extensions, guice modules).
+In order to solve such cases guicey provides [de-duplication mechanism](deduplication.md).
 
-3rd party jar must contain services file:
+So when you need to avoid redundant bundle instances, you can:
 
-```
-META-INF/services/ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
-```
+* extend `UniqueGuiceyBundle` to allow only one bundle instance
+* implement `equals` method (where you can implement any deduplication rules (e.g. based on bundles constructor arguments))
 
-File contain one or more (per line) GuiceyBundle implementations. E.g.
+!!! note
+    Deduplication could also help in case when your bundle is [available through lookup](#bundle-lookup)
+    with default configuration, but could be registered with customized configuration.
+    
+    In this case, you can also use `UniqueGuiceyBundle`: manually registered bundle will 
+    always be registered first, and bundle obtained with lookup mechansm would be considered 
+    as duplicate and not used (for example, [eventbus bundle](../extras/eventbus.md) use this)
 
-```
-com.foo.Bundle1
-com.foo.Bundle2
-```
+## Bundle technics
 
-Then Bundle1, Bundle2 would be loaded automatically on startup.
+### Optional extensions
 
-### Customizing lookup mechanism
-
-Custom bundle lookup must implement `GuiceyBundleLookup` interface:
+As all extensions registered under initialization phase, when configuration is not available yet
+it is not possible to implement optional extension registration. To workaround it, you can conditionally
+disable extensions:
 
 ```java
-public class CustomBundleLookup implements GuiceyBundleLookup {
+public class MyFeatureBundle implements GuiceyBundle {
 
     @Override
-    public List<GuiceyBundle> lookup() {
-        List<GuiceyBundle> bundles = Lists.newArrayList();
-        ...
-        return bundles;
+    public void initialize(GuiceyBootstrap bootstrap) {   
+        // always register extension
+        bootstrap.extensions(OptionalExtension.class);     
+    }   
+
+    @Override    
+    public void run(GuiceyEnvironment environment) throws Exception {
+        // disable extension based on configuration value
+        if (!environment.configuration().getSomeValue()) {
+            environment.disableExtension(OptionalExtension.class);
+        }
     }
 }
 ```
 
-Custom lookup implementation may be registered through:
+### Replaces
+
+As bundle has almost complete access to configuration, it can use [disables](disables.md)
+to substitute application functions.
+
+For example, it is known that application use `ServiceX` (from some core module in organization),
+but this bundle requires modified service. It can disable core module, installing feature 
+and register customized module:
 
 ```java
-bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
-        .bundleLookup(new CustomBundleLookup())
-        .build()
+public class MyFeatureBundle implements GuiceyBundle {
+
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {           
+        bootstrap
+            .disableModules(CoreModule.class)
+            .modules(new CustomizedCoreModule());     
+    }      
+}      
 ```
 
-But it's better to register it through default implementation `DefaultBundleLookup`, which performs composition 
-of multiple lookup implementations and logs resolved bundles to console.
+!!! note
+    It's not the best example: of course it's simpler to use [binding override](guice/override.md)
+    to override single service. But it's just to demonstrate the idea (it could be repalced
+    extension or fixed installer). 
+    
+    Bundles can't disable other bundles (because target bundle could be already processed at this point).   
 
-```java
-bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
-        .bundleLookup(new DefaultBundleLookup().addLookup(new CustomBundleLookup()))
-        .build()
-```
+### Options
 
-To override list of default lookups:
-
-```java
-bootstrap.addBundle(GuiceBundle.<TestConfiguration>builder()
-        .bundleLookup(new DefaultBundleLookup(new ServiceLoaderBundleLookup(), new CustomBundleLookup()))
-        .build()
-```
-
-Here two lookup mechanisms registered (property lookup is not registered and will not be implicitly added).
-
-## Options
-
-[Options](options.md) could be used in guicey bundes:
+Bundle could use guicey [options mechanism](options.md) to access guicey option values:
 
 ```java
 public class MyBundle implements GuiceyBundle {
@@ -257,48 +192,34 @@ public class MyBundle implements GuiceyBundle {
 
 Or it could be some [custom options](options.md#custom-options) usage.
 
-## Apply modifications
-
-Bundles could not only register new items, but also disable other.
-
-```java
-bootstrap
-    .disableInstallers(..)
-    .disableExtensions(..)
-    .disableModules()
-```
-
 !!! note
-    Bundles can't disable other bundles (because target bundle could be already processed at this point).
+    Option values are set only in main `GuiceBundle` and so all bundles see the same option values
+    (no one can change values after). 
 
-This could be used to register different versions instead of disabled items.
+### Configuration access
 
-Also, bundle could directly [override guice bindings](configuration.md#override-guice-bindings) with:
+Bundle could access not only direct dropwizard `Configuration`, but also individual values  
+thanks to [yaml values](yaml-values.md) introspection.
 
-```java
-bootstrap
-    .modulesOverride(new OverridingModule())
-```
+#### Unique sub config
 
-## Configuration access
+When creating re-usable bundle it is often required to access yaml configuration data. 
+Usually this is solved by some "configuration lookups" like in [dropwizard-views](https://www.dropwizard.io/en/stable/manual/views.html) 
 
-### Unique feature config
-
-When working with re-usable bundles, it could be handy to rely on unique configuration 
-object:
+Guicey allows you to obtain sub-configuration object directly:
 
 ```java
 public class XFeatureBundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
-        XFeatureConfig conf = bootstrap.configuration(XFeatureConfig.class);
+    public void run(GuiceyEnvironment environment) throws Exception {
+        XFeatureConfig environment = bootstrap.configuration(XFeatureConfig.class);
         ...
     }
 }
-``` 
+```   
 
 Note that this bundle doesn't known exact type of user configuration, it just 
-assumes that XFeatureConfig is declared somewhere in configuration (on any level)
+assumes that `XFeatureConfig` is declared somewhere in configuration (on any level)
 just once. For example:
 
 ```java
@@ -312,12 +233,16 @@ public class MyConfig extends Configuration {
 ```
 
 !!! important
+    Your sub configuration object must appear only once within user configuration.
+    
     Object uniqueness checked by exact type match, so if configuration also 
-    contains some extending class (`XFeatureConfigExt`) it will be different unique config. 
+    contains some extending class (`#!java XFeatureConfigExt extends XFeatureConfig`) 
+    it will be different unique config. 
 
-### Access by path
+#### Access by path
 
-When you are not sure that configuration is unique, you can rely on exact path definition:
+When you are not sure that configuration is unique, you can rely on exact path definition
+(of required sub configuration):
 
 ```java
 public class XFeatureBundle implements GuiceyBundle {
@@ -328,8 +253,8 @@ public class XFeatureBundle implements GuiceyBundle {
     } 
         
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
-        XFeatureConfig conf = bootstrap.configuration(path);
+    public void run(GuiceyEnvironment environment) throws Exception {
+        XFeatureConfig conf = environment.configuration(path);
         ...
     }
 }
@@ -359,10 +284,7 @@ public class MyConfig extends Configuration {
 }
 ```
 
-!!! warning
-    Remember that you can't register 2 bundles with the same class
-
-### Multiple configs
+#### Multiple configs
 
 In case, when multiple config objects could be declared in user configuration,
 you can access all of them: 
@@ -370,8 +292,8 @@ you can access all of them:
 ```java
 public class XFeatureBundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
-        List<XFeatureConfig> confs = configurations(XFeatureConfig.class);
+    public void run(GuiceyEnvironment environment) throws Exception {
+        List<XFeatureConfig> confs = environment.configurations(XFeatureConfig.class);
         ...
     }
 }
@@ -395,9 +317,9 @@ It wil return both objects: `[xfeature, xfeature2]`
 
 !!! important
     In contrast to unique configurations, this method returns all subclasses too.
-    So if there are `XFeatureConfigExt` declared somewhere it will also be returned.
+    So if there are `#!java XFeatureConfigExt extends XFeatureConfig` declared somewhere it will also be returned.
 
-### Custom configuration analysis
+#### Custom configuration analysis
 
 In all other cases (with more complex requirements) you can use `ConfigurationTree` object which
 represents introspected configuration paths.  
@@ -405,9 +327,9 @@ represents introspected configuration paths.
 ```java
 public class XFeatureBundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void run(GuiceyEnvironment environment) throws Exception {
          // get all properties of custom configuration (ignoring properties from base classes)
-        List<ConfigPath> paths = bootstrap.configurationTree()
+        List<ConfigPath> paths = environment.configurationTree()
                 .findAllRootPathsFrom(MyConfig.class);
     
         // search for not null values of marked (annotated) classes            
@@ -421,7 +343,256 @@ public class XFeatureBundle implements GuiceyBundle {
 }
 ```
 
-In this example, bundle search for properties declared directly in MyConfig configuration
+In this example, bundle search for properties declared directly in `MyConfig` configuration
 class with not null value and annotated (classes annotated, not properties!) with custom marker (`@MyMarker`).  
 
-See introspected configuration [structure description](guice/bindings.md#introspected-configuration)
+See introspected configuration [structure description](yaml-values.md#introspected-configuration).
+
+### Shared state
+
+Guicey maintains special shared state object useful for storing application-wide data.
+
+!!! warning
+    Yes, any shared state is a "hack". Normally, you should avoid using it. 
+    Guicey provides this ability to unify all such current and future hacks:
+    so if you need to communicate between bundles - you don't need to reinvent the wheel
+    and don't have additional problems in tests (due to leaking states).
+    
+
+For example, it is used by [spa bundle](../extras/spa.md) to share list of registered
+application names between all spa bundle instances and so be able to prevent duplicate name registration.
+
+[Server pages bundle](../extras/gsp.md) use shared state to maintain global configuration
+and allow application bundles communication with global views bundle. 
+
+#### Equal communication scenario
+
+Case when multiple (equal) bundles need to communicate. In this case first initialized
+bundle init shared state and others simply use it.
+
+```java
+public class EqualBundle implements GuiceyBundle {
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {
+        // either obtain already shared object or share new object                                                             
+        SomeState state = bootstrap.sharedState(EqualBundle, () -> new SomeState());
+        ...
+    }
+}
+```     
+
+#### Parent-child scenario
+
+Case when there is one global bundle, which must initialize some global state and child 
+bundles, which use or appends to this global state.
+
+```java
+public class GlobalBundle implements GuiceyBundle {
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {
+        // share global state object
+        bootstrap.shareState(GlobalBundle, new GlobalState());
+    }        
+}    
+
+public class ChildBundle implements GuiceyBundle {
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {
+        // access shared object or fail when not found
+        GlobalState state = environment.sharedStateOrFail(GlobalBundle, 
+                "Failed to obtain global state - check if global bundle registered");
+    }        
+}
+``` 
+
+## Bundle lookup
+
+Bundle lookup mechanism used to lookup guicey bundles in various sources. It may be used to activate specific bundles
+in tests (e.g. [HK2 scope control bundle](hk2.md#hk2-scope-debug)) or to install 3rd party extensions from classpath.
+
+Bundle lookup is equivalent to registering bundle directly using builder `bundles` method.
+
+!!! note
+    Bundles from lookup will always be registered after all manually registered bundles
+    so you can use [de-cuplication](deduplication.md) to accept manual instance and deny lookup. 
+
+By default, two lookup mechanisms active: [by property](#system-property-lookup) and 
+[with service loader](#service-loader-lookup). 
+
+All found bundles are logged into console:
+
+``` 
+INFO  [2019-10-17 14:50:14,304] ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup: guicey bundles lookup =
+
+    ru.vyarus.dropwizard.guice.diagnostic.support.bundle.LookupBundle
+```
+
+You can disable default lookups with:
+
+```java
+bootstrap.addBundle(GuiceBundle.builder()
+        .disableBundleLookup()
+        .build()
+```
+
+### System property lookup
+
+System property `guicey.bundles` could contain comma separated list of guicey bundle classes. These bundles 
+must have no-args constructor.
+
+For example, activate HK2 debug bundle for tests:
+
+```
+java ... -Dguicey.bundles=ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
+```
+
+Alternatively, system property may be set in code:
+
+```java
+PropertyBundleLookup.enableBundles(HK2DebugBundle.class)
+```
+
+### Service loader lookup
+
+Using default java [ServiceLoader](https://docs.oracle.com/javase/7/docs/api/java/util/ServiceLoader.html) 
+mechanism, loads all `GuiceyBundle` services.
+
+This is useful for automatically install 3rd party extensions (additional installers, extensions, guice modules).
+
+!!! note
+    This could be used to install bundle with default configuration: with proper [de-duplication](deduplication.md)
+    if user register custom bundle version, it will be used and bundle from lookup will be ignored.
+     
+    For example, [eventbus](../extras/eventbus.md) bundle works like this
+
+3rd party jar must contain services file:
+
+```
+META-INF/services/ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
+```
+
+File contain one or more (per line) GuiceyBundle implementations. E.g.
+
+```
+com.foo.Bundle1
+com.foo.Bundle2
+```
+
+Then Bundle1, Bundle2 would be loaded automatically on startup (would appear in logs).
+
+### Customizing lookup mechanism
+
+Custom bundle lookup must implement `GuiceyBundleLookup` interface:
+
+```java
+public class CustomBundleLookup implements GuiceyBundleLookup {
+
+    @Override
+    public List<GuiceyBundle> lookup() {
+        List<GuiceyBundle> bundles = Lists.newArrayList();
+        ...
+        return bundles;
+    }
+}
+```
+
+Custom lookup implementation may be registered through:
+
+```java
+bootstrap.addBundle(GuiceBundle.builder()
+        .bundleLookup(new CustomBundleLookup())
+        .build()
+```
+
+But it's better to register it through default implementation `DefaultBundleLookup`, which performs composition 
+of multiple lookup implementations and logs resolved bundles to console.
+
+```java
+bootstrap.addBundle(GuiceBundle.builder()
+        .bundleLookup(new DefaultBundleLookup().addLookup(new CustomBundleLookup()))
+        .build()
+```
+
+To override list of default lookups:
+
+```java
+bootstrap.addBundle(GuiceBundle.builder()
+        .bundleLookup(new DefaultBundleLookup(new ServiceLoaderBundleLookup(), new CustomBundleLookup()))
+        .build()
+```
+
+Here two lookup mechanisms registered (property lookup is not registered and will not be implicitly added).
+
+## Dropwizard bundles
+
+Dropwizard bundles can be used as before: be registered directly in `Bootstrap`.
+
+Guicey provides direct api for dropwizard bundles registration:
+
+```java
+GuiceBundle.builder()
+    .dropwizardBundles(new MyDwBundle())
+```
+
+and in bundles:
+
+```java
+public class MyBundle implements GuiceyBundle {
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {
+        bootstrap.dropwizardBundle(new MyDwBundle());
+    }
+}
+```    
+
+!!! note
+    The most common case is: extending some existing 3rd party integration (dropwizard bundle)
+    with guice bindings (or adding guicey installers for simplified usage). 
+    
+    ```java
+    public class XIntegratuionBundle implements GuiceyBundle {
+        @Override
+        public void initialize(GuiceyBootstrap bootstrap) {
+            bootstrap
+                .dropwizardBundle(new DropwizardXBundle());
+                .modules(new XBindingsModule())
+        }
+    }
+    ```     
+    
+    [JDBI bundle](../extras/jdbi3.md) could be king of such example: it does not use dropwizard
+    bundle, but it defines additional extension types to simplify configuration. 
+
+When you register dropwizard bundles through guicey api:
+
+* Bundle (and all transitive bundles) appear in [report](diagnostic/configuration-report.md)
+* Bundle itself or any transitive bundle could be [disabled](disables.md#disable-dropwizard-bundles)
+* [De-duplication mechanism](deduplication.md#dropwizard-bundles) will work for bundle and it's transitive bundles
+
+So, for example, if you have "common bundle" problem (when 2 bundles register some common bundle and so you can use these
+bundles together) it could be solved just by registering bundle throug guicey api (and [proper configuration](deduplication.md#unique-items))
+
+### Transitive bundles tracking
+
+Transitive dropwizard bundles are tracked with a `Bootstrap` object proxy 
+(so guicey could intercept `addBundle` call).
+
+If you have problems with it, you can switch off transitive bundles tracking:
+
+```java
+.option(GuiceyOptions.TrackDropwizardBundles, false)
+```
+
+If you don't want to switch off tracking, but still have problems registering some bundle,
+you can always register it directly in bootstrap object:
+
+```java
+public class MyBundle implements GuiceyBundle {
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {
+        bootstrap.bootstrap().addBundle(new MyDwBundle());
+    }
+}
+```
+
+`bootstrap.bootstrap()` - is a raw bootstrap (not a proxy).

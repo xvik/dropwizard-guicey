@@ -27,7 +27,7 @@ during development. All reports may be enabled on main guice bundle:
 
 `#!java .strictScopeControl()`
 :   In case of doubts about extension owner (guice or HK2) and suspicious for duplicate instantiation, 
-    you can enable strict control which will throw exception in case of wrong owner.   
+    you can enable [strict control](../hk2.md#hk2-scope-debug) which will throw exception in case of wrong owner.   
 
 ## Diagnostic hook
 
