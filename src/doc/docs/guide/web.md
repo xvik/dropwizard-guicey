@@ -84,6 +84,15 @@ Extension [recognized](../installers/listener.md) by `@WebListener` annotation.
     * Filter may be applied to exact servlet(s) (`#!java @WebFilter(servletNames = "servletName")`)
     * Request, servlet context or session [listeners installation](../installers/listener.md)
 
+If you don't want to use web installers or have problems with it (e.g. because they use `javax.servlet` annotations)
+you can disable all of them at once by disabling bundle:
+
+```java
+GuiceBundle.builder()
+    .disableBindles(WebInstallersBundle.class)
+    ...
+```
+
 ### Manual registration
     
 Alternatively, you can always register servlet or filter manually with dropwizard api:
@@ -102,16 +111,6 @@ public class App extends Application {
     }
 }
 ```    
-
-!!! tip
-    If you don't want to use web installers or have problems with it (e.g. because they use `javax.servlet` annotations)
-    you can disable all of them at once by disabling bundle:
-    
-    ```java
-    GuiceBundle.builder()
-        .disableBindles(WebInstallersBundle.class)
-        ...
-    ```
 
 ## Resources
 

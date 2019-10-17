@@ -94,6 +94,7 @@ As example, see [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/tre
 ### Options
 
 Installer could also use [guicey options](options.md): 
+
 * it must implement `WithOptions` marker interface
 * or extend form `InstallerOptionsSupport` base class (implemented boilerplate)
 

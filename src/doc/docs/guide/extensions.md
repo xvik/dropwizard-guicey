@@ -188,8 +188,7 @@ of manual `#!java bind(MyService.class).asEagerSingleton()`.
 
 ## More
 
-!!! note
-    This was only subset of supported extensions - see [installers](../installers/resource.md) 
-    section.
-         
-    You can add additional extensions support with a [custom installer](installers.md#writing-custom-installer).
+This was only subset of supported extensions - see [installers](../installers/resource.md) 
+section.
+     
+You can add additional extensions support with a [custom installer](installers.md#writing-custom-installer).
