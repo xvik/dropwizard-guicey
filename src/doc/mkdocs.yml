@@ -67,6 +67,7 @@ nav:
       - Configuration_old: guide/configuration.md
       - Extensions: guide/extensions.md
       - Web: guide/web.md
+      - Extra integrations: guide/modules.md
       - Integration lifecycle: guide/lifecycle.md
       - Yaml values: guide/yaml-values.md
       - Classpath scan: guide/scan.md
@@ -110,7 +111,7 @@ nav:
       - Web servlet: installers/servlet.md
       - Web filter: installers/filter.md
       - Web listener: installers/listener.md
-    - Extensions:
+    - Modules:
       - Admin REST: extras/admin-rest.md
       - BOM: extras/bom.md
       - Lifecycle annotations: extras/lifecycle-annotations.md
