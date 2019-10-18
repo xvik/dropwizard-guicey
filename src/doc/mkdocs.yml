@@ -96,6 +96,7 @@ nav:
       - Disables: guide/disables.md
       - De-duplication: guide/deduplication.md
       - Hooks: guide/hooks.md
+      - Shared state: guide/shared.md
       - Test: guide/test.md
       - HK2: guide/hk2.md
     - Installers:
