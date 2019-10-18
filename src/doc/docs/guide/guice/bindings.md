@@ -239,7 +239,7 @@ Request-scoped bindings:
 By default, `GuiceFilter` is enabled on both contexts (admin and main). So you can inject
 request and response objects and use under filter, servlet or resources calls (guice filter wraps all web interactions).
 
-If you disable guice filter with [.noGuiceFilter()](../configuration.md#servletmodule) then
+If you disable guice filter with [.noGuiceFilter()](servletmodule.md) then
 guicey will bridge objects from HK2 context:
 
 * `javax.servlet.http.HttpServletRequest`
@@ -298,5 +298,5 @@ But there are three exceptions:
 * If extension is annotated with`@LazyBinding`
 
 As injector is created in `Stage.PRODUCTION`, all singleton extensions will be instantiated
-in time of injector startup (injector stage could be changed in [main bundle](../configuration2.md#main-bundle)).
+in time of injector startup (injector stage could be changed in [main bundle](../configuration.md#main-bundle)).
        

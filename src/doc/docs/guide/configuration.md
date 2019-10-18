@@ -1,398 +1,364 @@
-
 # Configuration
 
-Builder `GuiceBundle.builder()` contains shortcuts for all available features, so you can always find required function 
-by looking at available methods and reading javadoc.
+Guicey main dropwizard bundle must be registered:
 
-!!! note "Configuration subjects (vocabulary)"
-    * Installers - used to recognize and install extension (usually encapsulates integration logic: get extension instance from guice injector and register in dropwizard (or jersey, HK2, whatever))
-    * Extensions - actual application parts, written by you (resources, tasks, health checks, servlets etc)
-    * Guice modules
-    * Guicey bundles - groups installers, extensions, gucie modules and other guicey bundles (represent reusable logic or 
-    3rd party integrations; very similar to dropwizard bundles)
-    * Options - general mechanism for low level configurations (development time triggers)
-    * Commands - dropwizard commands (mentioned because of ability for automatic registration)
+```java
+@Override
+public void initialize(Bootstrap<Configuration> bootstrap) {
+    bootstrap.addBundle(GuiceBundle.builder() 
+            // <configuration methods>           
+            .build());
+}
+```
 
-!!! warning
-    Configured bundles, modules, installers and extensions are checked for duplicates using *class type*. Duplicate configurations will be simply ignored.
-    For modules and bundles, which configured using instances, duplicates removes means that if two instances of the same type registered, then second instance will
-    be ignored. For example, in case of `.bundles(new MyBundle("one"), new MyBundle("two))`
-    the second bundle will be ignored becuause bundle with the same type is already registered 
-    (no matter that constructor parameters are different - only type matters).
- 
-Configuration process is recorded and may be observed with by [diagnostic info](diagnostic/configuration-report.md),
-so there is always a way to understand what and how was configured.
+Guicey could be configured through:
+
+* [Main (dropwizard) bundle](#main-bundle)
+* [Bundles](#guicey-bundle)
+* [Hooks](#hooks)
+
+## Main bundle
 
 !!! tip
-    You can see used configuration objects by enabling [detailed lifecycle logs](events.md#debug):
-    ```java
-    bundle.printLifecyclePhasesDetailed()
-    ```
+    Bundle builder contains shortcuts for all guicey features, so required function may be found only by looking at available methods (and reading javadoc).       
 
-## Auto configuration
+### Configuration items
 
-Auto configuration enables [classpath scan](scan.md) to search for extensions and custom installers. 
-Without auto scan, all extensions (resource, managed, health check etc.) must be registered [manually](#extensions) (manual mode).
+`#!java .enableAutoConfig(String... basePackages)`
+:   Enable classpath scan for automatic extensions registration, custom installers search and commands search (if enabled) 
+   
+`#!java .modules(Module... modules)`
+:   Guice modules registration
 
-```java
-.enableAutoConfig("com.mycompany.app")
-```
+    !!! note ""
+        Here guice modules are created in initialization phase, when `Configuration` and `Environment` are
+        not yet available. If they are required for module either use "Aware" interfaces or register
+        module in `GuiceyBundle`'s run method (under run phase).    
 
-or multiple packages
+`#!java .modulesOverride(Module... modules)`
+:   Overriding registered guice modules bindings (using guice `Modules.override()` api)
+    
+    !!! warning ""
+        Extensions are not recognized in overriding modules (intentionally)!
 
-```java
-.enableAutoConfig("com.mycompany.app.resources", "com.mycompany.app.staff")
-```
+`#!java .installers(Class<? extends FeatureInstaller>... installers)`
+:   Guicey extension installers registration. Required if you have custom installers or
+    to specify installers after disabling all default installers: `#!java .noDefaultInstallers()`
+    
+    !!! note ""
+        Custom installers are registered automatically when classpath scan is enabled.  
 
-### Commands search
+`#!java .extensions(Class<?>... extensionClasses)`  
+:   Manual extensions registration. May be used together with classpath scan and binding extensions
 
-In auto configuration mode guicey could also [search and install](commands.md#automatic-installation) dropwiard commands (register in bootstrap object):
+`#!java .bundles(GuiceyBundle... bundles)` 
+:   Guicey bundles registration. 
 
-```java
-.searchCommands()
-```
+`#!java .bundleLookup(GuiceyBundleLookup bundleLookup)`
+:   Custom lookup mechanism for guicey bundles. By default lookup by system property and
+    ServiceLoader are enabled. To disable all lookups use: `#!java .disableBundleLookup()`
 
-By default commands scan is disabled because it may be confusing. Besides, it's not often needed.
+`#!java .dropwizardBundles(ConfiguredBundle... bundles)`
+:   Shortcut for dropwizard bundles registration. This way guicey could apply disable and de-duplication rules
+    to registered bundles (and, also, registered bundles appear in reports)
 
+`#!java .searchCommands()`
+:   Search and register custom dropwizard commands. Requires enabled classpath scan   
 
-## Extensions
+### Disable items
 
-All features installed with guicey installers are called extensions. When auto configuration is enabled, extensions are discovered
-automatically. Without auto configuration (manual mode) all extensions must be specified manually.
+Registered configuration items could be disabled. This is mostly useful for tests where
+entire application parts could be disabled and replaced (e.g. with mocks) this way.
+Could be also useful to "hack" third party items.
 
-```java
-.extensions(MyResource1.class, MyHealthCheck.class)
-```
+`#!java .disableInstallers(Class<? extends FeatureInstaller>... installers)`  
+`#!java .disableExtensions(Class<?>... extensions)`  
+`#!java .disableModules(Class<? extends Module>... modules)`
+:   !!! warning ""
+        Affects transitive guice modules
+  
+`#!java .disableBundles(Class<? extends GuiceyBundle>... bundles)`   
+`#!java .disableDropwizardBundles(Class<? extends ConfiguredBundle>... bundles)`
+:   !!! warning ""
+        Affects only dropwizard bundles registered through guicey api and their transitive bundles
+          
+`#!java .disable(Predicate<ItemInfo>... predicates)`  
+:   Custom disable predicate useful to disable groups of items (by some sign)
 
-Auto configuration may be used together with manual definition (for example, manually registered extension could be unreachable for
-classpath scan).
+### Items de-duplication
 
-!!! warning ""
-    Each extension could be installed only by one installer: if multiple installers could recognize extension, 
-    only one of them will install it (first one according to priority).
+Guiey detects instances of the same type (bundles, modules). By default, two instances 
+considered as duplicates if they are equal, so duplicates could be controlled with proper 
+equals method implementation. When it's not possible, custom de-duplication implementation could be used.
 
 !!! tip
-    Any extension could be disabled with `.disableExtension(Extension.class)` 
-    (may be useful to disable not needed extension from 3rd party bundle)
+    Special base classes are available with correct equals implementations:
+    `UniqueModule` (for guice modules) and `UniqueGuiceyBundle` (for bundles).
 
-### Disable extensions
+`#!java .duplicateConfigDetector(DuplicateConfigDetector detector)`
+:   !!! note ""
+        Special implementation provided to replicate legacy guicey behaviour "one instance per class":
+        `#!java duplicateConfigDetector(new LegacyModeDuplicatesDetector())`
+              
+`#!java .uniqueItems(Class<?>... configurationItems)`
+:   Register special de-duplication implementation which will allow only one instance of provided types. 
 
-You can disable extensions (even if it's not registered)
 
-```java
-.disableExtensions(ExtensionOne.class, ExtensionTwo.class)
-```
+### Options
 
-!!! tip
-    This may be used when classpath scanner detected class you don't need to be installed
-    and you can't use `@InvisibleForScanner` annotation on it.
-
-Mostly useful for tests.
-
-## Installers
-
-Guicey come with pre-defined set of installers (for common extensions). But you can [write your own installers](installers.md#writing-custom-installer)
-(or use some 3rd party ones).
+Guicey generic options mechanism may be used for guicey (or other 3rd party bundles) fine-tuning.
 
 !!! note ""
-    Most installers implementations are very simple and easy to understand. Look installer source to better understand
-    how extensions work. In case when default installer does not fit your needs, it's not hard to replace installer 
-    with your custom version.
+    Guicey option enums: `GuiceyOptions` and `InstallersOptions` 
 
-```java
-.installers(MyExtensionInstaller.class, ThirdPartyExtensionInstaller.class)
-```
-
-!!! tip
-    In auto configuration mode, installers are also detected and installed automatically
-
-### Disable default installers
-
-You can disable all default installers:
-
-```java
-.noDefaultInstallers()
-```
-
-But note that in this case you must register at least one installer
-(it could be one of core installers) because otherwise no extensions could be installed.
-
-### Web installers
-
-Guicey has [advanced installers](web.md#web-installers) for standard servlet annotations (`@WebServlet`, `@WebFilter`, `@WebListener`).
-They are not enabled by default to avoid confusion: user may not expect guice support for these standard annotations.
-
-To enable web installers:
-
-```java
-.useWebInstallers()
-```
-
-### Disable installers
-
-You can disable installers (even if it's not registered)
-
-```java
-.disableInstallers(ManagedInstaller.class, ResourceInstaller.class)
-```
-
-Mostly useful for tests.
-
-### Availbale installers
-
-Special debug option could [print to console all available installers](diagnostic/configuration-report.md#installers-mode) (with registration sources):
-
-```java
-.printAvailableInstallers()
-```
-
-Use to quickly understand available features.
- 
-## Guice modules
-
-You can register one or more guice modules (including guice `ServletModule`s):
-
-```java
-.modules(new MyModule1(), new MyModule2())
-```
-
-If you have many modules try to group their installation inside your custom module in order
-to keep guice staff together.
-
-In some cases, it could be desired to use different instances of the same module:
-```java
-.modules(new ParametrizableModule("mod1"), new ParametrizableModule("mod2"))
-```
-This will not work (second instance will be dropped). In such cases do registrations in custom
-guice module:
-```java
-install(new ParametrizableModule("mod1"));
-install(new ParametrizableModule("mod2"));
-```
-
-### Disable guice modules
-
-You can disable guice modules (even if it's not registered)
-
-```java
-.disableInstallers(ModleOne.class, ModuleTwo.class)
-```
-
-!!! important
-    This will affect only modules directly registered in main bundle or guicey bundle
-    (modules installed inside guice module are not affected).
+`#!java .option(K option, Object value)`
+:   Set option value (override default)
     
-This is mostly useful for tests, but could be used to prevent some additional module 
-installation by 3rd party bundle (or may be used to override such module).
+`#!java .options(Map<Enum, Object> options)`
+:   Set multiple options at once (e.g. map system properties as option values)
 
-!!! tip
-    Note that you can also override some bindings (see below) instead of entire module override    
+#### GuiceyOptions
 
-### Override guice bindings
+!!! note
+    Some options are configured through main bundle shortcut methods and so they are not 
+    shown in the table below.
 
-Guice allows you to override any binding with `Modules.override()`. 
-With it you can override any service in context. Guicey provides direct shortcut 
-for using this feature. 
+Option | Type | Default |Description
+-----------|---|---|----
+BindConfigurationByPath | Boolean | true | [Introspect configuration](yaml-values.md) to be able to bind separate values
+TrackDropwizardBundles | Boolean | true | Recognize transitive dropwizard bundles (for bundles registered through guicey api)
+AnalyzeGuiceModules | Boolean | true | Extension recognition in guice bindings, transitive modules disable support
+GuiceFilterRegistration | `EnumSet<DispatcherType>` | [REQUEST] | Guice filter registration options
+UseHkBridge | Boolean | false | Activates HK2-guice bridge (bridge dependency must be avaiable in classpath)  
 
-Mostly, this is handful for tests, but could be used to override some service, 
-registered by 3rd party module (probably registered by some bundle).
+#### InstallersOptions
 
-Suppose we have 3rd party service with a bug, registered by 3rd party module:
+Option | Type | Default |Description
+-----------|---|---|----
+DenyServletRegistrationWithClash | Boolean | false | Throw error if `@WebServlet` annotated servlets clash with already registered servlets
+DenySessionListenersWithoutSession | Boolean | false | Throw error for registered `SessionListener` (annotated `@WebListener`) if sessions support not enabled (default)
+ForceSingletonForJerseyExtensions | Boolean | true | Force singleton scope for registered jersey extensions (resources, exception handlers etc) if no explicit scope declared
 
-```java
-public class XModule extends AbstractModule {
-    protected void configure() {
-        bind(XService.class).asEagerSingleton();
-        ...
-    }
-}
-```
+### Injector
 
-We can override it with fixed version:
+`#!java .injectorFactory(InjectorFactory injectorFactory)`
+:   Use custom injector factory implementation. May be useful for tests or for integration
+    of 3rd paty library (like governator)
+      
+`#!java .build(Stage stage)`
+:   Build bundle with custom guice stage (by default, `Production`) 
+  
+`#!java .build()`
+:   Build bundle with deafault guice stage
 
-```java
-public class FixXServiceModule extends AbstractModule {
-    protected void configure() {
-        // module with only one binding overriding original definition
-        bind(XService.class).to(FixedXService.class);        
-    }
-}
+### Lifecycle
 
-public class FixedXService extends XService {
-    ...
-} 
-```
+`#!java .listen(GuiceyLifecycleListener... listeners)`
+:   Listen for guicey lifecycle events
+  
+`#!java .noGuiceFilter()`
+:   Disable `GucieFilter` registration.
+    !!! danger ""
+        This will remove guice request and session scopes and also
+        it would become impossible to use `ServletModule`s
+          
+`#!java .strictScopeControl()`
+:   Explicitly detect when gucie bean is instantiated with HK2 and vice versa.
+    !!! note ""
+        Bean target container is defined with `@JerseyManaged` and `@GuiceManaged` annotations
+        or default (either guice or hk2 used as default (for jersey extensions))
+  
+`#!java .useHK2ForJerseyExtensions()`
+:   Use HK2 by default for jersey extensions (change default). With this `@GuiceManaged` annotation
+    may be used to override defual for bean.
+    !!! danger ""
+        Beans managed by HK2 can't use guice AOP, so AOP-based features will not work with such beans      
 
-```java
-bootstrap.addBundle(GuiceBundle.builder()
-            .modules(new XModule())
-            .modulesOverride(new FixXServiceModule())
-            .build())
-``` 
+!!! danger
+    In the next version guicey will get rid of HK2 and so all HK2 related options will be removed
+    (only guice will be used). Also, `.noGuiceFilter()` will be removed because request scope will be required.  
 
-Now all guice injector will use your service (`FixedXService`) instead of `XService`.
+### Diagnostic tools
 
-## Guicey bundles
+Guicey provide many bundled console reports to help with problems diagnostic (or to simply clarify how application works)
+during development, like:
 
-In essence, [guicey bundles](bundles.md) are the same as dropwizard bundles: used to install re-usable logic or 
-3rd party library integration.
-
-```java
-.bundles(new MyBundle(), new ThirdPartyBundle());
-```
-
-### Dropwizard bundles unification
-
-Guice bundles must implement interface (`GuiceyBundle`). Dropwizard bundle could implement it too. 
-This may be useful for [universal bundles](bundles.md#dropwizard-bundles-unification) when you can register something 
-in dropwizard bootstrap (or simply directly) and some features in guicey way (extensions).
-
-When:
-
-```java
-.configureFromDropwizardBundles()
-```
-
-guicey checks registered dropwizard bundles if they are also `GuiceyBundle` and register them as guicey bundles.
-
-### Bundle lookup
-
-[Bundle lookup](bundles.md#bundle-lookup) mechanism provides support for indirect guicey bundles installation.
-Default lookup mechanism allows using service loader (plug-n-play bundles) or system property (test/diagnostic bundles). 
-
-Custom implementation could be specified:
-
-```java
-.bundleLookup(new MyBundleLookupImpl())
-```
-
-Shortcut to disable default bundle lookup:
-
-```java
-.disableBundleLookup()
-```
-
-### Disable bundles
-
-Guicey bundles could be disabled only in root bundle. Bundles can't disable other bundles.  
-
-```java
-.disableBundles(MyBundle.class)
-```
-
-This is mostly useful for tests, but could also be used to disable some not required transitive bundle, installed by
-3rd party bundle.
-
-## Options
-
-[Options](options.md) are used for development time configurations (test specific triggers or low level configurations).
-Guicey option enums: `GuiceyOptions` and `InstallersOptions`
-
-```java
-.option(GuiceyOptions.InjectorStage, Stage.DEVELOPMENT)
-```
-
-!!! tip
-    Options look better with static import: `#!java .option(InjectorStage, DEVELOPMENT)`
-
-[Options mapper](options.md#options-lookup) could be used to map option value 
-from system properties, environment variables or simple strings (basic type conversions supported):
-
-```java
-.options(new OptionsMapper()
-                .prop("myprop", Myoptions.SomeOption)
-                .env("STAGE", GuiceyOptions.InjectorStage)
-                .string("property value", Myoptions.SomeOtherOption)
-                .map())                
+```java 
+.printDiagnosticInfo()
 ```  
 
-## Disable by predicate
+See [diagnostic section](diagnostic/diagnostic-tools.md) for a full list of available reports.
 
-There is also a generic disable method using predicate. With it you can disable
-items (bundles, modules, installers, extensions) by package or by installation bundle
-or some other custom condition (e.g. introduce your disabling annotation and handle it with predicate).
+### Hooks-related
 
-Supposed to be used in integration tests, but could be used directly too in specific cases.
+`#!java .hookAlias(String name, Class<? extends GuiceyConfigurationHook> hook)`
+:   Hook alias registration for simplified usage (various diagnostic tools quick enabling with a system property)
+   
+`#!java .withSharedState(Consumer<SharedConfigurationState> stateAction)` 
+:   This method is mainly useful for hooks, becase it's the only way to access application
+    shared state from [hook](#hooks).
 
-```java
-import static ru.vyarus.dropwizard.guice.module.context.Disables.*
+## Guicey bundle
 
-.disable(inPackage("com.foo.feature", "com.foo.feature2"));
-```
+`GuiceyBundle`s are like dropwizard bundles, but with greater abilities. Supposed to be used instead of 
+dropwizard bundles. Bundles are registered either directly (in main bundle or other guicey bundle)
+ or resolved by bundles lookup.
 
-Disable all extensions lying in package (or subpackage). It could be extension, bundle, installer, guice module.
-If you use package by feature approach then you can easily switch off entire features in tests.
-
-```java
-import static ru.vyarus.dropwizard.guice.module.context.Disables.*
-
-.disable(installer()
-         .and(registeredBy(Application.class))
-         .and(type(SomeInstallerType.class).negate());
-```
-
-Disable all installers, directly registered in main bundle except `SomeInstallerType`
+### Initialization
 
 ```java
-import static ru.vyarus.dropwizard.guice.module.context.Disables.*
+public class MyBundle implements GuiceyBundle {
+       
+    @Override
+    public void initialize(GuiceyBootstrap bootstrap) {
+        ...
+    }      
+}
+```   
 
-.disable(type(MyExtension.class,
-         MyInstaller.class,
-         MyBundle.class,
-         MyModule.class));
-```
+Bundle initialization share many methods in common with [main guice bundle](#main-bundle):
 
-Simply disable items by type.
+`#!java .modules(Module... modules)`  
+`#!java .modulesOverride(Module... modules)`   
+`#!java .installers(Class<? extends FeatureInstaller>... installers)`   
+`#!java .extensions(Class<?>... extensionClasses)`     
+`#!java .bundles(GuiceyBundle... bundles)`      
+`#!java .dropwizardBundles(ConfiguredBundle... bundles)`
+  
+`#!java .disableInstallers(Class<? extends FeatureInstaller>... installers)`  
+`#!java .disableExtensions(Class<?>... extensions)`  
+`#!java .disableModules(Class<? extends Module>... modules)`
 
-The condition is java `Predicate`. Use `Predicate#and(Predicate)`, `Predicate#or(Predicate)`
-and `Predicate#negate()` to compose complex conditions from simple ones.
+!!! note ""
+    No disable for bundles because at this moment some bundles were already executed and so 
+    real state could be inconsistent with configuration (and highly depend on processing order). 
 
-Most common predicates could be build with `ru.vyarus.dropwizard.guice.module.context.Disables`
-utility (examples above).
+`#!java .listen(GuiceyLifecycleListener... listeners)`
+:   !!! warning ""
+        Listener registered in bundle will "hear" only events starting with `GuiceyLifecycle#BundlesInitialized` 
 
-## Guice
+Shortcuts:
 
-### Stage
+`#!java .bootstrap()`   
+`#!java .application()`   
 
-Guice stage cold be provided in:
+Option value access:
+
+`#!java .option(T option)`  
+:   !!! warning ""
+        Bundle can't declare option value because it would make options state not predictable
+        (highly dependent on initialization order)  
+
+Shared state access:
+
+`#!java .shareState(Class<?> key, Object value)`
+:   Declare shared state (primary module scenario)
+
+`#!java .sharedState(Class<?> key, Supplier<T> defaultValue)`
+:   Get or init shared state (equal bundles scenario)
+
+`#!java .sharedStateOrFail(Class<?> key, String message, Object... args)`
+:   Shortcut to get shared state or immediately fail if not declared    
+
+### Run
 
 ```java
-.build(Stage.DEVELOPMENT)
+public class MyBundle implements GuiceyBundle {
+       
+    @Override
+    public void run(GuiceyEnvironment environment) {
+        ...
+    }      
+}
 ```
 
-By default, PRODUCTION stage used.
+Almost everything is configured under initialization phase and so on run phase
+bundle allows only modules registration  
 
-### Injector 
+Shortcuts:
 
-[Custom guice injector factory](guice/injector.md#injector-factory) may be registered to customize injector creation. 
-For example, custom factory is required for [governator](../examples/governator.md) integration:
+`#!java .configuration()`  
+`#!java .environment()`   
+`#!java .application()`  
+`#!java .register(Object... items)`
+:   Shortcut for `#!java environment().jersey().register(Object)`
+
+`#!java .register(Class<?>... items)`
+:   Shortcut for `#!java environment().jersey().register(Class)`
+
+`#!java .manage(Managed managed)`
+:   Shortcut for `#!java environment().lifecycle().manage()`
+
+`#!java .listen(ServerLifecycleListener listener)`
+:   Shortcut for `#!java environment().lifecycle().addServerLifecycleListener()`
+
+`#!java .listen(LifeCycle.Listener listener)`
+:   Shortcut for `#!java environment().lifecycle().addLifeCycleListener()`
+
+Extended configuration access:
+
+`#!java .configuration(String yamlPath)`  
+`#!java .configuration(Class<T> type)`  
+`#!java .configurations(Class<T> type)`  
+`#!java .configurationTree()`   
+
+Modules registration:
+
+`#!java .modules(Module... modules)`  
+:   !!! note ""
+        Only here bundles may be created directly with configuration values
+        
+`#!java .modulesOverride(Module... modules)`
+
+Disables:
+
+`#!java .disableExtensions(final Class<?>... extensions)`  
+`#!java .disableModules(Class<? extends Module>... modules)`  
+ 
+Option value access:
+
+`#!java .option(T option)`
+
+Shared state:
+
+`#!java .sharedStateOrFail(Class<?> key, String message, Object... args)`  
+`#!java .sharedState(Class<?> key)`
+
+Guicey listeners:
+
+`#!java .listen(GuiceyLifecycleListener... listeners)`
+:   !!! warning ""
+        Listener registered in run phase will "hear" only events starting 
+        with `GuiceyLifecycle#BundlesStarted` 
+
+`#!java .onGuiceyStartup(GuiceyStartupListener listener)`
+:   Shortcut for manual configuration under run phase with available injector
+
+`#!java .onApplicationStartup(ApplicationStartupListener listener)`
+:   Shortcut for manual actions after complete application start (jetty started) 
+
+    !!! note ""
+        It is also called after guicey initialization in lightweight guicey tests
+
+## Hooks
+
+Guicey hooks are registered statically **before** main guice bundle registration:
 
 ```java
-.injectorFactory(new GovernatorInjectorFactory())
-```
+public class MyHook implements GuiceyConfigurationHook {
 
-Also, custom factory may be used to [override already overridden guice bindings in tests](test.md#overriding-overridden-beans)
+    @Override
+    public void configure(final GuiceBundle.Builder builder) {
+        builder.printDiagnosticInfo();
+    }
+}    
 
-### ServletModule
+// static registration
+new MyHook().register() 
+```        
 
-By default, guicey [registers](web.md#guice-servletmodule-support) `GuiceFilter` for both main and admin contexts to provide request scopes for both contexts and
-ability to use guice `ServletModule`s on main context.
+On execution hook receives *the same* builder as used in main `GuiceBundle`. 
+So hooks could configure *everything*.
 
-`GuiceFilter` is registered with REQUEST dispatcher type. If you need to use other types:
-
-```java
-.option(GuiceFilterRegistration, EnumSet.of(REQUEST, FORWARD))
-```
-
-If you [don't need servlet module support](web.md#disable-servletmodule-support) (and request scopes), guice filter installation could be disabled:
-
-```java
-.noGuiceFilter()
-```
-
-Servlet modules will be rejected in this case. Intended to be used when [web installers](web.md#web-installers) enabled.
-
-!!! note 
-    `HttpServletRequest` and `HttpServletResponse` objects will be available for injection only in scope of jersey resources call.
-
-
+Hooks are intended to be used in tests and to implement a pluggable diagnostic tools 
+activated with system property `-Dguicey.hooks=...` (as an example, see guicey `DiagnosticHook`).

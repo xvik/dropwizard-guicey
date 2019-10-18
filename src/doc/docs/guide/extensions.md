@@ -15,7 +15,7 @@ section for details.
 Declaration sources:
 
 * [Classpath scan](scan.md)
-* [Manual declaration](configuration2.md#configuration-items)
+* [Manual declaration](configuration.md#configuration-items)
 * [Guice binding](guice/module-analysis.md#extensions-recognition)
 
 !!! tip

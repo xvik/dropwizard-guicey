@@ -24,7 +24,7 @@ Installers are registered manually or detected by [classpath scan](scan.md).
 
 ## How it works
 
-All [registered manually extensions](configuration2.md#main-bundle), 
+All [registered manually extensions](configuration.md#main-bundle), 
 classes from [classpath scan](scan.md) and unqualified [guice bindings](guice/module-analysis.md#extensions-recognition)
 are recognized by registered installers:
 

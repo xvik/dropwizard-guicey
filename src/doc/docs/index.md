@@ -8,7 +8,7 @@
 
 ## Main features
 
-* Auto configuration from [classpath scan](guide/configuration.md#auto-configuration) and guice bindings.  
+* Auto configuration from [classpath scan](guide/scan.md) and guice bindings.  
 * [Yaml config values bindings](guide/guice/bindings.md#configuration-by-path) by path or unique sub objects. 
 * [Web](guide/web.md) (servlets, filters, listeners):
     - supports both contexts (main and admin)
@@ -18,10 +18,10 @@
 * Admin context [rest emulation](extras/admin-rest.md) 
 * [Test support](guide/test.md): custom junit and [spock](http://spockframework.org) extensions
 * Developer friendly: 
-    - core integrations [may be replaced](guide/configuration.md#disable-installers) (to better fit needs)
+    - core integrations [may be replaced](guide/disables.md#disable-installers) (to better fit needs)
     - rich api for developing [custom integrations](guide/installers.md#writing-custom-installer), [custom behaviours](guide/events.md#events) and [configuration modification](guide/configuration.md#guicey-configuration-hooks) 
     - out of the box support for plug-n-play plugins ([auto discoverable](guide/bundles.md#service-loader-lookup))
-    - self diagnostic tools ([configuration diagnostic report](guide/diagnostic/diagnostic-tools.md), [bindable configuration paths](guide/guice/bindings.md#configuration-bindings-report), [lifecycle stages](guide/configuration.md#lifecycle-events)) 
+    - self diagnostic tools ([configuration diagnostic report](guide/diagnostic/diagnostic-tools.md), [bindable configuration paths](guide/guice/bindings.md#configuration-bindings-report), [lifecycle stages](guide/events.md)) 
 
 ## How to use docs
 

@@ -20,7 +20,7 @@ simply disabled to avoid installation.
     It doesn't matter if item was already registered or not (in time of disabling). Item 
     may not be registered at all.
 
-Disables are available in [main bundle](configuration2.md#main-bundle) and in [guicey bundles](configuration2.md#guicey-bundle).
+Disables are available in [main bundle](configuration.md#main-bundle) and in [guicey bundles](configuration.md#guicey-bundle).
 
 !!! warning
     Disable is performed by class, so disabling modules and bundles disables all instances of tipe.
@@ -102,7 +102,7 @@ installation by 3rd party bundle (or to override such module).
 
 ## Disable bundles
 
-Guicey bundles could be disabled only in [main bundle](configuration2.md#main-bundle), because 
+Guicey bundles could be disabled only in [main bundle](configuration.md#main-bundle), because 
 bundle must be disabled *before* it's execution and transitive bundles are registered during 
 execution (so disable may appear too late)  
 

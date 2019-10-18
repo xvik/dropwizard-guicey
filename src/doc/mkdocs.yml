@@ -63,8 +63,7 @@ nav:
     - Getting started: getting-started.md
     - Concepts overview: concepts.md
     - User guide:
-      - Configuration: guide/configuration2.md
-      - Configuration_old: guide/configuration.md
+      - Configuration: guide/configuration.md
       - Extensions: guide/extensions.md
       - Web: guide/web.md
       - Extra integrations: guide/modules.md

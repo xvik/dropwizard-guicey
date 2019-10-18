@@ -18,12 +18,11 @@ Anyway, it is not always possible to hide integration details, especially if you
 ## Lifecycle
 
 * Dropwizard configuration phase (`~Application.initialize`)   
-    * Apply [configuration hooks](configuration.md#guicey-configuration-hooks)
+    * Apply [configuration hooks](hooks.md)
     * Guice bundle registered 
-    * Perform [classpath scan for commands](commands.md#automatic-installation) ([optional](configuration.md#commands-search))
+    * Perform [classpath scan for commands](commands.md#automatic-installation) ([optional](commands.md))
 * Dropwizard run phase (`~Application.run`)
     * Dropwizard runs bundles (guice bundle is one of them so guice initialization may be performed between other dropwizard bundles)
-    * Search guicey bundles in dropwizard bundles ([optional](configuration.md#dropwizard-bundles-unification)) 
     * [Lookup guicey bundles](bundles.md#bundle-lookup)   
     * Apply configuration from guicey bundles
     * **Injector creation** ([using factory](guice/injector.md#injector-factory))
@@ -32,7 +31,7 @@ Anyway, it is not always possible to hide integration details, especially if you
         * Scan for extensions (in auto configuration mode)
         * Register `GuiceFeature` in environment (jersey `Feature` which will trigger jersey side installations)
         * Apply [lazy jersey bindings](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/jersey/hk2/GuiceBindingsModule.java)
-        * Activate [guice servlet support](web.md), register GuiceFilter on admin and main contexts ([could be disabled](configuration.md#servletmodule))
+        * Activate [guice servlet support](web.md), register GuiceFilter on admin and main contexts ([could be disabled](guice/servletmodule.md#disable-servletmodule-support))
     * Injector created
         * Call installers to register extensions
     * Your application's `run` method executed. Injector is already available, so any guice bean could be [accessed](guice/injector.md)          
@@ -40,7 +39,7 @@ Anyway, it is not always possible to hide integration details, especially if you
     * [Managed beans](../installers/managed.md) started
     * **HK2 context creation** (jersey start)
         * `GuiceFeature` (registered earlier) called
-            * [Optionally](configuration.md#hk2-bridge) register [HK2-guice bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) (only guice to hk2 way to let hk2 managed beans inject guice beans)
+            * [Optionally](hk2.md#hk2-guice-bridge) register [HK2-guice bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) (only guice to hk2 way to let hk2 managed beans inject guice beans)
             * Run jersey specific installers ([resource](../installers/resource.md), [extension](../installers/jersey-ext.md))
 
 !!! note

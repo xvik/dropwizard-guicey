@@ -9,7 +9,7 @@ Test support require `io.dropwizard:dropwizard-testing:2.0.0` dependency.
 
 ### Configuration hooks
 
-Guicey provides [hooks mechanism](configuration.md#guicey-configuration-hooks) to be able to modify
+Guicey provides [hooks mechanism](hooks.md) to be able to modify
 application configuration in tests.
 
 Using hooks you can disable installers, extensions, guicey bundles  
@@ -42,17 +42,17 @@ There are special spock and junit extensions for hooks registrations.
 
 You can use hooks to disable all not needed features in test:
 
-* [installers](configuration.md#disable-installer) 
-* [extensions](configuration.md#disable-extensions) 
-* [guice modules](configuration.md#disable-guice-modules)
-* [guicey bundles](configuration.md#disable-bundles) 
+* [installers](disables.md#disable-installers) 
+* [extensions](disables.md#disable-extensions) 
+* [guice modules](disables.md#disable-guice-modules)
+* [guicey bundles](disables.md#disable-bundles) 
 
 This way you can isolate (as possible) some feature for testing. 
 
 The most helpful should be bundles disable (if you use bundles for features grouping)
 and guice modules.
 
-Use [predicate disabling](configuration.md#disable-by-predicate).
+Use [predicate disabling](disables.md#disable-by-predicate).
 
 !!! note
     It is supposed that disabling will be used instead of mocking - you simply remove what
@@ -272,7 +272,7 @@ If you use [spock framework](http://spockframework.org) you can use spock specif
 
 Both extensions allows using injections directly in specifications (like spock-guice).
 
-`@UseGuiceyConfiguration` extension could be used to apply [configuration hook](configuration.md#guicey-configuration-hooks) 
+`@UseGuiceyConfiguration` extension could be used to apply [configuration hook](hooks.md) 
 common for all tests
 
 ### Spock lifecycle hooks
@@ -497,7 +497,7 @@ class InjectionTest extends Specification {
 
 ## Overriding overridden beans
 
-Guicey provides [direct support for overriding guice bindings](configuration.md#override-guice-bindings),
+Guicey provides [direct support for overriding guice bindings](guice/override.md),
 so in most cases you don't need to do anything.
 
 But, if you use this to override application bindings need to override such bindings in test (again), then you

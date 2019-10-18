@@ -472,7 +472,7 @@ Markers used:
 
 * `LOOKUP` - bundle resolved with bundle lookup mechanism
 * `DW` - dropwizard bundle
-* `HOOK` - registered by [configuration hook](../configuration.md#guicey-configuration-hooks)
+* `HOOK` - registered by [configuration hook](../hooks.md)
 
 ### Installers and extensions
 
@@ -495,7 +495,7 @@ Markers used:
 * `SCAN` - item from classpath scan (even if extension or installer were registered manually also to indicate item presence in classpath scan)
 * `LAZY` - extensions annotated with `@LazyBinding`
 * `JERSEY` - extension annotated with `@JerseyManaged`
-* `HOOK` - registered by [configuration hook](../configuration.md#guicey-configuration-hooks)
+* `HOOK` - registered by [configuration hook](../hooks.md)
 * `BINDING` - extension recognized from guice binding
 
 ### Modules

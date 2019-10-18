@@ -36,8 +36,8 @@ It is assumed that state will be used not for simple values, but for shared conf
 
 ## Main bundle
 
-It is assumed that there should be no need to access shared state from [main bundle](configuration2.md#main-bundle).
-So [the only state-related method](configuration2.md#hooks-related) actually assumed to be used by [hooks](hooks.md):
+It is assumed that there should be no need to access shared state from [main bundle](configuration.md#main-bundle).
+So [the only state-related method](configuration.md#hooks-related) actually assumed to be used by [hooks](hooks.md):
  
 ```java
 static class XHook implements GuiceyConfigurationHook {
@@ -52,7 +52,7 @@ static class XHook implements GuiceyConfigurationHook {
 
 ## Guicey bundle
 
-Shared state is assumed to be used by bundles. Bundle provides special [shortcut methods](configuration2.md#guicey-bundle) 
+Shared state is assumed to be used by bundles. Bundle provides special [shortcut methods](configuration.md#guicey-bundle) 
 for accessing state. It is assumed that state is declared under initialization phase and
 could be accessed under both phases.
 

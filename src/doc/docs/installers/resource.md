@@ -128,11 +128,11 @@ public class MyResource {
 ## Jersey managed resource
 
 If resource class is annotated with `#!java @JerseyManaged` then jersey HK2 container will manage bean creation instead of guice. 
-Injection of guice managed beans [could still be possible](../guide/configuration.md#hk2-bridge) via registered [HK2-guice-bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html),
+Injection of guice managed beans [could still be possible](../guide/hk2.md#hk2-guice-bridge) via registered [HK2-guice-bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html),
 but guice aop features will not work.
 
 !!! note
-    You can manage resources with [HK2 by default](../guide/configuration.md#use-hk2-for-jersey-extensions),
+    You can manage resources with [HK2 by default](../guide/hk2.md#use-hk2-for-jersey-extensions),
     but this will also affect all [jersey extensions](jersey-ext.md)
 
 ```java

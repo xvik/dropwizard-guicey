@@ -1,7 +1,7 @@
 # Guicey bundles
 
 By analogy with dropwizard bundles, guicey has it's own `GuiceyBundle`. These bundles contains almost the same options as 
-main `GuiceBundle` [builder](configuration2.md#main-bundle). The main purpose is the same as dropwizard bundles: incapsulate logic by grouping installers, 
+main `GuiceBundle` [builder](configuration.md#main-bundle). The main purpose is the same as dropwizard bundles: incapsulate logic by grouping installers, 
 extensions and guice modules related to specific feature.
 
 !!! note
@@ -78,7 +78,7 @@ Even more examples are in [extensions modules](../extras/bom.md)
 
 ## Configuration
 
-See all [bundle configuration options](configuration2.md#guicey-bundle)
+See all [bundle configuration options](configuration.md#guicey-bundle)
 
 !!! note
     Almost all configurations appear under initialization phase only. This was done in order

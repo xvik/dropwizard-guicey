@@ -16,7 +16,7 @@ Detects  classes annotated with jersey `@javax.ws.rs.ext.Provider` annotation an
 
 !!! attention ""
     Extensions registered as **singletons**, when no explicit scope annotation is used.
-    Behaviour could be disabled with [option](../guide/configuration.md#options):
+    Behaviour could be disabled with [option](../guide/options.md):
     ```java
     .option(InstallerOptions.ForceSingletonForJerseyExtensions, false)
     ```   
@@ -30,7 +30,7 @@ Due to specifics of [HK2 integration](lifecycle.md), you may need to use:
 * `#!java @LazyBinding` to delay bean creation to time when all dependencies will be available 
 * `javax.inject.Provider` as universal workaround (to wrap not immediately available dependency).
 
-Or you can enable [HK2 management for jersey extensions by default](../guide/configuration.md#use-hk2-for-jersey-extensions).
+Or you can enable [HK2 management for jersey extensions by default](../guide/hk2.md#use-hk2-for-jersey-extensions).
 Note that this will affect [resources](resource.md) too and guice aop will not work on jersey extensions.
 
 ### Supplier

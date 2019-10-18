@@ -168,7 +168,7 @@ If you think that developer comfort worth more then small performance gain, then
 * You can use explicit scope annotations to change singleton scope (`@RequestScoped`, `@Prototype`)
 * Switch off forced singletons (`.option(InstallerOptions.ForceSingletonForJerseyExtensions, false)`)
 * Delegate some extensions or resources management to HK2 using `@HK2Managed`
-* Use [HK2 by default](guide/configuration.md#use-hk2-for-jersey-extensions) for jersey extensions
+* Use [HK2 by default](guide/hk2.md#use-hk2-for-jersey-extensions) for jersey extensions
 
 !!! warning 
     Guice AOP will not work on extensions managed by HK2        
@@ -431,7 +431,7 @@ bootstrap.addBundle(GuiceBundle.builder()
 ```
 
 !!! tip
-    You can even perform [mass disables by predicate](guide/configuration.md#disable-by-predicate). 
+    You can even perform [mass disables by predicate](guide/disables.md#disable-by-predicate). 
     For example, disable all installations (extensions, bundles etc) from package:
     ```java
     .disable(Disables.inPackage("some.package.here"))
@@ -540,7 +540,7 @@ registering dropwizard bundles through guicey api.
 ## Guice bindings overrides
 
 Guice allows you to override any binding using `Modules.override()`. 
-With it you can override any service in context. Guicey provides [direct shortcut for using this feature](guide/configuration.md#override-guice-bindings). 
+With it you can override any service in context. Guicey provides [direct shortcut for using this feature](guide/guice/override.md). 
 
 Mostly, this is handful for tests, but could be used to override some service, 
 registered by 3rd party module (probably registered by some bundle).
@@ -557,7 +557,7 @@ Other example is an ability of low level tuning for 3rd party bundles.
     and not intended to be changed later.
 
 * Options are [declared with enum](guide/options.md#custom-options) (each enum represents options group) with value type declaration to grant safety.
-* Option could be set only [in main bundle](guide/configuration.md#options) (in your application class)
+* Option could be set only [in main bundle](guide/options.md) (in your application class)
 * You can access options [anywhere](guide/options.md): guice module, guicey bundle, and in any guice service by injecting special service
 * Options report is included into [diagnostic report](guide/diagnostic/configuration-report.md) so you can see all option values.
 
@@ -571,7 +571,7 @@ jersey extensions are handled: with guice or with HK2. This is developer time de
 selected by developer (because it affects behaviour a lot). Thanks to generic mechanism other bundles could
 know what was chosen.
 
-HK2 usage is highly dependent on [HK2-guice-bridge](guide/configuration.md#hk2-bridge) presence and with option we can verify it:
+HK2 usage is highly dependent on [HK2-guice-bridge](guide/hk2.md#hk2-guice-bridge) presence and with option we can verify it:
 
 ```java
 Preconditions.checkState(options.get(GuiceyOptions.UseHkBridge), 

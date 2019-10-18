@@ -54,7 +54,7 @@ public class DiagnosticHook implements GuiceyConfigurationHook {
 
 !!! tip
     If provided hook doesn't cover all required reports, you can always make your own hook
-    and [register it's shortcut](../configuration2.md#hooks-related) for simplified usage 
+    and [register it's shortcut](../configuration.md#hooks-related) for simplified usage 
 
 ## Reports implementation
 
