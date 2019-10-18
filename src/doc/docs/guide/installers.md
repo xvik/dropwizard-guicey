@@ -1,19 +1,58 @@
 # Installers
 
-Installer is a core integration concept: every extension point has it's own installer. Installers used for both [auto scan](scan.md) and manual modes
-(the only difference is in manual mode classes specified manually).
-Installers itself are resolved using classpath scanning, so it's very easy to add custom installers (and possibly override default one by disabling it and registering alternative).
+Installer is a core integration concept: every extension point has it's own installer. 
+Installers are registered manually or detected by [classpath scan](scan.md).
 
-All default installers are registered by [CoreInstallersBundle](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/CoreInstallersBundle.java)
+## Default installers
+
+* [Rest resource](../installers/resource.md) 
+* [Dropwizard task](../installers/task.md) 
+* [Dropwizard managed object](../installers/managed.md) 
+* [Jetty lifecycle](../installers/lifecycle.md)  
+* [Health check](../installers/healthcheck.md) 
+* [Jersey extensions](../installers/jersey-ext.md)
+* [Jersey feature](../installers/jersey-feature.md) 
+* [@EagerSingleton](../installers/eager.md)
+* [Plugins support](../installers/plugin.md)
+* [Http servlet](../installers/servlet.md)
+* [Http filter](../installers/filter.md)
+* [Servlet context, request, session listener](../installers/listener.md)
+
+!!! tip
+    In real application more installers may be available due to 3rd party bundles.
+    Use [installers report](diagnostic/installers-report.md) to see all available installers. 
 
 ## How it works
 
-When installer recognize class, it binds it into guice `binder.bind(foundClass)` (or bind by installer if it [support binding](#writing-custom-installer)).
-But extensions annotated with `@LazyBinding` are not bound to guice context. This may be useful to [delay bean creation](lifecycle.md):
-by default, guice production stage will instantiate all registered beans.
+All [registered manually extensions](configuration2.md#main-bundle), 
+classes from [classpath scan](scan.md) and unqualified [guice bindings](guice/module-analysis.md#extensions-recognition)
+are recognized by registered installers:
 
-On run phase (after injector created) all found or manually provided extensions are installed by type or instantiated (`injector.getInstance(foundClass)`) and passed to installer 
-to register extension within dropwizard (installation type is defined by installer).
+```java
+public class FeatureInstaller{
+    boolean matches(Class<?> type);
+}
+```
+
+Detected extensions are bound to guice context either with default `binder.bind(foundClass)` or by installer itself
+(default binding is required to support guice `.requireExplicitBindings()` option).
+
+After injector creation, installers register extension in dropwizard (not necessary, but most often). 
+For example, installation of extension instance (obtained from injector `#!java injector.getInstance(foundClass)`):
+
+```java
+public interface InstanceInstaller<T> {    
+    void install(Environment environment, T instance);
+}
+``` 
+
+Jersey-related extensions are installed later, during jersey context startup:
+
+```java
+public interface JerseyInstaller<T> {
+    void install(AbstractBinder binder, Injector injector, Class<T> type);
+}
+```
 
 Installers are [ordered](ordering.md#installers-order).
 
@@ -23,14 +62,23 @@ Installers are [ordered](ordering.md#installers-order).
 
 ## Writing custom installer
 
-Installer should implement [FeatureInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/FeatureInstaller.java)
-interface. It will be automatically registered if auto scan is enabled. To register manually use `.installers()` bundle option.
+Just for example, suppose we have some scheduling framework and we want to detect extensions,
+implementing `ScheduledTask` class.
 
-Installer `matches` method implements feature detection logic. You can use `FeatureUtils` for type checks, because it's denies
-abstract classes. Method is called for classes found during scan to detect installable features and for classes directly specified
-with `.extensions()` bundle option to detect installer.
+First of all, installer must implement `FeatureInstaller` interface. Here extension detection must be implemented
 
-Three types of installation supported. Installer should implement one or more of these interfaces:
+```java
+public class ScheduledInstaller implements FeatureInstaller {
+     @Override
+    public boolean matches(final Class<?> type) {
+        return FeatureUtils.is(type, ScheduledTask.class);
+    }
+
+    // NOTE: report() method will describe later
+}  
+```
+
+Next, installer must register extension somehow. There may be different options:
 
 * `BindingInstaller` allows custom guice bindings. If installer doesn't implement this interface simple `bind(type)` will be called to register in guice.
 * `TypeInstaller` used for registration based on type (no instance created during installation).
@@ -47,21 +95,50 @@ In case of `BindingInstaller`, special hint will be passed and installer should 
     Installers are not guice beans! So injections can't be used inside them. 
     This is because installers also used during initialization phase and instantiated before injector creation.
 
-Example installer:
+For example, our installer would register extension instance into some scheduler framework:
 
 ```java
-public class CustomInstaller implements FeatureInstaller<CustomFeature> {
+public class ScheduledInstaller implements FeatureInstaller,
+                                           InstanceInstaller<ScheduledTask> {
+    ...    
+    
     @Override
-    public boolean matches(final Class<?> type) {
-        return FeatureUtils.is(type, CustomFeature.class);
-    }    
+    public void install(Environment environment, ScheduledTask instance) {
+        SchedulerFramework.registerTask(instance);
+    }   
 }
 ```
 
-Finds all CustomFeature derived classes and register them in guice (implicit registration - all classes matched by installer are registered in injector). Note that no installer interfaces were used, 
-because guice registration is enough.
+The last remaining part is reporting - we must see all installed beans in console:
 
-Now suppose CustomFeature is a base class for our jersey extensions. Then installer will be:
+```java
+public class ScheduledInstaller implements FeatureInstaller<ScheduledTask>,
+                                           InstanceInstaller<ScheduledTask> {
+    
+    private final Reporter reporter = 
+            new Reporter(ScheduledInstaller.class, "scheduled tasks =");
+    ...    
+    
+    @Override
+    public void install(Environment environment, ScheduledTask instance) {
+        SchedulerFramework.registerTask(instance);
+        // register for reporting
+        reporter.line("(%s)", FeatureUtils.getInstanceClass(instance).getName());
+    }   
+                          
+    @Override
+    public void report() {
+        reporter.report();    
+    }
+}
+```
+
+Report method [will be called automatically](#reporting) after all extensions installation.
+More complex installers may require special reporter (like jersey extensins installer). 
+
+
+Another example, suppose `CustomFeature` is a base class for our jersey extensions. 
+Then installer will be:
 
 ```java
 public class CustomInstaller implements FeatureInstaller<CustomFeature>, JerseyInstaller<CustomFeature> {
@@ -72,14 +149,19 @@ public class CustomInstaller implements FeatureInstaller<CustomFeature>, JerseyI
     
     @Override
     public void install(final AbstractBinder binder, final Class<CustomFeature> type) {
-        JerseyBinding.bindComponent(binder, type, false, false);
+        JerseyBinding.bindComponent(binder, type, false, false); 
+        ...
     }
     
     @Override
-    public void report() {
+    public void report() { 
+        ...
     }
 }
-```
+``` 
+
+Jersey extensions are more usually complex due to binding aspects (especially for native
+jersey extensions). But, hopefully you'll never need to do it yourself. 
 
 !!! tip
     For jersey installers see `AbstractJerseyInstaller` base class, containing common utilities.
@@ -87,7 +169,10 @@ public class CustomInstaller implements FeatureInstaller<CustomFeature>, JerseyI
 ### Ordering
 
 In order to support [ordering](ordering.md), installer must implement `Ordered` interface.
-If installer doesn't implement it extensions will not be sorted, even if extensions has `@Order` annotations. 
+
+!!! important
+    If installer doesn't implement `Ordering` extensions will not be sorted, 
+    even if extensions has `@Order` annotations. 
 
 As example, see [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ManagedInstaller.java)
 
