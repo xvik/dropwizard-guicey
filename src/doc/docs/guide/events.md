@@ -91,6 +91,34 @@ public class MyListener extends GuiceyLifecycleAdapter {
 }
 ```
 
+### De-duplication
+
+Event listeners are also support de-duplication to prevent unnecessary  duplicates usage
+(for example, two bundles may register one listener because they are not always used together).
+But it is **not the same mechanism** as configuration items de-duplication.
+
+Simply listeners are registered in the `LinkedHashSet` and so listeners could control de-duplication
+with a proper `equals` and `hashCode` implementations
+
+Many reports use this feature (because all of them are based on listeners). For example,
+[diagnostic report](diagnostic/configuration-report.md) use the following implementations:
+
+```java
+@Override
+public boolean equals(final Object obj) {
+    // allow only one instance with the same title
+    return obj instanceof ConfigurationDiagnostic
+            && reportTitle.equals(((ConfigurationDiagnostic) obj).reportTitle);
+}
+
+@Override
+public int hashCode() {
+    return reportTitle.hashCode();
+}
+```
+
+And with it, `.printDiagnosticInfo()` can be called multiple times and still only one report
+will be actually printed.
 
 ### Events hierarchy
 

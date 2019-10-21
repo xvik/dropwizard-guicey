@@ -198,7 +198,7 @@ utility (examples above).
 
 ## Reporting
 
-[Configuration diagnostic report](diagnostic/configuration-report.md) (`.printDiagnosticReport()`) 
+[Configuration diagnostic report](diagnostic/configuration-report.md) (`.printDiagnosticInfo()`) 
 shows all [disables and disabled](diagnostic/configuration-report.md#disables) items. 
 
 For example:

@@ -119,12 +119,12 @@
         * `DebugGuiceyLifecycle` listener renamed into `LifecycleDiagnostic`
         * Guicey reports (listeners) properly implement equals and hashcode in order to 
           use new deduplicatation mechanism and avoid reports duplication (for example,
-          if `.printDiagnosticReport()` would be called multiple times, only one report would be shown;
-          but still different configurations will be reported separately (e.g. list `.printDiagnosticReport()` and 
+          if `.printDiagnosticInfo()` would be called multiple times, only one report would be shown;
+          but still different configurations will be reported separately (e.g. list `.printDiagnosticInfo()` and 
           `.printAvailableInstallers()` which internally use one listener))
-    - Report all diagnostic reports as one log message in order to differentiate `.printDiagnosticReport()` 
+    - Report all diagnostic reports as one log message in order to differentiate `.printDiagnosticInfo()` 
         and `.printAvailableInstallers()` reports when both active      
-    - Diagnostic report changes (`.printDiagnosticReport()`):         
+    - Diagnostic report changes (`.printDiagnosticInfo()`):         
         * Show both dropwizard and guicey bundles together (dropwizard bundles marked with DW)
         * Always show "empty" bundles (bundles without sub registrations) - important for dw bundles
         * Add "-" before ignored or disabled items (to visually differentiate from accepted items)

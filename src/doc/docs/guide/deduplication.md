@@ -119,7 +119,7 @@ Old guicey "1 instance per class" behaviour could be recovered with bundled dete
 
 ## Reporting
 
-[Configuration diagnostic report](diagnostic/configuration-report.md) (`.printDiagnosticReport()`) 
+[Configuration diagnostic report](diagnostic/configuration-report.md) (`.printDiagnosticInfo()`) 
 shows all registered instances and ignored duplicates.
 
 For example, if we have module declared to be unique by constructor value:
@@ -146,7 +146,7 @@ If modules are registered like this:
 ```java
  GuiceBundle.builder()
     .modules(new VMod(1), new VMod(1), new VMod(2), new VMod(2))
-    .printDiagnosticReport()
+    .printDiagnosticInfo()
     .build()
 ```
 

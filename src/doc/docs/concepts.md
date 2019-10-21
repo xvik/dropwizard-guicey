@@ -628,8 +628,8 @@ As you have seen, real life configuration could be quite complex because you may
 bundles, bundles installing other bundles, many gucie modules. Also, some bundles
 may disable extensions, installers, guice modules (and some modules could even override bindings).
 
-During startup guicey tracks all performed configurations and you can even access this 
-information at runtime using `@Inject GuiceyConfigurationInfo info`.
+During startup guicey tracks all performed configurations and you can even access [this 
+information](guide/diagnostic/configuration-model.md) at runtime using `@Inject GuiceyConfigurationInfo info`.
 
 Out of the box, guicey could print all this into console, you just need to add:
 

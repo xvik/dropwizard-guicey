@@ -51,7 +51,7 @@ Before guicey perform all it's operations under dropwizard run phase. This makes
 bundles interoperability hard. But guicey should not limit dropwizard abilities and so now
 almost all configuration is performed under dropwizard's configuration phase.
 
-New guicey lifecycle:
+[New guicey lifecycle](../guide/lifecycle.md):
 
 * Dropwizard bundles are resolved and initialized under configuration phase
 * Classpath scan and extensions resolution appears under configuration phase
@@ -85,7 +85,7 @@ registered because guice modules often require configuration values (without thi
 require to use root `DropwizardAwareModule` to perform some modules registrations).
 
 Extensions might be disabled in run phase: assumed that this could be required for
-optional features, driven by configuration (not needed extensions could be disabled, based on 
+[optional features](../guide/bundles.md#optional-extensions), driven by configuration (not needed extensions could be disabled, based on 
 configuration object values).
 
 !!! note
@@ -94,11 +94,11 @@ configuration object values).
     Note that guicey bundles now provide shortcut methods for easy dropwizard bundles registration.
 
 Before, extensions registration was performed under guice injector creation, but now it was moved 
-just after injector creation in order to differentiate pure injector creation errors from
+just [after injector creation](../guide/lifecycle.md#run-phase) in order to differentiate pure injector creation errors from
 extension installation errors.  
 
 !!! tip 
-    Statistics report (`.printDiagnosticReports()`) will also print time by phase:
+    Statistics report ([.printDiagnosticInfo()](../guide/diagnostic/configuration-report.md)) will also print time by phase:
     ```
     GUICEY started in 441.1 ms (104.8 ms config / 336.2 ms run / 0 jersey)
     ```
@@ -106,7 +106,7 @@ extension installation errors.
 
 ### Run phase shortcuts
 
-GuiceyEnvironment almost not allow guicey items registrations (except modules), but 
+`GuiceyEnvironment` don't allow guicey items registrations (except modules), but 
 provide many shortcuts:
 
 * `register()` for `environment().jersey().register()`
@@ -147,7 +147,7 @@ In some cases, previous limitation was actually desired for deduplication: befor
 common bundle, they could safely register it and be sure that only one common bundle instance would be used.
 Now, **both** common bundles would be registered.
 
-To workaround such cases *deduplication mechanism* was introduced: instances of the same
+To workaround such cases [deduplication mechanism](../guide/deduplication.md) was introduced: instances of the same
 type are considered duplicate if they are equal. So, in order to resolve "common bundle problem"
 bundle must only properly implement equals method, like this:
 
@@ -203,8 +203,8 @@ Old *"1 instance per class"* behaviour could be recovered with bundled detector:
 
 ### Reporting
 
-Configuration diagnostic report (`.printDiagnosticReport()`) was improved to show all registered instances and  
-ignored duplicates.
+Configuration diagnostic report ([.printDiagnosticInfo()](../guide/diagnostic/configuration-report.md)) was improved to 
+show all registered instances and ignored duplicates.
 
 For example, if we have module declared to be unique by constructor value:
 
@@ -230,7 +230,7 @@ If modules are registered like this:
 ```java
  GuiceBundle.builder()
     .modules(new VMod(1), new VMod(1), new VMod(2), new VMod(2))
-    .printDiagnosticReport()
+    .printDiagnosticInfo()
     .build()
 ```
 
@@ -256,9 +256,9 @@ bundles of the same type are registered in different bundles).
 
 As before, guicey configuration info (used for it's reports) is available through
 `@Inject GuiceyConfigurationInfo info` bean. But in new version it is not class centric:
-instead new `ItemId` class used.
+instead new `ItemId` [class used](../guide/diagnostic/configuration-model.md#identity).
 
-ItemId compose item type with real object hash in order to differentiate different instances of type.
+`ItemId` compose item type with real object hash in order to differentiate different instances of type.
 
 ```java
 // equal classes
@@ -298,11 +298,11 @@ public void initialize(GuiceyBootstrap bootstrap) {
 
 Benefits of registration through guicey api:
 
-* Bundle could be disabled (with `.disableDropwizardBundles(MyDropwizardBundle.class)`)
-* Bundle appear in diagnostic reports
-* Deduplication mechanism applied to registered bundles
+* Bundle could be [disabled](../guide/disables.md#disable-dropwizard-bundles) 
+* Bundle appear in [diagnostic reports](../guide/diagnostic/configuration-report.md)
+* Deduplication mechanism [applied to registered bundles](../guide/deduplication.md#dropwizard-bundles)
 
-And that's not all: guicey will also track transitive dropwizard bundles
+And that's not all: guicey will also track [transitive dropwizard bundles](../guide/bundles.md#transitive-bundles-tracking)
 (bundles, installed by registered bundles). That means you can see (in report) 
 and control entire application configuration.
 
@@ -310,16 +310,15 @@ and control entire application configuration.
     Only bundles registered with guicey api are tracked. If you don't want some bundle to be tracked
     register it in dropwizard boostrap object directly (even within guicey bundle bootstrap is available)
 
-This could be useful for deduplication. For example, you have some common
+This could be useful for [deduplication](../guide/deduplication.md). For example, you have some common
 dropwizard bundle and two other bundles, registering this common bindle. Normally,
 you can't use both bundles, because dropwizard will try to install both common bundles.
 But guicey will deduplicate them. 
 
 !!! note
-    Transitive dropwizard bundles are tracked by proxying bootsrap object, passed into bundles (not global!).
-    This introduce ~200ms startup overhead (clearly visible on stats report).
+    Transitive dropwizard bundles are tracked by proxying bootstrap object, passed into bundles (not global!).
     
-Transitive drtopwizard bundles detection could be disabled with option:
+Transitive dropwizard bundles detection could be disabled with option:
 
 ```java
 .option(GuieyOptions.TrackDropwizardBundles, false)
@@ -330,7 +329,8 @@ and so deduplication and disabling will affect only them.
 
 ## Configuration from guice bindings (jersey1-guice style)
 
-Guicey now can recognize extensions from guice bindings in configured guice modules. For example,
+Guicey now can recognize extensions [from guice bindings](../guide/guice/module-analysis.md#extensions-recognition) 
+in configured guice modules. For example,
 
 ```java 
 public class MyModule extends AbstractModule {
@@ -353,7 +353,7 @@ GuiceBundle.builder()
 
 !!! note
     Internally, the same installers are used for extensions recognition and installation.
-    The only difference is that guicey would not create default bindings for such extensions
+    The only difference is that guicey would not create [default bindings](../guide/guice/bindings.md#extension-bindings) for such extensions
     (because bindings already exists).
 
 
@@ -377,7 +377,7 @@ and could exclude some bindings before injector startup.
     To avoid duplicate work by injector (to parse user modules again), guicey prepares synthetic
     module with pre-processed bindings (and pass it to injector instead of raw modules).
     
-Also, guicey is able to track transitive modules (modules installed by registered modules)
+Also, guicey is able to track [transitive modules](../guide/guice/module-analysis.md#transitive-modules) (modules installed by registered modules)
 and exclude disabled modules.      
 
 For example, 
@@ -397,9 +397,9 @@ GuiceBundle.builder()
 Will correctly exclude transitive module (including all later transitive modules).
 
 !!! warning 
-    Deduplication rules will not work with transitive modules: guicey can only detect
+    [Deduplication rules](../guide/deduplication.md) will not work with transitive modules: guicey can only detect
     complete guice modules tree, but not intercept module instance registration.
-    Anyway, be aware that *guice itself* support deduplication: only one of equal modules
+    Anyway, be aware that **guice itself support deduplication**: only one of equal modules
     will be actually installed.   
     
 Guice modules analysis could be disabled with option:
@@ -413,7 +413,7 @@ by user and extensions will not be detected from bindings.
 
 ### Guice reports
 
-Guice bindings will be shown on diagnostic report `.printDiagnosticReport()`
+Guice bindings will be shown on diagnostic report [.printDiagnosticInfo()](../guide/diagnostic/configuration-report.md)
 
 ```
 ├── GUICE BINDINGS
@@ -429,7 +429,7 @@ Guice bindings will be shown on diagnostic report `.printDiagnosticReport()`
     (because this report just shows "configuration sources")        
 
 
-New guice bindings report `.printGuiceBindings()`:
+New guice bindings report [.printGuiceBindings()](../guide/diagnostic/guice-report.md):
 
 ```
  1 MODULES with 3 bindings
@@ -458,14 +458,14 @@ New guice bindings report `.printGuiceBindings()`:
     └── BindService  --[linked]-->  OverrideService
 ``` 
 
-Shows all bindings in user modules (without overriding modules)
+Shows all bindings in user modules (without [overriding modules](../guide/guice/override.md))
 
 !!! tip
-    `.printAllGuiceBindings()` shows also guicey's own bindings and guice internal bindings.
+    [.printAllGuiceBindings()](../guide/diagnostic/guice-report.md) shows also guicey's own bindings and guice internal bindings.
     It may be useful to see everything guicey configures. 
 
 
-And new guice aop map report `.printGuiceAopMap()`:
+And new guice aop map report [.printGuiceAopMap()](../guide/diagnostic/aop-report.md):
 
 ```
     2 AOP handlers declared
@@ -488,7 +488,7 @@ Shows all declared guice aop handlers and how they apply to beans (including ord
 
 ### BindingInstaller
 
-Interface of `BindingInstaller` were changed from 
+Interface of `BindingInstaller` was changed from 
 
 ```java
 public interface BindingInstaller {    
@@ -537,8 +537,8 @@ Deduplication applied for registered listeners (through `.listen()`). It is not 
 mechanism as applied for extensions. Listeners are registered now in `LinkedHashSet` and so
 listeners properly implementing equals and hashcode would be automatically ignored.
 
-Listeners deduplication is useful for reporting: as now all guicey reports implemented 
-with listeners and they correctly implement equals and hashcode so if user by accident
+Listeners deduplication is useful for reporting: as now all guicey reports [implemented 
+with listeners](../guide/diagnostic/diagnostic-tools.md#reports-implementation) and they correctly implement equals and hashcode so if user by accident
 register multiple reports they would be printed just once.
 
 Supported events were changed (due to lifecycle changes). More information 
@@ -548,14 +548,14 @@ One special event added `ApplicationStarted` which is always called after dropwi
 (including jersey start). It would be fired even in tests when `GuiceyAppRule` used 
 (which does not start jersey). Supposed to be used to simplify diagnostic reporting.
 
-Listeners are no longer checked to be hooks (for automatic hook registration). This was
+Listeners are no longer checked to be [hooks](../guide/hooks.md) (for automatic hook registration). This was
 very confusing feature. Now when hooks are more "open", custom hook should register listener
 and not opposite.
 
 ## New shared configuration state
 
 !!! warning 
-    This feature is intended to be used for very special cases only. It was added to 
+    This [feature](../guide/shared.md) is intended to be used for very special cases only. It was added to 
     remove current and future hacks for implementing global application state or bundles communication
     and avoid testing side effects. 
 
@@ -629,18 +629,19 @@ But this is only useful for special states initialization (because bundles are n
 executed yet). 
 
 !!! note
-    Guicey itself use this state for Injector storage and in extended bundles (gsp, spa). 
+    Guicey itself use this state for Injector storage and in extended bundles (
+    [gsp](../extras/gsp.md), [spa](../extras/spa.md)). 
 
 
 ## Reporting changes
 
-All guice reports were moved into top-level package "debug". All reports are
+All guicey [reports](../guide/diagnostic/diagnostic-tools.md) were moved into top-level package "debug". All reports are
 guicey listeners now. 
 
-Listeners deduplication mechanism used to ignore duplicate reports activation:
-e.g. duplicate `.printDiagnosticReport()` call will not cause duplicate report render.
+Listeners [deduplication](../guide/events.md#de-duplication) mechanism used to ignore duplicate reports activation:
+e.g. duplicate `.printDiagnosticInfo()` call will not cause duplicate report render.
 
-Diagnostic report (`.printDiagnosticReport()`) is now logged as single log message
+Diagnostic report ([.printDiagnosticInfo()](../guide/diagnostic/configuration-report.md)) is now logged as single log message
 and not each sub report as separate log.
 
 Statistics sub report now includes guice startup logs (previously required to be activated separately):
@@ -664,7 +665,7 @@ Statistics sub report now includes guice startup logs (previously required to be
     │   └── Preloading singletons: 6 ms
 ```   
 
-`.printAvailableInstallers()` report shows installer markers by implemented interfaces (like `TypeInstaller`, 
+[.printAvailableInstallers()](../guide/diagnostic/installers-report.md) report shows installer markers by implemented interfaces (like `TypeInstaller`, 
 `BindingInstaller`, etc.):
 
 ```
@@ -689,7 +690,7 @@ If you were using `DiagnosticBundle` directly it is now `ConfigurationDiagnostic
 
 ## Guicey hooks changes
 
-Guicey lifecycle hooks initially were supposed to be used for testing only. Now they
+Guicey lifecycle [hooks](../guide/hooks.md) initially were supposed to be used for testing only. Now they
 supposed to be also used for pluggable diagnostic tools (bundled, but not active). 
 It could be additional tracing, instrumentation etc. 
 
@@ -812,26 +813,26 @@ Still, guicey releases will be build with java 8, but CI tools will detect any f
 
 ## Extension modules
 
-Extension modules version now aligned with guicey version: guiceyVersion-Number. For example,
+Extension [modules](../guide/modules.md) version now aligned with guicey version: guiceyVersion-Number. For example,
 `5.0.0-0` will be the first extensions release for guicey 5.0.0. 
 
 All extension bundles are guicey bundles now (thanks to lifecycles unification): `SpaBundle`, `ServerPagesBundle` (and relative bundles).
 
 ### BOM
 
-`H2` and `dropwizard-flyway` versions are added to bom. 
+`H2` and `dropwizard-flyway` versions were added to [bom](../extras/bom.md). 
 
 ### GSP
 
 `ServerPagesBundle.extendApp` now also returns bundle which must be registered. But there are also
 direct shortcut on application builder: `ServerPagesBundle.app(...).attachPaths(...)`.
 
-ServerPagesBundle lifecycle is more predictable now as all configuration appear under initialization phase
+[ServerPagesBundle](../extras/gsp.md) lifecycle is more predictable now as all configuration appear under initialization phase
 and only limited to guicey bundles.
 
 ### JDBI2
 
-JDBI 2 module is deprecated because dropwizard deprecated it'd jdbi bundle and moved to [separate repository](https://github.com/dropwizard/dropwizard-jdbi) 
+[JDBI 2](../extras/jdbi.md) module is deprecated because dropwizard deprecated it'd jdbi bundle and moved to [separate repository](https://github.com/dropwizard/dropwizard-jdbi) 
 
 ## Fixes issues                             
 
@@ -905,7 +906,7 @@ In case of problems you can either stay in legacy mode or find the root cause.
 To find duplicate registrations enable diagnostic reports:
 
 ```java
-.printDiagnosticReports()
+.printDiagnosticInfo()
 ```      
     
 In configuration summary section pay attention to `REG(n/m)` markers, like this:
@@ -1134,7 +1135,7 @@ If you were using `DiagnosticBundle` directly it is now `ConfigurationDiagnostic
 All reports were moved into top-level package "debug".  
 
 You don't need to enable guice statistics (injector creation) logs manually now: they would be 
-intercepted automatically and show under diagnostics stats sub reprot (`.printDiagnosticReport()`)
+intercepted automatically and show under diagnostics stats sub reprot (`.printDiagnosticInfo()`)
 
 ### Extension modules
 
