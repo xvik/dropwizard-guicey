@@ -67,9 +67,8 @@ nav:
       - Extensions: guide/extensions.md
       - Web: guide/web.md
       - Extra integrations: guide/modules.md
-      - Lifecycle: guide/lifecycle.md
+      - Bundles: guide/bundles.md
       - Yaml values: guide/yaml-values.md
-      - Classpath scan: guide/scan.md
       - Guice:
           - Injector: guide/guice/injector.md
           - Bindings: guide/guice/bindings.md
@@ -78,10 +77,6 @@ nav:
           - Modules analysis: guide/guice/module-analysis.md
           - Override bindings: guide/guice/override.md
           - ServletModule: guide/guice/servletmodule.md
-      - Installers: guide/installers.md
-      - Ordering: guide/ordering.md
-      - Bundles: guide/bundles.md
-      - Options: guide/options.md
       - Diagnostic:
         - Tools: guide/diagnostic/diagnostic-tools.md
         - Configuration: guide/diagnostic/configuration-report.md
@@ -90,13 +85,18 @@ nav:
         - Lifecycle: guide/diagnostic/lifecycle-report.md
         - Guice: guide/diagnostic/guice-report.md
         - AOP: guide/diagnostic/aop-report.md
+      - Test: guide/test.md
+      - Lifecycle: guide/lifecycle.md
+      - Classpath scan: guide/scan.md
+      - Installers: guide/installers.md
+      - Ordering: guide/ordering.md
+      - Options: guide/options.md
       - Events: guide/events.md
-      - Commands: guide/commands.md
       - Disables: guide/disables.md
       - De-duplication: guide/deduplication.md
+      - Commands: guide/commands.md
       - Hooks: guide/hooks.md
       - Shared state: guide/shared.md
-      - Test: guide/test.md
       - HK2: guide/hk2.md
     - Installers:
       - Resource: installers/resource.md
