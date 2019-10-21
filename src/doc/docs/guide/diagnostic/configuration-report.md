@@ -7,7 +7,9 @@
     ```java
     @Inject GuiceyConfigurationInfo info;
     ``` 
-
+    
+    For usage details see [conifguration model](configuration-model.md)
+    
 Configuration diagnostic report is the most commonly used report allowing you to see guicey startup and 
 configuration details (the last is especially important for de-duplication logic diagnostic).
 

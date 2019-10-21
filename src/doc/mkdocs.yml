@@ -80,6 +80,7 @@ nav:
       - Diagnostic:
         - Tools: guide/diagnostic/diagnostic-tools.md
         - Configuration: guide/diagnostic/configuration-report.md
+        - Configuration model:  guide/diagnostic/configuration-model.md
         - Installers: guide/diagnostic/installers-report.md
         - Yaml values: guide/diagnostic/yaml-values-report.md
         - Lifecycle: guide/diagnostic/lifecycle-report.md
