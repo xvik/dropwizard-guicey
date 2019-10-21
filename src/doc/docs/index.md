@@ -8,20 +8,17 @@
 
 ## Main features
 
-* Auto configuration from [classpath scan](guide/scan.md) and guice bindings.  
-* [Yaml config values bindings](guide/guice/bindings.md#configuration-by-path) by path or unique sub objects. 
-* [Web](guide/web.md) (servlets, filters, listeners):
-    - supports both contexts (main and admin)
-    - guice ServletModule support is enabled by default ([could be disabled](guide/web.md#disable-servletmodule-support))
-    - jee web annotations (@WebServlet, @WebFilter) support ([could be enabled](guide/web.md#web-instalers))
-* Dropwizard style [reporting](guide/installers.md#reporting): detected (and installed) extensions are printed to console to remove uncertainty
-* Admin context [rest emulation](extras/admin-rest.md) 
+* Auto configuration from [classpath scan](guide/scan.md) and [guice bindings](guide/guice/module-analysis.md#extensions-recognition).  
+* [Yaml config values bindings](guide/yaml-values.md) by path or unique sub objects. 
+* Advanced [Web support](guide/web.md)
+* Dropwizard style [console reporting](guide/installers.md#reporting): detected (and installed) extensions are printed to console to remove uncertainty 
 * [Test support](guide/test.md): custom junit and [spock](http://spockframework.org) extensions
+    - Advanced test abilities to [disable](guide/disables.md) or [override](guide/guice/override.md) application logic
 * Developer friendly: 
     - core integrations [may be replaced](guide/disables.md#disable-installers) (to better fit needs)
-    - rich api for developing [custom integrations](guide/installers.md#writing-custom-installer), [custom behaviours](guide/events.md#events) and [configuration modification](guide/configuration.md#guicey-configuration-hooks) 
+    - rich api for developing [custom integrations](guide/installers.md#writing-custom-installer), and hooking into [lifecycle](guide/events.md)) 
     - out of the box support for plug-n-play plugins ([auto discoverable](guide/bundles.md#service-loader-lookup))
-    - self diagnostic tools ([configuration diagnostic report](guide/diagnostic/diagnostic-tools.md), [bindable configuration paths](guide/guice/bindings.md#configuration-bindings-report), [lifecycle stages](guide/events.md)) 
+    - [diagnostic tools](guide/diagnostic/diagnostic-tools.md) (reports), support for [custom diagnostic tools](guide/hooks.md#diagnostic)   
 
 ## How to use docs
 
@@ -33,29 +30,13 @@
 ### Reference
 * [**User guide**](guide/configuration.md) section contain detailed features descriptions. Good to read, but if no time, read as you need it.
 * [**Installers**](installers/resource.md) section describes all guicey installers. Use it as a *extensions hand book*.
-
-### Examples and integrations
-
-* [**Examples**](examples/authentication.md) section contains common example cases. Look also [examples repository](https://github.com/xvik/dropwizard-guicey-examples) for additional examples.
-* [**Extras**](extras/admin-rest.md) section covers extra modules: admin rest, 3rd party integrations (event bus, jdbi) provided by guicey itself 
-or extensions project.
+* [**Modules**](guide/modules.md) extension modules guide (*modules hand book*).
+* [**Examples**](examples/authentication.md) important usage examples. Look also [examples repository](https://github.com/xvik/dropwizard-guicey-examples) for additional examples. 
 
 ## Sources structure
 
-[The main repository](https://github.com/xvik/dropwizard-guicey) contains library itself and this documentation sources.
-
-Guicey core. Provides rich api for building custom integrations (for specific needs). 
-Only core version follow semantic versioning.
-
-[Examples repository](https://github.com/xvik/dropwizard-guicey-examples) holds examples of main features usage, dropwizard bundles 
-integrations and extensions samples.
-
-[Extensions repository](https://github.com/xvik/dropwizard-guicey-ext) contains guicey external integrations. 
-
-Extensions project shows what is possible to achieve based on guicey. Besides, provided integrations 
-itself might be quite useful. Version scheme is the same as dropwizard modules: guiceyVersion-releaseNumber
-(no semantic versioning).
-
-* [BOM module](extras/bom.md) unifies dependencies management for extensions, dropwizard and guice (as it includes boms for them).
-   Overall, extensions project is more like spring: growing set of solutions for everything (more "enterprisy").
-
+* [Guicey repository]((https://github.com/xvik/dropwizard-guicey)): guicey itself and (this) docs
+* [Modules repository](https://github.com/xvik/dropwizard-guicey-ext): extension [modules](guide/modules.md) (integrations) 
+are maintained in the separate repository
+* [Examples repository](https://github.com/xvik/dropwizard-guicey-examples) holds usage examples of main features usage, 
+dropwizard bundles integrations and extension modules samples.
