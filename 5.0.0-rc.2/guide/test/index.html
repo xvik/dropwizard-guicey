@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
     
     
       
@@ -46,21 +46,50 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.30686662.css">
       
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-93174150-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -71,24 +100,7 @@
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
-    viewBox="0 0 416 448" id="__github">
-  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
-        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
-        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
-        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
-        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
-        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
-        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
-        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
-        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
-        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
-        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
-        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
-        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
-        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
-        99.5z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
@@ -96,7 +108,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../../#testing" tabindex="1" class="md-skip">
+      <a href="#testing" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -117,22 +129,21 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                Dropwizard-guicey
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              Dropwizard-guicey
+            </span>
+            <span class="md-header-nav__topic">
+              
                 Test
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
@@ -155,7 +166,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -166,20 +176,18 @@
 
   
 
-
-  <a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      dropwizard-guicey
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
           </div>
         </div>
       
@@ -192,7 +200,98 @@
         
       
       
-      <main class="md-main">
+        
+
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href="../.." class="md-tabs__link">
+        Home
+      </a>
+    
+  </li>
+
+      
+        
+      
+        
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../configuration/" class="md-tabs__link md-tabs__link--active">
+          User guide
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../installers/resource/" class="md-tabs__link">
+          Installers
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../extras/admin-rest/" class="md-tabs__link">
+          Modules
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../examples/authentication/" class="md-tabs__link">
+          Examples
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../about/release-notes/" class="md-tabs__link">
+          About
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -215,20 +314,18 @@
 
   
 
-
-  <a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      dropwizard-guicey
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -308,8 +405,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../lifecycle/" title="Integration lifecycle" class="md-nav__link">
-      Integration lifecycle
+    <a href="../extensions/" title="Extensions" class="md-nav__link">
+      Extensions
     </a>
   </li>
 
@@ -320,7 +417,74 @@
 
 
   <li class="md-nav__item">
-    <a href="../injector/" title="Injector" class="md-nav__link">
+    <a href="../web/" title="Web" class="md-nav__link">
+      Web
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../modules/" title="Extra integrations" class="md-nav__link">
+      Extra integrations
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../bundles/" title="Bundles" class="md-nav__link">
+      Bundles
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../yaml-values/" title="Yaml values" class="md-nav__link">
+      Yaml values
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-7" type="checkbox" id="nav-4-7">
+    
+    <label class="md-nav__link" for="nav-4-7">
+      Guice
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-7">
+        Guice
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/injector/" title="Injector" class="md-nav__link">
       Injector
     </a>
   </li>
@@ -332,7 +496,31 @@
 
 
   <li class="md-nav__item">
-    <a href="../module-autowiring/" title="Module autowiring" class="md-nav__link">
+    <a href="../guice/bindings/" title="Bindings" class="md-nav__link">
+      Bindings
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/scopes/" title="Scopes" class="md-nav__link">
+      Scopes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/module-autowiring/" title="Module autowiring" class="md-nav__link">
       Module autowiring
     </a>
   </li>
@@ -344,8 +532,356 @@
 
 
   <li class="md-nav__item">
-    <a href="../bindings/" title="Bindings" class="md-nav__link">
-      Bindings
+    <a href="../guice/module-analysis/" title="Modules analysis" class="md-nav__link">
+      Modules analysis
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/override/" title="Override bindings" class="md-nav__link">
+      Override bindings
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/servletmodule/" title="ServletModule" class="md-nav__link">
+      ServletModule
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-8" type="checkbox" id="nav-4-8">
+    
+    <label class="md-nav__link" for="nav-4-8">
+      Diagnostic
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-8">
+        Diagnostic
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/diagnostic-tools/" title="Tools" class="md-nav__link">
+      Tools
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/configuration-report/" title="Configuration" class="md-nav__link">
+      Configuration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/configuration-model/" title="Configuration model" class="md-nav__link">
+      Configuration model
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/installers-report/" title="Installers" class="md-nav__link">
+      Installers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/yaml-values-report/" title="Yaml values" class="md-nav__link">
+      Yaml values
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/lifecycle-report/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/guice-report/" title="Guice" class="md-nav__link">
+      Guice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/aop-report/" title="AOP" class="md-nav__link">
+      AOP
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Test
+      </label>
+    
+    <a href="./" title="Test" class="md-nav__link md-nav__link--active">
+      Test
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general-test-support" class="md-nav__link">
+    General test support
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-hooks" class="md-nav__link">
+    Configuration hooks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disables" class="md-nav__link">
+    Disables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guice-bindings-override" class="md-nav__link">
+    Guice bindings override
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debug-bundles" class="md-nav__link">
+    Debug bundles
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#junit" class="md-nav__link">
+    Junit
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testing-core-logic" class="md-nav__link">
+    Testing core logic
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-web-logic" class="md-nav__link">
+    Testing web logic
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customizing-guicey-configuration" class="md-nav__link">
+    Customizing guicey configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-startup-errors" class="md-nav__link">
+    Testing startup errors
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spock" class="md-nav__link">
+    Spock
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spock-lifecycle-hooks" class="md-nav__link">
+    Spock lifecycle hooks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#useguiceyapp" class="md-nav__link">
+    @UseGuiceyApp
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usedropwizardapp" class="md-nav__link">
+    @UseDropwizardApp
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customizing-guicey-configuration_1" class="md-nav__link">
+    Customizing guicey configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dropwizard-startup-error" class="md-nav__link">
+    Dropwizard startup error
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#spock-extensions-details" class="md-nav__link">
+    Spock extensions details
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overriding-overridden-beans" class="md-nav__link">
+    Overriding overridden beans
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../lifecycle/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
     </a>
   </li>
 
@@ -392,18 +928,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../bundles/" title="Bundles (Guicey)" class="md-nav__link">
-      Bundles (Guicey)
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../options/" title="Options" class="md-nav__link">
       Options
     </a>
@@ -416,8 +940,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../diagnostic/" title="Diagnostic" class="md-nav__link">
-      Diagnostic
+    <a href="../events/" title="Events" class="md-nav__link">
+      Events
     </a>
   </li>
 
@@ -428,8 +952,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../events/" title="Lifecycle events" class="md-nav__link">
-      Lifecycle events
+    <a href="../disables/" title="Disables" class="md-nav__link">
+      Disables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../deduplication/" title="De-duplication" class="md-nav__link">
+      De-duplication
     </a>
   </li>
 
@@ -452,196 +988,9 @@
 
 
   <li class="md-nav__item">
-    <a href="../web/" title="Web" class="md-nav__link">
-      Web
+    <a href="../hooks/" title="Hooks" class="md-nav__link">
+      Hooks
     </a>
-  </li>
-
-        
-          
-          
-          
-
-  
-
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Test
-      </label>
-    
-    <a href="./" title="Test" class="md-nav__link md-nav__link--active">
-      Test
-    </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#general-test-support" title="General test support" class="md-nav__link">
-    General test support
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#configuration-hooks" title="Configuration hooks" class="md-nav__link">
-    Configuration hooks
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#disables" title="Disables" class="md-nav__link">
-    Disables
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#guice-bindings-override" title="Guice bindings override" class="md-nav__link">
-    Guice bindings override
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#debug-bundles" title="Debug bundles" class="md-nav__link">
-    Debug bundles
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#junit" title="Junit" class="md-nav__link">
-    Junit
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#testing-core-logic" title="Testing core logic" class="md-nav__link">
-    Testing core logic
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#testing-web-logic" title="Testing web logic" class="md-nav__link">
-    Testing web logic
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#customizing-guicey-configuration" title="Customizing guicey configuration" class="md-nav__link">
-    Customizing guicey configuration
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#testing-startup-errors" title="Testing startup errors" class="md-nav__link">
-    Testing startup errors
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#spock" title="Spock" class="md-nav__link">
-    Spock
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#spock-lifecycle-hooks" title="Spock lifecycle hooks" class="md-nav__link">
-    Spock lifecycle hooks
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#useguiceyapp" title="@UseGuiceyApp" class="md-nav__link">
-    @UseGuiceyApp
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#usedropwizardapp" title="@UseDropwizardApp" class="md-nav__link">
-    @UseDropwizardApp
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#customizing-guicey-configuration_1" title="Customizing guicey configuration" class="md-nav__link">
-    Customizing guicey configuration
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#dropwizard-startup-error" title="Dropwizard startup error" class="md-nav__link">
-    Dropwizard startup error
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#spock-extensions-details" title="Spock extensions details" class="md-nav__link">
-    Spock extensions details
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#overriding-overridden-beans" title="Overriding overridden beans" class="md-nav__link">
-    Overriding overridden beans
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -651,8 +1000,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../dg-migration/" title="Migration from dropwizard-guice" class="md-nav__link">
-      Migration from dropwizard-guice
+    <a href="../shared/" title="Shared state" class="md-nav__link">
+      Shared state
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../hk2/" title="HK2" class="md-nav__link">
+      HK2
     </a>
   </li>
 
@@ -840,107 +1201,11 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
     
     <label class="md-nav__link" for="nav-6">
-      Examples
+      Modules
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
       <label class="md-nav__title" for="nav-6">
-        Examples
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
-      Authentication
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/governator/" title="Governator" class="md-nav__link">
-      Governator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/hibernate/" title="Hibernate" class="md-nav__link">
-      Hibernate
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/eventbus/" title="EventBus" class="md-nav__link">
-      EventBus
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/jdbi/" title="JDBI" class="md-nav__link">
-      JDBI
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/jdbi3/" title="JDBI3" class="md-nav__link">
-      JDBI3
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
-    
-    <label class="md-nav__link" for="nav-7">
-      Extras
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-7">
-        Extras
+        Modules
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -1053,6 +1318,102 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
+      Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/governator/" title="Governator" class="md-nav__link">
+      Governator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/hibernate/" title="Hibernate" class="md-nav__link">
+      Hibernate
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/eventbus/" title="EventBus" class="md-nav__link">
+      EventBus
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi/" title="JDBI" class="md-nav__link">
+      JDBI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi3/" title="JDBI3" class="md-nav__link">
+      JDBI3
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
     
     <label class="md-nav__link" for="nav-8">
@@ -1064,6 +1425,18 @@
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/release-notes/" title="Release notes" class="md-nav__link">
+      Release notes
+    </a>
+  </li>
+
         
           
           
@@ -1083,8 +1456,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../about/history/" title="Release notes" class="md-nav__link">
-      Release notes
+    <a href="../../about/history/" title="Version history" class="md-nav__link">
+      Version history
     </a>
   </li>
 
@@ -1139,7 +1512,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#general-test-support" title="General test support" class="md-nav__link">
+  <a href="#general-test-support" class="md-nav__link">
     General test support
   </a>
   
@@ -1147,28 +1520,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#configuration-hooks" title="Configuration hooks" class="md-nav__link">
+  <a href="#configuration-hooks" class="md-nav__link">
     Configuration hooks
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#disables" title="Disables" class="md-nav__link">
+  <a href="#disables" class="md-nav__link">
     Disables
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#guice-bindings-override" title="Guice bindings override" class="md-nav__link">
+  <a href="#guice-bindings-override" class="md-nav__link">
     Guice bindings override
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#debug-bundles" title="Debug bundles" class="md-nav__link">
+  <a href="#debug-bundles" class="md-nav__link">
     Debug bundles
   </a>
   
@@ -1180,7 +1553,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#junit" title="Junit" class="md-nav__link">
+  <a href="#junit" class="md-nav__link">
     Junit
   </a>
   
@@ -1188,28 +1561,28 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#testing-core-logic" title="Testing core logic" class="md-nav__link">
+  <a href="#testing-core-logic" class="md-nav__link">
     Testing core logic
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#testing-web-logic" title="Testing web logic" class="md-nav__link">
+  <a href="#testing-web-logic" class="md-nav__link">
     Testing web logic
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#customizing-guicey-configuration" title="Customizing guicey configuration" class="md-nav__link">
+  <a href="#customizing-guicey-configuration" class="md-nav__link">
     Customizing guicey configuration
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#testing-startup-errors" title="Testing startup errors" class="md-nav__link">
+  <a href="#testing-startup-errors" class="md-nav__link">
     Testing startup errors
   </a>
   
@@ -1221,7 +1594,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#spock" title="Spock" class="md-nav__link">
+  <a href="#spock" class="md-nav__link">
     Spock
   </a>
   
@@ -1229,42 +1602,42 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#spock-lifecycle-hooks" title="Spock lifecycle hooks" class="md-nav__link">
+  <a href="#spock-lifecycle-hooks" class="md-nav__link">
     Spock lifecycle hooks
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#useguiceyapp" title="@UseGuiceyApp" class="md-nav__link">
+  <a href="#useguiceyapp" class="md-nav__link">
     @UseGuiceyApp
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#usedropwizardapp" title="@UseDropwizardApp" class="md-nav__link">
+  <a href="#usedropwizardapp" class="md-nav__link">
     @UseDropwizardApp
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#customizing-guicey-configuration_1" title="Customizing guicey configuration" class="md-nav__link">
+  <a href="#customizing-guicey-configuration_1" class="md-nav__link">
     Customizing guicey configuration
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#dropwizard-startup-error" title="Dropwizard startup error" class="md-nav__link">
+  <a href="#dropwizard-startup-error" class="md-nav__link">
     Dropwizard startup error
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#spock-extensions-details" title="Spock extensions details" class="md-nav__link">
+  <a href="#spock-extensions-details" class="md-nav__link">
     Spock extensions details
   </a>
   
@@ -1276,7 +1649,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#overriding-overridden-beans" title="Overriding overridden beans" class="md-nav__link">
+  <a href="#overriding-overridden-beans" class="md-nav__link">
     Overriding overridden beans
   </a>
   
@@ -1302,10 +1675,14 @@
                 
                 
                 <h1 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h1>
-<p>Test support require <code>io.dropwizard:dropwizard-testing:1.3.0</code> dependency.</p>
+<p>Test support require <code>io.dropwizard:dropwizard-testing:2.0.0</code> dependency.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Guicey does not provide junit 5 extensions: only junit 4 rules. Support will be added later.</p>
+</div>
 <h2 id="general-test-support">General test support<a class="headerlink" href="#general-test-support" title="Permanent link">&para;</a></h2>
 <h3 id="configuration-hooks">Configuration hooks<a class="headerlink" href="#configuration-hooks" title="Permanent link">&para;</a></h3>
-<p>Guicey provides <a href="../configuration/#guicey-configuration-hooks">hooks mechanism</a> to be able to modify
+<p>Guicey provides <a href="../hooks/">hooks mechanism</a> to be able to modify
 application configuration in tests.</p>
 <p>Using hooks you can disable installers, extensions, guicey bundles<br />
 or override guice bindings.</p>
@@ -1332,15 +1709,15 @@ debug/monitoring options specifically for test.</p>
 <h3 id="disables">Disables<a class="headerlink" href="#disables" title="Permanent link">&para;</a></h3>
 <p>You can use hooks to disable all not needed features in test:</p>
 <ul>
-<li><a href="../configuration/#disable-installer">installers</a> </li>
-<li><a href="../configuration/#disable-extensions">extensions</a> </li>
-<li><a href="../configuration/#disable-guice-modules">guice modules</a></li>
-<li><a href="../configuration/#disable-bundles">guicey bundles</a> </li>
+<li><a href="../disables/#disable-installers">installers</a> </li>
+<li><a href="../disables/#disable-extensions">extensions</a> </li>
+<li><a href="../disables/#disable-guice-modules">guice modules</a></li>
+<li><a href="../disables/#disable-bundles">guicey bundles</a> </li>
 </ul>
 <p>This way you can isolate (as possible) some feature for testing. </p>
 <p>The most helpful should be bundles disable (if you use bundles for features grouping)
 and guice modules.</p>
-<p>Use <a href="../configuration/#disable-by-predicate">predicate disabling</a>.</p>
+<p>Use <a href="../disables/#disable-by-predicate">predicate disabling</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>It is supposed that disabling will be used instead of mocking - you simply remove what
@@ -1521,7 +1898,7 @@ create call).</p>
 <li><code>@UseDropwizardApp</code> - internally use <code>DropwizardAppRule</code></li>
 </ul>
 <p>Both extensions allows using injections directly in specifications (like spock-guice).</p>
-<p><code>@UseGuiceyConfiguration</code> extension could be used to apply <a href="../configuration/#guicey-configuration-hooks">configuration hook</a> 
+<p><code>@UseGuiceyConfiguration</code> extension could be used to apply <a href="../hooks/">configuration hook</a> 
 common for all tests</p>
 <h3 id="spock-lifecycle-hooks">Spock lifecycle hooks<a class="headerlink" href="#spock-lifecycle-hooks" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><span class="kd">class</span> <span class="nc">MyTest</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
@@ -1718,10 +2095,10 @@ and override <code>newApplication</code> method). But this should be rare requir
 </pre></div>
 
 <h2 id="overriding-overridden-beans">Overriding overridden beans<a class="headerlink" href="#overriding-overridden-beans" title="Permanent link">&para;</a></h2>
-<p>Guicey provides <a href="../configuration/#override-guice-bindings">direct support for overriding guice bindings</a>,
+<p>Guicey provides <a href="../guice/override/">direct support for overriding guice bindings</a>,
 so in most cases you don't need to do anything.</p>
 <p>But, if you use this to override application bindings need to override such bindings in test (again), then you
- may use provided custom <a href="../injector/#injector-factory">injector factory</a>:  </p>
+ may use provided custom <a href="../guice/injector/#injector-factory">injector factory</a>:  </p>
 <p>Register factory in guice bundle:</p>
 <div class="codehilite"><pre><span></span><span class="n">GuiceBundle</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
     <span class="o">.</span><span class="na">injectorFactory</span><span class="o">(</span><span class="k">new</span> <span class="n">BindingsOverrideInjectorFactory</span><span class="o">())</span>
@@ -1787,7 +2164,7 @@ defined in some 3<sup>rd</sup> party module. For some reason we need to override
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../web/" title="Web" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../diagnostic/aop-report/" title="AOP" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1796,19 +2173,19 @@ defined in some 3<sup>rd</sup> party module. For some reason we need to override
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Web
+                AOP
               </span>
             </div>
           </a>
         
         
-          <a href="../dg-migration/" title="Migration from dropwizard-guice" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../lifecycle/" title="Lifecycle" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Migration from dropwizard-guice
+                Lifecycle
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -1834,7 +2211,6 @@ defined in some 3<sup>rd</sup> party module. For some reason we need to override
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
@@ -1844,21 +2220,15 @@ defined in some 3<sup>rd</sup> party module. For some reason we need to override
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      <script src="../../assets/javascripts/application.c648116f.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-93174150-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>

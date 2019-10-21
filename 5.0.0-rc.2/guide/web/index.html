@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
     
     
       
@@ -46,21 +46,50 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.30686662.css">
       
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-93174150-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -71,24 +100,7 @@
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
-    viewBox="0 0 416 448" id="__github">
-  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
-        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
-        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
-        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
-        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
-        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
-        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
-        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
-        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
-        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
-        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
-        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
-        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
-        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
-        99.5z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
@@ -96,7 +108,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../../#web-features" tabindex="1" class="md-skip">
+      <a href="#web-features" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -117,22 +129,21 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                Dropwizard-guicey
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              Dropwizard-guicey
+            </span>
+            <span class="md-header-nav__topic">
+              
                 Web
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
@@ -155,7 +166,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -166,20 +176,18 @@
 
   
 
-
-  <a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      dropwizard-guicey
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
           </div>
         </div>
       
@@ -192,7 +200,98 @@
         
       
       
-      <main class="md-main">
+        
+
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href="../.." class="md-tabs__link">
+        Home
+      </a>
+    
+  </li>
+
+      
+        
+      
+        
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../configuration/" class="md-tabs__link md-tabs__link--active">
+          User guide
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../installers/resource/" class="md-tabs__link">
+          Installers
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../extras/admin-rest/" class="md-tabs__link">
+          Modules
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../examples/authentication/" class="md-tabs__link">
+          Examples
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../about/release-notes/" class="md-tabs__link">
+          About
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -215,20 +314,18 @@
 
   
 
-
-  <a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      dropwizard-guicey
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -308,8 +405,137 @@
 
 
   <li class="md-nav__item">
-    <a href="../lifecycle/" title="Integration lifecycle" class="md-nav__link">
-      Integration lifecycle
+    <a href="../extensions/" title="Extensions" class="md-nav__link">
+      Extensions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Web
+      </label>
+    
+    <a href="./" title="Web" class="md-nav__link md-nav__link--active">
+      Web
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#servlets-filters" class="md-nav__link">
+    Servlets, filters
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#guice-servlet-module" class="md-nav__link">
+    Guice servlet module
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#web-extensions" class="md-nav__link">
+    Web extensions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-registration" class="md-nav__link">
+    Manual registration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resources" class="md-nav__link">
+    Resources
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#html5-routing" class="md-nav__link">
+    HTML5 routing
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templates" class="md-nav__link">
+    Templates
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#templates-resources" class="md-nav__link">
+    Templates + resources
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../modules/" title="Extra integrations" class="md-nav__link">
+      Extra integrations
     </a>
   </li>
 
@@ -320,7 +546,50 @@
 
 
   <li class="md-nav__item">
-    <a href="../injector/" title="Injector" class="md-nav__link">
+    <a href="../bundles/" title="Bundles" class="md-nav__link">
+      Bundles
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../yaml-values/" title="Yaml values" class="md-nav__link">
+      Yaml values
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-7" type="checkbox" id="nav-4-7">
+    
+    <label class="md-nav__link" for="nav-4-7">
+      Guice
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-7">
+        Guice
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/injector/" title="Injector" class="md-nav__link">
       Injector
     </a>
   </li>
@@ -332,7 +601,31 @@
 
 
   <li class="md-nav__item">
-    <a href="../module-autowiring/" title="Module autowiring" class="md-nav__link">
+    <a href="../guice/bindings/" title="Bindings" class="md-nav__link">
+      Bindings
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/scopes/" title="Scopes" class="md-nav__link">
+      Scopes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/module-autowiring/" title="Module autowiring" class="md-nav__link">
       Module autowiring
     </a>
   </li>
@@ -344,8 +637,181 @@
 
 
   <li class="md-nav__item">
-    <a href="../bindings/" title="Bindings" class="md-nav__link">
-      Bindings
+    <a href="../guice/module-analysis/" title="Modules analysis" class="md-nav__link">
+      Modules analysis
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/override/" title="Override bindings" class="md-nav__link">
+      Override bindings
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/servletmodule/" title="ServletModule" class="md-nav__link">
+      ServletModule
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-8" type="checkbox" id="nav-4-8">
+    
+    <label class="md-nav__link" for="nav-4-8">
+      Diagnostic
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-8">
+        Diagnostic
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/diagnostic-tools/" title="Tools" class="md-nav__link">
+      Tools
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/configuration-report/" title="Configuration" class="md-nav__link">
+      Configuration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/configuration-model/" title="Configuration model" class="md-nav__link">
+      Configuration model
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/installers-report/" title="Installers" class="md-nav__link">
+      Installers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/yaml-values-report/" title="Yaml values" class="md-nav__link">
+      Yaml values
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/lifecycle-report/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/guice-report/" title="Guice" class="md-nav__link">
+      Guice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/aop-report/" title="AOP" class="md-nav__link">
+      AOP
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../test/" title="Test" class="md-nav__link">
+      Test
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../lifecycle/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
     </a>
   </li>
 
@@ -392,18 +858,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../bundles/" title="Bundles (Guicey)" class="md-nav__link">
-      Bundles (Guicey)
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../options/" title="Options" class="md-nav__link">
       Options
     </a>
@@ -416,8 +870,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../diagnostic/" title="Diagnostic" class="md-nav__link">
-      Diagnostic
+    <a href="../events/" title="Events" class="md-nav__link">
+      Events
     </a>
   </li>
 
@@ -428,8 +882,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../events/" title="Lifecycle events" class="md-nav__link">
-      Lifecycle events
+    <a href="../disables/" title="Disables" class="md-nav__link">
+      Disables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../deduplication/" title="De-duplication" class="md-nav__link">
+      De-duplication
     </a>
   </li>
 
@@ -450,114 +916,10 @@
           
           
 
-  
-
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Web
-      </label>
-    
-    <a href="./" title="Web" class="md-nav__link md-nav__link--active">
-      Web
-    </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#guice-servletmodule-support" title="Guice ServletModule support" class="md-nav__link">
-    Guice ServletModule support
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#request-scoped-beans" title="Request scoped beans" class="md-nav__link">
-    Request scoped beans
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#limitations" title="Limitations" class="md-nav__link">
-    Limitations
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#disable-servletmodule-support" title="Disable ServletModule support" class="md-nav__link">
-    Disable ServletModule support
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#web-installers" title="Web installers" class="md-nav__link">
-    Web installers
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#differences-with-guiceservlet-module" title="Differences with GuiceServlet module" class="md-nav__link">
-    Differences with GuiceServlet module
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#admin-context" title="Admin context" class="md-nav__link">
-    Admin context
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
-  </li>
-
-        
-          
-          
-          
-
 
   <li class="md-nav__item">
-    <a href="../test/" title="Test" class="md-nav__link">
-      Test
+    <a href="../hooks/" title="Hooks" class="md-nav__link">
+      Hooks
     </a>
   </li>
 
@@ -568,8 +930,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../dg-migration/" title="Migration from dropwizard-guice" class="md-nav__link">
-      Migration from dropwizard-guice
+    <a href="../shared/" title="Shared state" class="md-nav__link">
+      Shared state
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../hk2/" title="HK2" class="md-nav__link">
+      HK2
     </a>
   </li>
 
@@ -757,107 +1131,11 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
     
     <label class="md-nav__link" for="nav-6">
-      Examples
+      Modules
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
       <label class="md-nav__title" for="nav-6">
-        Examples
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
-      Authentication
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/governator/" title="Governator" class="md-nav__link">
-      Governator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/hibernate/" title="Hibernate" class="md-nav__link">
-      Hibernate
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/eventbus/" title="EventBus" class="md-nav__link">
-      EventBus
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/jdbi/" title="JDBI" class="md-nav__link">
-      JDBI
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/jdbi3/" title="JDBI3" class="md-nav__link">
-      JDBI3
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
-    
-    <label class="md-nav__link" for="nav-7">
-      Extras
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-7">
-        Extras
+        Modules
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -970,6 +1248,102 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
+      Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/governator/" title="Governator" class="md-nav__link">
+      Governator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/hibernate/" title="Hibernate" class="md-nav__link">
+      Hibernate
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/eventbus/" title="EventBus" class="md-nav__link">
+      EventBus
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi/" title="JDBI" class="md-nav__link">
+      JDBI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi3/" title="JDBI3" class="md-nav__link">
+      JDBI3
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
     
     <label class="md-nav__link" for="nav-8">
@@ -981,6 +1355,18 @@
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/release-notes/" title="Release notes" class="md-nav__link">
+      Release notes
+    </a>
+  </li>
+
         
           
           
@@ -1000,8 +1386,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../about/history/" title="Release notes" class="md-nav__link">
-      Release notes
+    <a href="../../about/history/" title="Version history" class="md-nav__link">
+      Version history
     </a>
   </li>
 
@@ -1056,30 +1442,30 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#guice-servletmodule-support" title="Guice ServletModule support" class="md-nav__link">
-    Guice ServletModule support
+  <a href="#servlets-filters" class="md-nav__link">
+    Servlets, filters
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#request-scoped-beans" title="Request scoped beans" class="md-nav__link">
-    Request scoped beans
+  <a href="#guice-servlet-module" class="md-nav__link">
+    Guice servlet module
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#limitations" title="Limitations" class="md-nav__link">
-    Limitations
+  <a href="#web-extensions" class="md-nav__link">
+    Web extensions
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#disable-servletmodule-support" title="Disable ServletModule support" class="md-nav__link">
-    Disable ServletModule support
+  <a href="#manual-registration" class="md-nav__link">
+    Manual registration
   </a>
   
 </li>
@@ -1090,23 +1476,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#web-installers" title="Web installers" class="md-nav__link">
-    Web installers
+  <a href="#resources" class="md-nav__link">
+    Resources
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#differences-with-guiceservlet-module" title="Differences with GuiceServlet module" class="md-nav__link">
-    Differences with GuiceServlet module
+  <a href="#html5-routing" class="md-nav__link">
+    HTML5 routing
   </a>
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#templates" class="md-nav__link">
+    Templates
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
-  <a href="#admin-context" title="Admin context" class="md-nav__link">
-    Admin context
+  <a href="#templates-resources" class="md-nav__link">
+    Templates + resources
   </a>
   
 </li>
@@ -1136,107 +1535,225 @@
                 
                 
                 <h1 id="web-features">Web features<a class="headerlink" href="#web-features" title="Permanent link">&para;</a></h1>
-<h2 id="guice-servletmodule-support">Guice ServletModule support<a class="headerlink" href="#guice-servletmodule-support" title="Permanent link">&para;</a></h2>
-<p>By default, <code>GuiceFilter</code> is registered for both application and admin contexts. And so request and session scopes will be 
-be available in both contexts. Also it makes injection of request and response objects available with provider (in any bean).</p>
-<p>To register servlets and filters for main context use <code>ServletModule</code>, e.g.</p>
+<h2 id="servlets-filters">Servlets, filters<a class="headerlink" href="#servlets-filters" title="Permanent link">&para;</a></h2>
+<p>Servlets and filters could be registered either with guice <a href="../guice/servletmodule/">ServletModule</a>
+or using <a href="../extensions/#web">extensions</a>.</p>
+<h3 id="guice-servlet-module">Guice servlet module<a class="headerlink" href="#guice-servlet-module" title="Permanent link">&para;</a></h3>
+<p>Example:</p>
 <div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebModule</span> <span class="kd">extends</span> <span class="n">ServletModule</span> <span class="o">{</span>
 
     <span class="nd">@Override</span>
     <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">configureServlets</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">filter</span><span class="o">(</span><span class="s">&quot;/*&quot;</span><span class="o">).</span><span class="na">through</span><span class="o">(</span><span class="n">MyFilter</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-        <span class="n">serve</span><span class="o">(</span><span class="s">&quot;/myservlet&quot;</span><span class="o">).</span><span class="na">with</span><span class="o">(</span><span class="n">MyServlet</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+        <span class="n">filter</span><span class="o">(</span><span class="s">&quot;/*&quot;</span><span class="o">).</span><span class="na">through</span><span class="o">(</span><span class="n">MyFilter</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">serve</span><span class="o">(</span><span class="s">&quot;/myservlet&quot;</span><span class="o">).</span><span class="na">with</span><span class="o">(</span><span class="n">MyServlet</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>  
+</pre></div>
+
+<div class="admonition success">
+<p class="admonition-title">Pros</p>
+<p>Only <code>ServletModule</code> allows mappings <a href="https://github.com/google/guice/wiki/ServletRegexKeyMapping">by regexp</a>:</p>
+<div class="codehilite"><pre><span></span><span class="n">serveRegex</span><span class="o">(</span><span class="s">&quot;(.)*ajax(.)*&quot;</span><span class="o">).</span><span class="na">with</span><span class="o">(</span><span class="n">MyAjaxServlet</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</pre></div>
+
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is important to note that <code>GuiceFilter</code> dispatch all requests for filters and servlets 
+registered by <code>ServletModule</code> internally and so you may have problems combining servlets from 
+<code>ServletModule</code> with filters in main scope.</p>
+<p>It is never a blocking issues, but often "not obvious to understand" situations.</p>
+</div>
+<h3 id="web-extensions">Web extensions<a class="headerlink" href="#web-extensions" title="Permanent link">&para;</a></h3>
+<p>Extensions declared with standard <code>javax.servlet</code> annotations.</p>
+<p>Servlet registration: </p>
+<div class="codehilite"><pre><span></span><span class="nd">@WebServlet</span><span class="o">(</span><span class="s">&quot;/mapped&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyServlet</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</pre></div>
+
+<p>Extension <a href="../../installers/servlet/">recognized</a> by <code>@WebServlet</code> annotation.</p>
+<p>Could be registered on admin context:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@WebServlet</span><span class="o">(</span><span class="s">&quot;/mapped&quot;</span><span class="o">)</span>
+<span class="nd">@AdminContext</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyServlet</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</pre></div>
+
+<p>Or even on both contexts at the same time: <code class="codehilite"><span class="nd">@AdminContext</span><span class="o">(</span><span class="n">andAdmin</span><span class="o">=</span><span class="kc">true</span><span class="o">)</span></code>. </p>
+<p>Filter:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@WebFilter</span><span class="o">(</span><span class="s">&quot;/some/*&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyFilter</span> <span class="kd">implements</span> <span class="n">Filter</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</pre></div>
+
+<p>Extension <a href="../../installers/filter/">recognized</a> by <code>@WebFilter</code> annotation. </p>
+<p>Web listeners (servlet, request, session):</p>
+<div class="codehilite"><pre><span></span><span class="nd">@WebListener</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyListener</span> <span class="kd">implements</span> <span class="n">ServletContextListener</span> <span class="o">{...}</span>
+</pre></div>
+
+<p>Extension <a href="../../installers/listener/">recognized</a> by <code>@WebListener</code> annotation.</p>
+<div class="admonition success">
+<p class="admonition-title">Pros</p>
+<p>Installation through extensions has more abilities comparing to <code>ServletModule</code>:</p>
+<ul>
+<li>Installation into <a href="../../installers/servlet/#admin-context">admin context</a></li>
+<li><a href="../../installers/servlet/#admin-context">Async support</a></li>
+<li>Filter may be applied to exact servlet(s) (<code class="codehilite"><span class="nd">@WebFilter</span><span class="o">(</span><span class="n">servletNames</span> <span class="o">=</span> <span class="s">&quot;servletName&quot;</span><span class="o">)</span></code>)</li>
+<li>Request, servlet context or session <a href="../../installers/listener/">listeners installation</a></li>
+</ul>
+</div>
+<p>If you don't want to use web installers or have problems with it (e.g. because they use <code>javax.servlet</code> annotations)
+you can disable all of them at once by disabling bundle:</p>
+<div class="codehilite"><pre><span></span><span class="n">GuiceBundle</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">disableBindles</span><span class="o">(</span><span class="n">WebInstallersBundle</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="o">...</span>
+</pre></div>
+
+<h3 id="manual-registration">Manual registration<a class="headerlink" href="#manual-registration" title="Permanent link">&para;</a></h3>
+<p>Alternatively, you can always register servlet or filter manually with dropwizard api:</p>
+<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="kd">extends</span> <span class="n">Application</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initialize</span><span class="o">(</span><span class="n">Bootstrap</span> <span class="n">bootstrap</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="n">GuiceBundle</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">build</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(</span><span class="n">Configuration</span> <span class="n">configuration</span><span class="o">,</span> <span class="n">Environment</span> <span class="n">environment</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">MyFilter</span> <span class="n">filter</span> <span class="o">=</span> <span class="n">InjectorLookup</span><span class="o">.</span><span class="na">getInjector</span><span class="o">(</span><span class="k">this</span><span class="o">).</span><span class="na">get</span><span class="o">()</span>
+                                        <span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">MyFilterBean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">environment</span><span class="o">.</span><span class="na">servlets</span><span class="o">().</span><span class="na">addFilter</span><span class="o">(</span><span class="s">&quot;manualFilter&quot;</span><span class="o">,</span> <span class="n">filter</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">addMappingForUrlPatterns</span><span class="o">(</span><span class="n">EnumSet</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">DispatcherType</span><span class="o">.</span><span class="na">REQUEST</span><span class="o">),</span> <span class="kc">false</span><span class="o">,</span> <span class="s">&quot;/*&quot;</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
 
-<h3 id="request-scoped-beans">Request scoped beans<a class="headerlink" href="#request-scoped-beans" title="Permanent link">&para;</a></h3>
-<p>You can use request scoped beans in both main and admin contexts. </p>
-<div class="codehilite"><pre><span></span><span class="nd">@RequestScoped</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyRequestScopedBean</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<h2 id="resources">Resources<a class="headerlink" href="#resources" title="Permanent link">&para;</a></h2>
+<p>Dropwizard provides <a href="https://www.dropwizard.io/en/stable/manual/core.html#serving-assets">AssetsBundle</a> 
+for serving static files from classpath:</p>
+<div class="codehilite"><pre><span></span><span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="k">new</span> <span class="n">AssetsBundle</span><span class="o">(</span><span class="s">&quot;/assets/app/&quot;</span><span class="o">,</span> <span class="s">&quot;/&quot;</span><span class="o">,</span> <span class="s">&quot;index.html&quot;</span><span class="o">));</span>
 </pre></div>
 
-<p>To obtain bean reference use provider:</p>
-<div class="codehilite"><pre><span></span><span class="n">Provider</span><span class="o">&lt;</span><span class="n">MyRequestScopedBean</span><span class="o">&gt;</span> <span class="n">myBeanProvider</span><span class="o">;</span>
-</pre></div>
-
-<p>You can inject request and response objects in any bean:</p>
-<div class="codehilite"><pre><span></span><span class="n">Provider</span><span class="o">&lt;</span><span class="n">HttpServletRequest</span><span class="o">&gt;</span> <span class="n">requestProvider</span>
-<span class="n">Provider</span><span class="o">&lt;</span><span class="n">HttpServletResponse</span><span class="o">&gt;</span> <span class="n">responseProvider</span>
-</pre></div>
-
-<h3 id="limitations">Limitations<a class="headerlink" href="#limitations" title="Permanent link">&para;</a></h3>
-<p>By default, <code>GuiceFilter</code> is registered with <code>REQUEST</code> dispatcher type. If you need to use other types use option:</p>
-<div class="codehilite"><pre><span></span>    <span class="o">.</span><span class="na">option</span><span class="o">(</span><span class="n">GuiceyOptions</span><span class="o">.</span><span class="na">GuiceFilterRegistration</span><span class="o">,</span> <span class="n">EnumSet</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">REQUEST</span><span class="o">,</span> <span class="n">FORWARD</span><span class="o">))</span>
-</pre></div>
-
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Note that async servlets and filters can't be used with guice servlet module (and so it is impossible to register <code>GuiceFilter</code> for <code>ASYNC</code> type). 
-Use <a href="#web-installers">web installers</a> for such cases. </p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><code>GuiceFilter</code> dispatch all requests for filters and servlets registered by <code>ServletModule</code> internally and there may be problems combining servlets from <code>ServletModule</code>
-and filters in main scope.</p>
-</div>
-<h3 id="disable-servletmodule-support">Disable ServletModule support<a class="headerlink" href="#disable-servletmodule-support" title="Permanent link">&para;</a></h3>
-<p>If you don't use servlet modules (for example, because web installers cover all needs) you can disable guice servlet modules support:
+<p><code>http://localhost:8080/foo.css</code> &rarr; <code>src/main/resources/assets/app/foo.css</code> <br />
+<code>http://localhost:8080/</code> &rarr; <code>src/main/resources/assets/app/index.html</code></p>
+<h3 id="html5-routing">HTML5 routing<a class="headerlink" href="#html5-routing" title="Permanent link">&para;</a></h3>
+<p>But, if you develop SPA application with HTML5 routes, server will not handle these routes
+properly. Use guicey <a href="../../extras/spa/">SPA bundle</a> which adds proper SPA routing support above dropwizard <code>AssetBundle</code> </p>
 <div class="codehilite"><pre><span></span><span class="n">GuiceBundle</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
-    <span class="o">.</span><span class="na">noGuiceFilter</span><span class="o">()</span>
-</pre></div></p>
-<p>It will:</p>
-<ul>
-<li>Avoid registration of <code>GuiceFilter</code> in both contexts</li>
-<li>Remove request and session guice scopes support (because no ServletModule registered)</li>
-<li>Prevent installation of any <code>ServletModule</code> (error will be thrown indicating duplicate binding)</li>
-<li><code>HttpServletRequest</code> and <code>HttpServletResponse</code> still may be injected in resources with <code>Provider</code> 
-(but it will not be possible to use such injections in servlets, filters or any other place)</li>
-</ul>
-<p>Disabling saves about ~50ms of startup time. </p>
-<h2 id="web-installers">Web installers<a class="headerlink" href="#web-installers" title="Permanent link">&para;</a></h2>
-<p>Servlet api 3.0 provides <code>@WebServlet</code>, <code>@WebFilter</code> and <code>@WebListener</code> annotations, but they are not recognized in dropwizard
-(because dropwizard does not depend on jersey-annotations module). Web installers recognize this annotations and register guice-managed filters, servlets and listeners 
-instances.</p>
-<p>Web installers are disabled by default. To eable:</p>
-<div class="codehilite"><pre><span></span><span class="n">GuiceBundle</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
-    <span class="o">.</span><span class="na">useWebInstallers</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">bundles</span><span class="o">(</span><span class="n">SpaBundle</span><span class="o">.</span><span class="na">app</span><span class="o">(</span><span class="s">&quot;spaApp&quot;</span><span class="o">,</span> <span class="s">&quot;/assets/app/&quot;</span><span class="o">,</span> <span class="s">&quot;/&quot;</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
 </pre></div>
 
-<p>It will register <a href="https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/WebInstallersBundle.java">WebInstallersBundle</a>.</p>
+<p><code>http://localhost:8080/</code> &rarr; <code>src/main/resources/assets/app/index.html</code> <br />
+<code>http://localhost:8080/route/path</code> &rarr; <code>src/main/resources/assets/app/index.html</code></p>
+<h2 id="templates">Templates<a class="headerlink" href="#templates" title="Permanent link">&para;</a></h2>
+<p>Dropwizard provides <a href="https://www.dropwizard.io/en/stable/manual/views.html">ViewBundle</a>
+for handling templates (freemarker and mustache out of the box, more engines could be plugged).</p>
+<div class="codehilite"><pre><span></span><span class="n">bootstrap</span><span class="o">.</span><span class="na">addBundle</span><span class="o">(</span><span class="k">new</span> <span class="n">ViewBundle</span><span class="o">());</span>
+</pre></div>
+
+<p>Which allows you to serve rendered templates <a href="https://www.dropwizard.io/en/stable/manual/views.html">from rest endpoints</a>.</p>
+<h3 id="templates-resources">Templates + resources<a class="headerlink" href="#templates-resources" title="Permanent link">&para;</a></h3>
+<p>But it is not quite handful to use it together with static resources (<a href="#resources">AssetsBundle</a>)
+because static resources will have different urls (as they are not served from rest).  </p>
+<p>If you would like to have JSP-like behaviour (when templates and resources live at the same
+location and so could easily reference each other) - then use guicey <a href="../../extras/gsp/">GSP bundle</a> 
+(which is actually just a "glue" for dropwizard <code>ViewBundle</code> and <code>AssetsBundle</code>).</p>
+<div class="codehilite"><pre><span></span><span class="n">com</span><span class="o">/</span><span class="n">exmaple</span><span class="o">/</span><span class="n">app</span><span class="o">/</span>
+    <span class="n">person</span><span class="o">.</span><span class="na">ftl</span>
+    <span class="n">foo</span><span class="o">.</span><span class="na">ftl</span>
+    <span class="n">style</span><span class="o">.</span><span class="na">css</span>
+</pre></div>
+
+<div class="codehilite"><pre><span></span><span class="err">&lt;</span>#-- Sample template without model (/foo.ftl) --&gt;
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>        
+        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello, it&#39;s a template: ${12+22}!<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+
+<div class="codehilite"><pre><span></span><span class="err">&lt;</span>#-- Template with model, rendered by rest endpoint (/person/) --&gt;
+<span class="err">&lt;</span>#-- @ftlvariable name=&quot;&quot; type=&quot;com.example.views.PersonView&quot; --&gt;
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>   
+    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>  
+        <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;/style.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+        <span class="c">&lt;!-- calls getPerson().getName() and sanitizes it --&gt;</span>
+        <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello, ${person.name?html}!<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+
+<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonView</span> <span class="kd">extends</span> <span class="n">TemplateView</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Person</span> <span class="n">person</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">PersonView</span><span class="o">(</span><span class="n">Person</span> <span class="n">person</span><span class="o">)</span> <span class="o">{</span>    
+        <span class="kd">super</span><span class="o">(</span><span class="err">&#39;</span><span class="n">person</span><span class="o">.</span><span class="na">ftl</span><span class="err">&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">person</span> <span class="o">=</span> <span class="n">person</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">Person</span> <span class="nf">getPerson</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">person</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<div class="codehilite"><pre><span></span><span class="c1">// Path starts with application name  </span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/com.example.app/person/&quot;</span><span class="o">)</span>  
+<span class="nd">@Produces</span><span class="o">(</span><span class="n">MediaType</span><span class="o">.</span><span class="na">TEXT_HTML</span><span class="o">)</span>    
+<span class="c1">// Important marker</span>
+<span class="nd">@Template</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonPage</span> <span class="o">{</span>      
+
+    <span class="nd">@Inject</span>
+    <span class="kd">private</span> <span class="n">PersonDAO</span> <span class="n">dao</span><span class="o">;</span>
+
+    <span class="nd">@GET</span>  
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">PersonView</span> <span class="nf">getMaster</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">PersonView</span><span class="o">(</span><span class="n">dao</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+    <span class="o">}</span>    
+
+    <span class="nd">@GET</span>  
+    <span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/{id}&quot;</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">PersonView</span> <span class="nf">getPerson</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">PersonView</span><span class="o">(</span><span class="n">dao</span><span class="o">.</span><span class="na">find</span><span class="o">(</span><span class="n">id</span><span class="o">));</span>
+    <span class="o">}</span>   
+<span class="o">}</span>
+</pre></div>
+
+<div class="codehilite"><pre><span></span><span class="n">GuiceBundle</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>                                     
+    <span class="o">.</span><span class="na">bundles</span><span class="o">(</span>
+             <span class="c1">// global views support</span>
+             <span class="n">ServerPagesBundle</span><span class="o">.</span><span class="na">builder</span><span class="o">().</span><span class="na">build</span><span class="o">(),</span>
+             <span class="c1">// application registration</span>
+             <span class="n">ServerPagesBundle</span><span class="o">.</span><span class="na">app</span><span class="o">(</span><span class="s">&quot;com.example.app&quot;</span><span class="o">,</span> <span class="s">&quot;/com/example/app/&quot;</span><span class="o">,</span> <span class="s">&quot;/&quot;</span><span class="o">)</span>   
+                                 <span class="c1">// rest path as index page</span>
+                                 <span class="o">.</span><span class="na">indexPage</span><span class="o">(</span><span class="s">&quot;person/&quot;</span><span class="o">)</span>
+                                 <span class="o">.</span><span class="na">build</span><span class="o">());</span>
+</pre></div>
+
+<p>Static resource call:</p>
+<p><code>http://localhost:8080/style.css</code> &rarr; <code>src/main/resources/com/example/app/style.css</code></p>
+<p>Direct template call:</p>
+<p><code>http://localhost:8080/foo.ftl</code> &rarr; <code>src/main/resources/com/example/app/foo.ftl</code></p>
+<p>Rest-driven template call:</p>
+<p><code>http://localhost:8080/person/12</code> &rarr; <code>/rest/com.example.app/person/12</code></p>
+<p>Index page:</p>
+<p><code>http://localhost:8080/</code> &rarr; <code>/rest/com.example.app/person/</code></p>
 <div class="admonition note">
-<p>Web installers are not enabled by default, because dropwizard is primarily rest oriented framework and you may not use custom servlets and filters at all
-(so no need to spent time trying to recognize them). Moreover, using standard servlet api annotations may confuse users and so 
-it must be user decision to enable such support. Other developers should be guided bu option name and its javadoc (again to avoid confusion, no matter that
-it will work exactly as expected)</p>
+<p class="admonition-title">Summary</p>
+<p>Declaration differences from pure dropwizard views:</p>
+<ul>
+<li>Model extends <code>TemplateView</code></li>
+<li>Rest endpoints always annotated with <code>@Template</code></li>
+<li>Rest endpoints paths starts with registered application name (<code class="codehilite"><span class="n">ServerPagesBundle</span><span class="o">.</span><span class="na">app</span><span class="o">(</span><span class="s">&quot;com.example.app&quot;</span></code>)
+to be able to differentiate rest for different UI applications     </li>
+</ul>
 </div>
-<h3 id="differences-with-guiceservlet-module">Differences with GuiceServlet module<a class="headerlink" href="#differences-with-guiceservlet-module" title="Permanent link">&para;</a></h3>
-<p>There is a difference between using web installers and registering servlets and filters with <a href="#guice-servletmodule-support">guice servlet module</a>.
-Guice servlet module handles registered servlets and filters internally in <code>GuiceFilter</code> (which is installed by guicey in both app and admin contexts).
-As a side effect, there are some compatibility issues between guice servlets and native filters (rare and usually not blocking, but still).
-Web installers use guice only for filter or servlet instance creation and register this instance directly in dropwizard environment (using annotation metadata).  </p>
-<p>In many cases, annotations are more convenient way to declare servlet or filter registration comparing to servlet module. </p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Using annotations you can register async <a href="../../installers/servlet/#async">servlets</a> and <a href="../../installers/filter/#async">filters</a> (with annotations <code>asyncSupported=true</code> option).
-In contrast, it is impossible to register async with guice servlet module.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Standard errors handling in views (<a href="https://www.dropwizard.io/en/stable/manual/views.html#man-views-template-errors">templates</a>,
+<a href="https://www.dropwizard.io/en/stable/manual/views.html#custom-error-pages">custome pages</a>) is replaced by 
+<a href="../../extras/gsp/#error-pages">custom mechanism</a>, required to implement per-ui-app errors support.</p>
 </div>
-<h3 id="admin-context">Admin context<a class="headerlink" href="#admin-context" title="Permanent link">&para;</a></h3>
-<p>By default, web installers (servlet, filter, listener) target application context. If you want to install into admin context then use <code>@AdminContext</code> annotation.</p>
-<p>For example: </p>
-<div class="codehilite"><pre><span></span><span class="nd">@AdminContext</span>
-<span class="nd">@WebServlet</span><span class="o">(</span><span class="s">&quot;/mapped&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyServlet</span> <span class="n">extneds</span> <span class="n">HttpServlet</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
-</pre></div>
-
-<p>Will install servlet in admin context only.</p>
-<p>If you want to install in both contexts use andMain attribute:</p>
-<div class="codehilite"><pre><span></span><span class="nd">@AdminContext</span><span class="o">(</span><span class="n">andMain</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
-<span class="nd">@WebServlet</span><span class="o">(</span><span class="s">&quot;/mapped&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyServlet</span> <span class="n">extneds</span> <span class="n">HttpServlet</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
-</pre></div>
-
-<p>In example above, servlet registered in both contexts.</p>
                 
                   
                 
@@ -1257,7 +1774,7 @@ In contrast, it is impossible to register async with guice servlet module.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../commands/" title="Commands" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../extensions/" title="Extensions" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1266,19 +1783,19 @@ In contrast, it is impossible to register async with guice servlet module.</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Commands
+                Extensions
               </span>
             </div>
           </a>
         
         
-          <a href="../test/" title="Test" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../modules/" title="Extra integrations" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Test
+                Extra integrations
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -1304,7 +1821,6 @@ In contrast, it is impossible to register async with guice servlet module.</p>
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
@@ -1314,21 +1830,15 @@ In contrast, it is impossible to register async with guice servlet module.</p>
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      <script src="../../assets/javascripts/application.c648116f.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-93174150-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>

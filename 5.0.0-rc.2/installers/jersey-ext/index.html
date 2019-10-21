@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -38,7 +38,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.4">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.2">
     
     
       
@@ -46,21 +46,50 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.451f80e5.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.30686662.css">
       
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
     <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-93174150-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -71,24 +100,7 @@
       <defs>
         
         
-          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
-    viewBox="0 0 416 448" id="__github">
-  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
-        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
-        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
-        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
-        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
-        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
-        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
-        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
-        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
-        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
-        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
-        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
-        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
-        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
-        99.5z" />
-</svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
         
       </defs>
     </svg>
@@ -96,7 +108,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="../../#jersey-extension-installer" tabindex="1" class="md-skip">
+      <a href="#jersey-extension-installer" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -117,22 +129,21 @@
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                Dropwizard-guicey
-              </span>
-              <span class="md-header-nav__topic">
+            <span class="md-header-nav__topic">
+              Dropwizard-guicey
+            </span>
+            <span class="md-header-nav__topic">
+              
                 Jersey extension
-              </span>
-            
+              
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
@@ -155,7 +166,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -166,20 +176,18 @@
 
   
 
-
-  <a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      dropwizard-guicey
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
           </div>
         </div>
       
@@ -192,7 +200,98 @@
         
       
       
-      <main class="md-main">
+        
+
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href="../.." class="md-tabs__link">
+        Home
+      </a>
+    
+  </li>
+
+      
+        
+      
+        
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../guide/configuration/" class="md-tabs__link">
+          User guide
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../resource/" class="md-tabs__link md-tabs__link--active">
+          Installers
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../extras/admin-rest/" class="md-tabs__link">
+          Modules
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../examples/authentication/" class="md-tabs__link">
+          Examples
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../about/release-notes/" class="md-tabs__link">
+          About
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main" role="main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
             
@@ -215,20 +314,18 @@
 
   
 
-
-  <a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
-    
-      <div class="md-source__icon">
-        <svg viewBox="0 0 24 24" width="24" height="24">
-          <use xlink:href="#__github" width="24" height="24"></use>
-        </svg>
-      </div>
-    
-    <div class="md-source__repository">
-      dropwizard-guicey
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
     </div>
-  </a>
-
+  
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
     </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -306,8 +403,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../guide/lifecycle/" title="Integration lifecycle" class="md-nav__link">
-      Integration lifecycle
+    <a href="../../guide/extensions/" title="Extensions" class="md-nav__link">
+      Extensions
     </a>
   </li>
 
@@ -318,7 +415,74 @@
 
 
   <li class="md-nav__item">
-    <a href="../../guide/injector/" title="Injector" class="md-nav__link">
+    <a href="../../guide/web/" title="Web" class="md-nav__link">
+      Web
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/modules/" title="Extra integrations" class="md-nav__link">
+      Extra integrations
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/bundles/" title="Bundles" class="md-nav__link">
+      Bundles
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/yaml-values/" title="Yaml values" class="md-nav__link">
+      Yaml values
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-7" type="checkbox" id="nav-4-7">
+    
+    <label class="md-nav__link" for="nav-4-7">
+      Guice
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-7">
+        Guice
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/guice/injector/" title="Injector" class="md-nav__link">
       Injector
     </a>
   </li>
@@ -330,7 +494,31 @@
 
 
   <li class="md-nav__item">
-    <a href="../../guide/module-autowiring/" title="Module autowiring" class="md-nav__link">
+    <a href="../../guide/guice/bindings/" title="Bindings" class="md-nav__link">
+      Bindings
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/guice/scopes/" title="Scopes" class="md-nav__link">
+      Scopes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/guice/module-autowiring/" title="Module autowiring" class="md-nav__link">
       Module autowiring
     </a>
   </li>
@@ -342,8 +530,181 @@
 
 
   <li class="md-nav__item">
-    <a href="../../guide/bindings/" title="Bindings" class="md-nav__link">
-      Bindings
+    <a href="../../guide/guice/module-analysis/" title="Modules analysis" class="md-nav__link">
+      Modules analysis
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/guice/override/" title="Override bindings" class="md-nav__link">
+      Override bindings
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/guice/servletmodule/" title="ServletModule" class="md-nav__link">
+      ServletModule
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4-8" type="checkbox" id="nav-4-8">
+    
+    <label class="md-nav__link" for="nav-4-8">
+      Diagnostic
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-4-8">
+        Diagnostic
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/diagnostic/diagnostic-tools/" title="Tools" class="md-nav__link">
+      Tools
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/diagnostic/configuration-report/" title="Configuration" class="md-nav__link">
+      Configuration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/diagnostic/configuration-model/" title="Configuration model" class="md-nav__link">
+      Configuration model
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/diagnostic/installers-report/" title="Installers" class="md-nav__link">
+      Installers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/diagnostic/yaml-values-report/" title="Yaml values" class="md-nav__link">
+      Yaml values
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/diagnostic/lifecycle-report/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/diagnostic/guice-report/" title="Guice" class="md-nav__link">
+      Guice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/diagnostic/aop-report/" title="AOP" class="md-nav__link">
+      AOP
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/test/" title="Test" class="md-nav__link">
+      Test
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/lifecycle/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
     </a>
   </li>
 
@@ -390,18 +751,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../guide/bundles/" title="Bundles (Guicey)" class="md-nav__link">
-      Bundles (Guicey)
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../guide/options/" title="Options" class="md-nav__link">
       Options
     </a>
@@ -414,8 +763,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../guide/diagnostic/" title="Diagnostic" class="md-nav__link">
-      Diagnostic
+    <a href="../../guide/events/" title="Events" class="md-nav__link">
+      Events
     </a>
   </li>
 
@@ -426,8 +775,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../../guide/events/" title="Lifecycle events" class="md-nav__link">
-      Lifecycle events
+    <a href="../../guide/disables/" title="Disables" class="md-nav__link">
+      Disables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../guide/deduplication/" title="De-duplication" class="md-nav__link">
+      De-duplication
     </a>
   </li>
 
@@ -450,8 +811,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../guide/web/" title="Web" class="md-nav__link">
-      Web
+    <a href="../../guide/hooks/" title="Hooks" class="md-nav__link">
+      Hooks
     </a>
   </li>
 
@@ -462,8 +823,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../guide/test/" title="Test" class="md-nav__link">
-      Test
+    <a href="../../guide/shared/" title="Shared state" class="md-nav__link">
+      Shared state
     </a>
   </li>
 
@@ -474,8 +835,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../guide/dg-migration/" title="Migration from dropwizard-guice" class="md-nav__link">
-      Migration from dropwizard-guice
+    <a href="../../guide/hk2/" title="HK2" class="md-nav__link">
+      HK2
     </a>
   </li>
 
@@ -599,7 +960,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#recognition" title="Recognition" class="md-nav__link">
+  <a href="#recognition" class="md-nav__link">
     Recognition
   </a>
   
@@ -607,98 +968,98 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#factory" title="Factory" class="md-nav__link">
-    Factory
+  <a href="#supplier" class="md-nav__link">
+    Supplier
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#exceptionmapper" title="ExceptionMapper" class="md-nav__link">
+  <a href="#exceptionmapper" class="md-nav__link">
     ExceptionMapper
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#valueparamprovider" title="ValueParamProvider" class="md-nav__link">
+  <a href="#valueparamprovider" class="md-nav__link">
     ValueParamProvider
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#injectionresolver" title="InjectionResolver" class="md-nav__link">
+  <a href="#injectionresolver" class="md-nav__link">
     InjectionResolver
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#paramconverterprovider" title="ParamConverterProvider" class="md-nav__link">
+  <a href="#paramconverterprovider" class="md-nav__link">
     ParamConverterProvider
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#contextresolver" title="ContextResolver" class="md-nav__link">
+  <a href="#contextresolver" class="md-nav__link">
     ContextResolver
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#messagebodyreader" title="MessageBodyReader" class="md-nav__link">
+  <a href="#messagebodyreader" class="md-nav__link">
     MessageBodyReader
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#messagebodywriter" title="MessageBodyWriter" class="md-nav__link">
+  <a href="#messagebodywriter" class="md-nav__link">
     MessageBodyWriter
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#readerinterceptor" title="ReaderInterceptor" class="md-nav__link">
+  <a href="#readerinterceptor" class="md-nav__link">
     ReaderInterceptor
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#writerinterceptor" title="WriterInterceptor" class="md-nav__link">
+  <a href="#writerinterceptor" class="md-nav__link">
     WriterInterceptor
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#containerrequestfilter" title="ContainerRequestFilter" class="md-nav__link">
+  <a href="#containerrequestfilter" class="md-nav__link">
     ContainerRequestFilter
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#containerresponsefilter" title="ContainerResponseFilter" class="md-nav__link">
+  <a href="#containerresponsefilter" class="md-nav__link">
     ContainerResponseFilter
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#dynamicfeature" title="DynamicFeature" class="md-nav__link">
+  <a href="#dynamicfeature" class="md-nav__link">
     DynamicFeature
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#applicationeventlistener" title="ApplicationEventListener" class="md-nav__link">
+  <a href="#applicationeventlistener" class="md-nav__link">
     ApplicationEventListener
   </a>
   
@@ -807,107 +1168,11 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-6" type="checkbox" id="nav-6">
     
     <label class="md-nav__link" for="nav-6">
-      Examples
+      Modules
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
       <label class="md-nav__title" for="nav-6">
-        Examples
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
-      Authentication
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/governator/" title="Governator" class="md-nav__link">
-      Governator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/hibernate/" title="Hibernate" class="md-nav__link">
-      Hibernate
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/eventbus/" title="EventBus" class="md-nav__link">
-      EventBus
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/jdbi/" title="JDBI" class="md-nav__link">
-      JDBI
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../examples/jdbi3/" title="JDBI3" class="md-nav__link">
-      JDBI3
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
-    
-    <label class="md-nav__link" for="nav-7">
-      Extras
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-7">
-        Extras
+        Modules
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -1020,6 +1285,102 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7">
+    
+    <label class="md-nav__link" for="nav-7">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
+      Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/governator/" title="Governator" class="md-nav__link">
+      Governator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/hibernate/" title="Hibernate" class="md-nav__link">
+      Hibernate
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/eventbus/" title="EventBus" class="md-nav__link">
+      EventBus
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi/" title="JDBI" class="md-nav__link">
+      JDBI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi3/" title="JDBI3" class="md-nav__link">
+      JDBI3
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
     
     <label class="md-nav__link" for="nav-8">
@@ -1031,6 +1392,18 @@
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/release-notes/" title="Release notes" class="md-nav__link">
+      Release notes
+    </a>
+  </li>
+
         
           
           
@@ -1050,8 +1423,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../about/history/" title="Release notes" class="md-nav__link">
-      Release notes
+    <a href="../../about/history/" title="Version history" class="md-nav__link">
+      Version history
     </a>
   </li>
 
@@ -1106,7 +1479,7 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#recognition" title="Recognition" class="md-nav__link">
+  <a href="#recognition" class="md-nav__link">
     Recognition
   </a>
   
@@ -1114,98 +1487,98 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#factory" title="Factory" class="md-nav__link">
-    Factory
+  <a href="#supplier" class="md-nav__link">
+    Supplier
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#exceptionmapper" title="ExceptionMapper" class="md-nav__link">
+  <a href="#exceptionmapper" class="md-nav__link">
     ExceptionMapper
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#valueparamprovider" title="ValueParamProvider" class="md-nav__link">
+  <a href="#valueparamprovider" class="md-nav__link">
     ValueParamProvider
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#injectionresolver" title="InjectionResolver" class="md-nav__link">
+  <a href="#injectionresolver" class="md-nav__link">
     InjectionResolver
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#paramconverterprovider" title="ParamConverterProvider" class="md-nav__link">
+  <a href="#paramconverterprovider" class="md-nav__link">
     ParamConverterProvider
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#contextresolver" title="ContextResolver" class="md-nav__link">
+  <a href="#contextresolver" class="md-nav__link">
     ContextResolver
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#messagebodyreader" title="MessageBodyReader" class="md-nav__link">
+  <a href="#messagebodyreader" class="md-nav__link">
     MessageBodyReader
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#messagebodywriter" title="MessageBodyWriter" class="md-nav__link">
+  <a href="#messagebodywriter" class="md-nav__link">
     MessageBodyWriter
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#readerinterceptor" title="ReaderInterceptor" class="md-nav__link">
+  <a href="#readerinterceptor" class="md-nav__link">
     ReaderInterceptor
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#writerinterceptor" title="WriterInterceptor" class="md-nav__link">
+  <a href="#writerinterceptor" class="md-nav__link">
     WriterInterceptor
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#containerrequestfilter" title="ContainerRequestFilter" class="md-nav__link">
+  <a href="#containerrequestfilter" class="md-nav__link">
     ContainerRequestFilter
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#containerresponsefilter" title="ContainerResponseFilter" class="md-nav__link">
+  <a href="#containerresponsefilter" class="md-nav__link">
     ContainerResponseFilter
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#dynamicfeature" title="DynamicFeature" class="md-nav__link">
+  <a href="#dynamicfeature" class="md-nav__link">
     DynamicFeature
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#applicationeventlistener" title="ApplicationEventListener" class="md-nav__link">
+  <a href="#applicationeventlistener" class="md-nav__link">
     ApplicationEventListener
   </a>
   
@@ -1240,7 +1613,7 @@
 <p>CoreInstallersBundle / <a href="https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java">JerseyProviderInstaller</a>        </p>
 </div>
 <p>Installs various jersey extensions, usually annotated with jersey <code class="codehilite"><span class="nd">@Provider</span></code> annotation and installed via <code class="codehilite"><span class="n">environment</span><span class="o">.</span><span class="na">jersey</span><span class="o">().</span><span class="na">register</span><span class="o">()</span></code>:</p>
-<div class="codehilite"><pre><span></span>Factory, ExceptionMapper, ValueParamProvider, InjectionResolver, 
+<div class="codehilite"><pre><span></span>Supplier, ExceptionMapper, ValueParamProvider, InjectionResolver, 
 ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, 
 ReaderInterceptor, WriterInterceptor, ContainerRequestFilter, 
 ContainerResponseFilter, DynamicFeature, ApplicationEventListener
@@ -1251,7 +1624,7 @@ ContainerResponseFilter, DynamicFeature, ApplicationEventListener
 <p>Detects  classes annotated with jersey <code>@javax.ws.rs.ext.Provider</code> annotation and register their instances in jersey.</p>
 <div class="admonition attention">
 <p>Extensions registered as <strong>singletons</strong>, when no explicit scope annotation is used.
-Behaviour could be disabled with <a href="../../guide/configuration/#options">option</a>:
+Behaviour could be disabled with <a href="../../guide/options/">option</a>:
 <div class="codehilite"><pre><span></span><span class="o">.</span><span class="na">option</span><span class="o">(</span><span class="n">InstallerOptions</span><span class="o">.</span><span class="na">ForceSingletonForJerseyExtensions</span><span class="o">,</span> <span class="kc">false</span><span class="o">)</span>
 </pre></div></p>
 </div>
@@ -1259,46 +1632,44 @@ Behaviour could be disabled with <a href="../../guide/configuration/#options">op
 It is useful when <a href="../../guide/web/#disable-servletmodule-support">guice servlet support is disabled</a> (and so <code>@RequestScoped</code> could not be used).</p>
 <p>Due to specifics of <a href="../lifecycle/">HK2 integration</a>, you may need to use:</p>
 <ul>
-<li><code class="codehilite"><span class="nd">@HK2Managed</span></code> to delegate bean creation to HK2</li>
+<li><code class="codehilite"><span class="nd">@JerseyManaged</span></code> to delegate bean creation to HK2</li>
 <li><code class="codehilite"><span class="nd">@LazyBinding</span></code> to delay bean creation to time when all dependencies will be available </li>
 <li><code>javax.inject.Provider</code> as universal workaround (to wrap not immediately available dependency).</li>
 </ul>
-<p>Or you can enable <a href="../../guide/configuration/#use-hk2-for-jersey-extensions">HK2 management for jersey extensions by default</a>.
+<p>Or you can enable <a href="../../guide/hk2/#use-hk2-for-jersey-extensions">HK2 management for jersey extensions by default</a>.
 Note that this will affect <a href="../resource/">resources</a> too and guice aop will not work on jersey extensions.</p>
-<h3 id="factory">Factory<a class="headerlink" href="#factory" title="Permanent link">&para;</a></h3>
-<p>Any class implementing <code class="codehilite"><span class="n">org</span><span class="o">.</span><span class="na">glassfish</span><span class="o">.</span><span class="na">hk2</span><span class="o">.</span><span class="na">api</span><span class="o">.</span><span class="na">Factory</span></code> (or extending abstract class implementing it).</p>
-<div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AuthFactory</span> <span class="kd">implements</span> <span class="n">Factory</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;{</span>
-
+<h3 id="supplier">Supplier<a class="headerlink" href="#supplier" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>Supplier</code> is used now by hk2 as a replacement to it's own <code>Factory</code> interface.</p>
+<p>If you were using <code>AbstractContainerRequestValueFactory</code> then use just <code>Supplier&lt;T&gt;</code> instead.</p>
+</div>
+<p>Any class implementing <code class="codehilite"><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">function</span><span class="o">.</span><span class="na">Supplier</span></code> (or extending abstract class implementing it).</p>
+<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MySupplier</span> <span class="kd">implements</span> <span class="n">Supplier</span><span class="o">&lt;</span><span class="n">MyModel</span><span class="o">&gt;</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">User</span> <span class="nf">provide</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">User</span><span class="o">();</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">dispose</span><span class="o">(</span><span class="n">User</span> <span class="n">instance</span><span class="o">)</span> <span class="o">{</span>
-    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">MyModel</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span>
+       <span class="o">...</span>    
+    <span class="o">}</span>   
 <span class="o">}</span>
 </pre></div>
 
 <div class="admonition tip">
-<p>Factories in essence are very like guice (or javax.inject) providers (<code class="codehilite"><span class="n">Provider</span></code>).</p>
+<p>Suppliers in essence are very like guice (or <code>javax.inject</code>) providers (<code class="codehilite"><span class="n">Provider</span></code>).</p>
 </div>
-<p>Example of using jersey abstract class instead of direct implementation:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Previously, factories were used as auth objects providers. Now <code>Function&lt;ContainerRequest, ?&gt;</code> must be used instead: </p>
 <div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LocaleInjectableProvider</span> <span class="kd">extends</span> <span class="n">AbstractContainerRequestValueFactory</span><span class="o">&lt;</span><span class="n">Locale</span><span class="o">&gt;</span> <span class="o">{</span>
-
-    <span class="nd">@Inject</span>
-    <span class="kd">private</span> <span class="n">javax</span><span class="o">.</span><span class="na">inject</span><span class="o">.</span><span class="na">Provider</span><span class="o">&lt;</span><span class="n">HttpHeaders</span><span class="o">&gt;</span> <span class="n">request</span><span class="o">;</span>
+<span class="kd">class</span> <span class="nc">AuthFactory</span> <span class="kd">implements</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">ContainerRequest</span><span class="o">,</span> <span class="n">User</span><span class="o">&gt;</span> <span class="o">{</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Locale</span> <span class="nf">provide</span><span class="o">()</span> <span class="o">{</span>
-        <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Locale</span><span class="o">&gt;</span> <span class="n">locales</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">get</span><span class="o">().</span><span class="na">getAcceptableLanguages</span><span class="o">();</span>
-        <span class="k">return</span> <span class="n">locales</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">?</span> <span class="n">Locale</span><span class="o">.</span><span class="na">US</span> <span class="o">:</span> <span class="n">locales</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="n">User</span> <span class="nf">apply</span><span class="o">(</span><span class="n">ContainerRequest</span> <span class="n">containerRequest</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">User</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
 
+</div>
 <h3 id="exceptionmapper">ExceptionMapper<a class="headerlink" href="#exceptionmapper" title="Permanent link">&para;</a></h3>
 <p>Any class implementing <code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">ExceptionMapper</span></code> (or extending abstract class implementing it). 
 Useful for <a href="http://www.dropwizard.io/1.3.0/docs/manual/core.html#error-handling">error handling customization</a>.</p>
@@ -1333,50 +1704,52 @@ or completely disabled with <code>server.registerDefaultExceptionMappers</code> 
 <h3 id="valueparamprovider">ValueParamProvider<a class="headerlink" href="#valueparamprovider" title="Permanent link">&para;</a></h3>
 <p>Any class implementing <code class="codehilite"><span class="n">org</span><span class="o">.</span><span class="na">glassfish</span><span class="o">.</span><span class="na">jersey</span><span class="o">.</span><span class="na">server</span><span class="o">.</span><span class="na">spi</span><span class="o">.</span><span class="na">internal</span><span class="o">.</span><span class="na">ValueParamProvider</span></code> (or extending abstract class implementing it).</p>
 <div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
-<span class="nd">@LazyBinding</span> 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AuthFactoryProvider</span> <span class="kd">extends</span> <span class="n">AbstractValueFactoryProvider</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AuthFactoryProvider</span> <span class="kd">extends</span> <span class="n">AbstractValueParamProvider</span> <span class="o">{</span>
 
-    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Factory</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span> <span class="n">authFactory</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">AuthFactory</span> <span class="n">authFactory</span><span class="o">;</span>
 
     <span class="nd">@Inject</span>
-    <span class="kd">public</span> <span class="nf">AuthFactoryProvider</span><span class="o">(</span><span class="kd">final</span> <span class="n">MultivaluedParameterExtractorProvider</span> <span class="n">extractorProvider</span><span class="o">,</span>
-                               <span class="kd">final</span> <span class="n">AuthFactory</span> <span class="n">factory</span><span class="o">,</span> 
-                               <span class="kd">final</span> <span class="n">ServiceLocator</span> <span class="n">injector</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">extractorProvider</span><span class="o">,</span> <span class="n">injector</span><span class="o">,</span> <span class="n">Parameter</span><span class="o">.</span><span class="na">Source</span><span class="o">.</span><span class="na">UNKNOWN</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="nf">AuthFactoryProvider</span><span class="o">(</span><span class="kd">final</span> <span class="n">javax</span><span class="o">.</span><span class="na">inject</span><span class="o">.</span><span class="na">Provider</span><span class="o">&lt;</span><span class="n">MultivaluedParameterExtractorProvider</span><span class="o">&gt;</span> <span class="n">extractorProvider</span><span class="o">,</span>
+                               <span class="kd">final</span> <span class="n">AuthFactory</span> <span class="n">factory</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">extractorProvider</span><span class="o">,</span> <span class="n">Parameter</span><span class="o">.</span><span class="na">Source</span><span class="o">.</span><span class="na">UNKNOWN</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="na">authFactory</span> <span class="o">=</span> <span class="n">factory</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="n">Factory</span><span class="o">&lt;?&gt;</span> <span class="n">createValueFactory</span><span class="o">(</span><span class="n">Parameter</span> <span class="n">parameter</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">protected</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">ContainerRequest</span><span class="o">,</span> <span class="n">User</span><span class="o">&gt;</span> <span class="nf">createValueProvider</span><span class="o">(</span><span class="n">Parameter</span> <span class="n">parameter</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">final</span> <span class="n">Auth</span> <span class="n">auth</span> <span class="o">=</span> <span class="n">parameter</span><span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">Auth</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
         <span class="k">return</span> <span class="n">auth</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">authFactory</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
 
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code class="codehilite"><span class="nd">@LazyBinding</span></code> was used to delay provider creation because required dependency <code class="codehilite"><span class="n">MultivaluedParameterExtractorProvider</span></code>
-(by super class) will be available only after HK2 context creation (which is created after guice context). 
-Another option could be using <code class="codehilite"><span class="nd">@HK2Managed</span></code> (instead of lazy) which will delegate bean creation to HK2.</p>
-</div>
 <h3 id="injectionresolver">InjectionResolver<a class="headerlink" href="#injectionresolver" title="Permanent link">&para;</a></h3>
 <p>Any class implementing <code class="codehilite"><span class="n">org</span><span class="o">.</span><span class="na">glassfish</span><span class="o">.</span><span class="na">hk2</span><span class="o">.</span><span class="na">api</span><span class="o">.</span><span class="na">InjectionResolver</span></code> (or extending abstract class implementing it).</p>
 <div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
-<span class="nd">@LazyBinding</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AuthInjectionResolver</span> <span class="kd">extends</span> <span class="n">ParamInjectionResolver</span><span class="o">&lt;</span><span class="n">Auth</span><span class="o">&gt;</span> <span class="o">{</span>
+<span class="kd">class</span> <span class="nc">MyObjInjectionResolver</span> <span class="kd">implements</span> <span class="n">InjectionResolver</span><span class="o">&lt;</span><span class="n">MyObjAnn</span><span class="o">&gt;</span> <span class="o">{</span>
 
-    <span class="kd">public</span> <span class="nf">AuthInjectionResolver</span><span class="o">()</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">AuthFactoryProvider</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">resolve</span><span class="o">(</span><span class="n">Injectee</span> <span class="n">injectee</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">MyObj</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">MyObjAnn</span><span class="o">&gt;</span> <span class="nf">getAnnotation</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">MyObjAnn</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isConstructorParameterIndicator</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isMethodParameterIndicator</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </pre></div>
 
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code class="codehilite"><span class="nd">@LazyBinding</span></code> was used to delay provider creation because super class will require HK2 service locator, 
-which is not yet available. <code class="codehilite"><span class="nd">@HK2Managed</span></code> could also be used instead.</p>
-</div>
 <h3 id="paramconverterprovider">ParamConverterProvider<a class="headerlink" href="#paramconverterprovider" title="Permanent link">&para;</a></h3>
 <p>Any class implementing <a href="https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ParamConverterProvider.html"><code class="codehilite"><span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">ext</span><span class="o">.</span><span class="na">ParamConverterProvider</span></code></a> (or extending abstract class implementing it).</p>
 <div class="codehilite"><pre><span></span><span class="nd">@Provider</span>
@@ -1603,7 +1976,6 @@ Useful for conditional <a href="http://www.dropwizard.io/1.3.0/docs/manual/core.
           Material for MkDocs</a>
       </div>
       
-        
   <div class="md-footer-social">
     <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
@@ -1613,21 +1985,15 @@ Useful for conditional <a href="http://www.dropwizard.io/1.3.0/docs/manual/core.
     
   </div>
 
-      
     </div>
   </div>
 </footer>
       
     </div>
     
-      <script src="../../assets/javascripts/application.583bbe55.js"></script>
+      <script src="../../assets/javascripts/application.c648116f.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
-      
-    
-    
-      
-        <script>!function(e,a,t,n,o,c,i){e.GoogleAnalyticsObject=o,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,c=a.createElement(t),i=a.getElementsByTagName(t)[0],c.async=1,c.src="https://www.google-analytics.com/analytics.js",i.parentNode.insertBefore(c,i)}(window,document,"script",0,"ga"),ga("create","UA-93174150-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview");var links=document.getElementsByTagName("a");if(Array.prototype.map.call(links,function(e){e.host!=document.location.host&&e.addEventListener("click",function(){var a=e.getAttribute("data-md-action")||"follow";ga("send","event","outbound",a,e.href)})}),document.forms.search){var query=document.forms.search.query;query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}</script>
       
     
   </body>
