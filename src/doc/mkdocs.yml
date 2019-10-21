@@ -67,7 +67,7 @@ nav:
       - Extensions: guide/extensions.md
       - Web: guide/web.md
       - Extra integrations: guide/modules.md
-      - Integration lifecycle: guide/lifecycle.md
+      - Lifecycle: guide/lifecycle.md
       - Yaml values: guide/yaml-values.md
       - Classpath scan: guide/scan.md
       - Guice:
