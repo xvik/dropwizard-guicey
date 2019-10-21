@@ -47,7 +47,7 @@ them later for detection.
     - Guice modules may be [registered here](bundles.md#guicey-bundles)
     - Extensions may still [be disabled](bundles.md#optional-extensions)
 * [Autowire modules](guice/module-autowiring.md)
-* [Analyze modules](guice/module-analysis.md)
+* [Analyze enabled modules](guice/module-analysis.md)
     - Detect [extensions from bindings](guice/module-analysis.md#extensions-recognition)
     - Remove [disabled modules](guice/module-analysis.md#removed-bindings) and [disabled extensions](guice/module-analysis.md#disabled-extensions)
     - Re-package modules (to avoid duplicate modules parsing by guice)

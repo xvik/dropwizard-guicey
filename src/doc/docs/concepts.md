@@ -17,7 +17,7 @@ guice context. Guice-managed objects (extensions) are simply registered as insta
 So most of the time you don't have to know about HK2 at all.
 
 There are additional features allowing you to delegate some extensions management
-completely to HK2, but it's intended to be used in very rare cases (edge cases!). 
+[completely to HK2](guide/hk2.md#use-hk2-for-jersey-extensions), but it's intended to be used in very rare cases (edge cases!). 
 In this case you may require to explicitly register hk2-guice bride so hk2 could 
 see guice beans directly. 
 
@@ -147,17 +147,17 @@ GuiceBundle.builder()
 !!! summary
     So overall there are 3 possible sources for extensions:
     
-    * Classpath scan (mainly used for application extensions)
-    * Manual declaration (used in bundles to explicitly declare extensions)
-    * Guice bindings
+    * [Classpath scan](guide/scan.md) (mainly used for application extensions)
+    * [Manual declaration](guide/configuration.md#configuration-items) (used in bundles to explicitly declare extensions)
+    * [Guice bindings](guide/guice/module-analysis.md#extensions-recognition)
     
     In all cases extension is identifyed by it's class, but for extensions
-    detected from guice bindings automatic untargetted binding is not performed.  
+    detected from guice bindings [automatic untargetted binding](guide/guice/bindings.md#extension-bindings) is not performed.  
 
 ### Jersey extensions
 
 It is important to note that jersey extensions ([resources](installers/resource.md) and [other](installers/jersey-ext.md))
-are **forced to be singletons** (if explicit scope annotation is not set).
+are **forced to be singletons** (if explicit [scope annotation](guide/guice/scopes.md) is not set).
 
 This force you to always use all request scoped objects through `Provider`. But, from the other side,
 this avoids a jvm garbage from creating them for each request and makes everything a bit 
@@ -167,7 +167,7 @@ If you think that developer comfort worth more then small performance gain, then
 
 * You can use explicit scope annotations to change singleton scope (`@RequestScoped`, `@Prototype`)
 * Switch off forced singletons (`.option(InstallerOptions.ForceSingletonForJerseyExtensions, false)`)
-* Delegate some extensions or resources management to HK2 using `@HK2Managed`
+* Delegate some extensions or resources management to HK2 using `@JerseyManaged`
 * Use [HK2 by default](guide/hk2.md#use-hk2-for-jersey-extensions) for jersey extensions
 
 !!! warning 
@@ -184,7 +184,7 @@ can simply annotate class and make sure it would be registered in guice context 
 additional configurations (thanks to classpath scan). 
 
 !!! tip
-    Custom installers are also discovered and registered during classpath scan.   
+    Custom installers are also discovered and registered during [classpath scan](guide/scan.md).   
 
 Another example is [`PluginInstaller`](installers/plugin.md) which allows you to declare plugins 
 (e.g. implementing some interface) and inject all of them at once (as `Set<PluginInterface>`).
@@ -250,7 +250,7 @@ public interface GuiceyBundle {
 }
 ```         
 
-As you can see guicey bundles are completely equivalent to dropwizard bundles and so
+As you can see [guicey bundles](guide/bundles.md) are completely equivalent to dropwizard bundles and so
 it is very easy to switch from dropwizard bundles into guicey bundles.
 
 `GuiceyBootstrap` provides almost all the same methods as main `GuiceBundle`, allowing you to register
@@ -262,7 +262,7 @@ Provides access to dropwizard configuration, environment and introspected config
     
 !!! tip
     Guicey bundles assume to be used together with dropwizard bundles (because there are already 
-    many ready-to use dropwizard bundles): 
+    [many](https://modules.dropwizard.io/thirdparty/) ready-to use dropwizard bundles): 
     ```java
     GuiceyBootstrap.builder()
         .dropwizardBundles(..)
@@ -273,17 +273,11 @@ Provides access to dropwizard configuration, environment and introspected config
 In dropwizard bundles are helpful not just for extracting re-usable extensions, but for
 separation of application logic.
 
-In guicey, you don't need to write registration code with enabled classpath scan,
+In guicey, you don't need to write registration code and with enabled [classpath scan](guide/scan.md),
 don't need to configure much at all. This makes guicy bundles mostly usable for 3rd party integrations (or core modules extraction for large projects), 
 where you can't (and should not) rely on class path scan and must declare all installers and extensions manually.
 
-Guicey itself comes with multiple bundles: 
-
-* [Core installers bundle](guide/bundles.md#core-installers-bundle) - installers, enabled by default
-* [Web installers bundle](guide/bundles.md#web-installers-bundle) - web annotations installers for servlets and filters, enabled by default
-* [HK2/guice scope diagnostic bundle](guide/bundles.md#hk2-debug-bundle) - enables instantiation tracking to catch extensions instantiation by both (or just not intended) DI
-
-Many bundles are in extension modules.
+Many bundle examples could be found in [extension modules](guide/modules.md).
     
 ### Bundles lookup
 
@@ -649,9 +643,7 @@ And [other logs](guide/diagnostic/diagnostic-tools.md) giving you inside look on
 
 ### Not mentioned
 
-* [Dropwizard commands support](guide/commands.md) (automatic commands installation with classpath scan)
-* [Hiding classes from classpath scan](guide/scan.md#hide-class-from-scan)
+* [Dropwizard commands support](guide/commands.md) 
 * [Integration tests support](guide/test.md)
-* [Lifecycle events](guide/events.md) 
-* [Admin rest support](extras/admin-rest.md)
-* Ext integrations like [jdbi](extras/jdbi.md), [eventbus](extras/eventbus.md)
+* [Lifecycle events](guide/events.md)
+* [Shared state](guide/shared.md) 

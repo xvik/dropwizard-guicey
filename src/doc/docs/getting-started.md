@@ -53,17 +53,19 @@ dependencies {
 }
 ```
 
-Bom includes:
+BOM includes:
 
-* Guicey itself (ru.vyarus:dropwizard-guicey)
-* Dropwizard BOM (io.dropwizard:dropwizard-bom)
-* Guice BOM (com.google.inject:guice-bom)
-* HK2 bridge (org.glassfish.hk2:guice-bridge) 
-* System rules, required for StartupErrorRule (com.github.stefanbirkner:system-rules)
-* Spock (org.spockframework:spock-core)
+BOM           | Artifact
+--------------|-------------------------
+Guicey itself | `ru.vyarus:dropwizard-guicey`
+Dropwizard BOM | `io.dropwizard:dropwizard-bom`
+Guice BOM | `com.google.inject:guice-bom`
+HK2 bridge | `org.glassfish.hk2:guice-bridge` 
+System rules (required for StartupErrorRule) | `com.github.stefanbirkner:system-rules`
+Spock | `org.spockframework:spock-core`
 
 !!! tip
-    Guicey extensions project provide [extended BOM](extras/bom.md) with all guicey modules included. 
+    Guicey extensions project provide [extended BOM](extras/bom.md) with all [guicey modules](guide/modules.md) included. 
 
 ## Usage
 
@@ -96,9 +98,9 @@ public class SampleApplication extends Application<Configuration> {
     Bundle builder contains shortcuts for all available features, so required function 
     may be found only by looking at available methods (and reading javadoc).
 
-Auto configuration (activated with `enableAutoConfig`) means that guicey will search for extensions in application package and subpackages
-(extension classes are detected by "feature markers": for example, resources has `@Path` annotation,
-tasks extends `Task` etc.).
+[Auto configuration](guide/scan.md) (activated with `enableAutoConfig`) means that guicey will search for extensions in 
+application package and subpackages. Extension classes are detected by "feature markers": for example, 
+resources has `@Path` annotation, tasks extends `Task` etc.
 
 
 !!! tip
@@ -214,9 +216,10 @@ INFO  [2017-02-05 11:59:30,750] ru.vyarus.dropwizard.guice.module.installer.feat
 ### Add filter
 
 !!! note
-    Guice `ServletModule` may be used for servlets and filters definitions, but most of the time it's more convenient
-    to use simple servlet annotations (`@WebFilter`, `@WebServlet`, `@WebListener`). 
-    Moreover, guice servlet module is not able to register async filters and servlets.
+    Guice [ServletModule](guide/guice/servletmodule.md) may be used for servlets and filters definitions, but most of 
+    the time it's more convenient to use simple servlet annotations ([@WebFilter](installers/filter.md), 
+    [@WebServlet](installers/servlet.md), [@WebListener](installers/listener.md)). 
+    Moreover, guice servlet module is not able to register async [filters](installers/filter.md#async) and [servlets](installers/servlet.md#async).
 
 Add sample filter around rest methods:
 
@@ -277,7 +280,7 @@ Multiple modules could be registered at once:
 !!! note
     Registration above occur in dropwizard initialization phase, when neither `Configuration`
     nor `Environment` objects are available, but if you need them in module then either
-    register module in guicey bundle's run method or use [marker interfaces](guide/guice/module-autowiring.md)
+    register module in [guicey bundle's](guide/bundles.md#guicey-bundles) run method or use [marker interfaces](guide/guice/module-autowiring.md)
         
 ## Manual mode
 
@@ -378,23 +381,26 @@ integration may be replaced, if it doesn't suite your needs.
 ## Bundles 
 
 Guicey intended to extend dropwizard abilities (not limit). But to get access for these extended 
-abilities you'll need to use `GuiceyBundle` instead of dropwizard `ConfiguredBundle`.
+abilities you'll need to use [GuiceyBundle](guide/bundles.md) instead of dropwizard `ConfiguredBundle`.
 
-Bundles lifecycle and methods are the same, just guicey bundle provide more abilities.
+Bundles **lifecycle and methods are the same**, just guicey bundle provide more abilities.
 
-This does not mean that dropwizard bundles can't be used! An opposite, guicey provides
-direct shortcuts for them in it's bundles:
 
-```java
-public class MyBundle implements GuiceyBundle {
-     default void initialize(GuiceyBootstrap bootstrap) {
-         bootstrap.dropwizardBundles(new MyDropeizardBundle());
-     }
-}
-```                              
+!!! attention
+    This does not mean that dropwizard bundles can't be used! An opposite, guicey provides
+    direct shortcuts for them in it's bundles:
+    
+    ```java
+    public class MyBundle implements GuiceyBundle {
+         default void initialize(GuiceyBootstrap bootstrap) {
+             bootstrap.dropwizardBundles(new MyDropeizardBundle());
+         }
+    }
+    ```     
+    
+    Additional features will be available for dropwizard bundles registered through guicey api and
+    they also will appear in reports.                          
 
-!!! tip
-    Dropwizard bundles, registered like this will be visible on guicey reports. 
 
 You can use dropwizard bundles as before if you don't need to register guice modules 
 or use other guicey features from them. Usually dropwizard bundles used when
