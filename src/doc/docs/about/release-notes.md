@@ -42,6 +42,9 @@ The later may be used to obtain locator, but be aware that HK2 supposed to be co
     There is no alternatives now for deprecated methods so you can continue using them if required.
     Deprecation simply indicates what will be removed in the future version.
 
+Useless configuration generic was removed from main bundle: `#!java GuiceBundle.builder()` must be used 
+instead of `#!java GuiceBundle.<MyConfg>builder()`
+
 `GuiceBundle.builder()#useWebInstallers()` was removed because `WebInstallersBundle` is 
 activated by default and so you don't need to activate it manually anymore. 
 

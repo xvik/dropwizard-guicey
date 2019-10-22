@@ -15,7 +15,7 @@ class RSAwareTaskApp extends Application<TestConfiguration> {
 
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
-        bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+        bootstrap.addBundle(GuiceBundle.builder()
                 .noDefaultInstallers()
                 .installers(TaskInstaller)
                 .extensions(RSAwareTask)

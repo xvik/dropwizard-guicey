@@ -93,13 +93,12 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Jers
  * Project was originally inspired by <a href="https://github.com/HubSpot/dropwizard-guice">dropwizard-guice</a>
  * project. And because of this, project name was changed to dropwizard-guicey.
  *
- * @param <T> configuration type
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo for configuratio diagnostic
  * @since 31.08.2014
  */
 @SuppressWarnings({"PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.TooManyMethods"})
-public final class GuiceBundle<T extends Configuration> implements ConfiguredBundle<T> {
+public final class GuiceBundle implements ConfiguredBundle<Configuration> {
 
     private final ConfigurationContext context = new ConfigurationContext();
     private InjectorFactory injectorFactory = new DefaultInjectorFactory();
@@ -127,7 +126,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     }
 
     @Override
-    public void run(final T configuration, final Environment environment) throws Exception {
+    public void run(final Configuration configuration, final Environment environment) throws Exception {
         // deep configuration parsing (config paths resolution)
         final GuiceyRunner runner = new GuiceyRunner(context, configuration, environment);
 
@@ -159,23 +158,20 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
     }
 
     /**
-     * @param <T> configuration type
      * @return builder instance to construct bundle
      */
-    public static <T extends Configuration> Builder<T> builder() {
-        return new Builder<T>()
+    public static Builder builder() {
+        return new Builder()
                 // allow enabling diagnostic logs with system property (on compiled app): -Dguicey.hooks=diagnostic
                 .hookAlias("diagnostic", DiagnosticHook.class);
     }
 
     /**
      * Builder encapsulates bundle configuration options.
-     *
-     * @param <T> configuration type
      */
     @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
-    public static class Builder<T extends Configuration> {
-        private final GuiceBundle<T> bundle = new GuiceBundle<>();
+    public static class Builder {
+        private final GuiceBundle bundle = new GuiceBundle();
 
         /**
          * Guicey broadcast a lot of events in order to indicate lifecycle phases
@@ -201,7 +197,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
          * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
          */
-        public Builder<T> listen(final GuiceyLifecycleListener... listeners) {
+        public Builder listen(final GuiceyLifecycleListener... listeners) {
             bundle.context.lifecycle().register(listeners);
             return this;
         }
@@ -239,7 +235,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see GuiceyOptions
          * @see ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
          */
-        public <K extends Enum & Option> Builder<T> option(final K option, final Object value) {
+        public <K extends Enum & Option> Builder option(final K option, final Object value) {
             bundle.context.setOption(option, value);
             return this;
         }
@@ -279,7 +275,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see ru.vyarus.dropwizard.guice.module.context.option.mapper.OptionsMapper
          */
         @SuppressWarnings("unchecked")
-        public <K extends Enum & Option> Builder<T> options(final Map<Enum, Object> options) {
+        public <K extends Enum & Option> Builder options(final Map<Enum, Object> options) {
             ((Map<K, Object>) (Map) options).forEach(this::option);
             return this;
         }
@@ -290,7 +286,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param injectorFactory custom guice injector factory
          * @return builder instance for chained calls
          */
-        public Builder<T> injectorFactory(final InjectorFactory injectorFactory) {
+        public Builder injectorFactory(final InjectorFactory injectorFactory) {
             bundle.injectorFactory = injectorFactory;
             return this;
         }
@@ -304,7 +300,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see DefaultBundleLookup
          * @see #duplicateConfigDetector(DuplicateConfigDetector)
          */
-        public Builder<T> bundleLookup(final GuiceyBundleLookup bundleLookup) {
+        public Builder bundleLookup(final GuiceyBundleLookup bundleLookup) {
             bundle.bundleLookup = bundleLookup;
             return this;
         }
@@ -314,7 +310,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          *
          * @return builder instance for chained calls
          */
-        public Builder<T> disableBundleLookup() {
+        public Builder disableBundleLookup() {
             return bundleLookup(new VoidBundleLookup());
         }
 
@@ -326,7 +322,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          * @see GuiceyOptions#ScanPackages
          */
-        public Builder<T> enableAutoConfig(final String... basePackages) {
+        public Builder enableAutoConfig(final String... basePackages) {
             Preconditions.checkState(basePackages.length > 0, "Specify at least one package to scan");
             return option(ScanPackages, basePackages);
         }
@@ -352,7 +348,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param detector detector implementation
          * @return builder instance for chained calls
          */
-        public Builder<T> duplicateConfigDetector(final DuplicateConfigDetector detector) {
+        public Builder duplicateConfigDetector(final DuplicateConfigDetector detector) {
             bundle.context.setDuplicatesDetector(detector);
             return this;
         }
@@ -374,7 +370,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param configurationItems instance configuration items (bundles or modules) to grant uniqueness
          * @return builder instance for chained calls
          */
-        public Builder<T> uniqueItems(final Class<?>... configurationItems) {
+        public Builder uniqueItems(final Class<?>... configurationItems) {
             return duplicateConfigDetector(new UniqueItemsDuplicatesDetector(configurationItems));
         }
 
@@ -398,7 +394,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see ru.vyarus.dropwizard.guice.module.support.OptionsAwareModule
          * @see ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
          */
-        public Builder<T> modules(final Module... modules) {
+        public Builder modules(final Module... modules) {
             Preconditions.checkState(modules.length > 0, "Specify at least one module");
             bundle.context.registerModules(modules);
             return this;
@@ -424,7 +420,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see ru.vyarus.dropwizard.guice.test.binding.BindingsOverrideInjectorFactory to override overridden
          * bindings in test (edge case(
          */
-        public Builder<T> modulesOverride(final Module... modules) {
+        public Builder modulesOverride(final Module... modules) {
             bundle.context.registerModulesOverride(modules);
             return this;
         }
@@ -443,7 +439,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see CommandSupport
          * @see GuiceyOptions#SearchCommands
          */
-        public Builder<T> searchCommands() {
+        public Builder searchCommands() {
             return option(SearchCommands, true);
         }
 
@@ -454,7 +450,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          * @see GuiceyOptions#UseCoreInstallers
          */
-        public Builder<T> noDefaultInstallers() {
+        public Builder noDefaultInstallers() {
             return option(UseCoreInstallers, false);
         }
 
@@ -473,7 +469,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @deprecated in the next version HK2 support will be removed and guice request scope will be mandatory
          */
         @Deprecated
-        public Builder<T> noGuiceFilter() {
+        public Builder noGuiceFilter() {
             return option(GuiceFilterRegistration, EnumSet.noneOf(DispatcherType.class));
         }
 
@@ -487,7 +483,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          */
         @SafeVarargs
-        public final Builder<T> installers(final Class<? extends FeatureInstaller>... installers) {
+        public final Builder installers(final Class<? extends FeatureInstaller>... installers) {
             bundle.context.registerInstallers(installers);
             return this;
         }
@@ -506,7 +502,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param extensionClasses extension bean classes to register
          * @return builder instance for chained calls
          */
-        public Builder<T> extensions(final Class<?>... extensionClasses) {
+        public Builder extensions(final Class<?>... extensionClasses) {
             bundle.context.registerExtensions(extensionClasses);
             return this;
         }
@@ -523,7 +519,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param bundles guicey bundles
          * @return builder instance for chained calls
          */
-        public Builder<T> bundles(final GuiceyBundle... bundles) {
+        public Builder bundles(final GuiceyBundle... bundles) {
             bundle.context.registerBundles(bundles);
             return this;
         }
@@ -545,7 +541,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param bundles guicey bundles
          * @return builder instance for chained calls
          */
-        public Builder<T> dropwizardBundles(final ConfiguredBundle... bundles) {
+        public Builder dropwizardBundles(final ConfiguredBundle... bundles) {
             bundle.context.registerDropwizardBundles(bundles);
             return this;
         }
@@ -562,7 +558,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          */
         @SafeVarargs
-        public final Builder<T> disableInstallers(final Class<? extends FeatureInstaller>... installers) {
+        public final Builder disableInstallers(final Class<? extends FeatureInstaller>... installers) {
             bundle.context.disableInstallers(installers);
             return this;
         }
@@ -575,7 +571,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param extensions extensions to disable (manually added, registered by bundles or with classpath scan)
          * @return builder instance for chained calls
          */
-        public final Builder<T> disableExtensions(final Class<?>... extensions) {
+        public final Builder disableExtensions(final Class<?>... extensions) {
             bundle.context.disableExtensions(extensions);
             return this;
         }
@@ -597,7 +593,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          */
         @SafeVarargs
-        public final Builder<T> disableModules(final Class<? extends Module>... modules) {
+        public final Builder disableModules(final Class<? extends Module>... modules) {
             bundle.context.disableModules(modules);
             return this;
         }
@@ -611,7 +607,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          */
         @SafeVarargs
-        public final Builder<T> disableBundles(final Class<? extends GuiceyBundle>... bundles) {
+        public final Builder disableBundles(final Class<? extends GuiceyBundle>... bundles) {
             bundle.context.disableBundle(bundles);
             return this;
         }
@@ -625,7 +621,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          */
         @SafeVarargs
-        public final Builder<T> disableDropwizardBundles(final Class<? extends ConfiguredBundle>... bundles) {
+        public final Builder disableDropwizardBundles(final Class<? extends ConfiguredBundle>... bundles) {
             bundle.context.disableDropwizardBundle(bundles);
             return this;
         }
@@ -680,7 +676,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see ru.vyarus.dropwizard.guice.module.context.Disables for common predicates
          */
         @SafeVarargs
-        public final Builder<T> disable(final Predicate<ItemInfo>... predicates) {
+        public final Builder disable(final Predicate<ItemInfo>... predicates) {
             bundle.context.registerDisablePredicates(predicates);
             return this;
         }
@@ -703,7 +699,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @deprecated in the next version HK2 support will be removed and option will become useless
          */
         @Deprecated
-        public Builder<T> strictScopeControl() {
+        public Builder strictScopeControl() {
             bundle.context.registerBundles(new HK2DebugBundle());
             return this;
         }
@@ -727,7 +723,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @deprecated in the next version HK2 support will be removed
          */
         @Deprecated
-        public Builder<T> useHK2ForJerseyExtensions() {
+        public Builder useHK2ForJerseyExtensions() {
             option(JerseyExtensionsManagedByGuice, false);
             option(UseHkBridge, true);
             return this;
@@ -749,7 +745,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          * @see ConfigurationDiagnostic
          */
-        public Builder<T> printDiagnosticInfo() {
+        public Builder printDiagnosticInfo() {
             return listen(new ConfigurationDiagnostic());
         }
 
@@ -768,7 +764,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          * @see ConfigurationDiagnostic
          */
-        public Builder<T> printAvailableInstallers() {
+        public Builder printAvailableInstallers() {
             return listen(ConfigurationDiagnostic.builder("Available installers report")
                     .printConfiguration(new DiagnosticConfig()
                             .printInstallers()
@@ -803,7 +799,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @see ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
          * @see ru.vyarus.dropwizard.guice.module.yaml.bind.Config
          */
-        public Builder<T> printConfigurationBindings() {
+        public Builder printConfigurationBindings() {
             return listen(new YamlBindingsDiagnostic());
         }
 
@@ -813,7 +809,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          *
          * @return builder instance for chained calls
          */
-        public Builder<T> printCustomConfigurationBindings() {
+        public Builder printCustomConfigurationBindings() {
             return listen(new YamlBindingsDiagnostic(
                     new BindingsConfig()
                             .showConfigurationTree()
@@ -831,7 +827,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          * @see #printAllGuiceBindings() to show entire injector state
          */
-        public Builder<T> printGuiceBindings() {
+        public Builder printGuiceBindings() {
             return listen(new GuiceBindingsDiagnostic(new GuiceConfig()
                     .hideGuiceBindings()
                     .hideGuiceyBindings()));
@@ -843,7 +839,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          * @see #printGuiceBindings() to show only user-provided bindings
          */
-        public Builder<T> printAllGuiceBindings() {
+        public Builder printAllGuiceBindings() {
             return listen(new GuiceBindingsDiagnostic(new GuiceConfig()));
         }
 
@@ -854,7 +850,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          *
          * @return builder instance for chained calls
          */
-        public Builder<T> printGuiceAopMap() {
+        public Builder printGuiceAopMap() {
             return printGuiceAopMap(new GuiceAopConfig());
         }
 
@@ -869,7 +865,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param config report configuration
          * @return builder instance for chained calls
          */
-        public Builder<T> printGuiceAopMap(final GuiceAopConfig config) {
+        public Builder printGuiceAopMap(final GuiceAopConfig config) {
             return listen(new GuiceAopDiagnostic(config));
         }
 
@@ -882,7 +878,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          * @see LifecycleDiagnostic
          */
-        public Builder<T> printLifecyclePhases() {
+        public Builder printLifecyclePhases() {
             return listen(new LifecycleDiagnostic(false));
         }
 
@@ -895,7 +891,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return builder instance for chained calls
          * @see LifecycleDiagnostic
          */
-        public Builder<T> printLifecyclePhasesDetailed() {
+        public Builder printLifecyclePhasesDetailed() {
             return listen(new LifecycleDiagnostic(true));
         }
 
@@ -911,7 +907,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param hook hook class to alias
          * @return builder instance for chained calls
          */
-        public Builder<T> hookAlias(final String name, final Class<? extends GuiceyConfigurationHook> hook) {
+        public Builder hookAlias(final String name, final Class<? extends GuiceyConfigurationHook> hook) {
             ConfigurationHooksSupport.registerSystemHookAlias(name, hook);
             return this;
         }
@@ -931,7 +927,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @param stateAction state action
          * @return builder instance for chained calls
          */
-        public Builder<T> withSharedState(final Consumer<SharedConfigurationState> stateAction) {
+        public Builder withSharedState(final Consumer<SharedConfigurationState> stateAction) {
             stateAction.accept(bundle.context.getSharedState());
             return this;
         }
@@ -941,7 +937,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return bundle instance
          * @see GuiceyOptions#InjectorStage
          */
-        public GuiceBundle<T> build(final Stage stage) {
+        public GuiceBundle build(final Stage stage) {
             option(InjectorStage, stage);
             return build();
         }
@@ -950,7 +946,7 @@ public final class GuiceBundle<T extends Configuration> implements ConfiguredBun
          * @return bundle instance with implicit PRODUCTION stage
          * @see GuiceyOptions#InjectorStage
          */
-        public GuiceBundle<T> build() {
+        public GuiceBundle build() {
             bundle.context.runHooks(this);
             return bundle;
         }

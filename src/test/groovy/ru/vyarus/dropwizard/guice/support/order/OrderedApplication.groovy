@@ -20,7 +20,7 @@ class OrderedApplication extends Application<TestConfiguration> {
 
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
-        bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+        bootstrap.addBundle(GuiceBundle.builder()
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.order")
                 // at least one resource required
                 .extensions(DummyResource)
