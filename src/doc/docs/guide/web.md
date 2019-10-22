@@ -104,8 +104,7 @@ public class App extends Application {
     }
     
     public void run(Configuration configuration, Environment environment) {
-        final MyFilter filter = InjectorLookup.getInjector(this).get()
-                                        .getInstance(MyFilterBean.class);
+        final MyFilter filter = InjectorLookup.getInstance(this, MyFilterBean.class).get();
         environment.servlets().addFilter("manualFilter", filter)
             .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
     }

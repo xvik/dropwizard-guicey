@@ -31,8 +31,8 @@ public class ConfigurationHookDwAppTest {
 
     @Test
     public void checkHook() {
-        final GuiceyConfigurationInfo info = InjectorLookup.getInjector(RULE.getApplication()).get()
-                .getInstance(GuiceyConfigurationInfo.class);
+        final GuiceyConfigurationInfo info = InjectorLookup
+                .getInstance(RULE.getApplication(), GuiceyConfigurationInfo.class).get();
         Assert.assertTrue(info.getModules().contains(XMod.class));
     }
 

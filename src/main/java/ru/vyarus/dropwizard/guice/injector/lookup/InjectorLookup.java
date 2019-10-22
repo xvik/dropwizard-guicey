@@ -26,6 +26,18 @@ public final class InjectorLookup {
     }
 
     /**
+     * Shortcut to directly obtain bean instance.
+     *
+     * @param application application instance
+     * @param bean        bean type
+     * @param <T>         bean type
+     * @return bean instance, obtained from guice injector
+     */
+    public static <T> Optional<T> getInstance(final Application application, final Class<T> bean) {
+        return getInjector(application).map(it -> it.getInstance(bean));
+    }
+
+    /**
      * Used internally to register application specific injector.
      *
      * @param application application instance

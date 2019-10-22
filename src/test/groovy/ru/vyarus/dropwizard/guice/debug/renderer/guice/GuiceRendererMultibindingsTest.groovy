@@ -79,7 +79,7 @@ class GuiceRendererMultibindingsTest extends Specification {
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
-            println InjectorLookup.getInjector(this).get().getInstance(MultibindingsModule.OptService.class)
+            println InjectorLookup.getInstance(this, MultibindingsModule.OptService.class).get()
         }
     }
 

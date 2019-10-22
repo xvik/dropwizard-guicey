@@ -36,15 +36,14 @@ Provider<Injector> provider = new InjectorProvider(app);
 Injector injector = provider.get();
 ```
 
-When you are inside your application class:
+Bean instance may be obtained with `getInstance` shortcut:
 
 ```java
 public class MyApplication extends Application<Configuration> {
     
     @Override
     public void run(TestConfiguration configuration, Environment environment) throws Exception {
-        InjectorLookup.getInjector(this).get()
-                .getInstance(SomeService.class).doSomething();
+        InjectorLookup.getInstance(this, SomeService.class).get().doSomething();
     }
 }
 ```

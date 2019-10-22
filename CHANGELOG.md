@@ -149,7 +149,8 @@
 * Java 11 compatibility. Automatic module name (in meta-inf): `dropwizard-guicey.core`
 * (breaking) AdminRestBundle moved into ext modules (bundle become guicey bundle, 
     now return 404 instead of 403 on main context for admin-only resources)
-* (breaking) Remove useless configuration generic on main bundle: `GuiceBundle.<MyConfig>builder()` must be just `GuiceBundle.builder()`      
+* (breaking) Remove useless configuration generic on main bundle: `GuiceBundle.<MyConfig>builder()` must be just `GuiceBundle.builder()`
+* Add static lookup for bean instance: `InjectorLookup.getInstance(app, MyBean.class)`      
 
 Migration matrix:
 
