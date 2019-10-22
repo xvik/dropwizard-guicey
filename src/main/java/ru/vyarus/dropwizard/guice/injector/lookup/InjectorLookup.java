@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.injector.lookup;
 
 import com.google.inject.Injector;
 import io.dropwizard.Application;
+import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 
 import java.util.Optional;
@@ -12,6 +13,7 @@ import java.util.Optional;
  * @author Vyacheslav Rusakov
  * @since 19.04.2015
  */
+@SuppressWarnings("PMD.SingleMethodSingleton")
 public final class InjectorLookup {
 
     private InjectorLookup() {
@@ -26,6 +28,14 @@ public final class InjectorLookup {
     }
 
     /**
+     * @param environment environment instance
+     * @return optional with or without application-bound injector
+     */
+    public static Optional<Injector> getInjector(final Environment environment) {
+        return SharedConfigurationState.lookup(environment, Injector.class);
+    }
+
+    /**
      * Shortcut to directly obtain bean instance.
      *
      * @param application application instance
@@ -35,6 +45,18 @@ public final class InjectorLookup {
      */
     public static <T> Optional<T> getInstance(final Application application, final Class<T> bean) {
         return getInjector(application).map(it -> it.getInstance(bean));
+    }
+
+    /**
+     * Shortcut to directly obtain bean instance.
+     *
+     * @param environment environment instance
+     * @param bean        bean type
+     * @param <T>         bean type
+     * @return bean instance, obtained from guice injector
+     */
+    public static <T> Optional<T> getInstance(final Environment environment, final Class<T> bean) {
+        return getInjector(environment).map(it -> it.getInstance(bean));
     }
 
     /**

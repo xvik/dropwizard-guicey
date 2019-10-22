@@ -151,7 +151,9 @@
 * (breaking) AdminRestBundle moved into ext modules (bundle become guicey bundle, 
     now return 404 instead of 403 on main context for admin-only resources)
 * (breaking) Remove useless configuration generic on main bundle: `GuiceBundle.<MyConfig>builder()` must be just `GuiceBundle.builder()`
-* Add static lookup for bean instance: `InjectorLookup.getInstance(app, MyBean.class)`      
+* InjectorLookup:
+    - Add lookup by environment instance: `InjectorLookup.get(environment)` 
+    - Add direct lookup for bean instance: `InjectorLookup.getInstance(app, MyBean.class)` (or with environment)      
 
 Migration matrix:
 
