@@ -113,8 +113,8 @@ nav:
       - Web filter: installers/filter.md
       - Web listener: installers/listener.md
     - Modules:
-      - Admin REST: extras/admin-rest.md
       - BOM: extras/bom.md
+      - Admin REST: extras/admin-rest.md
       - Lifecycle annotations: extras/lifecycle-annotations.md
       - Guava EventBus: extras/eventbus.md
       - JDBI: extras/jdbi.md

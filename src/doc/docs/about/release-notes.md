@@ -45,6 +45,9 @@ The later may be used to obtain locator, but be aware that HK2 supposed to be co
 `GuiceBundle.builder()#useWebInstallers()` was removed because `WebInstallersBundle` is 
 activated by default and so you don't need to activate it manually anymore. 
 
+`AdminRestBundle` was moved from guicey to [external module](../extras/admin-rest.md).
+It is now a guicey bundle. Admin-only resources returns 404 instead of 403 on user context.
+
 ## New guicey lifecycle
 
 Before guicey perform all it's operations under dropwizard run phase. This makes guicey and dropwizard

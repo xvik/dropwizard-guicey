@@ -11,7 +11,7 @@ All additional guicey integartion modules are maintained as separate project: [d
 Module | Description
 -------|------------
 [BOM](../extras/bom.md) | Maven BOM for modules and their dependencies
-[Admin REST](../extras/admin-rest.md) | Mirror rest on admin context
+[Admin REST](../extras/admin-rest.md) | Admin context rest support.
 [Lifecycle annotations](../extras/lifecycle-annotations.md) | `@PostConstruct`, `@PostStartup`, `@PreDestroy` support
 [EventBus](../extras/eventbus.md) | Guava eventbus integration
 [JDBI](../extras/jdbi.md) | JDBI integration (based on dropwizard-jdbi)
