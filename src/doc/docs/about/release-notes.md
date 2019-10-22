@@ -15,6 +15,7 @@ Please read [dropwizard 2.0 upgrade guide](https://github.com/dropwizard/dropwiz
 * [Multiple bundles and modules of the same type support](#multiple-bundles-and-modules-of-the-same-type-support)
 * [Dropwizard bundles direct support](#dropwizard-bundles-direct-support)
 * [Configuration from guice bindings (jersey1-guice style)](#configuration-from-guice-bindings-jersey1-guice-style)
+* [Injector lookup improvements](#injector-lookup)
 * [Multiple classloaders support](#multiple-classloaders-support)
 * [Guicey listeners changes](#guicey-listeners-changes)
 * [New shared configuration state](#new-shared-lifecycle-state)
@@ -535,7 +536,25 @@ in both cases to apply some common logic (like reporting)
     Binding installers may now be called multiple times in case if guice reports will be activated.
     If required, actual run could be differentiated from report by current stage `currentStage() == Stage.TOOL`.
        
+## Injector lookup
 
+Injector now could be statically referenced with dropwizard `Environment` object:
+
+```java
+InjectorLookup.getInjector(environment)
+```
+
+Also, direct bean reference added:
+
+```java
+MyService service = InjectorLookup.getInstance(application, MyService.class).get()
+```
+
+And wtih environment:
+
+```java
+MyService service = InjectorLookup.getInstance(environment, MyService.class).get()
+```
 
 ## Guicey listeners changes
 

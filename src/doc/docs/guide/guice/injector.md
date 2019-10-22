@@ -46,6 +46,12 @@ public class MyApplication extends Application<Configuration> {
         InjectorLookup.getInstance(this, SomeService.class).get().doSomething();
     }
 }
+```       
+
+Injector could also be referenced by `Environment` object:
+
+```java
+InjectorLookup.getInstance(environment, SomeService.class).get().doSomething();
 ```
 
 !!! tip

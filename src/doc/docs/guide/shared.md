@@ -70,7 +70,24 @@ Or direct value access:
 
 ```java
 SharedConfigurationState.lookup(application, XBundle.class)
-```        
+```                    
+
+And it is possible to use `Environment` instance for access:
+
+```java
+SharedConfigurationState.get(environment)
+SharedConfigurationState.lookup(environment, XBundle.class)
+```
+
+Special shorcut methods may be used for "get or fail behaviour":
+
+```java
+SharedConfigurationState.lookupOrFail(app, XBundle.class, 
+        "Failed to lookup %s service", XBundle.class.getSimpleName())
+``` 
+
+It will throw IllegalStateException if shared context is not available or no value.
+Note that message is formatted with `String.format`. 
 
 ## Tests
 
