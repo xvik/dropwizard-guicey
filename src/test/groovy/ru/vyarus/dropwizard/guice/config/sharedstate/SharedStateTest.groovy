@@ -2,6 +2,8 @@ package ru.vyarus.dropwizard.guice.config.sharedstate
 
 import io.dropwizard.Application
 import io.dropwizard.Configuration
+import io.dropwizard.jersey.setup.JerseyEnvironment
+import io.dropwizard.lifecycle.setup.LifecycleEnvironment
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
@@ -107,6 +109,59 @@ class SharedStateTest extends Specification {
         then: "err"
         def ex3 = thrown(IllegalStateException)
         ex3.message == "Shared state already associated with application $App.name"
+    }
+
+    def "Check access by environment"() {
+        setup:
+        Application app = new App()
+        SharedConfigurationState state = new SharedConfigurationState()
+
+        def props = [:]
+        def environment = Mock(Environment)
+        environment.jersey() >> Mock(JerseyEnvironment)
+        environment.jersey().property(*_) >> {props.put(it[0], it[1])}
+        environment.jersey().getProperty(*_) >> {props.get(it[0])}
+        environment.lifecycle() >> Mock(LifecycleEnvironment)
+
+
+        when: "access context for not registered app"
+        def res = SharedConfigurationState.get(environment)
+        then: "not found"
+        !res.isPresent()
+
+        when: "get or fail"
+        SharedConfigurationState.getOrFail(environment, "failed %s", 1)
+        then: "error"
+        def ex = thrown(IllegalStateException)
+        ex.message == "failed 1"
+
+        when: "lookup value"
+        res = SharedConfigurationState.lookup(environment, App)
+        then: "null"
+        !res.isPresent()
+
+        when: "lookup or fail"
+        SharedConfigurationState.lookupOrFail(environment, App, "failed %s", 2)
+        then: "error"
+        ex = thrown(IllegalStateException)
+        ex.message == "failed 2"
+
+        when: "assigned to app"
+        state.put(App, app)
+        state.assignTo app
+        state.listen(environment)
+        then: "static lookup work"
+        props.size() == 1
+        props.get(SharedConfigurationState.CONTEXT_APPLICATION_PROPERTY) == app
+        SharedConfigurationState.get(environment).get() == state
+        SharedConfigurationState.getOrFail(environment, "1") == state
+        SharedConfigurationState.lookup(environment, App).get() == app
+        SharedConfigurationState.lookupOrFail(environment, App, "2") == app
+
+        when: "to string state"
+        res = state.toString()
+        then: "ok"
+        res == "Shared state with 1 objects: $App.name"
     }
 
     static class App extends Application<Configuration> {

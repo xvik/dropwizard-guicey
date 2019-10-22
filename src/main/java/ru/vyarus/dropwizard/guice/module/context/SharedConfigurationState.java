@@ -28,7 +28,8 @@ import java.util.function.Supplier;
  * Shared state could be accessed statically with {@link #get(Application)}, or within
  * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}. Guicey hooks could use
  * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#withSharedState(java.util.function.Consumer)} to
- * access application state.
+ * access application state. Alternatively, dropwizard {@link Environment} may be used for resolution:
+ * {@link #get(Environment)}.
  * <p>
  * Classes are used as state keys to simplify usage (in most cases, bundle class will be used as key).
  * Shared value could be set only once (to prevent complex situations with state substitutions). It is advised
@@ -38,6 +39,11 @@ import java.util.function.Supplier;
  * @since 26.09.2019
  */
 public class SharedConfigurationState {
+    /**
+     * Property name used to store application instance in jersey properties.
+     */
+    public static final String CONTEXT_APPLICATION_PROPERTY = "guicey.context.application";
+
     private static final Map<Application, SharedConfigurationState> STATE = Maps.newConcurrentMap();
 
     private final Map<String, Object> state = new HashMap<>();
@@ -147,6 +153,8 @@ public class SharedConfigurationState {
      * @param environment environment  object
      */
     protected void listen(final Environment environment) {
+        // storing application reference in jersey properties (to be able to reference shared state by environment)
+        environment.jersey().property(CONTEXT_APPLICATION_PROPERTY, application);
         environment.lifecycle().manage(new RegistryShutdown(application));
     }
 
@@ -155,12 +163,23 @@ public class SharedConfigurationState {
      *
      * @param application application instance
      * @param key         shared object key
-     * @param <V>         shared object type
+     * @param <V>         shared object key
      * @return value optional
      */
     public static <V> Optional<V> lookup(final Application application, final Class<?> key) {
-        final Optional<SharedConfigurationState> state = get(application);
-        return state.map(value -> value.get(key));
+        return get(application).map(value -> value.get(key));
+    }
+
+    /**
+     * Static lookup for registry value by environment instance.
+     *
+     * @param environment dropwizard environment object
+     * @param key         shared object key
+     * @param <V>         shared object key
+     * @return value optional
+     */
+    public static <V> Optional<V> lookup(final Environment environment, final Class<?> key) {
+        return get(environment).map(value -> value.get(key));
     }
 
     /**
@@ -184,6 +203,26 @@ public class SharedConfigurationState {
     }
 
     /**
+     * Shortcut for {@link #lookup(Environment, Class)} to immediately fail if value is not available.
+     *
+     * @param environment environment instance
+     * @param key         shared object key
+     * @param message     exception message (could use {@link String#format(String, Object...)} placeholders)
+     * @param args        placeholder arguments for error message
+     * @param <V>         shared object type
+     * @return value (never null)
+     * @throws IllegalStateException if value not available
+     */
+    @SuppressWarnings("unchecked")
+    public static <V> V lookupOrFail(final Environment environment,
+                                     final Class<?> key,
+                                     final String message,
+                                     final Object... args) {
+        return ((Optional<V>) lookup(environment, key))
+                .orElseThrow(() -> new IllegalStateException(Strings.lenientFormat(message, args)));
+    }
+
+    /**
      * Static lookup for entire application registry.
      *
      * @param application application instance
@@ -192,6 +231,17 @@ public class SharedConfigurationState {
     @SuppressWarnings("checkstyle:OverloadMethodsDeclarationOrder")
     public static Optional<SharedConfigurationState> get(final Application application) {
         return Optional.ofNullable(STATE.get(application));
+    }
+
+    /**
+     * Static lookup for entire application registry by environment instance.
+     *
+     * @param environment environment instance
+     * @return optional of application registry (may be empty if called too early or too late)
+     */
+    public static Optional<SharedConfigurationState> get(final Environment environment) {
+        final Application application = environment.jersey().getProperty(CONTEXT_APPLICATION_PROPERTY);
+        return application == null ? Optional.empty() : get(application);
     }
 
     /**
@@ -208,6 +258,23 @@ public class SharedConfigurationState {
                                                      final String message,
                                                      final Object... args) {
         return get(application)
+                .orElseThrow(() -> new IllegalStateException(Strings.lenientFormat(message, args)));
+    }
+
+    /**
+     * Shortcut for {@link #get(Environment)} to immediately fail if registry is not available.
+     *
+     * @param environment environment instance
+     * @param message     exception message (could use {@link String#format(String, Object...)} placeholders)
+     * @param args        placeholder arguments for error message
+     * @return registry (never null)
+     * @throws IllegalStateException if no state is associated with application yet
+     */
+    @SuppressWarnings("checkstyle:OverloadMethodsDeclarationOrder")
+    public static SharedConfigurationState getOrFail(final Environment environment,
+                                                     final String message,
+                                                     final Object... args) {
+        return get(environment)
                 .orElseThrow(() -> new IllegalStateException(Strings.lenientFormat(message, args)));
     }
 

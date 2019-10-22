@@ -102,7 +102,8 @@
     - (breaking) Removed hooks recognition on registered GuiceyLifecycleLister (as it was very confusing feature)                         
 * Add shared configuration state (for special configuration-time needs like bundles communication). 
     This is required only in very special cases. But such unified place will replace all current and future hacks.
-    - Static access: `SharedConfigurationState.get(app)` or `SharedConfigurationState.lookup(app, key)` 
+    - Static access by application: `SharedConfigurationState.get(app)` or `SharedConfigurationState.lookup(app, key)`
+    - Static access by environment: `SharedConfigurationState.get(env)` or `SharedConfigurationState.lookup(env, key)` 
     - Value access from guicey bundle: `boostrap.sharedState(key, defSupplier)`, `environment.sharedState(key)`
     - Hooks can use `GuiceBundle.Builder.withSharedState` to access application state.
     - (breaking) `InjectorLookup` now use global shared state        
