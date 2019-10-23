@@ -97,7 +97,8 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Jers
  * @see ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo for configuratio diagnostic
  * @since 31.08.2014
  */
-@SuppressWarnings({"PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.TooManyMethods"})
+@SuppressWarnings(
+        {"PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.TooManyMethods", "PMD.ExcessivePublicCount"})
 public final class GuiceBundle implements ConfiguredBundle<Configuration> {
 
     private final ConfigurationContext context = new ConfigurationContext();
@@ -893,6 +894,16 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          */
         public Builder printLifecyclePhasesDetailed() {
             return listen(new LifecycleDiagnostic(true));
+        }
+
+        /**
+         * Prints all configured filters and servlets (including guice {@link com.google.inject.servlet.ServletModule}
+         * declarations.
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder printWebMappings() {
+            return listen(new WebMappingsDiagnostic());
         }
 
         /**
