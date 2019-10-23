@@ -1,20 +1,22 @@
 package ru.vyarus.dropwizard.guice.debug
 
+
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
+import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.support.feature.DummyService
 import ru.vyarus.dropwizard.guice.support.web.WebModule
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
-import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 22.10.2019
  */
 @UseDropwizardApp(App)
-class WebMappingsReportTest extends Specification {
+class WebMappingsReportTest extends AbstractTest {
 
     def "Check web report"() {
         // actual reporting checked manually (test used for reporting configuration)
@@ -27,6 +29,7 @@ class WebMappingsReportTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
+                    .extensions(DummyService)
                     .modules(new WebModule())
                     .printWebMappings()
                     .build())
