@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.config.sharedstate
 
 import io.dropwizard.Application
 import io.dropwizard.Configuration
-import io.dropwizard.jersey.setup.JerseyEnvironment
+import io.dropwizard.jetty.MutableServletContextHandler
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
@@ -118,9 +118,9 @@ class SharedStateTest extends Specification {
 
         def props = [:]
         def environment = Mock(Environment)
-        environment.jersey() >> Mock(JerseyEnvironment)
-        environment.jersey().property(*_) >> {props.put(it[0], it[1])}
-        environment.jersey().getProperty(*_) >> {props.get(it[0])}
+        environment.getApplicationContext() >> Mock(MutableServletContextHandler)
+        environment.getApplicationContext().setAttribute(*_) >> { props.put(it[0], it[1]) }
+        environment.getApplicationContext().getAttribute(*_) >> { props.get(it[0]) }
         environment.lifecycle() >> Mock(LifecycleEnvironment)
 
 

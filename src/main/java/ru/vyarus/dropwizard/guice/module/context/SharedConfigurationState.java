@@ -40,7 +40,7 @@ import java.util.function.Supplier;
  */
 public class SharedConfigurationState {
     /**
-     * Property name used to store application instance in jersey properties.
+     * Attribute name used to store application instance in application context attributes.
      */
     public static final String CONTEXT_APPLICATION_PROPERTY = "guicey.context.application";
 
@@ -153,8 +153,8 @@ public class SharedConfigurationState {
      * @param environment environment  object
      */
     protected void listen(final Environment environment) {
-        // storing application reference in jersey properties (to be able to reference shared state by environment)
-        environment.jersey().property(CONTEXT_APPLICATION_PROPERTY, application);
+        // storing application reference in context attributes (to be able to reference shared state by environment)
+        environment.getApplicationContext().setAttribute(CONTEXT_APPLICATION_PROPERTY, application);
         environment.lifecycle().manage(new RegistryShutdown(application));
     }
 
@@ -240,7 +240,8 @@ public class SharedConfigurationState {
      * @return optional of application registry (may be empty if called too early or too late)
      */
     public static Optional<SharedConfigurationState> get(final Environment environment) {
-        final Application application = environment.jersey().getProperty(CONTEXT_APPLICATION_PROPERTY);
+        final Application application = (Application) environment.getApplicationContext()
+                .getAttribute(CONTEXT_APPLICATION_PROPERTY);
         return application == null ? Optional.empty() : get(application);
     }
 
