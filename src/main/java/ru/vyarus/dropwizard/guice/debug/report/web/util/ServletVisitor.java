@@ -32,7 +32,7 @@ public class ServletVisitor extends DefaultBindingTargetVisitor<Object, WebEleme
 
     @Override
     public WebElementModel visit(final InstanceServletBinding binding) {
-        return fillModel(binding, new WebElementModel(WebElementType.FILTER,
+        return fillModel(binding, new WebElementModel(WebElementType.SERVLET,
                 Key.get(binding.getServletInstance().getClass()), true));
     }
 

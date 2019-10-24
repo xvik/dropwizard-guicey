@@ -1,17 +1,10 @@
 package ru.vyarus.dropwizard.guice.debug.renderer.guice
 
-
 import com.google.inject.Injector
-import com.google.inject.TypeLiteral
-import com.google.inject.spi.ProvisionListener
-import com.google.inject.spi.TypeEncounter
-import com.google.inject.spi.TypeListener
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import org.aopalliance.intercept.MethodInterceptor
-import org.aopalliance.intercept.MethodInvocation
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule
@@ -22,7 +15,6 @@ import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * @author Vyacheslav Rusakov
@@ -84,7 +76,7 @@ class GuiceRendererCasesTest extends Specification {
                 .hideGuiceBindings()
                 .hideYamlBindings()) == """
 
-    5 MODULES with 22 bindings
+    6 MODULES with 22 bindings
     │
     ├── CasesModule                  (r.v.d.g.d.r.g.support)
     │   ├── <typelistener>                        CustomTypeListener                              at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:19)
@@ -108,7 +100,8 @@ class GuiceRendererCasesTest extends Specification {
         │   └── instance             [@Singleton]     ExtensionsHolder                                at ru.vyarus.dropwizard.guice.module.installer.InstallerModule.configure(InstallerModule.java:30)
         │
         └── Jersey2Module                (r.v.d.g.m.jersey)
-            ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:58)
+            ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:59)
+            ├── GuiceWebModule               (r.v.d.g.m.jersey)         *WEB
             │
             └── GuiceBindingsModule          (r.v.d.g.m.jersey.hk2)
                 ├── providerinstance     [@Prototype]     Application                                     at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
@@ -145,7 +138,7 @@ class GuiceRendererCasesTest extends Specification {
         expect:
         render(new GuiceConfig()) == """
 
-    6 MODULES with 87 bindings
+    8 MODULES with 99 bindings
     │
     ├── CasesModule                  (r.v.d.g.d.r.g.support)
     │   ├── <typelistener>                        CustomTypeListener                              at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:19)
@@ -169,7 +162,25 @@ class GuiceRendererCasesTest extends Specification {
         │   └── instance             [@Singleton]     ExtensionsHolder                                at ru.vyarus.dropwizard.guice.module.installer.InstallerModule.configure(InstallerModule.java:30)
         │
         ├── Jersey2Module                (r.v.d.g.m.jersey)
-        │   ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:58)
+        │   ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:59)
+        │   │
+        │   ├── GuiceWebModule               (r.v.d.g.m.jersey)         *WEB
+        │   │   │
+        │   │   └── InternalServletModule        (c.g.inject.servlet)
+        │   │       ├── <scope>              [@RequestScoped] -                                               at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:84)
+        │   │       ├── <scope>              [@SessionScoped] -                                               at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:85)
+        │   │       ├── linkedkey            [@Prototype]     ServletRequest                                  at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:86)
+        │   │       ├── linkedkey            [@Prototype]     ServletResponse                                 at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:87)
+        │   │       ├── untargetted          [@Singleton]     ManagedFilterPipeline                           at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:94)
+        │   │       ├── untargetted          [@Singleton]     ManagedServletPipeline                          at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:95)
+        │   │       ├── linkedkey            [@Singleton]     FilterPipeline                                  at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:96)
+        │   │       ├── providerkey          [@Prototype]     ServletContext                                  at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:98)
+        │   │       ├── untargetted          [@Singleton]     BackwardsCompatibleServletContextProvider       at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:99)
+        │   │       ├── providerinstance     [@Singleton]     @ScopingOnly GuiceFilter                        at com.google.inject.servlet.InternalServletModule.provideScopingOnlyGuiceFilter(InternalServletModule.java:106)
+        │   │       ├── providerinstance     [@RequestScoped] HttpServletRequest                              at com.google.inject.servlet.InternalServletModule.provideHttpServletRequest(InternalServletModule.java:112)
+        │   │       ├── providerinstance     [@RequestScoped] HttpServletResponse                             at com.google.inject.servlet.InternalServletModule.provideHttpServletResponse(InternalServletModule.java:118)
+        │   │       ├── providerinstance     [@Prototype]     HttpSession                                     at com.google.inject.servlet.InternalServletModule.provideHttpSession(InternalServletModule.java:123)
+        │   │       └── providerinstance     [@RequestScoped] @RequestParameters Map<String, String[]>        at com.google.inject.servlet.InternalServletModule.provideRequestParameters(InternalServletModule.java:131)
         │   │
         │   └── GuiceBindingsModule          (r.v.d.g.m.jersey.hk2)
         │       ├── providerinstance     [@Prototype]     Application                                     at ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent(JerseyBinding.java:179)
@@ -263,7 +274,10 @@ class GuiceRendererCasesTest extends Specification {
 
 
     BINDING CHAINS
-    └── BindService  --[linked]-->  OverrideService
+    ├── BindService  --[linked]-->  OverrideService
+    ├── FilterPipeline  --[linked]-->  ManagedFilterPipeline
+    ├── ServletRequest  --[linked]-->  HttpServletRequest  --[provided]-->  @Provides com.google.inject.servlet.InternalServletModule.provideHttpServletRequest(InternalServletModule.java:112)
+    └── ServletResponse  --[linked]-->  HttpServletResponse  --[provided]-->  @Provides com.google.inject.servlet.InternalServletModule.provideHttpServletResponse(InternalServletModule.java:118)
 """ as String;
     }
 

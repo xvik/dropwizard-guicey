@@ -1,14 +1,13 @@
 package ru.vyarus.dropwizard.guice.debug
 
-
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.support.feature.DummyService
-import ru.vyarus.dropwizard.guice.support.web.WebModule
+import ru.vyarus.dropwizard.guice.debug.renderer.web.support.GuiceWebModule
+import ru.vyarus.dropwizard.guice.debug.renderer.web.support.UserServletsBundle
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 
 /**
@@ -29,8 +28,8 @@ class WebMappingsReportTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .extensions(DummyService)
-                    .modules(new WebModule())
+                    .bundles(new UserServletsBundle())
+                    .modules(new GuiceWebModule())
                     .printWebMappings()
                     .build())
         }

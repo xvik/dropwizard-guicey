@@ -1,10 +1,12 @@
 package ru.vyarus.dropwizard.guice.debug.report.web;
 
 import com.google.common.base.Throwables;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.inject.Binding;
 import com.google.inject.Module;
 import com.google.inject.Stage;
-import com.google.inject.servlet.*;
+import com.google.inject.servlet.UriPatternType;
 import com.google.inject.spi.Element;
 import com.google.inject.spi.Elements;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -38,11 +40,13 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
  * @author Vyacheslav Rusakov
  * @since 22.10.2019
  */
-public class WebMappingsRenderer implements ReportRenderer<Void> {
+@SuppressWarnings("PMD.ExcessiveImports")
+public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
 
     private static final ServletVisitor VISITOR = new ServletVisitor();
     private static final String STOPPED = "STOPPED";
     private static final String ASYNC = "async";
+    private static final String IDEM = "--\"--";
 
     private final Environment environment;
     private final List<Module> modules;
@@ -57,31 +61,34 @@ public class WebMappingsRenderer implements ReportRenderer<Void> {
     }
 
     @Override
-    public String renderReport(final Void config) {
+    public String renderReport(final MappingsConfig config) {
         final StringBuilder res = new StringBuilder();
 
-        renderContext(environment.getApplicationContext(), "MAIN", res);
-        renderContext(environment.getAdminContext(), "ADMIN", res);
+        if (config.isMainContext()) {
+            renderContext(config, environment.getApplicationContext(), "MAIN", res);
+        }
+        if (config.isAdminContext()) {
+            renderContext(config, environment.getAdminContext(), "ADMIN", res);
+        }
         return res.toString();
     }
 
-    private void renderContext(final MutableServletContextHandler handler,
+    private void renderContext(final MappingsConfig config,
+                               final MutableServletContextHandler handler,
                                final String name,
                                final StringBuilder res) {
         final TreeNode root = new TreeNode("%s %s", name, handler.getContextPath());
         try {
-            for (FilterMapping mapping : handler.getServletHandler().getFilterMappings()) {
-                final TreeNode filter = renderFilter(mapping,
-                        handler.getServletHandler().getFilter(mapping.getFilterName()), root);
-                // single filter instance used for both contexts and so the name is also the same
-                if (mapping.getFilterName().equals(GuiceWebModule.GUICE_FILTER)) {
-                    renderGuiceWeb(filter);
-                }
-            }
+            final Multimap<String, FilterReference> servletFilters = renderContextFilters(config, handler, root);
 
             for (ServletMapping mapping : handler.getServletHandler().getServletMappings()) {
-                renderServlet(mapping,
-                        handler.getServletHandler().getServlet(mapping.getServletName()), root);
+                final ServletHolder servlet = handler.getServletHandler().getServlet(mapping.getServletName());
+                if (isAllowed(servlet.getClassName(), config)) {
+                    renderServlet(mapping,
+                            servlet,
+                            servletFilters,
+                            root);
+                }
             }
         } catch (Exception ex) {
             Throwables.throwIfUnchecked(ex);
@@ -93,41 +100,77 @@ public class WebMappingsRenderer implements ReportRenderer<Void> {
         }
     }
 
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    private Multimap<String, FilterReference> renderContextFilters(final MappingsConfig config,
+                                                                   final MutableServletContextHandler handler,
+                                                                   final TreeNode root) throws Exception {
+        final Multimap<String, FilterReference> servletFilters = LinkedHashMultimap.create();
+        for (FilterMapping mapping : handler.getServletHandler().getFilterMappings()) {
+            final FilterHolder holder = handler.getServletHandler().getFilter(mapping.getFilterName());
+            // single filter instance used for both contexts and so the name is also the same
+            final boolean isGuiceFilter = mapping.getFilterName().equals(GuiceWebModule.GUICE_FILTER);
+            if ((isGuiceFilter && !config.isGuiceMappings())
+                    || !isAllowed(holder.getClassName(), config)) {
+                continue;
+            }
+            if (mapping.getServletNames() != null && mapping.getServletNames().length > 0) {
+                // filters targeting exact servlet are only remembered to be shown below target servlet
+                for (String servlet : mapping.getServletNames()) {
+                    servletFilters.put(servlet, new FilterReference(mapping, holder));
+                }
+            } else {
+                final TreeNode filter = renderFilter(mapping, holder, root);
+                if (isGuiceFilter) {
+                    renderGuiceWeb(filter);
+                }
+            }
+        }
+        return servletFilters;
+    }
+
     @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
     private void renderServlet(final ServletMapping mapping,
                                final ServletHolder holder,
+                               final Multimap<String, FilterReference> servletFilters,
                                final TreeNode root) throws Exception {
         final List<String> markers = new ArrayList<>();
+        boolean first = true;
         for (String path : mapping.getPathSpecs()) {
             markers.clear();
             if (!holder.isEnabled()) {
                 markers.add("DISABLED");
             }
-            if (!holder.isAvailable()) {
-                markers.add(STOPPED);
-            }
-            root.child("servlet    %-20s %-7s %s",
+            final TreeNode servlet = root.child("servlet    %-20s %-7s %-70s %s",
                     path,
                     holder.isAsyncSupported() ? ASYNC : "",
-                    RenderUtils.renderClassLine(Class.forName(holder.getClassName()), markers));
+                    // indicate multiple mappings of the same servlet
+                    first ? RenderUtils.renderClassLine(Class.forName(holder.getClassName()), markers) : IDEM,
+                    first && holder.isStopped() ? STOPPED : "");
+            if (first) {
+                for (FilterReference filter : servletFilters.get(mapping.getServletName())) {
+                    renderFilter(filter.getMapping(), filter.getHolder(), servlet);
+                }
+            }
+            first = false;
         }
     }
 
     private TreeNode renderFilter(final FilterMapping mapping,
                                   final FilterHolder holder,
                                   final TreeNode root) throws Exception {
+        // required only guice filter
         TreeNode last = null;
-        final List<String> markers = new ArrayList<>();
-        for (String path : mapping.getPathSpecs().length == 0 ? mapping.getServletNames() : mapping.getPathSpecs()) {
-            markers.clear();
-            if (!holder.isStarted()) {
-                markers.add(STOPPED);
-            }
-            last = root.child("filter     %-20s %-7s %-50s    %s",
-                    path,
+        boolean first = true;
+        final boolean servletMapping = mapping.getPathSpecs() == null || mapping.getPathSpecs().length == 0;
+        for (String path : servletMapping ? mapping.getServletNames() : mapping.getPathSpecs()) {
+            last = root.child("filter     %-20s %-7s %-70s %s    %s",
+                    servletMapping ? "" : path,
                     holder.isAsyncSupported() ? ASYNC : "",
-                    RenderUtils.renderClassLine(Class.forName(holder.getClassName()), markers),
-                    mapping.getDispatcherTypes());
+                    // indicate multiple mappings of the same filter
+                    first ? RenderUtils.renderClassLine(Class.forName(holder.getClassName()), null) : IDEM,
+                    first && holder.isStopped() ? STOPPED : "",
+                    first ? mapping.getDispatcherTypes() : "");
+            first = false;
         }
         return last;
     }
@@ -140,7 +183,8 @@ public class WebMappingsRenderer implements ReportRenderer<Void> {
             if (!(element instanceof Binding)) {
                 continue;
             }
-            final WebElementModel model = (WebElementModel) ((Binding) element).acceptTargetVisitor(VISITOR);
+            @SuppressWarnings("unchecked") final WebElementModel model =
+                    (WebElementModel) ((Binding) element).acceptTargetVisitor(VISITOR);
             if (model == null) {
                 continue;
             }
@@ -155,8 +199,8 @@ public class WebMappingsRenderer implements ReportRenderer<Void> {
     }
 
     private String renderGuiceWebElement(final WebElementModel model, final Element element) throws Exception {
-        return String.format("%-10s %-20s %-7s %-30s %s",
-                model.getType().equals(WebElementType.FILTER) ? "filter" : "servlet",
+        return String.format("%-15s %-20s %-7s %-30s %s",
+                model.getType().equals(WebElementType.FILTER) ? "guicefilter" : "guiceservlet",
                 model.getPattern(),
                 model.getPatternType() == UriPatternType.REGEX ? "regex" : "",
                 (model.isInstance() ? "instance of " : "") + GuiceModelUtils.renderKey(model.getKey()),
@@ -180,6 +224,33 @@ public class WebMappingsRenderer implements ReportRenderer<Void> {
             for (String line : servlets) {
                 root.child(line);
             }
+        }
+    }
+
+    private boolean isAllowed(final String type, final MappingsConfig config) {
+        return config.isDropwizardMappings()
+                || !(type.startsWith("org.eclipse.jetty")
+                || type.startsWith("io.dropwizard") || type.startsWith("com.codahale.metrics"));
+    }
+
+    /**
+     * Filter mapping and declaration objects holder.
+     */
+    private static class FilterReference {
+        private final FilterMapping mapping;
+        private final FilterHolder holder;
+
+        FilterReference(final FilterMapping mapping, final FilterHolder holder) {
+            this.mapping = mapping;
+            this.holder = holder;
+        }
+
+        public FilterMapping getMapping() {
+            return mapping;
+        }
+
+        public FilterHolder getHolder() {
+            return holder;
         }
     }
 }

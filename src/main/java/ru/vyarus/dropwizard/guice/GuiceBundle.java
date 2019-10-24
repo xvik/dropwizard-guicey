@@ -18,6 +18,7 @@ import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig;
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig;
+import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig;
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
@@ -903,7 +904,11 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * @return builder instance for chained calls
          */
         public Builder printWebMappings() {
-            return listen(new WebMappingsDiagnostic());
+            return listen(new WebMappingsDiagnostic(new MappingsConfig()
+                    .showMainContext()
+                    .showAdminContext()
+                    .showDropwizardMappings()
+                    .showGuiceMappings()));
         }
 
         /**

@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.jersey;
 
+import com.google.inject.Stage;
 import com.google.inject.servlet.GuiceFilter;
 import com.google.inject.servlet.ServletModule;
 import io.dropwizard.setup.Environment;
@@ -36,10 +37,13 @@ public class GuiceWebModule extends ServletModule {
 
     @Override
     protected void configureServlets() {
-        final GuiceFilter guiceFilter = new GuiceFilter();
-        environment.servlets().addFilter(GUICE_FILTER, guiceFilter)
-                .addMappingForUrlPatterns(dispatcherTypes, false, ROOT_PATH);
-        environment.admin().addFilter(GUICE_FILTER, new AdminGuiceFilter(guiceFilter))
-                .addMappingForUrlPatterns(dispatcherTypes, false, ROOT_PATH);
+        // avoid registrations for guice reports (performing modules analysis and so calling this code many times)
+        if (currentStage() != Stage.TOOL) {
+            final GuiceFilter guiceFilter = new GuiceFilter();
+            environment.servlets().addFilter(GUICE_FILTER, guiceFilter)
+                    .addMappingForUrlPatterns(dispatcherTypes, false, ROOT_PATH);
+            environment.admin().addFilter(GUICE_FILTER, new AdminGuiceFilter(guiceFilter))
+                    .addMappingForUrlPatterns(dispatcherTypes, false, ROOT_PATH);
+        }
     }
 }
