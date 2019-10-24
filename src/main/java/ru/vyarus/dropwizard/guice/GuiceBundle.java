@@ -901,6 +901,9 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         /**
          * Prints all configured filters and servlets (including guice {@link com.google.inject.servlet.ServletModule}
          * declarations.
+         * <p>
+         * May be enabled on compiled application with a system property: {@code -Dguicey.hooks=diagnostic}
+         * (hook will also enable some other reports).
          *
          * @return builder instance for chained calls
          */

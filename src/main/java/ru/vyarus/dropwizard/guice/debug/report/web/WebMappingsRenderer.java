@@ -81,13 +81,16 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
         try {
             final Multimap<String, FilterReference> servletFilters = renderContextFilters(config, handler, root);
 
-            for (ServletMapping mapping : handler.getServletHandler().getServletMappings()) {
-                final ServletHolder servlet = handler.getServletHandler().getServlet(mapping.getServletName());
-                if (isAllowed(servlet.getClassName(), config)) {
-                    renderServlet(mapping,
-                            servlet,
-                            servletFilters,
-                            root);
+            // may be null if server not started and no servlets were registered (Guice Filter is always registered)
+            if (handler.getServletHandler().getServletMappings() != null) {
+                for (ServletMapping mapping : handler.getServletHandler().getServletMappings()) {
+                    final ServletHolder servlet = handler.getServletHandler().getServlet(mapping.getServletName());
+                    if (isAllowed(servlet.getClassName(), config)) {
+                        renderServlet(mapping,
+                                servlet,
+                                servletFilters,
+                                root);
+                    }
                 }
             }
         } catch (Exception ex) {
