@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature;
 
 import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.util.component.LifeCycle;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
@@ -29,7 +30,7 @@ public class LifeCycleInstaller implements
 
     @Override
     public void install(final Environment environment, final LifeCycle instance) {
-        reporter.line("(%s)", FeatureUtils.getInstanceClass(instance).getName());
+        reporter.line(RenderUtils.renderClassLine(FeatureUtils.getInstanceClass(instance)));
         environment.lifecycle().manage(instance);
     }
 

@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.web.listener;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
 import javax.servlet.ServletContextAttributeListener;
@@ -42,7 +43,7 @@ public class ListenerReporter extends Reporter {
 
     @SuppressWarnings("unchecked")
     public void listener(final Class<? extends EventListener> type, final String contextMarkers) {
-        final String line = String.format(TAB + "%-2s  (%s)", contextMarkers, type.getName());
+        final String line = String.format(TAB + "%-2s  %s", contextMarkers, RenderUtils.renderClassLine(type));
         for (Map.Entry<Class<? extends EventListener>, String> entry : DESCRIPTORS.entrySet()) {
             final Class ext = entry.getKey();
             if (ext.isAssignableFrom(type)) {

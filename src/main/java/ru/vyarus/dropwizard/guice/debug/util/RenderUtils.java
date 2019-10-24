@@ -64,6 +64,16 @@ public final class RenderUtils {
     }
 
     /**
+     * Shortcut for {@link #renderClassLine(Class, List)} to render without markers.
+     *
+     * @param type class
+     * @return rendered clas line
+     */
+    public static String renderClassLine(final Class<?> type) {
+        return renderClassLine(type, null);
+    }
+
+    /**
      * Renders scope as: class-simple-name#pos (class-package) *markers.
      * For position 1 position is not rendered.
      *

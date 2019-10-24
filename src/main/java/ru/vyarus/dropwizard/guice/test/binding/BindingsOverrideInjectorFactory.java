@@ -79,7 +79,7 @@ public class BindingsOverrideInjectorFactory implements InjectorFactory {
         final StringBuilder builder = new StringBuilder().append("\n\n");
         for (Module module : modules) {
             builder.append('\t').append(RenderUtils
-                    .renderClassLine(module.getClass(), null))
+                    .renderClassLine(module.getClass()))
                     .append('\n');
         }
         logger.info("Overriding modules = {}", builder.toString());

@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import io.dropwizard.jetty.setup.ServletEnvironment;
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.util.WebUtils;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
@@ -68,8 +69,9 @@ public class WebFilterInstaller implements FeatureInstaller<Filter>,
         final boolean servletMapping = servlets.length > 0;
         final AdminContext context = FeatureUtils.getAnnotation(extType, AdminContext.class);
         final String name = WebUtils.getFilterName(annotation, extType);
-        reporter.line("%-15s %-5s %-2s (%s)   %s", Joiner.on(",").join(servletMapping ? servlets : patterns),
-                WebUtils.getAsyncMarker(annotation), WebUtils.getContextMarkers(context), extType.getName(), name);
+        reporter.line("%-25s %-8s %-4s %s   %s", Joiner.on(",").join(servletMapping ? servlets : patterns),
+                WebUtils.getAsyncMarker(annotation), WebUtils.getContextMarkers(context),
+                RenderUtils.renderClassLine(extType), name);
 
         if (WebUtils.isForMain(context)) {
             configure(environment.servlets(), instance, name, annotation);

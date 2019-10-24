@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.plugin;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
 import java.util.Iterator;
@@ -16,9 +17,9 @@ import static java.lang.String.format;
  */
 public class PluginReporter extends Reporter {
     private static final String NAMED_KEY = "Map<%s, %s>";
-    private static final String NAMED_LINE = TAB + "%-10s (%s)";
+    private static final String NAMED_LINE = TAB + "%-10s %s";
     private static final String KEY = "Set<%s>";
-    private static final String LINE = TAB + "(%s)";
+    private static final String LINE = TAB + "%s";
 
     private final Multimap<String, String> namedPlugins = HashMultimap.create();
     private final Multimap<String, String> plugins = HashMultimap.create();
@@ -29,12 +30,12 @@ public class PluginReporter extends Reporter {
 
     public PluginReporter named(final Class keyType, final Class extType, final Object key, final Class extension) {
         namedPlugins.put(format(NAMED_KEY, keyType.getSimpleName(), extType.getSimpleName()),
-                format(NAMED_LINE, key, extension.getName()));
+                format(NAMED_LINE, key, RenderUtils.renderClassLine(extension)));
         return this;
     }
 
     public PluginReporter simple(final Class extType, final Class extension) {
-        plugins.put(format(KEY, extType.getSimpleName()), format(LINE, extension.getName()));
+        plugins.put(format(KEY, extType.getSimpleName()), format(LINE, RenderUtils.renderClassLine(extension)));
         return this;
     }
 

@@ -156,7 +156,7 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
                             .map(it -> it.substring(it.lastIndexOf(".") + 1))
                             .collect(Collectors.toList());
                     bindings.add(String.join("/", modules) + " | " + RenderUtils
-                            .renderClassLine(binding.getKey().getTypeLiteral().getRawType(), null));
+                            .renderClassLine(binding.getKey().getTypeLiteral().getRawType()));
                 }
                 logDetails("removed extension bindings", bindings);
             }
@@ -249,7 +249,7 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
                 .append("\t").append(message).append(" = \n");
         for (Object item : items) {
             builder.append("\t\t").append(item instanceof String ? item
-                    : RenderUtils.renderClassLine(item instanceof Class ? (Class) item : item.getClass(), null))
+                    : RenderUtils.renderClassLine(item instanceof Class ? (Class) item : item.getClass()))
                     .append(NL);
         }
         System.out.println(builder.toString());

@@ -6,6 +6,7 @@ import com.google.inject.Binder;
 import com.google.inject.Binding;
 import com.google.inject.Stage;
 import ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor.GuiceScopingVisitor;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
@@ -64,7 +65,7 @@ public class EagerSingletonInstaller implements FeatureInstaller<Object>, Bindin
     @Override
     public void installBinding(final Binder binder, final Class<?> type) {
         // may be called multiple times if bindings report enabled, but log must be counted just once
-        prerender.add(String.format("(%s)", type.getName()));
+        prerender.add(String.format("%s", RenderUtils.renderClassLine(type)));
     }
 
     @Override

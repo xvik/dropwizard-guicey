@@ -155,6 +155,7 @@
 * InjectorLookup:
     - Add lookup by environment instance: `InjectorLookup.get(environment)` 
     - Add direct lookup for bean instance: `InjectorLookup.getInstance(app, MyBean.class)` (or with environment)      
+* Update installers console reporting to to more readable class format: SimpleName   (reduced package)
 
 Migration matrix:
 

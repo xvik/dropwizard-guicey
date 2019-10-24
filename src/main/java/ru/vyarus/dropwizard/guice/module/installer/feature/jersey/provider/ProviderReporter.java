@@ -6,6 +6,7 @@ import com.google.common.collect.Multimap;
 import org.glassfish.jersey.internal.inject.InjectionResolver;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.spi.internal.ValueParamProvider;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 import ru.vyarus.java.generics.resolver.context.GenericsContext;
@@ -28,10 +29,10 @@ import static java.lang.String.format;
  * @since 12.10.2014
  */
 public class ProviderReporter extends Reporter {
-    private static final String SIMPLE_FORMAT = TAB + "(%s)";
-    private static final String SINGLE_GENERIC_FORMAT = TAB + "%-10s (%s)";
-    private static final String DOUBLE_GENERICS_FORMAT = TAB + "%-10s -> %-10s (%s)";
-    private static final String INJECTION_FORMAT = TAB + "@%-10s (%s)";
+    private static final String SIMPLE_FORMAT = TAB + "%s";
+    private static final String SINGLE_GENERIC_FORMAT = TAB + "%-20s %s";
+    private static final String DOUBLE_GENERICS_FORMAT = TAB + "%-10s -> %-10s %s";
+    private static final String INJECTION_FORMAT = TAB + "@%-20s %s";
     private static final String JERSEY_MANAGED = " *jersey managed";
 
     private static final Map<Class, ExtDescriptor> DESCRIPTORS = ImmutableMap.<Class, ExtDescriptor>builder()
@@ -69,7 +70,7 @@ public class ProviderReporter extends Reporter {
             }
         }
         if (!recognized) {
-            prerender.put(Object.class, format(SIMPLE_FORMAT, provider.getName())
+            prerender.put(Object.class, format(SIMPLE_FORMAT, RenderUtils.renderClassLine(provider))
                     + hkManaged(isHkManaged) + lazy(isLazy));
         }
         return this;
@@ -92,7 +93,7 @@ public class ProviderReporter extends Reporter {
         while (pos < desc.generics) {
             params[pos] = generics.genericAsString(pos++);
         }
-        params[pos] = provider.getName();
+        params[pos] = RenderUtils.renderClassLine(provider);
         return format(desc.format, params) + hkManaged(isHkManaged) + lazy(isLazy);
     }
 

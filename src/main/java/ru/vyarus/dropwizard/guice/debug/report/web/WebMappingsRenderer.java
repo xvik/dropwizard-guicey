@@ -167,7 +167,7 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
                     servletMapping ? "" : path,
                     holder.isAsyncSupported() ? ASYNC : "",
                     // indicate multiple mappings of the same filter
-                    first ? RenderUtils.renderClassLine(Class.forName(holder.getClassName()), null) : IDEM,
+                    first ? RenderUtils.renderClassLine(Class.forName(holder.getClassName())) : IDEM,
                     first && holder.isStopped() ? STOPPED : "",
                     first ? mapping.getDispatcherTypes() : "");
             first = false;
