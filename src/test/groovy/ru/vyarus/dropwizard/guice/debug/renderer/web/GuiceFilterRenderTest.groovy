@@ -44,7 +44,7 @@ class GuiceFilterRenderTest extends Specification {
 
     MAIN /
     │
-    └── filter     /*                   async   GuiceFilter                  (c.g.inject.servlet)                          [REQUEST]
+    └── filter     /*                   async   GuiceFilter                  (c.g.inject.servlet)                                    [REQUEST]       Guice Filter
         ├── guicefilter     /1/*                         GFilter                        r.v.d.g.d.r.w.support.GuiceWebModule
         ├── guicefilter     /1/abc?/.*           regex   GRegexFilter                   r.v.d.g.d.r.w.support.GuiceWebModule
         ├── guicefilter     /1/foo                       instance of GFilterInstance    r.v.d.g.d.r.w.support.GuiceWebModule

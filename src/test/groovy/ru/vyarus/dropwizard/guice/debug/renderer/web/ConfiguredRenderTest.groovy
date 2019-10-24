@@ -46,37 +46,37 @@ class ConfiguredRenderTest extends Specification {
                 .showDropwizardMappings()) == """
 
     MAIN /
-    ├── filter     /custom/*                    CustomMappingFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)          [ERROR]
-    ├── filter     /async/*             async   AsyncFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
-    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
-    ├── filter     /1/*                         MainFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
+    ├── filter     /custom/*                    CustomMappingFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)                    [ERROR]         .custommapping
+    ├── filter     /async/*             async   AsyncFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .async
+    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .both
+    ├── filter     /1/*                         MainFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .main
     ├── filter     /2/*                         --"--
-    ├── filter     /*                   async   GuiceFilter                  (c.g.inject.servlet)                          [REQUEST]
-    ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                           [REQUEST]
-    ├── filter     /*                   async   ThreadNameFilter             (i.d.servlets)                                [REQUEST]
+    ├── filter     /*                   async   GuiceFilter                  (c.g.inject.servlet)                                    [REQUEST]       Guice Filter
+    ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                                     [REQUEST]       io.dropwizard.jersey.filter.AllowedMethodsFilter-11111111
+    ├── filter     /*                   async   ThreadNameFilter             (i.d.servlets)                                          [REQUEST]       io.dropwizard.servlets.ThreadNameFilter-11111111
     │
-    ├── servlet    /foo                         MainServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)
-    │   └── filter                                  TargetServletFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
+    ├── servlet    /foo                         MainServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    target
+    │   └── filter                                  TargetServletFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .targetservlet
     │
     ├── servlet    /bar                         --"--
-    ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)
-    ├── servlet    /async               async   AsyncServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)
-    ├── servlet    /*                   async   JerseyServletContainer       (i.d.jersey.setup)
-    └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)
+    ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .both
+    ├── servlet    /async               async   AsyncServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .async
+    ├── servlet    /*                   async   JerseyServletContainer       (i.d.jersey.setup)                                                      io.dropwizard.jersey.setup.JerseyServletContainer-11111111
+    └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)                                                org.eclipse.jetty.servlet.ServletHandler\$Default404Servlet-11111111
 
 
     ADMIN /
-    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
-    ├── filter     /1/*                         AdminFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
+    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .both
+    ├── filter     /1/*                         AdminFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .admin
     ├── filter     /2/*                         --"--
-    ├── filter     /*                   async   AdminGuiceFilter             (r.v.d.g.m.i.internal)                        [REQUEST]
-    ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                           [REQUEST]
-    ├── servlet    /tasks/*             async   TaskServlet                  (i.d.servlets.tasks)
-    ├── servlet    /fooadmin                    AdminServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)
+    ├── filter     /*                   async   AdminGuiceFilter             (r.v.d.g.m.i.internal)                                  [REQUEST]       Guice Filter
+    ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                                     [REQUEST]       io.dropwizard.jersey.filter.AllowedMethodsFilter-11111111
+    ├── servlet    /tasks/*             async   TaskServlet                  (i.d.servlets.tasks)                                                    tasks
+    ├── servlet    /fooadmin                    AdminServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .admin
     ├── servlet    /baradmin                    --"--
-    ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)
-    ├── servlet    /*                   async   AdminServlet                 (c.c.metrics.servlets)
-    └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)
+    ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .both
+    ├── servlet    /*                   async   AdminServlet                 (c.c.metrics.servlets)                                                  com.codahale.metrics.servlets.AdminServlet-11111111
+    └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)                                                org.eclipse.jetty.servlet.ServletHandler\$Default404Servlet-11111111
 """ as String;
     }
 
@@ -88,27 +88,27 @@ class ConfiguredRenderTest extends Specification {
                 .showAdminContext()) == """
 
     MAIN /
-    ├── filter     /custom/*                    CustomMappingFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)          [ERROR]
-    ├── filter     /async/*             async   AsyncFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
-    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
-    ├── filter     /1/*                         MainFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
+    ├── filter     /custom/*                    CustomMappingFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)                    [ERROR]         .custommapping
+    ├── filter     /async/*             async   AsyncFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .async
+    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .both
+    ├── filter     /1/*                         MainFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .main
     ├── filter     /2/*                         --"--
     │
-    ├── servlet    /foo                         MainServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)
-    │   └── filter                                  TargetServletFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
+    ├── servlet    /foo                         MainServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    target
+    │   └── filter                                  TargetServletFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .targetservlet
     │
     ├── servlet    /bar                         --"--
-    ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)
-    └── servlet    /async               async   AsyncServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)
+    ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .both
+    └── servlet    /async               async   AsyncServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .async
 
 
     ADMIN /
-    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
-    ├── filter     /1/*                         AdminFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
+    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .both
+    ├── filter     /1/*                         AdminFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .admin
     ├── filter     /2/*                         --"--
-    ├── servlet    /fooadmin                    AdminServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)
+    ├── servlet    /fooadmin                    AdminServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .admin
     ├── servlet    /baradmin                    --"--
-    └── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)
+    └── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .both
 """ as String;
     }
 
@@ -119,12 +119,12 @@ class ConfiguredRenderTest extends Specification {
                 .showAdminContext()) == """
 
     ADMIN /
-    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
-    ├── filter     /1/*                         AdminFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)          [REQUEST]
+    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .both
+    ├── filter     /1/*                         AdminFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .admin
     ├── filter     /2/*                         --"--
-    ├── servlet    /fooadmin                    AdminServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)
+    ├── servlet    /fooadmin                    AdminServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .admin
     ├── servlet    /baradmin                    --"--
-    └── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)
+    └── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .both
 """ as String;
     }
 
@@ -146,5 +146,6 @@ class ConfiguredRenderTest extends Specification {
 
     String render(MappingsConfig config) {
         renderer.renderReport(config).replaceAll("\r", "").replaceAll(" +\n", "\n")
+                .replaceAll('-[^\\s]{7,8}([\\s]+)', "-11111111\$1")
     }
 }

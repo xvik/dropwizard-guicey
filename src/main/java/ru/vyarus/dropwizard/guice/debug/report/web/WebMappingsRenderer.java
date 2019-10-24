@@ -137,15 +137,27 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
         boolean first = true;
         for (String path : mapping.getPathSpecs()) {
             markers.clear();
-            if (!holder.isEnabled()) {
+            if (first && !holder.isEnabled()) {
                 markers.add("DISABLED");
             }
-            final TreeNode servlet = root.child("servlet    %-20s %-7s %-70s %s",
-                    path,
-                    holder.isAsyncSupported() ? ASYNC : "",
-                    // indicate multiple mappings of the same servlet
-                    first ? RenderUtils.renderClassLine(Class.forName(holder.getClassName()), markers) : IDEM,
-                    first && holder.isStopped() ? STOPPED : "");
+            // indicate multiple mappings of the same servlet
+            String type = IDEM;
+            String async = "";
+            String stopped = "";
+            String name = "";
+            if (first) {
+                type = RenderUtils.renderClassLine(Class.forName(holder.getClassName()), markers);
+                if (holder.isStopped()) {
+                    stopped = STOPPED;
+                }
+                if (holder.isAsyncSupported()) {
+                    async = ASYNC;
+                }
+                name = mapping.getServletName();
+            }
+            final TreeNode servlet = root.child("servlet    %-20s %-7s %-70s %-10s    %-15s %s",
+                    // blank placeholder to match with filters output
+                    path, async, type, stopped, "", name);
             if (first) {
                 for (FilterReference filter : servletFilters.get(mapping.getServletName())) {
                     renderFilter(filter.getMapping(), filter.getHolder(), servlet);
@@ -163,13 +175,25 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
         boolean first = true;
         final boolean servletMapping = mapping.getPathSpecs() == null || mapping.getPathSpecs().length == 0;
         for (String path : servletMapping ? mapping.getServletNames() : mapping.getPathSpecs()) {
-            last = root.child("filter     %-20s %-7s %-70s %s    %s",
-                    servletMapping ? "" : path,
-                    holder.isAsyncSupported() ? ASYNC : "",
-                    // indicate multiple mappings of the same filter
-                    first ? RenderUtils.renderClassLine(Class.forName(holder.getClassName())) : IDEM,
-                    first && holder.isStopped() ? STOPPED : "",
-                    first ? mapping.getDispatcherTypes() : "");
+            // indicate multiple urls or servlets mapping
+            String type = IDEM;
+            String async = "";
+            String stopped = "";
+            String dispatches = "";
+            String name = "";
+            if (first) {
+                type = RenderUtils.renderClassLine(Class.forName(holder.getClassName()));
+                if (holder.isStopped()) {
+                    stopped = STOPPED;
+                }
+                if (holder.isAsyncSupported()) {
+                    async = ASYNC;
+                }
+                dispatches = mapping.getDispatcherTypes().toString();
+                name = mapping.getFilterName();
+            }
+            last = root.child("filter     %-20s %-7s %-70s %-10s    %-15s %s",
+                    servletMapping ? "" : path, async, type, stopped, dispatches, name);
             first = false;
         }
         return last;

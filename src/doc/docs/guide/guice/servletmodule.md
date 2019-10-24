@@ -7,7 +7,8 @@ By default, [GuiceFilter](https://github.com/google/guice/wiki/Servlets) is regi
 
 !!! note
     Actually, the same `GuiceFilter` instance is used for both contexts. This way request scope works properly
-    on both contexts, but registrations through `ServeletModule` are available only in main context.
+    on both contexts, and registrations through `ServeletModule` are available both context.
+    See [web mappings report](../diagnostic/web-report.md).
 
 Example of servlet and filter registration through guice module:
 

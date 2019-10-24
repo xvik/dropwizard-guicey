@@ -46,13 +46,13 @@ class WebReportUnderLightweightGuiceyTest extends Specification {
                 .showDropwizardMappings()) == """
 
     MAIN /
-    ├── filter     /custom/*                    CustomMappingFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED    [ERROR]
-    ├── filter     /async/*             async   AsyncFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED    [REQUEST]
-    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED    [REQUEST]
-    ├── filter     /1/*                         MainFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED    [REQUEST]
+    ├── filter     /custom/*                    CustomMappingFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED       [ERROR]         .custommapping
+    ├── filter     /async/*             async   AsyncFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED       [REQUEST]       .async
+    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED       [REQUEST]       .both
+    ├── filter     /1/*                         MainFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED       [REQUEST]       .main
     ├── filter     /2/*                         --"--
     │
-    ├── filter     /*                   async   GuiceFilter                  (c.g.inject.servlet)                      STOPPED    [REQUEST]
+    ├── filter     /*                   async   GuiceFilter                  (c.g.inject.servlet)                      STOPPED       [REQUEST]       Guice Filter
     │   ├── guicefilter     /1/*                         GFilter                        r.v.d.g.d.r.w.support.GuiceWebModule
     │   ├── guicefilter     /1/abc?/.*           regex   GRegexFilter                   r.v.d.g.d.r.w.support.GuiceWebModule
     │   ├── guicefilter     /1/foo                       instance of GFilterInstance    r.v.d.g.d.r.w.support.GuiceWebModule
@@ -60,12 +60,12 @@ class WebReportUnderLightweightGuiceyTest extends Specification {
     │   ├── guiceservlet    /2/abc?/             regex   GRegexServlet                  r.v.d.g.d.r.w.support.GuiceWebModule
     │   └── guiceservlet    /2/foo                       instance of GServletInstance   r.v.d.g.d.r.w.support.GuiceWebModule
     │
-    ├── servlet    /foo                         MainServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED
-    │   └── filter                                  TargetServletFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED    [REQUEST]
+    ├── servlet    /foo                         MainServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED                       target
+    │   └── filter                                  TargetServletFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED       [REQUEST]       .targetservlet
     │
     ├── servlet    /bar                         --"--
-    ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED
-    └── servlet    /async               async   AsyncServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED
+    ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED                       .both
+    └── servlet    /async               async   AsyncServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)      STOPPED                       .async
 """ as String;
     }
 
