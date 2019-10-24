@@ -17,6 +17,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
  *
  * @author Vyacheslav Rusakov
  * @see GuiceyLifecycleAdapter
+ * @see UniqueGuiceyLifecycleListener
  * @since 17.04.2018
  */
 @FunctionalInterface

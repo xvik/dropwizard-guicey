@@ -198,6 +198,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * @return builder instance for chained calls
          * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
          * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
+         * @see ru.vyarus.dropwizard.guice.module.lifecycle.UniqueGuiceyLifecycleListener
          */
         public Builder listen(final GuiceyLifecycleListener... listeners) {
             bundle.context.lifecycle().register(listeners);

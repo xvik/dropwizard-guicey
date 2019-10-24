@@ -11,7 +11,7 @@ import org.glassfish.jersey.server.monitoring.RequestEvent;
 import org.glassfish.jersey.server.monitoring.RequestEventListener;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
-import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
+import ru.vyarus.dropwizard.guice.module.lifecycle.UniqueGuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * @since 17.04.2018
  */
 @SuppressWarnings({"checkstyle:ClassFanOutComplexity", "PMD.TooManyMethods"})
-public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
+public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
 
     private static final String BUNDLES = "bundles";
     private static final String DISABLED = "disabled";
@@ -210,18 +210,6 @@ public class LifecycleDiagnostic extends GuiceyLifecycleAdapter {
         if (showDetails) {
             logDetails(INSTALLED_EXTENSIONS, event.getExtensions());
         }
-    }
-
-
-    @Override
-    public boolean equals(final Object obj) {
-        // allow only one listener instance
-        return obj instanceof LifecycleDiagnostic;
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 
     @SuppressWarnings("PMD.SystemPrintln")

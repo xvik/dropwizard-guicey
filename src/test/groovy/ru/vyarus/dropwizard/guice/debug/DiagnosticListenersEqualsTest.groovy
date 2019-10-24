@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.debug
 
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig
+import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
 
 /**
@@ -57,6 +58,18 @@ class DiagnosticListenersEqualsTest extends AbstractTest {
         when: "two listener instances"
         GuiceBindingsDiagnostic l1 = new GuiceBindingsDiagnostic(new GuiceConfig())
         GuiceBindingsDiagnostic l2 = new GuiceBindingsDiagnostic(new GuiceConfig().hideGuiceBindings())
+
+        then: "equal"
+        l1.equals(l2)
+        l1.hashCode() == l1.hashCode()
+
+    }
+
+    def "Check web mappings listener"() {
+
+        when: "two listener instances"
+        WebMappingsDiagnostic l1 = new WebMappingsDiagnostic(new MappingsConfig())
+        WebMappingsDiagnostic l2 = new WebMappingsDiagnostic(new MappingsConfig().showAdminContext())
 
         then: "equal"
         l1.equals(l2)

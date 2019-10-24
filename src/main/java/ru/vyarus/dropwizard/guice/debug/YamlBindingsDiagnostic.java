@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig;
 import ru.vyarus.dropwizard.guice.debug.report.yaml.ConfigBindingsRenderer;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
-import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
+import ru.vyarus.dropwizard.guice.module.lifecycle.UniqueGuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.BeforeRunEvent;
 
 /**
@@ -21,7 +21,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.BeforeRunEvent;
  * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#printCustomConfigurationBindings()
  * @since 13.06.2018
  */
-public class YamlBindingsDiagnostic extends GuiceyLifecycleAdapter {
+public class YamlBindingsDiagnostic extends UniqueGuiceyLifecycleListener {
 
     private final Logger logger = LoggerFactory.getLogger(YamlBindingsDiagnostic.class);
 
@@ -48,16 +48,5 @@ public class YamlBindingsDiagnostic extends GuiceyLifecycleAdapter {
         }
         logger.info("Available {}configuration bindings = {}",
                 customOnly ? "custom " : "", report);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        // allow only one reporter
-        return obj instanceof YamlBindingsDiagnostic;
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }

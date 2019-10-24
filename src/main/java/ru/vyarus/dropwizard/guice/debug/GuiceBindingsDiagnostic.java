@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceBindingsRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig;
-import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
+import ru.vyarus.dropwizard.guice.module.lifecycle.UniqueGuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
 
 /**
@@ -18,7 +18,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStart
  * @author Vyacheslav Rusakov
  * @since 13.08.2019
  */
-public class GuiceBindingsDiagnostic extends GuiceyLifecycleAdapter {
+public class GuiceBindingsDiagnostic extends UniqueGuiceyLifecycleListener {
 
     private final Logger logger = LoggerFactory.getLogger(GuiceBindingsDiagnostic.class);
     private final GuiceConfig config;
@@ -31,16 +31,5 @@ public class GuiceBindingsDiagnostic extends GuiceyLifecycleAdapter {
     protected void applicationStarted(final ApplicationStartedEvent event) {
         final String report = new GuiceBindingsRenderer(event.getInjector()).renderReport(config);
         logger.info("Guice bindings = {}", report);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        // allow only one reporter
-        return obj instanceof GuiceBindingsDiagnostic;
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }
