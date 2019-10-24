@@ -20,6 +20,9 @@ during development. All reports may be enabled on main guice bundle:
 `#!java .printGuiceAopMap()`  
 `#!java .printGuiceAopMap(GuiceAopConfig config)`
 :   [AOP appliance](aop-report.md) map
+
+`#!java .printWebMappings()`
+:   Prints all registered [resvlets and filters](web-report.md) (including guice `ServletModule` declarations)
   
 `#!java .printLifecyclePhases()`  
 `#!java .printLifecyclePhasesDetailed()`  
