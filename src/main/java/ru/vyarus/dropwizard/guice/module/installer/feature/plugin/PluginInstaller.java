@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
  * @since 08.10.2014
  */
 @Order(80)
-public class PluginInstaller implements FeatureInstaller<Object>, BindingInstaller {
+public class PluginInstaller implements FeatureInstaller, BindingInstaller {
 
     private final PluginReporter reporter = new PluginReporter();
 

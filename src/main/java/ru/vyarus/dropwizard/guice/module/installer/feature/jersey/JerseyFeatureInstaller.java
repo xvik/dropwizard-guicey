@@ -20,8 +20,7 @@ import javax.ws.rs.core.Feature;
  * @since 13.01.2016
  */
 @Order(30)
-public class JerseyFeatureInstaller implements
-        FeatureInstaller<Feature>, InstanceInstaller<Feature> {
+public class JerseyFeatureInstaller implements FeatureInstaller, InstanceInstaller<Feature> {
 
     private final Reporter reporter = new Reporter(JerseyFeatureInstaller.class, "features =");
 

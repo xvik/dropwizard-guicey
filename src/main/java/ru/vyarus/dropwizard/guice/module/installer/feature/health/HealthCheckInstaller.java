@@ -18,8 +18,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
  * @since 01.09.2014
  */
 @Order(60)
-public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck>,
-        InstanceInstaller<NamedHealthCheck> {
+public class HealthCheckInstaller implements FeatureInstaller, InstanceInstaller<NamedHealthCheck> {
 
     private final Reporter reporter = new Reporter(HealthCheckInstaller.class, "health checks =");
 

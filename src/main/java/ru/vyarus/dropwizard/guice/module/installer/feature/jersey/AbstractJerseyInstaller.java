@@ -26,7 +26,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isJ
  * @since 28.04.2018
  */
 public abstract class AbstractJerseyInstaller<T> extends InstallerOptionsSupport implements
-        FeatureInstaller<T>,
+        FeatureInstaller,
         JerseyInstaller<T> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());

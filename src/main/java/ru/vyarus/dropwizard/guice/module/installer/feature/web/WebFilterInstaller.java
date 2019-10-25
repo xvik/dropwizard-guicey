@@ -44,7 +44,7 @@ import java.util.EnumSet;
  * @since 06.08.2016
  */
 @Order(100)
-public class WebFilterInstaller implements FeatureInstaller<Filter>,
+public class WebFilterInstaller implements FeatureInstaller,
         InstanceInstaller<Filter>, Ordered {
 
     private final Reporter reporter = new Reporter(WebFilterInstaller.class, "filters =");

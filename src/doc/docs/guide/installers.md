@@ -112,7 +112,7 @@ public class ScheduledInstaller implements FeatureInstaller,
 The last remaining part is reporting - we must see all installed beans in console:
 
 ```java
-public class ScheduledInstaller implements FeatureInstaller<ScheduledTask>,
+public class ScheduledInstaller implements FeatureInstaller,
                                            InstanceInstaller<ScheduledTask> {
     
     private final Reporter reporter = 
@@ -141,7 +141,7 @@ Another example, suppose `CustomFeature` is a base class for our jersey extensio
 Then installer will be:
 
 ```java
-public class CustomInstaller implements FeatureInstaller<CustomFeature>, JerseyInstaller<CustomFeature> {
+public class CustomInstaller implements FeatureInstaller, JerseyInstaller<CustomFeature> {
     @Override
     public boolean matches(final Class<?> type) {
         return FeatureUtils.is(type, CustomFeature.class);

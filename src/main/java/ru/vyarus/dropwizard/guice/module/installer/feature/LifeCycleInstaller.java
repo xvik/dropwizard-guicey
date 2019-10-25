@@ -18,8 +18,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
  * @since 01.09.2014
  */
 @Order(10)
-public class LifeCycleInstaller implements
-        FeatureInstaller<LifeCycle>, InstanceInstaller<LifeCycle>, Ordered {
+public class LifeCycleInstaller implements FeatureInstaller, InstanceInstaller<LifeCycle>, Ordered {
 
     private final Reporter reporter = new Reporter(LifeCycleInstaller.class, "life cycles =");
 

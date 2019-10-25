@@ -28,11 +28,10 @@ package ru.vyarus.dropwizard.guice.module.installer;
  * <p>
  * All installer are ordered according to {@link ru.vyarus.dropwizard.guice.module.installer.order.Order} annotation.
  *
- * @param <T> expected extension type (or Object when no super type (e.g. for annotated beans))
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
-public interface FeatureInstaller<T> {
+public interface FeatureInstaller {
 
     /**
      * NOTE: consider using {@code ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils} to simplify checks

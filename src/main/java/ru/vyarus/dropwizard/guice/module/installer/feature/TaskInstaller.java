@@ -15,7 +15,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
  * @since 01.09.2014
  */
 @Order(70)
-public class TaskInstaller implements FeatureInstaller<Task>, InstanceInstaller<Task> {
+public class TaskInstaller implements FeatureInstaller, InstanceInstaller<Task> {
 
     @Override
     public boolean matches(final Class<?> type) {

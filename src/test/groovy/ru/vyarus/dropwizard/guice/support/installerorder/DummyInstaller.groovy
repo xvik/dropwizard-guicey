@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.module.installer.order.Order
  * @since 17.04.2015
  */
 @Order(25)
-class DummyInstaller implements FeatureInstaller<DummyInstaller>{
+class DummyInstaller implements FeatureInstaller {
 
     @Override
     boolean matches(Class<?> type) {

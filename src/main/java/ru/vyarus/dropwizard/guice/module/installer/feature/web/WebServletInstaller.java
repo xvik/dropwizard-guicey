@@ -52,7 +52,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Deny
  */
 @Order(90)
 public class WebServletInstaller extends InstallerOptionsSupport
-        implements FeatureInstaller<HttpServlet>, InstanceInstaller<HttpServlet>, Ordered {
+        implements FeatureInstaller, InstanceInstaller<HttpServlet>, Ordered {
 
     private final Logger logger = LoggerFactory.getLogger(WebServletInstaller.class);
     private final Reporter reporter = new Reporter(WebServletInstaller.class, "servlets =");

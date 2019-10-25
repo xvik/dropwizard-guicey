@@ -18,8 +18,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
  * @since 01.09.2014
  */
 @Order(20)
-public class ManagedInstaller implements
-        FeatureInstaller<Managed>, InstanceInstaller<Managed>, Ordered {
+public class ManagedInstaller implements FeatureInstaller, InstanceInstaller<Managed>, Ordered {
 
     private final Reporter reporter = new Reporter(ManagedInstaller.class, "managed =");
 

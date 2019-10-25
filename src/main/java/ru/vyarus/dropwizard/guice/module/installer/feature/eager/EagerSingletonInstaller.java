@@ -31,7 +31,7 @@ import java.util.Set;
  * @since 01.09.2014
  */
 @Order(50)
-public class EagerSingletonInstaller implements FeatureInstaller<Object>, BindingInstaller {
+public class EagerSingletonInstaller implements FeatureInstaller, BindingInstaller {
     private static final GuiceScopingVisitor VISITOR = new GuiceScopingVisitor();
 
     private final Reporter reporter = new Reporter(EagerSingletonInstaller.class, "eager singletons =");
