@@ -43,6 +43,7 @@ JerseyConfiguration | Jersey context starting. Both jersey and jetty are startin
 JerseyExtensionsInstalledBy | Called when jersey installer installed all related extensions (for each installer) and only for installers actually performed installations (extensions list never empty) | Logging of installed extensions. Extension instance could be obtained from injector/locator and post processed.
 JerseyExtensionsInstalled^**?**^ | Called after all jersey installers install related extensions. Not called when no installed extensions (nothing registered or all disabled). At this point HK2 is not completely started yet (and so extensions) | Logging or extensions post processing
 ApplicationStarted | Meta event, called after complete dropwizard startup. This event also will be fired in guicey lightweight tests | May be used as assured "started" point (after all initializations). For example, for reporting.
+ApplicationShutdown | Meta event, called on server shutdown start. This event also will be fired in guicey lightweight tests | May be used for shutdown logic.
 
 ^?^ - event may not be called
 
@@ -89,7 +90,11 @@ public class MyListener extends GuiceyLifecycleAdapter {
            ...
     }        
 }
-```
+``` 
+
+!!! tip
+    In `ApplicationStarted` and `ApplicationShutdown` events lightweight guicey test
+    environment may be differentiated from real server startup with `.isJettyStarted()` method.
 
 ### De-duplication
 
