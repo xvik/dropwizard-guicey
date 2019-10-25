@@ -1,9 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event;
 
 import com.google.inject.Injector;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig;
@@ -16,9 +13,8 @@ import ru.vyarus.dropwizard.guice.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeRenderer;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 /**
  * Base class from events, started after guice injector creation. Since that moment, finalized guicey configuration
@@ -33,14 +29,9 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
     private final ReportRenderer reportRenderer = new ReportRenderer();
 
     public InjectorPhaseEvent(final GuiceyLifecycle type,
-                              final Options options,
-                              final Bootstrap bootstrap,
-                              final Configuration configuration,
-                              final ConfigurationTree configurationTree,
-                              final Environment environment,
-                              final Injector injector) {
-        super(type, options, bootstrap, configuration, configurationTree, environment);
-        this.injector = injector;
+                              final EventsContext context) {
+        super(type, context);
+        this.injector = context.getInjector();
     }
 
     /**

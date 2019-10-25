@@ -1,13 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.run;
 
 import com.google.inject.Module;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -27,17 +23,12 @@ public class InjectorCreationEvent extends RunPhaseEvent {
     private final List<Module> disabled;
     private final List<Module> ignored;
 
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public InjectorCreationEvent(final Options options,
-                                 final Bootstrap bootstrap,
-                                 final Configuration configuration,
-                                 final ConfigurationTree configurationTree,
-                                 final Environment environment,
+    public InjectorCreationEvent(final EventsContext context,
                                  final List<Module> modules,
                                  final List<Module> overriding,
                                  final List<Module> disabled,
                                  final List<Module> ignored) {
-        super(GuiceyLifecycle.InjectorCreation, options, bootstrap, configuration, configurationTree, environment);
+        super(GuiceyLifecycle.InjectorCreation, context);
         this.modules = modules;
         this.overriding = overriding;
         this.disabled = disabled;

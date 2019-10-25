@@ -1,10 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
-import io.dropwizard.setup.Bootstrap;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -21,11 +20,10 @@ public class InstallersResolvedEvent extends ConfigurationPhaseEvent {
     private final List<FeatureInstaller> installers;
     private final List<Class<? extends FeatureInstaller>> disabled;
 
-    public InstallersResolvedEvent(final Options options,
-                                   final Bootstrap bootstrap,
+    public InstallersResolvedEvent(final EventsContext context,
                                    final List<FeatureInstaller> installers,
                                    final List<Class<? extends FeatureInstaller>> disabled) {
-        super(GuiceyLifecycle.InstallersResolved, options, bootstrap);
+        super(GuiceyLifecycle.InstallersResolved, context);
         this.installers = installers;
         this.disabled = disabled;
     }

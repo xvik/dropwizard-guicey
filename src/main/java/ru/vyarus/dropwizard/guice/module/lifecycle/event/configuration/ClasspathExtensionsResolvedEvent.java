@@ -1,9 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
-import io.dropwizard.setup.Bootstrap;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -21,10 +20,9 @@ public class ClasspathExtensionsResolvedEvent extends ConfigurationPhaseEvent {
 
     private final List<Class<?>> extensions;
 
-    public ClasspathExtensionsResolvedEvent(final Options options,
-                                            final Bootstrap bootstrap,
+    public ClasspathExtensionsResolvedEvent(final EventsContext context,
                                             final List<Class<?>> extensions) {
-        super(GuiceyLifecycle.ClasspathExtensionsResolved, options, bootstrap);
+        super(GuiceyLifecycle.ClasspathExtensionsResolved, context);
         this.extensions = extensions;
     }
 

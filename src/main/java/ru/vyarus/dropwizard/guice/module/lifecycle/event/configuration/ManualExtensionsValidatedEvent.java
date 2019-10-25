@@ -1,9 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
-import io.dropwizard.setup.Bootstrap;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -24,11 +23,10 @@ public class ManualExtensionsValidatedEvent extends ConfigurationPhaseEvent {
     private final List<Class<?>> extensions;
     private final List<Class<?>> validated;
 
-    public ManualExtensionsValidatedEvent(final Options options,
-                                          final Bootstrap bootstrap,
+    public ManualExtensionsValidatedEvent(final EventsContext context,
                                           final List<Class<?>> extensions,
                                           final List<Class<?>> validated) {
-        super(GuiceyLifecycle.ManualExtensionsValidated, options, bootstrap);
+        super(GuiceyLifecycle.ManualExtensionsValidated, context);
         this.extensions = extensions;
         this.validated = validated;
     }
@@ -42,7 +40,7 @@ public class ManualExtensionsValidatedEvent extends ConfigurationPhaseEvent {
 
     /**
      * Note that some of these extensions may still be disabled in the run phase.
-     * 
+     *
      * @return actually validated extensions (known to be enabled at the time of validation)
      */
     public List<Class<?>> getValidated() {

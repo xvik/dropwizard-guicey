@@ -14,6 +14,7 @@ import org.glassfish.jersey.internal.inject.InjectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
@@ -44,19 +45,13 @@ import java.util.Set;
 public final class LifecycleSupport {
     private final Logger logger = LoggerFactory.getLogger(LifecycleSupport.class);
 
-    private final Options options;
-    private Bootstrap bootstrap;
-    private Configuration configuration;
-    private ConfigurationTree configurationTree;
-    private Environment environment;
-    private Injector injector;
-    private InjectionManager injectionManager;
+    private final EventsContext context;
     private GuiceyLifecycle currentStage;
 
     private final Set<GuiceyLifecycleListener> listeners = new LinkedHashSet<>();
 
-    public LifecycleSupport(final Options options) {
-        this.options = options;
+    public LifecycleSupport(final Options options, final SharedConfigurationState sharedState) {
+        this.context = new EventsContext(options, sharedState);
     }
 
     public void register(final GuiceyLifecycleListener... listeners) {
@@ -69,7 +64,7 @@ public final class LifecycleSupport {
 
     public void configurationHooksProcessed(final Set<GuiceyConfigurationHook> hooks) {
         if (hooks != null && !hooks.isEmpty()) {
-            broadcast(new ConfigurationHooksProcessedEvent(options, hooks));
+            broadcast(new ConfigurationHooksProcessedEvent(context, hooks));
         }
     }
 
@@ -77,66 +72,66 @@ public final class LifecycleSupport {
                                       final List<ConfiguredBundle> bundles,
                                       final List<ConfiguredBundle> disabled,
                                       final List<ConfiguredBundle> ignored) {
-        this.bootstrap = bootstrap;
+        this.context.setBootstrap(bootstrap);
         if (!bundles.isEmpty()) {
-            broadcast(new DropwizardBundlesInitializedEvent(options, bootstrap, bundles, disabled, ignored));
+            broadcast(new DropwizardBundlesInitializedEvent(context, bundles, disabled, ignored));
         }
     }
 
     public void bundlesFromLookupResolved(final List<GuiceyBundle> bundles) {
         if (!bundles.isEmpty()) {
-            broadcast(new BundlesFromLookupResolvedEvent(options, bootstrap, bundles));
+            broadcast(new BundlesFromLookupResolvedEvent(context, bundles));
         }
     }
 
     public void bundlesResolved(final List<GuiceyBundle> bundles,
                                 final List<GuiceyBundle> disabled,
                                 final List<GuiceyBundle> ignored) {
-        broadcast(new BundlesResolvedEvent(options, bootstrap, bundles, disabled, ignored));
+        broadcast(new BundlesResolvedEvent(context, bundles, disabled, ignored));
     }
 
     public void bundlesInitialized(final List<GuiceyBundle> bundles,
                                    final List<GuiceyBundle> disabled,
                                    final List<GuiceyBundle> ignored) {
         if (!bundles.isEmpty()) {
-            broadcast(new BundlesInitializedEvent(options, bootstrap, bundles, disabled, ignored));
+            broadcast(new BundlesInitializedEvent(context, bundles, disabled, ignored));
         }
     }
 
     public void commandsResolved(final List<Command> installed) {
         if (installed != null && !installed.isEmpty()) {
-            broadcast(new CommandsResolvedEvent(options, bootstrap, installed));
+            broadcast(new CommandsResolvedEvent(context, installed));
         }
     }
 
     public void installersResolved(final List<FeatureInstaller> installers,
                                    final List<Class<? extends FeatureInstaller>> disabled) {
-        broadcast(new InstallersResolvedEvent(options, bootstrap, installers, disabled));
+        broadcast(new InstallersResolvedEvent(context, installers, disabled));
     }
 
     public void manualExtensionsValidated(final List<Class<?>> extensions, final List<Class<?>> validated) {
         if (!extensions.isEmpty()) {
-            broadcast(new ManualExtensionsValidatedEvent(options, bootstrap, extensions, validated));
+            broadcast(new ManualExtensionsValidatedEvent(context, extensions, validated));
         }
     }
 
     public void classpathExtensionsResolved(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
-            broadcast(new ClasspathExtensionsResolvedEvent(options, bootstrap, extensions));
+            broadcast(new ClasspathExtensionsResolvedEvent(context, extensions));
         }
     }
 
     public void initialized() {
-        broadcast(new InitializedEvent(options, bootstrap));
+        broadcast(new InitializedEvent(context));
     }
 
     public void runPhase(final Configuration configuration,
                          final ConfigurationTree configurationTree,
                          final Environment environment) {
-        broadcast(new BeforeRunEvent(options, bootstrap, configuration, configurationTree, environment));
-        this.configuration = configuration;
-        this.configurationTree = configurationTree;
-        this.environment = environment;
+        this.context.setConfiguration(configuration);
+        this.context.setConfigurationTree(configurationTree);
+        this.context.setEnvironment(environment);
+        broadcast(new BeforeRunEvent(context));
         // fire after complete initialization (final meta-event)
         environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
             @Override
@@ -148,8 +143,7 @@ public final class LifecycleSupport {
 
     public void bundlesStarted(final List<GuiceyBundle> bundles) {
         if (!bundles.isEmpty()) {
-            broadcast(new BundlesStartedEvent(options, bootstrap,
-                    configuration, configurationTree, environment, bundles));
+            broadcast(new BundlesStartedEvent(context, bundles));
         }
     }
 
@@ -157,68 +151,58 @@ public final class LifecycleSupport {
                                 final List<Class<?>> extensions,
                                 final List<Class<? extends Module>> transitiveModulesRemoved,
                                 final List<Binding> bindingsRemoved) {
-        broadcast(new ModulesAnalyzedEvent(options, bootstrap,
-                configuration, configurationTree, environment,
-                modules, extensions, transitiveModulesRemoved, bindingsRemoved));
+        broadcast(new ModulesAnalyzedEvent(context, modules, extensions, transitiveModulesRemoved, bindingsRemoved));
     }
 
     public void extensionsResolved(final List<Class<?>> extensions, final List<Class<?>> disabled) {
-        broadcast(new ExtensionsResolvedEvent(options, bootstrap,
-                configuration, configurationTree, environment, extensions, disabled));
+        broadcast(new ExtensionsResolvedEvent(context, extensions, disabled));
     }
 
     public void injectorCreation(final List<Module> modules,
                                  final List<Module> overriding,
                                  final List<Module> disabled,
                                  final List<Module> ignored) {
-        broadcast(new InjectorCreationEvent(options, bootstrap,
-                configuration, configurationTree, environment, modules, overriding, disabled, ignored));
+        broadcast(new InjectorCreationEvent(context, modules, overriding, disabled, ignored));
     }
 
     public void injectorPhase(final Injector injector) {
-        this.injector = injector;
+        this.context.setInjector(injector);
     }
 
     public void extensionsInstalled(final Class<? extends FeatureInstaller> installer,
                                     final List<Class<?>> installed) {
         if (installed != null && !installed.isEmpty()) {
-            broadcast(new ExtensionsInstalledByEvent(options, bootstrap,
-                    configuration, configurationTree, environment, injector, installer, installed));
+            broadcast(new ExtensionsInstalledByEvent(context, installer, installed));
         }
     }
 
     public void extensionsInstalled(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
-            broadcast(new ExtensionsInstalledEvent(options, bootstrap,
-                    configuration, configurationTree, environment, injector, extensions));
+            broadcast(new ExtensionsInstalledEvent(context, extensions));
         }
     }
 
     public void applicationRun() {
-        broadcast(new ApplicationRunEvent(options, bootstrap,
-                configuration, configurationTree, environment, injector));
+        broadcast(new ApplicationRunEvent(context));
     }
 
 
     public void jerseyConfiguration(final InjectionManager injectionManager) {
-        broadcast(new JerseyConfigurationEvent(options, bootstrap,
-                configuration, configurationTree, environment, injector, injectionManager));
-        this.injectionManager = injectionManager;
+        this.context.setInjectionManager(injectionManager);
+        broadcast(new JerseyConfigurationEvent(context));
     }
 
 
     public void jerseyExtensionsInstalled(final Class<? extends FeatureInstaller> installer,
                                           final List<Class<?>> installed) {
         if (installed != null && !installed.isEmpty()) {
-            broadcast(new JerseyExtensionsInstalledByEvent(options, bootstrap,
-                    configuration, configurationTree, environment, injector, injectionManager, installer, installed));
+            broadcast(new JerseyExtensionsInstalledByEvent(context, installer, installed));
         }
     }
 
     public void jerseyExtensionsInstalled(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
-            broadcast(new JerseyExtensionsInstalledEvent(options, bootstrap,
-                    configuration, configurationTree, environment, injector, injectionManager, extensions));
+            broadcast(new JerseyExtensionsInstalledEvent(context, extensions));
         }
     }
 
@@ -235,7 +219,6 @@ public final class LifecycleSupport {
     }
 
     private void applicationStarted() {
-        broadcast(new ApplicationStartedEvent(options, bootstrap,
-                configuration, configurationTree, environment, injector, injectionManager));
+        broadcast(new ApplicationStartedEvent(context));
     }
 }

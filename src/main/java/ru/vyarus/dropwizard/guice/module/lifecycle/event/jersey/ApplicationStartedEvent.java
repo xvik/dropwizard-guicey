@@ -1,14 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey;
 
-import com.google.inject.Injector;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import org.glassfish.jersey.internal.inject.InjectionManager;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.JerseyPhaseEvent;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 /**
  * Called after complete dropwizard startup. Actually the same as jetty lifecycle started event (
@@ -23,14 +17,19 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
  */
 public class ApplicationStartedEvent extends JerseyPhaseEvent {
 
-    public ApplicationStartedEvent(final Options options,
-                                   final Bootstrap bootstrap,
-                                   final Configuration configuration,
-                                   final ConfigurationTree configurationTree,
-                                   final Environment environment,
-                                   final Injector injector,
-                                   final InjectionManager injectionManager) {
-        super(GuiceyLifecycle.ApplicationStarted, options, bootstrap, configuration, configurationTree,
-                environment, injector, injectionManager);
+    public ApplicationStartedEvent(final EventsContext context) {
+        super(GuiceyLifecycle.ApplicationStarted, context);
+    }
+
+    /**
+     * As event fired for both real server startup and guicey lightweight tests, this property allows
+     * to differentiate situations.
+     *
+     * @return true if jetty was started and false in case of guicey lightweight tests
+     * @see ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+     * @see ru.vyarus.dropwizard.guice.test.GuiceyAppRule
+     */
+    public boolean isJettyStarted() {
+        return getEnvironment().getApplicationContext().getServer().isStarted();
     }
 }

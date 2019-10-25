@@ -1,10 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
 import io.dropwizard.cli.Command;
-import io.dropwizard.setup.Bootstrap;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -19,8 +18,8 @@ public class CommandsResolvedEvent extends ConfigurationPhaseEvent {
 
     private final List<Command> commands;
 
-    public CommandsResolvedEvent(final Options options, final Bootstrap bootstrap, final List<Command> installed) {
-        super(GuiceyLifecycle.CommandsResolved, options, bootstrap);
+    public CommandsResolvedEvent(final EventsContext context, final List<Command> installed) {
+        super(GuiceyLifecycle.CommandsResolved, context);
         commands = installed;
     }
 

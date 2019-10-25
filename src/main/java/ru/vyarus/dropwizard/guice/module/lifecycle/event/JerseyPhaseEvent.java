@@ -1,14 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event;
 
-import com.google.inject.Injector;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.internal.inject.InjectionManager;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 /**
  * Base class for events, started after jersey context initialization start. Appears after jetty start, during
@@ -23,15 +18,9 @@ public abstract class JerseyPhaseEvent extends InjectorPhaseEvent {
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     public JerseyPhaseEvent(final GuiceyLifecycle type,
-                            final Options options,
-                            final Bootstrap bootstrap,
-                            final Configuration configuration,
-                            final ConfigurationTree configurationTree,
-                            final Environment environment,
-                            final Injector injector,
-                            final InjectionManager injectionManager) {
-        super(type, options, bootstrap, configuration, configurationTree, environment, injector);
-        this.injectionManager = injectionManager;
+                            final EventsContext context) {
+        super(type, context);
+        this.injectionManager = context.getInjectionManager();
     }
 
     /**

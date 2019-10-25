@@ -1,15 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey;
 
-import com.google.inject.Injector;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import org.glassfish.jersey.internal.inject.InjectionManager;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.JerseyPhaseEvent;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -34,16 +28,9 @@ public class JerseyExtensionsInstalledEvent extends JerseyPhaseEvent {
     private final List<Class<?>> extensions;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
-    public JerseyExtensionsInstalledEvent(final Options options,
-                                          final Bootstrap bootstrap,
-                                          final Configuration configuration,
-                                          final ConfigurationTree configurationTree,
-                                          final Environment environment,
-                                          final Injector injector,
-                                          final InjectionManager injectionManager,
+    public JerseyExtensionsInstalledEvent(final EventsContext context,
                                           final List<Class<?>> extensions) {
-        super(GuiceyLifecycle.JerseyExtensionsInstalled, options, bootstrap,
-                configuration, configurationTree, environment, injector, injectionManager);
+        super(GuiceyLifecycle.JerseyExtensionsInstalled, context);
         this.extensions = extensions;
     }
 

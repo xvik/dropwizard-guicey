@@ -1,12 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.run;
 
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -24,14 +20,10 @@ public class ExtensionsResolvedEvent extends RunPhaseEvent {
     private final List<Class<?>> extensions;
     private final List<Class<?>> disabled;
 
-    public ExtensionsResolvedEvent(final Options options,
-                                   final Bootstrap bootstrap,
-                                   final Configuration configuration,
-                                   final ConfigurationTree configurationTree,
-                                   final Environment environment,
+    public ExtensionsResolvedEvent(final EventsContext context,
                                    final List<Class<?>> extensions,
                                    final List<Class<?>> disabled) {
-        super(GuiceyLifecycle.ExtensionsResolved, options, bootstrap, configuration, configurationTree, environment);
+        super(GuiceyLifecycle.ExtensionsResolved, context);
         this.extensions = extensions;
         this.disabled = disabled;
     }

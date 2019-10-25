@@ -1,10 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
-import io.dropwizard.setup.Bootstrap;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -25,12 +24,11 @@ public class BundlesInitializedEvent extends ConfigurationPhaseEvent {
     private final List<GuiceyBundle> disabled;
     private final List<GuiceyBundle> ignored;
 
-    public BundlesInitializedEvent(final Options options,
-                                   final Bootstrap bootstrap,
+    public BundlesInitializedEvent(final EventsContext context,
                                    final List<GuiceyBundle> bundles,
                                    final List<GuiceyBundle> disabled,
                                    final List<GuiceyBundle> ignored) {
-        super(GuiceyLifecycle.BundlesInitialized, options, bootstrap);
+        super(GuiceyLifecycle.BundlesInitialized, context);
         this.bundles = bundles;
         this.disabled = disabled;
         this.ignored = ignored;

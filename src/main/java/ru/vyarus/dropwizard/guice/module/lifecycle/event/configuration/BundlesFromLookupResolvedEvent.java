@@ -1,10 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
-import io.dropwizard.setup.Bootstrap;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -21,10 +20,9 @@ public class BundlesFromLookupResolvedEvent extends ConfigurationPhaseEvent {
 
     private final List<GuiceyBundle> bundles;
 
-    public BundlesFromLookupResolvedEvent(final Options options,
-                                          final Bootstrap bootstrap,
+    public BundlesFromLookupResolvedEvent(final EventsContext context,
                                           final List<GuiceyBundle> bundles) {
-        super(GuiceyLifecycle.BundlesFromLookupResolved, options, bootstrap);
+        super(GuiceyLifecycle.BundlesFromLookupResolved, context);
         this.bundles = bundles;
     }
 

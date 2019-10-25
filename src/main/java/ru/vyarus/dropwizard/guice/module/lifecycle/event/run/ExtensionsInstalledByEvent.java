@@ -1,14 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.run;
 
-import com.google.inject.Injector;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -34,17 +29,10 @@ public class ExtensionsInstalledByEvent extends InjectorPhaseEvent {
     private final Class<? extends FeatureInstaller> installer;
     private final List<Class<?>> installed;
 
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public ExtensionsInstalledByEvent(final Options options,
-                                      final Bootstrap bootstrap,
-                                      final Configuration configuration,
-                                      final ConfigurationTree configurationTree,
-                                      final Environment environment,
-                                      final Injector injector,
+    public ExtensionsInstalledByEvent(final EventsContext context,
                                       final Class<? extends FeatureInstaller> installer,
                                       final List<Class<?>> installed) {
-        super(GuiceyLifecycle.ExtensionsInstalledBy, options, bootstrap,
-                configuration, configurationTree, environment, injector);
+        super(GuiceyLifecycle.ExtensionsInstalledBy, context);
         this.installer = installer;
         this.installed = installed;
     }

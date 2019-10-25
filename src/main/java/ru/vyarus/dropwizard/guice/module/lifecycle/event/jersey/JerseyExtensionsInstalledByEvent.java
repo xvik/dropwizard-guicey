@@ -1,17 +1,11 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey;
 
-import com.google.inject.Injector;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import org.glassfish.jersey.internal.inject.InjectionManager;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.JerseyPhaseEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -38,17 +32,10 @@ public class JerseyExtensionsInstalledByEvent extends JerseyPhaseEvent {
     private final List<Class<?>> installed;
 
     @SuppressWarnings("ParameterNumber")
-    public JerseyExtensionsInstalledByEvent(final Options options,
-                                            final Bootstrap bootstrap,
-                                            final Configuration configuration,
-                                            final ConfigurationTree configurationTree,
-                                            final Environment environment,
-                                            final Injector injector,
-                                            final InjectionManager injectionManager,
+    public JerseyExtensionsInstalledByEvent(final EventsContext context,
                                             final Class<? extends FeatureInstaller> installer,
                                             final List<Class<?>> installed) {
-        super(GuiceyLifecycle.JerseyExtensionsInstalledBy, options, bootstrap,
-                configuration, configurationTree, environment, injector, injectionManager);
+        super(GuiceyLifecycle.JerseyExtensionsInstalledBy, context);
         this.installer = installer;
         this.installed = installed;
     }

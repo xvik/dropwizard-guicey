@@ -286,6 +286,7 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         protected void applicationStarted(ApplicationStartedEvent event) {
             jerseyCheck(event)
+            assert event.jettyStarted
         }
 
         private void baseChecks(GuiceyLifecycleEvent event) {

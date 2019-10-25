@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.Set;
 
@@ -23,8 +23,8 @@ public class ConfigurationHooksProcessedEvent extends GuiceyLifecycleEvent {
 
     private final Set<GuiceyConfigurationHook> hooks;
 
-    public ConfigurationHooksProcessedEvent(final Options options, final Set<GuiceyConfigurationHook> hooks) {
-        super(GuiceyLifecycle.ConfigurationHooksProcessed, options);
+    public ConfigurationHooksProcessedEvent(final EventsContext context, final Set<GuiceyConfigurationHook> hooks) {
+        super(GuiceyLifecycle.ConfigurationHooksProcessed, context);
         this.hooks = hooks;
     }
 

@@ -1,14 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey;
 
-import com.google.inject.Injector;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.InjectionManager;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.JerseyPhaseEvent;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 /**
  * Jersey context starting. At this point jersey and jetty is only initializing. Guicey jersey configuration
@@ -19,14 +14,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
  */
 public class JerseyConfigurationEvent extends JerseyPhaseEvent {
 
-    public JerseyConfigurationEvent(final Options options,
-                                    final Bootstrap bootstrap,
-                                    final Configuration configuration,
-                                    final ConfigurationTree configurationTree,
-                                    final Environment environment,
-                                    final Injector injector,
-                                    final InjectionManager injectionManager) {
-        super(GuiceyLifecycle.JerseyConfiguration, options, bootstrap,
-                configuration, configurationTree, environment, injector, injectionManager);
+    public JerseyConfigurationEvent(final EventsContext context) {
+        super(GuiceyLifecycle.JerseyConfiguration, context);
     }
 }

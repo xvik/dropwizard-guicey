@@ -2,13 +2,9 @@ package ru.vyarus.dropwizard.guice.module.lifecycle.event.run;
 
 import com.google.inject.Binding;
 import com.google.inject.Module;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -30,17 +26,12 @@ public class ModulesAnalyzedEvent extends RunPhaseEvent {
     private final List<Binding> bindingsRemoved;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
-    public ModulesAnalyzedEvent(final Options options,
-                                final Bootstrap bootstrap,
-                                final Configuration configuration,
-                                final ConfigurationTree configurationTree,
-                                final Environment environment,
+    public ModulesAnalyzedEvent(final EventsContext context,
                                 final List<Module> analyzedModules,
                                 final List<Class<?>> extensions,
                                 final List<Class<? extends Module>> transitiveModulesRemoved,
                                 final List<Binding> bindingsRemoved) {
-        super(GuiceyLifecycle.ModulesAnalyzed,
-                options, bootstrap, configuration, configurationTree, environment);
+        super(GuiceyLifecycle.ModulesAnalyzed, context);
         this.analyzedModules = analyzedModules;
         this.extensions = extensions;
         this.transitiveModulesRemoved = transitiveModulesRemoved;

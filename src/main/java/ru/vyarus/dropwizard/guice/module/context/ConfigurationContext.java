@@ -130,7 +130,7 @@ public final class ConfigurationContext {
     /**
      * Guicey lifecycle listeners support.
      */
-    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new Options(optionsSupport));
+    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new Options(optionsSupport), sharedState);
 
 
     /**
