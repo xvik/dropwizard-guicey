@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.debug.report.guice;
 // CHECKSTYLE:OFF
-
+import com.google.inject.Module; // NOPMD
+// CHECKSTYLE:ON
 import com.google.inject.*;
 import com.google.inject.spi.ConstructorBinding;
 import com.google.inject.spi.Element;
@@ -23,8 +24,6 @@ import ru.vyarus.java.generics.resolver.util.map.IgnoreGenericsMap;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
-
-// CHECKSTYLE:ON
 
 /**
  * Render guice AOP appliance map.
