@@ -5,7 +5,6 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import io.dropwizard.testing.junit.DropwizardAppRule
-import javafx.stage.Stage
 import org.junit.runners.model.Statement
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
@@ -48,7 +47,7 @@ class ShutdownEventTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .listen(new GuiceyLifecycleAdapter(){
+                    .listen(new GuiceyLifecycleAdapter() {
                         @Override
                         protected void applicationShutdown(ApplicationShotdownEvent event) {
                             shutdown = event.jettyStarted
