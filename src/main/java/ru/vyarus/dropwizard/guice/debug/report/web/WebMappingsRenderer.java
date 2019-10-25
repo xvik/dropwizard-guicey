@@ -55,8 +55,8 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
                                final GuiceyConfigurationInfo info) {
         this.environment = environment;
         // lookup through all modules
-        this.modules = info.getModules().stream()
-                .map(it -> (Module) ((ModuleItemInfo) info.getInfo(it)).getInstance())
+        this.modules = info.getModuleIds().stream()
+                .map(it -> info.getData().<ModuleItemInfo>getInfo(it).getInstance())
                 .collect(Collectors.toList());
     }
 

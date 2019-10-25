@@ -9,14 +9,15 @@ import java.util.List;
  * registered in existing item info).
  *
  * @author Vyacheslav Rusakov
+ * @param <T> contained instance type
  * @since 03.07.2019
  */
-public interface InstanceItemInfo extends ItemInfo {
+public interface InstanceItemInfo<T> extends ItemInfo {
 
     /**
      * @return configuration object instance
      */
-    Object getInstance();
+    T getInstance();
 
     /**
      * For example, if multiple bundles registered: {@code .bundles(new Bundle(), new Bundle(), new Bundle()}

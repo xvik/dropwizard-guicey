@@ -69,12 +69,13 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
     public GuiceBindingsRenderer(final Injector injector) {
         this.injector = injector;
         final GuiceyConfigurationInfo info = injector.getInstance(GuiceyConfigurationInfo.class);
-        this.modules = info.getNormalModules().stream()
-                .map(it -> (Module) ((ModuleItemInfo) info.getInfo(it)).getInstance())
+        this.modules = info.getNormalModuleIds().stream()
+                .map(it -> info.getData().<ModuleItemInfo>getInfo(it).getInstance())
                 .collect(Collectors.toList());
-        this.overridden = info.getOverridingModules().stream()
-                .map(it -> (Module) ((ModuleItemInfo) info.getInfo(it)).getInstance())
+        this.overridden = info.getOverridingModuleIds().stream()
+                .map(it -> info.getData().<ModuleItemInfo>getInfo(it).getInstance())
                 .collect(Collectors.toList());
+        // important to highlight all extensions, including disabled
         this.extensions = ItemId.typesOnly(info.getData().getItems(ConfigItem.Extension));
         this.disabled = info.getExtensionsDisabled();
         // when module analysis disabled show entire context (because nothing would be removed)

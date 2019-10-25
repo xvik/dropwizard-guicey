@@ -14,7 +14,7 @@ import java.util.Set;
  * @author Vyacheslav Rusakov
  * @since 03.04.2018
  */
-public class ModuleItemInfoImpl extends InstanceItemInfoImpl implements ModuleItemInfo {
+public class ModuleItemInfoImpl extends InstanceItemInfoImpl<Module> implements ModuleItemInfo {
 
     private static ThreadLocal<Boolean> override = new ThreadLocal<>();
 

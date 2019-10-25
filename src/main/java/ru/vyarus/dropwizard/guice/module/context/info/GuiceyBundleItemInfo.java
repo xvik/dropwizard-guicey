@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.context.info;
 
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+
 /**
  * Guicey bundle configuration information.
  * For bundles, resolved with bundles lookup mechanism, context would be
@@ -14,7 +16,7 @@ package ru.vyarus.dropwizard.guice.module.context.info;
  * @author Vyacheslav Rusakov
  * @since 09.07.2016
  */
-public interface GuiceyBundleItemInfo extends BundleItemInfo {
+public interface GuiceyBundleItemInfo extends BundleItemInfo<GuiceyBundle> {
 
     /**
      * @return true if bundle resolved by lookup mechanism, false otherwise

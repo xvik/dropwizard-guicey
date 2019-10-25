@@ -171,6 +171,10 @@ public class GuiceyConfigurationInfo {
         return res.isEmpty() ? null : res.get(0);
     }
 
+    // NOTE shortcut for getting by ItemId not provided to avoid easy mistakes by obtaining info by class
+    // and loosing instances in case of multiple instane of the same type registration
+    // use getData().getInfo() instead
+
     /**
      * Shortcut for {@link ConfigurationInfo#getInfos(Class)}. Added to avoid confusion with {@link #getInfo(Class)}.
      *
@@ -206,7 +210,19 @@ public class GuiceyConfigurationInfo {
      * @return types of all installed and enabled bundles (including lookup bundles) or empty list
      */
     public List<Class<GuiceyBundle>> getGuiceyBundles() {
-        return typesOnly(context.getItems(ConfigItem.Bundle, Filters.enabled()));
+        return typesOnly(getGuiceyBundleIds());
+    }
+
+    /**
+     * Note that this list could be larger then {@link #getGuiceyBundles()} because multiple bundle instances
+     * of the same class could be registered.
+     *
+     * @return types of all enabled normal guice modules or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#bundles(GuiceyBundle...)
+     * @see ConfigurationInfo#getInfo(ItemId) for loaded model object for id
+     */
+    public List<ItemId<GuiceyBundle>> getGuiceyBundleIds() {
+        return context.getItems(ConfigItem.Bundle, Filters.enabled());
     }
 
     /**
@@ -216,7 +232,19 @@ public class GuiceyConfigurationInfo {
      * @return types of all installed and enabled dropwizard bundles or empty list
      */
     public List<Class<ConfiguredBundle>> getDropwizardBundles() {
-        return typesOnly(context.getItems(ConfigItem.DropwizardBundle, Filters.enabled()));
+        return typesOnly(getDropwizardBundleIds());
+    }
+
+    /**
+     * Note that this list could be larger then {@link #getDropwizardBundles()} because multiple bundle instances
+     * of the same class could be registered.
+     *
+     * @return types of all enabled normal guice modules or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#bundles(GuiceyBundle...)
+     * @see ConfigurationInfo#getInfo(ItemId) for loaded model object for id
+     */
+    public List<ItemId<ConfiguredBundle>> getDropwizardBundleIds() {
+        return context.getItems(ConfigItem.DropwizardBundle, Filters.enabled());
     }
 
     /**
@@ -270,7 +298,18 @@ public class GuiceyConfigurationInfo {
      * @return types of all registered and enabled guice modules (including normal and overriding) or empty list
      */
     public List<Class<Module>> getModules() {
-        return typesOnly(context.getItems(ConfigItem.Module, Filters.enabled()));
+        return typesOnly(getModuleIds());
+    }
+
+    /**
+     * Note that this list could be larger then {@link #getModules()} because multiple module instances of the same
+     * class could be registered.
+     *
+     * @return ids of all registered and enabled guice modules (including normal and overriding) or empty list
+     * @see ConfigurationInfo#getInfo(ItemId) for loaded model object for id
+     */
+    public List<ItemId<Module>> getModuleIds() {
+        return context.getItems(ConfigItem.Module, Filters.enabled());
     }
 
     /**
@@ -278,8 +317,20 @@ public class GuiceyConfigurationInfo {
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(Module...)
      */
     public List<Class<Module>> getNormalModules() {
-        return typesOnly(context.getItems(ConfigItem.Module, Filters.<ModuleItemInfo>enabled()
-                .and(Filters.overridingModule().negate())));
+        return typesOnly(getNormalModuleIds());
+    }
+
+    /**
+     * Note that this list could be larger then {@link #getNormalModules()} because multiple module instances
+     * of the same class could be registered.
+     *
+     * @return types of all enabled normal guice modules or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(Module...)
+     * @see ConfigurationInfo#getInfo(ItemId) for loaded model object for id
+     */
+    public List<ItemId<Module>> getNormalModuleIds() {
+        return context.getItems(ConfigItem.Module, Filters.<ModuleItemInfo>enabled()
+                .and(Filters.overridingModule().negate()));
     }
 
     /**
@@ -287,8 +338,20 @@ public class GuiceyConfigurationInfo {
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(Module...)
      */
     public List<Class<Module>> getOverridingModules() {
-        return typesOnly(context.getItems(ConfigItem.Module, Filters.<ModuleItemInfo>enabled()
-                .and(Filters.overridingModule())));
+        return typesOnly(getOverridingModuleIds());
+    }
+
+    /**
+     * Note that this list could be larger then {@link #getOverridingModules()} because multiple module instances
+     * of the same class could be registered.
+     *
+     * @return types of all enabled normal guice modules or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(Module...)
+     * @see ConfigurationInfo#getInfo(ItemId) for loaded model object for id
+     */
+    public List<ItemId<Module>> getOverridingModuleIds() {
+        return context.getItems(ConfigItem.Module, Filters.<ModuleItemInfo>enabled()
+                .and(Filters.overridingModule()));
     }
 
     /**

@@ -11,7 +11,8 @@ import ru.vyarus.dropwizard.guice.module.context.info.DropwizardBundleItemInfo;
  * @author Vyacheslav Rusakov
  * @since 24.07.2019
  */
-public class DropwizardBundleItemInfoImpl extends BundleItemInfoImpl implements DropwizardBundleItemInfo {
+public class DropwizardBundleItemInfoImpl extends BundleItemInfoImpl<ConfiguredBundle>
+        implements DropwizardBundleItemInfo {
 
     // disable only
     public DropwizardBundleItemInfoImpl(final Class<? extends ConfiguredBundle> type) {

@@ -11,11 +11,12 @@ import java.util.List;
  * Instance item info implementation.
  *
  * @author Vyacheslav Rusakov
+ * @param <T> instance type
  * @since 04.07.2019
  */
-public abstract class InstanceItemInfoImpl extends ItemInfoImpl implements InstanceItemInfo {
+public abstract class InstanceItemInfoImpl<T> extends ItemInfoImpl implements InstanceItemInfo<T> {
 
-    private final Object instance;
+    private final T instance;
     private int instanceCount;
     private final List<ItemId> duplicates = new ArrayList<>();
 
@@ -25,13 +26,13 @@ public abstract class InstanceItemInfoImpl extends ItemInfoImpl implements Insta
         this.instance = null;
     }
 
-    public InstanceItemInfoImpl(final ConfigItem itemType, final Object instance) {
+    public InstanceItemInfoImpl(final ConfigItem itemType, final T instance) {
         super(itemType, ItemId.from(instance));
         this.instance = instance;
     }
 
     @Override
-    public Object getInstance() {
+    public T getInstance() {
         return instance;
     }
 

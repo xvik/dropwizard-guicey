@@ -55,6 +55,7 @@ class GuiceAopRendererTest extends Specification {
     │   ├── getConfigurationTree()                                            Interceptor1
     │   ├── getData()                                                         Interceptor1
     │   ├── getDirectBundles()                                                Interceptor1
+    │   ├── getDropwizardBundleIds()                                          Interceptor1
     │   ├── getDropwizardBundles()                                            Interceptor1
     │   ├── getExtensions()                                                   Interceptor1
     │   ├── getExtensions(Class<? extends FeatureInstaller>)                  Interceptor1
@@ -64,6 +65,7 @@ class GuiceAopRendererTest extends Specification {
     │   ├── getExtensionsOrdered(Class<? extends FeatureInstaller>)           Interceptor1
     │   ├── getExtensionsRegisteredManauallyOnly()                            Interceptor1
     │   ├── getExtensionsRegisteredManually()                                 Interceptor1
+    │   ├── getGuiceyBundleIds()                                              Interceptor1
     │   ├── getGuiceyBundles()                                                Interceptor1
     │   ├── getInfo(Class<? extends Object>)                                  Interceptor1
     │   ├── getInfos(Class<? extends Object>)                                 Interceptor1
@@ -74,10 +76,13 @@ class GuiceAopRendererTest extends Specification {
     │   ├── getItemsByScope(Class<? extends Object>)                          Interceptor1
     │   ├── getItemsByScope(ConfigScope)                                      Interceptor1
     │   ├── getItemsByScope(ItemId)                                           Interceptor1
+    │   ├── getModuleIds()                                                    Interceptor1
     │   ├── getModules()                                                      Interceptor1
     │   ├── getModulesDisabled()                                              Interceptor1
+    │   ├── getNormalModuleIds()                                              Interceptor1
     │   ├── getNormalModules()                                                Interceptor1
     │   ├── getOptions()                                                      Interceptor1
+    │   ├── getOverridingModuleIds()                                          Interceptor1
     │   ├── getOverridingModules()                                            Interceptor1
     │   ├── getRelativelyInstalledBundles(Class<? extends Object>)            Interceptor1
     │   └── getStats()                                                        Interceptor1
@@ -129,6 +134,7 @@ class GuiceAopRendererTest extends Specification {
     │   ├── getBundlesFromLookup()                                            Interceptor1
     │   ├── getCommands()                                                     Interceptor1
     │   ├── getDirectBundles()                                                Interceptor1
+    │   ├── getDropwizardBundleIds()                                          Interceptor1
     │   ├── getDropwizardBundles()                                            Interceptor1
     │   ├── getExtensions()                                                   Interceptor1
     │   ├── getExtensions(Class<? extends FeatureInstaller>)                  Interceptor1
@@ -138,6 +144,7 @@ class GuiceAopRendererTest extends Specification {
     │   ├── getExtensionsOrdered(Class<? extends FeatureInstaller>)           Interceptor1
     │   ├── getExtensionsRegisteredManauallyOnly()                            Interceptor1
     │   ├── getExtensionsRegisteredManually()                                 Interceptor1
+    │   ├── getGuiceyBundleIds()                                              Interceptor1
     │   ├── getGuiceyBundles()                                                Interceptor1
     │   ├── getInfos(Class<? extends Object>)                                 Interceptor1
     │   ├── getInstallers()                                                   Interceptor1
@@ -147,9 +154,12 @@ class GuiceAopRendererTest extends Specification {
     │   ├── getItemsByScope(Class<? extends Object>)                          Interceptor1
     │   ├── getItemsByScope(ConfigScope)                                      Interceptor1
     │   ├── getItemsByScope(ItemId)                                           Interceptor1
+    │   ├── getModuleIds()                                                    Interceptor1
     │   ├── getModules()                                                      Interceptor1
     │   ├── getModulesDisabled()                                              Interceptor1
+    │   ├── getNormalModuleIds()                                              Interceptor1
     │   ├── getNormalModules()                                                Interceptor1
+    │   ├── getOverridingModuleIds()                                          Interceptor1
     │   ├── getOverridingModules()                                            Interceptor1
     │   └── getRelativelyInstalledBundles(Class<? extends Object>)            Interceptor1
     │

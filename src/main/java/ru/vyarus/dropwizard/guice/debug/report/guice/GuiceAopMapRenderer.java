@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.debug.report.guice;
 // CHECKSTYLE:OFF
-import com.google.inject.Module; // NOPMD
-// CHECKSTYLE:ON
+
 import com.google.inject.*;
 import com.google.inject.spi.ConstructorBinding;
 import com.google.inject.spi.Element;
@@ -25,6 +24,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// CHECKSTYLE:ON
+
 /**
  * Render guice AOP appliance map.
  *
@@ -41,8 +42,8 @@ public class GuiceAopMapRenderer implements ReportRenderer<GuiceAopConfig> {
         this.injector = injector;
         final GuiceyConfigurationInfo info = injector.getInstance(GuiceyConfigurationInfo.class);
         // all modules (in case if overriding module declares aop)
-        this.modules = info.getModules().stream()
-                .map(it -> (Module) ((ModuleItemInfo) info.getInfo(it)).getInstance())
+        this.modules = info.getModuleIds().stream()
+                .map(it -> info.getData().<ModuleItemInfo>getInfo(it).getInstance())
                 .collect(Collectors.toList());
     }
 

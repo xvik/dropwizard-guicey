@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.context.info;
 
+import io.dropwizard.ConfiguredBundle;
+
 /**
  * Dropwizard bundle configuration information.
  * <p>
@@ -9,6 +11,6 @@ package ru.vyarus.dropwizard.guice.module.context.info;
  * @author Vyacheslav Rusakov
  * @since 24.07.2019
  */
-public interface DropwizardBundleItemInfo extends BundleItemInfo {
+public interface DropwizardBundleItemInfo extends BundleItemInfo<ConfiguredBundle> {
 
 }

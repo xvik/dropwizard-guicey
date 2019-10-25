@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
  * @author Vyacheslav Rusakov
  * @since 06.07.2016
  */
-public class GuiceyBundleItemInfoImpl extends BundleItemInfoImpl implements GuiceyBundleItemInfo {
+public class GuiceyBundleItemInfoImpl extends BundleItemInfoImpl<GuiceyBundle> implements GuiceyBundleItemInfo {
 
     // disable only
     public GuiceyBundleItemInfoImpl(final Class<? extends GuiceyBundle> type) {
