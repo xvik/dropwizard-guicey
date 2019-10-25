@@ -146,6 +146,32 @@ And the last example is if you know exact extension instance and wasn't to get i
 BundleItemInfo model = info.getData().getInfo(ItemId.from(myBundleInstance))
 ```
 
+### Instances
+
+Bundles and modules are configured by instance and this instance is stored in configuration model.
+
+For example, to obtain all configured (and not [disabled](../disables.md#disable-guice-modules))  guice modules:
+
+```java
+@Inject GuiceConfigurationInfo info;
+
+List<Module> modules = info.getModuleIds().stream()
+                           .map(it -> info.getData().<ModuleItemInfo>getInfo(it).getInstance())
+                           .collect(Collectors.toList());
+```      
+
+Here all used module ids (`ItemId`) obtained. Then complete configuration model loaded for each item and
+and instance obtained from model. 
+
+!!! note
+    It may look overcomplicated to load ids first and only later obtain instances,
+    but it is actually a restriction of the model: correct registration order is preserved on
+    id level and so this way is the only way to get all instances in registration order.
+
+!!! note
+    Direct model object load by id shortcut was not added directly to `GuiceyConfigurationInfo`
+    intentionally to avoid mistakes by accidentally using class-based info loading instead of
+    id-based (which may lead to configuration items loss in your reporting or analysis).
 
 ## Startup stats
 
