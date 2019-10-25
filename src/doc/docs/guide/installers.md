@@ -107,7 +107,18 @@ public class ScheduledInstaller implements FeatureInstaller,
         SchedulerFramework.registerTask(instance);
     }   
 }
-```
+```    
+
+!!! tip
+    `TypeInstaller` and `InstanceInstaller` could [access injector](guice/injector.md#access-injector) with
+    ```java
+    InjectorLookup.getInjector(environment).get();
+    ```
+    
+    And [shared state](shared.md#static-access):
+    ```java
+    SharedConfigurationState.get(environment).get();
+    ```
 
 The last remaining part is reporting - we must see all installed beans in console:
 

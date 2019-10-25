@@ -14,6 +14,12 @@ import io.dropwizard.setup.Environment;
 public interface TypeInstaller<T> {
 
     /**
+     * Full {@link com.google.inject.Injector} could be obtained with
+     * {@link ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup#getInjector(Environment)}.
+     * <p>
+     * Shared state could be obtained with
+     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#get(Environment)}
+     *
      * @param environment environment object
      * @param type        extension type
      */
