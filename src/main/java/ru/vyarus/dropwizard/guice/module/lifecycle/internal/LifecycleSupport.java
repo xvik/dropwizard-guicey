@@ -22,10 +22,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.*;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
@@ -138,6 +135,11 @@ public final class LifecycleSupport {
             public void lifeCycleStarted(final LifeCycle event) {
                 applicationStarted();
             }
+
+            @Override
+            public void lifeCycleStopping(final LifeCycle event) {
+                applicationShutdown();
+            }
         });
     }
 
@@ -220,5 +222,9 @@ public final class LifecycleSupport {
 
     private void applicationStarted() {
         broadcast(new ApplicationStartedEvent(context));
+    }
+
+    private void applicationShutdown() {
+        broadcast(new ApplicationShotdownEvent(context));
     }
 }

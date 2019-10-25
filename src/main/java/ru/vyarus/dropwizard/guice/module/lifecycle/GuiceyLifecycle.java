@@ -3,10 +3,7 @@ package ru.vyarus.dropwizard.guice.module.lifecycle;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.*;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
 /**
@@ -190,7 +187,16 @@ public enum GuiceyLifecycle {
      * also will be fired in guicey tests ({@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule}) which does not
      * start the web part.
      */
-    ApplicationStarted(ApplicationStartedEvent.class);
+    ApplicationStarted(ApplicationStartedEvent.class),
+
+    /**
+     * Called on application shutdown start. Triggered by jetty lifecycle stopping event (
+     * {@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStopping(
+     *org.eclipse.jetty.util.component.LifeCycle)}).
+     * <p>
+     * May be used to perform some shutdown logic.
+     */
+    ApplicationShutdown(ApplicationShotdownEvent.class);
 
     private final Class<? extends GuiceyLifecycleEvent> type;
 
