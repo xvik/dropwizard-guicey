@@ -145,7 +145,8 @@
     - Add guice aop appliance report (`.printGuiceAopMap()`). This report supposed to be used as "a tool" to look exact 
       services and so configurable method version is directly available: 
       `.printGuiceAopMap(new GuiceAopConfig().types(...).methods(...))`
-    - Add web mappings report (`.printWebMappings()`): prints all registered servlets and filters        
+    - Add web mappings report (`.printWebMappings()`): prints all registered servlets and filters
+    - Add jersey config report (`.printJerseyConfig`): prints all registered jersey extensions        
 * Fix configuration bindings for recursive configuration object declarations (#60)
 * Guicey version added into BOM (dependencyManagement section in guicey pom) to avoid duplicate versions declarations
 * Java 11 compatibility. Automatic module name (in meta-inf): `dropwizard-guicey.core`

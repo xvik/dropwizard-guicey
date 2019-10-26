@@ -916,6 +916,16 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
+         * Prints all registered jersey extensions (including core dropwizard extensions and everything
+         * registered by other dropwizard bundles or manually).
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder printJerseyConfig() {
+            return listen(new JerseyConfigDiagnostic());
+        }
+
+        /**
          * Guicey hooks ({@link GuiceyConfigurationHook}) may be loaded with system property "guicey.hooks". But
          * it may be not comfortable to always declare full class name (e.g. -Dguicey.hooks=com.foo.bar.Hook,..).
          * Instead short alias name may be used: -Dguicey.hooks=alias1, alias2.
