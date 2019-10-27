@@ -99,6 +99,9 @@ public final class ProviderRenderUtil {
                                 final Class provider,
                                 final boolean isHkManaged,
                                 final boolean isLazy) {
+        if (ext.equals(MessageBodyWriter.class) || ext.equals(MessageBodyReader.class)) {
+            return renderMessageReaderWriter(ext, provider, isHkManaged, isLazy);
+        }
         return DESCRIPTORS.containsKey(ext)
                 ? renderLine(ext, provider, DESCRIPTORS.get(ext), isHkManaged, isLazy)
                 : renderUnknown(provider, isHkManaged, isLazy);
@@ -158,18 +161,6 @@ public final class ProviderRenderUtil {
         if (ExceptionMapper.class.equals(ext) && ExtendedExceptionMapper.class.isAssignableFrom(provider)) {
             markers.add("extended");
         }
-        if (MessageBodyReader.class.equals(ext)) {
-            final Consumes consume = FeatureUtils.getAnnotation(provider, Consumes.class);
-            if (consume != null) {
-                markers.add(Arrays.toString(consume.value()));
-            }
-        }
-        if (MessageBodyWriter.class.equals(ext)) {
-            final Produces produce = FeatureUtils.getAnnotation(provider, Produces.class);
-            if (produce != null) {
-                markers.add(Arrays.toString(produce.value()));
-            }
-        }
         final Annotation filter = FeatureUtils.getAnnotatedAnnotation(provider, NameBinding.class);
         if (filter != null) {
             markers.add("only @" + filter.annotationType().getSimpleName());
@@ -177,8 +168,11 @@ public final class ProviderRenderUtil {
         return markers;
     }
 
-    private static String renderLine(final Class ext, final Class provider, final ExtDescriptor desc,
-                                     final boolean isHkManaged, final boolean isLazy) {
+    private static String renderLine(final Class ext,
+                                     final Class provider,
+                                     final ExtDescriptor desc,
+                                     final boolean isHkManaged,
+                                     final boolean isLazy) {
         final Object[] params = new Object[1 + desc.generics];
         int pos = 0;
         final GenericsContext generics = GenericsResolver.resolve(provider).type(ext);
@@ -187,6 +181,27 @@ public final class ProviderRenderUtil {
         }
         params[pos] = RenderUtils.renderClassLine(provider, collectMarkers(ext, provider, isHkManaged, isLazy));
         return String.format(desc.format, params);
+    }
+
+    private static String renderMessageReaderWriter(final Class<?> ext,
+                                                    final Class provider,
+                                                    final boolean isHkManaged,
+                                                    final boolean isLazy) {
+        String media = "";
+        if (MessageBodyReader.class.equals(ext)) {
+            final Consumes consume = FeatureUtils.getAnnotation(provider, Consumes.class);
+            if (consume != null) {
+                media = Arrays.toString(consume.value());
+            }
+        }
+        if (MessageBodyWriter.class.equals(ext)) {
+            final Produces produce = FeatureUtils.getAnnotation(provider, Produces.class);
+            if (produce != null) {
+                media = Arrays.toString(produce.value());
+            }
+        }
+        final String res = renderLine(ext, provider, DESCRIPTORS.get(ext), isHkManaged, isLazy);
+        return String.format("%-100s %s", res, media);
     }
 
     private static String renderParamInjectionResolver(final ParamInjectionResolver instance,
