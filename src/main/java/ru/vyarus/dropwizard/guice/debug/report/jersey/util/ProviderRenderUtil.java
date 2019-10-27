@@ -55,7 +55,7 @@ public final class ProviderRenderUtil {
             .put(ContainerResponseFilter.class, new ExtDescriptor("Container response filters", SIMPLE_FORMAT, 0))
             .put(DynamicFeature.class, new ExtDescriptor("Dynamic features", SIMPLE_FORMAT, 0))
             .put(InjectionResolver.class, new ExtDescriptor("Injection resolvers", INJECTION_FORMAT, 1))
-            .put(ValueParamProvider.class, new ExtDescriptor("Value factory providers", SIMPLE_FORMAT, 0))
+            .put(ValueParamProvider.class, new ExtDescriptor("Param value providers", SIMPLE_FORMAT, 0))
             .put(ApplicationEventListener.class, new ExtDescriptor("Application event listeners", SIMPLE_FORMAT, 0))
             .build();
 
