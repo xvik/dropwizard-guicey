@@ -26,6 +26,10 @@ public class JerseyConfigDiagnostic extends UniqueGuiceyLifecycleListener {
 
     @Override
     protected void applicationStarted(final ApplicationStartedEvent event) {
+        if (event.isJettyStarted()) {
+            // report can't be shown in lightweight tests (jersey injector not started)
+            return;
+        }
         final Boolean guiceFirstMode = event.getOptions().get(InstallersOptions.JerseyExtensionsManagedByGuice);
         final String report = new JerseyConfigRenderer(event.getInjectionManager(), guiceFirstMode)
                 .renderReport(new JerseyConfig());
