@@ -918,6 +918,9 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         /**
          * Prints all registered jersey extensions (including core dropwizard extensions and everything
          * registered by other dropwizard bundles or manually).
+         * <p>
+         * May be enabled on compiled application with a system property: {@code -Dguicey.hooks=diagnostic}
+         * (hook will also enable some other reports).
          *
          * @return builder instance for chained calls
          */

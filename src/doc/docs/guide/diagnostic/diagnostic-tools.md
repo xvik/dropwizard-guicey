@@ -55,7 +55,8 @@ public class DiagnosticHook implements GuiceyConfigurationHook {
                 .printLifecyclePhasesDetailed()
                 .printCustomConfigurationBindings()
                 .printGuiceBindings()
-                .printWebMappings();
+                .printWebMappings()
+                .printJerseyConfig();
     }
 }
 ``` 
