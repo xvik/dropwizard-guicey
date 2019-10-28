@@ -87,6 +87,7 @@ nav:
         - Guice: guide/diagnostic/guice-report.md
         - AOP: guide/diagnostic/aop-report.md
         - Web: guide/diagnostic/web-report.md
+        - Jersey: guide/diagnostic/jersey-report.md
       - Test: guide/test.md
       - Lifecycle: guide/lifecycle.md
       - Classpath scan: guide/scan.md

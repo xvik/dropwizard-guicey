@@ -23,6 +23,10 @@ during development. All reports may be enabled on main guice bundle:
 
 `#!java .printWebMappings()`
 :   Prints all registered [resvlets and filters](web-report.md) (including guice `ServletModule` declarations)
+
+`#!java .printJerseyConfig()`
+:   Prints all registered jersey extensions (exception mappers, filters etc.): including everything registered by 
+    dropwizard itself and all direct manual registrations. 
   
 `#!java .printLifecyclePhases()`  
 `#!java .printLifecyclePhasesDetailed()`  
