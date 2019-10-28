@@ -1,5 +1,5 @@
 ### 5.0.0 (unreleased)
-* Update to dropwizard 2.0.0-rc10
+* Update to dropwizard 2.0.0-rc12
     - (breaking in jersey 2.26)
         * Jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
           This allows complete hk2 avoidance in the future. Right now it means that all direct hk2 classes must be replaced
@@ -14,7 +14,7 @@
                 * `org.glassfish.jersey.internal.inject.InjectionResolver` detected instead of `org.glassfish.hk2.api.InjectionResolver`
             - Jersey installers use `org.glassfish.jersey.internal.inject.AbstractBinder`
               instead of hk specific `org.glassfish.hk2.utilities.binding.AbstractBinder`
-            - Mark all hk2-related methods and options as deprecated (to be removed in the next version)             
+            - Mark all hk2-related methods and options as deprecated (to be removed in the next version)       
         * Jersey 2.26 implements jax-rs 2.1 which forced it to change some of it's apis.
             - `org.glassfish.jersey.server.AsyncContext` binding used instead of 
                 `org.glassfish.jersey.server.internal.process.AsyncContext`                                  
@@ -80,6 +80,7 @@
         * extensions are detected from declaration in specified guice modules 
             (essentially same as classpath scan, but from bindings)
         * support only direct type bindings (all generified or qualified declarations ignored)    
+        * like in classpath scan `@InvisibleForScanner` prevents recognition
         * all extension registration types may work together (classpath scan, manual declaration and binding declaration)    
         * extensions registered directly (or found by classpath scan) and also bound manually in guice module 
             will not conflict anymore (as manual declaration would be detected) and so @LazyBinding workaround is not needed        
@@ -102,7 +103,8 @@
     - (breaking) Removed hooks recognition on registered GuiceyLifecycleLister (as it was very confusing feature)                         
 * Add shared configuration state (for special configuration-time needs like bundles communication). 
     This is required only in very special cases. But such unified place will replace all current and future hacks.
-    - Static access: `SharedConfigurationState.get(app)` or `SharedConfigurationState.lookup(app, key)` 
+    - Static access by application: `SharedConfigurationState.get(app)` or `SharedConfigurationState.lookup(app, key)`
+    - Static access by environment: `SharedConfigurationState.get(env)` or `SharedConfigurationState.lookup(env, key)` 
     - Value access from guicey bundle: `boostrap.sharedState(key, defSupplier)`, `environment.sharedState(key)`
     - Hooks can use `GuiceBundle.Builder.withSharedState` to access application state.
     - (breaking) `InjectorLookup` now use global shared state        
@@ -143,10 +145,19 @@
     - Add guice bindings report (`printGuiceBindings()` or `printAllGuiceBindings()`)
     - Add guice aop appliance report (`.printGuiceAopMap()`). This report supposed to be used as "a tool" to look exact 
       services and so configurable method version is directly available: 
-      `.printGuiceAopMap(new GuiceAopConfig().types(...).methods(...))`      
+      `.printGuiceAopMap(new GuiceAopConfig().types(...).methods(...))`
+    - Add web mappings report (`.printWebMappings()`): prints all registered servlets and filters
+    - Add jersey config report (`.printJerseyConfig`): prints all registered jersey extensions        
 * Fix configuration bindings for recursive configuration object declarations (#60)
 * Guicey version added into BOM (dependencyManagement section in guicey pom) to avoid duplicate versions declarations
-* Java 11 compatibility. Automatic module name (in meta-inf): `dropwizard-guicey.core`  
+* Java 11 compatibility. Automatic module name (in meta-inf): `dropwizard-guicey.core`
+* (breaking) AdminRestBundle moved into ext modules (bundle become guicey bundle, 
+    now return 404 instead of 403 on main context for admin-only resources)
+* (breaking) Remove useless configuration generic on main bundle: `GuiceBundle.<MyConfig>builder()` must be just `GuiceBundle.builder()`
+* InjectorLookup:
+    - Add lookup by environment instance: `InjectorLookup.get(environment)` 
+    - Add direct lookup for bean instance: `InjectorLookup.getInstance(app, MyBean.class)` (or with environment)      
+* Update installers console reporting to use more readable class format: SimpleName   (reduced package)  
 
 ### [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2) (2018-11-26)
 * Update to guice 4.2.2 (java 11 compatible)
