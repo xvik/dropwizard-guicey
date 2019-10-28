@@ -944,6 +944,19 @@ and only limited to guicey bundles.
     As guicey register instances, you may be affected. Use `Provider<Something>` instead or rely
     on `@Context` injection for method parameters which is working.  
 
+Generic in main bundle:
+
+```java
+bootstrap,addBundle(GuiceBundle.<CustomConfiguration>builder()
+            ...
+            .build())   
+```                    
+
+Must be simply removed:
+```java
+bootstrap,addBundle(GuiceBundle.builder()
+```
+
 ### Dropwizard related
 
 Jersey abstracted DI code and so most of it's api classes changed. 
@@ -997,8 +1010,8 @@ duplicate bundle or module registrations.
     GuiceBundle.builder()
         .duplicateConfigDetector(new LegacyModeDuplicatesDetector())
     ```
-    And check again. If weird behaviour disappear then you have duplicate configurationsб
-    if not - check if it's [module analysis issue](#guicey-bindings-analysis)
+    And check again. If weird behaviour disappear then you have duplicate configurations
+    if not - check if it's [module analysis issue](#guice-bindings-analysis)
     
 In case of problems you can either stay in legacy mode or find the root cause.
 To find duplicate registrations enable diagnostic reports:
@@ -1104,12 +1117,12 @@ Detector receive all accepted instances of this type and new item. It must retur
 to mark this new as duplicate for it, or null to allow registration.
 
 
-### Guicey bindings analysis
+### Guice bindings analysis
 
 !!! warning
     Another point of potential migration problems
 
-As guicey now [analyze bindings from registered guice modules](#guicey-bindings-analysis) it could 
+As guicey now [analyze bindings from registered guice modules](../guide/guice/module-analysis.md#extensions-recognition) it could 
 detect and install new extensions, declared in bindings. For example,
 
 ```java
@@ -1242,3 +1255,23 @@ intercepted automatically and show under diagnostics stats sub reprot (`.printDi
 `ServerPagesBundle.extendApp` is not just a static call anymore: now returned guicey bundle must be also registered.
 If application is extended in the same bundle with registration (required extenions), it may now
 be scpecified directly in application builder: `ServerPagesBundle.app(...).attachPaths(...)`
+
+### Installers
+
+If you were writing custom installer, you'll have to update them.
+
+First of all, remove redundant generic on `FeatureInstaller` interface:
+
+```java 
+public class MyInstaller implements FeatureInstaller<Something> ...
+```
+
+Must become:
+
+```java 
+public class MyInstaller implements FeatureInstaller ...
+```
+
+[BindingInstaller](#bindinginstaller) interface significantly changed due to 
+extensions recognition [directly from guice bindings](#configuration-from-guice-bindings-jersey1-guice-style)
+ 
