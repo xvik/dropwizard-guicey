@@ -146,6 +146,6 @@ class ConfiguredRenderTest extends Specification {
 
     String render(MappingsConfig config) {
         renderer.renderReport(config).replaceAll("\r", "").replaceAll(" +\n", "\n")
-                .replaceAll('-[^\\s]{6,8}([\\s$]+)', "-11111111\$1")
+                .replaceAll('-[^\\s]{5,8}([\\s$]+)', "-11111111\$1")
     }
 }
