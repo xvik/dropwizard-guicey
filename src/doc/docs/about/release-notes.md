@@ -554,7 +554,7 @@ Also, direct bean reference added:
 MyService service = InjectorLookup.getInstance(application, MyService.class).get()
 ```
 
-And wtih environment:
+And with environment:
 
 ```java
 MyService service = InjectorLookup.getInstance(environment, MyService.class).get()
