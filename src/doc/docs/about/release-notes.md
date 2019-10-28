@@ -351,6 +351,10 @@ public class MyModule extends AbstractModule {
 
 Guicey will detect `MyResource` as jersey resource and `MyManaged` as managed extension.
 
+!!! tip
+    As with [classpath scan](../guide/scan.md), `@InvisibleForScanner` annotation may be
+    used to prevent binding recognition.
+
 This is completely equivalent to
 
 ```java

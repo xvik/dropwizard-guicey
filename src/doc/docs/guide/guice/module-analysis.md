@@ -40,6 +40,12 @@ public class MyModule extends AbstractModule {
 
 Guicey will detect `MyResource` as jersey resource and `MyManaged` as managed extension.
 
+!!! tip
+    Extensions annotated with `@InvisibleForScanner` are not recognized, like in [clsspath scanner](../scan.md).
+    But note that annotated extensions *should not be registered manually*! Because it will
+    lead to default extension binding registration by guicey, which will most likley conflict with
+    existing binding (as a workaround `@LazyBinding` annotation may be used). 
+
 This is completely equivalent to
 
 ```java
