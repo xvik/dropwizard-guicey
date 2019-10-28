@@ -712,6 +712,75 @@ INSTALLERS in processing order =
 If you were using `DiagnosticBundle` directly it is now `ConfigurationDiagnostic` listener.
 `DebugGuiceyLifecycle` was renamed to `LifecycleDiagnostic`
 
+### Web report
+
+New [web report](../guide/diagnostic/web-report.md) was added to show all registered servlets and filters for both contexts.
+Report also shows servlets and filters from guice `ServletModule`:
+
+```java 
+
+    MAIN /
+    ├── filter     /custom/*                    CustomMappingFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)                    [ERROR]         .custommapping
+    ├── filter     /async/*             async   AsyncFilter                  (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .async
+    ├── filter     /both/*                      BothFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .both
+    ├── filter     /1/*                         MainFilter                   (r.v.d.g.d.r.w.s.UserServletsBundle)                    [REQUEST]       .main
+    ├── filter     /2/*                         --"--                                                                                                
+    │   
+    ├── filter     /*                   async   GuiceFilter                  (c.g.inject.servlet)                                    [REQUEST]       Guice Filter
+    │   ├── guicefilter     /1/*                         GFilter                        r.v.d.g.d.r.w.support.GuiceWebModule
+    │   ├── guicefilter     /1/abc?/.*           regex   GRegexFilter                   r.v.d.g.d.r.w.support.GuiceWebModule
+    │   ├── guicefilter     /1/foo                       instance of GFilterInstance    r.v.d.g.d.r.w.support.GuiceWebModule
+    │   ├── guiceservlet    /2/*                         GServlet                       r.v.d.g.d.r.w.support.GuiceWebModule
+    │   ├── guiceservlet    /2/abc?/             regex   GRegexServlet                  r.v.d.g.d.r.w.support.GuiceWebModule
+    │   └── guiceservlet    /2/foo                       instance of GServletInstance   r.v.d.g.d.r.w.support.GuiceWebModule
+    │   
+    ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                                     [REQUEST]       io.dropwizard.jersey.filter.AllowedMethodsFilter-5d51e129
+    ├── filter     /*                   async   ThreadNameFilter             (i.d.servlets)                                          [REQUEST]       io.dropwizard.servlets.ThreadNameFilter-21c815e4
+    ...
+``` 
+
+### Jersey report
+
+New [jersey report](../guide/diagnostic/jersey-report.md) was added to show all jersey extensions
+(including registered by dropwizard and registered manually):
+
+```  
+    ...
+
+    Message body readers
+        Object                         BasicTypesMessageProvider    (o.g.j.m.internal)                       [text/plain]
+        byte[]                         ByteArrayProvider            (o.g.j.m.internal)                       [application/octet-stream, */*]
+        DataSource                     DataSourceProvider           (o.g.j.m.internal)                       [application/octet-stream, */*]
+        Document                       DocumentProvider             (o.g.j.jaxb.internal)                    [application/xml, text/xml, */*]
+        File                           FileProvider                 (o.g.j.m.internal)                       [application/octet-stream, */*]
+        MultivaluedMap<String, String> FormMultivaluedMapProvider   (o.g.j.m.internal)                       [application/x-www-form-urlencoded]
+        Form                           FormProvider                 (o.g.j.m.internal)                       [application/x-www-form-urlencoded, */*]
+        Type                           GuiceMessageBodyReader       (r.v.d.g.c.h.support)                    
+        Type                           HKMessageBodyReader          (r.v.d.g.c.h.s.hk)         *jersey managed 
+        InputStream                    InputStreamProvider          (o.g.j.m.internal)                       [application/octet-stream, */*]
+        Object                         JacksonJsonProvider          (c.f.j.jaxrs.json)                       [*/*]
+        Object                         JacksonMessageBodyProvider   (i.d.jersey.jackson)                     [*/*]
+        Reader                         ReaderProvider               (o.g.j.m.internal)                       [text/plain, */*]
+        RenderedImage                  RenderedImageProvider        (o.g.j.m.internal)                       [image/*, application/octet-stream]
+        StreamSource                   StreamSourceReader           (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
+        SAXSource                      SaxSourceReader              (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
+        DOMSource                      DomSourceReader              (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
+        String                         StringMessageProvider        (o.g.j.m.internal)                       [text/plain, */*]
+        T[], Collection<T>             App                          (o.g.j.j.i.XmlCollectionJaxbProvider)    [application/xml]
+        T[], Collection<T>             Text                         (o.g.j.j.i.XmlCollectionJaxbProvider)    [text/xml]
+        T[], Collection<T>             General                      (o.g.j.j.i.XmlCollectionJaxbProvider)    [*/*]
+        JAXBElement<Object>            App                          (o.g.j.j.i.XmlJaxbElementProvider)       [application/xml]
+        JAXBElement<Object>            Text                         (o.g.j.j.i.XmlJaxbElementProvider)       [text/xml]
+        JAXBElement<Object>            General                      (o.g.j.j.i.XmlJaxbElementProvider)       [*/*,*/*+xml]
+        Object                         App                          (o.g.j.j.i.XmlRootElementJaxbProvider)   [application/xml]
+        Object                         Text                         (o.g.j.j.i.XmlRootElementJaxbProvider)   [text/xml]
+        Object                         General                      (o.g.j.j.i.XmlRootElementJaxbProvider)   [*/*]
+        Object                         App                          (o.g.j.j.i.XmlRootObjectJaxbProvider)    [application/xml]
+        Object                         Text                         (o.g.j.j.i.XmlRootObjectJaxbProvider)    [text/xml]
+        Object                         General                      (o.g.j.j.i.XmlRootObjectJaxbProvider)    [*/*]
+
+    ...
+```
 
 ## Guicey hooks changes
 
