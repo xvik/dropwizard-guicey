@@ -7,7 +7,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 /**
  * Jersey context starting. At this point jersey and jetty is only initializing. Guicey jersey configuration
- * is not yer performed. Since that point hk {@link InjectionManager} is accessible.
+ * is not yer performed. Since that point jersey {@link InjectionManager} is accessible.
  *
  * @author Vyacheslav Rusakov
  * @since 19.04.2018

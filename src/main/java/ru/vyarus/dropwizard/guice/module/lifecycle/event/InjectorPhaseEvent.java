@@ -12,6 +12,8 @@ import ru.vyarus.dropwizard.guice.debug.report.option.OptionsRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.stat.StatsRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig;
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeRenderer;
+import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig;
+import ru.vyarus.dropwizard.guice.debug.report.web.WebMappingsRenderer;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
@@ -124,6 +126,16 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
          */
         public String renderGuiceAop(final GuiceAopConfig config) {
             return new GuiceAopMapRenderer(getInjector()).renderReport(config);
+        }
+
+        /**
+         * Render servlet and filter mappings report (including guice servlets and filters).
+         *
+         * @param config config object
+         * @return rendered report as string
+         */
+        public String renderWebMappings(final MappingsConfig config) {
+            return new WebMappingsRenderer(getEnvironment(), getConfigurationInfo()).renderReport(config);
         }
     }
 }

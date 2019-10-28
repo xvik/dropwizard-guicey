@@ -12,6 +12,8 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig
+import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfig
+import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
@@ -288,6 +290,7 @@ class EventsConsistencyTest extends AbstractTest {
         protected void applicationStarted(ApplicationStartedEvent event) {
             jerseyCheck(event)
             assert event.jettyStarted
+            assert event.renderJerseyConfig(new JerseyConfig()) != null
         }
 
         @Override
@@ -328,6 +331,7 @@ class EventsConsistencyTest extends AbstractTest {
             assert event.reportRenderer.renderConfigurationTree(new ContextTreeConfig()) != null
             assert event.reportRenderer.renderGuiceBindings(new GuiceConfig()) != null
             assert event.reportRenderer.renderGuiceAop(new GuiceAopConfig()) != null
+            assert event.reportRenderer.renderWebMappings(new MappingsConfig()) != null
         }
 
         private void jerseyCheck(JerseyPhaseEvent event) {

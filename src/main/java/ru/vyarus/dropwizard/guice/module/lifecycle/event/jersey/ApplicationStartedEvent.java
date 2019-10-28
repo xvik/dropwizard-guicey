@@ -1,5 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey;
 
+import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfig;
+import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfigRenderer;
+import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.JerseyPhaseEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
@@ -33,5 +36,21 @@ public class ApplicationStartedEvent extends JerseyPhaseEvent {
     public boolean isJettyStarted() {
         return getEnvironment().getApplicationContext().getServer() != null
                 && getEnvironment().getApplicationContext().getServer().isStarted();
+    }
+
+    /**
+     * Render jersey configuration report.
+     * <p>
+     * It is impossible to render this report under lightweight guicey tests (because jersey context is obviously
+     * not started).
+     *
+     * @param config config object
+     * @return rendered configuration or empty string if called under lightweight guicey test
+     */
+    public String renderJerseyConfig(final JerseyConfig config) {
+        final Boolean guiceFirstMode = getOptions().get(InstallersOptions.JerseyExtensionsManagedByGuice);
+        return isJettyStarted()
+                ? new JerseyConfigRenderer(getInjectionManager(), guiceFirstMode).renderReport(config)
+                : "";
     }
 }
