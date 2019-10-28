@@ -80,6 +80,7 @@
         * extensions are detected from declaration in specified guice modules 
             (essentially same as classpath scan, but from bindings)
         * support only direct type bindings (all generified or qualified declarations ignored)    
+        * like in classpath scan `@InvisibleForScanner` prevents recognition
         * all extension registration types may work together (classpath scan, manual declaration and binding declaration)    
         * extensions registered directly (or found by classpath scan) and also bound manually in guice module 
             will not conflict anymore (as manual declaration would be detected) and so @LazyBinding workaround is not needed        

@@ -14,6 +14,7 @@ import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
+import ru.vyarus.dropwizard.guice.module.installer.scanner.InvisibleForScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
@@ -58,7 +59,7 @@ public final class ExtensionsSupport {
     }
 
     /**
-     * Register extension from guice binding.
+     * Register extension from guice binding. Extensions annotated with {@link InvisibleForScanner} are ignored.
      *
      * @param context              configuration context
      * @param type                 extension type
@@ -70,6 +71,10 @@ public final class ExtensionsSupport {
                                                    final Class<?> type,
                                                    final Binding<?> manualBinding,
                                                    final Class<? extends Module> topDeclarationModule) {
+        if (FeatureUtils.hasAnnotation(type, InvisibleForScanner.class)) {
+            // manually hidden annotation from scanning
+            return false;
+        }
         final FeatureInstaller installer = findInstaller(type, context.getExtensionsHolder());
         final boolean recognized = installer != null;
         if (recognized) {
