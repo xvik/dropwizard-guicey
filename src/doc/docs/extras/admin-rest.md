@@ -26,14 +26,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-admin-rest</artifactId>
-  <version>5.0.0-0-rc.1</version>
+  <version>5.0.0-0-rc.2</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-admin-rest:5.0.0-0-rc.1'
+compile 'ru.vyarus.guicey:guicey-admin-rest:5.0.0-0-rc.2'
 ```
 
 See the most recent version in the badge above.

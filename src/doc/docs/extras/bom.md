@@ -37,7 +37,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>5.0.0-0-rc.1</version>
+            <version>5.0.0-0-rc.2</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -73,7 +73,7 @@ plugins {
 dependencyManagement {
     // Implicitly imports Dropwizard and Guice BOMs 
     imports {
-        mavenBom "ru.vyarus.guicey:guicey-bom:5.0.0-0-rc.1"
+        mavenBom "ru.vyarus.guicey:guicey-bom:5.0.0-0-rc.2"
     }
 }
 

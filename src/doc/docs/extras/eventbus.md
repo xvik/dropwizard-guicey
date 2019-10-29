@@ -32,7 +32,7 @@ Maven:
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-eventbus:5.0.0-0-rc.1'
+compile 'ru.vyarus.guicey:guicey-eventbus:5.0.0-0-rc.2'
 ```
 
 See the most recent version in the badge above.
