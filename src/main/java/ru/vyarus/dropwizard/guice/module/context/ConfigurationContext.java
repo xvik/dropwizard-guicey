@@ -958,7 +958,7 @@ public final class ConfigurationContext {
         return null;
     }
 
-    @SuppressWarnings("PMD.CompareObjectsWithEquals")
+    @SuppressWarnings({"unchecked", "PMD.CompareObjectsWithEquals"})
     private Object findDuplicateInstance(final ConfigItem type,
                                          final Collection<Object> registeredInstances,
                                          final Object item) {
