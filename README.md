@@ -16,7 +16,7 @@ Support:
 * [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey)
 * [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
 
-**NOTE** Dropwizard 2.0.0 compatible [release candidate is ready](https://github.com/xvik/dropwizard-guicey/issues/61#issuecomment-536259075). 
+**NOTE** Dropwizard 2.0.0 compatible [release candidate is ready](https://github.com/xvik/dropwizard-guicey/issues/61#issuecomment-547554892). 
 Please try it and [share your feedback](https://github.com/xvik/dropwizard-guicey/issues/61).
 
 ### About 
@@ -71,7 +71,7 @@ compile 'ru.vyarus:dropwizard-guicey:4.2.2'
 
 Dropwizard | Guicey
 ----------|---------
-2.0| [5.0.0-rc.2](http://xvik.github.io/dropwizard-guicey/5.0.0-rc.2)
+2.0| [5.0.0-rc.3](http://xvik.github.io/dropwizard-guicey/5.0.0-rc.3)
 1.3| [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
 1.0 | [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1)
