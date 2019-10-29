@@ -2,6 +2,9 @@ package ru.vyarus.dropwizard.guice.debug.report.guice.util;
 
 import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.internal.util.StackTraceElements;
+import com.google.inject.spi.Element;
+import com.google.inject.spi.ElementSource;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.BindingDeclaration;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.ModuleDeclaration;
 import ru.vyarus.java.generics.resolver.util.TypeToStringUtils;
@@ -111,5 +114,25 @@ public final class GuiceModelUtils {
         }
         res.append(TypeToStringUtils.toStringType(key.getTypeLiteral().getType(), EmptyGenericsMap.getInstance()));
         return res.toString();
+    }
+
+    /**
+     * NOTE: this will work only for elements, parsed with SPI api, and not for real bindings!
+     *
+     * @param element guice binding element
+     * @return element declaration stacktrace element
+     */
+    public static StackTraceElement getDeclarationSource(final Element element) {
+        final Object source = element.getSource();
+        StackTraceElement traceElement = null;
+        if (source instanceof ElementSource) {
+            final ElementSource src = (ElementSource) source;
+            if (src.getDeclaringSource() instanceof StackTraceElement) {
+                traceElement = (StackTraceElement) src.getDeclaringSource();
+            } else if (src.getDeclaringSource() instanceof Method) {
+                traceElement = (StackTraceElement) StackTraceElements.forMember((Method) src.getDeclaringSource());
+            }
+        }
+        return traceElement;
     }
 }

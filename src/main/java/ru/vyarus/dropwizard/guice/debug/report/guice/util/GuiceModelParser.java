@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.internal.util.StackTraceElements;
 import com.google.inject.servlet.ServletModule;
 import com.google.inject.spi.ConstructorBinding;
 import com.google.inject.spi.Element;
@@ -22,7 +21,6 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton;
 import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -91,7 +89,7 @@ public final class GuiceModelParser {
 
         if (dec != null) {
             fillDeclaration(dec, injector);
-            fillSource(dec, element.getSource());
+            fillSource(dec, element);
             dec.setModule(BindingUtils.getModules(element).get(0));
 
             if (dec.getKey() != null) {
@@ -241,25 +239,19 @@ public final class GuiceModelParser {
         }
     }
 
-    private static void fillSource(final BindingDeclaration dec, final Object source) {
-        if (source instanceof ElementSource) {
-            final ElementSource src = (ElementSource) source;
-            StackTraceElement traceElement = null;
-            if (src.getDeclaringSource() instanceof StackTraceElement) {
-                traceElement = (StackTraceElement) src.getDeclaringSource();
-            } else if (src.getDeclaringSource() instanceof Method) {
-                traceElement = (StackTraceElement) StackTraceElements.forMember((Method) src.getDeclaringSource());
-            }
-            if (traceElement != null) {
-                // using full stacktrace element to grant proper link highlight in idea
-                dec.setSource(traceElement.toString());
-                dec.setSourceLine(traceElement.getLineNumber());
-            }
-        } else if (source instanceof Class) {
-            dec.setSource(((Class) source).getName());
+    private static void fillSource(final BindingDeclaration dec, final Element element) {
+        final StackTraceElement trace = GuiceModelUtils.getDeclarationSource(element);
+        if (trace != null) {
+            // using full stacktrace element to grant proper link highlight in idea
+            dec.setSource(trace.toString());
+            dec.setSourceLine(trace.getLineNumber());
         } else {
-            LOGGER.warn("Unknown element '{}' source: {}", dec, source);
+            final Object source = element.getSource();
+            if (source instanceof Class) {
+                dec.setSource(((Class) source).getName());
+            } else {
+                LOGGER.warn("Unknown element '{}' source: {}", dec, source);
+            }
         }
     }
-
 }
