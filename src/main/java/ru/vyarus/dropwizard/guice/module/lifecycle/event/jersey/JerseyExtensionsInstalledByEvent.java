@@ -31,7 +31,6 @@ public class JerseyExtensionsInstalledByEvent extends JerseyPhaseEvent {
     private final Class<? extends FeatureInstaller> installer;
     private final List<Class<?>> installed;
 
-    @SuppressWarnings("ParameterNumber")
     public JerseyExtensionsInstalledByEvent(final EventsContext context,
                                             final Class<? extends FeatureInstaller> installer,
                                             final List<Class<?>> installed) {

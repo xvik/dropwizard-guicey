@@ -182,7 +182,6 @@ public class GuiceyBootstrap {
      * @return bootstrap instance for chained calls
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#dropwizardBundles(ConfiguredBundle...)
      */
-    @SuppressWarnings("unchecked")
     public GuiceyBootstrap dropwizardBundles(final ConfiguredBundle... bundles) {
         context.registerDropwizardBundles(bundles);
         return this;

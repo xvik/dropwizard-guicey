@@ -66,7 +66,6 @@ public class WebListenerInstaller extends InstallerOptionsSupport
             HttpSessionIdListener.class
     );
 
-    @SuppressWarnings("unchecked")
     private static final List<Class<? extends EventListener>> SUPPORTED = ImmutableList
             .<Class<? extends EventListener>>builder()
             .addAll(CONTEXT_LISTENERS)

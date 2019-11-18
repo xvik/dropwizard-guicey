@@ -16,7 +16,6 @@ public abstract class JerseyPhaseEvent extends InjectorPhaseEvent {
 
     private final InjectionManager injectionManager;
 
-    @SuppressWarnings("checkstyle:ParameterNumber")
     public JerseyPhaseEvent(final GuiceyLifecycle type,
                             final EventsContext context) {
         super(type, context);
