@@ -75,7 +75,7 @@ dependencies {
 
     testCompile 'io.dropwizard:dropwizard-auth'
     testCompile 'org.glassfish.jersey.ext:jersey-proxy-client'
-    testCompile 'cglib:cglib-nodep:3.2.9'
+    testCompile 'cglib:cglib-nodep:3.3.0'
     testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
 }
 
