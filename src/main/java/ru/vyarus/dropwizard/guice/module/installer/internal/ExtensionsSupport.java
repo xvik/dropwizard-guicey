@@ -7,6 +7,8 @@ import com.google.inject.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.OptionalExtensionDisablerScope;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
@@ -47,13 +49,25 @@ public final class ExtensionsSupport {
                                             final Class<?> type,
                                             final boolean fromScan) {
         final FeatureInstaller installer = findInstaller(type, context.getExtensionsHolder());
-        final boolean recognized = installer != null;
+        boolean recognized = installer != null;
+        // during classpath scan checks, non extension classes may come, so its not possible to move info creation
+        // here from both branches
         if (recognized) {
             // important to force config creation for extension from scan to allow disabling by matcher
             final ExtensionItemInfoImpl info = context.getOrRegisterExtension(type, fromScan);
             info.setLazy(type.isAnnotationPresent(LazyBinding.class));
             info.setJerseyManaged(JerseyBinding.isJerseyManaged(type, context.option(JerseyExtensionsManagedByGuice)));
             info.setInstaller(installer);
+        } else if (!fromScan) {
+            final ExtensionItemInfoImpl info = context.getOrRegisterExtension(type, fromScan);
+            if (info.isOptional()) {
+                // automatic optional extension disabling
+                LOGGER.debug("Optional extension disabled: {}", type.getName());
+                context.openScope(ItemId.from(OptionalExtensionDisablerScope.class));
+                context.disableExtensions(new Class[]{type});
+                context.closeScope();
+                recognized = true;
+            }
         }
         return recognized;
     }

@@ -494,19 +494,32 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         /**
          * Beans could be registered automatically when auto scan enabled,
          * but if you don't want to use it, you can register beans manually.
-         * <p>Guice injector will instantiate beans and registered installers will be used to recognize and
-         * properly register provided extension beans.</p>
-         * <p>Also, could be used to add beans from packages not included in auto scanning.</p>
-         * <p>NOTE: startup will fail if bean not recognized by installers.</p>
-         * <p>NOTE: Don't register commands here: either enable auto scan, which will install commands automatically
-         * or register command directly to bootstrap object and dependencies will be injected to it after
-         * injector creation.</p>
+         * <p>
+         * Guice injector will instantiate beans and registered installers will be used to recognize and properly
+         * register provided extension beans. Startup will fail if bean not recognized by installers.
+         * <p>
+         * Also, could be used to add beans from packages not included in auto scanning.
          *
          * @param extensionClasses extension bean classes to register
          * @return builder instance for chained calls
          */
         public Builder extensions(final Class<?>... extensionClasses) {
             bundle.context.registerExtensions(extensionClasses);
+            return this;
+        }
+
+        /**
+         * The same as {@link #extensions(Class[])}, but, in case if no installer recognize extension, will be
+         * automatically disabled instead of throwing error. Useful for optional extensions declaration, which
+         * must be activated only when some 3rd party bundle appear. For example, it could be some diagnostic
+         * info provider, which must be activated when 3rd party diagnostic bundle is enabled (via bundles lookup
+         * or with hook).
+         *
+         * @param extensionClasses extension bean classes to register
+         * @return builder instance for chained calls
+         */
+        public Builder extensionsOptional(final Class<?>... extensionClasses) {
+            bundle.context.registerExtensionsOptional(extensionClasses);
             return this;
         }
 

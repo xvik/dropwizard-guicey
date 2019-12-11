@@ -52,7 +52,12 @@ public enum ConfigScope {
      * module - visible in configuration). It was added just for completeness of context recognition logic
      * (see {@link #recognize(Class)}) and to indicate all possible scopes.
      */
-    Module(com.google.inject.Module.class);
+    Module(com.google.inject.Module.class),
+    /**
+     * Special scope for optional extensions automatic disabling (when no matching installer available). Extra
+     * scope is required to differentiate automatic disabling from manual.
+     */
+    OptionalExtensionDisable(OptionalExtensionDisablerScope.class);
 
 
     private final Class<?> type;

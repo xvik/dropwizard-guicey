@@ -9,10 +9,7 @@ import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
-import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.InstanceItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
-import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.*;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
@@ -53,6 +50,7 @@ import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.*;
  * Used markers:
  * <ul>
  * <li>DW - marks dropwizard bundles</li>
+ * <li>OPTIONAL - marks optional extensions</li>
  * <li>DISABLED - item disabled (by user)</li>
  * <li>DUPLICATE - item considered as duplicate by deduplication mechanism and ignored. If contains number
  * ("DUPLICATE(3)") then multiple instances were considered duplicate in this scope and ignored. </li>
@@ -290,6 +288,10 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         if (info.getItemType() == ConfigItem.DropwizardBundle) {
             // dropwizard bundle marker
             markers.add("DW");
+        }
+        if (info.getItemType() == ConfigItem.Extension && ((ExtensionItemInfo) info).isOptional()) {
+            // optional extension marker
+            markers.add("OPTIONAL");
         }
         if (asIgnore || isDuplicateRegistration(info, scope)) {
             final int cnt = info.getIgnoresByScope(scope);

@@ -144,7 +144,8 @@ public class GuiceyBootstrap {
      * Bundle should not rely on auto-scan mechanism and so must declare all extensions manually
      * (this better declares bundle content and speed ups startup).
      * <p>
-     * NOTE: startup will fail if bean not recognized by installers.
+     * NOTE: startup will fail if bean not recognized by installers. Use {@link #extensionsOptional(Class[])} to
+     * register optional extension.
      * <p>
      * NOTE: Don't register commands here: either enable auto scan, which will install commands automatically
      * or register command directly to bootstrap object and dependencies will be injected to them after
@@ -156,6 +157,20 @@ public class GuiceyBootstrap {
      */
     public GuiceyBootstrap extensions(final Class<?>... extensionClasses) {
         context.registerExtensions(extensionClasses);
+        return this;
+    }
+
+    /**
+     * The same as {@link #extensions(Class[])}, but, in case if no installer recognize extension, will be
+     * automatically disabled instead of throwing error. Useful for optional extensions declaration in 3rd party
+     * bundles (where it is impossible to be sure what other bundles will be used and so what installers will
+     * be available).
+     *
+     * @param extensionClasses extension bean classes to register
+     * @return bootstrap instance for chained calls
+     */
+    public GuiceyBootstrap extensionsOptional(final Class<?>... extensionClasses) {
+        context.registerExtensionsOptional(extensionClasses);
         return this;
     }
 

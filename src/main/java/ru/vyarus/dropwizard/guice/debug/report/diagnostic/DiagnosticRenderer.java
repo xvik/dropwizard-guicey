@@ -4,10 +4,10 @@ import com.google.common.collect.Lists;
 import com.google.inject.Module;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.cli.Command;
+import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
-import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.module.context.info.*;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
@@ -63,6 +63,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  * <li>BINDING when extension detected in manual guice bindings (possibly not only there)</li>
  * <li>JERSEY when extension managed by jersey (annotated with
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged})</li>
+ * <li>OPTIONAL when extension is registered as optional</li>
  * </ul>
  * <p>
  * Guice modules are rendered by type in registration order. OVERRIDE marker may appear if module was
@@ -82,6 +83,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
     private static final String DW = "DW";
     private static final String JERSEY = "JERSEY";
     private static final String BINDING = "BINDING";
+    private static final String OPTIONAL = "OPTIONAL";
 
     private final GuiceyConfigurationInfo service;
 
@@ -251,6 +253,9 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         final List<String> markers = new ArrayList<>();
         for (Class<Object> ext : extensions) {
             final ExtensionItemInfo einfo = service.getInfo(ext);
+            if (einfo.isOptional()) {
+                markers.add(OPTIONAL);
+            }
             if (einfo.isGuiceBinding()) {
                 markers.add(BINDING);
             }
@@ -265,6 +270,9 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
         commonMarkers(markers, einfo);
         if (einfo.isLazy()) {
             markers.add("LAZY");
+        }
+        if (einfo.isOptional()) {
+            markers.add(OPTIONAL);
         }
         if (einfo.isJerseyManaged()) {
             markers.add(JERSEY);

@@ -158,6 +158,8 @@
     - Add lookup by environment instance: `InjectorLookup.get(environment)` 
     - Add direct lookup for bean instance: `InjectorLookup.getInstance(app, MyBean.class)` (or with environment)      
 * Update installers console reporting to use more readable class format: SimpleName   (reduced package)
+* Add optional extensions support: optional extension automatically become disabled when no compatible installer found
+    Could be registered with new method in main and guicey bundles: `.extensionsOptional`
 
 Migration matrix:
 

@@ -44,4 +44,12 @@ public interface ExtensionItemInfo extends ClassItemInfo, ScanSupport, DisableSu
      * @return true if extension detected in guice bindings, false otherwise (for direct-only extension)
      */
     boolean isGuiceBinding();
+
+    /**
+     * Optional extensions are registered directly in guicey bundles. These extensions automatically become
+     * disabled if no installer recognize it (instead of throwing exception).
+     *
+     * @return true if extension is optional
+     */
+    boolean isOptional();
 }

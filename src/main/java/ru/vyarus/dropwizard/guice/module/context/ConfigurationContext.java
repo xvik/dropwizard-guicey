@@ -510,6 +510,20 @@ public final class ConfigurationContext {
     }
 
     /**
+     * Optional extension registration from
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#extensionsOptional(Class[])} or
+     * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#extensionsOptional(Class[])}.
+     *
+     * @param extensions optional extensions to register
+     */
+    public void registerExtensionsOptional(final Class<?>... extensions) {
+        for (Class<?> extension : extensions) {
+            final ExtensionItemInfoImpl info = register(ConfigItem.Extension, extension);
+            info.setOptional(true);
+        }
+    }
+
+    /**
      * Extensions classpath scan requires testing with all installers to recognize actual extensions.
      * To avoid duplicate installers recognition, extensions resolved by classpath scan are registered
      * immediately. It's required because of not obvious method used for both manually registered extensions

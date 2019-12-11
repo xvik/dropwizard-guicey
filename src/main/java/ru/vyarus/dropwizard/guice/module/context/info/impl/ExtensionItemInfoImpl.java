@@ -25,6 +25,7 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
     private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
     // little hack used to preserve installer reference during initialization
     private FeatureInstaller installer;
+    private boolean optional;
 
     public ExtensionItemInfoImpl(final Class<?> type) {
         super(ConfigItem.Extension, type);
@@ -65,6 +66,11 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
         return manualBinding != null;
     }
 
+    @Override
+    public boolean isOptional() {
+        return optional;
+    }
+
     public void setLazy(final boolean lazy) {
         this.lazy = lazy;
     }
@@ -88,5 +94,9 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
     public void setInstaller(final FeatureInstaller installer) {
         this.installer = installer;
         this.installedBy = installer.getClass();
+    }
+
+    public void setOptional(final boolean optional) {
+        this.optional = optional;
     }
 }
