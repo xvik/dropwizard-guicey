@@ -405,6 +405,48 @@ public class ChildBundle implements GuiceyBundle {
 }
 ``` 
 
+### Before/after run logic
+
+If multiple bundles must be synchronized on run phase, use [guicey events](events.md). 
+
+To run code after all guicey bundles initialization, but before run:
+
+```java
+@Override
+public void initialize(final GuiceyBootstrap bootstrap) {
+    bootstrap.listen(new GuiceyLifecycleAdapter() {
+        @Override
+        protected void beforeRun(final BeforeRunEvent event)  {
+            // do something before bundles run
+            // NOTE that environment and configuration already available!
+        }
+    });
+}
+```
+
+To run code after all guicey bundles run methods (delayed init):
+
+```java
+@Override
+public void run(final GuiceyEnvironment environment) {
+    environment.listen(new GuiceyLifecycleAdapter() {
+        @Override
+        protected void bundlesStarted(final BundlesStartedEvent event) {
+            // still sdropwizard run phase (anything could be configured)
+            // but all guicey bundles aready executed 
+        }
+    });
+}
+```    
+
+!!! note
+    This will work only for guicey bundles! Registered dropwizard bundles may
+    execute before or after this events: events broadcasted from main dropwizard 
+    `GuiceBundle` run method, so other dropwizard bundles, registere after guice bundle
+    will run after it. 
+    It is assumed that guicey bundles used for most configurations (especially in complex
+    cases when bundles synchronization is required)). 
+
 ## Bundle lookup
 
 Bundle lookup mechanism used to lookup guicey bundles in various sources. It may be used to activate specific bundles
