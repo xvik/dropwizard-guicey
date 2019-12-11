@@ -1,5 +1,5 @@
 ### 5.0.0 (unreleased)
-* Update to dropwizard 2.0.0-rc13
+* Update to dropwizard 2.0.0
     - (breaking in jersey 2.26)
         * Jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
           This allows complete hk2 avoidance in the future. Right now it means that all direct hk2 classes must be replaced

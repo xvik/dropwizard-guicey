@@ -138,7 +138,7 @@ class GuiceRendererCasesTest extends Specification {
         expect:
         render(new GuiceConfig()) == """
 
-    8 MODULES with 99 bindings
+    8 MODULES with 109 bindings
     │
     ├── CasesModule                  (r.v.d.g.d.r.g.support)
     │   ├── <typelistener>                        CustomTypeListener                              at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:19)
@@ -198,12 +198,22 @@ class GuiceRendererCasesTest extends Specification {
             ├── instance             [@Singleton]     ConfigurationTree                               at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.configure(ConfigBindingModule.java:45)
             ├── instance             [@Singleton]     Configuration                                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindRootTypes(ConfigBindingModule.java:63)
             ├── instance             [@Singleton]     @Config Configuration                           at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindRootTypes(ConfigBindingModule.java:65)
+            ├── instance             [@Singleton]     @Config AdminFactory                            at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:78)
             ├── instance             [@Singleton]     @Config GzipHandlerFactory                      at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:78)
+            ├── instance             [@Singleton]     @Config HealthCheckConfiguration                at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:78)
             ├── instance             [@Singleton]     @Config LoggingFactory                          at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:78)
             ├── instance             [@Singleton]     @Config MetricsFactory                          at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:78)
             ├── instance             [@Singleton]     @Config RequestLogFactory<Object>               at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:78)
             ├── instance             [@Singleton]     @Config ServerFactory                           at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:78)
             ├── instance             [@Singleton]     @Config ServerPushFilterFactory                 at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:78)
+            ├── instance             [@Singleton]     @Config TaskConfiguration                       at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:78)
+            ├── instance             [@Singleton]     @Config("admin") AdminFactory                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:91)
+            ├── instance             [@Singleton]     @Config("admin.healthChecks") HealthCheckConfiguration   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:91)
+            ├── instance             [@Singleton]     @Config("admin.healthChecks.maxThreads") Integer   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:91)
+            ├── instance             [@Singleton]     @Config("admin.healthChecks.minThreads") Integer   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:91)
+            ├── instance             [@Singleton]     @Config("admin.healthChecks.workQueueSize") Integer   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:91)
+            ├── instance             [@Singleton]     @Config("admin.tasks") TaskConfiguration        at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:91)
+            ├── instance             [@Singleton]     @Config("admin.tasks.printStackTraceOnError") Boolean   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:91)
             ├── instance             [@Singleton]     @Config("logging") LoggingFactory               at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:91)
             ├── instance             [@Singleton]     @Config("logging.appenders") List<AppenderFactory<ILoggingEvent>>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:91)
             ├── instance             [@Singleton]     @Config("logging.level") String                 at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:91)
