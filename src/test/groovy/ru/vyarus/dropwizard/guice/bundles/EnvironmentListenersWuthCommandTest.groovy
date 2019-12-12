@@ -53,7 +53,7 @@ class EnvironmentListenersWuthCommandTest extends Specification {
                         @Override
                         void run(GuiceyEnvironment environment) throws Exception {
                             environment
-                                    .listen(new AbstractLifeCycle.AbstractLifeCycleListener() {
+                                    .listenJetty(new AbstractLifeCycle.AbstractLifeCycleListener() {
                                         @Override
                                         void lifeCycleStarted(LifeCycle event) {
                                             lifecycleStarted = true

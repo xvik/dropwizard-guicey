@@ -53,8 +53,8 @@ class EnvironmentListenersShortcutsTest extends Specification {
         @Override
         void run(GuiceyEnvironment environment) {
             environment.manage(new Mng())
-            environment.listen(new LListener())
-            environment.listen(new SListener())
+            environment.listenJetty(new LListener())
+            environment.listenServer(new SListener())
             environment.onGuiceyStartup({cfg, env, inj ->
                 onGuiceyStartup = true
                 assert cfg != null

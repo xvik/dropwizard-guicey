@@ -311,7 +311,7 @@ public class GuiceyEnvironment {
      * @param listener server startup listener.
      * @return environment instance for chained calls
      */
-    public GuiceyEnvironment listen(final ServerLifecycleListener listener) {
+    public GuiceyEnvironment listenServer(final ServerLifecycleListener listener) {
         environment().lifecycle().addServerLifecycleListener(listener);
         return this;
     }
@@ -332,7 +332,7 @@ public class GuiceyEnvironment {
      * @return environment instance for chained calls
      * @see AbstractLifeCycle.AbstractLifeCycleListener adapter
      */
-    public GuiceyEnvironment listen(final LifeCycle.Listener listener) {
+    public GuiceyEnvironment listenJetty(final LifeCycle.Listener listener) {
         environment().lifecycle().addLifeCycleListener(listener);
         return this;
     }
@@ -392,7 +392,8 @@ public class GuiceyEnvironment {
      * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp}) - after guicey start (as jetty not started in this
      * case). In both cases application completely started at this moment. Suitable for reporting.
      * <p>
-     * If you need to listen only for real server startup then use {@link #listen(ServerLifecycleListener)} instead.
+     * If you need to listen only for real server startup then use {@link #listenServer(ServerLifecycleListener)}
+     * instead.
      * <p>
      * Not called on custom command execution (because no lifecycle involved in this case). In this case you can use
      * {@link #onGuiceyStartup(GuiceyStartupListener)} as always executed point.
