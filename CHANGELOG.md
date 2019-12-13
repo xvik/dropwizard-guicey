@@ -72,8 +72,8 @@
         * Add bundle loops detection: as multiple bundle instances allowed loops are highly possible
             Entire bundle chain is provided in exception to simplify fixing loops.
         * Add base classes for unique bundles and modules (with correct equals and hash code implementations):
-          `UniqueGuiceyBundle` and `UniqueModule` (use class name strings for comparison to correctly detect even
-          instances of classes from different class loaders). 
+          `UniqueGuiceyBundle` and `UniqueModule` or `UniqueDropwizardAwareModule` (use class name strings for 
+          comparison to correctly detect even instances of classes from different class loaders). 
           Note: no such class for dropwizard bundle because it's useless (if you use guicey - use GuiceyBundle instead 
           and if you need dropwizard bundle - it shouldn't be dependent on guicey classes)     
     - Support extensions recognition from guice modules (jersey1-guice style): 

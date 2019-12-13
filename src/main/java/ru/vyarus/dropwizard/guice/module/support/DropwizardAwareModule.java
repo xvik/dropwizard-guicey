@@ -17,6 +17,7 @@ import java.util.List;
  * @param <C> configuration type
  * @author Vyacheslav Rusakov
  * @since 06.06.2015
+ * @see ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueDropwizardAwareModule for uniquness
  */
 @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public abstract class DropwizardAwareModule<C extends Configuration> extends AbstractModule implements

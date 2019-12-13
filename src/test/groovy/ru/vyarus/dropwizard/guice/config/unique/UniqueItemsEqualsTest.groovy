@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.config.unique
 
+import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueDropwizardAwareModule
 import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle
 import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueModule
 import spock.lang.Specification
@@ -38,7 +39,23 @@ class UniqueItemsEqualsTest extends Specification {
         !m1.equals(new Bundle())
     }
 
+    def "Check unique aware module equals"() {
+
+        setup:
+        def m1 = new AwareModule()
+        def m2 = new AwareModule()
+
+        expect:
+        m1.equals(m2)
+        m1.hashCode() == m2.hashCode()
+        !m1.equals(null)
+        !m2.equals(null)
+        !m1.equals(new Bundle())
+    }
+
     static class Bundle extends UniqueGuiceyBundle {}
 
     static class Module extends UniqueModule {}
+
+    static class AwareModule extends UniqueDropwizardAwareModule {}
 }

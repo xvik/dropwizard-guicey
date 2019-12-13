@@ -14,6 +14,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * Also, note that guice silently ignores duplicate bindings and so in most cases it would be able to
  * handle duplicate modules properly. This class may be used for cases when bindings registered by module
  * instances are not equal (e.g. register something by instance or produce other side effects).
+ * <p>
+ * If module requires access to dropwizard specific project (via
+ * {@link ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule}) then use
+ * {@link UniqueDropwizardAwareModule} instead.
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#duplicateConfigDetector(
