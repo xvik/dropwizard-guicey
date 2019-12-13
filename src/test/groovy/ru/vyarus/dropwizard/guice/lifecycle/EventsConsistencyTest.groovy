@@ -302,6 +302,7 @@ class EventsConsistencyTest extends AbstractTest {
         private void baseChecks(GuiceyLifecycleEvent event) {
             assert event != null
             assert event.options != null
+            assert event.sharedState != null
             if (!called.contains(event.getType())) {
                 called.add(event.getType())
             }
