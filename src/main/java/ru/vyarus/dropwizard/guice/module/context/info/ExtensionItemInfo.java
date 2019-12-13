@@ -33,7 +33,9 @@ public interface ExtensionItemInfo extends ClassItemInfo, ScanSupport, DisableSu
      *
      * @return true if extension annotated with
      * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged}, false otherwise
+     * @deprecated in the next version HK2 support will be removed and annotation will become useless
      */
+    @Deprecated
     boolean isJerseyManaged();
 
     /**

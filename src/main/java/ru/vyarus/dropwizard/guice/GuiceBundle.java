@@ -499,6 +499,9 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * register provided extension beans. Startup will fail if bean not recognized by installers.
          * <p>
          * Also, could be used to add beans from packages not included in auto scanning.
+         * <p>
+         * Alternatively, you can manually bind extensions in guice module and they would be recognized
+         * ({@link GuiceyOptions#AnalyzeGuiceModules}).
          *
          * @param extensionClasses extension bean classes to register
          * @return builder instance for chained calls
@@ -514,6 +517,11 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * must be activated only when some 3rd party bundle appear. For example, it could be some diagnostic
          * info provider, which must be activated when 3rd party diagnostic bundle is enabled (via bundles lookup
          * or with hook).
+         * <p>
+         * Alternatively, you can manually bind extensions in guice module and they would be recognized
+         * ({@link GuiceyOptions#AnalyzeGuiceModules}). Extensions with no available target installer will simply
+         * wouldn't be detected (because installers used for recognition) and so there is no need
+         * to mark them as optional in this case.
          *
          * @param extensionClasses extension bean classes to register
          * @return builder instance for chained calls

@@ -147,9 +147,8 @@ public class GuiceyBootstrap {
      * NOTE: startup will fail if bean not recognized by installers. Use {@link #extensionsOptional(Class[])} to
      * register optional extension.
      * <p>
-     * NOTE: Don't register commands here: either enable auto scan, which will install commands automatically
-     * or register command directly to bootstrap object and dependencies will be injected to them after
-     * injector creation.
+     * Alternatively, you can manually bind extensions in guice module and they would be recognized
+     * ({@link ru.vyarus.dropwizard.guice.GuiceyOptions#AnalyzeGuiceModules}).
      *
      * @param extensionClasses extension bean classes to register
      * @return bootstrap instance for chained calls
@@ -165,6 +164,11 @@ public class GuiceyBootstrap {
      * automatically disabled instead of throwing error. Useful for optional extensions declaration in 3rd party
      * bundles (where it is impossible to be sure what other bundles will be used and so what installers will
      * be available).
+     * <p>
+     * Alternatively, you can manually bind extensions in guice module and they would be recognized
+     * ({@link ru.vyarus.dropwizard.guice.GuiceyOptions#AnalyzeGuiceModules}). Extensions with no available target
+     * installer will simply wouldn't be detected (because installers used for recognition) and so there is no need
+     * to mark them as optional in this case.
      *
      * @param extensionClasses extension bean classes to register
      * @return bootstrap instance for chained calls
