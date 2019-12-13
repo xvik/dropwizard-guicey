@@ -362,7 +362,7 @@ public class GuiceyEnvironment {
      *
      * @param key shared object key
      * @param <T> shared object type
-     * @return shared object (possibly just created)
+     * @return shared object
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
     public <T> Optional<T> sharedState(final Class<?> key) {

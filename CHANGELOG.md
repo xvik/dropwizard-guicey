@@ -106,6 +106,7 @@
     - Static access by application: `SharedConfigurationState.get(app)` or `SharedConfigurationState.lookup(app, key)`
     - Static access by environment: `SharedConfigurationState.get(env)` or `SharedConfigurationState.lookup(env, key)` 
     - Value access from guicey bundle: `boostrap.sharedState(key, defSupplier)`, `environment.sharedState(key)`
+    - Value access from `DropwizardAwareModule`: `sharedState`
     - Hooks can use `GuiceBundle.Builder.withSharedState` to access application state.
     - (breaking) `InjectorLookup` now use global shared state        
         * `clear()` method removed, but `SharedConfigurationState.clear()` could be used instead   
