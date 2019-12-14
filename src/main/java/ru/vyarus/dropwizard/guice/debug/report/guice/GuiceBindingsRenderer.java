@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.debug.report.guice;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.*;
-import com.google.inject.Module;
+import com.google.inject.Module; // NOPMD
 import com.google.inject.spi.Elements;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import ru.vyarus.dropwizard.guice.GuiceyOptions;
