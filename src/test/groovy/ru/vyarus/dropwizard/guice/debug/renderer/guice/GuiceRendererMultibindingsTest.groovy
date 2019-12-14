@@ -45,18 +45,18 @@ class GuiceRendererMultibindingsTest extends Specification {
     2 MODULES with 9 bindings
     │
     └── MultibindingsModule          (r.v.d.g.d.r.g.support)
-        ├── linkedkey            [@Prototype]     @Element Plugin (multibinding)                  at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:17)
+        ├── linkedkey            [@Prototype]     @Element Plugin --> MyPlugin (multibinding)     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:17)
         ├── instance             [@Singleton]     @Element Plugin (multibinding)                  at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:18)
         ├── providerinstance     [@Prototype]     @Element Map.Entry<String, Provider<KeyedPlugin>> (multibinding)   at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:22)
-        ├── linkedkey            [@Prototype]     @Element KeyedPlugin (multibinding)             at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:22)
+        ├── linkedkey            [@Prototype]     @Element KeyedPlugin --> MyKeyedPlugin (multibinding)   at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:22)
         ├── instance             [@Singleton]     @Element KeyedPlugin (multibinding)             at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:23)
         ├── providerinstance     [@Prototype]     @Element Map.Entry<String, Provider<KeyedPlugin>> (multibinding)   at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:23)
         ├── providerinstance     [@Prototype]     OptService                                      at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:25)
-        ├── linkedkey            [@Prototype]     @Default OptService (optional binding)          at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:25)
+        ├── linkedkey            [@Prototype]     @Default OptService --> DefImpl (optional binding)   at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule.configure(MultibindingsModule.java:25)
         │
         └── OverideModule                (r.v.d.g.d.r.g.s.MultibindingsModule)
             ├── providerinstance     [@Prototype]     OptService                                      at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule\$OverideModule.configure(MultibindingsModule.java:48)
-            └── linkedkey            [@Prototype]     @Actual OptService (optional binding)           at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule\$OverideModule.configure(MultibindingsModule.java:48)
+            └── linkedkey            [@Prototype]     @Actual OptService --> ActualImpl (optional binding)   at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.MultibindingsModule\$OverideModule.configure(MultibindingsModule.java:48)
 
 
     BINDING CHAINS

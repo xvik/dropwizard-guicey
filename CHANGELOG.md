@@ -78,13 +78,18 @@
           and if you need dropwizard bundle - it shouldn't be dependent on guicey classes)     
     - Support extensions recognition from guice modules (jersey1-guice style): 
         * extensions are detected from declaration in specified guice modules 
-            (essentially same as classpath scan, but from bindings)
-        * support only direct type bindings (all generified or qualified declarations ignored)    
+            (essentially same as classpath scan, but from bindings)            
+        * extensions declared in:
+            - direct type bindings (all generified or qualified declarations ignored)
+            - linked bindings (right part) bind(Something).to(Extension) are also recognized
+                (which must also be non qualified)    
         * like in classpath scan `@InvisibleForScanner` prevents recognition
+            (or bean may be simply qualified)
         * all extension registration types may work together (classpath scan, manual declaration and binding declaration)    
         * extensions registered directly (or found by classpath scan) and also bound manually in guice module 
             will not conflict anymore (as manual declaration would be detected) and so @LazyBinding workaround is not needed        
-        * extensions declared in guice module may be also disabled (guicey will remove binding declaration in this case)
+        * extensions declared in guice module may be also disabled (guicey will remove binding declaration in this case 
+            and all chains leading to this declartion to prevent possible context failures)
         * Transitive gucie modules (installed by other modules) may be disabled with usual `disableModules()`
             (but only if guice bindings analysis is not disabled).
         * enabled by default, but can be disabled with `GuiceyOptions.AnalyzeModules` option

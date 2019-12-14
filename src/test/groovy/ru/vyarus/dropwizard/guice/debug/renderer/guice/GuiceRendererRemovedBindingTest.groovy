@@ -45,10 +45,14 @@ class GuiceRendererRemovedBindingTest extends Specification {
     │
     └── DisableExtensionModule       (r.v.d.g.d.r.g.support)
         ├── untargetted          [@Prototype]     Res1                                            at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.DisableExtensionModule.configure(DisableExtensionModule.java:16) *EXTENSION, REMOVED
-        ├── linkedkey            [@Prototype]     Res2                                            at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.DisableExtensionModule.configure(DisableExtensionModule.java:17) *EXTENSION, REMOVED
+        ├── linkedkey            [@Prototype]     Res2 --> Res2Impl                               at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.DisableExtensionModule.configure(DisableExtensionModule.java:17) *EXTENSION, REMOVED
         ├── instance             [@Singleton]     Res3                                            at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.DisableExtensionModule.configure(DisableExtensionModule.java:18) *EXTENSION, REMOVED
         ├── providerkey          [@Prototype]     Res4                                            at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.DisableExtensionModule.configure(DisableExtensionModule.java:19) *EXTENSION, REMOVED
         └── providerinstance     [@Prototype]     Res5                                            at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.DisableExtensionModule.configure(DisableExtensionModule.java:20) *EXTENSION, REMOVED
+
+
+    BINDING CHAINS
+    └── Res2  --[linked]-->  Res2Impl       *CHAIN REMOVED
 """ as String;
     }
 

@@ -1,11 +1,14 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.inject.Binding;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.spi.Element;
 import com.google.inject.spi.Elements;
+import com.google.inject.spi.LinkedKeyBinding;
 import com.google.inject.util.Modules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.support.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.AnalyzeGuiceModules;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage;
@@ -133,6 +137,7 @@ public final class ModulesSupport {
         return modules;
     }
 
+    @SuppressWarnings("PMD.NcssCount")
     private static void analyzeAndFilterBindings(final ConfigurationContext context,
                                                  final List<Module> analyzedModules,
                                                  final List<Element> elements) {
@@ -144,6 +149,9 @@ public final class ModulesSupport {
         final List<Binding> removedBindings = new ArrayList<>();
         final Iterator<Element> it = elements.iterator();
         final List<Class<?>> extensions = new ArrayList<>();
+        // extension may be recognized by linked key and linked keys may need to be removed too
+        // right key -> binding
+        final Multimap<Key, LinkedKeyBinding> linkedBindings = LinkedHashMultimap.create();
         while (it.hasNext()) {
             final Element element = it.next();
             if (isInDisabledModule(element, disabledModules, actuallyDisabledModules)) {
@@ -153,10 +161,16 @@ public final class ModulesSupport {
                 continue;
             }
             // filter constants, listeners, aop etc.
-            if (element instanceof Binding && checkBindingRemoveRequired(context, (Binding) element, extensions)) {
+            if (element instanceof Binding
+                    && checkBindingRemoveRequired(context, (Binding) element, extensions, linkedBindings)) {
                 it.remove();
                 removedBindings.add((Binding) element);
             }
+        }
+        // recognize extensions in linked bindings and remove required bindings
+        for (Binding binding : findLinkedBindingsToRemove(context, extensions, linkedBindings)) {
+            elements.remove(binding);
+            removedBindings.add(binding);
         }
         if (!actuallyDisabledModules.isEmpty()) {
             LOGGER.debug("Removed inner guice modules: {}", actuallyDisabledModules);
@@ -171,10 +185,10 @@ public final class ModulesSupport {
 
     private static boolean checkBindingRemoveRequired(final ConfigurationContext context,
                                                       final Binding binding,
-                                                      final List<Class<?>> extensions) {
+                                                      final List<Class<?>> extensions,
+                                                      final Multimap<Key, LinkedKeyBinding> linkedBindings) {
         final Key key = binding.getKey();
-        // extensions bindings may be only unqualified, class only (no generified types)
-        if (key.getAnnotation() == null && key.getTypeLiteral().getType() instanceof Class) {
+        if (isPossibleExtension(key)) {
             context.stat().count(Stat.AnalyzedBindingsCount, 1);
             final Class type = key.getTypeLiteral().getRawType();
             if (ExtensionsSupport.registerExtensionBinding(context, type,
@@ -184,7 +198,79 @@ public final class ModulesSupport {
                 return !context.isExtensionEnabled(type);
             }
         }
+        // note if linked binding recognized as extension by its key - it would not be counted (not needed)
+        if (binding instanceof LinkedKeyBinding) {
+            // remember all linked bindings (do not recognize on first path to avoid linked binding check before
+            // real binding)
+            final LinkedKeyBinding linkedBind = (LinkedKeyBinding) binding;
+            linkedBindings.put(linkedBind.getLinkedKey(), linkedBind);
+        }
         return false;
+    }
+
+    // extension bindings may be only unqualified, class only (no generified types)
+    private static boolean isPossibleExtension(final Key key) {
+        return key.getAnnotation() == null && key.getTypeLiteral().getType() instanceof Class;
+    }
+
+    // links map is: linked type (end) -> binding
+    private static List<LinkedKeyBinding> findLinkedBindingsToRemove(final ConfigurationContext context,
+                                                                     final List<Class<?>> extensions,
+                                                                     final Multimap<Key, LinkedKeyBinding> links) {
+        // try to recognize extensions in links
+        for (Map.Entry<Key, LinkedKeyBinding> entry : links.entries()) {
+            final Key key = entry.getKey();
+            final Class type = key.getTypeLiteral().getRawType();
+            final LinkedKeyBinding binding = entry.getValue();
+            if (!isPossibleExtension(key)) {
+                continue;
+            }
+            // try to detect extension in linked type (binding already analyzed so no need to count)
+            if (!extensions.contains(type) && ExtensionsSupport.registerExtensionBinding(context, type,
+                    binding, BindingUtils.getTopDeclarationModule(binding))) {
+                LOGGER.debug("Extension detected from guice link binding: {}", type.getSimpleName());
+                extensions.add(type);
+            }
+        }
+        // find disabled bindings (already removed)
+        // for extensions recognized from links above imagine as we removed some (not existing) bindings
+        final List<Key> removedExtensions = extensions.stream()
+                .filter(it -> !context.isExtensionEnabled(it))
+                .map(Key::get)
+                .collect(Collectors.toList());
+        return removeChains(removedExtensions, links);
+    }
+
+    /**
+     * Pass in removed binding keys. Need to find all links ending on removed type and remove.
+     * Next, repeat with just removed types (to clean up entire chains because with it context may not start).
+     * For example: {@code bind(Interface1).to(Interface2); bind(Interface2).to(Extension)}
+     * Extension detected as extension, but if its disabled then link (Interface2 -> Extension) must be removed
+     * but without it Interface1 -> Interface2 remains and fail context becuase its just interfaces
+     * that's why entire chains must be removed.
+     *
+     * @param removed  removed keys (to clean links leading to this keys)
+     * @param bindings all linked bindings (actually without links with recognized extension in left part)
+     * @return list of bindings to remove
+     */
+    private static List<LinkedKeyBinding> removeChains(final List<Key> removed,
+                                                       final Multimap<Key, LinkedKeyBinding> bindings) {
+        final List<Key> newlyRemoved = new ArrayList<>();
+        final List<LinkedKeyBinding> res = new ArrayList<>();
+
+        for (Key removedKey : removed) {
+            // remove all links ending on removed key
+            for (LinkedKeyBinding bnd : bindings.get(removedKey)) {
+                res.add(bnd);
+                newlyRemoved.add(bnd.getKey());
+            }
+        }
+
+        // continue removing chains
+        if (!newlyRemoved.isEmpty()) {
+            res.addAll(removeChains(newlyRemoved, bindings));
+        }
+        return res;
     }
 
     private static List<String> prepareDisabledModules(final ConfigurationContext context) {

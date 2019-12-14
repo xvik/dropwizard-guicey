@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.debug.report.guice;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Module; // NOPMD
 import com.google.inject.*;
 import com.google.inject.spi.Elements;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -198,10 +197,8 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         final List<BindingDeclaration> chains = new ArrayList<>();
         final List<Key> targetKeys = new ArrayList<>();
         for (BindingDeclaration dec : bindings.values()) {
-            // ignore removed bindings (because analysis performed on original modules)
-            if (dec.getKey() != null && disabled.contains(dec.getKey().getTypeLiteral().getRawType())) {
-                continue;
-            }
+            // do not ignore disabled bindings to show entire removed chains
+
             // select only links because direct providers are easily visible on main tree
             if (dec.getTarget() != null) {
                 chains.add(dec);
@@ -282,8 +279,7 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         final TreeNode next = root.child(RenderUtils.renderClassLine(mod.getType(), mod.getMarkers()));
 
         for (BindingDeclaration dec : mod.getDeclarations()) {
-            if (analysisEnabled && dec.getKey() != null
-                    && disabled.contains(dec.getKey().getTypeLiteral().getRawType())) {
+            if (analysisEnabled && isDisabledBinding(dec)) {
                 dec.getMarkers().add(REMOVED);
             }
             final String type = dec.getType().isRuntimeBinding()
@@ -304,6 +300,13 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         }
     }
 
+    private boolean isDisabledBinding(final BindingDeclaration dec) {
+        return (dec.getKey() != null && disabled.contains(dec.getKey().getTypeLiteral().getRawType()))
+                // linked keys may be disabled by target too
+                || (dec.getType() == DeclarationType.LinkedKey
+                && disabled.contains(dec.getTarget().getTypeLiteral().getRawType()));
+    }
+
     @SuppressWarnings("PMD.UseStringBufferForStringAppends")
     private String renderElement(final BindingDeclaration declaration) {
         String res;
@@ -315,6 +318,10 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
 
         } else {
             res = GuiceModelUtils.renderKey(declaration.getKey());
+            // for linked key important to show target (more obvious)
+            if (declaration.getType() == DeclarationType.LinkedKey && declaration.getTarget() != null) {
+                res += " --> " + GuiceModelUtils.renderKey(declaration.getTarget());
+            }
             if (declaration.getSpecial() != null) {
                 res += " (" + declaration.getSpecial()
                         .stream().map(Object::toString).collect(Collectors.joining(", ")) + ")";
@@ -346,7 +353,12 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
                     if (nextDec == null) {
                         // bindings map may contain not all bindings due to filtering, but here we need
                         // to show entire chain
-                        nextDec = GuiceModelParser.parseElement(injector, injector.getExistingBinding(link));
+                        final Binding existingBinding = injector.getExistingBinding(link);
+                        if (existingBinding != null) {
+                            nextDec = GuiceModelParser.parseElement(injector, existingBinding);
+                        } else {
+                            line.append("       *CHAIN REMOVED");
+                        }
                     }
                 }
                 curr = nextDec;

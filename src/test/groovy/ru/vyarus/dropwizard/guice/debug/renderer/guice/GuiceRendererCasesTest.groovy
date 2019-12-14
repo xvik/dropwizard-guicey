@@ -49,14 +49,14 @@ class GuiceRendererCasesTest extends Specification {
         ├── <provisionlistener>                   CustomProvisionListener                         at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:26)
         ├── <aop>                                 CustomAop                                       at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:33)
         ├── untargetted          [@Singleton]     AopedService                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:36) *AOP
-        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
+        ├── linkedkey            [@Prototype]     BindService --> OverriddenService               at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
         └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:38) *OVERRIDDEN
 
 
     1 OVERRIDING MODULES with 2 bindings
     │
     └── OverrideModule               (r.v.d.g.d.r.g.support)
-        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:16) *OVERRIDE
+        ├── linkedkey            [@Prototype]     BindService --> OverrideService                 at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:16) *OVERRIDE
         └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:17) *OVERRIDE
 
 
@@ -83,7 +83,7 @@ class GuiceRendererCasesTest extends Specification {
     │   ├── <provisionlistener>                   CustomProvisionListener                         at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:26)
     │   ├── <aop>                                 CustomAop                                       at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:33)
     │   ├── untargetted          [@Singleton]     AopedService                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:36) *AOP
-    │   ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
+    │   ├── linkedkey            [@Prototype]     BindService --> OverriddenService               at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
     │   └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:38) *OVERRIDDEN
     │
     └── GuiceBootstrapModule         (r.v.d.guice.module)
@@ -119,7 +119,7 @@ class GuiceRendererCasesTest extends Specification {
     1 OVERRIDING MODULES with 2 bindings
     │
     └── OverrideModule               (r.v.d.g.d.r.g.support)
-        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:16) *OVERRIDE
+        ├── linkedkey            [@Prototype]     BindService --> OverrideService                 at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:16) *OVERRIDE
         └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:17) *OVERRIDE
 
 
@@ -145,7 +145,7 @@ class GuiceRendererCasesTest extends Specification {
     │   ├── <provisionlistener>                   CustomProvisionListener                         at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:26)
     │   ├── <aop>                                 CustomAop                                       at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:33)
     │   ├── untargetted          [@Singleton]     AopedService                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:36) *AOP
-    │   ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
+    │   ├── linkedkey            [@Prototype]     BindService --> OverriddenService               at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:37) *OVERRIDDEN
     │   └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:38) *OVERRIDDEN
     │
     └── GuiceBootstrapModule         (r.v.d.guice.module)
@@ -169,11 +169,11 @@ class GuiceRendererCasesTest extends Specification {
         │   │   └── InternalServletModule        (c.g.inject.servlet)
         │   │       ├── <scope>              [@RequestScoped] -                                               at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:84)
         │   │       ├── <scope>              [@SessionScoped] -                                               at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:85)
-        │   │       ├── linkedkey            [@Prototype]     ServletRequest                                  at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:86)
-        │   │       ├── linkedkey            [@Prototype]     ServletResponse                                 at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:87)
+        │   │       ├── linkedkey            [@Prototype]     ServletRequest --> HttpServletRequest           at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:86)
+        │   │       ├── linkedkey            [@Prototype]     ServletResponse --> HttpServletResponse         at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:87)
         │   │       ├── untargetted          [@Singleton]     ManagedFilterPipeline                           at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:94)
         │   │       ├── untargetted          [@Singleton]     ManagedServletPipeline                          at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:95)
-        │   │       ├── linkedkey            [@Singleton]     FilterPipeline                                  at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:96)
+        │   │       ├── linkedkey            [@Singleton]     FilterPipeline --> ManagedFilterPipeline        at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:96)
         │   │       ├── providerkey          [@Prototype]     ServletContext                                  at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:98)
         │   │       ├── untargetted          [@Singleton]     BackwardsCompatibleServletContextProvider       at com.google.inject.servlet.InternalServletModule.configure(InternalServletModule.java:99)
         │   │       ├── providerinstance     [@Singleton]     @ScopingOnly GuiceFilter                        at com.google.inject.servlet.InternalServletModule.provideScopingOnlyGuiceFilter(InternalServletModule.java:106)
@@ -275,7 +275,7 @@ class GuiceRendererCasesTest extends Specification {
     1 OVERRIDING MODULES with 2 bindings
     │
     └── OverrideModule               (r.v.d.g.d.r.g.support)
-        ├── linkedkey            [@Prototype]     BindService                                     at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:16) *OVERRIDE
+        ├── linkedkey            [@Prototype]     BindService --> OverrideService                 at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:16) *OVERRIDE
         └── instance             [@Singleton]     BindService2                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.OverrideModule.configure(OverrideModule.java:17) *OVERRIDE
 
 
