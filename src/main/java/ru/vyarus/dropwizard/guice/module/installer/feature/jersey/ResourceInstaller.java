@@ -55,18 +55,13 @@ public class ResourceInstaller extends AbstractJerseyInstaller<Object> implement
     }
 
     @Override
-    public <T> void checkBinding(final Binder binder, final Class<T> type, final Binding<T> manualBinding) {
+    public <T> void manualBinding(final Binder binder, final Class<T> type, final Binding<T> binding) {
         // no need to bind in case of manual binding
         final boolean hkManaged = isJerseyExtension(type);
         Preconditions.checkState(!hkManaged,
                 // intentially no "at" before stacktrtace because idea may hide error in some cases
                 "Resource annotated as jersey managed is declared manually in guice: %s (%s)",
-                type.getName(), BindingUtils.getDeclarationSource(manualBinding));
-    }
-
-    @Override
-    public void installBinding(final Binder binder, final Class<?> type) {
-        // no common binding logic (reporting is handled by dropwizard)
+                type.getName(), BindingUtils.getDeclarationSource(binding));
     }
 
     @Override

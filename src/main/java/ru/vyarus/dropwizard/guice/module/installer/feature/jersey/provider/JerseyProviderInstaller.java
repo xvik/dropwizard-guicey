@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import com.google.inject.Binder;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
+import com.google.inject.Stage;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.internal.inject.InjectionResolver;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
@@ -88,22 +89,23 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
     }
 
     @Override
-    public <T> void checkBinding(final Binder binder, final Class<T> type, final Binding<T> manualBinding) {
+    public <T> void manualBinding(final Binder binder, final Class<T> type, final Binding<T> binding) {
         // no need to bind in case of manual binding
         final boolean hkManaged = isJerseyExtension(type);
         Preconditions.checkState(!hkManaged,
                 // intentially no "at" before stacktrtace because idea may hide error in some cases
                 "Provider annotated as jersey managed is declared manually in guice: %s (%s)",
-                type.getName(), BindingUtils.getDeclarationSource(manualBinding));
+                type.getName(), BindingUtils.getDeclarationSource(binding));
     }
 
     @Override
-    public void installBinding(final Binder binder, final Class<?> type) {
-        // reporting (common for both registration types)
-        final boolean hkManaged = isJerseyExtension(type);
-        reporter.provider(type, hkManaged, false);
+    public void extensionBound(final Stage stage, final Class<?> type) {
+        if (stage != Stage.TOOL) {
+            // reporting (common for both registration types)
+            final boolean hkManaged = isJerseyExtension(type);
+            reporter.provider(type, hkManaged, false);
+        }
     }
-
 
     @Override
     public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {

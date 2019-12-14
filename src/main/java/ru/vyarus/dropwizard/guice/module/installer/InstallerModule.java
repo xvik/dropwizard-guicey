@@ -51,13 +51,13 @@ public class InstallerModule extends AbstractModule {
         if (installer instanceof BindingInstaller) {
             final BindingInstaller bindingInstaller = (BindingInstaller) installer;
             if (manualBinding != null) {
-                bindingInstaller.checkBinding(binder(), type, manualBinding);
+                bindingInstaller.manualBinding(binder(), type, manualBinding);
             } else {
                 // perform default binding only if not already bound manually by user
                 bindingInstaller.bindExtension(binder(), type, item.isLazy());
             }
-            // advanced bindings logic, common for both branches
-            bindingInstaller.installBinding(binder(), type);
+            // reporting call common for both branches
+            bindingInstaller.extensionBound(binder().currentStage(), type);
 
         } else if (manualBinding == null && !item.isLazy()) {
             // if installer isn't install binding manually, lazy simply disable registration

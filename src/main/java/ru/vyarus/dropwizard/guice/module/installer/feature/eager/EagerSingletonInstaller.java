@@ -49,23 +49,25 @@ public class EagerSingletonInstaller implements FeatureInstaller, BindingInstall
     }
 
     @Override
-    public <T> void checkBinding(final Binder binder, final Class<T> type, final Binding<T> manualBinding) {
+    public <T> void manualBinding(final Binder binder, final Class<T> type, final Binding<T> binding) {
         // we can only validate existing binding here (actually entire extension is pretty useless in case of manual
         // binding)
-        final Class<? extends Annotation> scope = manualBinding.acceptScopingVisitor(VISITOR);
+        final Class<? extends Annotation> scope = binding.acceptScopingVisitor(VISITOR);
         // in production all services will work as eager singletons, for report (TOOL stage) consider also valid
         Preconditions.checkArgument(scope.equals(EagerSingleton.class)
                         || (!binder.currentStage().equals(Stage.DEVELOPMENT)
                         && scope.equals(Singleton.class)),
                 // intentially no "at" before stacktrtace because idea may hide error in some cases
                 "Eager bean, declared manually is not marked .asEagerSingleton(): %s (%s)",
-                type.getName(), BindingUtils.getDeclarationSource(manualBinding));
+                type.getName(), BindingUtils.getDeclarationSource(binding));
     }
 
     @Override
-    public void installBinding(final Binder binder, final Class<?> type) {
-        // may be called multiple times if bindings report enabled, but log must be counted just once
-        prerender.add(String.format("%s", RenderUtils.renderClassLine(type)));
+    public void extensionBound(final Stage stage, final Class<?> type) {
+        if (stage != Stage.TOOL) {
+            // may be called multiple times if bindings report enabled, but log must be counted just once
+            prerender.add(String.format("%s", RenderUtils.renderClassLine(type)));
+        }
     }
 
     @Override

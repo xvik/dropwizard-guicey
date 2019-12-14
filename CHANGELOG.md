@@ -94,8 +94,7 @@
             (but only if guice bindings analysis is not disabled).
         * enabled by default, but can be disabled with `GuiceyOptions.AnalyzeModules` option
         * `BindingInstaller` interface changed (because of direct guice bindings): 
-            it now contains 3 methods for class binding, manual binding validation and extra installations, 
-            common for both types (or universal reporting)
+            it now contains 3 methods for class binding, manual binding validation and reporting
     - Extension classes loaded by different class loaders now detected as duplicate extension registration        
 * Guicey hooks, initially supposed to be used for testing only, now considered to be also used for
     diagnostic tools

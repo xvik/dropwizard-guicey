@@ -39,16 +39,16 @@ public class PluginInstaller implements FeatureInstaller, BindingInstaller {
     @Override
     public void bindExtension(final Binder binder, final Class<?> type, final boolean lazy) {
         Preconditions.checkArgument(!lazy, "Plugin bean can't be lazy: %s", type.getName());
+        registerPlugin(binder, type);
     }
 
     @Override
-    public <T> void checkBinding(final Binder binder, final Class<T> type, final Binding<T> manualBinding) {
-        // manually bound - nothing to do
+    public <T> void manualBinding(final Binder binder, final Class<T> type, final Binding<T> binding) {
+        registerPlugin(binder, type);
     }
 
-    @Override
     @SuppressWarnings("unchecked")
-    public void installBinding(final Binder binder, final Class<?> type) {
+    public void registerPlugin(final Binder binder, final Class<?> type) {
         // multibindings registration (common for both registration types)
         final Plugin annotation = FeatureUtils.getAnnotation(type, Plugin.class);
         if (annotation != null) {
@@ -56,6 +56,12 @@ public class PluginInstaller implements FeatureInstaller, BindingInstaller {
             reporter.simple(pluginType, type);
             Multibinder.newSetBinder(binder, pluginType).addBinding().to(type);
         } else {
+            /*
+                @Plugin(PluginInterface)
+                public @interface CustomPluginAnnotation {
+                    PluginKey value();
+                }
+             */
             final Annotation namesAnnotation = FeatureUtils.getAnnotatedAnnotation(type, Plugin.class);
             final Method valueMethod = FeatureUtils.findMethod(namesAnnotation.annotationType(), "value");
             final Class<Object> keyType = (Class<Object>) valueMethod.getReturnType();
