@@ -119,13 +119,15 @@ Bom includes:
 Guicey extensions project provide extended BOM with guicey and all guicey modules included. 
 See [extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-bom) section for more details of BOM usage.
 
-##### Snapshots
+### Snapshots
 
-You can use snapshot versions through [JitPack](https://jitpack.io):
+Snapshots could be used through JitPack:
 
-* Go to [JitPack project page](https://jitpack.io/#xvik/dropwizard-guicey)
-* Select `Commits` section and click `Get it` on commit you want to use (top one - the most recent)
-* Follow displayed instruction: add repository and change dependency (NOTE: due to JitPack convention artifact group will be different)
+* Go to [JitPack project page](https://jitpack.io/#ru.vyarus/dropwizard-guicey)
+* Select `Commits` section and click `Get it` on commit you want to use (you may need to wait while version builds if no one requested it before)
+* Follow displayed instruction: 
+    - Add jitpack repository: `maven { url 'https://jitpack.io' }`
+    - Use commit hash as version: `ru.vyarus:dropwizard-guicey:56537f7d23`
 
 ### Usage
 
