@@ -679,6 +679,8 @@ public final class ConfigurationContext {
      */
     public void initPhaseStarted(final Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
+        // register in shared state just in case
+        this.sharedState.put(Bootstrap.class, bootstrap);
         this.sharedState.assignTo(bootstrap.getApplication());
         // delayed init of registered dropwizard bundles
         final Stopwatch time = stat().timer(BundleTime);
@@ -701,6 +703,10 @@ public final class ConfigurationContext {
         this.configurationTree = ConfigTreeBuilder
                 .build(bootstrap, configuration, option(BindConfigurationByPath));
         this.environment = environment;
+        // register in shared state just in case
+        this.sharedState.put(Configuration.class, configuration);
+        this.sharedState.put(ConfigurationTree.class, configurationTree);
+        this.sharedState.put(Environment.class, environment);
         this.sharedState.listen(environment);
         lifecycle().runPhase(configuration, configurationTree, environment);
     }

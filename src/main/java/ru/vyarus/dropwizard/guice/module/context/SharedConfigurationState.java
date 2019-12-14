@@ -34,6 +34,10 @@ import java.util.function.Supplier;
  * Classes are used as state keys to simplify usage (in most cases, bundle class will be used as key).
  * Shared value could be set only once (to prevent complex situations with state substitutions). It is advised
  * to initialize shared value only in initialization phase (to avoid potential static access errors).
+ * <p>
+ * Objects available in shared state by default: {@link io.dropwizard.setup.Bootstrap},
+ * {@link io.dropwizard.Configuration}, {@link Environment},
+ * {@link ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree}, {@link com.google.inject.Injector}
  *
  * @author Vyacheslav Rusakov
  * @since 26.09.2019
