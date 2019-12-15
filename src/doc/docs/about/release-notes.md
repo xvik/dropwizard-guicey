@@ -8,9 +8,10 @@ Release contains many breaking changes due to:
 As dropwizard 2.0 already introduce many breaking changes (new jersey actually), so it was an ideal moment to fix 
 all conceptual guicey mistakes. 
 
-Please read [dropwizard 2.0 upgrade guide](https://github.com/dropwizard/dropwizard/blob/master/docs/source/manual/upgrade-notes/upgrade-notes-2_0_x.rst) first.
+Please read [dropwizard 2.0 upgrade guide](https://www.dropwizard.io/en/release-2.0.x/manual/upgrade-notes/upgrade-notes-2_0_x.html) first.
    
 * [General changes](#general-changes)
+* [Optional extensions](#optional-extensions)
 * [New guicey lifecycle](#new-guicey-lifecycle)
 * [Multiple bundles and modules of the same type support](#multiple-bundles-and-modules-of-the-same-type-support)
 * [Dropwizard bundles direct support](#dropwizard-bundles-direct-support)
@@ -51,6 +52,28 @@ activated by default and so you don't need to activate it manually anymore.
 
 `AdminRestBundle` was moved from guicey to [external module](../extras/admin-rest.md).
 It is now a guicey bundle. Admin-only resources returns 404 instead of 403 on user context.
+
+## Optional extensions
+
+When extension is declared directly in bundle:
+
+```java
+.extensions(SimeExtension.class)
+```
+
+And no intaller recognized such extension then startup will fail.
+
+Now extensions can be registered as:
+
+```java
+.extensionsOptional(SimeExtension.class)
+```
+
+For optional extension, if installer not found it automatically become disabled.
+
+!!! note
+    There is no need to mark extensions as optional for classpath scan or bindigns analysis
+    because guiey will simply not detect extension if requried installer is not available
 
 ## New guicey lifecycle
 
@@ -118,7 +141,8 @@ provide many shortcuts:
 
 * `register()` for `environment().jersey().register()`
 * `manage()` for `environment().lifecycle().manage()` 
-* `listen()` for `environment().lifecycle().addLifeCycleListener()` and `environment().lifecycle().addServerLifecycleListener()`
+* `listenJetty()` for `environment().lifecycle().addLifeCycleListener()` 
+* `listenServer()` for `environment().lifecycle().addServerLifecycleListener()`
 * `onGuiceyStartup()` - special callback called after guicey start to perform manual registrations in 
     dropwizard environment with provided injector
 * `onApplicationStartup()` - special callback called after complete application startup (in guicey lightweight tests too)
@@ -171,7 +195,7 @@ public class CommonBundle implements GuiceyBundle {
 
 !!! tip
     Guicey provide base classes for such cases:
-    `UniqueGuiceyBundle` for unique bundles and `UniqueModule` for unique guice modules
+    `UniqueGuiceyBundle` for unique bundles and `UniqueModule` (`UniqueDropwizardAwareModule`) for unique guice modules
 
 But, it may be impossible to implement correct equals method for some 3rd party bundle or module used.
 In this case unique objects may be marked with:
@@ -368,21 +392,17 @@ GuiceBundle.builder()
     (because bindings already exists).
 
 
-!!! warning "Limitations"
-    Only bindings in user modules are checked: overriding modules are not checked as they supposed
-    to be used for quick fixes and test mocking.
-    Generified (`bind(new TypeLiteral<MyResource<String>(){})`) and 
-    qualified (`bind(MyResource.class).annotatedWith(Qualify.class)`) bindings are ignored
-    (simply because it's not obvious what to do with them).
+See [available restrictions](../guide/guice/module-analysis.md#restrictions).
     
-Extensions from guice bindins could be also disabled:
+Extensions from guice bindings could be also disabled:
 
 ```java
 .disableExtensions(MyResource.class)
 ```
 
 This is possible because guicey use guice SPI to parse configured bindings (before injector creation)
-and could exclude some bindings before injector startup.
+and could exclude some bindings before injector startup. If extenions is part of a chain, 
+[chain is also removed](../guide/guice/module-analysis.md#removed-bindings)
 
 !!! note
     To avoid duplicate work by injector (to parse user modules again), guicey prepares synthetic
@@ -511,30 +531,30 @@ into
 
 ```java
 public interface BindingInstaller {
-    void bindExtension(Binder binder, Class<?> type, boolean lazy);
-    <T> void checkBinding(Binder binder, Class<T> type, Binding<T> manualBinding);
-    void installBinding(Binder binder, Class<?> type);
+    void bind(Binder binder, Class<?> type, boolean lazy);
+    default <T> void manualBinding(Binder binder, Class<T> type, Binding<T> binding){} 
+    default void extensionBound(Stage stage, Class<?> type){}
 }
 ```
 
 Where 
 
 ```java
-void bindExtension(Binder binder, Class<?> type, boolean lazy);
+void bind(Binder binder, Class<?> type, boolean lazy);
 ``` 
 will be called for classpath scan and directly registered extensions, 
 
 ```java
-<T> void checkBinding(Binder binder, Class<T> type, Binding<T> manualBinding);
+<T> void manualBinding(Binder binder, Class<T> type, Binding<T> binding);
 ``` 
 
 for detected guice bindings and 
 
 ```java
-void installBinding(Binder binder, Class<?> type);
+void extensionBound(Stage stage, Class<?> type);
 ``` 
 
-in both cases to apply some common logic (like reporting)
+in both cases to apply reporting (after bind or manual binding check)
 
 !!! warning
     Binding installers may now be called multiple times in case if guice reports will be activated.
@@ -660,6 +680,13 @@ executed yet).
 !!! note
     Guicey itself use this state for Injector storage and in extended bundles (
     [gsp](../extras/gsp.md), [spa](../extras/spa.md)). 
+
+By default, shared state contains references for `Bootstrap`, `Environment`, `Configuration` and `ConfigurationTree` objects
+just in case if they'll need to be accessed statically:
+
+```java
+Optional<Bootstrap> bootstrap = SharedConfigurationState.lookup(environment, Bootstrap.class);
+```
 
 
 ## Reporting changes
