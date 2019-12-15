@@ -54,7 +54,7 @@ public class InstallerModule extends AbstractModule {
                 bindingInstaller.manualBinding(binder(), type, manualBinding);
             } else {
                 // perform default binding only if not already bound manually by user
-                bindingInstaller.bindExtension(binder(), type, item.isLazy());
+                bindingInstaller.bind(binder(), type, item.isLazy());
             }
             // reporting call common for both branches
             bindingInstaller.extensionBound(binder().currentStage(), type);

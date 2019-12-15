@@ -37,7 +37,7 @@ public class PluginInstaller implements FeatureInstaller, BindingInstaller {
     }
 
     @Override
-    public void bindExtension(final Binder binder, final Class<?> type, final boolean lazy) {
+    public void bind(final Binder binder, final Class<?> type, final boolean lazy) {
         Preconditions.checkArgument(!lazy, "Plugin bean can't be lazy: %s", type.getName());
         registerPlugin(binder, type);
     }

@@ -45,7 +45,7 @@ public class ResourceInstaller extends AbstractJerseyInstaller<Object> implement
     }
 
     @Override
-    public void bindExtension(final Binder binder, final Class<?> type, final boolean lazyMarker) {
+    public void bind(final Binder binder, final Class<?> type, final boolean lazyMarker) {
         final boolean jerseyManaged = isJerseyExtension(type);
         final boolean lazy = isLazy(type, lazyMarker);
         // register in guice only if not managed by hk and just in time (lazy) binding not requested

@@ -10,7 +10,7 @@ import com.google.inject.Stage;
  * Note: {@code binder.bind(type)} is not called by default for binding installer, assuming installer will
  * specify proper binding itself.
  * <ul>
- * <li>{@link #bindExtension(Binder, Class, boolean)} called for extensions not manually bound in guice</li>
+ * <li>{@link #bind(Binder, Class, boolean)} called for extensions not manually bound in guice</li>
  * <li>{@link #manualBinding(Binder, Class, Binding)} called for extensions, resolved from manual guice binding</li>
  * <li>{@link #extensionBound(Stage, Class)} (Binder, Class)} is always called after one of install methods above in
  * order to apply actions common for both registration types (usually reporting).</li>
@@ -44,7 +44,7 @@ public interface BindingInstaller {
      * @param type   extension class
      * @param lazy   true if extension is annotated with {@link LazyBinding}
      */
-    void bindExtension(Binder binder, Class<?> type, boolean lazy);
+    void bind(Binder binder, Class<?> type, boolean lazy);
 
     /**
      * Called for extensions, resolved from guice bindings (in user modules). May be used to validate binding
@@ -70,7 +70,7 @@ public interface BindingInstaller {
 
     /**
      * Called after execution of one of above methods. Useful for reporting. {@link Binder} is not provided
-     * here to avoid confusion with {@link #bindExtension(Binder, Class, boolean)}.
+     * here to avoid confusion with {@link #bind(Binder, Class, boolean)}.
      * <p>
      * WARNING: may be called multiple times due to enabled bindings reporting! Be sure to produce correct logs.
      *

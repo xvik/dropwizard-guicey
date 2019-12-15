@@ -43,7 +43,7 @@ public class EagerSingletonInstaller implements FeatureInstaller, BindingInstall
     }
 
     @Override
-    public void bindExtension(final Binder binder, final Class<?> type, final boolean lazy) {
+    public void bind(final Binder binder, final Class<?> type, final boolean lazy) {
         Preconditions.checkArgument(!lazy, "Eager bean can't be annotated as lazy: %s", type.getName());
         binder.bind(type).asEagerSingleton();
     }
