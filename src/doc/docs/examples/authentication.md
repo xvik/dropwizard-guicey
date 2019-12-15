@@ -1,10 +1,10 @@
 # Authentication
 
-Example of [dropwizard authentication](http://www.dropwizard.io/1.3.0/docs/manual/auth.html) usage with guice.
+Example of [dropwizard authentication](https://www.dropwizard.io/en/release-2.0.x/manual/auth.html) usage with guice.
 
 ## Simple auth
 
-Using [dropwizard oauth](http://www.dropwizard.io/1.3.0/docs/manual/auth.html#man-auth-oauth2) example as basement.
+Using [dropwizard oauth](https://www.dropwizard.io/en/release-2.0.x/manual/auth.html#oauth2) example as basement.
 Other auth types are configured in similar way.
 
 ```java
@@ -58,7 +58,7 @@ If auto configuration is enabled, then the class will be resolved and installed 
 
 ## Chained auth
 
-[Chained auth](http://www.dropwizard.io/1.3.0/docs/manual/auth.html#chained-factories) can be used to support different authentication schemes.
+[Chained auth](https://www.dropwizard.io/en/release-2.0.x/manual/auth.html#chained-factories) can be used to support different authentication schemes.
 
 Integration approach is the same as in simple case:
 
@@ -92,7 +92,7 @@ public class ChainedAuthDynamicFeature extends AuthDynamicFeature {
 
 ## Polymorphic auth
 
-[Polymorphic auth](http://www.dropwizard.io/1.3.0/docs/manual/auth.html#multiple-principals-and-authenticators) allows using different auth schemes simultaneously.
+[Polymorphic auth](https://www.dropwizard.io/en/release-2.0.x/manual/auth.html#multiple-principals-and-authenticators) allows using different auth schemes simultaneously.
 
 Integration approach is the same as in simple case:
 

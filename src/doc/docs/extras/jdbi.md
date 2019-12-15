@@ -7,7 +7,7 @@
     **DEPRECATED**: because jdbi2 dropwizard module is deprecated and moved [outside of core modules](https://github.com/dropwizard/dropwizard-jdbi).
     Migrate [to jdbi3](#migration-to-jdbi3) 
 
-Integrates [JDBI2](http://jdbi.org/) with guice. Based on [dropwizard-jdbi](http://www.dropwizard.io/1.3.0/docs/manual/jdbi.html) integration.
+Integrates [JDBI2](http://jdbi.org/) with guice. Based on [dropwizard-jdbi](https://www.dropwizard.io/en/release-1.3.x/manual/jdbi.html) integration.
  
 Features:
 
@@ -60,7 +60,7 @@ GuiceBundle.builder()
 ```
 
 Here default DBI instance will be created from database configuration (much like it's described in 
-[dropwizard documentation](http://www.dropwizard.io/1.3.0/docs/manual/jdbi.html)).
+[dropwizard documentation](https://www.dropwizard.io/en/release-1.3.x/manual/jdbi.html)).
 
 Or build DBI instance yourself:
 

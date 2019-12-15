@@ -26,7 +26,7 @@ compile 'com.h2database:h2:1.4.199'
 !!! note
     Both versions are managed by [BOM](../extras/bom.md)
 
-[dropwizard-jdbi3](http://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html) is used to configure 
+[dropwizard-jdbi3](https://www.dropwizard.io/en/release-2.0.x/manual/jdbi3.html) is used to configure 
 and create dbi instance:
 
 ```java
@@ -69,7 +69,7 @@ database:
     See [example app source](https://github.com/xvik/dropwizard-guicey-examples/tree/master/jdbi3) for details. 
  
 
-JDBI instance created exactly as described in [dropwizard docs](http://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html) 
+JDBI instance created exactly as described in [dropwizard docs](https://www.dropwizard.io/en/release-2.0.x/manual/jdbi3.html) 
 using provided db configuration:
 
 ```java

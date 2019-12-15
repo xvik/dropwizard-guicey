@@ -1,6 +1,6 @@
 # Hibernate integration
 
-Example of [dropwizard-hibernate](http://www.dropwizard.io/1.3.0/docs/manual/hibernate.html) bundle usage with guicey.
+Example of [dropwizard-hibernate](https://www.dropwizard.io/en/release-2.0.x/manual/hibernate.html) bundle usage with guicey.
 
 !!! abstract ""
     Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/hibernate)
@@ -19,7 +19,7 @@ Additional dependencies required:
 
 For simplicity, an embedded H2 database is used.
 
-Overall configuration is exactly the same as described in [dropwizard docs](http://www.dropwizard.io/1.3.0/docs/manual/hibernate.html), 
+Overall configuration is exactly the same as described in [dropwizard docs](https://www.dropwizard.io/en/release-2.0.x/manual/hibernate.html), 
 but extracted to separate class for simplicity:
  
 ```java

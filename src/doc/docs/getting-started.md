@@ -183,7 +183,7 @@ Now resource will return caller IP.
 
 ### Add managed
 
-[Dropwizard managed objects](http://www.dropwizard.io/1.3.5/docs/manual/core.html#managed-objects) are extremely useful for managing resources.
+[Dropwizard managed objects](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#managed-objects) are extremely useful for managing resources.
 
 Create simple managed implementation:
 

@@ -116,7 +116,7 @@ You can use lookup mechanism to load bundles in tests. For example,
 ### Testing core logic
 
 For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like 
-[DropwizardAppRule](http://www.dropwizard.io/1.3.0/docs/manual/testing.html),
+[DropwizardAppRule](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#id2),
 but *doesn't start jetty* (and so jersey and guice web modules will not be initialized). 
 Managed and lifecycle objects supported.
 
@@ -142,7 +142,7 @@ new GuiceyAppRule<>(MyApplication.class, null)
 ### Testing web logic
 
 For web component tests (servlets, filters, resources) use 
-[DropwizardAppRule](http://www.dropwizard.io/1.3.0/docs/manual/testing.html).
+[DropwizardAppRule](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#id2).
 
 To access guice beans use injector lookup:
 

@@ -3,7 +3,7 @@
 !!! summary ""
     [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-spa) module
 
-Provides a replacement for [dropwizard-assets](http://www.dropwizard.io/1.3.0/docs/manual/core.html#serving-assets) 
+Provides a replacement for [dropwizard-assets](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#serving-assets) 
 bundle for single page applications (SPA) to properly
 handle html5 client routing.
 

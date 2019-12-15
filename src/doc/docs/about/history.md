@@ -1,5 +1,5 @@
-### 5.0.0 (unreleased)
-* Update to dropwizard 2.0.0-rc12
+### [5.0.0](http://xvik.github.io/dropwizard-guicey/5.0.0) (2019-12-15)
+* Update to dropwizard 2.0.0
     - (breaking in jersey 2.26)
         * Jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
           This allows complete hk2 avoidance in the future. Right now it means that all direct hk2 classes must be replaced
@@ -72,25 +72,29 @@
         * Add bundle loops detection: as multiple bundle instances allowed loops are highly possible
             Entire bundle chain is provided in exception to simplify fixing loops.
         * Add base classes for unique bundles and modules (with correct equals and hash code implementations):
-          `UniqueGuiceyBundle` and `UniqueModule` (use class name strings for comparison to correctly detect even
-          instances of classes from different class loaders). 
+          `UniqueGuiceyBundle` and `UniqueModule` or `UniqueDropwizardAwareModule` (use class name strings for 
+          comparison to correctly detect even instances of classes from different class loaders). 
           Note: no such class for dropwizard bundle because it's useless (if you use guicey - use GuiceyBundle instead 
           and if you need dropwizard bundle - it shouldn't be dependent on guicey classes)     
     - Support extensions recognition from guice modules (jersey1-guice style): 
         * extensions are detected from declaration in specified guice modules 
-            (essentially same as classpath scan, but from bindings)
-        * support only direct type bindings (all generified or qualified declarations ignored)    
+            (essentially same as classpath scan, but from bindings)            
+        * extensions declared in:
+            - direct type bindings (all generified or qualified declarations ignored)
+            - linked bindings (right part) bind(Something).to(Extension) are also recognized
+                (which must also be non qualified)    
         * like in classpath scan `@InvisibleForScanner` prevents recognition
+            (or bean may be simply qualified)
         * all extension registration types may work together (classpath scan, manual declaration and binding declaration)    
         * extensions registered directly (or found by classpath scan) and also bound manually in guice module 
             will not conflict anymore (as manual declaration would be detected) and so @LazyBinding workaround is not needed        
-        * extensions declared in guice module may be also disabled (guicey will remove binding declaration in this case)
+        * extensions declared in guice module may be also disabled (guicey will remove binding declaration in this case 
+            and all chains leading to this declartion to prevent possible context failures)
         * Transitive gucie modules (installed by other modules) may be disabled with usual `disableModules()`
             (but only if guice bindings analysis is not disabled).
         * enabled by default, but can be disabled with `GuiceyOptions.AnalyzeModules` option
         * `BindingInstaller` interface changed (because of direct guice bindings): 
-            it now contains 3 methods for class binding, manual binding validation and extra installations, 
-            common for both types (or universal reporting)
+            it now contains 3 methods for class binding, manual binding validation and reporting
     - Extension classes loaded by different class loaders now detected as duplicate extension registration        
 * Guicey hooks, initially supposed to be used for testing only, now considered to be also used for
     diagnostic tools
@@ -106,6 +110,7 @@
     - Static access by application: `SharedConfigurationState.get(app)` or `SharedConfigurationState.lookup(app, key)`
     - Static access by environment: `SharedConfigurationState.get(env)` or `SharedConfigurationState.lookup(env, key)` 
     - Value access from guicey bundle: `boostrap.sharedState(key, defSupplier)`, `environment.sharedState(key)`
+    - Value access from `DropwizardAwareModule`: `sharedState`
     - Hooks can use `GuiceBundle.Builder.withSharedState` to access application state.
     - (breaking) `InjectorLookup` now use global shared state        
         * `clear()` method removed, but `SharedConfigurationState.clear()` could be used instead   
@@ -157,7 +162,9 @@
 * InjectorLookup:
     - Add lookup by environment instance: `InjectorLookup.get(environment)` 
     - Add direct lookup for bean instance: `InjectorLookup.getInstance(app, MyBean.class)` (or with environment)      
-* Update installers console reporting to use more readable class format: SimpleName   (reduced package)  
+* Update installers console reporting to use more readable class format: SimpleName   (reduced package)
+* Add optional extensions support: optional extension automatically become disabled when no compatible installer found
+    Could be registered with new method in main and guicey bundles: `.extensionsOptional`  
 
 ### [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2) (2018-11-26)
 * Update to guice 4.2.2 (java 11 compatible)
