@@ -52,6 +52,10 @@ Guicey could be configured through:
 :   Manual extensions registration. May be used together with [classpath scan](scan.md) and 
     [binding extensions](guice/module-analysis.md#extensions-recognition)
 
+`#!java .extensionsOptional(Class<?>... extensionClasses)`  
+:   Optional extensions registration. The difference with `.extensions` is that such extensions
+    will be automatically disabled if there are no compatible installers (instead of throwing exception).  
+
 `#!java .bundles(GuiceyBundle... bundles)` 
 :   [Guicey bundles](bundles.md#guicey-bundles) registration. 
 
@@ -226,7 +230,8 @@ Bundle initialization share many methods in common with [main guice bundle](#mai
 `#!java .modules(Module... modules)`  
 `#!java .modulesOverride(Module... modules)`   
 `#!java .installers(Class<? extends FeatureInstaller>... installers)`   
-`#!java .extensions(Class<?>... extensionClasses)`     
+`#!java .extensions(Class<?>... extensionClasses)`
+`#!java .extensionsOptional(Class<?>... extensionClasses)`     
 `#!java .bundles(GuiceyBundle... bundles)`      
 `#!java .dropwizardBundles(ConfiguredBundle... bundles)`
   
@@ -294,10 +299,10 @@ Shortcuts:
 `#!java .manage(Managed managed)`
 :   Shortcut for `#!java environment().lifecycle().manage()`
 
-`#!java .listen(ServerLifecycleListener listener)`
+`#!java .listenServer(ServerLifecycleListener listener)`
 :   Shortcut for `#!java environment().lifecycle().addServerLifecycleListener()`
 
-`#!java .listen(LifeCycle.Listener listener)`
+`#!java .listenJetty(LifeCycle.Listener listener)`
 :   Shortcut for `#!java environment().lifecycle().addLifeCycleListener()`
 
 [Extended configuration](yaml-values.md) access:

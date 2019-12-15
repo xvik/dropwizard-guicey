@@ -505,7 +505,7 @@ and other considered duplicate.
 So if `ComonBundle` implement `equals` everything will work as planned.
 
 For completely unique bundles and modules there are pre-defined base classes
-`UniqueGuiceyBundle` and `UniqueModule` accordingly.
+`UniqueGuiceyBundle` and `UniqueModule` (`UniqueDropwizardAwareModule`) accordingly.
 (e.g. `CommonBundle extends UniqueGuiceyBundle`)
 
 For cases when it is not possible to change bundle or module class, it could be 

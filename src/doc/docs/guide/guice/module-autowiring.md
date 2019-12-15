@@ -53,7 +53,8 @@ public class MyModule extends DropwizardAwareModule<MyConfiguration> {
         confuguration(Class) // unique sub configuration
         configuration(String) // configuration value by yaml path
         configurations(Class) // sub configuration objects by type (including subtypes)
-        options() // access guicey options
+        options() // access guicey options   
+        sharedState(Class) // shared sctate access
     }
 } 
 ```
@@ -228,3 +229,23 @@ In this example, module search for properties declared directly in MyConfig conf
 class with not null value and annotated (classes annotated, not properties!) with custom marker (`@MyMarker`).  
 
 See introspected configuration [structure description](bindings.md#introspected-configuration)
+
+## Shared state
+
+Special shortcuts provided to simplify access to [shared state](../shared.md) (if required).
+
+```java
+public class XFeatureModule extends DropwizardAwareModule<Configuration> {
+    @Override
+    protected void configure() {
+        SharedConfigObject config = sharedStateOrFail(SomeBundle.class, 
+            "Bundle %s is not registered", SomeBundle.class.getSimpleName());           
+    }
+}
+```         
+
+Shared state supposed to be declared in bundles and if required state is not available in time
+of injector creation then required bundle was not registered for sure.
+
+Be careful with shared state as it is intended to be used only in rare cases when
+really complex integrations required.

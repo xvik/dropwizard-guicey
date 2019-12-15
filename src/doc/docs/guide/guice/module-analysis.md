@@ -44,7 +44,9 @@ Guicey will detect `MyResource` as jersey resource and `MyManaged` as managed ex
     Extensions annotated with `@InvisibleForScanner` are not recognized, like in [clsspath scanner](../scan.md).
     But note that annotated extensions *should not be registered manually*! Because it will
     lead to default extension binding registration by guicey, which will most likley conflict with
-    existing binding (as a workaround `@LazyBinding` annotation may be used). 
+    existing binding (as a workaround `@LazyBinding` annotation may be used).
+    
+    Alternatively, you can simply qualify bean and it would not be recognized as extension. 
 
 This is completely equivalent to
 
@@ -57,22 +59,87 @@ GuiceBundle.builder()
     Internally, the same [installers](../installers.md) are used for extensions recognition and installation.
     The only difference is that guicey would not create default bindings for such extensions
     (because bindings already exists).
-    
-!!! warning "Limitations"
-    Only bindings in user modules are checked: overriding modules are not checked as they supposed
-    to be used for quick fixes and test mocking.
-    Generified (`bind(new TypeLiteral<MyResource<String>(){})`) and 
+
+### Restrictions
+
+* Only direct bindings (`bind(..)`) and linked keys (`bind(..).to(..)`) are checked.
+* Instances are not analyzed (`bind(Something.class).toInstance(new Extension())`) because extensions supposed to be guice-managed 
+    (not strictly required, but will allow to avoid aop-related problems). But, still
+    it is possible to declare not guice managed extension with instance mapping to extension class or provider. 
+* Generified (`bind(new TypeLiteral<MyResource<String>(){})`) and 
     qualified (`bind(MyResource.class).annotatedWith(Qualify.class)`) bindings are ignored
     (simply because it's not obvious what to do with them).
+* [Overriding modules](override.md) are not checked  as they supposed to be used for quick fixes and test mocking.     
+
+!!! success "Will be recognized"    
+    ```java
+    // untargetted binding
+    bind(Extension.class)
+    
+    // left side of the link
+    bind(Extension.class).to(Something.class)
+    
+    // right side of the link
+    bind(Something.class).to(Extension.class)
+    
+    // left side of instance or provider mapping
+    bind(Extension.class).toInstance(new Extension())
+    bind(Extension.class).toProvider(SomeProvider.class)    
+    ```
+
+!!! fail "Will NOT be recognized"
+    ```java
+    // instances not analysed
+    bind(Something.class).toInstance(new Extension())    
+    
+    // extension-recignizable type must be strictly declared 
+    bind(Something.class).toProvider(ExtensionProvider.class)
+
+    // generified declaration    
+    bind(new TypeLiteral<Extension<Somthing>(){})
+
+    // qualified declaration    
+    bind(Extension.class).annotatedWith(Qualify.class)
+    ```
+    
+!!! note "Side note"
+    Qualified and generified cases are not supported because they imply that multiple
+    instances of one class may be declared. This rise problems with direct manual declaration:
+    for example, if user declare `.extensions(Extension.class)` and in module we have
+    `bind(Extension.class).annotatedWith(Qualify.class)` how can we be sure if its the same
+    declaration or not? 
+    
+    Current implementation will not revognize qualified extension and automatically create
+    direct binding (`bind(Extension.class)`).
+    
+    For sure someone will face generified or qualified extensions case, but it would be 
+    simplier to workaraund it in exact case, rather then trying to handle all posible cases
+    in general, making everything more complex.     
 
 ### Disabled extensions
 
 In order to [disable extension](../disables.md#disable-extensions), recognized from binding,
 guicey will simply remove this binding.
 
-!!! warning
-    It is not tracked that removed binding was used in some bindings chain, so remove may
-    lead to error.
+If extension was a part of longer links chain then entire chain would be removed too!
+
+For example, 
+
+```java
+bind(One.class).to(Two.class)
+bind(Two.class).to(Extension.class)
+```
+
+When `Extension` disabled `One-->Two` link is also removed.
+
+Motivation: 
+
+* First of all, this avoid error cases when remaining chain part contains 
+only abstract types (e.g. only interfaces remains)
+* Removes possible incosistencies as long chains may appear due to some class overrides and so 
+removing only top (overriding) class will just to "before override" state.  
+
+Removed chains are visible on [guice report](#removed-bindings).
 
 ## Transitive modules
 
@@ -160,6 +227,8 @@ If any bindings were removed, this would be also shown in report:
     ...
 ```         
 
+(removed links are also counted)
+
 [Guice bindings](../diagnostic/guice-report.md) report shows exact removed items:
 
 ```
@@ -172,3 +241,10 @@ If any bindings were removed, this would be also shown in report:
 ```
 
 Here entire module `Inner` and `Res2` extension binding removed.
+
+Removed chains are shown as:
+
+```
+    BINDING CHAINS
+    └── Base  --[linked]-->  Ext  --[linked]-->  ExtImpl       *CHAIN REMOVED
+``` 

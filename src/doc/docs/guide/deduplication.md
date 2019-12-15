@@ -58,7 +58,7 @@ public class CommonBundle implements GuiceyBundle {
 
 !!! tip
     Guicey provide base classes for such cases: `UniqueGuiceyBundle` for unique bundles 
-    and `UniqueModule` for unique guice modules. So bundle above could be simplified to:
+    and `UniqueModule` (or `UniqueDropwizardAwareModule`) for unique guice modules. So bundle above could be simplified to:
     
     ```java
     public class CommonBundle extends UniqueGuiceyBundle { ... }

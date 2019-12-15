@@ -58,6 +58,11 @@ could be accessed under both phases.
 
 For usage examples see [bundles section](bundles.md#shared-state).
 
+## Guice modules
+
+Shared state is not intended to be used in guice modules, but it is possible. 
+To simplify usage there are shortcuts available in [dropwizard aware module](guice/module-autowiring.md#shared-state) base class. 
+
 ## Static access
 
 If required, shared state could be accessed statically everywhere:
@@ -100,4 +105,27 @@ If it (hard to imagine how) will affect your tests, you can forcefully clean all
 
 ```java
 SharedConfigurationState.clear()
-```  
+```                         
+
+## Default objects
+
+The following objects are available in shared state just in case:
+
+* Bootstrap
+* Environment
+* Configuration
+* [ConfigurationTree](yaml-values.md)
+
+So any of it could be accessed statically with application or environment instance:
+
+```java
+Optional<Bootstrap> bootstrap = SharedConfigurationState
+            .lookup(environment, Bootstrap.class);
+```                
+
+or
+
+```java
+Bootstrap bootstrap = SharedConfigurationState
+            .lookupOrFail(environment, Bootstrap.class, "No bootstrap available");
+``` 
