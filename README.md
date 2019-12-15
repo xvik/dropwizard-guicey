@@ -16,27 +16,23 @@ Support:
 * [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey)
 * [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
 
-**NOTE** Dropwizard 2.0.0 compatible [release candidate is ready](https://github.com/xvik/dropwizard-guicey/issues/61#issuecomment-547554892). 
-Please try it and [share your feedback](https://github.com/xvik/dropwizard-guicey/issues/61).
-
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 1.3.7 [guice](https://github.com/google/guice) 4.2.2 integration.
-
-Originally inspired by [dropwizard-guice](https://github.com/HubSpot/dropwizard-guice) and 
-[dropwizardy-guice](https://github.com/jclawson/dropwizardry/tree/master/dropwizardry-guice) 
-(which was derived from first one).
+[Dropwizard](http://dropwizard.io/) 2.0.0 [guice](https://github.com/google/guice) 4.2.2 integration.
 
 Features:
-* Guice injector created on run phase
-* Auto configuration (classpath scan)
-* Configuration bindings by path or unique sub configuration object 
-* Support guice ServletModule and servlet 3.0 annotations (on both contexts)
-* Dropwizard style reporting
-* Admin context rest emulation
-* Tests support for junit and spock
-* Developer friendly: includes debugging tools and api for extensions
-* Flexible [HK2](https://hk2.java.net/2.5.0-b05/introduction.html) integration
+
+* Auto configuration from classpath scan and guice bindings.
+* Yaml config values bindings by path or unique sub objects.
+* Advanced Web support
+* Dropwizard style console reporting: detected (and installed) extensions are printed to console to remove uncertainty
+* Test support: custom junit and spock extensions
+* Advanced test abilities to disable or override application logic
+* Developer friendly:
+    - core integrations may be replaced (to better fit needs)
+    - rich api for developing custom integrations, and hooking into lifecycle)
+    - out of the box support for plug-n-play plugins (auto discoverable)
+    - diagnostic tools (reports), support for custom diagnostic tools
 
 ### Thanks to
 
@@ -59,19 +55,19 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>4.2.2</version>
+  <version>5.0.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:4.2.2'
+compile 'ru.vyarus:dropwizard-guicey:5.0.0'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-2.0| [5.0.0-rc.3](http://xvik.github.io/dropwizard-guicey/5.0.0-rc.3)
+2.0| [5.0.0](http://xvik.github.io/dropwizard-guicey/5.0.0)
 1.3| [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
 1.0 | [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1)
@@ -86,18 +82,19 @@ Guicey pom may be also used as maven BOM:
 
 ```groovy
 plugins {
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "io.spring.dependency-management" version "1.0.8.RELEASE"
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus:dropwizard-guicey:4.2.2'
+        mavenBom 'ru.vyarus:dropwizard-guicey:5.0.0'
         // uncomment to override dropwizard version    
-        // mavenBom 'io.dropwizard:dropwizard-bom:1.3.7' 
+        // mavenBom 'io.dropwizard:dropwizard-bom:2.0.0'
+        // mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.0'  
     }
 }
 
 dependencies {
-    compile 'ru.vyarus:dropwizard-guicey:4.2.2'
+    compile 'ru.vyarus:dropwizard-guicey:5.0.0'
    
     // no need to specify versions
     compile 'io.dropwizard:dropwizard-auth'
@@ -108,13 +105,16 @@ dependencies {
 }
 ```
 
-Bom includes:
+BOM includes:
 
-* Dropwizard BOM (io.dropwizard:dropwizard-bom)
-* Guice BOM (com.google.inject:guice-bom)
-* HK2 bridge (org.glassfish.hk2:guice-bridge) 
-* System rules, required for StartupErrorRule (com.github.stefanbirkner:system-rules)
-* Spock (org.spockframework:spock-core)
+BOM           | Artifact
+--------------|-------------------------
+Guicey itself | `ru.vyarus:dropwizard-guicey`
+Dropwizard BOM | `io.dropwizard:dropwizard-bom`
+Guice BOM | `com.google.inject:guice-bom`
+HK2 bridge | `org.glassfish.hk2:guice-bridge` 
+System rules (required for StartupErrorRule) | `com.github.stefanbirkner:system-rules`
+Spock | `org.spockframework:spock-core`
 
 Guicey extensions project provide extended BOM with guicey and all guicey modules included. 
 See [extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-bom) section for more details of BOM usage.

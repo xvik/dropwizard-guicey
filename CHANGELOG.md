@@ -1,4 +1,4 @@
-### 5.0.0 (unreleased)
+### 5.0.0 (2019-12-15)
 * Update to dropwizard 2.0.0
     - (breaking in jersey 2.26)
         * Jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
