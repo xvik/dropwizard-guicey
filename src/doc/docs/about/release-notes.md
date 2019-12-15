@@ -943,17 +943,99 @@ Extension [modules](../guide/modules.md) version now aligned with guicey version
 
 All extension bundles are guicey bundles now (thanks to lifecycles unification): `SpaBundle`, `ServerPagesBundle` (and relative bundles).
 
+### SPA
+
+Package notation may be used for more readable package declaration:
+
+```java
+.bundles(SpaBundle.adminApp("admin", "com.mycompany.adminapp", "/manager").build());
+```
+
 ### BOM
 
 `H2` and `dropwizard-flyway` versions were added to [bom](../extras/bom.md). 
 
 ### GSP
 
-`ServerPagesBundle.extendApp` now also returns bundle which must be registered. But there are also
-direct shortcut on application builder: `ServerPagesBundle.app(...).attachPaths(...)`.
+To simplify declaration, it is now possible to use package notation to declare resources:
+
+```java
+ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
+```
+
+But old path-style declaration will also work:
+
+```java
+ServerPagesBundle.app("projectName-ui", "/com/app/ui/", "/")
+```
+
+View rest mapping now can be declared:
+
+```java
+.bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
+        .mapViews("/view/projectName/ui/")
+```
+
+If mapping not declared then application name will be used as prefix: `/projectName-ui` (legacy behaviour)
+
+Additional view rest could be also mapped to sub url:
+
+```java
+.bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
+        .mapViews("/sub/path/", "/view/projectOther/ui/")
+```
+
+Additional assets locations could be declared directly:
+
+```java
+.bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
+        .attachAssets("some.other.package")
+```
+
+Assets may also be declared to sub url:
+
+```java
+.bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
+        .attachAssets("/sub/path/", "some.other.package")
+```
 
 [ServerPagesBundle](../extras/gsp.md) lifecycle is more predictable now as all configuration appear under initialization phase
 and only limited to guicey bundles.
+
+Extension call now also return bundle, which may be used to configure both extra assets and view mappings:
+
+```java
+.bundles(ServerPagesBundle.extendApp("projectName-ui")
+        .attachAssets("com.otherApp.ui.ext")
+        .mapViews("/sub/path/", "/view/projectOther/ui/")
+        .build())
+```
+
+Also extension bundle allow delayed configuration under run phase:
+
+```java
+.bundles(ServerPagesBundle.extendApp("projectName-ui")
+        .delayedConfiguration((env, assets, views) -> {
+            if (env.configuration().isExtensionsEnabled()) {
+                assets.attach("com.foo.bar")
+            }           
+         })
+        .build())
+```
+
+This might be important if configuration object is required for correct configuration.
+
+Console reporting for GSP application was improved to show all configured mappings (including sub paths).
+
+Removed dynamic rest assignment for direct templates support, now instead of it special ExceptionMapper is used
+(which removes many problems, appeared with rest approach).
+
+!!! attention 
+    New recommendation to put all viwe related rest under `/view/..` prefix to make it
+    clearly distiguish from application rest.
+
+!!! note
+    Just in case if anyone was using `PathUtils`, they were moved to guicey core with better test coverage and improved api.
 
 ### JDBI2
 
@@ -1281,7 +1363,7 @@ intercepted automatically and show under diagnostics stats sub reprot (`.printDi
 
 `ServerPagesBundle.extendApp` is not just a static call anymore: now returned guicey bundle must be also registered.
 If application is extended in the same bundle with registration (required extenions), it may now
-be scpecified directly in application builder: `ServerPagesBundle.app(...).attachPaths(...)`
+be scpecified directly in application builder: `ServerPagesBundle.app(...).attachAssets(...)`
 
 ### Installers
 
