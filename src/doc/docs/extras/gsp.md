@@ -17,7 +17,6 @@ Features:
 (like everything is stored in the same directory - easy to link css, js and other resources)
 * Multiple ui applications declaration with individual errors handling (error pages declaration like in servlet api, but not global)
 * Ability to extend applications (much like good old resources copying above exploded war in tomcat)
-* Pluggable ui applications (e.g. admin dashboard may be easily installed with a bundle)
 
 ## Problem
 
@@ -82,7 +81,7 @@ It is already obvious that asset servlet and templates are not play well togethe
 
 ### Solution  
 
-The solution is obvious: make asserts servlet as major resources supplier and with an additional filter to
+The solution is obvious: make assets servlet as major resources supplier and with an additional filter to
 detect template requests and redirect rendering to actual rest.
 
 So example above should become:
@@ -105,7 +104,7 @@ because it is queried by url `/index.ftl`: no difference with usual `index.html`
 When we need custom resource (most likely, for parameters mapping) we can still use it:
 
 ```java
-@Path("/ui/")
+@Path("/views/ui/")
 @Template("foo.ftl")
 @Produces(MediaType.TEXT_HTML)
 public class IndexResource {
@@ -140,14 +139,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-server-pages</artifactId>
-  <version>5.0.0-0-rc.2</version>
+  <version>5.0.0-0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-server-pages:5.0.0-0-rc.2'
+compile 'ru.vyarus.guicey:guicey-server-pages:5.0.0-0'
 ```
 
 See the most recent version in the badge above.
@@ -226,7 +225,7 @@ public class AppConfig extends Configuration {
 
 If `AppConfig#getViews` return `null` then empty map will be used instead as config.
 
-Additionally to direct yaml configuration binding, you can apply exact template engine modifications
+Additionally, to direct yaml configuration binding, you can apply exact template engine modifications
 
 ```java
 .bundles(ServerPagesBundle.builder()
@@ -249,11 +248,11 @@ Also, configuration is accessible from the bundle instance: `ServerPagesBundle#g
 Each GSP application is registered as separate bundle in main or admin context:
 
 ```java
-.bundles(ServerPagesBundle.app("com.project.ui", "/com/app/ui/", "/")
+.bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
                     .indexPage("index.ftl")
                     .build())
                     
-.bundles(ServerPagesBundle.adminApp("com.project.admin", "/com/app/admin/", "/admin")
+.bundles(ServerPagesBundle.adminApp("projectName-admin", "com.app.admin", "/admin")
                     .build())                    
 ```   
 
@@ -261,12 +260,13 @@ Unlimited number of applications may be registered on each context.
 
 
 ```java
-app("com.project.ui", "/com/app/ui/", "/")
+app("projectName-ui", "com.app.ui", "/")
 ```
 
-* `com.mycompany.ui` - unique(!) application name. Uniqueness is very important as name used for rest paths.
+* `projectName-ui` - unique(!) application name. Uniqueness is very important as name used for rest paths.
     To avoid collisions it's recommended to use domain-prefixed names to better identify application related resources. 
-* `/com/app/ui/` - path to resources in classpath (application "root" folder; the same meaning as in dropwizard-assets)
+* `com.app.ui` - classpath package with resources (application "root" folder; the same meaning as in dropwizard-assets);
+    Also, it may be configured as `/com/app/ui/`, but package notion is easier to understand 
 * `/` - application mapping url (in main or admin context; the same as in dropwizard-assets)
     (if context is prefixed (`server.applicationContextPath: /some` or `server.adminContextPath: /admin`) then GSP 
     application will be available under this prefix)
@@ -288,14 +288,27 @@ server:
 If application requires resources from multiple paths, use:
 
 ```java
-ServerPagesBundle.app("com.project.ui", "/com/app/path1/", "/")
-    .attachPaths("/com/app/path2/")
+ServerPagesBundle.app("projectName-ui", "com.app.path1", "/")
+    .attachAssets("com.app.path1")
     ...
 ```    
 
 For example, this can be useful to attach some shared resources.
 To attach webjars there is a [pre-defined shortcut](#webjars-usage).
 
+You can even attach resources path for exact sub url:
+
+```java
+ServerPagesBundle.app("projectName-ui", "com.app.path1", "/")
+    .attachAssets("/sub/path/", "com.app.path.sub")
+    ...
+``` 
+
+And for urls starting from `/sub/path/` application will look static resources
+(and templates) inside `/com/app/path/sub/` first, and only after that under root paths. 
+
+This way, you can map resources from different packages as you want. This is like
+if you copied everything from different packages into one place (like exploded war).
 
 ### Template engine constraint
 
@@ -305,7 +318,7 @@ may be even a 3rd party bundle) then it must be able to check required template 
 For example, this application requires freemarker:
 
 ```java
-.bundles(ServerPagesBundle.app("com.project.ui", "/com/app/ui/", "/")
+.bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
                     .requireRenderers("freemarker")
                     .build())
 ```
@@ -314,81 +327,86 @@ Template engine name is declared in `io.dropwizard.views.ViewRenderer#getConfigu
 
 ### Templates support
 
-As dropwizard-views are used under the hood, all templates are always rendered with
+As dropwizard-views is used under the hood, all templates are always rendered with
 rest endpoints. All these rest endpoints are part of global rest.
 
-But, in contrast to dropwizard-views, GSP must be able to differentiate rest endpoints
-by target application. That's why there is a naming convention for template resources mapping path:
-it must always start with application name.
+It is recommended to start all view rest with `/view/` to make it clearly distinguishable
+from application rest. Also, rest views, related to one GSP application must also start
+with a common prefix: for example, `/view/projectName/ui/..`.
 
-Let's see it on example.
-
-Suppose rest is re-mapped from root:
-
-```yaml
-server:
-  rootPath: '/rest/*'
-```
-
-And GSP application is registered with name `com.project.ui` under main context root path (`/`).
+You need to map required rest prefix in GSP application:
 
 ```java
-.bundles(ServerPagesBundle.app("com.project.ui", "/com/app/ui/", "/")
-                    .build())
-```  
+.bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
+                    .mapViews("/view/projectName/ui/")
+```                   
 
-So application related resources (powering views) paths must start with `com.project.ui/`.
+This will "map" all view rest paths after prefix directly to GSP application root.
+So if you have view resource `/view/projectName/ui/page1/action` you can access it
+relatively to application mapping root ("/" in the example above) as `/page1/action`.
 
-For each application default resource is always registered in order to render direct template files and so
-by default you will see in console:
+By default, if views mapping is not declared manually, it would be set to application name
+(`/...` -> `/projectName-ui/...`)
+
+Under startup dropwizard logs all registered rest enpoints, so you can always see original
+rest mapping paths. For each registered GSP application list of "visible" paths will be logged as: 
 
 ```
 INFO  [2019-06-07 04:10:47,978] io.dropwizard.jersey.DropwizardResourceConfig: The following paths were found for the configured resources:
 
-    GET     /rest/com.project.ui/{file:.*} (ru.vyarus.guicey.gsp.app.rest.DirectTemplateResource)
-    POST    /rest/com.project.ui/{file:.*} (ru.vyarus.guicey.gsp.app.rest.DirectTemplateResource)
+    GET     /rest/views/projectName/ui/sample (com.project.ui.SampleViewResource)
+    POST    /rest/views/projectName/ui/other (com.project.ui.SampleViewResource)
 
 INFO  [2019-06-07 04:10:47,982] ru.vyarus.guicey.gsp.app.ServerPagesApp: Server pages app 'com.project.ui' registered on uri '/*' in main context
 
     Static resources locations:
-        /com/app/ui/
+        com.app.ui
 
     Mapped handlers:
-        GET     /{file:.*}  (ru.vyarus.guicey.gsp.app.rest.DirectTemplateResource #get)
-        POST    /{file:.*}  (ru.vyarus.guicey.gsp.app.rest.DirectTemplateResource #post)
+        GET     /sample  (com.project.ui.SampleViewResource #sample)
+        POST    /other  (com.project.ui.SampleViewResource #other)
 ```
 
-Here you can see real rest mapping `GET     /rest/com.project.ui/{file:.*}` and
-how it could be used relative to application path `GET     /{file:.*}`. 
+Here you can see real rest mapping `GET     /rest/views/projectName/ui/sample` and
+how it could be used relative to application path `GET     /sample`. 
 
 This report will always contain all correct view paths which must simplify overall understanding:
 if path not appear in the report - it's incorrectly mapped and when it's appear - always use the path
 from application report to access it.
 
-So if we call `http://localhost:8080/template.ftl` it will be redirected on server
-into `/rest/com.project.ui/template.ftl` and handled by `DirectTemplateResource`
+But that's not all: you can actually map other rest prefixed to sub urls:
 
-!!! tip 
-    Templates in sub folders will be rendered the same way, e.g. `http://localhost:8080/sub/path/template.ftl`
-    will render `/com/app/ui/sub/path/template.ftl`. 
+```java
+.bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
+                    .mapViews("/sub/path/", "/view/projectName2/ui/something/")
+```
 
-When we declare custom resource to handle view it's path must start with application prefix:
-`@Path("/com.project.ui/mypage/")` which will be available as `http://localhost:8080/mypage/`
+This way, it is possible to combine rest endpoints, written for different applications
+(or simply prerare common view resource groups). Just note that in contrast to resources
+mapping, only one prefix may be mapped on each url!
 
-!!! attention: 
-    I know, it may seem not intuitive at first, but using redirection is the only way
-    to "merry" templates with static resources and bring usage comfort. Just forget about
-    real rest mappings (after correct declaration) and use application console report to know the real paths.
+You will also need to map static resources location accordingly if you use relative template paths.
+
+#### Direct templates
+
+You can also render template files without declaring view rest at all (good old jsp way).
+
+If we call supported template type directly like `http://localhost:8080/template.ftl` it will be recognized
+as direct template call and rendered. Template file must be placed under registered classpath path root:
+`/com/app/ui/template.ftl`.
+
+Templates in sub folders will be rendered the same way, e.g. `http://localhost:8080/sub/path/template.ftl`
+will render `/com/app/ui/sub/path/template.ftl`. 
 
 ### Template rest declaration
 
 Declaration differences with pure dropwizard-views:
 
-* `@Path` value must start with target application name (see the chapter above) 
+* `@Path` value must start with mapped prefix (see the chapter above) 
 * Resource class must be annotated with `@Template` (even without exact template declaration)
 * `TemplateView` must be used instead of dropwizard `View` as a base class for view models.
 
-Suppose we declaring page for gsp application `.app("com.project.ui", "/com/app/ui/", "/")`
+Suppose we declaring page for gsp application `.app("projectName-ui", "com.app.ui", "/")`
 
 As in pure views, in most cases we will need custom model object:
 
@@ -408,7 +426,7 @@ public class SampleView extends TemplateView {
     Custom model is optional - you can use `TemplateView` directly, as default "empty" model.
 
 ```java
-@Path("/com.project.ui/sample/")
+@Path("/views/projectName/ui/sample/")
 @Template("sample.ftl")
 public class SamplePage {
 
@@ -441,6 +459,11 @@ After application startup, new url must appear in GSP application console report
 If we call new page with `http://localhost:8080/sample/fred` we should see
 `Name: fred` as a result.
 
+!!! note 
+    Can pure dropwizard-views resources be used like that? Actually, yes, but
+    they must be annotated with `@Template` because not annotated resources are not 
+    considered as potential GSP application views (and will not be shown in console report).
+
 #### @Template
 
 `@Template` annotation must be used on ALL template resources. It may declare default
@@ -463,8 +486,8 @@ internally in order to not affect global api with GSP specific handling logic.
 Template path resolution:
 
 * If path starts with `/` then it would be resolved from classpath root
-* Path relative to resource class
-* Path relative to static resources location (`/com/app/ui/` in the example above) 
+* Resolution relative to resource class
+* Resolution relative to static resources location (`/com/app/ui/` in the example above) 
 
 Examples: 
 
@@ -476,7 +499,7 @@ Even if template is configured in the annotation, exact resource method could sp
 template directly in `TemplateView` constructor:
 
 ```java
-@Path("/com.project.ui/sample/")
+@Path("/views/projectName/ui/sample/")
 @Template("sample.ftl")  // default template
 public class SamplePage {
 
@@ -513,7 +536,7 @@ with model's `getContext()`, e.g.:
 In rest view resources it could be accessed with a static lookup: `TemplateContext.getInstance()`.
 
 This way you can always know current gsp application name, original url (before redirection to rest),
-root application mapping prefix and get origial request object (which may be required for error pages).
+root application mapping prefix and get original request object (which may be required for error pages).
 
 ### Index page
 
@@ -536,7 +559,7 @@ It could be:
 
 ### Error pages
 
-Each GSP application could declare it's own error pages (very similar to servlet api). 
+Each GSP application could declare its own error pages (very similar to servlet api). 
 
 It could be one global error page and different pages per status:
 
@@ -578,7 +601,7 @@ For example, even direct error template could show:
 For rest-powered error page:
 
 ```java
-@Path("/com.project.ui/error/")
+@Path("/views/projectName/ui/error/")
 @Template("error.ftl")
 public class ErrorPage {
 
@@ -658,7 +681,7 @@ As guicey SPA module can't be used directly with GSP, it's abilities is integrat
 be activated with:
 
 ```java
-.bundles(ServerPagesBundle.app("com.project.ui", "/com/app/ui/", "/")
+.bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
                     .spaRouting()
                     .build())
 ```
@@ -706,7 +729,7 @@ In order to achieve similar goals there is a application extension mechanism.
 For example we application:
 
 ```java
-.bundles(ServerPagesBundle.app("com.project.ui", "/com/app/ui/", "/")
+.bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
                     .build())
 ```
 
@@ -719,14 +742,16 @@ With multiple pages inside:
     style.css
 ```
 
-Each page could include style relatively as `style.css`. Most likely there will even
-be master template (freemarker) which unifies styles and common sscript installation.
+Each page could include style relatively as `style.css`. Most likely, there will even
+be master template (freemarker) which unifies styles and common script installation.
 
 This application is distributed as 3rd party bundle (jar). If we need to add one more page 
 to this application in our current dropwizard application, we can:
 
 ```java
-.bundles(ServerPagesBundle.extendApp("com.project.ui", "/com/otherApp/ui/ext"))
+.bundles(ServerPagesBundle.extendApp("projectName-ui")
+        .attachAssets("com.otherApp.ui.ext")
+        .build())
 ```
 
 And put another page into classpath:
@@ -755,6 +780,28 @@ There may be unlimited number of application extensions. If extended application
 is not available, it is not considered as an error: it's assumed as optional
 application extension, which will be activated if some 3rd party jar with GSP application  
 appear in classpath.
+
+You can also map addition rest prefixes:
+
+```java
+.bundles(ServerPagesBundle.extendApp("projectName-ui")
+        .mapViews("/sub/folder/", "/views/something/ext/")
+        .build())
+```        
+
+In some cases, extensions may depend on dropwizard configuration, but
+bundles created under initialization phase. To workaround this you can 
+use delayed extensions init:
+
+```java
+.bundles(ServerPagesBundle.extendApp("projectName-ui")
+        .delayedConfiguration((env, assets, views) -> {
+            if (env.configuration().isExtensionsEnabled()) {
+                assets.attach("com.foo.bar")
+            }           
+         })
+        .build())
+```
 
 ### Webjars usage
 
@@ -785,13 +832,15 @@ Under the hood `.attachWebjars()` use extensions mechanism and adds
 ```java
 ServerPagesBundle.app("com.project.ui", "/com/app/ui/", "/")
     ...
-    .attachPaths("META-INF/resources/webjars/")
+    .attachAssets("META-INF/resources/webjars/")
 ```
 
 OR
 
 ```java
-.bundles(ServerPagesBundle.extendApp("app name", "META-INF/resources/webjars/"))
+.bundles(ServerPagesBundle.extendApp("app name")
+    .attachAssets("META-INF/resources/webjars/")
+    .build())
 ```
 
 !!! tip

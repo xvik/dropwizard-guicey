@@ -57,14 +57,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-spa</artifactId>
-  <version>5.0.0-0-rc.2</version>
+  <version>5.0.0-0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-spa:5.0.0-0-rc.2'
+compile 'ru.vyarus.guicey:guicey-spa:5.0.0-0'
 ```
 
 See the most recent version in the badge above.
@@ -97,6 +97,9 @@ Example registration to admin context:
 
 Register "admin" application with resources in "/com/mycompany/adminapp/" package, served from "manager' 
 admin context (note that admin root is already used by dropwizard admin servlet).
+
+!!! tip 
+    Resources location can be declared both as path (`/com/mycompany/adminapp/`) or as package (`com.mycompany.adminapp`).
 
 ```
 http://localhost:8081/manager -> admin app index
