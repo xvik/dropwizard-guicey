@@ -94,7 +94,7 @@ dependencyManagement {
 }
 
 dependencies {
-    compile 'ru.vyarus:dropwizard-guicey:5.0.0'
+    compile 'ru.vyarus:dropwizard-guicey'
    
     // no need to specify versions
     compile 'io.dropwizard:dropwizard-auth'
