@@ -42,9 +42,9 @@ dependencyManagement {
 }
 
 dependencies {
-    compile 'ru.vyarus:dropwizard-guicey'
-   
     // no need to specify versions
+    compile 'ru.vyarus:dropwizard-guicey'
+       
     compile 'io.dropwizard:dropwizard-auth'
     compile 'com.google.inject:guice-assistedinject'   
      
