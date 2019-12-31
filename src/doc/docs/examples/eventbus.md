@@ -3,7 +3,7 @@
 Example of [guicey-eventbus](../extras/eventbus.md) extension usage.
 
 !!! abstract ""
-    Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/eventbus)
+    Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/ext-eventbus)
     
 The [eventbus extension](../extras/eventbus.md) is used for:
 
@@ -91,4 +91,4 @@ public void onMultipleEvents(BaseEvent event) {}
     or manually declared guice bean (using module) or bean created with guice AOT (because it's declared
     as dependency for other bean) will be searched for listener methods.
          
-See [a complete example](https://github.com/xvik/dropwizard-guicey-examples/tree/master/eventbus)         
+See [a complete example](https://github.com/xvik/dropwizard-guicey-examples/tree/master/ext-eventbus)         

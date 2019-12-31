@@ -70,7 +70,7 @@ Spock | `org.spockframework:spock-core`
 ## Usage
 
 !!! note ""
-    Full source of example application is [published here](https://github.com/xvik/dropwizard-guicey-examples/tree/master/getting-started)
+    Full source of example application is [published here](https://github.com/xvik/dropwizard-guicey-examples/tree/master/core-getting-started)
 
 Register guice bundle:
 

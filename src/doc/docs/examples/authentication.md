@@ -54,7 +54,7 @@ authentication the same way as described in dropwizard docs.
 If auto configuration is enabled, then the class will be resolved and installed automatically.
 
 !!! note ""
-    Complete [OAuth example source](https://github.com/xvik/dropwizard-guicey-examples/tree/master/auth)
+    Complete [OAuth example source](https://github.com/xvik/dropwizard-guicey-examples/tree/master/integration-auth)
 
 ## Chained auth
 
