@@ -20,6 +20,13 @@
     - out of the box support for plug-n-play plugins ([auto discoverable](guide/bundles.md#service-loader-lookup))
     - [diagnostic tools](guide/diagnostic/diagnostic-tools.md) (reports), support for [custom diagnostic tools](guide/hooks.md#diagnostic)   
 
+## Sponsors
+
+:   [![ZOYI](img/sponsors/zoyi.png)](https://zoyi.co "ZOYI Corporation")
+
+  
+<sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>
+
 ## How to use docs
 
 ### Introduction
@@ -39,4 +46,4 @@
 * [Modules repository](https://github.com/xvik/dropwizard-guicey-ext): extension [modules](guide/modules.md) (integrations) 
 are maintained in the separate repository
 * [Examples repository](https://github.com/xvik/dropwizard-guicey-examples) holds usage examples of main features usage, 
-dropwizard bundles integrations and extension modules samples.
+dropwizard bundles integrations and extension modules samples.  

@@ -34,7 +34,14 @@ Features:
     - out of the box support for plug-n-play plugins (auto discoverable)
     - diagnostic tools (reports), support for custom diagnostic tools
 
-### Thanks to
+### Sponsors
+
+&nbsp;&nbsp;&nbsp;&nbsp;[![ZOYI](src/doc/docs/img/sponsors/zoyi.png)](https://zoyi.co "ZOYI Corporation")
+
+  
+<sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>
+
+#### Thanks to
 
 * [Sébastien Boulet](https://github.com/gontard) ([intactile design](http://intactile.com)) for very useful feedback
 * [Nicholas Pace](https://github.com/segfly) for governator integration
