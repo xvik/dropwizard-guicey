@@ -22,7 +22,7 @@
 
 ## Sponsors
 
-:   [![ZOYI](img/sponsors/zoyi.png)](https://zoyi.co "ZOYI Corporation")
+:   [![Channel](img/sponsors/zoyi-ch.png)](https://channel.io "Channel")
 
   
 <sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>

@@ -36,7 +36,7 @@ Features:
 
 ### Sponsors
 
-&nbsp;&nbsp;&nbsp;&nbsp;[![ZOYI](src/doc/docs/img/sponsors/zoyi.png)](https://zoyi.co "ZOYI Corporation")
+&nbsp;&nbsp;&nbsp;&nbsp;[![Channel](src/doc/docs/img/sponsors/zoyi-ch.png)](https://channel.io "Channel")
 
   
 <sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>
