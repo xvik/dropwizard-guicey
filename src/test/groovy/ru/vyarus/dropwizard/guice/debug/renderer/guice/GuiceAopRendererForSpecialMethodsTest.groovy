@@ -43,30 +43,30 @@ class GuiceAopRendererForSpecialMethodsTest extends Specification {
         render(new GuiceAopConfig()) == """
 
     1 AOP handlers declared
-    └── GuiceAopRendererForSpecialMethodsTest\$App\$1/GuiceAopRendererForSpecialMethodsTest\$App\$1\$2    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    └── GuiceAopRendererForSpecialMethodsTest\$App\$1/GuiceAopRendererForSpecialMethodsTest\$App\$1\$1    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 
 
     1 bindings affected by AOP
     │
     └── Service    (r.v.d.g.d.r.g.GuiceAopRendererForSpecialMethodsTest)
-        ├── [SYNTHETIC] \$getStaticMetaClass()                                 GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── compare(Integer, Integer)                                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── [SYNTHETIC] compare(Object, Object)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── [SYNTHETIC] getMetaClass()                                        GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── [SYNTHETIC] getProperty(String)                                   GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── [SYNTHETIC] invokeMethod(String, Object)                          GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── [SYNTHETIC] methodMissing(String, Object)                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── [SYNTHETIC] propertyMissing(String)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── [SYNTHETIC] propertyMissing(String, Object)                       GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── reversed()                                                        GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── [SYNTHETIC] setMetaClass(MetaClass)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── [SYNTHETIC] setProperty(String, Object)                           GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── thenComparing(Comparator<? super Object>)                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── thenComparing(Function<? super Object, ? extends Object>)         GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── thenComparing(Function<? super Object, ? extends Object>, Comparator<? super Object>)      GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── thenComparingDouble(ToDoubleFunction<? super Object>)             GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        ├── thenComparingInt(ToIntFunction<? super Object>)                   GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
-        └── thenComparingLong(ToLongFunction<? super Object>)                 GuiceAopRendererForSpecialMethodsTest\$App\$1\$2
+        ├── [SYNTHETIC] \$getStaticMetaClass()                                 GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── compare(Integer, Integer)                                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── [SYNTHETIC] compare(Object, Object)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── [SYNTHETIC] getMetaClass()                                        GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── [SYNTHETIC] getProperty(String)                                   GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── [SYNTHETIC] invokeMethod(String, Object)                          GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── [SYNTHETIC] methodMissing(String, Object)                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── [SYNTHETIC] propertyMissing(String)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── [SYNTHETIC] propertyMissing(String, Object)                       GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── reversed()                                                        GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── [SYNTHETIC] setMetaClass(MetaClass)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── [SYNTHETIC] setProperty(String, Object)                           GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── thenComparing(Comparator<? super Object>)                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── thenComparing(Function<? super Object, ? extends Object>)         GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── thenComparing(Function<? super Object, ? extends Object>, Comparator<? super Object>)      GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── thenComparingDouble(ToDoubleFunction<? super Object>)             GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── thenComparingInt(ToIntFunction<? super Object>)                   GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        └── thenComparingLong(ToLongFunction<? super Object>)                 GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
 """ as String;
     }
 
