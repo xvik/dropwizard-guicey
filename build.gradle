@@ -3,7 +3,7 @@ plugins {
     id 'groovy'
     id 'jacoco'
     id 'project-report'
-    id 'ru.vyarus.java-lib' version '1.1.2'
+    id 'ru.vyarus.java-lib' version '2.0.0'
     id 'ru.vyarus.github-info' version '1.1.0'
     id 'ru.vyarus.quality' version '4.0.0'
     id 'com.jfrog.bintray' version '1.8.4'
