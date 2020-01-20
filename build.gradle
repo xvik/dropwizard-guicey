@@ -85,7 +85,6 @@ description = 'Dropwizard guice integration'
 github {
     user = 'xvik'
     license = 'MIT'
-    vcsUrl = 'https://github.com/xvik/dropwizard-guicey'
 }
 
 python.pip 'mkdocs:1.0.4',
