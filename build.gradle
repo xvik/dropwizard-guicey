@@ -3,8 +3,8 @@ plugins {
     id 'groovy'
     id 'jacoco'
     id 'project-report'
-    id 'ru.vyarus.java-lib' version '1.1.2'
-    id 'ru.vyarus.github-info' version '1.1.0'
+    id 'ru.vyarus.java-lib' version '2.1.0'
+    id 'ru.vyarus.github-info' version '1.2.0'
     id 'ru.vyarus.quality' version '4.0.0'
     id 'com.jfrog.bintray' version '1.8.4'
     id 'net.researchgate.release' version '2.8.1'
@@ -68,15 +68,15 @@ dependencies {
     provided 'com.github.spotbugs:spotbugs-annotations:3.1.2'
     provided "org.glassfish.hk2:guice-bridge"
 
-    compile 'com.google.inject:guice'
-    compile 'com.google.inject.extensions:guice-servlet'
-    compile 'io.dropwizard:dropwizard-core'
-    compile 'ru.vyarus:generics-resolver:3.0.2'
+    implementation 'com.google.inject:guice'
+    implementation 'com.google.inject.extensions:guice-servlet'
+    implementation 'io.dropwizard:dropwizard-core'
+    implementation 'ru.vyarus:generics-resolver:3.0.2'
 
-    testCompile 'io.dropwizard:dropwizard-auth'
-    testCompile 'org.glassfish.jersey.ext:jersey-proxy-client'
-    testCompile 'cglib:cglib-nodep:3.3.0'
-    testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
+    testImplementation 'io.dropwizard:dropwizard-auth'
+    testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
+    testImplementation 'cglib:cglib-nodep:3.3.0'
+    testImplementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
 }
 
 group = 'ru.vyarus'
