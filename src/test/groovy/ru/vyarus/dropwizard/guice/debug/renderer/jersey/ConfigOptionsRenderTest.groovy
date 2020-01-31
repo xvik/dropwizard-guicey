@@ -101,22 +101,22 @@ class ConfigOptionsRenderTest extends Specification {
         Object                         JacksonMessageBodyProvider   (i.d.jersey.jackson)                     [*/*]
         Reader                         ReaderProvider               (o.g.j.m.internal)                       [text/plain, */*]
         RenderedImage                  RenderedImageProvider        (o.g.j.m.internal)                       [image/*, application/octet-stream]
-        StreamSource                   StreamSourceReader           (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
-        SAXSource                      SaxSourceReader              (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
         DOMSource                      DomSourceReader              (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
+        SAXSource                      SaxSourceReader              (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
+        StreamSource                   StreamSourceReader           (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
         String                         StringMessageProvider        (o.g.j.m.internal)                       [text/plain, */*]
         T[], Collection<T>             App                          (o.g.j.j.i.XmlCollectionJaxbProvider)    [application/xml]
-        T[], Collection<T>             Text                         (o.g.j.j.i.XmlCollectionJaxbProvider)    [text/xml]
         T[], Collection<T>             General                      (o.g.j.j.i.XmlCollectionJaxbProvider)    [*/*]
+        T[], Collection<T>             Text                         (o.g.j.j.i.XmlCollectionJaxbProvider)    [text/xml]
         JAXBElement<Object>            App                          (o.g.j.j.i.XmlJaxbElementProvider)       [application/xml]
-        JAXBElement<Object>            Text                         (o.g.j.j.i.XmlJaxbElementProvider)       [text/xml]
         JAXBElement<Object>            General                      (o.g.j.j.i.XmlJaxbElementProvider)       [*/*,*/*+xml]
+        JAXBElement<Object>            Text                         (o.g.j.j.i.XmlJaxbElementProvider)       [text/xml]
         Object                         App                          (o.g.j.j.i.XmlRootElementJaxbProvider)   [application/xml]
-        Object                         Text                         (o.g.j.j.i.XmlRootElementJaxbProvider)   [text/xml]
         Object                         General                      (o.g.j.j.i.XmlRootElementJaxbProvider)   [*/*]
+        Object                         Text                         (o.g.j.j.i.XmlRootElementJaxbProvider)   [text/xml]
         Object                         App                          (o.g.j.j.i.XmlRootObjectJaxbProvider)    [application/xml]
-        Object                         Text                         (o.g.j.j.i.XmlRootObjectJaxbProvider)    [text/xml]
         Object                         General                      (o.g.j.j.i.XmlRootObjectJaxbProvider)    [*/*]
+        Object                         Text                         (o.g.j.j.i.XmlRootObjectJaxbProvider)    [text/xml]
 """ as String;
     }
 
@@ -151,14 +151,14 @@ class ConfigOptionsRenderTest extends Specification {
         String                         StringMessageProvider        (o.g.j.m.internal)                       [text/plain, */*]
         Object                         ValidationErrorMessageBodyWriter (o.g.j.s.v.internal)
         T[], Collection<T>             App                          (o.g.j.j.i.XmlCollectionJaxbProvider)    [application/xml]
-        T[], Collection<T>             Text                         (o.g.j.j.i.XmlCollectionJaxbProvider)    [text/xml]
         T[], Collection<T>             General                      (o.g.j.j.i.XmlCollectionJaxbProvider)    [*/*]
+        T[], Collection<T>             Text                         (o.g.j.j.i.XmlCollectionJaxbProvider)    [text/xml]
         JAXBElement<Object>            App                          (o.g.j.j.i.XmlJaxbElementProvider)       [application/xml]
-        JAXBElement<Object>            Text                         (o.g.j.j.i.XmlJaxbElementProvider)       [text/xml]
         JAXBElement<Object>            General                      (o.g.j.j.i.XmlJaxbElementProvider)       [*/*,*/*+xml]
+        JAXBElement<Object>            Text                         (o.g.j.j.i.XmlJaxbElementProvider)       [text/xml]
         Object                         App                          (o.g.j.j.i.XmlRootElementJaxbProvider)   [application/xml]
-        Object                         Text                         (o.g.j.j.i.XmlRootElementJaxbProvider)   [text/xml]
         Object                         General                      (o.g.j.j.i.XmlRootElementJaxbProvider)   [*/*]
+        Object                         Text                         (o.g.j.j.i.XmlRootElementJaxbProvider)   [text/xml]
 """ as String;
     }
 

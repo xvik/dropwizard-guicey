@@ -1,3 +1,5 @@
+* Update to dropwizard 2.0.1
+
 ### 5.0.0 (2019-12-15)
 * Update to dropwizard 2.0.0
     - (breaking in jersey 2.26)

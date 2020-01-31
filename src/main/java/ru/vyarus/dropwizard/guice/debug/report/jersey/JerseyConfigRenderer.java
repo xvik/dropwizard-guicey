@@ -51,7 +51,12 @@ public class JerseyConfigRenderer implements ReportRenderer<JerseyConfig> {
             return priority == null ? Priorities.USER : priority.value();
         }).thenComparing(it -> {
             final Class<?> type = it.getClass();
-            return type.isMemberClass() ? type.getDeclaringClass().getSimpleName() : type.getSimpleName();
+            if (type.isMemberClass()) {
+                // use both host class and inner class names to grant predictable order
+                return type.getDeclaringClass().getSimpleName() + "." + type.getSimpleName();
+            } else {
+                return type.getSimpleName();
+            }
         }).thenComparing(it -> it.getClass().getPackage().getName()));
 
         res.append(NEWLINE).append(TAB).append(ProviderRenderUtil.getTypeName(ext)).append(NEWLINE);
