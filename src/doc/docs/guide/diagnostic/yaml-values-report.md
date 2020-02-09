@@ -8,7 +8,12 @@ GuiceBundle.builder()
     .printConfigurationBindings()
      // or printCustomConfigurationBindings() to avoid dropwizard bindings 
     .build()
-```
+```     
+
+!!! note
+    Even if custom binding report selected (`printCustomConfigurationBindings()`), guicey will always
+    bind all bindings, including dropwziard `Configuration` class. Custom config report could just shows 
+    less for simplicity.  
 
 Will print:
 
