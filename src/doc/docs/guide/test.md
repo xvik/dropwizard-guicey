@@ -272,7 +272,7 @@ If you use [spock framework](http://spockframework.org) you can use spock specif
 
 Both extensions allows using injections directly in specifications (like spock-guice).
 
-`@UseGuiceyConfiguration` extension could be used to apply [configuration hook](hooks.md) 
+`@UseGuiceyHooks` extension could be used to apply [configuration hook](hooks.md) 
 common for all tests
 
 ### Spock lifecycle hooks
@@ -389,7 +389,7 @@ class MyHook implements GuiceyConfigurationHook {}
 When you need to register configurations common for all tests, declare hook at the base test class:
 
 ```java
-UseGuiceyConfiguration(MyBaseHook)
+@UseGuiceyHooks(MyBaseHook)
 class BaseTest extends Specification {
     
 }
@@ -403,7 +403,7 @@ class SomeTest extends BaseTest {}
     (to apply some more test-specific configuration).
 
 !!! warning
-    Only one `@UseGuiceyConfiguration` declaration may be used in test hierarchy:
+    Only one `@UseGuiceyHooks` declaration may be used in test hierarchy:
     for example, you can't declare it in base class and then another one on extended class
     - base for a group of tests. This is spock limitation (only one extension will actually work)
     but should not be an issue for most cases.
