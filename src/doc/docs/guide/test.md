@@ -147,7 +147,7 @@ For web component tests (servlets, filters, resources) use
 To access guice beans use injector lookup:
 
 ```java
-InjectorLookup.getInjector(RULE.getApplication()).getBean(MyService.class);
+InjectorLookup.getInstance(RULE.getApplication(), MyService.class).get();
 ```
 
 ### Customizing guicey configuration
