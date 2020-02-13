@@ -120,7 +120,7 @@ So when you need to avoid redundant bundle instances, you can:
     always be registered first, and bundle obtained with lookup mechansm would be considered 
     as duplicate and not used (for example, [eventbus bundle](../extras/eventbus.md) use this)
 
-## Bundle technics
+## Bundle techniques
 
 ### Optional extensions
 

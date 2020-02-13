@@ -33,11 +33,13 @@
 
 * [**Getting started**](getting-started.md) guide describes installation and shows core usage examples
 * [**Concepts overview**](concepts.md) guide introduce core guicey concepts and explains differences with pure dropwizard usage
+* [**Gucie**](guice.md) the essence of guice integration
+* [**Testing**](tests.md) describes integration testing techniques
 
 ### Reference
-* [**User guide**](guide/configuration.md) section contain detailed features descriptions. Good to read, but if no time, read as you need it.
-* [**Installers**](installers/resource.md) section describes all guicey installers. Use it as a *extensions hand book*.
-* [**Modules**](guide/modules.md) extension modules guide (*modules hand book*).
+* [**User guide**](guide/configuration.md) contain detailed features descriptions. Good to read, but if no time, read as you need it.
+* [**Installers**](installers/resource.md) describes all guicey installers. Use it as a *extensions hand book*.
+* [**Modules**](guide/modules.md) extension modules 
 * [**Examples**](examples/authentication.md) important usage examples. Look also [examples repository](https://github.com/xvik/dropwizard-guicey-examples) for additional examples. 
 
 ## Sources structure

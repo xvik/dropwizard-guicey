@@ -62,6 +62,8 @@ nav:
     - Home: index.md
     - Getting started: getting-started.md
     - Concepts overview: concepts.md
+    - Guice: guice.md
+    - Testing: tests.md
     - User guide:
       - Configuration: guide/configuration.md
       - Extensions: guide/extensions.md
