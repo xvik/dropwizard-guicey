@@ -4,7 +4,7 @@ You can use all existing [dropwizard arsenal](https://www.dropwizard.io/en/stabl
 
 ## Theory
 
-Guicey provides [a lot of tools](guide/test.md) for writing integration tests.
+Guicey intended to shine in integration tests: it provides [a lot of tools](guide/test.md) for application modification.
 
 The most important is [hooks mechanism](guide/hooks.md) which allows you to re-configure
 existing application. There are two main testing approaches:
@@ -57,9 +57,9 @@ Here [dropwizard rule](https://www.dropwizard.io/en/stable/manual/testing.html#i
 application startup and [hooks rule](guide/test.md#customizing-guicey-configuration)
 used **around** dropwizard rule to re-configure application:
 
-- remove SecurityOnlyBundle
-- remove DaoModule
-- add DaoModule
+- remove `SecurityOnlyBundle`
+- remove `DaoModule`
+- add `MockDaoModule`
 
 Note that this way you can [disable everything](guide/disables.md): module, extensions, guicey and
 dropwizard bundles and installers.
@@ -182,7 +182,7 @@ then use special [startup errors rule](guide/test.md#dropwizard-startup-error) w
 ## Spock
 
 You can use groovy-based [Spock framework](http://spockframework.org/) instead of junit. 
-Spock tests are much easier to write (with you can write less code) and resulted tests are more expressive.
+Spock tests are much easier to write (you can write less code) and more expressive.
 
 Guicey provides all [required extensions](guide/test.md#spock) to write tests above with spock.
 For example, the first example will look like:

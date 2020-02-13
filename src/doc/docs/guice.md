@@ -6,8 +6,8 @@
 
 You can see all available bindings from your configuration using [configuration report](guide/guice/bindings.md#configuration-bindings-report).    
     
-Or you can simply enable full guice report [.printAllGuiceBindings()](http://xvik.github.io/dropwizard-guicey/5.0.0/guide/diagnostic/guice-report/)
-and see everything under `GuiceBootsrapModule`:
+Or you can simply enable full guice report ([.printAllGuiceBindings()](http://xvik.github.io/dropwizard-guicey/5.0.0/guide/diagnostic/guice-report/))
+and see all added bindings under `GuiceBootsrapModule`:
 
 ```
  7 MODULES with 106 bindings
@@ -116,11 +116,11 @@ Auto scan and manual declaration is essentially the same: guicey have extension 
 In most cases it would be just `bind(Extension.class)` (but some installers can do more sophisticated bindings, 
 like [plugins installer](installers/plugin.md)).
 
-As you can see, in most cases extension is constructed by guice and so AOP features will work.
+As you can see, in all cases extension is constructed by guice and so AOP features will work.
 
 !!! note
-    While HK2 is still used instance management may be [delegated to HK2](http://xvik.github.io/dropwizard-guicey/5.0.0/guide/hk2/#hk2-delegation)
-    but it is not used in core guicey (just an ability, because this is almost never required) 
+    While HK2 is still used, instance management may be [delegated to HK2](http://xvik.github.io/dropwizard-guicey/5.0.0/guide/hk2/#hk2-delegation)
+    but it is not used in core guicey (just an ability; this is almost never required) 
 
 ## Servlets and filters
 
@@ -161,7 +161,7 @@ Module module = Elements.getModule(elements)
 ```
 
 And so guicey [injector factory](guide/guice/injector.md#injector-factory) will receive this 
-synthetic module. So if you need access to raw module, you can either do it with [even](guide/events.md)
+synthetic module. So if you need access to raw module, you can either do it with [event](guide/events.md)
 or [disable modules analysis](guide/guice/module-analysis.md#disabling-analysis) (but in this case some features would not work)
 
 !!! note

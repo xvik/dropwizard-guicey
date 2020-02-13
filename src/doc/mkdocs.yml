@@ -58,12 +58,15 @@ markdown_extensions:
   - pymdownx.smartsymbols
   - pymdownx.superfences
 
+dev_addr: 127.0.0.1:3001
+
 nav:
     - Home: index.md
     - Getting started: getting-started.md
     - Concepts overview: concepts.md
     - Guice: guice.md
     - Testing: tests.md
+    - Decomposition: decomposition.md
     - User guide:
       - Configuration: guide/configuration.md
       - Extensions: guide/extensions.md

@@ -445,16 +445,6 @@ registering dropwizard bundles through guicey api.
     So if there would be one bundle registered directly in dropwizard and 
     another with guicey api - guicey will not detect duplicate.
 
-
-## Guice bindings overrides
-
-Guice allows you to override any binding using `Modules.override()`. 
-With it you can override any service in context. Guicey provides [direct shortcut for using this feature](guide/guice/override.md). 
-
-Mostly, this is handful for tests, but could be used to override some service, 
-registered by 3rd party module (probably registered by some bundle).
-
-  
 ## Options
 
 Dropwizard configuration covers most configuration cases, except development specific cases.
