@@ -157,7 +157,7 @@ You can apply configuration hook using rule:
 
 ```java
 // there may be exact class instead of lambda
-new GuiceyConfigurationRule((builder) -> builder.modules(...))
+new GuiceyHooksRule((builder) -> builder.modules(...))
 ```
 
 To use it with `DropwizardAppRule` or `GuiceyAppRule` you will have to apply explicit order:
@@ -166,7 +166,7 @@ To use it with `DropwizardAppRule` or `GuiceyAppRule` you will have to apply exp
 static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
 @ClassRule
 public static RuleChain chain = RuleChain
-       .outerRule(new GuiceyConfigurationRule((builder) -> builder.modules(...)))
+       .outerRule(new GuiceyHooksRule((builder) -> builder.modules(...)))
        .around(RULE);
 ```
 
@@ -180,7 +180,7 @@ in base test class and use it in chain (at each test):
 ```java
 public class BaseTest {
     // IMPORTANT no @ClassRule annotation here!
-     static GuiceyConfigurationRule BASE = new GuiceyConfigurationRule((builder) -> builder.modules(...))
+     static GuiceyHooksRule BASE = new GuiceyHooksRule((builder) -> builder.modules(...))
  }
 
  public class SomeTest extends BaseTest {
@@ -189,7 +189,7 @@ public class BaseTest {
      public static RuleChain chain = RuleChain
         .outerRule(BASE)
         // optional test-specific staff
-        .around(new GuiceyConfigurationRule((builder) -> builder.modules(...)) 
+        .around(new GuiceyHooksRule((builder) -> builder.modules(...)) 
         .around(RULE);
  }
 ``` 
