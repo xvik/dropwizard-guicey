@@ -1774,16 +1774,16 @@
 used for extensions registration (configuration amount reduced).</p>
 <p>This chapter describe only re-usable logc decomposition.</p>
 </div>
-<p>In guicey: guicey bundle (<code>GuiceyBundle</code>), guice module (<code>Module</code>) and dropwizard bundle (<code>ConfiguredBundle</code>).
+<p>In guicey we have: guicey bundle (<code>GuiceyBundle</code>), guice module (<code>Module</code>) and dropwizard bundle (<code>ConfiguredBundle</code>).
 This could confuse.</p>
 <ul>
 <li>There are existing <a href="https://modules.dropwizard.io/thirdparty/">dropwizard modules</a> - <code>ConfiguredBundle</code></li>
-<li>Existing <a href="https://github.com/google/guice/wiki/3rdPartyModules">guice modules</a> (outdated list) - <code>Module</code></li>
+<li>Existing <a href="https://github.com/google/guice/wiki/3rdPartyModules">guice modules</a> (outdated list, just as an exampel) - <code>Module</code></li>
 <li>And <a href="../guide/modules/">guicey extensions</a> - <code>GuiceyBundle</code></li>
 </ul>
 <p>All these modules are supposed to be used together (obviously). In some cases, 
-guicey explicitly provides wrapping modules (e.g. <a href="../extras/jdbi3/">jdbi</a> - wrapper for dropwizard module).
-But such wrappers usually provide additional abilities (impossible with pure module) and
+guicey explicitly provides wrapping modules (e.g. <a href="../extras/jdbi3/">jdbi</a> - wrapper for dropwizard module),
+but such wrappers usually provide additional abilities (impossible with pure module) and
 not driven by inability to use a raw module.</p>
 <h2 id="guicey-bundle">Guicey bundle<a class="headerlink" href="#guicey-bundle" title="Permanent link">&para;</a></h2>
 <p>As it <a href="../concepts/#bundles">was described</a>, guicey have to introduce its own <a href="../guide/bundles/">bundle</a> because guicey provides
@@ -1848,10 +1848,10 @@ and remaining instance would have different configuration (confusion point).  </
 But this may be important with <a href="#shared-state">shared state</a>.</p>
 <h2 id="bundle-vs-module">Bundle vs Module<a class="headerlink" href="#bundle-vs-module" title="Permanent link">&para;</a></h2>
 <p>When extracting functionality into re-usable module always start with a bundle.
-Guice module, most likely will be required too.</p>
+Guice module, most likely, will be required too.</p>
 <p>Logic should be separated as:</p>
 <ul>
-<li><em>Guice module</em> is responsible for guice bindings and is not aware of dropwizard. </li>
+<li><em>Guice module</em> is responsible for guice bindings and should not be aware of dropwizard. </li>
 <li><em>Bundle</em> works with dropwizard: extract required configuration for creating module and do other registrations.</li>
 </ul>
 <p>That's an ideal case. But, for example, if you need to apply some bindings based on configuration only 
@@ -1887,7 +1887,7 @@ this configuration inside its main configuration:</p>
 
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This is not a recommended way! It was shown just to show that guice module <em>could</em> be used
+<p>This is not a recommended way! It was shown just to demonstrate that guice module <em>could</em> be used
 without bundle. It's better to use declaration bundle instead:</p>
 <div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ModuleImpl</span> <span class="kd">extends</span> <span class="n">AbstractBundle</span> <span class="o">{</span>
 
@@ -1918,7 +1918,7 @@ without bundle. It's better to use declaration bundle instead:</p>
 <h2 id="bundle-tips">Bundle tips<a class="headerlink" href="#bundle-tips" title="Permanent link">&para;</a></h2>
 <p>These tips show various techniques for developing bundles.<br />
 Mostly, these tips are based on developing <a href="https://github.com/xvik/dropwizard-guicey-ext">guicey extensions</a>.
-Use extensions sources as examples.</p>
+(look extensions sources as examples).</p>
 <h3 id="uniqueness">Uniqueness<a class="headerlink" href="#uniqueness" title="Permanent link">&para;</a></h3>
 <p>For everything that is registered "by instance" applied <a href="../guide/deduplication/">de-duplication mechanism</a>.</p>
 <p>You can use it to grant only one instance of <a href="../guide/bundles/#de-duplication">bundle</a> by <code>extends UniqueGuiceyBundle</code>
@@ -1928,7 +1928,7 @@ for example, to de-duplicate only instance with the same constructor arguments).
 (<code>MyModule extends UniqueModule</code>).</p>
 <h3 id="auto-loaded-bundle">Auto-loaded bundle<a class="headerlink" href="#auto-loaded-bundle" title="Permanent link">&para;</a></h3>
 <p>Auto loading based on guicey <a href="../guide/bundles/#service-loader-lookup">bundles lookup</a>.</p>
-<p>Be aware that user may switch off bundles lookup (with <code>.disableBundleLookup()</code> or <a href="../guide/bundles/#customizing-lookup-mechanism">custom lookup</a>).</p>
+<p>Be aware that user may switch off bundles lookup (with <code>.disableBundleLookup()</code>) or apply <a href="../guide/bundles/#customizing-lookup-mechanism">custom lookup</a>).</p>
 <h4 id="auto-load-override">Auto load override<a class="headerlink" href="#auto-load-override" title="Permanent link">&para;</a></h4>
 <p>If your bundle provides configuration, but you still want to load it automatically with the default configuration,
 then you can use <a href="../guide/bundles/#de-duplication">bundle uniquness</a>:</p>
@@ -1936,7 +1936,7 @@ then you can use <a href="../guide/bundles/#de-duplication">bundle uniquness</a>
 </pre></div>
 
 <p>Now only one bundle instance is allowed and, if user register bundle manually,
-bundle from lookup will simply not be applied. <a href="../extras/lifecycle-annotations/">lifecycle annotations</a> module use this technique.</p>
+bundle from lookup will simply be ignored. <a href="../extras/lifecycle-annotations/">Lifecycle annotations</a> module use this technique.</p>
 <h3 id="optional-extensions">Optional extensions<a class="headerlink" href="#optional-extensions" title="Permanent link">&para;</a></h3>
 <p>All extensions must be registered under initialization phase, when configuration is not yet available
 and so it is not possible to implement optional extension registration. </p>
@@ -2206,7 +2206,7 @@ bundles, which use or appends to this global state.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This will work only for guicey bundles! Registered dropwizard bundles may
-execute before or after this events: events broadcasted from main dropwizard 
+execute before or after these events: events broadcast from main dropwizard 
 <code>GuiceBundle</code> run method, so other dropwizard bundles, registered after guice bundle
 will run after it. 
 It is assumed that guicey bundles used for most configurations (especially in complex

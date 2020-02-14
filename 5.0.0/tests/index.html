@@ -415,8 +415,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#theory" class="md-nav__link">
-    Theory
+  <a href="#guicey-tests" class="md-nav__link">
+    Guicey tests
   </a>
   
     <nav class="md-nav">
@@ -1492,8 +1492,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#theory" class="md-nav__link">
-    Theory
+  <a href="#guicey-tests" class="md-nav__link">
+    Guicey tests
   </a>
   
     <nav class="md-nav">
@@ -1573,14 +1573,14 @@
                 
                 
                 <h1 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h1>
-<p>You can use all existing <a href="https://www.dropwizard.io/en/stable/manual/testing.html">dropwizard arsenal</a> for unit tests.</p>
-<h2 id="theory">Theory<a class="headerlink" href="#theory" title="Permanent link">&para;</a></h2>
+<p>You can use all existing <a href="https://www.dropwizard.io/en/stable/manual/testing.html">dropwizard testing tools</a> for unit tests.</p>
+<h2 id="guicey-tests">Guicey tests<a class="headerlink" href="#guicey-tests" title="Permanent link">&para;</a></h2>
 <p>Guicey intended to shine in integration tests: it provides <a href="../guide/test/">a lot of tools</a> for application modification.</p>
 <p>The most important is <a href="../guide/hooks/">hooks mechanism</a> which allows you to re-configure
 existing application. There are two main testing approaches:</p>
 <ul>
 <li>Disable everything not required and register custom versions <strong>instead</strong></li>
-<li>Override some bindings (pure guice <code>Modules.override()</code> method)</li>
+<li><strong>Override</strong> some bindings (pure guice <code>Modules.override()</code> method)</li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -1688,6 +1688,22 @@ override correctness.</p>
 <div class="codehilite"><pre><span></span><span class="n">InjectorLookup</span><span class="o">.</span><span class="na">getInjector</span><span class="o">(</span><span class="n">RULE</span><span class="o">.</span><span class="na">getApplication</span><span class="o">()).</span><span class="na">getBean</span><span class="o">(</span><span class="n">MyService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 </pre></div>
 
+<p>Also, the following trick may be used to inject test fields:</p>
+<div class="codehilite"><pre><span></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTest</span> <span class="o">{</span>
+
+    <span class="nd">@ClassRule</span>
+    <span class="kd">static</span> <span class="n">DropwizardAppRule</span><span class="o">&lt;</span><span class="n">TestConfiguration</span><span class="o">&gt;</span> <span class="n">RULE</span> <span class="o">=</span> <span class="o">...</span>
+
+    <span class="nd">@Inject</span> <span class="n">MyService</span> <span class="n">service</span><span class="o">;</span>
+    <span class="nd">@Inject</span> <span class="n">MyOtherService</span> <span class="n">otherService</span><span class="o">;</span>
+
+    <span class="nd">@Before</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUp</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">InjectorLookup</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">RULE</span><span class="o">.</span><span class="na">getApplication</span><span class="o">()).</span><span class="na">get</span><span class="o">().</span><span class="na">injectMemebers</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+    <span class="o">}</span>                    
+<span class="o">}</span>
+</pre></div>
+
 <h2 id="lightweight-tests">Lightweight tests<a class="headerlink" href="#lightweight-tests" title="Permanent link">&para;</a></h2>
 <p><code>DropwizardAppRule</code> runs complete application, including web context (requires open ports).
 But in many cases, you just need a working <code>Injector</code> to check core application logic.</p>
@@ -1729,8 +1745,7 @@ then use special <a href="../guide/test/#dropwizard-startup-error">startup error
 Spock tests are much easier to write (you can write less code) and more expressive.</p>
 <p>Guicey provides all <a href="../guide/test/#spock">required extensions</a> to write tests above with spock.
 For example, the first example will look like:</p>
-<div class="codehilite"><pre><span></span><span class="nd">@UseDropwizardApp</span><span class="o">(</span><span class="n">App</span><span class="o">)</span>
-<span class="nd">@UseGuiceyHooks</span><span class="o">(</span><span class="n">Hook</span><span class="o">)</span>
+<div class="codehilite"><pre><span></span><span class="nd">@UseDropwizardApp</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">App</span><span class="o">,</span> <span class="n">hooks</span> <span class="o">=</span> <span class="o">[</span><span class="n">Hook</span><span class="o">])</span>
 <span class="kd">class</span> <span class="nc">MyTest</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>    
 
     <span class="nd">@Inject</span>
@@ -1756,7 +1771,20 @@ For example, the first example will look like:</p>
 <span class="o">}</span>
 </pre></div>
 
-<p>Note that in spock tests you can use injection of beans directly.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If hooks are common for all tests, then they could be moved to base class:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@UseGuiceyHooks</span><span class="o">(</span><span class="n">Hook</span><span class="o">)</span>
+<span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">BaseTest</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+    <span class="c1">// hook class here </span>
+<span class="o">}</span>
+
+<span class="nd">@UseDropwizardApp</span><span class="o">(</span><span class="n">App</span><span class="o">)</span>
+<span class="kd">class</span> <span class="nc">MyTest</span> <span class="kd">extends</span> <span class="n">BaseTest</span> <span class="o">{</span> 
+</pre></div>
+
+</div>
+<p>Note that in spock tests fields injection in test works automatically.</p>
 <p>Lightweight guicey tests are available through <a href="../guide/test/#useguiceyapp">@UseGuiceyApp</a> annotation.</p>
 <p>Overriding configuration properties:</p>
 <div class="codehilite"><pre><span></span><span class="nd">@UseDropwizardApp</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">App</span><span class="o">,</span>

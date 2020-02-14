@@ -1548,9 +1548,8 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>It is important to say that guicey <strong>did not apply any "guice magic"</strong>. Guicey just register
-additional bindings, which you can use in your beans. </p>
+additional bindings, which you can use in your beans.  </p>
 </div>
-<p>You can see all available bindings from your configuration using <a href="../guide/guice/bindings/#configuration-bindings-report">configuration report</a>.    </p>
 <p>Or you can simply enable full guice report (<a href="http://xvik.github.io/dropwizard-guicey/5.0.0/guide/diagnostic/guice-report/">.printAllGuiceBindings()</a>)
 and see all added bindings under <code>GuiceBootsrapModule</code>:</p>
 <div class="codehilite"><pre><span></span> 7 MODULES with 106 bindings
@@ -1564,6 +1563,7 @@ and see all added bindings under <code>GuiceBootsrapModule</code>:</p>
 
 <h2 id="added-bindings">Added bindings<a class="headerlink" href="#added-bindings" title="Permanent link">&para;</a></h2>
 <p>All applied bindings are described in <a href="../guide/guice/bindings/">the user guide</a>.</p>
+<p>Main objects:</p>
 <ul>
 <li><code>io.dropwizard.setup.Bootstrap</code> </li>
 <li><code>io.dropwizard.Configuration</code></li>
@@ -1625,12 +1625,6 @@ entire configuration object. Often this removes boilerplate when one option is u
 <div class="codehilite"><pre><span></span><span class="nd">@Inject</span> <span class="nd">@Config</span> <span class="n">AuthConfig</span> <span class="n">auth</span><span class="o">;</span>
 </pre></div>
 
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This is especially helpful for extensions: if extension can be sure that
-it's configuration object would be used only once in your configuration - it could
-inject it directly, without dealing with your root configuration class.     </p>
-</div>
 <p>See complete description in <a href="http://xvik.github.io/dropwizard-guicey/5.0.0/guide/guice/bindings/#yaml-config-introspection">the user guide</a></p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -1638,12 +1632,18 @@ inject it directly, without dealing with your root configuration class.     </p>
 (including values from base <code>Configuration</code> class). Don't be confused when use <a href="../guide/diagnostic/yaml-values-report/">custom config report</a> -
 it just not shows common bindings for simplicity, but they are still applied.     </p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use <a href="../guide/diagnostic/yaml-values-report/">configuration bindings report</a> to see available configuration
+bindings. It is executed <em>before</em> injector creation and so could be used for problems diagnosis. 
+Bindings <a href="../guide/guice/bindings/#value-by-path">may change</a> with configuration values changes (e.g. <code>server</code> section depends on server implementation used).    </p>
+</div>
 <h2 id="extensions-and-aop">Extensions and AOP<a class="headerlink" href="#extensions-and-aop" title="Permanent link">&para;</a></h2>
 <p>As it <a href="../concepts/#extensions">was mentioned</a> guice knows about extensions either by 
 classpath scan search, manual declaration or guice bindings.</p>
 <p>Recognition <a href="../guide/guice/module-analysis/#extensions-recognition">from guice binding</a> is not interesting
 as you bind it manually.</p>
-<p>Auto scan and manual declaration is essentially the same: guicey have extension class, which <a href="http://xvik.github.io/dropwizard-guicey/5.0.0/guide/guice/bindings/#extension-bindings">must be bound to guice context</a>.
+<p>Auto scan and manual declaration are essentially the same: guicey have extension class, which <a href="http://xvik.github.io/dropwizard-guicey/5.0.0/guide/guice/bindings/#extension-bindings">must be bound to guice context</a>.
 In most cases it would be just <code>bind(Extension.class)</code> (but some installers can do more sophisticated bindings, 
 like <a href="../installers/plugin/">plugins installer</a>).</p>
 <p>As you can see, in all cases extension is constructed by guice and so AOP features will work.</p>
@@ -1652,13 +1652,14 @@ like <a href="../installers/plugin/">plugins installer</a>).</p>
 <p>While HK2 is still used, instance management may be <a href="http://xvik.github.io/dropwizard-guicey/5.0.0/guide/hk2/#hk2-delegation">delegated to HK2</a>
 but it is not used in core guicey (just an ability; this is almost never required) </p>
 </div>
+<p>All extensions recognized from guice bindings are clearly visible in the <a href="../guide/diagnostic/configuration-report/">configuration report</a>.</p>
 <h2 id="servlets-and-filters">Servlets and filters<a class="headerlink" href="#servlets-and-filters" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/google/guice/wiki/Servlets">GuiceFilter</a> is registered on both main and admin contexts.
 Guice servlets and filters (registered through <a href="http://xvik.github.io/dropwizard-guicey/5.0.0/guide/guice/servletmodule/">ServletModule</a>) may co-exist with pure servlets and filters:
 as guice filter intercept both contexts, it would be able to manage request scope for all calls (even rest).</p>
 <p>When you register <a href="../installers/servlet/">servlets</a> and <a href="../installers/filter/">filters</a> directly,
-their instances will be managed by guice (because it is <a href="#extensions-and-aop">extensions</a>), just
-dispatching will work a bit differently, which is almost never not important.</p>
+their instances will be managed by guice (because they are <a href="#extensions-and-aop">extensions</a>), just
+dispatching will work a bit differently, which is almost never important.</p>
 <p>As you can see, in case of servlets, AOP features will also be always available. Moreover,
 <a href="http://xvik.github.io/dropwizard-guicey/5.0.0/guide/guice/scopes/">scopes</a> will work as expected. </p>
 <div class="admonition note">
@@ -1690,7 +1691,7 @@ or <a href="../guide/guice/module-analysis/#disabling-analysis">disable modules 
 <p class="admonition-title">Note</p>
 <p>Guice bindings override (<code>Modules.override()</code>), available through guicey api <a href="../guide/guice/override/">modulesOverride()</a>,
 will also cause syntetic module (because overrides are applied before calling injector factory).
-But this supposed to be used for test only, so just mention.</p>
+But this supposed to be used for tests only (just to mention).</p>
 </div>
 <h2 id="aop">AOP<a class="headerlink" href="#aop" title="Permanent link">&para;</a></h2>
 <p>Not guicey-related, but still, as it's not always obvious how AOP is applied on beans
