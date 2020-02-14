@@ -2,9 +2,7 @@
 
 !!! note
     It is important to say that guicey **did not apply any "guice magic"**. Guicey just register
-    additional bindings, which you can use in your beans. 
-
-You can see all available bindings from your configuration using [configuration report](guide/guice/bindings.md#configuration-bindings-report).    
+    additional bindings, which you can use in your beans.  
     
 Or you can simply enable full guice report ([.printAllGuiceBindings()](http://xvik.github.io/dropwizard-guicey/5.0.0/guide/diagnostic/guice-report/))
 and see all added bindings under `GuiceBootsrapModule`:
@@ -22,6 +20,8 @@ and see all added bindings under `GuiceBootsrapModule`:
 ## Added bindings
 
 All applied bindings are described in [the user guide](guide/guice/bindings.md).
+
+Main objects:
 
 * `io.dropwizard.setup.Bootstrap` 
 * `io.dropwizard.Configuration`
@@ -92,17 +92,17 @@ It may be more convenient to bind it directly, instead of full configuration:
 @Inject @Config AuthConfig auth;
 ```
 
-!!! note
-    This is especially helpful for extensions: if extension can be sure that
-    it's configuration object would be used only once in your configuration - it could
-    inject it directly, without dealing with your root configuration class.     
-
 See complete description in [the user guide](http://xvik.github.io/dropwizard-guicey/5.0.0/guide/guice/bindings/#yaml-config-introspection)
 
 !!! warning
     If [not disabled](guide/yaml-values.md#disable-configuration-introspection), guicey will always bind all configuration values
     (including values from base `Configuration` class). Don't be confused when use [custom config report](guide/diagnostic/yaml-values-report.md) -
     it just not shows common bindings for simplicity, but they are still applied.     
+
+!!! note
+    Use [configuration bindings report](guide/diagnostic/yaml-values-report.md) to see available configuration
+    bindings. It is executed *before* injector creation and so could be used for problems diagnosis. 
+    Bindings [may change](guide/guice/bindings.md#value-by-path) with configuration values changes (e.g. `server` section depends on server implementation used).    
 
 ## Extensions and AOP   
 
@@ -112,7 +112,7 @@ classpath scan search, manual declaration or guice bindings.
 Recognition [from guice binding](guide/guice/module-analysis.md#extensions-recognition) is not interesting
 as you bind it manually.
 
-Auto scan and manual declaration is essentially the same: guicey have extension class, which [must be bound to guice context](http://xvik.github.io/dropwizard-guicey/5.0.0/guide/guice/bindings/#extension-bindings).
+Auto scan and manual declaration are essentially the same: guicey have extension class, which [must be bound to guice context](http://xvik.github.io/dropwizard-guicey/5.0.0/guide/guice/bindings/#extension-bindings).
 In most cases it would be just `bind(Extension.class)` (but some installers can do more sophisticated bindings, 
 like [plugins installer](installers/plugin.md)).
 
@@ -122,6 +122,8 @@ As you can see, in all cases extension is constructed by guice and so AOP featur
     While HK2 is still used, instance management may be [delegated to HK2](http://xvik.github.io/dropwizard-guicey/5.0.0/guide/hk2/#hk2-delegation)
     but it is not used in core guicey (just an ability; this is almost never required) 
 
+All extensions recognized from guice bindings are clearly visible in the [configuration report](guide/diagnostic/configuration-report.md).
+
 ## Servlets and filters
 
 [GuiceFilter](https://github.com/google/guice/wiki/Servlets) is registered on both main and admin contexts.
@@ -129,8 +131,8 @@ Guice servlets and filters (registered through [ServletModule](http://xvik.githu
 as guice filter intercept both contexts, it would be able to manage request scope for all calls (even rest).
 
 When you register [servlets](installers/servlet.md) and [filters](installers/filter.md) directly,
-their instances will be managed by guice (because it is [extensions](#extensions-and-aop)), just
-dispatching will work a bit differently, which is almost never not important.
+their instances will be managed by guice (because they are [extensions](#extensions-and-aop)), just
+dispatching will work a bit differently, which is almost never important.
 
 As you can see, in case of servlets, AOP features will also be always available. Moreover,
 [scopes](http://xvik.github.io/dropwizard-guicey/5.0.0/guide/guice/scopes/) will work as expected. 
@@ -167,7 +169,7 @@ or [disable modules analysis](guide/guice/module-analysis.md#disabling-analysis)
 !!! note
     Guice bindings override (`Modules.override()`), available through guicey api [modulesOverride()](guide/guice/override.md),
     will also cause syntetic module (because overrides are applied before calling injector factory).
-    But this supposed to be used for test only, so just mention.
+    But this supposed to be used for tests only (just to mention).
     
 ## AOP
 

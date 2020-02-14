@@ -12,16 +12,16 @@ In dropwizard we have only one decomposition element: [ConfiguredBundle](https:/
     
     This chapter describe only re-usable logc decomposition.
     
-In guicey: guicey bundle (`GuiceyBundle`), guice module (`Module`) and dropwizard bundle (`ConfiguredBundle`).
+In guicey we have: guicey bundle (`GuiceyBundle`), guice module (`Module`) and dropwizard bundle (`ConfiguredBundle`).
 This could confuse.
 
 - There are existing [dropwizard modules](https://modules.dropwizard.io/thirdparty/) - `ConfiguredBundle`
-- Existing [guice modules](https://github.com/google/guice/wiki/3rdPartyModules) (outdated list) - `Module`
+- Existing [guice modules](https://github.com/google/guice/wiki/3rdPartyModules) (outdated list, just as an exampel) - `Module`
 - And [guicey extensions](guide/modules.md) - `GuiceyBundle`
 
 All these modules are supposed to be used together (obviously). In some cases, 
-guicey explicitly provides wrapping modules (e.g. [jdbi](extras/jdbi3.md) - wrapper for dropwizard module).
-But such wrappers usually provide additional abilities (impossible with pure module) and
+guicey explicitly provides wrapping modules (e.g. [jdbi](extras/jdbi3.md) - wrapper for dropwizard module),
+but such wrappers usually provide additional abilities (impossible with pure module) and
 not driven by inability to use a raw module.
 
 ## Guicey bundle
@@ -103,11 +103,11 @@ But this may be important with [shared state](#shared-state).
 ## Bundle vs Module
 
 When extracting functionality into re-usable module always start with a bundle.
-Guice module, most likely will be required too.
+Guice module, most likely, will be required too.
 
 Logic should be separated as:
 
-- *Guice module* is responsible for guice bindings and is not aware of dropwizard. 
+- *Guice module* is responsible for guice bindings and should not be aware of dropwizard. 
 - *Bundle* works with dropwizard: extract required configuration for creating module and do other registrations.
 
 That's an ideal case. But, for example, if you need to apply some bindings based on configuration only 
@@ -148,7 +148,7 @@ public class ModuleImpl<C extends Configuration> extends DropwizardAwareModule<C
 ```
 
 !!! warning
-    This is not a recommended way! It was shown just to show that guice module *could* be used
+    This is not a recommended way! It was shown just to demonstrate that guice module *could* be used
     without bundle. It's better to use declaration bundle instead:
     
     ```java
@@ -181,7 +181,7 @@ public class ModuleImpl<C extends Configuration> extends DropwizardAwareModule<C
 
 These tips show various techniques for developing bundles.  
 Mostly, these tips are based on developing [guicey extensions](https://github.com/xvik/dropwizard-guicey-ext).
-Use extensions sources as examples.
+(look extensions sources as examples).
 
 ### Uniqueness
 
@@ -198,7 +198,7 @@ It may be mostly important for [guice modules](guide/deduplication.md#guice-modu
 
 Auto loading based on guicey [bundles lookup](guide/bundles.md#service-loader-lookup).
 
-Be aware that user may switch off bundles lookup (with `.disableBundleLookup()` or [custom lookup](guide/bundles.md#customizing-lookup-mechanism)).
+Be aware that user may switch off bundles lookup (with `.disableBundleLookup()`) or apply [custom lookup](guide/bundles.md#customizing-lookup-mechanism)).
 
 #### Auto load override
 
@@ -210,7 +210,7 @@ public class AutoLoadableBundle extends UniqueGuiceyBundle { ... }
 ```
 
 Now only one bundle instance is allowed and, if user register bundle manually,
-bundle from lookup will simply not be applied. [lifecycle annotations](extras/lifecycle-annotations.md) module use this technique.
+bundle from lookup will simply be ignored. [Lifecycle annotations](extras/lifecycle-annotations.md) module use this technique.
 
 
 ### Optional extensions
@@ -533,7 +533,7 @@ public void run(final GuiceyEnvironment environment) {
 
 !!! note
     This will work only for guicey bundles! Registered dropwizard bundles may
-    execute before or after this events: events broadcasted from main dropwizard 
+    execute before or after these events: events broadcast from main dropwizard 
     `GuiceBundle` run method, so other dropwizard bundles, registered after guice bundle
     will run after it. 
     It is assumed that guicey bundles used for most configurations (especially in complex

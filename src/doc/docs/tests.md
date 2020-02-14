@@ -1,8 +1,8 @@
 # Testing
 
-You can use all existing [dropwizard arsenal](https://www.dropwizard.io/en/stable/manual/testing.html) for unit tests.
+You can use all existing [dropwizard testing tools](https://www.dropwizard.io/en/stable/manual/testing.html) for unit tests.
 
-## Theory
+## Guicey tests
 
 Guicey intended to shine in integration tests: it provides [a lot of tools](guide/test.md) for application modification.
 
@@ -10,7 +10,7 @@ The most important is [hooks mechanism](guide/hooks.md) which allows you to re-c
 existing application. There are two main testing approaches:
 
 * Disable everything not required and register custom versions **instead**
-* Override some bindings (pure guice `Modules.override()` method)
+* **Override** some bindings (pure guice `Modules.override()` method)
 
 !!! warning
     Guicey currently provides Junit 4 and spock extensions. Junit 5 support will be added soon.
@@ -134,6 +134,24 @@ When using `DropwizardAppRule` the only way to obtain guice managed beans is thr
 
 ```java
 InjectorLookup.getInjector(RULE.getApplication()).getBean(MyService.class);
+```         
+
+Also, the following trick may be used to inject test fields:
+
+```java
+public class MyTest {
+    
+    @ClassRule
+    static DropwizardAppRule<TestConfiguration> RULE = ...
+
+    @Inject MyService service;
+    @Inject MyOtherService otherService;
+    
+    @Before
+    public void setUp() {
+        InjectorLookup.get(RULE.getApplication()).get().injectMemebers(this)
+    }                    
+}
 ```
     
 ## Lightweight tests
@@ -188,8 +206,7 @@ Guicey provides all [required extensions](guide/test.md#spock) to write tests ab
 For example, the first example will look like:
 
 ```groovy       
-@UseDropwizardApp(App)
-@UseGuiceyHooks(Hook)
+@UseDropwizardApp(value = App, hooks = [Hook])
 class MyTest extends Specification {    
     
     @Inject
@@ -213,9 +230,23 @@ class MyTest extends Specification {
         }
     }    
 }
-```    
+```
 
-Note that in spock tests you can use injection of beans directly.
+!!! tip
+    If hooks are common for all tests, then they could be moved to base class:
+    
+    ```java
+    @UseGuiceyHooks(Hook)
+    abstract class BaseTest extends Specification {
+        // hook class here 
+    }
+    
+    @UseDropwizardApp(App)
+    class MyTest extends BaseTest { 
+    ```
+    
+
+Note that in spock tests fields injection in test works automatically.
 
 Lightweight guicey tests are available through [@UseGuiceyApp](guide/test.md#useguiceyapp) annotation.
 
