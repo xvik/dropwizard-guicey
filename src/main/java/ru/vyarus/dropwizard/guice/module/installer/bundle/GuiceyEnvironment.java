@@ -7,7 +7,6 @@ import io.dropwizard.Configuration;
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.lifecycle.ServerLifecycleListener;
 import io.dropwizard.setup.Environment;
-import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
@@ -330,7 +329,7 @@ public class GuiceyEnvironment {
      *
      * @param listener jetty
      * @return environment instance for chained calls
-     * @see AbstractLifeCycle.AbstractLifeCycleListener adapter
+     * @see org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener adapter
      */
     public GuiceyEnvironment listenJetty(final LifeCycle.Listener listener) {
         environment().lifecycle().addLifeCycleListener(listener);

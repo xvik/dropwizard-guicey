@@ -5,8 +5,8 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 /**
  * Base interface for bundle items: guicey and dropwizard bundles.
  *
- * @author Vyacheslav Rusakov
  * @param <T> instance type
+ * @author Vyacheslav Rusakov
  * @since 28.07.2019
  */
 public interface BundleItemInfo<T> extends InstanceItemInfo<T>, DisableSupport {
@@ -21,7 +21,6 @@ public interface BundleItemInfo<T> extends InstanceItemInfo<T>, DisableSupport {
     boolean isTransitive();
 
     /**
-     *
      * @return true for dropwizard bundle, false for guicey bundle
      */
     boolean isDropwizard();
