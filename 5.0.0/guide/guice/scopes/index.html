@@ -1610,6 +1610,10 @@ request scoped binding in different thread, you need to transfer request scope i
     <span class="n">Provider</span><span class="o">&lt;</span><span class="n">UriInfo</span><span class="o">&gt;</span> <span class="n">uri</span><span class="o">;</span>
 
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doSomethingInRequestScope</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c1">// jersey object must be resolved inside hk request scope (to store it in guice request scope)</span>
+            <span class="c1">// so guice could see its instance later in another thread</span>
+            <span class="n">uri</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+
             <span class="c1">// wrap logic that require request scope </span>
             <span class="n">Callable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">action</span> <span class="o">=</span> <span class="n">ServletScopes</span><span class="o">.</span><span class="na">transferRequest</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
                 <span class="c1">// access request scoped binding in different thread </span>
@@ -1627,6 +1631,14 @@ request scoped binding in different thread, you need to transfer request scope i
 <span class="o">}</span>            
 </pre></div>
 
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Pay attention that for jersey scope objects provider must be called first <strong>in the current thread</strong>!
+Guice would be able to propagate to another thread only objects already present in guice request scope.
+Without it, <code>provider.get()</code>, called under different thread would be delegated to jersey,
+which is not aware of this thread and so fail to provide its request scope object.</p>
+<p>Such additional call is not required for pure guice-managed request scope objects.  </p>
+</div>
 <h2 id="eager-singleton">Eager singleton<a class="headerlink" href="#eager-singleton" title="Permanent link">&para;</a></h2>
 <p>By default, guicey create injector in <code>PRODUCTION</code> stage, so all registered singletons
 will be instantiated immediately.</p>
