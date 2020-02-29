@@ -88,6 +88,10 @@ public class RequestBean {
     Provider<UriInfo> uri;
     
     public void doSomethingInRequestScope() {
+            // jersey object must be resolved inside hk request scope (to store it in guice request scope)
+            // so guice could see its instance later in another thread
+            uri.get();
+
             // wrap logic that require request scope 
             Callable<String> action = ServletScopes.transferRequest(() -> {
                 // access request scoped binding in different thread 
@@ -105,6 +109,13 @@ public class RequestBean {
 }            
 ```
 
+!!! warning
+    Pay attention that for jersey scope objects provider must be called first **in the current thread**!
+    Guice would be able to propagate to another thread only objects already present in guice request scope.
+    Without it, `provider.get()`, called under different thread would be delegated to jersey,
+    which is not aware of this thread and so fail to provide its request scope object.
+    
+    Such additional call is not required for pure guice-managed request scope objects.  
 
 ## Eager singleton
 
