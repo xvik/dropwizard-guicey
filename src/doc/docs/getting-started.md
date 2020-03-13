@@ -14,43 +14,87 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>5.0.0</version>
+  <version>5.0.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus:dropwizard-guicey:5.0.0'
+implementation 'ru.vyarus:dropwizard-guicey:5.0.1'
 ```
 
 ### BOM
 
-Guicey pom may be also used as maven BOM:
+Guicey pom may be also used as maven BOM.
+
+!!! note
+    If you use guicey [extensions](guide/modules.md) then use [extensions BOM](extras/bom.md) 
+    instead (it already includes guicey BOM).
+
+Gradle:
 
 ```groovy
 plugins {
-    id "io.spring.dependency-management" version "1.0.8.RELEASE"
+    id "io.spring.dependency-management" version "1.0.9.RELEASE"
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus:dropwizard-guicey:5.0.0'  
-        // uncomment to override dropwizard version    
-        // mavenBom 'io.dropwizard:dropwizard-bom:2.0.0'
-        // mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.0' 
+        mavenBom 'ru.vyarus:dropwizard-guicey:5.0.1'  
+        // uncomment to override dropwizard and its dependencies versions    
+        // mavenBom 'io.dropwizard:dropwizard-bom:2.0.2'
+        // mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.2' 
     }
 }
 
 dependencies {
     // no need to specify versions
-    compile 'ru.vyarus:dropwizard-guicey'
+    implementation 'ru.vyarus:dropwizard-guicey'
        
-    compile 'io.dropwizard:dropwizard-auth'
-    compile 'com.google.inject:guice-assistedinject'   
+    implementation 'io.dropwizard:dropwizard-auth'
+    implementation 'com.google.inject:guice-assistedinject'   
      
-    testCompile 'io.dropwizard:dropwizard-test'
-    testCompile 'org.spockframework:spock-core'
+    testImplementation 'io.dropwizard:dropwizard-test'
+    testImplementation 'org.spockframework:spock-core'
 }
+```    
+
+Maven:
+
+```xml      
+<dependencyManagement>  
+    <dependencies>
+        <dependency>
+            <groupId>ru.vyarus</groupId>
+            <artifactId>dropwizard-guicey</artifactId>
+            <version>5.0.1</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency> 
+        <!-- uncomment to override dropwizard and its dependencies versions  
+        <dependency>
+            <groupId>io.dropwizard/groupId>
+            <artifactId>dropwizard-bom</artifactId>
+            <version>2.0.2</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard/groupId>
+            <artifactId>dropwizard-dependencies</artifactId>
+            <version>2.0.2</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency> -->                 
+    </dependencies>
+</dependencyManagement>
+
+<dependencies>
+    <dependency>
+        <groupId>ru.vyarus</groupId>
+        <artifactId>dropwizard-guicey</artifactId>
+    </dependency>
+</dependencies>
 ```
 
 BOM includes:
@@ -62,10 +106,7 @@ Dropwizard BOM | `io.dropwizard:dropwizard-bom`
 Guice BOM | `com.google.inject:guice-bom`
 HK2 bridge | `org.glassfish.hk2:guice-bridge` 
 System rules (required for StartupErrorRule) | `com.github.stefanbirkner:system-rules`
-Spock | `org.spockframework:spock-core`
-
-!!! tip
-    Guicey extensions project provide [extended BOM](extras/bom.md) with all [guicey modules](guide/modules.md) included. 
+Spock | `org.spockframework:spock-core` 
 
 ## Usage
 

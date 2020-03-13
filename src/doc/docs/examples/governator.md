@@ -3,7 +3,7 @@
 Include the [Netflix Governator](https://github.com/Netflix/governator) dependency:
 
 ```groovy
-compile "com.netflix.governator:governator:1.17.8"
+implementation "com.netflix.governator:governator:1.17.8"
 ```
 
 Governator [owns injector creation](https://github.com/Netflix/governator/wiki/Getting-Started#quick-start), 

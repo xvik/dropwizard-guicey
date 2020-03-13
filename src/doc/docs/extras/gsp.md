@@ -139,14 +139,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-server-pages</artifactId>
-  <version>5.0.0-0</version>
+  <version>5.0.1-1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-server-pages:5.0.0-0'
+compile 'ru.vyarus.guicey:guicey-server-pages:5.0.1-1'
 ```
 
 See the most recent version in the badge above.
@@ -170,8 +170,8 @@ GuiceBundle.builder()
 Out of the box [dropwizard provides](https://www.dropwizard.io/en/release-2.0.x/manual/views.html) `freemarker` and `mustache` engines support. 
 You will need to add dependency to one of them (or both) in order to activate it (or, maybe, some third party engine):
 
-* compile (`io.dropwizard:dropwizard-views-freemarker`) 
-* compile (`io.dropwizard:dropwizard-views-mustache`)
+* implementation (`io.dropwizard:dropwizard-views-freemarker`) 
+* implementation (`io.dropwizard:dropwizard-views-mustache`)
 
 Other template engines available as 3rd party modules. If your template engine is not yet supported
 then simply implement `io.dropwizard.views.ViewRenderer` in order to support it.
@@ -816,7 +816,7 @@ If you want to use resources from [webjars](https://www.webjars.org/) in GSP app
 For example, to add jquery:
 
 ```groovy
-compile 'org.webjars.npm:jquery:3.4.1'
+implementation 'org.webjars.npm:jquery:3.4.1'
 ```
 
 And it could be referenced as:

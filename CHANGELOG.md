@@ -1,4 +1,4 @@
-* Update to dropwizard 2.0.1
+* Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf)) 
 
 ### 5.0.0 (2019-12-15)
 * Update to dropwizard 2.0.0

@@ -101,9 +101,9 @@ plugins {
 dependencyManagement {
     imports {
         mavenBom 'ru.vyarus:dropwizard-guicey:5.0.0'
-        // uncomment to override dropwizard version    
-        // mavenBom 'io.dropwizard:dropwizard-bom:2.0.0'
-        // mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.0'  
+        // uncomment to override dropwizard and its dependencies versions  
+        // mavenBom 'io.dropwizard:dropwizard-bom:2.0.2'
+        // mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.2'  
     }
 }
 
@@ -130,7 +130,22 @@ Maven:
             <version>5.0.0</version>
             <type>pom</type>
             <scope>import</scope>
-        </dependency>            
+        </dependency> 
+        <!-- uncomment to override dropwizard and its dependencies versions  
+        <dependency>
+            <groupId>io.dropwizard/groupId>
+            <artifactId>dropwizard-bom</artifactId>
+            <version>2.0.2</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard/groupId>
+            <artifactId>dropwizard-dependencies</artifactId>
+            <version>2.0.2</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency> -->                 
     </dependencies>
 </dependencyManagement>
 

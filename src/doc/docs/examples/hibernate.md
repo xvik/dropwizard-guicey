@@ -10,8 +10,8 @@ Example of [dropwizard-hibernate](https://www.dropwizard.io/en/release-2.0.x/man
 Additional dependencies required:
 
 ```groovy
-    compile 'io.dropwizard:dropwizard-hibernate:1.3.0'
-    compile 'com.h2database:h2:1.4.199'
+    implementation 'io.dropwizard:dropwizard-hibernate:2.0.2'
+    implementation 'com.h2database:h2:1.4.199'
 ```  
 
 !!! note

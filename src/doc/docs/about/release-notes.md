@@ -899,7 +899,7 @@ dependencyManagement {
 }
 
 dependencies {
-    compile 'ru.vyarus:dropwizard-guicey:4.2.2'
+    implementation 'ru.vyarus:dropwizard-guicey:4.2.2'
 }
 ```
 
@@ -911,7 +911,7 @@ dependencyManagement {
 }
 
 dependencies {
-    compile 'ru.vyarus:dropwizard-guicey'
+    implementation 'ru.vyarus:dropwizard-guicey'
 }
 ```  
 
@@ -923,8 +923,8 @@ dependencies {
         imports {
             mavenBom 'ru.vyarus:dropwizard-guicey:5.0.0' 
             // override dropwizard version 
-            mavenBom 'io.dropwizard:dropwizard-bom:2.0.1'
-            mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.1' 
+            mavenBom 'io.dropwizard:dropwizard-bom:2.0.2'
+            mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.2' 
         }
     }
     ```    

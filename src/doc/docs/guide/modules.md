@@ -4,7 +4,7 @@ All additional guicey integartion modules are maintained as separate project: [d
 
 !!! note
     Module versions are based on guicey version: `$guiceyVersion-N`.
-    For example, 5.0.0-0 means first release of extensions for guicey 5.0.0.
+    For example, 5.0.0-1 means first release of extensions for guicey 5.0.0.
     
     This convention is commonly used for dropwizard extension modules.
 
@@ -18,3 +18,4 @@ Module | Description
 [JDBI3](../extras/jdbi3.md) | JDBI3 integration (based on dropwizard-jdbi3)
 [SPA](../extras/spa.md) | HTML5 routing support for single page applications
 [Server pages](../extras/gsp.md) | JSP-like templates support (based on dropwizard-views)
+[Validation](../extras/validation.md) | use validation annotations on guice beans (same behaviour as rest)

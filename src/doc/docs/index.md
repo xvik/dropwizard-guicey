@@ -1,7 +1,7 @@
 # Welcome to dropwizard-guicey
 
 !!! summary ""
-    [Guice](https://github.com/google/guice) `4.2.2` integration for [dropwizard](http://dropwizard.io) `2.0.0`.        
+    [Guice](https://github.com/google/guice) `4.2.2` integration for [dropwizard](http://dropwizard.io) `2.0.2`.        
     Compiled for `java 8`, binary compatible with `java 11`. 
 
 **[Release Notes](about/release-notes.md)** - [History](about/history.md) - [Javadoc](https://javadoc.io/doc/ru.vyarus/dropwizard-guicey/) - [Support](about/support.md) - [License](about/license.md)       
