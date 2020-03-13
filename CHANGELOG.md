@@ -1,4 +1,5 @@
-* Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf)) 
+* Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf))
+* Fix yaml bindings report rendering with values containing string format parameters like %s (#77) 
 
 ### 5.0.0 (2019-12-15)
 * Update to dropwizard 2.0.0

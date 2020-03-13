@@ -30,7 +30,7 @@ public class TreeNode {
      * @param args string format arguments
      */
     public TreeNode(final String name, final Object... args) {
-        this.name = String.format(name, args);
+        this.name = args.length == 0 ? name : String.format(name, args);
     }
 
     /**
