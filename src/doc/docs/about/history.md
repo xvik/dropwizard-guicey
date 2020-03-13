@@ -1,5 +1,6 @@
 ### [5.0.1](http://xvik.github.io/dropwizard-guicey/5.0.1) (2020-03-13)
 * Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf))
+* Fix yaml bindings report rendering with values containing string format parameters like %s (#77)
 
 ### [5.0.0](http://xvik.github.io/dropwizard-guicey/5.0.0) (2019-12-15)
 * Update to dropwizard 2.0.0

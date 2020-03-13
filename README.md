@@ -18,7 +18,7 @@ Support:
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 2.0.0 [guice](https://github.com/google/guice) 4.2.2 integration.
+[Dropwizard](http://dropwizard.io/) 2.0.2 [guice](https://github.com/google/guice) 4.2.2 integration.
 
 Features:
 
@@ -62,19 +62,19 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>5.0.0</version>
+  <version>5.0.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:5.0.0'
+implementation 'ru.vyarus:dropwizard-guicey:5.0.1'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-2.0| [5.0.0](http://xvik.github.io/dropwizard-guicey/5.0.0)
+2.0| [5.0.1](http://xvik.github.io/dropwizard-guicey/5.0.1)
 1.3| [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
 1.0 | [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1)
@@ -100,7 +100,7 @@ plugins {
 }
 dependencyManagement {
     imports {
-        mavenBom 'ru.vyarus:dropwizard-guicey:5.0.0'
+        mavenBom 'ru.vyarus:dropwizard-guicey:5.0.1'
         // uncomment to override dropwizard and its dependencies versions  
         // mavenBom 'io.dropwizard:dropwizard-bom:2.0.2'
         // mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.2'  
@@ -127,7 +127,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>dropwizard-guicey</artifactId>
-            <version>5.0.0</version>
+            <version>5.0.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
