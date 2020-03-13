@@ -31,9 +31,6 @@ extra:
 
 plugins:
   - search
-#  - pdf-export:
-#      verbose: false
-#      combined: false
 
 # Google Analytics
 google_analytics:
