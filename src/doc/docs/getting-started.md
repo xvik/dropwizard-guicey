@@ -42,7 +42,6 @@ dependencyManagement {
     imports {
         mavenBom 'ru.vyarus:dropwizard-guicey:5.0.1'  
         // uncomment to override dropwizard and its dependencies versions    
-        // mavenBom 'io.dropwizard:dropwizard-bom:2.0.2'
         // mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.2' 
     }
 }
@@ -72,13 +71,6 @@ Maven:
             <scope>import</scope>
         </dependency> 
         <!-- uncomment to override dropwizard and its dependencies versions  
-        <dependency>
-            <groupId>io.dropwizard/groupId>
-            <artifactId>dropwizard-bom</artifactId>
-            <version>2.0.2</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>

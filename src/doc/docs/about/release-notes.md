@@ -917,13 +917,12 @@ dependencies {
 
 !!! warning
     Dropwizard bom was split into `dropwizard-bom` and `dropwizard-dependencies` so in order
-    to override dropwizard version you will need to provide two dependencies:
+    to override dropwizard version you will need to use dependencies BOM:
     ```groovy
     dependencyManagement {
         imports {
             mavenBom 'ru.vyarus:dropwizard-guicey:5.0.0' 
             // override dropwizard version 
-            mavenBom 'io.dropwizard:dropwizard-bom:2.0.2'
             mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.2' 
         }
     }
