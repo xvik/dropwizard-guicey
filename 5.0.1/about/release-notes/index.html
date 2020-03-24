@@ -2818,12 +2818,11 @@ could always implement equals and hashcode correctly honoring different classloa
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Dropwizard bom was split into <code>dropwizard-bom</code> and <code>dropwizard-dependencies</code> so in order
-to override dropwizard version you will need to provide two dependencies:
+to override dropwizard version you will need to use dependencies BOM:
 <div class="codehilite"><pre><span></span><code><span class="n">dependencyManagement</span> <span class="o">{</span>
     <span class="n">imports</span> <span class="o">{</span>
         <span class="n">mavenBom</span> <span class="s1">&#39;ru.vyarus:dropwizard-guicey:5.0.0&#39;</span> 
         <span class="c1">// override dropwizard version </span>
-        <span class="n">mavenBom</span> <span class="s1">&#39;io.dropwizard:dropwizard-bom:2.0.2&#39;</span>
         <span class="n">mavenBom</span> <span class="s1">&#39;io.dropwizard:dropwizard-dependencies:2.0.2&#39;</span> 
     <span class="o">}</span>
 <span class="o">}</span>

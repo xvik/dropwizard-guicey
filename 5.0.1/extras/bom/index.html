@@ -1576,13 +1576,6 @@ first extensions release (1) for guicey 5.0.0. </p>
         <span class="c">&lt;!-- uncomment to override dropwizard and its dependencies versions  </span>
 <span class="c">        &lt;dependency&gt;</span>
 <span class="c">            &lt;groupId&gt;io.dropwizard/groupId&gt;</span>
-<span class="c">            &lt;artifactId&gt;dropwizard-bom&lt;/artifactId&gt;</span>
-<span class="c">            &lt;version&gt;2.0.2&lt;/version&gt;</span>
-<span class="c">            &lt;type&gt;pom&lt;/type&gt;</span>
-<span class="c">            &lt;scope&gt;import&lt;/scope&gt;</span>
-<span class="c">        &lt;/dependency&gt;</span>
-<span class="c">        &lt;dependency&gt;</span>
-<span class="c">            &lt;groupId&gt;io.dropwizard/groupId&gt;</span>
 <span class="c">            &lt;artifactId&gt;dropwizard-dependencies&lt;/artifactId&gt;</span>
 <span class="c">            &lt;version&gt;2.0.2&lt;/version&gt;</span>
 <span class="c">            &lt;type&gt;pom&lt;/type&gt;</span>
@@ -1618,7 +1611,9 @@ first extensions release (1) for guicey 5.0.0. </p>
 <span class="n">dependencyManagement</span> <span class="o">{</span>
     <span class="c1">// Implicitly imports Dropwizard and Guice BOMs </span>
     <span class="n">imports</span> <span class="o">{</span>
-        <span class="n">mavenBom</span> <span class="s2">&quot;ru.vyarus.guicey:guicey-bom:5.0.1-1&quot;</span>
+        <span class="n">mavenBom</span> <span class="s2">&quot;ru.vyarus.guicey:guicey-bom:5.0.1-1&quot;</span>    
+        <span class="c1">// uncomment to override dropwizard and its dependencies versions    </span>
+        <span class="c1">// mavenBom &#39;io.dropwizard:dropwizard-dependencies:2.0.2&#39;</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
