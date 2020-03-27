@@ -20,27 +20,23 @@ wrapper {
 }
 
 ext {
-    dropwizard = '2.0.3'
+    dropwizard = '2.0.4'
     guice = '4.2.3'
+    hk2 = '2.6.1'
     groovy = '2.5.9'
-    // have to declare asm.version property in BOM because dropwizard-dependencies includes hk2-bom,
-    // which does not declare this property and may ruin gradle build
-    asm = '7.2'
 }
 
 repositories { jcenter(); mavenCentral(); mavenLocal() }
 dependencyManagement {
     imports {
         mavenBom "com.google.inject:guice-bom:$guice"
-        mavenBom ("io.dropwizard:dropwizard-dependencies:$dropwizard") {
-            bomProperty 'asm.version', asm
-        }
+        mavenBom "io.dropwizard:dropwizard-dependencies:$dropwizard"
     }
     // exclusions here mostly fixes conflicts for maven projects
     dependencies {
         // force guava version from dropwizard bom
         dependency "com.google.guava:guava:${dependencyManagement.importedProperties['guava.version']}"
-        dependency "org.glassfish.hk2:guice-bridge:${dependencyManagement.importedProperties['hk2.version']}", {
+        dependency "org.glassfish.hk2:guice-bridge:$hk2", {
             exclude 'com.google.inject:guice'
             exclude 'org.glassfish.hk2:hk2-api'
         }
@@ -100,7 +96,7 @@ pom {
     delegate.properties {
         'guice.version' guice
         'dropwizard.version' dropwizard
-        'asm.version' asm
+        'hk2.version' hk2
     }
     developers {
         developer {

@@ -1,10 +1,5 @@
 * Update guice to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
-* Update to dropwizard 2.0.3
-    - WARNING: dropwizard-dependencies 2.0.3 now includes hk2-bom where asm dependencies
-      declared with ${asm.version} property, but property is not defined!
-      This does not cause problems normally because asm is not used in dropwizard. But, 
-      in gradle it could influence other configurations (I faced this with broken pmd tool classpath).
-      In order to fix this guicey pom PROVIDES asm.version property (7.2)  
+* Update to dropwizard 2.0.4
 
 ### 5.0.1 (2020-03-13)
 * Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf))
