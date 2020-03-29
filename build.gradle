@@ -20,7 +20,7 @@ wrapper {
 }
 
 ext {
-    dropwizard = '2.0.4'
+    dropwizard = '2.0.5'
     guice = '4.2.3'
     hk2 = '2.6.1'
     groovy = '2.5.9'
@@ -72,6 +72,7 @@ dependencies {
     implementation 'io.dropwizard:dropwizard-core'
     implementation 'ru.vyarus:generics-resolver:3.0.2'
 
+    testImplementation 'org.objenesis:objenesis'
     testImplementation 'org.glassfish.jersey.inject:jersey-hk2'
     testImplementation 'io.dropwizard:dropwizard-auth'
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
