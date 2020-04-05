@@ -1,5 +1,5 @@
 * Update guice to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
-* Update to dropwizard 2.0.5
+* Update to dropwizard 2.0.6
 
 ### 5.0.1 (2020-03-13)
 * Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf))
