@@ -1,8 +1,11 @@
 package ru.vyarus.dropwizard.guice.debug.report.guice;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.*;
-import com.google.inject.Module; // NOPMD
+import com.google.inject.Binding;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.Stage;
 import com.google.inject.spi.Elements;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import ru.vyarus.dropwizard.guice.GuiceyOptions;
@@ -20,7 +23,12 @@ import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -52,6 +60,7 @@ import java.util.stream.Collectors;
  * @author Vyacheslav Rusakov
  * @since 13.08.2019
  */
+@SuppressWarnings("PMD.GodClass")
 public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
 
     private static final String REMOVED = "REMOVED";

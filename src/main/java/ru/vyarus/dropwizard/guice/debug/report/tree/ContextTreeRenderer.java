@@ -63,6 +63,7 @@ import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.*;
  * @author Vyacheslav Rusakov
  * @since 17.07.2016
  */
+@SuppressWarnings("PMD.GodClass")
 public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
 
     private static final String DUPLICATE = "DUPLICATE";

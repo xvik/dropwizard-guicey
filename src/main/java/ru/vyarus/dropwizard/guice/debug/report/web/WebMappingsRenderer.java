@@ -40,7 +40,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
  * @author Vyacheslav Rusakov
  * @since 22.10.2019
  */
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.GodClass"})
 public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
 
     private static final ServletVisitor VISITOR = new ServletVisitor();
