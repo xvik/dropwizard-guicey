@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event;
 
-import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
@@ -27,7 +26,7 @@ public abstract class JerseyPhaseEvent extends InjectorPhaseEvent {
      * used for extensions access, but it could be stored somewhere and used later (with help of jersey lifecycle
      * listener).
      * <p>
-     * Note: HK2 {@link ServiceLocator} could be obtained as bean from manager as
+     * Note: HK2 {@code ServiceLocator} could be obtained as bean from manager as
      * {@code getInjectionManager().getInstance(ServiceLocator.class)}.
      *
      * @return root service locator

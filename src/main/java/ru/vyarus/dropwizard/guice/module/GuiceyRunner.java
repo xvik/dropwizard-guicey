@@ -6,6 +6,7 @@ import com.google.inject.Module;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
+import ru.vyarus.dropwizard.guice.injector.jersey.GuiceyInjectionFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
@@ -110,6 +111,7 @@ public class GuiceyRunner {
                 context.option(InjectorStage), modules);
         context.stat().getGuiceStats().resetStatsLogger();
         InjectorLookup.registerInjector(context.getBootstrap().getApplication(), injector);
+        GuiceyInjectionFactory.businessContextStarted(injector);
         timer.stop();
     }
 
