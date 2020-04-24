@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
-import io.dropwizard.ConfiguredBundle;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
-import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
+import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 
 import java.util.Arrays;
 
@@ -11,7 +11,9 @@ import java.util.Arrays;
  * Enum with type constants used for marking special configuration scopes. Guicey bundles are also
  * scopes: all items registered by guicey bunlde is scoped with bundle type.
  * <p>
- * Scope represents configuration source (configuration entry point).
+ * Scope represents configuration source (configuration entry point). Because bundle could be installed multiple
+ * times - it would multiple scopes with the same class and to identify scopes special abstraction is used:
+ * {@link ItemId}:combination of type + instance identity.
  *
  * @author Vyacheslav Rusakov
  * @since 16.04.2018
@@ -26,11 +28,6 @@ public enum ConfigScope {
      */
     BundleLookup(GuiceyBundleLookup.class),
     /**
-     * Guicey bundles resolved from (manually) registered dropwizard bundles
-     * (not enabled by default).
-     */
-    DropwizardBundle(ConfiguredBundle.class),
-    /**
      * Everything resolved with classpath scan.
      */
     ClasspathScan(ClasspathScanner.class),
@@ -43,7 +40,24 @@ public enum ConfigScope {
      * It was added just for completeness of context recognition logic (see {@link #recognize(Class)})
      * and to indicate all possible scopes.
      */
-    GuiceyBundle(ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle.class);
+    GuiceyBundle(ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle.class),
+    /**
+     * WARNING: dropwizard bundle scope is bundle class itself. Constant is useless for direct usage!
+     * It was added just for completeness of context recognition logic (see {@link #recognize(Class)})
+     * and to indicate all possible scopes.
+     */
+    DropwizardBundle(io.dropwizard.ConfiguredBundle.class),
+    /**
+     * WARNING: binding extension scope is guice module name itself (not direct module, but topmost registered
+     * module - visible in configuration). It was added just for completeness of context recognition logic
+     * (see {@link #recognize(Class)}) and to indicate all possible scopes.
+     */
+    Module(com.google.inject.Module.class),
+    /**
+     * Special scope for optional extensions automatic disabling (when no matching installer available). Extra
+     * scope is required to differentiate automatic disabling from manual.
+     */
+    OptionalExtensionDisable(OptionalExtensionDisablerScope.class);
 
 
     private final Class<?> type;
@@ -60,6 +74,13 @@ public enum ConfigScope {
     }
 
     /**
+     * @return scope key
+     */
+    public ItemId getKey() {
+        return ItemId.from(getType());
+    }
+
+    /**
      * Useful for hiding all special scopes except one in diagnostic report.
      *
      * @param scope scope to exclude
@@ -67,13 +88,23 @@ public enum ConfigScope {
      */
     public static Class[] allExcept(final ConfigScope scope) {
         return Arrays.stream(values())
-                .filter(s -> s != scope && s != ConfigScope.GuiceyBundle)
+                .filter(s -> s != scope)
                 .map(ConfigScope::getType)
                 .toArray(Class[]::new);
     }
 
     /**
-     * Scope recognition logic may be used in configration analyzers to easily detect item scope.
+     * Shortcut for {@link #recognize(Class)}.
+     *
+     * @param id scope key
+     * @return recognized scope type
+     */
+    public static ConfigScope recognize(final ItemId id) {
+        return recognize(id.getType());
+    }
+
+    /**
+     * Scope recognition logic may be used in configuration analyzers to easily detect item scope.
      *
      * @param type type to recognize scope
      * @return recognized scope

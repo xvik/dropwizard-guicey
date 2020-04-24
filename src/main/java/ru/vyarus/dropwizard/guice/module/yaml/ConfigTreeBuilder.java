@@ -152,6 +152,7 @@ public final class ConfigTreeBuilder {
      * @param object  analyzed part instance (may be null)
      * @return all configuration paths values
      */
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
     private static List<ConfigPath> resolvePaths(final SerializationConfig config,
                                                  final ConfigPath root,
                                                  final List<ConfigPath> content,
@@ -186,7 +187,7 @@ public final class ConfigTreeBuilder {
                 root.getChildren().add(item);
             }
 
-            if (item.isCustomType()) {
+            if (item.isCustomType() && !detectRecursion(item)) {
                 // build generics context for actual value type (if not null)
                 final GenericsContext subContext = prop.getGetter() != null
                         ? genericsContext.method(prop.getGetter().getAnnotated()).returnTypeAs(item.getValueType())
@@ -201,6 +202,35 @@ public final class ConfigTreeBuilder {
             root.getChildren().sort(Comparator.comparing(o -> (o.isCustomType() ? 'b' : 'a') + o.getPath()));
         }
         return content;
+    }
+
+    /**
+     * Possible recursive declarations must be detected to prevent stack overflow errors. The simplest recursion example
+     * is {@code class SubConfig { SubConfig property;}}, but it may not be direct recursion. Recursive processing
+     * must end as soon as we don't have real value (null). That means configured bindings may change depending
+     * on actual configuration, but it's the only way.
+     *
+     * @param item      current path
+     * @return true if recursion detected and processing must stop, false otherwise
+     */
+    @SuppressWarnings("unchecked")
+    private static boolean detectRecursion(final ConfigPath item) {
+        // always continue until real values end (and pure structure analysis starts)
+        if (item.getValue() != null || item.getRoot() == null) {
+            return false;
+        }
+        boolean res = false;
+        final Class recursiveType = item.getDeclaredType();
+        ConfigPath current = item;
+        while (current.getRoot() != null) {
+            current = current.getRoot();
+            // searching for equal or larger types in hierarchy above
+            if (recursiveType.isAssignableFrom(current.getDeclaredType())) {
+                res = true;
+                break;
+            }
+        }
+        return res;
     }
 
     /**

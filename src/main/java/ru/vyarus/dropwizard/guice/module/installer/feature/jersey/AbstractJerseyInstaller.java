@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
 import ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSupport;
 
 import javax.inject.Scope;
@@ -25,7 +26,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.isJ
  * @since 28.04.2018
  */
 public abstract class AbstractJerseyInstaller<T> extends InstallerOptionsSupport implements
-        FeatureInstaller<T>,
+        FeatureInstaller,
         JerseyInstaller<T> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -40,7 +41,8 @@ public abstract class AbstractJerseyInstaller<T> extends InstallerOptionsSupport
      */
     protected boolean isLazy(final Class<?> type, final boolean lazy) {
         if (isJerseyExtension(type) && lazy) {
-            logger.warn("@LazyBinding is ignored, because @HK2Managed set: {}", type.getName());
+            logger.warn("@{} is ignored, because @{} set: {}",
+                    LazyBinding.class.getSimpleName(), JerseyManaged.class.getSimpleName(), type.getName());
             return false;
         }
         return lazy;

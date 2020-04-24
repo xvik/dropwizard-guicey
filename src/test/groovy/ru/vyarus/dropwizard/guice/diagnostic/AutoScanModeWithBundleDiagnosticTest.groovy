@@ -10,6 +10,7 @@ import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
@@ -29,6 +30,8 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 import javax.inject.Inject
 
+import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
+
 /**
  * @author Vyacheslav Rusakov
  * @since 26.06.2016
@@ -42,7 +45,7 @@ class AutoScanModeWithBundleDiagnosticTest extends BaseDiagnosticTest {
     def "Check diagnostic info correctness"() {
 
         expect: "correct bundles info"
-        info.bundles as Set == [FooBundle, FooBundleRelativeBundle, CoreInstallersBundle, WebInstallersBundle] as Set
+        info.guiceyBundles as Set == [FooBundle, FooBundleRelativeBundle, CoreInstallersBundle, WebInstallersBundle] as Set
         info.bundlesFromLookup.isEmpty()
 
         and: "correct installers info"
@@ -71,23 +74,23 @@ class AutoScanModeWithBundleDiagnosticTest extends BaseDiagnosticTest {
         info.modules as Set == [FooModule, GuiceBootstrapModule, FooBundleModule] as Set
 
         and: "correct scopes"
-        info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle, FooBundle, WebInstallersBundle] as Set
-        info.getItemsByScope(ConfigScope.Application) as Set == [CoreInstallersBundle, FooBundle, FooModule, GuiceBootstrapModule] as Set
-        info.getItemsByScope(ConfigScope.ClasspathScan) as Set == [FooInstaller, FooResource] as Set
-        info.getItemsByScope(FooBundle) as Set == [FooBundleInstaller, FooBundleResource, FooBundleModule, FooBundleRelativeBundle] as Set
+        typesOnly(info.getActiveScopes()) as Set == [Application, ClasspathScanner, CoreInstallersBundle, FooBundle, WebInstallersBundle] as Set
+        typesOnly(info.getItemsByScope(ConfigScope.Application)) as Set == [CoreInstallersBundle, FooBundle, FooModule, GuiceBootstrapModule] as Set
+        typesOnly(info.getItemsByScope(ConfigScope.ClasspathScan)) as Set == [FooInstaller, FooResource] as Set
+        typesOnly(info.getItemsByScope(FooBundle)) as Set == [FooBundleInstaller, FooBundleResource, FooBundleModule, FooBundleRelativeBundle] as Set
 
         and: "lifecycle installer was disabled"
         !info.getItemsByScope(CoreInstallersBundle).contains(LifeCycleInstaller)
-        InstallerItemInfo li = info.data.getInfo(LifeCycleInstaller)
+        InstallerItemInfo li = info.getInfo(LifeCycleInstaller)
         !li.enabled
-        li.disabledBy == [Application] as Set
+        li.disabledBy == [ItemId.from(Application)] as Set
         li.registered
 
         and: "managed installer was disabled"
         !info.getItemsByScope(CoreInstallersBundle).contains(ManagedInstaller)
-        InstallerItemInfo mi = info.data.getInfo(ManagedInstaller)
+        InstallerItemInfo mi = info.getInfo(ManagedInstaller)
         !mi.enabled
-        mi.disabledBy == [FooBundle] as Set
+        mi.disabledBy == [ItemId.from(FooBundle)] as Set
         mi.registered
     }
 }

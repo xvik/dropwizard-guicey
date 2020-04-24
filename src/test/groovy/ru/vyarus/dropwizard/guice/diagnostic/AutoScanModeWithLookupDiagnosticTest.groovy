@@ -11,6 +11,7 @@ import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
@@ -33,6 +34,8 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 
 import javax.inject.Inject
 
+import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
+
 /**
  * @author Vyacheslav Rusakov
  * @since 26.06.2016
@@ -47,7 +50,7 @@ class AutoScanModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
 
         expect: "correct bundles info"
         // assigned in abstract test
-        info.bundles as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle, FooBundle, FooBundleRelativeBundle, CoreInstallersBundle, WebInstallersBundle] as Set
+        info.guiceyBundles as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle, FooBundle, FooBundleRelativeBundle, CoreInstallersBundle, WebInstallersBundle] as Set
         info.bundlesFromLookup as Set == [HK2DebugBundle, GuiceRestrictedConfigBundle] as Set
 
         and: "correct installers info"
@@ -77,32 +80,32 @@ class AutoScanModeWithLookupDiagnosticTest extends BaseDiagnosticTest {
         info.modules as Set == [FooModule, FooBundleModule, GuiceBootstrapModule, HK2DebugBundle.HK2DebugModule, GuiceRestrictedConfigBundle.GRestrictModule] as Set
 
         and: "correct scopes"
-        info.getActiveScopes() == [Application, ClasspathScanner, CoreInstallersBundle, WebInstallersBundle, FooBundle, GuiceRestrictedConfigBundle, HK2DebugBundle, GuiceyBundleLookup] as Set
-        info.getItemsByScope(ConfigScope.Application) as Set == [CoreInstallersBundle, FooBundle, FooModule, GuiceBootstrapModule] as Set
-        info.getItemsByScope(ConfigScope.ClasspathScan) as Set == [FooInstaller, FooResource] as Set
-        info.getItemsByScope(FooBundle) as Set == [FooBundleInstaller, FooBundleResource, FooBundleModule, FooBundleRelativeBundle] as Set
-        info.getItemsByScope(ConfigScope.BundleLookup) as Set == [GuiceRestrictedConfigBundle, HK2DebugBundle] as Set
-        info.getItemsByScope(GuiceRestrictedConfigBundle) as Set == [GuiceRestrictedConfigBundle.GRestrictModule] as Set
-        info.getItemsByScope(HK2DebugBundle) as Set == [JerseyFeatureInstaller, HK2DebugFeature, HK2DebugBundle.HK2DebugModule] as Set
+        typesOnly(info.getActiveScopes()) as Set == [Application, ClasspathScanner, CoreInstallersBundle, WebInstallersBundle, FooBundle, GuiceRestrictedConfigBundle, HK2DebugBundle, GuiceyBundleLookup] as Set
+        typesOnly(info.getItemsByScope(ConfigScope.Application)) as Set == [CoreInstallersBundle, FooBundle, FooModule, GuiceBootstrapModule] as Set
+        typesOnly(info.getItemsByScope(ConfigScope.ClasspathScan)) as Set == [FooInstaller, FooResource] as Set
+        typesOnly(info.getItemsByScope(FooBundle)) as Set == [FooBundleInstaller, FooBundleResource, FooBundleModule, FooBundleRelativeBundle] as Set
+        typesOnly(info.getItemsByScope(ConfigScope.BundleLookup)) as Set == [GuiceRestrictedConfigBundle, HK2DebugBundle] as Set
+        typesOnly(info.getItemsByScope(GuiceRestrictedConfigBundle)) as Set == [GuiceRestrictedConfigBundle.GRestrictModule] as Set
+        typesOnly(info.getItemsByScope(HK2DebugBundle)) as Set == [JerseyFeatureInstaller, HK2DebugFeature, HK2DebugBundle.HK2DebugModule] as Set
 
         and: "lifecycle installer was disabled"
         !info.getItemsByScope(CoreInstallersBundle).contains(LifeCycleInstaller)
-        InstallerItemInfo li = info.data.getInfo(LifeCycleInstaller)
+        InstallerItemInfo li = info.getInfo(LifeCycleInstaller)
         !li.enabled
-        li.disabledBy == [Application] as Set
+        li.disabledBy == [ItemId.from(Application)] as Set
         li.registered
 
         and: "managed installer was disabled"
         !info.getItemsByScope(CoreInstallersBundle).contains(ManagedInstaller)
-        InstallerItemInfo mi = info.data.getInfo(ManagedInstaller)
+        InstallerItemInfo mi = info.getInfo(ManagedInstaller)
         !mi.enabled
-        mi.disabledBy == [FooBundle] as Set
+        mi.disabledBy == [ItemId.from(FooBundle)] as Set
         mi.registered
 
         and: "feature installer was registered multiple times"
-        InstallerItemInfo ji = info.data.getInfo(JerseyFeatureInstaller)
-        ji.registeredBy == [CoreInstallersBundle, HK2DebugBundle] as Set
-        ji.registrationScope == CoreInstallersBundle
+        InstallerItemInfo ji = info.getInfo(JerseyFeatureInstaller)
+        typesOnly(ji.registeredBy) as Set == [CoreInstallersBundle, HK2DebugBundle] as Set
+        ji.registrationScope == ItemId.from(CoreInstallersBundle)
         ji.registrationScopeType == ConfigScope.GuiceyBundle
         ji.registrationAttempts == 2
     }

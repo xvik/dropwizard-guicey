@@ -71,11 +71,10 @@ public class ConfigBindingModule extends AbstractModule {
      * {@code @Inject @Config MySubConf config}. Value may be null because if null values would be avoided,
      * bindings will disappear.
      */
-    @SuppressWarnings("unchecked")
     private void bindUniqueSubConfigurations() {
         for (ConfigPath item : tree.getUniqueTypePaths()) {
             // bind only with annotation to avoid clashes with direct bindings
-            toValue(
+            bindValue(
                     bind(Key.get(item.getDeclaredTypeWithGenerics(), Config.class)),
                     item.getValue());
         }
@@ -85,17 +84,17 @@ public class ConfigBindingModule extends AbstractModule {
      * Bind configuration paths. Available for injection like {@code @Inject @Code("path.sub") Integer conf}.
      * Value may be null because if null values would be avoided, bindings will disappear.
      */
-    @SuppressWarnings({"unchecked", "PMD.AvoidInstantiatingObjectsInLoops"})
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void bindValuePaths() {
         for (ConfigPath item : tree.getPaths()) {
-            toValue(
+            bindValue(
                     bind(Key.get(item.getDeclaredTypeWithGenerics(), new ConfigImpl(item.getPath()))),
                     item.getValue());
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void toValue(final LinkedBindingBuilder binding, final Object value) {
+    private void bindValue(final LinkedBindingBuilder binding, final Object value) {
         if (value != null) {
             binding.toInstance(value);
         } else {

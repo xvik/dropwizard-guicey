@@ -3,9 +3,6 @@
 !!! summary ""
     WebInstallersBundle / [WebServletInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/web/WebServletInstaller.java)        
 
-!!! warning ""
-    [Web installers](../guide/web.md#web-installers) are not enabled by default. Enable it with `#!java bundle.useWebInstallers()`.
-
 Register new servlet in main or admin contexts.
 
 ## Recognition

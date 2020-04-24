@@ -1,135 +1,271 @@
 # Web features
 
-##  Guice ServletModule support
+## Servlets, filters
 
-By default, `GuiceFilter` is registered for both application and admin contexts. And so request and session scopes will be 
-be available in both contexts. Also it makes injection of request and response objects available with provider (in any bean).
+Servlets and filters could be registered either with guice [ServletModule](guice/servletmodule.md)
+or using [extensions](extensions.md#web).
 
-To register servlets and filters for main context use `ServletModule`, e.g.
+### Guice servlet module
+
+Example:
 
 ```java
 public class WebModule extends ServletModule {
 
     @Override
     protected void configureServlets() {
-        filter("/*").through(MyFilter.class)
-        serve("/myservlet").with(MyServlet.class)
+        filter("/*").through(MyFilter.class);
+        serve("/myservlet").with(MyServlet.class);
+    }
+}  
+```
+
+!!! success "Pros"
+    Only `ServletModule` allows mappings [by regexp](https://github.com/google/guice/wiki/ServletRegexKeyMapping):
+    
+    ```java
+    serveRegex("(.)*ajax(.)*").with(MyAjaxServlet.class)
+    ```
+
+!!! warning
+    It is important to note that `GuiceFilter` dispatch all requests for filters and servlets 
+    registered by `ServletModule` internally and so you may have problems combining servlets from 
+    `ServletModule` with filters in main scope.
+    
+    It is never a blocking issues, but often "not obvious to understand" situations.
+
+### Web extensions
+
+Extensions declared with standard `javax.servlet` annotations.
+
+Servlet registration: 
+
+```java
+@WebServlet("/mapped")
+public class MyServlet extends HttpServlet { ... }
+```       
+
+Extension [recognized](../installers/servlet.md) by `@WebServlet` annotation.
+
+Could be registered on admin context:
+
+```java
+@WebServlet("/mapped")
+@AdminContext
+public class MyServlet extends HttpServlet { ... }
+```   
+
+Or even on both contexts at the same time: `#!java @AdminContext(andAdmin=true)`. 
+
+Filter:
+
+```java
+@WebFilter("/some/*")
+public class MyFilter implements Filter { ... }
+```
+
+Extension [recognized](../installers/filter.md) by `@WebFilter` annotation. 
+
+Web listeners (servlet, request, session):
+
+```java
+@WebListener
+public class MyListener implements ServletContextListener {...}
+```
+
+Extension [recognized](../installers/listener.md) by `@WebListener` annotation.
+
+
+!!! success "Pros"
+    Installation through extensions has more abilities comparing to `ServletModule`:
+    
+    * Installation into [admin context](../installers/servlet.md#admin-context)
+    * [Async support](../installers/servlet.md#admin-context)
+    * Filter may be applied to exact servlet(s) (`#!java @WebFilter(servletNames = "servletName")`)
+    * Request, servlet context or session [listeners installation](../installers/listener.md)
+
+If you don't want to use web installers or have problems with it (e.g. because they use `javax.servlet` annotations)
+you can disable all of them at once by disabling bundle:
+
+```java
+GuiceBundle.builder()
+    .disableBindles(WebInstallersBundle.class)
+    ...
+```
+
+### Manual registration
+    
+Alternatively, you can always register servlet or filter manually with dropwizard api:
+
+```java
+public class App extends Application {
+    public void initialize(Bootstrap bootstrap) {
+        bootstrap.addBundle(GuiceBundle.builder().build());
+    }
+    
+    public void run(Configuration configuration, Environment environment) {
+        final MyFilter filter = InjectorLookup.getInstance(this, MyFilterBean.class).get();
+        environment.servlets().addFilter("manualFilter", filter)
+            .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
     }
 }
-```
+```    
 
-### Request scoped beans
+## Resources
 
-You can use request scoped beans in both main and admin contexts. 
+Dropwizard provides [AssetsBundle](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#serving-assets) 
+for serving static files from classpath:
 
-```java
-@RequestScoped
-public class MyRequestScopedBean { ... }
-```
+```java                       
+bootstrap.addBundle(new AssetsBundle("/assets/app/", "/", "index.html"));
+```                           
 
-To obtain bean reference use provider:
+`http://localhost:8080/foo.css` --> `src/main/resources/assets/app/foo.css`   
+`http://localhost:8080/` --> `src/main/resources/assets/app/index.html`
 
-```java
-Provider<MyRequestScopedBean> myBeanProvider;
-```
+### HTML5 routing
 
-You can inject request and response objects in any bean:
-
-```java
-Provider<HttpServletRequest> requestProvider
-Provider<HttpServletResponse> responseProvider
-```
-
-### Limitations
-
-By default, `GuiceFilter` is registered with `REQUEST` dispatcher type. If you need to use other types use option:
-
-```java
-    .option(GuiceyOptions.GuiceFilterRegistration, EnumSet.of(REQUEST, FORWARD))
-```
-
-!!! warning
-    Note that async servlets and filters can't be used with guice servlet module (and so it is impossible to register `GuiceFilter` for `ASYNC` type). 
-    Use [web installers](#web-installers) for such cases. 
-
-!!! warning
-    `GuiceFilter` dispatch all requests for filters and servlets registered by `ServletModule` internally and there may be problems combining servlets from `ServletModule`
-    and filters in main scope.
-
-### Disable ServletModule support
-
-If you don't use servlet modules (for example, because web installers cover all needs) you can disable guice servlet modules support:
-```java
-GuiceBundle.builder()
-    .noGuiceFilter()
-```
-
-It will:
-
-* Avoid registration of `GuiceFilter` in both contexts
-* Remove request and session guice scopes support (because no ServletModule registered)
-* Prevent installation of any `ServletModule` (error will be thrown indicating duplicate binding)
-* `HttpServletRequest` and `HttpServletResponse` still may be injected in resources with `Provider` 
-(but it will not be possible to use such injections in servlets, filters or any other place)
-
-Disabling saves about ~50ms of startup time. 
-
-## Web installers
-
-Servlet api 3.0 provides `@WebServlet`, `@WebFilter` and `@WebListener` annotations, but they are not recognized in dropwizard
-(because dropwizard does not depend on jersey-annotations module). Web installers recognize this annotations and register guice-managed filters, servlets and listeners 
-instances.
-
-Web installers are disabled by default. To eable:
+But, if you develop SPA application with HTML5 routes, server will not handle these routes
+properly. Use guicey [SPA bundle](../extras/spa.md) which adds proper SPA routing support above dropwizard `AssetBundle` 
 
 ```java
 GuiceBundle.builder()
-    .useWebInstallers()
-```
+    .bundles(SpaBundle.app("spaApp", "/assets/app/", "/").build());
+```          
 
-It will register [WebInstallersBundle](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/WebInstallersBundle.java).
+`http://localhost:8080/` --> `src/main/resources/assets/app/index.html`   
+`http://localhost:8080/route/path` --> `src/main/resources/assets/app/index.html`
 
-!!! note ""
-    Web installers are not enabled by default, because dropwizard is primarily rest oriented framework and you may not use custom servlets and filters at all
-    (so no need to spent time trying to recognize them). Moreover, using standard servlet api annotations may confuse users and so 
-    it must be user decision to enable such support. Other developers should be guided bu option name and its javadoc (again to avoid confusion, no matter that
-    it will work exactly as expected)
+## Templates 
 
-### Differences with GuiceServlet module
-
-There is a difference between using web installers and registering servlets and filters with [guice servlet module](#guice-servletmodule-support).
-Guice servlet module handles registered servlets and filters internally in `GuiceFilter` (which is installed by guicey in both app and admin contexts).
-As a side effect, there are some compatibility issues between guice servlets and native filters (rare and usually not blocking, but still).
-Web installers use guice only for filter or servlet instance creation and register this instance directly in dropwizard environment (using annotation metadata).  
-
-In many cases, annotations are more convenient way to declare servlet or filter registration comparing to servlet module. 
-
-!!! tip 
-    Using annotations you can register async [servlets](../installers/servlet.md#async) and [filters](../installers/filter.md#async) (with annotations `asyncSupported=true` option).
-    In contrast, it is impossible to register async with guice servlet module.
-
-### Admin context
-
-By default, web installers (servlet, filter, listener) target application context. If you want to install into admin context then use `@AdminContext` annotation.
-
-For example: 
+Dropwizard provides [ViewBundle](https://www.dropwizard.io/en/release-2.0.x/manual/views.html)
+for handling templates (freemarker and mustache out of the box, more engines could be plugged).
 
 ```java
-@AdminContext
-@WebServlet("/mapped")
-public class MyServlet extneds HttpServlet { ... }
-```
+bootstrap.addBundle(new ViewBundle());
+```    
 
-Will install servlet in admin context only.
+Which allows you to serve rendered templates [from rest endpoints](https://www.dropwizard.io/en/release-2.0.x/manual/views.html).
 
-If you want to install in both contexts use andMain attribute:
+
+### Templates + resources
+
+But it is not quite handful to use it together with static resources ([AssetsBundle](#resources))
+because static resources will have different urls (as they are not served from rest).  
+
+If you would like to have JSP-like behaviour (when templates and resources live at the same
+location and so could easily reference each other) - then use guicey [GSP bundle](../extras/gsp.md) 
+(which is actually just a "glue" for dropwizard `ViewBundle` and `AssetsBundle`).
 
 ```java
-@AdminContext(andMain = true)
-@WebServlet("/mapped")
-public class MyServlet extneds HttpServlet { ... }
+com/exmaple/app/
+    person.ftl
+    foo.ftl
+    style.css
+```     
+
+```html  
+<#-- Sample template without model (/foo.ftl) -->
+<html>
+    <body>        
+        <h1>Hello, it's a template: ${12+22}!</h1>
+    </body>
+</html>
+```      
+
+```html  
+<#-- Template with model, rendered by rest endpoint (/person/) -->
+<#-- @ftlvariable name="" type="com.example.views.PersonView" -->
+<html>   
+    <head>  
+        <link href="/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <!-- calls getPerson().getName() and sanitizes it -->
+        <h1>Hello, ${person.name?html}!</h1>
+    </body>
+</html>
 ```
 
-In example above, servlet registered in both contexts.
+```java
+public class PersonView extends TemplateView {
+    private final Person person;
 
+    public PersonView(Person person) {    
+        super('person.ftl');
+        this.person = person;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+}
+```      
+
+```java       
+// Path starts with application name  
+@Path("/com.example.app/person/")  
+@Produces(MediaType.TEXT_HTML)    
+// Important marker
+@Template
+public class PersonPage {      
+    
+    @Inject
+    private PersonDAO dao;
+
+    @GET  
+    @Path("/")
+    public PersonView getMaster() {
+        return new PersonView(dao.find(1));
+    }    
+
+    @GET  
+    @Path("/{id}")
+    public PersonView getPerson(@PathParam("id") String id) {
+        return new PersonView(dao.find(id));
+    }   
+}
+```       
+
+```java
+GuiceBundle.builder()                                     
+    .bundles(
+             // global views support
+             ServerPagesBundle.builder().build(),
+             // application registration
+             ServerPagesBundle.app("com.example.app", "/com/example/app/", "/")   
+                                 // rest path as index page
+                                 .indexPage("person/")
+                                 .build());
+```                 
+
+Static resource call:
+
+`http://localhost:8080/style.css` --> `src/main/resources/com/example/app/style.css`
+
+Direct template call:
+
+`http://localhost:8080/foo.ftl` --> `src/main/resources/com/example/app/foo.ftl`
+
+Rest-driven template call:
+
+`http://localhost:8080/person/12` --> `/rest/com.example.app/person/12`
+
+Index page:
+
+`http://localhost:8080/` --> `/rest/com.example.app/person/`
+
+!!! note "Summary"
+    Declaration differences from pure dropwizard views:
+    
+    * Model extends `TemplateView`
+    * Rest endpoints always annotated with `@Template`
+    * Rest endpoints paths starts with registered application name (`#!java ServerPagesBundle.app("com.example.app"`)
+    to be able to differentiate rest for different UI applications     
+    
+!!! warning
+    Standard errors handling in views ([templates](https://www.dropwizard.io/en/release-2.0.x/manual/views.html#template-errors),
+    [custome pages](https://www.dropwizard.io/en/release-2.0.x/manual/views.html#custom-error-pages)) is replaced by 
+    [custom mechanism](../extras/gsp.md#error-pages), required to implement per-ui-app errors support.
+    
  

@@ -2,9 +2,7 @@ package ru.vyarus.dropwizard.guice.module.lifecycle;
 
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.*;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
 /**
@@ -14,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
  * @author Vyacheslav Rusakov
  * @since 18.04.2018
  */
+@SuppressWarnings({"checkstyle:ClassFanOutComplexity", "PMD.TooManyMethods"})
 public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
 
     @Override
@@ -24,6 +23,9 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         switch (event.getType()) {
             case ConfigurationHooksProcessed:
                 configurationHooksProcessed((ConfigurationHooksProcessedEvent) event);
+                break;
+            case DropwizardBundlesInitialized:
+                dropwizardBundlesInitialized((DropwizardBundlesInitializedEvent) event);
                 break;
             case BundlesFromLookupResolved:
                 lookupBundlesResolved((BundlesFromLookupResolvedEvent) event);
@@ -40,8 +42,11 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case InstallersResolved:
                 installersResolved((InstallersResolvedEvent) event);
                 break;
-            case ExtensionsResolved:
-                extensionsResolved((ExtensionsResolvedEvent) event);
+            case ManualExtensionsValidated:
+                manualExtensionsValidated((ManualExtensionsValidatedEvent) event);
+                break;
+            case ClasspathExtensionsResolved:
+                classpathExtensionsResolved((ClasspathExtensionsResolvedEvent) event);
                 break;
             case Initialized:
                 initialized((InitializedEvent) event);
@@ -51,6 +56,12 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
                 break;
             case BundlesStarted:
                 bundlesStarted((BundlesStartedEvent) event);
+                break;
+            case ModulesAnalyzed:
+                modulesAnalyzed((ModulesAnalyzedEvent) event);
+                break;
+            case ExtensionsResolved:
+                extensionsResolved((ExtensionsResolvedEvent) event);
                 break;
             case InjectorCreation:
                 injectorCreation((InjectorCreationEvent) event);
@@ -73,10 +84,20 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case JerseyExtensionsInstalled:
                 jerseyExtensionsInstalled((JerseyExtensionsInstalledEvent) event);
                 break;
+            case ApplicationStarted:
+                applicationStarted((ApplicationStartedEvent) event);
+                break;
+            case ApplicationShutdown:
+                applicationShutdown((ApplicationShotdownEvent) event);
+                break;
         }
     }
 
     protected void configurationHooksProcessed(final ConfigurationHooksProcessedEvent event) {
+        // empty
+    }
+
+    protected void dropwizardBundlesInitialized(final DropwizardBundlesInitializedEvent event) {
         // empty
     }
 
@@ -100,7 +121,11 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         // empty
     }
 
-    protected void extensionsResolved(final ExtensionsResolvedEvent event) {
+    protected void manualExtensionsValidated(final ManualExtensionsValidatedEvent event) {
+        // empty
+    }
+
+    protected void classpathExtensionsResolved(final ClasspathExtensionsResolvedEvent event) {
         // empty
     }
 
@@ -113,6 +138,14 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
     }
 
     protected void bundlesStarted(final BundlesStartedEvent event) {
+        // empty
+    }
+
+    protected void modulesAnalyzed(final ModulesAnalyzedEvent event) {
+        // empty
+    }
+
+    protected void extensionsResolved(final ExtensionsResolvedEvent event) {
         // empty
     }
 
@@ -141,6 +174,14 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
     }
 
     protected void jerseyExtensionsInstalled(final JerseyExtensionsInstalledEvent event) {
+        // empty
+    }
+
+    protected void applicationStarted(final ApplicationStartedEvent event) {
+        // empty
+    }
+
+    protected void applicationShutdown(final ApplicationShotdownEvent event) {
         // empty
     }
 }

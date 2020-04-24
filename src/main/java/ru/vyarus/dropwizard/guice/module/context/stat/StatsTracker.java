@@ -19,6 +19,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyTime;
 public final class StatsTracker {
     private final Map<Stat, Stopwatch> timers = Maps.newEnumMap(Stat.class);
     private final Map<Stat, Integer> counters = Maps.newEnumMap(Stat.class);
+    private final GuiceStatsTracker guiceStats = new GuiceStatsTracker();
 
     /**
      * If measured first time, returns new instance. For second and following measures returns the same instance
@@ -87,5 +88,12 @@ public final class StatsTracker {
      */
     public Map<Stat, Integer> getCounters() {
         return counters;
+    }
+
+    /**
+     * @return guice stats logger tracker object
+     */
+    public GuiceStatsTracker getGuiceStats() {
+        return guiceStats;
     }
 }

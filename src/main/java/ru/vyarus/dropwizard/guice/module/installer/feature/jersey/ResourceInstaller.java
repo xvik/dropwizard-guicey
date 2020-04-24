@@ -1,13 +1,16 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.jersey;
 
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
+import com.google.inject.Binding;
 import com.google.inject.Injector;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
+import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
@@ -42,13 +45,23 @@ public class ResourceInstaller extends AbstractJerseyInstaller<Object> implement
     }
 
     @Override
-    public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazyMarker) {
+    public void bind(final Binder binder, final Class<?> type, final boolean lazyMarker) {
         final boolean jerseyManaged = isJerseyExtension(type);
         final boolean lazy = isLazy(type, lazyMarker);
         // register in guice only if not managed by hk and just in time (lazy) binding not requested
         if (!jerseyManaged && !lazy) {
             bindInGuice(binder, type);
         }
+    }
+
+    @Override
+    public <T> void manualBinding(final Binder binder, final Class<T> type, final Binding<T> binding) {
+        // no need to bind in case of manual binding
+        final boolean hkManaged = isJerseyExtension(type);
+        Preconditions.checkState(!hkManaged,
+                // intentially no "at" before stacktrtace because idea may hide error in some cases
+                "Resource annotated as jersey managed is declared manually in guice: %s (%s)",
+                type.getName(), BindingUtils.getDeclarationSource(binding));
     }
 
     @Override

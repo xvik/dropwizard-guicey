@@ -57,8 +57,9 @@ class GuiceRequestScopePropagationTest extends AbstractTest {
 
         @GET
         String ok() {
-            // object must be resolved inside request hk scope so guice could use it's instance later
-            uri.get().getRequestUri()
+            // jersey object must be resolved inside hk request scope (to store it in guice request scope)
+            // so guice could see its instance later in another thread
+            uri.get()
 
             // prepare request scope aware action for execution in other thread
             // UriInfo will be accessible only if its in request scope

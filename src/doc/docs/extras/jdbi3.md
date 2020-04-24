@@ -3,7 +3,7 @@
 !!! summary ""
     [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3) module
 
-Integrates [JDBI3](http://jdbi.org/) with guice. Based on [dropwizard-jdbi3](http://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html) integration.
+Integrates [JDBI3](http://jdbi.org/) with guice. Based on [dropwizard-jdbi3](https://www.dropwizard.io/en/release-2.0.x/manual/jdbi3.html) integration.
  
 Features:
 
@@ -34,17 +34,20 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi3</artifactId>
-  <version>0.7.0</version>
+  <version>5.0.1-1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-jdbi3:0.7.0'
+implementation 'ru.vyarus.guicey:guicey-jdbi3:5.0.1-1'
 ```
 
 See the most recent version in the badge above.
+
+!!! note ""
+    [Migration from jdbi2](jdbi.md#migration-to-jdbi3)
 
 ## Usage
 
@@ -57,7 +60,7 @@ GuiceBundle.builder()
 ```
 
 Here default JDBI instance will be created from database configuration (much like it's described in 
-[dropwizard documentation](http://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html)).
+[dropwizard documentation](https://www.dropwizard.io/en/release-2.0.x/manual/jdbi3.html)).
 
 Or build JDBI instance yourself:
 
@@ -329,27 +332,4 @@ try {
 }
 ```
 
-Repositories could also be called inside such manual unit (as unit of work is correctly started).
-
-## Migration from guice-jdbi (jdbi2)
-
-* Module package changed from `ru.vyarus.guicey.jdbi` to `ru.vyarus.guicey.jdbi3`.
-
-* `Jdbi` object was previously bound as `DBI` insterface. Now it's bound as `Jdbi` (DBI interface was removed in jdbi3).
-
-* New methods in `JdbiBundle`:
-    - withPlugins - install custom plugins
-    - withConfig - to simplify manual configuration
-
-* In jdbi3 `ResultSetMapper` was changed to `RowMapper` (and ColumnMapper). Installer supports RowMapper automatic installation.
-
-* If you were using binding annotations then:
-    - `@BindingAnnotation` -> `@SqlStatementCustomizingAnnotation`
-    - `BindingFactory` ->  `SqlStatementCustomizerFactory`
-
-* Sql obect proxies must be interfaces now (jdbi3 restriction). But as java 8 interfaces support default methods,
-its not a big problem
-    - instead of field injection (to access other proxies), now getter annotated with @Inject must be used.
-    
-    
-See [jdbi3 migration gude](http://jdbi.org/#_upgrading_from_v2_to_v3) for other (pure jdbi related) differences        
+Repositories could also be called inside such manual unit (as unit of work is correctly started).        

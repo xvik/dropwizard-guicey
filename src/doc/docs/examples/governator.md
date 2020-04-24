@@ -3,7 +3,7 @@
 Include the [Netflix Governator](https://github.com/Netflix/governator) dependency:
 
 ```groovy
-compile "com.netflix.governator:governator:1.5.11"
+implementation "com.netflix.governator:governator:1.17.8"
 ```
 
 Governator [owns injector creation](https://github.com/Netflix/governator/wiki/Getting-Started#quick-start), 
@@ -29,7 +29,17 @@ public void initialize(Bootstrap<Configuration> bootstrap) {
             .build()
     );
 }
-```
+```    
+
+!!! warning
+    Guicey by default [parses configured guice modules](../guide/guice/module-analysis.md#modules-analysis)
+    and so injector factory receives single synthetic module of parsed elements, instead of 
+    configured module instances. Some governator features may require exact module instances and so
+    you may need to [disable guicey analysis](../guide/guice/module-analysis.md#disabling-analysis).    
+    
+    Also, when using [overriding modules configuration](../guide/guice/override.md) (with `#modulesOverride` configuration)
+    injector factory also receives syntetic module after {@code Modules.override(modules).with(overridingModules)}.
+    So you will have not to use this feature when direct module instances required (for some governator features).  
 
 !!! note
     Auto scan is enabled and managed bean, described below, will be discovered and installed automatically (assuming its inside scanned package).

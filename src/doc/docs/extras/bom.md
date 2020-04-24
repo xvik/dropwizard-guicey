@@ -3,19 +3,25 @@
 !!! summary ""
     [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-bom) module
 
-Maven BOM containing guicey and guicey ext modules versions. Also includes dropwizard and guice boms.
+Maven BOM contains guicey and guicey ext modules versions. Also includes dropwizard and guice boms.
 
 !!! tip
     BOM's are useful for versions management. After including bom you can simply include required dependencies
-    (dropwizard, guice, guicey, guicey-ext) without versions: bom version will control all versions.
+    (dropwizard, guice, guicey, guicey-ext) without versions: bom will control all versions.
 
 | BOM version | Guicey | Dropwizard | Guice |
 |-------------|--------|------------|-------|
+| 5.0.1-1     | 5.0.1  | 2.0.2      | 4.2.2 |
+| 5.0.0-0     | 5.0.0  | 2.0.0      | 4.2.2 |
 | 0.7.0       | 4.2.2  | 1.3.7      | 4.2.2 |
 | 0.6.0       | 4.2.2  | 1.3.7      | 4.2.2 |
 | 0.5.0       | 4.2.1  | 1.3.5      | 4.2.0 |
 | 0.4.0       | 4.2.0  | 1.3.5      | 4.2.0 |
 | 0.3.0       | 4.1.0  | 1.1.0      | 4.1.0 |
+
+Since 5.0.0 extension modules version is derived from guicey version: guiceyVersion-Number 
+(the same convention as for dropwizard modules). For example version 5.0.0-1 means
+first extensions release (1) for guicey 5.0.0. 
 
 ## Setup
 
@@ -32,10 +38,18 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>0.7.0</version>
+            <version>5.0.1-1</version>
             <type>pom</type>
             <scope>import</scope>
-        </dependency>
+        </dependency>  
+        <!-- uncomment to override dropwizard and its dependencies versions  
+        <dependency>
+            <groupId>io.dropwizard/groupId>
+            <artifactId>dropwizard-dependencies</artifactId>
+            <version>2.0.2</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency> --> 
     </dependencies>
 </dependencyManagement>
 
@@ -62,28 +76,32 @@ Gradle:
 
 ```groovy
 plugins {
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "io.spring.dependency-management" version "1.0.9.RELEASE"
 }
 
 dependencyManagement {
     // Implicitly imports Dropwizard and Guice BOMs 
     imports {
-        mavenBom "ru.vyarus.guicey:guicey-bom:0.7.0"
+        mavenBom "ru.vyarus.guicey:guicey-bom:5.0.1-1"    
+        // uncomment to override dropwizard and its dependencies versions    
+        // mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.2'
     }
 }
 
 // declare guice and ext modules without versions 
 dependencies {
-    compile 'ru.vyarus:dropwizard-guicey'
+    implementation 'ru.vyarus:dropwizard-guicey'
     // For example, using dropwizard module (without version)
-    compile 'io.dropwizard:dropwizard-auth'
+    implementation 'io.dropwizard:dropwizard-auth'
     // Example of extension module usage
-    compile 'ru.vyarus.guicey:guicey-eventbus' 
+    implementation 'ru.vyarus.guicey:guicey-eventbus' 
 }
     
 ```
 
 Spring's [dependency management plugin](https://github.com/spring-gradle-plugins/dependency-management-plugin) is required to import BOM.
+It is recommended to use it instead of [built-in gradle bom support](https://docs.gradle.org/current/userguide/migrating_from_maven.html#migmvn:using_boms)
+because of [more correct spring plugin behaviour](https://github.com/spring-gradle-plugins/dependency-management-plugin/issues/211#issuecomment-387362326)
 
 ## Dependencies override
 
@@ -91,5 +109,5 @@ You may override BOM version for any dependency by simply specifying exact versi
 
 If you want to use newer version (then provided by guicey BOM) of dropwizard or guice then import also their BOMs directly:
 
-* `io.dropwizard:dropwizard-bom:$VERSION` for dropwizard
+* `io.dropwizard:dropwizard-bom:$VERSION` and `io.dropwizard:dropwizard-dependencies:$VERSION` for dropwizard
 * `com.google.inject:guice-bom:$VERSION` for guice

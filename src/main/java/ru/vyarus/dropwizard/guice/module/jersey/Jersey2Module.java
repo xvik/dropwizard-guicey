@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.jersey;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
+import com.google.inject.Stage;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.internal.inject.InjectionManager;
@@ -56,7 +57,10 @@ public class Jersey2Module extends AbstractModule {
         final GuiceFeature component =
                 new GuiceFeature(provider, context.stat(), context.lifecycle());
         bind(InjectionManager.class).toProvider(component);
-        environment.jersey().register(component);
+        // avoid registration when called within guice report
+        if (currentStage() != Stage.TOOL) {
+            environment.jersey().register(component);
+        }
 
         if (guiceServletSupport) {
             install(new GuiceWebModule(environment, types));

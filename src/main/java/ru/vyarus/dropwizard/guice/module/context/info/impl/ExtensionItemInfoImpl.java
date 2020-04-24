@@ -1,9 +1,11 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
 import com.google.common.collect.Sets;
+import com.google.inject.Binding;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 
 import java.util.Set;
@@ -14,21 +16,23 @@ import java.util.Set;
  * @author Vyacheslav Rusakov
  * @since 06.07.2016
  */
-public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItemInfo {
+public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements ExtensionItemInfo {
 
     private Class<? extends FeatureInstaller> installedBy;
     private boolean lazy;
     private boolean jerseyManaged;
-    private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
+    private Binding manualBinding;
+    private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
     // little hack used to preserve installer reference during initialization
     private FeatureInstaller installer;
+    private boolean optional;
 
     public ExtensionItemInfoImpl(final Class<?> type) {
         super(ConfigItem.Extension, type);
     }
 
     @Override
-    public Set<Class<?>> getDisabledBy() {
+    public Set<ItemId> getDisabledBy() {
         return disabledBy;
     }
 
@@ -44,7 +48,7 @@ public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItem
 
     @Override
     public boolean isFromScan() {
-        return getRegisteredBy().contains(ConfigScope.ClasspathScan.getType());
+        return getRegisteredBy().contains(ConfigScope.ClasspathScan.getKey());
     }
 
     @Override
@@ -57,6 +61,16 @@ public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItem
         return jerseyManaged;
     }
 
+    @Override
+    public boolean isGuiceBinding() {
+        return manualBinding != null;
+    }
+
+    @Override
+    public boolean isOptional() {
+        return optional;
+    }
+
     public void setLazy(final boolean lazy) {
         this.lazy = lazy;
     }
@@ -65,12 +79,24 @@ public class ExtensionItemInfoImpl extends ItemInfoImpl implements ExtensionItem
         this.jerseyManaged = jerseyManaged;
     }
 
+    public void setManualBinding(final Binding manualBinding) {
+        this.manualBinding = manualBinding;
+    }
+
+    public Binding getManualBinding() {
+        return manualBinding;
+    }
+
     public FeatureInstaller getInstaller() {
         return installer;
     }
 
-    public void setInstaller(FeatureInstaller installer) {
+    public void setInstaller(final FeatureInstaller installer) {
         this.installer = installer;
         this.installedBy = installer.getClass();
+    }
+
+    public void setOptional(final boolean optional) {
+        this.optional = optional;
     }
 }

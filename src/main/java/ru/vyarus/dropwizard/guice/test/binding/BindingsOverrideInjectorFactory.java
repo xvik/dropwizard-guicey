@@ -10,7 +10,7 @@ import com.google.inject.util.Modules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
-import ru.vyarus.dropwizard.guice.module.context.debug.util.RenderUtils;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 
 /**
  * Custom injector factory used to override already overridden bindings.
@@ -79,7 +79,7 @@ public class BindingsOverrideInjectorFactory implements InjectorFactory {
         final StringBuilder builder = new StringBuilder().append("\n\n");
         for (Module module : modules) {
             builder.append('\t').append(RenderUtils
-                    .renderClassLine(module.getClass(), null))
+                    .renderClassLine(module.getClass()))
                     .append('\n');
         }
         logger.info("Overriding modules = {}", builder.toString());

@@ -17,7 +17,7 @@ class OauthCheckApplication extends Application<TestConfiguration> {
 
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
-        bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+        bootstrap.addBundle(GuiceBundle.builder()
                 .noDefaultInstallers()
                 .installers(ResourceInstaller, JerseyProviderInstaller)
                 .extensions(OAuthTestResource, OAuthDynamicFeature)

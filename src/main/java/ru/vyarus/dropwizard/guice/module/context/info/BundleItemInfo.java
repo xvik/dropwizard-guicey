@@ -3,30 +3,25 @@ package ru.vyarus.dropwizard.guice.module.context.info;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 
 /**
- * Bundle configuration information.
- * For bundles, resolved with bundles lookup mechanism, context would be
- * {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup}.
- * <p>
- * Note that the same bundle may be registered by different mechanism simultaneously.
- * For example: by lookup and manually in application class. Bundle will actually be registered only once, but it's info
- * will contain 2 context classes ({@link io.dropwizard.Application} and
- * {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup}) and {@link #isFromLookup()} will be true.
+ * Base interface for bundle items: guicey and dropwizard bundles.
  *
+ * @param <T> instance type
  * @author Vyacheslav Rusakov
- * @since 09.07.2016
+ * @since 28.07.2019
  */
-public interface BundleItemInfo extends ItemInfo, DisableSupport {
-
-    /**
-     * @return true if bundle resolved by lookup mechanism, false otherwise
-     * @see ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
-     */
-    boolean isFromLookup();
+public interface BundleItemInfo<T> extends InstanceItemInfo<T>, DisableSupport {
 
     /**
      * In case when bundle is registered multiple times, bundle will be transitive if all registrations were transitive.
+     * Reminder: bundle is registered by instance, but same instance may be registered multiple times. Also,
+     * deduplication mechanism could consider different instances as the same bundle (equal objects, by default).
      *
      * @return true when bundle was registered only by some other bundle (and never directly)
      */
     boolean isTransitive();
+
+    /**
+     * @return true for dropwizard bundle, false for guicey bundle
+     */
+    boolean isDropwizard();
 }

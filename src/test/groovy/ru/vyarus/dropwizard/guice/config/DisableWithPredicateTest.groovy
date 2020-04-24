@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.config
 import com.google.inject.AbstractModule
 import io.dropwizard.Application
 import io.dropwizard.Configuration
+import io.dropwizard.ConfiguredBundle
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
@@ -14,19 +15,21 @@ import ru.vyarus.dropwizard.guice.module.context.Filters
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
-import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks
 
 import javax.inject.Inject
 import javax.ws.rs.Path
 
 import static ru.vyarus.dropwizard.guice.module.context.Disables.type
+import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
 
 /**
  * @author Vyacheslav Rusakov
  * @since 09.04.2018
  */
 @UseGuiceyApp(App)
+@UseGuiceyHooks(DisableHook)
 class DisableWithPredicateTest extends AbstractTest {
 
     @Inject
@@ -35,9 +38,10 @@ class DisableWithPredicateTest extends AbstractTest {
     def "Check configuration items disabling with matcher"() {
 
         expect: "items disabled"
-        info.getBundles().contains(SampleBundle2)  // to not specify bundles from test lookup
-        !info.getBundles().contains(SampleBundle)
-        info.getBundlesDisabled() == [SampleBundle]
+        !info.getDropwizardBundles().contains(DBundle)
+        info.getGuiceyBundles().contains(SampleBundle2)  // to not specify bundles from test lookup
+        !info.getGuiceyBundles().contains(SampleBundle)
+        info.getBundlesDisabled() as Set == [SampleBundle, DBundle] as Set
 
         info.getModules().contains(SampleModule2)
         !info.getModules().contains(SampleModule1)
@@ -51,9 +55,9 @@ class DisableWithPredicateTest extends AbstractTest {
         info.getInstallersDisabled() == [ManagedInstaller]
 
         and: "correct disable scope"
-        info.data.getItems(Filters.disabledBy(ConfigScope.Application.type)) as Set ==
-                [SampleBundle, SampleModule1] as Set
-        info.data.getItems(Filters.disabledBy(ConfigScope.Hook.type)) as Set ==
+        typesOnly(info.data.getItems(Filters.disabledBy(ConfigScope.Application.type))) as Set ==
+                [SampleBundle, SampleModule1, DBundle] as Set
+        typesOnly(info.data.getItems(Filters.disabledBy(ConfigScope.Hook.type))) as Set ==
                 [SampleExtension1, ManagedInstaller] as Set
     }
 
@@ -62,15 +66,12 @@ class DisableWithPredicateTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-            // listener will call disable AFTER items registration (post processing on predicate registration)
-                    .listen(new Listener())
             // predicate registered before items registration and will disable items by event
-                    .disable(type(SampleBundle, SampleModule1))
-
+                    .disable(type(SampleBundle, SampleModule1, DBundle))
+                    .dropwizardBundles(new DBundle())
                     .bundles(new SampleBundle(), new SampleBundle2())
                     .modules(new SampleModule1(), new SampleModule2())
                     .extensions(SampleExtension1, SampleExtension2)
-
                     .build())
         }
 
@@ -79,7 +80,7 @@ class DisableWithPredicateTest extends AbstractTest {
         }
     }
 
-    static class Listener extends GuiceyLifecycleAdapter implements GuiceyConfigurationHook {
+    static class DisableHook implements GuiceyConfigurationHook {
         @Override
         void configure(GuiceBundle.Builder builder) {
             builder.disable(type(SampleExtension1, ManagedInstaller))
@@ -97,13 +98,16 @@ class DisableWithPredicateTest extends AbstractTest {
     static class SampleBundle2 implements GuiceyBundle {
         @Override
         void initialize(GuiceyBootstrap bootstrap) {
-            bootstrap.extensions(InstalledExtension)
+            bootstrap
+                    .extensions(InstalledExtension)
         }
     }
 
     static class SampleModule1 extends AbstractModule {}
 
     static class SampleModule2 extends AbstractModule {}
+
+    static class DBundle implements ConfiguredBundle {}
 
     @Path('/1')
     static class SampleExtension1 {}

@@ -1,12 +1,15 @@
 # Testing
 
-Test support require `io.dropwizard:dropwizard-testing:1.3.0` dependency.
+Test support require `io.dropwizard:dropwizard-testing:2.0.2` dependency.
+
+!!! warning
+    Guicey does not provide junit 5 extensions: only junit 4 rules. Support will be added later.
 
 ## General test support
 
 ### Configuration hooks
 
-Guicey provides [hooks mechanism](configuration.md#guicey-configuration-hooks) to be able to modify
+Guicey provides [hooks mechanism](hooks.md) to be able to modify
 application configuration in tests.
 
 Using hooks you can disable installers, extensions, guicey bundles  
@@ -39,17 +42,17 @@ There are special spock and junit extensions for hooks registrations.
 
 You can use hooks to disable all not needed features in test:
 
-* [installers](configuration.md#disable-installer) 
-* [extensions](configuration.md#disable-extensions) 
-* [guice modules](configuration.md#disable-guice-modules)
-* [guicey bundles](configuration.md#disable-bundles) 
+* [installers](disables.md#disable-installers) 
+* [extensions](disables.md#disable-extensions) 
+* [guice modules](disables.md#disable-guice-modules)
+* [guicey bundles](disables.md#disable-bundles) 
 
 This way you can isolate (as possible) some feature for testing. 
 
 The most helpful should be bundles disable (if you use bundles for features grouping)
 and guice modules.
 
-Use [predicate disabling](configuration.md#disable-by-predicate).
+Use [predicate disabling](disables.md#disable-by-predicate).
 
 !!! note
     It is supposed that disabling will be used instead of mocking - you simply remove what
@@ -113,7 +116,7 @@ You can use lookup mechanism to load bundles in tests. For example,
 ### Testing core logic
 
 For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like 
-[DropwizardAppRule](http://www.dropwizard.io/1.3.0/docs/manual/testing.html),
+[DropwizardAppRule](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#id2),
 but *doesn't start jetty* (and so jersey and guice web modules will not be initialized). 
 Managed and lifecycle objects supported.
 
@@ -139,12 +142,12 @@ new GuiceyAppRule<>(MyApplication.class, null)
 ### Testing web logic
 
 For web component tests (servlets, filters, resources) use 
-[DropwizardAppRule](http://www.dropwizard.io/1.3.0/docs/manual/testing.html).
+[DropwizardAppRule](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#id2).
 
 To access guice beans use injector lookup:
 
 ```java
-InjectorLookup.getInjector(RULE.getApplication()).getBean(MyService.class);
+InjectorLookup.getInstance(RULE.getApplication(), MyService.class).get();
 ```
 
 ### Customizing guicey configuration
@@ -154,7 +157,7 @@ You can apply configuration hook using rule:
 
 ```java
 // there may be exact class instead of lambda
-new GuiceyConfigurationRule((builder) -> builder.modules(...))
+new GuiceyHooksRule((builder) -> builder.modules(...))
 ```
 
 To use it with `DropwizardAppRule` or `GuiceyAppRule` you will have to apply explicit order:
@@ -163,7 +166,7 @@ To use it with `DropwizardAppRule` or `GuiceyAppRule` you will have to apply exp
 static GuiceyAppRule RULE = new GuiceyAppRule(App.class, null);
 @ClassRule
 public static RuleChain chain = RuleChain
-       .outerRule(new GuiceyConfigurationRule((builder) -> builder.modules(...)))
+       .outerRule(new GuiceyHooksRule((builder) -> builder.modules(...)))
        .around(RULE);
 ```
 
@@ -177,7 +180,7 @@ in base test class and use it in chain (at each test):
 ```java
 public class BaseTest {
     // IMPORTANT no @ClassRule annotation here!
-     static GuiceyConfigurationRule BASE = new GuiceyConfigurationRule((builder) -> builder.modules(...))
+     static GuiceyHooksRule BASE = new GuiceyHooksRule((builder) -> builder.modules(...))
  }
 
  public class SomeTest extends BaseTest {
@@ -186,7 +189,7 @@ public class BaseTest {
      public static RuleChain chain = RuleChain
         .outerRule(BASE)
         // optional test-specific staff
-        .around(new GuiceyConfigurationRule((builder) -> builder.modules(...)) 
+        .around(new GuiceyHooksRule((builder) -> builder.modules(...)) 
         .around(RULE);
  }
 ``` 
@@ -269,7 +272,7 @@ If you use [spock framework](http://spockframework.org) you can use spock specif
 
 Both extensions allows using injections directly in specifications (like spock-guice).
 
-`@UseGuiceyConfiguration` extension could be used to apply [configuration hook](configuration.md#guicey-configuration-hooks) 
+`@UseGuiceyHooks` extension could be used to apply [configuration hook](hooks.md) 
 common for all tests
 
 ### Spock lifecycle hooks
@@ -386,7 +389,7 @@ class MyHook implements GuiceyConfigurationHook {}
 When you need to register configurations common for all tests, declare hook at the base test class:
 
 ```java
-UseGuiceyConfiguration(MyBaseHook)
+@UseGuiceyHooks(MyBaseHook)
 class BaseTest extends Specification {
     
 }
@@ -400,7 +403,7 @@ class SomeTest extends BaseTest {}
     (to apply some more test-specific configuration).
 
 !!! warning
-    Only one `@UseGuiceyConfiguration` declaration may be used in test hierarchy:
+    Only one `@UseGuiceyHooks` declaration may be used in test hierarchy:
     for example, you can't declare it in base class and then another one on extended class
     - base for a group of tests. This is spock limitation (only one extension will actually work)
     but should not be an issue for most cases.
@@ -494,11 +497,11 @@ class InjectionTest extends Specification {
 
 ## Overriding overridden beans
 
-Guicey provides [direct support for overriding guice bindings](configuration.md#override-guice-bindings),
+Guicey provides [direct support for overriding guice bindings](guice/override.md),
 so in most cases you don't need to do anything.
 
 But, if you use this to override application bindings need to override such bindings in test (again), then you
- may use provided custom [injector factory](injector.md#injector-factory):  
+ may use provided custom [injector factory](guice/injector.md#injector-factory):  
 
 Register factory in guice bundle:
 

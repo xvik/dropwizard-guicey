@@ -1,21 +1,21 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * Public api for collected guicey configuration info. In contrast to {@link ConfigurationContext},
- * used during configuration, contains only configuration item classes.
+ * used during configuration, contains only configuration item ids (item ids used instead of pure classes
+ * because multiple instances of the same type could be registered (e.g. multiple bundles or modules)).
  * <p>
  * Configuration info may be used for any kind of diagnostics: configuration logging, configuration tree rendering,
  * automatic configuration warnings generation etc.
@@ -33,17 +33,30 @@ import java.util.stream.Collectors;
  */
 public final class ConfigurationInfo {
 
+    // NOTE: ItemId for instance is equal to ItemId of class, but there would always be instance ItemIds
+    // if something was registered and class ItemId if item was disabled but never queried
+
     // required structure to preserve registration order
-    private final Multimap<ConfigItem, Class<?>> itemsHolder = LinkedHashMultimap.create();
-    private final Map<Class<?>, ItemInfo> detailsHolder = Maps.newHashMap();
+    private final Multimap<ConfigItem, ItemId> itemsHolder = LinkedHashMultimap.create();
+    // preserve all class types + pure disable (without registrations) of instance types
+    private final Map<ItemId, ItemInfo> classTypes = Maps.newHashMap();
+    // preserve all instance types together
+    private final Multimap<Class<?>, ItemInfo> instanceTypes = LinkedHashMultimap.create();
 
     public ConfigurationInfo(final ConfigurationContext context) {
         // convert all objects into types (more suitable for analysis)
         for (ConfigItem type : ConfigItem.values()) {
             for (Object item : context.getItems(type)) {
-                final Class<?> itemType = getType(item);
-                itemsHolder.put(type, itemType);
-                detailsHolder.put(itemType, context.getInfo(item));
+                final ItemId id = ItemId.from(item);
+                itemsHolder.put(type, id);
+                final ItemInfoImpl info = context.getInfo(item);
+
+                // put instance item pure disable descriptor into classTypes
+                if (info.getItemType().isInstanceConfig() && info.getRegistrationAttempts() > 0) {
+                    instanceTypes.put(info.getType(), info);
+                } else {
+                    classTypes.put(id, info);
+                }
             }
         }
     }
@@ -53,12 +66,12 @@ public final class ConfigurationInfo {
      *
      * @param type configuration item type
      * @param <T>  expected class
-     * @return registered item classes of required type in registration order or empty list if nothing registered
+     * @return registered item ids of required type in registration order or empty list if nothing registered
      */
     @SuppressWarnings("unchecked")
-    public <T> List<Class<T>> getItems(final ConfigItem type) {
+    public <T> List<ItemId<T>> getItems(final ConfigItem type) {
         final Collection res = itemsHolder.get(type);
-        return res.isEmpty() ? Collections.<Class<T>>emptyList() : (List<Class<T>>) Lists.newArrayList(res);
+        return res.isEmpty() ? Collections.emptyList() : new ArrayList<>(res);
     }
 
     /**
@@ -72,10 +85,10 @@ public final class ConfigurationInfo {
      * @param filter predicate to filter definitions
      * @param <T>    expected class
      * @param <K>    expected info container class
-     * @return registered item classes in registration order, filtered with provided filter or empty list
+     * @return registered item ids in registration order, filtered with provided filter or empty list
      */
-    public <T, K extends ItemInfo> List<Class<T>> getItems(final ConfigItem type, final Predicate<K> filter) {
-        final List<Class<T>> items = getItems(type);
+    public <T, K extends ItemInfo> List<ItemId<T>> getItems(final ConfigItem type, final Predicate<K> filter) {
+        final List<ItemId<T>> items = getItems(type);
         return filter(items, filter);
     }
 
@@ -88,29 +101,89 @@ public final class ConfigurationInfo {
      * Pay attention that disabled (or disabled and never registered) items are also returned.
      *
      * @param filter predicate to filter definitions
-     * @return registered item classes in registration order, filtered with provided filter or empty list
+     * @return registered item ids in registration order, filtered with provided filter or empty list
      */
     @SuppressWarnings("unchecked")
-    public List<Class<Object>> getItems(final Predicate<ItemInfo> filter) {
-        final List<Class<Object>> items = (List) Lists.newArrayList(itemsHolder.values());
+    public List<ItemId<Object>> getItems(final Predicate<? extends ItemInfo> filter) {
+        final List<ItemId<Object>> items = new ArrayList(itemsHolder.values());
         return filter(items, filter);
     }
 
     /**
-     * @param item configured item type
-     * @param <T>  expected configuration container type
-     * @return item configuration info or null if item not registered
+     * @param type item type
+     * @return registered items by type (possibly multiple results for instance item)
      */
     @SuppressWarnings("unchecked")
-    public <T extends ItemInfo> T getInfo(final Class<?> item) {
-        return (T) detailsHolder.get(item);
+    public List<ItemId<Object>> getItems(final Class<?> type) {
+        final List<ItemInfo> instances = getInfos(type);
+        if (instances.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final List<ItemId<Object>> res = new ArrayList<>();
+        for (ItemInfo item : instances) {
+            res.add(item.getId());
+        }
+        return res;
     }
 
-    private Class<?> getType(final Object item) {
-        return item instanceof Class ? (Class) item : item.getClass();
+    /**
+     * NOTE: it will not return first instance of type if called as {@code getInfo(ItemId.from(Bundle.class)))}!
+     * It could only return non null object for instance type if exact instance identity provided or
+     * disable - only info (when item was disabled but never registered then calling with id
+     * {@code ItemId.from(Bundle.class)} will return disable item info (information that all instances of class
+     * are disabled)). But note, that general disable into is not created if at least one instance was registered.
+     *
+     * @param id  configured item id
+     * @param <T> expected configuration container type
+     * @return item configuration info or null if item not registered
+     * @see #getInfos(Class) to retrieve all instace items of type
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends ItemInfo> T getInfo(final ItemId id) {
+        if (id.getIdentity() == null) {
+            // check if trying to reach instance descriptor by class identity
+            final int instancesCnt = instanceTypes.get(id.getType()).size();
+            Preconditions.checkState(instancesCnt == 0,
+                    "Class id descriptor (%s) can't be used to reach instance configurations: %s. "
+                            + "Use getInfos(class) instead.",
+                    id, instancesCnt);
+        }
+
+        // searching instance
+        final boolean instanceType = id.getIdentity() != null;
+        if (instanceType) {
+            for (ItemInfo info : instanceTypes.get(id.getType())) {
+                if (info.getId().equals(id)) {
+                    return (T) info;
+                }
+            }
+        }
+
+        return instanceType ? null : (T) classTypes.get(id);
     }
 
-    private <T, K extends ItemInfo> List<Class<T>> filter(final List<Class<T>> items, final Predicate<K> filter) {
+    /**
+     * Returns all registrations of type. For class based extensions will return list of one element (the same result
+     * as {@code getInfo(ItemId.from(type))}).For instance types will return all registered instances of type.
+     *
+     * @param type item class
+     * @param <T>  item info type
+     * @return all registrations of type or empty list if nothing registered
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends ItemInfo> List<T> getInfos(final Class<?> type) {
+        final ItemId id = ItemId.from(type);
+        // it may be request for class item or for all instance items (of provided class)
+        if (instanceTypes.containsKey(id.getType())) {
+            return new ArrayList<T>((Collection<T>) instanceTypes.get(id.getType()));
+        }
+        // if item is only disabled without actual registration
+        final T res = (T) classTypes.get(id);
+        return res == null ? Collections.emptyList() : Collections.singletonList(res);
+    }
+
+    private <T, K extends ItemInfo> List<ItemId<T>> filter(final List<ItemId<T>> items, final Predicate<K> filter) {
         return items.stream().filter(it -> filter.test(getInfo(it))).collect(Collectors.toList());
     }
 }

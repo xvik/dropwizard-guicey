@@ -4,13 +4,22 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Module;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
+import io.dropwizard.lifecycle.Managed;
+import io.dropwizard.lifecycle.ServerLifecycleListener;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.util.component.LifeCycle;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationStartupListener;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationStartupListenerAdapter;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.GuiceyStartupListener;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.GuiceyStartupListenerAdapter;
+import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Guicey environment object. Provides almost the same configuration methods as
@@ -22,6 +31,7 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 13.06.2019
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public class GuiceyEnvironment {
 
     private final ConfigurationContext context;
@@ -169,10 +179,17 @@ public class GuiceyEnvironment {
     }
 
     /**
-     * Register guice modules. All registered modules must be of unique type (duplicate instances of the
-     * same type are filtered).
+     * Register guice modules.
+     * <p>
+     * Note that this registration appear in run phase and so you already have access
+     * to environment and configuration (and don't need to use Aware* interfaces, but if you will they will also
+     * work, of course). This may look like misconception because configuration appear not in configuration phase,
+     * but it's not: for example, in pure dropwizard you can register jersey configuration modules in run phase too.
+     * This brings the simplicity of use: 3rd party guice modules often require configuration values to
+     * be passed directly to constructor, which is impossible in initialization phase (and so you have to use Aware*
+     * workarounds).
      *
-     * @param modules one or more juice modules
+     * @param modules one or more guice modules
      * @return environment instance for chained calls
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(com.google.inject.Module...)
      */
@@ -206,6 +223,9 @@ public class GuiceyEnvironment {
 
     /**
      * Disable both usual and overriding guice modules.
+     * <p>
+     * If bindings analysis is not disabled, could also disable inner (transitive) modules, but only inside
+     * normal modules.
      *
      * @param modules guice module types to disable
      * @return environment instance for chained calls
@@ -218,13 +238,13 @@ public class GuiceyEnvironment {
     }
 
     /**
-     * Shortcut for {@code environment().jerset().register()} for direct registration of jersey extensions.
+     * Shortcut for {@code environment().jersey().register()} for direct registration of jersey extensions.
      * For the most cases prefer automatic installation of jersey extensions with guicey installer.
      *
      * @param items jersey extension instances to install
      * @return environment instance for chained calls
      */
-    public GuiceyEnvironment register(Object... items) {
+    public GuiceyEnvironment register(final Object... items) {
         for (Object item : items) {
             environment().jersey().register(item);
         }
@@ -232,16 +252,156 @@ public class GuiceyEnvironment {
     }
 
     /**
-     * Shortcut for {@code environment().jerset().register()} for direct registration of jersey extensions.
+     * Shortcut for {@code environment().jersey().register()} for direct registration of jersey extensions.
      * For the most cases prefer automatic installation of jersey extensions with guicey installer.
      *
      * @param items jersey extension instances to install
      * @return environment instance for chained calls
      */
-    public GuiceyEnvironment register(Class<?>... items) {
+    public GuiceyEnvironment register(final Class<?>... items) {
         for (Class<?> item : items) {
             environment().jersey().register(item);
         }
         return this;
     }
+
+    /**
+     * Shortcut for manual registration of {@link Managed} objects.
+     * <p>
+     * Pay attention that managed objects are not called for commands.
+     *
+     * @param managed managed to register
+     * @return environment instance for chained calls
+     */
+    public GuiceyEnvironment manage(final Managed managed) {
+        environment().lifecycle().manage(managed);
+        return this;
+    }
+
+    /**
+     * Guicey broadcast a lot of events in order to indicate lifecycle phases
+     * ({@linkplain ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle}). Listener, registered in run phase
+     * could listen events from {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle#BundlesStarted}.
+     * <p>
+     * Listener is not registered if equal listener was already registered ({@link java.util.Set} used as
+     * listeners storage), so if you need to be sure that only one instance of some listener will be used
+     * implement {@link Object#equals(Object)}.
+     *
+     * @param listeners guicey lifecycle listeners
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(GuiceyLifecycleListener...)
+     */
+    public GuiceyEnvironment listen(final GuiceyLifecycleListener... listeners) {
+        context.lifecycle().register(listeners);
+        return this;
+    }
+
+    /**
+     * Shortcut for {@link ServerLifecycleListener} registration.
+     * <p>
+     * Note that server listener is called only when jetty starts up and so will no be called with lightweight
+     * guicey test helpers {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
+     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp}. Prefer using
+     * {@link #onApplicationStartup(ApplicationStartupListener)} to be correctly called in tests (of course, if not
+     * server only execution is desired).
+     * <p>
+     * Obviously not called for custom command execution.
+     *
+     * @param listener server startup listener.
+     * @return environment instance for chained calls
+     */
+    public GuiceyEnvironment listenServer(final ServerLifecycleListener listener) {
+        environment().lifecycle().addServerLifecycleListener(listener);
+        return this;
+    }
+
+    /**
+     * Shortcut for jetty lifecycle listener {@link LifeCycle.Listener listener} registration.
+     * <p>
+     * Lifecycle listeners are called with lightweight guicey test helpers
+     * {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
+     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp} which makes them perfectly suitable for reporting.
+     * <p>
+     * If only startup event is required, prefer {@link #onApplicationStartup(ApplicationStartupListener)} method
+     * as more expressive and easier to use.
+     * <p>
+     * Listeners are not called on custom command execution.
+     *
+     * @param listener jetty
+     * @return environment instance for chained calls
+     * @see org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener adapter
+     */
+    public GuiceyEnvironment listenJetty(final LifeCycle.Listener listener) {
+        environment().lifecycle().addLifeCycleListener(listener);
+        return this;
+    }
+
+    /**
+     * Use to access shared state value and immediately fail if value not yet set (most likely due to incorrect
+     * configuration order).
+     * <p>
+     * Note: shared state value assumed to be initialized under initialization phase (but you can workaround
+     * this limitation by accessing shared state statically)
+     *
+     * @param key     shared object key
+     * @param message exception message (could use {@link String#format(String, Object...)} placeholders)
+     * @param args    placeholder arguments for error message
+     * @param <T>     shared object type
+     * @return shared object
+     * @throws IllegalStateException if not value available
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> T sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
+        return context.getSharedState().getOrFail(key, message, args);
+    }
+
+    /**
+     * Access shared value. Shared state value assumed to be initialized under initialization phase  (but you
+     * can workaround this limitation by accessing shared state statically)
+     *
+     * @param key shared object key
+     * @param <T> shared object type
+     * @return shared object
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> Optional<T> sharedState(final Class<?> key) {
+        return Optional.ofNullable(context.getSharedState().get(key));
+    }
+
+    /**
+     * Code to execute after guice injector creation (but still under run phase). May be used for manual
+     * configurations (registrations into dropwizard environment).
+     * <p>
+     * Listener will be called on environment command start too.
+     * <p>
+     * Note: there is no registration method for this listener in main guice bundle builder
+     * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder}) because it is assumed, that such blocks would
+     * always be wrapped with bundles to improve application readability.
+     *
+     * @param listener listener to call after injector creation
+     * @return environment instance for chained calls
+     */
+    public GuiceyEnvironment onGuiceyStartup(final GuiceyStartupListener listener) {
+        return listen(new GuiceyStartupListenerAdapter(listener));
+    }
+
+    /**
+     * Code to execute after complete application startup. For server command it would happen after jerry startup
+     * and for lightweight guicey test helpers ({@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
+     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp}) - after guicey start (as jetty not started in this
+     * case). In both cases application completely started at this moment. Suitable for reporting.
+     * <p>
+     * If you need to listen only for real server startup then use {@link #listenServer(ServerLifecycleListener)}
+     * instead.
+     * <p>
+     * Not called on custom command execution (because no lifecycle involved in this case). In this case you can use
+     * {@link #onGuiceyStartup(GuiceyStartupListener)} as always executed point.
+     *
+     * @param listener listener to call on server startup
+     * @return environment instance for chained calls
+     */
+    public GuiceyEnvironment onApplicationStartup(final ApplicationStartupListener listener) {
+        return listen(new ApplicationStartupListenerAdapter(listener));
+    }
+
 }

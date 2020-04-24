@@ -1,14 +1,15 @@
 package ru.vyarus.dropwizard.guice.config
 
 import io.dropwizard.Application
-import io.dropwizard.Bundle
 import io.dropwizard.ConfiguredBundle
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.Filters
-import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
+import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo
+import ru.vyarus.dropwizard.guice.module.installer.feature.health.HealthCheckInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
@@ -37,12 +38,12 @@ class FiltersTest extends Specification {
 
         expect: "matched check"
         Filters.disabledBy(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            disabledBy.add(Application)
+            disabledBy.add(ItemId.from(Application))
         })
 
         and: "not matched check"
         !Filters.disabledBy(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            disabledBy.add(Bundle)
+            disabledBy.add(ItemId.from(ConfiguredBundle))
         })
 
     }
@@ -51,7 +52,7 @@ class FiltersTest extends Specification {
 
         expect: "from scan"
         Filters.fromScan().test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            registeredBy.add(ClasspathScanner)
+            registeredBy.add(ItemId.from(ClasspathScanner))
         })
 
         and: "not from scan"
@@ -66,12 +67,12 @@ class FiltersTest extends Specification {
 
         expect: "matched check"
         Filters.registrationScope(ConfigScope.Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            registrationScope = Application
+            countRegistrationAttempt(ItemId.from(Application))
         })
 
         and: "not matched check"
         !Filters.registrationScope(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            registrationScope = Bundle
+            countRegistrationAttempt(ItemId.from(ConfiguredBundle))
         })
 
     }
@@ -80,12 +81,12 @@ class FiltersTest extends Specification {
 
         expect: "matched check"
         Filters.registeredBy(ConfigScope.Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            registeredBy.add(Application)
+            registeredBy.add(ItemId.from(Application))
         })
 
         and: "not matched check"
         !Filters.registeredBy(Application).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {
-            registeredBy.add(Bundle)
+            registeredBy.add(ItemId.from(ConfiguredBundle))
         })
 
     }
@@ -94,21 +95,23 @@ class FiltersTest extends Specification {
 
         expect: "matched check"
         Filters.type(ConfigItem.Installer).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
+        Filters.type(JerseyFeatureInstaller).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
 
         and: "not matched check"
         !Filters.type(ConfigItem.Bundle).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
+        !Filters.type(HealthCheckInstaller).test(item(ConfigItem.Installer, JerseyFeatureInstaller) {})
 
     }
 
     def "Check lookupBundles filter"() {
 
         expect: "matched check"
-        Filters.lookupBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {
-            registeredBy.add(GuiceyBundleLookup)
+        Filters.lookupBundles().test(item(ConfigItem.Bundle, ConfigurationDiagnostic) {
+            registeredBy.add(ItemId.from(GuiceyBundleLookup))
         })
 
         and: "not matched check"
-        !Filters.lookupBundles().test(item(ConfigItem.Bundle, DiagnosticBundle) {})
+        !Filters.lookupBundles().test(item(ConfigItem.Bundle, ConfigurationDiagnostic) {})
 
     }
 

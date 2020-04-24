@@ -29,12 +29,12 @@ class ExtensionInfoCasesTest extends Specification {
     def "Check extension info"() {
 
         expect: "extension info for hk2 managed"
-        ExtensionItemInfo hk = info.data.getInfo(HkResource)
+        ExtensionItemInfo hk = info.getInfo(HkResource)
         !hk.lazy
         hk.jerseyManaged
 
         and: "extension info for lazy"
-        ExtensionItemInfo lazy = info.data.getInfo(LazyResource)
+        ExtensionItemInfo lazy = info.getInfo(LazyResource)
         lazy.lazy
         !lazy.jerseyManaged
 

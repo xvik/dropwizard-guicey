@@ -6,7 +6,7 @@ package ru.vyarus.dropwizard.guice.module.jersey.hk2;
  * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#UseHkBridge} option.
  * <p>
  * Installation extracted to separate class to isolate bridge dependency usage: when bridge is enabled.
- * extra 'org.glassfish.hk2:guice-bridge:2.5.0' dependency is required.
+ * extra 'org.glassfish.hk2:guice-bridge:2.6.1' dependency is required.
  *
  * @author Vyacheslav Rusakov
  * @since 26.03.2017

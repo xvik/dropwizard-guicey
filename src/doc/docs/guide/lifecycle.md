@@ -1,131 +1,95 @@
-# Integration lifecycle
-
-Jersey2 guice integration is more complicated than for jersey1, because of [HK2](https://hk2.java.net/2.4.0-b34/introduction.html) container, used by jersey2.
-
-!!! note
-    Many people ask why not just use HK2 instead of guice as it's already provided. Unfortunately, it's hard to use it 
-    in the same elegant way as we can use guice. HK2 context is launched too late (after dropwizard run phase).
-    For example, it is impossible to use HK2 to instantiate dropwizard managed object because managed
-    must be registered before HK2 context starts.
-
-Guice integration done in guice exclusive way as much as possible: everything should be managed by guice and invisibly integrated into HK2.
-Anyway, it is not always possible to hide integration details, especially if you need to register jersey extensions.
+# Guicey lifecycle
 
 !!! tip 
-    You can use [guicey lifecycle events](events.md) to see initialization stages in logs:
-    `.printLifecyclePhases()` 
-
-## Lifecycle
-
-* Dropwizard configuration phase (`~Application.initialize`)   
-    * Apply [configuration hooks](configuration.md#guicey-configuration-hooks)
-    * Guice bundle registered 
-    * Perform [classpath scan for commands](commands.md#automatic-installation) ([optional](configuration.md#commands-search))
-* Dropwizard run phase (`~Application.run`)
-    * Dropwizard runs bundles (guice bundle is one of them so guice initialization may be performed between other dropwizard bundles)
-    * Search guicey bundles in dropwizard bundles ([optional](configuration.md#dropwizard-bundles-unification)) 
-    * [Lookup guicey bundles](bundles.md#bundle-lookup)   
-    * Apply configuration from guicey bundles
-    * **Injector creation** ([using factory](injector.md#injector-factory))
-        * [Bind dropwizard objects](bindings.md): Environment, Configuration, Bootstrap
-        * Scan for installers (in auto configuration mode)
-        * Scan for extensions (in auto configuration mode)
-        * Register `GuiceFeature` in environment (jersey `Feature` which will trigger jersey side installations)
-        * Apply [lazy jersey bindings](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/jersey/hk2/GuiceBindingsModule.java)
-        * Activate [guice servlet support](web.md), register GuiceFilter on admin and main contexts ([could be disabled](configuration.md#servletmodule))
-    * Injector created
-        * Call installers to register extensions
-    * Your application's `run` method executed. Injector is already available, so any guice bean could be [accessed](injector.md)          
-* Jersey start
-    * [Managed beans](../installers/managed.md) started
-    * **HK2 context creation** (jersey start)
-        * `GuiceFeature` (registered earlier) called
-            * [Optionally](configuration.md#hk2-bridge) register [HK2-guice bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html) (only guice to hk2 way to let hk2 managed beans inject guice beans)
-            * Run jersey specific installers ([resource](../installers/resource.md), [extension](../installers/jersey-ext.md))
+    Guicey broadcast [events](events.md) in all major points.
+    You can see most of them with enabled [lifecycle report](diagnostic/lifecycle-report.md).     
+    
+## Configuration phase
 
 !!! note
-    Any `EnvironmentCommand` did no start jersey, so managed objects will not be started.
-    Also, all jersey related extensions will not be started. Still, core guice context will be completely operable. 
+    All manual registrations must be performed under this phase (the only exception is 
+    guice modules). All bundles are registered and initialized only under configuration phase.
+
+Everything below happens under bundle registration call:
+
+```java
+@Override
+public void initialize(Bootstrap<Configuration> bootstrap) {
+    bootstrap.addBundle(GuiceBundle.builder()
+            ...
+            .build());
+
+    // everything here will be called after all steps below
+}
+```  
+
+* [Main bundle](configuration.md#main-bundle) configuration
+* Apply [configuration hooks](hooks.md)
+* All [option](options.md) values set and can't be modified anymore.
+* Apply registered [dropwizard bundles](bundles.md#dropwizard-bundles) (init delayed to count 
+dropwizard bundle [disables](disables.md#disable-dropwizard-bundles)).  
+* Perform [classpath scan](scan.md) (if configured). Scan resolve all classes in configured packages to use 
+them later for detection.  
+* Perform [bundles lookup](bundles.md#bundle-lookup)
+* Initialize [bundles](bundles.md#guicey-bundles) 
+* Search [for commands](commands.md#automatic-installation) (if classpath scan enabled)
+* Prepare [installers](installers.md):
+    - Detect installers with classpath scan (if configured)
+    - Instantiate [not diabled](disables.md#disable-installers) installers
+* Resolve [extensions](extensions.md):
+    - Validate all [enabled](disables.md#disable-extensions) manually registered extensions:
+    one of prepared installers must recognize extension or error will be thrown.
+    - Recognize extensions from classpath scan classes (if configured)              
+
+## Run phase
+
+* Run [bundles](bundles.md#guicey-bundles)
+    - Guice modules may be [registered here](bundles.md#guicey-bundles)
+    - Extensions may still [be disabled](bundles.md#optional-extensions)
+* [Autowire modules](guice/module-autowiring.md)
+* [Analyze enabled modules](guice/module-analysis.md)
+    - Detect [extensions from bindings](guice/module-analysis.md#extensions-recognition)
+    - Remove [disabled modules](guice/module-analysis.md#removed-bindings) and [disabled extensions](guice/module-analysis.md#disabled-extensions)
+    - Re-package modules (to avoid duplicate modules parsing by guice)
+    - Register `GuiceBootsrapModule`  
+    - Apply [overriding](guice/override.md) modules
+* Create injector (with [injector factory](guice/injector.md#injector-factory))
+    - `GuiceBootsrapModule` configures:
+        * Additional [bindings](guice/bindings.md) (like [environment](guice/bindings.md#environment-binding), 
+        [configuration](guice/bindings.md#configuration) and [jersey-objects](guice/bindings.md#jersey-specific-bindings))
+        * Performs [extensions registration](guice/bindings.md#extension-bindings) (either default binding or specific, 
+        performed by `BindingInstaller`)
+        * Register `GuiceFeature` (jersey `Feature`), which will perform jersey initialization
+        * Activate [guice ServletModule support](guice/servletmodule.md)   
+    - Since that moment injector could be [referenced statically](guice/injector.md#access-injector)
+* Install extensions (except jersey extensions)
+* [Inject commands](commands.md#guice-injections)
+
+
+!!! note
+    As dropwizard bundles were registered under `GuiceBundle` configuration, they will be run by dropwizard
+    after `GuiceBundle`.
+    
+!!! note
+    Your `Application.run()` method will be called *after* guicey startup, so you can [use created 
+    injector](guice/injector.md#access-injector) there.   
+
+## Jersey startup
+
+!!! note
+    Jersey startup will initiate [hk2](hk2.md) context creation
+
+* [Managed beans](../installers/managed.md) started
+* [hk2](hk2.md) context creation activates `GuiceFeature` (registered earlier)
+    - Apply [guice bridge](hk2.md#hk2-guice-bridge) (if required)
+    - Run jersey specific installers ([resource](../installers/resource.md), [extension](../installers/jersey-ext.md)):
+    installers will register required bindings in hk2 context
+
+!!! note
+    Any `EnvironmentCommand` did no start jersey, so managed objects will not be started (but you can start required 
+    services [manually](commands.md#environment-commands). Also, all jersey related extensions will not be started.
+    Still, core guice context will be completely operable. 
 
 !!! attention ""
     When guice context is created, *jersey context doesn't exist* and when jersey context is created *it doesn't aware of guice existence*.
 
-## Cross context bindings
-
-### Access jersey beans from guice
-
-To access HK2 bindings we need HK2 `ServiceLocator`: it's instance is registered by `GuiceFeature` (in time of HK2 context startup).
-
-Jersey components are bound as providers:
-
-```java
-binder.bind(jerseyType).toProvider(new LazyJerseyProvider(jerseyType));
-```       
-
-Internally this provider will perform lookup in HK2 service locator:
-
-```java
-injector.getInstance(ServiceLocator.class).getService(jerseyType);
-```
- 
-This way jersey beans are "bridged" to guice. They can't be accessed directly in guice beans
-at injector creation time (as there is nothing to "bridge" yet). 
-
-`#!java @Inject Provider<JerseyType> provider` must be used to access such beans.     
-
-See more details in [jersey bindings module](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/jersey/hk2/GuiceBindingsModule.java).
-
-### Access guice beans from jersey    
-
-!!! note
-    It's almost never required to care about beans visibility from HK2 side because guicey already did all required
-    bindings.
-
-HK2 could see all guice beans because of registered guice-bridge. But it doesn't mean HK2 can analyze 
-all guice beans to search for extensions (it can resolve only direct injection).
-    
-Specific jersey installers ([resource](../installers/resource.md), [extension](../installers/jersey-ext.md)) 
-create required bindings manually in time of HK2 context creation.
-
-[Jersey extensions installer](../installers/jersey-ext.md) handles most specific installation cases
-(where HK2 knowledge is required). It uses the same technic, as the other side binding:
-
-```java
-binder.bindFactory(new LazyGuiceProvider(guiceType)).to(type)
-```
-
-On request, factory will simply delegate lookup to guice injector:
-
-```java
-injector.getInstance(guiceType);
-```
-
-!!! tip
-    If you just want to add some beans in HK2 context, annotate such beans with `@Provider` and `@HK2Managed` - provider
-    will be recognized by installer and HK2 managed annotation will trigger simple registration (overall it's the same
-    as write binding manually).
-    ```java
-    @HK2Managed
-    @Provider
-    public class MyBeanMangedByHK2 { ... }    
-    ```
-
-For more details look [jersey provider installer](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java)
-
-## Problematic cases    
-
-The problems may appear with binding of jersey extensions.
-Good example is [`ValueParamProvider`](../installers/jersey-ext.md#valueparamprovider). Most likely you will use `AbstractValueFactoryProvider` as base class, but it declares
-direct binding for `MultivaluedParameterExtractorProvider`. So such bean would be impossible to create eagerly in guice context.
-
-There are two options to solve this:
-
-* use `@LazyBinding`: bean instance will not be created together with guice context (when `MultivaluedParameterExtractorProvider` is not available),
-and creation will be initiated by HK2, when binding could be resolved.
-* or use `@HK2Managed` this will delegate instance management to HK2, but still guice services [may be injected](configuration.md#hk2-bridge).
-
-!!! note
-    You may use [HK2-first strategy](configuration.md#use-hk2-for-jersey-extensions) and create all jersey 
-    extensions in HK2 instead of guice. In this case you can use `@GuiceManaged` annotation to delegate management back to guice.
-
-In other cases simply wrap jersey specific bindings into `Provider`.

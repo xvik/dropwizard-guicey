@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.jersey;
 
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
@@ -19,8 +20,7 @@ import javax.ws.rs.core.Feature;
  * @since 13.01.2016
  */
 @Order(30)
-public class JerseyFeatureInstaller implements
-        FeatureInstaller<Feature>, InstanceInstaller<Feature> {
+public class JerseyFeatureInstaller implements FeatureInstaller, InstanceInstaller<Feature> {
 
     private final Reporter reporter = new Reporter(JerseyFeatureInstaller.class, "features =");
 
@@ -36,7 +36,7 @@ public class JerseyFeatureInstaller implements
 
     @Override
     public void install(final Environment environment, final Feature instance) {
-        reporter.line("(%s)", FeatureUtils.getInstanceClass(instance).getName());
+        reporter.line(RenderUtils.renderClassLine(FeatureUtils.getInstanceClass(instance)));
         environment.jersey().register(instance);
     }
 }

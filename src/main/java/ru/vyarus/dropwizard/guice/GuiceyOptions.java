@@ -1,6 +1,8 @@
 package ru.vyarus.dropwizard.guice;
 
 import com.google.inject.Stage;
+import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.setup.Bootstrap;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 
 import javax.servlet.DispatcherType;
@@ -70,6 +72,52 @@ public enum GuiceyOptions implements Option {
     BindConfigurationByPath(Boolean.class, true),
 
     /**
+     * Track transitive dropwizard bundles registration. Affects only dropwizard bundles registered through
+     * guicey api ({@link GuiceBundle.Builder#dropwizardBundles(ConfiguredBundle[])} (direct registration) and
+     * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#dropwizardBundles(ConfiguredBundle[])}
+     * (registration within guicey bundle)). When enabled, registered dropwizard bundles would be registered in
+     * dropwizard with decorated (to track execution) object and receive proxied bootstrap object instead
+     * of raw bootstrap into {@link ConfiguredBundle#initialize(Bootstrap)}. This should not cause any problems
+     * with normal bundles usage.
+     * <p>
+     * When disabled, guicey will be able to "see" only directly registered bundles (and so will be able to disable
+     * and deduplicate only them).
+     * <p>
+     * NOTE: dropwizard bundles registered directly into bootstrap object (in application or in guicey bundle)
+     * are not tracked in any case. It is assumed that guicey api would be used for bundles registration when
+     * you want to track them.
+     * <p>
+     * {@link Bootstrap} object proxy creation results in ~200ms overhead, clearly visible on diagnostics report
+     * (stats). But it's the only way to track transitive dropwizard bundles (not so big price).
+     * Proxy object is not created if no dropwizard bundles registered through guicey api.
+     */
+    TrackDropwizardBundles(Boolean.class, true),
+
+    /**
+     * Search for extensions in supplied guice modules (registration from guice module). Overriding modules
+     * are not taken into account. Also, removes disabled modules from inner module registrations (transitive
+     * modules).
+     * <p>
+     * Normally extension class is registered directly (or found by classpath scan), recognized by installer, bound
+     * to guice context (with a default binding) and installed in dropwizard. When option is enabled, the same is done
+     * with guice bindings (declared in modules): binding classes analyzed by installers to detect extensions and
+     * then extensions are installed. Overall it's the same, except no default bindings applied by framework.
+     * <p>
+     * It is ok if the same extension would be registered manually or detected by classpath scan and be declared
+     * in guice module manually - guicey will gust avoid default binding.
+     * <p>
+     * Extensions, detected from guice modules may be disabled the same way as usual extensions (bindings
+     * will be removed).
+     * <p>
+     * When modules analysis is enabled, guicey performs modules configuration (using SPI api) before actual injector
+     * creation and, to avoid duplicate work by injector, parsed modules are repackaged (to preserve parsed
+     * information). You can see on stats report that modules analysis time is cut off from injector creation time
+     * (creation time grows if option disabled). Also repackaging is the only way to properly handle disables for
+     * existing bindings.
+     */
+    AnalyzeGuiceModules(Boolean.class, true),
+
+    /**
      * Guice injector stage used for injector creation.
      * Production by default.
      *
@@ -105,8 +153,10 @@ public enum GuiceyOptions implements Option {
      * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged} used to properly instantiate
      * service by HK2 when it also depends on guice services.
      * <p>
-     * IMPORTANT: requires extra dependency on HK2 guice-bridge: 'org.glassfish.hk2:guice-bridge:2.5.0'
+     * IMPORTANT: requires extra dependency on HK2 guice-bridge: 'org.glassfish.hk2:guice-bridge:2.6.1'
+     * @deprecated in the next version HK2 support will be removed
      */
+    @Deprecated
     UseHkBridge(Boolean.class, false);
 
     private Class<?> type;

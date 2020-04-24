@@ -1,8 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.installer.bundle;
 
-import io.dropwizard.ConfiguredBundle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
-
 /**
  * Guicey bundle is an enhancement of dropwizard bundles ({@link io.dropwizard.ConfiguredBundle}). It allows
  * everything that dropwizard bundles can plus guicey specific features and so assumed to be used instead
@@ -28,6 +25,13 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
  * Bundles could be installed automatically with bundle lookups mechanism
  * {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup}. For example, it could be service loader based
  * lookup which automatically installs bundle when it appears in classpath.
+ * <p>
+ * Multiple instances of the same bundle could be registered (like with dropwizard bundles). But guicey duplicates
+ * mechanism will consider equal bundles as duplicate (and register only one). So in order to grant bundle
+ * uniqueness simply properly implement equals method or use
+ * {@link ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle}. See
+ * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#duplicateConfigDetector(
+ *ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector)} for duplicates detection mechanism info.
  *
  * @author Vyacheslav Rusakov
  * @since 01.08.2015
@@ -39,8 +43,9 @@ public interface GuiceyBundle {
      * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder}, which allows to register installers, extensions
      * and guice modules. Existing installer could be replaced by disabling old one and registering new.
      * <p>
-     * Dropwizard bundles could be also registered with {@link GuiceyBootstrap#bundles(ConfiguredBundle[])}
-     * shortcut (or by directly accessing dropwizard bootstrap object: {@link GuiceyBootstrap#bootstrap()}
+     * Dropwizard bundles could be also registered with
+     * {@link GuiceyBootstrap#dropwizardBundles(io.dropwizard.ConfiguredBundle[])} shortcut (or by directly accessing
+     * dropwizard bootstrap object: {@link GuiceyBootstrap#bootstrap()}.
      * <p>
      * As bundles could be registered only during initialization phase, it is not possible to
      * avoid bundle registration based on configuration (not a good practice). But, it is possible
@@ -48,7 +53,8 @@ public interface GuiceyBundle {
      * bundles should be activated.
      * <p>
      * Guicey lifecycle listeners ({@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener}
-     * could be registered only on initialization phase ({@link GuiceyBootstrap#listen(GuiceyLifecycleListener...)}).
+     * could be registered only on initialization phase
+     * ({@link GuiceyBootstrap#listen(ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}).
      *
      * @param bootstrap guicey bootstrap object
      */
@@ -71,8 +77,9 @@ public interface GuiceyBundle {
      * {@link GuiceyEnvironment#configurationTree()}.
      *
      * @param environment guicey environment object
+     * @throws Exception if something goes wrong
      */
-    default void run(GuiceyEnvironment environment) {
+    default void run(GuiceyEnvironment environment) throws Exception {
         // void
     }
 }

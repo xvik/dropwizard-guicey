@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.health;
 
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
@@ -17,8 +18,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
  * @since 01.09.2014
  */
 @Order(60)
-public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck>,
-        InstanceInstaller<NamedHealthCheck> {
+public class HealthCheckInstaller implements FeatureInstaller, InstanceInstaller<NamedHealthCheck> {
 
     private final Reporter reporter = new Reporter(HealthCheckInstaller.class, "health checks =");
 
@@ -30,7 +30,8 @@ public class HealthCheckInstaller implements FeatureInstaller<NamedHealthCheck>,
     @Override
     public void install(final Environment environment, final NamedHealthCheck instance) {
         environment.healthChecks().register(instance.getName(), instance);
-        reporter.line("%-10s (%s)", instance.getName(), FeatureUtils.getInstanceClass(instance).getName());
+        reporter.line("%-20s %s", instance.getName(),
+                RenderUtils.renderClassLine(FeatureUtils.getInstanceClass(instance)));
     }
 
     @Override

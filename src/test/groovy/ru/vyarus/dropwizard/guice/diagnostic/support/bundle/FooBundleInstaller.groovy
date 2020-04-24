@@ -6,7 +6,7 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller
  * @author Vyacheslav Rusakov
  * @since 26.06.2016
  */
-class FooBundleInstaller implements FeatureInstaller<Object>{
+class FooBundleInstaller implements FeatureInstaller {
 
     @Override
     boolean matches(Class<?> type) {

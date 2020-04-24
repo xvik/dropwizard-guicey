@@ -1,7 +1,10 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
+import io.dropwizard.ConfiguredBundle;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.*;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 
 /**
  * Guicey configurable item types.
@@ -13,55 +16,83 @@ public enum ConfigItem {
     /**
      * Installer.
      */
-    Installer,
+    Installer(false),
     /**
      * Extension (everything that is installed by installers (like resource, health check etc).
      */
-    Extension,
+    Extension(false),
     /**
-     * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}.
-     * Note that guicey bundle installs other items and all of the, are tracked too.
+     * {@link io.dropwizard.ConfiguredBundle}. Only bundles registered through guicey api are tracked.
      */
-    Bundle,
+    // NOTE dropwizard bundle goes before guicey bundle because dropwizard bundles are actually register first
+    DropwizardBundle(true),
+    /**
+     * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle} or
+     * {@link io.dropwizard.ConfiguredBundle}
+     * Note that guicey bundle installs other items and all of them are tracked too.
+     */
+    Bundle(true),
     /**
      * Guice module.
      * Note that only direct modules are tracked (if module registered by other guice module in it's configure
      * method it would not be tracked - it's pure guice staff).
      */
-    Module,
+    Module(true),
     /**
      * Dropwizard command. Commands could be resolved with classpath scan and installed (by default disabled).
      */
-    Command;
+    Command(false);
+
+    private boolean instanceConfig;
+
+    ConfigItem(final boolean instanceConfig) {
+        this.instanceConfig = instanceConfig;
+    }
+
+    /**
+     * @return true if instances used for configuration, false when configured with class
+     */
+    public boolean isInstanceConfig() {
+        return instanceConfig;
+    }
 
     /**
      * Creates info container for configuration item.
      *
-     * @param type item class
+     * @param item item instance or item class (for class based configurations)
      * @param <T>  type of required info container
      * @return info container instance
      */
     @SuppressWarnings("unchecked")
-    public <T extends ItemInfoImpl> T newContainer(final Class<?> type) {
+    public <T extends ItemInfoImpl> T newContainer(final Object item) {
         final ItemInfo res;
         switch (this) {
             case Installer:
-                res = new InstallerItemInfoImpl(type);
+                res = new InstallerItemInfoImpl((Class) item);
                 break;
             case Extension:
-                res = new ExtensionItemInfoImpl(type);
+                res = new ExtensionItemInfoImpl((Class) item);
+                break;
+            case DropwizardBundle:
+                res = item instanceof Class
+                        ? new DropwizardBundleItemInfoImpl((Class<ConfiguredBundle>) item)
+                        : new DropwizardBundleItemInfoImpl((ConfiguredBundle) item);
                 break;
             case Bundle:
-                res = new BundleItemInfoImpl(type);
+                res = item instanceof Class
+                        ? new GuiceyBundleItemInfoImpl((Class<GuiceyBundle>) item)
+                        : new GuiceyBundleItemInfoImpl((GuiceyBundle) item);
                 break;
             case Command:
-                res = new CommandItemInfoImpl(type);
+                res = new CommandItemInfoImpl((Class) item);
                 break;
             case Module:
-                res = new ModuleItemInfoImpl(type);
+                res = item instanceof Class
+                        ? new ModuleItemInfoImpl((Class<com.google.inject.Module>) item)
+                        : new ModuleItemInfoImpl((com.google.inject.Module) item);
                 break;
             default:
-                res = new ItemInfoImpl(this, type);
+                res = new ItemInfoImpl(this, ItemId.from(item));
                 break;
         }
         return (T) res;

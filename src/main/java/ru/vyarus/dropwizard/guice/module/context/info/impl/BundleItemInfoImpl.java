@@ -2,42 +2,38 @@ package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
 import com.google.common.collect.Sets;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
-import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 
 import java.util.Set;
 
 /**
- * Bundle item info implementation.
+ * Bundle item info generic implementation.
  *
+ * @param <T> instance type
  * @author Vyacheslav Rusakov
- * @since 06.07.2016
+ * @since 28.07.2019
  */
-public class BundleItemInfoImpl extends ItemInfoImpl implements BundleItemInfo {
-    private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
+public abstract class BundleItemInfoImpl<T> extends InstanceItemInfoImpl<T> implements BundleItemInfo<T> {
 
-    public BundleItemInfoImpl(final Class<?> type) {
-        super(ConfigItem.Bundle, type);
+    private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
+
+    // disable only
+    public BundleItemInfoImpl(final ConfigItem type, final Class<?> item) {
+        super(type, item);
+    }
+
+    public BundleItemInfoImpl(final ConfigItem type, final T instance) {
+        super(type, instance);
     }
 
     @Override
-    public Set<Class<?>> getDisabledBy() {
+    public Set<ItemId> getDisabledBy() {
         return disabledBy;
     }
 
     @Override
     public boolean isEnabled() {
         return disabledBy.isEmpty();
-    }
-
-    @Override
-    public boolean isFromLookup() {
-        return getRegisteredBy().contains(ConfigScope.BundleLookup.getType());
-    }
-
-    @Override
-    public boolean isTransitive() {
-        return getRegisteredBy().stream()
-                .noneMatch(type -> ConfigScope.recognize(type) != ConfigScope.GuiceyBundle);
     }
 }

@@ -78,6 +78,7 @@ class DebugBundleInHkFistModeTest extends AbstractTest {
                     .bundles(new HK2DebugBundle())
                     .disableBundles(GuiceRestrictedConfigBundle)
                     .noDefaultInstallers()
+                    .printDiagnosticInfo()
                     .installers(ResourceInstaller, JerseyProviderInstaller)
                     .extensions(GuiceResource, HkResource, GuiceMapper, HkMapper)
                     .build())

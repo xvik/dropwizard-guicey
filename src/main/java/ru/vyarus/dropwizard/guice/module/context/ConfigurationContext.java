@@ -1,19 +1,28 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.*;
 import com.google.inject.Module;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.Configuration;
+import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.GuiceyOptions;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
-import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
-import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.bootstrap.BootstrapProxyFactory;
+import ru.vyarus.dropwizard.guice.module.context.bootstrap.DropwizardBundleTracker;
+import ru.vyarus.dropwizard.guice.module.context.info.*;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
+import ru.vyarus.dropwizard.guice.module.context.info.impl.InstanceItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ModuleItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
@@ -21,6 +30,7 @@ import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
+import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
@@ -34,6 +44,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationByPath;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.DropwizardBundleInitTime;
 
 /**
  * Configuration context used internally to track all registered configuration items.
@@ -52,10 +64,15 @@ import static ru.vyarus.dropwizard.guice.GuiceyOptions.BindConfigurationByPath;
  * @since 06.07.2016
  */
 @SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "checkstyle:ClassFanOutComplexity",
-        "PMD.ExcessiveImports", "PMD.ExcessivePublicCount"})
+        "PMD.ExcessiveImports", "PMD.ExcessivePublicCount", "PMD.NcssCount", "PMD.CyclomaticComplexity",
+        "PMD.TooManyFields", "PMD.ClassDataAbstractionCoupling", "checkstyle:ClassDataAbstractionCoupling"})
 public final class ConfigurationContext {
+    private final Logger logger = LoggerFactory.getLogger(ConfigurationContext.class);
 
+    private final SharedConfigurationState sharedState = new SharedConfigurationState();
+    private DuplicateConfigDetector duplicates;
     private Bootstrap bootstrap;
+    private Bootstrap bootstrapProxy;
     private Configuration configuration;
     private ConfigurationTree configurationTree;
     private Environment environment;
@@ -68,17 +85,31 @@ public final class ConfigurationContext {
      */
     private final Multimap<ConfigItem, Object> itemsHolder = LinkedHashMultimap.create();
     /**
+     * Multiple instances of the same type could be registered for bundles or modules. Holds all registered
+     * items by type to simplify duplicates detector calls.
+     * Preserve registration order.
+     */
+    private final Multimap<Class<?>, Object> instanceItemsIndex = LinkedHashMultimap.create();
+    /**
      * Configuration details (stored mostly for diagnostics).
      */
-    private final Map<Class<?>, ItemInfo> detailsHolder = Maps.newHashMap();
+    private final Map<ItemId, ItemInfo> detailsHolder = Maps.newHashMap();
     /**
      * Holds disabled entries separately. Preserve registration order.
      */
-    private final Multimap<ConfigItem, Class<?>> disabledItemsHolder = LinkedHashMultimap.create();
+    private final Multimap<ConfigItem, ItemId> disabledItemsHolder = LinkedHashMultimap.create();
     /**
-     * Holds disable source for disabled items.
+     * Holds disable source for disabled items (item -- scope).
      */
-    private final Multimap<Class<?>, Class<?>> disabledByHolder = LinkedHashMultimap.create();
+    private final Multimap<ItemId, ItemId> disabledByHolder = LinkedHashMultimap.create();
+    /**
+     * Holds all instances considered as duplicates (and so ignored).
+     */
+    private final Multimap<ConfigItem, Object> duplicatesHolder = LinkedHashMultimap.create();
+    /**
+     * Holds used classes (extensions, modules etc) in order to detect same classes from different class loaders.
+     */
+    private final Map<String, Class<?>> usedClassesHolder = new HashMap<>();
     /**
      * Disable predicates listen for first item registration and could immediately disable it.
      */
@@ -86,7 +117,7 @@ public final class ConfigurationContext {
     /**
      * Current scope hierarchy. The last one is actual scope (application or bundle).
      */
-    private Class<?> currentScope;
+    private ItemId currentScope;
 
     /**
      * Used to gather guicey startup metrics.
@@ -99,7 +130,21 @@ public final class ConfigurationContext {
     /**
      * Guicey lifecycle listeners support.
      */
-    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new Options(optionsSupport));
+    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new Options(optionsSupport), sharedState);
+
+
+    /**
+     * Change default duplicates detector.
+     *
+     * @param detector new policy
+     */
+    public void setDuplicatesDetector(final DuplicateConfigDetector detector) {
+        if (duplicates != null) {
+            logger.warn("Configured duplicates detector {} is overridden with {}",
+                    duplicates.getClass().getSimpleName(), detector.getClass().getSimpleName());
+        }
+        this.duplicates = detector;
+    }
 
 
     // --------------------------------------------------------------------------- SCOPE
@@ -107,11 +152,23 @@ public final class ConfigurationContext {
     /**
      * Current configuration context (application, bundle or classpath scan).
      *
-     * @param scope scope class
+     * @param scope scope key
      */
-    public void setScope(final Class<?> scope) {
+    public void openScope(final ItemId scope) {
         Preconditions.checkState(currentScope == null, "State error: current scope not closed");
         currentScope = scope;
+    }
+
+    /**
+     * Declares possibly sub-configuration context. For example, to track dropwizard bundles initialization scope.
+     *
+     * @param scope scope key
+     * @return previous scope or null (for application scope)
+     */
+    public ItemId replaceContextScope(final ItemId scope) {
+        final ItemId current = currentScope;
+        currentScope = scope;
+        return current;
     }
 
     /**
@@ -131,7 +188,7 @@ public final class ConfigurationContext {
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands()
      */
     public void registerCommands(final List<Class<Command>> commands) {
-        setScope(ConfigScope.ClasspathScan.getType());
+        openScope(ConfigScope.ClasspathScan.getKey());
         for (Class<Command> cmd : commands) {
             register(ConfigItem.Command, cmd);
         }
@@ -147,13 +204,13 @@ public final class ConfigurationContext {
      * @see GuiceyBundleLookup
      */
     public void registerLookupBundles(final List<GuiceyBundle> bundles) {
-        setScope(ConfigScope.BundleLookup.getType());
+        openScope(ConfigScope.BundleLookup.getKey());
         for (GuiceyBundle bundle : bundles) {
             register(ConfigItem.Bundle, bundle);
         }
         closeScope();
         lifecycle().bundlesFromLookupResolved(bundles);
-        lifecycle().bundlesResolved(getEnabledBundles(), getDisabledBundles());
+        lifecycle().bundlesResolved(getEnabledBundles(), getDisabledBundles(), getIgnoredItems(ConfigItem.Bundle));
     }
 
     /**
@@ -162,11 +219,19 @@ public final class ConfigurationContext {
      * Context class is set to currently processed bundle.
      *
      * @param bundles bundles to register
+     * @return list of actually registered bundles (without duplicates)
      */
-    public void registerBundles(final GuiceyBundle... bundles) {
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
+    public List<GuiceyBundle> registerBundles(final GuiceyBundle... bundles) {
+        final List<GuiceyBundle> res = new ArrayList<>();
         for (GuiceyBundle bundle : bundles) {
-            register(ConfigItem.Bundle, bundle);
+            final GuiceyBundleItemInfo info = register(ConfigItem.Bundle, bundle);
+            // avoid duplicates (equal or same instances)
+            if (info.getRegistrationAttempts() == 1) {
+                res.add(bundle);
+            }
         }
+        return res;
     }
 
     /**
@@ -178,7 +243,7 @@ public final class ConfigurationContext {
     @SuppressWarnings("PMD.UseVarargs")
     public void disableBundle(final Class<? extends GuiceyBundle>[] bundles) {
         for (Class<? extends GuiceyBundle> bundle : bundles) {
-            registerDisable(ConfigItem.Bundle, bundle);
+            registerDisable(ConfigItem.Bundle, ItemId.from(bundle));
         }
     }
 
@@ -203,11 +268,73 @@ public final class ConfigurationContext {
      * Bundle must be disabled before it's processing, otherwise disabling will not have effect
      * (because bundle will be already processed and register all related items).
      *
-     * @param type bundle type to check
+     * @param id bundle id
      * @return true if bundle enabled, false otherwise
      */
-    public boolean isBundleEnabled(final Class<? extends GuiceyBundle> type) {
-        return isEnabled(ConfigItem.Bundle, type);
+    public boolean isBundleEnabled(final ItemId id) {
+        return isEnabled(ConfigItem.Bundle, id);
+    }
+
+    // --------------------------------------------------------------------------- DROPWIZARD BUNDLES
+
+    /**
+     * Direct dropwizard bundle registration from
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#dropwizardBundles(ConfiguredBundle...)}
+     * or {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#dropwizardBundles(
+     *ConfiguredBundle[])}.
+     * Context class is set to currently processed bundle.
+     *
+     * @param bundles dropwizard bundles
+     */
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
+    public void registerDropwizardBundles(final ConfiguredBundle... bundles) {
+        for (ConfiguredBundle bundle : bundles) {
+            final DropwizardBundleItemInfo info = register(ConfigItem.DropwizardBundle, bundle);
+            // register only non duplicate bundles
+            // bundles, registered in root GuiceBundle will be registered as soon as bootstrap would be available
+            if (info.getRegistrationAttempts() == 1 && bootstrap != null) {
+                registerDropwizardBundle(bundle);
+            }
+        }
+    }
+
+    /**
+     * Guicey bundle manual disable registration from
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableBundles(Class[])}.
+     *
+     * @param bundles modules to disable
+     */
+    @SuppressWarnings("PMD.UseVarargs")
+    public void disableDropwizardBundle(final Class<? extends ConfiguredBundle>[] bundles) {
+        for (Class<? extends ConfiguredBundle> bundle : bundles) {
+            registerDisable(ConfigItem.DropwizardBundle, ItemId.from(bundle));
+        }
+    }
+
+    /**
+     * @return all configured dropwizard bundles (without duplicates)
+     */
+    public List<ConfiguredBundle> getEnabledDropwizardBundles() {
+        return getEnabledItems(ConfigItem.DropwizardBundle);
+    }
+
+    /**
+     * @return all disabled dropwizard bundles
+     */
+    public List<ConfiguredBundle> getDisabledDropwizardBundles() {
+        return getDisabledItems(ConfigItem.DropwizardBundle);
+    }
+
+    /**
+     * Proxy object created on first access because of ~200ms creation overhead.
+     *
+     * @return bootstrap proxy object
+     */
+    public Bootstrap getBootstrapProxy() {
+        if (bootstrapProxy == null) {
+            bootstrapProxy = BootstrapProxyFactory.create(bootstrap, this);
+        }
+        return bootstrapProxy;
     }
 
     // --------------------------------------------------------------------------- MODULES
@@ -241,7 +368,7 @@ public final class ConfigurationContext {
     @SuppressWarnings("PMD.UseVarargs")
     public void disableModules(final Class<? extends Module>[] modules) {
         for (Class<? extends Module> module : modules) {
-            registerDisable(ConfigItem.Module, module);
+            registerDisable(ConfigItem.Module, ItemId.from(module));
         }
     }
 
@@ -282,6 +409,15 @@ public final class ConfigurationContext {
         return getDisabledItems(ConfigItem.Module);
     }
 
+    /**
+     * @return all disabled module types, including never registered
+     */
+    @SuppressWarnings("unchecked")
+    public List<Class<Object>> getDisabledModuleTypes() {
+        final Collection disabledIds = disabledItemsHolder.get(ConfigItem.Module);
+        return ItemId.typesOnly((Collection<ItemId<Object>>) disabledIds);
+    }
+
     // --------------------------------------------------------------------------- INSTALLERS
 
     /**
@@ -303,7 +439,7 @@ public final class ConfigurationContext {
      * @param installers installers found by classpath scan
      */
     public void registerInstallersFromScan(final List<Class<? extends FeatureInstaller>> installers) {
-        setScope(ConfigScope.ClasspathScan.getType());
+        openScope(ConfigScope.ClasspathScan.getKey());
         for (Class<? extends FeatureInstaller> installer : installers) {
             register(ConfigItem.Installer, installer);
         }
@@ -320,7 +456,7 @@ public final class ConfigurationContext {
     @SuppressWarnings("PMD.UseVarargs")
     public void disableInstallers(final Class<? extends FeatureInstaller>[] installers) {
         for (Class<? extends FeatureInstaller> installer : installers) {
-            registerDisable(ConfigItem.Installer, installer);
+            registerDisable(ConfigItem.Installer, ItemId.from(installer));
         }
     }
 
@@ -346,8 +482,8 @@ public final class ConfigurationContext {
      *
      * @param installers installers to use in correct order
      */
-    public void installersResolved(List<FeatureInstaller> installers) {
-        this.extensionsHolder = new ExtensionsHolder(installers, tracker, lifecycleTracker);
+    public void installersResolved(final List<FeatureInstaller> installers) {
+        this.extensionsHolder = new ExtensionsHolder(installers);
         lifecycle().installersResolved(new ArrayList<>(installers), getDisabledInstallers());
     }
 
@@ -374,6 +510,20 @@ public final class ConfigurationContext {
     }
 
     /**
+     * Optional extension registration from
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#extensionsOptional(Class[])} or
+     * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#extensionsOptional(Class[])}.
+     *
+     * @param extensions optional extensions to register
+     */
+    public void registerExtensionsOptional(final Class<?>... extensions) {
+        for (Class<?> extension : extensions) {
+            final ExtensionItemInfoImpl info = register(ConfigItem.Extension, extension);
+            info.setOptional(true);
+        }
+    }
+
+    /**
      * Extensions classpath scan requires testing with all installers to recognize actual extensions.
      * To avoid duplicate installers recognition, extensions resolved by classpath scan are registered
      * immediately. It's required because of not obvious method used for both manually registered extensions
@@ -387,7 +537,7 @@ public final class ConfigurationContext {
     public ExtensionItemInfoImpl getOrRegisterExtension(final Class<?> extension, final boolean fromScan) {
         final ExtensionItemInfoImpl info;
         if (fromScan) {
-            setScope(ConfigScope.ClasspathScan.getType());
+            openScope(ConfigScope.ClasspathScan.getKey());
             info = register(ConfigItem.Extension, extension);
             closeScope();
         } else {
@@ -395,6 +545,27 @@ public final class ConfigurationContext {
             info = getInfo(extension);
         }
 
+        return info;
+    }
+
+    /**
+     * Registration of extension detected from guice binding. Descriptor for extension may already exists.
+     * <p>
+     * Top guice module must be used because it's the only module, known by guicey configuration model and so
+     * the only way to show it properly on configuration report. Guice report can show extensions in correct
+     * positions, if required.
+     *
+     * @param extension extension class
+     * @param topScope  top module in registration modules hierarchy
+     * @return extension info container
+     */
+    public ExtensionItemInfoImpl getOrRegisterBindingExtension(final Class<?> extension,
+                                                               final Class<? extends Module> topScope) {
+        openScope(ItemId.from(topScope));
+        // extension could be already registered by classpath scan or manually and in this case just registration
+        // attempt will be registered
+        final ExtensionItemInfoImpl info = register(ConfigItem.Extension, extension);
+        closeScope();
         return info;
     }
 
@@ -407,7 +578,7 @@ public final class ConfigurationContext {
     @SuppressWarnings("PMD.UseVarargs")
     public void disableExtensions(final Class<?>[] extensions) {
         for (Class<?> extension : extensions) {
-            registerDisable(ConfigItem.Extension, extension);
+            registerDisable(ConfigItem.Extension, ItemId.from(extension));
         }
     }
 
@@ -416,7 +587,7 @@ public final class ConfigurationContext {
      * @return true if extension is enabled, false if disabled
      */
     public boolean isExtensionEnabled(final Class<?> extension) {
-        return isEnabled(ConfigItem.Extension, extension);
+        return isEnabled(ConfigItem.Extension, ItemId.from(extension));
     }
 
     /**
@@ -491,9 +662,13 @@ public final class ConfigurationContext {
      * @param builder bundle builder
      */
     public void runHooks(final GuiceBundle.Builder builder) {
+        ConfigurationHooksSupport.logRegisteredAliases();
+        // lookup hooks from system property "guicey.hooks" (lookup executed after builder configuration to
+        // let user declare alias hooks)
+        ConfigurationHooksSupport.loadSystemHooks();
         // Support for external configuration (for tests)
         // Use special scope to distinguish external configuration
-        setScope(ConfigScope.Hook.getType());
+        openScope(ConfigScope.Hook.getKey());
         final Set<GuiceyConfigurationHook> hooks = ConfigurationHooksSupport.run(builder);
         closeScope();
         lifecycle().configurationHooksProcessed(hooks);
@@ -504,7 +679,19 @@ public final class ConfigurationContext {
      */
     public void initPhaseStarted(final Bootstrap bootstrap) {
         this.bootstrap = bootstrap;
-        lifecycle().initializationStarted(bootstrap);
+        // register in shared state just in case
+        this.sharedState.put(Bootstrap.class, bootstrap);
+        this.sharedState.assignTo(bootstrap.getApplication());
+        // delayed init of registered dropwizard bundles
+        final Stopwatch time = stat().timer(BundleTime);
+        final Stopwatch dwtime = stat().timer(DropwizardBundleInitTime);
+        for (ConfiguredBundle bundle : getEnabledDropwizardBundles()) {
+            registerDropwizardBundle(bundle);
+        }
+        lifecycle().initializationStarted(bootstrap, getEnabledDropwizardBundles(),
+                getDisabledDropwizardBundles(), getIgnoredItems(ConfigItem.DropwizardBundle));
+        dwtime.stop();
+        time.stop();
     }
 
     /**
@@ -516,6 +703,11 @@ public final class ConfigurationContext {
         this.configurationTree = ConfigTreeBuilder
                 .build(bootstrap, configuration, option(BindConfigurationByPath));
         this.environment = environment;
+        // register in shared state just in case
+        this.sharedState.put(Configuration.class, configuration);
+        this.sharedState.put(ConfigurationTree.class, configurationTree);
+        this.sharedState.put(Environment.class, environment);
+        this.sharedState.listen(environment);
         lifecycle().runPhase(configuration, configurationTree, environment);
     }
 
@@ -524,17 +716,39 @@ public final class ConfigurationContext {
      * Merges disabled items configuration with registered items or creates new items to hold disable info.
      */
     public void finalizeConfiguration() {
+        // process disabled items
         for (ConfigItem type : disabledItemsHolder.keys()) {
-            for (Class<?> item : disabledItemsHolder.get(type)) {
-                final DisableSupport info = getOrCreateInfo(type, item);
-                info.getDisabledBy().addAll(disabledByHolder.get(getType(item)));
+            for (ItemId item : disabledItemsHolder.get(type)) {
+                final Collection<Object> instances = instanceItemsIndex.get(item.getType());
+                if (type.isInstanceConfig() && !instances.isEmpty()) {
+                    // disable all instances
+                    for (Object instance : instances) {
+                        final DisableSupport info = getOrCreateInfo(type, instance);
+                        info.getDisabledBy().addAll(disabledByHolder.get(item));
+                    }
+                } else {
+                    DisableSupport info = (DisableSupport) detailsHolder.get(item);
+                    if (info == null) {
+                        // if no registrations, create empty disable-only item (for instance items by type only)
+                        info = getOrCreateInfo(type, item.getType());
+                    }
+
+                    info.getDisabledBy().addAll(disabledByHolder.get(item));
+                }
             }
         }
+
+        // prepare extensions for installation
+        final List<ExtensionItemInfoImpl> exts = new ArrayList<>();
+        for (Class<?> ext : getEnabledExtensions()) {
+            exts.add(getInfo(ext));
+        }
+        extensionsHolder.registerExtensions(exts);
     }
 
     /**
      * @param type config type
-     * @param <T>  expected container type
+     * @param <T>  expected items type
      * @return list of all registered items of type or empty list
      */
     @SuppressWarnings("unchecked")
@@ -546,7 +760,7 @@ public final class ConfigurationContext {
     /**
      * @param type   config type
      * @param filter items filter
-     * @param <T>    expected container type
+     * @param <T>    expected items type
      * @return list of all items matching filter or empty list
      */
     @SuppressWarnings("unchecked")
@@ -559,17 +773,24 @@ public final class ConfigurationContext {
     }
 
     /**
-     * Note: registration is always tracked by class, so when instance provided actual info will be returned
-     * for object class.
-     *
+     * @param type config type
+     * @param <T>  expected items type
+     * @return list of all detected duplicates of this configuration type
+     */
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getIgnoredItems(final ConfigItem type) {
+        final Collection<Object> res = duplicatesHolder.get(type);
+        return res.isEmpty() ? Collections.<T>emptyList() : (List<T>) Lists.newArrayList(res);
+    }
+
+    /**
      * @param item item to get info
      * @param <T>  expected container type
      * @return item registration info container or null if item not registered
      */
     @SuppressWarnings("unchecked")
     public <T extends ItemInfoImpl> T getInfo(final Object item) {
-        final Class<?> itemType = getType(item);
-        return (T) detailsHolder.get(itemType);
+        return (T) detailsHolder.get(ItemId.from(item));
     }
 
     /**
@@ -614,8 +835,15 @@ public final class ConfigurationContext {
         return environment;
     }
 
-    private Class<?> getScope() {
-        return currentScope == null ? ConfigScope.Application.getType() : currentScope;
+    /**
+     * @return application-wide registry object
+     */
+    public SharedConfigurationState getSharedState() {
+        return sharedState;
+    }
+
+    private ItemId getScope() {
+        return currentScope == null ? ConfigScope.Application.getKey() : currentScope;
     }
 
     /**
@@ -636,23 +864,157 @@ public final class ConfigurationContext {
                 .forEach(item -> applyDisablePredicates(predicates, item));
     }
 
-    private void registerDisable(final ConfigItem type, final Class<?> item) {
+    private void registerDisable(final ConfigItem type, final ItemId id) {
+        if (type.isInstanceConfig() && id.getIdentity() == null && disabledByHolder.containsKey(id)) {
+            // when disabling by class, remove all per instance records (only one type record should remain)
+            // yes, it will loose some info about exact instance, but it doesn't matter anymore as entire type disabled
+            disabledItemsHolder.get(type).removeIf(it -> it.getIdentity() != null && it.equals(id));
+            final Iterator<Map.Entry<ItemId, ItemId>> iterator = disabledByHolder.entries().iterator();
+            while (iterator.hasNext()) {
+                final Map.Entry<ItemId, ItemId> entry = iterator.next();
+                final ItemId key = entry.getKey();
+                if (key.getIdentity() != null && key.equals(id)) {
+                    iterator.remove();
+                }
+            }
+        }
         // multimaps will filter duplicates automatically
-        disabledItemsHolder.put(type, item);
-        disabledByHolder.put(item, getScope());
+        disabledItemsHolder.put(type, id);
+        disabledByHolder.put(id, getScope());
     }
 
-    private <T extends ItemInfoImpl> T register(final ConfigItem type, final Object item) {
+    private <T extends ItemInfoImpl> T register(final ConfigItem type, final Object srcItem) {
+        final Object item = detectDuplicate(type, srcItem);
         final T info = getOrCreateInfo(type, item);
-        // if registered multiple times in one scope attempts will reveal it
-        info.countRegistrationAttempt();
-        info.getRegisteredBy().add(getScope());
-        // first registration scope stored
-        if (info.getRegistrationScope() == null) {
-            info.setRegistrationScope(getScope());
+
+        if (type.isInstanceConfig() && info.getRegistrationAttempts() == 0) {
+            // mark registration order for instance items to differentiate them
+            // (but only for actually registered - duplicate instances are ignored)
+            ((InstanceItemInfoImpl) info).setInstanceCount(instanceItemsIndex.get(info.getType()).size());
         }
+
+        // if registered multiple times in one scope attempts will reveal it
+        info.countRegistrationAttempt(getScope());
+
         fireRegistration(info);
         return info;
+    }
+
+    /**
+     * For instance types, registered instance may be a duplicate (relative to already registered).
+     * It may be either obvious duplicate when the same instance is already registered or
+     * duplicate by some other meaning (by default if objects are equal). If duplicate is detected then
+     * object must not be used for new configuration item creation, instead it must be tracked as another
+     * registration attempt to already registered item.
+     * <p>
+     * Instances of the same class, but loaded with different class loaders must be properly checked for deduplication
+     * in equals method (for example, {@link ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle}
+     * use class name instead of class itself for correct handling of multi class loaders case).
+     * <p>
+     * For class types, registered class is checked by name in order to detect already registered extension, but
+     * from different class loader. In case of detection, original class will be used instead of provied to prevent
+     * duplicate extension loading.
+     *
+     * @param type item type
+     * @param item item instance
+     * @return correct item to use for registration
+     */
+    @SuppressFBWarnings("NP_NULL_PARAM_DEREF")
+    private Object detectDuplicate(final ConfigItem type, final Object item) {
+        Object original = null;
+        if (type.isInstanceConfig()) {
+            final Class clsFromOtherCL = detectClassFromDifferentClassLoader(item.getClass());
+            // use correct class in order to correctly detect registered instances of the same type..
+            // this way instances could rely only on properly implemented equals (or external deduplicator)
+            final Collection<Object> registeredInstances = instanceItemsIndex
+                    .get(clsFromOtherCL != null ? clsFromOtherCL : item.getClass());
+            // when at least one instance of the same type registered - check for duplicates
+            if (!registeredInstances.isEmpty()) {
+                original = findDuplicateInstance(type, registeredInstances, item);
+                if (clsFromOtherCL != null && original == null) {
+                    // important to warn in case of incomplete equals implementation (for cases when it's not intended)
+                    logger.warn("Registered instances of class {} use different class loaders and may not be "
+                                    + "properly checked for duplicates: {}, {}",
+                            clsFromOtherCL.getName(), clsFromOtherCL.getClassLoader().toString(),
+                            item.getClass().getClassLoader().toString());
+                    // NOTE in configuration items class will not be unified, so care must be taken when building
+                    // reports (or perform other configuration analysis)
+                }
+            }
+            if (original == null) {
+                // register item as accepted
+                instanceItemsIndex.put(item.getClass(), item);
+            }
+        } else {
+            final Class clsFromOtherCL = detectClassFromDifferentClassLoader((Class) item);
+            if (clsFromOtherCL != null) {
+                // use already registered class to avoid duplicate extensions registrations
+                // (from different classloaders)
+                original = clsFromOtherCL;
+            }
+        }
+        return MoreObjects.firstNonNull(original, item);
+    }
+
+    /**
+     * Checks if class with the same name was already registered, but from different class loader. This is important
+     * for extensions deduplication because installers reporting will not reveal duplicate classes (they usually hide
+     * duplicates appeared from guice reportings).
+     *
+     * @param cls class to check
+     * @return already registered class from different class loader or null
+     */
+    private Class detectClassFromDifferentClassLoader(final Class cls) {
+        final String clsName = cls.getName();
+        final Class reg = usedClassesHolder.get(clsName);
+
+        // detected already registered class, but loaded by different class loader
+        if (reg != null && !reg.equals(cls)) {
+            return reg;
+        } else {
+            // remember class for future comparisons
+            usedClassesHolder.put(clsName, cls);
+        }
+        return null;
+    }
+
+    @SuppressWarnings({"unchecked", "PMD.CompareObjectsWithEquals"})
+    private Object findDuplicateInstance(final ConfigItem type,
+                                         final Collection<Object> registeredInstances,
+                                         final Object item) {
+        Object original = null;
+        // first check if exactly the same instance already registered or object is equal to some
+        // already registered instance - automatic duplicate
+        for (Object reg : registeredInstances) {
+            // do this instead of simple contains to cover cases when hashcode is not implemented properly
+            if (reg == item || reg.equals(item)) {
+                original = reg;
+                break;
+            }
+        }
+        if (original == null && duplicates != null) {
+            // use external duplicate detection logic
+            original = duplicates.getDuplicateItem(new ArrayList<>(registeredInstances), item);
+            if (original != null) {
+                Preconditions.checkState(registeredInstances.contains(original),
+                        "Incorrect instance duplicates detection result: returned item must "
+                                + "be already registered");
+            }
+        }
+        if (original != null && original != item) {
+            final ItemId<Object> originalId = ItemId.from(original);
+            final InstanceItemInfo originalInfo = (InstanceItemInfo) detailsHolder.get(originalId);
+            // remember duplicate item, but lost instance itself
+            originalInfo.getDuplicates().add(ItemId.from(item));
+
+            // log as info because duplicate instances may be way not obvious from code
+            logger.info("IGNORE {} {}/{} as duplicate for {}/{} (#{})",
+                    type, getScope().getType().getSimpleName(), ItemId.from(item),
+                    originalInfo.getRegistrationScope().getType().getSimpleName(),
+                    originalId, originalInfo.getInstanceCount());
+            duplicatesHolder.put(type, item);
+        }
+        return original;
     }
 
     private void fireRegistration(final ItemInfo item) {
@@ -681,38 +1043,44 @@ public final class ConfigurationContext {
      */
     @SuppressWarnings("unchecked")
     private <T extends ItemInfoImpl> T getOrCreateInfo(final ConfigItem type, final Object item) {
-        final Class<?> itemType = getType(item);
+        final ItemId id = ItemId.from(item);
         final T info;
         // details holder allows to implicitly filter by type and avoid duplicate registration
-        if (detailsHolder.containsKey(itemType)) {
+        // for instance type it will detect exactly the same instance (same object)
+        if (detailsHolder.containsKey(id)) {
             // no duplicate registration
-            info = (T) detailsHolder.get(itemType);
+            info = (T) detailsHolder.get(id);
         } else {
+            // initial registration
             itemsHolder.put(type, item);
-            info = type.newContainer(itemType);
-            detailsHolder.put(itemType, info);
+            info = type.newContainer(item);
+            detailsHolder.put(id, info);
         }
         return info;
     }
 
-    private Class<?> getType(final Object item) {
-        return item instanceof Class ? (Class) item : item.getClass();
-    }
-
     private <T> List<T> getDisabledItems(final ConfigItem type) {
-        final Collection<Class<?>> disabled = disabledItemsHolder.get(type);
+        final Collection<ItemId> disabled = disabledItemsHolder.get(type);
         return disabled.isEmpty()
-                ? Collections.emptyList() : getItems(type, item -> disabled.contains(getType(item)));
+                ? Collections.emptyList() : getItems(type, item -> disabled.contains(ItemId.from(item)));
     }
 
     private <T> List<T> getEnabledItems(final ConfigItem type) {
-        final Collection<Class<?>> disabled = disabledItemsHolder.get(type);
+        final Collection<ItemId> disabled = disabledItemsHolder.get(type);
         return disabled.isEmpty()
-                ? getItems(type) : getItems(type, item -> !disabled.contains(getType(item)));
+                ? getItems(type) : getItems(type, item -> !disabled.contains(ItemId.from(item)));
     }
 
-    private boolean isEnabled(final ConfigItem type, final Class itemType) {
-        return !disabledItemsHolder.get(type).contains(itemType);
+    private boolean isEnabled(final ConfigItem type, final ItemId itemId) {
+        return !disabledItemsHolder.get(type).contains(itemId);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void registerDropwizardBundle(final ConfiguredBundle bundle) {
+        // register decorated dropwizard bundle to track transitive bundles
+        // or bundle directly if tracking disabled
+        bootstrap.addBundle(option(GuiceyOptions.TrackDropwizardBundles)
+                ? new DropwizardBundleTracker(bundle, this) : bundle);
     }
 
     /**
@@ -720,10 +1088,10 @@ public final class ConfigurationContext {
      * items as disabled by that scope.
      */
     private class PredicateHandler {
-        private final Class<?> predicateScope;
+        private final ItemId predicateScope;
         private final Predicate<ItemInfo> predicate;
 
-        PredicateHandler(final Predicate<ItemInfo> predicate, final Class<?> predicateScope) {
+        PredicateHandler(final Predicate<ItemInfo> predicate, final ItemId predicateScope) {
             this.predicate = predicate;
             this.predicateScope = predicateScope;
         }
@@ -738,10 +1106,10 @@ public final class ConfigurationContext {
         public boolean disable(final ItemInfo item) {
             final boolean test = predicate.test(item);
             if (test) {
-                final Class<?> scope = currentScope;
+                final ItemId scope = currentScope;
                 // change scope to indicate predicate's registration scope as disable source
                 currentScope = predicateScope;
-                registerDisable(item.getItemType(), item.getType());
+                registerDisable(item.getItemType(), item.getId());
                 currentScope = scope;
             }
             return test;

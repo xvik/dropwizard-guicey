@@ -24,14 +24,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-lifecycle-annotations</artifactId>
-  <version>0.7.0</version>
+  <version>5.0.1-1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:lifecycle-annotations:0.7.0'
+implementation 'ru.vyarus.guicey:lifecycle-annotations:5.0.1-1'
 ```
 
 See the most recent version in the badge above.
@@ -39,7 +39,7 @@ See the most recent version in the badge above.
 
 ## Usage
 
-By default no setup required: bundle will be loaded automatically with the bundles lookup mechanism (enabled by default).
+By default, no setup required: bundle will be loaded automatically with the bundles lookup mechanism (enabled by default).
 So just add jar into classpath and annotations will work.
 
 ```java

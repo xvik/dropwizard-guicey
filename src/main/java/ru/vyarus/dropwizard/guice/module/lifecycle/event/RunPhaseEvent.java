@@ -1,13 +1,12 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event;
 
 import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
+import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig;
+import ru.vyarus.dropwizard.guice.debug.report.yaml.ConfigBindingsRenderer;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
-import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig;
-import ru.vyarus.dropwizard.guice.module.yaml.report.ConfigBindingsRenderer;
 
 /**
  * Base class for events, started after {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(Configuration, Environment)}
@@ -23,15 +22,11 @@ public abstract class RunPhaseEvent extends ConfigurationPhaseEvent {
     private final Environment environment;
 
     public RunPhaseEvent(final GuiceyLifecycle type,
-                         final Options options,
-                         final Bootstrap bootstrap,
-                         final Configuration configuration,
-                         final ConfigurationTree configurationTree,
-                         final Environment environment) {
-        super(type, options, bootstrap);
-        this.configuration = configuration;
-        this.configurationTree = configurationTree;
-        this.environment = environment;
+                         final EventsContext context) {
+        super(type, context);
+        this.configuration = context.getConfiguration();
+        this.configurationTree = context.getConfigurationTree();
+        this.environment = context.getEnvironment();
     }
 
     /**

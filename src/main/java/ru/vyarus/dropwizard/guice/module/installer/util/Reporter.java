@@ -16,7 +16,6 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 public class Reporter {
     public static final String NEWLINE = String.format("%n");
     public static final String TAB = "    ";
-    protected static final String LAZY_MARKER = " *LAZY_MARKER";
 
     // marker to be able switch off reports easily
     private static final Marker MARKER = MarkerFactory.getMarker("installer reporter");
@@ -31,16 +30,6 @@ public class Reporter {
         this.message = new StringBuilder();
         message.append(title).append(NEWLINE);
         emptyLine();
-    }
-
-    /**
-     * Supports {@code @LazyBinding} annotation, to show lazy marks in report.
-     *
-     * @param isLazy lazy marker
-     * @return empty string if lazy not set, lazy marker if lazy set.
-     */
-    public final String lazy(final boolean isLazy) {
-        return isLazy ? LAZY_MARKER : "";
     }
 
     /**

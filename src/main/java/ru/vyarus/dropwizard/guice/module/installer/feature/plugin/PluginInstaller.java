@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.plugin;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
+import com.google.inject.Binding;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -25,7 +26,7 @@ import java.lang.reflect.Method;
  * @since 08.10.2014
  */
 @Order(80)
-public class PluginInstaller implements FeatureInstaller<Object>, BindingInstaller {
+public class PluginInstaller implements FeatureInstaller, BindingInstaller {
 
     private final PluginReporter reporter = new PluginReporter();
 
@@ -36,15 +37,31 @@ public class PluginInstaller implements FeatureInstaller<Object>, BindingInstall
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazy) {
+    public void bind(final Binder binder, final Class<?> type, final boolean lazy) {
         Preconditions.checkArgument(!lazy, "Plugin bean can't be lazy: %s", type.getName());
+        registerPlugin(binder, type);
+    }
+
+    @Override
+    public <T> void manualBinding(final Binder binder, final Class<T> type, final Binding<T> binding) {
+        registerPlugin(binder, type);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void registerPlugin(final Binder binder, final Class<?> type) {
+        // multibindings registration (common for both registration types)
         final Plugin annotation = FeatureUtils.getAnnotation(type, Plugin.class);
         if (annotation != null) {
-            final Class<T> pluginType = (Class<T>) annotation.value();
+            final Class pluginType = annotation.value();
             reporter.simple(pluginType, type);
             Multibinder.newSetBinder(binder, pluginType).addBinding().to(type);
         } else {
+            /*
+                @Plugin(PluginInterface)
+                public @interface CustomPluginAnnotation {
+                    PluginKey value();
+                }
+             */
             final Annotation namesAnnotation = FeatureUtils.getAnnotatedAnnotation(type, Plugin.class);
             final Method valueMethod = FeatureUtils.findMethod(namesAnnotation.annotationType(), "value");
             final Class<Object> keyType = (Class<Object>) valueMethod.getReturnType();

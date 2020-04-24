@@ -2,8 +2,8 @@
 
 Example of [guicey-jdbi3](../extras/jdbi3.md) extension usage.
 
-!!! note ""
-    Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/jdbi3)
+!!! abstract ""
+    Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/ext-jdbi3)
 
 
 The [JDBI3 extension](../extras/jdbi3.md) allows:
@@ -19,14 +19,14 @@ The [JDBI3 extension](../extras/jdbi3.md) allows:
 Additional dependencies required:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-jdbi3:0.6.0'
-compile 'com.h2database:h2:1.4.193'
+implementation 'ru.vyarus.guicey:guicey-jdbi3:5.0.1-1'
+implementation 'com.h2database:h2:1.4.199'
 ```
 
 !!! note
-    guicey-jdbi version could be managed with [BOM](../extras/bom.md)
+    Both versions are managed by [BOM](../extras/bom.md)
 
-[dropwizard-jdbi3](http://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html) is used to configure 
+[dropwizard-jdbi3](https://www.dropwizard.io/en/release-2.0.x/manual/jdbi3.html) is used to configure 
 and create dbi instance:
 
 ```java
@@ -66,10 +66,10 @@ database:
 !!! warning
     Database scheme must be created manually. You can use 
     [dropwizard-flyway](https://github.com/dropwizard/dropwizard-flyway) module to prepare database. 
-    See [example app source](https://github.com/xvik/dropwizard-guicey-examples/tree/master/jdbi3) for details. 
+    See [example app source](https://github.com/xvik/dropwizard-guicey-examples/tree/master/ext-jdbi3) for details. 
  
 
-JDBI instance created exactly as described in [dropwizard docs](http://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html) 
+JDBI instance created exactly as described in [dropwizard docs](https://www.dropwizard.io/en/release-2.0.x/manual/jdbi3.html) 
 using provided db configuration:
 
 ```java

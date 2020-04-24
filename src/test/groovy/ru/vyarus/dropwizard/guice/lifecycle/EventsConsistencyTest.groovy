@@ -4,41 +4,43 @@ import com.google.inject.Binder
 import com.google.inject.Module
 import io.dropwizard.Application
 import io.dropwizard.Configuration
+import io.dropwizard.ConfiguredBundle
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig
+import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig
+import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfig
+import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
-import ru.vyarus.dropwizard.guice.module.context.debug.report.diagnostic.DiagnosticConfig
-import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig
-import ru.vyarus.dropwizard.guice.module.context.debug.report.tree.ContextTreeConfig
+import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
+import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
+import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
+import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle
+import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueModule
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.JerseyPhaseEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.InjectorPhaseEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesFromLookupResolvedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesInitializedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesResolvedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.CommandsResolvedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ExtensionsResolvedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.*
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShotdownEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*
-import ru.vyarus.dropwizard.guice.module.yaml.report.BindingsConfig
+import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
 import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
+import ru.vyarus.dropwizard.guice.support.feature.DummyTask
+import ru.vyarus.dropwizard.guice.support.util.BindModule
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+
+import javax.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov
@@ -49,11 +51,11 @@ class EventsConsistencyTest extends AbstractTest {
 
     def "Check events consistency"() {
 
-        expect: "all events called"
-        Listener.called.size() == GuiceyLifecycle.values().size()
+        expect: "all events called except shutdown"
+        Listener.called.size() == GuiceyLifecycle.values().size() - 1
 
         and: "order correct"
-        Listener.called == Arrays.asList(GuiceyLifecycle.values())
+        Listener.called == Arrays.asList(GuiceyLifecycle.values() - GuiceyLifecycle.ApplicationShutdown)
     }
 
     static class App extends Application<Configuration> {
@@ -64,11 +66,14 @@ class EventsConsistencyTest extends AbstractTest {
                             // to call all methods in adapter and make coverage happy
                             new GuiceyLifecycleAdapter())
                     .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
-                    .modules(new XMod())
+                    .bundles(new GBundle(), new GBundle())
+                    .dropwizardBundles(new DBundle(), new DBundle(), new DBundleDisabled())
+                    .modules(new XMod(), new YMod(), new YMod(), new BindModule(DummyTask))
                     .disableBundles(LookupBundle)
-                    .disableModules(XMod)
+                    .disableModules(XMod, InnerModule)
                     .disableInstallers(JerseyFeatureInstaller)
-                    .disableExtensions(DummyPlugin1, HK2DebugFeature)
+                    .disableExtensions(DummyPlugin1, HK2DebugFeature, BindEx)
+                    .disableDropwizardBundles(DBundleDisabled)
                     .searchCommands()
                     .printLifecyclePhasesDetailed()
                     .build())
@@ -79,12 +84,40 @@ class EventsConsistencyTest extends AbstractTest {
         }
     }
 
+    static class DBundle implements ConfiguredBundle {
+        @Override
+        public boolean equals(final Object obj) {
+            // only one debug module instance allowed
+            return obj != null && getClass().equals(obj.getClass());
+        }
+    }
+
+    static class DBundleDisabled implements ConfiguredBundle {}
+
     static class XMod implements Module {
         @Override
         void configure(Binder binder) {
-
         }
     }
+
+    static class YMod extends UniqueModule {
+        @Override
+        protected void configure() {
+            install(new InnerModule());
+            bind(BindEx)
+        }
+    }
+
+    static class InnerModule implements Module {
+        @Override
+        void configure(Binder binder) {
+            // need any binding to detect module removal
+             binder.bind(DummyTask)
+        }
+    }
+
+    @Path("/")
+    static class BindEx {}
 
     static class XConf implements GuiceyConfigurationHook {
         @Override
@@ -100,6 +133,8 @@ class EventsConsistencyTest extends AbstractTest {
         }
     }
 
+    static class GBundle extends UniqueGuiceyBundle {}
+
     static class Listener extends GuiceyLifecycleAdapter {
 
         static List<GuiceyLifecycle> called = new ArrayList<>()
@@ -113,6 +148,15 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
+        protected void dropwizardBundlesInitialized(DropwizardBundlesInitializedEvent event) {
+            confChecks(event)
+            assert event.getBundles().size() == 1
+            assert event.getBundles()[0].class == DBundle
+            assert event.getDisabled().size() == 1
+            assert event.getIgnored().size() == 1
+        }
+
+        @Override
         protected void lookupBundlesResolved(BundlesFromLookupResolvedEvent event) {
             confChecks(event)
             assert event.getBundles().size() == 1
@@ -123,15 +167,17 @@ class EventsConsistencyTest extends AbstractTest {
         protected void bundlesResolved(BundlesResolvedEvent event) {
             confChecks(event)
             // dw and lookup bundles are disabled
-            assert event.getBundles().size() == 3
+            assert event.getBundles().size() == 4
             assert event.getDisabled().size() == 1
+            assert event.getIgnored().size() == 1
         }
 
         @Override
         protected void bundlesInitialized(BundlesInitializedEvent event) {
             confChecks(event)
-            assert event.getBundles().size() == 4
+            assert event.getBundles().size() == 5
             assert event.getDisabled().size() == 1
+            assert event.getIgnored().size() == 1
         }
 
         @Override
@@ -150,10 +196,16 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
-        protected void extensionsResolved(ExtensionsResolvedEvent event) {
+        protected void manualExtensionsValidated(ManualExtensionsValidatedEvent event) {
             confChecks(event)
-            assert event.extensions.size() == 13
-            assert event.disabled.size() == 2
+            assert event.extensions.size() == 1
+            assert event.validated.size() == 0
+        }
+
+        @Override
+        protected void classpathExtensionsResolved(ClasspathExtensionsResolvedEvent event) {
+            confChecks(event)
+            assert event.extensions.size() == 14
         }
 
         @Override
@@ -170,15 +222,32 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         protected void bundlesStarted(BundlesStartedEvent event) {
             runChecks(event)
-            assert event.getBundles().size() == 4
+            assert event.getBundles().size() == 5
+        }
+
+        @Override
+        protected void modulesAnalyzed(ModulesAnalyzedEvent event) {
+            runChecks(event)
+            assert event.getAnalyzedModules().size() == 4
+            assert event.getExtensions().size() == 2
+            assert event.getTransitiveModulesRemoved().size() == 1
+            assert event.getBindingsRemoved().size() == 1
+        }
+
+        @Override
+        protected void extensionsResolved(ExtensionsResolvedEvent event) {
+            runChecks(event)
+            assert event.extensions.size() == 13
+            assert event.disabled.size() == 3
         }
 
         @Override
         protected void injectorCreation(InjectorCreationEvent event) {
             runChecks(event)
-            assert event.modules.size() == 3
+            assert event.modules.size() == 5
             assert event.overridingModules.isEmpty()
-            assert event.disabled.size() == 1
+            assert event.disabled.size() == 2
+            assert event.ignored.size() == 1
         }
 
         @Override
@@ -217,9 +286,23 @@ class EventsConsistencyTest extends AbstractTest {
             assert !event.getExtensions().isEmpty()
         }
 
+        @Override
+        protected void applicationStarted(ApplicationStartedEvent event) {
+            jerseyCheck(event)
+            assert event.jettyStarted
+            assert event.renderJerseyConfig(new JerseyConfig()) != null
+        }
+
+        @Override
+        protected void applicationShutdown(ApplicationShotdownEvent event) {
+            jerseyCheck(event)
+            assert event.jettyStarted
+        }
+
         private void baseChecks(GuiceyLifecycleEvent event) {
             assert event != null
             assert event.options != null
+            assert event.sharedState != null
             if (!called.contains(event.getType())) {
                 called.add(event.getType())
             }
@@ -247,6 +330,9 @@ class EventsConsistencyTest extends AbstractTest {
             assert event.reportRenderer.renderOptions(new OptionsConfig()) != null
             assert event.reportRenderer.renderConfigurationSummary(new DiagnosticConfig()) != null
             assert event.reportRenderer.renderConfigurationTree(new ContextTreeConfig()) != null
+            assert event.reportRenderer.renderGuiceBindings(new GuiceConfig()) != null
+            assert event.reportRenderer.renderGuiceAop(new GuiceAopConfig()) != null
+            assert event.reportRenderer.renderWebMappings(new MappingsConfig()) != null
         }
 
         private void jerseyCheck(JerseyPhaseEvent event) {

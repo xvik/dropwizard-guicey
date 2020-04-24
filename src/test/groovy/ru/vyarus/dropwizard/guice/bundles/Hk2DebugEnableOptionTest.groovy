@@ -26,7 +26,7 @@ class Hk2DebugEnableOptionTest extends Specification {
     def "Check hk2 debug bundle enable option"() {
 
         expect: "bundle enabled"
-        info.bundles == [HK2DebugBundle]
+        info.guiceyBundles == [HK2DebugBundle]
     }
 
     static class SampleApp extends Application<Configuration> {

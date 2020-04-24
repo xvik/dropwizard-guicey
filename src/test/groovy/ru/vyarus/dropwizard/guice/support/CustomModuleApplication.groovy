@@ -18,7 +18,7 @@ class CustomModuleApplication extends Application<TestConfiguration> {
 
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
-        bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+        bootstrap.addBundle(GuiceBundle.builder()
                 .enableAutoConfig("ru.vyarus.dropwizard.guice.support.feature")
                 .searchCommands()
                 .modules(new AutowiredModule())

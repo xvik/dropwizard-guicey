@@ -7,14 +7,17 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
  * startup monitoring or for some advanced features implementation (based on installers, extensions modules or bundles
  * post-processing).
  * <p>
- * Example usage: {@link ru.vyarus.dropwizard.guice.module.lifecycle.debug.DebugGuiceyLifecycle}.
+ * Example usage: {@link ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic}.
  * <p>
- * Listener could also implement {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook}
- * in order to apply special configurations. For example, this could be some diagnostic extensions.
- * There is no other way to modify configuration in listener.
+ * Listener is not registered if equal listener were already registered ({@link java.util.Set} used as
+ * listeners storage), so if you need to be sure that only one instance of some listener will be used
+ * implement {@link Object#equals(Object)} and {@link Object#hashCode()}. For example, this is used to resolve case
+ * where {@link ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook} installed and some reports were already enabled
+ * in bundle directly: thanks to correct equals in reports, user will not see duplicate reports.
  *
  * @author Vyacheslav Rusakov
  * @see GuiceyLifecycleAdapter
+ * @see UniqueGuiceyLifecycleListener
  * @since 17.04.2018
  */
 @FunctionalInterface

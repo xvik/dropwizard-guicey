@@ -14,7 +14,7 @@ import org.junit.rules.RuleChain;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
-import ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule;
+import ru.vyarus.dropwizard.guice.test.GuiceyHooksRule;
 
 /**
  * @author Vyacheslav Rusakov
@@ -26,13 +26,13 @@ public class ConfigurationHookDwAppTest {
 
     @ClassRule
     public static RuleChain chain = RuleChain
-            .outerRule(new GuiceyConfigurationRule((builder) -> builder.modules(new XMod())))
+            .outerRule(new GuiceyHooksRule((builder) -> builder.modules(new XMod())))
             .around(RULE);
 
     @Test
     public void checkHook() {
-        final GuiceyConfigurationInfo info = InjectorLookup.getInjector(RULE.getApplication()).get()
-                .getInstance(GuiceyConfigurationInfo.class);
+        final GuiceyConfigurationInfo info = InjectorLookup
+                .getInstance(RULE.getApplication(), GuiceyConfigurationInfo.class).get();
         Assert.assertTrue(info.getModules().contains(XMod.class));
     }
 

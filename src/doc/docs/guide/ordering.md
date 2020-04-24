@@ -1,23 +1,24 @@
 # Ordering
 
-Guicey `@Order` annotation should be used to order extensions and installers.
+!!! note
+    Guicey always preserve items registration order, which may be changed only 
+    by using explicit `@Order` annotation).
 
 ## General
 
 Order is natural. For example, `@Order(10)` will be before `@Order(20)`.
 
 When no annotation present, class order set to `#!java Integer.MAX_VALUE`, so
-all classes without order annotation are always goes last.
+all classes without order annotation are *always goes last*.
 
 ## Extensions order
 
 !!! note
-    Not all extensions supports ordering: look specific installer page for details.
-    For example, managed, lifecycle, servlets and filters installers support order.
+    Not all extensions supports ordering: look specific installer page or 
+    [installers report](diagnostic/installers-report.md).      
+    For example, [managed](../installers/managed.md), [servlets](../installers/servlet.md) and 
+    [filters](../installers/filter.md) installers support order.
     
-!!! tip
-    Installers supporting ordering implement [`Ordered`](installers.md#ordering) interface.
-
 The most common case for ordering is ordering managed objects. For example:
 
 ```java
@@ -34,15 +35,16 @@ Will be ordered as: `Managed2`, `Managed1`, `Managed3`
 
 !!! note
     Guicey remembers extensions registration order:
+    
     ```java
     .extensions(Ext1.class, Ext2.class)
     ```
+    
     So when no explicit ordering defined (or for elements with the same order value)
-    registration order will be preserved.
+    registration order will be preserved.  
 
 !!! tip
-    Console reporters for most extensions report extensions in correct order.
-    You can use diagnostic reporting to be sure about actual extensions order. 
+    You can use [diagnostic report](diagnostic/configuration-report.md) to see actual extensions order. 
 
 ## Installers order
 
@@ -52,35 +54,29 @@ put your installers between (if required).
 Use `@Order` annotation to order custom installer, otherwise it will go after all
 default installers.
 
+!!! tip
+    You can use [installers report](diagnostic/installers-report.md) to see actual installers order.
+
 ## Bundles order
 
 !!! attention
-    Guicey bundles does not support ordering.
+    Bundles can't be explicitly ordered.
     
-It makes no sense to order [guicey bundles](bundles.md) because they simply register other extensions and installers.
-You can always order installers and extensions registered by bundles.
+Bundles are transitive and transitive registrations appear at the middle of bundle configuration,
+so it is physically impossible to order bundles.
 
-Moreover, bundles are transitive, so it would be extremely hard to understand actual order:
-for example, when bundle registered both transitively and manually.
-
-There are implicit order of bundle processing:
+Still there are implicit order of bundle processing:
 
 * Manually registered bundles (including transitive)
-* Dropwizard bundles (when recognition enabled)
 * Bundles lookup
 
 But, again, don't count on this order because, for example, bundle resolved through lookup
-mechanism could be also manually registered and so installed as manual bundle.
+mechanism could be also manually registered and so processed with manual bundles.
 
 ## Modules order
 
 !!! attention
-    Guicey does not support modules ordering.
+    Modules can't be explicitly ordered.
     
-It makes no sense to order guice modules because they simply register bindings.
 According to guice guice: [modules should not contain conditional logic](https://github.com/google/guice/wiki/AvoidConditionalLogicInModules)
-
-So all that modules should do is registering bindings and order does not matter in that case.
-
-Modules, registered directly in guice bundle, must be executed before modules, registered in bundles 
-(because registration order is preserved).
+So modules should only register bindings and order does not matter in that case.

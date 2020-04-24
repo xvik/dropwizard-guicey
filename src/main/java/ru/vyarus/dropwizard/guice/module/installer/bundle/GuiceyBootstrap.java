@@ -11,8 +11,8 @@ import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Guicey initialization object. Provides almost the same configuration methods as
@@ -48,6 +48,7 @@ public class GuiceyBootstrap {
      * Note: application is already in run phase, so it's too late to configure dropwizard bootstrap object. Object
      * provided just for consultation.
      *
+     * @param <T> configuration type
      * @return dropwizard bootstrap instance
      */
     @SuppressWarnings("unchecked")
@@ -94,12 +95,17 @@ public class GuiceyBootstrap {
     }
 
     /**
-     * Register guice modules. All registered modules must be of unique type (duplicate instances of the
-     * same type are filtered).
+     * Register guice modules.
+     * <p>
+     * Note that this registration appear under initialization phase and so neither configuration nor environment
+     * objects are not available yet. If you need them for module, then you can wrap it with
+     * {@link ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule} or register modules in run phase
+     * (inside {@link GuiceyBundle#run(GuiceyEnvironment)}).
      *
-     * @param modules one or more juice modules
+     * @param modules one or more guice modules
      * @return bootstrap instance for chained calls
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(com.google.inject.Module...)
+     * @see ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
      */
     public GuiceyBootstrap modules(final Module... modules) {
         Preconditions.checkState(modules.length > 0, "Specify at least one module");
@@ -126,6 +132,7 @@ public class GuiceyBootstrap {
      *
      * @param installers feature installer classes to register
      * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#installers(Class[])
      */
     @SafeVarargs
     public final GuiceyBootstrap installers(final Class<? extends FeatureInstaller>... installers) {
@@ -137,14 +144,15 @@ public class GuiceyBootstrap {
      * Bundle should not rely on auto-scan mechanism and so must declare all extensions manually
      * (this better declares bundle content and speed ups startup).
      * <p>
-     * NOTE: startup will fail if bean not recognized by installers.
+     * NOTE: startup will fail if bean not recognized by installers. Use {@link #extensionsOptional(Class[])} to
+     * register optional extension.
      * <p>
-     * NOTE: Don't register commands here: either enable auto scan, which will install commands automatically
-     * or register command directly to bootstrap object and dependencies will be injected to them after
-     * injector creation.
+     * Alternatively, you can manually bind extensions in guice module and they would be recognized
+     * ({@link ru.vyarus.dropwizard.guice.GuiceyOptions#AnalyzeGuiceModules}).
      *
      * @param extensionClasses extension bean classes to register
      * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#extensions(Class[])
      */
     public GuiceyBootstrap extensions(final Class<?>... extensionClasses) {
         context.registerExtensions(extensionClasses);
@@ -152,33 +160,49 @@ public class GuiceyBootstrap {
     }
 
     /**
-     * Register other guicey bundles for installation.
+     * The same as {@link #extensions(Class[])}, but, in case if no installer recognize extension, will be
+     * automatically disabled instead of throwing error. Useful for optional extensions declaration in 3rd party
+     * bundles (where it is impossible to be sure what other bundles will be used and so what installers will
+     * be available).
      * <p>
-     * Duplicate bundles will be filtered automatically: bundles of the same type considered duplicate
-     * (if two or more bundles of the same type detected then only first instance will be processed).
+     * Alternatively, you can manually bind extensions in guice module and they would be recognized
+     * ({@link ru.vyarus.dropwizard.guice.GuiceyOptions#AnalyzeGuiceModules}). Extensions with no available target
+     * installer will simply wouldn't be detected (because installers used for recognition) and so there is no need
+     * to mark them as optional in this case.
      *
-     * @param bundles guicey bundles
+     * @param extensionClasses extension bean classes to register
      * @return bootstrap instance for chained calls
      */
-    public GuiceyBootstrap bundles(final GuiceyBundle... bundles) {
-        context.registerBundles(bundles);
-        iterationBundles.addAll(Arrays.asList(bundles));
+    public GuiceyBootstrap extensionsOptional(final Class<?>... extensionClasses) {
+        context.registerExtensionsOptional(extensionClasses);
         return this;
     }
 
     /**
-     * Shortcut for dropwizard bundles registration (instead of {@code bootstrap().addBundle()}).
-     * Be careful because in contrast to guicey bundles, dropwizard bundles does not
-     * check duplicate registrations.
+     * Register other guicey bundles for installation.
+     * <p>
+     * Equal instances of the same type will be considered as duplicate.
+     *
+     * @param bundles guicey bundles
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#bundles(GuiceyBundle...)
+     */
+    public GuiceyBootstrap bundles(final GuiceyBundle... bundles) {
+        // remember only non duplicate bundles
+        iterationBundles.addAll(context.registerBundles(bundles));
+        return this;
+    }
+
+    /**
+     * Shortcut for dropwizard bundles registration (instead of {@code bootstrap().addBundle()}), but with
+     * duplicates detection and tracking in diagnostic reporting. Dropwizard bundle is immediately initialized.
      *
      * @param bundles dropwizard bundles to register
      * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#dropwizardBundles(ConfiguredBundle...)
      */
-    @SuppressWarnings("unchecked")
-    public GuiceyBootstrap bundles(final ConfiguredBundle... bundles) {
-        for (ConfiguredBundle bundle : bundles) {
-            bootstrap().addBundle(bundle);
-        }
+    public GuiceyBootstrap dropwizardBundles(final ConfiguredBundle... bundles) {
+        context.registerDropwizardBundles(bundles);
         return this;
     }
 
@@ -205,6 +229,9 @@ public class GuiceyBootstrap {
 
     /**
      * Disable both usual and overriding guice modules.
+     * <p>
+     * If bindings analysis is not disabled, could also disable inner (transitive) modules, but only inside
+     * normal modules.
      *
      * @param modules guice module types to disable
      * @return bootstrap instance for chained calls
@@ -221,10 +248,9 @@ public class GuiceyBootstrap {
      * ({@linkplain ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle}). Listener, registered in bundles
      * could listen events from {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle#BundlesInitialized}.
      * <p>
-     * WARNING: don't register listeners implementing
-     * {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook} - such registrations will be rejected
-     * (it is too late - all hooks were already processed, but, as listener requires hooks support,
-     * assuming it can't work without proper configuration).
+     * Listener is not registered if equal listener was already registered ({@link java.util.Set} used as
+     * listeners storage), so if you need to be sure that only one instance of some listener will be used
+     * implement {@link Object#equals(Object)}.
      *
      * @param listeners guicey lifecycle listeners
      * @return bootstrap instance for chained calls
@@ -233,5 +259,58 @@ public class GuiceyBootstrap {
     public GuiceyBootstrap listen(final GuiceyLifecycleListener... listeners) {
         context.lifecycle().register(listeners);
         return this;
+    }
+
+    /**
+     * Share global state to be used in other bundles (during configuration). This was added for very special cases
+     * when shared state is unavoidable to not re-invent the wheel each time!
+     * <p>
+     * Internally, state is linked to application instance so it would be safe to use with concurrent tests.
+     * Value could be accessed statically with application instance:
+     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#lookup(Application, Class)}.
+     * <p>
+     * Use bundle class as key. Value could be set only once (to prevent hard to track situations).
+     * <p>
+     * If initialization point could vary (first access should initialize it) use {@link #sharedState(Class, Supplier)}
+     * instead.
+     *
+     * @param key   shared object key
+     * @param value shared object
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public GuiceyBootstrap shareState(final Class<?> key, final Object value) {
+        context.getSharedState().put(key, value);
+        return this;
+    }
+
+    /**
+     * Alternative shared value initialization for cases when first accessed bundle should init state value
+     * and all other just use it.
+     *
+     * @param key          shared object key
+     * @param defaultValue default object provider
+     * @param <T>          shared object type
+     * @return shared object (possibly just created)
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> T sharedState(final Class<?> key, final Supplier<T> defaultValue) {
+        return context.getSharedState().get(key, defaultValue);
+    }
+
+    /**
+     * Use to access shared state value and immediately fail if value not yet set (most likely due to incorrect
+     * configuration order).
+     *
+     * @param key     shared object key
+     * @param message exception message (could use {@link String#format(String, Object...)} placeholders)
+     * @param args    placeholder arguments for error message
+     * @param <T>     shared object type
+     * @return shared object
+     * @throws IllegalStateException if no value available
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> T sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
+        return context.getSharedState().getOrFail(key, message, args);
     }
 }

@@ -51,7 +51,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Deny
  */
 @Order(110)
 public class WebListenerInstaller extends InstallerOptionsSupport
-        implements FeatureInstaller<EventListener>, InstanceInstaller<EventListener>, Ordered {
+        implements FeatureInstaller, InstanceInstaller<EventListener>, Ordered {
 
     private static final List<Class<? extends EventListener>> CONTEXT_LISTENERS = ImmutableList.of(
             ServletContextListener.class,
@@ -66,7 +66,6 @@ public class WebListenerInstaller extends InstallerOptionsSupport
             HttpSessionIdListener.class
     );
 
-    @SuppressWarnings("unchecked")
     private static final List<Class<? extends EventListener>> SUPPORTED = ImmutableList
             .<Class<? extends EventListener>>builder()
             .addAll(CONTEXT_LISTENERS)

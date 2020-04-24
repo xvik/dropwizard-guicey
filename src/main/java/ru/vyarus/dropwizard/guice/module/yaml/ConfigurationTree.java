@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * root configuration instance, only properties tree.
  * <p>
  * Also, object is accessible inside guicey bundles
- * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#configurationTree()} and guice modules:
+ * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment#configurationTree()} and guice modules:
  * {@link ConfigurationTreeAwareModule}.
  *
  * @author Vyacheslav Rusakov

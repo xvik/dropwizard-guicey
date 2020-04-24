@@ -10,6 +10,7 @@ import ru.vyarus.dropwizard.guice.cases.multicases.support.Feature
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -32,14 +33,14 @@ class RepeatedRegistration2Test extends Specification {
     def "Check duplicate manual registrations"() {
 
         expect: "extension registered once"
-        ExtensionItemInfo item = info.getData().getInfo(Feature.class)
-        item.registeredBy == [Application] as Set
+        ExtensionItemInfo item = info.getInfo(Feature.class)
+        item.registeredBy == [ItemId.from(Application)] as Set
         item.registrationAttempts == 2
         info.getExtensionsOrdered(EagerSingletonInstaller).size() == 1
 
         and: "installer registered once"
-        InstallerItemInfo inst = info.getData().getInfo(CustomInstaller.class)
-        inst.registeredBy == [Application] as Set
+        InstallerItemInfo inst = info.getInfo(CustomInstaller.class)
+        inst.registeredBy == [ItemId.from(Application)] as Set
         inst.registrationAttempts == 2
         holder.getInstallers().findAll { it.class == CustomInstaller }.size() == 1
 

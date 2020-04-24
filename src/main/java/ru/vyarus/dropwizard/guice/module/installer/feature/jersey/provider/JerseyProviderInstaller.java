@@ -1,9 +1,12 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.google.inject.Binder;
+import com.google.inject.Binding;
 import com.google.inject.Injector;
+import com.google.inject.Stage;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.internal.inject.InjectionResolver;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
@@ -12,6 +15,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.AbstractJersey
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
+import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 
@@ -27,13 +31,14 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
 
 /**
  * Jersey provider installer.
- * Looks for classes annotated with {@code @javax.ws.rs.ext.Provider} and register bindings in HK context.
+ * Looks for classes annotated with {@link javax.ws.rs.ext.Provider} and register bindings in HK context.
  * <p>
- * If provider is annotated with {@code HK2Managed} it's instance will be created by HK2, not guice.
- * This is important when extensions directly depends on HK beans (no way to wrap with {@code Provider}
+ * If provider is annotated with {@link JerseyManaged} it's instance will be created by HK2, not guice.
+ * This is important when extensions directly depends on HK beans (no way to wrap with {@link Provider}
  * or if it's eager extension, which instantiated by HK immediately (when hk-guice contexts not linked yet).
  * <p>
- * In some cases {@code @LazyBinding} could be an alternative to {@code HK2Managed}
+ * In some cases {@link ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding} could
+ * be an alternative to {@link JerseyManaged}
  * <p>
  * Force singleton scope for extensions, but not for beans having explicit scope annotation.
  * See {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#ForceSingletonForJerseyExtensions}.
@@ -74,14 +79,32 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
     }
 
     @Override
-    public <T> void install(final Binder binder, final Class<? extends T> type, final boolean lazyMarker) {
+    public void bind(final Binder binder, final Class<?> type, final boolean lazyMarker) {
         final boolean hkManaged = isJerseyExtension(type);
         final boolean lazy = isLazy(type, lazyMarker);
         // register in guice only if not managed by hk and just in time (lazy) binding not requested
         if (!hkManaged && !lazy) {
             bindInGuice(binder, type);
         }
-        reporter.provider(type, hkManaged, lazy);
+    }
+
+    @Override
+    public <T> void manualBinding(final Binder binder, final Class<T> type, final Binding<T> binding) {
+        // no need to bind in case of manual binding
+        final boolean hkManaged = isJerseyExtension(type);
+        Preconditions.checkState(!hkManaged,
+                // intentially no "at" before stacktrtace because idea may hide error in some cases
+                "Provider annotated as jersey managed is declared manually in guice: %s (%s)",
+                type.getName(), BindingUtils.getDeclarationSource(binding));
+    }
+
+    @Override
+    public void extensionBound(final Stage stage, final Class<?> type) {
+        if (stage != Stage.TOOL) {
+            // reporting (common for both registration types)
+            final boolean hkManaged = isJerseyExtension(type);
+            reporter.provider(type, hkManaged, false);
+        }
     }
 
     @Override

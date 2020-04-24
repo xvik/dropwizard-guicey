@@ -25,7 +25,7 @@ class ManualApplication extends Application<TestConfiguration> {
 
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
-        bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+        bootstrap.addBundle(GuiceBundle.builder()
                 .disableBundleLookup()
                 .noDefaultInstallers()
                 .installers(ResourceInstaller, TaskInstaller, ManagedInstaller)

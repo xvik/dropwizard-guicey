@@ -23,7 +23,6 @@ import javax.inject.Singleton;
  * <li>Registers bootstrap, configuration and environment in injector</li>
  * <li>Installs jersey guice extension (to register resources instantiated with guice into jersey) and registers
  * guice filter</li>
- * <li>Starts auto scanning, if enabled (for automatic features installation)</li>
  * </ul>
  * Configuration is mapped as:
  * <ul>
@@ -68,7 +67,6 @@ public class GuiceBootstrapModule<T extends Configuration> extends DropwizardAwa
      * Bind bootstrap, configuration and environment objects to be able to use them
      * as injectable.
      */
-    @SuppressWarnings("deprecation")
     private void bindEnvironment() {
         bind(Bootstrap.class).toInstance(bootstrap());
         bind(Environment.class).toInstance(environment());

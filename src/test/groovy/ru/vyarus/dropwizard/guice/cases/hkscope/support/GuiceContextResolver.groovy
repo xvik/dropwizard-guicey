@@ -14,7 +14,7 @@ import javax.ws.rs.ext.Provider
 class GuiceContextResolver implements ContextResolver<Context> {
 
     @Override
-    Context getContext(Class type) {
+    Context getContext(Class<?> type) {
         return null
     }
 

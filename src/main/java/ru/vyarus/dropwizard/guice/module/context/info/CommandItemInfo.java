@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.ScanSupport;
  * @author Vyacheslav Rusakov
  * @since 27.07.2016
  */
-public interface CommandItemInfo extends ItemInfo, ScanSupport {
+public interface CommandItemInfo extends ClassItemInfo, ScanSupport {
 
     /**
      * @return true if command is environment command, false otherwise

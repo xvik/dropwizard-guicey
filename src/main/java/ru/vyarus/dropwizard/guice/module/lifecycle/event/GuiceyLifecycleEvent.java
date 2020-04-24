@@ -1,8 +1,10 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event;
 
 import com.google.common.base.Preconditions;
+import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 /**
  * Base class for guicey lifecycle events. All events are organized in hierarchy by:
@@ -26,13 +28,16 @@ public abstract class GuiceyLifecycleEvent {
 
     private final GuiceyLifecycle type;
     private final Options options;
+    private final SharedConfigurationState sharedState;
 
 
-    public GuiceyLifecycleEvent(final GuiceyLifecycle type, final Options options) {
+    public GuiceyLifecycleEvent(final GuiceyLifecycle type,
+                                final EventsContext context) {
         Preconditions.checkState(type.getType().equals(getClass()),
                 "Wrong event type %s used for class %s", type, getClass().getSimpleName());
         this.type = type;
-        this.options = options;
+        this.options = context.getOptions();
+        this.sharedState = context.getSharedState();
     }
 
     /**
@@ -52,5 +57,13 @@ public abstract class GuiceyLifecycleEvent {
      */
     public Options getOptions() {
         return options;
+    }
+
+    /**
+     * @return application shared state
+     * @see SharedConfigurationState
+     */
+    public SharedConfigurationState getSharedState() {
+        return sharedState;
     }
 }

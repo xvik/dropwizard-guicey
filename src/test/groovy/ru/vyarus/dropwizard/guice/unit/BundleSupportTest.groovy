@@ -1,12 +1,11 @@
 package ru.vyarus.dropwizard.guice.unit
 
 import com.google.common.collect.Lists
-import io.dropwizard.Bundle
+import io.dropwizard.Configuration
 import io.dropwizard.ConfiguredBundle
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
-import ru.vyarus.dropwizard.guice.admin.AdminRestBundle
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
@@ -42,7 +41,6 @@ class BundleSupportTest extends AbstractTest {
         def bootstrap = new Bootstrap(null)
         bootstrap.addBundle(new SampleBundle())
         bootstrap.addBundle(new SampleConfiguredBundle())
-        bootstrap.addBundle(new AdminRestBundle())
         def res = BundleSupport.findBundles(bootstrap, GuiceyBundle)
         then:
         res.size() == 2
@@ -59,22 +57,22 @@ class BundleSupportTest extends AbstractTest {
     def "Check filtering"() {
 
         setup: "prepare filter list"
-        def filter = [SampleBundle, AdminRestBundle]
+        def filter = [SampleBundle]
 
         when: "filtering bundles list"
         def res = BundleSupport.removeTypes([new CoreInstallersBundle(), new SampleBundle(), new HK2DebugBundle(),
-                                             new SampleConfiguredBundle(), new AdminRestBundle()], filter)
+                                             new SampleConfiguredBundle()], filter)
         then: "filtered"
         res*.class == [CoreInstallersBundle, HK2DebugBundle, SampleConfiguredBundle]
     }
 
-    static class SampleBundle implements Bundle, GuiceyBundle {
+    static class SampleBundle implements ConfiguredBundle<Configuration>, GuiceyBundle {
         @Override
         void initialize(Bootstrap<?> bootstrap) {
         }
 
         @Override
-        void run(Environment environment) {
+        void run(Configuration conf, Environment environment) {
         }
 
         @Override

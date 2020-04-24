@@ -1,7 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
 import com.google.common.collect.Sets;
+import com.google.inject.Module;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 
 import java.util.Set;
@@ -12,20 +14,26 @@ import java.util.Set;
  * @author Vyacheslav Rusakov
  * @since 03.04.2018
  */
-public class ModuleItemInfoImpl extends ItemInfoImpl implements ModuleItemInfo {
+public class ModuleItemInfoImpl extends InstanceItemInfoImpl<Module> implements ModuleItemInfo {
 
     private static ThreadLocal<Boolean> override = new ThreadLocal<>();
 
-    private final Set<Class<?>> disabledBy = Sets.newLinkedHashSet();
+    private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
     private final boolean overriding;
 
-    public ModuleItemInfoImpl(final Class<?> type) {
+    // disable only item
+    public ModuleItemInfoImpl(final Class<? extends Module> type) {
         super(ConfigItem.Module, type);
+        this.overriding = false;
+    }
+
+    public ModuleItemInfoImpl(final Module module) {
+        super(ConfigItem.Module, module);
         this.overriding = override.get() != null;
     }
 
     @Override
-    public Set<Class<?>> getDisabledBy() {
+    public Set<ItemId> getDisabledBy() {
         return disabledBy;
     }
 

@@ -2,13 +2,14 @@ package ru.vyarus.dropwizard.guice.module;
 
 import com.google.common.collect.Sets;
 import com.google.inject.Module;
+import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.cli.Command;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
-import ru.vyarus.dropwizard.guice.module.context.info.BundleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
@@ -23,6 +24,8 @@ import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
+import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly;
 
 /**
  * Public api for internal guicey configuration info and startup statistics. Provides information about time spent
@@ -98,13 +101,13 @@ public class GuiceyConfigurationInfo {
      * @param specialScope special scope
      * @return all enabled items registered in specified scope or empty list
      */
-    public List<Class<Object>> getItemsByScope(final ConfigScope specialScope) {
-        return getItemsByScope(specialScope.getType());
+    public List<ItemId<Object>> getItemsByScope(final ConfigScope specialScope) {
+        return getItemsByScope(specialScope.getKey());
     }
 
     /**
      * NOTE: single item may be registered from multiple scopes! This method will return entity by all it's registered
-     * scopes and not just but by first registration. It makes it usable, for example, for configuration tree building.
+     * scopes and not just by first registration. It makes it usable, for example, for configuration tree building.
      * If you need exact registration scope use {@link Filters#registrationScope(Class)} filter.
      *
      * @param scope required scope
@@ -112,16 +115,27 @@ public class GuiceyConfigurationInfo {
      * @see ItemInfo#getRegisteredBy() for more info about scopes
      * @see ConfigScope for the list of all special scopes
      */
-    public List<Class<Object>> getItemsByScope(final Class<?> scope) {
+    public List<ItemId<Object>> getItemsByScope(final ItemId scope) {
         return context.getItems(Filters.enabled().and(Filters.registeredBy(scope)));
     }
 
     /**
-     * @return all ative scopes including disable only scopes
+     * Shortcut for {@link #getItemsByScope(ItemId)}. Note that bundle of the same type may be registered multiple
+     * times and querying by such bundle type will return registrations from all bundle instances.
+     *
+     * @param scope scope class
+     * @return all enabled items registered in specified scope or empty list
+     */
+    public List<ItemId<Object>> getItemsByScope(final Class<?> scope) {
+        return getItemsByScope(ItemId.from(scope));
+    }
+
+    /**
+     * @return all active scopes including disable only scopes
      * @see #getActiveScopes(boolean)
      * @see ConfigScope for the list of all special scopes
      */
-    public Set<Class<?>> getActiveScopes() {
+    public Set<ItemId> getActiveScopes() {
         return getActiveScopes(true);
     }
 
@@ -130,8 +144,8 @@ public class GuiceyConfigurationInfo {
      * @return all active scopes or empty collection
      * @see ItemInfo#getRegisteredBy() for more info about scopes
      */
-    public Set<Class<?>> getActiveScopes(final boolean countDisables) {
-        final Set<Class<?>> res = Sets.newHashSet();
+    public Set<ItemId> getActiveScopes(final boolean countDisables) {
+        final Set<ItemId> res = Sets.newHashSet();
         context.getItems(it -> {
             res.addAll(it.getRegisteredBy());
             if (countDisables && it instanceof DisableSupport) {
@@ -142,54 +156,159 @@ public class GuiceyConfigurationInfo {
         return res;
     }
 
+    /**
+     * Shortcut for {@link ConfigurationInfo#getInfos(Class)} which always returns one configuration info
+     * object per class. It is generally not correct for instance types (where multiple instances of the same
+     * type could be registered), but enough for general reporting needs (showing general info on class level).
+     *
+     * @param type item type
+     * @param <T>  required info object type
+     * @return configuration item object for provided class (first one for multiple instances) or empty list if not
+     * found
+     */
+    public <T extends ItemInfo> T getInfo(final Class<?> type) {
+        final List<T> res = getInfos(type);
+        return res.isEmpty() ? null : res.get(0);
+    }
+
+    // NOTE shortcut for getting by ItemId not provided to avoid easy mistakes by obtaining info by class
+    // and loosing instances in case of multiple instane of the same type registration
+    // use getData().getInfo() instead
+
+    /**
+     * Shortcut for {@link ConfigurationInfo#getInfos(Class)}. Added to avoid confusion with {@link #getInfo(Class)}.
+     *
+     * @param type item type
+     * @param <T>  required info object type
+     * @return all configuration object registered with required class (could be multiple for instance types
+     * and always one element for class types).
+     * @see #getInfo(Class) shortcut method
+     */
+    public <T extends ItemInfo> List<T> getInfos(final Class<?> type) {
+        return getData().getInfos(type);
+    }
+
     // --------------------------------------------------------------------------- COMMANDS
 
     /**
+     * Note: only commands installed after classpath scan are tracked and so there might be only
+     * one instance for each command type (in spite of the fact that commands descriptors are instance based).
+     *
      * @return types of all installed commands or empty list
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#searchCommands()
      */
     public List<Class<Command>> getCommands() {
-        return context.getItems(ConfigItem.Command);
+        return typesOnly(context.getItems(ConfigItem.Command));
     }
 
     // --------------------------------------------------------------------------- BUNDLES
 
     /**
+     * Note that multiple instances could be installed for some bundles, but returned list will contain just
+     * bundle type (no matter how many instances were actually installed).
+     *
      * @return types of all installed and enabled bundles (including lookup bundles) or empty list
      */
-    public List<Class<GuiceyBundle>> getBundles() {
+    public List<Class<GuiceyBundle>> getGuiceyBundles() {
+        return typesOnly(getGuiceyBundleIds());
+    }
+
+    /**
+     * Note that this list could be larger then {@link #getGuiceyBundles()} because multiple bundle instances
+     * of the same class could be registered.
+     *
+     * @return types of all enabled normal guice modules or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#bundles(GuiceyBundle...)
+     * @see ConfigurationInfo#getInfo(ItemId) for loaded model object for id
+     */
+    public List<ItemId<GuiceyBundle>> getGuiceyBundleIds() {
         return context.getItems(ConfigItem.Bundle, Filters.enabled());
     }
 
     /**
+     * Note that multiple instances could be installed for some bundles, but returned list will contain just
+     * bundle type (no matter how many instances were actually installed).
+     *
+     * @return types of all installed and enabled dropwizard bundles or empty list
+     */
+    public List<Class<ConfiguredBundle>> getDropwizardBundles() {
+        return typesOnly(getDropwizardBundleIds());
+    }
+
+    /**
+     * Note that this list could be larger then {@link #getDropwizardBundles()} because multiple bundle instances
+     * of the same class could be registered.
+     *
+     * @return types of all enabled normal guice modules or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#bundles(GuiceyBundle...)
+     * @see ConfigurationInfo#getInfo(ItemId) for loaded model object for id
+     */
+    public List<ItemId<ConfiguredBundle>> getDropwizardBundleIds() {
+        return context.getItems(ConfigItem.DropwizardBundle, Filters.enabled());
+    }
+
+    /**
+     * Bundles lookup mechanism could register only one instance of bundle type, but other instances may be
+     * registered directly (anyway, it is correct that only one bundle instance belongs to lookup scope).
+     *
      * @return types of bundles resolved by bundle lookup mechanism or empty list
      * @see ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
      */
     public List<Class<GuiceyBundle>> getBundlesFromLookup() {
-        return context.getItems(ConfigItem.Bundle, Filters.lookupBundles());
+        return typesOnly(context.getItems(ConfigItem.Bundle, Filters.lookupBundles()));
     }
 
     /**
-     * @return all enabled top-level bundles (without transitives)
+     * @return all (guicey and dropwizard) enabled top-level bundles (without transitives)
      */
-    public List<Class<GuiceyBundle>> getDirectBundles() {
-        return context.getItems(ConfigItem.Bundle,
-                Filters.<BundleItemInfo>enabled().and(Filters.transitiveBundles().negate()));
+    public List<Class<Object>> getDirectBundles() {
+        return typesOnly(context.getItems(Filters.bundles()
+                .and(Filters.enabled())
+                .and(Filters.transitiveBundles().negate())));
     }
 
     /**
+     * Note that the same type may appear in both enabled and disabled lists if it is instance item and
+     * only some instances were disabled.
+     *
      * @return types of manually disabled bundles or empty list
      */
-    public List<Class<GuiceyBundle>> getBundlesDisabled() {
-        return context.getItems(ConfigItem.Bundle, Filters.enabled().negate());
+    public List<Class<Object>> getBundlesDisabled() {
+        return typesOnly(context.getItems(Filters.bundles()
+                .and(Filters.enabled().negate())));
+    }
+
+    /**
+     * @param bundle bundle
+     * @return types of bundles (guicey and dropwizard) registered from provided bundle avoiding disabled bundles
+     * or empty list
+     */
+    public List<Class<Object>> getRelativelyInstalledBundles(final Class<?> bundle) {
+        return typesOnly(context.getItems(Filters.bundles()
+                .and(Filters.enabled())
+                .and(Filters.registrationScope(bundle))));
     }
 
     // --------------------------------------------------------------------------- MODULES
 
     /**
+     * Note that multiple instances could be installed for some modules, but returned list will contain just
+     * module type (no matter how many instances were actually installed).
+     *
      * @return types of all registered and enabled guice modules (including normal and overriding) or empty list
      */
     public List<Class<Module>> getModules() {
+        return typesOnly(getModuleIds());
+    }
+
+    /**
+     * Note that this list could be larger then {@link #getModules()} because multiple module instances of the same
+     * class could be registered.
+     *
+     * @return ids of all registered and enabled guice modules (including normal and overriding) or empty list
+     * @see ConfigurationInfo#getInfo(ItemId) for loaded model object for id
+     */
+    public List<ItemId<Module>> getModuleIds() {
         return context.getItems(ConfigItem.Module, Filters.enabled());
     }
 
@@ -198,6 +317,18 @@ public class GuiceyConfigurationInfo {
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(Module...)
      */
     public List<Class<Module>> getNormalModules() {
+        return typesOnly(getNormalModuleIds());
+    }
+
+    /**
+     * Note that this list could be larger then {@link #getNormalModules()} because multiple module instances
+     * of the same class could be registered.
+     *
+     * @return types of all enabled normal guice modules or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(Module...)
+     * @see ConfigurationInfo#getInfo(ItemId) for loaded model object for id
+     */
+    public List<ItemId<Module>> getNormalModuleIds() {
         return context.getItems(ConfigItem.Module, Filters.<ModuleItemInfo>enabled()
                 .and(Filters.overridingModule().negate()));
     }
@@ -207,6 +338,18 @@ public class GuiceyConfigurationInfo {
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(Module...)
      */
     public List<Class<Module>> getOverridingModules() {
+        return typesOnly(getOverridingModuleIds());
+    }
+
+    /**
+     * Note that this list could be larger then {@link #getOverridingModules()} because multiple module instances
+     * of the same class could be registered.
+     *
+     * @return types of all enabled normal guice modules or empty list
+     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(Module...)
+     * @see ConfigurationInfo#getInfo(ItemId) for loaded model object for id
+     */
+    public List<ItemId<Module>> getOverridingModuleIds() {
         return context.getItems(ConfigItem.Module, Filters.<ModuleItemInfo>enabled()
                 .and(Filters.overridingModule()));
     }
@@ -215,7 +358,7 @@ public class GuiceyConfigurationInfo {
      * @return types of manually disabled modules or empty list
      */
     public List<Class<Module>> getModulesDisabled() {
-        return context.getItems(ConfigItem.Module, Filters.enabled().negate());
+        return typesOnly(context.getItems(ConfigItem.Module, Filters.enabled().negate()));
     }
 
     // --------------------------------------------------------------------------- INSTALLERS
@@ -224,21 +367,21 @@ public class GuiceyConfigurationInfo {
      * @return types of all registered installers (without disabled) or empty list
      */
     public List<Class<FeatureInstaller>> getInstallers() {
-        return context.getItems(ConfigItem.Installer, Filters.enabled());
+        return typesOnly(context.getItems(ConfigItem.Installer, Filters.enabled()));
     }
 
     /**
      * @return installer types, resolved by classpath scan (without disabled) or empty list
      */
     public List<Class<FeatureInstaller>> getInstallersFromScan() {
-        return context.getItems(ConfigItem.Installer, Filters.enabled().and(Filters.fromScan()));
+        return typesOnly(context.getItems(ConfigItem.Installer, Filters.enabled().and(Filters.fromScan())));
     }
 
     /**
      * @return types of manually disabled installers or empty list
      */
     public List<Class<FeatureInstaller>> getInstallersDisabled() {
-        return context.getItems(ConfigItem.Installer, Filters.enabled().negate());
+        return typesOnly(context.getItems(ConfigItem.Installer, Filters.enabled().negate()));
     }
 
     /**
@@ -258,7 +401,7 @@ public class GuiceyConfigurationInfo {
      * @return all registered and enabled extension types (including resolved with classpath scan) or empty list
      */
     public List<Class<Object>> getExtensions() {
-        return context.getItems(ConfigItem.Extension, Filters.enabled());
+        return typesOnly(context.getItems(ConfigItem.Extension, Filters.enabled()));
     }
 
     /**
@@ -266,15 +409,48 @@ public class GuiceyConfigurationInfo {
      * @return list of extensions installed by provided installer or empty list
      */
     public List<Class<Object>> getExtensions(final Class<? extends FeatureInstaller> installer) {
-        return context.getItems(ConfigItem.Extension, Filters.installedBy(installer));
+        return typesOnly(context.getItems(ConfigItem.Extension, Filters.installedBy(installer)));
     }
 
     /**
      * @return enabled extension types, resolved by classpath scan or empty list
      */
     public List<Class<Object>> getExtensionsFromScan() {
-        return context.getItems(ConfigItem.Extension, Filters.<ExtensionItemInfo>enabled()
-                .and(Filters.fromScan()));
+        return typesOnly(context.getItems(ConfigItem.Extension,
+                Filters.<ExtensionItemInfo>enabled().and(Filters.fromScan())));
+    }
+
+    /**
+     * @return enabled extension types, resolved by guice bindings scan or empty list
+     */
+    public List<Class<Object>> getExtensionsFromBindings() {
+        return typesOnly(context.getItems(ConfigItem.Extension,
+                Filters.<ExtensionItemInfo>enabled().and(Filters.fromBinding())));
+    }
+
+    /**
+     * Returned extensions may be also found by classpath scan or in guice bindings.
+     *
+     * @return enabled extensions which was registered manually or empty list
+     */
+    public List<Class<Object>> getExtensionsRegisteredManually() {
+        return typesOnly(context.getItems(ConfigItem.Extension,
+                Filters.<ExtensionItemInfo>enabled()
+                        .and(it -> it.getRegistrationScopeType().equals(ConfigScope.Application)
+                                || it.getRegistrationScopeType().equals(ConfigScope.GuiceyBundle))));
+    }
+
+    /**
+     * One extension could be installed manually then found by classpath scan and then found from guice binding.
+     * This method returns only extensions configured manually and never detected by other methods.
+     *
+     * @return list of enabled extensions, registered only manually or empty list
+     */
+    public List<Class<Object>> getExtensionsRegisteredManauallyOnly() {
+        return typesOnly(context.getItems(ConfigItem.Extension,
+                Filters.<ExtensionItemInfo>enabled()
+                        .and(Filters.fromScan().negate())
+                        .and(Filters.fromBinding().negate())));
     }
 
     /**
@@ -296,7 +472,7 @@ public class GuiceyConfigurationInfo {
      * @return types of manually disabled extensions or empty list
      */
     public List<Class<Object>> getExtensionsDisabled() {
-        return context.getItems(ConfigItem.Extension, Filters.enabled().negate());
+        return typesOnly(context.getItems(ConfigItem.Extension, Filters.enabled().negate()));
     }
 
 }

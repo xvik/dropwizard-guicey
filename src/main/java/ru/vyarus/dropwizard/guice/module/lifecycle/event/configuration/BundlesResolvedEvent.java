@@ -1,10 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
-import io.dropwizard.setup.Bootstrap;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
 
@@ -23,14 +22,16 @@ public class BundlesResolvedEvent extends ConfigurationPhaseEvent {
 
     private final List<GuiceyBundle> bundles;
     private final List<GuiceyBundle> disabled;
+    private final List<GuiceyBundle> ignored;
 
-    public BundlesResolvedEvent(final Options options,
-                                final Bootstrap bootstrap,
+    public BundlesResolvedEvent(final EventsContext context,
                                 final List<GuiceyBundle> bundles,
-                                final List<GuiceyBundle> disabled) {
-        super(GuiceyLifecycle.BundlesResolved, options, bootstrap);
+                                final List<GuiceyBundle> disabled,
+                                final List<GuiceyBundle> ignored) {
+        super(GuiceyLifecycle.BundlesResolved, context);
         this.bundles = bundles;
         this.disabled = disabled;
+        this.ignored = ignored;
     }
 
     /**
@@ -47,5 +48,14 @@ public class BundlesResolvedEvent extends ConfigurationPhaseEvent {
      */
     public List<GuiceyBundle> getDisabled() {
         return disabled;
+    }
+
+    /**
+     * Note: bundles are not yet processed so more bundles could be ignored later.
+     *
+     * @return list of ignored bundles (duplicates) or empty list
+     */
+    public List<GuiceyBundle> getIgnored() {
+        return ignored;
     }
 }

@@ -3,7 +3,7 @@
 !!! summary ""
     CoreInstallersBundle / [ResourceInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/ResourceInstaller.java)
 
-Installs [rest resources](http://www.dropwizard.io/1.3.0/docs/manual/core.html#resources).
+Installs [rest resources](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#resources).
 
 ## Recognition
 
@@ -94,7 +94,7 @@ class SampleResource {
     }
 ```
 
-See [jersey objects, available for injection](../guide/bindings.md#jersey-specific-bindings).
+See [jersey objects, available for injection](../guide/guice/bindings.md#jersey-specific-bindings).
 
 ## @Context usage
 
@@ -125,20 +125,20 @@ public class MyResource {
 }
 ```
 
-## HK2 managed resource
+## Jersey managed resource
 
-If resource class is annotated with `#!java @HK2Managed` then jersey HK2 container will manage bean creation instead of guice. 
-Injection of guice managed beans [could still be possible](../guide/configuration.md#hk2-bridge) via registered [HK2-guice-bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html),
+If resource class is annotated with `#!java @JerseyManaged` then jersey HK2 container will manage bean creation instead of guice. 
+Injection of guice managed beans [could still be possible](../guide/hk2.md#hk2-guice-bridge) via registered [HK2-guice-bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html),
 but guice aop features will not work.
 
 !!! note
-    You can manage resources with [HK2 by default](../guide/configuration.md#use-hk2-for-jersey-extensions),
+    You can manage resources with [HK2 by default](../guide/hk2.md#use-hk2-for-jersey-extensions),
     but this will also affect all [jersey extensions](jersey-ext.md)
 
 ```java
 @Path("/res")
 @Produces('application/json')
-@HK2Managed
+@JesreyManaged
 class SampleResource {
     ...
 }
@@ -148,7 +148,7 @@ class SampleResource {
     `@Context` annotation on field will work on HK2 managed bean:
     ```java
     @Path()
-    @HK2Managed
+    @JerseyManaged
     public class MyResource {
         @Context UriInfo info;
     }

@@ -26,7 +26,7 @@ class TransitiveBundlesTest extends AbstractTest {
         Bundle1.called
         Bundle2.called
         Bundle3.called
-        info.bundles.containsAll([Bundle1, Bundle2, Bundle3])
+        info.guiceyBundles.containsAll([Bundle1, Bundle2, Bundle3])
 
     }
 }

@@ -13,7 +13,7 @@ import org.junit.rules.RuleChain;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
-import ru.vyarus.dropwizard.guice.test.GuiceyConfigurationRule;
+import ru.vyarus.dropwizard.guice.test.GuiceyHooksRule;
 
 /**
  * @author Vyacheslav Rusakov
@@ -25,7 +25,7 @@ public class ConfigurationHookGuiceyAppTest {
 
     @ClassRule
     public static RuleChain chain = RuleChain
-            .outerRule(new GuiceyConfigurationRule((builder) -> builder.modules(new XMod())))
+            .outerRule(new GuiceyHooksRule((builder) -> builder.modules(new XMod())))
             .around(RULE);
 
     @Test

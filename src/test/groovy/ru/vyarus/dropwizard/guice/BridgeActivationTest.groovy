@@ -7,8 +7,8 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import io.dropwizard.testing.junit.DropwizardAppRule
 import org.junit.Rule
-import ru.vyarus.dropwizard.guice.module.context.debug.DiagnosticBundle
-import ru.vyarus.dropwizard.guice.module.context.debug.report.option.OptionsConfig
+import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic
+import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import spock.lang.Specification
 
@@ -61,7 +61,9 @@ class BridgeActivationTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(DiagnosticBundle.builder().printOptions(new OptionsConfig()).build())
+                    .listen(ConfigurationDiagnostic.builder()
+                            .printOptions(new OptionsConfig())
+                            .build())
                     .extensions(HkService)
                     .option(GuiceyOptions.UseHkBridge, enableBridge)
                     .build())

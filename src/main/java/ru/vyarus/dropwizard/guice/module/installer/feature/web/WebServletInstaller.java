@@ -6,6 +6,7 @@ import io.dropwizard.jetty.setup.ServletEnvironment;
 import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.util.WebUtils;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
@@ -51,7 +52,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Deny
  */
 @Order(90)
 public class WebServletInstaller extends InstallerOptionsSupport
-        implements FeatureInstaller<HttpServlet>, InstanceInstaller<HttpServlet>, Ordered {
+        implements FeatureInstaller, InstanceInstaller<HttpServlet>, Ordered {
 
     private final Logger logger = LoggerFactory.getLogger(WebServletInstaller.class);
     private final Reporter reporter = new Reporter(WebServletInstaller.class, "servlets =");
@@ -71,8 +72,9 @@ public class WebServletInstaller extends InstallerOptionsSupport
                 "Servlet %s not specified url pattern for mapping", extType.getName());
         final AdminContext context = FeatureUtils.getAnnotation(extType, AdminContext.class);
         final String name = WebUtils.getServletName(annotation, extType);
-        reporter.line("%-15s %-5s %-2s (%s)   %s", Joiner.on(",").join(patterns),
-                WebUtils.getAsyncMarker(annotation), WebUtils.getContextMarkers(context), extType.getName(), name);
+        reporter.line("%-25s %-8s %-4s %s   %s", Joiner.on(",").join(patterns),
+                WebUtils.getAsyncMarker(annotation), WebUtils.getContextMarkers(context),
+                RenderUtils.renderClassLine(extType), name);
 
         if (WebUtils.isForMain(context)) {
             configure(environment.servlets(), instance, extType, name, annotation);

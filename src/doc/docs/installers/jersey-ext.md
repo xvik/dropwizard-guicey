@@ -5,7 +5,7 @@
 
 Installs various jersey extensions, usually annotated with jersey `#!java @Provider` annotation and installed via `#!java environment.jersey().register()`:
 
-    Factory, ExceptionMapper, ValueParamProvider, InjectionResolver, 
+    Supplier, ExceptionMapper, ValueParamProvider, InjectionResolver, 
     ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, 
     ReaderInterceptor, WriterInterceptor, ContainerRequestFilter, 
     ContainerResponseFilter, DynamicFeature, ApplicationEventListener
@@ -16,7 +16,7 @@ Detects  classes annotated with jersey `@javax.ws.rs.ext.Provider` annotation an
 
 !!! attention ""
     Extensions registered as **singletons**, when no explicit scope annotation is used.
-    Behaviour could be disabled with [option](../guide/configuration.md#options):
+    Behaviour could be disabled with [option](../guide/options.md):
     ```java
     .option(InstallerOptions.ForceSingletonForJerseyExtensions, false)
     ```   
@@ -26,56 +26,52 @@ It is useful when [guice servlet support is disabled](../guide/web.md#disable-se
 
 Due to specifics of [HK2 integration](lifecycle.md), you may need to use:
 
-* `#!java @HK2Managed` to delegate bean creation to HK2
+* `#!java @JerseyManaged` to delegate bean creation to HK2
 * `#!java @LazyBinding` to delay bean creation to time when all dependencies will be available 
 * `javax.inject.Provider` as universal workaround (to wrap not immediately available dependency).
 
-Or you can enable [HK2 management for jersey extensions by default](../guide/configuration.md#use-hk2-for-jersey-extensions).
+Or you can enable [HK2 management for jersey extensions by default](../guide/hk2.md#use-hk2-for-jersey-extensions).
 Note that this will affect [resources](resource.md) too and guice aop will not work on jersey extensions.
 
-### Factory
+### Supplier
 
-Any class implementing `#!java org.glassfish.hk2.api.Factory` (or extending abstract class implementing it).
+!!! warning
+    `Supplier` is used now by hk2 as a replacement to it's own `Factory` interface.
+    
+    If you were using `AbstractContainerRequestValueFactory` then use just `Supplier<T>` instead.
+
+Any class implementing `#!java java.util.function.Supplier` (or extending abstract class implementing it).
 
 ```java
-@Provider
-public class AuthFactory implements Factory<User>{
-
+public class MySupplier implements Supplier<MyModel> {
     @Override
-    public User provide() {
-        return new User();
-    }
-
-    @Override
-    public void dispose(User instance) {
-    }
+    public MyModel get() {
+       ...    
+    }   
 }
 ```
 
 !!! tip ""
-    Factories in essence are very like guice (or javax.inject) providers (`#!java Provider`).
+    Suppliers in essence are very like guice (or `javax.inject`) providers (`#!java Provider`).
 
-Example of using jersey abstract class instead of direct implementation:
-
-```java
-@Provider
-public class LocaleInjectableProvider extends AbstractContainerRequestValueFactory<Locale> {
-
-    @Inject
-    private javax.inject.Provider<HttpHeaders> request;
-
-    @Override
-    public Locale provide() {
-        final List<Locale> locales = request.get().getAcceptableLanguages();
-        return locales.isEmpty() ? Locale.US : locales.get(0);
+!!! warning
+    Previously, factories were used as auth objects providers. Now `Function<ContainerRequest, ?>` must be used instead: 
+    
+    ```java
+    @Provider
+    class AuthFactory implements Function<ContainerRequest, User> {
+    
+        @Override
+        public User apply(ContainerRequest containerRequest) {
+            return new User();
+        }
     }
-}
-```
+    ```
 
 ### ExceptionMapper
 
 Any class implementing `#!java javax.ws.rs.ext.ExceptionMapper` (or extending abstract class implementing it). 
-Useful for [error handling customization](http://www.dropwizard.io/1.3.0/docs/manual/core.html#error-handling).
+Useful for [error handling customization](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#error-handling).
 
 ```java
 @Provider
@@ -97,11 +93,11 @@ public class DummyExceptionMapper implements ExceptionMapper<RuntimeException> {
 
 !!! tip
     You can also use `ExtendedExceptionMapper` as more flexible alternative. See example usage in
-    [dropwizard-views](https://www.dropwizard.io/1.3.5/docs/manual/views.html#template-errors).
+    [dropwizard-views](https://www.dropwizard.io/en/release-2.0.x/manual/views.html#template-errors).
     
 !!! tip
     Default exception dropwizard mappers (registered in `io.dropwizard.setup.ExceptionMapperBinder`) could be 
-    [overridden](https://www.dropwizard.io/1.3.5/docs/manual/core.html#overriding-default-exception-mappers)
+    [overridden](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#overriding-default-exception-mappers)
     or completely disabled with `server.registerDefaultExceptionMappers` option.    
 
 ### ValueParamProvider
@@ -110,31 +106,24 @@ Any class implementing `#!java org.glassfish.jersey.server.spi.internal.ValuePar
 
 ```java
 @Provider
-@LazyBinding 
-public class AuthFactoryProvider extends AbstractValueFactoryProvider {
+public class AuthFactoryProvider extends AbstractValueParamProvider {
 
-    private final Factory<User> authFactory;
+    private final AuthFactory authFactory;
 
     @Inject
-    public AuthFactoryProvider(final MultivaluedParameterExtractorProvider extractorProvider,
-                               final AuthFactory factory, 
-                               final ServiceLocator injector) {
-        super(extractorProvider, injector, Parameter.Source.UNKNOWN);
+    public AuthFactoryProvider(final javax.inject.Provider<MultivaluedParameterExtractorProvider> extractorProvider,
+                               final AuthFactory factory) {
+        super(extractorProvider, Parameter.Source.UNKNOWN);
         this.authFactory = factory;
     }
 
     @Override
-    protected Factory<?> createValueFactory(Parameter parameter) {
+    protected Function<ContainerRequest, User> createValueProvider(Parameter parameter) {
         final Auth auth = parameter.getAnnotation(Auth.class);
         return auth != null ? authFactory : null;
     }
 }
 ```
-
-!!! note
-    `#!java @LazyBinding` was used to delay provider creation because required dependency `#!java MultivaluedParameterExtractorProvider`
-    (by super class) will be available only after HK2 context creation (which is created after guice context). 
-    Another option could be using `#!java @HK2Managed` (instead of lazy) which will delegate bean creation to HK2.
 
 ### InjectionResolver
 
@@ -142,18 +131,29 @@ Any class implementing `#!java org.glassfish.hk2.api.InjectionResolver` (or exte
 
 ```java
 @Provider
-@LazyBinding
-public class AuthInjectionResolver extends ParamInjectionResolver<Auth> {
-    
-    public AuthInjectionResolver() {
-        super(AuthFactoryProvider.class);
+class MyObjInjectionResolver implements InjectionResolver<MyObjAnn> {
+
+    @Override
+    public Object resolve(Injectee injectee) {
+        return new MyObj();
+    }
+
+    @Override
+    public Class<MyObjAnn> getAnnotation() {
+        return MyObjAnn.class;
+    }
+
+    @Override
+    public boolean isConstructorParameterIndicator() {
+        return false;
+    }
+
+    @Override
+    public boolean isMethodParameterIndicator() {
+        return true;
     }
 }
 ```
-
-!!! note
-    `#!java @LazyBinding` was used to delay provider creation because super class will require HK2 service locator, 
-    which is not yet available. `#!java @HK2Managed` could also be used instead.
 
 ### ParamConverterProvider
 
@@ -205,7 +205,7 @@ public class MyContextResolver implements ContextResolver<Context> {
 ### MessageBodyReader
 
 Any class implementing [`#!java javax.ws.rs.ext.MessageBodyReader`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/MessageBodyReader.html) (or extending abstract class implementing it).
-Useful for [custom representations](http://www.dropwizard.io/1.3.0/docs/manual/core.html#custom-representations).
+Useful for [custom representations](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#custom-representations).
 
 ```java
 @Provider
@@ -228,7 +228,7 @@ public class TypeMessageBodyReader implements MessageBodyReader<Type> {
 ### MessageBodyWriter
 
 Any class implementing [`#!java javax.ws.rs.ext.MessageBodyWriter`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/MessageBodyWriter.html) (or extending abstract class implementing it).
-Useful for [custom representations](http://www.dropwizard.io/1.3.0/docs/manual/core.html#custom-representations).
+Useful for [custom representations](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#custom-representations).
 
 ```java
 @Provider
@@ -284,7 +284,7 @@ public class MyWriterInterceptor implements WriterInterceptor {
 ### ContainerRequestFilter
 
 Any class implementing [`#!java javax.ws.rs.container.ContainerRequestFilter`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/ContainerRequestFilter.html) (or extending abstract class implementing it).
-Useful for [request modifications](http://www.dropwizard.io/1.3.0/docs/manual/core.html#jersey-filters).
+Useful for [request modifications](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#jersey-filters).
 
 ```java
 @Provider
@@ -299,7 +299,7 @@ public class MyContainerRequestFilter implements ContainerRequestFilter {
 ### ContainerResponseFilter
 
 Any class implementing [`#!java javax.ws.rs.container.ContainerResponseFilter`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/ContainerResponseFilter.html) (or extending abstract class implementing it).
-Useful for [response modifications](http://www.dropwizard.io/1.3.0/docs/manual/core.html#jersey-filters).
+Useful for [response modifications](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#jersey-filters).
 
 ```java
 @Provider
@@ -314,7 +314,7 @@ public class MyContainerResponseFilter implements ContainerResponseFilter {
 ### DynamicFeature
 
 Any class implementing [`#!java javax.ws.rs.container.DynamicFeature`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/DynamicFeature.html) (or extending abstract class implementing it).
-Useful for conditional [activation of filters](http://www.dropwizard.io/1.3.0/docs/manual/core.html#jersey-filters).
+Useful for conditional [activation of filters](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#jersey-filters).
 
 ```java
 @Provider

@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.support.feature.CustomFeature
  * @author Vyacheslav Rusakov 
  * @since 04.09.2014
  */
-class CustomInstaller implements FeatureInstaller<CustomFeature>, InstanceInstaller<CustomFeature> {
+class CustomInstaller implements FeatureInstaller, InstanceInstaller<CustomFeature> {
 
     public static CustomFeature feature
 

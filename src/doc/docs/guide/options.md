@@ -12,7 +12,7 @@ Guicey use options to share guice bundle configurations (configured packages to 
 Another use is in web installers to change default behaviour though `InstallersOptions` enum. 
 
 Custom options may be defined for 3rd party bundle or even application. Options is a general mechanism providing configuration and access points with 
-standard reporting (part of [diagnostic reporting](diagnostic.md)). It may be used as feature triggers (like guicey do), to enable debug behaviour or to specialize
+standard reporting (part of [diagnostic reporting](diagnostic/configuration-report.md)). It may be used as feature triggers (like guicey do), to enable debug behaviour or to specialize
 application state in tests (just to name a few).
 
 ## Usage
@@ -30,10 +30,10 @@ Options could be accessed by:
 
 * Guicey bundles using [`bootstrap.option()`](bundles.md#options)
 * Installer by implementing [`WithOptions`](installers.md#options) interface 
-* Any guice bean could inject [`Options`](bindings.md#options) bean and use it to access options.
-* Guice module could access options by implementing [`OptionsAwareModule`](module-autowiring.md#options) marker interface
+* Any guice bean could inject [`Options`](guice/bindings.md#options) bean and use it to access options.
+* Guice module could access options by implementing [`OptionsAwareModule`](guice/module-autowiring.md#options) marker interface
 
-Guicey tracks options definition and usage and report all used options as part of [diagnostic reporting](diagnostic.md).
+Guicey tracks options definition and usage and report all used options as part of [diagnostic reporting](diagnostic/configuration-report.md).
 Pay attention that defined (value set) but not used (not consumed) options are marked as NOT_USED to indicate possibly redundant options.
 
 Actual application may use options in different time and so option may be defined as NOT_USE even if its actually "not yet" used.

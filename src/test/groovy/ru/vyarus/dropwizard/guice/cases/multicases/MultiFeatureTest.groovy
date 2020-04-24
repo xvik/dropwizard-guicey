@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
-import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
@@ -29,8 +29,8 @@ class MultiFeatureTest extends AbstractTest {
     def "Check multifeature installation"() {
 
         expect: "feature installed by only 1 installer"
-        def info = info.getData().<ExtensionItemInfo> getInfo(MultiExtension)
-        info.getRegisteredBy() == [Application] as Set
+        def info = info.<ExtensionItemInfo> getInfo(MultiExtension)
+        info.getRegisteredBy() == [ItemId.from(Application)] as Set
         info.installedBy == ManagedInstaller
 
     }

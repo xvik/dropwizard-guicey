@@ -26,7 +26,7 @@ class GBootstrapApplication extends Application<TestConfiguration> {
 
     @Override
     void initialize(Bootstrap<TestConfiguration> bootstrap) {
-        bootstrap.addBundle(GuiceBundle.<TestConfiguration> builder()
+        bootstrap.addBundle(GuiceBundle.builder()
                 .bundles(
                 new GuiceyBundle() {
                     @Override
@@ -43,7 +43,7 @@ class GBootstrapApplication extends Application<TestConfiguration> {
                             protected void configure() {
                                 bindConstant().annotatedWith(Names.named("sample")).to("test str")
                                 bindConstant().annotatedWith(Names.named("sample2")).to("test str")
-                                bind(DummyService)
+                                bind(DummyService).asEagerSingleton()
                             }
                         })
                                 .modulesOverride(new AbstractModule() {
@@ -58,6 +58,9 @@ class GBootstrapApplication extends Application<TestConfiguration> {
                     void run(GuiceyEnvironment environment) {
                         assert environment.configuration() != null
                         assert environment.environment() != null
+                        assert environment.configurationTree() != null
+                        assert environment.application() != null
+                        assert environment.option(GuiceyOptions.UseCoreInstallers)
                     }
                 })
                 .extensions(DummyTask, DummyResource, DummyManaged)

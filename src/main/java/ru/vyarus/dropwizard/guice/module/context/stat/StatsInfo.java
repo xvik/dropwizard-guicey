@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.context.stat;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -60,5 +61,12 @@ public final class StatsInfo {
         name.requiresCounter();
         final Integer value = tracker.getCounters().get(name);
         return value == null ? 0 : value;
+    }
+
+    /**
+     * @return guice injector creation logs (intercepted)
+     */
+    public List<String> getGuiceStats() {
+        return tracker.getGuiceStats().getMessages();
     }
 }

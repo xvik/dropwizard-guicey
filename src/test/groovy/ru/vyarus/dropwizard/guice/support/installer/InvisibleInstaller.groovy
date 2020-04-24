@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.InvisibleForScanner
  * @since 04.09.2014
  */
 @InvisibleForScanner
-class InvisibleInstaller implements FeatureInstaller<Object> {
+class InvisibleInstaller implements FeatureInstaller {
     @Override
     boolean matches(Class<?> type) {
         return false
