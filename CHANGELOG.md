@@ -1,5 +1,8 @@
 * Update guice to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
 * Update to dropwizard 2.0.8
+* Add junit 5 extensions (#74). Works much like existing spock extensions:
+    - @TestGuiceyApp for replacement of GuiceyAppRule
+    - @TestDropwizardApp for using instead of DropwizardAppRule (or current dropwizard extension)
 
 ### 5.0.1 (2020-03-13)
 * Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf))

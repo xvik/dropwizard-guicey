@@ -60,6 +60,7 @@ dependencyManagement {
 }
 dependencies {
     provided 'junit:junit'
+    provided 'org.junit.jupiter:junit-jupiter-api'
     provided 'io.dropwizard:dropwizard-testing'
     provided 'org.spockframework:spock-core'
     provided 'com.github.stefanbirkner:system-rules'
@@ -77,6 +78,10 @@ dependencies {
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
     testImplementation 'cglib:cglib-nodep:3.3.0'
     testImplementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
+
+    // junit 4 used by spock (waiting 2.0) and legacy junit4 extensions tests
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
 }
 
 // dependency management plugin affects spotbugs configuration lowering asm to 7.2 (due to guice bom)
@@ -156,6 +161,7 @@ afterReleaseBuild {
 }
 
 test {
+    useJUnitPlatform()
     testLogging {
         events 'skipped', 'failed'
         exceptionFormat 'full'
