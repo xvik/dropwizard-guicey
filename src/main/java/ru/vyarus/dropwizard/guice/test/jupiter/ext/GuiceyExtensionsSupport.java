@@ -32,7 +32,7 @@ import java.util.Optional;
  * @see TestParametersSupport for supported test parameters
  * @since 29.04.2020
  */
-public abstract class DwExtensionsSupport extends TestParametersSupport implements TestInstancePostProcessor,
+public abstract class GuiceyExtensionsSupport extends TestParametersSupport implements TestInstancePostProcessor,
         BeforeAllCallback,
         AfterAllCallback {
 
@@ -91,6 +91,8 @@ public abstract class DwExtensionsSupport extends TestParametersSupport implemen
      * <p>
      * The only thin moment here is extensions order! Junit preserve declaration order so in most cases it
      * should not be a problem.
+     * <p>
+     * To obtain guice injector use {@code InjectorLookup.getInjector(support.getApplication())}.
      *
      * @param extensionContext extension context
      * @return dropwizard support object prepared by guicey extension, or null if no guicey extension used or
@@ -117,12 +119,12 @@ public abstract class DwExtensionsSupport extends TestParametersSupport implemen
     private static ExtensionContext.Store getExtensionStore(final ExtensionContext context) {
         // Store is extension specific, but nested tests will see it too (because key is extension class)
         return context.getStore(ExtensionContext.Namespace
-                .create(DwExtensionsSupport.class));
+                .create(GuiceyExtensionsSupport.class));
     }
 
     private ExtensionContext.Store getLocalExtensionStore(final ExtensionContext context) {
         // test scoped extension scope (required to differentiate nested classes or parameterized executions)
         return context.getStore(ExtensionContext.Namespace
-                .create(DwExtensionsSupport.class, context.getRequiredTestClass()));
+                .create(GuiceyExtensionsSupport.class, context.getRequiredTestClass()));
     }
 }

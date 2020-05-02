@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.test.jupiter;
 import io.dropwizard.Application;
 import org.junit.jupiter.api.extension.ExtendWith;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.GuiceyAppJupiterExtension;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -49,13 +49,17 @@ import java.lang.annotation.Target;
  * <p>
  * Internally use {@link io.dropwizard.testing.DropwizardTestSupport} with custom command
  * ({@link ru.vyarus.dropwizard.guice.test.TestCommand}).
+ * <p>
+ * It is possible to apply extension manually using {@link org.junit.jupiter.api.extension.RegisterExtension}
+ * and {@link TestGuiceyAppExtension#forApp(Class)} builder. The only difference is declaration type, but in both cases
+ * extension will work the same way.
  *
  * @author Vyacheslav Rusakov
  * @since 29.04.2020
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@ExtendWith(GuiceyAppJupiterExtension.class)
+@ExtendWith(TestGuiceyAppExtension.class)
 public @interface TestGuiceyApp {
 
     /**

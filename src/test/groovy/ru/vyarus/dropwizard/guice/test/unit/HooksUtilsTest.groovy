@@ -13,9 +13,17 @@ import spock.lang.Specification
 class HooksUtilsTest extends Specification {
 
     def "Check hooks initialization"() {
+        when: "registering hook"
+        def res = HooksUtil.create(TestHook)
+        then: "hook registered"
+        res.size() == 1
+        res[0] instanceof TestHook
+    }
+
+    def "Check hooks registration"() {
 
         when: "registering hook"
-        HooksUtil.register(TestHook)
+        HooksUtil.register([new TestHook()])
         then: "hook registered"
         ConfigurationHooksSupport.count() == 1
     }
