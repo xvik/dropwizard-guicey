@@ -13,6 +13,7 @@ import io.dropwizard.testing.DropwizardTestSupport;
 import io.dropwizard.util.Strings;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.platform.commons.support.AnnotationSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
@@ -98,7 +99,10 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             // Note that it is impossible to have both manually build config and annotation because annotation
             // will be processed first and manual registration will be simply ignored
 
-            final TestDropwizardApp ann = context.getElement().get().getAnnotation(TestDropwizardApp.class);
+            final TestDropwizardApp ann = AnnotationSupport
+                    // also search annotation inside other annotations (meta)
+                    .findAnnotation(context.getElement(), TestDropwizardApp.class).orElse(null);
+
             // catch incorrect usage by direct @ExtendWith(...)
             Preconditions.checkNotNull(ann, "%s annotation not declared: can't work without configuration, "
                             + "so either use annotation or extension with @%s for manual configuration",
