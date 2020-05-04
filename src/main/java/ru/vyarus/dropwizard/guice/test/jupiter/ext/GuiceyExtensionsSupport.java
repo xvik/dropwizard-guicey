@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Injector;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
+import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
 
 import java.util.Optional;
 
@@ -26,7 +28,7 @@ import java.util.Optional;
  * instances with guice is possible, but in this case nested tests could not work at all, which is unacceptable.
  * <p>
  * For external integrations (other extensions), there is a special "hack" allowing to access
- * {@link DropwizardTestSupport} object (and so get access to injector): {@link #lookup(ExtensionContext)}.
+ * {@link DropwizardTestSupport} object (and so get access to injector): {@link #lookupSupport(ExtensionContext)}.
  *
  * @author Vyacheslav Rusakov
  * @see TestParametersSupport for supported test parameters
@@ -38,13 +40,18 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
     // dropwizard support storage key (store visible for all relative tests)
     private static final String DW_SUPPORT = "DW_SUPPORT";
+    // ClientFactory instance
+    private static final String DW_CLIENT = "DW_CLIENT";
     // indicator storage key of nested test (when extension activated in parent test)
     private static final String INHERITED_DW_SUPPORT = "INHERITED_DW_SUPPORT";
 
     @Override
     public void postProcessTestInstance(final Object testInstance, final ExtensionContext context) throws Exception {
-        final DropwizardTestSupport<?> support = getSupport(context);
-        InjectorLookup.getInjector(support.getApplication()).ifPresent(it -> it.injectMembers(testInstance));
+        final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(context));
+        final Optional<Injector> injector = InjectorLookup.getInjector(support.getApplication());
+        Preconditions.checkState(injector.isPresent(),
+                "Can't find guicey injector to process test fields injections");
+        injector.get().injectMembers(testInstance);
     }
 
     @Override
@@ -53,6 +60,8 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         if (store.get(DW_SUPPORT) == null) {
             final DropwizardTestSupport<?> support = prepareTestSupport(context);
             store.put(DW_SUPPORT, support);
+            // for pure guicey tests client may seem redundant, but it can be used for calling other services
+            store.put(DW_CLIENT, new ClientSupport(support));
             support.before();
         } else {
             // in case of nested test, beforeAll for root extension will be called second time (because junit keeps
@@ -84,23 +93,53 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         if (support != null) {
             support.after();
         }
+        final ClientSupport client = getClient(context);
+        if (client != null) {
+            client.close();
+        }
     }
+
+    // --------------------------------------------------------- 3rd party extensions support
 
     /**
      * Static "hack" for other extensions extending base guicey extensions abilities.
      * <p>
      * The only thin moment here is extensions order! Junit preserve declaration order so in most cases it
      * should not be a problem.
-     * <p>
-     * To obtain guice injector use {@code InjectorLookup.getInjector(support.getApplication())}.
      *
      * @param extensionContext extension context
      * @return dropwizard support object prepared by guicey extension, or null if no guicey extension used or
      * its beforeAll hook was not called yet
      */
-    public static Optional<DropwizardTestSupport<?>> lookup(final ExtensionContext extensionContext) {
+    public static Optional<DropwizardTestSupport<?>> lookupSupport(final ExtensionContext extensionContext) {
         return Optional.ofNullable((DropwizardTestSupport<?>) getExtensionStore(extensionContext).get(DW_SUPPORT));
     }
+
+    /**
+     * Shortcut for application injector resolution be used by other extensions.
+     * <p>
+     * Custom extension must be activated after main guicey extension!
+     *
+     * @param extensionContext extension context
+     * @return application injector or null if not available
+     */
+    public static Optional<Injector> lookupInjector(final ExtensionContext extensionContext) {
+        return lookupSupport(extensionContext).flatMap(it -> InjectorLookup.getInjector(it.getApplication()));
+    }
+
+    /**
+     * Shortcut for {@link ClientSupport} object lookup by other extensions.
+     * <p>
+     * Custom extension must be activated after main guicey extension!
+     *
+     * @param extensionContext extension context
+     * @return client factory object or null if not available
+     */
+    public static Optional<ClientSupport> lookupClient(final ExtensionContext extensionContext) {
+        return Optional.ofNullable((ClientSupport) getExtensionStore(extensionContext).get(DW_CLIENT));
+    }
+
+    // --------------------------------------------------------- end of 3rd party extensions support
 
     /**
      * The only role of actual extension class is to configure {@link DropwizardTestSupport} object
@@ -113,7 +152,18 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
     @Override
     protected DropwizardTestSupport<?> getSupport(final ExtensionContext extensionContext) {
-        return lookup(extensionContext).orElse(null);
+        return lookupSupport(extensionContext).orElse(null);
+    }
+
+    @Override
+    protected ClientSupport getClient(final ExtensionContext extensionContext) {
+        // throw exception when used improperly (to avoid null parameter injection)
+        return lookupClient(extensionContext).get();
+    }
+
+    @Override
+    protected Optional<Injector> getInjector(final ExtensionContext extensionContext) {
+        return lookupInjector(extensionContext);
     }
 
     private static ExtensionContext.Store getExtensionStore(final ExtensionContext context) {

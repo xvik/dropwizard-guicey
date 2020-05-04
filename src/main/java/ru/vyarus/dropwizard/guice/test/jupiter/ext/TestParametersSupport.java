@@ -16,10 +16,12 @@ import org.junit.jupiter.api.extension.ParameterResolver;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.AppAdminPort;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.AppPort;
+import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.Jit;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Base class for junit 5 extensions. Supports direct injection of test parameters:
@@ -28,6 +30,7 @@ import java.util.List;
  *     <li>{@link Configuration} class or exact configuration class</li>
  *     <li>{@link Environment} and {@link ObjectMapper}</li>
  *     <li>{@link com.google.inject.Injector}</li>
+ *     <li>{@link ClientSupport} application web client helper</li>
  *     <li>Any existing guice binging (without qualifiers)</li>
  *     <li>{@link Jit} annotated parameter will be obtained from guice context (assume JIT binding)</li>
  *     <li>{@code int} parameter annotated with {@link AppPort} or {@link AppAdminPort}</li>
@@ -44,7 +47,8 @@ public abstract class TestParametersSupport implements ParameterResolver {
             Configuration.class,
             Environment.class,
             ObjectMapper.class,
-            Injector.class);
+            Injector.class,
+            ClientSupport.class);
 
     private final List<Class<? extends Annotation>> supportedAnnotations = ImmutableList.of(
             Jit.class,
@@ -80,9 +84,7 @@ public abstract class TestParametersSupport implements ParameterResolver {
         }
 
         // declared guice binding (by class only)
-        final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(extensionContext));
-
-        return InjectorLookup.getInjector(support.getApplication())
+        return getInjector(extensionContext)
                 .map(it -> it.getExistingBinding(Key.get(type)) != null)
                 .orElse(false);
     }
@@ -96,14 +98,27 @@ public abstract class TestParametersSupport implements ParameterResolver {
         if (ann != null) {
             return lookupAnnotatedParam(ann, type, support);
         }
-        return lookupParam(type, support);
+        return ClientSupport.class.equals(type) ? getClient(extensionContext)
+                : lookupParam(type, support);
     }
 
     /**
      * @param extensionContext junit extension context
-     * @return dropwizard test support object assigned to test instance
+     * @return dropwizard test support object assigned to test instance or null
      */
     protected abstract DropwizardTestSupport<?> getSupport(ExtensionContext extensionContext);
+
+    /**
+     * @param extensionContext junit extension context
+     * @return client factory object assigned to test instance (never null)
+     */
+    protected abstract ClientSupport getClient(ExtensionContext extensionContext);
+
+    /**
+     * @param extensionContext junit extension context
+     * @return application injector or null
+     */
+    protected abstract Optional<Injector> getInjector(ExtensionContext extensionContext);
 
     private Class<? extends Annotation> findSupportedAnnotation(final ParameterContext parameterContext) {
         for (Class<? extends Annotation> ann : supportedAnnotations) {
@@ -126,10 +141,9 @@ public abstract class TestParametersSupport implements ParameterResolver {
             // may fail if web part not started
             return support.getAdminPort();
         }
-        // injector MAY be null (in command tests)
         return InjectorLookup.getInjector(support.getApplication())
                 .map(it -> it.getInstance(type))
-                .orElse(null);
+                .get();
     }
 
     @SuppressWarnings("checkstyle:ReturnCount")
@@ -146,11 +160,13 @@ public abstract class TestParametersSupport implements ParameterResolver {
         if (ObjectMapper.class.equals(type)) {
             return support.getObjectMapper();
         }
+        if (ClientSupport.class.equals(type)) {
+            return new ClientSupport(support);
+        }
         if (Injector.class.equals(type)) {
-            // injector MAY be null (in command tests)
-            return InjectorLookup.getInjector(support.getApplication()).orElse(null);
+            return InjectorLookup.getInjector(support.getApplication()).get();
         }
 
-        return InjectorLookup.getInjector(support.getApplication()).map(it -> it.getInstance(type)).orElse(null);
+        return InjectorLookup.getInjector(support.getApplication()).map(it -> it.getInstance(type)).get();
     }
 }

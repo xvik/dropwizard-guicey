@@ -4,6 +4,7 @@ import io.dropwizard.Application;
 import org.junit.jupiter.api.extension.ExtendWith;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
+import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -44,6 +45,7 @@ import java.lang.annotation.Target;
  *         <li>{@link io.dropwizard.setup.Environment}</li>
  *         <li>{@link com.fasterxml.jackson.databind.ObjectMapper}</li>
  *         <li>{@link com.google.inject.Injector}</li>
+ *         <li>{@link ClientSupport} for calling external urls</li>
  *     </ul>
  *     </li>
  * </ul>

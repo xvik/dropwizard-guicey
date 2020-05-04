@@ -45,7 +45,7 @@ import java.util.List;
  * registration will be ignored (junit default behaviour).
  * <p>
  * Other extensions requiring access to dropwizard application may use
- * {@link GuiceyExtensionsSupport#lookup(ExtensionContext)}.
+ * {@link GuiceyExtensionsSupport#lookupSupport(ExtensionContext)}.
  *
  * @author Vyacheslav Rusakov
  * @since 29.04.2020

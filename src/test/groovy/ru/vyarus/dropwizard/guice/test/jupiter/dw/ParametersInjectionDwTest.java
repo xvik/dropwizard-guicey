@@ -17,6 +17,7 @@ import ru.vyarus.dropwizard.guice.support.feature.DummyService;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.AppAdminPort;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.AppPort;
+import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.Jit;
 
 import javax.inject.Inject;
@@ -68,6 +69,7 @@ public class ParametersInjectionDwTest {
                                 Environment env,
                                 ObjectMapper mapper,
                                 Injector injector,
+                                ClientSupport clientSupport,
                                 DummyService service,
                                 @Jit JitService jit,
                                 @AppPort int port,
@@ -79,6 +81,7 @@ public class ParametersInjectionDwTest {
         assertNotNull(env);
         assertNotNull(mapper);
         assertNotNull(injector);
+        assertNotNull(clientSupport);
         assertNotNull(service);
         assertNotNull(jit);
         assertEquals(port, 8080);
