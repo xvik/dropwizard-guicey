@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public final class PathUtils {
 
     public static final String SLASH = "/";
-    private static final Pattern PATH_DIRTY_SLASHES = Pattern.compile("\\s*/\\s*(/+\\s*)?");
+    private static final Pattern PATH_DIRTY_SLASHES = Pattern.compile("(?<!:)\\s*/\\s*(/+\\s*)?");
     private static final CharMatcher TRIM_SLASH = CharMatcher.is('/');
     private static final CharMatcher TRIM_STAR = CharMatcher.is('*');
 
@@ -26,6 +26,8 @@ public final class PathUtils {
     /**
      * Combine parts into correct path avoiding duplicate slashes and replacing backward slashes. Null and empty
      * parts are ignored. No leading or trailing slash appended.
+     * <p>
+     * May contain base url as first part, e.g. "http://localhost/" and double slash there would not be replaced.
      *
      * @param parts path parts
      * @return combined path from supplied parts
