@@ -142,7 +142,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         /**
          * Same as {@link TestGuiceyApp#configOverride()}. Multiple calls will not be merged!
          *
-         * @param values overriding configuration values
+         * @param values overriding configuration values in "key: value" format
          * @return builder instance for chained calls
          */
         public Builder configOverrides(final String... values) {

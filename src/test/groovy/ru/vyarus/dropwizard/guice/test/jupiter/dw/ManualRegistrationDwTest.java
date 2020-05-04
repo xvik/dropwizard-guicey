@@ -27,7 +27,7 @@ public class ManualRegistrationDwTest {
     @RegisterExtension
     static TestDropwizardAppExtension app = TestDropwizardAppExtension.forApp(AutoScanApplication.class)
             .config("src/test/resources/ru/vyarus/dropwizard/guice/config.yml")
-            .configOverrides("foo=2", "bar=12")
+            .configOverrides("foo: 2", "bar: 12")
             .randomPorts()
             .restMapping("api")
             .hooks(Hook.class)

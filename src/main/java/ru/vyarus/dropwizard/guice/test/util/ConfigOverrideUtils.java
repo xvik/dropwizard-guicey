@@ -15,7 +15,7 @@ public final class ConfigOverrideUtils {
     }
 
     /**
-     * @param props overriding properties in "key=value" format
+     * @param props overriding properties in "key: value" format
      * @return parsed configuration override objects
      */
     public static ConfigOverride[] convert(final String... props) {
@@ -24,10 +24,10 @@ public final class ConfigOverrideUtils {
             overrides = new ConfigOverride[props.length];
             int i = 0;
             for (String value : props) {
-                final int idx = value.indexOf('=');
-                Preconditions.checkState(idx > 0,
-                        "Incorrect configuration override declaration: must be 'key=value', but found '%s'", value);
-                overrides[i++] = ConfigOverride.config(value.substring(0, idx), value.substring(idx + 1));
+                final int idx = value.indexOf(':');
+                Preconditions.checkState(idx > 0 && idx < value.length(),
+                        "Incorrect configuration override declaration: must be 'key: value', but found '%s'", value);
+                overrides[i++] = ConfigOverride.config(value.substring(0, idx).trim(), value.substring(idx + 1).trim());
             }
         }
         return overrides;

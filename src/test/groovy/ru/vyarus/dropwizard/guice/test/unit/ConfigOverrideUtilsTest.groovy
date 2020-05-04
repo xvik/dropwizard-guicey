@@ -19,14 +19,14 @@ class ConfigOverrideUtilsTest extends Specification {
 
         where:
         val     | key | value
-        'a=b'   | 'a' | 'b'
-        'a=b=c' | 'a' | 'b=c'
+        'a: b'   | 'a' | 'b'
+        'a: b:c' | 'a' | 'b:c'
     }
 
     def "Check error conversion cases"() {
 
         when: "no key"
-        ConfigOverrideUtils.convert('=bbb')
+        ConfigOverrideUtils.convert(':bbb')
         then: "err"
         thrown(IllegalStateException)
 

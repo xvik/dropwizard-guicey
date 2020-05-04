@@ -28,7 +28,7 @@ public class ConfigOverrideGuiceyTest {
 
     @TestGuiceyApp(value = AutoScanApplication.class,
             config = "src/test/resources/ru/vyarus/dropwizard/guice/config.yml",
-            configOverride = {"foo=2", "bar=12"})
+            configOverride = {"foo: 2", "bar: 12"})
     @Nested
     class ConfigOverrideTest implements ConfigOverrideCheck {
 
@@ -42,7 +42,7 @@ public class ConfigOverrideGuiceyTest {
     }
 
     @TestGuiceyApp(value = AutoScanApplication.class,
-            configOverride = {"foo=2", "bar=12", "baa=4"})
+            configOverride = {"foo: 2", "bar: 12", "baa: 4"})
     @Nested
     class EmptyConfigOverrideTest implements ConfigOverrideCheck {
 

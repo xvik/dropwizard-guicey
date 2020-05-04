@@ -75,8 +75,8 @@ public class ClientSupportDwTest {
 
 
     @TestDropwizardApp(value = App.class, configOverride = {
-            "server.applicationContextPath=/app",
-            "server.adminContextPath=/admin",
+            "server.applicationContextPath: /app",
+            "server.adminContextPath: /admin",
     }, restMapping = "api")
     @Nested
     class ChangedDefaultConfig implements ClientCallTest {

@@ -22,7 +22,7 @@ public class ManualRegistrationGuiceyTest {
     @RegisterExtension
     static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(AutoScanApplication.class)
             .config("src/test/resources/ru/vyarus/dropwizard/guice/config.yml")
-            .configOverrides("foo=2", "bar=12")
+            .configOverrides("foo: 2", "bar: 12")
             .hooks(Hook.class)
             .hooks(builder -> builder.disableExtensions(DummyResource.class))
             .create();

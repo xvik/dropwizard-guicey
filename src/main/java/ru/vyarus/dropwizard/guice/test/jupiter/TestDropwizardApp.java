@@ -76,7 +76,7 @@ public @interface TestDropwizardApp {
     String config() default "";
 
     /**
-     * Each value must be written as {@code key=value}.
+     * Each value must be written as {@code key: value}.
      *
      * @return list of overridden configuration values (may be used even without real configuration)
      */
