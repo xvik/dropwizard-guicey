@@ -44,7 +44,9 @@ import java.util.List;
  *
  * @author Vyacheslav Rusakov
  * @since 11.04.2018
+ * @deprecated use junit 5 extensions which allow hooks declaration directly
  */
+@Deprecated
 public class GuiceyHooksRule extends ExternalResource {
 
     private final List<GuiceyConfigurationHook> hooks;

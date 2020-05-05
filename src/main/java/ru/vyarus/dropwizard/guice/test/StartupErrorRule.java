@@ -22,7 +22,11 @@ import org.junit.runners.model.Statement;
  *
  * @author Vyacheslav Rusakov
  * @since 16.03.2017
+ * @deprecated in favour of junit 5. But system-rules does not support junit 5 so there is no direct replacement.
+ *  For system exit capturing you can use https://github.com/tginsberg/junit5-system-exit
+ *  For system streams capturing there is no alternatives, but in any case it is impossible to do for parallel tests
  */
+@Deprecated
 public final class StartupErrorRule implements TestRule {
     private final ExpectedSystemExit exit = ExpectedSystemExit.none();
     private final SystemErrRule systemErr = new SystemErrRule();

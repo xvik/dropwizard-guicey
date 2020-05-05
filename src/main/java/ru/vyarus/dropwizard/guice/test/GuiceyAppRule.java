@@ -29,7 +29,9 @@ import java.util.Enumeration;
  * @param <C> configuration type
  * @author Vyacheslav Rusakov
  * @since 23.10.2014
+ * @deprecated use junit 5 extension {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}
  */
+@Deprecated
 public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
 
     private final Class<? extends Application<C>> applicationClass;
