@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.AppAdminPort;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.AppPort;
+import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
 
 /**
  * @author Vyacheslav Rusakov
@@ -15,8 +14,8 @@ import ru.vyarus.dropwizard.guice.test.jupiter.param.AppPort;
 public class RandomPortsTest {
 
     @Test
-    void checkRandomPorts(@AppPort int port, @AppAdminPort int adminPort) {
-        Assertions.assertNotEquals(8080, port);
-        Assertions.assertNotEquals(8081, adminPort);
+    void checkRandomPorts(ClientSupport client) {
+        Assertions.assertNotEquals(8080, client.getPort());
+        Assertions.assertNotEquals(8081, client.getAdminPort());
     }
 }

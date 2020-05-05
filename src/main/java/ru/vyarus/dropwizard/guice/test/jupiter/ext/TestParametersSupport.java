@@ -13,13 +13,11 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.platform.commons.support.AnnotationSupport;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.AppAdminPort;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.AppPort;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.Jit;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +31,6 @@ import java.util.Optional;
  *     <li>{@link ClientSupport} application web client helper</li>
  *     <li>Any existing guice binging (without qualifiers)</li>
  *     <li>{@link Jit} annotated parameter will be obtained from guice context (assume JIT binding)</li>
- *     <li>{@code int} parameter annotated with {@link AppPort} or {@link AppAdminPort}</li>
  * </ul>
  * Overall, it provides everything {@link DropwizardTestSupport} provides plus guice-managed beans.
  *
@@ -50,28 +47,16 @@ public abstract class TestParametersSupport implements ParameterResolver {
             Injector.class,
             ClientSupport.class);
 
-    private final List<Class<? extends Annotation>> supportedAnnotations = ImmutableList.of(
-            Jit.class,
-            AppPort.class,
-            AppAdminPort.class);
-
     @Override
     @SuppressWarnings("checkstyle:ReturnCount")
     public boolean supportsParameter(final ParameterContext parameterContext,
                                      final ExtensionContext extensionContext) throws ParameterResolutionException {
-        final Class<?> type = parameterContext.getParameter().getType();
         if (parameterContext.getParameter().getAnnotations().length > 0) {
-            final Class<? extends Annotation> ann = findSupportedAnnotation(parameterContext);
-            // annotated parameter support
-            if (ann != null && (ann.equals(AppPort.class) || ann.equals(AppAdminPort.class))) {
-                Preconditions.checkState(type.equals(int.class),
-                        "Port parameter annotated with @%s must be with type 'int'", ann.getSimpleName());
-            }
-            // if any other (not supported) annotation declared on the parameter - skip it
-            // (possibly other extension's parameter)
-            return ann != null;
+            // if any other annotation declared on the parameter - skip it (possibly other extension's parameter)
+            return AnnotationSupport.isAnnotated(parameterContext.getParameter(), Jit.class);
         }
 
+        final Class<?> type = parameterContext.getParameter().getType();
         if (Application.class.isAssignableFrom(type) || Configuration.class.isAssignableFrom(type)) {
             // special case when exact app or configuration class used
             return true;
@@ -92,14 +77,12 @@ public abstract class TestParametersSupport implements ParameterResolver {
     @Override
     public Object resolveParameter(final ParameterContext parameterContext,
                                    final ExtensionContext extensionContext) throws ParameterResolutionException {
-        final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(extensionContext));
         final Class<?> type = parameterContext.getParameter().getType();
-        final Class<? extends Annotation> ann = findSupportedAnnotation(parameterContext);
-        if (ann != null) {
-            return lookupAnnotatedParam(ann, type, support);
+        if (AnnotationSupport.isAnnotated(parameterContext.getParameter(), Jit.class)) {
+            return getInjector(extensionContext).map(it -> it.getInstance(type)).get();
         }
-        return ClientSupport.class.equals(type) ? getClient(extensionContext)
-                : lookupParam(type, support);
+        final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(extensionContext));
+        return ClientSupport.class.equals(type) ? getClient(extensionContext) : lookupParam(type, support);
     }
 
     /**
@@ -119,32 +102,6 @@ public abstract class TestParametersSupport implements ParameterResolver {
      * @return application injector or null
      */
     protected abstract Optional<Injector> getInjector(ExtensionContext extensionContext);
-
-    private Class<? extends Annotation> findSupportedAnnotation(final ParameterContext parameterContext) {
-        for (Class<? extends Annotation> ann : supportedAnnotations) {
-            if (parameterContext.isAnnotated(ann)) {
-                return ann;
-            }
-        }
-        return null;
-    }
-
-    @SuppressWarnings("checkstyle:ReturnCount")
-    private Object lookupAnnotatedParam(final Class<? extends Annotation> ann,
-                                        final Class<?> type,
-                                        final DropwizardTestSupport<?> support) {
-        if (ann.equals(AppPort.class)) {
-            // may fail if web part not started
-            return support.getLocalPort();
-        }
-        if (ann.equals(AppAdminPort.class)) {
-            // may fail if web part not started
-            return support.getAdminPort();
-        }
-        return InjectorLookup.getInjector(support.getApplication())
-                .map(it -> it.getInstance(type))
-                .get();
-    }
 
     @SuppressWarnings("checkstyle:ReturnCount")
     private Object lookupParam(final Class<?> type, final DropwizardTestSupport<?> support) {

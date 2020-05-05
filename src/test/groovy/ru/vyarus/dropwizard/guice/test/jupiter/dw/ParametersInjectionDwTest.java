@@ -15,8 +15,6 @@ import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
 import ru.vyarus.dropwizard.guice.support.feature.DummyService;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.AppAdminPort;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.AppPort;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.Jit;
 
@@ -69,11 +67,9 @@ public class ParametersInjectionDwTest {
                                 Environment env,
                                 ObjectMapper mapper,
                                 Injector injector,
-                                ClientSupport clientSupport,
+                                ClientSupport client,
                                 DummyService service,
-                                @Jit JitService jit,
-                                @AppPort int port,
-                                @AppAdminPort int adminPort) {
+                                @Jit JitService jit) {
         assertNotNull(app);
         assertNotNull(app2);
         assertNotNull(conf);
@@ -81,11 +77,11 @@ public class ParametersInjectionDwTest {
         assertNotNull(env);
         assertNotNull(mapper);
         assertNotNull(injector);
-        assertNotNull(clientSupport);
+        assertNotNull(client);
         assertNotNull(service);
         assertNotNull(jit);
-        assertEquals(port, 8080);
-        assertEquals(adminPort, 8081);
+        assertEquals(client.getPort(), 8080);
+        assertEquals(client.getAdminPort(), 8081);
     }
 
     public static class JitService {

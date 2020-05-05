@@ -12,8 +12,7 @@ import ru.vyarus.dropwizard.guice.support.TestConfiguration;
 import ru.vyarus.dropwizard.guice.support.feature.DummyExceptionMapper;
 import ru.vyarus.dropwizard.guice.support.feature.DummyManaged;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestDropwizardAppExtension;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.AppAdminPort;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.AppPort;
+import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
@@ -38,20 +37,20 @@ public class ManualRegistrationDwTest {
     TestConfiguration config;
 
     @Test
-    void checkCorrectWiring(GuiceyConfigurationInfo info, @AppPort int port, @AppAdminPort int adminPort) {
+    void checkCorrectWiring(GuiceyConfigurationInfo info, ClientSupport client) {
         Assertions.assertEquals(config.foo, 2);
         Assertions.assertEquals(config.bar, 12);
         Assertions.assertEquals(config.baa, 4);
 
-        Assertions.assertNotEquals(8080, port);
-        Assertions.assertNotEquals(8081, adminPort);
+        Assertions.assertNotEquals(8080, client.getPort());
+        Assertions.assertNotEquals(8081, client.getAdminPort());
 
         Assertions.assertNotNull(info);
         Assertions.assertTrue(info.getExtensionsDisabled().contains(DummyManaged.class));
         Assertions.assertTrue(info.getExtensionsDisabled().contains(DummyExceptionMapper.class));
 
         Response response = ClientBuilder.newClient()
-                .target("http://localhost:" + port + "/api/dummy/")
+                .target("http://localhost:" + client.getPort() + "/api/dummy/")
                 .request()
                 .buildGet()
                 .invoke();

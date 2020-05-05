@@ -4,7 +4,6 @@ import io.dropwizard.Application;
 import org.junit.jupiter.api.extension.ExtendWith;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestDropwizardAppExtension;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -41,13 +40,10 @@ import java.lang.annotation.Target;
  *         <li>{@link io.dropwizard.setup.Environment}</li>
  *         <li>{@link com.fasterxml.jackson.databind.ObjectMapper}</li>
  *         <li>{@link com.google.inject.Injector}</li>
- *         <li>{@link ClientSupport} for calling application web endpoints (or external urls)</li>
+ *         <li>{@link ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport} for calling application web
+ *         endpoints (or external urls). Also it provides actual application ports.</li>
  *     </ul>
  *     </li>
- *     <li>{@link ru.vyarus.dropwizard.guice.test.jupiter.param.AppPort} annotated int parameter will contain server
- *     port (useful with {@link #randomPorts()})</li>
- *     <li>{@link ru.vyarus.dropwizard.guice.test.jupiter.param.AppAdminPort} annotated int parameter will contain
- *     server admin port (useful with {@link #randomPorts()})</li>
  * </ul>
  * <p>
  * Internally use {@link io.dropwizard.testing.DropwizardTestSupport}.
@@ -95,15 +91,15 @@ public @interface TestDropwizardApp {
      * Enables random ports usage. Supports both simple and default dropwizard servers. Random ports would be
      * set even if you specify exact configuration file with configured ports (option overrides configuration).
      * <p>
-     * To get port numbers in application use lifecycle or test method parameters annotated with
-     * {@link ru.vyarus.dropwizard.guice.test.jupiter.param.AppPort} or
-     * {@link ru.vyarus.dropwizard.guice.test.jupiter.param.AppAdminPort}. For example:
+     * To get port numbers in test use {@link ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport} parameter
+     * in lifecycle or test method:
      * <pre>{@code
-     * @BeforeAll
-     * static before(@AppPort int port, @AppAdminPort int adminPort) {
-     *     baseUrl = "http://localhost:" + port + "/";
+     * static beforeAll(ClientSupport client) {
+     *     String baseUrl = "http://localhost:" + client.getPort();
+     *     String baseAdminUrl = "http://localhost:" + client.getAdminPort();
      * }
      * }</pre>
+     * Or use client target methods directly.
      *
      * @return true to use random ports
      */
