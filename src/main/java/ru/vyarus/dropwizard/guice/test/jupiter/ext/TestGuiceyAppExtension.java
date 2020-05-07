@@ -141,6 +141,9 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
 
         /**
          * Same as {@link TestGuiceyApp#configOverride()}. Multiple calls will not be merged!
+         * <p>
+         * WARNING: config override can't be used with parallel tests because all overriding values would be set as system
+         * properties (see {@link io.dropwizard.testing.ConfigOverride#addToSystemProperties()}}).
          *
          * @param values overriding configuration values in "key: value" format
          * @return builder instance for chained calls

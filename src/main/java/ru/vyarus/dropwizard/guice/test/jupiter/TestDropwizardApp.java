@@ -73,6 +73,9 @@ public @interface TestDropwizardApp {
 
     /**
      * Each value must be written as {@code key: value}.
+     * <p>
+     * WARNING: config override can't be used with parallel tests because all overriding values would be set as system
+     * properties (see {@link io.dropwizard.testing.ConfigOverride#addToSystemProperties()}}).
      *
      * @return list of overridden configuration values (may be used even without real configuration)
      */
