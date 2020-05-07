@@ -84,6 +84,11 @@ public @interface TestDropwizardApp {
     /**
      * Hooks provide access to guice builder allowing complete customization of application context
      * in tests.
+     * <p>
+     * For anonymous hooks you can simply declare hook as static field:
+     * {@code static GuiceyConfigurationHook hook = builder -> builder.disableExtension(Something.class)}
+     * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
+     * are also counted.
      *
      * @return list of hooks to use
      * @see GuiceyConfigurationHook for more info

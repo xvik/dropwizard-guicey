@@ -7,10 +7,18 @@ import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
+import org.junit.platform.commons.support.HierarchyTraversalMode;
+import org.junit.platform.commons.support.ReflectionSupport;
+import org.junit.platform.commons.util.ReflectionUtils;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,8 +35,14 @@ import java.util.Optional;
  * for it to process test fields injection. Guice AOP can't be used on test methods. Technically, creating test
  * instances with guice is possible, but in this case nested tests could not work at all, which is unacceptable.
  * <p>
+ * Extension detects static fields of {@link GuiceyConfigurationHook} type and initialize these hooks automatically.
+ * It was done like this to simplify customizations, when main extension could be declared as annotation and
+ * hook as field. Also, it was impossible additional to implement hooks support with junit extension. Hook
+ * field could be declared even in base test class.
+ * <p>
  * For external integrations (other extensions), there is a special "hack" allowing to access
  * {@link DropwizardTestSupport} object (and so get access to injector): {@link #lookupSupport(ExtensionContext)}.
+ * And shortcuts {@link #lookupInjector(ExtensionContext)} and {@link #lookupClient(ExtensionContext)}.
  *
  * @author Vyacheslav Rusakov
  * @see TestParametersSupport for supported test parameters
@@ -62,6 +76,10 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             store.put(DW_SUPPORT, support);
             // for pure guicey tests client may seem redundant, but it can be used for calling other services
             store.put(DW_CLIENT, new ClientSupport(support));
+
+            // find and activate hooks declared in test static fields (impossible to do with an extension)
+            activateFieldHooks(context.getRequiredTestClass());
+
             support.before();
         } else {
             // in case of nested test, beforeAll for root extension will be called second time (because junit keeps
@@ -164,6 +182,18 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     @Override
     protected Optional<Injector> getInjector(final ExtensionContext extensionContext) {
         return lookupInjector(extensionContext);
+    }
+
+    @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
+    private void activateFieldHooks(final Class<?> testClass) {
+        final List<Field> fields = ReflectionSupport.findFields(testClass,
+                field -> Modifier.isStatic(field.getModifiers())
+                        && GuiceyConfigurationHook.class.isAssignableFrom(field.getType()),
+                HierarchyTraversalMode.BOTTOM_UP);
+        if (!fields.isEmpty()) {
+            HooksUtil.register((List<GuiceyConfigurationHook>)
+                    (List) ReflectionUtils.readFieldValues(fields, null));
+        }
     }
 
     private static ExtensionContext.Store getExtensionStore(final ExtensionContext context) {

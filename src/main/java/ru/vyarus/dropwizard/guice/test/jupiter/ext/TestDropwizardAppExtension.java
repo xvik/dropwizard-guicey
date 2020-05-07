@@ -180,8 +180,8 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         /**
          * Same as {@link TestDropwizardApp#configOverride()}. Multiple calls will not be merged!
          * <p>
-         * WARNING: config override can't be used with parallel tests because all overriding values would be set as system
-         * properties (see {@link io.dropwizard.testing.ConfigOverride#addToSystemProperties()}}).
+         * WARNING: config override can't be used with parallel tests because all overriding values would be set as
+         * system properties (see {@link io.dropwizard.testing.ConfigOverride#addToSystemProperties()}}).
          *
          * @param values overriding configuration values in "key: value" format
          * @return builder instance for chained calls
@@ -193,6 +193,11 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
 
         /**
          * Same as {@link TestDropwizardApp#hooks()}. May be called multiple times.
+         * <p>
+         * Anonymous hooks could be declared with a static field:
+         * {@code static GuiceyConfigurationHook hook = builder -> builder.disableExtension(Something.class)}
+         * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
+         * are also counted.
          *
          * @param hooks hook classes to use
          * @return builder instance for chained calls
@@ -212,6 +217,11 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * .hooks(builder -> builder.modules(new DebugModule()))
          * }</pre>
          * May be called multiple times.
+         * <p>
+         * Also, anonymous hooks could be declared with a static field:
+         * {@code static GuiceyConfigurationHook hook = builder -> builder.disableExtension(Something.class)}
+         * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
+         * are also counted.
          *
          * @param hooks hook instances (may be lambdas)
          * @return builder instance for chained calls
