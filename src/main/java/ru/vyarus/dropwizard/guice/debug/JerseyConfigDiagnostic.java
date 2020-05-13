@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStart
  * Jersey configuration diagnostic report.
  * <p>
  * Must be registered with {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(
- *ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
+ * ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
  * Show all extension types by default, but may be configured to show only some types.
  * <p>
  * If multiple listeners registered, only first registered will be actually used (allow safe multiple registrations).

@@ -21,7 +21,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#duplicateConfigDetector(
- *ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector)
+ * ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector)
  * @since 13.07.2019
  */
 @SuppressFBWarnings("EQ_COMPARING_CLASS_NAMES")

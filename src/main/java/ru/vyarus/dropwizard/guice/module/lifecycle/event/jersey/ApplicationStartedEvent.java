@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 /**
  * Called after complete dropwizard startup. Actually the same as jetty lifecycle started event (
  * {@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStarted(
- *org.eclipse.jetty.util.component.LifeCycle)}), which is called after complete jetty startup.
+ * org.eclipse.jetty.util.component.LifeCycle)}), which is called after complete jetty startup.
  * <p>
  * May be used as assured "started" point (after all initializations). For example, to report something. This event
  * also will be casted in guicey tests ({@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule}) when web part is not

@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStart
  * {@link com.google.inject.servlet.ServletModule} declarations.
  * <p>
  * Must be registered with {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(
- *ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
+ * ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
  * Should be configured what info to show because by default nothing is shown.
  * <p>
  * If multiple listeners registered, only first registered will be actually used (allow safe multiple registrations).

@@ -120,7 +120,7 @@ public final class ContextTreeConfig {
      * <p>
      * For showing only one special scope use
      * {@link ru.vyarus.dropwizard.guice.module.context.ConfigScope#allExcept(
-     *ru.vyarus.dropwizard.guice.module.context.ConfigScope)}.
+     * ru.vyarus.dropwizard.guice.module.context.ConfigScope)}.
      *
      * @param avoid scopes to avoid printing
      * @return config instance for chained calls
