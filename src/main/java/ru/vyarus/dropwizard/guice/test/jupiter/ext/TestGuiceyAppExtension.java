@@ -3,7 +3,6 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 import com.google.common.base.Preconditions;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
-import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -103,19 +102,23 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         }
 
         HooksUtil.register(config.hooks);
-        return create(config.app, config.configPath, ConfigOverrideUtils.convert(config.configOverrides));
+
+        // config overrides work through system properties so it is important to have unique prefixes
+        final String configPrefix = ConfigOverrideUtils.createPrefix(context.getRequiredTestClass());
+        return create(config.app, config.configPath, configPrefix, config.configOverrides);
     }
 
     @SuppressWarnings("unchecked")
     private <C extends Configuration> DropwizardTestSupport<C> create(
             final Class<? extends Application> app,
             final String configPath,
-            final ConfigOverride... overrides) {
+            final String configPrefix,
+            final String... overrides) {
         return new DropwizardTestSupport<C>((Class<? extends Application<C>>) app,
                 configPath,
-                (String) null,
+                configPrefix,
                 TestCommand::new,
-                overrides);
+                ConfigOverrideUtils.convert(configPrefix, overrides));
     }
 
     /**
@@ -141,9 +144,6 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
 
         /**
          * Same as {@link TestGuiceyApp#configOverride()}. Multiple calls will not be merged!
-         * <p>
-         * WARNING: config override can't be used with parallel tests because all overriding values would be set as
-         * system properties (see {@link io.dropwizard.testing.ConfigOverride#addToSystemProperties()}}).
          *
          * @param values overriding configuration values in "key: value" format
          * @return builder instance for chained calls

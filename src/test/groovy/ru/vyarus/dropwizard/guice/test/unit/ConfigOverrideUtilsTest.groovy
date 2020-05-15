@@ -13,7 +13,7 @@ class ConfigOverrideUtilsTest extends Specification {
     def "Check value conversion"() {
 
         expect:
-        ConfigOverride[] res = ConfigOverrideUtils.convert(val)
+        ConfigOverride[] res = ConfigOverrideUtils.convert('test', val)
         res[0].key == key
         res[0].value.get() == value
 
@@ -26,12 +26,12 @@ class ConfigOverrideUtilsTest extends Specification {
     def "Check error conversion cases"() {
 
         when: "no key"
-        ConfigOverrideUtils.convert(':bbb')
+        ConfigOverrideUtils.convert('test', ':bbb')
         then: "err"
         thrown(IllegalStateException)
 
         when: "no ="
-        ConfigOverrideUtils.convert('key-bbb')
+        ConfigOverrideUtils.convert('test', 'key-bbb')
         then: "err"
         thrown(IllegalStateException)
     }

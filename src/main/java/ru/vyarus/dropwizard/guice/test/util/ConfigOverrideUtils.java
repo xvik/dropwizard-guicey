@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.test.util;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.testing.ConfigOverride;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 
 /**
  * Config override handling utils.
@@ -15,10 +16,21 @@ public final class ConfigOverrideUtils {
     }
 
     /**
+     * Unique prefix is important because config overrides works through system properties and without unique prefix
+     * it would be impossible to use parallel tests.
+     *
+     * @param type test class
+     * @return unique properties prefix to use for this test
+     */
+    public static String createPrefix(final Class<?> type) {
+        return RenderUtils.getClassName(type);
+    }
+
+    /**
      * @param props overriding properties in "key: value" format
      * @return parsed configuration override objects
      */
-    public static ConfigOverride[] convert(final String... props) {
+    public static ConfigOverride[] convert(final String prefix, final String... props) {
         ConfigOverride[] overrides = null;
         if (props != null && props.length > 0) {
             overrides = new ConfigOverride[props.length];
@@ -27,7 +39,8 @@ public final class ConfigOverrideUtils {
                 final int idx = value.indexOf(':');
                 Preconditions.checkState(idx > 0 && idx < value.length(),
                         "Incorrect configuration override declaration: must be 'key: value', but found '%s'", value);
-                overrides[i++] = ConfigOverride.config(value.substring(0, idx).trim(), value.substring(idx + 1).trim());
+                overrides[i++] = ConfigOverride
+                        .config(prefix, value.substring(0, idx).trim(), value.substring(idx + 1).trim());
             }
         }
         return overrides;

@@ -114,9 +114,12 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
 
         HooksUtil.register(config.hooks);
 
+        // config overrides work through system properties so it is important to have unique prefixes
+        final String configPrefix = ConfigOverrideUtils.createPrefix(context.getRequiredTestClass());
         final DropwizardTestSupport support = new DropwizardTestSupport(config.app,
                 config.configPath,
-                buildConfigOverrides());
+                configPrefix,
+                buildConfigOverrides(configPrefix));
 
         if (config.randomPorts) {
             support.addListener(new RandomPortsListener());
@@ -124,14 +127,14 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         return support;
     }
 
-    private ConfigOverride[] buildConfigOverrides() {
-        ConfigOverride[] overrides = ConfigOverrideUtils.convert(config.configOverrides);
+    private ConfigOverride[] buildConfigOverrides(final String prefix) {
+        ConfigOverride[] overrides = ConfigOverrideUtils.convert(prefix, config.configOverrides);
         if (!Strings.isNullOrEmpty(config.restMapping)) {
             String mapping = PathUtils.leadingSlash(config.restMapping);
             if (!mapping.endsWith(STAR)) {
                 mapping = PathUtils.trailingSlash(mapping) + STAR;
             }
-            overrides = ConfigOverrideUtils.merge(overrides, ConfigOverride.config("server.rootPath", mapping));
+            overrides = ConfigOverrideUtils.merge(overrides, ConfigOverride.config(prefix, "server.rootPath", mapping));
         }
         return overrides;
     }
@@ -179,9 +182,6 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
 
         /**
          * Same as {@link TestDropwizardApp#configOverride()}. Multiple calls will not be merged!
-         * <p>
-         * WARNING: config override can't be used with parallel tests because all overriding values would be set as
-         * system properties (see {@link io.dropwizard.testing.ConfigOverride#addToSystemProperties()}}).
          *
          * @param values overriding configuration values in "key: value" format
          * @return builder instance for chained calls
