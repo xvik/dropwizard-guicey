@@ -195,8 +195,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
     protected static ExtensionContext.Store getExtensionStore(final ExtensionContext context) {
         // Store is extension specific, but nested tests will see it too (because key is extension class)
-        return context.getStore(ExtensionContext.Namespace
-                .create(GuiceyExtensionsSupport.class));
+        return context.getStore(ExtensionContext.Namespace.create(GuiceyExtensionsSupport.class));
     }
 
     @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
