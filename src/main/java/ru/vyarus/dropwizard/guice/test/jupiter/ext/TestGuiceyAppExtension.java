@@ -132,7 +132,10 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
     @Override
     protected void onShutdown(final ExtensionContext context) {
         // DropwizardTestSupport would not be able to shutdown guicey task, so shutdown must be performed manually
-        ((TestCommand<?>) getExtensionStore(context).get(TestCommand.class)).stop();
+        final TestCommand<?> command = (TestCommand<?>) getExtensionStore(context).get(TestCommand.class);
+        if (command != null) {
+            command.stop();
+        }
     }
 
     /**
