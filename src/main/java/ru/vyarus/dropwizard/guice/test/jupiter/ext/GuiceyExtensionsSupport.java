@@ -115,6 +115,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         if (client != null) {
             client.close();
         }
+        onShutdown(context);
     }
 
     // --------------------------------------------------------- 3rd party extensions support
@@ -168,6 +169,14 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      */
     protected abstract DropwizardTestSupport<?> prepareTestSupport(ExtensionContext context);
 
+    /**
+     * Hook to perform additional work after server shutdown. Useful for custom commands in order to shutdown properly.
+     *
+     * @param context test context
+     */
+    protected void onShutdown(final ExtensionContext context) {
+    }
+
     @Override
     protected DropwizardTestSupport<?> getSupport(final ExtensionContext extensionContext) {
         return lookupSupport(extensionContext).orElse(null);
@@ -184,6 +193,12 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         return lookupInjector(extensionContext);
     }
 
+    protected static ExtensionContext.Store getExtensionStore(final ExtensionContext context) {
+        // Store is extension specific, but nested tests will see it too (because key is extension class)
+        return context.getStore(ExtensionContext.Namespace
+                .create(GuiceyExtensionsSupport.class));
+    }
+
     @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
     private void activateFieldHooks(final Class<?> testClass) {
         final List<Field> fields = ReflectionSupport.findFields(testClass,
@@ -194,12 +209,6 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             HooksUtil.register((List<GuiceyConfigurationHook>)
                     (List) ReflectionUtils.readFieldValues(fields, null));
         }
-    }
-
-    private static ExtensionContext.Store getExtensionStore(final ExtensionContext context) {
-        // Store is extension specific, but nested tests will see it too (because key is extension class)
-        return context.getStore(ExtensionContext.Namespace
-                .create(GuiceyExtensionsSupport.class));
     }
 
     private ExtensionContext.Store getLocalExtensionStore(final ExtensionContext context) {
