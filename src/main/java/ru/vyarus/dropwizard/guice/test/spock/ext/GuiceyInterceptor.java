@@ -2,16 +2,16 @@ package ru.vyarus.dropwizard.guice.test.spock.ext;
 
 import com.google.inject.Injector;
 import com.google.inject.spi.InjectionPoint;
-import org.junit.rules.ExternalResource;
+import io.dropwizard.testing.DropwizardTestSupport;
 import org.spockframework.runtime.extension.AbstractMethodInterceptor;
 import org.spockframework.runtime.extension.IMethodInvocation;
 import org.spockframework.runtime.model.SpecInfo;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import spock.lang.Shared;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
@@ -26,29 +26,14 @@ import java.util.Set;
 // spec.getTopSpec() are intercepted (see GuiceExtension)
 public class GuiceyInterceptor extends AbstractMethodInterceptor {
 
-    private static Method before;
-    private static Method after;
-
-    private final ExternalRuleAdapter externalRuleAdapter;
+    private final EnvironmentSupport support;
     private final List<GuiceyConfigurationHook> hooks;
     private final Set<InjectionPoint> injectionPoints;
-    private ExternalResource resource;
+    private Injector injector;
 
-    static {
-        // resolve methods eagerly to speedup execution
-        try {
-            before = ExternalResource.class.getDeclaredMethod("before");
-            before.setAccessible(true);
-            after = ExternalResource.class.getDeclaredMethod("after");
-            after.setAccessible(true);
-        } catch (NoSuchMethodException e) {
-            throw new GuiceyExtensionException("Failed resolve method", e);
-        }
-    }
-
-    public GuiceyInterceptor(final SpecInfo spec, final ExternalRuleAdapter externalRuleAdapter,
+    public GuiceyInterceptor(final SpecInfo spec, final EnvironmentSupport support,
                              final List<GuiceyConfigurationHook> hooks) {
-        this.externalRuleAdapter = externalRuleAdapter;
+        this.support = support;
         this.hooks = hooks;
         injectionPoints = InjectionPoint.forInstanceMethodsAndFields(spec.getReflection());
     }
@@ -56,10 +41,8 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     @Override
     public void interceptSharedInitializerMethod(final IMethodInvocation invocation) throws Throwable {
         hooks.forEach(GuiceyConfigurationHook::register);
-        if (resource == null) {
-            resource = externalRuleAdapter.newResource();
-        }
-        before.invoke(resource);
+        support.before();
+        injector = support.getInjector();
         injectValues(invocation.getSharedInstance(), true);
         invocation.proceed();
     }
@@ -77,7 +60,7 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
         try {
             invocation.proceed();
         } finally {
-            after.invoke(resource);
+            support.after();
         }
     }
 
@@ -92,7 +75,7 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
                 continue;
             }
 
-            final Object value = externalRuleAdapter.getInjector().getInstance(point.getDependencies().get(0).getKey());
+            final Object value = injector.getInstance(point.getDependencies().get(0).getKey());
             field.setAccessible(true);
             field.set(target, value);
         }
@@ -101,16 +84,53 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     /**
      * External junit rules adapter.
      */
-    public interface ExternalRuleAdapter {
+    public interface EnvironmentSupport {
 
         /**
-         * @return new rule instance
+         * Prepare environment.
+         *
+         * @throws Exception on error
          */
-        ExternalResource newResource();
+        void before() throws Exception;
+
+        /**
+         * Shutdown environment.
+         *
+         * @throws Exception on error
+         */
+        void after() throws Exception;
 
         /**
          * @return injector instance
          */
         Injector getInjector();
+    }
+
+    /**
+     * Base environment support implementation. Used as-is for dropwizard test and requires advanced command
+     * handling for guicey test (because dropwizard support will not properly shutdown it).
+     */
+    public abstract static class AbstractEnvironmentSupport implements EnvironmentSupport {
+
+        private DropwizardTestSupport support;
+
+        protected abstract DropwizardTestSupport build();
+
+        @Override
+        public void before() throws Exception {
+            support = build();
+            support.before();
+        }
+
+        @Override
+        public void after() {
+            support.after();
+        }
+
+        @Override
+        public Injector getInjector() {
+            return InjectorLookup.getInjector(support.getApplication())
+                    .orElseThrow(() -> new IllegalStateException("No active injector found"));
+        }
     }
 }

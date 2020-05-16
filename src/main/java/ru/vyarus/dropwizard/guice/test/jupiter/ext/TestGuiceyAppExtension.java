@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.platform.commons.support.AnnotationSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
-import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.test.TestCommand;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
@@ -109,7 +108,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         return create(context, config.app, config.configPath, configPrefix, config.configOverrides);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
     private <C extends Configuration> DropwizardTestSupport<C> create(
             final ExtensionContext context,
             final Class<? extends Application> app,
@@ -120,7 +119,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         return new DropwizardTestSupport<>((Class<? extends Application<C>>) app,
                 configPath,
                 configPrefix,
-                (application) -> {
+                application -> {
                     final TestCommand<C> cmd = new TestCommand<>(application);
                     // need to hold command itself in order to properly shutdown it later
                     getExtensionStore(context).put(TestCommand.class, cmd);

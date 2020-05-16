@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.spock.ext;
 
 import io.dropwizard.testing.ConfigOverride;
+import io.dropwizard.testing.DropwizardTestSupport;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.SpecInfo;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
@@ -9,7 +10,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
- * Base class for guicey spock extensions. Extensions use junit rules inside to avoid duplication.
+ * Base class for guicey spock extensions. Extensions use {@link DropwizardTestSupport} internally.
  *
  * @param <T> extension annotation
  * @author Vyacheslav Rusakov
@@ -29,7 +30,7 @@ public abstract class AbstractAppExtension<T extends Annotation> extends Abstrac
         final List<GuiceyConfigurationHook> hooks =
                 GuiceyConfigurationExtension.instantiate(getHooks(annotation));
         final GuiceyInterceptor interceptor =
-                new GuiceyInterceptor(spec, buildResourceFactory(annotation), hooks);
+                new GuiceyInterceptor(spec, buildSupport(annotation), hooks);
         final SpecInfo topSpec = spec.getTopSpec();
         topSpec.addSharedInitializerInterceptor(interceptor);
         topSpec.addInitializerInterceptor(interceptor);
@@ -44,9 +45,9 @@ public abstract class AbstractAppExtension<T extends Annotation> extends Abstrac
 
     /**
      * @param annotation extension annotation instance
-     * @return resource factory instance, which will create correct rule instance
+     * @return environment support object
      */
-    protected abstract GuiceyInterceptor.ExternalRuleAdapter buildResourceFactory(T annotation);
+    protected abstract GuiceyInterceptor.EnvironmentSupport buildSupport(T annotation);
 
     /**
      * Utility method to convert configuration overrides from annotation to rule compatible format.

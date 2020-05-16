@@ -174,7 +174,9 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      *
      * @param context test context
      */
+    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     protected void onShutdown(final ExtensionContext context) {
+        // nothing by default (required for guicey extension to shutdown custom command properly)
     }
 
     @Override

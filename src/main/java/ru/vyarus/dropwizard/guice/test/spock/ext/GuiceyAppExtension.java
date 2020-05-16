@@ -1,14 +1,15 @@
 package ru.vyarus.dropwizard.guice.test.spock.ext;
 
-import com.google.common.base.Preconditions;
-import com.google.inject.Injector;
-import org.junit.rules.ExternalResource;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
+import io.dropwizard.testing.ConfigOverride;
+import io.dropwizard.testing.DropwizardTestSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
-import ru.vyarus.dropwizard.guice.test.GuiceyAppRule;
+import ru.vyarus.dropwizard.guice.test.TestCommand;
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp;
 
 /**
- * Spock extension for {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule}.
+ * Spock extension for guice-only lightweight tests.
  *
  * @author Vyacheslav Rusakov
  * @since 02.01.2015
@@ -16,29 +17,53 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp;
 public class GuiceyAppExtension extends AbstractAppExtension<UseGuiceyApp> {
 
     @Override
-    protected GuiceyInterceptor.ExternalRuleAdapter buildResourceFactory(final UseGuiceyApp annotation) {
-        return new GuiceyInterceptor.ExternalRuleAdapter() {
-            private GuiceyAppRule rule;
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public ExternalResource newResource() {
-                Preconditions.checkState(rule == null, "External resource creation could be called once.");
-                rule = new GuiceyAppRule(annotation.value(), annotation.config(),
-                        convertOverrides(annotation.configOverride()));
-                return rule;
-            }
-
-            @Override
-            public Injector getInjector() {
-                Preconditions.checkState(rule != null, "External resource not created.");
-                return rule.getInjector();
-            }
-        };
+    protected GuiceyInterceptor.EnvironmentSupport buildSupport(final UseGuiceyApp annotation) {
+        return new GuiceyTestEnvironment(annotation);
     }
 
     @Override
     protected Class<? extends GuiceyConfigurationHook>[] getHooks(final UseGuiceyApp annotation) {
         return annotation.hooks();
+    }
+
+    private class GuiceyTestEnvironment extends GuiceyInterceptor.AbstractEnvironmentSupport {
+
+        private final UseGuiceyApp annotation;
+        private TestCommand command;
+
+        GuiceyTestEnvironment(final UseGuiceyApp annotation) {
+            this.annotation = annotation;
+        }
+
+        @Override
+        protected DropwizardTestSupport build() {
+            return create(annotation.value(),
+                    annotation.config(),
+                    convertOverrides(annotation.configOverride()));
+        }
+
+        @Override
+        public void after() {
+            // root call still important to cleanup properties
+            super.after();
+            if (command != null) {
+                command.stop();
+            }
+        }
+
+        @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
+        private <C extends Configuration> DropwizardTestSupport<C> create(
+                final Class<? extends Application> app,
+                final String configPath,
+                final ConfigOverride... overrides) {
+            return new DropwizardTestSupport<C>((Class<? extends Application<C>>) app,
+                    configPath,
+                    (String) null,
+                    application -> {
+                        command = new TestCommand<>(application);
+                        return command;
+                    },
+                    overrides);
+        }
     }
 }

@@ -16,10 +16,10 @@ import spock.lang.Specification
 class MultipleRulesTest extends Specification {
 
     @Rule
-    GuiceyAppRule<TestConfiguration> RULE = new GuiceyAppRule<>(AutoScanApplication, null);
+    GuiceyAppRule<TestConfiguration> RULE = new GuiceyAppRule<>(AutoScanApplication, null)
 
     @Rule
-    GuiceyAppRule<TestConfiguration> RULE2 = new GuiceyAppRule<>(AutoScanApplication, null);
+    GuiceyAppRule<TestConfiguration> RULE2 = new GuiceyAppRule<>(AutoScanApplication, null)
 
     void setup() {
         // check injectors registered
