@@ -5,6 +5,7 @@
     - @TestDropwizardApp for using instead of DropwizardAppRule (or current dropwizard extension)
 * Spock extensions internally use DropwizardTestSupport instead of deprecated junit 4 rules    
 * Fix parallel tests support: guice logs interception wasn't thread safe (#103)     
+* Fix invalid Automatic-Module-Name to 'ru.vyarus.dropwizard.guicey' (#106) 
 
 ### 5.0.1 (2020-03-13)
 * Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf))
