@@ -177,6 +177,10 @@ test {
 dependencyUpdates.revision = 'release'
 jacocoTestReport.reports.xml.enabled = true
 
+// disable gradle metadata publishing (because it confuse A LOT)
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+}
 
 task showDependenciesTree(dependsOn: 'htmlDependencyReport', group: 'help', description:
         'Generates dependencies tree report and opens it in browser') {
