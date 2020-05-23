@@ -3,12 +3,15 @@ package ru.vyarus.dropwizard.guice.test.spock.ext;
 import com.google.inject.Injector;
 import com.google.inject.spi.InjectionPoint;
 import io.dropwizard.testing.DropwizardTestSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spockframework.runtime.extension.AbstractMethodInterceptor;
 import org.spockframework.runtime.extension.IMethodInvocation;
 import org.spockframework.runtime.model.SpecInfo;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
+import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import spock.lang.Shared;
 
 import java.lang.reflect.Field;
@@ -111,8 +114,15 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
      * handling for guicey test (because dropwizard support will not properly shutdown it).
      */
     public abstract static class AbstractEnvironmentSupport implements EnvironmentSupport {
+        private final Logger logger = LoggerFactory.getLogger(AbstractEnvironmentSupport.class);
 
+        private final Class<?> test;
         private DropwizardTestSupport support;
+        private ClientSupport client;
+
+        public AbstractEnvironmentSupport(final Class<?> test) {
+            this.test = test;
+        }
 
         protected abstract DropwizardTestSupport build();
 
@@ -120,11 +130,24 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
         public void before() throws Exception {
             support = build();
             support.before();
+
+            client = new ClientSupport(support);
+            SpecialFieldsSupport.initClients(test, client);
         }
 
         @Override
         public void after() {
-            support.after();
+            if (support != null) {
+                support.after();
+            }
+            if (client != null) {
+                try {
+                    client.close();
+                } catch (Exception e) {
+                    // not critical, just info
+                    logger.info("Error closing client instance", e);
+                }
+            }
         }
 
         @Override

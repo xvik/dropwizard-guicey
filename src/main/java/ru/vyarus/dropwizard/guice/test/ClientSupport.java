@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.param;
+package ru.vyarus.dropwizard.guice.test;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.jersey.jackson.JacksonFeature;
@@ -13,10 +13,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import javax.ws.rs.client.WebTarget;
 
 /**
- * {@link JerseyClient} support for direct web tests. Mainly assumed to be used with
- * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp}, but generic methods would also work
- * with {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}, so it can be used to call some external
- * service.
+ * {@link JerseyClient} support for direct web tests (complete dropwizard startup).
  * <p>
  * Client support maintains single {@link JerseyClient} instance. It may be used for calling any urls (not just
  * application). Class provides many utility methods for automatic construction of base context paths, so
@@ -51,7 +48,7 @@ public class ClientSupport implements AutoCloseable {
 
     /**
      * @return main context port
-     * @throws NullPointerException for guicey test ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp})
+     * @throws NullPointerException for guicey test
      */
     public int getPort() {
         return support.getLocalPort();
@@ -59,7 +56,7 @@ public class ClientSupport implements AutoCloseable {
 
     /**
      * @return admin context port
-     * @throws NullPointerException for guicey test ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp})
+     * @throws NullPointerException for guicey test
      */
     public int getAdminPort() {
         return support.getAdminPort();
@@ -72,7 +69,7 @@ public class ClientSupport implements AutoCloseable {
      * Returned path will always end with slash.
      *
      * @return base path for application main context
-     * @throws NullPointerException for guicey test ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp})
+     * @throws NullPointerException for guicey test
      */
     public String basePathMain() {
         final String contextMapping = support.getEnvironment().getApplicationContext().getContextPath();
@@ -89,7 +86,7 @@ public class ClientSupport implements AutoCloseable {
      * Returned path will always end with slash.
      *
      * @return base path for admin context
-     * @throws NullPointerException for guicey test ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp})
+     * @throws NullPointerException for guicey test
      */
     public String basePathAdmin() {
         final String contextMapping = support.getEnvironment().getAdminContext().getContextPath();
@@ -104,7 +101,7 @@ public class ClientSupport implements AutoCloseable {
      * Returned path will always end with slash.
      *
      * @return base path for rest
-     * @throws NullPointerException for guicey test ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp})
+     * @throws NullPointerException for guicey test
      */
     public String basePathRest() {
         final Environment env = support.getEnvironment();
@@ -152,7 +149,7 @@ public class ClientSupport implements AutoCloseable {
      * @param paths zero, one or more path parts (joined with '/') and appended to base path
      * @return jersey web target object for main context
      * @see #basePathMain() for base use construction details
-     * @throws NullPointerException for guicey test ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp})
+     * @throws NullPointerException for guicey test
      */
     public WebTarget targetMain(final String... paths) {
         return target(merge(basePathMain(), paths));
@@ -174,7 +171,7 @@ public class ClientSupport implements AutoCloseable {
      * @param paths zero, one or more path parts (joined with '/') and appended to base path
      * @return jersey web target object for admin context
      * @see #basePathAdmin() for base use construction details
-     * @throws NullPointerException for guicey test ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp})
+     * @throws NullPointerException for guicey test
      */
     public WebTarget targetAdmin(final String... paths) {
         return target(merge(basePathAdmin(), paths));
@@ -196,7 +193,7 @@ public class ClientSupport implements AutoCloseable {
      * @param paths zero, one or more path parts (joined with '/') and appended to base path
      * @return jersey web target object for rest context
      * @see #basePathRest() for base use construction details
-     * @throws NullPointerException for guicey test ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp})
+     * @throws NullPointerException for guicey test
      */
     public WebTarget targetRest(final String... paths) {
         return target(merge(basePathRest(), paths));

@@ -3,7 +3,12 @@
 * Add junit 5 extensions (#74). Works much like existing spock extensions:
     - @TestGuiceyApp for replacement of GuiceyAppRule
     - @TestDropwizardApp for using instead of DropwizardAppRule (or current dropwizard extension)
-* Spock extensions internally use DropwizardTestSupport instead of deprecated junit 4 rules    
+* Spock extensions updates:
+    - Internally, use DropwizardTestSupport instead of deprecated junit 4 rules
+    - New features (port features from junit 5 extensions):
+        * @UseDropwizardApp got new configuratins: randomPorts and restMapping 
+        * @UseGuiceyHooks deprecated: instead additional hooks may be declared in static test field
+        * static ClientSupport test field will be injected with client support object instance (same as in junit 5)     
 * Fix parallel tests support: guice logs interception wasn't thread safe (#103)     
 * Fix invalid Automatic-Module-Name to 'ru.vyarus.dropwizard.guicey' (#106) 
 

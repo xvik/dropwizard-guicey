@@ -2,12 +2,6 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.Application;
-import io.dropwizard.Configuration;
-import io.dropwizard.jetty.HttpConnectorFactory;
-import io.dropwizard.server.DefaultServerFactory;
-import io.dropwizard.server.ServerFactory;
-import io.dropwizard.server.SimpleServerFactory;
-import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import io.dropwizard.util.Strings;
@@ -19,6 +13,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
+import ru.vyarus.dropwizard.guice.test.util.RandomPortsListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -137,25 +132,6 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             overrides = ConfigOverrideUtils.merge(overrides, ConfigOverride.config(prefix, "server.rootPath", mapping));
         }
         return overrides;
-    }
-
-    /**
-     * Applies random ports to test application.
-     */
-    public static class RandomPortsListener extends DropwizardTestSupport.ServiceListener<Configuration> {
-        @Override
-        public void onRun(final Configuration configuration,
-                          final Environment environment,
-                          final DropwizardTestSupport<Configuration> rule) throws Exception {
-            final ServerFactory server = configuration.getServerFactory();
-            if (server instanceof SimpleServerFactory) {
-                ((HttpConnectorFactory) ((SimpleServerFactory) server).getConnector()).setPort(0);
-            } else {
-                final DefaultServerFactory dserv = (DefaultServerFactory) server;
-                ((HttpConnectorFactory) dserv.getApplicationConnectors().get(0)).setPort(0);
-                ((HttpConnectorFactory) dserv.getAdminConnectors().get(0)).setPort(0);
-            }
-        }
     }
 
 

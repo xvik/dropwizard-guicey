@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.ClientSupport;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 

@@ -5,6 +5,7 @@ import io.dropwizard.testing.DropwizardTestSupport;
 import org.spockframework.runtime.extension.AbstractAnnotationDrivenExtension;
 import org.spockframework.runtime.model.SpecInfo;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -27,10 +28,11 @@ public abstract class AbstractAppExtension<T extends Annotation> extends Abstrac
 
     @Override
     public void visitSpec(final SpecInfo spec) {
-        final List<GuiceyConfigurationHook> hooks =
-                GuiceyConfigurationExtension.instantiate(getHooks(annotation));
+        final Class<?> testType = spec.getReflection();
+        final List<GuiceyConfigurationHook> hooks = SpecialFieldsSupport.findHooks(testType);
+        hooks.addAll(HooksUtil.create(getHooks(annotation)));
         final GuiceyInterceptor interceptor =
-                new GuiceyInterceptor(spec, buildSupport(annotation), hooks);
+                new GuiceyInterceptor(spec, buildSupport(annotation, testType), hooks);
         final SpecInfo topSpec = spec.getTopSpec();
         topSpec.addSharedInitializerInterceptor(interceptor);
         topSpec.addInitializerInterceptor(interceptor);
@@ -45,9 +47,10 @@ public abstract class AbstractAppExtension<T extends Annotation> extends Abstrac
 
     /**
      * @param annotation extension annotation instance
+     * @param test       test class
      * @return environment support object
      */
-    protected abstract GuiceyInterceptor.EnvironmentSupport buildSupport(T annotation);
+    protected abstract GuiceyInterceptor.EnvironmentSupport buildSupport(T annotation, Class<?> test);
 
     /**
      * Utility method to convert configuration overrides from annotation to rule compatible format.

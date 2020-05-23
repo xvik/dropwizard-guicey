@@ -12,7 +12,9 @@ import java.util.List;
  *
  * @author Vyacheslav Rusakov
  * @since 12.04.2018
+ * @deprecated additional hooks may be declared in static test fields
  */
+@Deprecated
 public class GuiceyConfigurationHookInterceptor extends AbstractMethodInterceptor {
 
     private final List<GuiceyConfigurationHook> hooks;

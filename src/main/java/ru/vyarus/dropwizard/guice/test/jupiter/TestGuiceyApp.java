@@ -4,7 +4,7 @@ import io.dropwizard.Application;
 import org.junit.jupiter.api.extension.ExtendWith;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.ClientSupport;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

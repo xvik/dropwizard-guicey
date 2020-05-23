@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.support.TestConfiguration;
 import ru.vyarus.dropwizard.guice.support.feature.DummyExceptionMapper;
 import ru.vyarus.dropwizard.guice.support.feature.DummyManaged;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestDropwizardAppExtension;
-import ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.ClientSupport;
 
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;

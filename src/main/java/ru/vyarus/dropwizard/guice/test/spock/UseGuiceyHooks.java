@@ -21,10 +21,12 @@ import java.lang.annotation.Target;
  * @author Vyacheslav Rusakov
  * @since 12.04.2018
  * @see GuiceyConfigurationHook for more info
+ * @deprecated additional hooks could be declared in static test fields (even in base test class)
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @ExtensionAnnotation(GuiceyConfigurationExtension.class)
+@Deprecated
 public @interface UseGuiceyHooks {
 
     /**

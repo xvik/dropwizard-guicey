@@ -17,8 +17,8 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp;
 public class GuiceyAppExtension extends AbstractAppExtension<UseGuiceyApp> {
 
     @Override
-    protected GuiceyInterceptor.EnvironmentSupport buildSupport(final UseGuiceyApp annotation) {
-        return new GuiceyTestEnvironment(annotation);
+    protected GuiceyInterceptor.EnvironmentSupport buildSupport(final UseGuiceyApp annotation, final Class<?> test) {
+        return new GuiceyTestEnvironment(annotation, test);
     }
 
     @Override
@@ -31,7 +31,8 @@ public class GuiceyAppExtension extends AbstractAppExtension<UseGuiceyApp> {
         private final UseGuiceyApp annotation;
         private TestCommand command;
 
-        GuiceyTestEnvironment(final UseGuiceyApp annotation) {
+        GuiceyTestEnvironment(final UseGuiceyApp annotation, final Class<?> test) {
+            super(test);
             this.annotation = annotation;
         }
 

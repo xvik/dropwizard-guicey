@@ -11,16 +11,26 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Guicey app extension. Works almost the same as {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule}, but
- * application instance is created for all tests in class (as if rule would be used with @ClassRule annotation)
- * <p>Services will be injected into the specification based on regular Guice annotations. {@code @Share} may
- * be used to define common injection points for all tests in class.</p>
- * <p>Note: {@code setupSpec()} fixture is called after application start and {@code cleanupSpec()} before
- * application tear down.</p>
- * <p>Extension behaviour is the same as spock-guice module.</p>
+ * Guicey spock extension. Starts guice context only (without web part). {@link io.dropwizard.lifecycle.Managed}
+ * objects will be still executed correctly. Guice injectior is created before all tests in class and shut down
+ * after them.
+ * <p>
+ * Gucie injections will work on test class (just annotate required fields with {@link javax.inject.Inject}.
+ * {@code @Share} may be used to define common injection points for all tests in class.
+ * <p>
+ * Note: {@code setupSpec()} fixture is called after application start and {@code cleanupSpec()} before
+ * application tear down.
+ * <p>
+ * Extension would also recognize static test fields (including super classes):
+ * <ul>
+ * <li>{@link GuiceyConfigurationHook} - hook from field will be registered</li>
+ * <li>{@link ru.vyarus.dropwizard.guice.test.ClientSupport} field will be injected with client instance. Note that
+ * only generic client may be used (to call 3rd party external services), as application's web part is not started.</li>
+ * </ul>
+ * <p>
+ * Internally based on {@link io.dropwizard.testing.DropwizardTestSupport}.
  *
  * @author Vyacheslav Rusakov
- * @see ru.vyarus.dropwizard.guice.test.GuiceyAppRule for details
  * @since 02.01.2015
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -46,9 +56,11 @@ public @interface UseGuiceyApp {
     /**
      * Hooks provide access to guice builder allowing complete customization of application context
      * in tests.
+     * <p>
+     * Additional hooks could be declared in static test fields:
+     * {@code static GuiceyConfigurationHook HOOK = { it.disableExtensions(Something.class)}}.
      *
      * @return list of hooks to use
-     * @see UseGuiceyHooks to declare base hooks in base test class
      * @see GuiceyConfigurationHook for more info
      */
     Class<? extends GuiceyConfigurationHook>[] hooks() default {};

@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
  *         <li>{@link io.dropwizard.setup.Environment}</li>
  *         <li>{@link com.fasterxml.jackson.databind.ObjectMapper}</li>
  *         <li>{@link com.google.inject.Injector}</li>
- *         <li>{@link ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport} for calling application web
+ *         <li>{@link ru.vyarus.dropwizard.guice.test.ClientSupport} for calling application web
  *         endpoints (or external urls). Also it provides actual application ports.</li>
  *     </ul>
  *     </li>
@@ -96,7 +96,7 @@ public @interface TestDropwizardApp {
      * Enables random ports usage. Supports both simple and default dropwizard servers. Random ports would be
      * set even if you specify exact configuration file with configured ports (option overrides configuration).
      * <p>
-     * To get port numbers in test use {@link ru.vyarus.dropwizard.guice.test.jupiter.param.ClientSupport} parameter
+     * To get port numbers in test use {@link ru.vyarus.dropwizard.guice.test.ClientSupport} parameter
      * in lifecycle or test method:
      * <pre>{@code
      * static beforeAll(ClientSupport client) {
