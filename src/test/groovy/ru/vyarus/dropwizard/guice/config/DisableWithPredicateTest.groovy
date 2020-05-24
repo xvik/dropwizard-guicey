@@ -16,7 +16,6 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks
 
 import javax.inject.Inject
 import javax.ws.rs.Path
@@ -28,8 +27,7 @@ import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
  * @author Vyacheslav Rusakov
  * @since 09.04.2018
  */
-@UseGuiceyApp(App)
-@UseGuiceyHooks(DisableHook)
+@UseGuiceyApp(value = App, hooks = DisableHook)
 class DisableWithPredicateTest extends AbstractTest {
 
     @Inject

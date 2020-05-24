@@ -17,6 +17,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurat
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -237,7 +238,9 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
                 .append("\t").append(message).append(" = \n");
         for (Object item : items) {
             builder.append("\t\t").append(item instanceof String ? item
-                    : RenderUtils.renderClassLine(item instanceof Class ? (Class) item : item.getClass()))
+                    // it is the only way to show something meaningful for proxy
+                    : (item instanceof Proxy ? item.toString()
+                    : RenderUtils.renderClassLine(item instanceof Class ? (Class) item : item.getClass())))
                     .append(NL);
         }
         System.out.println(builder.toString());

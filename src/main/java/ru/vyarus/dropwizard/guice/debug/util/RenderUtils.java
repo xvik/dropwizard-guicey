@@ -127,8 +127,11 @@ public final class RenderUtils {
      * @see TargetLengthBasedClassNameAbbreviator
      */
     public static String renderPackage(final Class<?> type) {
+        // For some proxies package and declaring class may be null, so use full class names
+        // May appear with anonymous hooks declaration in tests
         return PACKAGE_FORMATTER.abbreviate(type.isMemberClass() && !type.isAnonymousClass()
-                ? type.getDeclaringClass().getName() : type.getPackage().getName());
+                ? (type.getDeclaringClass() != null ? type.getDeclaringClass().getName() : type.getName())
+                : (type.getPackage() != null ? type.getPackage().getName() : type.getName()));
     }
 
     /**

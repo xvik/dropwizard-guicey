@@ -143,7 +143,7 @@ class EventsConsistencyTest extends AbstractTest {
         protected void configurationHooksProcessed(ConfigurationHooksProcessedEvent event) {
             baseChecks(event)
             assert event.hooks.size() == 2
-            assert event.hooks[0] instanceof AbstractTest.GuiceyTestHook
+            assert event.hooks[0].toString().contains(AbstractTest.simpleName)
             assert event.hooks[1] instanceof XConf
         }
 

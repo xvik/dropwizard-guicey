@@ -40,6 +40,7 @@ class StartErrorTest extends AbstractTest {
 
         @Override
         void initialize(Bootstrap<TestConfiguration> bootstrap) {
+            TEST_HOOK.register()
             bootstrap.addBundle(GuiceBundle.builder()
                     .modules(new ErrorModule())
                     .build()
