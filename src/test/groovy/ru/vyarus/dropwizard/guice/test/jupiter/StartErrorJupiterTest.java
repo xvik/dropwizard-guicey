@@ -23,6 +23,7 @@ public class StartErrorJupiterTest {
 
     @Test
     @ExpectSystemExit
+    // NOTE could be parallized with some tests, but not with other error tests
     void checkStartupFail() throws Exception {
         ErrorApplication.main("server");
     }
@@ -33,8 +34,9 @@ public class StartErrorJupiterTest {
     // NOTE not parallelizable test!
     void checkStartupFailWithOutput(CaptureSystemOutput.OutputCapture output) throws Exception {
         // assertion declared before
+        // strange matching because in java9 @Named value will be quoted and in 8 will not
         output.expect(Matchers.containsString(
-                "No implementation for java.lang.String annotated with @com.google.inject.name.Named(value=unknown) was bound"));
+                "No implementation for java.lang.String annotated with @com.google.inject.name.Named(value="));
 
         ErrorApplication.main("server");
     }
