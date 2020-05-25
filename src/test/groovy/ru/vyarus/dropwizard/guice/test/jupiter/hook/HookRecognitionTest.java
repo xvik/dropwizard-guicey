@@ -6,6 +6,7 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.feature.DummyResource;
+import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 
 /**
@@ -15,6 +16,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 @TestGuiceyApp(AutoScanApplication.class)
 public class HookRecognitionTest {
 
+    @EnableHook
     static GuiceyConfigurationHook hook = builder -> builder.disableExtensions(DummyResource.class);
 
     @Test

@@ -171,7 +171,8 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * Same as {@link TestDropwizardApp#hooks()}. May be called multiple times.
          * <p>
          * Anonymous hooks could be declared with a static field:
-         * {@code static GuiceyConfigurationHook hook = builder -> builder.disableExtension(Something.class)}
+         * {@code @EnableHook static GuiceyConfigurationHook hook = builder -> builder.disableExtension(
+         *  Something.class)}.
          * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
          * are also counted.
          *
@@ -195,7 +196,8 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * May be called multiple times.
          * <p>
          * Also, anonymous hooks could be declared with a static field:
-         * {@code static GuiceyConfigurationHook hook = builder -> builder.disableExtension(Something.class)}
+         * {@code @EnableHook static GuiceyConfigurationHook hook = builder -> builder.disableExtension(
+         * Something.class)}.
          * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
          * are also counted.
          *

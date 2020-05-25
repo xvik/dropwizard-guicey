@@ -32,6 +32,7 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     private final EnvironmentSupport support;
     private final List<GuiceyConfigurationHook> hooks;
     private final Set<InjectionPoint> injectionPoints;
+    private final List<Field> clientFields;
     private Injector injector;
 
     public GuiceyInterceptor(final SpecInfo spec, final EnvironmentSupport support,
@@ -39,12 +40,15 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
         this.support = support;
         this.hooks = hooks;
         injectionPoints = InjectionPoint.forInstanceMethodsAndFields(spec.getReflection());
+        clientFields = SpecialFieldsSupport.findClientFields(spec.getReflection());
     }
 
     @Override
     public void interceptSharedInitializerMethod(final IMethodInvocation invocation) throws Throwable {
         hooks.forEach(GuiceyConfigurationHook::register);
         support.before();
+        // static fields
+        SpecialFieldsSupport.initClients(null, clientFields, support.getClient(), false);
         injector = support.getInjector();
         injectValues(invocation.getSharedInstance(), true);
         invocation.proceed();
@@ -82,6 +86,8 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
             field.setAccessible(true);
             field.set(target, value);
         }
+        // ClientSupport fields
+        SpecialFieldsSupport.initClients(target, clientFields, support.getClient(), sharedFields);
     }
 
     /**
@@ -107,6 +113,11 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
          * @return injector instance
          */
         Injector getInjector();
+
+        /**
+         * @return client object
+         */
+        ClientSupport getClient();
     }
 
     /**
@@ -132,7 +143,6 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
             support.before();
 
             client = new ClientSupport(support);
-            SpecialFieldsSupport.initClients(test, client);
         }
 
         @Override
@@ -154,6 +164,11 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
         public Injector getInjector() {
             return InjectorLookup.getInjector(support.getApplication())
                     .orElseThrow(() -> new IllegalStateException("No active injector found"));
+        }
+
+        @Override
+        public ClientSupport getClient() {
+            return client;
         }
     }
 }

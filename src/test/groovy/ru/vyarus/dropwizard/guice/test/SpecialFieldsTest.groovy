@@ -5,7 +5,9 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.feature.DummyResource
+import ru.vyarus.dropwizard.guice.test.spock.InjectClient
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import spock.lang.Shared
 
 import javax.inject.Inject
 
@@ -16,11 +18,20 @@ import javax.inject.Inject
 @UseDropwizardApp(AutoScanApplication)
 class SpecialFieldsTest extends AbstractTest {
 
+    @EnableHook
     static GuiceyConfigurationHook hook = { builder ->
         builder.disableExtensions(DummyResource)
     } as GuiceyConfigurationHook
 
+    @InjectClient
     static ClientSupport client
+
+    @InjectClient
+    @Shared
+    ClientSupport clientShared
+
+    @InjectClient
+    ClientSupport clientInstance
 
     @Inject
     GuiceyConfigurationInfo info
@@ -30,9 +41,13 @@ class SpecialFieldsTest extends AbstractTest {
         expect: "hook applied"
         info.getExtensionsDisabled().contains(DummyResource)
 
-        and: "client injected"
+        and: "static client injected"
         client != null
         client.getPort() == 8080
         client.getAdminPort() == 8081
+
+        and: "non static injections"
+        clientShared == client
+        clientInstance == client
     }
 }

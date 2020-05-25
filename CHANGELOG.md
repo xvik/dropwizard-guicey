@@ -8,7 +8,7 @@
     - New features (port features from junit 5 extensions):
         * @UseDropwizardApp got new configuratins: randomPorts and restMapping 
         * @UseGuiceyHooks deprecated: instead additional hooks may be declared in static test field
-        * static ClientSupport test field will be injected with client support object instance (same as in junit 5)     
+        * ClientSupport test field will be injected with client support object instance     
 * Fix parallel tests support: guice logs interception wasn't thread safe (#103)     
 * Fix invalid Automatic-Module-Name to 'ru.vyarus.dropwizard.guicey' (#106) 
 

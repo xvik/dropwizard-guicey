@@ -15,6 +15,7 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
+import ru.vyarus.dropwizard.guice.test.EnableHook
 import spock.lang.Specification
 
 import javax.servlet.FilterRegistration
@@ -35,6 +36,7 @@ abstract class AbstractTest extends Specification {
     }
 
     // common guicey extra extensions used for all tests
+    @EnableHook
     public static GuiceyConfigurationHook TEST_HOOK = { it.bundles(new HK2DebugBundle(), new GuiceRestrictedConfigBundle()) }
 
     void cleanupSpec() {

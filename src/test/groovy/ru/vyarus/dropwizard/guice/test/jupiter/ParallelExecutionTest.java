@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.jupiter;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
@@ -19,6 +20,7 @@ public class ParallelExecutionTest {
     void checkParallelExecution() {
         EngineTestKit
                 .engine("junit-jupiter")
+                .configurationParameter("junit.jupiter.conditions.deactivate", "org.junit.*DisabledCondition")
                 .configurationParameter("junit.jupiter.execution.parallel.enabled", "true")
                 .configurationParameter("junit.jupiter.execution.parallel.mode.default", "concurrent")
                 .selectors(selectClass(Test1.class),
@@ -35,6 +37,7 @@ public class ParallelExecutionTest {
             "server.applicationConnectors[0].port: 20000",
             "server.adminConnectors[0].port: 20001"
     })
+    @Disabled // prevent direct execution
     public static class Test1 {
 
         @Test
@@ -47,6 +50,7 @@ public class ParallelExecutionTest {
             "server.applicationConnectors[0].port: 10000",
             "server.adminConnectors[0].port: 10001"
     })
+    @Disabled // prevent direct execution
     public static class Test2 {
 
         @Test
@@ -58,6 +62,7 @@ public class ParallelExecutionTest {
     @TestGuiceyApp(value = AutoScanApplication.class, configOverride = {
             "foo: 1"
     })
+    @Disabled // prevent direct execution
     public static class Test3 {
 
         @Test
@@ -69,6 +74,7 @@ public class ParallelExecutionTest {
     @TestGuiceyApp(value = AutoScanApplication.class, configOverride = {
             "foo: 2"
     })
+    @Disabled // prevent direct execution
     public static class Test4 {
 
         @Test

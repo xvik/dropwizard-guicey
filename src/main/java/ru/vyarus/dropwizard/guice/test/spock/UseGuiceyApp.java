@@ -16,22 +16,25 @@ import java.lang.annotation.Target;
  * after them.
  * <p>
  * Gucie injections will work on test class (just annotate required fields with {@link javax.inject.Inject}.
- * {@code @Share} may be used to define common injection points for all tests in class.
+ * {@link spock.lang.Shared} may be used to define common injection points for all tests in class.
  * <p>
  * Note: {@code setupSpec()} fixture is called after application start and {@code cleanupSpec()} before
  * application tear down.
  * <p>
- * Extension would also recognize static test fields (including super classes):
+ * Extension would also recognize the following test fields (including super classes):
  * <ul>
- * <li>{@link GuiceyConfigurationHook} - hook from field will be registered</li>
- * <li>{@link ru.vyarus.dropwizard.guice.test.ClientSupport} field will be injected with client instance. Note that
- * only generic client may be used (to call 3rd party external services), as application's web part is not started.</li>
+ * <li>static {@link GuiceyConfigurationHook} annotated with {@link ru.vyarus.dropwizard.guice.test.EnableHook} - hook
+ * from field will be registered</li>
+ * <li>{@link ru.vyarus.dropwizard.guice.test.ClientSupport} annotated with {@link InjectClient} field will be injected
+ * with client instance. Note that only generic client may be used (to call 3rd party external services), as
+ * application's web part is not started.</li>
  * </ul>
  * <p>
  * Internally based on {@link io.dropwizard.testing.DropwizardTestSupport}.
  *
  * @author Vyacheslav Rusakov
  * @since 02.01.2015
+ * @see InjectClient
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -58,10 +61,11 @@ public @interface UseGuiceyApp {
      * in tests.
      * <p>
      * Additional hooks could be declared in static test fields:
-     * {@code static GuiceyConfigurationHook HOOK = { it.disableExtensions(Something.class)}}.
+     * {@code @EnableHook static GuiceyConfigurationHook HOOK = { it.disableExtensions(Something.class)}}.
      *
      * @return list of hooks to use
      * @see GuiceyConfigurationHook for more info
+     * @see ru.vyarus.dropwizard.guice.test.EnableHook
      */
     Class<? extends GuiceyConfigurationHook>[] hooks() default {};
 }

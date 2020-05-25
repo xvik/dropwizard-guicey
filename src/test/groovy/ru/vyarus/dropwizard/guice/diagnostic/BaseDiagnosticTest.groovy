@@ -6,6 +6,7 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
+import ru.vyarus.dropwizard.guice.test.EnableHook
 import spock.lang.Specification
 
 /**
@@ -15,6 +16,7 @@ import spock.lang.Specification
 abstract class BaseDiagnosticTest extends Specification {
 
     // enable bundles lookup
+    @EnableHook
     static GuiceyConfigurationHook LOOKUP_HOOK = {
         PropertyBundleLookup.enableBundles(HK2DebugBundle, GuiceRestrictedConfigBundle)
     }
