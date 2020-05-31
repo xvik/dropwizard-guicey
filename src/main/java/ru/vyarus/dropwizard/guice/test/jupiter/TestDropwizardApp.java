@@ -119,7 +119,7 @@ public @interface TestDropwizardApp {
      * <p>
      * This option is only intended to simplify cases when custom configuration file is not yet used in tests
      * (usually early PoC phase). It allows you to map servlet into application root in test (because rest is no
-     * more resides in test). When used with existing configuration file, this parameter will override file definition.
+     * more resides in root). When used with existing configuration file, this parameter will override file definition.
      *
      * @return rest mapping (empty string - do nothing)
      */
