@@ -846,3 +846,44 @@ OR
 !!! tip
     You can always see the content of webjar on [webjars site](https://www.webjars.org/) by clicking
     on package "Files" column. Use everything after "META-INF/resources/webjars/" to reference file.
+    
+### Custom classloaders
+
+*Very specific case*
+
+There is a limited support for custom classloaders. Assumed case is when application resources
+could be loaded with different class loaders.
+
+Custom classloader could be specified during application registration, for example:
+
+```java
+.bundles(ServerPagesBundle.app("com.project.ui", "/com/app/ui/", "/", classLoader)                    
+                    .build())
+```
+
+The same for admin app and extension.
+
+!!! warning 
+    This will affect only static resources! Template engine will not be able to resolve
+    resources because it is not aware of custom loaders.
+    
+!!! info
+    The main problem here is dropwizards `View` class which accepts only file path (String),
+    so even if correct URL object is known (which is enough to load resource) before view construction
+    it can't be used further.  
+    
+    To workaround this, resolved absolute template path passed to view constructor. GSP module
+    is able to found correct resourse later in correct class loader, but it requires obvious changes
+    to template engine templates resolution mechanism.    
+
+To resolve this, special templates resolver is required. For freemarker it is provided out of the box, 
+but must be enabled on main bundle:
+
+```java
+ServerPagesBundle.builder()
+    .enableFreemarkerCustomClassLoadersSupport()
+    ...
+```
+
+For mustache module it is impossible to write such integration.
+     
