@@ -91,7 +91,11 @@ nav:
         - AOP: guide/diagnostic/aop-report.md
         - Web: guide/diagnostic/web-report.md
         - Jersey: guide/diagnostic/jersey-report.md
-      - Test: guide/test.md
+      - Test:
+        - Overview: guide/test/overview.md
+        - Junit 5: guide/test/junit5.md
+        - Spock: guide/test/spock.md
+        - Junit 4: guide/test/junit4.md
       - Lifecycle: guide/lifecycle.md
       - Classpath scan: guide/scan.md
       - Installers: guide/installers.md

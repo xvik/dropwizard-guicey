@@ -12,7 +12,7 @@
 * [Yaml config values bindings](guide/yaml-values.md) by path or unique sub objects. 
 * Advanced [Web support](guide/web.md)
 * Dropwizard style [console reporting](guide/installers.md#reporting): detected (and installed) extensions are printed to console to remove uncertainty 
-* [Test support](guide/test.md): custom junit and [spock](http://spockframework.org) extensions
+* [Test support](guide/test/overview.md): custom junit and [spock](http://spockframework.org) extensions
     - Advanced test abilities to [disable](guide/disables.md) or [override](guide/guice/override.md) application logic
 * Developer friendly: 
     - core integrations [may be replaced](guide/disables.md#disable-installers) (to better fit needs)

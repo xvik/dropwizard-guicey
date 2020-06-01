@@ -42,7 +42,7 @@ method of `GuiceBundle`). Hooks registered after this moment will simply be neve
 ## Tests
 
 !!! note
-    For hooks usage in tests there is a [special test support](test.md) (spock and junit).
+    For hooks usage in tests there is a [special test support](test/overview.md) (spock and junit).
 
 In context of tests, the most important hook modifications are:
  

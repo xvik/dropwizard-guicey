@@ -549,6 +549,6 @@ And [other logs](guide/diagnostic/diagnostic-tools.md) giving you inside look on
 ### Not mentioned
 
 * [Dropwizard commands support](guide/commands.md) 
-* [Integration tests support](guide/test.md)
+* [Integration tests support](guide/test/overview.md)
 * [Lifecycle events](guide/events.md)
 * [Shared state](guide/shared.md) 

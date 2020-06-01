@@ -75,7 +75,7 @@ Guicey could be configured through:
 ### Disable items
 
 Registered configuration items [could be disabled](disables.md). This is mostly useful for tests where
-entire application parts [could be disabled](test.md#disables) and replaced (e.g. with mocks) this way.
+entire application parts [could be disabled](test/overview.md#disables) and replaced (e.g. with mocks) this way.
 Could be also useful to "hack" third party items.
 
 `#!java .disableInstallers(Class<? extends FeatureInstaller>... installers)`  
@@ -151,7 +151,7 @@ ForceSingletonForJerseyExtensions | Boolean | true | Force [singleton](../instal
 ### Injector
 
 `#!java .injectorFactory(InjectorFactory injectorFactory)`
-:   Use custom [injector factory](guice/injector.md#injector-factory) implementation. May be useful for tests or for [integration](test.md#overriding-overridden-beans)
+:   Use custom [injector factory](guice/injector.md#injector-factory) implementation. May be useful for tests or for [integration](test/overview.md#overriding-overridden-beans)
     of 3rd paty library (like [governator](../examples/governator.md))
       
 `#!java .build(Stage stage)`
