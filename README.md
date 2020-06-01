@@ -18,7 +18,7 @@ Support:
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 2.0.2 [guice](https://github.com/google/guice) 4.2.2 integration.
+[Dropwizard](http://dropwizard.io/) 2.0.10 [guice](https://github.com/google/guice) 4.2.3 integration.
 
 Features:
 
@@ -62,19 +62,19 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>5.0.1</version>
+  <version>5.1.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:5.0.1'
+implementation 'ru.vyarus:dropwizard-guicey:5.1.0'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-2.0| [5.0.1](http://xvik.github.io/dropwizard-guicey/5.0.1)
+2.0| [5.1.0](http://xvik.github.io/dropwizard-guicey/5.1.0)
 1.3| [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
 1.0 | [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1)
@@ -95,18 +95,11 @@ BOM usage is highly recommended as it allows you to correctly update dropwizard 
 Gradle:
 
 ```groovy
-plugins {
-    id "io.spring.dependency-management" version "1.0.9.RELEASE"
-}
-dependencyManagement {
-    imports {
-        mavenBom 'ru.vyarus:dropwizard-guicey:5.0.1'
-        // uncomment to override dropwizard and its dependencies versions  
-        // mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.2'  
-    }
-}
-
 dependencies {
+    implementation platform('ru.vyarus:dropwizard-guicey:5.1.0')
+    // uncomment to override dropwizard and its dependencies versions    
+    //implementation platform('io.dropwizard:dropwizard-dependencies:2.0.10')
+
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
    
@@ -126,7 +119,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>dropwizard-guicey</artifactId>
-            <version>5.0.1</version>
+            <version>5.1.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -134,7 +127,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>2.0.2</version>
+            <version>2.0.10</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 

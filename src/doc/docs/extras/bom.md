@@ -46,7 +46,7 @@ Maven:
         <!-- uncomment to override dropwizard and its dependencies versions  
         <dependency>
             <groupId>io.dropwizard/groupId>
-            <artifactId>dropwizard-bom</artifactId>
+            <artifactId>dropwizard-dependencies</artifactId>
             <version>2.0.2</version>
             <type>pom</type>
             <scope>import</scope>
@@ -80,7 +80,7 @@ Gradle:
 dependencies {
     implementation platform('ru.vyarus.guicey:guicey-bom:5.1.0-1')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-bom:2.0.10')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:2.0.10')
 
     implementation 'ru.vyarus:dropwizard-guicey'
     // For example, using dropwizard module (without version)
@@ -97,5 +97,5 @@ You may override BOM version for any dependency by simply specifying exact versi
 
 If you want to use newer version (then provided by guicey BOM) of dropwizard or guice then import also their BOMs directly:
 
-* `io.dropwizard:dropwizard-bom:$VERSION` and `io.dropwizard:dropwizard-dependencies:$VERSION` for dropwizard
+* `io.dropwizard:dropwizard-dependencies:$VERSION` for dropwizard
 * `com.google.inject:guice-bom:$VERSION` for guice
