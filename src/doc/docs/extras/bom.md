@@ -11,6 +11,7 @@ Maven BOM contains guicey and guicey ext modules versions. Also includes dropwiz
 
 | BOM version | Guicey | Dropwizard | Guice |
 |-------------|--------|------------|-------|
+| 5.1.0-1     | 5.1.0  | 2.0.10     | 4.2.3 |
 | 5.0.1-1     | 5.0.1  | 2.0.2      | 4.2.2 |
 | 5.0.0-0     | 5.0.0  | 2.0.0      | 4.2.2 |
 | 0.7.0       | 4.2.2  | 1.3.7      | 4.2.2 |
@@ -38,14 +39,14 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>5.0.1-1</version>
+            <version>5.1.0-1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>  
         <!-- uncomment to override dropwizard and its dependencies versions  
         <dependency>
             <groupId>io.dropwizard/groupId>
-            <artifactId>dropwizard-dependencies</artifactId>
+            <artifactId>dropwizard-bom</artifactId>
             <version>2.0.2</version>
             <type>pom</type>
             <scope>import</scope>
@@ -75,21 +76,12 @@ Maven:
 Gradle:
 
 ```groovy
-plugins {
-    id "io.spring.dependency-management" version "1.0.9.RELEASE"
-}
-
-dependencyManagement {
-    // Implicitly imports Dropwizard and Guice BOMs 
-    imports {
-        mavenBom "ru.vyarus.guicey:guicey-bom:5.0.1-1"    
-        // uncomment to override dropwizard and its dependencies versions    
-        // mavenBom 'io.dropwizard:dropwizard-dependencies:2.0.2'
-    }
-}
-
 // declare guice and ext modules without versions 
 dependencies {
+    implementation platform('ru.vyarus.guicey:guicey-bom:5.1.0-1')
+    // uncomment to override dropwizard and its dependencies versions    
+    //implementation platform('io.dropwizard:dropwizard-bom:2.0.10')
+
     implementation 'ru.vyarus:dropwizard-guicey'
     // For example, using dropwizard module (without version)
     implementation 'io.dropwizard:dropwizard-auth'
@@ -98,10 +90,6 @@ dependencies {
 }
     
 ```
-
-Spring's [dependency management plugin](https://github.com/spring-gradle-plugins/dependency-management-plugin) is required to import BOM.
-It is recommended to use it instead of [built-in gradle bom support](https://docs.gradle.org/current/userguide/migrating_from_maven.html#migmvn:using_boms)
-because of [more correct spring plugin behaviour](https://github.com/spring-gradle-plugins/dependency-management-plugin/issues/211#issuecomment-387362326)
 
 ## Dependencies override
 

@@ -25,14 +25,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-eventbus</artifactId>
-  <version>5.0.1-1</version>
+  <version>5.1.0-1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-eventbus:5.0.1-1'
+implementation 'ru.vyarus.guicey:guicey-eventbus:5.1.0-1'
 ```
 
 See the most recent version in the badge above.

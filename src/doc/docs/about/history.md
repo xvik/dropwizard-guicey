@@ -1,3 +1,19 @@
+### [5.1.0](http://xvik.github.io/dropwizard-guicey/5.1.0) (2020-06-02)
+* Update guice to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
+* Update to dropwizard 2.0.10
+* Add junit 5 extensions (#74). Works much like existing spock extensions:
+    - @TestGuiceyApp for replacement of GuiceyAppRule
+    - @TestDropwizardApp for using instead of DropwizardAppRule (or current dropwizard extension)
+* Spock extensions updates:
+    - Internally, use DropwizardTestSupport instead of deprecated junit 4 rules
+    - New features (port features from junit 5 extensions):
+        * @UseDropwizardApp got new configurations: randomPorts and restMapping 
+        * @UseGuiceyHooks deprecated: instead additional hooks may be declared in static test field
+        * ClientSupport test field will be injected with client support object instance
+* Junit 4 rules deprecated GuiceyAppRule, StartupErrorRules             
+* Fix parallel tests support: guice logs interception wasn't thread safe (#103)     
+* Fix invalid Automatic-Module-Name to 'ru.vyarus.dropwizard.guicey' (#106) 
+
 ### [5.0.1](http://xvik.github.io/dropwizard-guicey/5.0.1) (2020-03-13)
 * Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf))
 * Fix yaml bindings report rendering with values containing string format parameters like %s (#77)

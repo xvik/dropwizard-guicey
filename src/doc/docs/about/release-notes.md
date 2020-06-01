@@ -2,9 +2,17 @@
 
 The main release feature is Junit 5 support.
 
+* [General](#general)
 * [Junit5](#junit5)
 * [Spock updates](#spock-updates)
 * [Junit4 extensions deprecated](#junit4-extensions-deprecated)
+
+## General
+
+* Guice updated to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
+* Dropwizard updated to 2.0.10
+* Changed `Automatic-Module-Name` to `ru.vyarus.dropwizard.guicey` because previous name was invalid
+(ext modules names also changed)
  
 ## Junit 5
 
@@ -47,6 +55,21 @@ public class MyTest {
 
 !!! note
     Thanks to vintage engine junit 5 may be used together with existing junit4 or spock tests.
+
+Also, new junit extensions should be friendly to other extensions. Special static methods 
+could be used to access DropwizardTestSupport, Injector and ClientSupport objects,
+created by guicey extensions:
+
+```java
+public class MyExtension implements BeforeEachCallback {
+    
+    @Override
+    public void beforeEach(ExtensionContext context) throws Exception {
+        Injector injector = GuiceyExtensionsSupport.lookupInjector(context).get();
+        ...
+    }
+}
+```
 
 ## Spock updates
 

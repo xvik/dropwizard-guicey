@@ -104,7 +104,7 @@ github {
 }
 
 mkdocs.publish {
-    docPath = '5.0.1'
+    docPath = '5.1.0'
     rootRedirect = true
 }
 
