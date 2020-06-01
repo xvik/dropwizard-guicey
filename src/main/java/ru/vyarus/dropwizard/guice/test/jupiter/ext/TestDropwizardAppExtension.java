@@ -22,8 +22,7 @@ import java.util.List;
 /**
  * {@link TestDropwizardApp} junit 5 extension implementation. Normally, extension should be activated with annotation,
  * but in some cases manual registration may be used:
- * <pre>{@code
- * @RegisterExtension
+ * <pre>{@code @RegisterExtension
  * static TestDropwizardAppExtension app = TestDropwizardAppExtension.forApp(MyApp.class).create()
  * }</pre>
  * This is complete equivalent of annotation declaration! Static modifier is important! There is no additional
@@ -35,7 +34,7 @@ import java.util.List;
  *     after(!) all class level registrations (junit native behaviour). So moving guicey extension to manual
  *     registration may guarantee its execution after some other extension.</li>
  *     <li>Manual registration allows short hook declarations with lambdas:
- *     <{@code .hooks(builder -> builder.modules(new DebugGuiceModule()))}</li>
+ *     {@code .hooks(builder -> builder.modules(new DebugGuiceModule()))}</li>
  * </ul>
  * <p>
  * You can't use manual registration to configure multiple applications because junit allows only one extension
