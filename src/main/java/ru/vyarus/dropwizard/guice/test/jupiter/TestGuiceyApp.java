@@ -41,10 +41,7 @@ import java.lang.annotation.Target;
  *     <li>Specially supported objects:
  *     <ul>
  *         <li>{@link Application} or exact application class</li>
- *         <li>{@link io.dropwizard.Configuration} or exact configuration class</li>
- *         <li>{@link io.dropwizard.setup.Environment}</li>
  *         <li>{@link com.fasterxml.jackson.databind.ObjectMapper}</li>
- *         <li>{@link com.google.inject.Injector}</li>
  *         <li>{@link ClientSupport} for calling external urls</li>
  *     </ul>
  *     </li>

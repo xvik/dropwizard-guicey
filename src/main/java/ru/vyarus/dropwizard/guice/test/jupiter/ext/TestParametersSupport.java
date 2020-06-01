@@ -24,12 +24,10 @@ import java.util.Optional;
 /**
  * Base class for junit 5 extensions. Supports direct injection of test parameters:
  * <ul>
- *     <li>{@link Application} class or exact application class</li>
- *     <li>{@link Configuration} class or exact configuration class</li>
- *     <li>{@link Environment} and {@link ObjectMapper}</li>
- *     <li>{@link com.google.inject.Injector}</li>
+ *     <li>{@link Application} or exact application class</li>
+ *     <li>{@link ObjectMapper}</li>
  *     <li>{@link ClientSupport} application web client helper</li>
- *     <li>Any existing guice binging (without qualifiers)</li>
+ *     <li>Any existing guice binding (without qualifiers)</li>
  *     <li>{@link Jit} annotated parameter will be obtained from guice context (assume JIT binding)</li>
  * </ul>
  * Overall, it provides everything {@link DropwizardTestSupport} provides plus guice-managed beans.
@@ -40,11 +38,7 @@ import java.util.Optional;
 public abstract class TestParametersSupport implements ParameterResolver {
 
     private final List<Class<?>> supportedClasses = ImmutableList.of(
-            Application.class,
-            Configuration.class,
-            Environment.class,
             ObjectMapper.class,
-            Injector.class,
             ClientSupport.class);
 
     @Override
@@ -108,20 +102,11 @@ public abstract class TestParametersSupport implements ParameterResolver {
         if (Application.class.isAssignableFrom(type)) {
             return support.getApplication();
         }
-        if (Configuration.class.isAssignableFrom(type)) {
-            return support.getConfiguration();
-        }
-        if (Environment.class.equals(type)) {
-            return support.getEnvironment();
-        }
         if (ObjectMapper.class.equals(type)) {
             return support.getObjectMapper();
         }
         if (ClientSupport.class.equals(type)) {
             return new ClientSupport(support);
-        }
-        if (Injector.class.equals(type)) {
-            return InjectorLookup.getInjector(support.getApplication()).get();
         }
 
         return InjectorLookup.getInjector(support.getApplication()).map(it -> it.getInstance(type)).get();
