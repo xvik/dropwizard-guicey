@@ -3,11 +3,11 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.inject.BindingAnnotation;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
-import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -18,6 +18,9 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.Jit;
 
+import javax.inject.Qualifier;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +30,7 @@ import java.util.Optional;
  *     <li>{@link Application} or exact application class</li>
  *     <li>{@link ObjectMapper}</li>
  *     <li>{@link ClientSupport} application web client helper</li>
- *     <li>Any existing guice binding (without qualifiers)</li>
+ *     <li>Any existing guice binding (possibly with qualifier annotation or generified)</li>
  *     <li>{@link Jit} annotated parameter will be obtained from guice context (assume JIT binding)</li>
  * </ul>
  * Overall, it provides everything {@link DropwizardTestSupport} provides plus guice-managed beans.
@@ -45,12 +48,17 @@ public abstract class TestParametersSupport implements ParameterResolver {
     @SuppressWarnings("checkstyle:ReturnCount")
     public boolean supportsParameter(final ParameterContext parameterContext,
                                      final ExtensionContext extensionContext) throws ParameterResolutionException {
-        if (parameterContext.getParameter().getAnnotations().length > 0) {
-            // if any other annotation declared on the parameter - skip it (possibly other extension's parameter)
-            return AnnotationSupport.isAnnotated(parameterContext.getParameter(), Jit.class);
+        final Parameter parameter = parameterContext.getParameter();
+        if (parameter.getAnnotations().length > 0) {
+            if (AnnotationSupport.isAnnotated(parameter, Jit.class)) {
+                return true;
+            } else if (!isQualifierAnnotation(parameter.getAnnotations())) {
+                // if any other annotation declared on the parameter - skip it (possibly other extension's parameter)
+                return false;
+            }
         }
 
-        final Class<?> type = parameterContext.getParameter().getType();
+        final Class<?> type = parameter.getType();
         if (Application.class.isAssignableFrom(type) || Configuration.class.isAssignableFrom(type)) {
             // special case when exact app or configuration class used
             return true;
@@ -64,19 +72,29 @@ public abstract class TestParametersSupport implements ParameterResolver {
 
         // declared guice binding (by class only)
         return getInjector(extensionContext)
-                .map(it -> it.getExistingBinding(Key.get(type)) != null)
+                .map(it -> it.getExistingBinding(getKey(parameter)) != null)
                 .orElse(false);
     }
 
     @Override
+    @SuppressWarnings("checkstyle:ReturnCount")
     public Object resolveParameter(final ParameterContext parameterContext,
                                    final ExtensionContext extensionContext) throws ParameterResolutionException {
-        final Class<?> type = parameterContext.getParameter().getType();
-        if (AnnotationSupport.isAnnotated(parameterContext.getParameter(), Jit.class)) {
-            return getInjector(extensionContext).map(it -> it.getInstance(type)).get();
+        final Parameter parameter = parameterContext.getParameter();
+        final Class<?> type = parameter.getType();
+        if (ClientSupport.class.equals(type)) {
+            return getClient(extensionContext);
         }
         final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(extensionContext));
-        return ClientSupport.class.equals(type) ? getClient(extensionContext) : lookupParam(type, support);
+        if (Application.class.isAssignableFrom(type)) {
+            return support.getApplication();
+        }
+        if (ObjectMapper.class.equals(type)) {
+            return support.getObjectMapper();
+        }
+        return InjectorLookup.getInjector(support.getApplication())
+                .map(it -> it.getInstance(getKey(parameter)))
+                .get();
     }
 
     /**
@@ -97,18 +115,22 @@ public abstract class TestParametersSupport implements ParameterResolver {
      */
     protected abstract Optional<Injector> getInjector(ExtensionContext extensionContext);
 
-    @SuppressWarnings("checkstyle:ReturnCount")
-    private Object lookupParam(final Class<?> type, final DropwizardTestSupport<?> support) {
-        if (Application.class.isAssignableFrom(type)) {
-            return support.getApplication();
-        }
-        if (ObjectMapper.class.equals(type)) {
-            return support.getObjectMapper();
-        }
-        if (ClientSupport.class.equals(type)) {
-            return new ClientSupport(support);
-        }
+    private boolean isQualifierAnnotation(final Annotation... annotations) {
+        final Annotation ann = annotations[0];
+        return annotations.length == 1
+                && (AnnotationSupport.isAnnotated(ann.annotationType(), Qualifier.class)
+                || AnnotationSupport.isAnnotated(ann.annotationType(), BindingAnnotation.class));
+    }
 
-        return InjectorLookup.getInjector(support.getApplication()).map(it -> it.getInstance(type)).get();
+    private Key<?> getKey(final Parameter parameter) {
+        final Key<?> key;
+        if (parameter.getAnnotations().length > 0
+                && !AnnotationSupport.isAnnotated(parameter, Jit.class)) {
+            // qualified bean
+            key = Key.get(parameter.getParameterizedType(), parameter.getAnnotations()[0]);
+        } else {
+            key = Key.get(parameter.getParameterizedType());
+        }
+        return key;
     }
 }

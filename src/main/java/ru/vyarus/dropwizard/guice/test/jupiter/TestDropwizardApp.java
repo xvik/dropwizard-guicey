@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * <p>
  * Test constructor, lifecycle and test methods may use additional parameters:
  * <ul>
- *     <li>Any declared (unqualified) guice bean</li>
+ *     <li>Any declared (possibly with qualifier annotation or generified) guice bean</li>
  *     <li>For not declared beans use {@link ru.vyarus.dropwizard.guice.test.jupiter.param.Jit} to force JIT
  *     binding (create declared bean with guice, even if it wasn't registered)</li>
  *     <li>Specially supported objects:
