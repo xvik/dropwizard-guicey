@@ -1577,6 +1577,12 @@
 
 <p>This report shows all affected beans with all methods. In real application it may lead
 to the giant report. In real life it would be more suitable to always fine-tune report <a href="#tool">as a tool</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Kotlin</p>
+<p>If you're using kotlin, keep in mind that it makes methods final by default so guice will not
+be able to <a href="https://github.com/google/guice/wiki/AOP#limitations">apply aop</a>.
+The workaround is to put <strong>open</strong> keyword <a href="https://discuss.kotlinlang.org/t/aop-and-kotlin/685/6">before method</a>.  </p>
+</div>
 <h2 id="tool">Tool<a class="headerlink" href="#tool" title="Permanent link">&para;</a></h2>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
