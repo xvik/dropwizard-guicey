@@ -26,6 +26,11 @@ Example output:
 
 This report shows all affected beans with all methods. In real application it may lead
 to the giant report. In real life it would be more suitable to always fine-tune report [as a tool](#tool).
+
+!!! warning "Kotlin"
+    If you're using kotlin, keep in mind that it makes methods final by default so guice will not
+    be able to [apply aop](https://github.com/google/guice/wiki/AOP#limitations).
+    The workaround is to put **open** keyword [before method](https://discuss.kotlinlang.org/t/aop-and-kotlin/685/6).  
    
 ## Tool
 
