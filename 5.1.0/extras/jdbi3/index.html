@@ -1330,6 +1330,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#laziness" class="md-nav__link">
+    Laziness
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#guice-beans-access" class="md-nav__link">
     Guice beans access
   </a>
@@ -1684,6 +1691,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#laziness" class="md-nav__link">
+    Laziness
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#guice-beans-access" class="md-nav__link">
     Guice beans access
   </a>
@@ -1759,12 +1773,12 @@
 <div class="codehilite"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>ru.vyarus.guicey<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>guicey-jdbi3<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>5.1.0-1<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>5.1.0-2<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div>
 
 <p>Gradle:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">implementation</span> <span class="s1">&#39;ru.vyarus.guicey:guicey-jdbi3:5.1.0-1&#39;</span>
+<div class="codehilite"><pre><span></span><code><span class="n">implementation</span> <span class="s1">&#39;ru.vyarus.guicey:guicey-jdbi3:5.1.0-2&#39;</span>
 </code></pre></div>
 
 <p>See the most recent version in the badge above.</p>
@@ -1926,6 +1940,16 @@ needed now and may confuse.</p>
     (ru.vyarus.guicey.jdbi3.support.repository.SampleRepository)
 </code></pre></div>
 
+<h3 id="laziness">Laziness<a class="headerlink" href="#laziness" title="Permanent link">&para;</a></h3>
+<p>By default, JDBI proxies for declared repositories created only on first repository method call.
+Lazy behaviour is important to take into account all registered JDBI extensions. Laziness also
+slightly speeds up application startup. </p>
+<p>If required, you can enable eager initialization during bundle construction:   </p>
+<div class="codehilite"><pre><span></span><code><span class="n">JdbiBundle</span><span class="p">.</span><span class="na">forDatabase</span><span class="p">((</span><span class="n">conf</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">conf</span><span class="p">.</span><span class="na">getDatabase</span><span class="p">())</span>
+    <span class="p">.</span><span class="na">withEagerInitialization</span><span class="p">()</span>
+</code></pre></div>
+
+<p>In the eager mode all proxies would be constructed after application initialization (before web part initialization).</p>
 <h3 id="guice-beans-access">Guice beans access<a class="headerlink" href="#guice-beans-access" title="Permanent link">&para;</a></h3>
 <p>You can access guice beans by annotating getter with <code>@Inject</code> (javax or guice):</p>
 <div class="codehilite"><pre><span></span><code><span class="nd">@JdbiRepository</span>
