@@ -19,7 +19,7 @@ The [JDBI extension](../extras/jdbi.md) allows:
 Additional dependencies required:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-jdbi:5.1.0-1'
+implementation 'ru.vyarus.guicey:guicey-jdbi:5.1.0-2'
 implementation 'com.h2database:h2:1.4.199'
 ```
 
