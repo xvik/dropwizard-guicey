@@ -1,3 +1,5 @@
+* Update to dropwizard 2.0.12
+
 ### 5.1.0 (2020-06-02)
 * Update guice to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
 * Update to dropwizard 2.0.10

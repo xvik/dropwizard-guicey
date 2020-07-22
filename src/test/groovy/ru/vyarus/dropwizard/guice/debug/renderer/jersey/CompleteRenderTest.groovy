@@ -142,6 +142,7 @@ class CompleteRenderTest extends Specification {
         JsonWithPaddingInterceptor   (o.g.j.s.internal)
         GuiceWriterInterceptor       (r.v.d.g.c.h.support)
         HKWriterInterceptor          (r.v.d.g.c.h.s.hk)         *jersey managed
+        EofExceptionWriterInterceptor (i.d.jersey.errors)
 
     Container request filters
         GuiceContainerRequestFilter  (r.v.d.g.c.h.support)
