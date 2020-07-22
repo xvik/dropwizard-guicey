@@ -22,7 +22,7 @@ ext {
     dropwizard = '2.0.12'
     guice = '4.2.3'
     hk2 = '2.6.1'
-    groovy = '2.5.12'
+    groovy = '2.5.13'
 }
 
 repositories { jcenter(); mavenCentral(); mavenLocal() }
