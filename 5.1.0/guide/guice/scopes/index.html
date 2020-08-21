@@ -607,6 +607,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#request-scope-simulation" class="md-nav__link">
+    Request scope simulation
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1577,6 +1584,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#request-scope-simulation" class="md-nav__link">
+    Request scope simulation
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1711,6 +1725,21 @@ Without it, <code>provider.get()</code>, called under different thread would be 
 which is not aware of this thread and so fail to provide its request scope object.</p>
 <p>Such additional call is not required for pure guice-managed request scope objects.  </p>
 </div>
+<h3 id="request-scope-simulation">Request scope simulation<a class="headerlink" href="#request-scope-simulation" title="Permanent link">&para;</a></h3>
+<p>Sometimes, request scoped beans may need to be used somewhere without request (for example,
+inside scheduled job). Of course, this is not correct situation, and the best way is to re-design
+services, but not always possible.</p>
+<p>As a workaround, request scope could be simulated:</p>
+<div class="codehilite"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="n">Provider</span><span class="o">&lt;</span><span class="n">RScopedService</span><span class="o">&gt;</span> <span class="n">service</span><span class="p">;</span>
+<span class="p">...</span>
+<span class="kd">final</span> <span class="n">RequestScoper</span> <span class="n">scope</span> <span class="o">=</span> <span class="n">ServletScopes</span><span class="p">.</span><span class="na">scopeRequest</span><span class="p">(</span><span class="n">Collections</span><span class="p">.</span><span class="na">emptyMap</span><span class="p">());</span>
+<span class="k">try</span> <span class="p">(</span><span class="kd">final</span> <span class="n">RequestScoper</span><span class="p">.</span><span class="na">CloseableScope</span> <span class="n">ignored</span> <span class="o">=</span> <span class="n">scope</span><span class="p">.</span><span class="na">open</span><span class="p">())</span> <span class="p">{</span>
+  <span class="c1">// work with request-scoped bean</span>
+  <span class="n">service</span><span class="p">.</span><span class="na">get</span><span class="p">().</span><span class="na">doSomething</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
 <h2 id="eager-singleton">Eager singleton<a class="headerlink" href="#eager-singleton" title="Permanent link">&para;</a></h2>
 <p>By default, guicey create injector in <code>PRODUCTION</code> stage, so all registered singletons
 will be instantiated immediately.</p>
