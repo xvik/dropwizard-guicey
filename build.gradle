@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.google.inject:guice'
     implementation 'com.google.inject.extensions:guice-servlet'
     implementation 'io.dropwizard:dropwizard-core'
-    implementation 'ru.vyarus:generics-resolver:3.0.2'
+    implementation 'ru.vyarus:generics-resolver:3.0.3'
 
     testImplementation 'org.objenesis:objenesis:3.1'
     testImplementation 'org.glassfish.jersey.inject:jersey-hk2'

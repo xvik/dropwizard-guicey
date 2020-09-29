@@ -20,7 +20,13 @@ import ru.vyarus.java.generics.resolver.context.GenericsContext;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Analyzes configuration instance, prepared by dropwizard, in order to be able to use configuration
@@ -210,7 +216,7 @@ public final class ConfigTreeBuilder {
      * must end as soon as we don't have real value (null). That means configured bindings may change depending
      * on actual configuration, but it's the only way.
      *
-     * @param item      current path
+     * @param item current path
      * @return true if recursion detected and processing must stop, false otherwise
      */
     @SuppressWarnings("unchecked")

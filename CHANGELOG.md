@@ -1,5 +1,6 @@
 * Update to dropwizard 2.0.13
-* Remove direct usages of logback-classic classes to unlock logger switching (#127) 
+* Remove direct usages of logback-classic classes to unlock logger switching (#127)
+* Fix stackoverflow on config introspection caused by EnumMap fields (#87) 
 
 ### 5.1.0 (2020-06-02)
 * Update guice to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
