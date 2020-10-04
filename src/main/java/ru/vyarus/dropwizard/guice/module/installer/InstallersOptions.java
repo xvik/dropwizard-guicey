@@ -68,7 +68,26 @@ public enum InstallersOptions implements Option {
      * When switched off, extension scope will be driven only by scope annotation. Note that by default
      * guice and HK2 use prototype scope (for example, for resources it means new instance for each request).
      */
-    ForceSingletonForJerseyExtensions(Boolean.class, true);
+    ForceSingletonForJerseyExtensions(Boolean.class, true),
+    /**
+     * By default, when extension registered with {@code environment.jersey().register(...)} it's implicitly
+     * qualified with {@link org.glassfish.jersey.internal.inject.Custom}, so registered extensions could override
+     * default extensions, including default dropwizard extensions (see
+     * {@link org.glassfish.jersey.internal.inject.Providers#getAllServiceHolders(
+     * org.glassfish.jersey.internal.inject.InjectionManager, java.lang.Class)} to see that custom qualified providers
+     * are prioritized). For example, registered {@code ExceptionMapper<Throwable>} would override default dropwizard's
+     * one.
+     * <p>
+     * When option disabled, qualifier could still be applied manually with
+     * {@link org.glassfish.jersey.internal.inject.Custom} annotation on provider class. Or
+     * {@link javax.annotation.Priority} might be used instead (see {@link javax.ws.rs.Priorities} for default
+     * priority constants).
+     * <p>
+     * Option is enabled by default to mimic default dropwizard behaviour (when extensions registered manually).
+     * But it MAY change application behaviour comparing to previous guicey versoins and so it might be desirable
+     * to revert previous guicey behavior (and this is the main reason for option to exist).
+     */
+    PrioritizeJerseyExtensions(Boolean.class, true);
 
     private Class<?> type;
     private Object value;

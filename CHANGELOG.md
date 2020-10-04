@@ -1,6 +1,22 @@
 * Update to dropwizard 2.0.13
 * Remove direct usages of logback-classic classes to unlock logger switching (#127)
 * Fix stackoverflow on config introspection caused by EnumMap fields (#87) 
+* Prioritize registered jersey provider extensions and add support for @Priority annotation (#97)
+  Unifies raw dropwizard and guicey behaviour. Possibly breaking, see note below. 
+
+NOTE: 
+Raw dropwizard: when provider registered directly with environment.jersey().register(MyExceptionMapper.class)
+it implicitly qualified as @Custom and always used in priority comparing to default dropwizard providers.
+
+Before, guicey was registering provider extensions without this qualifier and so the default 
+dropwizard providers were used in priority (as registered earlier).
+For example, it was impossible to register ExceptionMapper<Throwable> because dropwizard already register one.
+Now your custom mapper will be used in priority and so it is possible to override default ExceptionMapper<Throwable>.
+
+This COULD (unlikely, but still) change application behaviour: your custom provider could be called in more cases.
+But, as this behaviour is the default for raw dropwizard, the change was done (considered as a bug).
+In case of problems, you could revert to legacy guicey behaviour with: 
+    .option(InstallerOptions.PrioritizeJerseyExtensions, false)     
 
 ### 5.1.0 (2020-06-02)
 * Update guice to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))

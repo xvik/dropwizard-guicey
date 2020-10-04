@@ -5,6 +5,8 @@ import com.google.inject.Injector;
 import com.google.inject.binder.ScopedBindingBuilder;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.internal.inject.Binding;
+import org.glassfish.jersey.internal.inject.Custom;
+import org.glassfish.jersey.internal.inject.CustomAnnotationLiteral;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.jersey.support.GuiceComponentFactory;
@@ -14,6 +16,7 @@ import ru.vyarus.java.generics.resolver.GenericsResolver;
 import ru.vyarus.java.generics.resolver.context.GenericsContext;
 import ru.vyarus.java.generics.resolver.context.container.ParameterizedTypeImpl;
 
+import javax.annotation.Priority;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.lang.reflect.Type;
@@ -86,7 +89,10 @@ public final class JerseyBinding {
         } else {
             // default case: simple service registered directly (including resource)
             optionalSingleton(
-                    binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type),
+                    // mirror @Priority annotation just in case
+                    prioritize(
+                            binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type),
+                            false, type),
                     singleton);
         }
     }
@@ -138,13 +144,15 @@ public final class JerseyBinding {
      * @param specificType  specific jersey type (interface or abstract class)
      * @param jerseyManaged true if bean must be managed by jersey, false to bind guice managed instance
      * @param singleton     true to force singleton scope
+     * @param autoQualify   mimic default jersey behaviour by qualifying user providers with @Custom
      */
     public static void bindSpecificComponent(final AbstractBinder binder,
                                              final Injector injector,
                                              final Class<?> type,
                                              final Class<?> specificType,
                                              final boolean jerseyManaged,
-                                             final boolean singleton) {
+                                             final boolean singleton,
+                                             final boolean autoQualify) {
         // resolve generics of specific type
         final GenericsContext context = GenericsResolver.resolve(type).type(specificType);
         final List<Type> genericTypes = context.genericTypes();
@@ -157,7 +165,10 @@ public final class JerseyBinding {
                     singleton);
         } else {
             optionalSingleton(
-                    binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type).to(bindingType),
+                    // @Priority mirroring is very important for providers
+                    prioritize(
+                            binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type).to(bindingType),
+                            autoQualify, type),
                     singleton);
         }
     }
@@ -177,6 +188,24 @@ public final class JerseyBinding {
     public static <T> ScopedBindingBuilder bindJerseyComponent(final Binder binder, final Provider<Injector> provider,
                                                                final Class<T> type) {
         return binder.bind(type).toProvider(new JerseyComponentProvider<>(provider, type));
+    }
+
+    private static Binding<?, ?> prioritize(final Binding<?, ?> binding,
+                                            final boolean autoQualify,
+                                            final Class<?> type) {
+        if (autoQualify || FeatureUtils.hasAnnotation(type, Custom.class)) {
+            // Jersey performs this by default when register provider directly (env.jersey().register())
+            // this prioritize user providers (see org.glassfish.jersey.internal.inject.Providers.getAllServiceHolders)
+            // Manual annotation support required for case when auto qualification disabled
+            binding.qualifiedBy(CustomAnnotationLiteral.INSTANCE);
+        }
+        // jersey couldn't recognize priority on non custom providers, but it may be important
+        // to prioritize without custom
+        final Priority priority = FeatureUtils.getAnnotation(type, Priority.class);
+        if (priority != null) {
+            binding.ranked(priority.value());
+        }
+        return binding;
     }
 
     private static void optionalSingleton(final Binding<?, ?> binding, final boolean singleton) {
