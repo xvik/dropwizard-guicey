@@ -33,6 +33,37 @@ Due to specifics of [HK2 integration](lifecycle.md), you may need to use:
 Or you can enable [HK2 management for jersey extensions by default](../guide/hk2.md#use-hk2-for-jersey-extensions).
 Note that this will affect [resources](resource.md) too and guice aop will not work on jersey extensions.
 
+### Priority
+
+By default, all registered providers are qualified with `@org.glassfish.jersey.internal.inject.Custom` to 
+prioritize them (be able to override dropwizard defaults). This *mimics the default behaviour*
+of manual registration with `#!java environment.jersey().register(...)`.
+
+For example, when you register your own `ExceptionMapper<Throwable>` it would be used instead
+of default dropwizard one (due to prioritized qualification).
+
+For more details see `org.glassfish.jersey.internal.inject.Providers#getAllServiceHolders(
+org.glassfish.jersey.internal.inject.InjectionManager, java.lang.Class)` which is used by jersey for providers loading.
+
+!!! tip
+    Previously (<= 5.1.0) guicey were not qualifying providers and qualification may (unlikely, but can!)
+    introduce behaviour changes on guicey upgrade (due to prioritized custom providers).
+    In this case, auto qualification may be disabled with 
+    ```java
+    .option(InstallerOptions.PrioritizeJerseyExtensions, false) 
+    ``` 
+    to revert to legacy guicey behaviour.
+    `@Custom` may be used directly in this case on some providers for prioritization. 
+
+`@Priority` annotation may be used for ordering providers. Value should be > 0 (but may be negative, just a convention). 
+For example, 1000 is more prioritized then 2000. See `javax.ws.rs.Priorities` for default priority constants.
+
+!!! note
+    `@Priority` may work differently on `@Custom` qualified providers (all user providers by default)
+    and unqualified (e.g. registered through hk module, like dropwizard defaults). Right now, qualified
+    providers sorted ascending while unqualified sorted descending (due to different selection implementations,
+    see `getAllServiceHolders` reference above). Probably a jersey bug.
+
 ### Supplier
 
 !!! warning
@@ -98,6 +129,7 @@ public class DummyExceptionMapper implements ExceptionMapper<RuntimeException> {
 !!! tip
     Default exception dropwizard mappers (registered in `io.dropwizard.setup.ExceptionMapperBinder`) could be 
     [overridden](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#overriding-default-exception-mappers)
+    (see [priority section](#priority))
     or completely disabled with `server.registerDefaultExceptionMappers` option.    
 
 ### ValueParamProvider

@@ -166,10 +166,10 @@ INFO  [2019-10-28 06:16:44,068] ru.vyarus.dropwizard.guice.debug.JerseyConfigDia
 ```
 
 !!! warning
-    Items in each section are sorted according to `@Priority` annotation and then by name.
-    So explicitly prioritized beans will go upper, but beans with the same priority will be 
-    ordered by name. Of course jersey itself may prioritize differently, but report must be
-    consistent (always show the same order) - so it's unavoidable trade off.
+    Items order does not represent actual priority order!
+    Items in each section are sorted according to `@Priority` annotation and then by name,
+    but `@Custom` qualification priority is ignored (and so user extensions and default one may be shown in incorrect order).
+    Report sorting applied only for consistency (always show the same order) - it's a trade off.
 
 ## Common markers
 
