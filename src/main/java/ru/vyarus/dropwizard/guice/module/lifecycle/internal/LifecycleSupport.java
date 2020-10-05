@@ -21,9 +21,30 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.*;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesFromLookupResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesInitializedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ClasspathExtensionsResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.CommandsResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.DropwizardBundlesInitializedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ManualExtensionsValidatedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShotdownEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ApplicationRunEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.BeforeRunEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.BundlesStartedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ExtensionsInstalledByEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ExtensionsResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.InjectorCreationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ModulesAnalyzedEvent;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.Arrays;
@@ -140,6 +161,11 @@ public final class LifecycleSupport {
             public void lifeCycleStopping(final LifeCycle event) {
                 applicationShutdown();
             }
+
+            @Override
+            public void lifeCycleStopped(final LifeCycle event) {
+                applicationStopped();
+            }
         });
     }
 
@@ -226,5 +252,9 @@ public final class LifecycleSupport {
 
     private void applicationShutdown() {
         broadcast(new ApplicationShotdownEvent(context));
+    }
+
+    private void applicationStopped() {
+        broadcast(new ApplicationStoppedEvent(context));
     }
 }

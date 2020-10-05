@@ -13,6 +13,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.Installer
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ManualExtensionsValidatedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShotdownEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
@@ -109,6 +110,9 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
                 break;
             case ApplicationShutdown:
                 applicationShutdown((ApplicationShotdownEvent) event);
+                break;
+            case ApplicationStopped:
+                applicationStopped((ApplicationStoppedEvent) event);
                 break;
         }
     }
@@ -367,6 +371,19 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
      * @see GuiceyLifecycle#ApplicationShutdown
      */
     protected void applicationShutdown(final ApplicationShotdownEvent event) {
+        // empty
+    }
+
+    /**
+     * Called after application shutdown. Triggered by jetty lifecycle stopping event (
+     * {@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStopping(
+     * org.eclipse.jetty.util.component.LifeCycle)}).
+     * <p>
+     *
+     * @param event event object
+     * @see GuiceyLifecycle#ApplicationStopped
+     */
+    protected void applicationStopped(final ApplicationStoppedEvent event) {
         // empty
     }
 }

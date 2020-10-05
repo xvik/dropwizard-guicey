@@ -30,6 +30,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.*
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShotdownEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent
@@ -52,10 +53,10 @@ class EventsConsistencyTest extends AbstractTest {
     def "Check events consistency"() {
 
         expect: "all events called except shutdown"
-        Listener.called.size() == GuiceyLifecycle.values().size() - 1
+        Listener.called.size() == GuiceyLifecycle.values().size() - 2
 
         and: "order correct"
-        Listener.called == Arrays.asList(GuiceyLifecycle.values() - GuiceyLifecycle.ApplicationShutdown)
+        Listener.called == Arrays.asList(GuiceyLifecycle.values() - GuiceyLifecycle.ApplicationShutdown - GuiceyLifecycle.ApplicationStopped)
     }
 
     static class App extends Application<Configuration> {
@@ -297,6 +298,11 @@ class EventsConsistencyTest extends AbstractTest {
         protected void applicationShutdown(ApplicationShotdownEvent event) {
             jerseyCheck(event)
             assert event.jettyStarted
+        }
+
+        @Override
+        protected void applicationStopped(ApplicationStoppedEvent event) {
+            jerseyCheck(event)
         }
 
         private void baseChecks(GuiceyLifecycleEvent event) {

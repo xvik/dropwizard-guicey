@@ -2,7 +2,8 @@
 * Remove direct usages of logback-classic classes to unlock logger switching (#127)
 * Fix stackoverflow on config introspection caused by EnumMap fields (#87) 
 * Prioritize registered jersey provider extensions and add support for @Priority annotation (#97)
-  Unifies raw dropwizard and guicey behaviour. Possibly breaking, see note below. 
+  Unifies raw dropwizard and guicey behaviour. Possibly breaking, see note below.
+* Add lifecycle event: ApplicationStoppedEvent (triggered on jersey lifecycle stop)   
 
 NOTE: 
 Raw dropwizard: when provider registered directly with environment.jersey().register(MyExceptionMapper.class)
