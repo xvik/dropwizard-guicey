@@ -64,12 +64,12 @@ public class GuiceStatsTracker {
     private class LogsInterceptor extends Handler {
 
         @Override
-        public void publish(final LogRecord record) {
+        public void publish(final LogRecord logRecord) {
             // in parallel tests each app instance will register its handler and each handler will receive
             // messages from different threads and not thread safe ArrayList may fail
             // (https://github.com/xvik/dropwizard-guicey/issues/103)
             synchronized (messages) {
-                final String msg = record.getMessage();
+                final String msg = logRecord.getMessage();
                 // add space between number and ms
                 messages.add(msg.substring(0, msg.length() - 2) + " ms");
             }
