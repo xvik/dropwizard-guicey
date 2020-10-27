@@ -25,6 +25,14 @@ testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
         ...
     }                    
     ```
+    
+!!! warning
+    Junit 5 annotations are **different** from junit4, so if you have both junit 5 and junit 4
+    make sure correct classes (annotations) used for junit 5 tests:
+    ```java
+    import org.junit.jupiter.api.Assertions;
+    import org.junit.jupiter.api.Test;
+    ```    
 
 ## Dropwizard extensions compatibility
 
