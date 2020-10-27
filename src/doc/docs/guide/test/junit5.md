@@ -17,6 +17,15 @@ testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
     ```
 
+!!! note
+    In gradle you need to explicitly [activate junit 5 support](https://docs.gradle.org/current/userguide/java_testing.html#using_junit5) with
+    ```groovy
+    test {
+        useJUnitPlatform()
+        ...
+    }                    
+    ```
+
 ## Dropwizard extensions compatibility
 
 Guicey extensions can be used with dropwizard extenssions. But this may be required only in edge cases
@@ -86,7 +95,7 @@ Application started before all tests in annotated class and stopped after them.
 
 ```groovy
 @TestDropwizardApp(MyApplication.class)
-class WebModuleTest extends Specification {
+class WebModuleTest {
 
     @Inject 
     MyService service
