@@ -1,4 +1,4 @@
-* Update to dropwizard 2.0.14
+* Update to dropwizard 2.0.15
 * Remove direct usages of logback-classic classes to unlock logger switching (#127)
 * Fix stackoverflow on config introspection caused by EnumMap fields (#87) 
 * Prioritize registered jersey provider extensions and add support for @Priority annotation (#97)

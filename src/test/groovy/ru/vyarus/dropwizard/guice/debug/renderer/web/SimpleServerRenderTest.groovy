@@ -49,7 +49,7 @@ class SimpleServerRenderTest extends Specification {
     MAIN /app
     ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                                     [REQUEST]       io.dropwizard.jersey.filter.AllowedMethodsFilter-11111111
     ├── filter     /*                   async   ThreadNameFilter             (i.d.servlets)                                          [REQUEST]       io.dropwizard.servlets.ThreadNameFilter-11111111
-    ├── servlet    /rest/*              async   JerseyServletContainer       (i.d.jersey.setup)                                                      io.dropwizard.jersey.setup.JerseyServletContainer-11111111
+    ├── servlet    /rest/*              async   JerseyServletContainer       (i.d.jersey.setup)                                                      jersey
     └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)                                                org.eclipse.jetty.servlet.ServletHandler\$Default404Servlet-11111111
 
 

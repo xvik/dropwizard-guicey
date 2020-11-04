@@ -61,7 +61,7 @@ class ConfiguredRenderTest extends Specification {
     ├── servlet    /bar                         --"--
     ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .both
     ├── servlet    /async               async   AsyncServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .async
-    ├── servlet    /*                   async   JerseyServletContainer       (i.d.jersey.setup)                                                      io.dropwizard.jersey.setup.JerseyServletContainer-11111111
+    ├── servlet    /*                   async   JerseyServletContainer       (i.d.jersey.setup)                                                      jersey
     └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)                                                org.eclipse.jetty.servlet.ServletHandler\$Default404Servlet-11111111
 
 
