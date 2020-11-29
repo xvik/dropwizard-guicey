@@ -1,117 +1,64 @@
-# 5.1.0 Release Notes
+# 5.2.0 Release Notes
 
-The main release feature is Junit 5 support.
+!!! summary ""
+    [5.0.0 release notes](http://xvik.github.io/dropwizard-guicey/5.0.0/about/release-notes/)
+    [5.1.0 release notes](http://xvik.github.io/dropwizard-guicey/5.1.0/about/release-notes/)
+
+Mostly bugfixing release, but jersey extensions registration priority fix *may affect behaviour*.
 
 * [General](#general)
-* [Junit5](#junit5)
-* [Spock updates](#spock-updates)
-* [Junit4 extensions deprecated](#junit4-extensions-deprecated)
+* [Jersey extensions priority change](#jersey-extensions-priority-change)
+* [New](#new)
+* [Bugfixes](#bugfixes)
 
 ## General
 
-* Guice updated to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
-* Dropwizard updated to 2.0.10
-* Changed `Automatic-Module-Name` to `ru.vyarus.dropwizard.guicey` because previous name was invalid
-(ext modules names also changed)
+Dropwizard updated to 2.0.16.
+
+## Jersey extensions priority change
+
+In raw dropwizard registered jersey extension (with environment.jersey().register(MyExceptionMapper.class))
+is implicitly qualified as @Custom and always used in priority comparing to default dropwizard providers.
+
+Before, guicey was registering provider extensions without this qualifier and so the default 
+dropwizard providers were used in priority (as registered earlier).
+For example, it was impossible to register `ExceptionMapper<Throwable>` because dropwizard already registered one.
+Now your custom mapper will be used in priority and so it is possible to override default `ExceptionMapper<Throwable>`
+(for example).
+
+!!! warning 
+    This COULD (unlikely, but still) change application behaviour: your custom provider could be called in more cases.
+    But, as this behaviour is the default for raw dropwizard, the change considered as a bugfix.
+
+### Legacy behaviour
+
+In case of problems, you could revert to legacy guicey behaviour with the new option:
+
+```java 
+.option(InstallerOptions.PrioritizeJerseyExtensions, false)
+```
+
+Even when option disabled, extensions order could be modified with `@Priority` annotation or with
+`@Custom` to gain the same effect as with enabled option (but only for some beans).
+
+### @Priority annotation
  
-## Junit 5
+Also, jersey `javax.annotation.Priority` annotation will now take effect for jersey extensions (previously it was ignored).
+This could also change your application behaviour (if you are using these annotations for extensions
+registered by guicey).
 
-2 junit 5 extensions added:
+See `javax.ws.rs.Priorities` for jersey default priority constants. 
+ 
+## New
 
-* @TestDropwizardRule - full application start
-* @TestGuiceyRule - guice-only tests (like old GuiceyAppRule)
+Add guicey `ApplicationStoppedEvent`, fired after application stop (called by jersey lifecycle stopped event).
+Suitable to perform actions after application shutdown (very rare case).
 
-Features:
+Note that existing `ApplicationShotdownEvent` is called just before application shutdown start
+(and suitable for cleanup application logic). 
 
-* Guice beans could be injected into test fileds
-* Guice beans could be injected as test (or lifecycle) method parameter
-* 2 declaration types supported: as annotations on test class and field builer (vith `@RegisterExtension`)
-* Hooks may be declared directly as test fields with lambdas
-* Special `ClientSupport` object added to simplify web-related testing
-* Support junit nested classes
-* Support parallel tests
+## Bugfixes
 
-Example usage:
-
-```java
-@TestDropwizardApp(MyApp.class)
-public class MyTest {
-    
-    @EnableHook
-    static GuiceyConfigurationHook HOOK = builder -> builder.modules(new DebugModule());
-
-    @Inject
-    SomeBean bean;
-    
-    void testWebUrls(ClientSupport client) {
-        Assertions.assertEquals("response string", 
-                client.targetMain("servlet").request()
-                        .buildGet()
-                        .invoke()
-                        .readEntity(String.class));
-    }   
-}
-```
-
-!!! note
-    Thanks to vintage engine junit 5 may be used together with existing junit4 or spock tests.
-
-Also, new junit extensions should be friendly to other extensions. Special static methods 
-could be used to access DropwizardTestSupport, Injector and ClientSupport objects,
-created by guicey extensions:
-
-```java
-public class MyExtension implements BeforeEachCallback {
-    
-    @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
-        Injector injector = GuiceyExtensionsSupport.lookupInjector(context).get();
-        ...
-    }
-}
-```
-
-## Spock updates
-
-New junit 5 extensions was en evolution of existing spock extensions (junit 5 extension modle allow 
-implementing thm the same way). Still, during development extensinos were improved and these improvements
-were ported to spock.
-
-Changes:
-
-* New options in @UseDropwizardApp: randomPorts and restMapping
-* Add support for hook declaration with test field:
-    `@EnableHook static GuiceyConfigurationHook HOOK = { it.modules(new DebugModule()) }`
-* @UseGuiceyHooks extension *deprecated* in favor of hooks declaration in fields
-* Add `ClientSupport` object to simplify web tests:
-    `@InjectClient ClientSupport client`
-* Extensions no more rely on depcrecated juni4 rules, but use DropwizardTestSupport instead         
-
-Old syntax remain for configOverride declaration (to preserve compatibility):
-
-```groovy
-@UseGuiceyApp(value = AutoScanApplication,
-        configOverride = [
-                @ConfigOverride(key = "foo", value = "2"),
-                @ConfigOverride(key = "bar", value = "12")
-        ])
-```
-
-It will be replaced with the new simplified junit5 syntax in the next breaking release.
-
-Overall, juni5 and spock extensions are almost equivalent.
-
-## Junit4 extensions deprecated
-
-Existing junit4 rules were deprecated: GuiceyAppRule, StartupErrorRules   
-
-Migration from junit 4 to junit 5:
-
-* Instead of GuiceyAppRule use @TestGuiceyApp extension.
-* Instead of DropwizardAppRule use @TestDropwizardApp extension.
-* GuiceyHooksRule can be substituted with hooks declaration in extensions or as test fields
-* There is no direct substitution for StartupErrorRule, but something similar could be achieved 
-with 3rd party extensions
-
-Also, with junit 5 vintage engine enabled, existing juni4 tests may be used together with 
-new junit 5 rules.
+* [127](https://github.com/xvik/dropwizard-guicey/issues/127) - remove direct usage of logback to  unlock logger switching
+* [87](https://github.com/xvik/dropwizard-guicey/issues/87) - fix config introspection infinite recursion for EnumMap fields
+* [97](https://github.com/xvik/dropwizard-guicey/issues/97) - fix jersey @Priority annotation support 

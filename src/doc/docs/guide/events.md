@@ -44,6 +44,7 @@ JerseyExtensionsInstalledBy | Called when jersey installer installed all related
 JerseyExtensionsInstalled^**?**^ | Called after all jersey installers install related extensions. Not called when no installed extensions (nothing registered or all disabled). At this point HK2 is not completely started yet (and so extensions) | Logging or extensions post processing
 ApplicationStarted | Meta event, called after complete dropwizard startup. This event also will be fired in guicey lightweight tests | May be used as assured "started" point (after all initializations). For example, for reporting.
 ApplicationShutdown | Meta event, called on server shutdown start. This event also will be fired in guicey lightweight tests | May be used for shutdown logic.
+ApplicationStoppedEvent | Meta event, called after application shutdown. This event also will be fired in guicey lightweight tests | May be used in rare cases to cleanup fs resources after application stop.
 
 ^?^ - event may not be called
 

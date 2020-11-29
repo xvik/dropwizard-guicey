@@ -1,3 +1,11 @@
+### [5.2.0](http://xvik.github.io/dropwizard-guicey/5.2.0) (2020-11-29)
+* Update to dropwizard 2.0.16
+* Remove direct usages of logback-classic classes to unlock logger switching (#127)
+* Fix stackoverflow on config introspection caused by EnumMap fields (#87) 
+* Prioritize registered jersey provider extensions and add support for @Priority annotation (#97)
+  Unifies raw dropwizard and guicey behaviour. Possibly breaking, see note below.
+* Add lifecycle event: ApplicationStoppedEvent (triggered on jersey lifecycle stop)   
+
 ### [5.1.0](http://xvik.github.io/dropwizard-guicey/5.1.0) (2020-06-02)
 * Update guice to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
 * Update to dropwizard 2.0.10

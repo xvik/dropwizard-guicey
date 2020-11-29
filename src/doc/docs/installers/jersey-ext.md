@@ -46,7 +46,7 @@ For more details see `org.glassfish.jersey.internal.inject.Providers#getAllServi
 org.glassfish.jersey.internal.inject.InjectionManager, java.lang.Class)` which is used by jersey for providers loading.
 
 !!! tip
-    Previously (<= 5.1.0) guicey were not qualifying providers and qualification may (unlikely, but can!)
+    Previously (<= 5.2.0) guicey were not qualifying providers and qualification may (unlikely, but can!)
     introduce behaviour changes on guicey upgrade (due to prioritized custom providers).
     In this case, auto qualification may be disabled with 
     ```java

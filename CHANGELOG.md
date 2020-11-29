@@ -6,16 +6,17 @@
 * Add lifecycle event: ApplicationStoppedEvent (triggered on jersey lifecycle stop)   
 
 NOTE: 
-Raw dropwizard: when provider registered directly with environment.jersey().register(MyExceptionMapper.class)
-it implicitly qualified as @Custom and always used in priority comparing to default dropwizard providers.
+In raw dropwizard registered jersey extension (with environment.jersey().register(MyExceptionMapper.class))
+is implicitly qualified as @Custom and always used in priority comparing to default dropwizard providers.
 
 Before, guicey was registering provider extensions without this qualifier and so the default 
 dropwizard providers were used in priority (as registered earlier).
-For example, it was impossible to register ExceptionMapper<Throwable> because dropwizard already register one.
-Now your custom mapper will be used in priority and so it is possible to override default ExceptionMapper<Throwable>.
+For example, it was impossible to register ExceptionMapper<Throwable> because dropwizard already registered one.
+Now your custom mapper will be used in priority and so it is possible to override default `ExceptionMapper<Throwable>`
+(for example).
 
 This COULD (unlikely, but still) change application behaviour: your custom provider could be called in more cases.
-But, as this behaviour is the default for raw dropwizard, the change was done (considered as a bug).
+But, as this behaviour is the default for raw dropwizard, the change considered as a bugfix.
 In case of problems, you could revert to legacy guicey behaviour with: 
     .option(InstallerOptions.PrioritizeJerseyExtensions, false)     
 
