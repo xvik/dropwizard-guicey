@@ -3,7 +3,6 @@ package ru.vyarus.dropwizard.guice.web
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.support.web.ServletsApplication
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
-import spock.lang.Ignore
 
 /**
  * @author Vyacheslav Rusakov 
@@ -12,7 +11,6 @@ import spock.lang.Ignore
 @UseDropwizardApp(ServletsApplication)
 class WebModuleTest extends AbstractTest {
 
-    @Ignore // jetty issue appears in 9.4.33 (dw 2.0.15) https://github.com/eclipse/jetty.project/issues/5555
     def "Check web bindings"() {
 
         when: "calling filter"
