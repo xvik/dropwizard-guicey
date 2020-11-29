@@ -18,7 +18,7 @@ Support:
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 2.0.10 [guice](https://github.com/google/guice) 4.2.3 integration.
+[Dropwizard](http://dropwizard.io/) 2.0.16 [guice](https://github.com/google/guice) 4.2.3 integration.
 
 Features:
 
@@ -62,19 +62,19 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>5.1.0</version>
+  <version>5.2.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:5.1.0'
+implementation 'ru.vyarus:dropwizard-guicey:5.2.0'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-2.0| [5.1.0](http://xvik.github.io/dropwizard-guicey/5.1.0)
+2.0| [5.2.0](http://xvik.github.io/dropwizard-guicey/5.2.0)
 1.3| [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
 1.0 | [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1)
@@ -96,9 +96,9 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus:dropwizard-guicey:5.1.0')
+    implementation platform('ru.vyarus:dropwizard-guicey:5.2.0')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-dependencies:2.0.10')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:2.0.16')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
@@ -119,7 +119,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>dropwizard-guicey</artifactId>
-            <version>5.1.0</version>
+            <version>5.2.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -127,7 +127,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>2.0.10</version>
+            <version>2.0.16</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 
