@@ -1094,13 +1094,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#priority" class="md-nav__link">
-    Priority
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#supplier" class="md-nav__link">
     Supplier
   </a>
@@ -1632,13 +1625,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#priority" class="md-nav__link">
-    Priority
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#supplier" class="md-nav__link">
     Supplier
   </a>
@@ -1790,33 +1776,6 @@ It is useful when <a href="../../guide/web/#disable-servletmodule-support">guice
 </ul>
 <p>Or you can enable <a href="../../guide/hk2/#use-hk2-for-jersey-extensions">HK2 management for jersey extensions by default</a>.
 Note that this will affect <a href="../resource/">resources</a> too and guice aop will not work on jersey extensions.</p>
-<h3 id="priority">Priority<a class="headerlink" href="#priority" title="Permanent link">&para;</a></h3>
-<p>By default, all registered providers are qualified with <code>@org.glassfish.jersey.internal.inject.Custom</code> to 
-prioritize them (be able to override dropwizard defaults). This <em>mimics the default behaviour</em>
-of manual registration with <code class="codehilite"><span class="n">environment</span><span class="p">.</span><span class="na">jersey</span><span class="p">().</span><span class="na">register</span><span class="p">(...)</span></code>.</p>
-<p>For example, when you register your own <code>ExceptionMapper&lt;Throwable&gt;</code> it would be used instead
-of default dropwizard one (due to prioritized qualification).</p>
-<p>For more details see <code>org.glassfish.jersey.internal.inject.Providers#getAllServiceHolders(
-org.glassfish.jersey.internal.inject.InjectionManager, java.lang.Class)</code> which is used by jersey for providers loading.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Previously (&lt;= 5.1.0) guicey were not qualifying providers and qualification may (unlikely, but can!)
-introduce behaviour changes on guicey upgrade (due to prioritized custom providers).
-In this case, auto qualification may be disabled with 
-<div class="codehilite"><pre><span></span><code><span class="p">.</span><span class="na">option</span><span class="p">(</span><span class="n">InstallerOptions</span><span class="p">.</span><span class="na">PrioritizeJerseyExtensions</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span> 
-</code></pre></div>
-to revert to legacy guicey behaviour.
-<code>@Custom</code> may be used directly in this case on some providers for prioritization. </p>
-</div>
-<p><code>@Priority</code> annotation may be used for ordering providers. Value should be &gt; 0 (but may be negative, just a convention). 
-For example, 1000 is more prioritized then 2000. See <code>javax.ws.rs.Priorities</code> for default priority constants.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code>@Priority</code> may work differently on <code>@Custom</code> qualified providers (all user providers by default)
-and unqualified (e.g. registered through hk module, like dropwizard defaults). Right now, qualified
-providers sorted ascending while unqualified sorted descending (due to different selection implementations,
-see <code>getAllServiceHolders</code> reference above). Probably a jersey bug.</p>
-</div>
 <h3 id="supplier">Supplier<a class="headerlink" href="#supplier" title="Permanent link">&para;</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -1878,7 +1837,6 @@ Useful for <a href="https://www.dropwizard.io/en/release-2.0.x/manual/core.html#
 <p class="admonition-title">Tip</p>
 <p>Default exception dropwizard mappers (registered in <code>io.dropwizard.setup.ExceptionMapperBinder</code>) could be 
 <a href="https://www.dropwizard.io/en/release-2.0.x/manual/core.html#overriding-default-exception-mappers">overridden</a>
-(see <a href="#priority">priority section</a>)
 or completely disabled with <code>server.registerDefaultExceptionMappers</code> option.    </p>
 </div>
 <h3 id="valueparamprovider">ValueParamProvider<a class="headerlink" href="#valueparamprovider" title="Permanent link">&para;</a></h3>

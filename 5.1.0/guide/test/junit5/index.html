@@ -1843,23 +1843,6 @@ so all tests could work  <strong>together</strong> with junit 5:
 <div class="codehilite"><pre><span></span><code><span class="n">testRuntimeOnly</span> <span class="s1">&#39;org.junit.vintage:junit-vintage-engine&#39;</span>
 </code></pre></div></p>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>In gradle you need to explicitly <a href="https://docs.gradle.org/current/userguide/java_testing.html#using_junit5">activate junit 5 support</a> with
-<div class="codehilite"><pre><span></span><code><span class="n">test</span> <span class="o">{</span>
-    <span class="n">useJUnitPlatform</span><span class="o">()</span>
-    <span class="o">...</span>
-<span class="o">}</span>                    
-</code></pre></div></p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Junit 5 annotations are <strong>different</strong> from junit4, so if you have both junit 5 and junit 4
-make sure correct classes (annotations) used for junit 5 tests:
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">org.junit.jupiter.api.Assertions</span><span class="p">;</span>
-<span class="kn">import</span> <span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span>
-</code></pre></div></p>
-</div>
 <h2 id="dropwizard-extensions-compatibility">Dropwizard extensions compatibility<a class="headerlink" href="#dropwizard-extensions-compatibility" title="Permanent link">&para;</a></h2>
 <p>Guicey extensions can be used with dropwizard extenssions. But this may be required only in edge cases
 when multiple applications startup is required.</p>
@@ -1913,7 +1896,7 @@ Also, guciey extension rely on junit parameters injection. Both options has pros
 <h2 id="testdropwizardapp">@TestDropwizardApp<a class="headerlink" href="#testdropwizardapp" title="Permanent link">&para;</a></h2>
 <p><code>@TestDropwizardApp</code> is useful for complete integration testing (when web part is required):</p>
 <div class="codehilite"><pre><span></span><code><span class="nd">@TestDropwizardApp</span><span class="o">(</span><span class="n">MyApplication</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-<span class="kd">class</span> <span class="nc">WebModuleTest</span> <span class="o">{</span>
+<span class="kd">class</span> <span class="nc">WebModuleTest</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
 
     <span class="nd">@Inject</span> 
     <span class="n">MyService</span> <span class="n">service</span>

@@ -1786,10 +1786,10 @@ all manual registrations.</p>
 
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Items order does not represent actual priority order!
-Items in each section are sorted according to <code>@Priority</code> annotation and then by name,
-but <code>@Custom</code> qualification priority is ignored (and so user extensions and default one may be shown in incorrect order).
-Report sorting applied only for consistency (always show the same order) - it's a trade off.</p>
+<p>Items in each section are sorted according to <code>@Priority</code> annotation and then by name.
+So explicitly prioritized beans will go upper, but beans with the same priority will be 
+ordered by name. Of course jersey itself may prioritize differently, but report must be
+consistent (always show the same order) - so it's unavoidable trade off.</p>
 </div>
 <h2 id="common-markers">Common markers<a class="headerlink" href="#common-markers" title="Permanent link">&para;</a></h2>
 <p>Markers are shown at the end of extension line. The following markers are common for all extension types.</p>
