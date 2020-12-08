@@ -235,7 +235,7 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
             return;
         }
         final StringBuilder builder = new StringBuilder()
-                .append("\t").append(message).append(" = \n");
+                .append('\t').append(message).append(" = \n");
         for (Object item : items) {
             builder.append("\t\t").append(item instanceof String ? item
                     // it is the only way to show something meaningful for proxy

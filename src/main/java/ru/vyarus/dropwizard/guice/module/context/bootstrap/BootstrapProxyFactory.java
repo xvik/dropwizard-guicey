@@ -35,7 +35,7 @@ public final class BootstrapProxyFactory {
             final Bootstrap res = (Bootstrap) proxy.getConstructor(Application.class).newInstance(new Object[]{null});
             ((Proxy) res).setHandler((self, thisMethod, proceed, args) -> {
                 // intercept only bundle addition
-                if (thisMethod.getName().equals("addBundle")) {
+                if ("addBundle".equals(thisMethod.getName())) {
                     context.registerDropwizardBundles((ConfiguredBundle) args[0]);
                     return null;
                 }

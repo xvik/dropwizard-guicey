@@ -30,7 +30,7 @@ class StartErrorTest extends AbstractTest {
         thrown(rule.indicatorExceptionType)
         // java 9 and above use quotes in annotations (@com.google.inject.name.Named(value="unknown")) while previous versions did not
         rule.error.replace('"', '').contains(
-                "Explicit bindings are required and java.lang.String annotated with @com.google.inject.name.Named(value=unknown) is not explicitly bound")
+                "[Guice/JitDisabled]: Explicit bindings are required and String annotated with @Named")
     }
 
     static class ErrorApplication extends Application<TestConfiguration> {

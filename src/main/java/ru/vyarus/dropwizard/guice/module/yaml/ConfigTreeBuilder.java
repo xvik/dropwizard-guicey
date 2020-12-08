@@ -158,7 +158,7 @@ public final class ConfigTreeBuilder {
      * @param object  analyzed part instance (may be null)
      * @return all configuration paths values
      */
-    @SuppressWarnings("checkstyle:CyclomaticComplexity")
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "PMD.AvoidLiteralsInIfCondition"})
     private static List<ConfigPath> resolvePaths(final SerializationConfig config,
                                                  final ConfigPath root,
                                                  final List<ConfigPath> content,
@@ -171,7 +171,7 @@ public final class ConfigTreeBuilder {
 
         for (BeanPropertyDefinition prop : description.findProperties()) {
             // ignore write-only or groovy special property
-            if (!prop.couldSerialize() || prop.getName().equals("metaClass")) {
+            if (!prop.couldSerialize() || "metaClass".equals(prop.getName())) {
                 continue;
             }
             final Object value;

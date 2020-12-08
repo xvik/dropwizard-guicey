@@ -169,6 +169,7 @@ public final class ProviderRenderUtil {
         return markers;
     }
 
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     private static String renderLine(final Class ext,
                                      final Class provider,
                                      final ExtDescriptor desc,
@@ -182,7 +183,7 @@ public final class ProviderRenderUtil {
         }
         params[pos] = RenderUtils.renderClassLine(provider, collectMarkers(ext, provider, isHkManaged, isLazy));
         // special case for message body readers and writers to identify collection mappers
-        if (params[0].equals("Object") && AbstractCollectionJaxbProvider.class.isAssignableFrom(provider)) {
+        if ("Object".equals(params[0]) && AbstractCollectionJaxbProvider.class.isAssignableFrom(provider)) {
             params[0] = "T[], Collection<T>";
         }
         return String.format(desc.format, params);

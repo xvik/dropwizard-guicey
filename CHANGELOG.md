@@ -1,3 +1,8 @@
+* Update to guice [5.0.0-BETA-1](https://github.com/google/guice/wiki/Guice500) 
+  (java15 support, removes cglib, fixes "illegal reflective access" warnings)
+  
+NOTE: it would not be possible to downgrade guice dependency due to renamed (internal) guice class, used by guicey
+
 ### 5.2.0 (2020-11-29)
 * Update to dropwizard 2.0.16
 * Remove direct usages of logback-classic classes to unlock logger switching (#127)

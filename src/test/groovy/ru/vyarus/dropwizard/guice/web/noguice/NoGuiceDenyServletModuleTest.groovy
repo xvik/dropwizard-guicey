@@ -23,7 +23,7 @@ class NoGuiceDenyServletModuleTest extends Specification {
         new DropwizardAppRule(DenySMApp).before()
         then: "error"
         def ex = thrown(CreationException)
-        ex.errorMessages[0].message.startsWith("A binding to javax.servlet.http.HttpServletRequest was already configured ")
+        ex.errorMessages[0].message.equals("javax.servlet.http.HttpServletRequest was bound multiple times.")
     }
 
     static class DenySMApp extends Application<Configuration> {

@@ -8,8 +8,8 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
- * Guice logs internal stats with java util logger ({@link com.google.inject.internal.util.Stopwatch}). In order to
- * intercept these messages, append custom handler to this logger, but just for injector creation time.
+ * Guice logs internal stats with java util logger ({@link com.google.inject.internal.util.ContinuousStopwatch}).
+ * In order to intercept these messages, append custom handler to this logger, but just for injector creation time.
  */
 @SuppressWarnings("PMD.MoreThanOneLogger")
 public class GuiceStatsTracker {
@@ -55,7 +55,7 @@ public class GuiceStatsTracker {
     }
 
     private Logger getLogger() {
-        return Logger.getLogger(com.google.inject.internal.util.Stopwatch.class.getName());
+        return Logger.getLogger(com.google.inject.internal.util.ContinuousStopwatch.class.getName());
     }
 
     /**

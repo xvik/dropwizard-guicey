@@ -36,7 +36,7 @@ public class StartErrorJupiterTest {
         // assertion declared before
         // strange matching because in java9 @Named value will be quoted and in 8 will not
         output.expect(Matchers.containsString(
-                "No implementation for java.lang.String annotated with @com.google.inject.name.Named(value="));
+                "[Guice/MissingImplementation]: No implementation for String annotated with @Named"));
 
         ErrorApplication.main("server");
     }
