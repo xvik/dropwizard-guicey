@@ -13,6 +13,7 @@ Additional repositories:
 
 Support:
 
+* [discussions](https://github.com/xvik/dropwizard-guicey/discussions)
 * [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey)
 * [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
 
