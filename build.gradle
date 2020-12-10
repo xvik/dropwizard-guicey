@@ -190,3 +190,9 @@ task showDependenciesTree(dependsOn: 'htmlDependencyReport', group: 'help', desc
         java.awt.Desktop.getDesktop().open(file('build/reports/project/dependencies/root.html'))
     }
 }
+
+task updateGithubPom(type: Copy, group: 'other') {
+    from(generatePomFileForMavenPublication)
+    into '.github'
+    rename 'pom-default.xml', 'pom.xml'
+}
