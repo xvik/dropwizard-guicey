@@ -37,7 +37,7 @@ class OptsMappingTest extends AbstractTest {
         System.setProperty("strictListeners", "true")
         def rule = new GuiceyAppRule(App, null)
 
-        when: "staring app"
+        when: "starting app"
         GuiceyConfigurationInfo info
         rule.apply({ info = rule.getBean(GuiceyConfigurationInfo) } as Statement, null).evaluate()
         then: "options applied"

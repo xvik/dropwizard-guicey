@@ -175,7 +175,7 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
 
     @Override
     protected void injectorCreation(final InjectorCreationEvent event) {
-        log("Staring guice with %s/%s%s modules...",
+        log("Starting guice with %s/%s%s modules...",
                 event.getModules().size(), event.getOverridingModules().size(), fmtDisabled(event.getDisabled()));
         if (showDetails) {
             logDetails("modules", event.getModules());
