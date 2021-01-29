@@ -33,7 +33,7 @@ class SampleResource {
     .option(InstallerOptions.ForceSingletonForJerseyExtensions, false)
     ``` 
 
-Special `@Protptype` scope annotation may be used to mark resources in prototype scope.
+Special `@Prototype` scope annotation may be used to mark resources in prototype scope.
 It is useful when [guice servlet support is disabled](../guide/web.md#disable-servletmodule-support) (and so `@RequestScoped` could not be used). 
 
 ### Interface recognition

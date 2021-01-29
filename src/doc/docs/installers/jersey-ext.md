@@ -21,7 +21,7 @@ Detects  classes annotated with jersey `@javax.ws.rs.ext.Provider` annotation an
     .option(InstallerOptions.ForceSingletonForJerseyExtensions, false)
     ```   
 
-Special `@Protptype` scope annotation may be used to mark resources in prototype scope.
+Special `@Prototype` scope annotation may be used to mark resources in prototype scope.
 It is useful when [guice servlet support is disabled](../guide/web.md#disable-servletmodule-support) (and so `@RequestScoped` could not be used).
 
 Due to specifics of [HK2 integration](lifecycle.md), you may need to use:
