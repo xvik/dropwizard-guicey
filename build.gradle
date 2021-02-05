@@ -78,7 +78,7 @@ dependencies {
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
     testImplementation 'cglib:cglib-nodep:3.3.0'
     testImplementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
-    testImplementation 'org.junit.platform:junit-platform-testkit:1.6.2'
+    testImplementation 'org.junit.platform:junit-platform-testkit'
     testImplementation 'com.ginsberg:junit5-system-exit:1.0.0'
     testImplementation 'com.github.blindpirate:junit5-capture-system-output-extension:0.1.1'
 
