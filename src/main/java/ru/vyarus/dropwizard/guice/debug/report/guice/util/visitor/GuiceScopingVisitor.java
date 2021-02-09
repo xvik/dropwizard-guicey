@@ -27,16 +27,16 @@ public class GuiceScopingVisitor
     @Override
     public Class<? extends Annotation> visitScope(final Scope scope) {
         Class<? extends Annotation> res = null;
-        if (scope == Scopes.SINGLETON) {
+        if (Scopes.SINGLETON.equals(scope)) {
             res = javax.inject.Singleton.class;
         }
-        if (scope == Scopes.NO_SCOPE) {
+        if (Scopes.NO_SCOPE.equals(scope)) {
             res = Prototype.class;
         }
-        if (scope == ServletScopes.REQUEST) {
+        if (ServletScopes.REQUEST.equals(scope)) {
             res = RequestScoped.class;
         }
-        if (scope == ServletScopes.SESSION) {
+        if (ServletScopes.SESSION.equals(scope)) {
             res = SessionScoped.class;
         }
         // not supporting custom scopes

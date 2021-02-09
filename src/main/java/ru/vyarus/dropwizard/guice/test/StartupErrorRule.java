@@ -131,7 +131,6 @@ public final class StartupErrorRule implements TestRule {
          * @param err error stream content (exception logged there)
          * @throws Exception in case of error
          */
-        @SuppressWarnings("PMD.AvoidPrefixingMethodParameters")
         void check(String out, String err) throws Exception;
     }
 }

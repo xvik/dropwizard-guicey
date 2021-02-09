@@ -59,7 +59,7 @@ public final class BindingUtils {
     @SuppressWarnings("unchecked")
     public static Class<? extends Module> getModuleClass(final String name) {
         final Class<? extends Module> res;
-        if (!name.equals(JIT_MODULE)) {
+        if (!JIT_MODULE.equals(name)) {
             try {
                 res = (Class) Class.forName(name);
             } catch (ClassNotFoundException e) {
