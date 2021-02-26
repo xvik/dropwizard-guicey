@@ -1,5 +1,6 @@
-* Update to guice [5.0.0-BETA-1](https://github.com/google/guice/wiki/Guice500) 
-  (java15 support, removes cglib, fixes "illegal reflective access" warnings)
+
+* Update to guice [5.0.0](https://github.com/google/guice/wiki/Guice500) 
+  (java15 support, removes cglib, fixes "illegal reflective access" warnings, update Guava to LATEST 30.1-jre)
   
 NOTE: it would not be possible to downgrade guice dependency due to renamed (internal) guice class, used by guicey
 
