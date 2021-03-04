@@ -139,14 +139,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-server-pages</artifactId>
-  <version>5.2.0-1</version>
+  <version>5.3.0-1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-server-pages:5.2.0-1'
+compile 'ru.vyarus.guicey:guicey-server-pages:5.3.0-1'
 ```
 
 See the most recent version in the badge above.

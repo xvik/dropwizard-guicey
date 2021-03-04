@@ -11,6 +11,7 @@ Maven BOM contains guicey and guicey ext modules versions. Also includes dropwiz
 
 | BOM version | Guicey | Dropwizard | Guice |
 |-------------|--------|------------|-------|
+| 5.3.0-1     | 5.3.0  | 2.0.20     | 5.0.1 |
 | 5.2.0-1     | 5.2.0  | 2.0.16     | 4.2.3 |
 | 5.1.0-2     | 5.1.0  | 2.0.10     | 4.2.3 |
 | 5.0.1-1     | 5.0.1  | 2.0.2      | 4.2.2 |
@@ -40,7 +41,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>5.2.0-1</version>
+            <version>5.3.0-1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>  
@@ -48,7 +49,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>2.0.16</version>
+            <version>2.0.20</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> --> 
@@ -79,9 +80,9 @@ Gradle:
 ```groovy
 // declare guice and ext modules without versions 
 dependencies {
-    implementation platform('ru.vyarus.guicey:guicey-bom:5.2.0-1')
+    implementation platform('ru.vyarus.guicey:guicey-bom:5.3.0-1')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-dependencies:2.0.16')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:2.0.20')
 
     implementation 'ru.vyarus:dropwizard-guicey'
     // For example, using dropwizard module (without version)
