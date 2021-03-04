@@ -1,8 +1,10 @@
-
-* Update to guice [5.0.0](https://github.com/google/guice/wiki/Guice500) 
+* Update to guice [5.0.1](https://github.com/google/guice/wiki/Guice501) 
   (java15 support, removes cglib, fixes "illegal reflective access" warnings, update Guava to LATEST 30.1-jre)
+* Update to dropwizard 2.0.20
+* Unify GuiceyAppRule (junit4) behaviour with DropwizardAppRule: config overrides should initialize just 
+  before test and not in the constructor. The issue was causing early evaluation of lazy (deferred) overrides (#151)
   
-NOTE: it would not be possible to downgrade guice dependency due to renamed (internal) guice class, used by guicey
+NOTE: it would not be possible to downgrade guice dependency (to 4.x) due to renamed (internal) guice class, used by guicey
 
 ### 5.2.0 (2020-11-29)
 * Update to dropwizard 2.0.16

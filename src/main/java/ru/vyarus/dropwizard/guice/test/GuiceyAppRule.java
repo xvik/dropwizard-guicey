@@ -13,7 +13,9 @@ import org.junit.rules.ExternalResource;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * A JUnit rule for starting and stopping your guice application at the start and end of a test class.
@@ -36,6 +38,7 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
 
     private final Class<? extends Application<C>> applicationClass;
     private final String configPath;
+    private final List<ConfigOverride> configOverrides;
 
     private C configuration;
     private Application<C> application;
@@ -47,9 +50,7 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
                          final ConfigOverride... configOverrides) {
         this.applicationClass = applicationClass;
         this.configPath = configPath;
-        for (ConfigOverride configOverride : configOverrides) {
-            configOverride.addToSystemProperties();
-        }
+        this.configOverrides = Arrays.asList(configOverrides);
     }
 
     public C getConfiguration() {
@@ -83,6 +84,9 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
 
     @Override
     protected void before() throws Throwable {
+        for (ConfigOverride configOverride : configOverrides) {
+            configOverride.addToSystemProperties();
+        }
         startIfRequired();
     }
 
