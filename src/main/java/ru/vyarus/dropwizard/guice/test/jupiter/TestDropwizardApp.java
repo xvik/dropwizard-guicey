@@ -70,6 +70,10 @@ public @interface TestDropwizardApp {
 
     /**
      * Each value must be written as {@code key: value}.
+     * <p>
+     * In order to specify raw {@link io.dropwizard.testing.ConfigOverride} values (for delayed evaluation)
+     * use direct extension registration with {@link org.junit.jupiter.api.extension.RegisterExtension} instead
+     * of annotation.
      *
      * @return list of overridden configuration values (may be used even without real configuration)
      */

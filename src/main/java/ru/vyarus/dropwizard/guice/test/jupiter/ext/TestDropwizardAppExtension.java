@@ -12,12 +12,15 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
+import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue;
+import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.RandomPortsListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * {@link TestDropwizardApp} junit 5 extension implementation. Normally, extension should be activated with annotation,
@@ -35,6 +38,8 @@ import java.util.List;
  *     registration may guarantee its execution after some other extension.</li>
  *     <li>Manual registration allows short hook declarations with lambdas:
  *     {@code .hooks(builder -> builder.modules(new DebugGuiceModule()))}</li>
+ *     <li>Config overrides registration as {@link ConfigOverride} objects (required for delayed evaluated values:
+ *     e.g. when it is obtained from some other junit extension)</li>
  * </ul>
  * <p>
  * You can't use manual registration to configure multiple applications because junit allows only one extension
@@ -121,7 +126,9 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         return support;
     }
 
-    private ConfigOverride[] buildConfigOverrides(final String prefix) {
+    @SuppressWarnings("unchecked")
+    private <T extends ConfigOverride & ConfigurablePrefix> ConfigOverride[] buildConfigOverrides(
+            final String prefix) {
         ConfigOverride[] overrides = ConfigOverrideUtils.convert(prefix, config.configOverrides);
         if (!Strings.isNullOrEmpty(config.restMapping)) {
             String mapping = PathUtils.leadingSlash(config.restMapping);
@@ -130,7 +137,9 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             }
             overrides = ConfigOverrideUtils.merge(overrides, ConfigOverride.config(prefix, "server.rootPath", mapping));
         }
-        return overrides;
+        return config.configOverrideObjects.isEmpty() ? overrides
+                : ConfigOverrideUtils.merge(overrides,
+                ConfigOverrideUtils.prepareOverrides(prefix, (List<T>) (List<?>) config.configOverrideObjects));
     }
 
 
@@ -160,9 +169,45 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          *
          * @param values overriding configuration values in "key: value" format
          * @return builder instance for chained calls
+         * @see #configOverrides(ConfigOverride...) for specifying {@link ConfigOverride} objects directly
          */
         public Builder configOverrides(final String... values) {
             cfg.configOverrides = values;
+            return this;
+        }
+
+        /**
+         * Direct {@link ConfigOverride} objects support. In most cases, it is simpler to use pure strings
+         * with {@link #configOverrides(String...)}. Direct objects may be useful when provided value must be lazy
+         * evaluated (e.g. it is obtained from some other junit extension).
+         * <p>
+         * IMPORTANT: provided values must implement {@link ConfigurablePrefix} interface so guicey could
+         * insert correct prefix, used by current test (required for parallel tests as all config overrides
+         * eventually stored in system properties).
+         * <p>
+         * May be called multiple times (values appended).
+         *
+         * @param values overriding configuration values
+         * @return builder instance for chained calls
+         * @see ConfigOverrideValue for an exmample of required implementation
+         * @see #configOverride(String, Supplier) for supplier shortcut
+         */
+        @SafeVarargs
+        public final <T extends ConfigOverride & ConfigurablePrefix> Builder configOverrides(final T... values) {
+            Collections.addAll(cfg.configOverrideObjects, values);
+            return this;
+        }
+
+        /**
+         * Shortcut for {@link #configOverrides(ConfigOverride[])}. Registers config override with a supplier.
+         * Useful for values with delayed resolution (e.g. provided by some other extension).
+         *
+         * @param key      configuration key
+         * @param supplier value supplier
+         * @return builder instance for chained calls
+         */
+        public Builder configOverride(final String key, final Supplier<String> supplier) {
+            configOverrides(new ConfigOverrideValue(key, supplier));
             return this;
         }
 
@@ -171,7 +216,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * <p>
          * Anonymous hooks could be declared with a static field:
          * {@code @EnableHook static GuiceyConfigurationHook hook = builder -> builder.disableExtension(
-         *  Something.class)}.
+         * Something.class)}.
          * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
          * are also counted.
          *
@@ -263,6 +308,8 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         Class<? extends Application> app;
         String configPath = "";
         String[] configOverrides = new String[0];
+        // required for lazy evaluation values
+        List<ConfigOverride> configOverrideObjects = new ArrayList<>();
         List<GuiceyConfigurationHook> hooks;
         boolean randomPorts;
         String restMapping = "";

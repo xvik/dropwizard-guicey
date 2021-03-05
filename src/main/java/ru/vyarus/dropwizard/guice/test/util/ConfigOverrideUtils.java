@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import io.dropwizard.testing.ConfigOverride;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 
+import java.util.List;
+
 /**
  * Config override handling utils.
  *
@@ -28,7 +30,7 @@ public final class ConfigOverrideUtils {
 
     /**
      * @param prefix prefix
-     * @param props overriding properties in "key: value" format
+     * @param props  overriding properties in "key: value" format
      * @return parsed configuration override objects
      */
     public static ConfigOverride[] convert(final String prefix, final String... props) {
@@ -56,7 +58,7 @@ public final class ConfigOverrideUtils {
      */
     @SuppressWarnings("checkstyle:ReturnCount")
     public static ConfigOverride[] merge(final ConfigOverride[] base, final ConfigOverride... addition) {
-        if (addition.length == 0) {
+        if (addition == null || addition.length == 0) {
             return base;
         }
         if (base == null) {
@@ -65,6 +67,28 @@ public final class ConfigOverrideUtils {
         final ConfigOverride[] res = new ConfigOverride[base.length + addition.length];
         System.arraycopy(base, 0, res, 0, base.length);
         System.arraycopy(addition, 0, res, base.length, addition.length);
+        return res;
+    }
+
+    /**
+     * Process provided custom config override objects by setting context prefix.
+     *
+     * @param prefix test specific prefix
+     * @param values objects to process
+     * @param <T>    composite helper type
+     * @return array of processed objects or null if nothing registered
+     */
+    public static <T extends ConfigOverride & ConfigurablePrefix> ConfigOverride[] prepareOverrides(
+            final String prefix, final List<T> values) {
+        ConfigOverride[] res = null;
+        if (!values.isEmpty()) {
+            res = new ConfigOverride[values.size()];
+            int i = 0;
+            for (T value : values) {
+                value.setPrefix(prefix);
+                res[i++] = value;
+            }
+        }
         return res;
     }
 }

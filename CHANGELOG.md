@@ -3,6 +3,7 @@
 * Update to dropwizard 2.0.20
 * Unify GuiceyAppRule (junit4) behaviour with DropwizardAppRule: config overrides should initialize just 
   before test and not in the constructor. The issue was causing early evaluation of lazy (deferred) overrides (#151)
+* Add custom ConfigOverride objects support for junit 5 extensions (registered with @RegisterExtension)    
   
 NOTE: it would not be possible to downgrade guice dependency (to 4.x) due to renamed (internal) guice class, used by guicey
 

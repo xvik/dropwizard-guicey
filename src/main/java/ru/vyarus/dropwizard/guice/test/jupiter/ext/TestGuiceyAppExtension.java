@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 import com.google.common.base.Preconditions;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
+import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -11,11 +12,14 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.TestCommand;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
+import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue;
+import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * {@link TestGuiceyApp} junit 5 extension implementation. Normally, extension should be activated with annotation,
@@ -33,6 +37,8 @@ import java.util.List;
  *     registration may guarantee its execution after some other extension.</li>
  *     <li>Manual registration allows short hook declarations with lambdas:
  *     {@code .hooks(builder -> builder.modules(new DebugGuiceModule()))}</li>
+ *     <li>Config overrides registration as {@link ConfigOverride} objects (required for delayed evaluated values:
+ *     e.g. when it is obtained from some other junit extension)</li>
  * </ul>
  * <p>
  * You can't use manual registration to configure multiple applications because junit allows only one extension
@@ -104,7 +110,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
 
         // config overrides work through system properties so it is important to have unique prefixes
         final String configPrefix = ConfigOverrideUtils.createPrefix(context.getRequiredTestClass());
-        return create(context, config.app, config.configPath, configPrefix, config.configOverrides);
+        return create(context, config.app, config.configPath, configPrefix);
     }
 
     @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
@@ -112,8 +118,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             final ExtensionContext context,
             final Class<? extends Application> app,
             final String configPath,
-            final String configPrefix,
-            final String... overrides) {
+            final String configPrefix) {
         // NOTE: DropwizardTestSupport.ServiceListener listeners would be called ONLY on start!
         return new DropwizardTestSupport<>((Class<? extends Application<C>>) app,
                 configPath,
@@ -124,7 +129,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
                     getExtensionStore(context).put(TestCommand.class, cmd);
                     return cmd;
                 },
-                ConfigOverrideUtils.convert(configPrefix, overrides));
+                buildConfigOverrides(configPrefix));
     }
 
     @Override
@@ -134,6 +139,15 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         if (command != null) {
             command.stop();
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends ConfigOverride & ConfigurablePrefix> ConfigOverride[] buildConfigOverrides(
+            final String prefix) {
+        final ConfigOverride[] overrides = ConfigOverrideUtils.convert(prefix, config.configOverrides);
+        return config.configOverrideObjects.isEmpty() ? overrides
+                : ConfigOverrideUtils.merge(overrides,
+                ConfigOverrideUtils.prepareOverrides(prefix, (List<T>) (List<?>) config.configOverrideObjects));
     }
 
     /**
@@ -162,9 +176,45 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          *
          * @param values overriding configuration values in "key: value" format
          * @return builder instance for chained calls
+         * @see #configOverrides(ConfigOverride...) for specifying {@link ConfigOverride} objects directly
          */
         public Builder configOverrides(final String... values) {
             cfg.configOverrides = values;
+            return this;
+        }
+
+        /**
+         * Direct {@link ConfigOverride} objects support. In most cases, it is simpler to use pure strings
+         * with {@link #configOverrides(String...)}. Direct objects may be useful when provided value must be lazy
+         * evaluated (e.g. it is obtained from some other junit extension).
+         * <p>
+         * IMPORTANT: provided values must implement {@link ConfigurablePrefix} interface so guicey could
+         * insert correct prefix, used by current test (required for parallel tests as all config overrides
+         * eventually stored in system properties).
+         * <p>
+         * May be called multiple times (values appended).
+         *
+         * @param values overriding configuration values
+         * @return builder instance for chained calls
+         * @see ConfigOverrideValue for an exmample of required implementation
+         * @see #configOverride(String, Supplier) for supplier shortcut
+         */
+        @SafeVarargs
+        public final <T extends ConfigOverride & ConfigurablePrefix> Builder configOverrides(final T... values) {
+            Collections.addAll(cfg.configOverrideObjects, values);
+            return this;
+        }
+
+        /**
+         * Shortcut for {@link #configOverrides(ConfigOverride[])}. Registers config override with a supplier.
+         * Useful for values with delayed resolution (e.g. provided by some other extension).
+         *
+         * @param key      configuration key
+         * @param supplier value supplier
+         * @return builder instance for chained calls
+         */
+        public Builder configOverride(final String key, final Supplier<String> supplier) {
+            configOverrides(new ConfigOverrideValue(key, supplier));
             return this;
         }
 
@@ -234,6 +284,8 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         Class<? extends Application> app;
         String configPath = "";
         String[] configOverrides = new String[0];
+        // required for lazy evaluation values
+        List<ConfigOverride> configOverrideObjects = new ArrayList<>();
         List<GuiceyConfigurationHook> hooks;
 
         /**
