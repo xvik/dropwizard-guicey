@@ -1,3 +1,4 @@
+### 5.3.0 (2021-03-06)
 * Update to guice [5.0.1](https://github.com/google/guice/wiki/Guice501) 
   (java15 support, removes cglib, fixes "illegal reflective access" warnings, update Guava to LATEST 30.1-jre)
 * Update to dropwizard 2.0.20
