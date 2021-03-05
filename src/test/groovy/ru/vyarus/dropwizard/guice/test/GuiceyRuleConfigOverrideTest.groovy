@@ -10,7 +10,6 @@ import static io.dropwizard.testing.ConfigOverride.config
  * @author Brian Wehrle
  * @since 05.03.2021
  */
-
 class GuiceyRuleConfigOverrideTest extends Specification {
 
     private final static String CONFIG_PROPERTY = "server.type";
@@ -27,6 +26,7 @@ class GuiceyRuleConfigOverrideTest extends Specification {
         !isPropertyPresent()
     }
 
+    @SuppressWarnings('GrDeprecatedAPIUsage')
     def "Test config override applied in before"() {
         GuiceyAppRule guiceyAppRule = new GuiceyAppRule<>(AutoScanApplication,
                 null,
@@ -35,6 +35,9 @@ class GuiceyRuleConfigOverrideTest extends Specification {
         expect: "config override applied after before()"
         guiceyAppRule.before()
         isPropertyPresent()
+
+        cleanup:
+        guiceyAppRule.after()
     }
 
     def static isPropertyPresent() {
