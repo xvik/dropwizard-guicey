@@ -1,9 +1,10 @@
-### [5.3.0](http://xvik.github.io/dropwizard-guicey/5.3.0) (2021-03-04)
+### [5.3.0](http://xvik.github.io/dropwizard-guicey/5.3.0) (2021-03-06)
 * Update to guice [5.0.1](https://github.com/google/guice/wiki/Guice501)
   (java15 support, removes cglib, fixes "illegal reflective access" warnings, update Guava to LATEST 30.1-jre)
 * Update to dropwizard 2.0.20
 * Unify GuiceyAppRule (junit4) behaviour with DropwizardAppRule: config overrides should initialize just
   before test and not in the constructor. The issue was causing early evaluation of lazy (deferred) overrides (#151)
+* Add custom ConfigOverride objects support for junit 5 extensions (registered with @RegisterExtension)  
 
 ### [5.2.0](http://xvik.github.io/dropwizard-guicey/5.2.0) (2020-11-29)
 * Update to dropwizard 2.0.16

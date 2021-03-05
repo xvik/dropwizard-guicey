@@ -431,6 +431,40 @@ Or use both at once (here overrides will override file values):
 class ConfigOverrideTest {
 ```
 
+### Deferred configuration
+
+If you need to configure value, supplied by some other extension, or value may be resolved only
+after test start, then static overrides declaration is not an option. In this case use
+[alternative extensions declaration](#alternative-declaration) which provides additional 
+config override methods:
+
+```java
+@RegisterExtension
+@Order(1)
+static FooExtension ext = new FooExtension();
+
+@RegisterExtension
+@Order(2)
+static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(AutoScanApplication.class)
+        .config("src/test/resources/ru/vyarus/dropwizard/guice/config.yml")
+        .configOverrides("foo: 1")
+        .configOverride("bar", () -> ext.getValue())
+        .configOverrides(new ConfigOverrideValue("baa", () -> "44"))
+        .create();
+```
+
+In most cases `configOverride("bar", () -> ext.getValue())` would be enough to configure a supplier instead
+of static value.
+
+In more complex cases, you can use custom implementations of `ConfigOverride`. 
+
+!!! warning ""
+    Guicey have to accept only `ConfigOverride` objects implementing custom 
+    `ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix` interface. 
+    In order to support parallel tests guicey generates unique config prefix for each test
+    (because all overrides eventually stored to system properties) and so it needs a way
+    to set this prefix into custom `ConfigOverride` objects.
+
 ## Application test modification
 
 You can use [hooks to customize application](overview.md#configuration-hooks).
@@ -493,6 +527,10 @@ junit.jupiter.execution.parallel.enabled = true
 junit.jupiter.execution.parallel.mode.default = concurrent
 ```
 
+!!! note
+    In order to avoid config overriding collisions (because all overrides eventually stored to system properties)
+    guicey generates unique property prefixes in each test.
+
 To avoid port collisions in dropwizard tests use [randomPorts option](#random-ports).
 
 ## Alternative declaration
@@ -525,6 +563,10 @@ and extensions declared with `@RegisterExtension` (by declaration order). But th
 to order extension registered with `@RegisterExtension` before annotation extension.
 
 So if you have 3rd party extension which needs to be executed BEFORE guicey extensions, you can use field declaration.
+
+!!! note
+    Junit 5 intentionally shuffle `@RegisterExtension` extensions order, but you can always order them with
+    `@Order` annotation.
 
 ## Junit nested classes
 
