@@ -1,0 +1,2247 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="Dropwizard guice integration">
+      
+      
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/5.3.0/guide/configuration/">
+      
+      
+        <meta name="author" content="Vyacheslav Rusakov">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-4.6.3">
+    
+    
+      
+        <title>Configuration - Dropwizard-guicey</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.adb8469c.css">
+      
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.86422ebf.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-93174150-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#configuration" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://xvik.github.io/dropwizard-guicey/5.3.0" title="Dropwizard-guicey" aria-label="Dropwizard-guicey" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              Dropwizard-guicey
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Configuration
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" aria-label="search" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+        
+
+  
+
+<nav class="md-tabs md-tabs--active" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  <li class="md-tabs__item">
+    
+      <a href="../.." class="md-tabs__link">
+        Home
+      </a>
+    
+  </li>
+
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="./" class="md-tabs__link md-tabs__link--active">
+          User guide
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../installers/resource/" class="md-tabs__link">
+          Installers
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../extras/bom/" class="md-tabs__link">
+          Modules
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../examples/authentication/" class="md-tabs__link">
+          Examples
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../../about/release-notes/" class="md-tabs__link">
+          About
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://xvik.github.io/dropwizard-guicey/5.3.0" title="Dropwizard-guicey" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Dropwizard-guicey
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../getting-started/" title="Getting started" class="md-nav__link">
+      Getting started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../concepts/" title="Concepts overview" class="md-nav__link">
+      Concepts overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../guice/" title="Guice" class="md-nav__link">
+      Guice
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../tests/" title="Testing" class="md-nav__link">
+      Testing
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../decomposition/" title="Decomposition" class="md-nav__link">
+      Decomposition
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7" type="checkbox" id="nav-7" checked>
+    
+    <label class="md-nav__link" for="nav-7">
+      User guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-7">
+        User guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Configuration
+      </label>
+    
+    <a href="./" title="Configuration" class="md-nav__link md-nav__link--active">
+      Configuration
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#main-bundle" class="md-nav__link">
+    Main bundle
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-items" class="md-nav__link">
+    Configuration items
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disable-items" class="md-nav__link">
+    Disable items
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#items-de-duplication" class="md-nav__link">
+    Items de-duplication
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#guiceyoptions" class="md-nav__link">
+    GuiceyOptions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installersoptions" class="md-nav__link">
+    InstallersOptions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injector" class="md-nav__link">
+    Injector
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle" class="md-nav__link">
+    Lifecycle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostic-tools" class="md-nav__link">
+    Diagnostic tools
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hooks-related" class="md-nav__link">
+    Hooks-related
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guicey-bundle" class="md-nav__link">
+    Guicey bundle
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    Initialization
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run" class="md-nav__link">
+    Run
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hooks" class="md-nav__link">
+    Hooks
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../extensions/" title="Extensions" class="md-nav__link">
+      Extensions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../web/" title="Web" class="md-nav__link">
+      Web
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../modules/" title="Extra integrations" class="md-nav__link">
+      Extra integrations
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../bundles/" title="Bundles" class="md-nav__link">
+      Bundles
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../yaml-values/" title="Yaml values" class="md-nav__link">
+      Yaml values
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-7" type="checkbox" id="nav-7-7">
+    
+    <label class="md-nav__link" for="nav-7-7">
+      Guice
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-7">
+        Guice
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/injector/" title="Injector" class="md-nav__link">
+      Injector
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/bindings/" title="Bindings" class="md-nav__link">
+      Bindings
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/scopes/" title="Scopes" class="md-nav__link">
+      Scopes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/module-autowiring/" title="Module autowiring" class="md-nav__link">
+      Module autowiring
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/module-analysis/" title="Modules analysis" class="md-nav__link">
+      Modules analysis
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/override/" title="Override bindings" class="md-nav__link">
+      Override bindings
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../guice/servletmodule/" title="ServletModule" class="md-nav__link">
+      ServletModule
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-8" type="checkbox" id="nav-7-8">
+    
+    <label class="md-nav__link" for="nav-7-8">
+      Diagnostic
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-8">
+        Diagnostic
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/diagnostic-tools/" title="Tools" class="md-nav__link">
+      Tools
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/configuration-report/" title="Configuration" class="md-nav__link">
+      Configuration
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/configuration-model/" title="Configuration model" class="md-nav__link">
+      Configuration model
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/installers-report/" title="Installers" class="md-nav__link">
+      Installers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/yaml-values-report/" title="Yaml values" class="md-nav__link">
+      Yaml values
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/lifecycle-report/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/guice-report/" title="Guice" class="md-nav__link">
+      Guice
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/aop-report/" title="AOP" class="md-nav__link">
+      AOP
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/web-report/" title="Web" class="md-nav__link">
+      Web
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../diagnostic/jersey-report/" title="Jersey" class="md-nav__link">
+      Jersey
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-7-9" type="checkbox" id="nav-7-9">
+    
+    <label class="md-nav__link" for="nav-7-9">
+      Test
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-7-9">
+        Test
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../test/overview/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../test/junit5/" title="Junit 5" class="md-nav__link">
+      Junit 5
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../test/spock/" title="Spock" class="md-nav__link">
+      Spock
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../test/junit4/" title="Junit 4" class="md-nav__link">
+      Junit 4
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../lifecycle/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../scan/" title="Classpath scan" class="md-nav__link">
+      Classpath scan
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../installers/" title="Installers" class="md-nav__link">
+      Installers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../ordering/" title="Ordering" class="md-nav__link">
+      Ordering
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../options/" title="Options" class="md-nav__link">
+      Options
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../events/" title="Events" class="md-nav__link">
+      Events
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../disables/" title="Disables" class="md-nav__link">
+      Disables
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../deduplication/" title="De-duplication" class="md-nav__link">
+      De-duplication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../commands/" title="Commands" class="md-nav__link">
+      Commands
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../hooks/" title="Hooks" class="md-nav__link">
+      Hooks
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../shared/" title="Shared state" class="md-nav__link">
+      Shared state
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../hk2/" title="HK2" class="md-nav__link">
+      HK2
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-8" type="checkbox" id="nav-8">
+    
+    <label class="md-nav__link" for="nav-8">
+      Installers
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-8">
+        Installers
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/resource/" title="Resource" class="md-nav__link">
+      Resource
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/task/" title="Task" class="md-nav__link">
+      Task
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/managed/" title="Managed" class="md-nav__link">
+      Managed
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/lifecycle/" title="Lifecycle" class="md-nav__link">
+      Lifecycle
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/healthcheck/" title="Health check" class="md-nav__link">
+      Health check
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/jersey-ext/" title="Jersey extension" class="md-nav__link">
+      Jersey extension
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/jersey-feature/" title="Jersey feature" class="md-nav__link">
+      Jersey feature
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/eager/" title="Eager singleton" class="md-nav__link">
+      Eager singleton
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/plugin/" title="Plugin" class="md-nav__link">
+      Plugin
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/servlet/" title="Web servlet" class="md-nav__link">
+      Web servlet
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/filter/" title="Web filter" class="md-nav__link">
+      Web filter
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../installers/listener/" title="Web listener" class="md-nav__link">
+      Web listener
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-9" type="checkbox" id="nav-9">
+    
+    <label class="md-nav__link" for="nav-9">
+      Modules
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-9">
+        Modules
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/bom/" title="BOM" class="md-nav__link">
+      BOM
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/admin-rest/" title="Admin REST" class="md-nav__link">
+      Admin REST
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/lifecycle-annotations/" title="Lifecycle annotations" class="md-nav__link">
+      Lifecycle annotations
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/eventbus/" title="Guava EventBus" class="md-nav__link">
+      Guava EventBus
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/jdbi/" title="JDBI" class="md-nav__link">
+      JDBI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/jdbi3/" title="JDBI3" class="md-nav__link">
+      JDBI3
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/spa/" title="SPA" class="md-nav__link">
+      SPA
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/gsp/" title="Server Pages" class="md-nav__link">
+      Server Pages
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../extras/validation/" title="Validation" class="md-nav__link">
+      Validation
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-10" type="checkbox" id="nav-10">
+    
+    <label class="md-nav__link" for="nav-10">
+      Examples
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-10">
+        Examples
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/authentication/" title="Authentication" class="md-nav__link">
+      Authentication
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/governator/" title="Governator" class="md-nav__link">
+      Governator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/hibernate/" title="Hibernate" class="md-nav__link">
+      Hibernate
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/eventbus/" title="EventBus" class="md-nav__link">
+      EventBus
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi/" title="JDBI" class="md-nav__link">
+      JDBI
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../examples/jdbi3/" title="JDBI3" class="md-nav__link">
+      JDBI3
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-11" type="checkbox" id="nav-11">
+    
+    <label class="md-nav__link" for="nav-11">
+      About
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-11">
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/release-notes/" title="Release notes" class="md-nav__link">
+      Release notes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/compatibility/" title="Compatibility" class="md-nav__link">
+      Compatibility
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/history/" title="Version history" class="md-nav__link">
+      Version history
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/support/" title="Support" class="md-nav__link">
+      Support
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../about/license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#main-bundle" class="md-nav__link">
+    Main bundle
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-items" class="md-nav__link">
+    Configuration items
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disable-items" class="md-nav__link">
+    Disable items
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#items-de-duplication" class="md-nav__link">
+    Items de-duplication
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#guiceyoptions" class="md-nav__link">
+    GuiceyOptions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installersoptions" class="md-nav__link">
+    InstallersOptions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injector" class="md-nav__link">
+    Injector
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle" class="md-nav__link">
+    Lifecycle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diagnostic-tools" class="md-nav__link">
+    Diagnostic tools
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hooks-related" class="md-nav__link">
+    Hooks-related
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guicey-bundle" class="md-nav__link">
+    Guicey bundle
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    Initialization
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run" class="md-nav__link">
+    Run
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hooks" class="md-nav__link">
+    Hooks
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/guide/configuration.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h1>
+<p>Guicey main dropwizard bundle must be registered:</p>
+<div class="codehilite"><pre><span></span><code><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">Bootstrap</span><span class="o">&lt;</span><span class="n">Configuration</span><span class="o">&gt;</span> <span class="n">bootstrap</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">bootstrap</span><span class="p">.</span><span class="na">addBundle</span><span class="p">(</span><span class="n">GuiceBundle</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span> 
+            <span class="c1">// &lt;configuration methods&gt;           </span>
+            <span class="p">.</span><span class="na">build</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Guicey could be configured through:</p>
+<ul>
+<li><a href="#main-bundle">Main (dropwizard) bundle</a></li>
+<li><a href="#guicey-bundle">Bundles</a></li>
+<li><a href="#hooks">Hooks</a></li>
+</ul>
+<h2 id="main-bundle">Main bundle<a class="headerlink" href="#main-bundle" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Bundle builder contains shortcuts for all guicey features, so required function may be found only by looking at available methods (and reading javadoc).       </p>
+</div>
+<h3 id="configuration-items">Configuration items<a class="headerlink" href="#configuration-items" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">enableAutoConfig</span><span class="p">(</span><span class="n">String</span><span class="p">...</span> <span class="n">basePackages</span><span class="p">)</span></code></dt>
+<dd>Enable <a href="../scan/">classpath scan</a> for automatic extensions registration, custom installers search and commands search (if enabled) </dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">modules</span><span class="p">(</span><span class="n">Module</span><span class="p">...</span> <span class="n">modules</span><span class="p">)</span></code></dt>
+<dd>
+<p>Guice modules registration</p>
+<div class="admonition note">
+<p>Here guice modules are created in initialization phase, when <code>Configuration</code> and <code>Environment</code> are
+not yet available. If they are required for module either use <a href="../guice/module-autowiring/">"Aware" interfaces</a> 
+or register module in <a href="../bundles/#guicey-bundles">GuiceyBundle's</a> run method (under run phase).    </p>
+</div>
+</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">modulesOverride</span><span class="p">(</span><span class="n">Module</span><span class="p">...</span> <span class="n">modules</span><span class="p">)</span></code></dt>
+<dd>
+<p><a href="../guice/override/">Overriding</a> registered guice modules bindings (using guice <code>Modules.override()</code> api)</p>
+<div class="admonition warning">
+<p>Extensions are <a href="../guice/module-analysis/#extensions-recognition">not recognized</a> in overriding modules (intentionally)!</p>
+</div>
+</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">installers</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">FeatureInstaller</span><span class="o">&gt;</span><span class="p">...</span> <span class="n">installers</span><span class="p">)</span></code></dt>
+<dd>
+<p>Guicey extension <a href="../installers/">installers</a> registration. Required if you have custom installers or
+to specify installers after disabling all default installers: <code class="codehilite"><span class="p">.</span><span class="na">noDefaultInstallers</span><span class="p">()</span></code></p>
+<div class="admonition note">
+<p>Custom installers are registered automatically when <a href="../scan/">classpath scan</a> is enabled.  </p>
+</div>
+</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">extensions</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span> <span class="n">extensionClasses</span><span class="p">)</span></code></dt>
+<dd>Manual extensions registration. May be used together with <a href="../scan/">classpath scan</a> and 
+<a href="../guice/module-analysis/#extensions-recognition">binding extensions</a></dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">extensionsOptional</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span> <span class="n">extensionClasses</span><span class="p">)</span></code></dt>
+<dd>Optional extensions registration. The difference with <code>.extensions</code> is that such extensions
+will be automatically disabled if there are no compatible installers (instead of throwing exception).  </dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">bundles</span><span class="p">(</span><span class="n">GuiceyBundle</span><span class="p">...</span> <span class="n">bundles</span><span class="p">)</span></code></dt>
+<dd><a href="../bundles/#guicey-bundles">Guicey bundles</a> registration. </dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">bundleLookup</span><span class="p">(</span><span class="n">GuiceyBundleLookup</span> <span class="n">bundleLookup</span><span class="p">)</span></code></dt>
+<dd>Custom <a href="../bundles/#bundle-lookup">lookup mechanism</a> for guicey bundles. By default, lookup 
+<a href="../bundles/#system-property-lookup">by system property</a> and <a href="../bundles/#service-loader-lookup">ServiceLoader</a> 
+are enabled. To disable all lookups use: <code class="codehilite"><span class="p">.</span><span class="na">disableBundleLookup</span><span class="p">()</span></code></dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">dropwizardBundles</span><span class="p">(</span><span class="n">ConfiguredBundle</span><span class="p">...</span> <span class="n">bundles</span><span class="p">)</span></code></dt>
+<dd>Shortcut for <a href="../bundles/#dropwizard-bundles">dropwizard bundles</a> registration. This way guicey could apply 
+<a href="../disables/#disable-dropwizard-bundles">disable</a> and <a href="../deduplication/#dropwizard-bundles">de-duplication</a> rules
+to registered bundles (and, also, registered bundles appear in <a href="../diagnostic/diagnostic-tools/">reports</a>)</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">searchCommands</span><span class="p">()</span></code></dt>
+<dd><a href="../commands/#automatic-installation">Search and register</a> custom dropwizard commands. Requires enabled <a href="../scan/">classpath scan</a>   </dd>
+</dl>
+<h3 id="disable-items">Disable items<a class="headerlink" href="#disable-items" title="Permanent link">&para;</a></h3>
+<p>Registered configuration items <a href="../disables/">could be disabled</a>. This is mostly useful for tests where
+entire application parts <a href="../test/overview/#disables">could be disabled</a> and replaced (e.g. with mocks) this way.
+Could be also useful to "hack" third party items.</p>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">disableInstallers</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">FeatureInstaller</span><span class="o">&gt;</span><span class="p">...</span> <span class="n">installers</span><span class="p">)</span></code></dt>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">disableExtensions</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span> <span class="n">extensions</span><span class="p">)</span></code></dt>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">disableModules</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Module</span><span class="o">&gt;</span><span class="p">...</span> <span class="n">modules</span><span class="p">)</span></code></dt>
+<dd>
+<div class="admonition warning">Affects <a href="../guice/module-analysis/#transitive-modules">transitive guice modules</a></div>
+</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">disableBundles</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">GuiceyBundle</span><span class="o">&gt;</span><span class="p">...</span> <span class="n">bundles</span><span class="p">)</span></code></dt>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">disableDropwizardBundles</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">ConfiguredBundle</span><span class="o">&gt;</span><span class="p">...</span> <span class="n">bundles</span><span class="p">)</span></code></dt>
+<dd>
+<div class="admonition warning">Affects only dropwizard bundles registered <a href="../bundles/#dropwizard-bundles">through guicey api</a> and 
+their <a href="../bundles/#transitive-bundles-tracking">transitive bundles</a></div>
+</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">disable</span><span class="p">(</span><span class="n">Predicate</span><span class="o">&lt;</span><span class="n">ItemInfo</span><span class="o">&gt;</span><span class="p">...</span> <span class="n">predicates</span><span class="p">)</span></code></dt>
+<dd>Custom <a href="../disables/#disable-by-predicate">disable predicate</a> useful to disable groups of items (by some sign)</dd>
+</dl>
+<h3 id="items-de-duplication">Items de-duplication<a class="headerlink" href="#items-de-duplication" title="Permanent link">&para;</a></h3>
+<p>Guiey detects instances of the same type (bundles, modules). By default, two instances 
+considered as <a href="../deduplication/">duplicates</a> if they are equal, so duplicates could be controlled with proper 
+equals method implementation. When it's not possible, custom de-duplication <a href="../deduplication/#general-unique-logic">implementation</a> 
+could be used.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Special <a href="../deduplication/#equals-method">base classes</a> are available with correct equals implementations:
+<code>UniqueModule</code> (for guice modules) and <code>UniqueGuiceyBundle</code> (for bundles).</p>
+</div>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">duplicateConfigDetector</span><span class="p">(</span><span class="n">DuplicateConfigDetector</span> <span class="n">detector</span><span class="p">)</span></code></dt>
+<dd>
+<div class="admonition note">Special implementation provided to replicate <a href="../deduplication/#legacy-mode">legacy guicey behaviour</a> 
+"one instance per class": <code class="codehilite"><span class="n">duplicateConfigDetector</span><span class="p">(</span><span class="k">new</span> <span class="n">LegacyModeDuplicatesDetector</span><span class="p">())</span></code></div>
+</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">uniqueItems</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span> <span class="n">configurationItems</span><span class="p">)</span></code></dt>
+<dd>Register special de-duplication <a href="../deduplication/#unique-items">implementation</a> which will allow only one instance of provided types. </dd>
+</dl>
+<h3 id="options">Options<a class="headerlink" href="#options" title="Permanent link">&para;</a></h3>
+<p>Guicey generic <a href="../options/">options mechanism</a> may be used for guicey (or other 3<sup>rd</sup> party bundles) fine-tuning.</p>
+<div class="admonition note">
+<p>Guicey option enums: <code>GuiceyOptions</code> and <code>InstallersOptions</code> </p>
+</div>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">option</span><span class="p">(</span><span class="n">K</span> <span class="n">option</span><span class="p">,</span> <span class="n">Object</span> <span class="n">value</span><span class="p">)</span></code></dt>
+<dd>Set option value (override default)</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">options</span><span class="p">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">Enum</span><span class="p">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">options</span><span class="p">)</span></code></dt>
+<dd>Set <a href="../options/#options-lookup">multiple options</a> at once (e.g. map system properties as option values)</dd>
+</dl>
+<h4 id="guiceyoptions">GuiceyOptions<a class="headerlink" href="#guiceyoptions" title="Permanent link">&para;</a></h4>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some <a href="../options/">options</a> are configured through main bundle shortcut methods and so they are not 
+shown in the table below.           </p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BindConfigurationByPath</td>
+<td>Boolean</td>
+<td>true</td>
+<td><a href="../yaml-values/">Introspect configuration</a> to be able to bind separate values</td>
+</tr>
+<tr>
+<td>TrackDropwizardBundles</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Recognize <a href="../bundles/#transitive-bundles-tracking">transitive</a> dropwizard bundles (for bundles registered through guicey api)</td>
+</tr>
+<tr>
+<td>AnalyzeGuiceModules</td>
+<td>Boolean</td>
+<td>true</td>
+<td><a href="../guice/module-analysis/#extensions-recognition">Extension recognition</a> in guice bindings, <a href="../guice/module-analysis/#transitive-modules">transitive modules</a> disable support</td>
+</tr>
+<tr>
+<td>GuiceFilterRegistration</td>
+<td><code>EnumSet&lt;DispatcherType&gt;</code></td>
+<td>[REQUEST]</td>
+<td><a href="../guice/servletmodule/">Guice filter</a> registration options</td>
+</tr>
+<tr>
+<td>UseHkBridge</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Activates <a href="../hk2/#hk2-guice-bridge">HK2-guice bridge</a> (bridge dependency must be avaiable in classpath)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="installersoptions">InstallersOptions<a class="headerlink" href="#installersoptions" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DenyServletRegistrationWithClash</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Throw <a href="../../installers/servlet/#recognition">error</a> if <code>@WebServlet</code> annotated servlets clash with already registered servlets</td>
+</tr>
+<tr>
+<td>DenySessionListenersWithoutSession</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Throw <a href="../../installers/listener/#recognition">error</a> for registered <code>SessionListener</code> (annotated <code>@WebListener</code>) if sessions support not enabled (default)</td>
+</tr>
+<tr>
+<td>ForceSingletonForJerseyExtensions</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Force <a href="../../installers/resource/#recognition">singleton</a> scope for registered jersey extensions (resources, exception handlers etc) if no explicit scope declared</td>
+</tr>
+</tbody>
+</table>
+<h3 id="injector">Injector<a class="headerlink" href="#injector" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">injectorFactory</span><span class="p">(</span><span class="n">InjectorFactory</span> <span class="n">injectorFactory</span><span class="p">)</span></code></dt>
+<dd>Use custom <a href="../guice/injector/#injector-factory">injector factory</a> implementation. May be useful for tests or for <a href="../test/overview/#overriding-overridden-beans">integration</a>
+of 3<sup>rd</sup> paty library (like <a href="../../examples/governator/">governator</a>)</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">build</span><span class="p">(</span><span class="n">Stage</span> <span class="n">stage</span><span class="p">)</span></code></dt>
+<dd>Build bundle with custom <a href="../guice/injector/#injector-stage">guice stage</a> (by default, <code>Production</code>) </dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">build</span><span class="p">()</span></code></dt>
+<dd>Build bundle with default guice stage</dd>
+</dl>
+<h3 id="lifecycle">Lifecycle<a class="headerlink" href="#lifecycle" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">listen</span><span class="p">(</span><span class="n">GuiceyLifecycleListener</span><span class="p">...</span> <span class="n">listeners</span><span class="p">)</span></code></dt>
+<dd>Listen for guicey lifecycle <a href="../events/#listeners">events</a></dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">noGuiceFilter</span><span class="p">()</span></code></dt>
+<dd>
+<div class="admonition danger">This will <a href="../guice/servletmodule/#disable-servletmodule-support">remove</a> guice request and session scopes and also
+it would become impossible to use <code>ServletModule</code>s</div>
+</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">strictScopeControl</span><span class="p">()</span></code></dt>
+<dd>
+<div class="admonition note">Bean target container is defined with <code>@JerseyManaged</code> and <code>@GuiceManaged</code> annotations
+or default (either guice or <a href="../hk2/#use-hk2-for-jersey-extensions">hk2 used as default</a> (for jersey extensions))</div>
+</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">useHK2ForJerseyExtensions</span><span class="p">()</span></code></dt>
+<dd>
+<div class="admonition danger">Beans managed by HK2 can't use guice AOP, so AOP-based features will not work with such beans      </div>
+</dd>
+</dl>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>In the next version guicey will get rid of HK2 and so all HK2 related options will be removed
+(only guice will be used). Also, <code>.noGuiceFilter()</code> will be removed because request scope will be required.  </p>
+</div>
+<h3 id="diagnostic-tools">Diagnostic tools<a class="headerlink" href="#diagnostic-tools" title="Permanent link">&para;</a></h3>
+<p>Guicey provide many bundled console reports to help with problems diagnostic (or to simply clarify how application works)
+during development, like:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">.</span><span class="na">printDiagnosticInfo</span><span class="p">()</span>
+</code></pre></div>
+
+<p>See <a href="../diagnostic/diagnostic-tools/">diagnostic section</a> for a full list of available reports.</p>
+<h3 id="hooks-related">Hooks-related<a class="headerlink" href="#hooks-related" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">hookAlias</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="p">,</span> <span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">GuiceyConfigurationHook</span><span class="o">&gt;</span> <span class="n">hook</span><span class="p">)</span></code></dt>
+<dd><a href="../hooks/#diagnostic">Hook alias</a> registration for simplified usage (various diagnostic tools quick enabling with a system property)</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">withSharedState</span><span class="p">(</span><span class="n">Consumer</span><span class="o">&lt;</span><span class="n">SharedConfigurationState</span><span class="o">&gt;</span> <span class="n">stateAction</span><span class="p">)</span></code></dt>
+<dd>This method is mainly useful for hooks, because it's the only way to access application
+<a href="../shared/">shared state</a> from <a href="#hooks">hook</a>.</dd>
+</dl>
+<h2 id="guicey-bundle">Guicey bundle<a class="headerlink" href="#guicey-bundle" title="Permanent link">&para;</a></h2>
+<p><code>GuiceyBundle</code>s are like dropwizard bundles, but with <a href="../bundles/">greater abilities</a>. Supposed to be used instead of 
+dropwizard bundles. Bundles are registered either directly (in main bundle or other guicey bundle)
+ or resolved by bundles lookup.</p>
+<h3 id="initialization">Initialization<a class="headerlink" href="#initialization" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBundle</span> <span class="kd">implements</span> <span class="n">GuiceyBundle</span> <span class="p">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">GuiceyBootstrap</span> <span class="n">bootstrap</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">}</span>      
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Bundle initialization share many methods in common with <a href="#main-bundle">main guice bundle</a>:</p>
+<p><code class="codehilite"><span class="p">.</span><span class="na">modules</span><span class="p">(</span><span class="n">Module</span><span class="p">...</span> <span class="n">modules</span><span class="p">)</span></code><br />
+<code class="codehilite"><span class="p">.</span><span class="na">modulesOverride</span><span class="p">(</span><span class="n">Module</span><span class="p">...</span> <span class="n">modules</span><span class="p">)</span></code> <br />
+<code class="codehilite"><span class="p">.</span><span class="na">installers</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">FeatureInstaller</span><span class="o">&gt;</span><span class="p">...</span> <span class="n">installers</span><span class="p">)</span></code> <br />
+<code class="codehilite"><span class="p">.</span><span class="na">extensions</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span> <span class="n">extensionClasses</span><span class="p">)</span></code>
+<code class="codehilite"><span class="p">.</span><span class="na">extensionsOptional</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span> <span class="n">extensionClasses</span><span class="p">)</span></code>   <br />
+<code class="codehilite"><span class="p">.</span><span class="na">bundles</span><span class="p">(</span><span class="n">GuiceyBundle</span><span class="p">...</span> <span class="n">bundles</span><span class="p">)</span></code>    <br />
+<code class="codehilite"><span class="p">.</span><span class="na">dropwizardBundles</span><span class="p">(</span><span class="n">ConfiguredBundle</span><span class="p">...</span> <span class="n">bundles</span><span class="p">)</span></code></p>
+<p><code class="codehilite"><span class="p">.</span><span class="na">disableInstallers</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">FeatureInstaller</span><span class="o">&gt;</span><span class="p">...</span> <span class="n">installers</span><span class="p">)</span></code><br />
+<code class="codehilite"><span class="p">.</span><span class="na">disableExtensions</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span> <span class="n">extensions</span><span class="p">)</span></code><br />
+<code class="codehilite"><span class="p">.</span><span class="na">disableModules</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Module</span><span class="o">&gt;</span><span class="p">...</span> <span class="n">modules</span><span class="p">)</span></code></p>
+<div class="admonition note">
+<p>No <a href="../disables/#disable-bundles">disable</a> for bundles because at this moment some bundles were already executed and so 
+real state could be inconsistent with configuration (and highly depend on processing order). </p>
+</div>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">listen</span><span class="p">(</span><span class="n">GuiceyLifecycleListener</span><span class="p">...</span> <span class="n">listeners</span><span class="p">)</span></code></dt>
+<dd>
+<div class="admonition warning"><a href="../events/#listeners">Listener</a> registered in bundle will "hear" only events starting with <code>GuiceyLifecycle#BundlesInitialized</code> </div>
+</dd>
+</dl>
+<p>Shortcuts:</p>
+<p><code class="codehilite"><span class="p">.</span><span class="na">bootstrap</span><span class="p">()</span></code> <br />
+<code class="codehilite"><span class="p">.</span><span class="na">application</span><span class="p">()</span></code>   </p>
+<p><a href="../options/">Option</a> value access:</p>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">option</span><span class="p">(</span><span class="n">T</span> <span class="n">option</span><span class="p">)</span></code></dt>
+<dd>
+<div class="admonition warning">Bundle can't declare option value because it would make options state not predictable
+(highly dependent on initialization order)  </div>
+</dd>
+</dl>
+<p><a href="../shared/">Shared state</a> access:</p>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">shareState</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">key</span><span class="p">,</span> <span class="n">Object</span> <span class="n">value</span><span class="p">)</span></code></dt>
+<dd>Declare shared state (<a href="../bundles/#parent-child-scenario">primary module</a> scenario)</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">sharedState</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">key</span><span class="p">,</span> <span class="n">Supplier</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">defaultValue</span><span class="p">)</span></code></dt>
+<dd>Get or init shared state (<a href="../bundles/#equal-communication-scenario">equal bundles</a> scenario)</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">sharedStateOrFail</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">key</span><span class="p">,</span> <span class="n">String</span> <span class="n">message</span><span class="p">,</span> <span class="n">Object</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span></code></dt>
+<dd>Shortcut to get shared state or immediately fail if not declared    </dd>
+</dl>
+<h3 id="run">Run<a class="headerlink" href="#run" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBundle</span> <span class="kd">implements</span> <span class="n">GuiceyBundle</span> <span class="p">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="p">(</span><span class="n">GuiceyEnvironment</span> <span class="n">environment</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">}</span>      
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Everything is configured under initialization phase. On run phase
+bundle allows only modules registration and extensions disable.  </p>
+<p>Shortcuts:</p>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">configuration</span><span class="p">()</span></code></dt>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">environment</span><span class="p">()</span></code></dt>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">application</span><span class="p">()</span></code></dt>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="n">Object</span><span class="p">...</span> <span class="n">items</span><span class="p">)</span></code></dt>
+<dd>Shortcut for <code class="codehilite"><span class="n">environment</span><span class="p">().</span><span class="na">jersey</span><span class="p">().</span><span class="na">register</span><span class="p">(</span><span class="n">Object</span><span class="p">)</span></code></dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span> <span class="n">items</span><span class="p">)</span></code></dt>
+<dd>Shortcut for <code class="codehilite"><span class="n">environment</span><span class="p">().</span><span class="na">jersey</span><span class="p">().</span><span class="na">register</span><span class="p">(</span><span class="n">Class</span><span class="p">)</span></code></dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">manage</span><span class="p">(</span><span class="n">Managed</span> <span class="n">managed</span><span class="p">)</span></code></dt>
+<dd>Shortcut for <code class="codehilite"><span class="n">environment</span><span class="p">().</span><span class="na">lifecycle</span><span class="p">().</span><span class="na">manage</span><span class="p">()</span></code></dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">listenServer</span><span class="p">(</span><span class="n">ServerLifecycleListener</span> <span class="n">listener</span><span class="p">)</span></code></dt>
+<dd>Shortcut for <code class="codehilite"><span class="n">environment</span><span class="p">().</span><span class="na">lifecycle</span><span class="p">().</span><span class="na">addServerLifecycleListener</span><span class="p">()</span></code></dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">listenJetty</span><span class="p">(</span><span class="n">LifeCycle</span><span class="p">.</span><span class="na">Listener</span> <span class="n">listener</span><span class="p">)</span></code></dt>
+<dd>Shortcut for <code class="codehilite"><span class="n">environment</span><span class="p">().</span><span class="na">lifecycle</span><span class="p">().</span><span class="na">addLifeCycleListener</span><span class="p">()</span></code></dd>
+</dl>
+<p><a href="../yaml-values/">Extended configuration</a> access:</p>
+<p><code class="codehilite"><span class="p">.</span><span class="na">configuration</span><span class="p">(</span><span class="n">String</span> <span class="n">yamlPath</span><span class="p">)</span></code><br />
+<code class="codehilite"><span class="p">.</span><span class="na">configuration</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">type</span><span class="p">)</span></code><br />
+<code class="codehilite"><span class="p">.</span><span class="na">configurations</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">type</span><span class="p">)</span></code><br />
+<code class="codehilite"><span class="p">.</span><span class="na">configurationTree</span><span class="p">()</span></code>   </p>
+<p>Modules registration:</p>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">modules</span><span class="p">(</span><span class="n">Module</span><span class="p">...</span> <span class="n">modules</span><span class="p">)</span></code></dt>
+<dd>
+<div class="admonition note">Only here modules may be created directly with configuration values</div>
+</dd>
+</dl>
+<p><code class="codehilite"><span class="p">.</span><span class="na">modulesOverride</span><span class="p">(</span><span class="n">Module</span><span class="p">...</span> <span class="n">modules</span><span class="p">)</span></code></p>
+<p><a href="../disables/">Disables</a>:</p>
+<p><code class="codehilite"><span class="p">.</span><span class="na">disableExtensions</span><span class="p">(</span><span class="kd">final</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span><span class="p">...</span> <span class="n">extensions</span><span class="p">)</span></code><br />
+<code class="codehilite"><span class="p">.</span><span class="na">disableModules</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Module</span><span class="o">&gt;</span><span class="p">...</span> <span class="n">modules</span><span class="p">)</span></code>  </p>
+<p><a href="../options/">Option</a> value access:</p>
+<p><code class="codehilite"><span class="p">.</span><span class="na">option</span><span class="p">(</span><span class="n">T</span> <span class="n">option</span><span class="p">)</span></code></p>
+<p><a href="../shared/">Shared state</a>:</p>
+<p><code class="codehilite"><span class="p">.</span><span class="na">sharedStateOrFail</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">key</span><span class="p">,</span> <span class="n">String</span> <span class="n">message</span><span class="p">,</span> <span class="n">Object</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span></code><br />
+<code class="codehilite"><span class="p">.</span><span class="na">sharedState</span><span class="p">(</span><span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">key</span><span class="p">)</span></code></p>
+<p>Guicey <a href="../events/#listeners">listeners</a>:</p>
+<dl>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">listen</span><span class="p">(</span><span class="n">GuiceyLifecycleListener</span><span class="p">...</span> <span class="n">listeners</span><span class="p">)</span></code></dt>
+<dd>
+<div class="admonition warning">Listener registered in run phase will "hear" only events starting 
+with <code>GuiceyLifecycle#BundlesStarted</code> </div>
+</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">onGuiceyStartup</span><span class="p">(</span><span class="n">GuiceyStartupListener</span> <span class="n">listener</span><span class="p">)</span></code></dt>
+<dd>Shortcut for manual configuration under run phase with available injector</dd>
+<dt><code class="codehilite"><span class="p">.</span><span class="na">onApplicationStartup</span><span class="p">(</span><span class="n">ApplicationStartupListener</span> <span class="n">listener</span><span class="p">)</span></code></dt>
+<dd>
+<p>Shortcut for manual actions after complete application start (jetty started) </p>
+<div class="admonition note">
+<p>It is also called after guicey initialization in lightweight guicey tests</p>
+</div>
+</dd>
+</dl>
+<h2 id="hooks">Hooks<a class="headerlink" href="#hooks" title="Permanent link">&para;</a></h2>
+<p>Guicey <a href="../hooks/">hooks</a> are registered statically <strong>before</strong> main guice bundle registration:</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyHook</span> <span class="kd">implements</span> <span class="n">GuiceyConfigurationHook</span> <span class="p">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">configure</span><span class="p">(</span><span class="kd">final</span> <span class="n">GuiceBundle</span><span class="p">.</span><span class="na">Builder</span> <span class="n">builder</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">builder</span><span class="p">.</span><span class="na">printDiagnosticInfo</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>    
+
+<span class="c1">// static registration</span>
+<span class="k">new</span> <span class="n">MyHook</span><span class="p">().</span><span class="na">register</span><span class="p">()</span> 
+</code></pre></div>
+
+<p>On execution hook receives <em>the same</em> builder as used in main <code>GuiceBundle</code>. 
+So hooks could configure <em>everything</em>.</p>
+<p>Hooks are intended to be used in tests and to implement a pluggable <a href="../hooks/#diagnostic">diagnostic tools</a> 
+activated with system property <code>-Dguicey.hooks=...</code> (as an example, see guicey <code>DiagnosticHook</code>).</p>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../../decomposition/" title="Decomposition" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Decomposition
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../extensions/" title="Extensions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Extensions
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2014-2021 Vyacheslav Rusakov
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org" target="_blank" rel="noopener">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/xvik" target="_blank" rel="noopener" title="github" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/vyarus" target="_blank" rel="noopener" title="twitter" class="md-footer-social__link fa fa-twitter"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.c33a9706.js"></script>
+      
+      <script>app.initialize({version:"1.1",url:{base:"../.."}})</script>
+      
+    
+  </body>
+</html>
