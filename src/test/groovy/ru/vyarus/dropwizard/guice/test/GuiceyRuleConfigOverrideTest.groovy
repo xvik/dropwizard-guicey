@@ -1,15 +1,10 @@
 package ru.vyarus.dropwizard.guice.test
 
-import com.google.inject.Key
-import io.dropwizard.setup.Environment
-import org.junit.Rule
-import org.junit.rules.ExternalResource
-import org.junit.rules.RuleChain
+
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import spock.lang.Specification
 
 import static io.dropwizard.testing.ConfigOverride.config
-
 
 /**
  * @author Brian Wehrle
@@ -24,7 +19,7 @@ class GuiceyRuleConfigOverrideTest extends Specification {
 
     @SuppressWarnings('GrDeprecatedAPIUsage')
     def "Test config override not applied in init"() {
-        GuiceyAppRule RULE = new GuiceyAppRule<>(AutoScanApplication,
+        GuiceyAppRule guiceyAppRule = new GuiceyAppRule<>(AutoScanApplication,
                 null,
                 config(CONFIG_PROPERTY, CONFIG_PROPERTY_VALUE));
 
@@ -33,12 +28,12 @@ class GuiceyRuleConfigOverrideTest extends Specification {
     }
 
     def "Test config override applied in before"() {
-        GuiceyAppRule RULE = new GuiceyAppRule<>(AutoScanApplication,
+        GuiceyAppRule guiceyAppRule = new GuiceyAppRule<>(AutoScanApplication,
                 null,
                 config(CONFIG_PROPERTY, CONFIG_PROPERTY_VALUE));
 
         expect: "config override applied after before()"
-        RULE.before()
+        guiceyAppRule.before()
         isPropertyPresent()
     }
 
