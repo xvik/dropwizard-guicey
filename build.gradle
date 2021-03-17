@@ -9,7 +9,7 @@ plugins {
     id 'net.researchgate.release' version '2.8.1'
     id 'com.github.ben-manes.versions' version '0.38.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'ru.vyarus.mkdocs' version '2.0.1'
+    id 'ru.vyarus.mkdocs' version '2.1.0'
 }
 
 sourceCompatibility = 1.8
