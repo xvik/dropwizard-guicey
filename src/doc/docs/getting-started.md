@@ -1,4 +1,4 @@
-# Getting started
+# Setup
 
 !!! note ""
     Getting started guide briefly shows the most commonly used features.
@@ -14,14 +14,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>5.3.0</version>
+  <version>{{ gradle.version }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:5.3.0'
+implementation 'ru.vyarus:dropwizard-guicey:{{ gradle.version }}'
 ```
 
 ### BOM
@@ -36,9 +36,9 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus:dropwizard-guicey:5.3.0')
+    implementation platform('ru.vyarus:dropwizard-guicey:{{ gradle.version }}')
     // uncomment to override dropwizard and its dependencies versions
-//    implementation platform('io.dropwizard:dropwizard-dependencies:2.0.20')
+//    implementation platform('io.dropwizard:dropwizard-dependencies:{{ gradle.dropwizard }}')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
@@ -59,7 +59,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>dropwizard-guicey</artifactId>
-            <version>5.3.0</version>
+            <version>{{ gradle.version }}</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -67,7 +67,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>2.0.20</version>
+            <version>{{ gradle.dropwizard }}</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 

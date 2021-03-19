@@ -22,14 +22,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-validation</artifactId>
-  <version>5.3.0-1</version>
+  <version>{{ gradle.ext }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-validation:5.3.0-1'
+implementation 'ru.vyarus.guicey:guicey-validation:{{ gradle.ext }}'
 ```
 
 See the most recent version in the badge above.

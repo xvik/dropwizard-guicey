@@ -34,14 +34,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi3</artifactId>
-  <version>5.3.0-1</version>
+  <version>{{ gradle.ext }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-jdbi3:5.3.0-1'
+implementation 'ru.vyarus.guicey:guicey-jdbi3:{{ gradle.ext }}'
 ```
 
 See the most recent version in the badge above.

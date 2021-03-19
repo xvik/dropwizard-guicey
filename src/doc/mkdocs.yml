@@ -11,11 +11,16 @@ repo_url: 'https://github.com/xvik/dropwizard-guicey'
 # Copyright
 copyright: 'Copyright &copy; 2014-2021 Vyacheslav Rusakov'
 
+plugins:
+  - search
+  - markdownextradata
+
 # Documentation and theme
 theme:
   name: 'material'
-  feature:
-    tabs: true
+  features:
+    - navigation.tabs
+
 
 # Options
 extra:
@@ -24,13 +29,11 @@ extra:
 #    accent: 'indigo'
 
   social:
-    - type: github
+    - icon: fontawesome/brands/github
       link: https://github.com/xvik
-    - type: twitter
+    - icon: fontawesome/brands/twitter
       link: https://twitter.com/vyarus
 
-plugins:
-  - search
 
 # Google Analytics
 google_analytics:
@@ -59,11 +62,12 @@ dev_addr: 127.0.0.1:3001
 
 nav:
     - Home: index.md
-    - Getting started: getting-started.md
-    - Concepts overview: concepts.md
-    - Guice: guice.md
-    - Testing: tests.md
-    - Decomposition: decomposition.md
+    - Getting started:
+      - Setup: getting-started.md
+      - Concepts overview: concepts.md
+      - Guice: guice.md
+      - Testing: tests.md
+      - Decomposition: decomposition.md
     #- Development tips: dev.md
     - User guide:
       - Configuration: guide/configuration.md
