@@ -94,8 +94,8 @@ github {
 }
 
 mkdocs.publish {
-    docPath = '4.2.2'
-    rootRedirect = true
+    docPath = '4.2.3'
+    rootRedirect = false
 }
 
 pom {
@@ -167,6 +167,7 @@ test {
 
 dependencyUpdates.revision = 'release'
 jacocoTestReport.reports.xml.enabled = true
+release.git.requireBranch = 'dw-1.3'
 
 // disable gradle metadata publishing (because it confuse A LOT)
 tasks.withType(GenerateModuleMetadata) {
