@@ -138,3 +138,5 @@ $RECYCLE.BIN/
 
 # KDE directory preferences
 .directory
+# Java verion manager
+.java-version

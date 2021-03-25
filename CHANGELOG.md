@@ -1,3 +1,5 @@
+* Unify GuiceyAppRule (junit4) behaviour with DropwizardAppRule: config overrides should initialize just 
+  before test and not in the constructor. The issue was causing early evaluation of lazy (deferred) overrides (from #151)
 * Update to dropwizard 1.3.29
 
 ### 4.2.2 (2018-11-26)
