@@ -1,31 +1,31 @@
 plugins {
-    id 'com.gradle.build-scan' version '1.16'
     id 'groovy'
     id 'jacoco'
     id 'project-report'
-    id 'ru.vyarus.java-lib' version '1.1.2'
-    id 'ru.vyarus.github-info' version '1.1.0'
-    id 'ru.vyarus.quality' version '3.3.0'
-    id 'com.jfrog.bintray' version '1.8.4'
-    id 'net.researchgate.release' version '2.7.0'
-    id 'com.github.ben-manes.versions' version '0.20.0'
-    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
-    id 'ru.vyarus.mkdocs' version '1.1.0'
+    id 'ru.vyarus.java-lib' version '2.1.0'
+    id 'ru.vyarus.github-info' version '1.2.0'
+    id 'ru.vyarus.quality' version '4.5.0'
+    id 'com.jfrog.bintray' version '1.8.5'
+    id 'net.researchgate.release' version '2.8.1'
+    id 'com.github.ben-manes.versions' version '0.38.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'ru.vyarus.mkdocs' version '2.1.1'
 }
 
 sourceCompatibility = 1.8
 
 wrapper {
-    gradleVersion = '4.8.1'
+    gradleVersion = '6.3'
 }
 
 ext {
     dropwizard = '1.3.29'
     guice = '4.2.3'
     hk2 = '2.5.0-b32'
+    groovy = '2.5.14'
 }
 
-repositories { jcenter(); mavenCentral(); mavenLocal() }
+repositories { mavenCentral(); mavenLocal() }
 dependencyManagement {
     imports {
         mavenBom "com.google.inject:guice-bom:$guice"
@@ -39,10 +39,23 @@ dependencyManagement {
             exclude 'com.google.inject:guice'
             exclude 'org.glassfish.hk2:hk2-api'
         }
-        dependency 'org.spockframework:spock-core:1.2-groovy-2.5'
-        dependency 'com.github.stefanbirkner:system-rules:1.17.1'
+        dependency 'org.spockframework:spock-core:1.3-groovy-2.5'
+        // groovy bundled with spock (2.5.2) does not work well with java 11
+        dependency "org.codehaus.groovy:groovy:$groovy"
+        dependency "org.codehaus.groovy:groovy-json:$groovy"
+        dependency "org.codehaus.groovy:groovy-macro:$groovy"
+        dependency "org.codehaus.groovy:groovy-nio:$groovy"
+        dependency "org.codehaus.groovy:groovy-sql:$groovy"
+        dependency "org.codehaus.groovy:groovy-templates:$groovy"
+        dependency "org.codehaus.groovy:groovy-test:$groovy"
+        dependency "org.codehaus.groovy:groovy-xml:$groovy"
+
+        dependency 'com.github.stefanbirkner:system-rules:1.19.0'
 
         dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
+
+        // add guicey itself to BOM (for version management)
+        dependency 'ru.vyarus:dropwizard-guicey:${project.version}'
     }
 }
 dependencies {
@@ -53,15 +66,23 @@ dependencies {
     provided 'com.github.spotbugs:spotbugs-annotations:3.1.2'
     provided "org.glassfish.hk2:guice-bridge"
 
-    compile 'com.google.inject:guice'
-    compile 'com.google.inject.extensions:guice-servlet'
-    compile 'io.dropwizard:dropwizard-core'
-    compile 'ru.vyarus:generics-resolver:3.0.0'
+    implementation 'com.google.inject:guice'
+    implementation 'com.google.inject.extensions:guice-servlet'
+    implementation 'io.dropwizard:dropwizard-core'
+    implementation 'ru.vyarus:generics-resolver:3.0.3'
 
-    testCompile 'io.dropwizard:dropwizard-auth'
-    testCompile 'org.glassfish.jersey.ext:jersey-proxy-client'
-    testCompile 'cglib:cglib-nodep:3.2.0'
-    testCompile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
+    testImplementation 'io.dropwizard:dropwizard-auth'
+    testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
+    testImplementation 'cglib:cglib-nodep:3.2.9'
+    testImplementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+}
+
+// dependency management plugin affects spotbugs configuration lowering asm to 7.2 (due to guice bom)
+afterEvaluate {
+    dependencies {
+        spotbugs "com.github.spotbugs:spotbugs:${quality.spotbugsVersion}"
+        spotbugs "org.ow2.asm:asm:9.1"
+    }
 }
 
 group = 'ru.vyarus'
@@ -89,6 +110,12 @@ pom {
             name 'Vyacheslav Rusakov'
             email 'vyarus@gmail.com'
         }
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Automatic-Module-Name': 'ru.vyarus.dropwizard.guicey'
     }
 }
 
@@ -141,16 +168,14 @@ test {
 dependencyUpdates.revision = 'release'
 jacocoTestReport.reports.xml.enabled = true
 
+// disable gradle metadata publishing (because it confuse A LOT)
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+}
 
 task showDependenciesTree(dependsOn: 'htmlDependencyReport', group: 'help', description:
         'Generates dependencies tree report and opens it in browser') {
     doLast {
         java.awt.Desktop.getDesktop().open(file('build/reports/project/dependencies/root.html'))
     }
-}
-
-buildScan {
-    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-    termsOfServiceAgree = 'yes'
-    publishOnFailure()
 }

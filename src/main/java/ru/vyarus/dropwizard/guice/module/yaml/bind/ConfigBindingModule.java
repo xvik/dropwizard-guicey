@@ -100,7 +100,7 @@ public class ConfigBindingModule extends AbstractModule {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "PMD.LinguisticNaming"})
     private void toValue(final LinkedBindingBuilder binding, final Object value) {
         if (value != null) {
             binding.toInstance(value);

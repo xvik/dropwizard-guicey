@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.BeforeRunEvent;
 /**
  * Configuration bindings debug listener. Must be registered with
  * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(
- *ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
+ * ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
  * Could be configured to filter out not required info.
  *
  * @author Vyacheslav Rusakov
