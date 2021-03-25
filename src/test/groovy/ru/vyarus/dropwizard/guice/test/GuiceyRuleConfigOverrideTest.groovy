@@ -1,21 +1,15 @@
 package ru.vyarus.dropwizard.guice.test
 
-import com.google.inject.Key
-import io.dropwizard.setup.Environment
-import org.junit.Rule
-import org.junit.rules.ExternalResource
-import org.junit.rules.RuleChain
+
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import spock.lang.Specification
 
 import static io.dropwizard.testing.ConfigOverride.config
 
-
 /**
  * @author Brian Wehrle
  * @since 05.03.2021
  */
-
 class GuiceyRuleConfigOverrideTest extends Specification {
 
     private final static String CONFIG_PROPERTY = "server.type";
@@ -32,6 +26,7 @@ class GuiceyRuleConfigOverrideTest extends Specification {
         !isPropertyPresent()
     }
 
+    @SuppressWarnings('GrDeprecatedAPIUsage')
     def "Test config override applied in before"() {
         GuiceyAppRule RULE = new GuiceyAppRule<>(AutoScanApplication,
                 null,
@@ -40,6 +35,9 @@ class GuiceyRuleConfigOverrideTest extends Specification {
         expect: "config override applied after before()"
         RULE.before()
         isPropertyPresent()
+
+        cleanup:
+        RULE.after()
     }
 
     def static isPropertyPresent() {
