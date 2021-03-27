@@ -11,6 +11,7 @@ Maven BOM containing guicey and guicey ext modules versions. Also includes dropw
 
 | BOM version | Guicey | Dropwizard | Guice |
 |-------------|--------|------------|-------|
+| 0.7.1       | 4.2.3  | 1.3.29     | 4.2.3 |
 | 0.7.0       | 4.2.2  | 1.3.7      | 4.2.2 |
 | 0.6.0       | 4.2.2  | 1.3.7      | 4.2.2 |
 | 0.5.0       | 4.2.1  | 1.3.5      | 4.2.0 |
@@ -32,7 +33,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>0.7.0</version>
+            <version>0.7.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -62,13 +63,13 @@ Gradle:
 
 ```groovy
 plugins {
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
 }
 
 dependencyManagement {
     // Implicitly imports Dropwizard and Guice BOMs 
     imports {
-        mavenBom "ru.vyarus.guicey:guicey-bom:0.7.0"
+        mavenBom "ru.vyarus.guicey:guicey-bom:0.7.1"
     }
 }
 

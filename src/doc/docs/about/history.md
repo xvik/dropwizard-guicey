@@ -1,3 +1,15 @@
+### [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3) (2021-03-27)
+* Unify GuiceyAppRule (junit4) behaviour with DropwizardAppRule: config overrides should initialize just
+  before test and not in the constructor. The issue was causing early evaluation of lazy (deferred) overrides (from #151)
+* Update to dropwizard 1.3.29
+* Update to guice 4.2.3 (java 14 compatible)
+* Java 11 compatibility. Add automatic module name
+* BOM changes:
+    - spock 1.3
+    - groovy 2.5.14 (java 11 compatible)
+    - system-rules 1.19.0
+    - add guicey itself to bom
+
 ### [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2) (2018-11-26)
 * Update to guice 4.2.2 (java 11 compatible)
 * Update to dropwizard 1.3.7

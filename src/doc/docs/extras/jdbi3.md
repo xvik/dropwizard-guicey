@@ -3,7 +3,7 @@
 !!! summary ""
     [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3) module
 
-Integrates [JDBI3](http://jdbi.org/) with guice. Based on [dropwizard-jdbi3](http://www.dropwizard.io/1.3.5/docs/manual/jdbi3.html) integration.
+Integrates [JDBI3](http://jdbi.org/) with guice. Based on [dropwizard-jdbi3](https://www.dropwizard.io/en/release-1.3.x/manual/jdbi3.html) integration.
  
 Features:
 
@@ -34,14 +34,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi3</artifactId>
-  <version>0.7.0</version>
+  <version>0.7.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-jdbi3:0.7.0'
+compile 'ru.vyarus.guicey:guicey-jdbi3:0.7.1'
 ```
 
 See the most recent version in the badge above.

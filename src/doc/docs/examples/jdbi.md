@@ -19,14 +19,14 @@ The [JDBI extension](../extras/jdbi.md) allows:
 Additional dependencies required:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-jdbi:0.6.0'
+compile 'ru.vyarus.guicey:guicey-jdbi:0.7.1'
 compile 'com.h2database:h2:1.4.193'
 ```
 
 !!! note
     guicey-jdbi version could be managed with [BOM](../extras/bom.md)
 
-[dropwizard-jdbi](http://www.dropwizard.io/1.3.5/docs/manual/jdbi.html) is used to configure 
+[dropwizard-jdbi](https://www.dropwizard.io/en/release-1.3.x/manual/jdbi.html) is used to configure 
 and create dbi instance:
 
 ```java

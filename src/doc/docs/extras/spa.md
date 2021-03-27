@@ -3,7 +3,7 @@
 !!! summary ""
     [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-spa) module
 
-Provides a replacement for [dropwizard-assets](http://www.dropwizard.io/1.3.0/docs/manual/core.html#serving-assets) 
+Provides a replacement for [dropwizard-assets](https://www.dropwizard.io/en/release-1.3.x/manual/core.html#serving-assets) 
 bundle for single page applications (SPA) to properly
 handle html5 client routing.
 
@@ -57,14 +57,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-spa</artifactId>
-  <version>0.7.0</version>
+  <version>0.7.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-spa:0.7.0'
+compile 'ru.vyarus.guicey:guicey-spa:0.7.1'
 ```
 
 See the most recent version in the badge above.

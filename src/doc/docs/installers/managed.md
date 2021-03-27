@@ -3,7 +3,7 @@
 !!! summary ""
     CoreInstallersBundle / [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ManagedInstaller.java)        
 
-Installs [dropwizard managed objects](http://www.dropwizard.io/1.3.0/docs/manual/core.html#managed-objects).
+Installs [dropwizard managed objects](https://www.dropwizard.io/en/release-1.3.x/manual/core.html#managed-objects).
 
 ## Recognition
 
