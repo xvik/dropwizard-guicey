@@ -1,0 +1,1824 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Dropwizard guice integration">
+      
+      
+      
+        <meta name="author" content="Vyacheslav Rusakov">
+      
+      
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/4.2.3/guide/diagnostic/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.6">
+    
+    
+      
+        <title>Diagnostic - Dropwizard-guicey</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2c0c5eaf.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.7fa14f5b.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-93174150-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#diagnostic-info" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Dropwizard-guicey" class="md-header__button md-logo" aria-label="Dropwizard-guicey" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Dropwizard-guicey
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Diagnostic
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-header__options">
+      
+    </div>
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Dropwizard-guicey" class="md-nav__button md-logo" aria-label="Dropwizard-guicey" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Dropwizard-guicey
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        Getting started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/" class="md-nav__link">
+        Concepts overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4">
+        User guide
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="User guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          User guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lifecycle/" class="md-nav__link">
+        Integration lifecycle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../injector/" class="md-nav__link">
+        Injector
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../module-autowiring/" class="md-nav__link">
+        Module autowiring
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bindings/" class="md-nav__link">
+        Bindings
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scan/" class="md-nav__link">
+        Classpath scan
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installers/" class="md-nav__link">
+        Installers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ordering/" class="md-nav__link">
+        Ordering
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bundles/" class="md-nav__link">
+        Bundles (Guicey)
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../options/" class="md-nav__link">
+        Options
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Diagnostic
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Diagnostic
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#diagnostic-service" class="md-nav__link">
+    Diagnostic service
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timings" class="md-nav__link">
+    Timings
+  </a>
+  
+    <nav class="md-nav" aria-label="Timings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#startup-timings" class="md-nav__link">
+    Startup timings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classpath-scan" class="md-nav__link">
+    Classpath scan
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bundles" class="md-nav__link">
+    Bundles
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injector" class="md-nav__link">
+    Injector
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hk2" class="md-nav__link">
+    HK2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remaining" class="md-nav__link">
+    Remaining
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#used-options" class="md-nav__link">
+    Used options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-diagnostic-info" class="md-nav__link">
+    Configuration diagnostic info
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration diagnostic info">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    General
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands_1" class="md-nav__link">
+    Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bundles_1" class="md-nav__link">
+    Bundles
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installers-and-extensions" class="md-nav__link">
+    Installers and extensions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    Modules
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-context-tree" class="md-nav__link">
+    Configuration context tree
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#re-using" class="md-nav__link">
+    Re-using
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installers-mode" class="md-nav__link">
+    Installers mode
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guice-injector-creation-timings" class="md-nav__link">
+    Guice injector creation timings
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../events/" class="md-nav__link">
+        Lifecycle events
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../commands/" class="md-nav__link">
+        Commands
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../web/" class="md-nav__link">
+        Web
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/" class="md-nav__link">
+        Test
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dg-migration/" class="md-nav__link">
+        Migration from dropwizard-guice
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Installers
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Installers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Installers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/resource/" class="md-nav__link">
+        Resource
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/task/" class="md-nav__link">
+        Task
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/managed/" class="md-nav__link">
+        Managed
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/lifecycle/" class="md-nav__link">
+        Lifecycle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/healthcheck/" class="md-nav__link">
+        Health check
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/jersey-ext/" class="md-nav__link">
+        Jersey extension
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/jersey-feature/" class="md-nav__link">
+        Jersey feature
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/eager/" class="md-nav__link">
+        Eager singleton
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/plugin/" class="md-nav__link">
+        Plugin
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/servlet/" class="md-nav__link">
+        Web servlet
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/filter/" class="md-nav__link">
+        Web filter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/listener/" class="md-nav__link">
+        Web listener
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/authentication/" class="md-nav__link">
+        Authentication
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/governator/" class="md-nav__link">
+        Governator
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/hibernate/" class="md-nav__link">
+        Hibernate
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/eventbus/" class="md-nav__link">
+        EventBus
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/jdbi/" class="md-nav__link">
+        JDBI
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/jdbi3/" class="md-nav__link">
+        JDBI3
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        Extras
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Extras" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Extras
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/admin-rest/" class="md-nav__link">
+        Admin REST
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/bom/" class="md-nav__link">
+        BOM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/lifecycle-annotations/" class="md-nav__link">
+        Lifecycle annotations
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/eventbus/" class="md-nav__link">
+        Guava EventBus
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/jdbi/" class="md-nav__link">
+        JDBI
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/jdbi3/" class="md-nav__link">
+        JDBI3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/spa/" class="md-nav__link">
+        SPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/gsp/" class="md-nav__link">
+        Server Pages
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      <label class="md-nav__link" for="__nav_8">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/compatibility/" class="md-nav__link">
+        Compatibility
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/history/" class="md-nav__link">
+        Release notes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/support/" class="md-nav__link">
+        Support
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#diagnostic-service" class="md-nav__link">
+    Diagnostic service
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#timings" class="md-nav__link">
+    Timings
+  </a>
+  
+    <nav class="md-nav" aria-label="Timings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#startup-timings" class="md-nav__link">
+    Startup timings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#classpath-scan" class="md-nav__link">
+    Classpath scan
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands" class="md-nav__link">
+    Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bundles" class="md-nav__link">
+    Bundles
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#injector" class="md-nav__link">
+    Injector
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hk2" class="md-nav__link">
+    HK2
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remaining" class="md-nav__link">
+    Remaining
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#used-options" class="md-nav__link">
+    Used options
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-diagnostic-info" class="md-nav__link">
+    Configuration diagnostic info
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration diagnostic info">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    General
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commands_1" class="md-nav__link">
+    Commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bundles_1" class="md-nav__link">
+    Bundles
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installers-and-extensions" class="md-nav__link">
+    Installers and extensions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    Modules
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-context-tree" class="md-nav__link">
+    Configuration context tree
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#re-using" class="md-nav__link">
+    Re-using
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installers-mode" class="md-nav__link">
+    Installers mode
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guice-injector-creation-timings" class="md-nav__link">
+    Guice injector creation timings
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/guide/diagnostic.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="diagnostic-info">Diagnostic info<a class="headerlink" href="#diagnostic-info" title="Permanent link">&para;</a></h1>
+<p>During startup guicey records startup metrics and remembers all details of configuration process. 
+All this information is available through <a href="https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/GuiceyConfigurationInfo.java">GuiceyConfigurationInfo</a> bean in guice context. </p>
+<h2 id="diagnostic-service">Diagnostic service<a class="headerlink" href="#diagnostic-service" title="Permanent link">&para;</a></h2>
+<p>Default diagnostic info rendering is provided to assist configuration problems resolution and better guicey internals understanding.</p>
+<p>The simplest way to enable diagnostic reporting is using bundle <code>.printDiagnosticInfo()</code> option. 
+This registers <a href="https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/DiagnosticBundle.java">DiagnosticBundle</a> with default reporting configuration. 
+Bundle could be registered directly in order to customize output.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can use diagnostic logs with <a href="../events/#debug">lifecycle phases logging</a>
+and <a href="../bindings/#configuration-bindings-report">configuration bindings report</a></p>
+</div>
+<p>When <code>.printDiagnosticInfo()</code> enabled, the following kind of logs will be printed after server startup:</p>
+<div class="highlight"><pre><span></span><code>INFO  [2016-08-01 21:22:50,898] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Startup stats = 
+
+    GUICEY started in 453.3 ms
+    │   
+    ├── [0,88%] CLASSPATH scanned in 4.282 ms
+    │   ├── scanned 5 classes
+    │   └── recognized 4 classes (80% of scanned)
+    │   
+    ├── [4,2%] COMMANDS processed in 19.10 ms
+    │   └── registered 2 commands
+    │   
+    ├── [6,4%] BUNDLES processed in 29.72 ms
+    │   ├── 2 resolved in 8.149 ms
+    │   └── 6 processed
+    │   
+    ├── [86%] INJECTOR created in 390.3 ms
+    │   ├── installers prepared in 13.79 ms
+    │   │   
+    │   ├── extensions recognized in 9.259 ms
+    │   │   ├── using 11 installers
+    │   │   └── from 7 classes
+    │   │   
+    │   └── 3 extensions installed in 4.188 ms
+    │   
+    ├── [1,3%] HK2 bridged in 6.583 ms
+    │   ├── using 2 jersey installers
+    │   └── 2 jersey extensions installed in 660.9 μs
+    │   
+    └── [1,1%] remaining 5 ms
+
+INFO  [2016-08-01 21:22:50,901] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Options = 
+
+    Guicey                    (r.v.dropwizard.guice.GuiceyOptions)
+        ScanPackages                   = [ru.vyarus.dropwizard.guice.diagnostic.support.features] *CUSTOM
+        SearchCommands                 = true                           *CUSTOM
+        UseCoreInstallers              = true                           
+        ConfigureFromDropwizardBundles = false                          
+        InjectorStage                  = PRODUCTION                     
+        GuiceFilterRegistration        = [REQUEST]                 
+
+INFO  [2016-08-01 21:22:50,901] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Configuration diagnostic info = 
+
+    COMMANDS = 
+        Cli                          (r.v.d.g.d.s.features)     *SCAN
+        EnvCommand                   (r.v.d.g.d.s.features)     *SCAN, GUICE_ENABLED
+
+
+    BUNDLES = 
+        CoreInstallersBundle         (r.v.d.g.m.installer)      
+        Foo2Bundle                   (r.v.d.g.d.s.bundle)       
+            FooBundleRelative2Bundle     (r.v.d.g.d.s.bundle)       
+        HK2DebugBundle               (r.v.d.g.m.j.debug)        *LOOKUP, REG(2)
+        DiagnosticBundle             (r.v.d.g.m.c.debug)        
+        GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     *LOOKUP
+
+
+    INSTALLERS and EXTENSIONS in processing order = 
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
+            HK2DebugFeature              (r.v.d.g.m.j.d.service)    
+        resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    
+            FooBundleResource            (r.v.d.g.d.s.bundle)       *REG(3)
+            FooResource                  (r.v.d.g.d.s.features)     *SCAN
+
+
+    GUICE MODULES = 
+        FooModule                    (r.v.d.g.d.s.features)     *REG(2)
+        FooBundleModule              (r.v.d.g.d.s.bundle)       
+        HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle) 
+        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle) 
+        GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
+        GuiceBootstrapModule         (r.v.d.guice.module)       
+
+INFO  [2016-08-01 21:22:50,909] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Configuration context tree = 
+
+    APPLICATION
+    ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       
+    ├── module     FooModule                    (r.v.d.g.d.s.features)     
+    ├── module     GuiceBootstrapModule         (r.v.d.guice.module)       
+    ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature)      
+    │   
+    ├── Foo2Bundle                   (r.v.d.g.d.s.bundle)       
+    │   ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       *IGNORED
+    │   ├── module     FooBundleModule              (r.v.d.g.d.s.bundle)       
+    │   ├── -disable   ManagedInstaller             (r.v.d.g.m.i.feature)      
+    │   │   
+    │   └── FooBundleRelative2Bundle     (r.v.d.g.d.s.bundle)       
+    │       └── module     FooModule                    (r.v.d.g.d.s.features)     *IGNORED
+    │   
+    ├── HK2DebugBundle               (r.v.d.g.m.j.debug)        
+    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     
+    │   ├── extension  HK2DebugFeature              (r.v.d.g.m.j.d.service)    
+    │   └── module     HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle) 
+    │   
+    ├── DiagnosticBundle             (r.v.d.g.m.c.debug)        
+    │   └── module     DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle) 
+    │   
+    ├── CoreInstallersBundle         (r.v.d.g.m.installer)      
+    │   ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     *IGNORED
+    │   └── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)     
+    │   
+    ├── BUNDLES LOOKUP
+    │   ├── HK2DebugBundle               (r.v.d.g.m.j.debug)        *IGNORED
+    │   │   
+    │   └── GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     
+    │       └── module     GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
+    │   
+    └── CLASSPATH SCAN
+        └── extension  FooResource                  (r.v.d.g.d.s.features)  
+</code></pre></div>
+
+<p>Default reporting contains 4 sections:</p>
+<ul>
+<li>How guicey spent time</li>
+<li>What options used</li>
+<li>What was configured</li>
+<li>From where configuration items come from</li>
+</ul>
+<h2 id="timings">Timings<a class="headerlink" href="#timings" title="Permanent link">&para;</a></h2>
+<h3 id="startup-timings">Startup timings<a class="headerlink" href="#startup-timings" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    GUICEY started in 453.3 ms
+</code></pre></div>
+
+<p>Overall guicey time measured: GuiceBundle methods plus part of HK2 configuration time (HK2 started after bundle).
+All items below represent guicey time detalization. Items always detail time of direct parent.</p>
+<p>Most of this time actually spent on class loading. For example, report above represent <a href="https://github.com/xvik/dropwizard-guicey/blob/master/src/test/groovy/ru/vyarus/dropwizard/guice/config/debug/DiagnosticBundleTest.groovy">test</a> direct execution. 
+But when this test executed as part of suit time become  <code>GUICEY started in 52.95 ms</code> because most classes were pre-loaded by other tests.</p>
+<h3 id="classpath-scan">Classpath scan<a class="headerlink" href="#classpath-scan" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    ├── [0,88%] CLASSPATH scanned in 4.282 ms
+    │   ├── scanned 5 classes
+    │   └── recognized 4 classes (80% of scanned)
+</code></pre></div>
+
+<p>Classpath scan performed just once. Represents only time spent resolving all classes in configured packages. Guicey will later use this resolved classes to search commands (if enabled), installers and extensions. </p>
+<p><code>scanned 5 classes</code> means that 5 classed were found (overall) in configured packages. <code>recognized 4 classes</code> Show effectiveness of classpath scanning (how many classes were actually used as installer, extension or command).</p>
+<p>NOTE: classpath scan time will be obviously bigger for larger classes count. But most of this time are actually class loading time. If you use all these classes then they will be loaded in any case. If you disable classpath scan to save time then this time move to other some place (for example, to injector creation). </p>
+<h3 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    ├── [4,2%] COMMANDS processed in 19.10 ms
+    │   └── registered 2 commands
+</code></pre></div>
+
+<p>Commands time includes time spent on commands search (in classes from classpath scan; if enabled .searchCommands()) and calling .injectMemebers on configured environment commands (last part is always performed, but it's very fast so most likely commands section will not appear if .searchCommands() is not enabled)</p>
+<h3 id="bundles">Bundles<a class="headerlink" href="#bundles" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    ├── [6,4%] BUNDLES processed in 29.72 ms
+    │   ├── 2 resolved in 8.149 ms
+    │   └── 6 processed
+</code></pre></div>
+
+<p>Bundles time includes bundles lookup time (if not .disableBundleLookup()), dropwizard bunles lookup (if .configureFromDropwizardBundles()) and bundles execution.</p>
+<p><code>2 resolved in 8.149 ms</code> indicated bundles resolved with guicey bundle lookup or from dropwizard bundles.
+<code>6 processed</code> - overall processed bundles (all registered bundles, including just resolved).</p>
+<h3 id="injector">Injector<a class="headerlink" href="#injector" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    ├── [86%] INJECTOR created in 390.3 ms
+    │   ├── installers prepared in 13.79 ms
+    │   │   
+    │   ├── extensions recognized in 9.259 ms
+    │   │   ├── using 11 installers
+    │   │   └── from 7 classes
+    │   │   
+    │   └── 3 extensions installed in 4.188 ms
+</code></pre></div>
+
+<p>All installers and extensions operations (except jersey related features) performed inside of guice module and so included into overall injector creation time.</p>
+<p><code>installers prepared in 13.79 ms</code> include installers search in classpath (if scan enabled), instantiation and preparing for usage (remove duplicates, sort).</p>
+<p><code>extensions recognized in 9.259 ms</code> - all manually configured extensions and all classes from classpath scan (<code>from 7 classes</code>) are recognized by all registered installers (<code>using 11 installers</code>) using installer match method. Recognized installers bound to guice context (or custom action performed for binding installers).</p>
+<p><code>3 extensions installed in 4.188 ms</code> - all recognized extensions are installed with installers install methods.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Most time of injector creation is internal guice logic. You can enable guice logs to see more details (see below)</p>
+</div>
+<h3 id="hk2">HK2<a class="headerlink" href="#hk2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    ├── [1,3%] HK2 bridged in 6.583 ms
+    │   ├── using 2 jersey installers
+    │   └── 2 jersey extensions installed in 660.9 μs
+</code></pre></div>
+
+<p>Jersey starts after dropwizard bundles processing and so after GuiceBundle execution. This time is tracked as (overall) guicey time. Here guicey register required HK2 bindings and (some HK2 beans in guice) and executes jersey installers (installers implement JerseyInstaller) to process jersey specific features. For example, all resources and jersey extensions installed here (because requires HK2 specific bindings).</p>
+<p>Note that installation time (<code>2 jersey extensions installed in 660.9 μs</code>) is so tiny just because empty resources (without methods) were used. In real application installation time will be bigger.</p>
+<h3 id="remaining">Remaining<a class="headerlink" href="#remaining" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    └── [1,1%] remaining 5 ms
+</code></pre></div>
+
+<p>Represent not explicitly tracked time, spent by guicey for other small operations. Shown on tree to indicate that all major parts were shown.</p>
+<h2 id="used-options">Used options<a class="headerlink" href="#used-options" title="Permanent link">&para;</a></h2>
+<p>Shows all set or requested (by application logic) options. If you use your own options here they will also be printed.</p>
+<div class="highlight"><pre><span></span><code>    Guicey                    (r.v.dropwizard.guice.GuiceyOptions)
+        ScanPackages                   = [ru.vyarus.dropwizard.guice.diagnostic.support.features] *CUSTOM
+        SearchCommands                 = true                           *CUSTOM
+        UseCoreInstallers              = true                           
+        ConfigureFromDropwizardBundles = false                          
+        InjectorStage                  = PRODUCTION                     
+        GuiceFilterRegistration        = [REQUEST]     
+</code></pre></div>
+
+<p>Used markers:
+* CUSTOM - option value set by user
+* NOT_USED - option was set by user but never used</p>
+<p>Not used marker just indicated that option is "not yet" used. Options may be consumed lazilly by application logic, so
+it is possible that its not used at reporting time. There is no such cases with guicey options, but may be with your custom options (it all depends on usage scenario).</p>
+<h2 id="configuration-diagnostic-info">Configuration diagnostic info<a class="headerlink" href="#configuration-diagnostic-info" title="Permanent link">&para;</a></h2>
+<p>Section intended to compactly show all configuration (to quickly see what was configured).</p>
+<p>This and the next sections used condensed package notion:</p>
+<div class="highlight"><pre><span></span><code>CoreInstallersBundle         (r.v.d.g.m.installer)    
+</code></pre></div>
+
+<p>Assumed that all classes in application will be uniquely identifiable by name and package info shown just to be able to 
+understand exact class location. Logback shrinker used.</p>
+<p>Report also indicates duplicate registrations by REG(N) marker, where N - amount of installations 
+(ignored installations will be visible in configuration tree). Counted:</p>
+<ul>
+<li>item registration in different places (e.g. different bundles)</li>
+<li>duplicate registrations in simgle place (e.g. <code>.extensions(MyExt.class, MyExt.class)</code>)</li>
+</ul>
+<h3 id="general">General<a class="headerlink" href="#general" title="Permanent link">&para;</a></h3>
+<p>All configuration items (commands, modules, installers, extension, bundles) are identified by class. Duplicate entities are not allowed and simply ignored.</p>
+<p>For example, if extension registered manually and by classpath scan then it will be registered once, but internally guicey will remember both configuration sources.</p>
+<p>In contrast to other items, bundles and modules are registered by instance, but still uniqueness is checked by type: only first instance registered and other instances considered as duplicate.</p>
+<h3 id="commands_1">Commands<a class="headerlink" href="#commands_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    COMMANDS = 
+        Cli                          (r.v.d.g.d.s.features)     *SCAN
+        EnvCommand                   (r.v.d.g.d.s.features)     *SCAN,GUICE_ENABLED
+</code></pre></div>
+
+<p>Shows commands resolved with classpath scan (enabled with .searchCommands()).</p>
+<p>The following markers used:</p>
+<ul>
+<li>SCAN - item from classpath scan (always)</li>
+<li>GUICE_ENABLED - marks environment command, which could contain guice injections (other commands simply doesn't trigger application run and so injector never starts)</li>
+</ul>
+<h3 id="bundles_1">Bundles<a class="headerlink" href="#bundles_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    BUNDLES = 
+        CoreInstallersBundle         (r.v.d.g.m.installer)      
+        Foo2Bundle                   (r.v.d.g.d.s.bundle)       
+            FooBundleRelative2Bundle     (r.v.d.g.d.s.bundle)       
+        HK2DebugBundle               (r.v.d.g.m.j.debug)        *LOOKUP, REG(2)
+        DiagnosticBundle             (r.v.d.g.m.c.debug)        
+        GuiceRestrictedConfigBundle  (r.v.d.g.support.util)     *LOOKUP
+</code></pre></div>
+
+<p>All registered bundles are shown as a tree (to indicate transitive bundles).</p>
+<p>The following markers used:</p>
+<ul>
+<li>LOOKUP - bundle resolved with bundle lookup mechanism</li>
+<li>DW - bundle recognized from registered dropwizard bundle</li>
+</ul>
+<h3 id="installers-and-extensions">Installers and extensions<a class="headerlink" href="#installers-and-extensions" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    INSTALLERS and EXTENSIONS in processing order = 
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) *REG(2)
+            HK2DebugFeature              (r.v.d.g.m.j.d.service)    
+        resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    
+            FooBundleResource            (r.v.d.g.d.s.bundle)       *REG(3)
+            FooResource                  (r.v.d.g.d.s.features)     *SCAN
+</code></pre></div>
+
+<p>Shows used installers (only installers which install extensions) and installed extensions. </p>
+<p>Both installers and extensions are shown in the processing order (sorted according to @Order annotations).</p>
+<p>The following markers used:</p>
+<ul>
+<li>SCAN - item from classpath scan (even if extension or installer were registered manually also to indicate item presence in classpath scan)</li>
+<li>LAZY - extensions annotated with <code>@LazyBinding</code></li>
+<li>HK2 - extension annotated with <code>@HK2Managed</code></li>
+<li>HOOK - registered by <a href="../configuration/#guicey-configuration-hooks">configuration hook</a></li>
+</ul>
+<h3 id="modules">Modules<a class="headerlink" href="#modules" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>    GUICE MODULES = 
+        FooModule                    (r.v.d.g.d.s.features)     *REG(2)
+        FooBundleModule              (r.v.d.g.d.s.bundle)       
+        HK2DebugModule               (r.v.d.g.m.j.d.HK2DebugBundle) 
+        DiagnosticModule             (r.v.d.g.m.c.d.DiagnosticBundle) 
+        GRestrictModule              (r.v.d.g.s.u.GuiceRestrictedConfigBundle) 
+        GuiceBootstrapModule         (r.v.d.guice.module)  
+</code></pre></div>
+
+<p>All registered guice modules.</p>
+<h2 id="configuration-context-tree">Configuration context tree<a class="headerlink" href="#configuration-context-tree" title="Permanent link">&para;</a></h2>
+<p>Configuration tree is useful to understand from where configuration items come from.</p>
+<p>Installer disables are shown like:</p>
+<div class="highlight"><pre><span></span><code>    ├── -disable   LifeCycleInstaller           (r.v.d.g.m.i.feature) 
+</code></pre></div>
+
+<p>Duplicate registrations (ignored by guicey) are shown like:</p>
+<div class="highlight"><pre><span></span><code>    │   ├── extension  FooBundleResource            (r.v.d.g.d.s.bundle)       *IGNORED
+</code></pre></div>
+
+<p>If number in configuration report (e.g.REG(3)) doesn't match registration appearances, then item registered
+multiple times in one of this places.</p>
+<p>Note that CoreInstallersBundle are always below all other bundles. This is because it always registered last 
+(to be able to disable it's registration). It doesn't affect anything other than reporting (because bundles order does 
+not change anything except this tree).</p>
+<h2 id="re-using">Re-using<a class="headerlink" href="#re-using" title="Permanent link">&para;</a></h2>
+<p>Diagnostic info rendering may be used for custom rendering (showing in web page or some other staff).
+Rendering is performed with 3 beans, available for injection (when bundle registered):</p>
+<ul>
+<li><a href="https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/stat/StatsRenderer.java">StatsRenderer</a></li>
+<li><a href="https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/option/OptionsRenderer.java">OptionsRenderer</a></li>
+<li><a href="https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/diagnostic/DiagnosticRenderer.java">DiagnosticRenderer</a></li>
+<li><a href="https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/context/debug/report/tree/ContextTreeRenderer.java">ContextTreeRenderer</a> </li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Renderers are also available in <a href="../events/#event-structure">event objects</a> (for events fired after injection creation) </p>
+</div>
+<h2 id="installers-mode">Installers mode<a class="headerlink" href="#installers-mode" title="Permanent link">&para;</a></h2>
+<p>There is a special option in GuiceBundle <code>.printAvailableInstallers()</code> for printing only installers information. 
+It also use DiagnosticBundle, but with different configuration. </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Both options can't be used together (but it should never be required as they serve different purposes).</p>
+</div>
+<p>Example output:</p>
+<div class="highlight"><pre><span></span><code>INFO  [2016-08-22 00:49:33,557] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Configuration diagnostic info = 
+
+    INSTALLERS in processing order = 
+        lifecycle            (r.v.d.g.m.i.f.LifeCycleInstaller)     
+        managed              (r.v.d.g.m.i.feature.ManagedInstaller) 
+        jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) 
+        jerseyprovider       (r.v.d.g.m.i.f.j.p.JerseyProviderInstaller) 
+        resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    
+        eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller) 
+        healthcheck          (r.v.d.g.m.i.f.h.HealthCheckInstaller) 
+        task                 (r.v.d.g.m.i.feature.TaskInstaller)    
+        plugin               (r.v.d.g.m.i.f.plugin.PluginInstaller) 
+        webservlet           (r.v.d.g.m.i.f.w.WebServletInstaller)  
+        webfilter            (r.v.d.g.m.i.f.web.WebFilterInstaller) 
+        weblistener          (r.v.d.g.m.i.f.w.l.WebListenerInstaller) 
+
+INFO  [2016-08-22 00:49:33,563] ru.vyarus.dropwizard.guice.module.context.debug.report.DiagnosticReporter: Configuration context tree = 
+
+    APPLICATION
+    │   
+    ├── WebInstallersBundle          (r.v.d.g.m.installer)      
+    │   ├── installer  WebFilterInstaller           (r.v.d.g.m.i.f.web)        
+    │   ├── installer  WebServletInstaller          (r.v.d.g.m.i.f.web)        
+    │   └── installer  WebListenerInstaller         (r.v.d.g.m.i.f.w.listener) 
+    │   
+    └── CoreInstallersBundle         (r.v.d.g.m.installer)      
+        ├── installer  LifeCycleInstaller           (r.v.d.g.m.i.feature)      
+        ├── installer  ManagedInstaller             (r.v.d.g.m.i.feature)      
+        ├── installer  JerseyFeatureInstaller       (r.v.d.g.m.i.f.jersey)     
+        ├── installer  JerseyProviderInstaller      (r.v.d.g.m.i.f.j.provider) 
+        ├── installer  ResourceInstaller            (r.v.d.g.m.i.f.jersey)     
+        ├── installer  EagerSingletonInstaller      (r.v.d.g.m.i.f.eager)      
+        ├── installer  HealthCheckInstaller         (r.v.d.g.m.i.f.health)     
+        ├── installer  TaskInstaller                (r.v.d.g.m.i.feature)      
+        └── installer  PluginInstaller              (r.v.d.g.m.i.f.plugin)     
+</code></pre></div>
+
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Comparing to complete diagnostic, it shows all installers (<em>even not used</em>). 
+In diagnostic reporting not used installers are hidden, because usually it means they are not needed.</p>
+</div>
+<h2 id="guice-injector-creation-timings">Guice injector creation timings<a class="headerlink" href="#guice-injector-creation-timings" title="Permanent link">&para;</a></h2>
+<p>You will see in guicey timings that almost all time spent creating guice injector. 
+To see some guice internal timings enable guice debug logs:</p>
+<div class="highlight"><pre><span></span><code>logging:
+  loggers:
+    com.google.inject.internal.util: DEBUG
+</code></pre></div>
+
+<p>Logs will be something like this:</p>
+<div class="highlight"><pre><span></span><code>DEBUG [2016-08-03 21:09:45,963] com.google.inject.internal.util.Stopwatch: Module execution: 272ms
+DEBUG [2016-08-03 21:09:45,963] com.google.inject.internal.util.Stopwatch: Interceptors creation: 1ms
+DEBUG [2016-08-03 21:09:45,965] com.google.inject.internal.util.Stopwatch: TypeListeners &amp; ProvisionListener creation: 2ms
+DEBUG [2016-08-03 21:09:45,966] com.google.inject.internal.util.Stopwatch: Scopes creation: 1ms
+DEBUG [2016-08-03 21:09:45,966] com.google.inject.internal.util.Stopwatch: Converters creation: 0ms
+DEBUG [2016-08-03 21:09:45,992] com.google.inject.internal.util.Stopwatch: Binding creation: 26ms
+DEBUG [2016-08-03 21:09:45,992] com.google.inject.internal.util.Stopwatch: Module annotated method scanners creation: 0ms
+DEBUG [2016-08-03 21:09:45,993] com.google.inject.internal.util.Stopwatch: Private environment creation: 1ms
+DEBUG [2016-08-03 21:09:45,993] com.google.inject.internal.util.Stopwatch: Injector construction: 0ms
+DEBUG [2016-08-03 21:09:46,170] com.google.inject.internal.util.Stopwatch: Binding initialization: 177ms
+DEBUG [2016-08-03 21:09:46,171] com.google.inject.internal.util.Stopwatch: Binding indexing: 1ms
+DEBUG [2016-08-03 21:09:46,172] com.google.inject.internal.util.Stopwatch: Collecting injection requests: 1ms
+DEBUG [2016-08-03 21:09:46,179] com.google.inject.internal.util.Stopwatch: Binding validation: 7ms
+DEBUG [2016-08-03 21:09:46,183] com.google.inject.internal.util.Stopwatch: Static validation: 4ms
+DEBUG [2016-08-03 21:09:46,191] com.google.inject.internal.util.Stopwatch: Instance member validation: 8ms
+DEBUG [2016-08-03 21:09:46,192] com.google.inject.internal.util.Stopwatch: Provider verification: 1ms
+DEBUG [2016-08-03 21:09:46,201] com.google.inject.internal.util.Stopwatch: Static member injection: 9ms
+DEBUG [2016-08-03 21:09:46,204] com.google.inject.internal.util.Stopwatch: Instance injection: 3ms
+DEBUG [2016-08-03 21:09:46,427] com.google.inject.internal.util.Stopwatch: Preloading singletons: 223ms
+</code></pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>'Preloading singletons' line will be logged <strong>long after</strong> other guice log messages, so search it at the end of your startup log.</p>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../options/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Options
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../events/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Lifecycle events
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2014-2021 Vyacheslav Rusakov
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/xvik" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/vyarus" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fb4a9340.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a1c7c35e.min.js"></script>
+      
+    
+  </body>
+</html>
