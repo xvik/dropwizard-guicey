@@ -9,10 +9,12 @@ repo_name: 'dropwizard-guicey'
 repo_url: 'https://github.com/xvik/dropwizard-guicey'
 
 # Copyright
-copyright: 'Copyright &copy; 2014-2018 Vyacheslav Rusakov'
+copyright: 'Copyright &copy; 2014-2021 Vyacheslav Rusakov'
 
 # Documentation and theme
-theme: 'material'
+theme:
+  name: 'material'
+
 
 # Options
 extra:
@@ -21,10 +23,11 @@ extra:
 #    accent: 'indigo'
 
   social:
-    - type: 'github'
-      link: 'https://github.com/xvik'
-    - type: 'twitter'
-      link: 'https://twitter.com/vyarus'
+    - icon: fontawesome/brands/github
+      link: https://github.com/xvik
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/vyarus
+
 
 # Google Analytics
 google_analytics:
@@ -38,6 +41,7 @@ markdown_extensions:
       guess_lang: false
   - footnotes
   - meta
+  - def_list
   - toc:
       permalink: true
   - pymdownx.betterem:
