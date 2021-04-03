@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>5.2.0</version>
+  <version>5.3.0</version>
   <dependencies>
     <dependency>
       <groupId>com.google.inject</groupId>
@@ -68,14 +68,14 @@
       <dependency>
         <groupId>io.dropwizard</groupId>
         <artifactId>dropwizard-dependencies</artifactId>
-        <version>2.0.16</version>
+        <version>2.0.20</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
       <dependency>
         <groupId>com.google.inject</groupId>
         <artifactId>guice-bom</artifactId>
-        <version>4.2.3</version>
+        <version>5.0.1</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>
@@ -117,7 +117,7 @@
       <dependency>
         <groupId>com.google.inject</groupId>
         <artifactId>guice</artifactId>
-        <version>4.2.3</version>
+        <version>5.0.1</version>
         <exclusions>
           <exclusion>
             <groupId>com.google.guava</groupId>
@@ -143,7 +143,7 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>30.0-jre</version>
+        <version>30.1-jre</version>
       </dependency>
       <dependency>
         <groupId>org.glassfish.hk2</groupId>
@@ -185,8 +185,8 @@
     <url>https://github.com/xvik/dropwizard-guicey/issues</url>
   </issueManagement>
   <properties>
-    <guice.version>4.2.3</guice.version>
-    <dropwizard.version>2.0.16</dropwizard.version>
+    <guice.version>5.0.1</guice.version>
+    <dropwizard.version>2.0.20</dropwizard.version>
     <hk2.version>2.6.1</hk2.version>
   </properties>
   <developers>
