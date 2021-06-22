@@ -1,6 +1,6 @@
 # Dropwizard guice integration
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://www.opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.org/xvik/dropwizard-guicey.svg?branch=master)](https://travis-ci.org/xvik/dropwizard-guicey)
+[![Build Status](https://travis-ci.com/xvik/dropwizard-guicey.svg?branch=master)](https://travis-ci.com/xvik/dropwizard-guicey)
 [![Appveyor build status](https://ci.appveyor.com/api/projects/status/github/xvik/dropwizard-guicey?svg=true&branch=master)](https://ci.appveyor.com/project/xvik/dropwizard-guicey)
 [![codecov](https://codecov.io/gh/xvik/dropwizard-guicey/branch/master/graph/badge.svg)](https://codecov.io/gh/xvik/dropwizard-guicey)
 
@@ -49,10 +49,6 @@ Features:
 
 ### Setup
 
-Releases are published to [bintray jcenter](https://bintray.com/bintray/jcenter) (package appear immediately after release) 
-and then to maven central (require few days after release to be published). 
-
-[![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey/_latestVersion)
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus/dropwizard-guicey.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
 
 May be used through [extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-bom) or directly.
