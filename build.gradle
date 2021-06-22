@@ -2,11 +2,12 @@ plugins {
     id 'groovy'
     id 'jacoco'
     id 'project-report'
-    id 'ru.vyarus.java-lib' version '2.1.0'
+    id 'signing'
+    id 'ru.vyarus.java-lib' version '2.2.0'
     id 'ru.vyarus.github-info' version '1.2.0'
     id 'ru.vyarus.quality' version '4.6.0'
-    id 'com.jfrog.bintray' version '1.8.5'
     id 'net.researchgate.release' version '2.8.1'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
     id 'com.github.ben-manes.versions' version '0.39.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'ru.vyarus.mkdocs' version '2.1.1'
@@ -15,7 +16,7 @@ plugins {
 sourceCompatibility = 1.8
 
 wrapper {
-    gradleVersion = '6.3'
+    gradleVersion = '6.9'
 }
 
 ext {
@@ -25,7 +26,7 @@ ext {
     groovy = '2.5.14'
 }
 
-repositories { mavenCentral(); mavenLocal() }
+repositories { mavenLocal(); mavenCentral() }
 dependencyManagement {
     imports {
         mavenBom "com.google.inject:guice-bom:$guice"
@@ -125,40 +126,28 @@ pom {
     }
 }
 
-jar {
-    manifest {
-        attributes 'Automatic-Module-Name': 'ru.vyarus.dropwizard.guicey'
-    }
+javaLib {
+    // java 9 auto module name
+    autoModuleName = 'ru.vyarus.dropwizard.guicey'
+    // don't publish gradle metadata artifact
+    withoutGradleMetadata()
 }
 
-bintray {
-    user = findProperty('bintrayUser')
-    key = findProperty('bintrayKey')
-    publications = ['maven']
-    dryRun = false
-    publish = true
-    pkg {
-        repo = 'xvik'
-        name = project.name
-        desc = project.description
-        labels = ['dropwizard', 'guice']
-        publicDownloadNumbers = true
-        version {
-            gpg {
-                sign = true
-                passphrase = findProperty('gpgPassphrase')
-            }
-            mavenCentralSync {
-                sync = true
-                user = findProperty('sonatypeUser')
-                password = findProperty('sonatypePassword')
-            }
+nexusPublishing {
+    repositories {
+        sonatype {
+            username = findProperty('sonatypeUser')
+            password = findProperty('sonatypePassword')
         }
     }
 }
 
+// Required signing properties for release: signing.keyId, signing.password and signing.secretKeyRingFile
+// (https://docs.gradle.org/current/userguide/signing_plugin.html#sec:signatory_credentials)
+
 afterReleaseBuild {
-    dependsOn = [bintrayUpload]
+    dependsOn = ['publishToSonatype',
+                 'closeAndReleaseSonatypeStagingRepository']
     doLast {
         logger.warn "RELEASED $project.group:$project.name:$project.version"
     }
@@ -179,19 +168,6 @@ test {
 }
 
 dependencyUpdates.revision = 'release'
-jacocoTestReport.reports.xml.enabled = true
-
-// disable gradle metadata publishing (because it confuse A LOT)
-tasks.withType(GenerateModuleMetadata) {
-    enabled = false
-}
-
-task showDependenciesTree(dependsOn: 'htmlDependencyReport', group: 'help', description:
-        'Generates dependencies tree report and opens it in browser') {
-    doLast {
-        java.awt.Desktop.getDesktop().open(file('build/reports/project/dependencies/root.html'))
-    }
-}
 
 task updateGithubPom(type: Copy, group: 'other') {
     from(generatePomFileForMavenPublication)

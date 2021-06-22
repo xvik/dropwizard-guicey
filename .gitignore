@@ -138,5 +138,10 @@ $RECYCLE.BIN/
 
 # KDE directory preferences
 .directory
-# Java verion manager
+
+### JEnv ###
+# JEnv local Java version configuration file
 .java-version
+
+# Used by previous versions of JEnv
+.jenv-version
