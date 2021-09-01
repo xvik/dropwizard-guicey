@@ -245,6 +245,7 @@ Read [documentation](http://xvik.github.io/dropwizard-guicey/)
 
 ### Might also like
 
+* [yaml-updater](https://github.com/xvik/yaml-updater) - yaml configuration update tool, preserving comments and whitespaces (has dropwizard module)
 * [generics-resolver](https://github.com/xvik/generics-resolver) - runtime generics resolution
 * [guice-validator](https://github.com/xvik/guice-validator) - hibernate validator integration for guice 
 (objects validation, method arguments and return type runtime validation)
