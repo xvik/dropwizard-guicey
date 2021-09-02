@@ -161,11 +161,6 @@ test {
         events 'skipped', 'failed'
         exceptionFormat 'full'
     }
-    if (System.getenv("TRAVIS")) {
-        // tests run only on windows build due to untraceable failure on travis
-        exclude "**/HKScopeTest.class"
-        exclude "**/HkFirstModeScopeTest.class"
-    }
     maxHeapSize = '512m'
 }
 

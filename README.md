@@ -1,6 +1,6 @@
 # Dropwizard guice integration
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://www.opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.com/xvik/dropwizard-guicey.svg?branch=master)](https://travis-ci.com/xvik/dropwizard-guicey)
+[![CI](https://github.com/xvik/dropwizard-guicey/actions/workflows/CI.yml/badge.svg)](https://github.com/xvik/dropwizard-guicey/actions/workflows/CI.yml)
 [![Appveyor build status](https://ci.appveyor.com/api/projects/status/github/xvik/dropwizard-guicey?svg=true&branch=master)](https://ci.appveyor.com/project/xvik/dropwizard-guicey)
 [![codecov](https://codecov.io/gh/xvik/dropwizard-guicey/branch/master/graph/badge.svg)](https://codecov.io/gh/xvik/dropwizard-guicey)
 
@@ -11,11 +11,7 @@ Additional repositories:
 * [Examples](https://github.com/xvik/dropwizard-guicey-examples)
 * [Extensions and integrations](https://github.com/xvik/dropwizard-guicey-ext)
 
-Support:
-
-* [discussions](https://github.com/xvik/dropwizard-guicey/discussions)
-* [google group](https://groups.google.com/forum/#!forum/dropwizard-guicey)
-* [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
+Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
 
 ### About 
 

@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Java ${{ matrix.java }}
+    strategy:
+      matrix:
+        java: [8, 11]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+
+      - name: Build
+        run: |
+          chmod +x gradlew
+          ./gradlew assemble --no-daemon
+
+      - name: Test
+        env:
+          GH_ACTIONS: true
+        run: ./gradlew check --no-daemon
+
+      - name: Build coverage report
+        run: ./gradlew jacocoTestReport --no-daemon
+
+      - uses: codecov/codecov-action@v2
+        with:
+          files: build/reports/jacoco/test/jacocoTestReport.xml
+          flags: LINUX
+          fail_ci_if_error: true
