@@ -1,4 +1,13 @@
 * Use direct dependency versions in pom to simplify resolution (dependencyManagement section remains but for usage as BOM only)
+* Fix lambda modules support (modules declared with lambda expression) (#160)
+
+Lambda modules reporting:
+- Root lambda module class will be shown in the diagnostic report (in a list of root modules)
+- Guice bindings report:
+  * Will show all root lambda modules bindings below to com.google.inject.Module
+    (code links at the end of each binding would lead to correct declaration line)
+  * Bindings of lambda modules installed by root (or deeper modules) would be shown
+      directly under root module, as if it was declared directly in that module (logically it's correct)
 
 ### 5.3.0 (2021-03-06)
 * Update to guice [5.0.1](https://github.com/google/guice/wiki/Guice501) 
