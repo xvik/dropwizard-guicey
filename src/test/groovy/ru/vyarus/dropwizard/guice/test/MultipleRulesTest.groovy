@@ -7,6 +7,7 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
+import spock.lang.Shared
 import spock.lang.Specification
 
 /**
@@ -21,9 +22,13 @@ class MultipleRulesTest extends Specification {
     @Rule
     GuiceyAppRule<TestConfiguration> RULE2 = new GuiceyAppRule<>(AutoScanApplication, null)
 
+    @Shared
+    int initialStates
+
     void setup() {
         // check injectors registered
-        assert SharedConfigurationState.statesCount() == 2
+        initialStates = SharedConfigurationState.statesCount()
+        assert initialStates >= 2
         def inj1 = SharedConfigurationState.lookup(RULE.getApplication(), Injector).get()
         def inj2 = SharedConfigurationState.lookup(RULE2.getApplication(), Injector).get()
         assert inj1 != inj2
@@ -31,7 +36,7 @@ class MultipleRulesTest extends Specification {
 
     void cleanupSpec() {
         // check injectors correctly unregistered
-        assert SharedConfigurationState.statesCount() == 0
+        assert SharedConfigurationState.statesCount() == (initialStates - 2)
     }
 
     def "Check multiple rules"() {
