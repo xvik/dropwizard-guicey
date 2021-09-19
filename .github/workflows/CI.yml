@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Java ${{ matrix.java }}
     strategy:
+      # don't cancel remaining matrix steps on failure
+      fail-fast: false
       matrix:
         java: [8, 11]
 

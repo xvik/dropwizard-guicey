@@ -30,7 +30,9 @@ class AnonymousModuleAnalysisTest extends AbstractTest {
         and: "report correct"
 
         new GuiceBindingsRenderer(injector).renderReport(new GuiceConfig().hideGuiceBindings().hideGuiceyBindings())
-                .replaceAll("\r", "").replaceAll(" +\n", "\n") == """
+                .replaceAll("\r", "").replaceAll(" +\n", "\n")
+                // in jdk 8 inner lambda shown as null, above 8 as initialize
+                .replace('$initialize$0(AnnModuleApp.java:25)', '$null$0(AnnModuleApp.java:25)') == """
 
     2 MODULES with 5 bindings
     │
@@ -44,7 +46,7 @@ class AnonymousModuleAnalysisTest extends AbstractTest {
     │
     └── Module                       (com.google.inject)
         ├── instance             [@Singleton]     @DefaultName String                             at ru.vyarus.dropwizard.guice.cases.analysis.AnnModuleApp.lambda\$initialize\$1(AnnModuleApp.java:24)
-        └── instance             [@Singleton]     @DefaultName Double                             at ru.vyarus.dropwizard.guice.cases.analysis.AnnModuleApp.lambda\$initialize\$0(AnnModuleApp.java:25)
+        └── instance             [@Singleton]     @DefaultName Double                             at ru.vyarus.dropwizard.guice.cases.analysis.AnnModuleApp.lambda\$null\$0(AnnModuleApp.java:25)
 """
     }
 }
