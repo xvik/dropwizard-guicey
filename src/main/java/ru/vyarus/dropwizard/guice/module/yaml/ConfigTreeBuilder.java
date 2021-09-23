@@ -60,7 +60,7 @@ public final class ConfigTreeBuilder {
      * Packages to stop types introspection on (for sure non custom pojo types).
      */
     private static final ImmutableSet<String> INTROSPECTION_STOP_PACKAGES = ImmutableSet.of(
-            "java.", "groovy.", "com.google.common.collect"
+            "java.", "groovy.", "com.google.common.collect", "sun."
     );
 
     /**
