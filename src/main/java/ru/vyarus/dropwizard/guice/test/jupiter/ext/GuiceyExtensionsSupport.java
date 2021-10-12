@@ -5,8 +5,8 @@ import com.google.inject.Injector;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.junit.platform.commons.support.AnnotationSupport;
 import org.junit.platform.commons.util.ReflectionUtils;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
@@ -47,9 +47,10 @@ import java.util.Optional;
  * @see TestParametersSupport for supported test parameters
  * @since 29.04.2020
  */
-public abstract class GuiceyExtensionsSupport extends TestParametersSupport implements TestInstancePostProcessor,
+public abstract class GuiceyExtensionsSupport extends TestParametersSupport implements
         BeforeAllCallback,
-        AfterAllCallback {
+        AfterAllCallback,
+        BeforeEachCallback {
 
     // dropwizard support storage key (store visible for all relative tests)
     private static final String DW_SUPPORT = "DW_SUPPORT";
@@ -57,15 +58,6 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     private static final String DW_CLIENT = "DW_CLIENT";
     // indicator storage key of nested test (when extension activated in parent test)
     private static final String INHERITED_DW_SUPPORT = "INHERITED_DW_SUPPORT";
-
-    @Override
-    public void postProcessTestInstance(final Object testInstance, final ExtensionContext context) throws Exception {
-        final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(context));
-        final Optional<Injector> injector = InjectorLookup.getInjector(support.getApplication());
-        Preconditions.checkState(injector.isPresent(),
-                "Can't find guicey injector to process test fields injections");
-        injector.get().injectMembers(testInstance);
-    }
 
     @Override
     public void beforeAll(final ExtensionContext context) throws Exception {
@@ -92,6 +84,22 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                             + "Please report this case to guicey developer.");
             localStore.put(INHERITED_DW_SUPPORT, true);
         }
+    }
+
+    @Override
+    public void beforeEach(final ExtensionContext context) {
+        // before each used to properly handle both default @TestInstance(TestInstance.Lifecycle.PER_METHOD)
+        // and @TestInstance(TestInstance.Lifecycle.PER_CLASS) (in later case BeforeAllCallback called after
+        // TestInstancePostProcessor, making it not usable for this task)
+
+        final Object testInstance = context.getTestInstance()
+                .orElseThrow(() -> new IllegalStateException("Unable to get the current test instance"));
+
+        final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(context));
+
+        InjectorLookup.getInjector(support.getApplication()).orElseThrow(() ->
+                new IllegalStateException("Can't find guicey injector to process test fields injections"))
+                .injectMembers(testInstance);
     }
 
     @Override

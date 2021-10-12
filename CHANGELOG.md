@@ -1,6 +1,8 @@
 * Use direct dependency versions in pom to simplify resolution (dependencyManagement section remains but for usage as BOM only)
 * Fix lambda modules support (modules declared with lambda expression) (#160)
 * Exclude "sun.*" objects from configuration analysis (#170, #180)
+* Fix junit5 extensions support for @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+  (class instance injections now processed in beforeEach hook instead of instancePostProcessor)
 
 Lambda modules reporting:
 - Root lambda module class will be shown in the diagnostic report (in a list of root modules)
