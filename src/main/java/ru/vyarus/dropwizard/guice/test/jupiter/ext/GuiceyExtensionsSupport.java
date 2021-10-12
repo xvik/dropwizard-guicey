@@ -95,10 +95,12 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         final Object testInstance = context.getTestInstance()
                 .orElseThrow(() -> new IllegalStateException("Unable to get the current test instance"));
 
-        final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(context));
+        final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(context),
+                "Guicey test support was not initialized: most likely, you are trying to manually "
+                        + "register extension using non-static field - such usage is not supported.");
 
         InjectorLookup.getInjector(support.getApplication()).orElseThrow(() ->
-                new IllegalStateException("Can't find guicey injector to process test fields injections"))
+                        new IllegalStateException("Can't find guicey injector to process test fields injections"))
                 .injectMembers(testInstance);
     }
 
