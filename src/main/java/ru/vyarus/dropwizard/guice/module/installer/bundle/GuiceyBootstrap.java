@@ -265,7 +265,7 @@ public class GuiceyBootstrap {
      * Share global state to be used in other bundles (during configuration). This was added for very special cases
      * when shared state is unavoidable to not re-invent the wheel each time!
      * <p>
-     * Internally, state is linked to application instance so it would be safe to use with concurrent tests.
+     * Internally, state is linked to application instance, so it would be safe to use with concurrent tests.
      * Value could be accessed statically with application instance:
      * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#lookup(Application, Class)}.
      * <p>

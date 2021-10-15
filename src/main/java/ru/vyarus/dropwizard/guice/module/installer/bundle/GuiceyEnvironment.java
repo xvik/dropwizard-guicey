@@ -357,7 +357,7 @@ public class GuiceyEnvironment {
 
     /**
      * Access shared value. Shared state value assumed to be initialized under initialization phase  (but you
-     * can workaround this limitation by accessing shared state statically)
+     * can work around this limitation by accessing shared state statically)
      *
      * @param key shared object key
      * @param <T> shared object type
