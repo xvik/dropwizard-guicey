@@ -4,11 +4,20 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import com.google.inject.Injector;
 import io.dropwizard.Application;
+import io.dropwizard.Configuration;
 import io.dropwizard.lifecycle.Managed;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
-import java.util.*;
+import javax.inject.Provider;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -31,6 +40,10 @@ import java.util.function.Supplier;
  * access application state. Alternatively, dropwizard {@link Environment} may be used for resolution:
  * {@link #get(Environment)}.
  * <p>
+ * During startup shared state instance could be obtained directly as {@link #getStartupInstance()}, but only
+ * from application main thread. This might be required for places where neither application nor environment
+ * object available. After guice bundle's run method finishes, startup instance is unlinked.
+ * <p>
  * Classes are used as state keys to simplify usage (in most cases, bundle class will be used as key).
  * Shared value could be set only once (to prevent complex situations with state substitutions). It is advised
  * to initialize shared value only in initialization phase (to avoid potential static access errors).
@@ -38,10 +51,12 @@ import java.util.function.Supplier;
  * Objects available in shared state by default: {@link io.dropwizard.setup.Bootstrap},
  * {@link io.dropwizard.Configuration}, {@link Environment},
  * {@link ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree}, {@link com.google.inject.Injector}
+ * (see shortcut instance methods).
  *
  * @author Vyacheslav Rusakov
  * @since 26.09.2019
  */
+@SuppressWarnings("rawtypes")
 public class SharedConfigurationState {
     /**
      * Attribute name used to store application instance in application context attributes.
@@ -50,8 +65,20 @@ public class SharedConfigurationState {
 
     private static final Map<Application, SharedConfigurationState> STATE = Maps.newConcurrentMap();
 
+    /**
+     * During application startup all initialization performed in the single thread and so it is possible
+     * to reference shared state instance with a simple static call. This is required because in some cases
+     * neither Application nor Environment objects are accessible (e.g. BindingInstaller, BundlesLookup).
+     */
+    private static final ThreadLocal<SharedConfigurationState> STARTUP_INSTANCE = new ThreadLocal<>();
+
     private final Map<String, Object> state = new HashMap<>();
     private Application application;
+
+    public SharedConfigurationState() {
+        // make shared state accessible during startup in all places
+        STARTUP_INSTANCE.set(this);
+    }
 
     /**
      * Note: in spite of fact that class is used for key, actual value is stored with full class name string.
@@ -101,6 +128,76 @@ public class SharedConfigurationState {
         }
         return res;
     }
+
+    // ---- providers for common objects
+
+    /**
+     * Bootstrap object is available since guice bundle initialization start. It will not be available for
+     * hooks (because hooks processed before guice bundle initialization call - no way to get boostrap reference).
+     *
+     * @param <C> configuration type
+     * @return bootstrap instance provider (would fail if called too early)
+     */
+    public <C extends Configuration> Provider<Bootstrap<C>> getBootstrap() {
+        return () -> Preconditions.checkNotNull(get(Bootstrap.class), "Bootstrap object not yet available");
+    }
+
+    /**
+     * Application object is available since guice bundle initialization start.
+     *
+     * @param <C> configuration type
+     * @return application instance provider (would fail if called too early)
+     */
+    @SuppressWarnings("unchecked")
+    public <C extends Configuration> Provider<Application<C>> getApplication() {
+        return () -> Optional.<Bootstrap>ofNullable(get(Bootstrap.class))
+                .map(b -> (Application<C>) b.getApplication())
+                .orElseThrow(() -> new NullPointerException("Application instance is not yet available"));
+    }
+
+    /**
+     * Environment instance is available since guice bundle run.
+     *
+     * @return environment instance provider (would fail if called too early)
+     */
+    public Provider<Environment> getEnvironment() {
+        return () -> Preconditions.checkNotNull(get(Environment.class),
+                "Environment is not yet available");
+    }
+
+    /**
+     * Configuration instance is available since guice bundle run.
+     *
+     * @param <C> configuration type
+     * @return configuration instance provider (would fail if called too early)
+     */
+    public <C extends Configuration> Provider<C> getConfiguration() {
+        return () -> Preconditions.checkNotNull(get(Configuration.class),
+                "Configuration is not yet available");
+    }
+
+    /**
+     * Configuration instance is available since guice bundle run.
+     *
+     * @return configuration tree instance provider (would fail if called too early)
+     */
+    public Provider<ConfigurationTree> getConfigurationTree() {
+        return () -> Preconditions.checkNotNull(get(ConfigurationTree.class),
+                "ConfigurationTree is not yet available");
+    }
+
+    /**
+     * Injector instance is created under guice bundle run.
+     *
+     * @return configuration instance provider (would fail if called too early)
+     * @see ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup for simpler lookup method
+     */
+    public Provider<Injector> getInjector() {
+        return () -> Preconditions.checkNotNull(get(ConfigurationTree.class),
+                "Injector is not yet available");
+    }
+
+    // ---- end of common object providers
 
     /**
      * Assumed to be used to store some configuration during startup. For example, if multiple bundle instances
@@ -160,6 +257,34 @@ public class SharedConfigurationState {
         // storing application reference in context attributes (to be able to reference shared state by environment)
         environment.getApplicationContext().setAttribute(CONTEXT_APPLICATION_PROPERTY, application);
         environment.lifecycle().manage(new RegistryShutdown(application));
+    }
+
+    /**
+     * Called after application startup to cleanup thread local instance. After this moment call to
+     * {@link #getStartupInstance()} would lead to exception (since that moment it is not a problem to obtain
+     * application or environment instances and resolve state with them).
+     */
+    protected void forgetStartupInstance() {
+        STARTUP_INSTANCE.remove();
+    }
+
+    /**
+     * During application startup it is not always possible to lookup configuration state with
+     * {@link Application} or {@link Environment} objects. For such cases simplified static call can be used.
+     * For example, in binding installer call, bundles lookup implementation, hook.
+     * <p>
+     * IMPORTANT: It will work only during application startup and only from main application thread! Would not be
+     * available in application run method (becuase at this point guice bundle is already processed).
+     *
+     * @return shared configuration state instance
+     * @throws java.lang.NullPointerException if called after startup, from non-main thread or before guice bundle
+     *                                        registration (too early).
+     */
+    public static SharedConfigurationState getStartupInstance() {
+        return Preconditions.checkNotNull(STARTUP_INSTANCE.get(),
+                "Shared state startup instance is not available: either you try to access it from different thread"
+                        + "or trying to obtain instance after application startup (in later case, use lookup by "
+                        + "application or environment objects instead).");
     }
 
     /**

@@ -747,6 +747,15 @@ public final class ConfigurationContext {
     }
 
     /**
+     * Called after complete guice bundle startup (other dropwizard bundle's run phase (for bundles registered
+     * after guice bundle) may not yet be called).
+     */
+    public void bundleStarted() {
+        lifecycle().applicationRun();
+        sharedState.forgetStartupInstance();
+    }
+
+    /**
      * @param type config type
      * @param <T>  expected items type
      * @return list of all registered items of type or empty list

@@ -4,6 +4,15 @@
 * Fix junit5 extensions support for @TestInstance(TestInstance.Lifecycle.PER_CLASS)
   (class instance injections now processed in beforeEach hook instead of instancePostProcessor)
 * Add error message when junit5 extensions incorrectly registered with non-static fields (to avoid confusion)
+* SharedConfigurationState:
+  - Add ability for direct static lookup during startup (from main thread):
+     SharedConfigurationState.getStartupInstance() 
+     (option required for places where neither application not environment object accessible
+     (e.g. binding installer, bundle lookup, etc.); and could be used for common objects resolution where otherwise 
+     they are not directly accessible)
+  - Add shortcut methods on state instance producing providers (lazy) for common objects:
+     getBootstrap, getApplication, getEnvironment, getConfiguration, getConfigurationTree
+     (example usage during startup: SharedConfigurationState.getStartupInstance().getApplication() returns Provider<Application>)
 
 Lambda modules reporting:
 - Root lambda module class will be shown in the diagnostic report (in a list of root modules)
