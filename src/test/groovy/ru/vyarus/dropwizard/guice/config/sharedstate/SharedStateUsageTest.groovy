@@ -80,6 +80,11 @@ class SharedStateUsageTest extends Specification {
             } catch (IllegalStateException ex) {
                 assert ex.message == 'ups'
             }
+
+            // check state sharing in run phase
+            environment.shareState(Map, "foo")
+            assert environment.sharedState(Map, null) == "foo"
+            assert environment.sharedState(List, { "baa" }) == "baa"
         }
     }
 
@@ -88,6 +93,8 @@ class SharedStateUsageTest extends Specification {
         void initialize(GuiceyBootstrap bootstrap) {
             def state = bootstrap.sharedState(EqualBundle, {"13"})
             assert state == "13"
+
+            assert bootstrap.sharedState(EqualBundle).get() == "13"
         }
 
         @Override

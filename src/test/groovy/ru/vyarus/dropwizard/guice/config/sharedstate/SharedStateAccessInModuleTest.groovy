@@ -53,6 +53,14 @@ class SharedStateAccessInModuleTest extends AbstractTest {
             assert val instanceof Map
 
             val.put("module", "i was here")
+
+
+            shareState(List, "fafa")
+            assert sharedState(List).get() == "fafa"
+
+            
+            sharedState(List, {"ff"}) == "ff"
+            sharedState(Queue, {"tt"}) == "tt"
         }
     }
 }

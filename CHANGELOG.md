@@ -13,6 +13,8 @@
   - Add shortcut methods on state instance producing providers (lazy) for common objects:
      getBootstrap, getApplication, getEnvironment, getConfiguration, getConfigurationTree
      (example usage during startup: SharedConfigurationState.getStartupInstance().getApplication() returns Provider<Application>)
+* Unify shared state access methods in GuiceyBootstrap, GuiceyEnvironment and DropwizardAwareModule
+  (removes implicit limitation that shared state must be initialized only in init phase)
 
 Lambda modules reporting:
 - Root lambda module class will be shown in the diagnostic report (in a list of root modules)
