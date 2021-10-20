@@ -25,7 +25,8 @@ Lambda modules reporting:
       directly under root module, as if it was declared directly in that module (logically it's correct)
 
 IMPORTANT: since dropwizard 2.0.22 [jdk8 compatibility is broken for jdbi3](https://github.com/dropwizard/dropwizard/releases/tag/v2.0.22). 
-To bring back jdk8 compatibility force caffeine version: `com.github.ben-manes.caffeine:caffeine:2.9.2`
+To bring back jdk8 compatibility caffeine version must be downgraded.
+There is now a special package guicey-jdbi3-jdk8 for easy compatibility fixing.
 
 ### 5.3.0 (2021-03-06)
 * Update to guice [5.0.1](https://github.com/google/guice/wiki/Guice501) 

@@ -1,3 +1,22 @@
+### [5.4.0](http://xvik.github.io/dropwizard-guicey/5.4.0) (2021-10-21)
+* Use direct dependency versions in pom to simplify resolution (dependencyManagement section remains but for usage as BOM only)
+* Fix lambda modules support (modules declared with lambda expression) (#160)
+* Exclude "sun.*" objects from configuration analysis (#170, #180)
+* Fix junit5 extensions support for @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+  (class instance injections now processed in beforeEach hook instead of instancePostProcessor)
+* Add error message when junit5 extensions incorrectly registered with non-static fields (to avoid confusion)
+* SharedConfigurationState:
+    - Add ability for direct static lookup during startup (from main thread):
+      SharedConfigurationState.getStartupInstance()
+      (option required for places where neither application not environment object accessible
+      (e.g. binding installer, bundle lookup, etc.); and could be used for common objects resolution where otherwise
+      they are not directly accessible)
+    - Add shortcut methods on state instance producing providers (lazy) for common objects:
+      getBootstrap, getApplication, getEnvironment, getConfiguration, getConfigurationTree
+      (example usage during startup: SharedConfigurationState.getStartupInstance().getApplication() returns Provider<Application>)
+* Unify shared state access methods in GuiceyBootstrap, GuiceyEnvironment and DropwizardAwareModule
+  (removes implicit limitation that shared state must be initialized only in init phase)
+
 ### [5.3.0](http://xvik.github.io/dropwizard-guicey/5.3.0) (2021-03-06)
 * Update to guice [5.0.1](https://github.com/google/guice/wiki/Guice501)
   (java15 support, removes cglib, fixes "illegal reflective access" warnings, update Guava to LATEST 30.1-jre)

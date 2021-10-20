@@ -2,7 +2,7 @@
 
 !!! summary ""
     [Guice](https://github.com/google/guice) `{{ gradle.guice }}` integration for [dropwizard](http://dropwizard.io) `{{ gradle.dropwizard }}`.        
-    Compiled for `java 8`, binary compatible with `java 11`. 
+    Compiled for `java 8`, compatible with `java 11 - 16` ([17 not supported by dropwizard](https://github.com/dropwizard/dropwizard/issues/4347)). 
 
 **[Release Notes](about/release-notes.md)** - [History](about/history.md) - [Javadoc](https://javadoc.io/doc/ru.vyarus/dropwizard-guicey/) - [Support](about/support.md) - [License](about/license.md)       
 
