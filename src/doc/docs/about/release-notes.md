@@ -60,7 +60,7 @@ Now it is supported. But lambda modules has specifics in guicey reporting:
     * Bindings of lambda modules installed by root (or deeper modules) would be shown
       directly under root module, as if it was declared directly in that module (logically it's correct)
 
-# JDK16
+## JDK16
 
 !!! note
     Since JDK 16 `--illegal-access=permit` was changed to `--illegal-access=deny` by default.
