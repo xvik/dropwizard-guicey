@@ -1,3 +1,4 @@
+### 5.4.0 (2021-10-21)
 * Use direct dependency versions in pom to simplify resolution (dependencyManagement section remains but for usage as BOM only)
 * Fix lambda modules support (modules declared with lambda expression) (#160)
 * Exclude "sun.*" objects from configuration analysis (#170, #180)
