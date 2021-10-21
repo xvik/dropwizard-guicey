@@ -1,0 +1,4 @@
+version: 5.4.0
+ext: 5.4.0-1
+dropwizard: 2.0.25
+guice: 5.0.1

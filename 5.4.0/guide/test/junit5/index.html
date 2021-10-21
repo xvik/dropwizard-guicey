@@ -1,0 +1,2667 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Dropwizard guice integration">
+      
+      
+      
+        <meta name="author" content="Vyacheslav Rusakov">
+      
+      
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/5.4.0/guide/test/junit5/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.6">
+    
+    
+      
+        <title>Junit 5 - Dropwizard-guicey</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.2c0c5eaf.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.7fa14f5b.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+        
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-93174150-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#junit-5" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Dropwizard-guicey" class="md-header__button md-logo" aria-label="Dropwizard-guicey" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Dropwizard-guicey
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Junit 5
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-header__options">
+      
+    </div>
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../getting-started/" class="md-tabs__link">
+        Getting started
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../configuration/" class="md-tabs__link md-tabs__link--active">
+        User guide
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../installers/resource/" class="md-tabs__link">
+        Installers
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../extras/bom/" class="md-tabs__link">
+        Modules
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../examples/authentication/" class="md-tabs__link">
+        Examples
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../about/release-notes/" class="md-tabs__link">
+        About
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Dropwizard-guicey" class="md-nav__button md-logo" aria-label="Dropwizard-guicey" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Dropwizard-guicey
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/xvik/dropwizard-guicey/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      <label class="md-nav__link" for="__nav_2">
+        Getting started
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/" class="md-nav__link">
+        Setup
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../concepts/" class="md-nav__link">
+        Concepts overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guice/" class="md-nav__link">
+        Guice
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tests/" class="md-nav__link">
+        Testing
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../decomposition/" class="md-nav__link">
+        Decomposition
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      <label class="md-nav__link" for="__nav_3">
+        User guide
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="User guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          User guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/" class="md-nav__link">
+        Web
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/" class="md-nav__link">
+        Extra integrations
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../bundles/" class="md-nav__link">
+        Bundles
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../yaml-values/" class="md-nav__link">
+        Yaml values
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_7" type="checkbox" id="__nav_3_7" >
+      
+      <label class="md-nav__link" for="__nav_3_7">
+        Guice
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Guice" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_7">
+          <span class="md-nav__icon md-icon"></span>
+          Guice
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guice/injector/" class="md-nav__link">
+        Injector
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guice/bindings/" class="md-nav__link">
+        Bindings
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guice/scopes/" class="md-nav__link">
+        Scopes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guice/module-autowiring/" class="md-nav__link">
+        Module autowiring
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guice/module-analysis/" class="md-nav__link">
+        Modules analysis
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guice/override/" class="md-nav__link">
+        Override bindings
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guice/servletmodule/" class="md-nav__link">
+        ServletModule
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_8" type="checkbox" id="__nav_3_8" >
+      
+      <label class="md-nav__link" for="__nav_3_8">
+        Diagnostic
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Diagnostic" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_8">
+          <span class="md-nav__icon md-icon"></span>
+          Diagnostic
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostic/diagnostic-tools/" class="md-nav__link">
+        Tools
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostic/configuration-report/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostic/configuration-model/" class="md-nav__link">
+        Configuration model
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostic/installers-report/" class="md-nav__link">
+        Installers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostic/yaml-values-report/" class="md-nav__link">
+        Yaml values
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostic/lifecycle-report/" class="md-nav__link">
+        Lifecycle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostic/guice-report/" class="md-nav__link">
+        Guice
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostic/aop-report/" class="md-nav__link">
+        AOP
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostic/web-report/" class="md-nav__link">
+        Web
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagnostic/jersey-report/" class="md-nav__link">
+        Jersey
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_9" type="checkbox" id="__nav_3_9" checked>
+      
+      <label class="md-nav__link" for="__nav_3_9">
+        Test
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Test" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_9">
+          <span class="md-nav__icon md-icon"></span>
+          Test
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Junit 5
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Junit 5
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dropwizard-extensions-compatibility" class="md-nav__link">
+    Dropwizard extensions compatibility
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensions" class="md-nav__link">
+    Extensions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testguiceyapp" class="md-nav__link">
+    @TestGuiceyApp
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testdropwizardapp" class="md-nav__link">
+    @TestDropwizardApp
+  </a>
+  
+    <nav class="md-nav" aria-label="@TestDropwizardApp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#random-ports" class="md-nav__link">
+    Random ports
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rest-mapping" class="md-nav__link">
+    Rest mapping
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guice-injections" class="md-nav__link">
+    Guice injections
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameter-injection" class="md-nav__link">
+    Parameter injection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#client" class="md-nav__link">
+    Client
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deferred-configuration" class="md-nav__link">
+    Deferred configuration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-test-modification" class="md-nav__link">
+    Application test modification
+  </a>
+  
+    <nav class="md-nav" aria-label="Application test modification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hook-fields" class="md-nav__link">
+    Hook fields
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parallel-execution" class="md-nav__link">
+    Parallel execution
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-declaration" class="md-nav__link">
+    Alternative declaration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#junit-nested-classes" class="md-nav__link">
+    Junit nested classes
+  </a>
+  
+    <nav class="md-nav" aria-label="Junit nested classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-interfaces-to-share-tests" class="md-nav__link">
+    Use interfaces to share tests
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#meta-annotation" class="md-nav__link">
+    Meta annotation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dropwizard-startup-error" class="md-nav__link">
+    Dropwizard startup error
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3rd-party-extensions-integration" class="md-nav__link">
+    3rd party extensions integration
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spock/" class="md-nav__link">
+        Spock
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../junit4/" class="md-nav__link">
+        Junit 4
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lifecycle/" class="md-nav__link">
+        Lifecycle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scan/" class="md-nav__link">
+        Classpath scan
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/" class="md-nav__link">
+        Installers
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ordering/" class="md-nav__link">
+        Ordering
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../options/" class="md-nav__link">
+        Options
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../events/" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../disables/" class="md-nav__link">
+        Disables
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deduplication/" class="md-nav__link">
+        De-duplication
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../commands/" class="md-nav__link">
+        Commands
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hooks/" class="md-nav__link">
+        Hooks
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../shared/" class="md-nav__link">
+        Shared state
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hk2/" class="md-nav__link">
+        HK2
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Installers
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Installers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Installers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/resource/" class="md-nav__link">
+        Resource
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/task/" class="md-nav__link">
+        Task
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/managed/" class="md-nav__link">
+        Managed
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/lifecycle/" class="md-nav__link">
+        Lifecycle
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/healthcheck/" class="md-nav__link">
+        Health check
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/jersey-ext/" class="md-nav__link">
+        Jersey extension
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/jersey-feature/" class="md-nav__link">
+        Jersey feature
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/eager/" class="md-nav__link">
+        Eager singleton
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/plugin/" class="md-nav__link">
+        Plugin
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/servlet/" class="md-nav__link">
+        Web servlet
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/filter/" class="md-nav__link">
+        Web filter
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../installers/listener/" class="md-nav__link">
+        Web listener
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      <label class="md-nav__link" for="__nav_5">
+        Modules
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Modules" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Modules
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../extras/bom/" class="md-nav__link">
+        BOM
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../extras/admin-rest/" class="md-nav__link">
+        Admin REST
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../extras/lifecycle-annotations/" class="md-nav__link">
+        Lifecycle annotations
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../extras/eventbus/" class="md-nav__link">
+        Guava EventBus
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../extras/jdbi/" class="md-nav__link">
+        JDBI
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../extras/jdbi3/" class="md-nav__link">
+        JDBI3
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../extras/spa/" class="md-nav__link">
+        SPA
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../extras/gsp/" class="md-nav__link">
+        Server Pages
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../extras/validation/" class="md-nav__link">
+        Validation
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      <label class="md-nav__link" for="__nav_6">
+        Examples
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Examples" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/authentication/" class="md-nav__link">
+        Authentication
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/governator/" class="md-nav__link">
+        Governator
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/hibernate/" class="md-nav__link">
+        Hibernate
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/eventbus/" class="md-nav__link">
+        EventBus
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/jdbi/" class="md-nav__link">
+        JDBI
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../examples/jdbi3/" class="md-nav__link">
+        JDBI3
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      <label class="md-nav__link" for="__nav_7">
+        About
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/release-notes/" class="md-nav__link">
+        Release notes
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/compatibility/" class="md-nav__link">
+        Compatibility
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/history/" class="md-nav__link">
+        Version history
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/support/" class="md-nav__link">
+        Support
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dropwizard-extensions-compatibility" class="md-nav__link">
+    Dropwizard extensions compatibility
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extensions" class="md-nav__link">
+    Extensions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testguiceyapp" class="md-nav__link">
+    @TestGuiceyApp
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testdropwizardapp" class="md-nav__link">
+    @TestDropwizardApp
+  </a>
+  
+    <nav class="md-nav" aria-label="@TestDropwizardApp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#random-ports" class="md-nav__link">
+    Random ports
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rest-mapping" class="md-nav__link">
+    Rest mapping
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guice-injections" class="md-nav__link">
+    Guice injections
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameter-injection" class="md-nav__link">
+    Parameter injection
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#client" class="md-nav__link">
+    Client
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deferred-configuration" class="md-nav__link">
+    Deferred configuration
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-test-modification" class="md-nav__link">
+    Application test modification
+  </a>
+  
+    <nav class="md-nav" aria-label="Application test modification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hook-fields" class="md-nav__link">
+    Hook fields
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parallel-execution" class="md-nav__link">
+    Parallel execution
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-declaration" class="md-nav__link">
+    Alternative declaration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#junit-nested-classes" class="md-nav__link">
+    Junit nested classes
+  </a>
+  
+    <nav class="md-nav" aria-label="Junit nested classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-interfaces-to-share-tests" class="md-nav__link">
+    Use interfaces to share tests
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#meta-annotation" class="md-nav__link">
+    Meta annotation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dropwizard-startup-error" class="md-nav__link">
+    Dropwizard startup error
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3rd-party-extensions-integration" class="md-nav__link">
+    3rd party extensions integration
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/guide/test/junit5.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="junit-5">JUnit 5<a class="headerlink" href="#junit-5" title="Permanent link">&para;</a></h1>
+<p>Junit 5 <a href="https://junit.org/junit5/docs/current/user-guide/">user guide</a></p>
+<p>You will need the following dependencies (assuming BOM used for versions management):</p>
+<div class="highlight"><pre><span></span><code><span class="n">testImplementation</span> <span class="s1">&#39;io.dropwizard:dropwizard-testing&#39;</span>
+<span class="n">testImplementation</span> <span class="s1">&#39;org.junit.jupiter:junit-jupiter-api&#39;</span>
+<span class="n">testRuntimeOnly</span> <span class="s1">&#39;org.junit.jupiter:junit-jupiter&#39;</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you already have junit4 or spock tests, you can activate <a href="https://junit.org/junit5/docs/current/user-guide/#migrating-from-junit4">vintage engine</a> 
+so all tests could work  <strong>together</strong> with junit 5: 
+<div class="highlight"><pre><span></span><code><span class="n">testRuntimeOnly</span> <span class="s1">&#39;org.junit.vintage:junit-vintage-engine&#39;</span>
+</code></pre></div></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In gradle you need to explicitly <a href="https://docs.gradle.org/current/userguide/java_testing.html#using_junit5">activate junit 5 support</a> with
+<div class="highlight"><pre><span></span><code><span class="n">test</span> <span class="o">{</span>
+    <span class="n">useJUnitPlatform</span><span class="o">()</span>
+    <span class="o">...</span>
+<span class="o">}</span>                    
+</code></pre></div></p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Junit 5 annotations are <strong>different</strong> from junit4, so if you have both junit 5 and junit 4
+make sure correct classes (annotations) used for junit 5 tests:
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">org.junit.jupiter.api.Assertions</span><span class="p">;</span>
+<span class="kn">import</span> <span class="nn">org.junit.jupiter.api.Test</span><span class="p">;</span>
+</code></pre></div></p>
+</div>
+<h2 id="dropwizard-extensions-compatibility">Dropwizard extensions compatibility<a class="headerlink" href="#dropwizard-extensions-compatibility" title="Permanent link">&para;</a></h2>
+<p>Guicey extensions can be used with dropwizard extensions. But this may be required only in edge cases
+when multiple applications startup is required.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>There is a difference in extensions implementation. </p>
+<p>Dropwizard extensions work as:
+junit extension <code>@ExtendWith(DropwizardExtensionsSupport.class)</code> looks for fields 
+implementing <code>DropwizardExtension</code> (like <code>DropwizardAppExtension</code>) and start/stop them according to test lifecycle.</p>
+<p>Guicey extensions completely implemented as junit extensions (and only hook fields are manually searched). 
+Also, guciey extension rely on junit parameters injection. Both options has pros and cons.</p>
+</div>
+<h2 id="extensions">Extensions<a class="headerlink" href="#extensions" title="Permanent link">&para;</a></h2>
+<p>Provided extensions:</p>
+<ul>
+<li><code>@TestGuiceyApp</code> - for lightweight tests (without starting web part, only guice context)</li>
+<li><code>@TestDropwizardApp</code> - for complete integration tests</li>
+</ul>
+<p>Both extensions allow using injections directly in test fields.</p>
+<p>Extensions are compatible with <a href="#parallel-execution">parallel execution</a> (no side effects).</p>
+<p><a href="#alternative-declaration">Alternative declaration</a> is possible.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Spock and junit5 extensions are almost equivalent in features and behaviour. </p>
+</div>
+<h2 id="testguiceyapp">@TestGuiceyApp<a class="headerlink" href="#testguiceyapp" title="Permanent link">&para;</a></h2>
+<p><code>@TestGuiceyApp</code> runs all guice logic without starting jetty (so resources, servlets and filters will not be available).
+<code>Managed</code> objects will still be handled correctly.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestGuiceyApp</span><span class="p">(</span><span class="n">MyApplication</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AutoScanModeTest</span> <span class="p">{</span>
+
+    <span class="nd">@Inject</span> 
+    <span class="n">MyService</span> <span class="n">service</span><span class="p">;</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testMyService</span><span class="p">()</span> <span class="p">{</span>        
+        <span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">,</span> <span class="n">service</span><span class="p">.</span><span class="na">getSmth</span><span class="p">());</span>     
+    <span class="p">}</span>
+</code></pre></div>
+<p>Also, injections work as method parameters:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestGuiceyApp</span><span class="p">(</span><span class="n">MyApplication</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AutoScanModeTest</span> <span class="p">{</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testMyService</span><span class="p">(</span><span class="n">MyService</span> <span class="n">service</span><span class="p">)</span> <span class="p">{</span>        
+        <span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">,</span> <span class="n">service</span><span class="p">.</span><span class="na">getSmth</span><span class="p">());</span>     
+    <span class="p">}</span>
+</code></pre></div>
+<p>Application started before all tests in annotated class and stopped after them.</p>
+<h2 id="testdropwizardapp">@TestDropwizardApp<a class="headerlink" href="#testdropwizardapp" title="Permanent link">&para;</a></h2>
+<p><code>@TestDropwizardApp</code> is useful for complete integration testing (when web part is required):</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestDropwizardApp</span><span class="o">(</span><span class="n">MyApplication</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">class</span> <span class="nc">WebModuleTest</span> <span class="o">{</span>
+
+    <span class="nd">@Inject</span> 
+    <span class="n">MyService</span> <span class="n">service</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">checkWebBindings</span><span class="o">(</span><span class="n">ClientSupport</span> <span class="n">client</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">Assertions</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="s2">&quot;Sample filter and service called&quot;</span><span class="o">,</span> 
+            <span class="n">client</span><span class="o">.</span><span class="na">targetMain</span><span class="o">(</span><span class="s2">&quot;servlet&quot;</span><span class="o">).</span><span class="na">request</span><span class="o">().</span><span class="na">buildGet</span><span class="o">().</span><span class="na">invoke</span><span class="o">().</span><span class="na">readEntity</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+
+        <span class="n">Assertions</span><span class="o">.</span><span class="na">assertTrur</span><span class="o">(</span><span class="n">service</span><span class="o">.</span><span class="na">isCalled</span><span class="o">());</span>
+</code></pre></div>
+<h3 id="random-ports">Random ports<a class="headerlink" href="#random-ports" title="Permanent link">&para;</a></h3>
+<p>In order to start application on random port you can use configuration shortcut:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestDropwizardApp</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">MyApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">randomPorts</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Random ports will be applied even if configuration with exact ports provided:
+<div class="highlight"><pre><span></span><code><span class="nd">@TestDropwizardApp</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">MyApplication</span><span class="o">,</span> 
+                  <span class="n">config</span> <span class="o">=</span> <span class="s1">&#39;path/to/my/config.yml&#39;</span><span class="o">,</span> 
+                  <span class="n">randomPorts</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+</code></pre></div>
+Also, random ports support both server types (default and simple)</p>
+</div>
+<p>Real ports could be resolved with <a href="#client">ClientSupport</a> object.</p>
+<h3 id="rest-mapping">Rest mapping<a class="headerlink" href="#rest-mapping" title="Permanent link">&para;</a></h3>
+<p>Normally, rest mapping configured with <code>server.rootMapping=/something/*</code> configuration, but
+if you don't use custom configuration class, but still want to re-map rest, shortcut could be used:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestDropwizardApp</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">MyApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">restMapping</span><span class="o">=</span><span class="s2">&quot;something&quot;</span><span class="o">)</span>
+</code></pre></div>
+<p>In contrast to config declaration, attribute value may not start with '/' and end with '/*' -
+it would be appended automatically. </p>
+<p>This option is only intended to simplify cases when custom configuration file is not yet used in tests
+(usually early PoC phase). It allows you to map servlet into application root in test (because rest is no
+more resides in root). When used with existing configuration file, this parameter will override file definition.</p>
+<h2 id="guice-injections">Guice injections<a class="headerlink" href="#guice-injections" title="Permanent link">&para;</a></h2>
+<p>Any gucie bean may be injected directly into test field:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span>
+<span class="n">SomeBean</span> <span class="n">bean</span>
+</code></pre></div>
+<p>This may be even bean not declared in guice modules (JIT injection will occur).</p>
+<p>To better understand injection scopes look the following test:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestGuiceyApp</span><span class="o">(</span><span class="n">AutoScanApplication</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="nd">@TestMethodOrder</span><span class="o">(</span><span class="n">MethodOrderer</span><span class="o">.</span><span class="na">OrderAnnotation</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">InjectionScopeTest</span> <span class="o">{</span>
+
+    <span class="c1">// new instance injected on each test</span>
+    <span class="nd">@Inject</span>
+    <span class="n">TestBean</span> <span class="n">bean</span><span class="o">;</span>
+
+    <span class="c1">// the same context used for all tests (in class), so the same bean instance inserted before each test</span>
+    <span class="nd">@Inject</span>
+    <span class="n">TestSingletonBean</span> <span class="n">singletonBean</span><span class="o">;</span>
+
+    <span class="nd">@Test</span>
+    <span class="nd">@Order</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testInjection</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">bean</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+        <span class="n">singletonBean</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">15</span><span class="o">;</span>
+
+        <span class="n">Assertions</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="n">bean</span><span class="o">.</span><span class="na">value</span><span class="o">);</span>
+        <span class="n">Assertions</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">15</span><span class="o">,</span> <span class="n">singletonBean</span><span class="o">.</span><span class="na">value</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Test</span>
+    <span class="nd">@Order</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testSharedState</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="n">Assertions</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">bean</span><span class="o">.</span><span class="na">value</span><span class="o">);</span>
+        <span class="n">Assertions</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="mi">15</span><span class="o">,</span> <span class="n">singletonBean</span><span class="o">.</span><span class="na">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">// bean is in prototype scope</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TestBean</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Singleton</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TestSingletonBean</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Guice AOP will not work on test methods (because test instances not created by guice).</p>
+</div>
+<h2 id="parameter-injection">Parameter injection<a class="headerlink" href="#parameter-injection" title="Permanent link">&para;</a></h2>
+<p>Any <strong>declared</strong> guice bean may be injected as method parameter:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testSomthing</span><span class="p">(</span><span class="n">DummyBean</span> <span class="n">bean</span><span class="p">)</span> 
+</code></pre></div>
+<p>(where <code>DummyBean</code> is manually declared in some module or JIT-instantiated during injector creation).</p>
+<p>For not declared beans injection (JIT) special annotation must be used:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testSomthing</span><span class="p">(</span><span class="nd">@Jit</span> <span class="n">TestBean</span> <span class="n">bean</span><span class="p">)</span> 
+</code></pre></div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Additional annotation required because you may use other junit extensions providing their own
+parameters, which guicey extension should not try to handle. That's why not annotated parameters
+verified with existing injector bindings.</p>
+</div>
+<p>Qualified and generified injections will also work:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testSomthing</span><span class="p">(</span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;qual&quot;</span><span class="p">)</span> <span class="n">SomeBean</span> <span class="n">bean</span><span class="p">,</span>
+                         <span class="n">TestBean</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">generifiedBean</span><span class="p">,</span>
+                         <span class="n">Provider</span><span class="o">&lt;</span><span class="n">OtherBean</span><span class="o">&gt;</span> <span class="n">provider</span><span class="p">)</span> 
+</code></pre></div>
+<p>Also, there are special objects available as parameters:</p>
+<ul>
+<li><code>Application</code> or exact application class (<code>MyApplication</code>)</li>
+<li><code>ObjectMapper</code></li>
+<li><code>ClientSupport</code> application web client helper</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Parameter injection will work not only in test, but also in lifecyle methods (beforeAll, afterEach etc.) </p>
+</div>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestDropwizardApp</span><span class="p">(</span><span class="n">AutoScanApplication</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParametersInjectionDwTest</span> <span class="p">{</span>
+
+    <span class="kd">public</span> <span class="nf">ParametersInjectionDwTest</span><span class="p">(</span><span class="n">Environment</span> <span class="n">env</span><span class="p">,</span> <span class="n">DummyService</span> <span class="n">service</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Preconditions</span><span class="p">.</span><span class="na">checkNotNull</span><span class="p">(</span><span class="n">env</span><span class="p">);</span>
+        <span class="n">Preconditions</span><span class="p">.</span><span class="na">checkNotNull</span><span class="p">(</span><span class="n">service</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nd">@BeforeAll</span>
+    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">before</span><span class="p">(</span><span class="n">Application</span> <span class="n">app</span><span class="p">,</span> <span class="n">DummyService</span> <span class="n">service</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Preconditions</span><span class="p">.</span><span class="na">checkNotNull</span><span class="p">(</span><span class="n">app</span><span class="p">);</span>
+        <span class="n">Preconditions</span><span class="p">.</span><span class="na">checkNotNull</span><span class="p">(</span><span class="n">service</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nd">@BeforeEach</span>
+    <span class="kt">void</span> <span class="nf">setUp</span><span class="p">(</span><span class="n">Application</span> <span class="n">app</span><span class="p">,</span> <span class="n">DummyService</span> <span class="n">service</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Preconditions</span><span class="p">.</span><span class="na">checkNotNull</span><span class="p">(</span><span class="n">app</span><span class="p">);</span>
+        <span class="n">Preconditions</span><span class="p">.</span><span class="na">checkNotNull</span><span class="p">(</span><span class="n">service</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nd">@AfterEach</span>
+    <span class="kt">void</span> <span class="nf">tearDown</span><span class="p">(</span><span class="n">Application</span> <span class="n">app</span><span class="p">,</span> <span class="n">DummyService</span> <span class="n">service</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Preconditions</span><span class="p">.</span><span class="na">checkNotNull</span><span class="p">(</span><span class="n">app</span><span class="p">);</span>
+        <span class="n">Preconditions</span><span class="p">.</span><span class="na">checkNotNull</span><span class="p">(</span><span class="n">service</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nd">@AfterAll</span>
+    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">after</span><span class="p">(</span><span class="n">Application</span> <span class="n">app</span><span class="p">,</span> <span class="n">DummyService</span> <span class="n">service</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Preconditions</span><span class="p">.</span><span class="na">checkNotNull</span><span class="p">(</span><span class="n">app</span><span class="p">);</span>
+        <span class="n">Preconditions</span><span class="p">.</span><span class="na">checkNotNull</span><span class="p">(</span><span class="n">service</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Test</span>
+    <span class="kt">void</span> <span class="nf">checkAllPossibleParams</span><span class="p">(</span><span class="n">Application</span> <span class="n">app</span><span class="p">,</span>
+                                <span class="n">AutoScanApplication</span> <span class="n">app2</span><span class="p">,</span>
+                                <span class="n">Configuration</span> <span class="n">conf</span><span class="p">,</span>
+                                <span class="n">TestConfiguration</span> <span class="n">conf2</span><span class="p">,</span>
+                                <span class="n">Environment</span> <span class="n">env</span><span class="p">,</span>
+                                <span class="n">ObjectMapper</span> <span class="n">mapper</span><span class="p">,</span>
+                                <span class="n">Injector</span> <span class="n">injector</span><span class="p">,</span>
+                                <span class="n">ClientSupport</span> <span class="n">client</span><span class="p">,</span>
+                                <span class="n">DummyService</span> <span class="n">service</span><span class="p">,</span>
+                                <span class="nd">@Jit</span> <span class="n">JitService</span> <span class="n">jit</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">assertNotNull</span><span class="p">(</span><span class="n">app</span><span class="p">);</span>
+        <span class="n">assertNotNull</span><span class="p">(</span><span class="n">app2</span><span class="p">);</span>
+        <span class="n">assertNotNull</span><span class="p">(</span><span class="n">conf</span><span class="p">);</span>
+        <span class="n">assertNotNull</span><span class="p">(</span><span class="n">conf2</span><span class="p">);</span>
+        <span class="n">assertNotNull</span><span class="p">(</span><span class="n">env</span><span class="p">);</span>
+        <span class="n">assertNotNull</span><span class="p">(</span><span class="n">mapper</span><span class="p">);</span>
+        <span class="n">assertNotNull</span><span class="p">(</span><span class="n">injector</span><span class="p">);</span>
+        <span class="n">assertNotNull</span><span class="p">(</span><span class="n">client</span><span class="p">);</span>
+        <span class="n">assertNotNull</span><span class="p">(</span><span class="n">service</span><span class="p">);</span>
+        <span class="n">assertNotNull</span><span class="p">(</span><span class="n">jit</span><span class="p">);</span>
+        <span class="n">assertEquals</span><span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="na">getPort</span><span class="p">(),</span> <span class="mi">8080</span><span class="p">);</span>
+        <span class="n">assertEquals</span><span class="p">(</span><span class="n">client</span><span class="p">.</span><span class="na">getAdminPort</span><span class="p">(),</span> <span class="mi">8081</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">JitService</span> <span class="p">{</span>
+
+        <span class="kd">private</span> <span class="kd">final</span> <span class="n">DummyService</span> <span class="n">service</span><span class="p">;</span>
+
+        <span class="nd">@Inject</span>
+        <span class="kd">public</span> <span class="nf">JitService</span><span class="p">(</span><span class="n">DummyService</span> <span class="n">service</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="na">service</span> <span class="o">=</span> <span class="n">service</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="client">Client<a class="headerlink" href="#client" title="Permanent link">&para;</a></h2>
+<p>Both extensions prepare special jersey client instance which could be used for web calls.
+It is mostly useful for complete web tests to call rest services and servlets.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">checkRandomPorts</span><span class="p">(</span><span class="n">ClientSupport</span> <span class="n">client</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Assertions</span><span class="p">.</span><span class="na">assertNotEquals</span><span class="p">(</span><span class="mi">8080</span><span class="p">,</span> <span class="n">client</span><span class="p">.</span><span class="na">getPort</span><span class="p">());</span>
+    <span class="n">Assertions</span><span class="p">.</span><span class="na">assertNotEquals</span><span class="p">(</span><span class="mi">8081</span><span class="p">,</span> <span class="n">client</span><span class="p">.</span><span class="na">getAdminPort</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Client object provides:</p>
+<ul>
+<li>Access to <a href="https://eclipse-ee4j.github.io/jersey.github.io/documentation/2.29.1/client.html">JerseyClient</a> object (for raw calls)</li>
+<li>Shortcuts for querying main, admin or rest contexts (it will count the current configuration automatically)</li>
+<li>Shortcuts for base main, admin or rest contexts base urls (and application ports)</li>
+</ul>
+<p>Example usages:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// GET {rest path}/some</span>
+<span class="n">client</span><span class="p">.</span><span class="na">targetRest</span><span class="p">(</span><span class="s">&quot;some&quot;</span><span class="p">).</span><span class="na">request</span><span class="p">().</span><span class="na">buildGet</span><span class="p">().</span><span class="na">invoke</span><span class="p">()</span>
+
+<span class="c1">// GET {main context path}/servlet</span>
+<span class="n">client</span><span class="p">.</span><span class="na">targetMain</span><span class="p">(</span><span class="s">&quot;servlet&quot;</span><span class="p">).</span><span class="na">request</span><span class="p">().</span><span class="na">buildGet</span><span class="p">().</span><span class="na">invoke</span><span class="p">()</span>
+
+<span class="c1">// GET {admin context path}/adminServlet</span>
+<span class="n">client</span><span class="p">.</span><span class="na">targetAdmin</span><span class="p">(</span><span class="s">&quot;adminServlet&quot;</span><span class="p">).</span><span class="na">request</span><span class="p">().</span><span class="na">buildGet</span><span class="p">().</span><span class="na">invoke</span><span class="p">()</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>All methods above accepts any number of strings which would be automatically combined into correct path:
+<div class="highlight"><pre><span></span><code><span class="n">client</span><span class="o">.</span><span class="na">targetRest</span><span class="o">(</span><span class="s2">&quot;some&quot;</span><span class="o">,</span> <span class="s2">&quot;other/&quot;</span><span class="o">,</span> <span class="s2">&quot;/part&quot;</span><span class="o">)</span>
+</code></pre></div>
+would be correctly combined as "/some/other/part/"</p>
+</div>
+<p>As you can see test code is abstracted from actual configuration: it may be default or simple server
+with any contexts mapping on any ports - target urls will always be correct.</p>
+<div class="highlight"><pre><span></span><code><span class="n">Response</span> <span class="n">res</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="na">targetRest</span><span class="p">(</span><span class="s">&quot;some&quot;</span><span class="p">).</span><span class="na">request</span><span class="p">().</span><span class="na">buildGet</span><span class="p">().</span><span class="na">invoke</span><span class="p">()</span>
+
+<span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">res</span><span class="p">.</span><span class="na">getStatus</span><span class="p">())</span>
+<span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="s">&quot;response text&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">.</span><span class="na">readEntity</span><span class="p">(</span><span class="n">String</span><span class="p">))</span> 
+</code></pre></div>
+<p>Also, if you want to use other client, client object can simply provide required info:</p>
+<div class="highlight"><pre><span></span><code><span class="n">client</span><span class="o">.</span><span class="na">getPort</span><span class="o">()</span>        <span class="c1">// app port (8080)</span>
+<span class="n">client</span><span class="o">.</span><span class="na">getAdminPort</span><span class="o">()</span>   <span class="c1">// app admin port (8081)</span>
+<span class="n">client</span><span class="o">.</span><span class="na">basePathMain</span><span class="o">()</span>   <span class="c1">// main context path (http://localhost:8080/)</span>
+<span class="n">client</span><span class="o">.</span><span class="na">basePathAdmin</span><span class="o">()</span>  <span class="c1">// admin context path (http://localhost:8081/)</span>
+<span class="n">client</span><span class="o">.</span><span class="na">basePathRest</span><span class="o">()</span>   <span class="c1">// rest context path (http://localhost:8080/)</span>
+</code></pre></div>
+<p>Raw client usage:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// call completely external url</span>
+<span class="n">client</span><span class="p">.</span><span class="na">target</span><span class="p">(</span><span class="s">&quot;http://somedomain:8080/dummy/&quot;</span><span class="p">).</span><span class="na">request</span><span class="p">().</span><span class="na">buildGet</span><span class="p">().</span><span class="na">invoke</span><span class="p">()</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Client object could be injected with both dropwizard and guicey extensions, but in case of guicey extension,
+only raw client could be used (because web part not started all other methods will throw NPE)</p>
+</div>
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<p>For both extensions you can configure application with external configuration file:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestGuiceyApp</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">MyApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="s">&quot;path/to/my/config.yml&quot;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ConfigOverrideTest</span> <span class="p">{</span>
+</code></pre></div>
+<p>Or just declare required values:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestGuiceyApp</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">MyApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+    <span class="n">configOverride</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;foo: 2&quot;</span><span class="p">,</span>
+            <span class="s">&quot;bar: 12&quot;</span>
+    <span class="p">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ConfigOverrideTest</span> <span class="p">{</span>
+</code></pre></div>
+<p>(note that overriding declaration follows yaml format "key: value")</p>
+<p>Or use both at once (here overrides will override file values):</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestGuiceyApp</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">MyApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my</span><span class="o">/</span><span class="n">config</span><span class="p">.</span><span class="na">yml</span><span class="err">&#39;</span><span class="p">,</span>
+    <span class="n">configOverride</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;foo: 2&quot;</span><span class="p">,</span>
+            <span class="s">&quot;bar: 12&quot;</span>
+    <span class="p">})</span>
+<span class="kd">class</span> <span class="nc">ConfigOverrideTest</span> <span class="p">{</span>
+</code></pre></div>
+<h3 id="deferred-configuration">Deferred configuration<a class="headerlink" href="#deferred-configuration" title="Permanent link">&para;</a></h3>
+<p>If you need to configure value, supplied by some other extension, or value may be resolved only
+after test start, then static overrides declaration is not an option. In this case use
+<a href="#alternative-declaration">alternative extensions declaration</a> which provides additional 
+config override methods:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@RegisterExtension</span>
+<span class="nd">@Order</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="kd">static</span> <span class="n">FooExtension</span> <span class="n">ext</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FooExtension</span><span class="p">();</span>
+
+<span class="nd">@RegisterExtension</span>
+<span class="nd">@Order</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="kd">static</span> <span class="n">TestGuiceyAppExtension</span> <span class="n">app</span> <span class="o">=</span> <span class="n">TestGuiceyAppExtension</span><span class="p">.</span><span class="na">forApp</span><span class="p">(</span><span class="n">AutoScanApplication</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+        <span class="p">.</span><span class="na">config</span><span class="p">(</span><span class="s">&quot;src/test/resources/ru/vyarus/dropwizard/guice/config.yml&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="na">configOverrides</span><span class="p">(</span><span class="s">&quot;foo: 1&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="na">configOverride</span><span class="p">(</span><span class="s">&quot;bar&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ext</span><span class="p">.</span><span class="na">getValue</span><span class="p">())</span>
+        <span class="p">.</span><span class="na">configOverrides</span><span class="p">(</span><span class="k">new</span> <span class="n">ConfigOverrideValue</span><span class="p">(</span><span class="s">&quot;baa&quot;</span><span class="p">,</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="s">&quot;44&quot;</span><span class="p">))</span>
+        <span class="p">.</span><span class="na">create</span><span class="p">();</span>
+</code></pre></div>
+<p>In most cases <code>configOverride("bar", () -&gt; ext.getValue())</code> would be enough to configure a supplier instead
+of static value.</p>
+<p>In more complex cases, you can use custom implementations of <code>ConfigOverride</code>. </p>
+<div class="admonition warning">
+<p>Guicey have to accept only <code>ConfigOverride</code> objects implementing custom 
+<code>ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix</code> interface. 
+In order to support parallel tests guicey generates unique config prefix for each test
+(because all overrides eventually stored to system properties) and so it needs a way
+to set this prefix into custom <code>ConfigOverride</code> objects.</p>
+</div>
+<h2 id="application-test-modification">Application test modification<a class="headerlink" href="#application-test-modification" title="Permanent link">&para;</a></h2>
+<p>You can use <a href="../overview/#configuration-hooks">hooks to customize application</a>.</p>
+<p>In both extensions annotation hooks could be declared with attribute:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestDropwizardApp</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">MyApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">hooks</span> <span class="o">=</span> <span class="n">MyHook</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+</code></pre></div>
+<p>or</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestGuiceyApp</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">MyApplication</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">hooks</span> <span class="o">=</span> <span class="n">MyHook</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+</code></pre></div>
+<p>Where MyHook is:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyHook</span> <span class="kd">implements</span> <span class="n">GuiceyConfigurationHook</span> <span class="p">{}</span>
+</code></pre></div>
+<h3 id="hook-fields">Hook fields<a class="headerlink" href="#hook-fields" title="Permanent link">&para;</a></h3>
+<p>Alternatively, you can declare hook directly in test static field:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@EnableHook</span>
+<span class="kd">static</span> <span class="n">GuiceyConfigurationHook</span> <span class="n">HOOK</span> <span class="o">=</span> <span class="n">builder</span> <span class="o">-&gt;</span> <span class="n">builder</span><span class="p">.</span><span class="na">modules</span><span class="p">(</span><span class="k">new</span> <span class="n">DebugModule</span><span class="p">());</span>
+</code></pre></div>
+<p>Any number of fields could be declared. The same way hook could be declared in base test class:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BaseTest</span> <span class="p">{</span>
+
+    <span class="c1">// hook in base class</span>
+    <span class="nd">@EnableHook</span>
+    <span class="kd">static</span> <span class="n">GuiceyConfigurationHook</span> <span class="n">BASE_HOOK</span> <span class="o">=</span> <span class="n">builder</span> <span class="o">-&gt;</span> <span class="n">builder</span><span class="p">.</span><span class="na">modules</span><span class="p">(</span><span class="k">new</span> <span class="n">DebugModule</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="nd">@TestGuiceyApp</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">hooks</span> <span class="o">=</span> <span class="n">SomeOtherHook</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SomeTest</span> <span class="kd">extends</span> <span class="n">BaseTest</span> <span class="p">{</span>
+
+    <span class="c1">// Another hook</span>
+    <span class="nd">@EnableHook</span>
+    <span class="kd">static</span> <span class="n">GuiceyConfigurationHook</span> <span class="n">HOOK</span> <span class="o">=</span> <span class="n">builder</span> <span class="o">-&gt;</span> <span class="n">builder</span><span class="p">.</span><span class="na">modules</span><span class="p">(</span><span class="k">new</span> <span class="n">DebugModule2</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>All 3 hooks will work.</p>
+<h2 id="parallel-execution">Parallel execution<a class="headerlink" href="#parallel-execution" title="Permanent link">&para;</a></h2>
+<p>Junit <a href="https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution">parallel tests execution</a>
+could be activated with properties file <code>junit-platform.properties</code> located at test resources root:</p>
+<div class="highlight"><pre><span></span><code><span class="na">junit.jupiter.execution.parallel.enabled</span> <span class="o">=</span> <span class="s">true</span>
+<span class="na">junit.jupiter.execution.parallel.mode.default</span> <span class="o">=</span> <span class="s">concurrent</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In order to avoid config overriding collisions (because all overrides eventually stored to system properties)
+guicey generates unique property prefixes in each test.</p>
+</div>
+<p>To avoid port collisions in dropwizard tests use <a href="#random-ports">randomPorts option</a>.</p>
+<h2 id="alternative-declaration">Alternative declaration<a class="headerlink" href="#alternative-declaration" title="Permanent link">&para;</a></h2>
+<p>Both extensions could be declared in static fields:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@RegisterExtension</span>
+<span class="kd">static</span> <span class="n">TestDropwizardAppExtension</span> <span class="n">app</span> <span class="o">=</span> <span class="n">TestDropwizardAppExtension</span><span class="p">.</span><span class="na">forApp</span><span class="p">(</span><span class="n">AutoScanApplication</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+        <span class="p">.</span><span class="na">config</span><span class="p">(</span><span class="s">&quot;src/test/resources/ru/vyarus/dropwizard/guice/config.yml&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="na">configOverrides</span><span class="p">(</span><span class="s">&quot;foo: 2&quot;</span><span class="p">,</span> <span class="s">&quot;bar: 12&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="na">randomPorts</span><span class="p">()</span>
+        <span class="p">.</span><span class="na">hooks</span><span class="p">(</span><span class="n">Hook</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+        <span class="p">.</span><span class="na">hooks</span><span class="p">(</span><span class="n">builder</span> <span class="o">-&gt;</span> <span class="n">builder</span><span class="p">.</span><span class="na">disableExtensions</span><span class="p">(</span><span class="n">DummyManaged</span><span class="p">.</span><span class="na">class</span><span class="p">))</span>
+        <span class="p">.</span><span class="na">create</span><span class="p">();</span>
+</code></pre></div>
+<p>The only difference with annotations is that you can declare hooks as lambdas directly 
+(still hooks in static fields will also work).</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@RegisterExtension</span>
+<span class="kd">static</span> <span class="n">TestGuiceyAppExtension</span> <span class="n">app</span> <span class="o">=</span> <span class="n">TestGuiceyAppExtension</span><span class="p">.</span><span class="na">forApp</span><span class="p">(</span><span class="n">AutoScanApplication</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+        <span class="p">...</span>
+</code></pre></div>
+<p>This alternative declaration is intended to be used in cases when guicey exensions need to be aligned with
+other 3<sup>rd</sup> party extensions: in junit you can order extensions declared with annotations (by annotation order)
+and extensions declared with <code>@RegisterExtension</code> (by declaration order). But there is no way
+to order extension registered with <code>@RegisterExtension</code> before annotation extension.</p>
+<p>So if you have 3<sup>rd</sup> party extension which needs to be executed BEFORE guicey extensions, you can use field declaration.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Junit 5 intentionally shuffle <code>@RegisterExtension</code> extensions order, but you can always order them with
+<code>@Order</code> annotation.</p>
+</div>
+<h2 id="junit-nested-classes">Junit nested classes<a class="headerlink" href="#junit-nested-classes" title="Permanent link">&para;</a></h2>
+<p>Junit natively supports <a href="https://junit.org/junit5/docs/current/user-guide/#writing-tests-nested">nested tests</a>.</p>
+<p>Guicey extensions affects all nested tests below declaration (nesting level is not limited):</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestGuiceyApp</span><span class="p">(</span><span class="n">AutoScanApplication</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">NestedPropagationTest</span> <span class="p">{</span>
+
+    <span class="nd">@Inject</span>
+    <span class="n">Environment</span> <span class="n">environment</span><span class="p">;</span>
+
+    <span class="nd">@Test</span>
+    <span class="kt">void</span> <span class="nf">checkInjection</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">Assertions</span><span class="p">.</span><span class="na">assertNotNull</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Nested</span>
+    <span class="kd">class</span> <span class="nc">Inner</span> <span class="p">{</span>
+
+        <span class="nd">@Inject</span>
+        <span class="n">Environment</span> <span class="n">env</span><span class="p">;</span> <span class="c1">// intentionally different name</span>
+
+        <span class="nd">@Test</span>
+        <span class="kt">void</span> <span class="nf">checkInjection</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">Assertions</span><span class="p">.</span><span class="na">assertNotNull</span><span class="p">(</span><span class="n">env</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Nested tests will use exactly the same guice context as root test (application started only once).</p>
+</div>
+<p>Extension declared on nested test will affect all sub-tests:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">NestedTreeTest</span> <span class="p">{</span>
+
+    <span class="nd">@TestGuiceyApp</span><span class="p">(</span><span class="n">AutoScanApplication</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+    <span class="nd">@Nested</span>
+    <span class="kd">class</span> <span class="nc">Level1</span> <span class="p">{</span>
+
+        <span class="nd">@Inject</span>
+        <span class="n">Environment</span> <span class="n">environment</span><span class="p">;</span>
+
+        <span class="nd">@Test</span>
+        <span class="kt">void</span> <span class="nf">checkExtensionApplied</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">Assertions</span><span class="p">.</span><span class="na">assertNotNull</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="nd">@Nested</span>
+        <span class="kd">class</span> <span class="nc">Level2</span> <span class="p">{</span>
+            <span class="nd">@Inject</span>
+            <span class="n">Environment</span> <span class="n">env</span><span class="p">;</span>
+
+            <span class="nd">@Test</span>
+            <span class="kt">void</span> <span class="nf">checkExtensionApplied</span><span class="p">()</span> <span class="p">{</span>
+                <span class="n">Assertions</span><span class="p">.</span><span class="na">assertNotNull</span><span class="p">(</span><span class="n">env</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="nd">@Nested</span>
+            <span class="kd">class</span> <span class="nc">Level3</span> <span class="p">{</span>
+
+                <span class="nd">@Inject</span>
+                <span class="n">Environment</span> <span class="n">envr</span><span class="p">;</span>
+
+                <span class="nd">@Test</span>
+                <span class="kt">void</span> <span class="nf">checkExtensionApplied</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="n">Assertions</span><span class="p">.</span><span class="na">assertNotNull</span><span class="p">(</span><span class="n">envr</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nd">@Nested</span>
+    <span class="kd">class</span> <span class="nc">NotAffected</span> <span class="p">{</span>
+        <span class="nd">@Inject</span>
+        <span class="n">Environment</span> <span class="n">environment</span><span class="p">;</span>
+
+        <span class="nd">@Test</span>
+        <span class="kt">void</span> <span class="nf">extensionNotApplied</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">Assertions</span><span class="p">.</span><span class="na">assertNull</span><span class="p">(</span><span class="n">environment</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This way nested tests allows you to use different extension configurations in one (root) class.</p>
+<h3 id="use-interfaces-to-share-tests">Use interfaces to share tests<a class="headerlink" href="#use-interfaces-to-share-tests" title="Permanent link">&para;</a></h3>
+<p>This is just a tip on how to execute same test method in different environments.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClientSupportDwTest</span> <span class="p">{</span>
+
+    <span class="kd">interface</span> <span class="nc">ClientCallTest</span> <span class="p">{</span>
+        <span class="c1">// test to apply for multiple environments</span>
+        <span class="nd">@Test</span>
+        <span class="k">default</span> <span class="kt">void</span> <span class="nf">callClient</span><span class="p">(</span><span class="n">ClientSupport</span> <span class="n">client</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="s">&quot;main&quot;</span><span class="p">,</span> <span class="n">client</span><span class="p">.</span><span class="na">targetMain</span><span class="p">(</span><span class="s">&quot;servlet&quot;</span><span class="p">)</span>
+                    <span class="p">.</span><span class="na">request</span><span class="p">().</span><span class="na">buildGet</span><span class="p">().</span><span class="na">invoke</span><span class="p">().</span><span class="na">readEntity</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="na">class</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nd">@TestDropwizardApp</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+    <span class="nd">@Nested</span>
+    <span class="kd">class</span> <span class="nc">DefaultConfig</span> <span class="kd">implements</span> <span class="n">ClientCallTest</span> <span class="p">{</span>
+
+        <span class="nd">@Test</span>
+        <span class="kt">void</span> <span class="nf">testClient</span><span class="p">(</span><span class="n">ClientSupport</span> <span class="n">client</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="s">&quot;http://localhost:8080/&quot;</span><span class="p">,</span> <span class="n">client</span><span class="p">.</span><span class="na">basePathMain</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nd">@TestDropwizardApp</span><span class="p">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">,</span> <span class="n">configOverride</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">&quot;server.applicationContextPath: /app&quot;</span><span class="p">,</span>
+            <span class="s">&quot;server.adminContextPath: /admin&quot;</span><span class="p">,</span>
+    <span class="p">},</span> <span class="n">restMapping</span> <span class="o">=</span> <span class="s">&quot;api&quot;</span><span class="p">)</span>
+    <span class="nd">@Nested</span>
+    <span class="kd">class</span> <span class="nc">ChangedDefaultConfig</span> <span class="kd">implements</span> <span class="n">ClientCallTest</span> <span class="p">{</span>
+
+        <span class="nd">@Test</span>
+        <span class="kt">void</span> <span class="nf">testClient</span><span class="p">(</span><span class="n">ClientSupport</span> <span class="n">client</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="s">&quot;http://localhost:8080/app/&quot;</span><span class="p">,</span> <span class="n">client</span><span class="p">.</span><span class="na">basePathMain</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Here test declared in <code>ClientCallTest</code> interface will be called for each nested test 
+(one declaration - two executions in different environments).</p>
+<h2 id="meta-annotation">Meta annotation<a class="headerlink" href="#meta-annotation" title="Permanent link">&para;</a></h2>
+<p>You can prepare meta annotation (possibly combining multiple 3<sup>rd</sup> party extensions): </p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Retention</span><span class="p">(</span><span class="n">RetentionPolicy</span><span class="p">.</span><span class="na">RUNTIME</span><span class="p">)</span>
+<span class="nd">@Target</span><span class="p">(</span><span class="n">ElementType</span><span class="p">.</span><span class="na">TYPE</span><span class="p">)</span>
+<span class="nd">@TestDropwizardApp</span><span class="p">(</span><span class="n">AutoScanApplication</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">MyApp</span> <span class="p">{</span>
+<span class="p">}</span>
+
+<span class="nd">@MyApp</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MetaAnnotationDwTest</span> <span class="p">{</span>
+
+    <span class="nd">@Test</span>
+    <span class="kt">void</span> <span class="nf">checkAnnotationRecognized</span><span class="p">(</span><span class="n">Application</span> <span class="n">app</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Assertions</span><span class="p">.</span><span class="na">assertNotNull</span><span class="p">(</span><span class="n">app</span><span class="p">);</span>
+    <span class="p">}</span>   
+<span class="p">}</span>
+</code></pre></div>
+<p>OR you can simply use base test class and configure annotation there:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestDropwizardApp</span><span class="p">(</span><span class="n">AutoScanApplication</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BaseTest</span> <span class="p">{}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ActualTest</span> <span class="kd">extends</span> <span class="n">BaseTest</span> <span class="p">{}</span> 
+</code></pre></div>
+<h2 id="dropwizard-startup-error">Dropwizard startup error<a class="headerlink" href="#dropwizard-startup-error" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Tests written in such way CAN'T run in parallel due to <code>System.*</code> modifications.</p>
+</div>
+<p>To test application startup fails you can use extensions:</p>
+<ul>
+<li><a href="https://github.com/tginsberg/junit5-system-exit">junit5-system-exit</a></li>
+<li><a href="https://github.com/blindpirate/junit5-capture-system-output-extension">junit5-capture-system-output-extension</a></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">testImplementation</span> <span class="s1">&#39;com.ginsberg:junit5-system-exit:1.0.0&#39;</span>
+<span class="n">testImplementation</span> <span class="s1">&#39;com.github.blindpirate:junit5-capture-system-output-extension:0.1.1&#39;</span>
+</code></pre></div>
+<p>Testing app startup fail:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="nd">@ExpectSystemExit</span>
+<span class="kt">void</span> <span class="nf">checkStartupFail</span><span class="p">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="p">{</span>
+    <span class="n">ErrorApplication</span><span class="p">.</span><span class="na">main</span><span class="p">(</span><span class="s">&quot;server&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>With error message validation:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="nd">@ExpectSystemExit</span>
+<span class="nd">@CaptureSystemOutput</span>
+<span class="kt">void</span> <span class="nf">checkStartupFailWithOutput</span><span class="p">(</span><span class="n">CaptureSystemOutput</span><span class="p">.</span><span class="na">OutputCapture</span> <span class="n">output</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="p">{</span>
+    <span class="c1">// assertion declared before!</span>
+    <span class="n">output</span><span class="p">.</span><span class="na">expect</span><span class="p">(</span><span class="n">Matchers</span><span class="p">.</span><span class="na">containsString</span><span class="p">(</span>
+            <span class="s">&quot;No implementation for java.lang.String annotated with @com.google.inject.name.Named(value=&quot;</span><span class="p">));</span>
+
+    <span class="n">ErrorApplication</span><span class="p">.</span><span class="na">main</span><span class="p">(</span><span class="s">&quot;server&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="3rd-party-extensions-integration">3<sup>rd</sup> party extensions integration<a class="headerlink" href="#3rd-party-extensions-integration" title="Permanent link">&para;</a></h2>
+<p>It is extremely simple in JUnit 5 to <a href="https://junit.org/junit5/docs/current/user-guide/#extensions">write extensions</a>.
+If you do your own extension, you can easily integrate with guicey or dropwizard extensions: there
+are special static methods allowing you to obtain main test objects:</p>
+<ul>
+<li><code>GuiceyExtensionsSupport.lookupSupport(extensionContext)</code> -&gt; <code>Optional&lt;DropwizardTestSupport&gt;</code></li>
+<li><code>GuiceyExtensionsSupport.lookupInjector(extensionContext)</code> -&gt; <code>Optional&lt;Injector&gt;</code></li>
+<li><code>GuiceyExtensionsSupport.lookupClient(extensionContext)</code> -&gt; <code>Optional&lt;ClientSupport&gt;</code></li>
+</ul>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyExtension</span> <span class="kd">implements</span> <span class="n">BeforeEachCallback</span> <span class="p">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">beforeEach</span><span class="p">(</span><span class="n">ExtensionContext</span> <span class="n">context</span><span class="p">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="p">{</span>
+        <span class="n">Injector</span> <span class="n">injector</span> <span class="o">=</span> <span class="n">GuiceyExtensionsSupport</span><span class="p">.</span><span class="na">lookupInjector</span><span class="p">(</span><span class="n">context</span><span class="p">).</span><span class="na">get</span><span class="p">();</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>(guicey holds test state in junit test-specific storages and that's why test context is required)</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>There is no way in junit to order extensions, so you will have to make sure that your extension
+will be declared after guicey extension (<code>@TestGuiceyApp</code> or <code>@TestDropwizardApp</code>).</p>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../overview/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Overview
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../spock/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Spock
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2014-2021 Vyacheslav Rusakov
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/xvik" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/vyarus" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../../assets/javascripts/workers/search.fb4a9340.min.js", "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.a1c7c35e.min.js"></script>
+      
+    
+  </body>
+</html>
