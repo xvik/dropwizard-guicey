@@ -1692,7 +1692,7 @@ This should prevent incorrect usage confusion: before it was silently not workin
 <p>Since JDK 16 <code>--illegal-access=permit</code> was changed to <code>--illegal-access=deny</code> by default.
 So now, instead of warning, application fails on illegal access.</p>
 </div>
-<p>Guicey configuration analysis was fixed to exclude objects from "sun.*" package from introspection<br />
+<p>Guicey configuration analysis was fixed to exclude objects from "sun.*" package from introspection
 (<a href="https://github.com/xvik/dropwizard-guicey/issues/170">170</a>, <a href="https://github.com/xvik/dropwizard-guicey/issues/180">180</a>)</p>
 <p>Guicey-jdbi3 was fixed from <a href="https://github.com/xvik/dropwizard-guicey/issues/178">failing due to incorrect javassist usage</a>
 (new version of <a href="https://github.com/xvik/guice-ext-annotations/releases/tag/1.4.0">guice-ext-annotations</a> released).</p>
@@ -1703,11 +1703,11 @@ So now, instead of warning, application fails on illegal access.</p>
 <h2 id="shared-state">Shared state<a class="headerlink" href="#shared-state" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Shared state feature was initially introduces for complex extensions, when multiple bundles must 
+<p><a href="../../guide/shared/">Shared state feature</a> was initially introduces for complex extensions, when multiple bundles must 
 interact with the same state.</p>
 </div>
 <p>The following changes simplifies shared state usage, making it usable for wider range of cases.</p>
-<p><code>SharedConfigurationState</code> now could be obtained directly during startup with</p>
+<p><code>SharedConfigurationState</code> now could be obtained directly during startup with:</p>
 <div class="highlight"><pre><span></span><code><span class="n">SharedConfigurationState</span><span class="p">.</span><span class="na">getStartupInstance</span><span class="p">()</span> 
 </code></pre></div>
 <div class="admonition warning">
