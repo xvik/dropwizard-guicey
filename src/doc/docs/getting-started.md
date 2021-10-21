@@ -6,8 +6,6 @@
 
 ## Installation
 
-Available from maven central and [bintray jcenter](https://bintray.com/bintray/jcenter).
-
 Maven:
 
 ```xml

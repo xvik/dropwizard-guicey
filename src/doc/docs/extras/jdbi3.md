@@ -23,7 +23,10 @@ Added installers:
  
 ## Setup
 
-[![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion)
+!!! important 
+    Since dropwizard 2.0.22 dropwizard-jdbi3 [requires Java 11 by default](https://github.com/dropwizard/dropwizard/releases/tag/v2.0.22),
+    use `guicey-jdbi3-jdk8` instead (meta package fixing classpath) for java 8 compatibility.
+
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-jdbi3.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-jdbi3)
 
 Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 

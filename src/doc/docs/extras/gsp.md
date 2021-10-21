@@ -128,7 +128,6 @@ dropwizard-views such things should be implemented manually, which is not good f
 
 ## Setup 
 
-[![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion)
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-server-pages.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-gsp)
 
 Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 

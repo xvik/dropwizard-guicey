@@ -36,7 +36,7 @@ testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
 
 ## Dropwizard extensions compatibility
 
-Guicey extensions can be used with dropwizard extenssions. But this may be required only in edge cases
+Guicey extensions can be used with dropwizard extensions. But this may be required only in edge cases
 when multiple applications startup is required.
 
 !!! info

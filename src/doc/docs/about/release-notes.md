@@ -3,7 +3,6 @@
 !!! summary ""
     [5.3.0 release notes](http://xvik.github.io/dropwizard-guicey/5.3.0/about/release-notes/)
 
-This is a bug-fixing release.
 
 * [General](#general)
 * [POM](#pom)
@@ -21,7 +20,7 @@ Dropwizard updated to 2.0.25.
     due to caffeine library upgrade (see [caffeine author explanation](https://github.com/jdbi/jdbi/issues/1853#issuecomment-819101724))
     (actually, new jdbi3 version depends on caffeine 3 while dropwizard itself still depends on caffeine 2).
 
-Special artifact was added: [guicey-jdbi3-jkd8](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3-jdk8) fixing caffeine version for you.
+Special artifact was added: [guicey-jdbi3-jdk8](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3-jdk8) fixing caffeine version for you.
 Simply use it instead of `guicey-jdbi3` if you need jdk8 support.
 
 ## POM
@@ -29,7 +28,7 @@ Simply use it instead of `guicey-jdbi3` if you need jdk8 support.
 Guicey POM now specifies dependencies versions directly, instead relying on `dependencyManagement` section.
 As before, core guicey pom might be used as BOM. This change simplifies dependency resolution for build tools.
 
-Extension modules are also declare versions directly.
+Extension modules are also declare versions directly now.
 
 Extensions BOM does not contain properties section anymore (but I doubt anyone ever used it).
 
@@ -65,12 +64,13 @@ Now it is supported. But lambda modules has specifics in guicey reporting:
 
 !!! note
     Since JDK 16 `--illegal-access=permit` was changed to `--illegal-access=deny` by default.
-    So application now simply failing on illegal access instead of warning.
+    So now, instead of warning, application fails on illegal access.
 
-Guicey configuration analysis was fixed: objects from "sun.*" package are not introspected anymore 
+Guicey configuration analysis was fixed to exclude objects from "sun.*" package from introspection  
 ([170](https://github.com/xvik/dropwizard-guicey/issues/170), [180](https://github.com/xvik/dropwizard-guicey/issues/180))
 
 Guicey-jdbi3 was fixed from [failing due to incorrect javassist usage](https://github.com/xvik/dropwizard-guicey/issues/178)
+(new version of [guice-ext-annotations](https://github.com/xvik/guice-ext-annotations/releases/tag/1.4.0) released).
 
 !!! note 
     Dropwizard currently [is not compatible with JDK17](https://github.com/dropwizard/dropwizard/issues/4347).
@@ -78,9 +78,10 @@ Guicey-jdbi3 was fixed from [failing due to incorrect javassist usage](https://g
 ## Shared state
 
 !!! note
-    Shared state feature usually used for complex extensions, when multiple bundles must share state.
+    Shared state feature was initially introduces for complex extensions, when multiple bundles must 
+    interact with the same state.
 
-The following changes simplifies object usage, making it more usable for simpler cases.
+The following changes simplifies shared state usage, making it usable for wider range of cases.
 
 `SharedConfigurationState` now could be obtained directly during startup with
 
@@ -90,10 +91,10 @@ SharedConfigurationState.getStartupInstance()
 
 !!! warning
     During startup, state instance is stored in thread local and so static call would work only from
-    application main thread (usually, all configuration appears in one thread so not a problem, 
+    application main thread (usually, all configuration appears in one thread so should not be a problem, 
     but just in case).
 
-This is required in cases when there is links to `Environment` or `Application` objects
+Direct access is required in cases when there are no way to obtain `Environment` or `Application` objects
 (like binding installer, bundle lookup, etc.). Also, now it allows referencing 
 main objects everywhere during startup.
 
@@ -107,24 +108,26 @@ Shortcut methods were added to `SharedConfigurationState` instance:
 
 All of them return providers: e.g. `SharedConfigurationState.getStartupInstance().getBootsrap()`
 would return `Provider<Bootstrap>`. This is required because target object 
-might not be available yet, still there would be a way to initialize
-logic with "lazy objects" (to call it later, when object would be available).
+might not be available yet, still there would be a way to initialize some logic with "lazy object" 
+(to call it later, when object would be available) at any configuration stage.
 
 Shared state methods were unified in:
 
-- `GuiceyBootstrap`
-- `GuiceyEnvironment`
+- `GuiceyBootstrap` (GuiceyBundle#initialize)
+- `GuiceyEnvironment` (GuiceyBundle#run)
 - `DropwizardAwareModule`
 
-To simplify all kinds of state manipulation.
+To simplify all kinds of state manipulations.
 
 !!! tip
-    Before, it was assumed that shared state is initialized only under 
-    initialization phase (ond only in `GuiceyBindle`) and used under runtime phase 
+    Before, it was assumed that shared state must be initialized only under 
+    initialization phase (only in `GuiceyBindle`) and used under runtime phase 
     (it was possible to workaround limitation with manual state resolution).
     
-    Now (after facing edge cases in real life) state is assumed as more general tool and the same 
-    shortcuts for main oprations avaiilable everywhere.
+    Now shared state is assumed as more general tool and the same 
+    shortcuts for main oprations available everywhere.
+
+    As before, state might be initialized only once.
 
 It was also recommended before to use bundle classes for state keys.
 Now it is not strictly recommended (javadoc changed).
