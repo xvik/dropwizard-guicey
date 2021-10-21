@@ -66,7 +66,7 @@ Now it is supported. But lambda modules has specifics in guicey reporting:
     Since JDK 16 `--illegal-access=permit` was changed to `--illegal-access=deny` by default.
     So now, instead of warning, application fails on illegal access.
 
-Guicey configuration analysis was fixed to exclude objects from "sun.*" package from introspection  
+Guicey configuration analysis was fixed to exclude objects from "sun.*" package from introspection
 ([170](https://github.com/xvik/dropwizard-guicey/issues/170), [180](https://github.com/xvik/dropwizard-guicey/issues/180))
 
 Guicey-jdbi3 was fixed from [failing due to incorrect javassist usage](https://github.com/xvik/dropwizard-guicey/issues/178)
@@ -78,12 +78,12 @@ Guicey-jdbi3 was fixed from [failing due to incorrect javassist usage](https://g
 ## Shared state
 
 !!! note
-    Shared state feature was initially introduces for complex extensions, when multiple bundles must 
+    [Shared state feature](../guide/shared.md) was initially introduces for complex extensions, when multiple bundles must 
     interact with the same state.
 
 The following changes simplifies shared state usage, making it usable for wider range of cases.
 
-`SharedConfigurationState` now could be obtained directly during startup with
+`SharedConfigurationState` now could be obtained directly during startup with:
 
 ```java
 SharedConfigurationState.getStartupInstance() 
