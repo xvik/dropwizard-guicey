@@ -371,6 +371,31 @@ class SomeTest extends BaseTest {}
     - base for a group of tests. This is spock limitation (only one extension will actually work)
     but should not be an issue for most cases.
 
+## Extension configuration unification
+
+It is a common need to run multiple tests with the same test application configuration
+(same config overrides, same hooks etc.).
+Do not configure it in each test, instead move extension configuration into base test class:
+
+```groovy
+@UsetGuiceyApp(...)
+abstract class AbstractTest extends Specification {
+    // here might be helper methods
+}
+```
+
+And now all test classes should simply extend it:
+
+```groovy
+class Test1 extends AbstractTest {
+    
+    @Inject
+    MyService service
+            
+    def "Check something"() { ... }
+}
+```
+
 ## Dropwizard startup error
 
 !!! warning

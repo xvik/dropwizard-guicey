@@ -517,6 +517,35 @@ public class SomeTest extends BaseTest {
 
 All 3 hooks will work.
 
+## Extension configuration unification
+
+It is a common need to run multiple tests with the same test application configuration
+(same config overrides, same hooks etc.).
+Do not configure it in each test, instead move extension configuration into base test class:
+
+```java
+@TestGuiceyApp(...)
+public abstract class AbstractTest {
+    // here might be helper methods
+}
+```
+
+And now all test classes should simply extend it:
+
+```java
+public class Test1 extends AbstractTest {
+    
+    @Inject
+    MyService service;
+    
+    @Test
+    public void testSomething() { ... }
+}
+```
+
+If you use manual extension configuration (through field), just replace annotation in base class with
+manual declaration - approach would still work.
+
 ## Parallel execution
     
 Junit [parallel tests execution](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution)
