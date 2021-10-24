@@ -959,6 +959,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#extension-configuration-unification" class="md-nav__link">
+    Extension configuration unification
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parallel-execution" class="md-nav__link">
     Parallel execution
   </a>
@@ -1839,6 +1846,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#extension-configuration-unification" class="md-nav__link">
+    Extension configuration unification
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parallel-execution" class="md-nav__link">
     Parallel execution
   </a>
@@ -2323,6 +2337,27 @@ to set this prefix into custom <code>ConfigOverride</code> objects.</p>
 <span class="p">}</span>
 </code></pre></div>
 <p>All 3 hooks will work.</p>
+<h2 id="extension-configuration-unification">Extension configuration unification<a class="headerlink" href="#extension-configuration-unification" title="Permanent link">&para;</a></h2>
+<p>It is a common need to run multiple tests with the same test application configuration
+(same config overrides, same hooks etc.).
+Do not configure it in each test, instead move extension configuration into base test class:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestGuiceyApp</span><span class="p">(...)</span>
+<span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">AbstractTest</span> <span class="p">{</span>
+    <span class="c1">// here might be helper methods</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>And now all test classes should simply extend it:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test1</span> <span class="kd">extends</span> <span class="n">AbstractTest</span> <span class="p">{</span>
+
+    <span class="nd">@Inject</span>
+    <span class="n">MyService</span> <span class="n">service</span><span class="p">;</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testSomething</span><span class="p">()</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>If you use manual extension configuration (through field), just replace annotation in base class with
+manual declaration - approach would still work.</p>
 <h2 id="parallel-execution">Parallel execution<a class="headerlink" href="#parallel-execution" title="Permanent link">&para;</a></h2>
 <p>Junit <a href="https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution">parallel tests execution</a>
 could be activated with properties file <code>junit-platform.properties</code> located at test resources root:</p>

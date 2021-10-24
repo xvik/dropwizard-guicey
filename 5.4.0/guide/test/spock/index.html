@@ -951,6 +951,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#extension-configuration-unification" class="md-nav__link">
+    Extension configuration unification
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#dropwizard-startup-error" class="md-nav__link">
     Dropwizard startup error
   </a>
@@ -1758,6 +1765,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#extension-configuration-unification" class="md-nav__link">
+    Extension configuration unification
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#dropwizard-startup-error" class="md-nav__link">
     Dropwizard startup error
   </a>
@@ -2078,6 +2092,24 @@ for example, you can't declare it in base class and then another one on extended
 - base for a group of tests. This is spock limitation (only one extension will actually work)
 but should not be an issue for most cases.</p>
 </div>
+<h2 id="extension-configuration-unification">Extension configuration unification<a class="headerlink" href="#extension-configuration-unification" title="Permanent link">&para;</a></h2>
+<p>It is a common need to run multiple tests with the same test application configuration
+(same config overrides, same hooks etc.).
+Do not configure it in each test, instead move extension configuration into base test class:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@UsetGuiceyApp</span><span class="o">(...)</span>
+<span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">AbstractTest</span> <span class="kd">extends</span> <span class="n">Specification</span> <span class="o">{</span>
+    <span class="c1">// here might be helper methods</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>And now all test classes should simply extend it:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span> <span class="nc">Test1</span> <span class="kd">extends</span> <span class="n">AbstractTest</span> <span class="o">{</span>
+
+    <span class="nd">@Inject</span>
+    <span class="n">MyService</span> <span class="n">service</span>
+
+    <span class="kt">def</span> <span class="s2">&quot;Check something&quot;</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
 <h2 id="dropwizard-startup-error">Dropwizard startup error<a class="headerlink" href="#dropwizard-startup-error" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
