@@ -65,7 +65,7 @@ dependencies {
     provided 'io.dropwizard:dropwizard-testing'
     provided 'org.spockframework:spock-core'
     provided 'com.github.stefanbirkner:system-rules'
-    provided 'com.github.spotbugs:spotbugs-annotations:4.4.2'
+    provided 'com.github.spotbugs:spotbugs-annotations:4.5.0'
     provided "org.glassfish.hk2:guice-bridge"
 
     implementation 'com.google.inject:guice'
