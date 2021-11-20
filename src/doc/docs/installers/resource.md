@@ -138,7 +138,7 @@ but guice aop features will not work.
 ```java
 @Path("/res")
 @Produces('application/json')
-@JesreyManaged
+@JerseyManaged
 class SampleResource {
     ...
 }
