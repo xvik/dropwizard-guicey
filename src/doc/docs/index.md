@@ -31,26 +31,27 @@
   
 <sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>
 
-## How to use docs
+## Documentation Summary
 
 ### Introduction
 
-* [**Getting started**](getting-started.md) guide describes installation and shows core usage examples
-* [**Concepts overview**](concepts.md) guide introduce core guicey concepts and explains differences with pure dropwizard usage
-* [**Gucie**](guice.md) the essence of guice integration
+* [**Getting started**](getting-started.md) guide describes installation and provides core usage examples
+* [**Concepts overview**](concepts.md) guide introduces core guicey concepts and demonstrates differences from pure dropwizard usage
+* [**Guice**](guice.md) the essence of guice integration
 * [**Testing**](tests.md) describes integration testing techniques
 * [**Decomposition**](tests.md) guide on writing re-usable modules
 
 ### Reference
-* [**User guide**](guide/configuration.md) contain detailed features descriptions. Good to read, but if no time, read as you need it.
+* [**User guide**](guide/configuration.md) contains detailed feature descriptions. It is good to read, but it also functions 
+  well as a reference if you're short on time.
 * [**Installers**](installers/resource.md) describes all guicey installers. Use it as a *extensions hand book*.
-* [**Modules**](guide/modules.md) extension modules 
-* [**Examples**](examples/authentication.md) important usage examples. Look also [examples repository](https://github.com/xvik/dropwizard-guicey-examples) for additional examples. 
+* [**Modules**](guide/modules.md) external extension modules overview.
+* [**Examples**](examples/authentication.md) important usage examples. 
 
 ## Sources structure
 
-* [Guicey repository]((https://github.com/xvik/dropwizard-guicey)): guicey itself and (this) docs
+* [Guicey repository]((https://github.com/xvik/dropwizard-guicey)): guicey itself and (these) docs
 * [Modules repository](https://github.com/xvik/dropwizard-guicey-ext): extension [modules](guide/modules.md) (integrations) 
 are maintained in the separate repository
-* [Examples repository](https://github.com/xvik/dropwizard-guicey-examples) holds usage examples of main features usage, 
-dropwizard bundles integrations and extension modules samples.  
+* [Examples repository](https://github.com/xvik/dropwizard-guicey-examples): holds code samples for main features dropwizard 
+bundles and extension modules.
