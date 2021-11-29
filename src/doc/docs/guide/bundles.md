@@ -96,15 +96,15 @@ Your bundles may be installed multiple times, and you must always think of what 
 For example:
 
 ```java
-.bundles(new MyBundle(), new MuBundle())
+.bundles(new MyBundle(), new MyBundle())
 ```
 
 Bundles are often intended to be used multiple times (for example, [spa bundle](../extras/spa.md)).
 
 But in some cases, only one bundle instance must be installed. For example, [eventbus bundle](../extras/eventbus.md)
-must be installed just once. The opposite may be true, a common bundle could be installed by multiple other bundles.
+must be installed just once. The opposite may be true: a common bundle could be installed by multiple other bundles.
 
-In order to manage these such cases guicey provides a [de-duplication mechanism](deduplication.md).
+In order to manage these cases guicey provides a [de-duplication mechanism](deduplication.md).
 
 To avoid redundant bundle instances, you can:
 

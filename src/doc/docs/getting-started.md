@@ -229,7 +229,7 @@ public class SampleBootstrap implements Managed {
 }
 ```
 
-It will be automatically discovered and installed by the application. Guicey always reports installed extensions
+The managed class will be automatically discovered and installed by Guicey. Guicey always reports installed extensions
 when they are not reported by dropwizard itself. In the start-up logs of the application, you can see:
 
 ```
@@ -299,13 +299,13 @@ bootstrap.addBundle(GuiceBundle.builder()
 
 Multiple modules could be registered at once:
 ```java
-.modules(new SampleModule(), new Some3rdPatyModule())
+.modules(new SampleModule(), new Some3rdPartyModule())
 ```
 
 !!! note
     The above registration occurs in dropwizard initialization phase, when neither `Configuration`
-    nor `Environment` objects are available. If you need access to them in a module then either
-    register module in [guicey bundle's](guide/bundles.md#guicey-bundles) run method or use [marker interfaces](guide/guice/module-autowiring.md)
+    nor `Environment` objects are available. If you need either of them in a module, you may register a module in 
+    [guicey bundle's](guide/bundles.md#guicey-bundles) `run` method or use [marker interfaces](guide/guice/module-autowiring.md).
         
 ## Manual mode
 
@@ -323,11 +323,11 @@ bootstrap.addBundle(GuiceBundle.builder()
                 .build());
 ```
 
-The only difference is the absence of `.enableAutoConfig(...)` and the explicit declaration of desired all extensions.
+The only difference is the absence of `.enableAutoConfig(...)` and the explicit declaration of desired extensions.
 
 !!! tip
     Explicit extension declaration could be used together with `enableAutoConfig` (classpath scan). For example,
-    a classpath scan may only scan for extensions in your application's package and subpackages, while extensions from outside 
+    a classpath scan may only scan for extensions in your application's package and subpackages, while extensions outside of
     those packages may be specified separately. This avoids large class path scans and improves the startup time of your 
     application.
 
@@ -361,8 +361,8 @@ or manual declaration is only that guicey will not declare default bindings for 
 (by default, guicey creates untargetted bindings for all extensions: `bind(Extension.class)`).
 
 !!! tip
-    One extension may be found by classpath scan and declared manually in binding,
-    but it would still be considered as single registration (with existing binding).
+    An extension may be found three ways: by classpath scan, explicit extension declaration on the GuiceBundle, and by 
+    declaring a binding in a guice module. Even if all three were used, the extension would only be registered once.
 
 ## Recognized Extensions
 
