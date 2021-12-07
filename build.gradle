@@ -10,7 +10,7 @@ plugins {
     id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
     id 'com.github.ben-manes.versions' version '0.39.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'ru.vyarus.mkdocs' version '2.1.2'
+    id 'ru.vyarus.mkdocs' version '2.2.0'
 }
 
 sourceCompatibility = 1.8
@@ -102,6 +102,8 @@ mkdocs {
     publish {
         docPath = '5.4.0'
         rootRedirect = true
+        rootRedirectTo = 'latest'
+        versionAliases = ['latest']
     }
     extras = [
             'version': '5.4.0',

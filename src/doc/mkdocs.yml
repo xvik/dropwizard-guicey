@@ -15,18 +15,33 @@ plugins:
   - search
   - markdownextradata
 
-# Documentation and theme
+# Meterial theme
 theme:
   name: 'material'
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
   features:
     - navigation.tabs
+    #- navigation.tabs.sticky
+    - navigation.tracking
+    - navigation.top
 
-
-# Options
 extra:
 #  palette:
 #    primary: 'indigo'
 #    accent: 'indigo'
+
+  version:
+    provider: mike
 
   social:
     - icon: fontawesome/brands/github
@@ -34,29 +49,44 @@ extra:
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/vyarus
 
-
 # Google Analytics
-google_analytics:
-  - 'UA-93174150-1'
-  - 'auto'
+  analytics:
+    provider: google
+    property: UA-93174150-1
 
-# Extensions
 markdown_extensions:
+  # Python Markdown
+  - abbr
   - admonition
-  - codehilite:
-      guess_lang: false
+  - attr_list
+  - def_list
   - footnotes
   - meta
-  - def_list
+  - md_in_html
   - toc:
       permalink: true
+
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
   - pymdownx.betterem:
       smart_enable: all
   - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight
   - pymdownx.inlinehilite
-  - pymdownx.magiclink
+  - pymdownx.keys
+  - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
 
 dev_addr: 127.0.0.1:3001
 
