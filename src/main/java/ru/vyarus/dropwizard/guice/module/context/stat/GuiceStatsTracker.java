@@ -55,7 +55,9 @@ public class GuiceStatsTracker {
     }
 
     private Logger getLogger() {
-        return Logger.getLogger(com.google.inject.internal.util.ContinuousStopwatch.class.getName());
+        // string used instead of safer class reference due to OSGI issue (#187)
+        // (internal package reference not possible - cause class not found)
+        return Logger.getLogger("com.google.inject.internal.util.ContinuousStopwatch");
     }
 
     /**
