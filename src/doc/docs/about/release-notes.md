@@ -13,7 +13,7 @@
 
 ## General
 
-Dropwizard updated to 2.0.25.
+Dropwizard updated to 2.0.27.
 
 !!! important
     Since dropwizard 2.0.22 [jdk8 compatibility is broken for jdbi3](https://github.com/dropwizard/dropwizard/releases/tag/v2.0.22)

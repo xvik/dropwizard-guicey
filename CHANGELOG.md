@@ -1,4 +1,6 @@
+### 5.4.1 (2021-12-19)
 * Fix inner guice class usage in always executable code (#187, OSGi issue)
+* Update dropwizard to 2.0.27 (many dependency updates in the latest versions fixing java 17 support)
 
 ### 5.4.0 (2021-10-21)
 * Use direct dependency versions in pom to simplify resolution (dependencyManagement section remains but for usage as BOM only)
