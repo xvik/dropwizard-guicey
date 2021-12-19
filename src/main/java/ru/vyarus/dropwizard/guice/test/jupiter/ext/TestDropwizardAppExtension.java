@@ -188,6 +188,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * May be called multiple times (values appended).
          *
          * @param values overriding configuration values
+         * @param <T>    value type
          * @return builder instance for chained calls
          * @see ConfigOverrideValue for an exmample of required implementation
          * @see #configOverride(String, Supplier) for supplier shortcut
