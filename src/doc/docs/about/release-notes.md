@@ -1,8 +1,10 @@
-# {{ gradle.version }} Release Notes
+# 5.4.0 Release Notes
 
 !!! summary ""
     [5.3.0 release notes](http://xvik.github.io/dropwizard-guicey/5.3.0/about/release-notes/)
 
+!!! note
+    Does not cover bugfix releases: for complete changelog see [history](history.md)
 
 * [General](#general)
 * [POM](#pom)
