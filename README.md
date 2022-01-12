@@ -47,7 +47,7 @@ Features:
 
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus/dropwizard-guicey.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
 
-May be used through [extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-bom) or directly.
+May be used through [extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext) or directly.
 
 Maven:
 
@@ -80,7 +80,7 @@ Dropwizard | Guicey
 
 Guicey pom may be also used as maven BOM.
 
-NOTE: If you use guicey extensions then use [extensions BOM](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-bom) 
+NOTE: If you use guicey extensions then use [extensions BOM](https://github.com/xvik/dropwizard-guicey-ext) 
 instead (it already includes guicey BOM).
 
 BOM usage is highly recommended as it allows you to correctly update dropwizard dependencies.
