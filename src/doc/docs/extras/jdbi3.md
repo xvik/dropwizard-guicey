@@ -257,6 +257,23 @@ INFO  [2016-12-05 19:42:27,374] ru.vyarus.guicey.jdbi3.installer.repository.Repo
     (ru.vyarus.guicey.jdbi3.support.repository.SampleRepository)
 ```
 
+#### Manual bindings
+
+Repository can't be recognized from guice binding because repository type is abstract
+and guice would complain about it. But repository can be recognized from the chain.
+
+For example, suppose there is a base interface `Storage`
+and JDBI implementation is only one possible implementation: `JdbiStorage extends Storage`.
+In this case you can bind: `bind(Storage.class).to(JdbiStorage.class)` and use
+everywhere in code `@Inject Storage storage;` (installer would bind interface to implementation and
+guice would be able to correctly track binding to the generated instance).
+
+Only in this case repository class could be recognized from guice binding (even if it's not declared as extension and
+classpath scan not used).
+
+In all other cases, repository declaration would cause an error (to identify incorrect declaration).
+
+
 ### Laziness
 
 By default, JDBI proxies for declared repositories created only on first repository method call.

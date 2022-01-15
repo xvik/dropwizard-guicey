@@ -107,7 +107,7 @@ mkdocs {
     }
     extras = [
             'version': '5.4.1',
-            'ext': '5.4.1-1',
+            'ext': '5.4.1-2',
             'dropwizard': project.dropwizard,
             'guice': project.guice
     ]
