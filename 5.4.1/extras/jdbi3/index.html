@@ -1577,6 +1577,19 @@
     Repository
   </a>
   
+    <nav class="md-nav" aria-label="Repository">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-bindings" class="md-nav__link">
+    Manual bindings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1991,6 +2004,19 @@
     Repository
   </a>
   
+    <nav class="md-nav" aria-label="Repository">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-bindings" class="md-nav__link">
+    Manual bindings
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -2078,11 +2104,11 @@ use <code>guicey-jdbi3-jdk8</code> instead (meta package fixing classpath) for j
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>ru.vyarus.guicey<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>guicey-jdbi3<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>5.4.1-1<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>5.4.1-2<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div>
 <p>Gradle:</p>
-<div class="highlight"><pre><span></span><code><span class="n">implementation</span> <span class="s1">&#39;ru.vyarus.guicey:guicey-jdbi3:5.4.1-1&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="n">implementation</span> <span class="s1">&#39;ru.vyarus.guicey:guicey-jdbi3:5.4.1-2&#39;</span>
 </code></pre></div>
 <p>See the most recent version in the badge above.</p>
 <div class="admonition note">
@@ -2229,6 +2255,17 @@ needed now and may confuse.</p>
 
     (ru.vyarus.guicey.jdbi3.support.repository.SampleRepository)
 </code></pre></div>
+<h4 id="manual-bindings">Manual bindings<a class="headerlink" href="#manual-bindings" title="Permanent link">&para;</a></h4>
+<p>Repository can't be recognized from guice binding because repository type is abstract
+and guice would complain about it. But repository can be recognized from the chain.</p>
+<p>For example, suppose there is a base interface <code>Storage</code>
+and JDBI implementation is only one possible implementation: <code>JdbiStorage extends Storage</code>.
+In this case you can bind: <code>bind(Storage.class).to(JdbiStorage.class)</code> and use
+everywhere in code <code>@Inject Storage storage;</code> (installer would bind interface to implementation and
+guice would be able to correctly track binding to the generated instance).</p>
+<p>Only in this case repository class could be recognized from guice binding (even if it's not declared as extension and
+classpath scan not used).</p>
+<p>In all other cases, repository declaration would cause an error (to identify incorrect declaration).</p>
 <h3 id="laziness">Laziness<a class="headerlink" href="#laziness" title="Permanent link">&para;</a></h3>
 <p>By default, JDBI proxies for declared repositories created only on first repository method call.
 Lazy behaviour is important to take into account all registered JDBI extensions. Laziness also
