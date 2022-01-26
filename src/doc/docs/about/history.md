@@ -1,4 +1,8 @@
-### [5.4.1](http://xvik.github.io/dropwizard-guicey/5.4.0) (2021-12-19)
+### [5.4.2](http://xvik.github.io/dropwizard-guicey/5.4.2) (2022-01-26)
+* Update dropwizard to 2.0.28
+* Update guice to 5.1.0 (java 17 support)
+
+### [5.4.1](http://xvik.github.io/dropwizard-guicey/5.4.1) (2021-12-19)
 * Fix inner guice class usage in always executable code (#187, OSGi issue)
 * Update dropwizard to 2.0.27 (many dependency updates in the latest versions fixing java 17 support)
 
