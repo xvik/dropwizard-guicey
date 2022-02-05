@@ -1,3 +1,6 @@
+* Add GuiceyTestSupport to simplify guice-only manual application runs (test framework-agnostic)
+  (by analogy to DropwizardTestSupport class)
+
 ### 5.4.2 (2022-01-26)
 * Update dropwizard to 2.0.28
 * Update guice to 5.1.0 (java 17 support)
