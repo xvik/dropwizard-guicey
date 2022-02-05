@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.platform.commons.support.AnnotationSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
-import ru.vyarus.dropwizard.guice.test.TestCommand;
+import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue;
@@ -110,35 +110,19 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
 
         // config overrides work through system properties so it is important to have unique prefixes
         final String configPrefix = ConfigOverrideUtils.createPrefix(context.getRequiredTestClass());
-        return create(context, config.app, config.configPath, configPrefix);
+        return create(config.app, config.configPath, configPrefix);
     }
 
     @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
     private <C extends Configuration> DropwizardTestSupport<C> create(
-            final ExtensionContext context,
             final Class<? extends Application> app,
             final String configPath,
             final String configPrefix) {
         // NOTE: DropwizardTestSupport.ServiceListener listeners would be called ONLY on start!
-        return new DropwizardTestSupport<>((Class<? extends Application<C>>) app,
+        return new GuiceyTestSupport<C>((Class<? extends Application<C>>) app,
                 configPath,
                 configPrefix,
-                application -> {
-                    final TestCommand<C> cmd = new TestCommand<>(application);
-                    // need to hold command itself in order to properly shutdown it later
-                    getExtensionStore(context).put(TestCommand.class, cmd);
-                    return cmd;
-                },
                 buildConfigOverrides(configPrefix));
-    }
-
-    @Override
-    protected void onShutdown(final ExtensionContext context) {
-        // DropwizardTestSupport would not be able to shutdown guicey task, so shutdown must be performed manually
-        final TestCommand<?> command = (TestCommand<?>) getExtensionStore(context).get(TestCommand.class);
-        if (command != null) {
-            command.stop();
-        }
     }
 
     @SuppressWarnings("unchecked")
