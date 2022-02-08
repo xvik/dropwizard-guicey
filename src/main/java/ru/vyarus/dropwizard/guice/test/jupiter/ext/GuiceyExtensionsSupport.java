@@ -17,8 +17,12 @@ import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Base class for junit 5 extensions implementations. All extensions use {@link DropwizardTestSupport} object
@@ -63,13 +67,16 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     public void beforeAll(final ExtensionContext context) throws Exception {
         final ExtensionContext.Store store = getExtensionStore(context);
         if (store.get(DW_SUPPORT) == null) {
+            // find and activate hooks declared in base class static fields
+            final HookFields hooks = new HookFields(context.getRequiredTestClass());
+            hooks.activateBaseHooks();
+
             final DropwizardTestSupport<?> support = prepareTestSupport(context);
+            // activate hooks declared in test static fields (so hooks declared in annotation goes before)
+            hooks.activateClassHooks();
             store.put(DW_SUPPORT, support);
             // for pure guicey tests client may seem redundant, but it can be used for calling other services
             store.put(DW_CLIENT, new ClientSupport(support));
-
-            // find and activate hooks declared in test static fields (impossible to do with an extension)
-            activateFieldHooks(context.getRequiredTestClass());
 
             support.before();
         } else {
@@ -124,7 +131,6 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         if (client != null) {
             client.close();
         }
-        onShutdown(context);
     }
 
     // --------------------------------------------------------- 3rd party extensions support
@@ -178,16 +184,6 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      */
     protected abstract DropwizardTestSupport<?> prepareTestSupport(ExtensionContext context);
 
-    /**
-     * Hook to perform additional work after server shutdown. Useful for custom commands in order to shutdown properly.
-     *
-     * @param context test context
-     */
-    @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-    protected void onShutdown(final ExtensionContext context) {
-        // nothing by default (required for guicey extension to shutdown custom command properly)
-    }
-
     @Override
     protected DropwizardTestSupport<?> getSupport(final ExtensionContext extensionContext) {
         return lookupSupport(extensionContext).orElse(null);
@@ -209,19 +205,56 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         return context.getStore(ExtensionContext.Namespace.create(GuiceyExtensionsSupport.class));
     }
 
-    @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
-    private void activateFieldHooks(final Class<?> testClass) {
-        final List<Field> fields = AnnotationSupport.findAnnotatedFields(testClass, EnableHook.class);
-        HooksUtil.validateFieldHooks(fields);
-        if (!fields.isEmpty()) {
-            HooksUtil.register((List<GuiceyConfigurationHook>)
-                    (List) ReflectionUtils.readFieldValues(fields, null));
-        }
-    }
-
     private ExtensionContext.Store getLocalExtensionStore(final ExtensionContext context) {
         // test scoped extension scope (required to differentiate nested classes or parameterized executions)
         return context.getStore(ExtensionContext.Namespace
                 .create(GuiceyExtensionsSupport.class, context.getRequiredTestClass()));
+    }
+
+    /**
+     * Utility class for activating hook fields (annotated with {@link EnableHook}). Such fields must be activated
+     * in two steps: first hooks declared in base classes, then hooks declared directly in test class
+     * (after hooks declared in extension would be activated).
+     */
+    private static class HookFields {
+        private final Class<?> testClass;
+        private final List<Field> fields;
+
+        HookFields(final Class<?> testClass) {
+            this.testClass = testClass;
+            // find and validate all fields
+            this.fields = findHookFields(testClass);
+        }
+
+        public void activateBaseHooks() {
+            // activate hooks declared in base classes
+            activateFieldHooks(field -> !testClass.equals(field.getDeclaringClass()));
+        }
+
+        public void activateClassHooks() {
+            // activate all remaining hooks (in test class)
+            activateFieldHooks(null);
+        }
+
+        @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
+        private void activateFieldHooks(final Predicate<Field> condition) {
+            if (!fields.isEmpty()) {
+                final List<Field> target;
+                if (condition != null) {
+                    target = fields.stream().filter(condition).collect(Collectors.toList());
+                    fields.removeAll(target);
+                } else {
+                    target = fields;
+                }
+                HooksUtil.register((List<GuiceyConfigurationHook>)
+                        (List) ReflectionUtils.readFieldValues(target, null));
+            }
+        }
+
+        private List<Field> findHookFields(final Class<?> testClass) {
+            final List<Field> fields = AnnotationSupport.findAnnotatedFields(testClass, EnableHook.class);
+            HooksUtil.validateFieldHooks(fields);
+            return fields.isEmpty() ? Collections.emptyList() : new ArrayList<>(fields);
+        }
     }
 }

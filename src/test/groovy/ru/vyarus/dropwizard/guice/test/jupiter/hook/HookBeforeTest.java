@@ -14,7 +14,6 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
  * @author Vyacheslav Rusakov
  * @since 08.05.2020
  */
-
 public class HookBeforeTest {
 
     public static class Base {
