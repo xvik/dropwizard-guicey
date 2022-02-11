@@ -9,9 +9,7 @@ import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.jetbrains.annotations.Nullable;
-import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 
-import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 
@@ -65,47 +63,15 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
     }
 
     /**
-     * Void execution. Mostly used to detect startup errors. Same as {@code #execute(null)}.
-     *
-     * @throws Exception any appeared exception
-     */
-    public void execute() throws Exception {
-        execute((Callable<Void>) null);
-    }
-
-    /**
      * Normally, {@link #before()} and {@link #after()} methods are called separately. This method is a shortcut
      * mostly for errors testing when {@link #before()} assumed to fail to make sure {@link #after()} will be called
-     * in any case: {@code testSupport.execute(null)}.
+     * in any case: {@code testSupport.run(null)}.
      *
      * @param callback callback (may be null)
      * @throws Exception any appeared exception
      */
-    public void execute(final Runnable callback) throws Exception {
-        execute(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                callback.run();
-                return null;
-            }
-        });
-    }
-
-    /**
-     * Normally, {@link #before()} and {@link #after()} methods are called separately. This method is a shortcut
-     * mostly for errors testing when {@link #before()} assumed to fail to make sure {@link #after()} will be called
-     * in any case: {@code testSupport.execute(null)}.
-     *
-     * @param callback callback (may be null)
-     * @throws Exception any appeared exception
-     */
-    public <T> T execute(final Callable<T> callback) throws Exception {
-        before();
-        try {
-            return callback != null ? callback.call() : null;
-        } finally {
-            after();
-        }
+    public <T> T run(final @Nullable TestSupport.RunCallback<T> callback) throws Exception {
+        return TestSupport.run(this, callback);
     }
 
     /**
@@ -116,7 +82,7 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      * @return bean instance
      */
     public <T> T getBean(final Class<T> type) {
-        return getBean(Key.get(type));
+        return TestSupport.getBean(this, type);
     }
 
     /**
@@ -127,7 +93,7 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      * @return bean instance
      */
     public <T> T getBean(final Key<T> key) {
-        return InjectorLookup.getInjector(getApplication()).get().getInstance(key);
+        return TestSupport.getBean(this, key);
     }
 
     @Override

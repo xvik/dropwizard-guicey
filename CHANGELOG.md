@@ -1,5 +1,9 @@
 * Add GuiceyTestSupport to simplify guice-only manual application runs (test framework-agnostic)
   (by analogy to DropwizardTestSupport class)
+* Add TestSupport class as a root for test framework-agnostic utilities.
+    Suitable for application startup errors testing and integration within not supported test runner.
+* Apply hooks from static fields from base classes before hooks in test
+  (before all field hooks were applied after annotation hooks)
 
 ### 5.4.2 (2022-01-26)
 * Update dropwizard to 2.0.28
