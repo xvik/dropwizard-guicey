@@ -9,14 +9,14 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.support.DisabledFeatureApplication
 import ru.vyarus.dropwizard.guice.support.feature.DummyResource
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 04.09.2014
  */
-@UseGuiceyApp(DisabledFeatureApplication)
+@TestGuiceyApp(DisabledFeatureApplication)
 class DisabledFeatureTest extends Specification {
 
     @Inject

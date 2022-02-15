@@ -7,7 +7,7 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.config.support.ComplexConfigApp
 import ru.vyarus.dropwizard.guice.config.support.conf.*
 import ru.vyarus.dropwizard.guice.module.yaml.bind.Config
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Unroll
 
 import javax.inject.Inject
@@ -16,14 +16,14 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 19.06.2016
  */
-@UseGuiceyApp(ComplexConfigApp)
+@TestGuiceyApp(ComplexConfigApp)
 class ComplexConfigurationMappingTest extends AbstractTest {
 
     @Inject
     Injector injector
 
     @Unroll
-    def "Check configuration type #type.simpleName mapping"() {
+    def "Check configuration type #type mapping"() {
 
         expect: "all required mapped"
         injector.getBinding(type)

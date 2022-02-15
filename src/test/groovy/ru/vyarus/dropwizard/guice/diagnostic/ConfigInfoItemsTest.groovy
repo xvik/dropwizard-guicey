@@ -9,14 +9,10 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
-import ru.vyarus.dropwizard.guice.module.context.info.GuiceyBundleItemInfo
-import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
-import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
-import ru.vyarus.dropwizard.guice.module.context.info.ItemId
-import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo
+import ru.vyarus.dropwizard.guice.module.context.info.*
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -25,7 +21,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 11.07.2016
  */
-@UseGuiceyApp(ManualAppWithBundle)
+@TestGuiceyApp(ManualAppWithBundle)
 class ConfigInfoItemsTest extends Specification {
 
     @Inject

@@ -20,7 +20,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.Jerse
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugService
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 import javax.inject.Provider
@@ -34,7 +34,7 @@ import java.lang.annotation.Annotation
  * @author Vyacheslav Rusakov
  * @since 19.01.2016
  */
-@UseDropwizardApp(ScopeApplication)
+@TestDropwizardApp(ScopeApplication)
 class HKScopeTest extends AbstractTest {
 
     @Inject
@@ -80,7 +80,7 @@ class HKScopeTest extends AbstractTest {
 
         and: "all hk2 beans are in forced singleton scope"
         debugService.hkManaged.find {
-            def r = locator.get().<ServiceLocator>getInstance(ServiceLocator.class).getBestDescriptor(new Filter() {
+            def r = locator.get().<ServiceLocator> getInstance(ServiceLocator.class).getBestDescriptor(new Filter() {
                 @Override
                 boolean matches(Descriptor d) {
                     d.getImplementation() == it.name
@@ -99,7 +99,7 @@ class HKScopeTest extends AbstractTest {
             r
         }.call()
         list.find {
-            def r = locator.get().<ServiceLocator>getInstance(ServiceLocator.class).getBestDescriptor(new Filter() {
+            def r = locator.get().<ServiceLocator> getInstance(ServiceLocator.class).getBestDescriptor(new Filter() {
                 @Override
                 boolean matches(Descriptor d) {
                     d.getAdvertisedContracts().contains(it.name)

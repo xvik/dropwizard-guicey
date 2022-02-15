@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.debug.renderer.web.support.GuiceWebModule
 import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig
 import ru.vyarus.dropwizard.guice.debug.report.web.WebMappingsRenderer
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -19,7 +19,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 23.10.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class GuiceFilterRenderTest extends Specification {
     static {
         System.clearProperty(PropertyBundleLookup.BUNDLES_PROPERTY)

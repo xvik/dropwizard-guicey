@@ -8,13 +8,13 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ApplicationRunEvent
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 10.09.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class DuplicateListenersIgnoredTest extends AbstractTest {
 
     def "Check listeneres deduplicates"() {

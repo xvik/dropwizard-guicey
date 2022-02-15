@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.ws.rs.Path
 
@@ -19,7 +19,7 @@ import javax.ws.rs.Path
  * @author Vyacheslav Rusakov
  * @since 13.12.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class LinkedInstanceDetectionTest extends AbstractTest {
 
     @Inject

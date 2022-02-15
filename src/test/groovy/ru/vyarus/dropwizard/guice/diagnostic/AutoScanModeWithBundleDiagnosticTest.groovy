@@ -26,7 +26,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebFilterInstalle
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListenerInstaller
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -36,7 +36,7 @@ import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
  * @author Vyacheslav Rusakov
  * @since 26.06.2016
  */
-@UseGuiceyApp(AutoScanAppWithBundle)
+@TestGuiceyApp(AutoScanAppWithBundle)
 class AutoScanModeWithBundleDiagnosticTest extends BaseDiagnosticTest {
 
     @Inject

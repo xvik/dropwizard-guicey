@@ -10,21 +10,21 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
+import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
+import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeRenderer
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.Disables
-import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
-import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeRenderer
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -37,7 +37,7 @@ import static ru.vyarus.dropwizard.guice.module.context.ConfigScope.allExcept
  * @author Vyacheslav Rusakov
  * @since 17.07.2016
  */
-@UseGuiceyApp(value = App, hooks = DisableHook)
+@TestGuiceyApp(value = App, hooks = DisableHook)
 class ContextTreeRendererTest extends Specification {
 
     @Inject

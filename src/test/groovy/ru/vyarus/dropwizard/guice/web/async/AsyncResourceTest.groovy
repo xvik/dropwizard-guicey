@@ -6,7 +6,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import org.glassfish.jersey.server.ManagedAsync
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.ws.rs.GET
@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture
  * @author Vyacheslav Rusakov
  * @since 18.08.2016
  */
-@UseDropwizardApp(AsyncRestApp)
+@TestDropwizardApp(AsyncRestApp)
 class AsyncResourceTest extends Specification {
 
     def "Check async resource"() {

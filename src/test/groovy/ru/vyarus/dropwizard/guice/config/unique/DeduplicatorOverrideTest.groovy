@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.unique.LegacyModeDuplicatesDetector
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 24.09.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class DeduplicatorOverrideTest extends AbstractTest {
 
     @Inject
@@ -35,7 +35,7 @@ class DeduplicatorOverrideTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .duplicateConfigDetector(new LegacyModeDuplicatesDetector())
-                    // override detector implementation
+            // override detector implementation
                     .uniqueItems(App)
                     .bundles(new Bundle(), new Bundle())
                     .build())

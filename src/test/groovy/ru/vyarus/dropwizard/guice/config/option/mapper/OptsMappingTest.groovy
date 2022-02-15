@@ -5,41 +5,39 @@ import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import org.junit.Rule
-import org.junit.contrib.java.lang.system.EnvironmentVariables
-import org.junit.contrib.java.lang.system.RestoreSystemProperties
-import org.junit.contrib.java.lang.system.SystemOutRule
-import org.junit.runners.model.Statement
+import org.junit.jupiter.api.extension.ExtendWith
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.GuiceyOptions
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.option.mapper.OptionsMapper
 import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
-import ru.vyarus.dropwizard.guice.test.GuiceyAppRule
+import ru.vyarus.dropwizard.guice.test.TestSupport
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
+import uk.org.webcompere.systemstubs.jupiter.SystemStub
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension
+import uk.org.webcompere.systemstubs.properties.SystemProperties
 
 /**
  * @author Vyacheslav Rusakov
  * @since 28.04.2018
  */
+@ExtendWith(SystemStubsExtension)
 class OptsMappingTest extends AbstractTest {
 
-    @Rule
-    EnvironmentVariables ENV = new EnvironmentVariables()
-    @Rule
-    SystemOutRule out = new SystemOutRule().enableLog();
-    @Rule
-    RestoreSystemProperties propsReset = new RestoreSystemProperties();
+    @SystemStub
+    EnvironmentVariables ENV
+    @SystemStub
+    SystemProperties propsReset
 
     def "Check options mapping"() {
         setup:
         ENV.set("STAGE", Stage.DEVELOPMENT.name())
         System.setProperty("strictListeners", "true")
-        def rule = new GuiceyAppRule(App, null)
 
         when: "starting app"
-        GuiceyConfigurationInfo info
-        rule.apply({ info = rule.getBean(GuiceyConfigurationInfo) } as Statement, null).evaluate()
+        GuiceyConfigurationInfo info = TestSupport.runCoreApp(App, null,
+                { it.getInstance(GuiceyConfigurationInfo) })
         then: "options applied"
         info.getOptions().getValue(InstallersOptions.DenySessionListenersWithoutSession) == true
         info.getOptions().getValue(GuiceyOptions.InjectorStage) == Stage.DEVELOPMENT
@@ -50,9 +48,9 @@ class OptsMappingTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .options(new OptionsMapper()
-                    .prop("strictListeners", InstallersOptions.DenySessionListenersWithoutSession)
-                    .env("STAGE", GuiceyOptions.InjectorStage)
-                    .map())
+                            .prop("strictListeners", InstallersOptions.DenySessionListenersWithoutSession)
+                            .env("STAGE", GuiceyOptions.InjectorStage)
+                            .map())
                     .build())
         }
 

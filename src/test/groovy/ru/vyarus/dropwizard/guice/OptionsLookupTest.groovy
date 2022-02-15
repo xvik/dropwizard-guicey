@@ -6,7 +6,7 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 21.08.2016
  */
-@UseGuiceyApp(OLApp)
+@TestGuiceyApp(OLApp)
 class OptionsLookupTest extends AbstractTest {
 
     @Inject
@@ -31,8 +31,8 @@ class OptionsLookupTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .options(ImmutableMap.<Enum, Object> builder()
-                        .put(GuiceyOptions.UseCoreInstallers, false)
-                        .build())
+                            .put(GuiceyOptions.UseCoreInstallers, false)
+                            .build())
                     .build())
         }
 

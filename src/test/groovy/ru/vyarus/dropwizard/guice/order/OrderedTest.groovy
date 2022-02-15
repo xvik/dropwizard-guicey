@@ -8,13 +8,13 @@ import ru.vyarus.dropwizard.guice.support.order.Ext1
 import ru.vyarus.dropwizard.guice.support.order.Ext2
 import ru.vyarus.dropwizard.guice.support.order.Ext3
 import ru.vyarus.dropwizard.guice.support.order.OrderedApplication
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 13.10.2014
  */
-@UseGuiceyApp(OrderedApplication)
+@TestGuiceyApp(OrderedApplication)
 class OrderedTest extends AbstractTest {
 
     @Inject

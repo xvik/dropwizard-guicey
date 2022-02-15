@@ -8,17 +8,16 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.CommandItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
-
 
 /**
  * @author Vyacheslav Rusakov
  * @since 27.07.2016
  */
-@UseGuiceyApp(AutoScanApp)
+@TestGuiceyApp(AutoScanApp)
 class CommandInfoItemTest extends Specification {
 
     @Inject

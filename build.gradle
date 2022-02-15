@@ -40,18 +40,7 @@ dependencyManagement {
             exclude 'com.google.inject:guice'
             exclude 'org.glassfish.hk2:hk2-api'
         }
-        dependency 'org.spockframework:spock-core:1.3-groovy-2.5'
-        // groovy bundled with spock (2.5.2) does not work well with java 11
-        dependency "org.codehaus.groovy:groovy:$groovy"
-        dependency "org.codehaus.groovy:groovy-json:$groovy"
-        dependency "org.codehaus.groovy:groovy-macro:$groovy"
-        dependency "org.codehaus.groovy:groovy-nio:$groovy"
-        dependency "org.codehaus.groovy:groovy-sql:$groovy"
-        dependency "org.codehaus.groovy:groovy-templates:$groovy"
-        dependency "org.codehaus.groovy:groovy-test:$groovy"
-        dependency "org.codehaus.groovy:groovy-xml:$groovy"
-
-        dependency 'com.github.stefanbirkner:system-rules:1.19.0'
+        // SPOCK excluded from bom because it would complicate older version  usage in gradle
 
         dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
 
@@ -60,11 +49,9 @@ dependencyManagement {
     }
 }
 dependencies {
-    provided 'junit:junit'
     provided 'org.junit.jupiter:junit-jupiter-api'
     provided 'io.dropwizard:dropwizard-testing'
-    provided 'org.spockframework:spock-core'
-    provided 'com.github.stefanbirkner:system-rules'
+    provided 'org.spockframework:spock-core:2.0-groovy-3.0'
     provided 'com.github.spotbugs:spotbugs-annotations:4.5.3'
     provided "org.glassfish.hk2:guice-bridge"
 
@@ -73,21 +60,14 @@ dependencies {
     implementation 'io.dropwizard:dropwizard-core'
     implementation 'ru.vyarus:generics-resolver:3.0.3'
 
-    testImplementation 'org.objenesis:objenesis:3.2'
     testImplementation 'org.glassfish.jersey.inject:jersey-hk2'
     testImplementation 'io.dropwizard:dropwizard-auth'
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
-    testImplementation 'cglib:cglib-nodep:3.3.0'
-    testImplementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     testImplementation 'org.junit.platform:junit-platform-testkit'
-    testImplementation 'com.ginsberg:junit5-system-exit:1.1.2'
-    testImplementation 'com.github.blindpirate:junit5-capture-system-output-extension:0.1.2'
-    // since dw 2.0.23 downgraded to 1.3 but 2.1 required by junit5-capture-system-output-extension
-    testImplementation 'org.hamcrest:hamcrest-core:2.2'
+    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.1'
+    testImplementation 'ru.vyarus:spock-junit5:1.0.0'
 
-    // junit 4 used by spock (waiting 2.0) and legacy junit4 extensions tests
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
 }
 
 group = 'ru.vyarus'

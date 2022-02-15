@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigScope
 import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
  * @author Vyacheslav Rusakov
  * @since 26.06.2016
  */
-@UseGuiceyApp(ManualApp)
+@TestGuiceyApp(ManualApp)
 class ManualModeDiagnosticTest extends BaseDiagnosticTest {
 
     @Inject

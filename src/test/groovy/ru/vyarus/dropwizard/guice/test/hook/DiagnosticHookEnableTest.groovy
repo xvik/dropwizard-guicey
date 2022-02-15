@@ -6,14 +6,14 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 18.08.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class DiagnosticHookEnableTest extends Specification {
 
     void cleanup() {

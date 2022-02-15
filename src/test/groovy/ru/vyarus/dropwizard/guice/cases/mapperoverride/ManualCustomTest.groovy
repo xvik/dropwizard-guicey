@@ -11,8 +11,7 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
 import ru.vyarus.dropwizard.guice.test.ClientSupport
-import ru.vyarus.dropwizard.guice.test.spock.InjectClient
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -25,15 +24,13 @@ import javax.ws.rs.ext.Provider
  * @author Vyacheslav Rusakov
  * @since 04.10.2020
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class ManualCustomTest extends AbstractTest {
 
-    @InjectClient
-    ClientSupport client
     @Inject
     InjectionManager manager
 
-    def "Check default exception mapper override with manual custom"() {
+    def "Check default exception mapper override with manual custom"(ClientSupport client) {
 
         when: "Lookup mappers"
         def provs = Providers.getAllServiceHolders(manager, ExceptionMapper.class)

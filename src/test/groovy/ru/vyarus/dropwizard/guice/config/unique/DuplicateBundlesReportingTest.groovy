@@ -6,14 +6,14 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticRenderer
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeRenderer
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 08.07.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class DuplicateBundlesReportingTest extends AbstractTest {
 
     @Inject

@@ -184,8 +184,8 @@ public enum GuiceyLifecycle {
      * org.eclipse.jetty.util.component.LifeCycle)}), which is called after complete jetty startup.
      * <p>
      * May be used as assured "started" point (after all initializations). For example, to report something. This event
-     * also will be fired in guicey tests ({@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule}) which does not
-     * start the web part.
+     * also will be fired in guicey tests ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}) which does not
+     * start the web part).
      */
     ApplicationStarted(ApplicationStartedEvent.class),
 

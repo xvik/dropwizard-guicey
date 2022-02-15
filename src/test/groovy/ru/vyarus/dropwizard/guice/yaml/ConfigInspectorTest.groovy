@@ -18,10 +18,10 @@ import io.dropwizard.setup.Environment
 import io.dropwizard.setup.HealthCheckConfiguration
 import io.dropwizard.util.Duration
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import ru.vyarus.dropwizard.guice.yaml.support.*
 import spock.lang.Specification
 
@@ -31,7 +31,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 05.05.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class ConfigInspectorTest extends Specification {
 
     Object NOT_SET = new Object()
@@ -239,11 +239,11 @@ class ConfigInspectorTest extends Specification {
                  TaskConfiguration, AdminFactory, HealthCheckConfiguration] as Set
         res.findByPath("sub1").getDeclaredType() == NotUniqueSubConfig.SubConfig
         res.findByPath("sub1.sub").getDeclaredType() == String
-        res.findAllByType(NotUniqueSubConfig.SubConfig).collect {it.path} == ["sub1", "sub2", "sub3"]
-        res.findAllFrom(NotUniqueSubConfig).collect {it.path} == ["sub1", "sub1.sub", "sub2", "sub2.sub", "sub3", "sub3.sub"]
-        res.findAllRootPaths().collect {it.path} == ["sub1", "sub2", "sub3", "admin", "logging", "metrics", "server"]
-        res.findAllRootPathsFrom(NotUniqueSubConfig).collect {it.path} == ["sub1", "sub2", "sub3"]
-        res.findAllRootPathsFrom(Configuration).collect {it.path} == ["admin", "logging", "metrics", "server"]
+        res.findAllByType(NotUniqueSubConfig.SubConfig).collect { it.path } == ["sub1", "sub2", "sub3"]
+        res.findAllFrom(NotUniqueSubConfig).collect { it.path } == ["sub1", "sub1.sub", "sub2", "sub2.sub", "sub3", "sub3.sub"]
+        res.findAllRootPaths().collect { it.path } == ["sub1", "sub2", "sub3", "admin", "logging", "metrics", "server"]
+        res.findAllRootPathsFrom(NotUniqueSubConfig).collect { it.path } == ["sub1", "sub2", "sub3"]
+        res.findAllRootPathsFrom(Configuration).collect { it.path } == ["admin", "logging", "metrics", "server"]
         res.valueByPath("not.exists") == null
         res.valueByPath("sub1") == null
         res.valueByType(NotUniqueSubConfig.SubConfig) == null
@@ -260,12 +260,12 @@ class ConfigInspectorTest extends Specification {
                  TaskConfiguration, AdminFactory, HealthCheckConfiguration] as Set
         res.findByPath("sub").getDeclaredType() == ComplexConfig.SubConfig
         res.findByPath("sub.sub").getDeclaredType() == String
-        res.findAllByType(ComplexConfig.SubConfig).collect {it.path} == ["sub"]
-        res.findAllByType(ComplexConfig.Parametrized).collect {it.path} == ["one", "sub.two"]
-        res.findAllFrom(ComplexConfig).collect {it.path} == ["one", "one.list", "sub", "sub.sub", "sub.two", "sub.two.list"]
-        res.findAllRootPaths().collect {it.path} == ["one", "sub", "admin", "logging", "metrics", "server"]
-        res.findAllRootPathsFrom(ComplexConfig).collect {it.path} == ["one", "sub"]
-        res.findAllRootPathsFrom(Configuration).collect {it.path} == ["admin", "logging", "metrics", "server"]
+        res.findAllByType(ComplexConfig.SubConfig).collect { it.path } == ["sub"]
+        res.findAllByType(ComplexConfig.Parametrized).collect { it.path } == ["one", "sub.two"]
+        res.findAllFrom(ComplexConfig).collect { it.path } == ["one", "one.list", "sub", "sub.sub", "sub.two", "sub.two.list"]
+        res.findAllRootPaths().collect { it.path } == ["one", "sub", "admin", "logging", "metrics", "server"]
+        res.findAllRootPathsFrom(ComplexConfig).collect { it.path } == ["one", "sub"]
+        res.findAllRootPathsFrom(Configuration).collect { it.path } == ["admin", "logging", "metrics", "server"]
         res.valueByPath("not.exists") == null
         res.valueByPath("sub") == null
         res.valueByType(ComplexConfig.SubConfig) == null
@@ -327,7 +327,7 @@ class ConfigInspectorTest extends Specification {
         def path = res.findByPath("sub1")
         then:
         path.root == null
-        path.children.collect {it.path} == ["sub1.sub"]
+        path.children.collect { it.path } == ["sub1.sub"]
         path.declarationClass == NotUniqueSubConfig
         path.declaredType == NotUniqueSubConfig.SubConfig
         path.valueType == NotUniqueSubConfig.SubConfig

@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -21,7 +21,7 @@ import javax.ws.rs.core.FeatureContext
  * @author Vyacheslav Rusakov
  * @since 10.09.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class EnvironmentMethodsTest extends Specification {
 
     @Inject

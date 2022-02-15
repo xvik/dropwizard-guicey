@@ -15,14 +15,14 @@ import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.DummyManaged
 import ru.vyarus.dropwizard.guice.support.feature.DummyResource
 import ru.vyarus.dropwizard.guice.support.feature.DummyTask
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 04.09.2014
  */
-@UseGuiceyApp(ManualApplication)
+@TestGuiceyApp(ManualApplication)
 class ManualModeTest extends Specification {
 
     @Inject

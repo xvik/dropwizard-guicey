@@ -14,14 +14,14 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.Initializ
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ApplicationRunEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.BeforeRunEvent
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 15.10.2021
  */
-@UseGuiceyApp(value = App, hooks = Hook)
+@TestGuiceyApp(value = App, hooks = Hook)
 class SharedStateDirectAccessTest extends Specification {
 
     def "Check shared state direct availability"() {
@@ -101,9 +101,9 @@ class SharedStateDirectAccessTest extends Specification {
         void configure(GuiceBundle.Builder builder) {
             assert SharedConfigurationState.getStartupInstance() != null
 
-             builder.withSharedState({
-                 noBootstrap(it)
-             })
+            builder.withSharedState({
+                noBootstrap(it)
+            })
         }
     }
 

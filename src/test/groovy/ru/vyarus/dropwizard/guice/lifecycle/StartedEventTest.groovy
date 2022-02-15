@@ -4,13 +4,10 @@ import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import io.dropwizard.testing.junit.DropwizardAppRule
-import org.junit.runners.model.Statement
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShotdownEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent
-import ru.vyarus.dropwizard.guice.test.GuiceyAppRule
+import ru.vyarus.dropwizard.guice.test.TestSupport
 import spock.lang.Specification
 
 /**
@@ -20,22 +17,20 @@ import spock.lang.Specification
 class StartedEventTest extends Specification {
 
     def "Check startup event called"() {
-        def rule = new DropwizardAppRule(App) {}
         App.started = null
 
         when: "start-stop with jetty app"
-        rule.apply({} as Statement, null).evaluate()
+        TestSupport.runWebApp(App, null)
         then: "startup called"
         App.started != null
         App.started
     }
 
     def "Check startup event called in lightweight tests"() {
-        def rule = new GuiceyAppRule(App, null)
         App.started = null
 
         when: "start-stop without jetty app"
-        rule.apply({} as Statement, null).evaluate()
+        TestSupport.runCoreApp(App, null)
         then: "start called and test env detected"
         App.started != null
         !App.started
@@ -48,7 +43,7 @@ class StartedEventTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .listen(new GuiceyLifecycleAdapter(){
+                    .listen(new GuiceyLifecycleAdapter() {
                         @Override
                         protected void applicationStarted(ApplicationStartedEvent event) {
                             started = event.isJettyStarted()

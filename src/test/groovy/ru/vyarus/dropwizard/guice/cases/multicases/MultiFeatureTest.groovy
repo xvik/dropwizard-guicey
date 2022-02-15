@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -20,7 +20,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 01.08.2016
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class MultiFeatureTest extends AbstractTest {
 
     @Inject

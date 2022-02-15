@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.debug.renderer.web.support.UserServletsBundle
 import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig
 import ru.vyarus.dropwizard.guice.debug.report.web.WebMappingsRenderer
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -20,7 +20,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 24.10.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class WebReportUnderLightweightGuiceyTest extends Specification {
 
     static {

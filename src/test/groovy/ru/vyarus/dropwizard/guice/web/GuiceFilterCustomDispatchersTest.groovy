@@ -7,7 +7,7 @@ import io.dropwizard.setup.Environment
 import org.eclipse.jetty.servlet.FilterMapping
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.jersey.GuiceWebModule
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -21,7 +21,7 @@ import static ru.vyarus.dropwizard.guice.GuiceyOptions.GuiceFilterRegistration
  * @author Vyacheslav Rusakov
  * @since 21.08.2016
  */
-@UseGuiceyApp(CDApp)
+@TestGuiceyApp(CDApp)
 class GuiceFilterCustomDispatchersTest extends Specification {
 
     @Inject

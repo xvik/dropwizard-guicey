@@ -5,14 +5,14 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 13.06.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class AppWithEmptyCustomBindingsPrintTest extends Specification {
 
     def "Check empty custom bindings print"() {

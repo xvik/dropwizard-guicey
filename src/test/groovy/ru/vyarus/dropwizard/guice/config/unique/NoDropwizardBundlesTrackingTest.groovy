@@ -12,13 +12,13 @@ import ru.vyarus.dropwizard.guice.GuiceyOptions
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.DropwizardBundleItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 28.07.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class NoDropwizardBundlesTrackingTest extends AbstractTest {
 
     @Inject

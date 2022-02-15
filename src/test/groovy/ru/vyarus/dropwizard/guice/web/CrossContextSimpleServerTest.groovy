@@ -4,13 +4,13 @@ import com.google.inject.Inject
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.support.web.crosscontext.CrossContextListener
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 09.08.2016
  */
-@UseDropwizardApp(value = CrossContextTest.CrossApp,
+@TestDropwizardApp(value = CrossContextTest.CrossApp,
         config = 'src/test/resources/ru/vyarus/dropwizard/guice/simple-server.yml')
 class CrossContextSimpleServerTest extends AbstractTest {
 

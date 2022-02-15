@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -20,7 +20,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 01.08.2016
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class MultiInstallerRegistrationTest extends Specification {
 
     @Inject

@@ -6,25 +6,24 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.config.BundleLifecycleListenerTest.XListener
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 26.04.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class BundleLifecycleListenerTest extends AbstractTest {
 
     def "Check bundle listener used"() {
 
-        expect: "listener called" 
-         XListener.events.size() > 1
+        expect: "listener called"
+        XListener.events.size() > 1
     }
 
     static class App extends Application<Configuration> {
@@ -32,11 +31,11 @@ class BundleLifecycleListenerTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .bundles(new GuiceyBundle() {
-                @Override
-                void initialize(GuiceyBootstrap gbootstrap) {
-                    gbootstrap.listen(new XListener())
-                }
-            }).build())
+                        @Override
+                        void initialize(GuiceyBootstrap gbootstrap) {
+                            gbootstrap.listen(new XListener())
+                        }
+                    }).build())
         }
 
         @Override

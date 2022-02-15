@@ -9,7 +9,7 @@ import net.sourceforge.argparse4j.inf.Subparser
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.context.bootstrap.BootstrapProxyFactory
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 28.07.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class BootstrapProxyTest extends AbstractTest {
 
     @Inject

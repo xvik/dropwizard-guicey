@@ -7,15 +7,14 @@ import io.dropwizard.setup.Environment
 import org.eclipse.jetty.util.component.AbstractLifeCycle
 import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
-
 
 /**
  * @author Vyacheslav Rusakov
  * @since 31.07.2016
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class LifecycleStartedForGuiceyTest extends Specification {
 
     static boolean called

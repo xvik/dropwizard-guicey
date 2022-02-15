@@ -6,13 +6,13 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.GuiceyOptions
-import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsRenderer
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.option.Option
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -21,7 +21,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 13.08.2016
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class OptionsRendererTest extends Specification {
 
     @Inject

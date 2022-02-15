@@ -9,8 +9,7 @@ import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig
 import ru.vyarus.dropwizard.guice.debug.report.web.WebMappingsRenderer
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.ConfigOverride
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -19,9 +18,9 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 25.10.2019
  */
-@UseDropwizardApp(value = App,
+@TestDropwizardApp(value = App,
         config = 'src/test/resources/ru/vyarus/dropwizard/guice/simple-server.yml',
-        configOverride = @ConfigOverride(key = "server.applicationContextPath", value = "/app/"))
+        configOverride = ["server.applicationContextPath: /app/"])
 class SimpleServerRenderTest extends Specification {
 
     static {

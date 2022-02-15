@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfig
 import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfigRenderer
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.annotation.Priority
@@ -22,7 +22,7 @@ import javax.ws.rs.ext.Provider
  * @author Vyacheslav Rusakov
  * @since 27.10.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class PriorityCountInRenderTest extends Specification {
     static {
         System.clearProperty(PropertyBundleLookup.BUNDLES_PROPERTY)

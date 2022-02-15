@@ -10,10 +10,10 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.renderer.guice.support.ConstantModule
-import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceBindingsRenderer
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -22,7 +22,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 20.08.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class GuiceRendererConstantTest extends Specification {
 
     static {

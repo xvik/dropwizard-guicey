@@ -4,7 +4,16 @@
     Suitable for application startup errors testing and integration within not supported test runner.
 * Apply hooks from static fields from base classes before hooks in test
   (before all field hooks were applied after annotation hooks)
-
+* spock 2 support: spock should use junit 5 extensions (no special extensions anymore)
+    through a special library spock-junit5 (developed specifically for this integration)
+* spock 1 and junit 4 modules were moved into ext modules: 
+  - packages remain the same, so there should not be issues with it
+  - junit 4 rules now not deprecated (entire module assumed to be deprecated)
+* Guicey bom section changes:
+  - spock version removed in order to avoid problems downgrading spock version for spock1 module
+  - system-rules removed because it targets junit4 (instead use system-stubs-jupiter)
+  - groovy libraries removed (newer groovy 2.x was required for spock1 to run on java 11)
+  
 ### 5.4.2 (2022-01-26)
 * Update dropwizard to 2.0.28
 * Update guice to 5.1.0 (java 17 support)

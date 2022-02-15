@@ -300,9 +300,8 @@ public class GuiceyEnvironment {
     /**
      * Shortcut for {@link ServerLifecycleListener} registration.
      * <p>
-     * Note that server listener is called only when jetty starts up and so will no be called with lightweight
-     * guicey test helpers {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
-     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp}. Prefer using
+     * Note that server listener is called only when jetty starts up and so will not be called with lightweight
+     * guicey test helpers {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}. Prefer using
      * {@link #onApplicationStartup(ApplicationStartupListener)} to be correctly called in tests (of course, if not
      * server only execution is desired).
      * <p>
@@ -320,8 +319,7 @@ public class GuiceyEnvironment {
      * Shortcut for jetty lifecycle listener {@link LifeCycle.Listener listener} registration.
      * <p>
      * Lifecycle listeners are called with lightweight guicey test helpers
-     * {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
-     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp} which makes them perfectly suitable for reporting.
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp} which makes them perfectly suitable for reporting.
      * <p>
      * If only startup event is required, prefer {@link #onApplicationStartup(ApplicationStartupListener)} method
      * as more expressive and easier to use.
@@ -431,10 +429,10 @@ public class GuiceyEnvironment {
     }
 
     /**
-     * Code to execute after complete application startup. For server command it would happen after jerry startup
-     * and for lightweight guicey test helpers ({@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
-     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp}) - after guicey start (as jetty not started in this
-     * case). In both cases application completely started at this moment. Suitable for reporting.
+     * Code to execute after complete application startup. For server command it would happen after jetty startup
+     * and for lightweight guicey test helpers ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}) - after
+     * guicey start (as jetty not started in this case). In both cases, application completely started at this moment.
+     * Suitable for reporting.
      * <p>
      * If you need to listen only for real server startup then use {@link #listenServer(ServerLifecycleListener)}
      * instead.

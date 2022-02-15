@@ -1,17 +1,21 @@
 package ru.vyarus.dropwizard.guice.test.jupiter;
 
-import com.ginsberg.junit.exit.ExpectSystemExit;
-import com.github.blindpirate.extensions.CaptureSystemOutput;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Named;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
 import ru.vyarus.dropwizard.guice.support.feature.DummyCommand;
+import uk.org.webcompere.systemstubs.jupiter.SystemStub;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.security.SystemExit;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
+import uk.org.webcompere.systemstubs.stream.SystemOut;
 
 import javax.inject.Inject;
 
@@ -19,26 +23,33 @@ import javax.inject.Inject;
  * @author Vyacheslav Rusakov
  * @since 25.05.2020
  */
+@ExtendWith(SystemStubsExtension.class)
 public class StartErrorJupiterTest {
 
+    @SystemStub
+    SystemExit exit;
+    @SystemStub
+    SystemErr err;
+
     @Test
-    @ExpectSystemExit
-    // NOTE could be parallized with some tests, but not with other error tests
+        // NOTE could be parallelized with some tests, but not with other error tests
     void checkStartupFail() throws Exception {
-        ErrorApplication.main("server");
+        exit.execute(() -> {
+            ErrorApplication.main("server");
+        });
+        Assertions.assertEquals(1, exit.getExitCode());
     }
 
     @Test
-    @ExpectSystemExit
-    @CaptureSystemOutput
-    // NOTE not parallelizable test!
-    void checkStartupFailWithOutput(CaptureSystemOutput.OutputCapture output) throws Exception {
-        // assertion declared before
+        // NOTE not parallelizable test!
+    void checkStartupFailWithOutput() throws Exception {
+        exit.execute(() -> {
+            ErrorApplication.main("server");
+        });
         // strange matching because in java9 @Named value will be quoted and in 8 will not
-        output.expect(Matchers.containsString(
-                "[Guice/MissingImplementation]: No implementation for String annotated with @Named"));
+        Assertions.assertTrue(err.getText()
+                .contains("[Guice/MissingImplementation]: No implementation for String annotated with @Named"));
 
-        ErrorApplication.main("server");
     }
 
     public static class ErrorApplication extends Application<TestConfiguration> {

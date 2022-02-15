@@ -9,13 +9,13 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.Jerse
 import ru.vyarus.dropwizard.guice.module.installer.order.Order
 import ru.vyarus.dropwizard.guice.support.installerorder.DummyInstaller
 import ru.vyarus.dropwizard.guice.support.installerorder.OrderedInstallersApplication
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 17.04.2015
  */
-@UseGuiceyApp(OrderedInstallersApplication)
+@TestGuiceyApp(OrderedInstallersApplication)
 class InstallersOrderTest extends AbstractTest {
 
     @Inject

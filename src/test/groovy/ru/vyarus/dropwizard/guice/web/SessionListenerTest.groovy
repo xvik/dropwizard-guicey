@@ -4,13 +4,13 @@ import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import io.dropwizard.testing.junit.DropwizardAppRule
 import org.eclipse.jetty.server.session.SessionHandler
 import org.eclipse.jetty.util.component.AbstractLifeCycle
 import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.web.session.SessionListener
+import ru.vyarus.dropwizard.guice.test.TestSupport
 
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.DenySessionListenersWithoutSession
 
@@ -23,21 +23,15 @@ class SessionListenerTest extends AbstractTest {
     def "Check application startup without sessions"() {
 
         when: "starting app without session configured"
-        def rule = new DropwizardAppRule(NSApp)
-        rule.before()
+        TestSupport.runWebApp(NSApp, null)
         then: "listeners were not installed - warning printed"
         true
-
-        cleanup:
-        rule.after()
-
     }
 
     def "Check application startup fail without sessions"() {
 
         when: "starting app without session configured"
-        def rule = new DropwizardAppRule(NSFailApp, 'src/test/resources/ru/vyarus/dropwizard/guice/simple-server.yml')
-        rule.before()
+        TestSupport.runWebApp(NSFailApp, 'src/test/resources/ru/vyarus/dropwizard/guice/simple-server.yml')
         then: "error"
         def ex = thrown(IllegalStateException)
         ex.message == 'Can\'t register session listeners for application context because sessions support is not enabled: SessionListener'
@@ -46,14 +40,9 @@ class SessionListenerTest extends AbstractTest {
     def "Check session listener installation"() {
 
         when: "starting app with session configured"
-        def rule = new DropwizardAppRule(SApp)
-        rule.before()
+        TestSupport.runWebApp(SApp, null)
         then: "listener installation ok"
         true
-
-        cleanup:
-        rule.after()
-
     }
 
     static class NSApp extends Application<Configuration> {

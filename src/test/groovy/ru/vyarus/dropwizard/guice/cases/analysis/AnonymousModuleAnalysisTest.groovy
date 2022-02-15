@@ -5,7 +5,7 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceBindingsRenderer
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -13,7 +13,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 05.04.2021
  */
-@UseGuiceyApp(AnnModuleApp)
+@TestGuiceyApp(AnnModuleApp)
 class AnonymousModuleAnalysisTest extends AbstractTest {
 
     @Inject
@@ -31,7 +31,7 @@ class AnonymousModuleAnalysisTest extends AbstractTest {
 
         new GuiceBindingsRenderer(injector).renderReport(new GuiceConfig().hideGuiceBindings().hideGuiceyBindings())
                 .replaceAll("\r", "").replaceAll(" +\n", "\n")
-                // in jdk 8 inner lambda shown as null, above 8 as initialize
+        // in jdk 8 inner lambda shown as null, above 8 as initialize
                 .replace('$initialize$0(AnnModuleApp.java:25)', '$null$0(AnnModuleApp.java:25)') == """
 
     2 MODULES with 5 bindings

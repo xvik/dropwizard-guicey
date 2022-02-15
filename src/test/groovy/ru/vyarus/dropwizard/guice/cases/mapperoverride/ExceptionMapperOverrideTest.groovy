@@ -9,8 +9,7 @@ import org.glassfish.jersey.internal.inject.Providers
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.ClientSupport
-import ru.vyarus.dropwizard.guice.test.spock.InjectClient
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -23,15 +22,13 @@ import javax.ws.rs.ext.Provider
  * @author Vyacheslav Rusakov
  * @since 03.10.2020
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class ExceptionMapperOverrideTest extends AbstractTest {
 
-    @InjectClient
-    ClientSupport client
     @Inject
     InjectionManager manager
 
-    def "Check default exception mapper override"() {
+    def "Check default exception mapper override"(ClientSupport client) {
 
         when: "Lookup mappers"
         def provs = Providers.getAllServiceHolders(manager, ExceptionMapper.class)

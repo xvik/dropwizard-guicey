@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.module.support.scope.Prototype
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.ws.rs.GET
 import javax.ws.rs.Path
@@ -18,7 +18,7 @@ import javax.ws.rs.Path
  * @author Vyacheslav Rusakov
  * @since 04.05.2018
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class ForceSingletonOverrideTest extends AbstractTest {
 
     def "Check singleton override hk resource"() {

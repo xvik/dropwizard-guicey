@@ -6,10 +6,9 @@ import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import io.dropwizard.testing.junit.DropwizardAppRule
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.test.TestSupport
 import spock.lang.Specification
-
 
 /**
  * @author Vyacheslav Rusakov
@@ -20,7 +19,7 @@ class NoGuiceDenyServletModuleTest extends Specification {
     def "Check servlet module denied without guice filter"() {
 
         when: "start app with servlet module and no filter"
-        new DropwizardAppRule(DenySMApp).before()
+        TestSupport.runWebApp(DenySMApp, null)
         then: "error"
         def ex = thrown(CreationException)
         ex.errorMessages[0].message.equals("javax.servlet.http.HttpServletRequest was bound multiple times.")

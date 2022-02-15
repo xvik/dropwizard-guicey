@@ -10,21 +10,21 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
+import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
+import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticRenderer
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
-import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticRenderer
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
-import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -34,7 +34,7 @@ import javax.ws.rs.Path
  * @author Vyacheslav Rusakov
  * @since 16.07.2016
  */
-@UseGuiceyApp(value = App, hooks = XConf)
+@TestGuiceyApp(value = App, hooks = XConf)
 class DiagnosticRendererTest extends Specification {
 
     @Inject
@@ -346,11 +346,11 @@ class DiagnosticRendererTest extends Specification {
             bootstrap.addBundle(
                     GuiceBundle.builder()
                             .bundleLookup(new GuiceyBundleLookup() {
-                        @Override
-                        List<GuiceyBundle> lookup() {
-                            return Lists.asList(new FooBundle())
-                        }
-                    })
+                                @Override
+                                List<GuiceyBundle> lookup() {
+                                    return Lists.asList(new FooBundle())
+                                }
+                            })
                             .enableAutoConfig(FooResource.package.name)
                             .searchCommands()
                             .dropwizardBundles(new DBundle(), new DisabledDBundle())

@@ -6,19 +6,18 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import org.eclipse.jetty.servlet.ServletHolder
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
 
-
 /**
  * @author Vyacheslav Rusakov
  * @since 22.08.2016
  */
-@UseGuiceyApp(GCollApp)
+@TestGuiceyApp(GCollApp)
 class ServletGenNameCollisionTest extends Specification {
 
     @Inject

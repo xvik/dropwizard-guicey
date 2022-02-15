@@ -11,17 +11,16 @@ import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingletonInstaller
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
-
 
 /**
  * @author Vyacheslav Rusakov
  * @since 01.08.2016
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class MultiExtensionRegistrationTest extends Specification {
 
     @Inject

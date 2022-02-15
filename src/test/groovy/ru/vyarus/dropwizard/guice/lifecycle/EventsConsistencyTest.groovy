@@ -10,14 +10,15 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
+import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig
 import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfig
-import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig
-import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
-import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
+import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig
+import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle
 import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueModule
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
@@ -28,18 +29,12 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.*
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShotdownEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.*
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*
-import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
 import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
 import ru.vyarus.dropwizard.guice.support.feature.DummyTask
 import ru.vyarus.dropwizard.guice.support.util.BindModule
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.ws.rs.Path
 
@@ -47,7 +42,7 @@ import javax.ws.rs.Path
  * @author Vyacheslav Rusakov
  * @since 23.04.2018
  */
-@UseDropwizardApp(value = App, hooks = XConf)
+@TestDropwizardApp(value = App, hooks = XConf)
 class EventsConsistencyTest extends AbstractTest {
 
     def "Check events consistency"() {
@@ -113,7 +108,7 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         void configure(Binder binder) {
             // need any binding to detect module removal
-             binder.bind(DummyTask)
+            binder.bind(DummyTask)
         }
     }
 

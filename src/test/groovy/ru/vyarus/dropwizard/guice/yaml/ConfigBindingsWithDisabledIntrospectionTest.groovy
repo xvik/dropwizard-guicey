@@ -15,7 +15,7 @@ import ru.vyarus.dropwizard.guice.GuiceyOptions
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
 import ru.vyarus.dropwizard.guice.module.yaml.bind.Config
 import ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigImpl
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 23.07.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class ConfigBindingsWithDisabledIntrospectionTest extends AbstractTest {
 
     @Inject

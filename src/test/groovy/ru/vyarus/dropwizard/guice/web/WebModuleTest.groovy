@@ -2,13 +2,13 @@ package ru.vyarus.dropwizard.guice.web
 
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.support.web.ServletsApplication
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 12.10.2014
  */
-@UseDropwizardApp(ServletsApplication)
+@TestDropwizardApp(ServletsApplication)
 class WebModuleTest extends AbstractTest {
 
     def "Check web bindings"() {

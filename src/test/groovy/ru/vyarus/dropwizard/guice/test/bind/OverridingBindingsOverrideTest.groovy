@@ -7,7 +7,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.binding.BindingsOverrideInjectorFactory
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -16,7 +16,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 24.06.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class OverridingBindingsOverrideTest extends Specification {
 
     @Inject
@@ -42,9 +42,9 @@ class OverridingBindingsOverrideTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                     // original binding
+            // original binding
                     .modules(new Module())
-                    // overriding binding
+            // overriding binding
                     .modulesOverride(new ModuleExt())
                     .printLifecyclePhasesDetailed()
                     .injectorFactory(new BindingsOverrideInjectorFactory())

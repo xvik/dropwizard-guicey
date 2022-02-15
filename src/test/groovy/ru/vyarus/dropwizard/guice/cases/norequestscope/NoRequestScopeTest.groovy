@@ -11,7 +11,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.util.BindModule
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 import javax.inject.Provider
@@ -20,7 +20,7 @@ import javax.inject.Provider
  * @author Vyacheslav Rusakov
  * @since 21.08.2020
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class NoRequestScopeTest extends AbstractTest {
 
     @Inject
@@ -47,7 +47,7 @@ class NoRequestScopeTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-            .modules(new BindModule(RScopedBean))
+                    .modules(new BindModule(RScopedBean))
                     .build())
         }
 

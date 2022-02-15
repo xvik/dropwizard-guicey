@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 import javax.ws.rs.ext.Provider
@@ -20,7 +20,7 @@ import java.util.function.Supplier
  * @author Vyacheslav Rusakov
  * @since 12.09.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class HkManagedFactoryTest extends AbstractTest {
 
     @Inject

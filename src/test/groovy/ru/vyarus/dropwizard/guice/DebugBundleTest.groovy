@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugServic
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.WrongContextException
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -29,7 +29,7 @@ import javax.ws.rs.ext.Provider
  * @author Vyacheslav Rusakov
  * @since 17.01.2016
  */
-@UseDropwizardApp(DebugApp)
+@TestDropwizardApp(DebugApp)
 class DebugBundleTest extends AbstractTest {
 
     @Inject

@@ -11,14 +11,14 @@ import ru.vyarus.dropwizard.guice.config.unique.support.ParentLastURLClassLoader
 import ru.vyarus.dropwizard.guice.config.unique.support.SampleExt
 import ru.vyarus.dropwizard.guice.config.unique.support.SampleModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 09.09.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class DifferentClassLoaderRecognitionTest extends Specification {
 
     @Inject

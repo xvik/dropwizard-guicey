@@ -8,7 +8,7 @@ import org.glassfish.jersey.internal.inject.InjectionManager
 import org.glassfish.jersey.internal.inject.Providers
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.annotation.Priority
 import javax.inject.Inject
@@ -26,7 +26,7 @@ import javax.ws.rs.ext.Provider
  * @author Vyacheslav Rusakov
  * @since 04.10.2020
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class PriorityAnnQualifiedTest extends AbstractTest {
 
     @Inject

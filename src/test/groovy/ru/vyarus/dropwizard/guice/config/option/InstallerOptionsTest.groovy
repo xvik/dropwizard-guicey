@@ -7,21 +7,19 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller
-import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
 import ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSupport
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
 
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.DenyServletRegistrationWithClash
 
-
 /**
  * @author Vyacheslav Rusakov
  * @since 20.08.2016
  */
-@UseGuiceyApp(InstOptApp)
+@TestGuiceyApp(InstOptApp)
 class InstallerOptionsTest extends Specification {
 
     @Inject

@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -20,7 +20,7 @@ import javax.ws.rs.Path
  * @author Vyacheslav Rusakov
  * @since 11.07.2016
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class ExtensionInfoCasesTest extends Specification {
 
     @Inject

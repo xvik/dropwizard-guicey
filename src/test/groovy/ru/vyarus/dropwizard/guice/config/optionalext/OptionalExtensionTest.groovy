@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 import javax.ws.rs.Path
@@ -21,7 +21,7 @@ import javax.ws.rs.Path
  * @author Vyacheslav Rusakov
  * @since 11.12.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class OptionalExtensionTest extends AbstractTest {
 
     @Inject

@@ -7,7 +7,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 23.05.2020
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class NestedMapsConfigTest extends AbstractTest {
 
     @Inject
@@ -41,8 +41,13 @@ class NestedMapsConfigTest extends AbstractTest {
                 .create(type, bootstrap.validatorFactory.validator, bootstrap.objectMapper, "dw").build()
     }
 
-    enum Enum1 {ONE, TWO}
-    enum Enum2 {THREE, FOUR}
+    enum Enum1 {
+        ONE, TWO
+    }
+
+    enum Enum2 {
+        THREE, FOUR
+    }
 
     static class Config extends Configuration {
         Map<String, Map<String, String>> simpleMap = new HashMap<>()

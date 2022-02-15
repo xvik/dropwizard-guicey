@@ -6,14 +6,14 @@ import io.dropwizard.ConfiguredBundle
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.debug.report.stat.StatsRenderer
 import ru.vyarus.dropwizard.guice.diagnostic.BaseDiagnosticTest
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.debug.report.stat.StatsRenderer
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 08.08.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class StatRenderWithDwBundleTest extends BaseDiagnosticTest {
 
     @Inject

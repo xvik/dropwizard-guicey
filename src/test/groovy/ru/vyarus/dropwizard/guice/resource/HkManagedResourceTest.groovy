@@ -6,7 +6,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.servlet.http.HttpServletRequest
 import javax.ws.rs.GET
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
  * @author Vyacheslav Rusakov
  * @since 02.05.2018
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class HkManagedResourceTest extends AbstractTest {
 
     def "Check singleton hk resource"() {
@@ -28,12 +28,14 @@ class HkManagedResourceTest extends AbstractTest {
         ExecutorService service = Executors.newFixedThreadPool(20)
         def res = Collections.synchronizedSet(new TreeSet())
         def expectedRes = [] as Set
-        20.times{ expectedRes.add("q=test$it")}
+        20.times { expectedRes.add("q=test$it") }
 
         when: "calling singleton resource concurrently"
-        20.times {num -> service.submit({
-            res.add(new URL("http://localhost:8080/?q=test$num").getText())
-        })}
+        20.times { num ->
+            service.submit({
+                res.add(new URL("http://localhost:8080/?q=test$num").getText())
+            })
+        }
         service.shutdown()
         service.awaitTermination(2, TimeUnit.SECONDS)
         then: "ok"

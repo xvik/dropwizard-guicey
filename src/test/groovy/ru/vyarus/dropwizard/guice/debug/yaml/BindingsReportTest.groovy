@@ -4,21 +4,20 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
 import ru.vyarus.dropwizard.guice.debug.report.yaml.ConfigBindingsRenderer
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase
 import spock.lang.Specification
 
 import javax.inject.Inject
 
-
 /**
  * @author Vyacheslav Rusakov
  * @since 13.06.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class BindingsReportTest extends Specification {
 
     @Inject

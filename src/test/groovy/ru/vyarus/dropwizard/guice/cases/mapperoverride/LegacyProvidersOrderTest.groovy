@@ -10,8 +10,7 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
 import ru.vyarus.dropwizard.guice.test.ClientSupport
-import ru.vyarus.dropwizard.guice.test.spock.InjectClient
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -24,21 +23,19 @@ import javax.ws.rs.ext.Provider
  * @author Vyacheslav Rusakov
  * @since 04.10.2020
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class LegacyProvidersOrderTest extends AbstractTest {
 
-    @InjectClient
-    ClientSupport client
     @Inject
     InjectionManager manager
 
-    def "Check default exception mapper not overridden"() {
+    def "Check default exception mapper not overridden"(ClientSupport client) {
 
         when: "Lookup mappers"
         def provs = Providers.getAllServiceHolders(manager, ExceptionMapper.class)
         then: "custom provider last"
         // jersey's ValidationExceptionMapper may be last or before last
-        provs.last().contractTypes.contains(GeneralMapper) || provs[provs.size() -2].contractTypes.contains(GeneralMapper)
+        provs.last().contractTypes.contains(GeneralMapper) || provs[provs.size() - 2].contractTypes.contains(GeneralMapper)
 
         when: "Calling rest"
         Response res = client.targetRest('test').request().buildGet().invoke()

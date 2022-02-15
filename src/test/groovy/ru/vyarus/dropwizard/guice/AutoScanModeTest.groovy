@@ -21,7 +21,7 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.*
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * Dummy test.
@@ -29,7 +29,7 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
-@UseGuiceyApp(AutoScanApplication)
+@TestGuiceyApp(AutoScanApplication)
 class AutoScanModeTest extends AbstractTest {
 
     @Inject

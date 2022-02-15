@@ -9,7 +9,7 @@ import org.glassfish.jersey.internal.inject.Providers
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.annotation.Priority
 import javax.inject.Inject
@@ -21,7 +21,7 @@ import javax.ws.rs.ext.Provider
  * @author Vyacheslav Rusakov
  * @since 04.10.2020
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class PriorityAnnTest extends AbstractTest {
 
     @Inject
@@ -31,7 +31,7 @@ class PriorityAnnTest extends AbstractTest {
 
         when: "Lookup mappers"
         def provs = Providers.getAllServiceHolders(manager, ExceptionMapper.class).findAll {
-            it.contractTypes.find {it instanceof Class &&  (it as Class).package.name == 'ru.vyarus.dropwizard.guice.cases.mapperoverride'}
+            it.contractTypes.find { it instanceof Class && (it as Class).package.name == 'ru.vyarus.dropwizard.guice.cases.mapperoverride' }
         }
         then: "custom provider last"
         provs.size() == 3
@@ -49,8 +49,8 @@ class PriorityAnnTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(Mapper1, Mapper3, Mapper2)
-                    // prioritization disabled because @Custom providers are sorted directly by Provider annotation,
-                    // whereas default once require setting rank (with true it would test nothing)
+            // prioritization disabled because @Custom providers are sorted directly by Provider annotation,
+            // whereas default once require setting rank (with true it would test nothing)
                     .option(InstallersOptions.PrioritizeJerseyExtensions, false)
                     .build())
         }

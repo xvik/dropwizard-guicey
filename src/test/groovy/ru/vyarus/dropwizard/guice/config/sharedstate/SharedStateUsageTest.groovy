@@ -9,14 +9,14 @@ import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 28.09.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class SharedStateUsageTest extends Specification {
 
     def "Check shared state usage"() {
@@ -91,7 +91,7 @@ class SharedStateUsageTest extends Specification {
     static class EqualBundle implements GuiceyBundle {
         @Override
         void initialize(GuiceyBootstrap bootstrap) {
-            def state = bootstrap.sharedState(EqualBundle, {"13"})
+            def state = bootstrap.sharedState(EqualBundle, { "13" })
             assert state == "13"
 
             assert bootstrap.sharedState(EqualBundle).get() == "13"

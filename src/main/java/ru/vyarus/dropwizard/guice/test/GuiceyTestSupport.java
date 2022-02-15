@@ -18,7 +18,7 @@ import java.util.function.Function;
  * context. Internally, {@link TestCommand} used instead of {@link io.dropwizard.cli.ServerCommand}.
  * <p>
  * Supposed to be used in cases when application startup fail must be tested:
- * {@link new GuiceyTestSupport(MyApp.class).before()}.
+ * {@code new GuiceyTestSupport(MyApp.class).before()}.
  *
  * @param <C> configuration type
  * @author Vyacheslav Rusakov
@@ -68,6 +68,8 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      * in any case: {@code testSupport.run(null)}.
      *
      * @param callback callback (may be null)
+     * @param <T>      result type
+     * @return callback result
      * @throws Exception any appeared exception
      */
     public <T> T run(final @Nullable TestSupport.RunCallback<T> callback) throws Exception {

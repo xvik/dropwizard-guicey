@@ -5,14 +5,14 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 13.08.2019
  */
-@UseGuiceyApp(AIApp)
+@TestGuiceyApp(AIApp)
 class GuiceBindingsReportTest extends Specification {
 
     def "Check guice bindings reporting"() {

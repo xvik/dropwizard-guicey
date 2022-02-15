@@ -1,22 +1,22 @@
 package ru.vyarus.dropwizard.guice.cases.taskreqscope
 
-import groovyx.net.http.HTTPBuilder
 import ru.vyarus.dropwizard.guice.AbstractTest
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.ClientSupport
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 03.09.2015
  */
-@UseDropwizardApp(RSAwareTaskApp)
+@TestDropwizardApp(RSAwareTaskApp)
 class RSAwareTaskTest extends AbstractTest {
 
-    def "Check task with request scope dependency"() {
+    def "Check task with request scope dependency"(ClientSupport client) {
 
         when: "calling task with request scope dependency"
-        def res = new HTTPBuilder("http://localhost:8081/tasks/rsaware").post([:])
+        def res = client.targetAdmin("/tasks/rsaware").request().post(null)
         then: "ok"
-        res.getText() == 'success'
+        res.readEntity(String) == 'success'
 
     }
 }

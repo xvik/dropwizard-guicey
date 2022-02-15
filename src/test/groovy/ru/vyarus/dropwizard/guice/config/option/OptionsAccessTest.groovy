@@ -15,17 +15,16 @@ import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
-
 
 /**
  * @author Vyacheslav Rusakov
  * @since 13.08.2016
  */
-@UseGuiceyApp(OptionsApp)
+@TestGuiceyApp(OptionsApp)
 class OptionsAccessTest extends Specification {
 
     @Inject
@@ -88,14 +87,14 @@ class OptionsAccessTest extends Specification {
             bootstrap.addBundle(GuiceBundle.builder()
                     .option(SampleOptions.NullOption, "SAMPLE")
                     .bundles(
-                    new GuiceyBundle() {
-                        @Override
-                        void initialize(GuiceyBootstrap bs) {
-                            assert bs.option(SampleOptions.NullOption) == "SAMPLE"
-                            // reading default value
-                            assert bs.option(SampleOptions.BoolFalse) == false
-                        }
-                    })
+                            new GuiceyBundle() {
+                                @Override
+                                void initialize(GuiceyBootstrap bs) {
+                                    assert bs.option(SampleOptions.NullOption) == "SAMPLE"
+                                    // reading default value
+                                    assert bs.option(SampleOptions.BoolFalse) == false
+                                }
+                            })
                     .extensions(Singleton)
                     .build())
         }

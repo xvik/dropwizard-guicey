@@ -6,7 +6,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.yaml.bind.Config
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import ru.vyarus.dropwizard.guice.yaml.RealBindingsTest.AppConfig.Iface
 import spock.lang.Specification
 
@@ -16,15 +16,26 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 25.06.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class RealBindingsTest extends Specification {
 
-    @Inject Configuration direct
-    @Inject @Config Configuration directQualified
-    @Inject @Config AppConfig config
-    @Inject @Config Iface configIface
-    @Inject @Config AppConfig.SubConfig subConfig
-    @Inject @Config("sub.sub") String value
+    @Inject
+    Configuration direct
+    @Inject
+    @Config
+    Configuration directQualified
+    @Inject
+    @Config
+    AppConfig config
+    @Inject
+    @Config
+    Iface configIface
+    @Inject
+    @Config
+    AppConfig.SubConfig subConfig
+    @Inject
+    @Config("sub.sub")
+    String value
 
     def "Check binding correctness"() {
 

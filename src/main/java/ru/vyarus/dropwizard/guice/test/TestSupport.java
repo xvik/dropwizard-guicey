@@ -127,6 +127,9 @@ public final class TestSupport {
      * assumed to fail to make sure {@link DropwizardTestSupport#after()} will be called in any case.
      *
      * @param callback callback (may be null)
+     * @param <T>      result type
+     * @param support  test support instance
+     * @return callback result
      * @throws Exception any appeared exception
      */
     public static <T> T run(final DropwizardTestSupport<?> support,
@@ -161,6 +164,8 @@ public final class TestSupport {
      * @param configPath configuration file path (absolute or relative to working dir) (may be null)
      * @param callback   callback to execute while application started (may be null)
      * @param <C>        configuration type
+     * @param <T>        result type
+     * @return callback result
      * @throws Exception any appeared exception
      */
     public static <T, C extends Configuration> T runWebApp(final Class<? extends Application<C>> appClass,
@@ -192,6 +197,8 @@ public final class TestSupport {
      * @param configPath configuration file path (absolute or relative to working dir) (may be null)
      * @param callback   callback to execute while application started (may be null)
      * @param <C>        configuration type
+     * @param <T>        result type
+     * @return callback result
      * @throws Exception any appeared exception
      */
     public static <T, C extends Configuration> T runCoreApp(final Class<? extends Application<C>> appClass,

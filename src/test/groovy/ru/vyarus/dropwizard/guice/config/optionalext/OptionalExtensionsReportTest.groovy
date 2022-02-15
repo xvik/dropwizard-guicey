@@ -6,7 +6,7 @@ import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticRenderer
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeRenderer
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 11.12.2019
  */
-@UseGuiceyApp(OptionalExtensionTest.App)
+@TestGuiceyApp(OptionalExtensionTest.App)
 class OptionalExtensionsReportTest extends AbstractTest {
 
     @Inject

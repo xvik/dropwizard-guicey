@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.bundles
 
-
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.lifecycle.Managed
@@ -13,14 +12,14 @@ import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 18.09.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class EnvironmentListenersShortcutsTest extends Specification {
 
     def "Check listeners registration"() {
@@ -55,7 +54,7 @@ class EnvironmentListenersShortcutsTest extends Specification {
             environment.manage(new Mng())
             environment.listenJetty(new LListener())
             environment.listenServer(new SListener())
-            environment.onGuiceyStartup({cfg, env, inj ->
+            environment.onGuiceyStartup({ cfg, env, inj ->
                 onGuiceyStartup = true
                 assert cfg != null
                 assert env != null
@@ -92,6 +91,7 @@ class EnvironmentListenersShortcutsTest extends Specification {
 
     static class SListener implements ServerLifecycleListener {
         static boolean called
+
         @Override
         void serverStarted(Server server) {
             called = true
