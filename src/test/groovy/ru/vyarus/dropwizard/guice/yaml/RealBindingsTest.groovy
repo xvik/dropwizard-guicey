@@ -7,7 +7,6 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.yaml.bind.Config
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
-import ru.vyarus.dropwizard.guice.yaml.RealBindingsTest.AppConfig.Iface
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -70,9 +69,9 @@ class RealBindingsTest extends Specification {
         static class SubConfig {
             String sub = 'sample';
         }
+    }
 
-        interface Iface {
+    interface Iface {
 
-        }
     }
 }

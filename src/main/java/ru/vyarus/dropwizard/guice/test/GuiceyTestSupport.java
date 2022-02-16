@@ -8,8 +8,8 @@ import io.dropwizard.cli.Command;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
 

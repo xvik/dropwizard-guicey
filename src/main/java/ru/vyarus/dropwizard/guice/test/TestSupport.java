@@ -5,8 +5,9 @@ import com.google.inject.Key;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.testing.DropwizardTestSupport;
-import org.jetbrains.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
+
+import javax.annotation.Nullable;
 
 /**
  * Utility class combining test-framework agnostic utilities.

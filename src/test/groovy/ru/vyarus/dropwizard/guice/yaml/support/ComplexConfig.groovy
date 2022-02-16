@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice.yaml.support
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.dropwizard.Configuration
-import ru.vyarus.dropwizard.guice.yaml.support.ComplexConfig.Iface
 
 /**
  * @author Vyacheslav Rusakov
@@ -24,8 +23,8 @@ class ComplexConfig extends Configuration implements Iface{
 
         List<T> list;
     }
+}
 
-    interface Iface {
+interface Iface {
 
-    }
 }

@@ -166,7 +166,7 @@ class ConfigInspectorTest extends Specification {
 [ComplexConfig] sub.sub (String) = null
 [ComplexConfig] sub.two (ComplexConfig.Parametrized<String>) = null
 [ComplexConfig] sub.two.list (List<String>) = null"""
-        res.rootTypes == [ComplexConfig, ComplexConfig.Iface, Configuration]
+        res.rootTypes == [ComplexConfig, Iface, Configuration]
         res.uniqueTypePaths.size() == 10
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.SubConfig } != null
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.Parametrized } == null
