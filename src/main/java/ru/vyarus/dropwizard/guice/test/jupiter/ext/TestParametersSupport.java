@@ -83,7 +83,7 @@ public abstract class TestParametersSupport implements ParameterResolver {
         final Parameter parameter = parameterContext.getParameter();
         final Class<?> type = parameter.getType();
         if (ClientSupport.class.equals(type)) {
-            return getClient(extensionContext);
+            return Preconditions.checkNotNull(getClient(extensionContext), "ClientSupport object not available");
         }
         final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(extensionContext));
         if (Application.class.isAssignableFrom(type)) {
@@ -105,7 +105,7 @@ public abstract class TestParametersSupport implements ParameterResolver {
 
     /**
      * @param extensionContext junit extension context
-     * @return client factory object assigned to test instance (never null)
+     * @return client factory object assigned to test instance or null
      */
     protected abstract ClientSupport getClient(ExtensionContext extensionContext);
 

@@ -191,8 +191,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
     @Override
     protected ClientSupport getClient(final ExtensionContext extensionContext) {
-        // throw exception when used improperly (to avoid null parameter injection)
-        return lookupClient(extensionContext).get();
+        return lookupClient(extensionContext).orElse(null);
     }
 
     @Override
