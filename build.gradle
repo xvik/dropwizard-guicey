@@ -51,7 +51,7 @@ dependencyManagement {
 dependencies {
     provided 'org.junit.jupiter:junit-jupiter-api'
     provided 'io.dropwizard:dropwizard-testing'
-    provided 'org.spockframework:spock-core:2.1-groovy-3.0'
+    provided 'org.spockframework:spock-core:2.2-M1-groovy-4.0'
     provided 'com.github.spotbugs:spotbugs-annotations:4.5.3'
     provided "org.glassfish.hk2:guice-bridge"
 
