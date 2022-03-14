@@ -41,6 +41,7 @@ dependencyManagement {
             exclude 'org.glassfish.hk2:hk2-api'
         }
         // SPOCK excluded from bom because it would complicate older version  usage in gradle
+        dependency 'ru.vyarus:spock-junit5:1.0.0'
 
         dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
 
@@ -65,7 +66,7 @@ dependencies {
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
     testImplementation 'org.junit.platform:junit-platform-testkit'
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.1'
-    testImplementation 'ru.vyarus:spock-junit5:1.0.0'
+    testImplementation 'ru.vyarus:spock-junit5'
 
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
 }

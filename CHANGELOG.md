@@ -13,6 +13,7 @@
   - spock version removed in order to avoid problems downgrading spock version for spock1 module
   - system-rules removed because it targets junit4 (instead use system-stubs-jupiter)
   - groovy libraries removed (newer groovy 2.x was required for spock1 to run on java 11)
+  - add spock-junit5 version
   
 ### 5.4.2 (2022-01-26)
 * Update dropwizard to 2.0.28
