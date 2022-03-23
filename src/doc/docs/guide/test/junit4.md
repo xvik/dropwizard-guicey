@@ -1,25 +1,39 @@
 # Junit 4
 
 !!! warning
-    JUnit 4 support is deprecated. Migrate to [JUnit 5](#migrating-to-junit-5), if possible. 
+    Since guicey 5.5 junit 4 support was extracted from guicey to [external module](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-test-junit4):
+
+    * Package remains the same to simplify migration (only additional dependency would be required)
+    * Deprecation marks removed from rules to reduce warnings. 
+
+DEPRECATED because dropwizard deprecated its junit4 rules. Consider [migration to JUnit 5](#migrating-to-junit-5)
+
+## Setup
 
 Required dependencies (assuming BOM used for versions management):
 
 ```groovy
-testImplementation 'io.dropwizard:dropwizard-testing'
-testImplementation 'junit:junit'
+testImplementation 'ru.vyarus.guicey:guicey-test-junit4'
 ```
 
 OR you can use it with junit 5 vintage engine:
 
 ```groovy
-testImplementation 'io.dropwizard:dropwizard-testing'
+testImplementation 'ru.vyarus.guicey:guicey-test-junit4'
 testImplementation 'org.junit.jupiter:junit-jupiter-api'
 testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
 testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
 ```
 
 This way all existing junit 4 tests would work and new tests could use junit 5 extensions.
+
+## Overview
+
+Module includes:
+
+* `GuiceyAppRule` - lightweight integration tests (guice only)
+* `GuiceyHooksRule` - test-specific application modifications
+* `StartupErrorRule` - helper for testing failed application startup
 
 ## Testing core logic
 
@@ -60,7 +74,7 @@ InjectorLookup.getInstance(RULE.getApplication(), MyService.class).get();
 
 ## Customizing guicey configuration
 
-As [described above](#configuration-hooks) guicey provides a way to modify it's configuration in tests.
+Guicey [provides a way](../hooks.md) to modify its configuration in tests.
 You can apply configuration hook using rule:
 
 ```java
@@ -82,7 +96,7 @@ public static RuleChain chain = RuleChain
     RuleChain is required because rules execution order is not guaranteed and
     configuration rule must obviously be executed before application rule. 
 
-If you need to declare configurations common for all tests then declare rule instace
+If you need to declare configurations common for all tests then declare rule instance
 in base test class and use it in chain (at each test):
 
 ```java
@@ -136,11 +150,13 @@ public class MyTest {
 If exception occur on startup dropwizard will call `#!java System.exit(1)` instead of throwing exception (as it was before 1.1.0).
 System exit could be intercepted with [system rules](http://stefanbirkner.github.io/system-rules/index.html).
 
-Special rule is provided to simplify work with system rules: `StartupErrorRule`.
+Special rule provided to simplify work with system rules: `StartupErrorRule`.
 It's a combination of exit and out/err outputs interception rules.
 
-To use this rule add dependency: `com.github.stefanbirkner:system-rules:1.16.0`
+To use this rule add dependency: `com.github.stefanbirkner:system-rules:1.19.0`
 
+!!! warning 
+    Since guicey 5.5 system-rules version is not managed anymore by guicey BOM 
 
 ```java
 public class MyErrTest {
@@ -199,14 +215,15 @@ create call).
 
 ## Migrating to JUnit 5
 
-* Instead of GuiceyAppRule use [@TestGuiceyApp](junit5.md#testguiceyapp) extension.
-* Instead of DropwizardAppRule use [@TestDropwizardApp](junit5.md#testdropwizardapp) extension.
-* GuiceyHooksRule can be substituted with hooks declaration [in extensions](junit5.md#application-test-modification) or as [test fields](junit5.md#hook-fields)
-* There is no direct substitution for StartupErrorRule, but something similar could be achieved 
-with [3rd party extensions](junit5.md#dropwizard-startup-error).
+* Instead of `GuiceyAppRule` use [@TestGuiceyApp](junit5.md#testguiceyapp) extension.
+* Instead of `DropwizardAppRule` use [@TestDropwizardApp](junit5.md#testdropwizardapp) extension.
+* `GuiceyHooksRule` can be substituted with hooks declaration [in extensions](junit5.md#application-test-modification) or as [test fields](junit5.md#hook-fields)
+* Instead of `StartupErrorRule` use [system-stubs](https://github.com/webcompere/system-stubs) - the successor of system rules
 
 In essence:
 
 * Use annotations instead of rules (and forget about RuleChain difficulties)
 * Test fields injection will work out of the box, so no need for additional hacks
-* JUnit 5 propose parameter injection, which may be not common at first, but its actually very handy    
+* JUnit 5 propose [parameter injection](junit5.md#parameter-injection), which may be not common at first, but its actually very handy
+
+Also, there is a pre-configured [http client](http://xvik.github.io/dropwizard-guicey/5.4.2/guide/test/junit5/#client) suitable for calling test application urls (or any other general url).  
