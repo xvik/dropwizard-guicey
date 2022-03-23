@@ -8,6 +8,8 @@ so you can use existing [Junit 5 extensions](junit5.md) with spock.
     You are not limited to guicey junit 5 extensions, you can use ([almost](https://github.com/xvik/spock-junit5#what-is-supported)) any junit 5 extensions.
     And you can use any other spock extensions together with junit extensions.
 
+## Setup
+
 You will need the following dependencies (assuming BOM used for versions management):
 
 ```groovy

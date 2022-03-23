@@ -16,6 +16,8 @@ Required dependencies (assuming BOM used for versions management):
 testImplementation 'ru.vyarus.guicey:guicey-test-junit4'
 ```
 
+### With Junit 5
+
 OR you can use it with junit 5 vintage engine:
 
 ```groovy
@@ -27,9 +29,9 @@ testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
 
 This way all existing junit 4 tests would work and new tests could use junit 5 extensions.
 
-## Overview
+## Rules
 
-Module includes:
+Provided rules:
 
 * `GuiceyAppRule` - lightweight integration tests (guice only)
 * `GuiceyHooksRule` - test-specific application modifications
@@ -152,11 +154,6 @@ System exit could be intercepted with [system rules](http://stefanbirkner.github
 
 Special rule provided to simplify work with system rules: `StartupErrorRule`.
 It's a combination of exit and out/err outputs interception rules.
-
-To use this rule add dependency: `com.github.stefanbirkner:system-rules:1.19.0`
-
-!!! warning 
-    Since guicey 5.5 system-rules version is not managed anymore by guicey BOM 
 
 ```java
 public class MyErrTest {
