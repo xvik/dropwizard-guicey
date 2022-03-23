@@ -18,7 +18,7 @@ import java.util.function.Function;
  * context. Internally, {@link TestCommand} used instead of {@link io.dropwizard.cli.ServerCommand}.
  * <p>
  * Supposed to be used in cases when application startup fail must be tested:
- * {@code new GuiceyTestSupport(MyApp.class).before()}.
+ * {@code new GuiceyTestSupport(MyApp.class, (String) null).before()}.
  *
  * @param <C> configuration type
  * @author Vyacheslav Rusakov
