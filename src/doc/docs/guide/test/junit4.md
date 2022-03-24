@@ -152,6 +152,10 @@ public class MyTest {
 If exception occur on startup dropwizard will call `#!java System.exit(1)` instead of throwing exception (as it was before 1.1.0).
 System exit could be intercepted with [system rules](http://stefanbirkner.github.io/system-rules/index.html).
 
+!!! note
+    If you are going to move to junit 5 soon then better use [system stubs](https://github.com/webcompere/system-stubs) library.
+    It is a successor of system rules and provides both junit 4 and 5 extensions.
+
 Special rule provided to simplify work with system rules: `StartupErrorRule`.
 It's a combination of exit and out/err outputs interception rules.
 

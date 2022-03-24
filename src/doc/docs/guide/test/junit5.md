@@ -1,6 +1,11 @@
 # JUnit 5
 
+!!! note ""
+    [Migration from JUnit 4](junit4.md#migrating-to-junit-5)
+
 Junit 5 [user guide](https://junit.org/junit5/docs/current/user-guide/)
+
+## Setup
 
 You will need the following dependencies (assuming BOM used for versions management):
 
@@ -61,12 +66,14 @@ Both extensions allow using injections directly in test fields.
 
 Extensions are compatible with [parallel execution](#parallel-execution) (no side effects).
 
-[Alternative declaration](#alternative-declaration) is possible.
+[Alternative declaration](#alternative-declaration) is possible. 
+
+Pre-configured [http client](#client) might be used to calling tested application endpoints.
 
 !!! note
-    Spock and junit5 extensions are almost equivalent in features and behaviour. 
+    You can use junit 5 extensions with [Spock 2](spock2.md) 
     
-## @TestGuiceyApp
+## Testing core logic
 
 `@TestGuiceyApp` runs all guice logic without starting jetty (so resources, servlets and filters will not be available).
 `Managed` objects will still be handled correctly.
@@ -97,7 +104,7 @@ public class AutoScanModeTest {
 
 Application started before all tests in annotated class and stopped after them.
 
-## @TestDropwizardApp
+## Testing web logic
 
 `@TestDropwizardApp` is useful for complete integration testing (when web part is required):
 
@@ -767,40 +774,61 @@ public class ActualTest extends BaseTest {}
 !!! warning
     Tests written in such way CAN'T run in parallel due to `System.*` modifications.
        
-To test application startup fails you can use extensions:
-
-* [junit5-system-exit](https://github.com/tginsberg/junit5-system-exit)
-* [junit5-capture-system-output-extension](https://github.com/blindpirate/junit5-capture-system-output-extension)
+To test application startup fails you can use [system stubs](https://github.com/webcompere/system-stubs) library
 
 ```groovy
-testImplementation 'com.ginsberg:junit5-system-exit:1.0.0'
-testImplementation 'com.github.blindpirate:junit5-capture-system-output-extension:0.1.1'
+testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.1'
 ```
 
 Testing app startup fail:
 
 ```java
-@Test
-@ExpectSystemExit
-void checkStartupFail() throws Exception {
-    ErrorApplication.main("server");
+@ExtendWith(SystemStubsExtension.class)
+public class MyTest {
+    @SystemStub
+    SystemExit exit;
+    @SystemStub
+    SystemErr err;
+    
+    @Test
+    public void testStartupError() {
+        exit.execute(() -> new App().run('server'));
+        
+        Assertions.assertEquals(1, exit.getExitCode());
+        Assertions.assertTrue(err.getTest().contains("Error message text"));
+    }     
 }
 ```
 
-With error message validation:
+Note that you can also substitute environment variables and system properties and validate output:
 
 ```java
-@Test
-@ExpectSystemExit
-@CaptureSystemOutput
-void checkStartupFailWithOutput(CaptureSystemOutput.OutputCapture output) throws Exception {
-    // assertion declared before!
-    output.expect(Matchers.containsString(
-            "No implementation for java.lang.String annotated with @com.google.inject.name.Named(value="));
-
-    ErrorApplication.main("server");
+@ExtendWith(SystemStubsExtension.class)
+public class MyTest {
+    @SystemStub
+    EnvironmentVariables ENV;
+    @SystemStub
+    SystemOut out;
+    @SystemStub
+    SystemProperties propsReset;
+    
+    @BeforeAll
+    public void setup() {
+        ENV.set("VAR", "1");
+        System.setProperty("foo", "bar"); // OR propsReset.set("foo", "bar") - both works the same
+    } 
+    
+    @Test
+    public void test() {
+        // here goes some test that requires custom environment and system property values
+        
+        // validating output
+        Assertions.assertTrue(out.getTest().contains("some log message"));
+    }
 }
 ```
+
+Note that there is no need for cleanup: system properties and environment variables would be re-set automatically!
 
 ## 3rd party extensions integration
 

@@ -258,3 +258,17 @@ public class RawTest {
     }
 }
 ```
+
+## Special needs
+
+If you need to:
+
+* Intercept application exit (e.g. startup crash)
+* Validate system output (e.g. logs correctness)
+* Change environment or system variables (with reset)
+
+Then use [system stubs](https://github.com/webcompere/system-stubs) library
+(low-level usage is described in project readme).
+
+There is also specialized guides for [junit 5](junit5.md#dropwizard-startup-error) 
+and [spock 2](spock2.md#special-cases).
