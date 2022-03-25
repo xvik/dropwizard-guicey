@@ -134,21 +134,22 @@ public class MyTest {
 
 ## Spock
 
-All examples above was for junit 5. You can also use groovy-based [Spock framework](http://spockframework.org/) instead of junit. 
-Spock tests are much easier to write (you can write less code) and more expressive. Junit 5 and spock
-extensions are almost identical, so its more the language preference.
+All examples above was for junit 5, but you can also use groovy-based [Spock framework 2](http://spockframework.org/). 
+Spock tests are much easier to write (you can write less code) and more expressive. You'll use the same Junit 5 rules
+(instead of writing custom spock extensions, junit 5 compatibility layer was [implemented](https://github.com/xvik/spock-junit5), 
+so you can use any junit 5 extensions with spock).
 
-Guicey provides all [required extensions](guide/test/spock.md) to write tests above with spock.
+See [this article](https://blog.vyarus.ru/using-junit-5-extensions-in-spock-2-tests#heading-why-spock) for spock usage motivation.
 
-For example, the first example will look like:
+For example, the first junit example will look like in spock:
 
 ```groovy       
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class MyTest extends Specification {    
     
     @EnableHook
-    static GuiceyConfigurationHook HOOK = { it.disableBundles(SecurityOnlyBundle.class)
-                                            .disableModules(DaoModule.class)
+    static GuiceyConfigurationHook HOOK = { it.disableBundles(SecurityOnlyBundle)
+                                            .disableModules(DaoModule)
                                             .modules(new MockDaoModule()) }
 
     @Inject
@@ -165,5 +166,4 @@ class MyTest extends Specification {
 }
 ```
 
-!!! note
-    Only junit 5 currently support running tests in parallel.
+See [Spock 2 docs](guide/test/spock2.md) for more details.

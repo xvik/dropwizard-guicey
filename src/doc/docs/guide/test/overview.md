@@ -1,18 +1,23 @@
 # Testing
 
-Guicey provides extensions for 
+Guicey provides test extensions for: 
 
-* [JUnit 5](junit5.md)  
-* [Spock 1.x](spock.md) 
+* [Spock 2](spock2.md)
+* [JUnit 5](junit5.md)
+* [Framework-agnostic utilities](general.md)
+
+Deprecated:
+
+* [Spock 1](spock.md) 
 * [JUnit 4](junit4.md)
 
-You may choose one or use all in one project: for example, if you already have junit4 or spock tests you can 
-write new tests in junit5.
-
-Junit5 and spock extensions are almost equivalent in features. Junit4 extensions are deprecated 
-(same as dropwizard's own junit4 extensions). 
-
 All extensions implemented with [DropwizardTestSupport](https://www.dropwizard.io/en/latest/manual/testing.html#non-junit).
+
+!!! note
+    There is no special Spock 2 extensions - junit 5 extensions would be used directly so you get the best of both worlds - 
+    use junit extensions (and so can always easily migrate to pure junit) and have spock (and groovy) expressiveness.
+
+Additionally, guicey provides several mechanisms at its core for application customization in tests (see below).
 
 ## Configuration hooks
 
@@ -75,7 +80,7 @@ Guicey could use guice `Modules.override()` to help you override required bindin
 To use it prepare module only with changed bindings (bindings that must override existing).
 For example, you want to replace ServiceX. You have few options:
 
-* If it implement interface, implement your own service and bind as 
+* If it implements interface, implement your own service and bind as 
 `bind(ServiceContract.class).to(MyServiceXImpl.class)`
 * If service is a class, you can modify its behaviour with extended class
 `bind(ServiceX.class).to(MyServiceXExt.class)`
