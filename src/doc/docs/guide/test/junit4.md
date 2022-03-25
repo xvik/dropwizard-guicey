@@ -212,7 +212,7 @@ Multiple check callbacks may be registered (even if the first one was registered
 create call).
 
 !!! note ""
-    Rule works a bit differently with spock (see below).
+    Rule works a bit differently with [spock 1](spock.md#dropwizard-startup-error).
 
 ## Migrating to JUnit 5
 

@@ -99,8 +99,8 @@ In order to start application on random port you can use configuration shortcut:
     Random ports will be applied even if configuration with exact ports provided:
     ```groovy
     @UseDropwizardApp(value = MyApplication, 
-                      config = 'path/to/my/config.yml', 
-                      randomPorts = true)
+              config = 'path/to/my/config.yml', 
+              randomPorts = true)
     ```
     Also, random ports support both server types (default and simple)
     
