@@ -1,135 +1,88 @@
-# 5.4.0 Release Notes
+# 5.5.0 Release Notes
 
 !!! summary ""
-    [5.3.0 release notes](http://xvik.github.io/dropwizard-guicey/5.3.0/about/release-notes/)
+    [5.4.0 release notes](http://xvik.github.io/dropwizard-guicey/5.4.0/about/release-notes/)
 
-!!! note
-    Does not cover bugfix releases: for complete changelog see [history](history.md)
+* [Junit 4 and Spock 1](#junit-4-and-spock-1)
+* [Spock 2](#junit-5) 
+* [General test utils](#general-test-utils)
+* [BOM](#bom)
 
-* [General](#general)
-* [POM](#pom)
-* [JUnit 5](#junit-5) 
-* [Lambda guice modules](#lambda-guice-modules)
-* [JDK16](#jdk16)
-* [Shared state](#shared-state)
+## Junit 4 and Spock 1
 
-## General
+Junit 4 rules and Spock 1 extensions were moved to external modules:
 
-Dropwizard updated to 2.0.27.
+* [guicey-test-junit4](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-test-junit4)
+* [guicey-test-spock](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-test-spock)
 
-!!! important
-    Since dropwizard 2.0.22 [jdk8 compatibility is broken for jdbi3](https://github.com/dropwizard/dropwizard/releases/tag/v2.0.22)
-    due to caffeine library upgrade (see [caffeine author explanation](https://github.com/jdbi/jdbi/issues/1853#issuecomment-819101724))
-    (actually, new jdbi3 version depends on caffeine 3 while dropwizard itself still depends on caffeine 2).
+Both modules considered deprecated because they both rely on deprecated dropwizard junit 4 rule. 
 
-Special artifact was added: [guicey-jdbi3-jdk8](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3-jdk8) fixing caffeine version for you.
-Simply use it instead of `guicey-jdbi3` if you need jdk8 support.
+Packages remain the same so all you need to continue using them is to add additional dependency.
 
-## POM
-
-Guicey POM now specifies dependencies versions directly, instead relying on `dependencyManagement` section.
-As before, core guicey pom might be used as BOM. This change simplifies dependency resolution for build tools.
-
-Extension modules are also declare versions directly now.
-
-Extensions BOM does not contain properties section anymore (but I doubt anyone ever used it).
-
-## JUnit 5
-
-Fixed support for `@TestInstance(TestInstance.Lifecycle.PER_CLASS)` (the default is `PER_METHOD`).
-Now class injections performed in beforeEach instead of instancePostProcessor.
-
-Error message would be thrown now when guicey extensions registered with non-static field (not supported mode of 
-starting guicey per test method).
-This should prevent incorrect usage confusion: before it was silently not working in this case.  
-
-## Lambda guice modules
-
-Before, modules analysis [was failing for lambda modules](https://github.com/xvik/dropwizard-guicey/issues/160):
-
-```java
-GuiceBundle.builder()
-        .modules(binder -> binder.bind(SomeService.class))
-        .build()
+```groovy
+testImplementation 'ru.vyarus.guicey:guicey-test-junit4'
 ```
 
-Now it is supported. But lambda modules has specifics in guicey reporting:
-
-- Root lambda module class will be shown in the diagnostic report (in a list of root modules)
-- Guice bindings report:
-    * Will show all root lambda modules bindings below to com.google.inject.Module
-      (code links at the end of each binding would lead to correct declaration line)
-    * Bindings of lambda modules installed by root (or deeper modules) would be shown
-      directly under root module, as if it was declared directly in that module (logically it's correct)
-
-## JDK16
-
-!!! note
-    Since JDK 16 `--illegal-access=permit` was changed to `--illegal-access=deny` by default.
-    So now, instead of warning, application fails on illegal access.
-
-Guicey configuration analysis was fixed to exclude objects from "sun.*" package from introspection
-([170](https://github.com/xvik/dropwizard-guicey/issues/170), [180](https://github.com/xvik/dropwizard-guicey/issues/180))
-
-Guicey-jdbi3 was fixed from [failing due to incorrect javassist usage](https://github.com/xvik/dropwizard-guicey/issues/178)
-(new version of [guice-ext-annotations](https://github.com/xvik/guice-ext-annotations/releases/tag/1.4.0) released).
-
-!!! note 
-    Dropwizard currently [is not compatible with JDK17](https://github.com/dropwizard/dropwizard/issues/4347).
-
-## Shared state
-
-!!! note
-    [Shared state feature](../guide/shared.md) was initially introduces for complex extensions, when multiple bundles must 
-    interact with the same state.
-
-The following changes simplifies shared state usage, making it usable for wider range of cases.
-
-`SharedConfigurationState` now could be obtained directly during startup with:
-
-```java
-SharedConfigurationState.getStartupInstance() 
+```groovy
+testImplementation 'ru.vyarus.guicey:guicey-test-spock'
 ```
 
-!!! warning
-    During startup, state instance is stored in thread local and so static call would work only from
-    application main thread (usually, all configuration appears in one thread so should not be a problem, 
-    but just in case).
+Spock 1 extensions move was required because it was blocking guicey CI tests on JDK 16 and above.
+Now guicey use spock 2 for all its tests, and so now JDK 16 and 17 compatibility is completely checked.
 
-Direct access is required in cases when there are no way to obtain `Environment` or `Application` objects
-(like binding installer, bundle lookup, etc.). Also, now it allows referencing 
-main objects everywhere during startup.
+Junit 4 rules was moved away to remove direct deprecation marks on rules (instead entire module now considered deprecated).
+This should reduce the amount of compilation warnings.
 
-Shortcut methods were added to `SharedConfigurationState` instance:
+There are also new migration guides:
 
-- getBootstrap()
-- getApplication()
-- getEnvironment()
-- getConfiguration()
-- getConfigurationTree()
+* [Junit 4 to Junit 5](../guide/test/junit4.md#migrating-to-junit-5)
+* [Spock 1 to Spock 2](../guide/test/spock.md#migration-to-spock-2)
 
-All of them return providers: e.g. `SharedConfigurationState.getStartupInstance().getBootsrap()`
-would return `Provider<Bootstrap>`. This is required because target object 
-might not be available yet, still there would be a way to initialize some logic with "lazy object" 
-(to call it later, when object would be available) at any configuration stage.
+## Spock 2
 
-Shared state methods were unified in:
+There is no special [Spock 2](https://spockframework.org/spock/docs/2.1/) extensions, like it was with Spock 1.
+Instead, a new library was created [spock-junit5](https://github.com/xvik/spock-junit5) to support Junit 5 extensions in general for Spock 2.
+You can read more about motivation in the [blog post](https://blog.vyarus.ru/using-junit-5-extensions-in-spock-2-tests)). 
 
-- `GuiceyBootstrap` (GuiceyBundle#initialize)
-- `GuiceyEnvironment` (GuiceyBundle#run)
-- `DropwizardAwareModule`
+Now only Junit 5 extensions need to be maintained and behaviour will be absolutely the same
+in Junit 5 and Spock 2 (and so, in theory, it would not be a problem to move between frameworks).
 
-To simplify all kinds of state manipulations.
+See new [Spock 2 documentation](../guide/test/spock2.md) for more details.
 
-!!! tip
-    Before, it was assumed that shared state must be initialized only under 
-    initialization phase (only in `GuiceyBindle`) and used under runtime phase 
-    (it was possible to workaround limitation with manual state resolution).
-    
-    Now shared state is assumed as more general tool and the same 
-    shortcuts for main oprations available everywhere.
+All tests in guicey itself, guidey-ext and examples were migrated into Spock 2 (so JDK 16 and 17 CI builds now active).
 
-    As before, state might be initialized only once.
+## General test utils
 
-It was also recommended before to use bundle classes for state keys.
-Now it is not strictly recommended (javadoc changed).
+By analogy with dropwizard `DropwizardTestSupport`, `GuiceyTestSupport` class was added.
+It might be used for running applications without web context.
+
+Might be useful in case when there is no provided extensions for your test framework.
+Also, such classes are useful for startup errors validation (when assertions must be performed after application shutdown).
+
+To simplify common use-cases, new `TestSupport` utility class was added with: 
+
+* simple run methods to run complete or guice-only application
+* methods for `DropwizardTestSupport`, `GuiceyTestSupport` and `ClientSupport` objects creation
+* methods for accessing injector (like get injector, get bean, process injections on target object)
+
+Overall, `TestSupport` class should provide access to all other test utilities (no need to remember others).
+
+See new [general testing documentation](../guide/test/general.md).
+
+It is also suggested now to use [system-stubs](https://github.com/webcompere/system-stubs) for:
+
+* Changing (and reverting) system properties and environment variables
+* Intercepting system exit (dropwizard startup error testing)
+* Validating console output (e.g. test logs)
+
+See specialized guides for [junit 5](../guide/test/junit5.md#dropwizard-startup-error)
+and [spock 2](../guide/test/spock2.md#special-cases).
+
+## BOM
+
+Guicey BOM have to be changed:
+
+- spock version removed in order to avoid problems downgrading spock version for spock1 module
+- system-rules removed because it targets junit4 (ext module provides it)
+- groovy libraries removed (newer groovy 2.x was required for spock1 to run on java 11)
+- add spock-junit5 version 

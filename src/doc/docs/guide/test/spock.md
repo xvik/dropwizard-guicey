@@ -16,7 +16,7 @@ DEPRECATED because Implementation relies on deprecated junit 4 rules. Consider [
 You will need the following dependencies (assuming BOM used for versions management):
 
 ```groovy
-testImplementation 'io.dropwizard:dropwizard-testing'
+testImplementation 'ru.vyarus.guicey:guicey-test-spock'
 ```
 
 ### With Junit 5
@@ -24,7 +24,7 @@ testImplementation 'io.dropwizard:dropwizard-testing'
 OR you can use it with junit 5 vintage engine:
 
 ```groovy
-testImplementation 'ru.vyarus.guicey:guicey-test-spock:5.4.2-1'
+testImplementation 'ru.vyarus.guicey:guicey-test-spock'
 testImplementation 'org.junit.jupiter:junit-jupiter-api'
 testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
 testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'

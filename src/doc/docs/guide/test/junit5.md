@@ -828,7 +828,11 @@ public class MyTest {
 }
 ```
 
-Note that there is no need for cleanup: system properties and environment variables would be re-set automatically!
+Pay attention that there is no need for cleanup: system properties and environment variables would be re-set automatically!
+
+!!! note
+    Use [test framework-agnostic utilities](general.md) to run application with configuration or to run
+    application without web part (for faster test).
 
 ## 3rd party extensions integration
 

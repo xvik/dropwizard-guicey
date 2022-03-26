@@ -117,3 +117,7 @@ class EnvironmentChangeTest extends Specification {
         // validate system output (e.g. logs correctness)
         out.text.contains("Some message assumed to be logged")
 ```
+
+!!! note
+    Use [test framework-agnostic utilities](general.md) to run application with configuration or to run
+    application without web part (for faster test).

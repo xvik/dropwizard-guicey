@@ -17,6 +17,10 @@ All extensions implemented with [DropwizardTestSupport](https://www.dropwizard.i
     There is no special Spock 2 extensions - junit 5 extensions would be used directly so you get the best of both worlds - 
     use junit extensions (and so can always easily migrate to pure junit) and have spock (and groovy) expressiveness.
 
+!!! tip
+    [Test framework-agnostic utilities](general.md) are useful with junit 5 or spock extensions in cases when
+    assertions required after application shutdown or to test application startup errors.
+
 Additionally, guicey provides several mechanisms at its core for application customization in tests (see below).
 
 ## Configuration hooks

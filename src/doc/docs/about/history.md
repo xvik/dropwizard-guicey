@@ -1,3 +1,23 @@
+### [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0) (2022-03-??)
+* Test framework-agnostic utilities:
+    - Add GuiceyTestSupport to simplify guice-only manual application runs
+      (by analogy to DropwizardTestSupport class)
+    - Add TestSupport class as a root for test framework-agnostic utilities.
+      Suitable for application startup errors testing and integration within not supported test runner.
+* Add Spock 2 support: there is no custom extensions, instead existing junit 5 extensions would be used
+  through a special library spock-junit5 (developed specifically for this integration)
+* Change "hooks in base test class" behaviour: hooks from static fields from base classes applied before hooks in test itself.
+  Such behaviour is more natural - "base classes declarations go first"
+  (before all field hooks were applied after annotation hooks)
+* Extract Spock 1 and Junit 4 extensions from core into ext modules:
+    - packages remain the same, so there should be no issues with it (just add new dependency)
+    - removed deprecation markers from Junit 4 rules (entire module assumed to be deprecated; fewer warnings on build)
+* BOM changes:
+    - spock version removed in order to avoid problems downgrading spock version for spock1 module
+    - system-rules removed because it targets junit4 (ext module provides it)
+    - groovy libraries removed (newer groovy 2.x was required for spock1 to run on java 11)
+    - add spock-junit5 version
+
 ### [5.4.2](http://xvik.github.io/dropwizard-guicey/5.4.2) (2022-01-26)
 * Update dropwizard to 2.0.28
 * Update guice to 5.1.0 (java 17 support)
