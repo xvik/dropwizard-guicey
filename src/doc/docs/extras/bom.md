@@ -11,6 +11,7 @@ Maven BOM contains guicey and guicey ext modules versions. Also includes dropwiz
 
 | BOM version | Guicey | Dropwizard | Guice |
 |-------------|--------|-----------|-------|
+| 5.5.0-1     | 5.5.0  | 2.0.28    | 5.1.0 |
 | 5.4.2-1     | 5.4.2  | 2.0.28    | 5.1.0 |
 | 5.4.0-1     | 5.4.0  | 2.0.25    | 5.0.1 |
 | 5.3.0-1     | 5.3.0  | 2.0.20    | 5.0.1 |

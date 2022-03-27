@@ -87,9 +87,8 @@ BOM           | Artifact
 Guicey itself | `ru.vyarus:dropwizard-guicey`
 Dropwizard BOM | `io.dropwizard:dropwizard-bom`
 Guice BOM | `com.google.inject:guice-bom`
-HK2 bridge | `org.glassfish.hk2:guice-bridge` 
-System rules (required for StartupErrorRule) | `com.github.stefanbirkner:system-rules`
-Spock | `org.spockframework:spock-core` 
+HK2 bridge | `org.glassfish.hk2:guice-bridge`
+Spock-junit5 | `ru.vyarus:spock-junit5` 
 
 ## Usage
 

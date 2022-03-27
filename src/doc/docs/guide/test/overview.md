@@ -13,9 +13,19 @@ Deprecated:
 
 All extensions implemented with [DropwizardTestSupport](https://www.dropwizard.io/en/latest/manual/testing.html#non-junit).
 
-!!! note
-    There is no special Spock 2 extensions - junit 5 extensions would be used directly so you get the best of both worlds - 
-    use junit extensions (and so can always easily migrate to pure junit) and have spock (and groovy) expressiveness.
+!!! note "History"
+    Spock 1 extensions were much more advanced than JUnit 4 rules, simply because
+    spock extensions model was much more powerful.
+
+    JUnit 5 extension model is almost equal to spock and JUnit 5 extensions were 
+    "an evolution" of the spock extensions.
+
+    There is no special Spock 2 extensions, instead junit 5 extensions must be used directly.
+    You get the best of both worlds - use junit extensions (and so can always easily migrate to pure junit) and 
+    have spock (and groovy) expressiveness.
+
+    Currently, spock 1 and junit 4 extensions considered deprecated becuase they use
+    deprecated [dropwizard rule](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#junit-4).
 
 !!! tip
     [Test framework-agnostic utilities](general.md) are useful with junit 5 or spock extensions in cases when
