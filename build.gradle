@@ -67,8 +67,6 @@ dependencies {
     testImplementation 'org.junit.platform:junit-platform-testkit'
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.1'
     testImplementation 'ru.vyarus:spock-junit5'
-
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
 }
 
 group = 'ru.vyarus'
