@@ -17,11 +17,20 @@ so you can use existing [Junit 5 extensions](junit5.md) with spock.
 You will need the following dependencies (assuming BOM used for versions management):
 
 ```groovy
-testImplementation 'io.dropwizard:dropwizard-testing'
-testImplementation 'org.junit.jupiter:junit-jupiter-api'
 testImplementation 'ru.vyarus:spock-junit5'
 testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0'
+testImplementation 'io.dropwizard:dropwizard-testing'
+testImplementation 'org.junit.jupiter:junit-jupiter-api'
 ```
+
+!!! note
+    In gradle you need to explicitly [activate junit 5 support](https://docs.gradle.org/current/userguide/java_testing.html#using_junit5) with
+    ```groovy
+    test {
+        useJUnitPlatform()
+        ...
+    }                    
+    ```
 
 ## Usage
 
@@ -43,7 +52,7 @@ class MyTest extends Specification {
         
         when: "calling rest endpoint"
         def res = client.targetRest("foo/bar").request()
-                .buildGet().invoke().readEntity(String.class)
+                .buildGet().invoke().readEntity(String)
         
         then: "result correct"
         res == "something"

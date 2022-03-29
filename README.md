@@ -55,19 +55,19 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>5.4.2</version>
+  <version>5.5.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:5.4.2'
+implementation 'ru.vyarus:dropwizard-guicey:5.5.0'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-2.0| [5.4.2](http://xvik.github.io/dropwizard-guicey/5.4.2)
+2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
 1.0 | [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1)
@@ -89,7 +89,7 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus:dropwizard-guicey:5.4.2')
+    implementation platform('ru.vyarus:dropwizard-guicey:5.5.0')
     // uncomment to override dropwizard and its dependencies versions    
     //implementation platform('io.dropwizard:dropwizard-dependencies:2.0.28')
 
@@ -98,9 +98,10 @@ dependencies {
    
     implementation 'io.dropwizard:dropwizard-auth'
     implementation 'com.google.inject:guice-assistedinject'   
-     
+    
+    testImplementation 'ru.vyarus:spock-junit5'
+    testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0'
     testImplementation 'io.dropwizard:dropwizard-test'
-    testImplementation 'org.spockframework:spock-core'
 }
 ```
 
@@ -112,7 +113,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>dropwizard-guicey</artifactId>
-            <version>5.4.2</version>
+            <version>5.5.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -142,9 +143,8 @@ BOM           | Artifact
 Guicey itself | `ru.vyarus:dropwizard-guicey`
 Dropwizard BOM | `io.dropwizard:dropwizard-bom`
 Guice BOM | `com.google.inject:guice-bom`
-HK2 bridge | `org.glassfish.hk2:guice-bridge` 
-System rules (required for StartupErrorRule) | `com.github.stefanbirkner:system-rules`
-Spock | `org.spockframework:spock-core`
+HK2 bridge | `org.glassfish.hk2:guice-bridge`
+Spock-junit5 | `ru.vyarus:spock-junit5`
 
 
 ### Snapshots

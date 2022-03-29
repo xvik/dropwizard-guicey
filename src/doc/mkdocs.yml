@@ -127,8 +127,10 @@ nav:
         - Jersey: guide/diagnostic/jersey-report.md
       - Test:
         - Overview: guide/test/overview.md
+        - Spock 2: guide/test/spock2.md
         - Junit 5: guide/test/junit5.md
-        - Spock: guide/test/spock.md
+        - General support: guide/test/general.md
+        - Spock 1: guide/test/spock.md
         - Junit 4: guide/test/junit4.md
       - Lifecycle: guide/lifecycle.md
       - Classpath scan: guide/scan.md

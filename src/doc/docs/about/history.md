@@ -1,4 +1,4 @@
-### [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0) (2022-03-??)
+### [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0) (2022-03-30)
 * Test framework-agnostic utilities:
     - Add GuiceyTestSupport to simplify guice-only manual application runs
       (by analogy to DropwizardTestSupport class)

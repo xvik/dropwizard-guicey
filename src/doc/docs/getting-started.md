@@ -42,10 +42,11 @@ dependencies {
     implementation 'ru.vyarus:dropwizard-guicey'
        
     implementation 'io.dropwizard:dropwizard-auth'
-    implementation 'com.google.inject:guice-assistedinject'   
-     
+    implementation 'com.google.inject:guice-assistedinject'
+
+    testImplementation 'ru.vyarus:spock-junit5'
+    testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0'
     testImplementation 'io.dropwizard:dropwizard-test'
-    testImplementation 'org.spockframework:spock-core'
 }
 ```    
 

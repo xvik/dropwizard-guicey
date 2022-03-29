@@ -10,7 +10,7 @@ Test utils:
 
  - `TestSupport` - root utilities class, providing easy access to other helpers
  - `DropwizardTestSupport` - [dropwizard native support](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#non-junit) for full integration tests
- - `GuiceyTestSupport` - guice context only integration tests (without starting web part)
+ - `GuiceyTestSupport` - guice context-only integration tests (without starting web part)
  - `ClientSupport` - web client helper (useful for calling application urls)
 
 !!! important
@@ -23,7 +23,8 @@ Core [DropwizardTestSupport](https://www.dropwizard.io/en/release-2.0.x/manual/t
 used to run complete application for testing:
 
 ```java
-DropwizardTestSupport support = new DropwizardTestSupport(App.class, "path/to/test-config.yml");
+DropwizardTestSupport support = TestSupport.webApp(App.class, "path/to/test-config.yml"); 
+        // OR for custom configuration - new DropwizardTestSupport(App.class, "path/to/test-config.yml");
 // start
 support.before();
 
@@ -46,7 +47,8 @@ See constructor for advanced configuration options.
 guice context without web part. Provides additional utility methods:
 
 ```java
-GuiceyTestSupport support = new GuiceyTestSupport(App.class, "path/to/test-config.yml");
+GuiceyTestSupport support = TestSupport.coreApp(App.class, "path/to/test-config.yml");
+        // OR for custom configuration - new GuiceyTestSupport(App.class, "path/to/test-config.yml");
 // start
 support.before();
 
@@ -67,7 +69,7 @@ aware of dropwizard configuration, so you can easily call admin/main/rest urls.
 Creation:
 
 ```java
-ClientSupport client = new ClientSupport(support);
+ClientSupport client = TestSupport.webClient(support);
 ```
 
 where support is `DropwizardTestSupport` or `GuiceyTestSupport` (in later case it could be used only as generic client for calling external urls).
@@ -192,7 +194,7 @@ or
 GuiceyTestSupport support = TestSupport.coreApp(App.class, "path/to/test-config.yml");
 ```
 
-As before, configuration could be null:
+Configuration path could be null:
 
 ```java
 DropwizardTestSupport support = TestSupport.webApp(App.class, null);

@@ -42,7 +42,7 @@ There are also new migration guides:
 
 There is no special [Spock 2](https://spockframework.org/spock/docs/2.1/) extensions, like it was with Spock 1.
 Instead, a new library was created [spock-junit5](https://github.com/xvik/spock-junit5) to support Junit 5 extensions in general for Spock 2.
-You can read more about motivation in the [blog post](https://blog.vyarus.ru/using-junit-5-extensions-in-spock-2-tests)). 
+You can read more about motivation in the [blog post](https://blog.vyarus.ru/using-junit-5-extensions-in-spock-2-tests). 
 
 Now only Junit 5 extensions need to be maintained and behaviour will be absolutely the same
 in Junit 5 and Spock 2 (and so, in theory, it would not be a problem to move between frameworks).
