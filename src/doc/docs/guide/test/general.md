@@ -232,28 +232,28 @@ public class RawTest {
     @Inject MyService service;
     
     @BeforeAll
-    static void setup() {
-        support = TestSupport.coreApp(App.class);
-        // support = TestSupport.webApp(App.class);
+    public static void setup() {
+        support = TestSupport.coreApp(App.class, null);
+        // support = TestSupport.webApp(App.class, null);
         // start app
         support.before();
     }
     
     @BeforeEach
-    void before() {
+    public void before() {
         // inject services in test
         TestSupport.injectBeans(support, this);
     }
     
     @AfterAll
-    static void cleanup() {
+    public static void cleanup() {
         if (support != null) {
             support.after();
         }
     }
     
     @Test
-    void test() {
+    public void test() {
         Assertions.assertEquals("10", service.computeValue());
     }
 }
