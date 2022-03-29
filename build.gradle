@@ -52,7 +52,6 @@ dependencyManagement {
 dependencies {
     provided 'org.junit.jupiter:junit-jupiter-api'
     provided 'io.dropwizard:dropwizard-testing'
-    provided 'org.spockframework:spock-core:2.2-M1-groovy-4.0'
     provided 'com.github.spotbugs:spotbugs-annotations:4.6.0'
     provided "org.glassfish.hk2:guice-bridge"
 
@@ -61,12 +60,14 @@ dependencies {
     implementation 'io.dropwizard:dropwizard-core'
     implementation 'ru.vyarus:generics-resolver:3.0.3'
 
+    testImplementation 'ru.vyarus:spock-junit5'
+    testImplementation 'org.spockframework:spock-core:2.2-M1-groovy-4.0'
+
     testImplementation 'org.glassfish.jersey.inject:jersey-hk2'
     testImplementation 'io.dropwizard:dropwizard-auth'
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
     testImplementation 'org.junit.platform:junit-platform-testkit'
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.1'
-    testImplementation 'ru.vyarus:spock-junit5'
 }
 
 group = 'ru.vyarus'
