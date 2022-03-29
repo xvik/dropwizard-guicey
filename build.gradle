@@ -68,6 +68,9 @@ dependencies {
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
     testImplementation 'org.junit.platform:junit-platform-testkit'
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.1'
+
+    // required for pure junit 5 tests
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
 }
 
 group = 'ru.vyarus'
