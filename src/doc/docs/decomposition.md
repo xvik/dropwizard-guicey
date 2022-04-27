@@ -20,13 +20,13 @@ Having three options could be confusing.
 - And [guicey extensions](guide/modules.md) - `GuiceyBundle`
 
 All of these modules are supposed to be used together. In some cases, guicey explicitly provides wrapping 
-modules (e.g. the [jdbi](extras/jdbi3.md) wrapper around the [dropwizard module](https://www.dropwizard.io/en/latest/manual/jdbi3.html)). 
-Such wrappers usually provide additional features and enhancements that would be impossible with a single module type.
+modules (e.g. the [jdbi](extras/jdbi3.md) wrapper around the [dropwizard module](https://www.dropwizard.io/en/latest/manual/jdbi3.html)).
+Such wrappers provide guice related features and enhancements, impossible in vanilla dropwizard modules.
 
 ## Guicey bundle
 
-As it [was described](concepts.md#bundles), guicey introduces its own [bundle](guide/bundles.md) because guicey provides
-additional configuration features. Even the simple use cases require some configuration of guice modules.
+As described [here](concepts.md#bundles), guicey introduces its own [bundle](guide/bundles.md) because guicey provides
+additional configuration features. Even a simple use case may have a need to configure guice modules from a bundle.
 
 *Prefer `GuiceyBundle` over dropwizard `Bundle`* for developing re-usable modules.
 Of course, if module is very generic (does not depend on guice) you can use a pure dropwizard module
@@ -194,7 +194,7 @@ This is most applicable to [guice modules](guide/deduplication.md#guice-modules)
 
 ### Auto-loaded bundle
 
-Auto-loading is based on guicey [bundles lookup](guide/bundles.md#service-loader-lookup) algorithm.
+Auto-loading is based on the guicey [bundles lookup](guide/bundles.md#bundle-lookup) feature.
 
 Be aware that a user may switch off bundle lookup (with `.disableBundleLookup()`) or apply [custom lookup](guide/bundles.md#customizing-lookup-mechanism)).
 
@@ -244,7 +244,7 @@ As bundle has almost complete access to configuration, it can use [disables](gui
 to substitute application functions.
 
 For example, it is known that an application uses `ServiceX` from some core module provided by the organization. Your module 
-requires a modified service. Your bundle may disable the core module, and install a replacement customized module:
+requires a modified service. Your bundle may disable the core module, and install a customized module as a replacement:
 
 ```java
 public class MyFeatureBundle implements GuiceyBundle {
