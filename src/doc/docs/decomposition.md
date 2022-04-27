@@ -3,60 +3,58 @@
 !!! summary ""
     Guide for writing re-usable bundles
 
-In dropwizard we have only one decomposition element: [ConfiguredBundle](https://www.dropwizard.io/en/stable/manual/core.html#bundles).
+In dropwizard there is only one decomposition element: [ConfiguredBundle](https://www.dropwizard.io/en/stable/manual/core.html#bundles).
 
 !!! note
-    In pure dropwizard, bundles also used inside single application to separate configuration blocks
-    (simplify logic). In guicey, this is not required as [classpath scan](guide/scan.md) could be
-    used for extensions registration (configuration amount reduced).
+    In pure dropwizard, bundles may also  be used within a single application to separate configuration blocks
+    (simplify logic). In guicey, this is not required as [classpath scan](guide/scan.md) may be
+    used for extension registration and reduce the amount of required configuration.
     
-    This chapter describe only re-usable logc decomposition.
+    This chapter describes only re-usable logic decomposition.
     
-In guicey we have: guicey bundle (`GuiceyBundle`), guice module (`Module`) and dropwizard bundle (`ConfiguredBundle`).
-This could confuse.
+In guicey there are three decomposition elements - guicey bundles (`GuiceyBundle`), guice modules (`Module`) and dropwizard bundle (`ConfiguredBundle`).
+Having three options could be confusing.
 
 - There are existing [dropwizard modules](https://modules.dropwizard.io/thirdparty/) - `ConfiguredBundle`
-- Existing [guice modules](https://github.com/google/guice/wiki/3rdPartyModules) (outdated list, just as an exampel) - `Module`
+- Existing [guice modules](https://github.com/google/guice/wiki/3rdPartyModules) (outdated list, just as an example) - `Module`
 - And [guicey extensions](guide/modules.md) - `GuiceyBundle`
 
-All these modules are supposed to be used together (obviously). In some cases, 
-guicey explicitly provides wrapping modules (e.g. [jdbi](extras/jdbi3.md) - wrapper for dropwizard module),
-but such wrappers usually provide additional abilities (impossible with pure module) and
-not driven by inability to use a raw module.
+All of these modules are supposed to be used together. In some cases, guicey explicitly provides wrapping 
+modules (e.g. the [jdbi](extras/jdbi3.md) wrapper around the [dropwizard module](https://www.dropwizard.io/en/latest/manual/jdbi3.html)).
+Such wrappers provide guice related features and enhancements, impossible in vanilla dropwizard modules.
 
 ## Guicey bundle
 
-As it [was described](concepts.md#bundles), guicey have to introduce its own [bundle](guide/bundles.md) because guicey provides
-additional configuration features (even in the simplest case you should be able to
-configure guice modules).
+As described [here](concepts.md#bundles), guicey introduces its own [bundle](guide/bundles.md) because guicey provides
+additional configuration features. Even a simple use case may have a need to configure guice modules from a bundle.
 
 *Prefer `GuiceyBundle` over dropwizard `Bundle`* for developing re-usable modules.
-Of course, if module is very generic (does not depend on guice) you can do pure dropwizard module
-(to publish it for wider audience), but almost always bundles rely on guicey features.
+Of course, if module is very generic (does not depend on guice) you can use a pure dropwizard module
+(to publish it for wider audience), but almost all bundles rely on guicey features.
 
 Benefits:
 
 - guice support (ability to register guice modules)
 - [options](guide/options.md) support
-- could use [sub-configration objects](guide/yaml-values.md#unique-sub-configuration) directly (important for writing generic modules)
-- ability to introduce new [extension types](guide/extensions.md) to simplify usage (e.g. like [jdbi](extras/jdbi3.md))
-- [automatic module load](concepts.md#bundles-lookup) when jar appear in classpath (e.g. like [lifecycle annotations](extras/lifecycle-annotations.md))
-- [shared state](guide/shared.md) - advanced technique for bundles communications (e.g. used by [GSP](extras/gsp.md) and [SPA](extras/spa.md))
+- use [sub-configration objects](guide/yaml-values.md#unique-sub-configuration) directly (important for writing generic modules)
+- define custom [extension types](guide/extensions.md) to simplify usage (e.g. like [jdbi](extras/jdbi3.md))
+- [automatic module loading](concepts.md#bundles-lookup) when jar appear in classpath (e.g. like [lifecycle annotations](extras/lifecycle-annotations.md))
+- [shared state](guide/shared.md) - advanced techniques for bundle communication (e.g. used by [GSP](extras/gsp.md) and [SPA](extras/spa.md))
 - [events](guide/events.md) - internal lifecycle events for fine-tuning lifecycle (again, complex cases only, for example, [GSP](extras/gsp.md) use it to order bundles logic)
 - ability to replace functionality (prevent feature x registration by [disabling it](guide/disables.md) and register feature y instead)
 
 ## Dropwizard bundle
 
-It is important to note that there is a difference between registration of dropwizard bundle directly
-(in dropwizard `Bootstrap`) and through guicey api: bundle registered through guicey api
-[could be disabled](guide/disables.md#disable-dropwizard-bundles), [de-duplicated](guide/deduplication.md#dropwizard-bundles),
+It is important to note that there is an important difference between registering a dropwizard bundle directly via the 
+dropwizard `Bootstrap` and registering a bundle through the guicey api - any bundle registered through the guicey api
+[may be disabled](guide/disables.md#disable-dropwizard-bundles), [de-duplicated](guide/deduplication.md#dropwizard-bundles), and/or
 tracked for [transitive bundles](guide/bundles.md#transitive-bundles-tracking).
 
-Also, bundles registered through guicey api appear in [configuration report](guide/diagnostic/configuration-report.md).
+All bundles registered through guicey api will also appear in [configuration report](guide/diagnostic/configuration-report.md).
 
-There is a difference between dropwizard and guicey bundles in transitive bundles initialization: 
+There is a difference between the order that dropwizard and guicey bundles are initialized:
 
-*Dropwizard bundle* **immediately** initialize transitive bundle:
+*Dropwizard bundles* **immediately** initialize a transitive bundle.
 
 ```java
 public class MyBundle implements ConfiguredBundle {
@@ -69,7 +67,7 @@ public class MyBundle implements ConfiguredBundle {
 }
 ```                           
 
-*Guicey bundle* register transitive bundle **after** current bundle, but dropwizard bundle immediately.
+*Guicey bundle* registers a transitive bundle **after** current bundle, but dropwizard bundles are still immediately initialized.
 
 ```java
 public class MyBundle implements GuiceyBundle {
@@ -84,8 +82,8 @@ public class MyBundle implements GuiceyBundle {
 }
 ```
 
-Guicey bundles behaviour explained by [de-duplciation](guide/deduplication.md) logic:
-registered root bundles must be initialized in priority. It avoids situation like:
+Guicey bundle de-duplication logic is further explaned [here](guide/deduplication.md). In short, registered root bundles 
+must be initialized in priority. This avoids situations like:
 
 ```java
 GuiceBundle.builder()
@@ -93,9 +91,9 @@ GuiceBundle.builder()
 ```
 
 If `Bundle2` is unique and `Bundle1` transitively installs `new Bundle2(1)` (e.g. with different config),
-then this transitive bundle would be ignored (because root bundles init will appear first).
-If it were working like dropwizard bundles, then directly registered `Bundle2` would be ignored
-and remaining instance would have different configuration (confusion point).  
+then this transitive bundle would be ignored because the root bundle's init will appear first.
+If guicey bundles worked like dropwizard bundles, then the directly registered `Bundle2` would be ignored
+and remaining instance would have different configuration, introducing a major point of confusion.  
 
 Normally, this behaviour should not be an issue as you shouldn't rely on bundles initialization order.
 But this may be important with [shared state](#shared-state).
@@ -103,12 +101,12 @@ But this may be important with [shared state](#shared-state).
 ## Bundle vs Module
 
 When extracting functionality into re-usable module always start with a bundle.
-Guice module, most likely, will be required too.
+A guice module will likely be required as well.
 
 Logic should be separated as:
 
 - *Guice module* is responsible for guice bindings and should not be aware of dropwizard. 
-- *Bundle* works with dropwizard: extract required configuration for creating module and do other registrations.
+- *Bundle* works with dropwizard, extracts required configuration for creating module and do other registrations.
 
 That's an ideal case. But, for example, if you need to apply some bindings based on configuration only 
 then you can do it with pure guice module, like:
@@ -130,7 +128,7 @@ public class AppConfig extends Configuration {
 }
 ```
 
-Make module [aware of dropwizard staff](guide/guice/module-autowiring.md#autowiring-base-class):
+Make module [aware of dropwizard stuff](guide/guice/module-autowiring.md#autowiring-base-class):
 
 ```java
 public class ModuleImpl<C extends Configuration> extends DropwizardAwareModule<C> {
@@ -148,8 +146,8 @@ public class ModuleImpl<C extends Configuration> extends DropwizardAwareModule<C
 ```
 
 !!! warning
-    This is not a recommended way! It was shown just to demonstrate that guice module *could* be used
-    without bundle. It's better to use declaration bundle instead:
+    This is not the recommended way! It was shown just to demonstrate that guice module *could* be used
+    without bundle. It's better to use a declarative bundle instead:
     
     ```java
     public class ModuleImpl extends AbstractBundle {
@@ -181,41 +179,42 @@ public class ModuleImpl<C extends Configuration> extends DropwizardAwareModule<C
 
 These tips show various techniques for developing bundles.  
 Mostly, these tips are based on developing [guicey extensions](https://github.com/xvik/dropwizard-guicey-ext).
-(look extensions sources as examples).
+See extension sources for examples.
 
 ### Uniqueness
 
-For everything that is registered "by instance" applied [de-duplication mechanism](guide/deduplication.md).
+For everything that is registered "by instance", the [de-duplication mechanism](guide/deduplication.md) is applied.
 
-You can use it to grant only one instance of [bundle](guide/bundles.md#de-duplication) by `extends UniqueGuiceyBundle`
-(or more sophisticated logic by manual [equals and hash code implementation](guide/deduplication.md#equals-method),
-for example, to de-duplicate only instance with the same constructor arguments).
+You can use it to provide only one instance of a [bundle](guide/bundles.md#bundle-de-duplication) by `extends 
+UniqueGuiceyBundle`. If more sophisticated logic is required, a manual [equals and hash code implementation](guide/deduplication.md#equals-method),
+may be used. This could be used to de-duplicate only instances with the same constructor arguments.
 
-It may be mostly important for [guice modules](guide/deduplication.md#guice-modules) as guice will not start with duplicate bundings
+This is most applicable to [guice modules](guide/deduplication.md#guice-modules) as guice will not start with duplicate bindings
 (`MyModule extends UniqueModule`).
 
 ### Auto-loaded bundle
 
-Auto loading based on guicey [bundles lookup](guide/bundles.md#service-loader-lookup).
+Auto-loading is based on the guicey [bundles lookup](guide/bundles.md#bundle-lookup) feature.
 
-Be aware that user may switch off bundles lookup (with `.disableBundleLookup()`) or apply [custom lookup](guide/bundles.md#customizing-lookup-mechanism)).
+Be aware that a user may switch off bundle lookup (with `.disableBundleLookup()`) or apply [custom lookup](guide/bundles.md#customizing-lookup-mechanism)).
 
 #### Auto load override
 
 If your bundle provides configuration, but you still want to load it automatically with the default configuration,
-then you can use [bundle uniquness](guide/bundles.md#de-duplication):
+then you can use [bundle uniquness](guide/bundles.md#bundle-de-duplication):
 
 ```java
 public class AutoLoadableBundle extends UniqueGuiceyBundle { ... }
 ```
 
-Now only one bundle instance is allowed and, if user register bundle manually,
-bundle from lookup will simply be ignored. [Lifecycle annotations](extras/lifecycle-annotations.md) module use this technique.
+If this is used, only one bundle instance is allowed. If a user registers another instance of the bundle manually,
+the bundle found from a lookup will simply be ignored. The [lifecycle annotations](extras/lifecycle-annotations.md) module uses 
+this technique.
 
 
 ### Optional extensions
 
-All extensions must be registered under initialization phase, when configuration is not yet available
+All extensions must be registered during the initialization phase, when configuration is not yet available
 and so it is not possible to implement optional extension registration. 
 
 To workaround this, you can conditionally disable extensions:
@@ -244,9 +243,8 @@ public class MyFeatureBundle implements GuiceyBundle {
 As bundle has almost complete access to configuration, it can use [disables](guide/disables.md)
 to substitute application functions.
 
-For example, it is known that application use `ServiceX` (from some core module in organization),
-but this bundle requires modified service. It can disable core module, installing feature 
-and register customized module:
+For example, it is known that an application uses `ServiceX` from some core module provided by the organization. Your module 
+requires a modified service. Your bundle may disable the core module, and install a customized module as a replacement:
 
 ```java
 public class MyFeatureBundle implements GuiceyBundle {
@@ -261,15 +259,14 @@ public class MyFeatureBundle implements GuiceyBundle {
 ```
 
 !!! note
-    It's not the best example: of course it's simpler to use [binding override](guide/guice/override.md)
-    to override single service. But it's just to demonstrate the idea (it could be repalced
-    extension or fixed installer). 
+    This is not the best pattern to follow. It is simpler to use [binding override](guide/guice/override.md)
+    to override single service. This is an example for demonstration purposes.
     
     Bundles can't disable other bundles (because target bundle could be already processed at this point).   
 
 ### Bundle options
 
-Bundle could use guicey [options mechanism](guide/options.md) to access guicey option values:
+Bundles can use the guicey [options mechanism](guide/options.md) to access guicey option values:
 
 ```java
 public class MyBundle implements GuiceyBundle {
@@ -282,23 +279,22 @@ public class MyBundle implements GuiceyBundle {
 }
 ``` 
 
-Or it could be some [custom options](guide/options.md#custom-options) usage.
+There is also support for [custom options](guide/options.md#custom-options).
 
 !!! note
-    Option values are set only in main `GuiceBundle` and so all bundles see the same option values
-    (no one can change values after).
+    Option values are set only in main `GuiceBundle`. They are immutable, so all bundles receive the same option values.
     
 ### Configuration access
 
-Bundle could access not only direct dropwizard `Configuration`, but also individual values  
-thanks to [yaml values](guide/yaml-values.md) introspection.
+A bundle may access direct dropwizard `Configuration`, as well as individual values thanks to [yaml values](guide/yaml-values.md)
+introspection.
 
 #### Unique sub config
 
 When creating re-usable bundle it is often required to access yaml configuration data. 
 Usually this is solved by some "configuration lookups" like in [dropwizard-views](https://www.dropwizard.io/en/release-2.0.x/manual/views.html) 
 
-Guicey allows you to obtain sub-configuration object directly:
+Guicey allows you to obtain the sub-configuration object directly:
 
 ```java
 public class XFeatureBundle implements GuiceyBundle {
@@ -310,9 +306,9 @@ public class XFeatureBundle implements GuiceyBundle {
 }
 ```   
 
-Note that this bundle doesn't known exact type of user configuration, it just 
-assumes that `XFeatureConfig` is declared somewhere in configuration (on any level)
-just once. For example:
+Note that this bundle doesn't know exact type of user configuration, it just 
+assumes that `XFeatureConfig` is declared somewhere in configuration at any level
+**just once**. For example:
 
 ```java
 public class MyConfig extends Configuration {
@@ -333,8 +329,7 @@ public class MyConfig extends Configuration {
 
 #### Access by path
 
-When you are not sure that configuration is unique, you can rely on exact path definition
-(of required sub configuration):
+When you are not sure that configuration is unique, you can rely on exact path definition of required sub configuration:
 
 ```java
 public class XFeatureBundle implements GuiceyBundle {
@@ -352,7 +347,7 @@ public class XFeatureBundle implements GuiceyBundle {
 }
 ```
 
-Path is declared by bundle user, who knows required configuration location:
+The Path may be declared by the bundle user, who knows required configuration location:
 
 ```java
 GuiceBundle.builder()
@@ -405,10 +400,10 @@ public class MyConfig extends Configuration {
 }
 ```
 
-It wil return both objects: `[xfeature, xfeature2]`
+This `configurations` method will return both objects: `[xfeature, xfeature2]`
 
 !!! important
-    In contrast to unique configurations, this method returns all subclasses too.
+    In contrast to unique configurations, this method returns all subclasses as well.
     So if there are `#!java XFeatureConfigExt extends XFeatureConfig` declared somewhere it will also be returned.
 
 #### Custom configuration analysis
@@ -435,10 +430,10 @@ public class XFeatureBundle implements GuiceyBundle {
 }
 ```
 
-In this example, bundle search for properties declared directly in `MyConfig` configuration
-class with not null value and annotated (classes annotated, not properties!) with custom marker (`@MyMarker`).  
+In this example, the bundle searches for properties declared directly in the `MyConfig` configuration
+class with non-null values and the custom marker (`@MyMarker`) class annotation.  
 
-See introspected configuration [structure description](guide/yaml-values.md#introspected-configuration).
+See introspected configuration [structure description](guide/yaml-values.md#introspected-configuration) for details.
 
 ### Shared state
 
@@ -459,8 +454,8 @@ and allow application bundles communication with global views bundle.
 
 #### Equal communication scenario
 
-Case when multiple (equal) bundles need to communicate. In this case first initialized
-bundle init shared state and others simply use it.
+Use the following in cases when multiple (equal) bundles need to communicate, the first initialized
+bundle will initialize the shared state and others simply use it:
 
 ```java
 public class EqualBundle implements GuiceyBundle {
@@ -475,8 +470,8 @@ public class EqualBundle implements GuiceyBundle {
 
 #### Parent-child scenario
 
-Case when there is one global bundle, which must initialize some global state and child 
-bundles, which use or appends to this global state.
+Use the following in cases when there is one global bundle, which must initialize some global state and child 
+bundles, which use or append to this global state:
 
 ```java
 public class GlobalBundle implements GuiceyBundle {
@@ -501,7 +496,7 @@ public class ChildBundle implements GuiceyBundle {
 
 If multiple bundles must be synchronized on run phase, use [guicey events](guide/events.md). 
 
-To run code after all guicey bundles initialization, but before run:
+To run code after all guicey bundles have been initialized, but before run is called:
 
 ```java
 @Override
@@ -516,7 +511,7 @@ public void initialize(final GuiceyBootstrap bootstrap) {
 }
 ```
 
-To run code after all guicey bundles run methods (delayed init):
+To run code after all guicey bundles run methods have been called (delayed init):
 
 ```java
 @Override
@@ -533,9 +528,8 @@ public void run(final GuiceyEnvironment environment) {
 
 !!! note
     This will work only for guicey bundles! Registered dropwizard bundles may
-    execute before or after these events: events broadcast from main dropwizard 
+    execute before or after these events. Events are broadcast from the main dropwizard 
     `GuiceBundle` run method, so other dropwizard bundles, registered after guice bundle
     will run after it. 
-    It is assumed that guicey bundles used for most configurations (especially in complex
-    cases when bundles synchronization is required)). 
-     
+    It is assumed that guicey bundles will be used for most configurations, but especially 
+    in complex cases when bundle synchronization is required. 

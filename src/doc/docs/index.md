@@ -39,7 +39,7 @@
 * [**Concepts overview**](concepts.md) guide introduces core guicey concepts and demonstrates differences from pure dropwizard usage
 * [**Guice**](guice.md) the essence of guice integration
 * [**Testing**](tests.md) describes integration testing techniques
-* [**Decomposition**](tests.md) guide on writing re-usable modules
+* [**Decomposition**](decomposition.md) guide on writing re-usable modules
 
 ### Reference
 * [**User guide**](guide/configuration.md) contains detailed feature descriptions. It is good to read, but it also functions 
