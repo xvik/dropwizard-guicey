@@ -1,4 +1,4 @@
 version: 5.5.0
 ext: 5.5.0-1
-dropwizard: 2.0.28
+dropwizard: 2.1.0
 guice: 5.1.0
