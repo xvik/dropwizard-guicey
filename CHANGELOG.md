@@ -1,3 +1,5 @@
+* Update dropwizard to 2.1.0
+
 ### 5.5.0 (2022-03-30)
 * Test framework-agnostic utilities:
   - Add GuiceyTestSupport to simplify guice-only manual application runs 

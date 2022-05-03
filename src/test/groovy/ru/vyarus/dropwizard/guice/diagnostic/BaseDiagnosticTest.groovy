@@ -28,5 +28,6 @@ abstract class BaseDiagnosticTest extends Specification {
     void cleanupSpec() {
         // some tests are intentionally failing so be sure to remove stale applications
         SharedConfigurationState.clear()
+        System.clearProperty(PropertyBundleLookup.BUNDLES_PROPERTY)
     }
 }

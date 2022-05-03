@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.yaml;
 
+import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
-import com.fasterxml.jackson.databind.introspect.BasicBeanDescription;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
@@ -165,7 +165,7 @@ public final class ConfigTreeBuilder {
                                                  final Class type,
                                                  final Object object,
                                                  final GenericsContext genericsContext) {
-        final BasicBeanDescription description = config.introspect(
+        final BeanDescription description = config.introspect(
                 config.constructType(type)
         );
 

@@ -44,13 +44,15 @@ class ConfigInspectorTest extends Specification {
         when: "check default config"
         def res = ConfigTreeBuilder.build(bootstrap, create(Configuration))
         then:
-        printConfig(res) == """[Configuration] admin (AdminFactory) = AdminFactory[healthChecks=HealthCheckConfiguration[minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
-[Configuration] admin.healthChecks (HealthCheckConfiguration) = HealthCheckConfiguration[minThreads=1, maxThreads=4, workQueueSize=1]
+        printConfig(res) == """[Configuration] admin (AdminFactory) = AdminFactory[healthChecks=HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
+[Configuration] admin.healthChecks (HealthCheckConfiguration) = HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1]
 [Configuration] admin.healthChecks.maxThreads (Integer) = 4
 [Configuration] admin.healthChecks.minThreads (Integer) = 1
+[Configuration] admin.healthChecks.servletEnabled (Boolean) = true
 [Configuration] admin.healthChecks.workQueueSize (Integer) = 1
 [Configuration] admin.tasks (TaskConfiguration) = TaskConfiguration[printStackTraceOnError=false]
 [Configuration] admin.tasks.printStackTraceOnError (Boolean) = false
+[Configuration] health (Optional<HealthFactory>) = Optional.empty
 [Configuration] logging (LoggingFactory as DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
 [Configuration] logging.appenders (List<AppenderFactory<ILoggingEvent>> as ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
 [Configuration] logging.level (String) = "INFO"
@@ -109,7 +111,7 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.user (String) = null"""
         res.rootTypes == [Configuration]
         res.uniqueTypePaths.size() == 9
-        res.paths.size() == 63
+        res.paths.size() == 65
         check(res, "server", DefaultServerFactory)
         check(res, "server.maxThreads", Integer, 1024)
         check(res, "server.idleThreadTimeout", Duration, Duration.minutes(1))
@@ -125,7 +127,7 @@ class ConfigInspectorTest extends Specification {
 [SimpleConfig] prim (Integer) = 0"""
         res.rootTypes == [SimpleConfig, Configuration]
         res.uniqueTypePaths.size() == 9
-        res.paths.size() == 66
+        res.paths.size() == 68
         check(res, "foo", String)
         check(res, "bar", Boolean)
         check(res, "prim", Integer)
@@ -137,7 +139,7 @@ class ConfigInspectorTest extends Specification {
         printConfig(res) == "[ObjectPropertyConfig] sub (Object) = null"
         res.rootTypes == [ObjectPropertyConfig, Configuration]
         res.uniqueTypePaths.size() == 9
-        res.paths.size() == 64
+        res.paths.size() == 66
         check(res, "sub", Object)
         elt.isObjectDeclaration()
         elt.declaredType == Object
@@ -170,7 +172,7 @@ class ConfigInspectorTest extends Specification {
         res.uniqueTypePaths.size() == 10
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.SubConfig } != null
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.Parametrized } == null
-        res.paths.size() == 69
+        res.paths.size() == 71
         check(res, "sub", ComplexConfig.SubConfig)
         check(res, "sub.sub", String)
         check(res, "sub.two", ComplexConfig.Parametrized, null, String)
@@ -241,9 +243,9 @@ class ConfigInspectorTest extends Specification {
         res.findByPath("sub1.sub").getDeclaredType() == String
         res.findAllByType(NotUniqueSubConfig.SubConfig).collect { it.path } == ["sub1", "sub2", "sub3"]
         res.findAllFrom(NotUniqueSubConfig).collect { it.path } == ["sub1", "sub1.sub", "sub2", "sub2.sub", "sub3", "sub3.sub"]
-        res.findAllRootPaths().collect { it.path } == ["sub1", "sub2", "sub3", "admin", "logging", "metrics", "server"]
+        res.findAllRootPaths().collect { it.path } == ["sub1", "sub2", "sub3", "admin", "health", "logging", "metrics", "server"]
         res.findAllRootPathsFrom(NotUniqueSubConfig).collect { it.path } == ["sub1", "sub2", "sub3"]
-        res.findAllRootPathsFrom(Configuration).collect { it.path } == ["admin", "logging", "metrics", "server"]
+        res.findAllRootPathsFrom(Configuration).collect { it.path } == ["admin", "health", "logging", "metrics", "server"]
         res.valueByPath("not.exists") == null
         res.valueByPath("sub1") == null
         res.valueByType(NotUniqueSubConfig.SubConfig) == null
@@ -263,9 +265,9 @@ class ConfigInspectorTest extends Specification {
         res.findAllByType(ComplexConfig.SubConfig).collect { it.path } == ["sub"]
         res.findAllByType(ComplexConfig.Parametrized).collect { it.path } == ["one", "sub.two"]
         res.findAllFrom(ComplexConfig).collect { it.path } == ["one", "one.list", "sub", "sub.sub", "sub.two", "sub.two.list"]
-        res.findAllRootPaths().collect { it.path } == ["one", "sub", "admin", "logging", "metrics", "server"]
+        res.findAllRootPaths().collect { it.path } == ["one", "sub", "admin", "health", "logging", "metrics", "server"]
         res.findAllRootPathsFrom(ComplexConfig).collect { it.path } == ["one", "sub"]
-        res.findAllRootPathsFrom(Configuration).collect { it.path } == ["admin", "logging", "metrics", "server"]
+        res.findAllRootPathsFrom(Configuration).collect { it.path } == ["admin", "health", "logging", "metrics", "server"]
         res.valueByPath("not.exists") == null
         res.valueByPath("sub") == null
         res.valueByType(ComplexConfig.SubConfig) == null

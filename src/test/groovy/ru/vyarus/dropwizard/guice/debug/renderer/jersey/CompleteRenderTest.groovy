@@ -54,11 +54,7 @@ class CompleteRenderTest extends Specification {
         GuiceParamConverterProvider  (r.v.d.g.c.h.support)
         HKParamConverterProvider     (r.v.d.g.c.h.s.hk)         *jersey managed
         RootElementProvider          (o.g.j.j.i.JaxbStringReaderProvider)
-        OptionalDoubleParamConverterProvider (i.d.jersey.optional)
-        OptionalIntParamConverterProvider (i.d.jersey.optional)
-        OptionalLongParamConverterProvider (i.d.jersey.optional)
         OptionalParamConverterProvider (i.d.jersey.guava)
-        OptionalParamConverterProvider (i.d.jersey.optional)
         AggregatedProvider           (o.g.j.i.i.ParamConverters)
 
     Context resolvers
@@ -70,6 +66,7 @@ class CompleteRenderTest extends Specification {
         byte[]                         ByteArrayProvider            (o.g.j.m.internal)                       [application/octet-stream, */*]
         DataSource                     DataSourceProvider           (o.g.j.m.internal)                       [application/octet-stream, */*]
         Document                       DocumentProvider             (o.g.j.jaxb.internal)                    [application/xml, text/xml, */*]
+        Enum                           EnumMessageProvider          (o.g.j.m.internal)                       [text/plain]
         File                           FileProvider                 (o.g.j.m.internal)                       [application/octet-stream, */*]
         MultivaluedMap<String, String> FormMultivaluedMapProvider   (o.g.j.m.internal)                       [application/x-www-form-urlencoded]
         Form                           FormProvider                 (o.g.j.m.internal)                       [application/x-www-form-urlencoded, */*]
@@ -103,6 +100,7 @@ class CompleteRenderTest extends Specification {
         ChunkedOutput<Object>          ChunkedResponseWriter        (o.g.jersey.server)
         DataSource                     DataSourceProvider           (o.g.j.m.internal)                       [application/octet-stream, */*]
         Document                       DocumentProvider             (o.g.j.jaxb.internal)                    [application/xml, text/xml, */*]
+        Enum                           EnumMessageProvider          (o.g.j.m.internal)                       [text/plain]
         File                           FileProvider                 (o.g.j.m.internal)                       [application/octet-stream, */*]
         MultivaluedMap<String, String> FormMultivaluedMapProvider   (o.g.j.m.internal)                       [application/x-www-form-urlencoded]
         Form                           FormProvider                 (o.g.j.m.internal)                       [application/x-www-form-urlencoded, */*]

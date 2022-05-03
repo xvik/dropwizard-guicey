@@ -40,10 +40,10 @@ class BindingsReportTest extends Specification {
     Unique sub configuration objects bindings:
 
         Configuration.admin
-            @Config AdminFactory = AdminFactory[healthChecks=HealthCheckConfiguration[minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
+            @Config AdminFactory = AdminFactory[healthChecks=HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
 
         Configuration.admin.healthChecks
-            @Config HealthCheckConfiguration = HealthCheckConfiguration[minThreads=1, maxThreads=4, workQueueSize=1]
+            @Config HealthCheckConfiguration = HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1]
 
         Configuration.admin.tasks
             @Config TaskConfiguration = TaskConfiguration[printStackTraceOnError=false]
@@ -70,13 +70,15 @@ class BindingsReportTest extends Specification {
     Configuration paths bindings:
 
         Configuration:
-            @Config("admin") AdminFactory = AdminFactory[healthChecks=HealthCheckConfiguration[minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
-            @Config("admin.healthChecks") HealthCheckConfiguration = HealthCheckConfiguration[minThreads=1, maxThreads=4, workQueueSize=1]
+            @Config("admin") AdminFactory = AdminFactory[healthChecks=HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
+            @Config("admin.healthChecks") HealthCheckConfiguration = HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1]
             @Config("admin.healthChecks.maxThreads") Integer = 4
             @Config("admin.healthChecks.minThreads") Integer = 1
+            @Config("admin.healthChecks.servletEnabled") Boolean = true
             @Config("admin.healthChecks.workQueueSize") Integer = 1
             @Config("admin.tasks") TaskConfiguration = TaskConfiguration[printStackTraceOnError=false]
             @Config("admin.tasks.printStackTraceOnError") Boolean = false
+            @Config("health") Optional<HealthFactory> = Optional.empty
             @Config("logging") LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
             @Config("logging.appenders") List<AppenderFactory<ILoggingEvent>> (with actual type ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
             @Config("logging.level") String = "INFO"
@@ -142,10 +144,13 @@ class BindingsReportTest extends Specification {
     │   ├── healthChecks: HealthCheckConfiguration
     │   │   ├── maxThreads: Integer = 4
     │   │   ├── minThreads: Integer = 1
+    │   │   ├── servletEnabled: Boolean = true
     │   │   └── workQueueSize: Integer = 1
     │   │
     │   └── tasks: TaskConfiguration
     │       └── printStackTraceOnError: Boolean = false
+    │
+    ├── health: Optional<HealthFactory> = Optional.empty
     │
     ├── logging: DefaultLoggingFactory
     │   ├── appenders: ArrayList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
@@ -221,10 +226,10 @@ class BindingsReportTest extends Specification {
             @Config ComplexGenericCase.Sub<String> = null
 
         Configuration.admin
-            @Config AdminFactory = AdminFactory[healthChecks=HealthCheckConfiguration[minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
+            @Config AdminFactory = AdminFactory[healthChecks=HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
 
         Configuration.admin.healthChecks
-            @Config HealthCheckConfiguration = HealthCheckConfiguration[minThreads=1, maxThreads=4, workQueueSize=1]
+            @Config HealthCheckConfiguration = HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1]
 
         Configuration.admin.tasks
             @Config TaskConfiguration = TaskConfiguration[printStackTraceOnError=false]
@@ -255,13 +260,15 @@ class BindingsReportTest extends Specification {
             @Config("sub.smth") String = null
 
         Configuration:
-            @Config("admin") AdminFactory = AdminFactory[healthChecks=HealthCheckConfiguration[minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
-            @Config("admin.healthChecks") HealthCheckConfiguration = HealthCheckConfiguration[minThreads=1, maxThreads=4, workQueueSize=1]
+            @Config("admin") AdminFactory = AdminFactory[healthChecks=HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
+            @Config("admin.healthChecks") HealthCheckConfiguration = HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1]
             @Config("admin.healthChecks.maxThreads") Integer = 4
             @Config("admin.healthChecks.minThreads") Integer = 1
+            @Config("admin.healthChecks.servletEnabled") Boolean = true
             @Config("admin.healthChecks.workQueueSize") Integer = 1
             @Config("admin.tasks") TaskConfiguration = TaskConfiguration[printStackTraceOnError=false]
             @Config("admin.tasks.printStackTraceOnError") Boolean = false
+            @Config("health") Optional<HealthFactory> = Optional.empty
             @Config("logging") LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
             @Config("logging.appenders") List<AppenderFactory<ILoggingEvent>> (with actual type ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
             @Config("logging.level") String = "INFO"
@@ -377,10 +384,13 @@ class BindingsReportTest extends Specification {
     │   ├── healthChecks: HealthCheckConfiguration
     │   │   ├── maxThreads: Integer = 4
     │   │   ├── minThreads: Integer = 1
+    │   │   ├── servletEnabled: Boolean = true
     │   │   └── workQueueSize: Integer = 1
     │   │
     │   └── tasks: TaskConfiguration
     │       └── printStackTraceOnError: Boolean = false
+    │
+    ├── health: Optional<HealthFactory> = Optional.empty
     │
     ├── logging: DefaultLoggingFactory
     │   ├── appenders: ArrayList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]

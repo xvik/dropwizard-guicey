@@ -40,7 +40,9 @@ class GuiceAopRendererForSpecialMethodsTest extends Specification {
     def "Check aop render"() {
 
         expect:
-        render(new GuiceAopConfig()) == """
+        render(new GuiceAopConfig())
+            // appears when running from IDEA
+                .replace("org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:318)", "sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)") == """
 
     1 AOP handlers declared
     └── GuiceAopRendererForSpecialMethodsTest\$App\$1/GuiceAopRendererForSpecialMethodsTest\$App\$1\$1    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
