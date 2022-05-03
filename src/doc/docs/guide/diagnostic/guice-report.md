@@ -39,13 +39,24 @@ Example report:
     └── BindService  --[linked]-->  OverrideService
 ```
 
-!!! note
+!!! important
+    Report is build using guice SPI from raw modules and that's why it shows everything
+    that modules configure (listeners, aop). But this also cause an additional execution of 
+    `configure()` method of all modules when report is enabled.
+
+    In most cases, this is not a problem (modules should only declare bindings). Report use
+    stage `TOOL`, so, if required, you can easilly avoid duplicate execution for sensitive logic: 
+    ```java
+    if (binder.currentStage() != Stage.TOOL) {
+        // do only on normal run
+    }
+    ```
+    For example, guicey itself use this in installers to avoid duplicate console output on startup when report enabled.
+
+!!! tip
     If you run application in IDE then binding traces (on the right) should be clickable in console
     (strange format of "at + full class name" used exactly to activate such links because IDE will consider
-    these lines as stacktrace elements).     
-
-Report is build using guice SPI from raw modules and that's why it shows everything
-that modules configure (listeners, aop) 
+    these lines as stacktrace elements).
 
 !!! note
     You may use multiple modules of the same type (e.g. `.modules(new MyModule(), new MyModule())`)
