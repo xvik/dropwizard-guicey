@@ -7,7 +7,6 @@ import io.dropwizard.lifecycle.ServerLifecycleListener
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import org.eclipse.jetty.server.Server
-import org.eclipse.jetty.util.component.AbstractLifeCycle
 import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
@@ -80,7 +79,7 @@ class EnvironmentListenersShortcutsTest extends Specification {
         }
     }
 
-    static class LListener extends AbstractLifeCycle.AbstractLifeCycleListener {
+    static class LListener implements LifeCycle.Listener {
         static boolean called
 
         @Override

@@ -328,7 +328,6 @@ public class GuiceyEnvironment {
      *
      * @param listener jetty
      * @return environment instance for chained calls
-     * @see org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener adapter
      */
     public GuiceyEnvironment listenJetty(final LifeCycle.Listener listener) {
         environment().lifecycle().addLifeCycleListener(listener);

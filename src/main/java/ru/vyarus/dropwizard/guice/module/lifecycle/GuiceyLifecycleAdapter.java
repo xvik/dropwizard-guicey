@@ -352,7 +352,7 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
 
     /**
      * Called after complete dropwizard startup. Actually the same as jetty lifecycle started event (
-     * {@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStarted(
+     * {@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStarted(
      * org.eclipse.jetty.util.component.LifeCycle)}), which is called after complete jetty startup.
      *
      * @param event event object
@@ -364,7 +364,7 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
 
     /**
      * Called on application shutdown start. Triggered by jetty lifecycle stopping event (
-     * {@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStopping(
+     * {@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStopping(
      * org.eclipse.jetty.util.component.LifeCycle)}).
      *
      * @param event event object
@@ -376,7 +376,7 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
 
     /**
      * Called after application shutdown. Triggered by jetty lifecycle stopping event (
-     * {@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStopped(
+     * {@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStopped(
      * org.eclipse.jetty.util.component.LifeCycle)}).
      * <p>
      *

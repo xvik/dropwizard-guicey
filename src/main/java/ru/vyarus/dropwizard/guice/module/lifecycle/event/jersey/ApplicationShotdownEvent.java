@@ -7,7 +7,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 /**
  * Called on application shutdown start. Triggered by jetty lifecycle stopping event (
- * {@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStopping(
+ * {@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStopping(
  * org.eclipse.jetty.util.component.LifeCycle)}).
  * <p>
  * May be used to perform some shutdown logic.

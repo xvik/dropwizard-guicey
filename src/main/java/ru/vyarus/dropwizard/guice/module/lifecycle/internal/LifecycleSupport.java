@@ -8,7 +8,6 @@ import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.cli.Command;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.glassfish.jersey.internal.inject.InjectionManager;
 import org.slf4j.Logger;
@@ -151,7 +150,7 @@ public final class LifecycleSupport {
         this.context.setEnvironment(environment);
         broadcast(new BeforeRunEvent(context));
         // fire after complete initialization (final meta-event)
-        environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+        environment.lifecycle().addLifeCycleListener(new LifeCycle.Listener() {
             @Override
             public void lifeCycleStarted(final LifeCycle event) {
                 applicationStarted();

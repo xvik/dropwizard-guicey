@@ -31,7 +31,6 @@ public class ApplicationRunEvent extends InjectorPhaseEvent {
 
     /**
      * @param listener jetty listener
-     * @see org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener
      */
     public void registerJettyListener(final LifeCycle.Listener listener) {
         getEnvironment().lifecycle().addLifeCycleListener(listener);

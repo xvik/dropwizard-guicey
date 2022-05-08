@@ -71,7 +71,7 @@ class SessionListenerTest extends AbstractTest {
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
-            environment.lifecycle().addLifeCycleListener(new AbstractLifeCycle.AbstractLifeCycleListener() {
+            environment.lifecycle().addLifeCycleListener(new LifeCycle.Listener() {
                 @Override
                 void lifeCycleStopping(LifeCycle event) {
                     (event as AbstractLifeCycle).stopTimeout = 0

@@ -8,7 +8,6 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import io.dropwizard.testing.junit.DropwizardAppRule
 import net.sourceforge.argparse4j.inf.Namespace
-import org.eclipse.jetty.util.component.AbstractLifeCycle
 import org.eclipse.jetty.util.component.LifeCycle
 import spock.lang.Specification
 
@@ -80,7 +79,7 @@ class ListenersCallWithinCommandTest extends Specification {
         }
     }
 
-    static class Listener extends AbstractLifeCycle.AbstractLifeCycleListener {
+    static class Listener implements LifeCycle.Listener {
         static List<String> called = []
 
         @Override
