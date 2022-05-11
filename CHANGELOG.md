@@ -1,4 +1,7 @@
 * Update dropwizard to 2.1.0
+* Support providing config override value from 3rd party junit 5 extensions with new
+  configOverrideByExtension methods in extensions builders (field registration). 
+  3rd party extension must store required value in junit storage (no direct guicey classes calls required).
 
 ### 5.5.0 (2022-03-30)
 * Test framework-agnostic utilities:

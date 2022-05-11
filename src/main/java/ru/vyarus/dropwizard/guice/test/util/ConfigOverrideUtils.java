@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.test.util;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.testing.ConfigOverride;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 
 import java.util.List;
@@ -90,5 +91,24 @@ public final class ConfigOverrideUtils {
             }
         }
         return res;
+    }
+
+    /**
+     * Process config overrides set by junit extensions.
+     *
+     * @param overrides array of all configured config overrides
+     * @param context   extension contest to resolve storage from
+     * @return same array
+     */
+    public static ConfigOverride[] prepareExtensionOverrides(final ConfigOverride[] overrides,
+                                                             final ExtensionContext context) {
+        if (overrides != null) {
+            for (ConfigOverride override : overrides) {
+                if (override instanceof ConfigOverrideExtensionValue) {
+                    ((ConfigOverrideExtensionValue) override).resolveValue(context);
+                }
+            }
+        }
+        return overrides;
     }
 }

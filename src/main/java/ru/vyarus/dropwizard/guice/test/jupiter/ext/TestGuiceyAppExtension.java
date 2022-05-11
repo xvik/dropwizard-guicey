@@ -11,6 +11,7 @@ import org.junit.platform.commons.support.AnnotationSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
+import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideExtensionValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
@@ -108,30 +109,33 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
 
         HooksUtil.register(config.hooks);
 
-        // config overrides work through system properties so it is important to have unique prefixes
-        final String configPrefix = ConfigOverrideUtils.createPrefix(context.getRequiredTestClass());
-        return create(config.app, config.configPath, configPrefix);
+        return create(config.app, config.configPath, context);
     }
 
     @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
     private <C extends Configuration> DropwizardTestSupport<C> create(
             final Class<? extends Application> app,
             final String configPath,
-            final String configPrefix) {
+            final ExtensionContext context) {
+        // config overrides work through system properties so it is important to have unique prefixes
+        final String configPrefix = ConfigOverrideUtils.createPrefix(context.getRequiredTestClass());
         // NOTE: DropwizardTestSupport.ServiceListener listeners would be called ONLY on start!
         return new GuiceyTestSupport<C>((Class<? extends Application<C>>) app,
                 configPath,
                 configPrefix,
-                buildConfigOverrides(configPrefix));
+                buildConfigOverrides(configPrefix, context));
     }
 
     @SuppressWarnings("unchecked")
     private <T extends ConfigOverride & ConfigurablePrefix> ConfigOverride[] buildConfigOverrides(
-            final String prefix) {
+            final String prefix, final ExtensionContext context) {
         final ConfigOverride[] overrides = ConfigOverrideUtils.convert(prefix, config.configOverrides);
         return config.configOverrideObjects.isEmpty() ? overrides
                 : ConfigOverrideUtils.merge(overrides,
-                ConfigOverrideUtils.prepareOverrides(prefix, (List<T>) (List<?>) config.configOverrideObjects));
+                ConfigOverrideUtils.prepareExtensionOverrides(
+                        ConfigOverrideUtils.prepareOverrides(prefix, (List<T>) (List<?>) config.configOverrideObjects),
+                        context
+                ));
     }
 
     /**
@@ -200,6 +204,47 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          */
         public Builder configOverride(final String key, final Supplier<String> supplier) {
             configOverrides(new ConfigOverrideValue(key, supplier));
+            return this;
+        }
+
+        /**
+         * Shortcut for {@link #configOverrideByExtension(
+         * org.junit.jupiter.api.extension.ExtensionContext.Namespace, String, String)} for cases when storage key
+         * and configuration path is the same. If possible, prefer this method for simplicity.
+         *
+         * @param namespace junit storage namespace to resolve value in
+         * @param key       value name in namespace and overriding property name
+         * @return builder instance for chained calls
+         */
+        public Builder configOverrideByExtension(final ExtensionContext.Namespace namespace, final String key) {
+            return configOverrideByExtension(namespace, key, key);
+        }
+
+        /**
+         * Override configuration value from 3rd party junit extension. Such value must be stored by
+         * extension in the store with provided namespace (for simple cases use
+         * {@link org.junit.jupiter.api.extension.ExtensionContext.Namespace#GLOBAL}). It is better to use the same
+         * storage key as configuration path (for simplicity). Value must be initialized in
+         * {@link org.junit.jupiter.api.extension.BeforeAllCallback} because guicey initialize config overrides
+         * under this stage.
+         * <p>
+         * WARNING: keep in mind that your extension must be executed before guicey because otherwise value would
+         * not be taken into account. To highlight such cases, guicey would put a warning in logs indicating
+         * absent value in configured storage.
+         * <p>
+         * Such complication is required for a very special cases when parallel tests execution must be used together
+         * with some common extension (for example, starting database) declared in base class with a static field.
+         * Using test storage is the only way to guarantee different values in parallel tests.
+         *
+         * @param namespace  junit storage namespace to resolve value in
+         * @param storageKey value name in namespace
+         * @param configPath overriding property name
+         * @return builder instance for chained calls
+         */
+        public Builder configOverrideByExtension(final ExtensionContext.Namespace namespace,
+                                                 final String storageKey,
+                                                 final String configPath) {
+            configOverrides(new ConfigOverrideExtensionValue(namespace, storageKey, configPath));
             return this;
         }
 
