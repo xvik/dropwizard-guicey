@@ -2,6 +2,15 @@
 * Support providing config override value from 3rd party junit 5 extensions with new
   configOverrideByExtension methods in extensions builders (field registration). 
   3rd party extension must store required value in junit storage (no direct guicey classes calls required).
+* Changes to junit 5 test extension builders:
+  - hooks(Class) method accepts multiple classes
+  - configOverrides(String...) aggregates multiple calls
+* Add new test extension for junit 5 extensions: TestEnvironmentSupport.
+  - In contrast to guicey hooks, this extension supposed to be used to prepare
+    test environment before test (e.g. create db). Previously custom junit 5 extensions
+    were required to perform such setup - new way is simpler.
+  - Registration the same as with hooks: annotation, with builder and with static field using
+    new annotation @EanbleSupport
 
 ### 5.5.0 (2022-03-30)
 * Test framework-agnostic utilities:

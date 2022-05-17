@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.test.jupiter;
 import io.dropwizard.Application;
 import org.junit.jupiter.api.extension.ExtendWith;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 
@@ -98,4 +99,19 @@ public @interface TestGuiceyApp {
      * @see ru.vyarus.dropwizard.guice.test.EnableHook
      */
     Class<? extends GuiceyConfigurationHook>[] hooks() default {};
+
+    /**
+     * Environment support object is the simplest way to prepare additional objects for test
+     * (like database) and apply configuration overrides. Provided classes would be instantiated with the
+     * default constructor.
+     * <p>
+     * To avoid confusion with guicey hooks: setup object required to prepare test environment before test (and apply
+     * required configurations) whereas hooks is a general mechanism for application customization (not only in tests).
+     * <p>
+     * Anonymous implementation could be simply declared as static field:
+     * {@code @EnableSupport static TestEnvironmentSupport ext = ext -> ext.configOverrides("foo:1")}
+     * All such fields will be detected automatically and objects registered. Fields declared in base test classes
+     * are also counted.
+     */
+    Class<? extends TestEnvironmentSetup>[] setup() default {};
 }

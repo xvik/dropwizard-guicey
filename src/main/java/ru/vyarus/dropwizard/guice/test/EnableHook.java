@@ -14,10 +14,9 @@ import java.lang.annotation.Target;
  * Target fields must be static fields. If non static or not
  * {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook} filed annotated then error will be thrown indicating
  * incorrect usage.
- * <p>
- * Annotation works with junit 5 and spock extensions (dropwizard and guicey).
  *
  * @author Vyacheslav Rusakov
+ * @see ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup
  * @since 25.05.2020
  */
 @Retention(RetentionPolicy.RUNTIME)

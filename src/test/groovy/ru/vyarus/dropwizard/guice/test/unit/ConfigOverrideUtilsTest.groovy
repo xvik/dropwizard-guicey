@@ -63,4 +63,32 @@ class ConfigOverrideUtilsTest extends Specification {
         base.length == 3
         base.collect { it.key } == ['a', 'c', 'd']
     }
+
+    def "Check string config merge"() {
+
+        String[] base = null
+
+        when: "add nothing to null"
+        base = ConfigOverrideUtils.mergeRaw(base)
+        then: "not changed"
+        base == null
+
+        when: "add something to null"
+        base = ConfigOverrideUtils.mergeRaw(base, "a: b")
+        then: "addition returned"
+        base.length == 1
+        base[0] == 'a: b'
+
+        when: "add nothing not existing"
+        base = ConfigOverrideUtils.mergeRaw(base)
+        then: "not changed"
+        base.length == 1
+        base[0] == 'a: b'
+
+        when: "real merge"
+        base = ConfigOverrideUtils.mergeRaw(base,  "c: c", "d: d")
+        then: "merged"
+        base.length == 3
+        base == ['a: b', 'c: c', 'd: d'] as String[]
+    }
 }

@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice.test.jupiter;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
@@ -15,7 +14,7 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass
  * @author Vyacheslav Rusakov
  * @since 26.05.2020
  */
-public class BadHookFieldDeclaration {
+public class BadHookFieldDeclarationTest {
 
     @Test
     void checkIncorrectFieldDetection() {

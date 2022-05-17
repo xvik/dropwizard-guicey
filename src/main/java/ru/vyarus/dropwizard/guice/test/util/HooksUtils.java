@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Guice hooks test utilities.
+ * Guicey {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook} test utilities.
  *
  * @author Vyacheslav Rusakov
  * @since 02.05.2020
  */
-public final class HooksUtil {
+public final class HooksUtils {
 
-    private HooksUtil() {
+    private HooksUtils() {
     }
 
     /**

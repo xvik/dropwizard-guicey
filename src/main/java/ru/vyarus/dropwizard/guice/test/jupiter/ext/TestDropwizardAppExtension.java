@@ -11,17 +11,18 @@ import org.junit.platform.commons.support.AnnotationSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
-import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideExtensionValue;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
-import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
-import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
+import ru.vyarus.dropwizard.guice.test.util.HooksUtils;
 import ru.vyarus.dropwizard.guice.test.util.RandomPortsListener;
+import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * {@link TestDropwizardApp} junit 5 extension implementation. Normally, extension should be activated with annotation,
@@ -112,7 +113,8 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             config = Config.parse(ann);
         }
 
-        HooksUtil.register(config.hooks);
+        TestSetupUtils.findAndProcessSetupObjects(config, context);
+        HooksUtils.register(config.hooks);
 
         // config overrides work through system properties so it is important to have unique prefixes
         final String configPrefix = ConfigOverrideUtils.createPrefix(context.getRequiredTestClass());
@@ -150,10 +152,10 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
     /**
      * Builder used for manual extension registration ({@link #forApp(Class)}).
      */
-    public static class Builder {
-        private final Config cfg = new Config();
+    public static class Builder extends ExtensionBuilder<Builder, Config> {
 
         public Builder(final Class<? extends Application> app) {
+            super(new Config());
             this.cfg.app = Preconditions.checkNotNull(app, "Application class must be provided");
         }
 
@@ -165,140 +167,6 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          */
         public Builder config(final String configPath) {
             cfg.configPath = configPath;
-            return this;
-        }
-
-        /**
-         * Same as {@link TestDropwizardApp#configOverride()}. Multiple calls will not be merged!
-         *
-         * @param values overriding configuration values in "key: value" format
-         * @return builder instance for chained calls
-         * @see #configOverrides(ConfigOverride...) for specifying {@link ConfigOverride} objects directly
-         */
-        public Builder configOverrides(final String... values) {
-            cfg.configOverrides = values;
-            return this;
-        }
-
-        /**
-         * Direct {@link ConfigOverride} objects support. In most cases, it is simpler to use pure strings
-         * with {@link #configOverrides(String...)}. Direct objects may be useful when provided value must be lazy
-         * evaluated (e.g. it is obtained from some other junit extension).
-         * <p>
-         * IMPORTANT: provided values must implement {@link ConfigurablePrefix} interface so guicey could
-         * insert correct prefix, used by current test (required for parallel tests as all config overrides
-         * eventually stored in system properties).
-         * <p>
-         * May be called multiple times (values appended).
-         *
-         * @param values overriding configuration values
-         * @param <T>    value type
-         * @return builder instance for chained calls
-         * @see ConfigOverrideValue for an exmample of required implementation
-         * @see #configOverride(String, Supplier) for supplier shortcut
-         */
-        @SafeVarargs
-        public final <T extends ConfigOverride & ConfigurablePrefix> Builder configOverrides(final T... values) {
-            Collections.addAll(cfg.configOverrideObjects, values);
-            return this;
-        }
-
-        /**
-         * Shortcut for {@link #configOverrides(ConfigOverride[])}. Registers config override with a supplier.
-         * Useful for values with delayed resolution (e.g. provided by some other extension).
-         *
-         * @param key      configuration key
-         * @param supplier value supplier
-         * @return builder instance for chained calls
-         */
-        public Builder configOverride(final String key, final Supplier<String> supplier) {
-            configOverrides(new ConfigOverrideValue(key, supplier));
-            return this;
-        }
-
-        /**
-         * Shortcut for {@link #configOverrideByExtension(
-         * org.junit.jupiter.api.extension.ExtensionContext.Namespace, String, String)} for cases when storage key
-         * and configuration path is the same. If possible, prefer this method for simplicity.
-         *
-         * @param namespace junit storage namespace to resolve value in
-         * @param key       value name in namespace and overriding property name
-         * @return builder instance for chained calls
-         */
-        public Builder configOverrideByExtension(final ExtensionContext.Namespace namespace, final String key) {
-            return configOverrideByExtension(namespace, key, key);
-        }
-
-        /**
-         * Override configuration value from 3rd party junit extension. Such value must be stored by
-         * extension in the store with provided namespace (for simple cases use
-         * {@link org.junit.jupiter.api.extension.ExtensionContext.Namespace#GLOBAL}). It is better to use the same
-         * storage key as configuration path (for simplicity). Value must be initialized in
-         * {@link org.junit.jupiter.api.extension.BeforeAllCallback} because guicey initialize config overrides
-         * under this stage.
-         * <p>
-         * WARNING: keep in mind that your extension must be executed before guicey because otherwise value would
-         * not be taken into account. To highlight such cases, guicey would put a warning in logs indicating
-         * absent value in configured storage.
-         * <p>
-         * Such complication is required for a very special cases when parallel tests execution must be used together
-         * with some common extension (for example, starting database) declared in base class with a static field.
-         * Using test storage is the only way to guarantee different values in parallel tests.
-         *
-         * @param namespace  junit storage namespace to resolve value in
-         * @param storageKey value name in namespace
-         * @param configPath overriding property name
-         * @return builder instance for chained calls
-         */
-        public Builder configOverrideByExtension(final ExtensionContext.Namespace namespace,
-                                                 final String storageKey,
-                                                 final String configPath) {
-            configOverrides(new ConfigOverrideExtensionValue(namespace, storageKey, configPath));
-            return this;
-        }
-
-        /**
-         * Same as {@link TestDropwizardApp#hooks()}. May be called multiple times.
-         * <p>
-         * Anonymous hooks could be declared with a static field:
-         * {@code @EnableHook static GuiceyConfigurationHook hook = builder -> builder.disableExtension(
-         * Something.class)}.
-         * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
-         * are also counted.
-         *
-         * @param hooks hook classes to use
-         * @return builder instance for chained calls
-         */
-        public Builder hooks(final Class<? extends GuiceyConfigurationHook> hooks) {
-            if (cfg.hooks == null) {
-                cfg.hooks = HooksUtil.create(hooks);
-            } else {
-                cfg.hooks.addAll(HooksUtil.create(hooks));
-            }
-            return this;
-        }
-
-        /**
-         * Has no annotation equivalent. May be used for quick configurations with lambda:
-         * <pre>{@code
-         * .hooks(builder -> builder.modules(new DebugModule()))
-         * }</pre>
-         * May be called multiple times.
-         * <p>
-         * Also, anonymous hooks could be declared with a static field:
-         * {@code @EnableHook static GuiceyConfigurationHook hook = builder -> builder.disableExtension(
-         * Something.class)}.
-         * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
-         * are also counted.
-         *
-         * @param hooks hook instances (may be lambdas)
-         * @return builder instance for chained calls
-         */
-        public Builder hooks(final GuiceyConfigurationHook... hooks) {
-            if (cfg.hooks == null) {
-                cfg.hooks = new ArrayList<>();
-            }
-            Collections.addAll(cfg.hooks, hooks);
             return this;
         }
 
@@ -334,6 +202,58 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         }
 
         /**
+         * Environment support object is the simplest way to prepare additional objects for test
+         * (like database) and apply configuration overrides. Provided classes would be instantiated with the
+         * default constructor.
+         * <p>
+         * To avoid confusion with guicey hooks: setup object required to prepare test environment before test (and
+         * apply required configurations) whereas hooks is a general mechanism for application customization (not only
+         * in tests).
+         * <p>
+         * Anonymous implementation could be simply declared as static field:
+         * {@code @EnableSupport static TestEnvironmentSupport ext = ext -> ext.configOverrides("foo:1")}
+         * All such fields will be detected automatically and objects registered. Fields declared in base test classes
+         * are also counted.
+         *
+         * @param support support object classes
+         * @return builder instance for chained calls
+         */
+        @SafeVarargs
+        public final Builder setup(final Class<? extends TestEnvironmentSetup>... support) {
+            if (cfg.extensions == null) {
+                cfg.extensions = TestSetupUtils.create(support);
+            } else {
+                cfg.extensions.addAll(TestSetupUtils.create(support));
+            }
+            return this;
+        }
+
+        /**
+         * Environment support objects is the simplest mechanism to prepare additional objects for test
+         * (like database) and apply configuration overrides.
+         * <p>
+         * To avoid confusion with guicey hooks: setup object required to prepare test environment before test (and
+         * apply required configurations) whereas hooks is a general mechanism for application customization (not only
+         * in tests).
+         * <p>
+         * Anonymous implementation could be simply declared as static field:
+         * {@code @EnableSupport static TestEnvironmentSupport ext =
+         * ext -> ext.configOverrides("foo:1")}
+         * All such fields will be detected automatically and objects registered. Fields declared in base test classes
+         * are also counted.
+         *
+         * @param support support object instances
+         * @return builder instance for chained calls
+         */
+        public Builder setup(final TestEnvironmentSetup... support) {
+            if (cfg.extensions == null) {
+                cfg.extensions = new ArrayList<>();
+            }
+            Collections.addAll(cfg.extensions, support);
+            return this;
+        }
+
+        /**
          * Creates extension.
          * <p>
          * Note that extension must be assigned to static field! Extension instance does not provide additional
@@ -350,13 +270,9 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
      * Unified configuration.
      */
     @SuppressWarnings({"checkstyle:VisibilityModifier", "PMD.DefaultPackage"})
-    private static class Config {
+    private static class Config extends ExtensionConfig {
         Class<? extends Application> app;
         String configPath = "";
-        String[] configOverrides = new String[0];
-        // required for lazy evaluation values
-        List<ConfigOverride> configOverrideObjects = new ArrayList<>();
-        List<GuiceyConfigurationHook> hooks;
         boolean randomPorts;
         String restMapping = "";
 
@@ -371,9 +287,10 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             res.app = ann.value();
             res.configPath = ann.config();
             res.configOverrides = ann.configOverride();
-            res.hooks = HooksUtil.create(ann.hooks());
+            res.hooks = HooksUtils.create(ann.hooks());
             res.randomPorts = ann.randomPorts();
             res.restMapping = ann.restMapping();
+            res.extensions = TestSetupUtils.create(ann.setup());
             return res;
         }
     }

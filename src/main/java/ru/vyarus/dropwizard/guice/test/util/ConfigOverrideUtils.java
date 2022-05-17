@@ -51,6 +51,27 @@ public final class ConfigOverrideUtils {
     }
 
     /**
+     * Merges config override arrays.
+     *
+     * @param base     existing overrides (may be null)
+     * @param addition additional overrides (may be empty)
+     * @return merged overrides
+     */
+    @SuppressWarnings("checkstyle:ReturnCount")
+    public static String[] mergeRaw(final String[] base, final String... addition) {
+        if (addition == null || addition.length == 0) {
+            return base;
+        }
+        if (base == null || base.length == 0) {
+            return addition;
+        }
+        final String[] res = new String[base.length + addition.length];
+        System.arraycopy(base, 0, res, 0, base.length);
+        System.arraycopy(addition, 0, res, base.length, addition.length);
+        return res;
+    }
+
+    /**
      * Adds config override for existing overrides array.
      *
      * @param base     existing overrides (may be null)
