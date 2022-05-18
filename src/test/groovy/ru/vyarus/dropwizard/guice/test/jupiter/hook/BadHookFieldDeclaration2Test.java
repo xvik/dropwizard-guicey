@@ -1,20 +1,20 @@
-package ru.vyarus.dropwizard.guice.test.jupiter;
+package ru.vyarus.dropwizard.guice.test.jupiter.hook;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
-import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
-import ru.vyarus.dropwizard.guice.support.feature.DummyResource;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
  * @author Vyacheslav Rusakov
- * @since 26.05.2020
+ * @since 18.05.2022
  */
-public class BadHookFieldDeclarationTest {
+public class BadHookFieldDeclaration2Test {
 
     @Test
     void checkIncorrectFieldDetection() {
@@ -32,9 +32,9 @@ public class BadHookFieldDeclarationTest {
     @Disabled // prevent direct execution
     public static class Test1 {
 
-        // not a static field
+        // bad type
         @EnableHook
-        GuiceyConfigurationHook hook = it -> it.disableExtensions(DummyResource.class);
+        TestEnvironmentSetup hook = it -> it.configOverrides("foo: 1");
 
         @Test
         void fooTest() {

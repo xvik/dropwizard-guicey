@@ -1,26 +1,28 @@
-package ru.vyarus.dropwizard.guice.test.jupiter;
+package ru.vyarus.dropwizard.guice.test.jupiter.hook;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
-import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
-import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
+import ru.vyarus.dropwizard.guice.support.feature.DummyResource;
+import ru.vyarus.dropwizard.guice.test.EnableHook;
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
  * @author Vyacheslav Rusakov
- * @since 17.05.2022
+ * @since 26.05.2020
  */
-public class BadSupportFieldDeclarationTest {
+public class BadHookFieldDeclarationTest {
 
     @Test
     void checkIncorrectFieldDetection() {
         EngineTestKit
                 .engine("junit-jupiter")
                 .configurationParameter("junit.jupiter.conditions.deactivate", "org.junit.*DisabledCondition")
-                .selectors(selectClass(BadSupportFieldDeclarationTest.Test1.class))
+                .selectors(selectClass(Test1.class))
                 .execute()
                 .testEvents()
                 .debug()
@@ -32,8 +34,8 @@ public class BadSupportFieldDeclarationTest {
     public static class Test1 {
 
         // not a static field
-        @EnableSetup
-        TestEnvironmentSetup ext = it -> it.configOverrides("foo: 1");
+        @EnableHook
+        GuiceyConfigurationHook hook = it -> it.disableExtensions(DummyResource.class);
 
         @Test
         void fooTest() {
