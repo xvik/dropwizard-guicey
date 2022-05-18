@@ -26,7 +26,7 @@ public final class HooksUtils {
      */
     public static void validateFieldHooks(final List<Field> fields) {
         for (Field field : fields) {
-            if (!field.getType().equals(GuiceyConfigurationHook.class)) {
+            if (!GuiceyConfigurationHook.class.isAssignableFrom(field.getType())) {
                 throw new IllegalStateException(String.format(
                         "Field %s annotated with @%s, but its type is not %s",
                         toString(field), EnableHook.class.getSimpleName(), GuiceyConfigurationHook.class.getSimpleName()

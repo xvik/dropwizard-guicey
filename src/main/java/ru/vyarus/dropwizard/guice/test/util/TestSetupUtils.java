@@ -111,7 +111,7 @@ public final class TestSetupUtils {
      */
     private static void validateFields(final List<Field> fields) {
         for (Field field : fields) {
-            if (!field.getType().equals(TestEnvironmentSetup.class)) {
+            if (!TestEnvironmentSetup.class.isAssignableFrom(field.getType())) {
                 throw new IllegalStateException(String.format(
                         "Field %s annotated with @%s, but its type is not %s",
                         toString(field), EnableSetup.class.getSimpleName(),
