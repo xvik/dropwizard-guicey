@@ -11,7 +11,6 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,14 +32,8 @@ public final class TestSetupUtils {
      * @param context junit extension context
      */
     public static void findAndProcessSetupObjects(final ExtensionConfig config, final ExtensionContext context) {
-        final List<TestEnvironmentSetup> setups = analyzeFields(context.getRequiredTestClass());
-        if (!setups.isEmpty()) {
-            if (config.extensions == null) {
-                config.extensions = setups;
-            } else {
-                config.extensions.addAll(setups);
-            }
-        }
+        registerFields(config, context.getRequiredTestClass());
+        config.logExtensionRegistrations();
         executeSetup(config, context);
     }
 
@@ -68,16 +61,18 @@ public final class TestSetupUtils {
      * test class and collect support objects.
      *
      * @param testClass test class
-     * @return resolved support objects or empty list
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static List<TestEnvironmentSetup> analyzeFields(final Class<?> testClass) {
+    private static void registerFields(final ExtensionConfig config, final Class<?> testClass) {
         final List<Field> fields = AnnotationSupport.findAnnotatedFields(testClass, EnableSetup.class);
         validateFields(fields);
         if (fields.isEmpty()) {
-            return Collections.emptyList();
+            return;
         }
-        return (List<TestEnvironmentSetup>) (List) ReflectionUtils.readFieldValues(fields, null);
+        // register instances
+        final List<TestEnvironmentSetup> setups = (List<TestEnvironmentSetup>) (List)
+                ReflectionUtils.readFieldValues(fields, null);
+        config.extensionsFromFields(setups, fields);
     }
 
     /**
@@ -88,7 +83,7 @@ public final class TestSetupUtils {
      * @param context junit extension context
      */
     private static void executeSetup(final ExtensionConfig config, final ExtensionContext context) {
-        if (config.extensions != null) {
+        if (!config.extensions.isEmpty()) {
             final TestExtension builder = new TestExtension(config);
             final ExtensionContext.Store store = context.getStore(
                     ExtensionContext.Namespace.create(TestEnvironmentSetup.class));

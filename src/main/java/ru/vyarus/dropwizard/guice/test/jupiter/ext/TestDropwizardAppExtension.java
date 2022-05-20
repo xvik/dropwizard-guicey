@@ -18,9 +18,9 @@ import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtils;
 import ru.vyarus.dropwizard.guice.test.util.RandomPortsListener;
+import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -220,11 +220,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          */
         @SafeVarargs
         public final Builder setup(final Class<? extends TestEnvironmentSetup>... support) {
-            if (cfg.extensions == null) {
-                cfg.extensions = TestSetupUtils.create(support);
-            } else {
-                cfg.extensions.addAll(TestSetupUtils.create(support));
-            }
+            cfg.extensionsClasses(support);
             return this;
         }
 
@@ -246,10 +242,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * @return builder instance for chained calls
          */
         public Builder setup(final TestEnvironmentSetup... support) {
-            if (cfg.extensions == null) {
-                cfg.extensions = new ArrayList<>();
-            }
-            Collections.addAll(cfg.extensions, support);
+            cfg.extensionInstances(support);
             return this;
         }
 
@@ -276,6 +269,23 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         boolean randomPorts;
         String restMapping = "";
 
+        final void extensionInstances(final TestEnvironmentSetup... exts) {
+            Collections.addAll(extensions, exts);
+            // track
+            RegistrationTrackUtils.fromInstance(extensionsSource, String.format("@%s %s instance",
+                    RegisterExtension.class.getSimpleName(),
+                    TestDropwizardAppExtension.class.getSimpleName()), exts);
+        }
+
+        @SafeVarargs
+        final void extensionsClasses(final Class<? extends TestEnvironmentSetup>... exts) {
+            extensions.addAll(TestSetupUtils.create(exts));
+            // track
+            RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s %s class",
+                    RegisterExtension.class.getSimpleName(),
+                    TestDropwizardAppExtension.class.getSimpleName()), exts);
+        }
+
         /**
          * Converts annotation to unified configuration object.
          *
@@ -290,7 +300,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             res.hooks = HooksUtils.create(ann.hooks());
             res.randomPorts = ann.randomPorts();
             res.restMapping = ann.restMapping();
-            res.extensions = TestSetupUtils.create(ann.setup());
+            res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
             return res;
         }
     }

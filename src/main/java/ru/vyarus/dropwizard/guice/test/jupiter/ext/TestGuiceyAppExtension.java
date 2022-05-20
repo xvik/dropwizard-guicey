@@ -11,15 +11,15 @@ import org.junit.platform.commons.support.AnnotationSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
-import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtils;
+import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
+import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -180,11 +180,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          */
         @SafeVarargs
         public final Builder setup(final Class<? extends TestEnvironmentSetup>... support) {
-            if (cfg.extensions == null) {
-                cfg.extensions = TestSetupUtils.create(support);
-            } else {
-                cfg.extensions.addAll(TestSetupUtils.create(support));
-            }
+            cfg.extensionsClasses(support);
             return this;
         }
 
@@ -205,10 +201,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          * @return builder instance for chained calls
          */
         public Builder setup(final TestEnvironmentSetup... support) {
-            if (cfg.extensions == null) {
-                cfg.extensions = new ArrayList<>();
-            }
-            Collections.addAll(cfg.extensions, support);
+            cfg.extensionInstances(support);
             return this;
         }
 
@@ -233,6 +226,23 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         Class<? extends Application> app;
         String configPath = "";
 
+        final void extensionInstances(final TestEnvironmentSetup... exts) {
+            Collections.addAll(extensions, exts);
+            // track
+            RegistrationTrackUtils.fromInstance(extensionsSource, String.format("@%s %s instance",
+                    RegisterExtension.class.getSimpleName(),
+                    TestGuiceyAppExtension.class.getSimpleName()), exts);
+        }
+
+        @SafeVarargs
+        final void extensionsClasses(final Class<? extends TestEnvironmentSetup>... exts) {
+            extensions.addAll(TestSetupUtils.create(exts));
+            // track
+            RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s %s class",
+                    RegisterExtension.class.getSimpleName(),
+                    TestGuiceyAppExtension.class.getSimpleName()), exts);
+        }
+
         /**
          * Converts annotation to unified configuration object.
          *
@@ -245,7 +255,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             res.configPath = ann.config();
             res.configOverrides = ann.configOverride();
             res.hooks = HooksUtils.create(ann.hooks());
-            res.extensions = TestSetupUtils.create(ann.setup());
+            res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
             return res;
         }
     }
