@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
-import ru.vyarus.dropwizard.guice.test.util.HooksUtils;
+import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
@@ -109,7 +109,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         }
 
         TestSetupUtils.findAndProcessSetupObjects(config, context);
-        HooksUtils.register(config.hooks);
+        HooksUtil.register(config.hooks);
 
         return create(config.app, config.configPath, context);
     }
@@ -254,7 +254,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             res.app = ann.value();
             res.configPath = ann.config();
             res.configOverrides = ann.configOverride();
-            res.hooks = HooksUtils.create(ann.hooks());
+            res.hooks = HooksUtil.create(ann.hooks());
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
             return res;
         }

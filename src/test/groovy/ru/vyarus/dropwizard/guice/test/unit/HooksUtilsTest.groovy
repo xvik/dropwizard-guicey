@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.test.unit
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
-import ru.vyarus.dropwizard.guice.test.util.HooksUtils
+import ru.vyarus.dropwizard.guice.test.util.HooksUtil
 import spock.lang.Specification
 
 /**
@@ -14,7 +14,7 @@ class HooksUtilsTest extends Specification {
 
     def "Check hooks initialization"() {
         when: "registering hook"
-        def res = HooksUtils.create(TestHook)
+        def res = HooksUtil.create(TestHook)
         then: "hook registered"
         res.size() == 1
         res[0] instanceof TestHook
@@ -23,7 +23,7 @@ class HooksUtilsTest extends Specification {
     def "Check hooks registration"() {
 
         when: "registering hook"
-        HooksUtils.register([new TestHook()])
+        HooksUtil.register([new TestHook()])
         then: "hook registered"
         ConfigurationHooksSupport.count() == 1
     }

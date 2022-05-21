@@ -7,7 +7,7 @@ import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideExtensionValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
-import ru.vyarus.dropwizard.guice.test.util.HooksUtils;
+import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -146,9 +146,9 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
     @SafeVarargs
     public final T hooks(final Class<? extends GuiceyConfigurationHook>... hooks) {
         if (cfg.hooks == null) {
-            cfg.hooks = HooksUtils.create(hooks);
+            cfg.hooks = HooksUtil.create(hooks);
         } else {
-            cfg.hooks.addAll(HooksUtils.create(hooks));
+            cfg.hooks.addAll(HooksUtil.create(hooks));
         }
         return self();
     }

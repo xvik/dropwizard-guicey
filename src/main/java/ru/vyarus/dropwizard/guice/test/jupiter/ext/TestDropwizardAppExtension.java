@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
-import ru.vyarus.dropwizard.guice.test.util.HooksUtils;
+import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.RandomPortsListener;
 import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
@@ -114,7 +114,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         }
 
         TestSetupUtils.findAndProcessSetupObjects(config, context);
-        HooksUtils.register(config.hooks);
+        HooksUtil.register(config.hooks);
 
         // config overrides work through system properties so it is important to have unique prefixes
         final String configPrefix = ConfigOverrideUtils.createPrefix(context.getRequiredTestClass());
@@ -297,7 +297,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             res.app = ann.value();
             res.configPath = ann.config();
             res.configOverrides = ann.configOverride();
-            res.hooks = HooksUtils.create(ann.hooks());
+            res.hooks = HooksUtil.create(ann.hooks());
             res.randomPorts = ann.randomPorts();
             res.restMapping = ann.restMapping();
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());

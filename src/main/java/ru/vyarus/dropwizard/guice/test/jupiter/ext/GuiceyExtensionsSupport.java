@@ -14,7 +14,7 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
-import ru.vyarus.dropwizard.guice.test.util.HooksUtils;
+import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -245,14 +245,14 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                 } else {
                     target = fields;
                 }
-                HooksUtils.register((List<GuiceyConfigurationHook>)
+                HooksUtil.register((List<GuiceyConfigurationHook>)
                         (List) ReflectionUtils.readFieldValues(target, null));
             }
         }
 
         private List<Field> findHookFields(final Class<?> testClass) {
             final List<Field> fields = AnnotationSupport.findAnnotatedFields(testClass, EnableHook.class);
-            HooksUtils.validateFieldHooks(fields);
+            HooksUtil.validateFieldHooks(fields);
             return fields.isEmpty() ? Collections.emptyList() : new ArrayList<>(fields);
         }
     }

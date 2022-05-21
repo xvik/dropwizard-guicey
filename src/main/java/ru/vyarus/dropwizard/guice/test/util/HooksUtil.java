@@ -14,9 +14,9 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 02.05.2020
  */
-public final class HooksUtils {
+public final class HooksUtil {
 
-    private HooksUtils() {
+    private HooksUtil() {
     }
 
     /**
