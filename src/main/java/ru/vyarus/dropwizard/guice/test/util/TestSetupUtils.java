@@ -1,12 +1,11 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.platform.commons.support.AnnotationSupport;
-import org.junit.platform.commons.util.ReflectionUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionTracker;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -22,19 +21,6 @@ import java.util.List;
 public final class TestSetupUtils {
 
     private TestSetupUtils() {
-    }
-
-    /**
-     * Search for fields annotated with {@link ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup}, validate
-     * them, and execute all configured setup objects.
-     *
-     * @param config  extension configuration
-     * @param context junit extension context
-     */
-    public static void findAndProcessSetupObjects(final ExtensionConfig config, final ExtensionContext context) {
-        registerFields(config, context.getRequiredTestClass());
-        config.logExtensionRegistrations();
-        executeSetup(config, context);
     }
 
     /**
@@ -57,37 +43,20 @@ public final class TestSetupUtils {
     }
 
     /**
-     * Search for fields annotated with {@link ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup} in
-     * test class and collect support objects.
-     *
-     * @param testClass test class
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void registerFields(final ExtensionConfig config, final Class<?> testClass) {
-        final List<Field> fields = AnnotationSupport.findAnnotatedFields(testClass, EnableSetup.class);
-        validateFields(fields);
-        if (fields.isEmpty()) {
-            return;
-        }
-        // register instances
-        final List<TestEnvironmentSetup> setups = (List<TestEnvironmentSetup>) (List)
-                ReflectionUtils.readFieldValues(fields, null);
-        config.extensionsFromFields(setups, fields);
-    }
-
-    /**
      * Execute all configured support objects. If object returns closable then register it in junit storage
      * for automatic closing.
      *
      * @param config  extension config
      * @param context junit extension context
      */
-    private static void executeSetup(final ExtensionConfig config, final ExtensionContext context) {
+    public static void executeSetup(final ExtensionConfig config, final ExtensionContext context) {
         if (!config.extensions.isEmpty()) {
             final TestExtension builder = new TestExtension(config);
             final ExtensionContext.Store store = context.getStore(
                     ExtensionContext.Namespace.create(TestEnvironmentSetup.class));
             for (TestEnvironmentSetup support : config.extensions) {
+                // required to recognize hooks registered from setup objects
+                ExtensionTracker.hooksContext(support.getClass());
                 final Object res = support.setup(builder);
                 // method could return anything, but only closable object would be tracked
                 if (res instanceof AutoCloseable || res instanceof ExtensionContext.Store.CloseableResource) {
@@ -104,7 +73,7 @@ public final class TestSetupUtils {
      *
      * @param fields fields to validate
      */
-    private static void validateFields(final List<Field> fields) {
+    public static void validateFields(final List<Field> fields) {
         for (Field field : fields) {
             if (!TestEnvironmentSetup.class.isAssignableFrom(field.getType())) {
                 throw new IllegalStateException(String.format(

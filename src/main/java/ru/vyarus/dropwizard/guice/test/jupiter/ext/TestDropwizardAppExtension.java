@@ -14,11 +14,11 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionTracker;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.RandomPortsListener;
-import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
 import java.util.Collections;
@@ -64,10 +64,13 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
     private Config config;
 
     public TestDropwizardAppExtension() {
-        // for usage with annotation
+        // extension created automatically by @TestGuiceyApp annotation
+        super(new ExtensionTracker());
     }
 
     private TestDropwizardAppExtension(final Config config) {
+        // manual extension creation from @RegisterExtension field
+        super(config.tracker);
         this.config = config;
     }
 
@@ -94,7 +97,8 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected DropwizardTestSupport<?> prepareTestSupport(final ExtensionContext context) {
+    protected DropwizardTestSupport<?> prepareTestSupport(final ExtensionContext context,
+                                                          final List<TestEnvironmentSetup> setups) {
         if (config == null) {
             // Configure from annotation
             // Note that it is impossible to have both manually build config and annotation because annotation
@@ -110,10 +114,12 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
                     TestDropwizardApp.class.getSimpleName(),
                     RegisterExtension.class.getSimpleName());
 
-            config = Config.parse(ann);
+            config = Config.parse(ann, tracker);
         }
 
-        TestSetupUtils.findAndProcessSetupObjects(config, context);
+        // setups from @EnableSetup fields go last
+        config.extensions.addAll(setups);
+        TestSetupUtils.executeSetup(config, context);
         HooksUtil.register(config.hooks);
 
         // config overrides work through system properties so it is important to have unique prefixes
@@ -269,21 +275,23 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         boolean randomPorts;
         String restMapping = "";
 
+        Config() {
+            super(new ExtensionTracker());
+        }
+
+        Config(final ExtensionTracker tracker) {
+            super(tracker);
+        }
+
         final void extensionInstances(final TestEnvironmentSetup... exts) {
             Collections.addAll(extensions, exts);
-            // track
-            RegistrationTrackUtils.fromInstance(extensionsSource, String.format("@%s %s instance",
-                    RegisterExtension.class.getSimpleName(),
-                    TestDropwizardAppExtension.class.getSimpleName()), exts);
+            tracker.extensionInstances(exts);
         }
 
         @SafeVarargs
         final void extensionsClasses(final Class<? extends TestEnvironmentSetup>... exts) {
             extensions.addAll(TestSetupUtils.create(exts));
-            // track
-            RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s %s class",
-                    RegisterExtension.class.getSimpleName(),
-                    TestDropwizardAppExtension.class.getSimpleName()), exts);
+            tracker.extensionClasses(exts);
         }
 
         /**
@@ -292,14 +300,14 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * @param ann configuration annotation
          * @return configuration instance
          */
-        static Config parse(final TestDropwizardApp ann) {
-            final Config res = new Config();
+        static Config parse(final TestDropwizardApp ann, final ExtensionTracker tracker) {
+            final Config res = new Config(tracker);
             res.app = ann.value();
             res.configPath = ann.config();
             res.configOverrides = ann.configOverride();
-            res.hooks = HooksUtil.create(ann.hooks());
             res.randomPorts = ann.randomPorts();
             res.restMapping = ann.restMapping();
+            res.hooksFromAnnotation(ann.annotationType(), ann.hooks());
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
             return res;
         }

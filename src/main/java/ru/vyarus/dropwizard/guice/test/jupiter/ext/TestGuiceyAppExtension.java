@@ -14,10 +14,10 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionTracker;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
-import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
 import java.util.Collections;
@@ -61,10 +61,13 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
     private Config config;
 
     public TestGuiceyAppExtension() {
-        // for usage with annotation
+        // extension created automatically by @TestGuiceyApp annotation
+        super(new ExtensionTracker());
     }
 
     private TestGuiceyAppExtension(final Config config) {
+        // manual extension creation from @RegisterExtension field
+        super(config.tracker);
         this.config = config;
     }
 
@@ -90,7 +93,8 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
     }
 
     @Override
-    protected DropwizardTestSupport<?> prepareTestSupport(final ExtensionContext context) {
+    protected DropwizardTestSupport<?> prepareTestSupport(final ExtensionContext context,
+                                                          final List<TestEnvironmentSetup> setups) {
         if (config == null) {
             // Configure from annotation
             // Note that it is impossible to have both manually build config and annotation because annotation
@@ -105,10 +109,12 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
                             + "so either use annotation or extension with @%s for manual configuration",
                     TestGuiceyApp.class.getSimpleName(),
                     RegisterExtension.class.getSimpleName());
-            config = Config.parse(ann);
+            config = Config.parse(ann, tracker);
         }
 
-        TestSetupUtils.findAndProcessSetupObjects(config, context);
+        // setups from @EnableSetup fields go last
+        config.extensions.addAll(setups);
+        TestSetupUtils.executeSetup(config, context);
         HooksUtil.register(config.hooks);
 
         return create(config.app, config.configPath, context);
@@ -180,7 +186,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          */
         @SafeVarargs
         public final Builder setup(final Class<? extends TestEnvironmentSetup>... support) {
-            cfg.extensionsClasses(support);
+            cfg.extensionClasses(support);
             return this;
         }
 
@@ -226,21 +232,23 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         Class<? extends Application> app;
         String configPath = "";
 
+        Config() {
+            super(new ExtensionTracker());
+        }
+
+        Config(final ExtensionTracker tracker) {
+            super(tracker);
+        }
+
         final void extensionInstances(final TestEnvironmentSetup... exts) {
             Collections.addAll(extensions, exts);
-            // track
-            RegistrationTrackUtils.fromInstance(extensionsSource, String.format("@%s %s instance",
-                    RegisterExtension.class.getSimpleName(),
-                    TestGuiceyAppExtension.class.getSimpleName()), exts);
+            tracker.extensionInstances(exts);
         }
 
         @SafeVarargs
-        final void extensionsClasses(final Class<? extends TestEnvironmentSetup>... exts) {
+        final void extensionClasses(final Class<? extends TestEnvironmentSetup>... exts) {
             extensions.addAll(TestSetupUtils.create(exts));
-            // track
-            RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s %s class",
-                    RegisterExtension.class.getSimpleName(),
-                    TestGuiceyAppExtension.class.getSimpleName()), exts);
+            tracker.extensionClasses(exts);
         }
 
         /**
@@ -249,12 +257,12 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          * @param ann configuration annotation
          * @return configuration instance
          */
-        static Config parse(final TestGuiceyApp ann) {
-            final Config res = new Config();
+        static Config parse(final TestGuiceyApp ann, final ExtensionTracker tracker) {
+            final Config res = new Config(tracker);
             res.app = ann.value();
             res.configPath = ann.config();
             res.configOverrides = ann.configOverride();
-            res.hooks = HooksUtil.create(ann.hooks());
+            res.hooksFromAnnotation(ann.annotationType(), ann.hooks());
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
             return res;
         }

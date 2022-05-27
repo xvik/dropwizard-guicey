@@ -11,7 +11,8 @@
     were required to perform such setup - new way is simpler.
   - Registration the same as with hooks: annotation, with builder and with static field using
     new annotation @EanbleSupport
-* @EnableHook fields might be declared as custom classes (not only raw hook interface) 
+* @EnableHook fields might be declared as custom classes (not only raw hook interface)
+* Log hooks and setup objects configured in test in execution order 
 
 ### 5.5.0 (2022-03-30)
 * Test framework-agnostic utilities:

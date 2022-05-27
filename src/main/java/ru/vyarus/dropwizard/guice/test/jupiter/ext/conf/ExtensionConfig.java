@@ -1,17 +1,14 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
 
 import io.dropwizard.testing.ConfigOverride;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
-import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
-import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
+import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,42 +23,41 @@ public abstract class ExtensionConfig {
 
     public String[] configOverrides = new String[0];
     // required for lazy evaluation values
-    public List<ConfigOverride> configOverrideObjects = new ArrayList<>();
-    public List<GuiceyConfigurationHook> hooks;
+    public final List<ConfigOverride> configOverrideObjects = new ArrayList<>();
+    public final List<GuiceyConfigurationHook> hooks = new ArrayList<>();
 
-    public List<TestEnvironmentSetup> extensions = new ArrayList<>();
+    public final List<TestEnvironmentSetup> extensions = new ArrayList<>();
     // tracks source of registered setup objects
-    protected List<String> extensionsSource = new ArrayList<>();
 
-    private final Logger logger = LoggerFactory.getLogger(ExtensionConfig.class);
+    public final ExtensionTracker tracker;
 
-    public final void extensionsFromFields(final List<TestEnvironmentSetup> exts, final List<Field> fields) {
-        extensions.addAll(exts);
-        // track
-        RegistrationTrackUtils.fromField(extensionsSource, String.format("@%s field",
-                EnableSetup.class.getSimpleName()), fields);
+    public ExtensionConfig(final ExtensionTracker tracker) {
+        this.tracker = tracker;
     }
+
 
     @SafeVarargs
     public final void extensionsFromAnnotation(final Class<? extends Annotation> ann,
                                                final Class<? extends TestEnvironmentSetup>... exts) {
         extensions.addAll(TestSetupUtils.create(exts));
-        //track
-        RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s", ann.getSimpleName()), exts);
+        tracker.extensionsFromAnnotation(ann, exts);
     }
 
-    /**
-     * Logs registered setup objects. Do nothing if no setup objects registered.
-     */
-    public void logExtensionRegistrations() {
-        if (!extensionsSource.isEmpty()) {
-            // logger not used because it is not yet configured (message will be visible but with different pattern)
-            final StringBuilder res = new StringBuilder("Guicey test setup objects = \n\n");
-            for (String st : extensionsSource) {
-                res.append('\t').append(st).append('\n');
-            }
-            // note: at this stage dropwizard did not apply its logger config, so message would look different
-            logger.info(res.toString());
-        }
+    @SafeVarargs
+    public final void hooksFromAnnotation(final Class<? extends Annotation> ann,
+                                          final Class<? extends GuiceyConfigurationHook>... exts) {
+        hooks.addAll(HooksUtil.create(exts));
+        tracker.hooksFromAnnotation(ann, exts);
+    }
+
+    public final void hookInstances(final GuiceyConfigurationHook... exts) {
+        Collections.addAll(hooks, exts);
+        tracker.hookInstances(exts);
+    }
+
+    @SafeVarargs
+    public final void hookClasses(final Class<? extends GuiceyConfigurationHook>... exts) {
+        hooks.addAll(HooksUtil.create(exts));
+        tracker.hookClasses(exts);
     }
 }

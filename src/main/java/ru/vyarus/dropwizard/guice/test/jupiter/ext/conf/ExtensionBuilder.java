@@ -7,9 +7,7 @@ import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideExtensionValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
-import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.Supplier;
 
@@ -145,11 +143,7 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
      */
     @SafeVarargs
     public final T hooks(final Class<? extends GuiceyConfigurationHook>... hooks) {
-        if (cfg.hooks == null) {
-            cfg.hooks = HooksUtil.create(hooks);
-        } else {
-            cfg.hooks.addAll(HooksUtil.create(hooks));
-        }
+        cfg.hookClasses(hooks);
         return self();
     }
 
@@ -170,10 +164,7 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
      * @return builder instance for chained calls
      */
     public T hooks(final GuiceyConfigurationHook... hooks) {
-        if (cfg.hooks == null) {
-            cfg.hooks = new ArrayList<>();
-        }
-        Collections.addAll(cfg.hooks, hooks);
+        cfg.hookInstances(hooks);
         return self();
     }
 

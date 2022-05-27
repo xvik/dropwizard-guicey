@@ -14,14 +14,17 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionTracker;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
+import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -63,20 +66,29 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     // indicator storage key of nested test (when extension activated in parent test)
     private static final String INHERITED_DW_SUPPORT = "INHERITED_DW_SUPPORT";
 
+    protected final ExtensionTracker tracker;
+
+    public GuiceyExtensionsSupport(final ExtensionTracker tracker) {
+        this.tracker = tracker;
+    }
+
     @Override
     public void beforeAll(final ExtensionContext context) throws Exception {
         final ExtensionContext.Store store = getExtensionStore(context);
         if (store.get(DW_SUPPORT) == null) {
-            // find and activate hooks declared in base class static fields
-            final HookFields hooks = new HookFields(context.getRequiredTestClass());
-            hooks.activateBaseHooks();
+            // find fields annotated with @EnableHook and @EnableSetup
+            final FieldSupport fields = new FieldSupport(context.getRequiredTestClass(), tracker);
+            fields.activateBaseHooks();
 
-            final DropwizardTestSupport<?> support = prepareTestSupport(context);
+            final DropwizardTestSupport<?> support = prepareTestSupport(context, fields.getSetupObjects());
             // activate hooks declared in test static fields (so hooks declared in annotation goes before)
-            hooks.activateClassHooks();
+            fields.activateClassHooks();
             store.put(DW_SUPPORT, support);
             // for pure guicey tests client may seem redundant, but it can be used for calling other services
             store.put(DW_CLIENT, new ClientSupport(support));
+
+            tracker.logExtensionRegistrations();
+            tracker.logHookRegistrations();
 
             support.before();
         } else {
@@ -177,12 +189,14 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
     /**
      * The only role of actual extension class is to configure {@link DropwizardTestSupport} object
-     * according to annotated configuration.
+     * according to annotation.
      *
      * @param context extension context
+     * @param setups setup extensions resolved from fields (or empty list)
      * @return configured dropwizard test support object
      */
-    protected abstract DropwizardTestSupport<?> prepareTestSupport(ExtensionContext context);
+    protected abstract DropwizardTestSupport<?> prepareTestSupport(ExtensionContext context,
+                                                                   List<TestEnvironmentSetup> setups);
 
     @Override
     protected DropwizardTestSupport<?> getSupport(final ExtensionContext extensionContext) {
@@ -211,48 +225,68 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     }
 
     /**
-     * Utility class for activating hook fields (annotated with {@link EnableHook}). Such fields must be activated
-     * in two steps: first hooks declared in base classes, then hooks declared directly in test class
-     * (after hooks declared in extension would be activated).
+     * Utility class for activating hooks and setup objects collected from fields (annotated with
+     * {@link EnableHook} and {link {@link ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup}}).
+     * <p>
+     * Hook fields must be activated in two steps: first hooks declared in base classes, then hooks declared directly
+     * in test class (after hooks declared in extension would be activated).
+     * <p>
+     * Setup extensions from fields are always registered after all other.
      */
-    private static class HookFields {
-        private final Class<?> testClass;
-        private final List<Field> fields;
+    private static class FieldSupport {
+        private final ExtensionTracker tracker;
+        private final List<Field> parentHookFields;
+        private final List<Field> ownHookFields;
+        private final List<Field> extensionFields;
 
-        HookFields(final Class<?> testClass) {
-            this.testClass = testClass;
+        FieldSupport(final Class<?> testClass, final ExtensionTracker tracker) {
+            this.tracker = tracker;
             // find and validate all fields
-            this.fields = findHookFields(testClass);
+            ownHookFields = findHookFields(testClass);
+            parentHookFields = ownHookFields.isEmpty() ? Collections.emptyList() : ownHookFields.stream()
+                    .filter(field -> !testClass.equals(field.getDeclaringClass()))
+                    .collect(Collectors.toList());
+            ownHookFields.removeAll(parentHookFields);
+
+            extensionFields = findSetupFields(testClass);
+        }
+
+        public List<TestEnvironmentSetup> getSetupObjects() {
+            tracker.extensionsFromFields(extensionFields);
+            return extensionFields.isEmpty() ? Collections.emptyList() : getFieldValues(extensionFields);
         }
 
         public void activateBaseHooks() {
             // activate hooks declared in base classes
-            activateFieldHooks(field -> !testClass.equals(field.getDeclaringClass()));
+            activateFieldHooks(parentHookFields);
+            tracker.hooksFromFields(parentHookFields, true);
         }
 
         public void activateClassHooks() {
             // activate all remaining hooks (in test class)
-            activateFieldHooks(null);
+            activateFieldHooks(ownHookFields);
+            tracker.hooksFromFields(ownHookFields, false);
         }
 
-        @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
-        private void activateFieldHooks(final Predicate<Field> condition) {
-            if (!fields.isEmpty()) {
-                final List<Field> target;
-                if (condition != null) {
-                    target = fields.stream().filter(condition).collect(Collectors.toList());
-                    fields.removeAll(target);
-                } else {
-                    target = fields;
-                }
-                HooksUtil.register((List<GuiceyConfigurationHook>)
-                        (List) ReflectionUtils.readFieldValues(target, null));
-            }
+        private void activateFieldHooks(final List<Field> fields) {
+            HooksUtil.register(getFieldValues(fields));
+        }
+
+        @SuppressWarnings("unchecked")
+        private <T> List<T> getFieldValues(final List<Field> fields) {
+            return fields.isEmpty() ? Collections.emptyList() : (List<T>)
+                    ReflectionUtils.readFieldValues(fields, null);
         }
 
         private List<Field> findHookFields(final Class<?> testClass) {
             final List<Field> fields = AnnotationSupport.findAnnotatedFields(testClass, EnableHook.class);
             HooksUtil.validateFieldHooks(fields);
+            return fields.isEmpty() ? Collections.emptyList() : new ArrayList<>(fields);
+        }
+
+        private List<Field> findSetupFields(final Class<?> testClass) {
+            final List<Field> fields = AnnotationSupport.findAnnotatedFields(testClass, EnableSetup.class);
+            TestSetupUtils.validateFields(fields);
             return fields.isEmpty() ? Collections.emptyList() : new ArrayList<>(fields);
         }
     }
