@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
-import org.apache.commons.lang3.StringUtils;
+import org.junit.platform.commons.util.ReflectionUtils;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 
 import java.lang.reflect.Field;
@@ -28,7 +28,7 @@ public final class RegistrationTrackUtils {
      * @param classes items to append
      */
     public static void fromClass(final List<String> info, final String prefix, final Class<?>[] classes) {
-        track(info, prefix, Arrays.asList(classes), RenderUtils::renderClass);
+        track(info, Arrays.asList(classes), it -> it, it -> prefix);
     }
 
     /**
@@ -39,7 +39,7 @@ public final class RegistrationTrackUtils {
      * @param instances instances to append
      */
     public static void fromInstance(final List<String> info, final String prefix, final Object[] instances) {
-        track(info, prefix, Arrays.asList(instances), obj -> RenderUtils.renderClass(obj.getClass()));
+        track(info, Arrays.asList(instances), Object::getClass, obj -> prefix);
     }
 
     /**
@@ -50,18 +50,20 @@ public final class RegistrationTrackUtils {
      * @param fields fields to append
      */
     public static void fromField(final List<String> info, final String prefix, final List<Field> fields) {
-        track(info, prefix, fields,
-                field -> RenderUtils.renderClass(field.getDeclaringClass()) + "." + field.getName());
+        track(info, fields,
+                field -> ReflectionUtils.tryToReadFieldValue(field)
+                        .orElseTry(() -> new Exception()).toOptional().map(Object::getClass).get(),
+                field -> prefix + " " + field.getDeclaringClass().getSimpleName() + "." + field.getName()
+        );
     }
 
     private static <T> void track(final List<String> info,
-                                  final String prefix,
                                   final List<T> objects,
-                                  final Function<T, String> transformer) {
-        int i = 0;
-        final String blank = StringUtils.repeat(' ', prefix.length());
+                                  final Function<T, Class> converter,
+                                  final Function<T, String> marker) {
         for (T obj : objects) {
-            info.add((i++ == 0 ? prefix : blank) + " " + transformer.apply(obj));
+            final Class<?> cls = converter.apply(obj);
+            info.add(String.format("%-80s \t%s", RenderUtils.renderClassLine(cls), marker.apply(obj)));
         }
     }
 }

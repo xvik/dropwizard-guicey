@@ -14,7 +14,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionTracker;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
@@ -62,7 +62,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
 
     public TestGuiceyAppExtension() {
         // extension created automatically by @TestGuiceyApp annotation
-        super(new ExtensionTracker());
+        super(new TestExtensionsTracker());
     }
 
     private TestGuiceyAppExtension(final Config config) {
@@ -233,10 +233,10 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         String configPath = "";
 
         Config() {
-            super(new ExtensionTracker());
+            super(new TestExtensionsTracker());
         }
 
-        Config(final ExtensionTracker tracker) {
+        Config(final TestExtensionsTracker tracker) {
             super(tracker);
         }
 
@@ -257,7 +257,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          * @param ann configuration annotation
          * @return configuration instance
          */
-        static Config parse(final TestGuiceyApp ann, final ExtensionTracker tracker) {
+        static Config parse(final TestGuiceyApp ann, final TestExtensionsTracker tracker) {
             final Config res = new Config(tracker);
             res.app = ann.value();
             res.configPath = ann.config();

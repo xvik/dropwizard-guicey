@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Base configuration for junit 5 extensions (contains common configurations). Required to unify common configuration
- * methods in {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder}.
+ * methods in {@link ExtensionBuilder}.
  *
  * @author Vyacheslav Rusakov
  * @since 12.05.2022
@@ -29,9 +29,9 @@ public abstract class ExtensionConfig {
     public final List<TestEnvironmentSetup> extensions = new ArrayList<>();
     // tracks source of registered setup objects
 
-    public final ExtensionTracker tracker;
+    public final TestExtensionsTracker tracker;
 
-    public ExtensionConfig(final ExtensionTracker tracker) {
+    public ExtensionConfig(final TestExtensionsTracker tracker) {
         this.tracker = tracker;
     }
 

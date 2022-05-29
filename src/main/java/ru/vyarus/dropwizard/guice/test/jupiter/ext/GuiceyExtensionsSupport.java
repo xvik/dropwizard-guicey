@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionTracker;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
@@ -66,9 +66,9 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     // indicator storage key of nested test (when extension activated in parent test)
     private static final String INHERITED_DW_SUPPORT = "INHERITED_DW_SUPPORT";
 
-    protected final ExtensionTracker tracker;
+    protected final TestExtensionsTracker tracker;
 
-    public GuiceyExtensionsSupport(final ExtensionTracker tracker) {
+    public GuiceyExtensionsSupport(final TestExtensionsTracker tracker) {
         this.tracker = tracker;
     }
 
@@ -88,7 +88,6 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             store.put(DW_CLIENT, new ClientSupport(support));
 
             tracker.logExtensionRegistrations();
-            tracker.logHookRegistrations();
 
             support.before();
         } else {
@@ -234,12 +233,12 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      * Setup extensions from fields are always registered after all other.
      */
     private static class FieldSupport {
-        private final ExtensionTracker tracker;
+        private final TestExtensionsTracker tracker;
         private final List<Field> parentHookFields;
         private final List<Field> ownHookFields;
         private final List<Field> extensionFields;
 
-        FieldSupport(final Class<?> testClass, final ExtensionTracker tracker) {
+        FieldSupport(final Class<?> testClass, final TestExtensionsTracker tracker) {
             this.tracker = tracker;
             // find and validate all fields
             ownHookFields = findHookFields(testClass);

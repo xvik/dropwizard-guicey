@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
@@ -23,17 +24,17 @@ import java.util.List;
  * @since 27.05.2022
  */
 @SuppressWarnings("checkstyle:MultipleStringLiterals")
-public class ExtensionTracker {
+public class TestExtensionsTracker {
 
     private static final ThreadLocal<Class<? extends TestEnvironmentSetup>> CONTEXT = new ThreadLocal<>();
 
     protected final List<String> extensionsSource = new ArrayList<>();
     protected final List<String> hooksSource = new ArrayList<>();
 
-    private final Logger logger = LoggerFactory.getLogger(ExtensionTracker.class);
+    private final Logger logger = LoggerFactory.getLogger(TestExtensionsTracker.class);
 
-    public static void hooksContext(final Class<? extends TestEnvironmentSetup> context) {
-        CONTEXT.set(context);
+    public static void setContextHook(final Class<? extends TestEnvironmentSetup> hook) {
+        CONTEXT.set(hook);
     }
 
     public final void extensionsFromFields(final List<Field> fields) {
@@ -44,7 +45,11 @@ public class ExtensionTracker {
     @SafeVarargs
     public final void extensionsFromAnnotation(final Class<? extends Annotation> ann,
                                                final Class<? extends TestEnvironmentSetup>... exts) {
+        // sync actual extension registration order with tracking info
+        final List<String> tmp = new ArrayList<>(extensionsSource);
+        extensionsSource.clear();
         RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s", ann.getSimpleName()), exts);
+        extensionsSource.addAll(tmp);
     }
 
     public final void hooksFromFields(final List<Field> fields, final boolean baseHooks) {
@@ -90,34 +95,34 @@ public class ExtensionTracker {
      * Logs registered setup objects. Do nothing if no setup objects registered.
      */
     public void logExtensionRegistrations() {
-        logTracks(extensionsSource, "Guicey test setup objects");
-    }
+        if (!extensionsSource.isEmpty() || !hooksSource.isEmpty()) {
+            final StringBuilder res = new StringBuilder(500).append("Guicey test extensions:\n\n");
+            if (!extensionsSource.isEmpty()) {
+                res.append("\tSetup objects = \n");
+                logTracks(res, extensionsSource);
+            }
 
-    /**
-     * Logs hooks registered in test.
-     * IMPORTANT: this might be not all hooks because some hooks might be registered from system property or
-     * inside starting application. The intention was to track only additional hooks from test.
-     */
-    public void logHookRegistrations() {
-        logTracks(hooksSource, "Guicey hooks registered in test");
+            if (!hooksSource.isEmpty()) {
+                res.append("\tTest hooks = \n");
+                logTracks(res, hooksSource);
+            }
+
+            // note: at this stage dropwizard did not apply its logger config, so message would look different
+            logger.info(res.toString());
+        }
     }
 
     private String getHookContext() {
         // hook might be registered from manual extension in filed or within setup object and in this case
         // tracking setup object class
-        final boolean fromSetupObject = CONTEXT.get() != null;
-        final Class<?> ctx = fromSetupObject ? CONTEXT.get() : RegisterExtension.class;
-        return (fromSetupObject ? "setup " : "@") + ctx.getSimpleName();
+        return CONTEXT.get() != null
+                ? RenderUtils.getClassName(CONTEXT.get()) : "@" + RegisterExtension.class.getSimpleName();
     }
 
-    private void logTracks(final List<String> tracks, final String message) {
-        if (!tracks.isEmpty()) {
-            final StringBuilder res = new StringBuilder(message + " = \n\n");
-            for (String st : tracks) {
-                res.append('\t').append(st).append('\n');
-            }
-            // note: at this stage dropwizard did not apply its logger config, so message would look different
-            logger.info(res.toString());
+    private void logTracks(final StringBuilder res, final List<String> tracks) {
+        for (String st : tracks) {
+            res.append("\t\t").append(st).append('\n');
         }
+        res.append('\n');
     }
 }
