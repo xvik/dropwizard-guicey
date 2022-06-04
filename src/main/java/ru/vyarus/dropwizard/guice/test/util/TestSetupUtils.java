@@ -71,9 +71,10 @@ public final class TestSetupUtils {
      * Validate fields annotated with {@link ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup}
      * for correctness.
      *
-     * @param fields fields to validate
+     * @param fields                fields to validate
+     * @param includeInstanceFields true to allow instance fields, false to break if instance field detected
      */
-    public static void validateFields(final List<Field> fields) {
+    public static void validateFields(final List<Field> fields, final boolean includeInstanceFields) {
         for (Field field : fields) {
             if (!TestEnvironmentSetup.class.isAssignableFrom(field.getType())) {
                 throw new IllegalStateException(String.format(
@@ -82,7 +83,7 @@ public final class TestSetupUtils {
                         TestEnvironmentSetup.class.getSimpleName()
                 ));
             }
-            if (!Modifier.isStatic(field.getModifiers())) {
+            if (!includeInstanceFields && !Modifier.isStatic(field.getModifiers())) {
                 throw new IllegalStateException(String.format("Field %s annotated with @%s must be static",
                         toString(field), EnableSetup.class.getSimpleName()));
             }

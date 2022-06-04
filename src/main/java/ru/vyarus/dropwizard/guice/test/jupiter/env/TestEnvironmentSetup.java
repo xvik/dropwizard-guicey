@@ -7,14 +7,14 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
  * overriding test application configuration. Consider this as a simpler option to writing custom junit extensions.
  * <p>
  * If you need to take action after test execution (e.g. shutdown database) then return {@link java.lang.AutoCloseable}
- * or {@link org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource} object and it would be
+ * or {@link org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource} object, and it would be
  * closed automatically.
  * <p>
  * The same could be achieved with an additional junit 5 extensions, but it might be harder to properly synchronize
  * lifecycles (extensions order would be important). Environment support assumed to be a simpler alternative.
  * <p>
  * Setup object might be registered directly into extension annotation or with extension builder (when extension
- * registered with field). Also, support object may be declared in static field (in test or any base test class),
+ * registered with field). Also, support object may be declared in field (in test or any base test class),
  * annotated with {@link ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup} annotation (annotation is required
  * to provide context javadoc).
  * <p>

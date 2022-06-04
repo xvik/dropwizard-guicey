@@ -133,10 +133,12 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
     /**
      * Hooks provide access to guice builder allowing application-level customization of application context in tests.
      * <p>
-     * For anonymous hooks you can simply declare hook as static field:
-     * {@code @EnableHook static GuiceyConfigurationHook hook = builder -> builder.disableExtension(Something.class)}
-     * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
-     * are also counted.
+     * Anonymous implementation could be simply declared as field:
+     * {@code @EnableHook static GuiceyConfigurationHook hook = builder -> builder.disableExtension(
+     * Something.class)}.
+     * Non-static fields may be used only when extension is registered with non-static field (static fields would
+     * be also counted in this case). All annotated fields will be detected automatically and objects registered.
+     * Fields declared in base test classes are also counted.
      *
      * @param hooks hook classes to use
      * @return builder instance for chained calls
@@ -154,11 +156,12 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
      * }</pre>
      * May be called multiple times (values appended).
      * <p>
-     * Also, anonymous hooks could be declared with a static field:
+     * Anonymous implementation could be simply declared as field:
      * {@code @EnableHook static GuiceyConfigurationHook hook = builder -> builder.disableExtension(
      * Something.class)}.
-     * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
-     * are also counted.
+     * Non-static fields may be used only when extension is registered with non-static field (static fields would
+     * be also counted in this case). All annotated fields will be detected automatically and objects registered.
+     * Fields declared in base test classes are also counted.
      *
      * @param hooks hook instances (may be lambdas)
      * @return builder instance for chained calls

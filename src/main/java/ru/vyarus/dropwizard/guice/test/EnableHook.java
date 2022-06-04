@@ -11,9 +11,8 @@ import java.lang.annotation.Target;
  * <p>
  * Example usage: {@code @EnableHook static GuiceyConfigurationHook HOOK = builder -> builder.modules(new Mod()) }
  * <p>
- * Target fields must be static fields. If non static or not
- * {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook} filed annotated then error will be thrown indicating
- * incorrect usage.
+ * Field might be not static only if extension is registered in non-static field (application started for each test
+ * method), otherwise it must be static. Incorrect usage will be indicated with an exception.
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup

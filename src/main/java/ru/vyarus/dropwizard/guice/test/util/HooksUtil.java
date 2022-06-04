@@ -22,9 +22,10 @@ public final class HooksUtil {
     /**
      * Validate fields annotated with {@link EnableHook} for correctness.
      *
-     * @param fields fields to validate
+     * @param fields                fields to validate
+     * @param includeInstanceFields true to allow instance fields, false to break if instance field detected
      */
-    public static void validateFieldHooks(final List<Field> fields) {
+    public static void validateFieldHooks(final List<Field> fields, final boolean includeInstanceFields) {
         for (Field field : fields) {
             if (!GuiceyConfigurationHook.class.isAssignableFrom(field.getType())) {
                 throw new IllegalStateException(String.format(
@@ -32,7 +33,7 @@ public final class HooksUtil {
                         toString(field), EnableHook.class.getSimpleName(), GuiceyConfigurationHook.class.getSimpleName()
                 ));
             }
-            if (!Modifier.isStatic(field.getModifiers())) {
+            if (!includeInstanceFields && !Modifier.isStatic(field.getModifiers())) {
                 throw new IllegalStateException(String.format("Field %s annotated with @%s must be static",
                         toString(field), EnableHook.class.getSimpleName()));
             }

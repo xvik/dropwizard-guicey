@@ -5,14 +5,16 @@
 * Changes to junit 5 test extension builders:
   - hooks(Class) method accepts multiple classes
   - configOverrides(String...) aggregates multiple calls
-* Add new test extension for junit 5 extensions: TestEnvironmentSupport.
+* Add new test extension for junit 5 extensions: TestEnvironmentSetup.
   - In contrast to guicey hooks, this extension supposed to be used to prepare
     test environment before test (e.g. create db). Previously custom junit 5 extensions
     were required to perform such setup - new way is simpler.
   - Registration the same as with hooks: annotation, with builder and with static field using
-    new annotation @EanbleSupport
+    new annotation @EanbleSetup
 * @EnableHook fields might be declared as custom classes (not only raw hook interface)
 * Log hooks and setup objects configured in test in execution order 
+* Add per test method application startup support for junit extensions
+  (when extension registered in non-static @RegisterExtension field) 
 
 ### 5.5.0 (2022-03-30)
 * Test framework-agnostic utilities:

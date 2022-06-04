@@ -45,15 +45,19 @@ public final class RegistrationTrackUtils {
     /**
      * Stores tracking info for recognized test class fields.
      *
-     * @param info   info holder
-     * @param prefix source identity
-     * @param fields fields to append
+     * @param info     info holder
+     * @param prefix   source identity
+     * @param fields   fields to append
+     * @param instance test instance or null for static fields
      */
-    public static void fromField(final List<String> info, final String prefix, final List<Field> fields) {
+    public static void fromField(final List<String> info,
+                                 final String prefix,
+                                 final List<Field> fields,
+                                 final Object instance) {
         track(info, fields,
-                field -> ReflectionUtils.tryToReadFieldValue(field)
+                field -> ReflectionUtils.tryToReadFieldValue(field, instance)
                         .orElseTry(() -> new Exception()).toOptional().map(Object::getClass).get(),
-                field -> prefix + " " + field.getDeclaringClass().getSimpleName() + "." + field.getName()
+                field -> prefix + " field " + field.getDeclaringClass().getSimpleName() + "." + field.getName()
         );
     }
 

@@ -23,7 +23,7 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 27.05.2022
  */
-@SuppressWarnings("checkstyle:MultipleStringLiterals")
+@SuppressWarnings({"checkstyle:MultipleStringLiterals", "PMD:AvoidDuplicateLiterals"})
 public class TestExtensionsTracker {
 
     private static final ThreadLocal<Class<? extends TestEnvironmentSetup>> CONTEXT = new ThreadLocal<>();
@@ -37,9 +37,8 @@ public class TestExtensionsTracker {
         CONTEXT.set(hook);
     }
 
-    public final void extensionsFromFields(final List<Field> fields) {
-        RegistrationTrackUtils.fromField(extensionsSource, String.format("@%s field",
-                EnableSetup.class.getSimpleName()), fields);
+    public final void extensionsFromFields(final List<Field> fields, final Object instance) {
+        RegistrationTrackUtils.fromField(extensionsSource, "@" + EnableSetup.class.getSimpleName(), fields, instance);
     }
 
     @SafeVarargs
@@ -48,19 +47,18 @@ public class TestExtensionsTracker {
         // sync actual extension registration order with tracking info
         final List<String> tmp = new ArrayList<>(extensionsSource);
         extensionsSource.clear();
-        RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s", ann.getSimpleName()), exts);
+        RegistrationTrackUtils.fromClass(extensionsSource, "@" + ann.getSimpleName(), exts);
         extensionsSource.addAll(tmp);
     }
 
-    public final void hooksFromFields(final List<Field> fields, final boolean baseHooks) {
+    public final void hooksFromFields(final List<Field> fields, final boolean baseHooks, final Object instance) {
         if (!fields.isEmpty()) {
             // hooks from fields in base classes activated before configured hooks
             final List<String> tmp = baseHooks ? new ArrayList<>(hooksSource) : Collections.emptyList();
             if (baseHooks) {
                 hooksSource.clear();
             }
-            RegistrationTrackUtils.fromField(hooksSource, String.format("@%s field",
-                    EnableHook.class.getSimpleName()), fields);
+            RegistrationTrackUtils.fromField(hooksSource, "@" + EnableHook.class.getSimpleName(), fields, instance);
             hooksSource.addAll(tmp);
         }
     }
@@ -68,7 +66,7 @@ public class TestExtensionsTracker {
     @SafeVarargs
     public final void hooksFromAnnotation(final Class<? extends Annotation> ann,
                                           final Class<? extends GuiceyConfigurationHook>... exts) {
-        RegistrationTrackUtils.fromClass(hooksSource, String.format("@%s", ann.getSimpleName()), exts);
+        RegistrationTrackUtils.fromClass(hooksSource, "@" + ann.getSimpleName(), exts);
     }
 
     public final void extensionInstances(final TestEnvironmentSetup... exts) {

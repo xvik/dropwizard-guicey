@@ -29,8 +29,8 @@ import java.util.List;
  * <pre>{@code @RegisterExtension
  * static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(MyApp.class).create()
  * }</pre>
- * This is complete equivalent of annotation declaration! Static modifier is important! There is no additional
- * methods in extension (intentionally), so registration type changes nothing in usage.
+ * Registration in static field is complete equivalent of annotation declaration! When registered in non-static field,
+ * application would be started for each test method.
  * <p>
  * Reasons why it could be used instead of annotation:
  * <ul>
@@ -41,11 +41,12 @@ import java.util.List;
  *     {@code .hooks(builder -> builder.modules(new DebugGuiceModule()))}</li>
  *     <li>Config overrides registration as {@link ConfigOverride} objects (required for delayed evaluated values:
  *     e.g. when it is obtained from some other junit extension)</li>
+ *     <li>Per-method application startup (for non-static field)</li>
  * </ul>
  * <p>
  * You can't use manual registration to configure multiple applications because junit allows only one extension
  * instance (if you really need to use multiple applications in tests then register one with extension and for
- * another use {@link DropwizardTestSupport} directly).
+ * another use {@link DropwizardTestSupport} or {@link ru.vyarus.dropwizard.guice.test.TestSupport} utility).
  * <p>
  * If both declarations will be used at the same class (don't do that!) then annotation will win and manual
  * registration will be ignored (junit default behaviour).
@@ -176,10 +177,11 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          * apply required configurations) whereas hooks is a general mechanism for application customization (not only
          * in tests).
          * <p>
-         * Anonymous implementation could be simply declared as static field:
-         * {@code @EnableSupport static TestEnvironmentSupport ext = ext -> ext.configOverrides("foo:1")}
-         * All such fields will be detected automatically and objects registered. Fields declared in base test classes
-         * are also counted.
+         * Anonymous implementation could be simply declared as field:
+         * {@code @EnableSetup static TestEnvironmentSetup ext = ext -> ext.configOverrides("foo:1")}.
+         * Non-static fields may be used only when extension is registered with non-static field (static fields would
+         * be also counted in this case). All annotated fields will be detected automatically and objects registered.
+         * Fields declared in base test classes are also counted.
          *
          * @param support support object classes
          * @return builder instance for chained calls
@@ -198,10 +200,11 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          * apply required configurations) whereas hooks is a general mechanism for application customization (not only
          * in tests).
          * <p>
-         * Anonymous implementation could be simply declared as static field:
-         * {@code @EnableSupport static TestEnvironmentSupport ext = ext -> ext.configOverrides("foo:1")}
-         * All such fields will be detected automatically and objects registered. Fields declared in base test classes
-         * are also counted.
+         * Anonymous implementation could be simply declared as field:
+         * {@code @EnableSetup static TestEnvironmentSetup ext = ext -> ext.configOverrides("foo:1")}.
+         * Non-static fields may be used only when extension is registered with non-static field (static fields would
+         * be also counted in this case). All annotated fields will be detected automatically and objects registered.
+         * Fields declared in base test classes are also counted.
          *
          * @param support support object instances
          * @return builder instance for chained calls

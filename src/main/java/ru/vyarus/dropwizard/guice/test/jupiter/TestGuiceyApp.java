@@ -26,9 +26,9 @@ import java.lang.annotation.Target;
  * (and other will be ignored).
  * <p>
  * Guice context started before all tests (before {@link org.junit.jupiter.api.BeforeAll}) and shut down
- * after all tests (after {@link org.junit.jupiter.api.AfterAll}). There is no way to restart it between tests. Group
- * test, not modifying internal application state and extract test modifying state to separate classes (possibly
- * junit nested tests).
+ * after all tests (after {@link org.junit.jupiter.api.AfterAll}). If you need to restart application between tests
+ * then declare extension in {@link org.junit.jupiter.api.extension.RegisterExtension} non-static field instead of
+ * annotation.
  * <p>
  * Guice injections will work on test fields annotated with {@link javax.inject.Inject} or
  * {@link com.google.inject.Inject} ({@link com.google.inject.Injector#injectMembers(Object)} applied on test instance).
@@ -52,8 +52,8 @@ import java.lang.annotation.Target;
  * ({@link ru.vyarus.dropwizard.guice.test.TestCommand}).
  * <p>
  * It is possible to apply extension manually using {@link org.junit.jupiter.api.extension.RegisterExtension}
- * and {@link TestGuiceyAppExtension#forApp(Class)} builder. The only difference is declaration type, but in both cases
- * extension will work the same way.
+ * and {@link TestGuiceyAppExtension#forApp(Class)} builder. For static field the behaviour would be the same as with
+ * annotation, for non-static field application will restart before each test method.
  *
  * @author Vyacheslav Rusakov
  * @since 29.04.2020
@@ -89,10 +89,11 @@ public @interface TestGuiceyApp {
      * Hooks provide access to guice builder allowing complete customization of application context
      * in tests.
      * <p>
-     * For anonymous hooks you can simply declare hook as static field:
-     * {@code @EnableHook static GuiceyConfigurationHook hook = builder -> builder.disableExtension(Something.class)}
-     * All such fields will be detected automatically and hooks registered. Hooks declared in base test classes
-     * are also counted.
+     * For anonymous hooks you can simply declare hook as field:
+     * {@code @EnableHook static GuiceyConfigurationHook hook = builder -> builder.disableExtension(Something.class)}.
+     * Non-static fields may be used only when extension is registered with non-static field (static fields would be
+     * also counted in this case). All annotated fields will be detected automatically and objects registered. Fields
+     * declared in base test classes are also counted.
      *
      * @return list of hooks to use
      * @see GuiceyConfigurationHook for more info
@@ -108,10 +109,11 @@ public @interface TestGuiceyApp {
      * To avoid confusion with guicey hooks: setup object required to prepare test environment before test (and apply
      * required configurations) whereas hooks is a general mechanism for application customization (not only in tests).
      * <p>
-     * Anonymous implementation could be simply declared as static field:
-     * {@code @EnableSupport static TestEnvironmentSupport ext = ext -> ext.configOverrides("foo:1")}
-     * All such fields will be detected automatically and objects registered. Fields declared in base test classes
-     * are also counted.
+     * Anonymous implementation could be simply declared as field:
+     * {@code @EnableSetup static TestEnvironmentSetup ext = ext -> ext.configOverrides("foo:1")}.
+     * Non-static fields may be used only when extension is registered with non-static field (static fields would be
+     * also counted in this case). All annotated fields will be detected automatically and objects registered. Fields
+     * declared in base test classes are also counted.
      */
     Class<? extends TestEnvironmentSetup>[] setup() default {};
 }

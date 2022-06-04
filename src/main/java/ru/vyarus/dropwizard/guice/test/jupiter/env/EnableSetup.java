@@ -17,9 +17,8 @@ import java.lang.annotation.Target;
  *  return smth;
  * }}</pre>
  * <p>
- * Target fields must be static fields. If non static or not
- * {@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup} filed annotated then error will be thrown
- * indicating incorrect usage.
+ * Field might be not static only if extension is registered in non-static field (application started for each test
+ * method), otherwise it must be static. Incorrect usage will be indicated with an exception.
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.test.EnableHook
