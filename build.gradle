@@ -82,14 +82,14 @@ github {
 
 mkdocs {
     publish {
-        docPath = '5.5.0'
+        docPath = '5.6.0'
         rootRedirect = true
         rootRedirectTo = 'latest'
         versionAliases = ['latest']
     }
     extras = [
-            'version': '5.5.0',
-            'ext': '5.5.0-1',
+            'version': '5.6.0',
+            'ext': '5.6.0-1',
             'dropwizard': project.dropwizard,
             'guice': project.guice
     ]
