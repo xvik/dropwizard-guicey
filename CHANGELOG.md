@@ -1,20 +1,26 @@
 * Update dropwizard to 2.1.0
-* Support providing config override value from 3rd party junit 5 extensions with new
-  configOverrideByExtension methods in extensions builders (field registration). 
-  3rd party extension must store required value in junit storage (no direct guicey classes calls required).
-* Changes to junit 5 test extension builders:
+* Test support objects changes:
+    - Add new interface TestEnvironmentSetup to simplify test environment setup
+        * In contrast to guicey hooks, setup objects used only in tests to replace the need of writing 
+          additional junit extensions (for example, to setup test db). It provides a simple way to
+          override application configuration (e.g. to specify credentials to just started db)
+        * Registration is the same as with hooks: annotation or inside extension builder and with 
+          field using new annotation @EnableSetup
+    - Hooks and setup objects configured in test are logged now in execution order and
+      with registration source hint
+    - @EnableHook fields might be declared with custom classes (not only raw hook interface)
+* Junit 5 extensions field registration (@RegisterExtension) changes 
+  - Application might be started per-test-method now (when extension registered in non-static field)
+      * In this case support objects might also be registered in non-static fields
+  - Add configOverrideByExtension method to read configuration override value
+    registered by 3rd party junit 5 extension (from junit extension store).
   - hooks(Class) method accepts multiple classes
-  - configOverrides(String...) aggregates multiple calls
-* Add new test extension for junit 5 extensions: TestEnvironmentSetup.
-  - In contrast to guicey hooks, this extension supposed to be used to prepare
-    test environment before test (e.g. create db). Previously custom junit 5 extensions
-    were required to perform such setup - new way is simpler.
-  - Registration the same as with hooks: annotation, with builder and with static field using
-    new annotation @EanbleSetup
-* @EnableHook fields might be declared as custom classes (not only raw hook interface)
-* Log hooks and setup objects configured in test in execution order 
-* Add per test method application startup support for junit extensions
-  (when extension registered in non-static @RegisterExtension field) 
+  - configOverrides(String...) now aggregates multiple calls
+
+Known issue:
+* Dropwizard replaced jackson afterburner with blackbird. On java 8 this
+  leads to a warning on startup that looks like exception. Everything works,
+  just a very confusing stacktrace on startup (https://github.com/xvik/dropwizard-guicey/discussions/226) 
 
 ### 5.5.0 (2022-03-30)
 * Test framework-agnostic utilities:
