@@ -1,3 +1,23 @@
+### [5.6.0](http://xvik.github.io/dropwizard-guicey/5.6.0) (2022-06-06)
+* Update dropwizard to 2.1.0
+* Test support objects changes:
+    - Add new interface TestEnvironmentSetup to simplify test environment setup
+        * In contrast to guicey hooks, setup objects used only in tests to replace the need of writing
+          additional junit extensions (for example, to setup test db). It provides a simple way to
+          override application configuration (e.g. to specify credentials to just started db)
+        * Registration is the same as with hooks: annotation or inside extension builder and with
+          field using new annotation @EnableSetup
+    - Hooks and setup objects configured in test are logged now in execution order and
+      with registration source hint
+    - @EnableHook fields might be declared with custom classes (not only raw hook interface)
+* Junit 5 extensions field registration (@RegisterExtension) changes
+    - Application might be started per-test-method now (when extension registered in non-static field)
+        * In this case support objects might also be registered in non-static fields
+    - Add configOverrideByExtension method to read configuration override value
+      registered by 3rd party junit 5 extension (from junit extension store).
+    - hooks(Class) method accepts multiple classes
+    - configOverrides(String...) now aggregates multiple calls
+
 ### [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0) (2022-03-30)
 * Test framework-agnostic utilities:
     - Add GuiceyTestSupport to simplify guice-only manual application runs
