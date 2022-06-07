@@ -114,6 +114,9 @@ public @interface TestGuiceyApp {
      * Non-static fields may be used only when extension is registered with non-static field (static fields would be
      * also counted in this case). All annotated fields will be detected automatically and objects registered. Fields
      * declared in base test classes are also counted.
+     *
+     * @return setup objects to use
+     * @see ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup
      */
     Class<? extends TestEnvironmentSetup>[] setup() default {};
 }
