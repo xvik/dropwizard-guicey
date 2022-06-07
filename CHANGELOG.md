@@ -1,3 +1,4 @@
+### 5.6.0 (2022-06-07)
 * Update dropwizard to 2.1.0
 * Test support objects changes:
     - Add new interface TestEnvironmentSetup to simplify test environment setup
