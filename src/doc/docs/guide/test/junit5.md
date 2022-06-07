@@ -66,12 +66,16 @@ Both extensions allow using injections directly in test fields.
 
 Extensions are compatible with [parallel execution](#parallel-execution) (no side effects).
 
-[Alternative declaration](#alternative-declaration) is possible. 
+[Alternative declaration](#alternative-declaration) might be used for [deferred configuration](#deferred-configuration)
+or [starting application for each test method](#start-application-by-test-method). 
 
-Pre-configured [http client](#client) might be used to calling tested application endpoints.
+Pre-configured [http client](#client) might be used for calling testing application endpoints.
 
 !!! note
-    You can use junit 5 extensions with [Spock 2](spock2.md) 
+    You can use junit 5 extensions with [Spock 2](spock2.md)
+
+Test environment might be prepared with [setup objects](#test-environment-setup)
+and application might be re-configured with [hooks](#application-test-modification)
     
 ## Testing core logic
 
@@ -472,6 +476,145 @@ In more complex cases, you can use custom implementations of `ConfigOverride`.
     (because all overrides eventually stored to system properties) and so it needs a way
     to set this prefix into custom `ConfigOverride` objects.
 
+### Configuration from 3rd party extensions
+
+If you have junit extension (e.g. which starts db for test) and you need 
+to apply configuration overrides from that extension, then you should simply
+store required values inside junit storage:
+
+```java
+public class ConfigExtension implements BeforeAllCallback {
+
+    @Override
+    public void beforeAll(ExtensionContext context) throws Exception {
+        // do something and then store value
+        context.getStore(ExtensionContext.Namespace.GLOBAL).put("ext1", 10);
+    }
+}
+```
+
+And map overrides directly from store using `configOverrideByExtension` method:
+
+```java
+@ExtendWith(ConfigExtension.class)
+public class SampleTest {
+    
+    @RegisterExtension
+    static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(App.class)
+            .configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "ext1")
+            .create();
+}
+```
+
+Here, value applied by extension under key `ext1` would be applied to configuration `ext1` path.
+If you need to use different configuration key:
+
+```java
+.configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "ext1", "key")
+```
+
+!!! tip
+    You can use [setup objects](#test-environment-setup) instead of custom junit extensions for test environment setup
+
+## Test environment setup
+
+It is often required to prepare test environment before starting dropwizard application.
+Normally, such cases require writing custom junit extensions. In order to simplify
+environment setup, guicey provides `TestEnviromentSetup` interface.
+
+Setup objects are called before application startup and could directly apply (through parameter)
+configuration overrides and hooks.
+
+For example, suppose you need to setup database before test:
+
+```java
+public class TestDbSetup implements TestEnvironmentSetup {
+
+    @Override
+    public Object setup(TestExtension extension) {
+        // pseudo code
+        Db db = DbFactory.startTestDb();
+        // register required configuration
+        extension
+                .configOverride("database.url", ()-> db.getUrl())
+                .configOverride("database.user", ()-> db.getUser())
+                .configOverride("database.password", ()-> db.getPassword);
+        // assuming object implements Closable
+        return db;
+    }
+}
+```
+
+It is not required to return anything, only if something needs to be closed after application shutdown:
+objects other than `Closable` (`AutoClosable`) or `org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource`
+simply ignored.
+This approach (only one method) simplifies interface usage with lambdas.
+
+Setup object might be declared in extension annotation: 
+
+```java
+@TestGuiceyApp(value=App.class, setup=TestDbSetup.class)
+```
+
+Or in manual registration:
+
+```java
+@RegisterExtension
+TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class)
+        // as class
+        .setup(TestDbSetup.class)
+        // or as instance
+        .setup(new TestDbSetup())
+```
+
+Or with lambda:
+
+```java
+.setup(ext -> {
+        Db db = new Db();
+        ext.configOverride("db.url", ()->db.getUrl())
+        return db;
+})
+```
+
+### Setup fields
+
+Alternatively, setup objects might be declared simply in test fields:
+
+```java
+@EnableSetup
+static TestEnvironmentSetup db = ext -> {
+            Db db = new Db();
+            ext.configOverride("db.url", ()->db.getUrl())
+            return db;
+        };
+```
+
+or 
+
+```java
+@EnableSetup
+static TestDbSetup db = new TestDbSetup()
+```
+
+This could be extremely useful if you need to unify setup logic for multiple tests,
+but use different extension declarations in test. In this case simply move field
+declaration into base test class:
+
+```java
+public abstract class BaseTest {
+    
+    @EnableSetup
+    static TestDbSetup db = new TestDbSetup();
+}
+```
+
+!!! note
+    To avoid confusion with guicey hooks: setup object required to prepare test environment before test (and apply
+    required configurations) whereas hooks is a general mechanism for application customization (not only in tests).
+    Setup objects are executed before application startup (before `DropwizardTestSupport` object creation) and hooks 
+    are executed by started application.
+
 ## Application test modification
 
 You can use [hooks to customize application](overview.md#configuration-hooks).
@@ -496,7 +639,7 @@ public class MyHook implements GuiceyConfigurationHook {}
 
 ### Hook fields
 
-Alternatively, you can declare hook directly in test static field:
+Alternatively, you can declare hook directly in test field:
 
 ```java
 @EnableHook
@@ -506,7 +649,7 @@ static GuiceyConfigurationHook HOOK = builder -> builder.modules(new DebugModule
 Any number of fields could be declared. The same way hook could be declared in base test class:
 
 ```java
-public class BaseTest {
+public abstract class BaseTest {
     
     // hook in base class
     @EnableHook
@@ -571,7 +714,7 @@ To avoid port collisions in dropwizard tests use [randomPorts option](#random-po
 
 ## Alternative declaration
 
-Both extensions could be declared in static fields:
+Both extensions could be declared in fields:
 
 ```java
 @RegisterExtension
@@ -584,7 +727,7 @@ static TestDropwizardAppExtension app = TestDropwizardAppExtension.forApp(AutoSc
         .create();
 ```
 
-The only difference with annotations is that you can declare hooks as lambdas directly 
+The only difference with annotations is that you can declare hooks and setup objects as lambdas directly 
 (still hooks in static fields will also work).
 
 ```java
@@ -593,7 +736,7 @@ static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(AutoScanApplic
         ...
 ```
 
-This alternative declaration is intended to be used in cases when guicey exensions need to be aligned with
+This alternative declaration is intended to be used in cases when guicey extensions need to be aligned with
 other 3rd party extensions: in junit you can order extensions declared with annotations (by annotation order)
 and extensions declared with `@RegisterExtension` (by declaration order). But there is no way
 to order extension registered with `@RegisterExtension` before annotation extension.
@@ -603,6 +746,44 @@ So if you have 3rd party extension which needs to be executed BEFORE guicey exte
 !!! note
     Junit 5 intentionally shuffle `@RegisterExtension` extensions order, but you can always order them with
     `@Order` annotation.
+
+### Start application by test method
+
+When you declare extensions with annotations or with `@RegisterExtension` in static fields,
+application would be started before all test methods and shut down after last test method.
+
+If you want to start application *for each test method* then delcare extension in non-static field:
+
+```java
+RegisterExtension
+TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class).create()
+
+// injection would be re-newed for each test method
+@Inject Bean bean;
+
+@Test
+public void test1() {
+    Assertions.assertEquals(0, bean.value);
+    // changing value to show that bean was reset between tests
+    bean.value = 10    
+}
+
+@Test
+public void test2() {
+    Assertions.assertEquals(0, bean.value);
+    bean.value = 10
+}
+```
+
+Also, `@EnableHook` and `@EnableSetup` fields might also be not static (but static fields would also work) in this case:
+
+```java
+@RegisterExtension
+TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class).create()
+
+@EnableSetup
+MySetup setup = new MySetup()
+```
 
 ## Junit nested classes
 
@@ -694,6 +875,10 @@ public class NestedTreeTest {
 ```
 
 This way nested tests allows you to use different extension configurations in one (root) class.
+
+Note that extension declaration with `@RegisterExtension` on the root class field would also
+be applied to nested tests. Even declaration in non-static field (start application for each method)
+would also work.
 
 ### Use interfaces to share tests
 
@@ -862,3 +1047,26 @@ public class MyExtension implements BeforeEachCallback {
 !!! warning
     There is no way in junit to order extensions, so you will have to make sure that your extension
     will be declared after guicey extension (`@TestGuiceyApp` or `@TestDropwizardApp`).
+
+There is intentionally no direct api for applying configuration overrides from
+3rd party extensions because it would be not obvious. Instead, you should always 
+declare overridden value in extension declaration. Either use instance getter:
+
+```java
+@RegisterExtension
+static MyExtension ext = new MyExtension()
+
+@RegisterExtension
+static TestGuiceyAppExtension dw = TestGuiceyAppExtension.forApp(App.class)
+        .configOverride("some.key", ()-> ext.getValue())
+        .create()
+```
+
+Or store value [inside junit store](#configuration-from-3rd-party-extensions) and then reference it:
+
+```java
+@RegisterExtension
+static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(App.class)
+        .configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "ext1")
+        .create();
+```

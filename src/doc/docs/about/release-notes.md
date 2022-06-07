@@ -4,7 +4,7 @@
     [5.5.0 release notes](http://xvik.github.io/dropwizard-guicey/5.5.0/about/release-notes/)
 
 * Dropwizard 2.1 compatibility
-* TJunit 5 extensions enhancements
+* Junit 5 extensions enhancements
 
 ## Dropwizard 2.1 compatibility
 
@@ -66,7 +66,7 @@ mapper.registerModule(new FuzzyEnumModule());
 The obvious solution would be to disable blackbird for java 8: there was [a discussion proposing this](https://github.com/dropwizard/dropwizard/discussions/5319), 
 but dropwizard maintainers did not wish to do it (I still hope they would change their mind).
 
-You **can't** hide this message [with logger configuration](https://github.com/dropwizard/dropwizard/discussions/5268#discussioncomment-2723607)
+You can't hide this message [with logger configuration](https://github.com/dropwizard/dropwizard/discussions/5268#discussioncomment-2723607)
 because it happens before logger initialization.
 
 The only way to hide it is to manually construct application `ObjectMapper`:
@@ -95,7 +95,7 @@ public void initialize(Bootstrap<Configuration> bootstrap) {
     bootstrap.setObjectMapper(mapper);
 ```
 
-As you can see this is basically a copy dropwizard [Jackson class](https://github.com/dropwizard/dropwizard/blob/release/2.1.x/dropwizard-jackson/src/main/java/io/dropwizard/jackson/Jackson.java#L58) 
+As you can see this is basically a copy of dropwizard [Jackson class](https://github.com/dropwizard/dropwizard/blob/release/2.1.x/dropwizard-jackson/src/main/java/io/dropwizard/jackson/Jackson.java#L58) 
 logic with one change.
 
 To use afterburner you'll need an additional dependency:
@@ -138,7 +138,7 @@ public class TestDbSetup implements TestEnvironmentSetup {
 }
 ```
 
-!!! tip "motivation"
+!!! tip "Motivation"
     Previously, additional junit extensions were required for such kind of setup,
     but there was a problem with configuration (because guicey generates system property
     key for each test and so it is not possible to configure application directly with
@@ -151,10 +151,12 @@ Only configuration overrides and guicey hooks are allowed for registration.
 
 !!! note
     To avoid confusion with guicey hooks: setup object required to prepare test environment before test (and apply
-    required configurations) whereas hooks is a general mechanism for application customization (not only in tests). 
+    required configurations) whereas hooks is a general mechanism for application customization (not only in tests).
+    Setup objects are executed before application startup (before `DropwizardTestSupport` object creation) and hooks
+    are executed by started application.
 
 It is often required not only to start/create something before test, but also
-propely stop/destroy it after. To do it simply return any `Closable` (or `AutoClosable`)
+properly stop/destroy it after. To do it simply return any `Closable` (or `AutoClosable`)
 and it would be called just after application shutdown.
 
 If no managed object required - you may return whatever else (even null), nothing would happen.
@@ -225,8 +227,7 @@ static MyHook hook = new MyHook();
 
 #### Start application for each test method
 
-Before it was impossible to start/stop application for each test method, but now 
-it is possible:
+It is now possible to start application before each test method:
 
 ```java
 @RegisterExtension
@@ -250,7 +251,7 @@ public void test2() {
 
 Note that field is **not static**. In this case extension would be activated for each method.
 
-Also, `@EnableHook` and `@EnableSetup` fields might also be not static (but static fields would also work):
+Also, `@EnableHook` and `@EnableSetup` fields might also be not static (but static fields would also work) in this case:
 
 ```java
 @RegisterExtension
@@ -275,7 +276,7 @@ public class ConfigExtension implements BeforeAllCallback {
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        // do somthing and then store value
+        // do something and then store value
         context.getStore(ExtensionContext.Namespace.GLOBAL).put("ext1", 10);
     }
 }
@@ -295,10 +296,10 @@ from store. Configuration path and storage key are the same here, but they could
 
 
 ```java
-.configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "key", "ext1")
+.configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "storage.key", "config.path")
 ```
 
-Apply configuration path 'key' value from junit storage under key `ext1`. 
+Apply configuration path 'config.path' value from junit storage under key `storage.key`. 
 
 
 #### Small builder improvements

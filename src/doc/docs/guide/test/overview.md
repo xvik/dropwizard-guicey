@@ -33,6 +33,13 @@ All extensions implemented with [DropwizardTestSupport](https://www.dropwizard.i
 
 Additionally, guicey provides several mechanisms at its core for application customization in tests (see below).
 
+## Setup objects
+
+Junit 5 extensions provide support for [setup objects](junit5.md#test-environment-setup):
+a simple way to prepare test environment and apply context configuration (e.g. start test database).
+
+Spock 2 test could also use setup objects.
+
 ## Configuration hooks
 
 Guicey provides [hooks mechanism](../hooks.md) to be able to modify
