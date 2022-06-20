@@ -49,8 +49,7 @@ public final class OReflectionHelper {
                         final JarFile jar = conn.getJarFile();
                         for (JarEntry e : Collections.list(jar.entries())) {
 
-                            if (e.getName().startsWith(iPackageName.replace('.', '/')) && e.getName().endsWith(CLASS_EXTENSION)
-                                    && !e.getName().contains("$")) {
+                            if (e.getName().startsWith(iPackageName.replace('.', '/')) && e.getName().endsWith(CLASS_EXTENSION)) {
                                 final String className = e.getName().replace("/", ".").substring(0, e.getName().length() - 6);
                                 classes.add(Class.forName(className, true, iClassLoader));
                             }
