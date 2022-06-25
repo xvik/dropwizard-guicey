@@ -18,6 +18,7 @@ import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
+import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
@@ -193,11 +194,13 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      * The only role of actual extension class is to configure {@link DropwizardTestSupport} object
      * according to annotation.
      *
+     * @param configPrefix configuration properties prefix
      * @param context extension context
      * @param setups  setup extensions resolved from fields (or empty list)
      * @return configured dropwizard test support object
      */
-    protected abstract DropwizardTestSupport<?> prepareTestSupport(ExtensionContext context,
+    protected abstract DropwizardTestSupport<?> prepareTestSupport(String configPrefix,
+                                                                   ExtensionContext context,
                                                                    List<TestEnvironmentSetup> setups);
 
     @Override
@@ -232,16 +235,19 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         final FieldSupport fields = new FieldSupport(context.getRequiredTestClass(), testInstance, tracker);
         fields.activateBaseHooks();
 
-        final DropwizardTestSupport<?> support = prepareTestSupport(context, fields.getSetupObjects());
+        // config overrides work through system properties so it is important to have unique prefixes
+        final String configPrefix = ConfigOverrideUtils.createPrefix(context);
+        final DropwizardTestSupport<?> support = prepareTestSupport(configPrefix, context, fields.getSetupObjects());
         // activate hooks declared in test static fields (so hooks declared in annotation goes before)
         fields.activateClassHooks();
         store.put(DW_SUPPORT, support);
         // for pure guicey tests client may seem redundant, but it can be used for calling other services
         store.put(DW_CLIENT, new ClientSupport(support));
 
-        tracker.logExtensionRegistrations();
-
+        tracker.enableDebugFromSystemProperty();
+        tracker.logUsedHooksAndSetupObjects(configPrefix);
         support.before();
+        tracker.logOverriddenConfigs(configPrefix);
     }
 
     private void stop(final ExtensionContext context) throws Exception {

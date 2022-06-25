@@ -1,8 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
 
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
@@ -15,10 +13,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Tracks registration of hooks and support objects during test initialization in order to log used
- * additions (to simplify applied objects tracking).
+ * additions (to simplify applied objects tracking). Also, tracks applied configuration overrides, but only after
+ * application start (the only way to show actually applied values).
  *
  * @author Vyacheslav Rusakov
  * @since 27.05.2022
@@ -26,12 +26,21 @@ import java.util.List;
 @SuppressWarnings({"checkstyle:MultipleStringLiterals", "PMD:AvoidDuplicateLiterals"})
 public class TestExtensionsTracker {
 
+    /**
+     * System property enables debug output for all used guicey extensions.
+     */
+    public static final String GUICEY_EXTENSIONS_DEBUG = "guicey.extensions.debug";
+    /**
+     * Enabled value for {@link #GUICEY_EXTENSIONS_DEBUG} system property.
+     */
+    public static final String DEBUG_ENABLED = "true";
     private static final ThreadLocal<Class<? extends TestEnvironmentSetup>> CONTEXT = new ThreadLocal<>();
+
+    @SuppressWarnings("checkstyle:VisibilityModifier")
+    public boolean debug;
 
     protected final List<String> extensionsSource = new ArrayList<>();
     protected final List<String> hooksSource = new ArrayList<>();
-
-    private final Logger logger = LoggerFactory.getLogger(TestExtensionsTracker.class);
 
     public static void setContextHook(final Class<? extends TestEnvironmentSetup> hook) {
         CONTEXT.set(hook);
@@ -90,11 +99,25 @@ public class TestExtensionsTracker {
     }
 
     /**
-     * Logs registered setup objects. Do nothing if no setup objects registered.
+     * In some cases it might be simpler to use system property to enable debug: {@code -Dguicey.extensions.debug=true}.
      */
-    public void logExtensionRegistrations() {
-        if (!extensionsSource.isEmpty() || !hooksSource.isEmpty()) {
-            final StringBuilder res = new StringBuilder(500).append("Guicey test extensions:\n\n");
+    public void enableDebugFromSystemProperty() {
+         if (!debug && DEBUG_ENABLED.equalsIgnoreCase(System.getProperty(GUICEY_EXTENSIONS_DEBUG))) {
+             debug = true;
+         }
+    }
+
+    /**
+     * Logs registered setup objects and hooks. Do nothing if no setup objects or hooks registered.
+     *
+     * @param configPrefix configuration prefix
+     */
+    @SuppressWarnings("PMD.SystemPrintln")
+    public void logUsedHooksAndSetupObjects(final String configPrefix) {
+        if (debug && (!extensionsSource.isEmpty() || !hooksSource.isEmpty())) {
+            // using config prefix to differentiate outputs for parallel execution
+            final StringBuilder res = new StringBuilder(500).append("\nGuicey test extensions (")
+                    .append(configPrefix).append(".):\n\n");
             if (!extensionsSource.isEmpty()) {
                 res.append("\tSetup objects = \n");
                 logTracks(res, extensionsSource);
@@ -105,8 +128,29 @@ public class TestExtensionsTracker {
                 logTracks(res, hooksSource);
             }
 
-            // note: at this stage dropwizard did not apply its logger config, so message would look different
-            logger.info(res.toString());
+            System.out.println(res);
+        }
+    }
+
+    /**
+     * Logs overridden configurations. Show values already applied to system properties.
+     *
+     * @param configPrefix configuration prefix
+     */
+    @SuppressWarnings("PMD.SystemPrintln")
+    public void logOverriddenConfigs(final String configPrefix) {
+        if (debug) {
+            final StringBuilder res = new StringBuilder();
+            for (Map.Entry<Object, Object> entry : System.getProperties().entrySet()) {
+                final String key = (String) entry.getKey();
+                if (key.startsWith(configPrefix)) {
+                    res.append(String.format("\t %20s = %s%n",
+                            key.substring(configPrefix.length() + 1), entry.getValue()));
+                }
+            }
+            if (res.length() > 0) {
+                System.out.println("\nApplied configuration overrides (" + configPrefix + ".): \n\n" + res);
+            }
         }
     }
 

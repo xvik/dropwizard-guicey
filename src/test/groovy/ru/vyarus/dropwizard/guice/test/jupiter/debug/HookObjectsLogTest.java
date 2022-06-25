@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.hook;
+package ru.vyarus.dropwizard.guice.test.jupiter.debug;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -10,6 +10,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
+import ru.vyarus.dropwizard.guice.test.TestSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
@@ -32,6 +33,7 @@ public class HookObjectsLogTest {
 
     @Test
     void checkSetupOutputForAnnotation() {
+        TestSupport.debugExtensions();
         EngineTestKit
                 .engine("junit-jupiter")
                 .configurationParameter("junit.jupiter.conditions.deactivate", "org.junit.*DisabledCondition")
@@ -46,26 +48,27 @@ public class HookObjectsLogTest {
 
         Assertions.assertTrue(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
                         .replaceAll("\\) {8,}\t", ")        \t")
-                .contains("Guicey test extensions:\n" +
+                .contains("Guicey test extensions (Test1.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@EnableSetup field Test1.setup\n" +
+                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test1.setup\n" +
                         "\n" +
                         "\tTest hooks = \n" +
-                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@EnableHook field Base.base1\n" +
-                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@EnableHook field Base.base2\n" +
-                        "\t\tExt1                         (r.v.d.g.t.j.h.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
-                        "\t\tExt2                         (r.v.d.g.t.j.h.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
-                        "\t\tExt3                         (r.v.d.g.t.j.h.HookObjectsLogTest)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 class\n" +
-                        "\t\tExt4                         (r.v.d.g.t.j.h.HookObjectsLogTest)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 class\n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@EnableHook field Test1.ext1\n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@EnableHook field Test1.ext2\n"));
+                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base1\n" +
+                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base2\n" +
+                        "\t\tExt1                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
+                        "\t\tExt2                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
+                        "\t\tExt3                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 class\n" +
+                        "\t\tExt4                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 class\n" +
+                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
+                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
+                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext1\n" +
+                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext2\n"));
     }
 
     @Test
     void checkSetupOutputForManualRegistration() {
+        TestSupport.debugExtensions();
         EngineTestKit
                 .engine("junit-jupiter")
                 .configurationParameter("junit.jupiter.conditions.deactivate", "org.junit.*DisabledCondition")
@@ -80,24 +83,24 @@ public class HookObjectsLogTest {
 
         Assertions.assertTrue(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
                 .replaceAll("\\) {8,}\t", ")        \t")
-                .contains("Guicey test extensions:\n" +
+                .contains("Guicey test extensions (Test2.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@EnableSetup field Test2.setup\n" +
+                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test2.setup\n" +
                         "\n" +
                         "\tTest hooks = \n" +
-                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@EnableHook field Base.base1\n" +
-                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@EnableHook field Base.base2\n" +
-                        "\t\tExt1                         (r.v.d.g.t.j.h.HookObjectsLogTest)        \t@RegisterExtension class\n" +
-                        "\t\tExt2                         (r.v.d.g.t.j.h.HookObjectsLogTest)        \t@RegisterExtension class\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@RegisterExtension instance\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@RegisterExtension instance\n" +
-                        "\t\tExt3                         (r.v.d.g.t.j.h.HookObjectsLogTest)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 class\n" +
-                        "\t\tExt4                         (r.v.d.g.t.j.h.HookObjectsLogTest)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 class\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@EnableHook field Test2.ext1\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.hook)        \t@EnableHook field Test2.ext2\n"));
+                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base1\n" +
+                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base2\n" +
+                        "\t\tExt1                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@RegisterExtension class\n" +
+                        "\t\tExt2                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@RegisterExtension class\n" +
+                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
+                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
+                        "\t\tExt3                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 class\n" +
+                        "\t\tExt4                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 class\n" +
+                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +
+                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +
+                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test2.ext1\n" +
+                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test2.ext2\n"));
     }
 
     public static class Base {

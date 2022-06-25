@@ -5,7 +5,9 @@ import io.dropwizard.testing.ConfigOverride;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Config override handling utils.
@@ -21,12 +23,23 @@ public final class ConfigOverrideUtils {
     /**
      * Unique prefix is important because config overrides works through system properties and without unique prefix
      * it would be impossible to use parallel tests.
+     * <p>
+     * Because extension might be used per-method, prefix must follow current test hierarchy (counting nested tests
+     * and executed test method).
      *
-     * @param type test class
+     * @param context test context
      * @return unique properties prefix to use for this test
      */
-    public static String createPrefix(final Class<?> type) {
-        return RenderUtils.getClassName(type);
+    public static String createPrefix(final ExtensionContext context) {
+        // extension per-method support
+        final Optional<Method> method = context.getTestMethod();
+        String prefix = method.map(Method::getName)
+                .orElseGet(() -> RenderUtils.getClassName(context.getRequiredTestClass()));
+        // nested tests support
+        if (context.getParent().isPresent() && context.getParent().get().getTestClass().isPresent()) {
+            prefix = createPrefix(context.getParent().get()) + "." + prefix;
+        }
+        return prefix;
     }
 
     /**

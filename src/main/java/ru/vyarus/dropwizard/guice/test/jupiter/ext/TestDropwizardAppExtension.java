@@ -98,7 +98,8 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
 
     @Override
     @SuppressWarnings("unchecked")
-    protected DropwizardTestSupport<?> prepareTestSupport(final ExtensionContext context,
+    protected DropwizardTestSupport<?> prepareTestSupport(final String configPrefix,
+                                                          final ExtensionContext context,
                                                           final List<TestEnvironmentSetup> setups) {
         if (config == null) {
             // Configure from annotation
@@ -123,8 +124,6 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         TestSetupUtils.executeSetup(config, context);
         HooksUtil.register(config.hooks);
 
-        // config overrides work through system properties so it is important to have unique prefixes
-        final String configPrefix = ConfigOverrideUtils.createPrefix(context.getRequiredTestClass());
         final DropwizardTestSupport support = new DropwizardTestSupport(config.app,
                 config.configPath,
                 configPrefix,
@@ -311,6 +310,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             res.restMapping = ann.restMapping();
             res.hooksFromAnnotation(ann.annotationType(), ann.hooks());
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
+            res.tracker.debug = ann.debug();
             return res;
         }
     }

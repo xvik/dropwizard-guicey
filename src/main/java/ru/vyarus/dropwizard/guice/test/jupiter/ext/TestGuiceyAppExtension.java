@@ -94,7 +94,8 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
     }
 
     @Override
-    protected DropwizardTestSupport<?> prepareTestSupport(final ExtensionContext context,
+    protected DropwizardTestSupport<?> prepareTestSupport(final String configPrefix,
+                                                          final ExtensionContext context,
                                                           final List<TestEnvironmentSetup> setups) {
         if (config == null) {
             // Configure from annotation
@@ -118,16 +119,15 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         TestSetupUtils.executeSetup(config, context);
         HooksUtil.register(config.hooks);
 
-        return create(config.app, config.configPath, context);
+        return create(configPrefix, config.app, config.configPath, context);
     }
 
     @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
     private <C extends Configuration> DropwizardTestSupport<C> create(
+            final String configPrefix,
             final Class<? extends Application> app,
             final String configPath,
             final ExtensionContext context) {
-        // config overrides work through system properties so it is important to have unique prefixes
-        final String configPrefix = ConfigOverrideUtils.createPrefix(context.getRequiredTestClass());
         // NOTE: DropwizardTestSupport.ServiceListener listeners would be called ONLY on start!
         return new GuiceyTestSupport<C>((Class<? extends Application<C>>) app,
                 configPath,
@@ -267,6 +267,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             res.configOverrides = ann.configOverride();
             res.hooksFromAnnotation(ann.annotationType(), ann.hooks());
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
+            res.tracker.debug = ann.debug();
             return res;
         }
     }

@@ -119,4 +119,22 @@ public @interface TestGuiceyApp {
      * @see ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup
      */
     Class<? extends TestEnvironmentSetup>[] setup() default {};
+
+    /**
+     * Enables debug output for extension: used setup objects, hooks and applied config overrides. Might be useful
+     * for concurrent tests too because each message includes configuration prefix (exactly pointing to context test
+     * or method).
+     * <p>
+     * Configuration overrides are printed after application startup (but before the test) because overridden values
+     * are resolved from system properties (applied by {@link io.dropwizard.testing.DropwizardTestSupport#before()}).
+     * If application startup failed, no configuration overrides would be printed (because dropwizard would immediately
+     * cleanup system properties). Using system properties is the only way to receive actually applied configuration
+     * value because property overrides might be implemented as value providers and potentially return different values.
+     * <p>
+     * System property might be used to enable debug mode: {@code -Dguicey.extensions.debug=true}. Or alias in code:
+     * {@link ru.vyarus.dropwizard.guice.test.TestSupport#debugExtensions()}.
+     *
+     * @return true to enable debug output, false otherwise
+     */
+    boolean debug() default false;
 }

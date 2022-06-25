@@ -6,6 +6,7 @@ import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.testing.DropwizardTestSupport;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 
 import javax.annotation.Nullable;
 
@@ -207,6 +208,16 @@ public final class TestSupport {
                                                             final @Nullable RunCallback<T> callback)
             throws Exception {
         return run(coreApp(appClass, configPath), callback);
+    }
+
+    /**
+     * Enables debug output for registered junit 5 extensions. Simple alias for:
+     * {@code System.setProperty("guicey.extensions.debug", "true")}.
+     * <p>
+     * Alternatively, debug could be enabled on extension directly with debug option.
+     */
+    public static void debugExtensions() {
+        System.setProperty(TestExtensionsTracker.GUICEY_EXTENSIONS_DEBUG, "true");
     }
 
     /**
