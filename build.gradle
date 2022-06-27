@@ -51,7 +51,7 @@ dependencyManagement {
 dependencies {
     provided 'org.junit.jupiter:junit-jupiter-api'
     provided 'io.dropwizard:dropwizard-testing'
-    provided 'com.github.spotbugs:spotbugs-annotations:4.7.0'
+    provided 'com.github.spotbugs:spotbugs-annotations:4.7.1'
     provided "org.glassfish.hk2:guice-bridge"
 
     implementation 'com.google.inject:guice'
