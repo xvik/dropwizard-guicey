@@ -5,7 +5,6 @@ import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -56,7 +55,7 @@ public final class TestSetupUtils {
                     ExtensionContext.Namespace.create(TestEnvironmentSetup.class));
             for (TestEnvironmentSetup support : config.extensions) {
                 // required to recognize hooks registered from setup objects
-                TestExtensionsTracker.setContextHook(support.getClass());
+                config.tracker.setContextHook(support.getClass());
                 final Object res = support.setup(builder);
                 // method could return anything, but only closable object would be tracked
                 if (res instanceof AutoCloseable || res instanceof ExtensionContext.Store.CloseableResource) {

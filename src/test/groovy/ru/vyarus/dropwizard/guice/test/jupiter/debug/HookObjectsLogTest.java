@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.debug;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +18,7 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.stream.SystemOut;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
@@ -46,8 +46,8 @@ public class HookObjectsLogTest {
         String output = out.getText().replace("\r", "");
         System.err.println(output);
 
-        Assertions.assertTrue(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
-                        .replaceAll("\\) {8,}\t", ")        \t")
+        assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
+                .replaceAll("\\) {8,}\t", ")        \t"))
                 .contains("Guicey test extensions (Test1.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
@@ -63,7 +63,7 @@ public class HookObjectsLogTest {
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext1\n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext2\n"));
+                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext2\n");
     }
 
     @Test
@@ -81,8 +81,8 @@ public class HookObjectsLogTest {
         String output = out.getText().replace("\r", "");
         System.err.println(output);
 
-        Assertions.assertTrue(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
-                .replaceAll("\\) {8,}\t", ")        \t")
+        assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
+                .replaceAll("\\) {8,}\t", ")        \t"))
                 .contains("Guicey test extensions (Test2.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
@@ -100,7 +100,7 @@ public class HookObjectsLogTest {
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test2.ext1\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test2.ext2\n"));
+                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test2.ext2\n");
     }
 
     public static class Base {

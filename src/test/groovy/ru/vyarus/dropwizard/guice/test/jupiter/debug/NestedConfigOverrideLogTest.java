@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.debug;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +12,7 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.stream.SystemOut;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
@@ -28,6 +28,7 @@ public class NestedConfigOverrideLogTest {
 
     @Test
     void checkSetupOutputForAnnotation() {
+        Test1.i = 1;
         TestSupport.debugExtensions();
         EngineTestKit
                 .engine("junit-jupiter")
@@ -41,24 +42,24 @@ public class NestedConfigOverrideLogTest {
         String output = out.getText().replace("\r", "");
         System.err.println(output);
 
-        Assertions.assertTrue(output.contains("Guicey test extensions (Test1.Inner.test1.):"));
-        Assertions.assertTrue(output.contains("Applied configuration overrides (Test1.Inner.test1.): \n" +
+        assertThat(output).contains("Guicey test extensions (Test1.Inner.test1.):");
+        assertThat(output).contains("Applied configuration overrides (Test1.Inner.test1.): \n" +
                 "\n" +
-                "\t                  foo = 1"));
+                "\t                  foo = 1");
 
-        Assertions.assertTrue(output.contains("Guicey test extensions (Test1.Inner.test2.):"));
-        Assertions.assertTrue(output.contains("Applied configuration overrides (Test1.Inner.test2.): \n" +
+        assertThat(output).contains("Guicey test extensions (Test1.Inner.test2.):");
+        assertThat(output).contains("Applied configuration overrides (Test1.Inner.test2.): \n" +
                 "\n" +
-                "\t                  foo = 2"));
+                "\t                  foo = 2");
     }
 
     public static class Test1 {
-        static int i = 1;
+        static int i;
 
         @RegisterExtension
         TestGuiceyAppExtension extension = TestGuiceyAppExtension.forApp(AutoScanApplication.class)
                 // setup object used only to check log
-                .setup(ext -> ext.configOverride("foo", ()-> String.valueOf(i++)))
+                .setup(ext -> ext.configOverride("foo", () -> String.valueOf(i++)))
                 .debug()
                 .create();
 

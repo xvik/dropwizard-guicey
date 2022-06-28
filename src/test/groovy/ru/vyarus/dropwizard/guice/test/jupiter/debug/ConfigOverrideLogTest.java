@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.debug;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +13,7 @@ import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.stream.SystemOut;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
@@ -41,9 +41,9 @@ public class ConfigOverrideLogTest {
         String output = out.getText().replace("\r", "");
         System.err.println(output);
 
-        Assertions.assertTrue(output.contains("Applied configuration overrides (Test1.): \n" +
+        assertThat(output).contains("Applied configuration overrides (Test1.): \n" +
                 "\n" +
-                "\t                  foo = 1"));
+                "\t                  foo = 1");
     }
 
     @Test
@@ -61,9 +61,9 @@ public class ConfigOverrideLogTest {
         String output = out.getText().replace("\r", "");
         System.err.println(output);
 
-        Assertions.assertTrue(output.contains("Applied configuration overrides (Test2.): \n" +
+        assertThat(output).contains("Applied configuration overrides (Test2.): \n" +
                 "\n" +
-                "\t                  foo = 2"));
+                "\t                  foo = 2");
     }
 
     @Disabled // prevent direct execution

@@ -34,7 +34,6 @@ public class TestExtensionsTracker {
      * Enabled value for {@link #GUICEY_EXTENSIONS_DEBUG} system property.
      */
     public static final String DEBUG_ENABLED = "true";
-    private static final ThreadLocal<Class<? extends TestEnvironmentSetup>> CONTEXT = new ThreadLocal<>();
 
     @SuppressWarnings("checkstyle:VisibilityModifier")
     public boolean debug;
@@ -42,8 +41,10 @@ public class TestExtensionsTracker {
     protected final List<String> extensionsSource = new ArrayList<>();
     protected final List<String> hooksSource = new ArrayList<>();
 
-    public static void setContextHook(final Class<? extends TestEnvironmentSetup> hook) {
-        CONTEXT.set(hook);
+    private Class<? extends TestEnvironmentSetup> contextHook;
+
+    public void setContextHook(final Class<? extends TestEnvironmentSetup> hook) {
+        contextHook = hook;
     }
 
     public final void extensionsFromFields(final List<Field> fields, final Object instance) {
@@ -102,9 +103,9 @@ public class TestExtensionsTracker {
      * In some cases it might be simpler to use system property to enable debug: {@code -Dguicey.extensions.debug=true}.
      */
     public void enableDebugFromSystemProperty() {
-         if (!debug && DEBUG_ENABLED.equalsIgnoreCase(System.getProperty(GUICEY_EXTENSIONS_DEBUG))) {
-             debug = true;
-         }
+        if (!debug && DEBUG_ENABLED.equalsIgnoreCase(System.getProperty(GUICEY_EXTENSIONS_DEBUG))) {
+            debug = true;
+        }
     }
 
     /**
@@ -157,8 +158,8 @@ public class TestExtensionsTracker {
     private String getHookContext() {
         // hook might be registered from manual extension in filed or within setup object and in this case
         // tracking setup object class
-        return CONTEXT.get() != null
-                ? RenderUtils.getClassName(CONTEXT.get()) : "@" + RegisterExtension.class.getSimpleName();
+        return contextHook != null
+                ? RenderUtils.getClassName(contextHook) : "@" + RegisterExtension.class.getSimpleName();
     }
 
     private void logTracks(final StringBuilder res, final List<String> tracks) {
