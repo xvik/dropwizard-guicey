@@ -67,9 +67,21 @@ The obvious solution would be to disable blackbird for java 8: there was [a disc
 but dropwizard maintainers did not wish to do it (I still hope they would change their mind).
 
 You can't hide this message [with logger configuration](https://github.com/dropwizard/dropwizard/discussions/5268#discussioncomment-2723607)
-because it happens before logger initialization.
+because it happens before logger initialization. 
 
-The only way to hide it is to manually construct application `ObjectMapper`:
+But you can configure logger manually:
+
+```java
+@Override
+public void initialize(Bootstrap<Configuration> bootstrap) {
+        ((LoggerContext)org.slf4j.LoggerFactory.getILoggerFactory())
+                            .getLogger(BlackbirdModule.class).setLevel(Level.ERROR);
+}
+```
+
+This way you'll hide the warning and continue using blackbird.
+
+The other way is to manually replace `ObjectMapper`:
 
 ```java
 @Override
@@ -98,7 +110,7 @@ public void initialize(Bootstrap<Configuration> bootstrap) {
 As you can see this is basically a copy of dropwizard [Jackson class](https://github.com/dropwizard/dropwizard/blob/release/2.1.x/dropwizard-jackson/src/main/java/io/dropwizard/jackson/Jackson.java#L58) 
 logic with one change.
 
-To use afterburner you'll need an additional dependency:
+Using this method you can bring back the afterburner, but you'll need an additional dependency:
 
 ```groovy
 implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.13.0'
