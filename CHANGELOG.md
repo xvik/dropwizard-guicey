@@ -1,3 +1,4 @@
+### 5.6.1 (2022-07-02)
 * Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)
 * Fix classpath scan recognition of inner static classes inside jars (#231)
 * Junit 5 extensions:

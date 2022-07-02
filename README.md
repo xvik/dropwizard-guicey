@@ -15,7 +15,7 @@ Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | 
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 2.1.0 [guice](https://github.com/google/guice) 5.1.0 integration.
+[Dropwizard](http://dropwizard.io/) 2.1.1 [guice](https://github.com/google/guice) 5.1.0 integration.
 
 Features:
 
@@ -55,19 +55,19 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>5.6.0</version>
+  <version>5.6.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:5.6.0'
+implementation 'ru.vyarus:dropwizard-guicey:5.6.1'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-2.1| [5.6.0](http://xvik.github.io/dropwizard-guicey/5.6.0)
+2.1| [5.6.1](http://xvik.github.io/dropwizard-guicey/5.6.1)
 2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
@@ -75,6 +75,16 @@ Dropwizard | Guicey
 0.9 | [3.3.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.9)
 0.8 | [3.1.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.8)
 0.7 | [1.1.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7)
+
+WARNING:
+Since dropwizard 2.1.0 [jackson blackbird](https://github.com/FasterXML/jackson-modules-base/tree/jackson-modules-base-2.13.3/blackbird#readme)
+[used by default](https://www.dropwizard.io/en/release-2.1.x/manual/upgrade-notes/upgrade-notes-2_1_x.html#jackson-blackbird-as-default) instead of [afterburner](https://github.com/FasterXML/jackson-modules-base/tree/jackson-modules-base-2.13.3/afterburner#readme).
+If you use **java 8** then apply afterburner dependency in order to switch into it:
+```
+implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.13.3'
+```
+(omit version if guicey or dropwizard BOM used).
+Without it you'll always see a nasty warning on startup (afterburner is better for java 8, but for java 9+ blackbird should be used)
 
 
 #### BOM
@@ -90,9 +100,9 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus:dropwizard-guicey:5.6.0')
+    implementation platform('ru.vyarus:dropwizard-guicey:5.6.1')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-dependencies:2.1.0')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:2.1.1')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
@@ -114,7 +124,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>dropwizard-guicey</artifactId>
-            <version>5.6.0</version>
+            <version>5.6.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -122,7 +132,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 

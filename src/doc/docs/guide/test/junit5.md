@@ -785,6 +785,82 @@ TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class).create()
 MySetup setup = new MySetup()
 ```
 
+## Debug
+
+Debug option could be activated on extensions in order to print
+
+registered setup objects and hooks (registered in test):
+
+```
+Guicey test extensions (Test2.):
+
+	Setup objects = 
+		HookObjectsLogTest$Test2$$Lambda$349/1644231115 (r.v.d.g.t.j.hook)               	@EnableSetup field Test2.setup
+
+	Test hooks = 
+		HookObjectsLogTest$Base$$Lambda$341/1127224355 (r.v.d.g.t.j.hook)                	@EnableHook field Base.base1
+		Ext1                         (r.v.d.g.t.j.h.HookObjectsLogTest)                  	@RegisterExtension class
+		HookObjectsLogTest$Test2$$Lambda$345/484589713 (r.v.d.g.t.j.hook)                	@RegisterExtension instance
+		Ext3                         (r.v.d.g.t.j.h.HookObjectsLogTest)                  	HookObjectsLogTest$Test2$$Lambda$349/1644231115 class
+		HookObjectsLogTest$Test2$$Lambda$369/1911152052 (r.v.d.g.t.j.hook)               	HookObjectsLogTest$Test2$$Lambda$349/1644231115 instance
+		HookObjectsLogTest$Test2$$Lambda$350/537066525 (r.v.d.g.t.j.hook)                	@EnableHook field Test2.ext1
+```
+
+which prints registered objects in the execution order and with registration source in the right.
+
+And applied configuration overrides:
+
+```
+Applied configuration overrides (Test1.): 
+
+	                  foo = 1
+```
+
+!!! important
+    Configuration overrides printed **after** application startup because they are
+    extracted from system properties (to guarantee exact used value), which is possible
+    to analyze only after `DropwizardTestSupport#before()` call.
+
+!!! note
+    Configuration prefix for system properties is shown in brackets: `(Test1.)`.
+    It simplifies investigation in case of concurrent tests.
+
+Debug could be activated by annotation:
+
+```java
+@TestGuiceyApp(value = App.class, debug = true)
+```
+
+By builder:
+
+```java
+@RegisterExtension
+TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App)
+        .debug()
+        .create()
+```
+
+By setup object:
+
+```java
+@EnableSetup
+static TestEnvironmentSetup db = ext -> {
+            ext.debug();
+        };
+```
+
+And using system property:
+
+```
+-Dguicey.extensions.debug=true
+```
+
+There is also a shortcut for enabling system property:
+
+```java
+TestSupport.debugExtensions()
+```
+
 ## Junit nested classes
 
 Junit natively supports [nested tests](https://junit.org/junit5/docs/current/user-guide/#writing-tests-nested).

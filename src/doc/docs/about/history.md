@@ -1,3 +1,14 @@
+### [5.6.1](http://xvik.github.io/dropwizard-guicey/5.6.1) (2022-07-02)
+* Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)
+* Fix classpath scan recognition of inner static classes inside jars (#231)
+* Junit 5 extensions:
+    - Fix parallel test methods support (configuration overrides were applied incorrectly)
+    - Add "debug" option: when enabled, prints registered setup objects, hooks and
+      applied configuration overrides
+        * Setup objects and hooks not printed by default as before, only when debug enabled
+        * Debug could be also enabled with system property -Dguicey.extensions.debug=true
+          or with alias TestSupport.debugExtensions()
+
 ### [5.6.0](http://xvik.github.io/dropwizard-guicey/5.6.0) (2022-06-07)
 * Update dropwizard to 2.1.0
 * Test support objects changes:
