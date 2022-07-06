@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.scanner.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -27,6 +29,7 @@ public final class OReflectionHelper {
     private OReflectionHelper() {
     }
 
+    @SuppressFBWarnings("DCN_NULLPOINTER_EXCEPTION")
     public static List<Class<?>> getClassesFor(final String iPackageName,
                                                final ClassLoader iClassLoader) throws ClassNotFoundException {
         // This will hold a list of directories matching the pckgname.

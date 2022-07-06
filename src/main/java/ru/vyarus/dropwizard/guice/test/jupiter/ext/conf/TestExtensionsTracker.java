@@ -23,7 +23,6 @@ import java.util.Map;
  * @author Vyacheslav Rusakov
  * @since 27.05.2022
  */
-@SuppressWarnings({"checkstyle:MultipleStringLiterals", "PMD:AvoidDuplicateLiterals"})
 public class TestExtensionsTracker {
 
     /**

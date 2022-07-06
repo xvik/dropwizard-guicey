@@ -64,7 +64,7 @@ public interface BindingInstaller {
      * @see ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils#getDeclarationSource(Binding)
      * for errors reporting
      */
-    default <T> void manualBinding(Binder binder, Class<T> type, Binding<T> binding) {
+    default <T> void manualBinding(final Binder binder, final Class<T> type, final Binding<T> binding) {
         // no actions by default
     }
 
@@ -78,7 +78,7 @@ public interface BindingInstaller {
      *              rendering ({@link Stage#TOOL})
      * @param type  extension class
      */
-    default void extensionBound(Stage stage, Class<?> type) {
+    default void extensionBound(final Stage stage, final Class<?> type) {
         // no actions by default
     }
 }

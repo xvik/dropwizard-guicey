@@ -58,7 +58,7 @@ public interface GuiceyBundle {
      *
      * @param bootstrap guicey bootstrap object
      */
-    default void initialize(GuiceyBootstrap bootstrap) {
+    default void initialize(final GuiceyBootstrap bootstrap) {
         // void
     }
 
@@ -79,7 +79,7 @@ public interface GuiceyBundle {
      * @param environment guicey environment object
      * @throws Exception if something goes wrong
      */
-    default void run(GuiceyEnvironment environment) throws Exception {
+    default void run(final GuiceyEnvironment environment) throws Exception {
         // void
     }
 }

@@ -111,7 +111,7 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
         for (FilterMapping mapping : handler.getServletHandler().getFilterMappings()) {
             final FilterHolder holder = handler.getServletHandler().getFilter(mapping.getFilterName());
             // single filter instance used for both contexts and so the name is also the same
-            final boolean isGuiceFilter = mapping.getFilterName().equals(GuiceWebModule.GUICE_FILTER);
+            final boolean isGuiceFilter = GuiceWebModule.GUICE_FILTER.equals(mapping.getFilterName());
             if ((isGuiceFilter && !config.isGuiceMappings())
                     || !isAllowed(holder.getClassName(), config)) {
                 continue;
