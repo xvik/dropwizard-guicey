@@ -16,7 +16,7 @@ plugins {
 sourceCompatibility = 1.8
 
 wrapper {
-    gradleVersion = '7.4'
+    gradleVersion = '7.5.1'
 }
 
 ext {
