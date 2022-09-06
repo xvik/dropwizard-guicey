@@ -40,7 +40,7 @@ dependencyManagement {
             exclude 'org.glassfish.hk2:hk2-api'
         }
         // SPOCK excluded from bom because it would complicate older version  usage in gradle
-        dependency 'ru.vyarus:spock-junit5:1.0.0'
+        dependency 'ru.vyarus:spock-junit5:1.0.1'
 
         dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
 
