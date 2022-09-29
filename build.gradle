@@ -60,7 +60,7 @@ dependencies {
     implementation 'ru.vyarus:generics-resolver:3.0.3'
 
     testImplementation 'ru.vyarus:spock-junit5'
-    testImplementation 'org.spockframework:spock-core:2.2-groovy-4.0'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
 
     testImplementation 'org.glassfish.jersey.inject:jersey-hk2'
     testImplementation 'io.dropwizard:dropwizard-auth'
