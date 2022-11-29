@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice.debug.report.jersey.util;
 
 import com.google.common.collect.ImmutableMap;
 import org.glassfish.jersey.internal.inject.InjectionResolver;
-import org.glassfish.jersey.jaxb.internal.AbstractCollectionJaxbProvider;
 import org.glassfish.jersey.server.internal.inject.ParamInjectionResolver;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.spi.internal.ValueParamProvider;
@@ -183,10 +182,22 @@ public final class ProviderRenderUtil {
         }
         params[pos] = RenderUtils.renderClassLine(provider, collectMarkers(ext, provider, isHkManaged, isLazy));
         // special case for message body readers and writers to identify collection mappers
-        if ("Object".equals(params[0]) && AbstractCollectionJaxbProvider.class.isAssignableFrom(provider)) {
+        if ("Object".equals(params[0]) && isAbstractCollectionJaxbProvider(provider)) {
             params[0] = "T[], Collection<T>";
         }
         return String.format(desc.format, params);
+    }
+
+    // AbstractCollectionJaxbProvider located inside (org.glassfish.jersey.media:jersey-media-jaxb:2.36)
+    // artifact, not present by default (but it is a transitive dependency for dropwizard-testing),
+    // and so can't be checked with isAssignableFrom
+    private static boolean isAbstractCollectionJaxbProvider(final Class provider) {
+        return (MessageBodyReader.class.isAssignableFrom(provider)
+                || MessageBodyWriter.class.isAssignableFrom(provider))
+                && GenericsResolver.resolve(provider).getGenericsInfo()
+                .getComposingTypes().stream()
+                .map(Class::getName)
+                .anyMatch("org.glassfish.jersey.jaxb.internal.AbstractCollectionJaxbProvider"::equals);
     }
 
     private static String renderMessageReaderWriter(final Class<?> ext,
