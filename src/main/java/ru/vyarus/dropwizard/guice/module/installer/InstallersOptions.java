@@ -87,7 +87,17 @@ public enum InstallersOptions implements Option {
      * But it MAY change application behaviour comparing to previous guicey versoins and so it might be desirable
      * to revert previous guicey behavior (and this is the main reason for option to exist).
      */
-    PrioritizeJerseyExtensions(Boolean.class, true);
+    PrioritizeJerseyExtensions(Boolean.class, true),
+    /**
+     * By default, jersey extensions would be recognized by type (e.g. {@link javax.ws.rs.ext.ExceptionMapper})
+     * (not only annotated as prvider). But, if you have complex extension hierarchies with non-abstract classes in
+     * the middle, classpath scan could recognize "middle" extensions and install them. Or there might be other
+     * situation when you need to avoid installation by type.
+     * <p>
+     * When disabled, only extensions annotated with {@link javax.ws.rs.ext.Provider} would be recognized
+     * (legacy guicey behaviour).
+     */
+    JerseyExtensionsRecognizedByType(Boolean.class, true);
 
     private Class<?> type;
     private Object value;

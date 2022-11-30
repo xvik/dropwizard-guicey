@@ -24,6 +24,7 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.DynamicFeature;
 import javax.ws.rs.ext.*;
+import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -32,7 +33,12 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
 
 /**
  * Jersey provider installer.
- * Looks for classes annotated with {@link javax.ws.rs.ext.Provider} and register bindings in HK context.
+ * Looks for jersey extension classes and classes annotated with {@link javax.ws.rs.ext.Provider} and register
+ * bindings in HK context.
+ * <p>
+ * Registration by extension type might be disabled using
+ * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsRecognizedByType} option
+ * (for legacy behaviour - register classed only annotated with {@link javax.ws.rs.ext.Provider}).
  * <p>
  * By default, user providers are prioritized (with {@link org.glassfish.jersey.internal.inject.Custom}
  * qualifier). This is the default dropwizard behaviour for direct provider registration with
@@ -89,7 +95,10 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
 
     @Override
     public boolean matches(final Class<?> type) {
-        return FeatureUtils.hasAnnotation(type, Provider.class);
+        return FeatureUtils.hasAnnotation(type, Provider.class)
+                || (!Modifier.isAbstract(type.getModifiers())
+                && (boolean) option(InstallersOptions.JerseyExtensionsRecognizedByType)
+                && EXTENSION_TYPES.stream().anyMatch(ext -> ext.isAssignableFrom(type)));
     }
 
     @Override
