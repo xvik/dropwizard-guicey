@@ -3,6 +3,7 @@
 * Jersey extensions might omit `@Provider` on known extension types (ExceptionMapper, MessageBodyReader, etc.). 
   Unifies usage with pure dropwizard (no additional `@Provider` annotation required). (#265)
     - New option InstallerOptions.JerseyExtensionsRecognizedByType could disable new behaviour
+* Support ModelProcessor jersey extension installation (#186)
 
 ### 5.6.1 (2022-07-02)
 * Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)

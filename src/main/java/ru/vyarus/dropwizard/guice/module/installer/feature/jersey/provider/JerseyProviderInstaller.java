@@ -9,6 +9,7 @@ import com.google.inject.Injector;
 import com.google.inject.Stage;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.internal.inject.InjectionResolver;
+import org.glassfish.jersey.server.model.ModelProcessor;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.spi.internal.ValueParamProvider;
 import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
@@ -88,7 +89,8 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
             DynamicFeature.class,
             ValueParamProvider.class,
             InjectionResolver.class,
-            ApplicationEventListener.class
+            ApplicationEventListener.class,
+            ModelProcessor.class
     );
 
     private final ProviderReporter reporter = new ProviderReporter();
@@ -146,7 +148,9 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
                     GenericsResolver.resolve(type).getGenericsInfo().getComposingTypes());
             if (!extensions.isEmpty()) {
                 for (Class<?> ext : extensions) {
-                    bindSpecificComponent(binder, injector, type, ext, hkExtension, forceSingleton, prioritize);
+                    bindSpecificComponent(binder, injector, type, ext, hkExtension, forceSingleton, prioritize,
+                            // model processor must be bound by instance (initialization specific)
+                            ModelProcessor.class.equals(ext));
                 }
             } else {
                 // no known extension found

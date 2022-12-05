@@ -4,6 +4,8 @@ import io.dropwizard.lifecycle.Managed
 import io.dropwizard.setup.Environment
 import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.AbstractTest
+import ru.vyarus.dropwizard.guice.module.context.option.Options
+import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
@@ -18,6 +20,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListe
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.WebServletInstaller
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller
+import ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSupport
 import ru.vyarus.dropwizard.guice.support.feature.*
 import ru.vyarus.dropwizard.guice.support.feature.abstr.*
 import ru.vyarus.dropwizard.guice.support.web.feature.DummyFilter
@@ -58,6 +61,9 @@ class InstallersTest extends AbstractTest {
 
         expect: "installer did not accept abstract class and correctly installs good one"
         def inst = installer.newInstance()
+        if (InstallerOptionsSupport.isAssignableFrom(installer)) {
+            ((InstallerOptionsSupport) inst).setOptions(new Options(new OptionsSupport()))
+        }
         inst.matches(goodBean)
         !inst.matches(denyBean)
         if (inst instanceof TypeInstaller)

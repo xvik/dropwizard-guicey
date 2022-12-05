@@ -99,7 +99,7 @@ public final class JerseyBinding {
 
     /**
      * Binds jersey {@link Supplier}. If bean is {@link JerseyManaged} then registered directly as
-     * factory. Otherwise register factory through special "lazy bridge" to delay guice factory bean instantiation.
+     * factory. Otherwise, register factory through special "lazy bridge" to delay guice factory bean instantiation.
      * Also registers factory directly (through wrapper to be able to inject factory by its type).
      * <p>
      * NOTE: since jersey 2.26 jersey don't use hk2 directly and so all HK interfaces replaced by java 8 interfaces.
@@ -138,21 +138,26 @@ public final class JerseyBinding {
      * <p> If type is {@link JerseyManaged}, binds directly.
      * Otherwise, use guice "bridge" factory to lazily bind type.</p>
      *
-     * @param binder        jersey binder
-     * @param injector      guice injector
-     * @param type          type which implements specific jersey interface or extends class
-     * @param specificType  specific jersey type (interface or abstract class)
-     * @param jerseyManaged true if bean must be managed by jersey, false to bind guice managed instance
-     * @param singleton     true to force singleton scope
-     * @param autoQualify   mimic default jersey behaviour by qualifying user providers with @Custom
+     * @param binder               jersey binder
+     * @param injector             guice injector
+     * @param type                 type which implements specific jersey interface or extends class
+     * @param specificType         specific jersey type (interface or abstract class)
+     * @param jerseyManaged        true if bean must be managed by jersey, false to bind guice managed instance
+     * @param singleton            true to force singleton scope
+     * @param autoQualify          mimic default jersey behaviour by qualifying user providers with @Custom
+     * @param instanceGuiceBinding true to bind by instance instead of factory "wrapper" (required for
+     *                             {@link org.glassfish.jersey.server.model.ModelProcessor} extensions due to
+     *                             initialization specifics)
      */
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public static void bindSpecificComponent(final AbstractBinder binder,
                                              final Injector injector,
                                              final Class<?> type,
                                              final Class<?> specificType,
                                              final boolean jerseyManaged,
                                              final boolean singleton,
-                                             final boolean autoQualify) {
+                                             final boolean autoQualify,
+                                             final boolean instanceGuiceBinding) {
         // resolve generics of specific type
         final GenericsContext context = GenericsResolver.resolve(type).type(specificType);
         final List<Type> genericTypes = context.genericTypes();
@@ -167,7 +172,9 @@ public final class JerseyBinding {
             optionalSingleton(
                     // @Priority mirroring is very important for providers
                     prioritize(
-                            binder.bindFactory(new GuiceComponentFactory<>(injector, type)).to(type).to(bindingType),
+                            (instanceGuiceBinding ? binder.bind(injector.getInstance(type))
+                                    : binder.bindFactory(new GuiceComponentFactory<>(injector, type)))
+                                    .to(type).to(bindingType),
                             autoQualify, type),
                     singleton);
         }
@@ -175,7 +182,7 @@ public final class JerseyBinding {
 
     /**
      * Used to bind jersey beans in guice context (lazily). Guice context is started first, so there is
-     * no way to bind instances. Instead "lazy bridge" installed, which will resolve target type on first call.
+     * no way to bind instances. Instead, "lazy bridge" installed, which will resolve target type on first call.
      * Guice is not completely started and direct injector lookup is impossible here, so lazy injector provider used.
      *
      * @param binder   guice binder

@@ -201,7 +201,7 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         protected void classpathExtensionsResolved(ClasspathExtensionsResolvedEvent event) {
             confChecks(event)
-            assert event.extensions.size() == 14
+            assert event.extensions.size() == 15
         }
 
         @Override
@@ -233,7 +233,7 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         protected void extensionsResolved(ExtensionsResolvedEvent event) {
             runChecks(event)
-            assert event.extensions.size() == 13
+            assert event.extensions.size() == 14
             assert event.disabled.size() == 3
         }
 

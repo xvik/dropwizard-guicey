@@ -75,7 +75,7 @@ class AutoScanModeTest extends AbstractTest {
         injector.getExistingBinding(Key.get(DummyLifeCycle))
 
         then: "jersey provider found"
-        info.getExtensions(JerseyProviderInstaller) as Set == [DummyExceptionMapper, DummyJerseyProvider, DummyOtherProvider] as Set
+        info.getExtensions(JerseyProviderInstaller) as Set == [DummyExceptionMapper, DummyJerseyProvider, DummyOtherProvider, DummyModelProcessor] as Set
         injector.getExistingBinding(Key.get(DummyExceptionMapper))
         injector.getExistingBinding(Key.get(DummyJerseyProvider))
 

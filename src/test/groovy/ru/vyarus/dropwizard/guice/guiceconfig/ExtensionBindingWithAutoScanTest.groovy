@@ -48,7 +48,7 @@ class ExtensionBindingWithAutoScanTest extends AbstractTest {
         info.getExtensions(LifeCycleInstaller) == [DummyLifeCycle]
 
         then: "jersey provider found"
-        info.getExtensions(JerseyProviderInstaller) as Set == [DummyExceptionMapper, DummyJerseyProvider, DummyOtherProvider] as Set
+        info.getExtensions(JerseyProviderInstaller) as Set == [DummyExceptionMapper, DummyJerseyProvider, DummyModelProcessor, DummyOtherProvider] as Set
 
         then: "feature found"
         info.getExtensions(JerseyFeatureInstaller) as Set == [DummyFeature, HK2DebugFeature] as Set

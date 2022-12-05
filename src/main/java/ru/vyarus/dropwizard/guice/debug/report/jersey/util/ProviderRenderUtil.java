@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.debug.report.jersey.util;
 import com.google.common.collect.ImmutableMap;
 import org.glassfish.jersey.internal.inject.InjectionResolver;
 import org.glassfish.jersey.server.internal.inject.ParamInjectionResolver;
+import org.glassfish.jersey.server.model.ModelProcessor;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.spi.internal.ValueParamProvider;
 import org.glassfish.jersey.spi.ExtendedExceptionMapper;
@@ -56,6 +57,7 @@ public final class ProviderRenderUtil {
             .put(InjectionResolver.class, new ExtDescriptor("Injection resolvers", INJECTION_FORMAT, 1))
             .put(ValueParamProvider.class, new ExtDescriptor("Param value providers", SIMPLE_FORMAT, 0))
             .put(ApplicationEventListener.class, new ExtDescriptor("Application event listeners", SIMPLE_FORMAT, 0))
+            .put(ModelProcessor.class, new ExtDescriptor("Model processors", SIMPLE_FORMAT, 0))
             .build();
 
     private ProviderRenderUtil() {
