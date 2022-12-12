@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionIdListener;
 import javax.servlet.http.HttpSessionListener;
+import java.util.Collections;
 import java.util.EventListener;
 import java.util.List;
 
@@ -127,5 +128,11 @@ public class WebListenerInstaller extends InstallerOptionsSupport
             }
         }
         return res;
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        return Collections.singletonList("implements " + EventListener.class.getSimpleName()
+                + " + @" + WebListener.class.getSimpleName());
     }
 }

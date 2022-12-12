@@ -26,6 +26,8 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.DynamicFeature;
 import javax.ws.rs.ext.*;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -72,6 +74,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
  * @see ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
  * @since 10.10.2014
  */
+@SuppressWarnings("PMD.ExcessiveImports")
 @Order(30)
 public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> implements
         BindingInstaller {
@@ -162,5 +165,17 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
     @Override
     public void report() {
         reporter.report();
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        final List<String> res = new ArrayList<>();
+        res.add("@" + Provider.class.getSimpleName() + " on class");
+        if (option(InstallersOptions.JerseyExtensionsRecognizedByType)) {
+            for (Class<?> ext : EXTENSION_TYPES) {
+                res.add("implements " + ext.getSimpleName());
+            }
+        }
+        return res;
     }
 }

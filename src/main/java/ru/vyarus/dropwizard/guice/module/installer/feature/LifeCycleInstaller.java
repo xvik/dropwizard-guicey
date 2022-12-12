@@ -10,6 +10,9 @@ import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Lifecycle objects installer.
  * Looks for classes implementing {@code org.eclipse.jetty.util.component.LifeCycle} and register them in environment.
@@ -36,5 +39,10 @@ public class LifeCycleInstaller implements FeatureInstaller, InstanceInstaller<L
     @Override
     public void report() {
         reporter.report();
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        return Collections.singletonList("implements " + LifeCycle.class.getSimpleName());
     }
 }

@@ -15,6 +15,8 @@ import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
 import javax.ws.rs.Path;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Jersey resource installer.
@@ -91,5 +93,11 @@ public class ResourceInstaller extends AbstractJerseyInstaller<Object> implement
             }
         }
         return matches;
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        return Arrays.asList("@" + Path.class.getSimpleName() + " on class",
+                "@" + Path.class.getSimpleName() + " on implemented interface");
     }
 }

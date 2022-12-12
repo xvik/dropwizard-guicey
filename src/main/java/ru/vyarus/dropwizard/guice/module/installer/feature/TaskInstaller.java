@@ -7,6 +7,9 @@ import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Dropwizard tasks installer.
  * Looks for classes extending {@code io.dropwizard.servlets.tasks.Task} and register in environment.
@@ -30,5 +33,10 @@ public class TaskInstaller implements FeatureInstaller, InstanceInstaller<Task> 
     @Override
     public void report() {
         // dropwizard logs installed tasks
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        return Collections.singletonList("extends " + Task.class.getSimpleName());
     }
 }

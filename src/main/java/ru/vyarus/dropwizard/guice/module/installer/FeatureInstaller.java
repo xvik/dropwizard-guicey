@@ -1,5 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.installer;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Installer serve two purposes: find extension on classpath and properly install it
  * (in dropwizard or somewhere else). Each installer should work with single feature.
@@ -50,4 +53,15 @@ public interface FeatureInstaller {
      * <p>Method may do nothing if reporting not required</p>
      */
     void report();
+
+    /**
+     * Method used by extensions help report
+     * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#printExtensionsHelp()}) to show what signs this exact
+     * installer recognize so user could better understand extensions support specifics.
+     *
+     * @return list of extension signs installer recognize
+     */
+    default List<String> getRecognizableSigns() {
+        return Collections.singletonList("<no information provided>");
+    }
 }

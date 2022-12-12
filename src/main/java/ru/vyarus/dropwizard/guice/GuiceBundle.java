@@ -774,6 +774,19 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
+         * Prints extensions usage help: all extension signs recognized by installers. Installers printed in
+         * execution order.
+         * <p>
+         * Not that custom installers must provide this information by overriding
+         * {@link ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller#getRecognizableSigns()}.
+         * 
+         * @return builder instance for chained calls
+         */
+        public Builder printExtensionsHelp() {
+            return listen(new ExtensionsHelpDiagnostic());
+        }
+
+        /**
          * Prints all registered (not disabled) installers with registration source. Useful to see all supported
          * extension types when multiple guicey bundles registered and available features become not obvious
          * from application class.
