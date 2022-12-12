@@ -28,6 +28,6 @@ public class GuiceAopDiagnostic extends GuiceyLifecycleAdapter {
     @Override
     protected void applicationStarted(final ApplicationStartedEvent event) {
         final String report = new GuiceAopMapRenderer(event.getInjector()).renderReport(config);
-        logger.info("Guice AOP map = {}", report);
+        logger.warn("Guice AOP map = {}", report);
     }
 }

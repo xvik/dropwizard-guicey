@@ -32,7 +32,7 @@ public class WebMappingsDiagnostic extends UniqueGuiceyLifecycleListener {
 
     @Override
     protected void applicationStarted(final ApplicationStartedEvent event) {
-        logger.info("Web mappings: {}",
+        logger.warn("Web mappings: {}",
                 new WebMappingsRenderer(event.getEnvironment(), event.getConfigurationInfo())
                         .renderReport(config));
     }

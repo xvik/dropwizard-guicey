@@ -101,7 +101,7 @@ public class ConfigurationDiagnostic extends GuiceyLifecycleAdapter {
         report("CONFIGURATION", new DiagnosticRenderer(info), config, res);
         report("CONFIGURATION TREE", new ContextTreeRenderer(info), treeConfig, res);
 
-        logger.info(res.toString());
+        logger.warn(res.toString());
     }
 
     @Override

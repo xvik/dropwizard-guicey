@@ -30,6 +30,6 @@ public class GuiceBindingsDiagnostic extends UniqueGuiceyLifecycleListener {
     @Override
     protected void applicationStarted(final ApplicationStartedEvent event) {
         final String report = new GuiceBindingsRenderer(event.getInjector()).renderReport(config);
-        logger.info("Guice bindings = {}", report);
+        logger.warn("Guice bindings = {}", report);
     }
 }

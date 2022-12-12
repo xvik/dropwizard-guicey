@@ -7,6 +7,7 @@
 * Add extensions help: .printExtensionsHelp() showing extension signs recognized by installers (in recognition order)
   - Custom installers could participate in report by overriding FeatureInstaller.getRecognizableSigns()
     (default interface method).
+* Change reports log level from INFO to WARN to comply with default dropwizard level
 
 ### 5.6.1 (2022-07-02)
 * Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)

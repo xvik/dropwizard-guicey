@@ -32,6 +32,6 @@ public class JerseyConfigDiagnostic extends UniqueGuiceyLifecycleListener {
         final Boolean guiceFirstMode = event.getOptions().get(InstallersOptions.JerseyExtensionsManagedByGuice);
         final String report = new JerseyConfigRenderer(event.getInjectionManager(), guiceFirstMode)
                 .renderReport(new JerseyConfig());
-        logger.info("Jersey configuration = {}", report);
+        logger.warn("Jersey configuration = {}", report);
     }
 }
