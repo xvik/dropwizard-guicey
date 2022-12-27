@@ -31,6 +31,11 @@ public abstract class ExtensionConfig {
 
     public final TestExtensionsTracker tracker;
 
+    public boolean reuseApp;
+    public Class<?> reuseDeclarationClass;
+    // description of declaration field or annotation (in declaration class)
+    public String reuseSource;
+
     public ExtensionConfig(final TestExtensionsTracker tracker) {
         this.tracker = tracker;
     }

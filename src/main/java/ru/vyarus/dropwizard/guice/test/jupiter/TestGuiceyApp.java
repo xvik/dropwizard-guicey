@@ -137,4 +137,21 @@ public @interface TestGuiceyApp {
      * @return true to enable debug output, false otherwise
      */
     boolean debug() default false;
+
+    /**
+     * By default, new application instance is started for each test. If you want to re-use the same application
+     * instance between several tests then declare application in BASE test class and enable reuse option: all tests,
+     * derived from this base class would use the same application instance.
+     * <p>
+     * You may have multiple base classes with reusable application declaration (different test hierarchies) - in
+     * this case, multiple applications would be kept running during tests execution.
+     * <p>
+     * All other extensions (without enabled re-use) will start new applications: take this into account to
+     * prevent port clashes with already started reusable apps.
+     * <p>
+     * Reused application instance would be stopped after all tests execution.
+     *
+     * @return true to reuse application, false to start application for each test
+     */
+    boolean reuseApplication() default false;
 }

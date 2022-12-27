@@ -192,6 +192,26 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
         return self();
     }
 
+    /**
+     * By default, new application instance is started for each test. If you want to re-use the same application
+     * instance between several tests then put extension declaration in BASE test class and enable reuse option: all
+     * tests derived from this base class would use the same application instance.
+     * <p>
+     * You may have multiple base classes with reusable application declaration (different test hierarchies) - in
+     * this case, multiple applications would be kept running during tests execution.
+     * <p>
+     * All other extensions (without enabled re-use) will start new applications: take this into account to
+     * prevent port clashes with already started reusable apps.
+     * <p>
+     * Reused application instance would be stopped after all tests execution.
+     *
+     * @return builder instance for chained calls
+     */
+    public T reuseApplication() {
+        cfg.reuseApp = true;
+        return self();
+    }
+
 
     @SuppressWarnings("unchecked")
     private T self() {

@@ -8,6 +8,10 @@
   - Custom installers could participate in report by overriding FeatureInstaller.getRecognizableSigns()
     (default interface method).
 * Change reports log level from INFO to WARN to comply with default dropwizard level
+* Support application reuse between tests (#269)
+  - new reuseApplication parameter in extensions enables reuse
+  - reusable application must be declared in base test class: all tests derived
+    from this base class would use the same application instance
 
 ### 5.6.1 (2022-07-02)
 * Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)

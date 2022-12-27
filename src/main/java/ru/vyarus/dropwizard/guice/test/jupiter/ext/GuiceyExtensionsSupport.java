@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
 import io.dropwizard.testing.DropwizardTestSupport;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.platform.commons.support.AnnotationSupport;
 import org.junit.platform.commons.util.ReflectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
@@ -17,9 +20,12 @@ import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
+import ru.vyarus.dropwizard.guice.test.util.ReusableAppUtils;
+import ru.vyarus.dropwizard.guice.test.util.StoredReusableApp;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
 import java.lang.reflect.Field;
@@ -61,20 +67,27 @@ import java.util.stream.Collectors;
  * @see TestParametersSupport for supported test parameters
  * @since 29.04.2020
  */
+@SuppressWarnings("PMD.ExcessiveImports")
 public abstract class GuiceyExtensionsSupport extends TestParametersSupport implements
         BeforeAllCallback,
         AfterAllCallback,
         BeforeEachCallback,
         AfterEachCallback {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GuiceyExtensionsSupport.class);
 
     // dropwizard support storage key (store visible for all relative tests)
     private static final String DW_SUPPORT = "DW_SUPPORT";
+    // storage key used to indicate reusable app usage instead of test-specific instance (even for first test)
+    private static final String DW_SUPPORT_GLOBAL = "DW_SUPPORT_GLOBAL";
     // ClientFactory instance
     private static final String DW_CLIENT = "DW_CLIENT";
     // indicator storage key of nested test (when extension activated in parent test)
     private static final String INHERITED_DW_SUPPORT = "INHERITED_DW_SUPPORT";
     // indicator storage key for case when application started for each method in test
     private static final String PER_METHOD_DW_SUPPORT = "PER_METHOD_DW_SUPPORT";
+
+    // required for proper initialization under parallel tests
+    private static final Object SYNC = new Object();
 
     protected final TestExtensionsTracker tracker;
 
@@ -84,12 +97,20 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
     @Override
     public void beforeAll(final ExtensionContext context) throws Exception {
+        synchronized (SYNC) {
+            // check if app is reusable and start it (or apply already started to context)
+            checkReusableApp(context);
+        }
+
         if (!lookupSupport(context).isPresent()) {
             start(context, null);
         } else {
             // in case of nested test, beforeAll for root extension will be called second time (because junit keeps
             // only one extension instance!) and this means we should not perform initialization, but we also must
             // prevent afterAll call for this nested test too and so need to store marker value!
+
+            // Also, this branch works with reusable apps when only first test starts new application and other
+            // tests just use already started instance (just like with nested classes)
 
             final ExtensionContext.Store localStore = getLocalExtensionStore(context);
             // just in case
@@ -188,15 +209,52 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         return Optional.ofNullable((ClientSupport) getExtensionStore(extensionContext).get(DW_CLIENT));
     }
 
+    /**
+     * Shortcut for testing if current test is using reusable application instead of test-specific application
+     * instance.
+     *
+     * @param extensionContext extension context
+     * @return true if global application instance used, false otherwise
+     */
+    public static boolean isReusableAppUsed(final ExtensionContext extensionContext) {
+        return getExtensionStore(extensionContext).get(DW_SUPPORT_GLOBAL) != null;
+    }
+
+    /**
+     * Close global application instance. Do nothing if no global application registered
+     * for provided base class.
+     * <p>
+     * Method exists to allow creation of custom extension like "@CloseAppAfterTest" to
+     * be able to close app at some points (next test would start a fresh app again).
+     *
+     * @param extensionContext extension context
+     * @param declarationClass base test class where reusable application declared
+     */
+    public static void closeReusableApp(final ExtensionContext extensionContext, final Class<?> declarationClass) {
+        ReusableAppUtils.closeGlobalApp(extensionContext, declarationClass);
+    }
+
     // --------------------------------------------------------- end of 3rd party extensions support
+
+    /**
+     * Returns existing config or parse it from annotation.
+     * <p>
+     * Separate configuration creation is important for application re-use logic when additional actions
+     * from {@link #prepareTestSupport(String, org.junit.jupiter.api.extension.ExtensionContext, java.util.List)}
+     * should be omitted in case if context already created.
+     *
+     * @param context extension context
+     * @return extension configuration
+     */
+    protected abstract ExtensionConfig getConfig(ExtensionContext context);
 
     /**
      * The only role of actual extension class is to configure {@link DropwizardTestSupport} object
      * according to annotation.
      *
      * @param configPrefix configuration properties prefix
-     * @param context extension context
-     * @param setups  setup extensions resolved from fields (or empty list)
+     * @param context      extension context
+     * @param setups       setup extensions resolved from fields (or empty list)
      * @return configured dropwizard test support object
      */
     protected abstract DropwizardTestSupport<?> prepareTestSupport(String configPrefix,
@@ -229,13 +287,60 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                 .create(GuiceyExtensionsSupport.class, context.getRequiredTestClass()));
     }
 
+    private void checkReusableApp(final ExtensionContext context) throws Exception {
+        final ExtensionConfig config = getConfig(context);
+        if (config.reuseApp) {
+            final String source = config.reuseSource;
+            final StoredReusableApp globalApp = ReusableAppUtils.getGlobalApp(context, config.reuseDeclarationClass);
+            final ExtensionContext.Store store = getExtensionStore(context);
+            if (globalApp != null) {
+                Preconditions.checkState(globalApp.getSource().equals(config.reuseSource),
+                        "Can't apply reusable app instance from %s in test %s because different reusable app (%s)"
+                                + "is already registered", source, context.getRequiredTestClass().getSimpleName(),
+                        globalApp.getSource());
+                // highlight ignored extensions (@EnableSetup, @EnableSetup)
+                new FieldSupport(context.getRequiredTestClass(), null, null)
+                        .hintIgnoredFields(config.reuseDeclarationClass);
+                if (store.get(DW_SUPPORT) == null) {
+                    // global app already started, simply use it for current test (extension treat this case the same
+                    // way as with nested test)
+                    store.put(DW_SUPPORT, globalApp.getSupport());
+                    // new client created for each test
+                    store.put(DW_CLIENT, globalApp.getClient());
+                } else {
+                    // DW_SUPPORT might be available at this point in nested tests
+                    Preconditions.checkState(store.get(DW_SUPPORT).equals(globalApp.getSupport()),
+                            "Can't apply reusable app instance from %s in test %s context because it already contains"
+                                    + " started app", source, context.getRequiredTestClass().getSimpleName());
+                }
+            } else {
+                // start new application and apply it into global store
+                start(context, null);
+                // global context would close after all tests and would automatically call app close
+                ReusableAppUtils.registerGlobalApp(context, new StoredReusableApp(
+                        config.reuseDeclarationClass, source, lookupSupport(context).get(),
+                        lookupClient(context).get()));
+            }
+            // exists in nested tests
+            if (store.get(DW_SUPPORT_GLOBAL) == null) {
+                // simply to indicate reusable app usage
+                store.put(DW_SUPPORT_GLOBAL, true);
+            }
+        }
+    }
+
     private void start(final ExtensionContext context, final Object testInstance) throws Exception {
+        // trigger config resolution from annotation and validate reusable app usage correctness for per-method
+        final ExtensionConfig config = getConfig(context);
         final ExtensionContext.Store store = getExtensionStore(context);
         // find fields annotated with @EnableHook and @EnableSetup
         final FieldSupport fields = new FieldSupport(context.getRequiredTestClass(), testInstance, tracker);
+        if (config.reuseApp) {
+            fields.hintIncorrectFieldsUsage(config.reuseDeclarationClass);
+        }
         fields.activateBaseHooks();
 
-        // config overrides work through system properties so it is important to have unique prefixes
+        // config overrides work through system properties, so it is important to have unique prefixes
         final String configPrefix = ConfigOverrideUtils.createPrefix(context);
         final DropwizardTestSupport<?> support = prepareTestSupport(configPrefix, context, fields.getSetupObjects());
         // activate hooks declared in test static fields (so hooks declared in annotation goes before)
@@ -274,6 +379,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      * Setup extensions from fields are always registered after all other.
      */
     private static class FieldSupport {
+        private final Class<?> testClass;
         // test instance in application per test method case (beforeEach)
         private final Object instance;
         private final TestExtensionsTracker tracker;
@@ -282,6 +388,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         private final List<Field> extensionFields;
 
         FieldSupport(final Class<?> testClass, final Object instance, final TestExtensionsTracker tracker) {
+            this.testClass = testClass;
             this.instance = instance;
             this.tracker = tracker;
             // find and validate all fields
@@ -293,6 +400,42 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             ownHookFields.removeAll(parentHookFields);
 
             extensionFields = findSetupFields(testClass, includeInstanceFields);
+        }
+
+        /**
+         * Extensions like {@link ru.vyarus.dropwizard.guice.test.EnableHook} and
+         * {@link ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup} might be declared in test class
+         * or on one of base classes, extending class with reusable app declaration. Such extensions would be
+         * used for reusable app startup, when this exact class is called first, but would be ignored when
+         * application would be started from different class.
+         * <p>
+         * This usage is allowed for edge cases (for some debug), but, generally, this is incorrect usage.
+         *
+         * @param declarationClass base class where reusable app is declared
+         */
+        public void hintIncorrectFieldsUsage(final Class<?> declarationClass) {
+            final List<String> wrong = findNonBaseFields(declarationClass);
+            if (!wrong.isEmpty()) {
+                LOGGER.warn("The following extensions were used during reusable app startup in test {}, but they did "
+                                + "not belong to base class {} hierarchy where reusable app is declared and so would "
+                                + "be ignored if reusable app would start by different test: \n{}",
+                        testClass.getName(), declarationClass.getName(), Joiner.on("\n").join(wrong));
+            }
+        }
+
+        /**
+         * If application was already started by different tests then all extension fields not declared not in
+         * base class would be ignored (application already started).
+         *
+         * @param declarationClass base class where reusable app is declared
+         */
+        public void hintIgnoredFields(final Class<?> declarationClass) {
+            final List<String> wrong = findNonBaseFields(declarationClass);
+            if (!wrong.isEmpty()) {
+                LOGGER.warn("The following extensions were ignored in test {} because reusable application was "
+                                + "already started by another test: \n{}",
+                        testClass.getName(), Joiner.on("\n").join(wrong));
+            }
         }
 
         public List<TestEnvironmentSetup> getSetupObjects() {
@@ -310,6 +453,25 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             // activate all remaining hooks (in test class)
             activateFieldHooks(ownHookFields);
             tracker.hooksFromFields(ownHookFields, false, instance);
+        }
+
+        private List<String> findNonBaseFields(final Class<?> declarationClass) {
+            final List<String> wrong = new ArrayList<>();
+            checkFieldsDeclaration(wrong, parentHookFields, declarationClass);
+            checkFieldsDeclaration(wrong, ownHookFields, declarationClass);
+            checkFieldsDeclaration(wrong, extensionFields, declarationClass);
+            return wrong;
+        }
+
+        private void checkFieldsDeclaration(final List<String> wrong,
+                                            final List<Field> fields,
+                                            final Class<?> baseClass) {
+            for (Field field : fields) {
+                if (!field.getDeclaringClass().isAssignableFrom(baseClass)) {
+                    wrong.add("\t" + field.getDeclaringClass().getName() + "." + field.getName()
+                            + " (" + field.getType().getSimpleName() + ")");
+                }
+            }
         }
 
         private void activateFieldHooks(final List<Field> fields) {

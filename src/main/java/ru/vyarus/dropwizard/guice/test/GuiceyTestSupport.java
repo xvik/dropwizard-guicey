@@ -26,8 +26,6 @@ import java.util.function.Function;
  */
 public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSupport<C> {
 
-    private static final ThreadLocal<TestCommand> COMMAND = new ThreadLocal<>();
-
     public GuiceyTestSupport(final Class<? extends Application<C>> applicationClass,
                              final @Nullable String configPath,
                              final ConfigOverride... configOverrides) {
@@ -101,22 +99,22 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
     @Override
     public void after() {
         super.after();
-        final TestCommand cmd = COMMAND.get();
+        final TestCommand<C> cmd = ((CmdProvider<C>) commandInstantiator).command;
         if (cmd != null) {
-            COMMAND.remove();
             cmd.stop();
         }
     }
 
+    @SuppressWarnings("checkstyle:VisibilityModifier")
     static class CmdProvider<C extends Configuration> implements Function<Application<C>, Command> {
+
+        public TestCommand<C> command;
 
         @Override
         public Command apply(final Application<C> application) {
-            Preconditions.checkState(GuiceyTestSupport.COMMAND.get() == null,
-                    "Command already bound in thread");
-            final TestCommand<C> cmd = new TestCommand<>(application);
-            GuiceyTestSupport.COMMAND.set(cmd);
-            return cmd;
+            Preconditions.checkState(command == null, "Command already created");
+            command = new TestCommand<>(application);
+            return command;
         }
     }
 }

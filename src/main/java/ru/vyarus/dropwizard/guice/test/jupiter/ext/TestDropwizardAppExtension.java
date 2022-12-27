@@ -19,10 +19,13 @@ import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.RandomPortsListener;
+import ru.vyarus.dropwizard.guice.test.util.ReusableAppUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
+import java.lang.reflect.AnnotatedElement;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * {@link TestDropwizardApp} junit 5 extension implementation. Normally, extension should be activated with annotation,
@@ -97,18 +100,16 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    protected DropwizardTestSupport<?> prepareTestSupport(final String configPrefix,
-                                                          final ExtensionContext context,
-                                                          final List<TestEnvironmentSetup> setups) {
+    protected ExtensionConfig getConfig(final ExtensionContext context) {
         if (config == null) {
             // Configure from annotation
             // Note that it is impossible to have both manually build config and annotation because annotation
             // will be processed first and manual registration will be simply ignored
 
+            final Optional<AnnotatedElement> element = context.getElement();
             final TestDropwizardApp ann = AnnotationSupport
                     // also search annotation inside other annotations (meta)
-                    .findAnnotation(context.getElement(), TestDropwizardApp.class).orElse(null);
+                    .findAnnotation(element, TestDropwizardApp.class).orElse(null);
 
             // catch incorrect usage by direct @ExtendWith(...)
             Preconditions.checkNotNull(ann, "%s annotation not declared: can't work without configuration, "
@@ -117,8 +118,23 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
                     RegisterExtension.class.getSimpleName());
 
             config = Config.parse(ann, tracker);
+            if (config.reuseApp) {
+                // identify annotation extension source (class) and validate declaration correctness
+                ReusableAppUtils.registerAnnotation(context.getRequiredTestClass(), ann, config);
+            }
         }
+        if (config.reuseApp && config.reuseSource == null) {
+            // identify manual extension source (field) and validate declaration correctness
+            ReusableAppUtils.registerField(context.getRequiredTestClass(), this, config);
+        }
+        return config;
+    }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    protected DropwizardTestSupport<?> prepareTestSupport(final String configPrefix,
+                                                          final ExtensionContext context,
+                                                          final List<TestEnvironmentSetup> setups) {
         // setups from @EnableSetup fields go last
         config.extensions.addAll(setups);
         TestSetupUtils.executeSetup(config, context);
@@ -311,6 +327,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             res.hooksFromAnnotation(ann.annotationType(), ann.hooks());
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
             res.tracker.debug = ann.debug();
+            res.reuseApp = ann.reuseApplication();
             return res;
         }
     }
