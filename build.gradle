@@ -11,6 +11,7 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.44.0'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'ru.vyarus.mkdocs' version '3.0.0'
+    id "org.cyclonedx.bom" version "1.7.3"
 }
 
 sourceCompatibility = 1.8
@@ -119,6 +120,25 @@ javaLib {
     // put resolved dependencies versions
     pom.forceVersions()
 }
+
+// SBOM
+cyclonedxBom {
+    includeConfigs = ["runtimeClasspath"]
+    destination = file("build/reports")
+    outputName = "bom"
+    outputFormat = "all"
+}
+publishing.publications.maven {
+    artifact(file('build/reports/bom.json')) {
+        classifier = 'cyclonedx'
+        builtBy cyclonedxBom
+    }
+    artifact(file('build/reports/bom.xml')) {
+        classifier = 'cyclonedx'
+        builtBy cyclonedxBom
+    }
+}
+
 
 nexusPublishing {
     repositories {

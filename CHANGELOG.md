@@ -12,6 +12,7 @@
   - new reuseApplication parameter in extensions enables reuse
   - reusable application must be declared in base test class: all tests derived
     from this base class would use the same application instance
+* Add SBOM (json and xml with cyclonedx classifier)
 
 ### 5.6.1 (2022-07-02)
 * Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)
