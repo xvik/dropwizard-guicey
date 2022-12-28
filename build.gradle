@@ -11,7 +11,7 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.44.0'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'ru.vyarus.mkdocs' version '3.0.0'
-    id "org.cyclonedx.bom" version "1.7.3"
+    id 'org.cyclonedx.bom' version '1.7.3'
 }
 
 sourceCompatibility = 1.8
@@ -84,14 +84,14 @@ github {
 
 mkdocs {
     publish {
-        docPath = '5.6.1'
+        docPath = '5.7.0'
         rootRedirect = true
         rootRedirectTo = 'latest'
         versionAliases = ['latest']
     }
     extras = [
-            'version': '5.6.1',
-            'ext': '5.6.1-1',
+            'version': '5.7.0',
+            'ext': '5.7.0-1',
             'dropwizard': project.dropwizard,
             'guice': project.guice
     ]

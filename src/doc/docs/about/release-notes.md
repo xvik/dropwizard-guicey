@@ -1,319 +1,196 @@
 # 5.6.1 Release Notes
 
 !!! summary ""
-    [5.5.0 release notes](http://xvik.github.io/dropwizard-guicey/5.5.0/about/release-notes/)
+    [5.6.0 release notes](http://xvik.github.io/dropwizard-guicey/5.6.0/about/release-notes/)
 
-* Dropwizard 2.1 compatibility
-* Junit 5 extensions enhancements
+* Update to dropwizard 2.1.4
+* Guicey reports use WARN level now instead of INFO
+* @Provide not required for jersey extensions
+* ModelProcessor jersey extension support
+* Extensions help
+* Support application instance reuse between tests
+* SBOM
 
-## Dropwizard 2.1 compatibility
+## @Provide not required for jersey extensions
 
-Release upgrades guicey to [dropwizard 2.1.1](https://github.com/dropwizard/dropwizard/releases/tag/v2.1.1)
+It is *not required* anymore to put `@Provide` annotation on extensions implementing:
 
-[Dropwizard upgrade notes](https://www.dropwizard.io/en/latest/manual/upgrade-notes/upgrade-notes-2_1_x.html#upgrade-notes-for-dropwizard-2-1-x)
+* ExceptionMapper
+* ParamConverterProvider
+* ContextResolver
+* MessageBodyReader
+* MessageBodyWriter
+* ReaderInterceptor
+* WriterInterceptor
+* ContainerRequestFilter
+* ContainerResponseFilter
+* DynamicFeature
+* ValueParamProvider
+* InjectionResolver
+* ApplicationEventListener
+* ModelProcessor
 
-### Java 8 issue
+!!! note
+    Existing extensions with `@Provide` annotation would work as before, annotation is just optional now.
 
-Dropwizard 2.1 use [jackson blackbird](https://github.com/FasterXML/jackson-modules-base/tree/jackson-modules-base-2.13.3/blackbird#readme) [by default now](https://www.dropwizard.io/en/release-2.1.x/manual/upgrade-notes/upgrade-notes-2_1_x.html#jackson-blackbird-as-default)
-instead of [afterburner](https://github.com/FasterXML/jackson-modules-base/tree/jackson-modules-base-2.13.3/afterburner#readme).
-On java 8 you'll see the following warning on application startup:
-
-```
-WARN  [2022-06-06 16:39:24,946] com.fasterxml.jackson.module.blackbird.BlackbirdModule: Unable to find Java 9+ MethodHandles.privateLookupIn.  Blackbird is not performing optimally!
-! java.lang.NoSuchMethodError: java.lang.invoke.MethodHandles.privateLookupIn(Ljava/lang/Class;Ljava/lang/invoke/MethodHandles$Lookup;)Ljava/lang/invoke/MethodHandles$Lookup;
-! at java.lang.invoke.MethodHandleNatives.resolve(Native Method)
-! at java.lang.invoke.MemberName$Factory.resolve(MemberName.java:975)
-! at java.lang.invoke.MemberName$Factory.resolveOrFail(MemberName.java:1000)
-! ... 86 common frames omitted
-! Causing: java.lang.NoSuchMethodException: no such method: java.lang.invoke.MethodHandles.privateLookupIn(Class,Lookup)Lookup/invokeStatic
-! at java.lang.invoke.MemberName.makeAccessException(MemberName.java:871)
-! at java.lang.invoke.MemberName$Factory.resolveOrFail(MemberName.java:1003)
-! at java.lang.invoke.MethodHandles$Lookup.resolveOrFail(MethodHandles.java:1386)
-! at java.lang.invoke.MethodHandles$Lookup.findStatic(MethodHandles.java:780)
-! at com.fasterxml.jackson.module.blackbird.util.ReflectionHack$Java9Up.init(ReflectionHack.java:39)
-! at com.fasterxml.jackson.module.blackbird.util.ReflectionHack$Java9Up.<clinit>(ReflectionHack.java:34)
-...
-```
-
-To fix this simply add afterburner jar into classpath and *it would be used automatically* instead of blackbird:
-
-```
-implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.13.3'
-```
-
-(you may omit version if guicey or dropwizard BOM used)
-
-## Junit 5 extensions enhancements
-
-### Test support objects
-
-#### Environment setup
-
-In order to simplify environment setup in tests, new interface added: 
+New behaviour may be switched off with a new option:
 
 ```java
-public interface TestEnvironmentSetup {
-    Object setup(TestExtension extension);
-}
+GuiceBundle.builder()
+   .option(InstallersOptions.JerseyExtensionsRecognizedByType, false)
 ```
 
-For example, it might be used to setup test database:
+Switching off might be required if you want to avoid not annotated extensions resolution by 
+classpath scan (edge case).
+
+## ModelProcessor jersey extension support
+
+Extension implementing `org.glassfish.jersey.server.model.ModelProcessor` would be recognized and installed now
+(classpath scan or manual installation). Note that `@Provide` annotation is not required for recognition.
 
 ```java
-public class TestDbSetup implements TestEnvironmentSetup {
+public class MyModelProcessor implements ModelProcessor { ... }
 
+```
+
+## Extensions help
+
+New report showing recognized extension signs for registered installers:
+
+```java
+GuiceBundle.builder()
+        .printExtensionsHelp()
+```
+
+```
+WARN  [2022-12-28 14:57:01,445] ru.vyarus.dropwizard.guice.debug.ExtensionsHelpDiagnostic: Recognized extension signs
+
+    lifecycle            (r.v.d.g.m.i.f.LifeCycleInstaller)     
+        implements LifeCycle
+
+    managed              (r.v.d.g.m.i.feature.ManagedInstaller) 
+        implements Managed
+
+    jerseyfeature        (r.v.d.g.m.i.f.j.JerseyFeatureInstaller) 
+        implements Feature
+
+    jerseyprovider       (r.v.d.g.m.i.f.j.p.JerseyProviderInstaller) 
+        @Provider on class
+        implements ExceptionMapper
+        implements ParamConverterProvider
+        implements ContextResolver
+        implements MessageBodyReader
+        implements MessageBodyWriter
+        implements ReaderInterceptor
+        implements WriterInterceptor
+        implements ContainerRequestFilter
+        implements ContainerResponseFilter
+        implements DynamicFeature
+        implements ValueParamProvider
+        implements InjectionResolver
+        implements ApplicationEventListener
+        implements ModelProcessor
+
+    resource             (r.v.d.g.m.i.f.j.ResourceInstaller)    
+        @Path on class
+        @Path on implemented interface
+
+    eagersingleton       (r.v.d.g.m.i.f.e.EagerSingletonInstaller) 
+        @EagerSingleton on class
+
+    healthcheck          (r.v.d.g.m.i.f.h.HealthCheckInstaller) 
+        extends NamedHealthCheck
+
+    task                 (r.v.d.g.m.i.feature.TaskInstaller)    
+        extends Task
+
+    plugin               (r.v.d.g.m.i.f.plugin.PluginInstaller) 
+        @Plugin on class
+        custom annotation on class, annotated with @Plugin
+
+    webservlet           (r.v.d.g.m.i.f.w.WebServletInstaller)  
+        extends HttpServlet + @WebServlet
+
+    webfilter            (r.v.d.g.m.i.f.web.WebFilterInstaller) 
+        implements Filter + @WebFilter
+
+    weblistener          (r.v.d.g.m.i.f.w.l.WebListenerInstaller) 
+        implements EventListener + @WebListener
+```
+
+Custom installers should implement new method to participate in report (not required!).
+Example implementation from singleton installer:
+
+```java
+public class EagerSingletonInstaller implements FeatureInstaller {
+    ...
+    
     @Override
-    public Object setup(TestExtension extension) {
-        // pseudo code
-        Db db = DbFactory.startTestDb();
-        // register required configuration
-        extension
-                .configOverride("database.url", ()-> db.getUrl())
-                .configOverride("database.user", ()-> db.getUser())
-                .configOverride("database.password", ()-> db.getPassword);
-        // assuming object implements Closable
-        return db;
+    public List<String> getRecognizableSigns() {
+        return Collections.singletonList("@" + EagerSingleton.class.getSimpleName() + " on class");
     }
 }
 ```
 
-!!! tip "Motivation"
-    Previously, additional junit extensions were required for such kind of setup,
-    but there was a problem with configuration (because guicey generates system property
-    key for each test and so it is not possible to configure application directly with
-    system property.
-    Also, it was problematic to move such initialization into base class because
-    it could be done only with static fields.
-    New interface should greatly simplify maintaining test environments.
+## Support application instance reuse between tests
 
-Only configuration overrides and guicey hooks are allowed for registration.
+In order to use the same application instance for multiple tests, junit extension must be declared in
+BASE test class with `reuseApplication` flag enabled. 
 
-!!! note
-    To avoid confusion with guicey hooks: setup object required to prepare test environment before test (and apply
-    required configurations) whereas hooks is a general mechanism for application customization (not only in tests).
-    Setup objects are executed before application startup (before `DropwizardTestSupport` object creation) and hooks
-    are executed by started application.
-
-It is often required not only to start/create something before test, but also
-properly stop/destroy it after. To do it simply return any `Closable` (or `AutoClosable`)
-and it would be called just after application shutdown.
-
-If no managed object required - you may return whatever else (even null), nothing would happen.
-This was done to simplify lambda declarations.
-
-##### Registration
-
-Registration is the same as with hooks:
-
-* `setup` attribute in extension annotations
-* `setup()` methods in extension builders (registered in fields)
-* Test fields, annotated with `@EnableSetup`
-
-Simple lambdas might be used for registration, for example:
+Either with annotation:
 
 ```java
-@EnableSetup
-static TestEnvironmentSetup db = ext -> {
-             Db db = new Db();
-             ext.configOverride("db.url", ()->db.getUrl())
-             return db;
-        };
+@TestGuiceyApp(value = Application.class, reuseApplication = true)
+public abstract class BaseTest {}
 ```
 
-Field-based declaration might be useful when such initializations must be declared
-in base test class (and affect all tests).
+or manually:
 
-#### Extensions debug
-
-There is a new debug option added to guicey extensions. When enabled it prints 
-registered setup objects and hooks (registered in test):
-
-```
-Guicey test extensions (Test2.):
-
-	Setup objects = 
-		HookObjectsLogTest$Test2$$Lambda$349/1644231115 (r.v.d.g.t.j.hook)               	@EnableSetup field Test2.setup
-
-	Test hooks = 
-		HookObjectsLogTest$Base$$Lambda$341/1127224355 (r.v.d.g.t.j.hook)                	@EnableHook field Base.base1
-		Ext1                         (r.v.d.g.t.j.h.HookObjectsLogTest)                  	@RegisterExtension class
-		HookObjectsLogTest$Test2$$Lambda$345/484589713 (r.v.d.g.t.j.hook)                	@RegisterExtension instance
-		Ext3                         (r.v.d.g.t.j.h.HookObjectsLogTest)                  	HookObjectsLogTest$Test2$$Lambda$349/1644231115 class
-		HookObjectsLogTest$Test2$$Lambda$369/1911152052 (r.v.d.g.t.j.hook)               	HookObjectsLogTest$Test2$$Lambda$349/1644231115 instance
-		HookObjectsLogTest$Test2$$Lambda$350/537066525 (r.v.d.g.t.j.hook)                	@EnableHook field Test2.ext1
+```java
+public abstract class BaseTest {
+    @RegisterExtension
+    static TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class)
+            .reuseApplication()
+            .create();
+    
+}
 ```
 
-Setup objects and hooks are shown in execution order. Setup objects go first because they
-might also register hooks. Registration source hints are shown on the right. 
-There should be enough information to clearly understand test initialization sequence.
-
-!!! warning
-    Setup objects and hooks logging was introduced in guicey 5.6.0, and it was always logged there.
-    In 5.6.1 it is shown only when debug option is enabled. Also, originally it was logged
-    using logger and now printed to `System.out`.
-
-And prints all configuration overrides:
-
-```
-Applied configuration overrides (Test1.): 
-
-	                  foo = 1
-```
+And the same for dropwizard extension (`@TestDropwizardApp` and `TestDropwizardAppExtension`).
 
 !!! important
-    Configuration overrides printed **after** application startup because they are 
-    extracted from system properties (to guarantee exact used value), which is possible
-    to analyze only after `DropwizardTestSupport#before()` call.
+    Application instance re-use is not enabled by default for backwards compatibility:
+    if you already have base class with declared extension, it will work the same as before. 
 
-!!! note 
-    Configuration prefix for system properties is shown in brackets: `(Test1.)`.
-    It simplifies investigation in case of concurrent tests.
-
-##### Debug activation
-
-Debug could be activated by annotation:
+All tests extending base class would use the same instance:
 
 ```java
-@TestGuiceyApp(value = App.class, debug = true)
+public class Test1 extends BaseTest { }
 ```
 
-By builder:
+Such "global" application would be closed after all tests execution (with test engine shutdown).
 
-```java
-@RegisterExtension
-TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App)
-        .debug()
-        .create()
-```
+In essence, reusable application "stick" to declaration in base class, so all tests,
+extending base class "inherit" the same declaration and so the same application (when reuse enabled).
 
-By setup object:
+You may have multiple reusable applications if you declare multiple base classes:
+in this case, tests would use application "attached" to extended base class.
 
-```java
-@EnableSetup
-static TestEnvironmentSetup db = ext -> {
-            ext.debug();
-        };
-```
+!!! tip
+    Reusable applications may be used together with tests, not extending base class
+    and using guicey extensions. Such tests would simply start a new application instance.
+    Just be sure to avoid port clashes when using reusable dropwizard apps (by using `randomPorts` option). 
 
-And using system property:
+`@EnableSetup` and `@EnableHook` fields are also supported for reusable applications.
+But declare all such fields on base class level (or below) because otherwise only fields
+declared on first started test would be used. Warning would be printed if such fields used
+(or ignored because reusable app was already started by different test).
 
-```
--Dguicey.extensions.debug=true
-```
+## SBOM
 
-There is also a shortcut for enabling system property:
+Json and xml SBOMs are now published with `cyclonedx` classifier (same way as dropwizard):
 
-```java
-TestSupport.debugExtensions()
-```
+[View published files](https://repo1.maven.org/maven2/ru/vyarus/dropwizard-guicey/5.7.0/)
 
-#### @EnableHook field type
-
-Before, it was impossible to use exact hook class type in field declaration:
-
-```java
-@EnableHook
-static GuiceyConfigurationHook hook = new MyHook();
-```
-
-But now any class could be used:
-
-```java
-@EnableHook
-static MyHook hook = new MyHook();
-```
-
-### Extensions registration changes
-
-#### Start application for each test method
-
-It is now possible to start application before each test method:
-
-```java
-@RegisterExtension
-TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class).create()
-
-// injection would be re-newed for each test method
-@Inject Bean bean;
-
-@Test
-public void test1() {
-    Assertions.assertEquals(0, bean.value);
-    bean.value = 10    
-}
-
-@Test
-public void test2() {
-    Assertions.assertEquals(0, bean.value);
-    bean.value = 10
-}
-```
-
-Note that field is **not static**. In this case extension would be activated for each method.
-
-Also, `@EnableHook` and `@EnableSetup` fields might also be not static (but static fields would also work) in this case:
-
-```java
-@RegisterExtension
-TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class).create()
-
-@EnableSetup
-MySetup setup = new MySetup()
-```
-
-#### Configure application from 3rd party junit extension
-
-!!! note
-    Generally, setup objects usage should be simpler then writing additional junit 
-    extensions for environment setup, but if you already have an extension,
-    the following should simplify configuration.
-
-3rd party junit extension should only store required values using junit storage and 
-they could be applied now with a new method `configOverrideByExtension`:
-
-```java
-public class ConfigExtension implements BeforeAllCallback {
-
-    @Override
-    public void beforeAll(ExtensionContext context) throws Exception {
-        // do something and then store value
-        context.getStore(ExtensionContext.Namespace.GLOBAL).put("ext1", 10);
-    }
-}
-
-@ExtendWith(ConfigExtension.class)
-public class SampleTest {
-    
-    @RegisterExtension
-    static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(App.class)
-            .configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "ext1")
-            .create();
-}
-```
-
-Here junit extension stores value and guicey extension will retrieve and apply value 
-from store. Configuration path and storage key are the same here, but they could be different:
-
-
-```java
-.configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "storage.key", "config.path")
-```
-
-Apply configuration path 'config.path' value from junit storage under key `storage.key`. 
-
-
-#### Small builder improvements
-
-`.hooks(Class)` method now accepts multiple hooks at once:
-
-```java
-.hooks(Hook1.class, Hook2.class); 
-```
-
-`.configOverrides(String...)` method now could be called multiple times:
-
-```java
-.configOverrides("foo:1", "bar:2")
-.configOverrides("over:3")
-```
+Also, SBOMs published for all ext modules.
 

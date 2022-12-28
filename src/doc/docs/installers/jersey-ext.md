@@ -8,18 +8,26 @@ Installs various jersey extensions, usually annotated with jersey `#!java @Provi
     Supplier, ExceptionMapper, ValueParamProvider, InjectionResolver, 
     ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, 
     ReaderInterceptor, WriterInterceptor, ContainerRequestFilter, 
-    ContainerResponseFilter, DynamicFeature, ApplicationEventListener
+    ContainerResponseFilter, DynamicFeature, ApplicationEventListener, ModelProcessor
 
 ## Recognition
 
-Detects  classes annotated with jersey `@javax.ws.rs.ext.Provider` annotation and register their instances in jersey.
+Detects known jersey extension classes and classes annotated with jersey `@javax.ws.rs.ext.Provider` annotation and register their instances in jersey.
 
 !!! attention ""
     Extensions registered as **singletons**, when no explicit scope annotation is used.
     Behaviour could be disabled with [option](../guide/options.md):
     ```java
     .option(InstallerOptions.ForceSingletonForJerseyExtensions, false)
-    ```   
+    ```
+
+!!! tip ""
+    Before guicey 5.7.0 it was required to annotate all extensions with `@Provide`, but now
+    it is not required - extension would be recognized by implemented interface.
+    But, if you prefer legacy behaviour then it could be reverted with:
+    ```java
+    .option(InstallersOptions.JerseyExtensionsRecognizedByType, false)
+    ```
 
 Special `@Prototype` scope annotation may be used to mark resources in prototype scope.
 It is useful when [guice servlet support is disabled](../guide/web.md#disable-servletmodule-support) (and so `@RequestScoped` could not be used).
@@ -105,7 +113,6 @@ Any class implementing `#!java javax.ws.rs.ext.ExceptionMapper` (or extending ab
 Useful for [error handling customization](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#error-handling).
 
 ```java
-@Provider
 public class DummyExceptionMapper implements ExceptionMapper<RuntimeException> {
 
     private final Logger logger = LoggerFactory.getLogger(DummyExceptionMapper.class);
@@ -137,7 +144,6 @@ public class DummyExceptionMapper implements ExceptionMapper<RuntimeException> {
 Any class implementing `#!java org.glassfish.jersey.server.spi.internal.ValueParamProvider` (or extending abstract class implementing it).
 
 ```java
-@Provider
 public class AuthFactoryProvider extends AbstractValueParamProvider {
 
     private final AuthFactory authFactory;
@@ -162,7 +168,6 @@ public class AuthFactoryProvider extends AbstractValueParamProvider {
 Any class implementing `#!java org.glassfish.hk2.api.InjectionResolver` (or extending abstract class implementing it).
 
 ```java
-@Provider
 class MyObjInjectionResolver implements InjectionResolver<MyObjAnn> {
 
     @Override
@@ -192,7 +197,6 @@ class MyObjInjectionResolver implements InjectionResolver<MyObjAnn> {
 Any class implementing [`#!java javax.ws.rs.ext.ParamConverterProvider`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ParamConverterProvider.html) (or extending abstract class implementing it).
 
 ```java
-@Provider
 public class FooParamConverter implements ParamConverterProvider {
 
     @Override
@@ -222,7 +226,6 @@ public class FooParamConverter implements ParamConverterProvider {
 Any class implementing [`#!java javax.ws.rs.ext.ContextResolver`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ContextResolver.html) (or extending abstract class implementing it).
 
 ```java
-@Provider
 public class MyContextResolver implements ContextResolver<Context> {
 
     @Override
@@ -240,7 +243,6 @@ Any class implementing [`#!java javax.ws.rs.ext.MessageBodyReader`](https://docs
 Useful for [custom representations](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#custom-representations).
 
 ```java
-@Provider
 public class TypeMessageBodyReader implements MessageBodyReader<Type> {
 
     @Override
@@ -263,7 +265,6 @@ Any class implementing [`#!java javax.ws.rs.ext.MessageBodyWriter`](https://docs
 Useful for [custom representations](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#custom-representations).
 
 ```java
-@Provider
 public class TypeMessageBodyWriter implements MessageBodyWriter<Type> {
 
     @Override
@@ -289,7 +290,6 @@ public class TypeMessageBodyWriter implements MessageBodyWriter<Type> {
 Any class implementing [`#!java javax.ws.rs.ext.ReaderInterceptor`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ReaderInterceptor.html) (or extending abstract class implementing it).
 
 ```java
-@Provider
 public class MyReaderInterceptor implements ReaderInterceptor {
 
     @Override
@@ -304,7 +304,6 @@ public class MyReaderInterceptor implements ReaderInterceptor {
 Any class implementing [`#!java javax.ws.rs.ext.WriterInterceptor`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/WriterInterceptor.html) (or extending abstract class implementing it).
 
 ```java
-@Provider
 public class MyWriterInterceptor implements WriterInterceptor {
 
     @Override
@@ -319,7 +318,6 @@ Any class implementing [`#!java javax.ws.rs.container.ContainerRequestFilter`](h
 Useful for [request modifications](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#jersey-filters).
 
 ```java
-@Provider
 public class MyContainerRequestFilter implements ContainerRequestFilter {
 
     @Override
@@ -334,7 +332,6 @@ Any class implementing [`#!java javax.ws.rs.container.ContainerResponseFilter`](
 Useful for [response modifications](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#jersey-filters).
 
 ```java
-@Provider
 public class MyContainerResponseFilter implements ContainerResponseFilter {
 
     @Override
@@ -349,7 +346,6 @@ Any class implementing [`#!java javax.ws.rs.container.DynamicFeature`](https://d
 Useful for conditional [activation of filters](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#jersey-filters).
 
 ```java
-@Provider
 public class MyDynamicFeature implements DynamicFeature {
 
     @Override
@@ -363,7 +359,6 @@ public class MyDynamicFeature implements DynamicFeature {
 Any class implementing [`#!java org.glassfish.jersey.server.monitoring.ApplicationEventListener`](https://jersey.java.net/apidocs/2.9/jersey/org/glassfish/jersey/server/monitoring/ApplicationEventListener.html) (or extending abstract class implementing it).
 
 ```java
-@Provider
 public class MyApplicationEventListener implements ApplicationEventListener {
 
     @Override
@@ -373,6 +368,27 @@ public class MyApplicationEventListener implements ApplicationEventListener {
     @Override
     public RequestEventListener onRequest(RequestEvent requestEvent) {
         return null;
+    }
+}
+```
+
+### ModelProcessor
+
+Any class implementing [`#!java org.glassfish.jersey.server.model.ModelProcessor`](https://eclipse-ee4j.github.io/jersey.github.io/apidocs/2.29.1/jersey/org/glassfish/jersey/server/model/ModelProcessor.html) (or extending abstract class implementing it).
+
+```java
+public class MyModelProcessor implements ModelProcessor {
+
+    @Override
+    public ResourceModel processResourceModel(ResourceModel resourceModel, 
+                                              Configuration configuration) {
+        return resourceModel;
+    }
+
+    @Override
+    public ResourceModel processSubResource(ResourceModel subResourceModel, 
+                                            Configuration configuration) {
+        return subResourceModel;
     }
 }
 ```

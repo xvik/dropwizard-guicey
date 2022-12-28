@@ -13,7 +13,7 @@ GuiceBundle.builder()
 Example report:
 
 ```
-INFO  [2019-10-28 06:16:44,068] ru.vyarus.dropwizard.guice.debug.JerseyConfigDiagnostic: Jersey configuration = 
+WARN  [2019-10-28 06:16:44,068] ru.vyarus.dropwizard.guice.debug.JerseyConfigDiagnostic: Jersey configuration = 
 
     Exception mappers
         Throwable                      ExceptionMapperBinder$1      (io.dropwizard.setup)      

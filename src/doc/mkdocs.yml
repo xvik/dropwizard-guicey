@@ -116,6 +116,7 @@ nav:
           - ServletModule: guide/guice/servletmodule.md
       - Diagnostic:
         - Tools: guide/diagnostic/diagnostic-tools.md
+        - Extensions help: guide/diagnostic/extensions-report.md
         - Configuration: guide/diagnostic/configuration-report.md
         - Configuration model:  guide/diagnostic/configuration-model.md
         - Installers: guide/diagnostic/installers-report.md

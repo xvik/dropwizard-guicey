@@ -1,3 +1,20 @@
+### [5.7.0](http://xvik.github.io/dropwizard-guicey/5.7.0) (2022-12-28)
+* Update to dropwizard 2.1.4
+* Fix NoClassDefFoundError(AbstractCollectionJaxbProvider) appeared for some jersey provider registrations (#240)
+* Jersey extensions might omit `@Provider` on known extension types (ExceptionMapper, MessageBodyReader, etc.).
+  Unifies usage with pure dropwizard (no additional `@Provider` annotation required). (#265)
+    - New option InstallerOptions.JerseyExtensionsRecognizedByType could disable new behaviour
+* Support ModelProcessor jersey extension installation (#186)
+* Add extensions help: .printExtensionsHelp() showing extension signs recognized by installers (in recognition order)
+    - Custom installers could participate in report by overriding FeatureInstaller.getRecognizableSigns()
+      (default interface method).
+* Change reports log level from INFO to WARN to comply with default dropwizard level
+* Support application reuse between tests (#269)
+    - new reuseApplication parameter in extensions enables reuse
+    - reusable application must be declared in base test class: all tests derived
+      from this base class would use the same application instance
+* Add SBOM (json and xml with cyclonedx classifier)
+
 ### [5.6.1](http://xvik.github.io/dropwizard-guicey/5.6.1) (2022-07-02)
 * Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)
 * Fix classpath scan recognition of inner static classes inside jars (#231)
