@@ -226,12 +226,16 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      * <p>
      * Method exists to allow creation of custom extension like "@CloseAppAfterTest" to
      * be able to close app at some points (next test would start a fresh app again).
+     * <p>
+     * In order to close application before test use {@link ReusableAppUtils} directly (it must be called
+     * before extension (which should start new app instance) and so there is no base class in context yet.
      *
      * @param extensionContext extension context
-     * @param declarationClass base test class where reusable application declared
+     * @return true if app was closed, false otherwise
      */
-    public static void closeReusableApp(final ExtensionContext extensionContext, final Class<?> declarationClass) {
-        ReusableAppUtils.closeGlobalApp(extensionContext, declarationClass);
+    public static boolean closeReusableApp(final ExtensionContext extensionContext) {
+        final Class<?> baseClass = (Class<?>) getExtensionStore(extensionContext).get(DW_SUPPORT_GLOBAL);
+        return baseClass != null && ReusableAppUtils.closeGlobalApp(extensionContext, baseClass);
     }
 
     // --------------------------------------------------------- end of 3rd party extensions support
@@ -324,7 +328,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             // exists in nested tests
             if (store.get(DW_SUPPORT_GLOBAL) == null) {
                 // simply to indicate reusable app usage
-                store.put(DW_SUPPORT_GLOBAL, true);
+                store.put(DW_SUPPORT_GLOBAL, config.reuseDeclarationClass);
             }
         }
     }

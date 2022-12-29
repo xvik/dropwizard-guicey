@@ -175,18 +175,23 @@ public final class ReusableAppUtils {
      *
      * @param context any context
      * @param declarationClass base test class where reusable app was declared
+     * @return true if app was closed, false otherwise
      */
-    public static synchronized void closeGlobalApp(final ExtensionContext context, final Class<?> declarationClass) {
+    public static synchronized boolean closeGlobalApp(final ExtensionContext context,
+                                                      final Class<?> declarationClass) {
         final StoredReusableApp app = getGlobalApp(context, declarationClass);
         if (app != null) {
-            LOGGER.warn("Requesting manual close for reusable app {}", app.getSource());
+            LOGGER.warn("Requested manual close for reusable app {}", app.getSource());
             try {
                 app.close();
+                return true;
             } catch (Exception e) {
                 LOGGER.error("Error closing reusable app manually", e);
+            } finally {
+                getGlobalStore(context).remove(getKey(declarationClass));
             }
-            getGlobalStore(context).remove(getKey(declarationClass));
         }
+        return false;
     }
 
     private static void validateDeclaringClass(final Class<?> test, final Class<?> declaration, final String source) {

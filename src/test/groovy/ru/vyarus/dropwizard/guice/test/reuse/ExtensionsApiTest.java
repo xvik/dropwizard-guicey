@@ -93,7 +93,7 @@ public class ExtensionsApiTest {
         @Override
         public void beforeAll(ExtensionContext context) throws Exception {
             Preconditions.checkState(GuiceyExtensionsSupport.isReusableAppUsed(context));
-            GuiceyExtensionsSupport.closeReusableApp(context, Base.class);
+            Assertions.assertTrue(GuiceyExtensionsSupport.closeReusableApp(context));
             actions.add("reusable2: " + GuiceyExtensionsSupport.isReusableAppUsed(context));
             // still would be exception next because injector is required for fields injection
         }
