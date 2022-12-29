@@ -51,6 +51,10 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
  */
 @SuppressWarnings("PMD.ExcessiveImports")
 public class GuiceyInitializer {
+    /**
+     * Special package name for classpath scan configuration to use application location package.
+     */
+    public static final String APP_PKG = "<app>";
     private static final OrderComparator COMPARATOR = new OrderComparator();
     private final Logger logger = LoggerFactory.getLogger(GuiceyInitializer.class);
 
@@ -72,6 +76,10 @@ public class GuiceyInitializer {
         this.bootstrap = bootstrap;
         this.context = context;
         final String[] packages = context.option(ScanPackages);
+        // configuration shortcut for all packages starting from application location
+        if (packages.length == 1 && APP_PKG.equals(packages[0])) {
+            packages[0] = bootstrap.getApplication().getClass().getPackage().getName();
+        }
         // classpath scan performed immediately (if required)
         this.scanner = packages.length > 0
                 ? new ClasspathScanner(Sets.newHashSet(Arrays.asList(packages)), context.stat()) : null;

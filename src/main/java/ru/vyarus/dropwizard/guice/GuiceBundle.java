@@ -318,8 +318,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
-         * Enables auto scan feature.
-         * When enabled, all core installers are registered automatically.
+         * Enables auto scan feature: search for installers and extensions in provided packages.
          *
          * @param basePackages packages to scan extensions in
          * @return builder instance for chained calls
@@ -328,6 +327,15 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         public Builder enableAutoConfig(final String... basePackages) {
             Preconditions.checkState(basePackages.length > 0, "Specify at least one package to scan");
             return option(ScanPackages, basePackages);
+        }
+
+        /**
+         * Shortcut for enabling auto config for application package (package with application class).
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder enableAutoConfig() {
+            return enableAutoConfig(GuiceyInitializer.APP_PKG);
         }
 
         /**
