@@ -15,7 +15,7 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks
+import ru.vyarus.dropwizard.guice.test.EnableHook
 import spock.lang.Specification
 
 import javax.servlet.FilterRegistration
@@ -27,7 +27,6 @@ import javax.servlet.ServletRegistration
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
-@UseGuiceyHooks(GuiceyTestHook)
 abstract class AbstractTest extends Specification {
 
     static {
@@ -35,6 +34,10 @@ abstract class AbstractTest extends Specification {
         LoggingUtil.getLoggerContext().getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME).setLevel(Level.WARN);
         LoggingUtil.getLoggerContext().getLogger("ru.vyarus.dropwizard.guice").setLevel(Level.INFO);
     }
+
+    // common guicey extra extensions used for all tests
+    @EnableHook
+    public static GuiceyConfigurationHook TEST_HOOK = { it.bundles(new HK2DebugBundle(), new GuiceRestrictedConfigBundle()) }
 
     void cleanupSpec() {
         // some tests are intentionally failing so be sure to remove stale applications
@@ -56,13 +59,5 @@ abstract class AbstractTest extends Specification {
         environment.lifecycle() >> Mock(LifecycleEnvironment)
         environment.healthChecks() >> Mock(HealthCheckRegistry)
         return environment
-    }
-
-    // common guicey extra extensions used for all tests
-    static class GuiceyTestHook implements GuiceyConfigurationHook {
-        @Override
-        void configure(GuiceBundle.Builder builder) {
-            builder.bundles(new GuiceRestrictedConfigBundle())
-        }
     }
 }

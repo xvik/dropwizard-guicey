@@ -117,6 +117,25 @@ public class RequestBean {
     
     Such additional call is not required for pure guice-managed request scope objects.  
 
+### Request scope simulation
+
+Sometimes, request scoped beans may need to be used somewhere without request (for example,
+inside scheduled job). Of course, this is not correct situation, and the best way is to re-design
+services, but not always possible.
+
+As a workaround, request scope could be simulated:
+
+```java
+@Inject
+Provider<RScopedService> service;
+...
+final RequestScoper scope = ServletScopes.scopeRequest(Collections.emptyMap());
+try (final RequestScoper.CloseableScope ignored = scope.open()) {
+  // work with request-scoped bean
+  service.get().doSomething();
+}
+```  
+
 ## Eager singleton
 
 By default, guicey create injector in `PRODUCTION` stage, so all registered singletons

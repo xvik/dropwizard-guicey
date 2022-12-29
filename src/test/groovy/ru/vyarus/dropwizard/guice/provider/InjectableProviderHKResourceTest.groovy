@@ -4,13 +4,13 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.support.provider.CustomFeatureInjectableProvider
 import ru.vyarus.dropwizard.guice.support.provider.InjectableProviderCheckApplication3
 import ru.vyarus.dropwizard.guice.support.provider.LocaleInjectableProvider
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 25.11.2014
  */
-@UseDropwizardApp(InjectableProviderCheckApplication3)
+@TestDropwizardApp(InjectableProviderCheckApplication3)
 class InjectableProviderHKResourceTest extends AbstractTest {
 
     void cleanupSpec() {

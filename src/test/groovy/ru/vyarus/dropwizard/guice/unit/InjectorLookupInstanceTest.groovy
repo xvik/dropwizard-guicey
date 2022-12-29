@@ -8,7 +8,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 22.10.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class InjectorLookupInstanceTest extends AbstractTest {
 
     @Inject

@@ -11,13 +11,13 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyFeatureInstaller
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
 import ru.vyarus.dropwizard.guice.support.feature.DummyPlugin1
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 21.04.2018
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class LifecycleEventsTest extends AbstractTest {
 
     def "Check lifecycle events"() {

@@ -7,24 +7,24 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
+import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
+import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
+import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.Foo2Bundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.FooBundleResource
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.LookupBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.dwbundle.FooDwBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
-import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
-import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
-import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
 import ru.vyarus.dropwizard.guice.diagnostic.support.module.ModuleWithExtensions
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 12.07.2016
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 // important to track HK2 part also
 class DiagnosticBundleTest extends AbstractTest {
 

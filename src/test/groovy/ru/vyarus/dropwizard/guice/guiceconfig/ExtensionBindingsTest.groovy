@@ -19,13 +19,13 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.Jerse
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.support.feature.*
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 30.08.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class ExtensionBindingsTest extends AbstractTest {
 
     @Inject

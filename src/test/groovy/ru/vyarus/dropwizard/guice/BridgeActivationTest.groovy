@@ -5,11 +5,10 @@ import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import io.dropwizard.testing.junit.DropwizardAppRule
-import org.junit.Rule
 import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic
 import ru.vyarus.dropwizard.guice.debug.report.option.OptionsConfig
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
+import ru.vyarus.dropwizard.guice.test.TestSupport
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -22,19 +21,14 @@ import javax.ws.rs.Path
  */
 class BridgeActivationTest extends Specification {
 
-    @Rule
-    DropwizardAppRule rule = new DropwizardAppRule(App)
-
-    void setup() {
-        // rule will work first, so it's too late for the first method but affects second one
-        App.enableBridge = true
-    }
-
     def "Check startup fail without bridge"() {
 
         when: "start app without server"
-        // force resource creation
-        new URL('http://localhost:8080/sample/').text
+        App.enableBridge = false
+        TestSupport.runWebApp(App, null, {
+            // force resource creation
+            new URL('http://localhost:8080/sample/').text
+        })
 
         then: "failed"
         def ex = thrown(IOException)
@@ -44,7 +38,10 @@ class BridgeActivationTest extends Specification {
     def "Check startup ok with bridge"() {
 
         when: "start with bridge enabled"
-        String res = new URL('http://localhost:8080/sample/').text
+        App.enableBridge = true
+        String res = TestSupport.runWebApp(App, null, {
+             new URL('http://localhost:8080/sample/').text
+        })
 
         then: "passed"
         res == 'ok'

@@ -1,8 +1,11 @@
 package ru.vyarus.dropwizard.guice.module.installer.scanner.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Modifier;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -26,6 +29,7 @@ public final class OReflectionHelper {
     private OReflectionHelper() {
     }
 
+    @SuppressFBWarnings("DCN_NULLPOINTER_EXCEPTION")
     public static List<Class<?>> getClassesFor(final String iPackageName,
                                                final ClassLoader iClassLoader) throws ClassNotFoundException {
         // This will hold a list of directories matching the pckgname.
@@ -49,10 +53,12 @@ public final class OReflectionHelper {
                         final JarFile jar = conn.getJarFile();
                         for (JarEntry e : Collections.list(jar.entries())) {
 
-                            if (e.getName().startsWith(iPackageName.replace('.', '/')) && e.getName().endsWith(CLASS_EXTENSION)
-                                    && !e.getName().contains("$")) {
+                            if (e.getName().startsWith(iPackageName.replace('.', '/')) && e.getName().endsWith(CLASS_EXTENSION)) {
                                 final String className = e.getName().replace("/", ".").substring(0, e.getName().length() - 6);
-                                classes.add(Class.forName(className, true, iClassLoader));
+                                final Class<?> cls = Class.forName(className, true, iClassLoader);
+                                if (isAcceptibleClass(cls)) {
+                                    classes.add(cls);
+                                }
                             }
                         }
                     } else {
@@ -81,7 +87,10 @@ public final class OReflectionHelper {
                             String className;
                             if (file.getName().endsWith(CLASS_EXTENSION)) {
                                 className = file.getName().substring(0, file.getName().length() - CLASS_EXTENSION.length());
-                                classes.add(Class.forName(iPackageName + '.' + className, true, iClassLoader));
+                                final Class<?> cls = Class.forName(iPackageName + '.' + className, true, iClassLoader);
+                                if (isAcceptibleClass(cls)) {
+                                    classes.add(cls);
+                                }
                             }
                         }
                     }
@@ -121,10 +130,18 @@ public final class OReflectionHelper {
                     classes.addAll(findClasses(file, iPackageName, iClassLoader));
                 } else if (file.getName().endsWith(CLASS_EXTENSION)) {
                     className = file.getName().substring(0, file.getName().length() - CLASS_EXTENSION.length());
-                    classes.add(Class.forName(iPackageName + '.' + className, true, iClassLoader));
+                    final Class<?> cls = Class.forName(iPackageName + '.' + className, true, iClassLoader);
+                    if (isAcceptibleClass(cls)) {
+                        classes.add(cls);
+                    }
                 }
             }
         }
         return classes;
+    }
+
+    private static boolean isAcceptibleClass(final Class type) {
+        // only public non-anonymous classes allowed
+        return Modifier.isPublic(type.getModifiers());
     }
 }

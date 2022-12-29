@@ -12,6 +12,8 @@ import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Shortcut for guice multibindings mechanism.
@@ -81,5 +83,11 @@ public class PluginInstaller implements FeatureInstaller, BindingInstaller {
     @Override
     public void report() {
         reporter.report();
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        return Arrays.asList("@" + Plugin.class.getSimpleName() + " on class",
+                "custom annotation on class, annotated with " + "@" + Plugin.class.getSimpleName());
     }
 }

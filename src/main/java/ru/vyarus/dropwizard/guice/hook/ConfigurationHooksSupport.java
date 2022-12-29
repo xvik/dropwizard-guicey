@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.module.installer.util.PropertyUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
-import ru.vyarus.dropwizard.guice.test.GuiceyHooksRule;
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks;
 
 import java.util.*;
 
@@ -17,8 +15,7 @@ import java.util.*;
  * Supposed to be used for integration tests.
  *
  * @author Vyacheslav Rusakov
- * @see GuiceyHooksRule
- * @see UseGuiceyHooks
+ * @see GuiceyConfigurationHook
  * @since 11.04.2018
  */
 public final class ConfigurationHooksSupport {

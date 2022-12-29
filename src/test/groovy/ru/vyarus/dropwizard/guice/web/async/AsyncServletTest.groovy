@@ -6,7 +6,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.servlet.AsyncContext
@@ -16,12 +16,11 @@ import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
 /**
  * @author Vyacheslav Rusakov
  * @since 18.08.2016
  */
-@UseDropwizardApp(AsyncServletApp)
+@TestDropwizardApp(AsyncServletApp)
 class AsyncServletTest extends Specification {
 
     def "Check async servlet"() {

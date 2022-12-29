@@ -19,13 +19,13 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.Jerse
 import ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.support.feature.*
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 03.09.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class ExtensionBindingWithAutoScanTest extends AbstractTest {
     @Inject
     GuiceyConfigurationInfo info
@@ -48,7 +48,7 @@ class ExtensionBindingWithAutoScanTest extends AbstractTest {
         info.getExtensions(LifeCycleInstaller) == [DummyLifeCycle]
 
         then: "jersey provider found"
-        info.getExtensions(JerseyProviderInstaller) as Set == [DummyExceptionMapper, DummyJerseyProvider, DummyOtherProvider] as Set
+        info.getExtensions(JerseyProviderInstaller) as Set == [DummyExceptionMapper, DummyJerseyProvider, DummyModelProcessor, DummyOtherProvider] as Set
 
         then: "feature found"
         info.getExtensions(JerseyFeatureInstaller) as Set == [DummyFeature, HK2DebugFeature] as Set

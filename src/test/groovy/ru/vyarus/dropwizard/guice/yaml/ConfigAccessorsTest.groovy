@@ -6,10 +6,10 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -18,7 +18,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 04.05.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class ConfigAccessorsTest extends Specification {
 
     @Inject

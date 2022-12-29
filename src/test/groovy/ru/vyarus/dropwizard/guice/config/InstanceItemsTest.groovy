@@ -8,7 +8,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 10.09.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class InstanceItemsTest extends Specification {
 
     @Inject

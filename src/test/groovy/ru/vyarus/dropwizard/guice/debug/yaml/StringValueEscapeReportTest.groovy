@@ -7,8 +7,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
 import ru.vyarus.dropwizard.guice.debug.report.yaml.ConfigBindingsRenderer
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
-import ru.vyarus.dropwizard.guice.test.spock.ConfigOverride
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import ru.vyarus.dropwizard.guice.yaml.support.SimpleConfig
 import spock.lang.Specification
 
@@ -18,9 +17,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 13.03.2020
  */
-@UseGuiceyApp(value = App, configOverride = [
-        @ConfigOverride(key = "foo", value = "string %s with %d params")
-])
+@TestGuiceyApp(value = App, configOverride = ["foo: string %s with %d params"])
 class StringValueEscapeReportTest extends Specification {
 
     @Inject

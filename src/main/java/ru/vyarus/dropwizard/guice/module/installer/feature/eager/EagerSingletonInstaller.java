@@ -16,7 +16,9 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -57,7 +59,7 @@ public class EagerSingletonInstaller implements FeatureInstaller, BindingInstall
         Preconditions.checkArgument(scope.equals(EagerSingleton.class)
                         || (!binder.currentStage().equals(Stage.DEVELOPMENT)
                         && scope.equals(Singleton.class)),
-                // intentially no "at" before stacktrtace because idea may hide error in some cases
+                // intentionally no "at" before stacktrtace because idea may hide error in some cases
                 "Eager bean, declared manually is not marked .asEagerSingleton(): %s (%s)",
                 type.getName(), BindingUtils.getDeclarationSource(binding));
     }
@@ -77,5 +79,10 @@ public class EagerSingletonInstaller implements FeatureInstaller, BindingInstall
         }
         prerender.clear();
         reporter.report();
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        return Collections.singletonList("@" + EagerSingleton.class.getSimpleName() + " on class");
     }
 }

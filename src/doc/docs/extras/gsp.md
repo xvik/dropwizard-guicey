@@ -128,7 +128,6 @@ dropwizard-views such things should be implemented manually, which is not good f
 
 ## Setup 
 
-[![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion)
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-server-pages.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-gsp)
 
 Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 
@@ -139,14 +138,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-server-pages</artifactId>
-  <version>5.0.1-1</version>
+  <version>{{ gradle.ext }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-server-pages:5.0.1-1'
+compile 'ru.vyarus.guicey:guicey-server-pages:{{ gradle.ext }}'
 ```
 
 See the most recent version in the badge above.
@@ -846,3 +845,44 @@ OR
 !!! tip
     You can always see the content of webjar on [webjars site](https://www.webjars.org/) by clicking
     on package "Files" column. Use everything after "META-INF/resources/webjars/" to reference file.
+    
+### Custom classloaders
+
+*Very specific case*
+
+There is a limited support for custom classloaders. Assumed case is when application resources
+could be loaded with different class loaders.
+
+Custom classloader could be specified during application registration, for example:
+
+```java
+.bundles(ServerPagesBundle.app("com.project.ui", "/com/app/ui/", "/", classLoader)                    
+                    .build())
+```
+
+The same for admin app and extension.
+
+!!! warning 
+    This will affect only static resources! Template engine will not be able to resolve
+    resources because it is not aware of custom loaders.
+    
+!!! info
+    The main problem here is dropwizards `View` class which accepts only file path (String),
+    so even if correct URL object is known (which is enough to load resource) before view construction
+    it can't be used further.  
+    
+    To workaround this, resolved absolute template path passed to view constructor. GSP module
+    is able to found correct resourse later in correct class loader, but it requires obvious changes
+    to template engine templates resolution mechanism.    
+
+To resolve this, special templates resolver is required. For freemarker it is provided out of the box, 
+but must be enabled on main bundle:
+
+```java
+ServerPagesBundle.builder()
+    .enableFreemarkerCustomClassLoadersSupport()
+    ...
+```
+
+For mustache module it is impossible to write such integration.
+     

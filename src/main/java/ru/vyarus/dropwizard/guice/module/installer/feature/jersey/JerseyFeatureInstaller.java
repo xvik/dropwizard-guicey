@@ -9,6 +9,8 @@ import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
 import javax.ws.rs.core.Feature;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Jersey feature installer.
@@ -38,5 +40,10 @@ public class JerseyFeatureInstaller implements FeatureInstaller, InstanceInstall
     public void install(final Environment environment, final Feature instance) {
         reporter.line(RenderUtils.renderClassLine(FeatureUtils.getInstanceClass(instance)));
         environment.jersey().register(instance);
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        return Collections.singletonList("implements " + Feature.class.getSimpleName());
     }
 }

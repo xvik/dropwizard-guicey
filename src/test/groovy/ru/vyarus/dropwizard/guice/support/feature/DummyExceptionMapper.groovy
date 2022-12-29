@@ -6,14 +6,12 @@ import org.slf4j.LoggerFactory
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 import javax.ws.rs.ext.ExceptionMapper
-import javax.ws.rs.ext.Provider
 
 /**
  * http://avianey.blogspot.ru/2011/12/exception-mapping-jersey.html.
  * @author Vyacheslav Rusakov 
  * @since 03.09.2014
  */
-@Provider
 @javax.inject.Singleton
 class DummyExceptionMapper implements ExceptionMapper<RuntimeException> {
 

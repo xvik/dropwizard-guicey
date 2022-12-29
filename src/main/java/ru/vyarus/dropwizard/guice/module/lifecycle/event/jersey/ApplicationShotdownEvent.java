@@ -7,8 +7,8 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 /**
  * Called on application shutdown start. Triggered by jetty lifecycle stopping event (
- * {@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStopping(
- *org.eclipse.jetty.util.component.LifeCycle)}).
+ * {@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStopping(
+ * org.eclipse.jetty.util.component.LifeCycle)}).
  * <p>
  * May be used to perform some shutdown logic.
  *
@@ -23,11 +23,10 @@ public class ApplicationShotdownEvent extends JerseyPhaseEvent {
 
     /**
      * As event fired for both real server startup and guicey lightweight tests, this property allows
-     * to differentiate situations.
+     * differentiating situations.
      *
      * @return true if jetty was started and false in case of guicey lightweight tests
-     * @see ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
-     * @see ru.vyarus.dropwizard.guice.test.GuiceyAppRule
+     * @see ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
      */
     public boolean isJettyStarted() {
         return getEnvironment().getApplicationContext().getServer() != null

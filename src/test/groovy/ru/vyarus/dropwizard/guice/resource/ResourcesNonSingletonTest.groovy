@@ -7,13 +7,13 @@ import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
 import ru.vyarus.dropwizard.guice.support.resource.PrototypeResource
 import ru.vyarus.dropwizard.guice.support.resource.ResourceSingletonCheckApplication
 import ru.vyarus.dropwizard.guice.support.resource.SingletonResource
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 03.05.2018
  */
-@UseDropwizardApp(value = ResourceSingletonCheckApplication, hooks = XConf)
+@TestDropwizardApp(value = ResourceSingletonCheckApplication, hooks = XConf)
 class ResourcesNonSingletonTest extends AbstractTest {
 
     void cleanupSpec() {

@@ -8,7 +8,7 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -16,14 +16,14 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 13.12.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class SharedStateAccessInModuleTest extends AbstractTest {
 
     @Inject
     Environment environment
 
     def "Check shared state access within module"() {
-        
+
         expect: "module modified state"
         SharedConfigurationState.lookup(environment, Mod).get()["module"] == "i was here"
     }
@@ -53,6 +53,14 @@ class SharedStateAccessInModuleTest extends AbstractTest {
             assert val instanceof Map
 
             val.put("module", "i was here")
+
+
+            shareState(List, "fafa")
+            assert sharedState(List).get() == "fafa"
+
+
+            sharedState(List, { "ff" }) == "ff"
+            sharedState(Queue, { "tt" }) == "tt"
         }
     }
 }

@@ -7,6 +7,7 @@ import com.google.inject.spi.Element;
 import com.google.inject.spi.ElementSource;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +30,12 @@ public final class BindingUtils {
     /**
      * Resolve guice configuration element declaration module chain. The first list element is declaration module.
      * Later elements appear if module was installed by other module.
+     * <p>
+     * Modules declared with lambda expression removed. If there are upper modules, declared normally then
+     * only they would remain (in report bindings would be should directly as module's bindings). When no upper
+     * modules exists then returned chain would contain only {@link com.google.inject.Module} to group all bindings
+     * from all root lambda modules into single "meta" module in the report (code links would still be correct in
+     * the report).
      *
      * @param element guice SPI element
      * @return modules chain from declaration point or single {@link #JIT_MODULE} if binding is a JIT binding
@@ -41,7 +48,7 @@ public final class BindingUtils {
             if (source.getOriginalElementSource() != null) {
                 source = source.getOriginalElementSource();
             }
-            modules = source.getModuleClassNames();
+            modules = replaceLambdaModuleClasses(source.getModuleClassNames());
         } else {
             // consider JIT binding
             modules = Collections.singletonList(JIT_MODULE);
@@ -59,7 +66,7 @@ public final class BindingUtils {
     @SuppressWarnings("unchecked")
     public static Class<? extends Module> getModuleClass(final String name) {
         final Class<? extends Module> res;
-        if (!name.equals(JIT_MODULE)) {
+        if (!JIT_MODULE.equals(name)) {
             try {
                 res = (Class) Class.forName(name);
             } catch (ClassNotFoundException e) {
@@ -106,6 +113,39 @@ public final class BindingUtils {
             }
         } else if (source instanceof Class) {
             res = ((Class) source).getName();
+        }
+        return res;
+    }
+
+    private static List<String> replaceLambdaModuleClasses(final List<String> modules) {
+        List<String> detected = null;
+        for (String module : modules) {
+            // most likely, lambda expression
+            if (module.contains("$$")) {
+                try {
+                    Class.forName(module);
+                } catch (ClassNotFoundException ex) {
+                    if (detected == null) {
+                        detected = new ArrayList<>();
+                    }
+                    detected.add(module);
+                }
+            }
+        }
+        final List<String> res = detected == null ? modules : new ArrayList<>(modules);
+        if (detected != null) {
+            // remove all lambda references
+            res.removeAll(detected);
+            // If there is a chain of modules then DO NOT ADD default module to let these bindings
+            // be directly shown under custom module (installing lambda module) in the report.
+            // If no upper module, then adding default module to gather all lambda module's bindings
+            // under one node in report (Module).
+            // NOTE: ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo.getModules would
+            // still return root lambda modules (only root!) because all root module classes are stored
+            // on registration, but there would not be any possibility to disable such module
+            if (res.isEmpty()) {
+                res.add(Module.class.getName());
+            }
         }
         return res;
     }

@@ -20,6 +20,8 @@ import javax.servlet.ServletRegistration;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.DenyServletRegistrationWithClash;
@@ -110,5 +112,11 @@ public class WebServletInstaller extends InstallerOptionsSupport
             }
         }
         mapping.setAsyncSupported(annotation.asyncSupported());
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        return Collections.singletonList("extends " + HttpServlet.class.getSimpleName()
+                + " + @" + WebServlet.class.getSimpleName());
     }
 }

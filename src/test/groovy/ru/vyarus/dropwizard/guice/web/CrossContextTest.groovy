@@ -10,13 +10,13 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.web.crosscontext.CrossContextFilter
 import ru.vyarus.dropwizard.guice.support.web.crosscontext.CrossContextListener
 import ru.vyarus.dropwizard.guice.support.web.crosscontext.CrossContextServlet
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 08.08.2016
  */
-@UseDropwizardApp(CrossApp)
+@TestDropwizardApp(CrossApp)
 class CrossContextTest extends AbstractTest {
 
     @Inject

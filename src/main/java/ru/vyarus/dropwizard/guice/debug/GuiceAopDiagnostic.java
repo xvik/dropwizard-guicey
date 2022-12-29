@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStart
 /**
  * Guice AOP map debug listener. Must be registered with
  * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(
- *ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
+ * ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
  * Could be configured to filter out not required info.
  *
  * @author Vyacheslav Rusakov
@@ -28,6 +28,6 @@ public class GuiceAopDiagnostic extends GuiceyLifecycleAdapter {
     @Override
     protected void applicationStarted(final ApplicationStartedEvent event) {
         final String report = new GuiceAopMapRenderer(event.getInjector()).renderReport(config);
-        logger.info("Guice AOP map = {}", report);
+        logger.warn("Guice AOP map = {}", report);
     }
 }

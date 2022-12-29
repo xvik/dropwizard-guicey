@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.yaml;
 
+import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
-import com.fasterxml.jackson.databind.introspect.BasicBeanDescription;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Optional;
@@ -20,7 +20,13 @@ import ru.vyarus.java.generics.resolver.context.GenericsContext;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Analyzes configuration instance, prepared by dropwizard, in order to be able to use configuration
@@ -54,7 +60,7 @@ public final class ConfigTreeBuilder {
      * Packages to stop types introspection on (for sure non custom pojo types).
      */
     private static final ImmutableSet<String> INTROSPECTION_STOP_PACKAGES = ImmutableSet.of(
-            "java.", "groovy.", "com.google.common.collect"
+            "java.", "groovy.", "com.google.common.collect", "sun."
     );
 
     /**
@@ -152,20 +158,20 @@ public final class ConfigTreeBuilder {
      * @param object  analyzed part instance (may be null)
      * @return all configuration paths values
      */
-    @SuppressWarnings("checkstyle:CyclomaticComplexity")
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "PMD.AvoidLiteralsInIfCondition"})
     private static List<ConfigPath> resolvePaths(final SerializationConfig config,
                                                  final ConfigPath root,
                                                  final List<ConfigPath> content,
                                                  final Class type,
                                                  final Object object,
                                                  final GenericsContext genericsContext) {
-        final BasicBeanDescription description = config.introspect(
+        final BeanDescription description = config.introspect(
                 config.constructType(type)
         );
 
         for (BeanPropertyDefinition prop : description.findProperties()) {
             // ignore write-only or groovy special property
-            if (!prop.couldSerialize() || prop.getName().equals("metaClass")) {
+            if (!prop.couldSerialize() || "metaClass".equals(prop.getName())) {
                 continue;
             }
             final Object value;
@@ -210,7 +216,7 @@ public final class ConfigTreeBuilder {
      * must end as soon as we don't have real value (null). That means configured bindings may change depending
      * on actual configuration, but it's the only way.
      *
-     * @param item      current path
+     * @param item current path
      * @return true if recursion detected and processing must stop, false otherwise
      */
     @SuppressWarnings("unchecked")

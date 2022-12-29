@@ -8,7 +8,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 27.06.2016
  */
-@UseGuiceyApp(SampleApp)
+@TestGuiceyApp(SampleApp)
 class Hk2DebugEnableOptionTest extends Specification {
 
     @Inject

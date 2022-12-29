@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -263,13 +264,18 @@ public class GuiceyBootstrap {
 
     /**
      * Share global state to be used in other bundles (during configuration). This was added for very special cases
-     * when shared state is unavoidable to not re-invent the wheel each time!
+     * when shared state is unavoidable (to not re-invent the wheel each time)!
      * <p>
-     * Internally, state is linked to application instance so it would be safe to use with concurrent tests.
+     * During application strartup, shared state could be requested with a static call
+     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#getStartupInstance()}, but only
+     * from main thread.
+     * <p>
+     * Internally, state is linked to application instance, so it would be safe to use with concurrent tests.
      * Value could be accessed statically with application instance:
      * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#lookup(Application, Class)}.
      * <p>
-     * Use bundle class as key. Value could be set only once (to prevent hard to track situations).
+     * In some cases, it is preferred to use bundle class as key. Value could be set only once
+     * (to prevent hard to track situations).
      * <p>
      * If initialization point could vary (first access should initialize it) use {@link #sharedState(Class, Supplier)}
      * instead.
@@ -299,7 +305,19 @@ public class GuiceyBootstrap {
     }
 
     /**
-     * Use to access shared state value and immediately fail if value not yet set (most likely due to incorrect
+     * Access shared value.
+     *
+     * @param key shared object key
+     * @param <T> shared object type
+     * @return shared object
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> Optional<T> sharedState(final Class<?> key) {
+        return Optional.ofNullable(context.getSharedState().get(key));
+    }
+
+    /**
+     * Used to access shared state value and immediately fail if value not yet set (most likely due to incorrect
      * configuration order).
      *
      * @param key     shared object key

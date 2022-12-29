@@ -6,20 +6,19 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup
-import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticRenderer
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
-
 
 /**
  * @author Vyacheslav Rusakov
  * @since 16.07.2016
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class EmptyConfigRendererTest extends Specification {
 
     @Inject

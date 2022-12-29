@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 26.04.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class DisableFromBundlesTest extends AbstractTest {
 
     @Inject

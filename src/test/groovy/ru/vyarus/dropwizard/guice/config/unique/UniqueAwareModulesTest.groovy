@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.config.unique
 
-
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
@@ -13,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo
 import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueDropwizardAwareModule
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -21,7 +20,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 13.12.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class UniqueAwareModulesTest extends AbstractTest {
 
     @Inject

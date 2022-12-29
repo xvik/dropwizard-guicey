@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.request
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.support.request.RequestBeansApplication
 import ru.vyarus.dropwizard.guice.support.request.RequestScopedBean
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * Check request scoped beans supported.
@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
  * @author Vyacheslav Rusakov 
  * @since 04.10.2014
  */
-@UseDropwizardApp(RequestBeansApplication)
+@TestDropwizardApp(RequestBeansApplication)
 class RequestBeansTest extends AbstractTest {
 
     def "Check request bean"() {

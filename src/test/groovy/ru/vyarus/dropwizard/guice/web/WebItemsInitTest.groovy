@@ -13,7 +13,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.web.params.InitParamsFilter
 import ru.vyarus.dropwizard.guice.support.web.params.InitParamsServlet
 import ru.vyarus.dropwizard.guice.support.web.params.ServletRegFilter
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.servlet.DispatcherType
 
@@ -21,7 +21,7 @@ import javax.servlet.DispatcherType
  * @author Vyacheslav Rusakov
  * @since 08.08.2016
  */
-@UseDropwizardApp(WebInitApp)
+@TestDropwizardApp(WebInitApp)
 class WebItemsInitTest extends AbstractTest {
 
     @Inject

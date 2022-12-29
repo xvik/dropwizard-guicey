@@ -1,15 +1,14 @@
 package ru.vyarus.dropwizard.guice.web
 
-
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import io.dropwizard.testing.junit.DropwizardAppRule
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.web.servletclash.Servlet1
 import ru.vyarus.dropwizard.guice.support.web.servletclash.Servlet2
+import ru.vyarus.dropwizard.guice.test.TestSupport
 
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.DenyServletRegistrationWithClash
 
@@ -22,7 +21,7 @@ class ServletMappingClashFailTest extends AbstractTest {
     def "Check servlets mapping clash"() {
 
         when: "starting app with servlets clash"
-        new DropwizardAppRule(ClashApp).before()
+        TestSupport.runWebApp(ClashApp, null)
         then: "exception thrown"
         def ex = thrown(IllegalStateException)
         ex.message == "Servlet registration Servlet2 clash with already installed servlets on paths: /sam"

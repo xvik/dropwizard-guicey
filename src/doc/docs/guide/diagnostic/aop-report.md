@@ -26,6 +26,25 @@ Example output:
 
 This report shows all affected beans with all methods. In real application it may lead
 to the giant report. In real life it would be more suitable to always fine-tune report [as a tool](#tool).
+
+!!! important
+    Report is build using guice SPI from raw modules because it's the only way to detect 
+    registered aop listeners. But this also cause an additional execution of
+    `configure()` method of all modules when report is enabled.
+
+    In most cases, this is not a problem (modules should only declare bindings). Report use
+    stage `TOOL`, so, if required, you can easilly avoid duplicate execution for sensitive logic: 
+    ```java
+    if (binder.currentStage() != Stage.TOOL) {
+        // do only on normal run
+    }
+    ```
+    For example, guicey itself use this in installers to avoid duplicate console output on startup when report enabled.
+
+!!! warning "Kotlin"
+    If you're using kotlin, keep in mind that it makes methods final by default so guice will not
+    be able to [apply aop](https://github.com/google/guice/wiki/AOP#limitations).
+    The workaround is to put **open** keyword [before method](https://discuss.kotlinlang.org/t/aop-and-kotlin/685/6).  
    
 ## Tool
 

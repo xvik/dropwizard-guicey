@@ -6,7 +6,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 import javax.inject.Provider
@@ -20,7 +20,7 @@ import javax.ws.rs.core.SecurityContext
  * @author Vyacheslav Rusakov
  * @since 21.08.2016
  */
-@UseDropwizardApp(NFApp)
+@TestDropwizardApp(NFApp)
 class NoGuiceFilterTest extends AbstractTest {
 
     def "Check filter works without guice module"() {

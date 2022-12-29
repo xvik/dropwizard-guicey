@@ -5,14 +5,14 @@ import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 26.10.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class JerseyReportTest extends Specification {
 
     def "Check report correcness"() {

@@ -8,13 +8,13 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.debug.renderer.web.support.GuiceWebModule
 import ru.vyarus.dropwizard.guice.debug.renderer.web.support.UserServletsBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 22.10.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class WebMappingsReportTest extends AbstractTest {
 
     def "Check web report"() {

@@ -3,6 +3,9 @@
 Guicey provide many bundled console reports to help with problems diagnostic (or to simply clarify how application works)
 during development. All reports may be enabled on main guice bundle:
 
+`#!java .printExtensionsHelp()`
+:   Extensions [recognition help](extensions-report.md)
+
 `#!java .printDiagnosticInfo()`  
 :   Detailed [guicey configuration](configuration-report.md) information
 

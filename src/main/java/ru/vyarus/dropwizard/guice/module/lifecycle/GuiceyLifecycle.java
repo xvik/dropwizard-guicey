@@ -180,23 +180,31 @@ public enum GuiceyLifecycle {
     JerseyExtensionsInstalled(JerseyExtensionsInstalledEvent.class),
     /**
      * Called after complete dropwizard startup. Actually the same as jetty lifecycle started event
-     * ({@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStarted(
+     * ({@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStarted(
      * org.eclipse.jetty.util.component.LifeCycle)}), which is called after complete jetty startup.
      * <p>
      * May be used as assured "started" point (after all initializations). For example, to report something. This event
-     * also will be fired in guicey tests ({@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule}) which does not
-     * start the web part.
+     * also will be fired in guicey tests ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}) which does not
+     * start the web part).
      */
     ApplicationStarted(ApplicationStartedEvent.class),
 
     /**
      * Called on application shutdown start. Triggered by jetty lifecycle stopping event (
-     * {@link org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener#lifeCycleStopping(
-     *org.eclipse.jetty.util.component.LifeCycle)}).
+     * {@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStopping(
+     * org.eclipse.jetty.util.component.LifeCycle)}).
      * <p>
      * May be used to perform some shutdown logic.
      */
-    ApplicationShutdown(ApplicationShotdownEvent.class);
+    ApplicationShutdown(ApplicationShotdownEvent.class),
+    /**
+     * Called after application shutdown. Triggered by jetty lifecycle stopping event (
+     * {@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStopped(
+     * org.eclipse.jetty.util.component.LifeCycle)}).
+     * <p>
+     * Supposed to be used to cleanup some resources after complete shutdown (very specific cases).
+     */
+    ApplicationStopped(ApplicationStoppedEvent.class);
 
     private final Class<? extends GuiceyLifecycleEvent> type;
 

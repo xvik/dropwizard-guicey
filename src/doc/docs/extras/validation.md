@@ -11,7 +11,6 @@ Bundle is actually a wrapper for [guice-validator](https://github.com/xvik/guice
 
 ## Setup
 
-[![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion)
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-validation.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-validation)
 
 Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 
@@ -22,14 +21,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-validation</artifactId>
-  <version>5.0.1-1</version>
+  <version>{{ gradle.ext }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-validation:5.0.1-1'
+implementation 'ru.vyarus.guicey:guicey-validation:{{ gradle.ext }}'
 ```
 
 See the most recent version in the badge above.
@@ -111,4 +110,17 @@ Now methods annotated with `@SuppressValidation` will not be validated. Note tha
 `.and(new DirectMethodMatcher())` condition was added to aslo exclude synthetic and bridge methods (jvm generated methods).
 
 !!! note 
-    You can verify AOP appliance with guicey `.printGuiceAopMap()` report.                                      
+    You can verify AOP appliance with guicey `.printGuiceAopMap()` report.
+
+### Validation groups
+
+By default, `Default` validation group is always enabled allowing you to not specify
+groups for each call. 
+
+This could be disabled with bundle option:
+
+```java
+.bundles(new ValidationBundle().strictGroupsDeclaration())
+```
+
+Read more in [guice-validator docs](https://github.com/xvik/guice-validator#default-group-specifics).

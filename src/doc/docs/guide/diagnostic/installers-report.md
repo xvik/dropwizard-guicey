@@ -15,7 +15,7 @@ GuiceBundle.builder()
 Example output:
 
 ```
-INFO  [2019-10-11 06:09:06,085] ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic: Available installers report
+WARN  [2019-10-11 06:09:06,085] ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic: Available installers report
 
 ---------------------------------------------------------------------------[CONFIGURATION]
 

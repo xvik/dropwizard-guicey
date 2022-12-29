@@ -7,7 +7,6 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import io.dropwizard.testing.junit.DropwizardAppRule
 import net.sourceforge.argparse4j.inf.Namespace
-import org.eclipse.jetty.util.component.AbstractLifeCycle
 import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
@@ -53,7 +52,7 @@ class EnvironmentListenersWuthCommandTest extends Specification {
                         @Override
                         void run(GuiceyEnvironment environment) throws Exception {
                             environment
-                                    .listenJetty(new AbstractLifeCycle.AbstractLifeCycleListener() {
+                                    .listenJetty(new LifeCycle.Listener() {
                                         @Override
                                         void lifeCycleStarted(LifeCycle event) {
                                             lifecycleStarted = true

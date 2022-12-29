@@ -30,6 +30,9 @@ public enum GuiceyOptions implements Option {
     /**
      * Packages for classpath scan. Not empty value indicates auto scan mode enabled.
      * Empty by default.
+     * <p>
+     * Special value {@link ru.vyarus.dropwizard.guice.module.GuiceyInitializer#APP_PKG} might be used to configure
+     * application package (replaced into real package during initialization).
      *
      * @see GuiceBundle.Builder#enableAutoConfig(String...)
      */

@@ -13,7 +13,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopMapRenderer
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -22,7 +22,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 10.09.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class GuiceAopRendererForSpecialMethodsTest extends Specification {
 
     static {
@@ -40,7 +40,9 @@ class GuiceAopRendererForSpecialMethodsTest extends Specification {
     def "Check aop render"() {
 
         expect:
-        render(new GuiceAopConfig()) == """
+        render(new GuiceAopConfig())
+            // appears when running from IDEA
+                .replace("org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:318)", "sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)") == """
 
     1 AOP handlers declared
     └── GuiceAopRendererForSpecialMethodsTest\$App\$1/GuiceAopRendererForSpecialMethodsTest\$App\$1\$1    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
@@ -52,15 +54,15 @@ class GuiceAopRendererForSpecialMethodsTest extends Specification {
         ├── [SYNTHETIC] \$getStaticMetaClass()                                 GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
         ├── compare(Integer, Integer)                                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
         ├── [SYNTHETIC] compare(Object, Object)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
-        ├── [SYNTHETIC] getMetaClass()                                        GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
-        ├── [SYNTHETIC] getProperty(String)                                   GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
-        ├── [SYNTHETIC] invokeMethod(String, Object)                          GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── getMetaClass()                                                    GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── getProperty(String)                                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── invokeMethod(String, Object)                                      GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
         ├── [SYNTHETIC] methodMissing(String, Object)                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
         ├── [SYNTHETIC] propertyMissing(String)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
         ├── [SYNTHETIC] propertyMissing(String, Object)                       GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
         ├── reversed()                                                        GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
-        ├── [SYNTHETIC] setMetaClass(MetaClass)                               GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
-        ├── [SYNTHETIC] setProperty(String, Object)                           GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── setMetaClass(MetaClass)                                           GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
+        ├── setProperty(String, Object)                                       GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
         ├── thenComparing(Comparator<? super Object>)                         GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
         ├── thenComparing(Function<? super Object, ? extends Object>)         GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
         ├── thenComparing(Function<? super Object, ? extends Object>, Comparator<? super Object>)      GuiceAopRendererForSpecialMethodsTest\$App\$1\$1
@@ -100,7 +102,7 @@ class GuiceAopRendererForSpecialMethodsTest extends Specification {
     String render(GuiceAopConfig config) {
         renderer.renderReport(config).replace("\r", "").replaceAll(" +\n", "\n")
         // unify package name for jdk 9 and above
-        .replace('java.base/jdk.internal', 'sun')
+                .replace('java.base/jdk.internal', 'sun')
     }
 
     // synthetic methods would be provided by groovy methods

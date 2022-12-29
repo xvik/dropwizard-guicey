@@ -95,7 +95,7 @@ public final class GuiceModelParser {
             if (dec.getKey() != null) {
                 final Class ann = dec.getKey().getAnnotationType();
                 if (ann != null) {
-                    if (ann.getName().equals("com.google.inject.internal.Element")) {
+                    if ("com.google.inject.internal.Element".equals(ann.getName())) {
                         dec.setSpecial(Collections.singletonList("multibinding"));
                     }
                     if (ann.getName().startsWith("com.google.inject.internal.RealOptionalBinder")) {

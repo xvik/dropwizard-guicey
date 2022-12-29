@@ -14,13 +14,13 @@ import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeConfig
 import ru.vyarus.dropwizard.guice.debug.report.tree.ContextTreeRenderer
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 06.09.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class Simple2DeduplicationReportTest extends AbstractTest {
 
     @Inject

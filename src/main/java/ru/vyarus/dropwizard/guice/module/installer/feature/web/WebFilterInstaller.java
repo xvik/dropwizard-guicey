@@ -19,7 +19,9 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 
 /**
  * Search for http filters annotated with {@link WebFilter} (servlet api annotation). Such filters will not
@@ -103,5 +105,11 @@ public class WebFilterInstaller implements FeatureInstaller,
             }
         }
         mapping.setAsyncSupported(annotation.asyncSupported());
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        return Collections.singletonList("implements " + Filter.class.getSimpleName()
+                + " + @" + WebFilter.class.getSimpleName());
     }
 }

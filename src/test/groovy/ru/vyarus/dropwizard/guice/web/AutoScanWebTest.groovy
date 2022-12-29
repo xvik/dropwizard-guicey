@@ -16,13 +16,13 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListe
 import ru.vyarus.dropwizard.guice.module.installer.internal.AdminGuiceFilter
 import ru.vyarus.dropwizard.guice.support.feature.DummyService
 import ru.vyarus.dropwizard.guice.support.web.feature.*
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 07.08.2016
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class AutoScanWebTest extends AbstractTest {
 
     @Inject

@@ -31,7 +31,7 @@ package ru.vyarus.dropwizard.guice.module.installer.bundle;
  * uniqueness simply properly implement equals method or use
  * {@link ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle}. See
  * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#duplicateConfigDetector(
- *ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector)} for duplicates detection mechanism info.
+ * ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector)} for duplicates detection mechanism info.
  *
  * @author Vyacheslav Rusakov
  * @since 01.08.2015
@@ -58,7 +58,7 @@ public interface GuiceyBundle {
      *
      * @param bootstrap guicey bootstrap object
      */
-    default void initialize(GuiceyBootstrap bootstrap) {
+    default void initialize(final GuiceyBootstrap bootstrap) {
         // void
     }
 
@@ -79,7 +79,7 @@ public interface GuiceyBundle {
      * @param environment guicey environment object
      * @throws Exception if something goes wrong
      */
-    default void run(GuiceyEnvironment environment) throws Exception {
+    default void run(final GuiceyEnvironment environment) throws Exception {
         // void
     }
 }

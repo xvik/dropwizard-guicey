@@ -23,7 +23,10 @@ Added installers:
  
 ## Setup
 
-[![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion)
+!!! important 
+    Since dropwizard 2.0.22 dropwizard-jdbi3 [requires Java 11 by default](https://github.com/dropwizard/dropwizard/releases/tag/v2.0.22),
+    use `guicey-jdbi3-jdk8` instead (meta package fixing classpath) for java 8 compatibility.
+
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-jdbi3.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-jdbi3)
 
 Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 
@@ -34,14 +37,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi3</artifactId>
-  <version>5.0.1-1</version>
+  <version>{{ gradle.ext }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-jdbi3:5.0.1-1'
+implementation 'ru.vyarus.guicey:guicey-jdbi3:{{ gradle.ext }}'
 ```
 
 See the most recent version in the badge above.
@@ -253,6 +256,38 @@ INFO  [2016-12-05 19:42:27,374] ru.vyarus.guicey.jdbi3.installer.repository.Repo
 
     (ru.vyarus.guicey.jdbi3.support.repository.SampleRepository)
 ```
+
+#### Manual bindings
+
+Repository can't be recognized from guice binding because repository type is abstract
+and guice would complain about it. But repository can be recognized from the chain.
+
+For example, suppose there is a base interface `Storage`
+and JDBI implementation is only one possible implementation: `JdbiStorage extends Storage`.
+In this case you can bind: `bind(Storage.class).to(JdbiStorage.class)` and use
+everywhere in code `@Inject Storage storage;` (installer would bind interface to implementation and
+guice would be able to correctly track binding to the generated instance).
+
+Only in this case repository class could be recognized from guice binding (even if it's not declared as extension and
+classpath scan not used).
+
+In all other cases, repository declaration would cause an error (to identify incorrect declaration).
+
+
+### Laziness
+
+By default, JDBI proxies for declared repositories created only on first repository method call.
+Lazy behaviour is important to take into account all registered JDBI extensions. Laziness also
+slightly speeds up application startup. 
+
+If required, you can enable eager initialization during bundle construction:   
+
+```java
+JdbiBundle.forDatabase((conf, env) -> conf.getDatabase())
+    .withEagerInitialization()
+```
+
+In the eager mode all proxies would be constructed after application initialization (before web part initialization).
 
 ### Guice beans access
 

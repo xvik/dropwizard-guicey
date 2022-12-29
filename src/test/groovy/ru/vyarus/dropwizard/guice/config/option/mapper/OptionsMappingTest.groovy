@@ -1,12 +1,14 @@
 package ru.vyarus.dropwizard.guice.config.option.mapper
 
-import org.junit.Rule
-import org.junit.contrib.java.lang.system.EnvironmentVariables
-import org.junit.contrib.java.lang.system.RestoreSystemProperties
-import org.junit.contrib.java.lang.system.SystemOutRule
+import org.junit.jupiter.api.extension.ExtendWith
 import ru.vyarus.dropwizard.guice.module.context.option.Option
 import ru.vyarus.dropwizard.guice.module.context.option.mapper.OptionsMapper
 import spock.lang.Specification
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
+import uk.org.webcompere.systemstubs.jupiter.SystemStub
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension
+import uk.org.webcompere.systemstubs.properties.SystemProperties
+import uk.org.webcompere.systemstubs.stream.SystemOut
 
 import java.util.function.Function
 
@@ -14,14 +16,15 @@ import java.util.function.Function
  * @author Vyacheslav Rusakov
  * @since 27.04.2018
  */
+@ExtendWith(SystemStubsExtension)
 class OptionsMappingTest extends Specification {
 
-    @Rule
-    EnvironmentVariables ENV = new EnvironmentVariables()
-    @Rule
-    SystemOutRule out = new SystemOutRule().enableLog();
-    @Rule
-    RestoreSystemProperties propsReset = new RestoreSystemProperties();
+    @SystemStub
+    EnvironmentVariables ENV
+    @SystemStub
+    SystemOut out
+    @SystemStub
+    SystemProperties propsReset
 
     def "Check variables mapping"() {
 
@@ -46,19 +49,19 @@ class OptionsMappingTest extends Specification {
         res[Opts.OptBool] == true
 
         and: "log ok"
-        out.log.replace("\r", "") == """\tenv: VAR                   Opts.OptInt = 1
+        out.text.replace("\r", "") == """\tenv: VAR                   Opts.OptInt = 1
 \tprop: foo                  Opts.OptStr = bar
 \t                           Opts.OptBool = true
 """
 
         when: "logging disabled"
-        out.clearLog()
+        out.clear()
         res = new OptionsMapper()
                 .env("VAR", Opts.OptInt)
                 .map()
         then: "no log"
         res[Opts.OptInt] == 1
-        out.log == ""
+        out.text == ""
     }
 
     def "Check mass mapping"() {
@@ -70,10 +73,10 @@ class OptionsMappingTest extends Specification {
 
         when: "mass mapping props"
         def res = new OptionsMapper()
-            // override option mapping
-            .prop("option.${Opts.name}.${Opts.OptDbl.name()}", Opts.OptDbl, {val -> 12} as Function)
-            .props()
-            .map()
+        // override option mapping
+                .prop("option.${Opts.name}.${Opts.OptDbl.name()}", Opts.OptDbl, { val -> 12 } as Function)
+                .props()
+                .map()
         then: "custom option overridden by manual mapping"
         res[Opts.OptDbl] == 12
         res[Opts.OptBool] == true

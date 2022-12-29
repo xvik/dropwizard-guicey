@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.renderer.guice.support.AopModule
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopMapRenderer
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -20,7 +20,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 23.08.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class GuiceAopRendererTest extends Specification {
     static {
         System.clearProperty(PropertyBundleLookup.BUNDLES_PROPERTY)
@@ -101,7 +101,7 @@ class GuiceAopRendererTest extends Specification {
 
         expect:
         render(new GuiceAopConfig()
-        .types(Matchers.subclassesOf(AopModule.Service.class))) == """
+                .types(Matchers.subclassesOf(AopModule.Service.class))) == """
 
     2 AOP handlers declared
     ├── AopModule/Interceptor1                                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.AopModule.configure(AopModule.java:23)

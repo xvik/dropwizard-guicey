@@ -6,7 +6,7 @@ import ru.vyarus.dropwizard.guice.bundles.transitive.support.Bundle2
 import ru.vyarus.dropwizard.guice.bundles.transitive.support.Bundle3
 import ru.vyarus.dropwizard.guice.bundles.transitive.support.TransitiveBundlesApp
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 21.06.2016
  */
-@UseGuiceyApp(TransitiveBundlesApp)
+@TestGuiceyApp(TransitiveBundlesApp)
 class TransitiveBundlesTest extends AbstractTest {
 
     @Inject

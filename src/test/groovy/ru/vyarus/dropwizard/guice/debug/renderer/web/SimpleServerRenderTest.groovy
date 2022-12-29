@@ -9,8 +9,7 @@ import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.report.web.MappingsConfig
 import ru.vyarus.dropwizard.guice.debug.report.web.WebMappingsRenderer
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.ConfigOverride
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -19,9 +18,9 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 25.10.2019
  */
-@UseDropwizardApp(value = App,
+@TestDropwizardApp(value = App,
         config = 'src/test/resources/ru/vyarus/dropwizard/guice/simple-server.yml',
-        configOverride = @ConfigOverride(key = "server.applicationContextPath", value = "/app/"))
+        configOverride = ["server.applicationContextPath: /app/"])
 class SimpleServerRenderTest extends Specification {
 
     static {
@@ -49,7 +48,7 @@ class SimpleServerRenderTest extends Specification {
     MAIN /app
     ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                                     [REQUEST]       io.dropwizard.jersey.filter.AllowedMethodsFilter-11111111
     ├── filter     /*                   async   ThreadNameFilter             (i.d.servlets)                                          [REQUEST]       io.dropwizard.servlets.ThreadNameFilter-11111111
-    ├── servlet    /rest/*              async   JerseyServletContainer       (i.d.jersey.setup)                                                      io.dropwizard.jersey.setup.JerseyServletContainer-11111111
+    ├── servlet    /rest/*              async   JerseyServletContainer       (i.d.jersey.setup)                                                      jersey
     └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)                                                org.eclipse.jetty.servlet.ServletHandler\$Default404Servlet-11111111
 
 

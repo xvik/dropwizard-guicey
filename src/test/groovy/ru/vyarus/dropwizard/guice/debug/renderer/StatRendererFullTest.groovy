@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooModule
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooResource
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 
@@ -20,7 +20,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 31.07.2016
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class StatRendererFullTest extends BaseDiagnosticTest {
 
     @Inject

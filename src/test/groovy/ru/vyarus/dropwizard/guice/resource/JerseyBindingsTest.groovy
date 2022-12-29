@@ -10,7 +10,7 @@ import org.glassfish.jersey.server.ContainerRequest
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -26,7 +26,7 @@ import javax.ws.rs.ext.Providers
  * @author Vyacheslav Rusakov
  * @since 29.03.2017
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class JerseyBindingsTest extends AbstractTest {
 
     def "Check jersey bindings"() {

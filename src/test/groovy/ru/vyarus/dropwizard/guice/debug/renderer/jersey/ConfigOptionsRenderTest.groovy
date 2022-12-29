@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfig
 import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfigRenderer
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -18,7 +18,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 27.10.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class ConfigOptionsRenderTest extends Specification {
     static {
         System.clearProperty(PropertyBundleLookup.BUNDLES_PROPERTY)
@@ -61,11 +61,7 @@ class ConfigOptionsRenderTest extends Specification {
         GuiceParamConverterProvider  (r.v.d.g.c.h.support)
         HKParamConverterProvider     (r.v.d.g.c.h.s.hk)         *jersey managed
         RootElementProvider          (o.g.j.j.i.JaxbStringReaderProvider)
-        OptionalDoubleParamConverterProvider (i.d.jersey.optional)
-        OptionalIntParamConverterProvider (i.d.jersey.optional)
-        OptionalLongParamConverterProvider (i.d.jersey.optional)
         OptionalParamConverterProvider (i.d.jersey.guava)
-        OptionalParamConverterProvider (i.d.jersey.optional)
         AggregatedProvider           (o.g.j.i.i.ParamConverters)
 """ as String;
     }
@@ -91,6 +87,7 @@ class ConfigOptionsRenderTest extends Specification {
         byte[]                         ByteArrayProvider            (o.g.j.m.internal)                       [application/octet-stream, */*]
         DataSource                     DataSourceProvider           (o.g.j.m.internal)                       [application/octet-stream, */*]
         Document                       DocumentProvider             (o.g.j.jaxb.internal)                    [application/xml, text/xml, */*]
+        Enum                           EnumMessageProvider          (o.g.j.m.internal)                       [text/plain]
         File                           FileProvider                 (o.g.j.m.internal)                       [application/octet-stream, */*]
         MultivaluedMap<String, String> FormMultivaluedMapProvider   (o.g.j.m.internal)                       [application/x-www-form-urlencoded]
         Form                           FormProvider                 (o.g.j.m.internal)                       [application/x-www-form-urlencoded, */*]
@@ -131,6 +128,7 @@ class ConfigOptionsRenderTest extends Specification {
         ChunkedOutput<Object>          ChunkedResponseWriter        (o.g.jersey.server)
         DataSource                     DataSourceProvider           (o.g.j.m.internal)                       [application/octet-stream, */*]
         Document                       DocumentProvider             (o.g.j.jaxb.internal)                    [application/xml, text/xml, */*]
+        Enum                           EnumMessageProvider          (o.g.j.m.internal)                       [text/plain]
         File                           FileProvider                 (o.g.j.m.internal)                       [application/octet-stream, */*]
         MultivaluedMap<String, String> FormMultivaluedMapProvider   (o.g.j.m.internal)                       [application/x-www-form-urlencoded]
         Form                           FormProvider                 (o.g.j.m.internal)                       [application/x-www-form-urlencoded, */*]
@@ -184,6 +182,7 @@ class ConfigOptionsRenderTest extends Specification {
         JsonWithPaddingInterceptor   (o.g.j.s.internal)
         GuiceWriterInterceptor       (r.v.d.g.c.h.support)
         HKWriterInterceptor          (r.v.d.g.c.h.s.hk)         *jersey managed
+        EofExceptionWriterInterceptor (i.d.jersey.errors)
 """ as String;
     }
 

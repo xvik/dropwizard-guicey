@@ -6,13 +6,13 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstal
 import ru.vyarus.dropwizard.guice.support.AutowiredModule
 import ru.vyarus.dropwizard.guice.support.CustomModuleApplication
 import ru.vyarus.dropwizard.guice.support.feature.InvisibleResource
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 04.09.2014
  */
-@UseGuiceyApp(CustomModuleApplication)
+@TestGuiceyApp(CustomModuleApplication)
 class CustomModuleTest extends AbstractTest {
 
     @Inject

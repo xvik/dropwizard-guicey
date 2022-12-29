@@ -6,7 +6,7 @@ import ru.vyarus.dropwizard.guice.cases.ifaceresource.support.ResourceContract
 import ru.vyarus.dropwizard.guice.cases.ifaceresource.support.ResourceImpl
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import javax.ws.rs.client.ClientBuilder
  * @author Vyacheslav Rusakov
  * @since 18.06.2016
  */
-@UseDropwizardApp(InterfaceResourceApp)
+@TestDropwizardApp(InterfaceResourceApp)
 class InterfaceResourceDefinitionTest extends Specification {
 
     @Inject

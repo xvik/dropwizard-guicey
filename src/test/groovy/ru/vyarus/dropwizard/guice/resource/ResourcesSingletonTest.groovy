@@ -4,14 +4,14 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.support.resource.PrototypeResource
 import ru.vyarus.dropwizard.guice.support.resource.ResourceSingletonCheckApplication
 import ru.vyarus.dropwizard.guice.support.resource.SingletonResource
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * Check resources are singletons
  * @author Vyacheslav Rusakov 
  * @since 04.10.2014
  */
-@UseDropwizardApp(ResourceSingletonCheckApplication)
+@TestDropwizardApp(ResourceSingletonCheckApplication)
 class ResourcesSingletonTest extends AbstractTest {
 
     void cleanupSpec() {

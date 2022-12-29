@@ -9,61 +9,95 @@ repo_name: 'dropwizard-guicey'
 repo_url: 'https://github.com/xvik/dropwizard-guicey'
 
 # Copyright
-copyright: 'Copyright &copy; 2014-2020 Vyacheslav Rusakov'
+copyright: 'Copyright &copy; 2014-2022 Vyacheslav Rusakov'
 
-# Documentation and theme
+plugins:
+  - search
+  - markdownextradata
+
+# Meterial theme
 theme:
   name: 'material'
-  feature:
-    tabs: true
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    #- navigation.tabs.sticky
+    - navigation.tracking
+    - navigation.top
 
-# Options
 extra:
 #  palette:
 #    primary: 'indigo'
 #    accent: 'indigo'
 
-  social:
-    - type: 'github'
-      link: 'https://github.com/xvik'
-    - type: 'twitter'
-      link: 'https://twitter.com/vyarus'
+  version:
+    provider: mike
 
-plugins:
-  - search
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/xvik
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/vyarus
 
 # Google Analytics
-google_analytics:
-  - 'UA-93174150-1'
-  - 'auto'
+  analytics:
+    provider: google
+    property: UA-93174150-1
 
-# Extensions
 markdown_extensions:
+  # Python Markdown
+  - abbr
   - admonition
-  - codehilite:
-      guess_lang: false
+  - attr_list
+  - def_list
   - footnotes
   - meta
-  - def_list
+  - md_in_html
   - toc:
       permalink: true
+
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
   - pymdownx.betterem:
       smart_enable: all
   - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight
   - pymdownx.inlinehilite
-  - pymdownx.magiclink
+  - pymdownx.keys
+  - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
 
 dev_addr: 127.0.0.1:3001
 
 nav:
     - Home: index.md
-    - Getting started: getting-started.md
-    - Concepts overview: concepts.md
-    - Guice: guice.md
-    - Testing: tests.md
-    - Decomposition: decomposition.md
+    - Getting started:
+      - Setup: getting-started.md
+      - Concepts overview: concepts.md
+      - Guice: guice.md
+      - Testing: tests.md
+      - Decomposition: decomposition.md
     #- Development tips: dev.md
     - User guide:
       - Configuration: guide/configuration.md
@@ -82,6 +116,7 @@ nav:
           - ServletModule: guide/guice/servletmodule.md
       - Diagnostic:
         - Tools: guide/diagnostic/diagnostic-tools.md
+        - Extensions help: guide/diagnostic/extensions-report.md
         - Configuration: guide/diagnostic/configuration-report.md
         - Configuration model:  guide/diagnostic/configuration-model.md
         - Installers: guide/diagnostic/installers-report.md
@@ -91,7 +126,13 @@ nav:
         - AOP: guide/diagnostic/aop-report.md
         - Web: guide/diagnostic/web-report.md
         - Jersey: guide/diagnostic/jersey-report.md
-      - Test: guide/test.md
+      - Test:
+        - Overview: guide/test/overview.md
+        - Spock 2: guide/test/spock2.md
+        - Junit 5: guide/test/junit5.md
+        - General support: guide/test/general.md
+        - Spock 1: guide/test/spock.md
+        - Junit 4: guide/test/junit4.md
       - Lifecycle: guide/lifecycle.md
       - Classpath scan: guide/scan.md
       - Installers: guide/installers.md

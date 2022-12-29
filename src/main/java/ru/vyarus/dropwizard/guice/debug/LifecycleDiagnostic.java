@@ -3,7 +3,6 @@ package ru.vyarus.dropwizard.guice.debug;
 import com.google.inject.Binding;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.time.StopWatch;
-import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
@@ -12,11 +11,24 @@ import org.glassfish.jersey.server.monitoring.RequestEventListener;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.lifecycle.UniqueGuiceyLifecycleListener;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.*;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesFromLookupResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesInitializedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ClasspathExtensionsResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.CommandsResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.DropwizardBundlesInitializedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ManualExtensionsValidatedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.*;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ApplicationRunEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.BundlesStartedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ExtensionsInstalledEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ExtensionsResolvedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.InjectorCreationEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ModulesAnalyzedEvent;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -37,7 +49,7 @@ import java.util.stream.Collectors;
  * @author Vyacheslav Rusakov
  * @since 17.04.2018
  */
-@SuppressWarnings({"checkstyle:ClassFanOutComplexity", "PMD.TooManyMethods"})
+@SuppressWarnings({"checkstyle:ClassFanOutComplexity", "PMD.TooManyMethods", "PMD.ExcessiveImports"})
 public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
 
     private static final String BUNDLES = "bundles";
@@ -174,7 +186,7 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
 
     @Override
     protected void injectorCreation(final InjectorCreationEvent event) {
-        log("Staring guice with %s/%s%s modules...",
+        log("Starting guice with %s/%s%s modules...",
                 event.getModules().size(), event.getOverridingModules().size(), fmtDisabled(event.getDisabled()));
         if (showDetails) {
             logDetails("modules", event.getModules());
@@ -234,10 +246,12 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
             return;
         }
         final StringBuilder builder = new StringBuilder()
-                .append("\t").append(message).append(" = \n");
+                .append('\t').append(message).append(" = \n");
         for (Object item : items) {
             builder.append("\t\t").append(item instanceof String ? item
-                    : RenderUtils.renderClassLine(item instanceof Class ? (Class) item : item.getClass()))
+                    // it is the only way to show something meaningful for proxy
+                    : (item instanceof Proxy ? item.toString()
+                    : RenderUtils.renderClassLine(item instanceof Class ? (Class) item : item.getClass())))
                     .append(NL);
         }
         System.out.println(builder.toString());
@@ -246,7 +260,7 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
     /**
      * Jetty listener.
      */
-    private class JettyLifecycleListener extends AbstractLifeCycle.AbstractLifeCycleListener {
+    private class JettyLifecycleListener implements LifeCycle.Listener {
         @Override
         public void lifeCycleStarting(final LifeCycle event) {
             log("Jetty starting...");

@@ -9,19 +9,18 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase
 import ru.vyarus.dropwizard.guice.yaml.support.NotUniqueSubConfig
 import spock.lang.Specification
 
 import javax.inject.Inject
 
-
 /**
  * @author Vyacheslav Rusakov
  * @since 11.06.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class ShortcutsTest extends Specification {
 
     @Inject
@@ -52,7 +51,7 @@ class ShortcutsTest extends Specification {
         then:
         mod.configuration("not.exists") == null
         mod.configuration("sub") != null
-        mod.configuration("sub.smth") ==  "sample"
+        mod.configuration("sub.smth") == "sample"
         mod.configuration(ComplexGenericCase.Sub) != null
         mod.configurations(ComplexGenericCase.Sub).size() == 1
 
@@ -85,7 +84,7 @@ class ShortcutsTest extends Specification {
         then:
         bundle.configuration("not.exists") == null
         bundle.configuration("sub") != null
-        bundle.configuration("sub.smth") ==  "sample"
+        bundle.configuration("sub.smth") == "sample"
         bundle.configuration(ComplexGenericCase.Sub) != null
         bundle.configurations(ComplexGenericCase.Sub).size() == 1
 

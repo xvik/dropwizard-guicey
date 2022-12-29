@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListenerInstaller
 import ru.vyarus.dropwizard.guice.support.web.listeners.ContextListener
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 09.08.2016
  */
-@UseGuiceyApp(ListApp)
+@TestGuiceyApp(ListApp)
 class ListenersTest extends AbstractTest {
 
     @Inject

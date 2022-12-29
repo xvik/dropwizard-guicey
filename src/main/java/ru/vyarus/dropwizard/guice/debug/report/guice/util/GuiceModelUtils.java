@@ -86,6 +86,7 @@ public final class GuiceModelUtils {
      * @param key guice binding key
      * @return string representation for key or "-" if key is null
      */
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     public static String renderKey(final Key key) {
         if (key == null) {
             return "-";
@@ -94,7 +95,7 @@ public final class GuiceModelUtils {
         if (key.getAnnotationType() != null) {
             res.append('@').append(key.getAnnotationType().getSimpleName());
             for (Method method : key.getAnnotationType().getMethods()) {
-                if (method.getName().equals("value") && method.getReturnType().equals(String.class)) {
+                if ("value".equals(method.getName()) && method.getReturnType().equals(String.class)) {
                     final boolean accessible = method.isAccessible();
                     try {
                         method.setAccessible(true);

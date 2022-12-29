@@ -1,11 +1,11 @@
 # Shared configuration state
 
-Sometimes is is required to pass configuration values between different application parts
-or implement bundles communication. In this cases usually you have to use `ThreadLocal` (direct static fields can't 
+Sometimes, it is required to pass configuration values between different application parts
+or implement bundles communication. In these cases usually you have to use `ThreadLocal` (direct static fields can't 
 be used because it will make problems for tests).
 
 !!! attention
-    This is edge cases - they are really rare and should be avoided if possible.
+    Use it only when it's not possible to avoid.
 
 Guicey adds shared state support in order to replace all current and future hacks (and 
 so avoid unexpected side effects for tests).
@@ -15,17 +15,42 @@ Internally it is implemented as static map with value reference by application i
 
 !!! note
     Shared state content is intentionally not logged (there is no report for that) because
-    it is an internal state. Don't abuse it! It myst be used only for edge cases.
+    it is an internal state. Don't abuse it! It must be used only for edge cases.
     
 Guicey use it for storing `Injector` object lookup ([InjectorLookup](guice/injector.md#access-injector) is actually a shortcut).
+Also, all main dropwizard objects are stored there for direct reference.
 
 [SPA](../extras/spa.md) and [GSP](../extras/gsp.md) bundles use it for bundles communication.    
+
+## Utility
+
+During startup shared state could be obtained with a static call:
+
+```java
+SharedConfigurationState.getStartupInstance() 
+```
+
+!!! note ""
+    Static reference is possible only from the main application thread (which is always the case during initialization)
+
+Shared state holds references to the main dropwizard objects, see methods:
+
+- getBootstrap()
+- getApplication()
+- getEnvironment()
+- getConfiguration()
+- getConfigurationTree()
+
+All of them return providers: e.g. `SharedConfigurationState.getStartupInstance().getBootsrap()`
+would return `Provider<Bootstrap>`. This is required because target object
+might not be available yet, still there would be a way to initialize some logic with "lazy object"
+(to call it later, when object would be available) at any configuration stage.
 
 ## Shared state restrictions
 
 Internally shared state is a `Map<Class, Object>`. Class is used as key because assumed 
-usage scope is bundle and it will force you to use bundle class as a key. Moreover non string
-key reduce dummy errors: typos (internally, values are stored by string class name to unify keys from different class loaders). 
+usage scope is bundle and it will force you to use bundle class as a key (or any holder object class). Moreover, non string
+key reduce dummy typos (internally, values are stored by string class name to unify keys from different class loaders). 
 
 Other restrictions:
 
@@ -33,6 +58,7 @@ Other restrictions:
 * State value can't be null! Again, to avoid problems with NPE errors.
 
 It is assumed that state will be used not for simple values, but for shared configuration objects.
+But there is no direct restrictions.
 
 ## Main bundle
 
@@ -54,9 +80,9 @@ static class XHook implements GuiceyConfigurationHook {
 
 Shared state is assumed to be used by bundles. Bundle provides special [shortcut methods](configuration.md#guicey-bundle) 
 for accessing state. It is assumed that state is declared under initialization phase and
-could be accessed under both phases.
+could be accessed under both phases (but not restricted, so state could be declared in run phase too).
 
-For usage examples see [bundles section](bundles.md#shared-state).
+For usage examples see [decomposition section](../decomposition.md#shared-state).
 
 ## Guice modules
 
@@ -69,7 +95,11 @@ If required, shared state could be accessed statically everywhere:
 
 ```java
 SharedConfigurationState.get(application)
-```                                      
+```
+
+!!! note ""
+    Direct static access (`SharedConfigurationState.getStartupInstance()`) is available only during startup, at runtime you can reference state
+    only with Environment or Application objects.
 
 Or direct value access:
 
@@ -129,3 +159,6 @@ or
 Bootstrap bootstrap = SharedConfigurationState
             .lookupOrFail(environment, Bootstrap.class, "No bootstrap available");
 ``` 
+
+!!! tip
+    During startup these objects might be referenced as lazy objects with [shortcuts](#utility)

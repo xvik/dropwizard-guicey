@@ -36,12 +36,14 @@ public class TestCommand<C extends Configuration> extends EnvironmentCommand<C> 
     }
 
     public void stop() {
-        try {
-            container.stop();
-        } catch (Exception e) {
-            throw new IllegalStateException("Failed to stop managed objects container", e);
+        if (container != null) {
+            try {
+                container.stop();
+            } catch (Exception e) {
+                throw new IllegalStateException("Failed to stop managed objects container", e);
+            }
+            container.destroy();
         }
-        container.destroy();
         cleanup();
     }
 

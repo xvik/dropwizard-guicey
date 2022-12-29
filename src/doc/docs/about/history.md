@@ -1,3 +1,131 @@
+### [5.7.0](http://xvik.github.io/dropwizard-guicey/5.7.0) (2022-12-29)
+* Update to dropwizard 2.1.4
+* Fix NoClassDefFoundError(AbstractCollectionJaxbProvider) appeared for some jersey provider registrations (#240)
+* Jersey extensions might omit `@Provider` on known extension types (ExceptionMapper, MessageBodyReader, etc.).
+  Unifies usage with pure dropwizard (no additional `@Provider` annotation required). (#265)
+    - New option InstallerOptions.JerseyExtensionsRecognizedByType could disable new behaviour
+* Support ModelProcessor jersey extension installation (#186)
+* Add extensions help: .printExtensionsHelp() showing extension signs recognized by installers (in recognition order)
+    - Custom installers could participate in report by overriding FeatureInstaller.getRecognizableSigns()
+      (default interface method).
+* Change reports log level from INFO to WARN to comply with default dropwizard level
+* Support application reuse between tests (#269)
+    - new reuseApplication parameter in extensions enables reuse
+    - reusable application must be declared in base test class: all tests derived
+      from this base class would use the same application instance
+* Add SBOM (json and xml with cyclonedx classifier)
+* Add .enableAutoConfig() no-args shortcut for enabling classpath scan in application package
+
+### [5.6.1](http://xvik.github.io/dropwizard-guicey/5.6.1) (2022-07-02)
+* Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)
+* Fix classpath scan recognition of inner static classes inside jars (#231)
+* Junit 5 extensions:
+    - Fix parallel test methods support (configuration overrides were applied incorrectly)
+    - Add "debug" option: when enabled, prints registered setup objects, hooks and
+      applied configuration overrides
+        * Setup objects and hooks not printed by default as before, only when debug enabled
+        * Debug could be also enabled with system property -Dguicey.extensions.debug=true
+          or with alias TestSupport.debugExtensions()
+
+### [5.6.0](http://xvik.github.io/dropwizard-guicey/5.6.0) (2022-06-07)
+* Update dropwizard to 2.1.0
+* Test support objects changes:
+    - Add new interface TestEnvironmentSetup to simplify test environment setup
+        * In contrast to guicey hooks, setup objects used only in tests to replace the need of writing
+          additional junit extensions (for example, to setup test db). It provides a simple way to
+          override application configuration (e.g. to specify credentials to just started db)
+        * Registration is the same as with hooks: annotation or inside extension builder and with
+          field using new annotation @EnableSetup
+    - Hooks and setup objects configured in test are logged now in execution order and
+      with registration source hint
+    - @EnableHook fields might be declared with custom classes (not only raw hook interface)
+* Junit 5 extensions field registration (@RegisterExtension) changes
+    - Application might be started per-test-method now (when extension registered in non-static field)
+        * In this case support objects might also be registered in non-static fields
+    - Add configOverrideByExtension method to read configuration override value
+      registered by 3rd party junit 5 extension (from junit extension store).
+    - hooks(Class) method accepts multiple classes
+    - configOverrides(String...) now aggregates multiple calls
+
+### [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0) (2022-03-30)
+* Test framework-agnostic utilities:
+    - Add GuiceyTestSupport to simplify guice-only manual application runs
+      (by analogy to DropwizardTestSupport class)
+    - Add TestSupport class as a root for test framework-agnostic utilities.
+      Suitable for application startup errors testing and integration within not supported test runner.
+* Add Spock 2 support: there is no custom extensions, instead existing junit 5 extensions would be used
+  through a special library spock-junit5 (developed specifically for this integration)
+* Change "hooks in base test class" behaviour: hooks from static fields from base classes applied before hooks in test itself.
+  Such behaviour is more natural - "base classes declarations go first"
+  (before all field hooks were applied after annotation hooks)
+* Extract Spock 1 and Junit 4 extensions from core into ext modules:
+    - packages remain the same, so there should be no issues with it (just add new dependency)
+    - removed deprecation markers from Junit 4 rules (entire module assumed to be deprecated; fewer warnings on build)
+* BOM changes:
+    - spock version removed in order to avoid problems downgrading spock version for spock1 module
+    - system-rules removed because it targets junit4 (ext module provides it)
+    - groovy libraries removed (newer groovy 2.x was required for spock1 to run on java 11)
+    - add spock-junit5 version
+
+### [5.4.2](http://xvik.github.io/dropwizard-guicey/5.4.2) (2022-01-26)
+* Update dropwizard to 2.0.28
+* Update guice to 5.1.0 (java 17 support)
+
+### [5.4.1](http://xvik.github.io/dropwizard-guicey/5.4.1) (2021-12-19)
+* Fix inner guice class usage in always executable code (#187, OSGi issue)
+* Update dropwizard to 2.0.27 (many dependency updates in the latest versions fixing java 17 support)
+
+### [5.4.0](http://xvik.github.io/dropwizard-guicey/5.4.0) (2021-10-21)
+* Use direct dependency versions in pom to simplify resolution (dependencyManagement section remains but for usage as BOM only)
+* Fix lambda modules support (modules declared with lambda expression) (#160)
+* Exclude "sun.*" objects from configuration analysis (#170, #180)
+* Fix junit5 extensions support for @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+  (class instance injections now processed in beforeEach hook instead of instancePostProcessor)
+* Add error message when junit5 extensions incorrectly registered with non-static fields (to avoid confusion)
+* SharedConfigurationState:
+    - Add ability for direct static lookup during startup (from main thread):
+      SharedConfigurationState.getStartupInstance()
+      (option required for places where neither application not environment object accessible
+      (e.g. binding installer, bundle lookup, etc.); and could be used for common objects resolution where otherwise
+      they are not directly accessible)
+    - Add shortcut methods on state instance producing providers (lazy) for common objects:
+      getBootstrap, getApplication, getEnvironment, getConfiguration, getConfigurationTree
+      (example usage during startup: SharedConfigurationState.getStartupInstance().getApplication() returns Provider<Application>)
+* Unify shared state access methods in GuiceyBootstrap, GuiceyEnvironment and DropwizardAwareModule
+  (removes implicit limitation that shared state must be initialized only in init phase)
+
+### [5.3.0](http://xvik.github.io/dropwizard-guicey/5.3.0) (2021-03-06)
+* Update to guice [5.0.1](https://github.com/google/guice/wiki/Guice501)
+  (java15 support, removes cglib, fixes "illegal reflective access" warnings, update Guava to LATEST 30.1-jre)
+* Update to dropwizard 2.0.20
+* Unify GuiceyAppRule (junit4) behaviour with DropwizardAppRule: config overrides should initialize just
+  before test and not in the constructor. The issue was causing early evaluation of lazy (deferred) overrides (#151)
+* Add custom ConfigOverride objects support for junit 5 extensions (registered with @RegisterExtension)  
+
+### [5.2.0](http://xvik.github.io/dropwizard-guicey/5.2.0) (2020-11-29)
+* Update to dropwizard 2.0.16
+* Remove direct usages of logback-classic classes to unlock logger switching (#127)
+* Fix stackoverflow on config introspection caused by EnumMap fields (#87) 
+* Prioritize registered jersey provider extensions and add support for @Priority annotation (#97)
+  Unifies raw dropwizard and guicey behaviour. Possibly breaking, see note below.
+* Add lifecycle event: ApplicationStoppedEvent (triggered on jersey lifecycle stop)   
+
+### [5.1.0](http://xvik.github.io/dropwizard-guicey/5.1.0) (2020-06-02)
+* Update guice to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
+* Update to dropwizard 2.0.10
+* Add junit 5 extensions (#74). Works much like existing spock extensions:
+    - @TestGuiceyApp for replacement of GuiceyAppRule
+    - @TestDropwizardApp for using instead of DropwizardAppRule (or current dropwizard extension)
+* Spock extensions updates:
+    - Internally, use DropwizardTestSupport instead of deprecated junit 4 rules
+    - New features (port features from junit 5 extensions):
+        * @UseDropwizardApp got new configurations: randomPorts and restMapping 
+        * @UseGuiceyHooks deprecated: instead additional hooks may be declared in static test field
+        * ClientSupport test field will be injected with client support object instance
+* Junit 4 rules deprecated GuiceyAppRule, StartupErrorRules             
+* Fix parallel tests support: guice logs interception wasn't thread safe (#103)     
+* Fix invalid Automatic-Module-Name to 'ru.vyarus.dropwizard.guicey' (#106) 
+
 ### [5.0.1](http://xvik.github.io/dropwizard-guicey/5.0.1) (2020-03-13)
 * Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf))
 * Fix yaml bindings report rendering with values containing string format parameters like %s (#77)

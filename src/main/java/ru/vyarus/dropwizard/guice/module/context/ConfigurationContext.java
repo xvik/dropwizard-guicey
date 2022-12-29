@@ -281,7 +281,7 @@ public final class ConfigurationContext {
      * Direct dropwizard bundle registration from
      * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#dropwizardBundles(ConfiguredBundle...)}
      * or {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#dropwizardBundles(
-     *ConfiguredBundle[])}.
+     * ConfiguredBundle[])}.
      * Context class is set to currently processed bundle.
      *
      * @param bundles dropwizard bundles
@@ -744,6 +744,15 @@ public final class ConfigurationContext {
             exts.add(getInfo(ext));
         }
         extensionsHolder.registerExtensions(exts);
+    }
+
+    /**
+     * Called after complete guice bundle startup (other dropwizard bundle's run phase (for bundles registered
+     * after guice bundle) may not yet be called).
+     */
+    public void bundleStarted() {
+        lifecycle().applicationRun();
+        sharedState.forgetStartupInstance();
     }
 
     /**

@@ -340,7 +340,7 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
         return res;
     }
 
-    @SuppressWarnings({"unchecked", "PMD.AvoidInstantiatingObjectsInLoops"})
+    @SuppressWarnings({"unchecked", "PMD.CognitiveComplexity"})
     private List<String> renderChainLines(final List<BindingDeclaration> roots,
                                           final Map<Key, BindingDeclaration> bindings) {
         final List<String> lines = new ArrayList<>();

@@ -6,7 +6,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.servlet.*
@@ -16,7 +16,7 @@ import javax.servlet.annotation.WebFilter
  * @author Vyacheslav Rusakov
  * @since 18.08.2016
  */
-@UseDropwizardApp(AsyncFilterApp)
+@TestDropwizardApp(AsyncFilterApp)
 class AsyncFilterTest extends Specification {
 
     def "Check async filter"() {

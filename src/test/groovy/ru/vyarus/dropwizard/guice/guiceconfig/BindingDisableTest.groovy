@@ -1,10 +1,6 @@
 package ru.vyarus.dropwizard.guice.guiceconfig
 
-import com.google.inject.AbstractModule
-import com.google.inject.Inject
-import com.google.inject.Injector
-import com.google.inject.Key
-import com.google.inject.Provider
+import com.google.inject.*
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
@@ -12,7 +8,7 @@ import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 import javax.ws.rs.Path
 
@@ -20,7 +16,7 @@ import javax.ws.rs.Path
  * @author Vyacheslav Rusakov
  * @since 03.09.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class BindingDisableTest extends AbstractTest {
 
     @Inject

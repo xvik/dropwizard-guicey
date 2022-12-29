@@ -9,8 +9,7 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -19,8 +18,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 28.09.2019
  */
-@UseGuiceyApp(App)
-@UseGuiceyHooks(XHook)
+@TestGuiceyApp(value = App, hooks = XHook)
 class SharedHookStateTest extends Specification {
 
     @Inject

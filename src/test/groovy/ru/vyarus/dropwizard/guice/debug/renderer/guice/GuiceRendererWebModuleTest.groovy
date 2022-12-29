@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.renderer.guice.support.WebModule
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceBindingsRenderer
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -19,7 +19,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 20.08.2019
  */
-@UseDropwizardApp(App)
+@TestDropwizardApp(App)
 class GuiceRendererWebModuleTest extends Specification {
     static {
         System.clearProperty(PropertyBundleLookup.BUNDLES_PROPERTY)

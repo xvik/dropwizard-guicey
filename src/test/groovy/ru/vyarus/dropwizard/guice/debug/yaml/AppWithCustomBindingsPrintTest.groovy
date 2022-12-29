@@ -4,16 +4,15 @@ import io.dropwizard.Application
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase
 import spock.lang.Specification
-
 
 /**
  * @author Vyacheslav Rusakov
  * @since 13.06.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class AppWithCustomBindingsPrintTest extends Specification {
 
     def "Check custom bindings print"() {

@@ -9,8 +9,10 @@ import com.google.inject.Injector;
 import com.google.inject.Stage;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.internal.inject.InjectionResolver;
+import org.glassfish.jersey.server.model.ModelProcessor;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import org.glassfish.jersey.server.spi.internal.ValueParamProvider;
+import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.AbstractJerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;
@@ -23,6 +25,9 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.DynamicFeature;
 import javax.ws.rs.ext.*;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -31,7 +36,25 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
 
 /**
  * Jersey provider installer.
- * Looks for classes annotated with {@link javax.ws.rs.ext.Provider} and register bindings in HK context.
+ * Looks for jersey extension classes and classes annotated with {@link javax.ws.rs.ext.Provider} and register
+ * bindings in HK context.
+ * <p>
+ * Registration by extension type might be disabled using
+ * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsRecognizedByType} option
+ * (for legacy behaviour - register classed only annotated with {@link javax.ws.rs.ext.Provider}).
+ * <p>
+ * By default, user providers are prioritized (with {@link org.glassfish.jersey.internal.inject.Custom}
+ * qualifier). This is the default dropwizard behaviour for direct provider registration with
+ * {@code environment.jersey().register(provider)} and so installer behaves the same. Without it ambiguous situations
+ * are possible when dropwizard default providers used instead (e.g. user provided {@code ExceptionMapper<Throwable>}
+ * not used at all because of dropwizard's one).
+ * Auto qualification may be disabled with
+ * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#PrioritizeJerseyExtensions} (to mimic older
+ * guicey versions behaviour). When auto prioritization disabled, {@link org.glassfish.jersey.internal.inject.Custom}
+ * annotation may be used directly (to prioritize exact providers).
+ * <p>
+ * {@link javax.annotation.Priority} may be used to order providers (see {@link javax.ws.rs.Priorities} for
+ * the default priority constants).
  * <p>
  * If provider is annotated with {@link JerseyManaged} it's instance will be created by HK2, not guice.
  * This is important when extensions directly depends on HK beans (no way to wrap with {@link Provider}
@@ -51,6 +74,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
  * @see ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
  * @since 10.10.2014
  */
+@SuppressWarnings("PMD.ExcessiveImports")
 @Order(30)
 public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> implements
         BindingInstaller {
@@ -68,14 +92,18 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
             DynamicFeature.class,
             ValueParamProvider.class,
             InjectionResolver.class,
-            ApplicationEventListener.class
+            ApplicationEventListener.class,
+            ModelProcessor.class
     );
 
     private final ProviderReporter reporter = new ProviderReporter();
 
     @Override
     public boolean matches(final Class<?> type) {
-        return FeatureUtils.hasAnnotation(type, Provider.class);
+        return FeatureUtils.hasAnnotation(type, Provider.class)
+                || (!Modifier.isAbstract(type.getModifiers())
+                && (boolean) option(InstallersOptions.JerseyExtensionsRecognizedByType)
+                && EXTENSION_TYPES.stream().anyMatch(ext -> ext.isAssignableFrom(type)));
     }
 
     @Override
@@ -111,6 +139,7 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
     public void install(final AbstractBinder binder, final Injector injector, final Class<Object> type) {
         final boolean hkExtension = isJerseyExtension(type);
         final boolean forceSingleton = isForceSingleton(type, hkExtension);
+        final boolean prioritize = option(InstallersOptions.PrioritizeJerseyExtensions);
         // since jersey 2.26 internal hk Factory class replaced by java 8 Supplier
         if (is(type, Supplier.class)) {
             // register factory directly (without wrapping)
@@ -122,7 +151,9 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
                     GenericsResolver.resolve(type).getGenericsInfo().getComposingTypes());
             if (!extensions.isEmpty()) {
                 for (Class<?> ext : extensions) {
-                    bindSpecificComponent(binder, injector, type, ext, hkExtension, forceSingleton);
+                    bindSpecificComponent(binder, injector, type, ext, hkExtension, forceSingleton, prioritize,
+                            // model processor must be bound by instance (initialization specific)
+                            ModelProcessor.class.equals(ext));
                 }
             } else {
                 // no known extension found
@@ -134,5 +165,17 @@ public class JerseyProviderInstaller extends AbstractJerseyInstaller<Object> imp
     @Override
     public void report() {
         reporter.report();
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        final List<String> res = new ArrayList<>();
+        res.add("@" + Provider.class.getSimpleName() + " on class");
+        if (option(InstallersOptions.JerseyExtensionsRecognizedByType)) {
+            for (Class<?> ext : EXTENSION_TYPES) {
+                res.add("implements " + ext.getSimpleName());
+            }
+        }
+        return res;
     }
 }

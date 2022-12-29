@@ -11,6 +11,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Base module to avoid boilerplate. It's not required to extend it, but
@@ -28,6 +29,8 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
         ConfigurationAwareModule<C>,
         ConfigurationTreeAwareModule,
         OptionsAwareModule {
+
+    private static final String STATE_NOT_FOUND = "Shared state not found";
 
     private C configuration;
     private Bootstrap<C> bootstrap;
@@ -180,23 +183,50 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
     }
 
     /**
-     * Use to access shared state value and immediately fail if value not yet set (most likely due to incorrect
-     * configuration order).
+     * Share global state to be used in other bundles (during configuration). This was added for very special cases
+     * when shared state is unavoidable (to not re-invent the wheel each time)!
      * <p>
-     * Note: shared state value assumed to be initialized under initialization phase by bundle (but you can workaround
-     * this limitation by accessing shared state statically with
-     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState})
+     * It is preferred to initialize shared state under initialization phase to avoid problems related to
+     * initialization order (assuming state is used under run phase). But, in some cases, it is not possible.
+     * <p>
+     * Internally, state is linked to application instance, so it would be safe to use with concurrent tests.
+     * Value could be accessed statically with application instance:
+     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#lookup(
+     * io.dropwizard.Application, Class)}.
+     * <p>
+     * During application strartup, shared state could be requested with a static call
+     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#getStartupInstance()}, but only
+     * from main thread.
+     * <p>
+     * In some cases, it is preferred to use module class as key. Value could be set only once
+     * (to prevent hard to track situations)
+     * <p>
+     * If initialization point could vary (first access should initialize it) use
+     * {@link #sharedState(Class, java.util.function.Supplier)} instead.
      *
-     * @param key     shared object key
-     * @param message exception message (could use {@link String#format(String, Object...)} placeholders)
-     * @param args    placeholder arguments for error message
-     * @param <T>     shared object type
-     * @return shared object
-     * @throws IllegalStateException if not value available
+     * @param key   shared object key
+     * @param value shared object
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
-    protected <T> T sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
-        return SharedConfigurationState.lookupOrFail(environment(), key, message, args);
+    public void shareState(final Class<?> key, final Object value) {
+        SharedConfigurationState.getOrFail(environment(), STATE_NOT_FOUND).put(key, value);
+    }
+
+    /**
+     * Alternative shared value initialization for cases when first accessed bundle should init state value
+     * and all other just use it.
+     * <p>
+     * It is preferred to initialize shared state under initialization phase to avoid problems related to
+     * initialization order (assuming state is used under run phase). But, in some cases, it is not possible.
+     *
+     * @param key          shared object key
+     * @param defaultValue default object provider
+     * @param <T>          shared object type
+     * @return shared object (possibly just created)
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> T sharedState(final Class<?> key, final Supplier<T> defaultValue) {
+        return SharedConfigurationState.getOrFail(environment(), STATE_NOT_FOUND).get(key, defaultValue);
     }
 
     /**
@@ -211,5 +241,21 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      */
     protected <T> Optional<T> sharedState(final Class<?> key) {
         return SharedConfigurationState.lookup(environment(), key);
+    }
+
+    /**
+     * Used to access shared state value and immediately fail if value not yet set (most likely, due to incorrect
+     * configuration order).
+     *
+     * @param key     shared object key
+     * @param message exception message (could use {@link String#format(String, Object...)} placeholders)
+     * @param args    placeholder arguments for error message
+     * @param <T>     shared object type
+     * @return shared object
+     * @throws IllegalStateException if not value available
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    protected <T> T sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
+        return SharedConfigurationState.lookupOrFail(environment(), key, message, args);
     }
 }

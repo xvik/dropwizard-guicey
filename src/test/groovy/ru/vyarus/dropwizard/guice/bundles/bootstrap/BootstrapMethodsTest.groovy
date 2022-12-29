@@ -12,13 +12,13 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstal
 import ru.vyarus.dropwizard.guice.support.feature.DummyManaged
 import ru.vyarus.dropwizard.guice.support.feature.DummyResource
 import ru.vyarus.dropwizard.guice.support.feature.DummyTask
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 03.08.2015
  */
-@UseGuiceyApp(GBootstrapApplication)
+@TestGuiceyApp(GBootstrapApplication)
 class BootstrapMethodsTest extends AbstractTest {
 
     @Inject

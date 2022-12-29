@@ -8,14 +8,14 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
  * @since 24.04.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class MissedEventsTest extends Specification {
 
     def "Check missed events"() {

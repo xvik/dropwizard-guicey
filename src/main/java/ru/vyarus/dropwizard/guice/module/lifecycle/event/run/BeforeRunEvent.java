@@ -5,7 +5,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 /**
- * Meta event. Called just before guice bundle processin gin run phase. Convenient point before main guicey logic.
+ * Meta event. Called just before guice bundle processing in run phase. Convenient point before main guicey logic.
  *
  * @author Vyacheslav Rusakov
  * @since 13.06.2018

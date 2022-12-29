@@ -98,8 +98,8 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Jers
  * @see ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo for configuratio diagnostic
  * @since 31.08.2014
  */
-@SuppressWarnings(
-        {"PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.TooManyMethods", "PMD.ExcessivePublicCount"})
+@SuppressWarnings({
+        "PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.TooManyMethods", "PMD.ExcessivePublicCount"})
 public final class GuiceBundle implements ConfiguredBundle<Configuration> {
 
     private final ConfigurationContext context = new ConfigurationContext();
@@ -318,8 +318,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
-         * Enables auto scan feature.
-         * When enabled, all core installers are registered automatically.
+         * Enables auto scan feature: search for installers and extensions in provided packages.
          *
          * @param basePackages packages to scan extensions in
          * @return builder instance for chained calls
@@ -328,6 +327,15 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         public Builder enableAutoConfig(final String... basePackages) {
             Preconditions.checkState(basePackages.length > 0, "Specify at least one package to scan");
             return option(ScanPackages, basePackages);
+        }
+
+        /**
+         * Shortcut for enabling auto config for application package (package with application class).
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder enableAutoConfig() {
+            return enableAutoConfig(GuiceyInitializer.APP_PKG);
         }
 
         /**
@@ -771,6 +779,19 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          */
         public Builder printDiagnosticInfo() {
             return listen(new ConfigurationDiagnostic());
+        }
+
+        /**
+         * Prints extensions usage help: all extension signs recognized by installers. Installers printed in
+         * execution order.
+         * <p>
+         * Not that custom installers must provide this information by overriding
+         * {@link ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller#getRecognizableSigns()}.
+         * 
+         * @return builder instance for chained calls
+         */
+        public Builder printExtensionsHelp() {
+            return listen(new ExtensionsHelpDiagnostic());
         }
 
         /**

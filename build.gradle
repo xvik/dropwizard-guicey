@@ -2,30 +2,31 @@ plugins {
     id 'groovy'
     id 'jacoco'
     id 'project-report'
-    id 'ru.vyarus.java-lib' version '2.1.0'
-    id 'ru.vyarus.github-info' version '1.2.0'
-    id 'ru.vyarus.quality' version '4.2.2'
-    id 'com.jfrog.bintray' version '1.8.5'
-    id 'net.researchgate.release' version '2.8.1'
-    id 'com.github.ben-manes.versions' version '0.28.0'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'ru.vyarus.mkdocs' version '2.0.1'
+    id 'signing'
+    id 'ru.vyarus.java-lib' version '2.3.1'
+    id 'ru.vyarus.github-info' version '1.4.0'
+    id 'ru.vyarus.quality' version '4.8.0'
+    id 'net.researchgate.release' version '3.0.2'
+    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
+    id 'com.github.ben-manes.versions' version '0.44.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'ru.vyarus.mkdocs' version '3.0.0'
+    id 'org.cyclonedx.bom' version '1.7.3'
 }
 
 sourceCompatibility = 1.8
 
 wrapper {
-    gradleVersion = '6.3'
+    gradleVersion = '7.5.1'
 }
 
 ext {
-    dropwizard = '2.0.8'
-    guice = '4.2.3'
+    dropwizard = '2.1.4'
+    guice = '5.1.0'
     hk2 = '2.6.1'
-    groovy = '2.5.9'
 }
 
-repositories { jcenter(); mavenCentral(); mavenLocal() }
+repositories { mavenLocal(); mavenCentral() }
 dependencyManagement {
     imports {
         mavenBom "com.google.inject:guice-bom:$guice"
@@ -42,18 +43,8 @@ dependencyManagement {
 //            exclude 'com.google.inject:guice'
 //            exclude 'org.glassfish.hk2:hk2-api'
 //        }
-        dependency 'org.spockframework:spock-core:1.3-groovy-2.5'
-        // groovy bundled with spock (2.5.2) does not work well with java 11
-        dependency "org.codehaus.groovy:groovy:$groovy"
-        dependency "org.codehaus.groovy:groovy-json:$groovy"
-        dependency "org.codehaus.groovy:groovy-macro:$groovy"
-        dependency "org.codehaus.groovy:groovy-nio:$groovy"
-        dependency "org.codehaus.groovy:groovy-sql:$groovy"
-        dependency "org.codehaus.groovy:groovy-templates:$groovy"
-        dependency "org.codehaus.groovy:groovy-test:$groovy"
-        dependency "org.codehaus.groovy:groovy-xml:$groovy"
-
-        dependency 'com.github.stefanbirkner:system-rules:1.19.0'
+        // SPOCK excluded from bom because it would complicate older version  usage in gradle
+        dependency 'ru.vyarus:spock-junit5:1.2.0'
 
         dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
 
@@ -62,33 +53,28 @@ dependencyManagement {
     }
 }
 dependencies {
-    provided 'junit:junit'
+    provided 'org.junit.jupiter:junit-jupiter-api'
     provided 'io.dropwizard:dropwizard-testing'
-    provided 'org.spockframework:spock-core'
-    provided 'com.github.stefanbirkner:system-rules'
-    provided 'com.github.spotbugs:spotbugs-annotations:3.1.2'
-//    provided "org.glassfish.hk2:guice-bridge"
+    provided 'com.github.spotbugs:spotbugs-annotations:4.7.3'
+    provided "org.glassfish.hk2:guice-bridge"
 
     implementation 'com.google.inject:guice'
     implementation 'com.google.inject.extensions:guice-servlet'
     implementation 'io.dropwizard:dropwizard-core'
-    implementation 'ru.vyarus:generics-resolver:3.1.0-SNAPSHOT'
+    implementation 'ru.vyarus:generics-resolver:3.0.3'
 
-    testImplementation 'org.objenesis:objenesis'
+    testImplementation 'ru.vyarus:spock-junit5'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+
     testImplementation 'org.glassfish.jersey.inject:jersey-hk2'
     testImplementation 'io.dropwizard:dropwizard-auth'
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
-    testImplementation 'cglib:cglib-nodep:3.3.0'
-    testImplementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2'
-}
+    testImplementation 'org.junit.platform:junit-platform-testkit'
+    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.1'
+    testImplementation "com.google.truth:truth:1.1.3"
 
-// dependency management plugin affects spotbugs configuration lowering asm to 7.2 (due to guice bom)
-afterEvaluate {
-    dependencies {
-        spotbugs "com.github.spotbugs:spotbugs:${quality.spotbugsVersion}"
-        spotbugs "org.slf4j:slf4j-simple:1.7.30"
-        spotbugs "org.ow2.asm:asm:8.0.1"
-    }
+    // required for pure junit 5 tests
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
 }
 
 group = 'ru.vyarus'
@@ -99,9 +85,19 @@ github {
     license = 'MIT'
 }
 
-mkdocs.publish {
-    docPath = '5.0.1'
-    rootRedirect = true
+mkdocs {
+    publish {
+        docPath = '5.7.0'
+        rootRedirect = true
+        rootRedirectTo = 'latest'
+        versionAliases = ['latest']
+    }
+    extras = [
+            'version': '5.7.0',
+            'ext': '5.7.0-1',
+            'dropwizard': project.dropwizard,
+            'guice': project.guice
+    ]
 }
 
 pom {
@@ -119,65 +115,72 @@ pom {
     }
 }
 
-jar {
-    manifest {
-        attributes 'Automatic-Module-Name': 'dropwizard-guicey.core'
+javaLib {
+    // java 9 auto module name
+    autoModuleName = 'ru.vyarus.dropwizard.guicey'
+    // don't publish gradle metadata artifact
+    withoutGradleMetadata()
+    // put resolved dependencies versions
+    pom.forceVersions()
+}
+
+// SBOM
+cyclonedxBom {
+    includeConfigs = ["runtimeClasspath"]
+    destination = file("build/reports")
+    outputName = "bom"
+    outputFormat = "all"
+}
+publishing.publications.maven {
+    artifact(file('build/reports/bom.json')) {
+        classifier = 'cyclonedx'
+        builtBy cyclonedxBom
+    }
+    artifact(file('build/reports/bom.xml')) {
+        classifier = 'cyclonedx'
+        builtBy cyclonedxBom
     }
 }
 
-bintray {
-    user = findProperty('bintrayUser')
-    key = findProperty('bintrayKey')
-    publications = ['maven']
-    dryRun = false
-    publish = true
-    pkg {
-        repo = 'xvik'
-        name = project.name
-        desc = project.description
-        labels = ['dropwizard', 'guice']
-        publicDownloadNumbers = true
-        version {
-            gpg {
-                sign = true
-                passphrase = findProperty('gpgPassphrase')
-            }
-            mavenCentralSync {
-                sync = true
-                user = findProperty('sonatypeUser')
-                password = findProperty('sonatypePassword')
-            }
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            username = findProperty('sonatypeUser')
+            password = findProperty('sonatypePassword')
         }
     }
 }
 
+// skip signing for jitpack (snapshots)
+tasks.withType(Sign) {onlyIf { !System.getenv('JITPACK') }}
+
+// Required signing properties for release: signing.keyId, signing.password and signing.secretKeyRingFile
+// (https://docs.gradle.org/current/userguide/signing_plugin.html#sec:signatory_credentials)
+
+release.git.requireBranch.set('master')
+
 afterReleaseBuild {
-    dependsOn = [bintrayUpload]
+    dependsOn = ['publishToSonatype',
+                 'closeAndReleaseSonatypeStagingRepository']
     doLast {
         logger.warn "RELEASED $project.group:$project.name:$project.version"
     }
 }
 
 test {
+    useJUnitPlatform()
     testLogging {
         events 'skipped', 'failed'
         exceptionFormat 'full'
-    }
-    if (System.getenv("TRAVIS")) {
-        // tests run only on windows build due to untraceable failure on travis
-        exclude "**/HKScopeTest.class"
-        exclude "**/HkFirstModeScopeTest.class"
     }
     maxHeapSize = '512m'
 }
 
 dependencyUpdates.revision = 'release'
-jacocoTestReport.reports.xml.enabled = true
 
-
-task showDependenciesTree(dependsOn: 'htmlDependencyReport', group: 'help', description:
-        'Generates dependencies tree report and opens it in browser') {
-    doLast {
-        java.awt.Desktop.getDesktop().open(file('build/reports/project/dependencies/root.html'))
-    }
+task updateGithubPom(type: Copy, group: 'other') {
+    from(generatePomFileForMavenPublication)
+    into '.github'
+    rename 'pom-default.xml', 'pom.xml'
 }

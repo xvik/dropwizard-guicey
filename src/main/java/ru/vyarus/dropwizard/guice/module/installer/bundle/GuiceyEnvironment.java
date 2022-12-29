@@ -20,6 +20,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Guicey environment object. Provides almost the same configuration methods as
@@ -299,9 +300,8 @@ public class GuiceyEnvironment {
     /**
      * Shortcut for {@link ServerLifecycleListener} registration.
      * <p>
-     * Note that server listener is called only when jetty starts up and so will no be called with lightweight
-     * guicey test helpers {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
-     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp}. Prefer using
+     * Note that server listener is called only when jetty starts up and so will not be called with lightweight
+     * guicey test helpers {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}. Prefer using
      * {@link #onApplicationStartup(ApplicationStartupListener)} to be correctly called in tests (of course, if not
      * server only execution is desired).
      * <p>
@@ -319,8 +319,7 @@ public class GuiceyEnvironment {
      * Shortcut for jetty lifecycle listener {@link LifeCycle.Listener listener} registration.
      * <p>
      * Lifecycle listeners are called with lightweight guicey test helpers
-     * {@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
-     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp} which makes them perfectly suitable for reporting.
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp} which makes them perfectly suitable for reporting.
      * <p>
      * If only startup event is required, prefer {@link #onApplicationStartup(ApplicationStartupListener)} method
      * as more expressive and easier to use.
@@ -329,7 +328,6 @@ public class GuiceyEnvironment {
      *
      * @param listener jetty
      * @return environment instance for chained calls
-     * @see org.eclipse.jetty.util.component.AbstractLifeCycle.AbstractLifeCycleListener adapter
      */
     public GuiceyEnvironment listenJetty(final LifeCycle.Listener listener) {
         environment().lifecycle().addLifeCycleListener(listener);
@@ -337,11 +335,68 @@ public class GuiceyEnvironment {
     }
 
     /**
-     * Use to access shared state value and immediately fail if value not yet set (most likely due to incorrect
-     * configuration order).
+     * Share global state to be used in other bundles (during configuration). This was added for very special cases
+     * when shared state is unavoidable (to not re-invent the wheel each time)!
      * <p>
-     * Note: shared state value assumed to be initialized under initialization phase (but you can workaround
-     * this limitation by accessing shared state statically)
+     * It is preferred to initialize shared state under initialization phase to avoid problems related to
+     * initialization order (assuming state is used under run phase). But, in some cases, it is not possible.
+     * <p>
+     * Internally, state is linked to application instance, so it would be safe to use with concurrent tests.
+     * Value could be accessed statically with application instance:
+     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#lookup(Application, Class)}.
+     * <p>
+     * During application strartup, shared state could be requested with a static call
+     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#getStartupInstance()}, but only
+     * from main thread.
+     * <p>
+     * In some cases, it is preferred to use bundle class as key. Value could be set only once
+     * (to prevent hard to track situations).
+     * <p>
+     * If initialization point could vary (first access should initialize it) use
+     * {@link #sharedState(Class, java.util.function.Supplier)} instead.
+     *
+     * @param key   shared object key
+     * @param value shared object
+     * @return bootstrap instance for chained calls
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public GuiceyEnvironment shareState(final Class<?> key, final Object value) {
+        context.getSharedState().put(key, value);
+        return this;
+    }
+
+    /**
+     * Alternative shared value initialization for cases when first accessed bundle should init state value
+     * and all other just use it.
+     * <p>
+     * It is preferred to initialize shared state under initialization phase to avoid problems related to
+     * initialization order (assuming state is used under run phase). But, in some cases, it is not possible.
+     *
+     * @param key          shared object key
+     * @param defaultValue default object provider
+     * @param <T>          shared object type
+     * @return shared object (possibly just created)
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> T sharedState(final Class<?> key, final Supplier<T> defaultValue) {
+        return context.getSharedState().get(key, defaultValue);
+    }
+
+    /**
+     * Access shared value.
+     *
+     * @param key shared object key
+     * @param <T> shared object type
+     * @return shared object
+     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     */
+    public <T> Optional<T> sharedState(final Class<?> key) {
+        return Optional.ofNullable(context.getSharedState().get(key));
+    }
+
+    /**
+     * Used to access shared state value and immediately fail if value not yet set (most likely due to incorrect
+     * configuration order).
      *
      * @param key     shared object key
      * @param message exception message (could use {@link String#format(String, Object...)} placeholders)
@@ -353,19 +408,6 @@ public class GuiceyEnvironment {
      */
     public <T> T sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
         return context.getSharedState().getOrFail(key, message, args);
-    }
-
-    /**
-     * Access shared value. Shared state value assumed to be initialized under initialization phase  (but you
-     * can workaround this limitation by accessing shared state statically)
-     *
-     * @param key shared object key
-     * @param <T> shared object type
-     * @return shared object
-     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
-     */
-    public <T> Optional<T> sharedState(final Class<?> key) {
-        return Optional.ofNullable(context.getSharedState().get(key));
     }
 
     /**
@@ -386,10 +428,10 @@ public class GuiceyEnvironment {
     }
 
     /**
-     * Code to execute after complete application startup. For server command it would happen after jerry startup
-     * and for lightweight guicey test helpers ({@link ru.vyarus.dropwizard.guice.test.GuiceyAppRule} or
-     * {@link ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp}) - after guicey start (as jetty not started in this
-     * case). In both cases application completely started at this moment. Suitable for reporting.
+     * Code to execute after complete application startup. For server command it would happen after jetty startup
+     * and for lightweight guicey test helpers ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}) - after
+     * guicey start (as jetty not started in this case). In both cases, application completely started at this moment.
+     * Suitable for reporting.
      * <p>
      * If you need to listen only for real server startup then use {@link #listenServer(ServerLifecycleListener)}
      * instead.

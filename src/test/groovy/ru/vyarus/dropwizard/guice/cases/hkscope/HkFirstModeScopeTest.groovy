@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugService
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 import javax.inject.Inject
 import javax.inject.Provider
@@ -21,7 +21,7 @@ import javax.ws.rs.ext.Providers
  * @author Vyacheslav Rusakov
  * @since 28.04.2018
  */
-@UseDropwizardApp(ScopeApplication)
+@TestDropwizardApp(ScopeApplication)
 class HkFirstModeScopeTest extends AbstractTest {
 
     @Inject

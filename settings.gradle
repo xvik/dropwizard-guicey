@@ -1,14 +1,19 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}
 plugins {
-    id "com.gradle.enterprise" version "3.2.1"
+    id "com.gradle.enterprise" version "3.12.1"
 }
 
 gradleEnterprise {
     buildScan {
         termsOfServiceUrl = 'https://gradle.com/terms-of-service'
         termsOfServiceAgree = 'yes'
-        publishOnFailure()
+        //publishOnFailure()
     }
 }
 
 rootProject.name = 'dropwizard-guicey'
-

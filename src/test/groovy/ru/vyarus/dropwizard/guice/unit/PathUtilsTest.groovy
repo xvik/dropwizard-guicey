@@ -21,6 +21,7 @@ class PathUtilsTest extends Specification {
         '/foo/'      | '/sample.txt' | '/foo/sample.txt'
         '  /foo/  '  | '/sample.txt' | '/foo/sample.txt'
         '/foo\\bar/' | '/sample.txt' | '/foo/bar/sample.txt'
+        'http://foo' | 'bar' | 'http://foo/bar'
     }
 
     def "Check path"() {

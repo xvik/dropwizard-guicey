@@ -39,13 +39,24 @@ Example report:
     └── BindService  --[linked]-->  OverrideService
 ```
 
-!!! note
+!!! important
+    Report is build using guice SPI from raw modules and that's why it shows everything
+    that modules configure (listeners, aop). But this also cause an additional execution of 
+    `configure()` method of all modules when report is enabled.
+
+    In most cases, this is not a problem (modules should only declare bindings). Report use
+    stage `TOOL`, so, if required, you can easilly avoid duplicate execution for sensitive logic: 
+    ```java
+    if (binder.currentStage() != Stage.TOOL) {
+        // do only on normal run
+    }
+    ```
+    For example, guicey itself use this in installers to avoid duplicate console output on startup when report enabled.
+
+!!! tip
     If you run application in IDE then binding traces (on the right) should be clickable in console
     (strange format of "at + full class name" used exactly to activate such links because IDE will consider
-    these lines as stacktrace elements).     
-
-Report is build using guice SPI from raw modules and that's why it shows everything
-that modules configure (listeners, aop) 
+    these lines as stacktrace elements).
 
 !!! note
     You may use multiple modules of the same type (e.g. `.modules(new MyModule(), new MyModule())`)
@@ -145,7 +156,7 @@ Report shows all beans affected with aop:
 For private guice modules report will show all internal bindings:
 
 ```
-INFO  [2019-10-13 09:21:21,080] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
+WARN  [2019-10-13 09:21:21,080] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
 
     4 MODULES with 4 bindings
     │   
@@ -217,7 +228,7 @@ it will physically remove relative bindings. All removed are indicated on report
 For example:
 
 ```
-INFO  [2019-10-13 09:26:59,502] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
+WARN  [2019-10-13 09:26:59,502] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
 
     2 MODULES with 2 bindings
     │   

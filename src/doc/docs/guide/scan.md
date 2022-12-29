@@ -21,6 +21,15 @@ GuiceBundle.builder()
     .enableAutoConfig("com.mycompany.pkg1", "com.mycompany.pkg2")
 ```
 
+If no packages specified, classpath scan would be activated for application package:
+
+```java
+GuiceBundle.builder()
+    .enableAutoConfig()
+```
+
+(equivalent to `.enableAutoConfig(getClass().getPackage().getName())`
+
 ## How it works
 
 When auto scan enabled:

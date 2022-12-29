@@ -8,13 +8,13 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.web.servletclash.Servlet1
 import ru.vyarus.dropwizard.guice.support.web.servletclash.Servlet2
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 08.08.2016
  */
-@UseDropwizardApp(ClashApp)
+@TestDropwizardApp(ClashApp)
 class ServletMappingClashTest extends AbstractTest {
 
     def "Check servlets mapping clash"() {

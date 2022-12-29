@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.test
 import com.google.inject.Inject
 import com.google.inject.Singleton
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -12,10 +12,10 @@ import spock.lang.Specification
  * @author Vyacheslav Rusakov 
  * @since 03.01.2015
  */
-@UseGuiceyApp(AutoScanApplication)
+@TestGuiceyApp(AutoScanApplication)
 class InjectionTest extends Specification {
 
-    // instance remain the same between tests
+    // shared field can't be initialized!
     @Shared @Inject TestBean sharedBean
 
     // new instance injected on each test
@@ -26,12 +26,11 @@ class InjectionTest extends Specification {
 
     def "Check injection types"() {
         when: "changing state of injected beans"
-        sharedBean.value = 10
         bean.value = 5
         singletonBean.value = 15
 
         then: "instances are different"
-        sharedBean.value == 10
+        sharedBean == null
         bean.value == 5
         singletonBean.value == 15
 
@@ -40,7 +39,7 @@ class InjectionTest extends Specification {
     def "Check shared state"() {
 
         expect: "shared bean instance is the same, whereas other one re-injected"
-        sharedBean.value == 10
+        sharedBean == null
         bean.value == 0
         singletonBean.value == 15 // the same instance was set before second test
     }

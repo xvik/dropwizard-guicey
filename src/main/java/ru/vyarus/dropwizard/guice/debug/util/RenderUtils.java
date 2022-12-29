@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.debug.util;
 
-import ch.qos.logback.classic.pattern.TargetLengthBasedClassNameAbbreviator;
 import com.google.common.base.Joiner;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
@@ -8,17 +7,16 @@ import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import java.util.List;
 
 /**
- * Helper utilities for diagnostic info rendering. Use logback's {@link TargetLengthBasedClassNameAbbreviator}
+ * Helper utilities for diagnostic info rendering. Uses copy of logback's
+ * {@link ch.qos.logback.classic.pattern.TargetLengthBasedClassNameAbbreviator}
  * to shrink full class name to predictable size.
  *
  * @author Vyacheslav Rusakov
  * @since 14.07.2016
  */
 public final class RenderUtils {
-    private static final TargetLengthBasedClassNameAbbreviator PACKAGE_FORMATTER =
-            new TargetLengthBasedClassNameAbbreviator(20);
-    private static final TargetLengthBasedClassNameAbbreviator CLASS_FORMATTER =
-            new TargetLengthBasedClassNameAbbreviator(36);
+    private static final ClassNameAbbreviator PACKAGE_FORMATTER = new ClassNameAbbreviator(20);
+    private static final ClassNameAbbreviator CLASS_FORMATTER = new ClassNameAbbreviator(36);
 
     private RenderUtils() {
     }
@@ -113,7 +111,7 @@ public final class RenderUtils {
     /**
      * @param type class to render
      * @return class rendered in abbreviated manner (to fit it into 36 chars)
-     * @see TargetLengthBasedClassNameAbbreviator
+     * @see ClassNameAbbreviator
      */
     public static String renderClass(final Class<?> type) {
         return CLASS_FORMATTER.abbreviate(type.getName());
@@ -124,11 +122,14 @@ public final class RenderUtils {
      *
      * @param type class to render package
      * @return class package rendered in abbreviated manner (to fit nto 20 chars)
-     * @see TargetLengthBasedClassNameAbbreviator
+     * @see ClassNameAbbreviator
      */
     public static String renderPackage(final Class<?> type) {
+        // For some proxies package and declaring class may be null, so use full class names
+        // May appear with anonymous hooks declaration in tests
         return PACKAGE_FORMATTER.abbreviate(type.isMemberClass() && !type.isAnonymousClass()
-                ? type.getDeclaringClass().getName() : type.getPackage().getName());
+                ? (type.getDeclaringClass() != null ? type.getDeclaringClass().getName() : type.getName())
+                : (type.getPackage() != null ? type.getPackage().getName() : type.getName()));
     }
 
     /**

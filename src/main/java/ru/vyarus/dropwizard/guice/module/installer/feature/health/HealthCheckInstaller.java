@@ -8,6 +8,9 @@ import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Health check installer.
  * Looks for classes extending
@@ -37,5 +40,10 @@ public class HealthCheckInstaller implements FeatureInstaller, InstanceInstaller
     @Override
     public void report() {
         reporter.report();
+    }
+
+    @Override
+    public List<String> getRecognizableSigns() {
+        return Collections.singletonList("extends " + NamedHealthCheck.class.getSimpleName());
     }
 }

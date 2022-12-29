@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStart
 /**
  * Guice bindings debug listener. Must be registered with
  * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(
- *ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
+ * ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener...)}.
  * Could be configured to filter out not required info.
  * <p>
  * If multiple listeners registered, only first registered will be actually used (allow safe multiple registrations).
@@ -30,6 +30,6 @@ public class GuiceBindingsDiagnostic extends UniqueGuiceyLifecycleListener {
     @Override
     protected void applicationStarted(final ApplicationStartedEvent event) {
         final String report = new GuiceBindingsRenderer(event.getInjector()).renderReport(config);
-        logger.info("Guice bindings = {}", report);
+        logger.warn("Guice bindings = {}", report);
     }
 }

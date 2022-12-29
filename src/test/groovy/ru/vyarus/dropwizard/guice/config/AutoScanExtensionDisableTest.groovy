@@ -9,13 +9,13 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.support.feature.DummyTask
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 07.04.2018
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class AutoScanExtensionDisableTest extends AbstractTest {
 
     @Inject

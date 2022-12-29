@@ -1,26 +1,27 @@
 package ru.vyarus.dropwizard.guice.provider
 
-import groovyx.net.http.HttpResponseException
-import groovyx.net.http.RESTClient
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.support.provider.exceptionmapper.ExceptionMapperApp
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.ClientSupport
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 17.04.2015
  */
-@UseDropwizardApp(ExceptionMapperApp)
+@TestDropwizardApp(ExceptionMapperApp)
 class ExceptionMapperTest extends AbstractTest {
 
-    def "Check exception mapper registration"() {
+    def "Check exception mapper registration"(ClientSupport client) {
 
         when: "calling resource which trigger io exception"
-        new RESTClient("http://localhost:8080/ex/").get([:])
+        def res = client.targetMain("/ex/").request().get()
         then:
-        def ex = thrown(HttpResponseException)
-        ex.response.status == 400
-        ex.response.data.text == 'ERROR: IO exception!'
+        res.status == 400
+        res.readEntity(String.class) == 'ERROR: IO exception!'
+
+        cleanup:
+        res.close()
     }
 
 }

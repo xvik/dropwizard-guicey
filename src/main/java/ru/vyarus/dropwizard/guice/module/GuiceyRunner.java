@@ -139,7 +139,7 @@ public class GuiceyRunner {
      * Run lifecycle end.
      */
     public void runFinished() {
-        context.lifecycle().applicationRun();
+        context.bundleStarted();
 
         runTime.stop();
         guiceyTime.stop();

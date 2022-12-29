@@ -26,7 +26,6 @@ Added installers:
  
 ## Setup
 
-[![JCenter](https://img.shields.io/bintray/v/vyarus/xvik/dropwizard-guicey-ext.svg?label=jcenter)](https://bintray.com/vyarus/xvik/dropwizard-guicey-ext/_latestVersion)
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-jdbi.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-jdbi)
 
 Avoid version in dependency declaration below if you use [extensions BOM](bom.md). 
@@ -37,14 +36,14 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi</artifactId>
-  <version>5.0.1-1</version>
+  <version>{{ gradle.ext }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-jdbi:5.0.1-1'
+implementation 'ru.vyarus.guicey:guicey-jdbi:{{ gradle.ext }}'
 ```
 
 See the most recent version in the badge above.

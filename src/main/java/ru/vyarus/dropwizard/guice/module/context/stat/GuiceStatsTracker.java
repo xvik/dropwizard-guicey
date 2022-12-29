@@ -8,8 +8,8 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 /**
- * Guice logs internal stats with java util logger ({@link com.google.inject.internal.util.Stopwatch}). In order to
- * intercept these messages, append custom handler to this logger, but just for injector creation time.
+ * Guice logs internal stats with java util logger ({@link com.google.inject.internal.util.ContinuousStopwatch}).
+ * In order to intercept these messages, append custom handler to this logger, but just for injector creation time.
  */
 @SuppressWarnings("PMD.MoreThanOneLogger")
 public class GuiceStatsTracker {
@@ -55,18 +55,26 @@ public class GuiceStatsTracker {
     }
 
     private Logger getLogger() {
-        return Logger.getLogger(com.google.inject.internal.util.Stopwatch.class.getName());
+        // string used instead of safer class reference due to OSGI issue (#187)
+        // (internal package reference not possible - cause class not found)
+        return Logger.getLogger("com.google.inject.internal.util.ContinuousStopwatch");
     }
 
     /**
      * Intercept guice stats logs.
      */
     private class LogsInterceptor extends Handler {
+
         @Override
-        public void publish(final LogRecord record) {
-            final String msg = record.getMessage();
-            // add space between number and ms
-            messages.add(msg.substring(0, msg.length() - 2) + " ms");
+        public void publish(final LogRecord logRecord) {
+            // in parallel tests each app instance will register its handler and each handler will receive
+            // messages from different threads and not thread safe ArrayList may fail
+            // (https://github.com/xvik/dropwizard-guicey/issues/103)
+            synchronized (messages) {
+                final String msg = logRecord.getMessage();
+                // add space between number and ms
+                messages.add(msg.substring(0, msg.length() - 2) + " ms");
+            }
         }
 
         @Override

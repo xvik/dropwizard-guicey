@@ -15,13 +15,13 @@ import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.context.unique.LegacyModeDuplicatesDetector
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 04.07.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class LegacyDuplicatesPolicyTest extends AbstractTest {
 
     @Inject
@@ -62,7 +62,7 @@ class LegacyDuplicatesPolicyTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    // with legacy mode only 1 registration will occur
+            // with legacy mode only 1 registration will occur
                     .duplicateConfigDetector(new LegacyModeDuplicatesDetector())
                     .bundles(new FooBundle(), new Foo2Bundle(), new MiddleBundle())
                     .build()

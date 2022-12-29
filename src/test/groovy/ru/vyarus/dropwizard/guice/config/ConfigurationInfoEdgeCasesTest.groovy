@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
-import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
 import javax.inject.Inject
@@ -19,7 +19,7 @@ import javax.inject.Inject
  * @author Vyacheslav Rusakov
  * @since 28.09.2019
  */
-@UseGuiceyApp(App)
+@TestGuiceyApp(App)
 class ConfigurationInfoEdgeCasesTest extends Specification {
 
     @Inject
