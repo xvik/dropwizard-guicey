@@ -119,7 +119,7 @@ public class SampleApplication extends Application<Configuration> {
     @Override
     public void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(GuiceBundle.builder()
-                .enableAutoConfig(getClass().getPackage().getName())
+                .enableAutoConfig()
                 .build());
     }
 
@@ -139,7 +139,8 @@ resources has `@Path` annotation, tasks extends `Task` etc.
 
 
 !!! tip
-    You can declare multiple packages for classpath scan: 
+    By default, auto configutation enabled for application package, but 
+    you can declare manually any packages for classpath scan: 
     ```java
      .enableAutoConfig("com.mycompany.foo", "com.mycompany.bar")
     ```
@@ -334,7 +335,7 @@ bootstrap.addBundle(GuiceBundle.builder()
                 .build());
 ```
 
-The only difference is the absence of `.enableAutoConfig(...)` and the explicit declaration of desired extensions.
+The only difference is the absence of `.enableAutoConfig()` and the explicit declaration of desired extensions.
 
 !!! tip
     Explicit extension declaration could be used together with `enableAutoConfig` (classpath scan). For example,

@@ -1,15 +1,32 @@
-# 5.6.1 Release Notes
+# 5.7.0 Release Notes
 
 !!! summary ""
-    [5.6.0 release notes](http://xvik.github.io/dropwizard-guicey/5.6.0/about/release-notes/)
+    [5.6.1 release notes](http://xvik.github.io/dropwizard-guicey/5.6.1/about/release-notes/)
 
 * Update to dropwizard 2.1.4
 * Guicey reports use WARN level now instead of INFO
+* Classpath scan configuration shortcut
 * @Provide not required for jersey extensions
 * ModelProcessor jersey extension support
 * Extensions help
 * Support application instance reuse between tests
 * SBOM
+
+## Classpath scan configuration shortcut
+
+Classpath scan (auto configuration) for application package may now be configured with no-args shortcut:
+
+```java
+GuiceBundle.builder()
+        .enableAutoConfig()
+```
+
+This is equivalent to:
+
+```java
+GuiceBundle.builder()
+        .enableAutoConfig(getClass().getPackage().getName())
+```
 
 ## @Provide not required for jersey extensions
 

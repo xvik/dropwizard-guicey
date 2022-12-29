@@ -1,4 +1,4 @@
-### [5.7.0](http://xvik.github.io/dropwizard-guicey/5.7.0) (2022-12-28)
+### [5.7.0](http://xvik.github.io/dropwizard-guicey/5.7.0) (2022-12-29)
 * Update to dropwizard 2.1.4
 * Fix NoClassDefFoundError(AbstractCollectionJaxbProvider) appeared for some jersey provider registrations (#240)
 * Jersey extensions might omit `@Provider` on known extension types (ExceptionMapper, MessageBodyReader, etc.).
@@ -14,6 +14,7 @@
     - reusable application must be declared in base test class: all tests derived
       from this base class would use the same application instance
 * Add SBOM (json and xml with cyclonedx classifier)
+* Add .enableAutoConfig() no-args shortcut for enabling classpath scan in application package
 
 ### [5.6.1](http://xvik.github.io/dropwizard-guicey/5.6.1) (2022-07-02)
 * Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)

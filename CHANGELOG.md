@@ -1,3 +1,4 @@
+### 5.7.0 (2022-12-29)
 * Update to dropwizard 2.1.4
 * Fix NoClassDefFoundError(AbstractCollectionJaxbProvider) appeared for some jersey provider registrations (#240)
 * Jersey extensions might omit `@Provider` on known extension types (ExceptionMapper, MessageBodyReader, etc.). 

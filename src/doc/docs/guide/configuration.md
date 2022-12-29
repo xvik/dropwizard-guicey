@@ -26,6 +26,9 @@ Guicey could be configured through:
 
 `#!java .enableAutoConfig(String... basePackages)`
 :   Enable [classpath scan](scan.md) for automatic extensions registration, custom installers search and commands search (if enabled) 
+
+`#!java .enableAutoConfig()`
+:   Shortcut for enabling classpath scan on application package
    
 `#!java .modules(Module... modules)`
 :   Guice modules registration
