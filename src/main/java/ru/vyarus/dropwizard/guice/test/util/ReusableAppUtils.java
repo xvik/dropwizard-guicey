@@ -29,7 +29,7 @@ import java.util.List;
  * <p>
  * There is an additional api for extensions to be able to close reusable application:
  * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.GuiceyExtensionsSupport#closeReusableApp(
- * org.junit.jupiter.api.extension.ExtensionContext, Class)}.
+ * org.junit.jupiter.api.extension.ExtensionContext)}.
  *
  * @author Vyacheslav Rusakov
  * @since 19.12.2022
