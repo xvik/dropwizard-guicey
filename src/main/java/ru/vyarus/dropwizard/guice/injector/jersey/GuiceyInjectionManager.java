@@ -158,6 +158,13 @@ public class GuiceyInjectionManager implements InjectionManager {
     }
 
     @Override
+    public <T> T create(Class<T> createMe) {
+        logger.debug("CREATE: {}", createMe.getName());
+        // todo probably INCORRECT
+        return createAndInitialize(createMe);
+    }
+
+    @Override
     public <T> T createAndInitialize(Class<T> createMe) {
         logger.debug("CREATE AND INIT: {}", createMe.getName());
         T instance;

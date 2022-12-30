@@ -5,15 +5,13 @@ import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
-import ru.vyarus.dropwizard.guice.test.spock.ConfigOverride
-import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
 /**
  * @author Vyacheslav Rusakov
  * @since 25.04.2019
  */
-@UseDropwizardApp(value = App, configOverride =
-        @ConfigOverride(key = "logging.loggers.ru\\.vyarus\\.dropwizard\\.guice", value = "DEBUG"))
+@TestDropwizardApp(value = App, configOverride = "logging.loggers.ru\\.vyarus\\.dropwizard\\.guice: DEBUG")
 class JerseyStartupTest extends AbstractTest {
 
     def "Test jersey startup"() {
