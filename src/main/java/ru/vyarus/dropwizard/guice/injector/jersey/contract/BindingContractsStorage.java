@@ -4,9 +4,12 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.inject.Key;
+import ru.vyarus.dropwizard.guice.injector.jersey.util.BindingUtils;
+import ru.vyarus.java.generics.resolver.util.TypeToStringUtils;
 
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * DI frameworks like HK2 and CDI allows binding multiple keys to one service, but in guice it could be only one key.
@@ -30,6 +33,8 @@ public class BindingContractsStorage {
                 index.put(contract, key);
             }
         }
+        System.out.println("CONTRACT " + BindingUtils.toStringKey(key) + ": " + contracts.stream()
+                .map(TypeToStringUtils::toStringType).collect(Collectors.joining(", ")));
     }
 
     public boolean containsKey(Key key) {
@@ -37,10 +42,16 @@ public class BindingContractsStorage {
     }
 
     public List<Key> findByContract(Type contract) {
-        return new ArrayList<>(index.get(contract));
+        final Collection<Key> find = index.get(contract);
+        System.out.println("FIND BY CONTRACT " + TypeToStringUtils.toStringType(contract) + ": " + find.stream()
+                .map(BindingUtils::toStringKey).collect(Collectors.joining(", ")));
+        return new ArrayList<>(find);
     }
 
     public Set<Type> getContracts(Key key) {
-        return new HashSet<>(contractsInfo.get(key));
+        final Collection<Type> find = contractsInfo.get(key);
+        System.out.println("GET CONTRACT " + BindingUtils.toStringKey(key) + ": " + find.stream()
+                .map(TypeToStringUtils::toStringType).collect(Collectors.joining(", ")));
+        return new HashSet<>(find);
     }
 }

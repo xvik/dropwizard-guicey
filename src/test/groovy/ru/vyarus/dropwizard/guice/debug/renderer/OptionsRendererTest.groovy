@@ -54,7 +54,6 @@ class OptionsRendererTest extends Specification {
         AnalyzeGuiceModules            = true
         InjectorStage                  = PRODUCTION
         GuiceFilterRegistration        = [REQUEST]
-        UseHkBridge                    = false
 
 
     Installers                (r.v.d.g.m.i.InstallersOptions)
@@ -88,7 +87,6 @@ class OptionsRendererTest extends Specification {
         AnalyzeGuiceModules            = true
         InjectorStage                  = PRODUCTION
         GuiceFilterRegistration        = [REQUEST]
-        UseHkBridge                    = false
 
 
     Installers                (r.v.d.g.m.i.InstallersOptions)
@@ -140,7 +138,6 @@ class OptionsRendererTest extends Specification {
         BindConfigurationByPath        = true
         AnalyzeGuiceModules            = true
         InjectorStage                  = PRODUCTION
-        UseHkBridge                    = false
 
 
     Installers                (r.v.d.g.m.i.InstallersOptions)

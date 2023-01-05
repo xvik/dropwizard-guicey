@@ -7,6 +7,9 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
+import javax.ws.rs.GET
+import javax.ws.rs.Path
+
 /**
  * @author Vyacheslav Rusakov
  * @since 25.04.2019
@@ -25,17 +28,28 @@ class JerseyStartupTest extends AbstractTest {
 
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
-            bootstrap.addBundle(GuiceBundle.builder().build())
+            bootstrap.addBundle(GuiceBundle.builder()
+                    .build())
         }
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
             println "APP RUN"
+            environment.jersey().register(FooResource)
         }
 
         @Override
         protected Level bootstrapLogLevel() {
             return Level.DEBUG
+        }
+    }
+
+    @Path("/foo/")
+    static class FooResource {
+
+        @GET
+        String get() {
+            return ""
         }
     }
 }
