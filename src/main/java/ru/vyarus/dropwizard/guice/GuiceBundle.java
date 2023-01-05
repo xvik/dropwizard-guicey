@@ -12,7 +12,14 @@ import io.dropwizard.setup.Environment;
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
-import ru.vyarus.dropwizard.guice.debug.*;
+import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.ExtensionsHelpDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.GuiceAopDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.JerseyConfigDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.WebMappingsDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.YamlBindingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook;
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig;
@@ -49,7 +56,12 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.GuiceFilterRegistration;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.ScanPackages;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.SearchCommands;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseCoreInstallers;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseHkBridge;
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
 
 /**
@@ -108,6 +120,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
 
     GuiceBundle() {
         // Bundle should be instantiated only from builder
+//        GuiceyInjectionFactory.noHK2();
     }
 
     @Override

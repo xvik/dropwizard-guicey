@@ -6,7 +6,6 @@ import org.glassfish.jersey.internal.inject.InjectionManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
-import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 
 /**
  * @author Vyacheslav Rusakov
@@ -41,5 +40,14 @@ public class GuiceyInjectionFactory implements InjectionManagerFactory {
         }
         logger.debug("CREATE injection manager");
         return new GuiceyInjectionManager(context);
+    }
+
+    public static void noHK2() {
+        try {
+            Class.forName("org.glassfish.jersey.inject.hk2.Hk2InjectionManagerFactory");
+            throw new IllegalStateException("Jersey-HK2 integration detected in classpath: remove");
+        } catch (ClassNotFoundException e) {
+            // OK
+        }
     }
 }
