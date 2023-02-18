@@ -85,6 +85,7 @@ public class JerseyBindingsModule extends AbstractModule {
     }
 
     private void bind(Binding<?, ? extends Binding> binding) {
+        // TODO RANK info lost
         if (logger.isDebugEnabled()) {
             logger.debug("BIND {}", BindingUtils.toStringBinding(binding));
         }
