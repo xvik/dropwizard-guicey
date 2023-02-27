@@ -114,6 +114,7 @@ class BindingsReportTest extends Specification {
             @Config("server.registerDefaultExceptionMappers") Boolean = true
             @Config("server.requestLog") RequestLogFactory<Object> (with actual type LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
             @Config("server.requestLog.appenders") List<AppenderFactory<IAccessEvent>> (with actual type ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+            @Config("server.responseMeteredLevel") ResponseMeteredLevel = COARSE
             @Config("server.rootPath") Optional<String> = Optional.empty
             @Config("server.serverPush") ServerPushFilterFactory = io.dropwizard.jetty.ServerPushFilterFactory@1111111
             @Config("server.serverPush.associatePeriod") Duration = 4 seconds
@@ -179,10 +180,12 @@ class BindingsReportTest extends Specification {
         ├── idleThreadTimeout: Duration = 1 minute
         ├── maxQueuedRequests: Integer = 1024
         ├── maxThreads: Integer = 1024
+        ├── metricPrefix: String = null
         ├── minThreads: Integer = 8
         ├── nofileHardLimit: Integer = null
         ├── nofileSoftLimit: Integer = null
         ├── registerDefaultExceptionMappers: Boolean = true
+        ├── responseMeteredLevel: ResponseMeteredLevel = COARSE
         ├── rootPath: Optional<String> = Optional.empty
         ├── shutdownGracePeriod: Duration = 30 seconds
         ├── startsAsRoot: Boolean = null
@@ -307,12 +310,14 @@ class BindingsReportTest extends Specification {
             @Config("server.idleThreadTimeout") Duration = 1 minute
             @Config("server.maxQueuedRequests") Integer = 1024
             @Config("server.maxThreads") Integer = 1024
+            @Config("server.metricPrefix") String = null
             @Config("server.minThreads") Integer = 8
             @Config("server.nofileHardLimit") Integer = null
             @Config("server.nofileSoftLimit") Integer = null
             @Config("server.registerDefaultExceptionMappers") Boolean = true
             @Config("server.requestLog") RequestLogFactory<Object> (with actual type LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
             @Config("server.requestLog.appenders") List<AppenderFactory<IAccessEvent>> (with actual type ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+            @Config("server.responseMeteredLevel") ResponseMeteredLevel = COARSE
             @Config("server.rootPath") Optional<String> = Optional.empty
             @Config("server.serverPush") ServerPushFilterFactory = io.dropwizard.jetty.ServerPushFilterFactory@1111111
             @Config("server.serverPush.associatePeriod") Duration = 4 seconds
@@ -419,6 +424,7 @@ class BindingsReportTest extends Specification {
         ├── maxThreads: Integer = 1024
         ├── minThreads: Integer = 8
         ├── registerDefaultExceptionMappers: Boolean = true
+        ├── responseMeteredLevel: ResponseMeteredLevel = COARSE
         ├── rootPath: Optional<String> = Optional.empty
         ├── shutdownGracePeriod: Duration = 30 seconds
         │

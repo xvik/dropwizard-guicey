@@ -91,12 +91,14 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.idleThreadTimeout (Duration) = 1 minute
 [Configuration] server.maxQueuedRequests (Integer) = 1024
 [Configuration] server.maxThreads (Integer) = 1024
+[Configuration] server.metricPrefix (String) = null
 [Configuration] server.minThreads (Integer) = 8
 [Configuration] server.nofileHardLimit (Integer) = null
 [Configuration] server.nofileSoftLimit (Integer) = null
 [Configuration] server.registerDefaultExceptionMappers (Boolean) = true
 [Configuration] server.requestLog (RequestLogFactory<Object> as LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
 [Configuration] server.requestLog.appenders (List<AppenderFactory<IAccessEvent>> as ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+[Configuration] server.responseMeteredLevel (ResponseMeteredLevel) = COARSE
 [Configuration] server.rootPath (Optional<String>) = Optional.empty
 [Configuration] server.serverPush (ServerPushFilterFactory) = io.dropwizard.jetty.ServerPushFilterFactory@1111111
 [Configuration] server.serverPush.associatePeriod (Duration) = 4 seconds
@@ -111,7 +113,7 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.user (String) = null"""
         res.rootTypes == [Configuration]
         res.uniqueTypePaths.size() == 9
-        res.paths.size() == 65
+        res.paths.size() == 67
         check(res, "server", DefaultServerFactory)
         check(res, "server.maxThreads", Integer, 1024)
         check(res, "server.idleThreadTimeout", Duration, Duration.minutes(1))
@@ -127,7 +129,7 @@ class ConfigInspectorTest extends Specification {
 [SimpleConfig] prim (Integer) = 0"""
         res.rootTypes == [SimpleConfig, Configuration]
         res.uniqueTypePaths.size() == 9
-        res.paths.size() == 68
+        res.paths.size() == 70
         check(res, "foo", String)
         check(res, "bar", Boolean)
         check(res, "prim", Integer)
@@ -139,7 +141,7 @@ class ConfigInspectorTest extends Specification {
         printConfig(res) == "[ObjectPropertyConfig] sub (Object) = null"
         res.rootTypes == [ObjectPropertyConfig, Configuration]
         res.uniqueTypePaths.size() == 9
-        res.paths.size() == 66
+        res.paths.size() == 68
         check(res, "sub", Object)
         elt.isObjectDeclaration()
         elt.declaredType == Object
@@ -172,7 +174,7 @@ class ConfigInspectorTest extends Specification {
         res.uniqueTypePaths.size() == 10
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.SubConfig } != null
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.Parametrized } == null
-        res.paths.size() == 71
+        res.paths.size() == 73
         check(res, "sub", ComplexConfig.SubConfig)
         check(res, "sub.sub", String)
         check(res, "sub.two", ComplexConfig.Parametrized, null, String)
