@@ -12,7 +12,7 @@ GuiceBundle.builder()
 Example report:
 
 ```
-WARN  [2019-10-24 07:48:32,601] ru.vyarus.dropwizard.guice.debug.WebMappingsDiagnostic: Web mappings: 
+INFO  [2019-10-24 07:48:32,601] ru.vyarus.dropwizard.guice.debug.WebMappingsDiagnostic: Web mappings: 
 
     MAIN /
     ├── filter     /custom/*                    CustomMappingFilter          (r.v.d.g.d.r.w.s.UserServletsBundle)                    [ERROR]         .custommapping

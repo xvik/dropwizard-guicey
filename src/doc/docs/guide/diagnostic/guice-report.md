@@ -156,7 +156,7 @@ Report shows all beans affected with aop:
 For private guice modules report will show all internal bindings:
 
 ```
-WARN  [2019-10-13 09:21:21,080] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
+INFO  [2019-10-13 09:21:21,080] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
 
     4 MODULES with 4 bindings
     │   
@@ -228,7 +228,7 @@ it will physically remove relative bindings. All removed are indicated on report
 For example:
 
 ```
-WARN  [2019-10-13 09:26:59,502] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
+INFO  [2019-10-13 09:26:59,502] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
 
     2 MODULES with 2 bindings
     │   

@@ -18,7 +18,7 @@ GuiceBundle.builder()
 Will print:
 
 ```
-WARN  [2018-06-18 05:55:03,532] ru.vyarus.dropwizard.guice.module.yaml.report.DebugConfigBindings: Available configuration bindings = 
+INFO  [2018-06-18 05:55:03,532] ru.vyarus.dropwizard.guice.module.yaml.report.DebugConfigBindings: Available configuration bindings = 
 
     ComplexGenericCase (visible paths)
     │   

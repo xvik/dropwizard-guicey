@@ -12,7 +12,7 @@ GuiceBundle.builder()
 Example report:
 
 ```
-WARN  [2022-12-28 14:57:01,445] ru.vyarus.dropwizard.guice.debug.ExtensionsHelpDiagnostic: Recognized extension signs
+INFO  [2022-12-28 14:57:01,445] ru.vyarus.dropwizard.guice.debug.ExtensionsHelpDiagnostic: Recognized extension signs
 
     lifecycle            (r.v.d.g.m.i.f.LifeCycleInstaller)     
         implements LifeCycle

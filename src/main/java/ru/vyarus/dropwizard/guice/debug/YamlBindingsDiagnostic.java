@@ -46,7 +46,7 @@ public class YamlBindingsDiagnostic extends UniqueGuiceyLifecycleListener {
         } else {
             report = new ConfigBindingsRenderer(event.getConfigurationTree()).renderReport(config);
         }
-        logger.warn("Available {}configuration bindings = {}",
+        logger.info("Available {}configuration bindings = {}",
                 customOnly ? "custom " : "", report);
     }
 }

@@ -31,7 +31,7 @@ Report intended to answer:
 Example report:
 
 ```    
-WARN  [2019-10-11 04:25:47,022] ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic: Diagnostic report
+INFO  [2019-10-11 04:25:47,022] ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic: Diagnostic report
 
 ---------------------------------------------------------------------------[STARTUP STATS]
 
