@@ -1,3 +1,4 @@
+### 5.7.1 (2023-03-09)
 * Update to dropwizard 2.1.5
 * Revert changing reports log level: now INFO used instead of WARN (#276) 
 

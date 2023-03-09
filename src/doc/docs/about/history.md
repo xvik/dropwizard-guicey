@@ -1,3 +1,7 @@
+### ### [5.7.1](http://xvik.github.io/dropwizard-guicey/5.7.1) (2023-03-09)
+* Update to dropwizard 2.1.5
+* Revert changing reports log level: now INFO used instead of WARN (#276)
+
 ### [5.7.0](http://xvik.github.io/dropwizard-guicey/5.7.0) (2022-12-29)
 * Update to dropwizard 2.1.4
 * Fix NoClassDefFoundError(AbstractCollectionJaxbProvider) appeared for some jersey provider registrations (#240)
