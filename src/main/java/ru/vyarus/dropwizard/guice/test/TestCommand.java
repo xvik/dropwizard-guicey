@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.test;
 
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
-import io.dropwizard.cli.EnvironmentCommand;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.cli.EnvironmentCommand;
+import io.dropwizard.core.setup.Environment;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.eclipse.jetty.util.component.ContainerLifeCycle;
 

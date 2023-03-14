@@ -133,7 +133,8 @@ public enum GuiceyLifecycle {
     ExtensionsInstalled(ExtensionsInstalledEvent.class),
     /**
      * Called after
-     * {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(io.dropwizard.Configuration, io.dropwizard.setup.Environment)}
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(
+     * io.dropwizard.core.Configuration, io.dropwizard.core.setup.Environment)}
      * when guicey context is started, extensions installed (but not hk extensions, because neither jersey nor jetty
      * is't start yet).
      * <p>
@@ -141,8 +142,9 @@ public enum GuiceyLifecycle {
      * run application instead of "server"). Injector itself is completely initialized - all singletons started.
      * <p>
      * This point is before
-     * {@link io.dropwizard.Application#run(io.dropwizard.Configuration, io.dropwizard.setup.Environment)}. Ideal point
-     * for jersey and jetty listeners installation (with shortcut event methods).
+     * {@link io.dropwizard.core.Application#run(
+     * io.dropwizard.core.Configuration, io.dropwizard.core.setup.Environment)}. Ideal point for jersey and jetty
+     * listeners installation (with shortcut event methods).
      */
     ApplicationRun(ApplicationRunEvent.class),
 

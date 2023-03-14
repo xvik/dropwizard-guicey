@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.support.installer
 
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils

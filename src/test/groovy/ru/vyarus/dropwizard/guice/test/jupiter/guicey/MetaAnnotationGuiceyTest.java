@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.guicey;
 
-import io.dropwizard.Application;
+import io.dropwizard.core.Application;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;

@@ -22,7 +22,7 @@ public enum ConfigScope {
     /**
      * Application scope: everything registered directly in guice bundle's builder.
      */
-    Application(io.dropwizard.Application.class),
+    Application(io.dropwizard.core.Application.class),
     /**
      * Lookup scope contains all bundles, resolved with lookup mechanism.
      */
@@ -46,7 +46,7 @@ public enum ConfigScope {
      * It was added just for completeness of context recognition logic (see {@link #recognize(Class)})
      * and to indicate all possible scopes.
      */
-    DropwizardBundle(io.dropwizard.ConfiguredBundle.class),
+    DropwizardBundle(io.dropwizard.core.ConfiguredBundle.class),
     /**
      * WARNING: binding extension scope is guice module name itself (not direct module, but topmost registered
      * module - visible in configuration). It was added just for completeness of context recognition logic

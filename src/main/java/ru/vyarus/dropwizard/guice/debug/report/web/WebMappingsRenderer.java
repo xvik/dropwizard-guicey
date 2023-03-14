@@ -11,7 +11,7 @@ import com.google.inject.spi.Element;
 import com.google.inject.spi.Elements;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.jetty.MutableServletContextHandler;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.FilterMapping;
 import org.eclipse.jetty.servlet.ServletHolder;

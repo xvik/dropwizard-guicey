@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.support;
 
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Bootstrap;
 
 /**
  * Guice module, registered in bundle, may implement this to be able to use bootstrap object in module

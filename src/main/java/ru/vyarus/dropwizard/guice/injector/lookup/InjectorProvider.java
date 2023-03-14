@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.injector.lookup;
 
 import com.google.inject.Injector;
-import io.dropwizard.Application;
+import io.dropwizard.core.Application;
 
 import javax.inject.Provider;
 

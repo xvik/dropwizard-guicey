@@ -14,7 +14,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
  * {@link ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent}) simply
  * don't have access for it.
  * <li>{@link ConfigurationPhaseEvent} - dropwizard configuration phase events (all have access to dropwizard
- * {@link io.dropwizard.setup.Bootstrap} object)</li>
+ * {@link io.dropwizard.core.setup.Bootstrap} object)</li>
  * <li>{@link RunPhaseEvent} - events started on dropwizard run phase (when configuration is available)</li>
  * <li>{@link InjectorPhaseEvent} - all events after guice injector creation</li>
  * <li>{@link JerseyPhaseEvent} - all events after jersey context initialization start (since

@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice;
 
 import com.google.inject.Stage;
-import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.setup.Bootstrap;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 
 import javax.servlet.DispatcherType;

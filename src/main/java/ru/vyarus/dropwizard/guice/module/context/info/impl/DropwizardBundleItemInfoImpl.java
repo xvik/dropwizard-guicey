@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
-import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.core.ConfiguredBundle;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.DropwizardBundleItemInfo;

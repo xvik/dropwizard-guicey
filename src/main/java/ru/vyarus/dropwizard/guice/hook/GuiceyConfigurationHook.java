@@ -43,11 +43,11 @@ public interface GuiceyConfigurationHook {
      * <li>Guice bindings override:
      * {@link GuiceBundle.Builder#modulesOverride(com.google.inject.Module...)}</li>
      * </ul>
-     * All other configuration options are also available, so it is possible to register extra extensions, bundles etc
+     * All other configuration options are also available, so it is possible to register extra extensions, bundles etc.
      * or modify guicey options ({@link GuiceBundle.Builder#option(Enum, Object)}).
      * <p>
      * All configuration items, registered with hook will be scoped as {@link GuiceyConfigurationHook}
-     * instead of {@link io.dropwizard.Application} and so will be clearly distinguishable in configuration logs
+     * instead of {@link io.dropwizard.core.Application} and so will be clearly distinguishable in configuration logs
      * ({@link GuiceBundle.Builder#printDiagnosticInfo()}).
      *
      * @param builder just created bundle's builder

@@ -2,9 +2,9 @@ package ru.vyarus.dropwizard.guice.test;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Key;
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
-import io.dropwizard.cli.Command;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.cli.Command;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 /**
  * An alternative to {@link DropwizardTestSupport} which does not run jetty (web part) allowing to test only guice
- * context. Internally, {@link TestCommand} used instead of {@link io.dropwizard.cli.ServerCommand}.
+ * context. Internally, {@link TestCommand} used instead of {@link io.dropwizard.core.cli.ServerCommand}.
  * <p>
  * Supposed to be used in cases when application startup fail must be tested:
  * {@code new GuiceyTestSupport(MyApp.class, (String) null).before()}.

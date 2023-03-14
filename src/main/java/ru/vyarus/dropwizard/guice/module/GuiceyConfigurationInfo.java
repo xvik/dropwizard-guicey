@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.module;
 
 import com.google.common.collect.Sets;
 import com.google.inject.Module;
-import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.cli.Command;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.cli.Command;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;

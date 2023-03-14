@@ -15,7 +15,7 @@ public interface DisableSupport {
     /**
      * Item may be disabled either from root application class or from
      * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}. For application,
-     * {@link io.dropwizard.Application} class stored as context and for guicey bundle actual bundle instance id
+     * {@link io.dropwizard.core.Application} class stored as context and for guicey bundle actual bundle instance id
      * is stored.
      *
      * @return contexts where item was disabled or empty collection

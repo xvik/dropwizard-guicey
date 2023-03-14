@@ -14,14 +14,14 @@ plugins {
     id 'org.cyclonedx.bom' version '1.7.4'
 }
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
 wrapper {
     gradleVersion = '7.5.1'
 }
 
 ext {
-    dropwizard = '2.1.5'
+    dropwizard = '3.0.0-beta.5'
     guice = '5.1.0'
     hk2 = '2.6.1'
 }
@@ -43,7 +43,11 @@ dependencyManagement {
         // SPOCK excluded from bom because it would complicate older version  usage in gradle
         dependency 'ru.vyarus:spock-junit5:1.2.0'
 
-        dependency "com.google.inject:guice:$guice", { exclude 'com.google.guava:guava' }
+        dependency "com.google.inject:guice:$guice", {
+            exclude 'com.google.guava:guava'
+            // jakarta-inject used instead
+            exclude 'javax.inject:javax.inject'
+        }
 
         // add guicey itself to BOM (for version management)
         dependency 'ru.vyarus:dropwizard-guicey:${project.version}'

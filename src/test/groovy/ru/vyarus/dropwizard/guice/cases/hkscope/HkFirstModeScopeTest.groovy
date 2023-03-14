@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.cases.hkscope
 
-import io.dropwizard.Application
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import org.glassfish.jersey.internal.inject.InjectionManager
 import org.glassfish.jersey.internal.inject.InjectionResolver
 import ru.vyarus.dropwizard.guice.AbstractTest

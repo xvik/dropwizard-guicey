@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature;
 
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import org.eclipse.jetty.util.component.LifeCycle;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;

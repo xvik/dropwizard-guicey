@@ -13,7 +13,7 @@ import java.util.Set;
  * <p>
  * Provides list of all used hooks.
  * <p>
- * Note: dropwizard {@link io.dropwizard.setup.Bootstrap} object is already existing at that moment, but bundle
+ * Note: dropwizard {@link io.dropwizard.core.setup.Bootstrap} object is already existing at that moment, but bundle
  * don't have access for it yet and so it's not available in event.
  *
  * @author Vyacheslav Rusakov

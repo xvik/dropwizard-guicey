@@ -8,7 +8,8 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 /**
  * Called after
- * {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(io.dropwizard.Configuration, io.dropwizard.setup.Environment)}
+ * {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(
+ * io.dropwizard.core.Configuration, io.dropwizard.core.setup.Environment)}
  * when guicey context is started, extensions installed (but not hk extensions, because neither jersey nor jetty
  * isn't start yet).
  * <p>
@@ -16,8 +17,8 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
  * run application instead of "server"). Injector itself is completely initialized - all singletons processed.
  * <p>
  * This point is before
- * {@link io.dropwizard.Application#run(io.dropwizard.Configuration, io.dropwizard.setup.Environment)}. Ideal point
- * for jersey and jetty listeners installation  (use shortcut methods in event for registration).
+ * {@link io.dropwizard.core.Application#run(io.dropwizard.core.Configuration, io.dropwizard.core.setup.Environment)}.
+ * Ideal point for jersey and jetty listeners installation  (use shortcut methods in event for registration).
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic for listeners usage example
@@ -33,7 +34,7 @@ public class ApplicationRunEvent extends InjectorPhaseEvent {
      * @param listener jetty listener
      */
     public void registerJettyListener(final LifeCycle.Listener listener) {
-        getEnvironment().lifecycle().addLifeCycleListener(listener);
+        getEnvironment().lifecycle().addEventListener(listener);
     }
 
     /**

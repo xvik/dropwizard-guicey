@@ -5,11 +5,11 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.google.inject.Injector;
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
 import io.dropwizard.lifecycle.Managed;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import javax.inject.Provider;
@@ -48,8 +48,8 @@ import java.util.function.Supplier;
  * Shared value could be set only once (to prevent complex situations with state substitutions). It is advised
  * to initialize shared value only in initialization phase (to avoid potential static access errors).
  * <p>
- * Objects available in shared state by default: {@link io.dropwizard.setup.Bootstrap},
- * {@link io.dropwizard.Configuration}, {@link Environment},
+ * Objects available in shared state by default: {@link io.dropwizard.core.setup.Bootstrap},
+ * {@link io.dropwizard.core.Configuration}, {@link Environment},
  * {@link ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree}, {@link com.google.inject.Injector}
  * (see shortcut instance methods).
  *

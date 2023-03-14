@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.module.support;
 
 import com.google.inject.AbstractModule;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
@@ -192,7 +192,7 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      * Internally, state is linked to application instance, so it would be safe to use with concurrent tests.
      * Value could be accessed statically with application instance:
      * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#lookup(
-     * io.dropwizard.Application, Class)}.
+     * io.dropwizard.core.Application, Class)}.
      * <p>
      * During application strartup, shared state could be requested with a static call
      * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#getStartupInstance()}, but only

@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.context.bootstrap;
 
-import io.dropwizard.Application;
-import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.setup.Bootstrap;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;

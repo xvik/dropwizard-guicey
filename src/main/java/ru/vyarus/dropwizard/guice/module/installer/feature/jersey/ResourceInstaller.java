@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import ru.vyarus.dropwizard.guice.module.installer.install.TypeInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.BindingInstaller;

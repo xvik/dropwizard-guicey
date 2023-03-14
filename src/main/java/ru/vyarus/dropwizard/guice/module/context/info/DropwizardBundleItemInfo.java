@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context.info;
 
-import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.core.ConfiguredBundle;
 
 /**
  * Dropwizard bundle configuration information.

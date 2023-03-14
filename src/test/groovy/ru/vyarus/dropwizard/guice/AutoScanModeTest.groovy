@@ -4,9 +4,9 @@ import com.google.inject.Inject
 import com.google.inject.Injector
 import com.google.inject.Key
 import com.google.inject.TypeLiteral
-import io.dropwizard.Configuration
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.LifeCycleInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller

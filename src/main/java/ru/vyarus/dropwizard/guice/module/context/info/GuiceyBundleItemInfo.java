@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
  * Note that the same bundle may be registered by different mechanism simultaneously.
  * For example: by lookup and manually in application class. Bundle will actually be registered either only once
  * (if correct equals method implemented) and it's info will contain 2 context classes
- * ({@link io.dropwizard.Application} and {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup})
+ * ({@link io.dropwizard.core.Application} and {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup})
  * (and {@link #isFromLookup()} will be true) or as separate instances.
  *
  * @author Vyacheslav Rusakov

@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.debug.renderer.jersey
 
-import io.dropwizard.Application
-import io.dropwizard.Configuration
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import org.glassfish.jersey.internal.inject.InjectionManager
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
@@ -44,7 +44,7 @@ class PriorityCountInRenderTest extends Specification {
     Exception mappers
         IOException                    Mapper1                      (r.v.d.g.d.r.j.PriorityCountInRenderTest)
         IOException                    Mapper2                      (r.v.d.g.d.r.j.PriorityCountInRenderTest)
-        Throwable                      ExceptionMapperBinder\$1      (io.dropwizard.setup)
+        Throwable                      ExceptionMapperBinder\$1      (i.d.core.setup)
         EofException                   EarlyEofExceptionMapper      (i.d.jersey.errors)
         EmptyOptionalException         EmptyOptionalExceptionMapper (i.d.jersey.optional)
         IllegalStateException          IllegalStateExceptionMapper  (i.d.jersey.errors)

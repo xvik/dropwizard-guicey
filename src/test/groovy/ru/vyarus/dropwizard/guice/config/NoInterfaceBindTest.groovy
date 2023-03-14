@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.config
 
 import com.google.inject.Injector
 import com.google.inject.Key
-import io.dropwizard.Configuration
+import io.dropwizard.core.Configuration
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.config.support.NoIfaceBindingApp
 import ru.vyarus.dropwizard.guice.config.support.conf.*

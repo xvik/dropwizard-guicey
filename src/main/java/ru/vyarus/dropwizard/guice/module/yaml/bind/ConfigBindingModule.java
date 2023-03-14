@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.util.Providers;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath;
 

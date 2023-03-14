@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.module.installer.bundle.listener;
 
 import com.google.inject.Injector;
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Environment;
 
 /**
  * Called after guicey startup (after {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(Configuration, Environment)}

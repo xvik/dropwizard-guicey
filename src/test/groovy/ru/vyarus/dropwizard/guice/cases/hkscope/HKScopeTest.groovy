@@ -5,9 +5,9 @@ import com.google.inject.Key
 import com.google.inject.Scope
 import com.google.inject.Scopes
 import com.google.inject.spi.DefaultBindingScopingVisitor
-import io.dropwizard.Application
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import org.glassfish.hk2.api.Descriptor
 import org.glassfish.hk2.api.Filter
 import org.glassfish.hk2.api.ServiceLocator

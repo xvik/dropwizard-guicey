@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer;
 
 import io.dropwizard.jetty.MutableServletContextHandler;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;

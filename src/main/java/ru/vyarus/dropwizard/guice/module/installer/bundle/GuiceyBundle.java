@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.bundle;
 
 /**
- * Guicey bundle is an enhancement of dropwizard bundles ({@link io.dropwizard.ConfiguredBundle}). It allows
+ * Guicey bundle is an enhancement of dropwizard bundles ({@link io.dropwizard.core.ConfiguredBundle}). It allows
  * everything that dropwizard bundles can plus guicey specific features and so assumed to be used instead
  * of dropwizard bundles. But it does not mean that other dropwizard bundles can't be used: both bundle types
  * share the same lifecycle, so you can register dropwizard bundles from within guicey bundle (which is very important
@@ -44,8 +44,8 @@ public interface GuiceyBundle {
      * and guice modules. Existing installer could be replaced by disabling old one and registering new.
      * <p>
      * Dropwizard bundles could be also registered with
-     * {@link GuiceyBootstrap#dropwizardBundles(io.dropwizard.ConfiguredBundle[])} shortcut (or by directly accessing
-     * dropwizard bootstrap object: {@link GuiceyBootstrap#bootstrap()}.
+     * {@link GuiceyBootstrap#dropwizardBundles(io.dropwizard.core.ConfiguredBundle[])} shortcut (or by directly
+     * accessing dropwizard bootstrap object: {@link GuiceyBootstrap#bootstrap()}.
      * <p>
      * As bundles could be registered only during initialization phase, it is not possible to
      * avoid bundle registration based on configuration (not a good practice). But, it is possible

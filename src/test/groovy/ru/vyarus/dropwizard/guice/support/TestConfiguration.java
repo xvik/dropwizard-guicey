@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.support;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 
 /**
  * Groovy class can't be used anymore, because jackson 2.5 is very sensible for additional methods.

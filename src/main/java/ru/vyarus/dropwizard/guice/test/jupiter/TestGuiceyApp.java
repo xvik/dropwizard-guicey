@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter;
 
-import io.dropwizard.Application;
+import io.dropwizard.core.Application;
 import org.junit.jupiter.api.extension.ExtendWith;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;

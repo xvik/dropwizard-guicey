@@ -3,11 +3,11 @@ package ru.vyarus.dropwizard.guice.module.lifecycle.internal;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import io.dropwizard.Configuration;
-import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.cli.Command;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.cli.Command;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.glassfish.jersey.internal.inject.InjectionManager;
 import org.slf4j.Logger;
@@ -150,7 +150,7 @@ public final class LifecycleSupport {
         this.context.setEnvironment(environment);
         broadcast(new BeforeRunEvent(context));
         // fire after complete initialization (final meta-event)
-        environment.lifecycle().addLifeCycleListener(new LifeCycle.Listener() {
+        environment.lifecycle().addEventListener(new LifeCycle.Listener() {
             @Override
             public void lifeCycleStarted(final LifeCycle event) {
                 applicationStarted();

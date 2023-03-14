@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.debug.report.diagnostic;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Module;
-import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.cli.Command;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.cli.Command;
 import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;

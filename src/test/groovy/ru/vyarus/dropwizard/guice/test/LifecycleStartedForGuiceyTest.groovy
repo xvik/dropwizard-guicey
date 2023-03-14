@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.test
 
-import io.dropwizard.Application
-import io.dropwizard.Configuration
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
@@ -34,7 +34,7 @@ class LifecycleStartedForGuiceyTest extends Specification {
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
-            environment.lifecycle().addLifeCycleListener(new LifeCycle.Listener() {
+            environment.lifecycle().addEventListener(new LifeCycle.Listener() {
                 @Override
                 void lifeCycleStarted(LifeCycle event) {
                     called = true

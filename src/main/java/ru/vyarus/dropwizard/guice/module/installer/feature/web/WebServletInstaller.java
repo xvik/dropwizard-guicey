@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.web;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import io.dropwizard.jetty.setup.ServletEnvironment;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;

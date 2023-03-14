@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature;
 
 import io.dropwizard.servlets.tasks.Task;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;

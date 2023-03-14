@@ -31,7 +31,8 @@ public final class Disables {
 
     /**
      * Check registration source.  Context class could be
-     * {@link io.dropwizard.Application}, {@link ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner},
+     * {@link io.dropwizard.core.Application},
+     * {@link ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner},
      * {@link ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup} and classes implementing
      * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}.
      *

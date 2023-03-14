@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.debug.renderer.jersey
 
-import io.dropwizard.Application
-import io.dropwizard.Configuration
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import org.glassfish.jersey.internal.inject.InjectionManager
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
@@ -41,7 +41,7 @@ class FilterMarkerRenderTest extends Specification {
         render(new JerseyConfig().showExceptionMappers()) == """
 
     Exception mappers
-        Throwable                      ExceptionMapperBinder\$1      (io.dropwizard.setup)
+        Throwable                      ExceptionMapperBinder\$1      (i.d.core.setup)
         EofException                   EarlyEofExceptionMapper      (i.d.jersey.errors)
         EmptyOptionalException         EmptyOptionalExceptionMapper (i.d.jersey.optional)
         IOException                    ExMapper                     (r.v.d.g.d.r.j.FilterMarkerRenderTest) *only @FilterAnn

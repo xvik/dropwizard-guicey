@@ -4,11 +4,11 @@ import com.google.inject.Binding
 import com.google.inject.Injector
 import com.google.inject.Key
 import com.google.inject.name.Names
-import io.dropwizard.Application
-import io.dropwizard.Configuration
-import io.dropwizard.server.ServerFactory
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.server.ServerFactory
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
