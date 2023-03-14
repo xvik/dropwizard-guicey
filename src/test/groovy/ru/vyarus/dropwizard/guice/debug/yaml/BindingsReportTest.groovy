@@ -380,7 +380,9 @@ class BindingsReportTest extends Specification {
     def "Check tree only report"() {
         expect:
         render(new BindingsConfig()
-                .showConfigurationTreeOnly()) == """
+                .showConfigurationTreeOnly())
+                .replace('[HEAD, DELETE, POST, GET, OPTIONS, PATCH, PUT]', '[HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]')
+                == """
 
     ComplexGenericCase (visible paths)
     │
