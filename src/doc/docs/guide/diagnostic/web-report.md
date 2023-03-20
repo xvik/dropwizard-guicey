@@ -89,7 +89,7 @@ If filter is applied by servlet name then it would be rendered *below* target se
 ```  
 
 !!! warning
-    Filters, applied by servlet name are not shown at all if target servets are not registered.
+    Filters, applied by servlet name are not shown at all if target servlets are not registered.
     
 If filter or servlet is applied with multiple target urls then each pattern will start on new line and
 only on first line complete information will be shown (idem `--"--` string will be used to identify same filter):
@@ -115,7 +115,7 @@ Guice servlets and filters (declared in `ServletModule`s) are shown below guice 
     Guice servlets and filters are shown in both admin and main contexts, because `GuiceFilter` is applied on
     both contexts and so all urls will work in both contexts.
     
-Note that regex registrations are explicitly markerd with `reges`
+Note that regex registrations are explicitly marked with `reges`
 
 ```java
 filterRegex("/1/abc?/.*").through(GRegexFilter.class)
@@ -177,4 +177,3 @@ listen(new WebMappingsDiagnostic(new MappingsConfig()
 
 Report rendering logic may also be used directly as report provide separate renderer object
 implementing `ReportRenderer`. Renderer not bound to guice context and assume direct instantiation.    
-    

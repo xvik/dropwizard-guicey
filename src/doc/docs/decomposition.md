@@ -36,7 +36,7 @@ Benefits:
 
 - guice support (ability to register guice modules)
 - [options](guide/options.md) support
-- use [sub-configration objects](guide/yaml-values.md#unique-sub-configuration) directly (important for writing generic modules)
+- use [sub-configuration objects](guide/yaml-values.md#unique-sub-configuration) directly (important for writing generic modules)
 - define custom [extension types](guide/extensions.md) to simplify usage (e.g. like [jdbi](extras/jdbi3.md))
 - [automatic module loading](concepts.md#bundles-lookup) when jar appear in classpath (e.g. like [lifecycle annotations](extras/lifecycle-annotations.md))
 - [shared state](guide/shared.md) - advanced techniques for bundle communication (e.g. used by [GSP](extras/gsp.md) and [SPA](extras/spa.md))
@@ -82,7 +82,7 @@ public class MyBundle implements GuiceyBundle {
 }
 ```
 
-Guicey bundle de-duplication logic is further explaned [here](guide/deduplication.md). In short, registered root bundles 
+Guicey bundle de-duplication logic is further explained [here](guide/deduplication.md). In short, registered root bundles 
 must be initialized in priority. This avoids situations like:
 
 ```java
@@ -201,7 +201,7 @@ Be aware that a user may switch off bundle lookup (with `.disableBundleLookup()`
 #### Auto load override
 
 If your bundle provides configuration, but you still want to load it automatically with the default configuration,
-then you can use [bundle uniquness](guide/bundles.md#bundle-de-duplication):
+then you can use [bundle uniqueness](guide/bundles.md#bundle-de-duplication):
 
 ```java
 public class AutoLoadableBundle extends UniqueGuiceyBundle { ... }
@@ -217,7 +217,7 @@ this technique.
 All extensions must be registered during the initialization phase, when configuration is not yet available
 and so it is not possible to implement optional extension registration. 
 
-To workaround this, you can conditionally disable extensions:
+To work around this, you can conditionally disable extensions:
 
 ```java
 public class MyFeatureBundle implements GuiceyBundle {
@@ -292,7 +292,7 @@ introspection.
 #### Unique sub config
 
 When creating re-usable bundle it is often required to access yaml configuration data. 
-Usually this is solved by some "configuration lookups" like in [dropwizard-views](https://www.dropwizard.io/en/release-2.0.x/manual/views.html) 
+Usually this is solved by some "configuration look-ups" like in [dropwizard-views](https://www.dropwizard.io/en/release-2.0.x/manual/views.html) 
 
 Guicey allows you to obtain the sub-configuration object directly:
 

@@ -1,6 +1,6 @@
 # Modules
 
-All additional guicey integartion modules are maintained as separate project: [dropwizard-guicey-ext](https://github.com/xvik/dropwizard-guicey-ext)
+All additional guicey integration modules are maintained as separate project: [dropwizard-guicey-ext](https://github.com/xvik/dropwizard-guicey-ext)
 
 !!! note
     Module versions are based on guicey version: `$guiceyVersion-N`.

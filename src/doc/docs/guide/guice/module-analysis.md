@@ -41,9 +41,9 @@ public class MyModule extends AbstractModule {
 Guicey will detect `MyResource` as jersey resource and `MyManaged` as managed extension.
 
 !!! tip
-    Extensions annotated with `@InvisibleForScanner` are not recognized, like in [clsspath scanner](../scan.md).
+    Extensions annotated with `@InvisibleForScanner` are not recognized, like in [classpath scanner](../scan.md).
     But note that annotated extensions *should not be registered manually*! Because it will
-    lead to default extension binding registration by guicey, which will most likley conflict with
+    lead to default extension binding registration by guicey, which will most likely conflict with
     existing binding (as a workaround `@LazyBinding` annotation may be used).
     
     Alternatively, you can simply qualify bean and it would not be recognized as extension. 
@@ -73,7 +73,7 @@ GuiceBundle.builder()
 
 !!! success "Will be recognized"    
     ```java
-    // untargetted binding
+    // untargeted binding
     bind(Extension.class)
     
     // left side of the link
@@ -106,7 +106,7 @@ GuiceBundle.builder()
     Qualified and generified cases are not supported because they imply that multiple
     instances of one class may be declared. This rise problems with direct manual declaration:
     for example, if user declare `.extensions(Extension.class)` and in module we have
-    `bind(Extension.class).annotatedWith(Qualify.class)` how can we be sure if its the same
+    `bind(Extension.class).annotatedWith(Qualify.class)` how can we be sure if it is the same
     declaration or not? 
     
     Current implementation will not revognize qualified extension and automatically create
@@ -134,16 +134,16 @@ When `Extension` disabled `One-->Two` link is also removed.
 
 Motivation: 
 
-* First of all, this avoid error cases when remaining chain part contains 
+* First of all, this avoids error cases when remaining chain part contains 
 only abstract types (e.g. only interfaces remains)
-* Removes possible incosistencies as long chains may appear due to some class overrides and so 
+* Removes possible inconsistencies as long chains may appear due to some class overrides and so 
 removing only top (overriding) class will just to "before override" state.  
 
 Removed chains are visible on [guice report](#removed-bindings).
 
 ## Transitive modules
 
-During bindings analysis guicey can see binding modules hierarchy (module A install module B which register binding C).
+During bindings analysis guicey can see binding module's hierarchy (module "A" installs module "B", which registers binding C).
 Using this guicey can remove all bindings relative to exact module class - the result is the same
 as if such module was never registered.
 
@@ -165,7 +165,7 @@ To completely switch off analysis use option:
 With disabled analysis [injector factory](injector.md) will receive user provided modules directly (instead of pre-parsed synthetic module).
 
 !!! important
-    Enabled analysis completely prevent situations when default binding, created by guciey, conflict
+    Enabled analysis completely prevent situations when default binding, created by guicey, conflict
     with manual binding existing in module. In such case startup will fail. Before modules analysis
     it was only possible to solve such issue with `@LazyBinding` annotation.  
 

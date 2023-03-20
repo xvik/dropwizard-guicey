@@ -6,7 +6,7 @@
 Maven BOM contains guicey and guicey ext modules versions. Also includes dropwizard and guice boms.
 
 !!! tip
-    BOM's are useful for versions management. After including bom you can simply include required dependencies
+    BOMs are useful for versions management. After including bom you can simply include required dependencies
     (dropwizard, guice, guicey, guicey-ext) without versions: bom will control all versions.
 
 | BOM version | Guicey | Dropwizard | Guice |
@@ -99,7 +99,7 @@ dependencies {
 
 ## Dependencies override
 
-You may override BOM version for any dependency by simply specifying exact version in dependecy declaration section.
+You may override BOM version for any dependency by simply specifying exact version in dependency declaration section.
 
 If you want to use newer version (then provided by guicey BOM) of dropwizard or guice then import also their BOMs directly:
 

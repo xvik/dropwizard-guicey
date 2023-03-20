@@ -22,4 +22,4 @@ To enable automatic reload of static resources:
 Now static resources would "hot swap".  
 
 !!! warning
-    Note that template engines (fremmarker, mustache) may [cahce templates](https://www.dropwizard.io/en/latest/manual/views.html#caching)  
+    Note that template engines (freemarker, mustache) may [cache templates](https://www.dropwizard.io/en/latest/manual/views.html#caching)  
