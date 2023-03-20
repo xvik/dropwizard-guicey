@@ -67,7 +67,7 @@ Inside guice context you can simply inject Injector instance:
 ## Injector stage
 
 By default injector is created at `PRODICTION` stage, which means that all registered
-singletons are instantiated in time of injector craetion.
+singletons are instantiated in time of injector creation.
 
 You can change stage at [main bundle](../configuration.md#injector):
 

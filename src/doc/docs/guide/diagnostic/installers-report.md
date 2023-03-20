@@ -57,7 +57,7 @@ INFO  [2019-10-11 06:09:06,085] ru.vyarus.dropwizard.guice.debug.ConfigurationDi
 
 !!! note
     This is actually re-configured [configuration report](configuration-report.md).
-    But, in contrast to configration report, it shows all installers (*even not used*). 
+    But, in contrast to configuration report, it shows all installers (*even not used*). 
 
 Also, it indicated used installer features. For example, looking at
 
@@ -84,6 +84,6 @@ Feature | Description
 `OBJECT` | Installer use object instances for extensions registration (obtain instance from guice context)
 `TYPE` | Installer use extension class for extension registration. Usually it's jersey installers which has to register extension in jersey context
 `JERSEY` | Installer installs jersey features (in time of jersey start and not after injector creation as "pure" installers)
-`BIND` | Installer perform manual guice binding. For such installers, automatic untargetted binding for extension is not created (assuming installer require some custom binding). Such installers also verify manual gucie bindings, when they are recognized as extension binding.
+`BIND` | Installer perform manual guice binding. For such installers, automatic untargeted binding for extension is not created (assuming installer require some custom binding). Such installers also verify manual guice bindings, when they are recognized as extension binding.
 `OPTIONS` | Installer requires access for options. Most likely it means it supports additional configuration options (but it cold just read core options value).
 `ORDER` | Installer supports extensions ordering. Use `@Order` annotation to declare order.               

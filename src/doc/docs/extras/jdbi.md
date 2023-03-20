@@ -77,7 +77,7 @@ multiple objects in one transaction, you have to always create them manually for
 
 Integration removes these restrictions: dao (repository) objects are normal guice beans and transaction
 scope is controlled by `@InTransaction` annotation (note that such name was intentional to avoid confusion with
-DBI own's Transaction annotation and more common Transactional annotations).
+DBI's own Transaction annotation and more common Transactional annotations).
 
 At the beginning of unit of work, DBI handle is created and bound to thread (thread local).
 All repositories are simply using this bound handle and so share transaction inside unit of work.
@@ -161,7 +161,7 @@ public interface MyRepository {
 ```
 
 Note the use of `@InTransaction`: it was used to be able to call repository methods without extra annotations
-(the lowest transaction scope it's repository itself). It will make beans "feel the same" as usual DBI on demand
+(the lowest transaction scope its repository itself). It will make beans "feel the same" as usual DBI on demand
 sql object proxies.
 
 `@InTransaction` annotation is handled using guice aop. You can use any other guice aop related features.
@@ -191,7 +191,7 @@ INFO  [2016-12-05 19:42:27,374] ru.vyarus.guicey.jdbi.installer.repository.Repos
 ### Result set mapper
 
 If you have custom implementations of `ResultSetMapper`, it may be registered automatically. 
-You will be able to use injections there because mappers become ususal guice beans (singletons).
+You will be able to use injections there because mappers become usual guice beans (singletons).
 When classpath scan is enabled, such classes will be searched and installed automatically.
 
 ```java
@@ -265,4 +265,4 @@ Repositories could also be called inside such manual unit (as unit of work is co
 its not a big problem
     - instead of field injection (to access other proxies), now getter annotated with @Inject must be used.
         
-See [jdbi3 migration gude](http://jdbi.org/#_upgrading_from_v2_to_v3) for other (pure jdbi related) differences
+See [jdbi3 migration guide](http://jdbi.org/#_upgrading_from_v2_to_v3) for other (pure jdbi related) differences

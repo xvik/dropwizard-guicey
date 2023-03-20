@@ -22,7 +22,7 @@ public class MyModule extends AbstractModule {
    
 Generally have few options:
 
-* If it implement interface, implement your own service and bind as 
+* If it implements an interface, implement your own service and bind as 
 `#!java bind(ServiceX.class).to(MyServiceXImpl.class)`
 * If service is a class, you can modify its behaviour with extended class
 `#!java bind(ServiceX.class).to(MyServiceXExt.class)`

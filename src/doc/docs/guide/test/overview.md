@@ -139,7 +139,7 @@ For example, guicey tests use bundle to enable restricted guice options like
 
 Bundles are also able to:
 
-* disable installers, extensions, gucie modules
+* disable installers, extensions, guice modules
 * override guice bindings
 
 You can also use lookup mechanism to load bundles in tests. For example, 
@@ -169,7 +169,7 @@ BindingsOverrideInjectorFactory.override(new MyOverridingModule())
 ```
 
 !!! important
-    It is assumed that overrding modules registration and application initialization
+    It is assumed that overriding modules registration and application initialization
     will be at the same thread (`ThreadLocal` used for holding registered modules to allow
     parallel tests usage). 
 

@@ -14,7 +14,7 @@
 
 ## Classpath scan configuration shortcut
 
-Classpath scan (auto configuration) for application package may now be configured with no-args shortcut:
+Classpath scan (autoconfiguration) for application package may now be configured with no-args shortcut:
 
 ```java
 GuiceBundle.builder()
@@ -210,4 +210,3 @@ Json and xml SBOMs are now published with `cyclonedx` classifier (same way as dr
 [View published files](https://repo1.maven.org/maven2/ru/vyarus/dropwizard-guicey/5.7.0/)
 
 Also, SBOMs published for all ext modules.
-

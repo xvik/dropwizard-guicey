@@ -101,7 +101,7 @@ All raw data is actually available through: `GuiceyConfigurationInfo#getData()`,
 but `GuiceyConfigurationInfo` provides many shortcut methods to simplify raw data querying.  
 
 Data querying is based on java `Predicate` usage. `Filters` class provides common predicate builders.
-Many examples of it's usage may be found in code.
+Many examples of its usage may be found in code.
 
 !!! note
     For some reports it is important to know only types of used configuration items,
@@ -126,7 +126,7 @@ More advanced queries are applied with predicate composition:
 }
 ```
 
-For exact configuration item type you can always get it's configuration model:
+For exact configuration item type you can always get its configuration model:
 
 ```java
 @Inject GuiceyConfigurationInfo info;
@@ -140,7 +140,7 @@ For instance-based items, you can receive all models for instances of type:
 List<BundleItemInfo> models = info.getInfos(MyBundle.class)
 ```    
 
-And the last example is if you know exact extension instance and wasn't to get it's info:
+And the last example is if you know exact extension instance and wasn't to get its info:
 
 ```java
 BundleItemInfo model = info.getData().getInfo(ItemId.from(myBundleInstance))
@@ -160,7 +160,7 @@ List<Module> modules = info.getModuleIds().stream()
                            .collect(Collectors.toList());
 ```      
 
-Here all used module ids (`ItemId`) obtained. Then complete configuration model loaded for each item and
+Here all used module ids (`ItemId`) obtained. Then complete configuration model loaded for each item
 and instance obtained from model. 
 
 !!! note

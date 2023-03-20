@@ -124,7 +124,7 @@ public class SubConf {
 !!! note
     Path bindings are available even for null values. For example, if sub configuration object
     is null, all it's sub paths will still be available (by class declarations). 
-    The only exception is conditional mappin like dropwizard "server" when available paths
+    The only exception is conditional mapping like dropwizard "server" when available paths
     could change, depending on configuration (what configuration class will be used)
 
 !!! note 
@@ -187,7 +187,7 @@ You can traverse up or down from any path (tree structure).
 * `valueByPath(String)` - return path value or null if value null or path not exists
 * `valuesByType(Class)` - all not null values with assignable type
 * `valueByType(Class)` - first not null value with assignable type
-* `valueByUniqueDeclaredType(Class)` - value of unique sub conifguration or null if value is null or config is not unique
+* `valueByUniqueDeclaredType(Class)` - value of unique sub configuration or null if value is null or config is not unique
 
 Paths are sorted by configuration class (to put custom properties upper) and by path name
 (for predictable paths order).

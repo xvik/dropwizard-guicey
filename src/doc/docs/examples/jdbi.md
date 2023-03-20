@@ -192,8 +192,8 @@ Mappers are instantiated as normal guice beans without restrictions which means 
 (it's only not shown in example mapper).
 
 !!! note
-    The mapper installer mostly automates (and unifies) registration. If your mapper does not need to be guice bean
-    and you dont want to use auto configuration then you can register it manually in dbi instance, making it available for injection.
+    The mapper installer mostly automates (and unifies) registration. If your mapper does not need to be a guice bean
+    and you don't want to use autoconfiguration then you can register it manually in dbi instance, making it available for injection.
 
 Also, see complementing binding annotation, used to bind object to query parameters:
 
@@ -251,7 +251,7 @@ public class UserResource {
 `UserMapper` and `UserBind` are used implicitly to convert the POJO into a db record and back.
 
 You can use `@InTransaction` on repository method to enlarge transaction scope, but, in contrast
-to hibernate you dont't have to always declare it to avoid lazy initialization exception 
+to hibernate you don't have to always declare it to avoid lazy initialization exception 
 (because jdbi produces simple pojos).
 
 !!! note
