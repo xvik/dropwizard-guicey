@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
-import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.core.ConfiguredBundle;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.*;
@@ -22,13 +22,13 @@ public enum ConfigItem {
      */
     Extension(false),
     /**
-     * {@link io.dropwizard.ConfiguredBundle}. Only bundles registered through guicey api are tracked.
+     * {@link io.dropwizard.core.ConfiguredBundle}. Only bundles registered through guicey api are tracked.
      */
     // NOTE dropwizard bundle goes before guicey bundle because dropwizard bundles are actually register first
     DropwizardBundle(true),
     /**
      * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle} or
-     * {@link io.dropwizard.ConfiguredBundle}
+     * {@link io.dropwizard.core.ConfiguredBundle}
      * Note that guicey bundle installs other items and all of them are tracked too.
      */
     Bundle(true),

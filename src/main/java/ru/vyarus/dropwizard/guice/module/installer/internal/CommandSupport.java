@@ -2,10 +2,10 @@ package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
-import io.dropwizard.Application;
-import io.dropwizard.cli.Command;
-import io.dropwizard.cli.EnvironmentCommand;
-import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.cli.Command;
+import io.dropwizard.core.cli.EnvironmentCommand;
+import io.dropwizard.core.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
@@ -31,8 +31,8 @@ public final class CommandSupport {
 
     /**
      * Scans classpath to find commands and register them.
-     * Commands are instantiated using default constructor, but {@link io.dropwizard.cli.EnvironmentCommand}
-     * must have constructor with {@link io.dropwizard.Application} argument.
+     * Commands are instantiated using default constructor, but {@link io.dropwizard.core.cli.EnvironmentCommand}
+     * must have constructor with {@link io.dropwizard.core.Application} argument.
      *
      * @param bootstrap bootstrap object
      * @param scanner   configured scanner instance
@@ -69,8 +69,8 @@ public final class CommandSupport {
 
     /**
      * Search catch all {@link Command} derived classes.
-     * Instantiate command with default constructor and {@link io.dropwizard.cli.EnvironmentCommand}
-     * using constructor with {@link io.dropwizard.Application} argument.
+     * Instantiate command with default constructor and {@link io.dropwizard.core.cli.EnvironmentCommand}
+     * using constructor with {@link io.dropwizard.core.Application} argument.
      */
     private static class CommandClassVisitor implements ClassVisitor {
         private final Bootstrap bootstrap;

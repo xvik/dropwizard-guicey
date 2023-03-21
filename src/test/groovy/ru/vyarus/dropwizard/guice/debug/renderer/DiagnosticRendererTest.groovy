@@ -3,11 +3,11 @@ package ru.vyarus.dropwizard.guice.debug.renderer
 import com.google.common.collect.Lists
 import com.google.inject.Binder
 import com.google.inject.Module
-import io.dropwizard.Application
-import io.dropwizard.Configuration
-import io.dropwizard.ConfiguredBundle
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.ConfiguredBundle
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig

@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice
 import com.google.inject.Inject
 import com.google.inject.Injector
 import com.google.inject.Key
-import io.dropwizard.setup.Bootstrap
+import io.dropwizard.core.setup.Bootstrap
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.TaskInstaller
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller

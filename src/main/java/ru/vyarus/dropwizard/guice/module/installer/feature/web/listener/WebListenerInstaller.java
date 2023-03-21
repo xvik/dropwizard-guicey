@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.web.listener;
 
 import com.google.common.collect.ImmutableList;
 import io.dropwizard.jetty.MutableServletContextHandler;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.util.WebUtils;

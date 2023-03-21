@@ -31,7 +31,7 @@ Report intended to answer:
 Example report:
 
 ```    
-WARN  [2019-10-11 04:25:47,022] ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic: Diagnostic report
+INFO  [2019-10-11 04:25:47,022] ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic: Diagnostic report
 
 ---------------------------------------------------------------------------[STARTUP STATS]
 
@@ -203,9 +203,9 @@ WARN  [2019-10-11 04:25:47,022] ru.vyarus.dropwizard.guice.debug.ConfigurationDi
 ```
 
 Guicey time (`431.2 ms`) is measured as `GuiceBundle` methods plus part of jersey configuration time (jersey started after bundle).
-It also show time spent on each application starting phase: `150.2 ms` configuration (initialization), `279.4 ms` run and `1.594 ms` during jersey startup.
+It also shows time spent on each application starting phase: `150.2 ms` configuration (initialization), `279.4 ms` run and `1.594 ms` during jersey startup.
 
-All items below represent guicey time detalization. Tree childs always detail time of direct parent.                                                                     
+All items below represent guicey time details. Each child item always includes the time detail of the direct parent.                                                                     
 
 !!! tip
     Application startup during development may be improved with VM options:
@@ -236,7 +236,7 @@ Guicey will later use this resolved classes to search commands (if enabled), ins
 
 !!! note 
     Classpath scan time will be obviously bigger for real applications (with larger classes count). 
-    But most of this time spent on class loading (becauase guicey loads all classes during scan and not 
+    But most of this time spent on class loading (because guicey loads all classes during scan and not 
     just parse class structure). If you use all these classes then they will be loaded 
     in any case. If you disable classpath scan to save time then this time will just move to other places
     (where classes are used). 
@@ -417,8 +417,8 @@ Used markers:
 * `NOT_USED` - option was set by user but never used
 
 !!! note
-    `NOT_USED` marker just indicates that option is "not yet" used. Options may be consumed lazilly by application logic, so
-    it is possible that its not used at reporting time. There is no such cases with guicey options, 
+    `NOT_USED` marker just indicates that option is "not yet" used. Options may be consumed lazily by application logic, so
+    it is possible that it's not used at reporting time. There is no such cases with guicey options, 
     but may be with your custom options (it all depends on usage scenario).
 
 ## Configuration summary
@@ -622,7 +622,7 @@ Extensions detected from guice bindings are shown as a sub tree:
     see configuration source.    
 
 Bindings are not shown under main configuration tree (where modules are registered) because
-guicey know only module class, but actually moduliple module instances could be registered
+guicey only knows about the module class, but actually multiple module instances could be registered
 and so it is impossible to known what module instance extension is related to.
 
 !!! tip

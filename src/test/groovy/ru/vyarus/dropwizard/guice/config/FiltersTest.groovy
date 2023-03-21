@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.config
 
-import io.dropwizard.Application
-import io.dropwizard.ConfiguredBundle
+import io.dropwizard.core.Application
+import io.dropwizard.core.ConfiguredBundle
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem
 import ru.vyarus.dropwizard.guice.module.context.ConfigScope

@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.support.feature
 
 import com.google.inject.Inject
-import io.dropwizard.cli.ConfiguredCommand
-import io.dropwizard.setup.Bootstrap
+import io.dropwizard.core.cli.ConfiguredCommand
+import io.dropwizard.core.setup.Bootstrap
 import net.sourceforge.argparse4j.inf.Namespace
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 

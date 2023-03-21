@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.support.badcmd
 
-import io.dropwizard.cli.Command
-import io.dropwizard.setup.Bootstrap
+import io.dropwizard.core.cli.Command
+import io.dropwizard.core.setup.Bootstrap
 import net.sourceforge.argparse4j.inf.Namespace
 import net.sourceforge.argparse4j.inf.Subparser
 

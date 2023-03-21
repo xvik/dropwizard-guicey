@@ -209,7 +209,8 @@ public class ConfigPath {
     }
 
     /**
-     * Useful to filter out core dropwizard properties (where root type would be {@link io.dropwizard.Configuration}.
+     * Useful to filter out core dropwizard properties (where root type would be
+     * {@link io.dropwizard.core.Configuration}.
      *
      * @return root configuration class where entire path started
      */

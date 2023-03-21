@@ -67,7 +67,7 @@ public class SampleBean {
 
 * Annotated methods must not contain parameters. Method could have any visibility.
 * `@PostConstruct` or `@PostStartup` methods fail fails entire application startup (fail fast)
-* `@PreDestroy` method fails are just logged to guarantee that all destroy methods will be procesed
+* `@PreDestroy` method fails are just logged to guarantee that all destroy methods will be processed
 * If both current class and super class have annotated methods - both methods will be executed (the only obvious exception is overridden methods)
 
 !!! important   

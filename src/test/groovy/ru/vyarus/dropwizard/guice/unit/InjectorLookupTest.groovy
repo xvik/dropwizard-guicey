@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.unit
 
 import com.google.inject.Injector
-import io.dropwizard.Application
+import io.dropwizard.core.Application
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState

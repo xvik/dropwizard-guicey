@@ -1,12 +1,10 @@
 package ru.vyarus.dropwizard.guice.web
 
-import io.dropwizard.Application
-import io.dropwizard.Configuration
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import org.eclipse.jetty.server.session.SessionHandler
-import org.eclipse.jetty.util.component.AbstractLifeCycle
-import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.web.session.SessionListener
@@ -71,12 +69,6 @@ class SessionListenerTest extends AbstractTest {
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
-            environment.lifecycle().addLifeCycleListener(new LifeCycle.Listener() {
-                @Override
-                void lifeCycleStopping(LifeCycle event) {
-                    (event as AbstractLifeCycle).stopTimeout = 0
-                }
-            })
         }
 
     }

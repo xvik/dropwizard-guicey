@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.diagnostic
 
-import io.dropwizard.Application
+import io.dropwizard.core.Application
 import ru.vyarus.dropwizard.guice.diagnostic.support.ManualAppWithBundle
 import ru.vyarus.dropwizard.guice.diagnostic.support.bundle.*
 import ru.vyarus.dropwizard.guice.diagnostic.support.features.FooInstaller

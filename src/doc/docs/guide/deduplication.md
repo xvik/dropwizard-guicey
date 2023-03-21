@@ -37,7 +37,7 @@ GuiceBundle.buider()
     ...
 ```
 
-To workaround such cases *deduplication mechanism** was introduced: instances of the same 
+To work around such cases *deduplication mechanism** was introduced: instances of the same 
 type are considered duplicate if they are equal. 
 
 ## Equals method
@@ -204,7 +204,7 @@ public class MyModule extends UniqueModule {}
 Then guice will perform de-duplication itself.
 
 !!! warning
-    Guice will perform de-deplication itself only if both `equals` and `hashCode` properly implemented
+    Guice will perform de-duplication itself only if both `equals` and `hashCode` properly implemented
     (like in `UniqueModule`)  
 
 

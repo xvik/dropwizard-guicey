@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.web
 
 import com.google.inject.Inject
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.support.web.crosscontext.CrossContextListener
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp

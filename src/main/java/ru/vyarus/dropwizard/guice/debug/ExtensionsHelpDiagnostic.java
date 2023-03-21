@@ -23,7 +23,7 @@ public class ExtensionsHelpDiagnostic extends UniqueGuiceyLifecycleListener {
 
     @Override
     protected void installersResolved(final InstallersResolvedEvent event) {
-        logger.warn("Recognized extension signs"
+        logger.info("Recognized extension signs"
                 + new ExtensionsHelpRenderer(event.getInstallers()).renderReport(null));
     }
 }

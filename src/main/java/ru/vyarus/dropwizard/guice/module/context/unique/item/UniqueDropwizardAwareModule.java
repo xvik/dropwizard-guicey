@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.context.unique.item;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
 
 /**

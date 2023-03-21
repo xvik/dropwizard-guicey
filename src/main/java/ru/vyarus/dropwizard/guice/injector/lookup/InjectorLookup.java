@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.injector.lookup;
 
 import com.google.inject.Injector;
-import io.dropwizard.Application;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 
 import java.util.Optional;

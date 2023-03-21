@@ -48,12 +48,12 @@ class DummyLifeCycle implements LifeCycle {
     }
 
     @Override
-    void addLifeCycleListener(LifeCycle.Listener listener) {
-
+    boolean addEventListener(EventListener listener) {
+        return false
     }
 
     @Override
-    void removeLifeCycleListener(LifeCycle.Listener listener) {
-
+    boolean removeEventListener(EventListener listener) {
+        return false
     }
 }

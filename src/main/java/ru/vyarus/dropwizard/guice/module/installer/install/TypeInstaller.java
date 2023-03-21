@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.install;
 
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 
 /**
  * Marker interface must be used together with {@code FeatureInstaller}.

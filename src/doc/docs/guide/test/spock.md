@@ -125,7 +125,7 @@ more resides in root). When used with existing configuration file, this paramete
 
 ## Guice injections
 
-Any gucie bean may be injected directly into test field:
+Any guice bean may be injected directly into test field:
 
 ```groovy
 @Inject

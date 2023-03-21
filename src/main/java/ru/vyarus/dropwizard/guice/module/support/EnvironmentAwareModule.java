@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.support;
 
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 
 /**
  * Guice module, registered in bundle, may implement this to be able to use environment object in module

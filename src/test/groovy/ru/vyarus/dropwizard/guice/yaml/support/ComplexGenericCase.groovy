@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.yaml.support
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.dropwizard.Configuration
+import io.dropwizard.core.Configuration
 
 /**
  * @author Vyacheslav Rusakov

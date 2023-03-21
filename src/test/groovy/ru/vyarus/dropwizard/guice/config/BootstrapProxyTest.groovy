@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.config
 
-import io.dropwizard.Application
-import io.dropwizard.Configuration
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import net.sourceforge.argparse4j.inf.Namespace
 import net.sourceforge.argparse4j.inf.Subparser
 import ru.vyarus.dropwizard.guice.AbstractTest
@@ -48,7 +48,7 @@ class BootstrapProxyTest extends AbstractTest {
         }
     }
 
-    static class Command extends io.dropwizard.cli.Command {
+    static class Command extends io.dropwizard.core.cli.Command {
 
         Command() {
             super("sample", "")

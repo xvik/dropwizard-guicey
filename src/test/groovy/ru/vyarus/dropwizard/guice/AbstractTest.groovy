@@ -6,10 +6,10 @@ import io.dropwizard.jersey.setup.JerseyEnvironment
 import io.dropwizard.jetty.MutableServletContextHandler
 import io.dropwizard.jetty.setup.ServletEnvironment
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment
-import io.dropwizard.logging.BootstrapLogging
-import io.dropwizard.logging.LoggingUtil
-import io.dropwizard.setup.AdminEnvironment
-import io.dropwizard.setup.Environment
+import io.dropwizard.logging.common.BootstrapLogging
+import io.dropwizard.logging.common.LoggingUtil
+import io.dropwizard.core.setup.AdminEnvironment
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState

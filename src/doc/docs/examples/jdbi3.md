@@ -261,7 +261,7 @@ public class UserResource {
 `UserMapper` and `UserBind` are used implicitly to convert the POJO into a db record and back.
 
 You can use `@InTransaction` on repository method to enlarge transaction scope, but, in contrast
-to hibernate you dont't have to always declare it to avoid lazy initialization exception 
+to hibernate you don't have to always declare it to avoid lazy initialization exception 
 (because jdbi produces simple pojos).
 
 !!! note

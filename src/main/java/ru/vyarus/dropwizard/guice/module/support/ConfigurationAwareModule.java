@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.support;
 
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 
 /**
  * Guice module, registered in bundle, may implement this to be able to use configuration object in module

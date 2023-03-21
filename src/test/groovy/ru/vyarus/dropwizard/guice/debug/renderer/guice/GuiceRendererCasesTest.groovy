@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.debug.renderer.guice
 
 import com.google.inject.Injector
-import io.dropwizard.Application
-import io.dropwizard.Configuration
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.lookup.PropertyBundleLookup
 import ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule
@@ -240,8 +240,6 @@ class GuiceRendererCasesTest extends Specification {
             ├── instance             [@Singleton]     @Config("server.gzip.bufferSize") DataSize      at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── instance             [@Singleton]     @Config("server.gzip.deflateCompressionLevel") Integer   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── instance             [@Singleton]     @Config("server.gzip.enabled") Boolean          at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
-            ├── instance             [@Singleton]     @Config("server.gzip.excludedUserAgentPatterns") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
-            ├── instance             [@Singleton]     @Config("server.gzip.gzipCompatibleInflation") Boolean   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── instance             [@Singleton]     @Config("server.gzip.minimumEntitySize") DataSize   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── instance             [@Singleton]     @Config("server.gzip.syncFlush") Boolean        at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── instance             [@Singleton]     @Config("server.idleThreadTimeout") Duration    at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
@@ -251,6 +249,7 @@ class GuiceRendererCasesTest extends Specification {
             ├── instance             [@Singleton]     @Config("server.registerDefaultExceptionMappers") Boolean   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── instance             [@Singleton]     @Config("server.requestLog") RequestLogFactory<Object>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── instance             [@Singleton]     @Config("server.requestLog.appenders") List<AppenderFactory<IAccessEvent>>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
+            ├── instance             [@Singleton]     @Config("server.responseMeteredLevel") ResponseMeteredLevel   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── instance             [@Singleton]     @Config("server.rootPath") Optional<String>     at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── instance             [@Singleton]     @Config("server.serverPush") ServerPushFilterFactory   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── instance             [@Singleton]     @Config("server.serverPush.associatePeriod") Duration   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
@@ -264,6 +263,7 @@ class GuiceRendererCasesTest extends Specification {
             ├── providerinstance     [@Prototype]     @Config("server.gzip.excludedPaths") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── providerinstance     [@Prototype]     @Config("server.gzip.includedMethods") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── providerinstance     [@Prototype]     @Config("server.gzip.includedPaths") Set<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
+            ├── providerinstance     [@Prototype]     @Config("server.metricPrefix") String           at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── providerinstance     [@Prototype]     @Config("server.nofileHardLimit") Integer       at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── providerinstance     [@Prototype]     @Config("server.nofileSoftLimit") Integer       at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)
             ├── providerinstance     [@Prototype]     @Config("server.serverPush.refererHosts") List<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:90)

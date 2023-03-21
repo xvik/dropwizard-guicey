@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import io.dropwizard.Application;
+import io.dropwizard.core.Application;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.ExtensionContext;

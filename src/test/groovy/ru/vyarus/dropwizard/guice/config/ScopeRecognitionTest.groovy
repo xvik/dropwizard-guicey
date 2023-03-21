@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.config
 
-import io.dropwizard.Application
+import io.dropwizard.core.Application
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
 import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule

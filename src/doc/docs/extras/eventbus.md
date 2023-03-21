@@ -91,7 +91,7 @@ INFO  [2016-12-01 12:31:02,819] ru.vyarus.guicey.eventbus.report.EventsReporter:
 
 !!! note 
     Only subscriptions of beans registered at the time of injector startup will be shown.
-    For example, if MyBean has a subscription method but a binding for it is not declared (and noone depends on it),
+    For example, if MyBean has a subscription method but a binding for it is not declared (and no-one depends on it),
     a JIT binding will be created later in time (when bean will be actually used) and will not be reflected in the logs. 
 
 ### Consuming multiple events

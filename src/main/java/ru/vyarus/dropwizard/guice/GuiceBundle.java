@@ -5,10 +5,10 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
-import io.dropwizard.Configuration;
-import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
@@ -162,7 +162,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
 
     /**
      * Note that injector could be accessed statically anywhere with
-     * {@link ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup#getInjector(io.dropwizard.Application)}.
+     * {@link ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup#getInjector(io.dropwizard.core.Application)}.
      *
      * @return created injector instance or fail if injector not yet created
      * @throws IllegalStateException if injector is not yet created
@@ -454,8 +454,9 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * with {@link #enableAutoConfig(String...)}).
          * <p>
          * Enables commands classpath search. All found commands are instantiated and registered in
-         * bootstrap. Default constructor is used for simple commands, but {@link io.dropwizard.cli.EnvironmentCommand}
-         * must have constructor with {@link io.dropwizard.Application} argument.
+         * bootstrap. Default constructor is used for simple commands, but
+         * {@link io.dropwizard.core.cli.EnvironmentCommand} must have constructor with
+         * {@link io.dropwizard.core.Application} argument.
          * <p>
          * By default, commands search is disabled.
          *

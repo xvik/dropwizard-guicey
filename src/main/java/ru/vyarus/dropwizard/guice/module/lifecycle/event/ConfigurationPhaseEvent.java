@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event;
 
-import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.core.setup.Bootstrap;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 

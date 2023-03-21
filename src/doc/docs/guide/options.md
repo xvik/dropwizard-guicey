@@ -161,7 +161,7 @@ Converter is actually any `java.util.Function` (here, lambda with method call (`
 
 ### System properties
 
-As shown before, you can bind single system property to option. But you can allso allow
+As shown before, you can bind single system property to option. But you can also allow
 to set any option with system property:
 
 ```java
@@ -199,7 +199,7 @@ new OptionsMapper()
             .map()
 ```
 
-When enabled, all mapped options will be printed to console (logger is not used becuase it's not yet initialized).
+When enabled, all mapped options will be printed to console (logger is not used because it's not yet initialized).
 
 Example output:
 ```

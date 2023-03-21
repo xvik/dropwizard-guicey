@@ -165,7 +165,7 @@ more resides in root). When used with existing configuration file, this paramete
 
 ## Guice injections
 
-Any gucie bean may be injected directly into test field:
+Any guice bean may be injected directly into test field:
 
 ```groovy
 @Inject
@@ -263,7 +263,7 @@ Also, there are special objects available as parameters:
 * `ClientSupport` application web client helper
 
 !!! note
-    Parameter injection will work not only in test, but also in lifecyle methods (beforeAll, afterEach etc.) 
+    Parameter injection will work on test methods as well as lifecyle methods (beforeAll, afterEach etc.) 
 
 Example:
 
@@ -525,7 +525,7 @@ environment setup, guicey provides `TestEnviromentSetup` interface.
 Setup objects are called before application startup and could directly apply (through parameter)
 configuration overrides and hooks.
 
-For example, suppose you need to setup database before test:
+For example, suppose you need to set up a database before test:
 
 ```java
 public class TestDbSetup implements TestEnvironmentSetup {
@@ -802,7 +802,7 @@ So if you have 3rd party extension which needs to be executed BEFORE guicey exte
 When you declare extensions with annotations or with `@RegisterExtension` in static fields,
 application would be started before all test methods and shut down after last test method.
 
-If you want to start application *for each test method* then delcare extension in non-static field:
+If you want to start application *for each test method* then declare extension in non-static field:
 
 ```java
 RegisterExtension

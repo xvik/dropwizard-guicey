@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.test;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
 import io.dropwizard.testing.DropwizardTestSupport;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;

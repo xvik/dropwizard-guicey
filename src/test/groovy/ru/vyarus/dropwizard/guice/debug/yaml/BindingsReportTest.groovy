@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.debug.yaml
 
-import io.dropwizard.Application
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
 import ru.vyarus.dropwizard.guice.debug.report.yaml.ConfigBindingsRenderer
@@ -30,7 +30,9 @@ class BindingsReportTest extends Specification {
         // @Config("server.requestLog") RequestLogFactory<RequestLog>, but its not because
         // type is lowered on declaration: private RequestLogFactory<?> requestLog; (AbstractServerFactory)
         // SO case is: type information INTENTIONALLY lowered
-        render(new BindingsConfig()) == """
+        render(new BindingsConfig())
+                .replace('[HEAD, DELETE, POST, GET, OPTIONS, PATCH, PUT]', '[HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]')
+                == """
 
     Configuration object bindings:
         @Config ComplexGenericCase
@@ -49,7 +51,7 @@ class BindingsReportTest extends Specification {
             @Config TaskConfiguration = TaskConfiguration[printStackTraceOnError=false]
 
         Configuration.logging
-            @Config LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
+            @Config LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]}
 
         Configuration.metrics
             @Config MetricsFactory = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false}
@@ -79,8 +81,8 @@ class BindingsReportTest extends Specification {
             @Config("admin.tasks") TaskConfiguration = TaskConfiguration[printStackTraceOnError=false]
             @Config("admin.tasks.printStackTraceOnError") Boolean = false
             @Config("health") Optional<HealthFactory> = Optional.empty
-            @Config("logging") LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
-            @Config("logging.appenders") List<AppenderFactory<ILoggingEvent>> (with actual type ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+            @Config("logging") LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]}
+            @Config("logging.appenders") List<AppenderFactory<ILoggingEvent>> (with actual type ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
             @Config("logging.level") String = "INFO"
             @Config("logging.loggers") Map<String, JsonNode> (with actual type HashMap<String, JsonNode>) = {}
             @Config("metrics") MetricsFactory = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false}
@@ -103,8 +105,6 @@ class BindingsReportTest extends Specification {
             @Config("server.gzip.bufferSize") DataSize = 8 kibibytes
             @Config("server.gzip.deflateCompressionLevel") Integer = -1
             @Config("server.gzip.enabled") Boolean = true
-            @Config("server.gzip.excludedUserAgentPatterns") Set<String> (with actual type HashSet<String>) = []
-            @Config("server.gzip.gzipCompatibleInflation") Boolean = true
             @Config("server.gzip.minimumEntitySize") DataSize = 256 bytes
             @Config("server.gzip.syncFlush") Boolean = false
             @Config("server.idleThreadTimeout") Duration = 1 minute
@@ -113,7 +113,8 @@ class BindingsReportTest extends Specification {
             @Config("server.minThreads") Integer = 8
             @Config("server.registerDefaultExceptionMappers") Boolean = true
             @Config("server.requestLog") RequestLogFactory<Object> (with actual type LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
-            @Config("server.requestLog.appenders") List<AppenderFactory<IAccessEvent>> (with actual type ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+            @Config("server.requestLog.appenders") List<AppenderFactory<IAccessEvent>> (with actual type ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
+            @Config("server.responseMeteredLevel") ResponseMeteredLevel = COARSE
             @Config("server.rootPath") Optional<String> = Optional.empty
             @Config("server.serverPush") ServerPushFilterFactory = io.dropwizard.jetty.ServerPushFilterFactory@1111111
             @Config("server.serverPush.associatePeriod") Duration = 4 seconds
@@ -132,7 +133,9 @@ class BindingsReportTest extends Specification {
         // SO case is: type information INTENTIONALLY lowered
         render(new BindingsConfig()
                 .showConfigurationTree()
-                .showNullValues()) == """
+                .showNullValues())
+                .replace('[HEAD, DELETE, POST, GET, OPTIONS, PATCH, PUT]', '[HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]')
+                == """
 
     ComplexGenericCase (visible paths)
     │
@@ -153,7 +156,7 @@ class BindingsReportTest extends Specification {
     ├── health: Optional<HealthFactory> = Optional.empty
     │
     ├── logging: DefaultLoggingFactory
-    │   ├── appenders: ArrayList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+    │   ├── appenders: ArrayList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
     │   ├── level: String = "INFO"
     │   └── loggers: HashMap<String, JsonNode> = {}
     │
@@ -179,10 +182,12 @@ class BindingsReportTest extends Specification {
         ├── idleThreadTimeout: Duration = 1 minute
         ├── maxQueuedRequests: Integer = 1024
         ├── maxThreads: Integer = 1024
+        ├── metricPrefix: String = null
         ├── minThreads: Integer = 8
         ├── nofileHardLimit: Integer = null
         ├── nofileSoftLimit: Integer = null
         ├── registerDefaultExceptionMappers: Boolean = true
+        ├── responseMeteredLevel: ResponseMeteredLevel = COARSE
         ├── rootPath: Optional<String> = Optional.empty
         ├── shutdownGracePeriod: Duration = 30 seconds
         ├── startsAsRoot: Boolean = null
@@ -197,15 +202,13 @@ class BindingsReportTest extends Specification {
         │   ├── enabled: Boolean = true
         │   ├── excludedMimeTypes: Set<String> = null
         │   ├── excludedPaths: Set<String> = null
-        │   ├── excludedUserAgentPatterns: HashSet<String> = []
-        │   ├── gzipCompatibleInflation: Boolean = true
         │   ├── includedMethods: Set<String> = null
         │   ├── includedPaths: Set<String> = null
         │   ├── minimumEntitySize: DataSize = 256 bytes
         │   └── syncFlush: Boolean = false
         │
         ├── requestLog: LogbackAccessRequestLogFactory
-        │   └── appenders: ArrayList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+        │   └── appenders: ArrayList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
         │
         └── serverPush: ServerPushFilterFactory
             ├── associatePeriod: Duration = 4 seconds
@@ -235,7 +238,7 @@ class BindingsReportTest extends Specification {
             @Config TaskConfiguration = TaskConfiguration[printStackTraceOnError=false]
 
         Configuration.logging
-            @Config LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
+            @Config LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]}
 
         Configuration.metrics
             @Config MetricsFactory = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false}
@@ -269,8 +272,8 @@ class BindingsReportTest extends Specification {
             @Config("admin.tasks") TaskConfiguration = TaskConfiguration[printStackTraceOnError=false]
             @Config("admin.tasks.printStackTraceOnError") Boolean = false
             @Config("health") Optional<HealthFactory> = Optional.empty
-            @Config("logging") LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
-            @Config("logging.appenders") List<AppenderFactory<ILoggingEvent>> (with actual type ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+            @Config("logging") LoggingFactory (with actual type DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]}
+            @Config("logging.appenders") List<AppenderFactory<ILoggingEvent>> (with actual type ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
             @Config("logging.level") String = "INFO"
             @Config("logging.loggers") Map<String, JsonNode> (with actual type HashMap<String, JsonNode>) = {}
             @Config("metrics") MetricsFactory = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false}
@@ -298,8 +301,6 @@ class BindingsReportTest extends Specification {
             @Config("server.gzip.enabled") Boolean = true
             @Config("server.gzip.excludedMimeTypes") Set<String> = null
             @Config("server.gzip.excludedPaths") Set<String> = null
-            @Config("server.gzip.excludedUserAgentPatterns") Set<String> (with actual type HashSet<String>) = []
-            @Config("server.gzip.gzipCompatibleInflation") Boolean = true
             @Config("server.gzip.includedMethods") Set<String> = null
             @Config("server.gzip.includedPaths") Set<String> = null
             @Config("server.gzip.minimumEntitySize") DataSize = 256 bytes
@@ -307,12 +308,14 @@ class BindingsReportTest extends Specification {
             @Config("server.idleThreadTimeout") Duration = 1 minute
             @Config("server.maxQueuedRequests") Integer = 1024
             @Config("server.maxThreads") Integer = 1024
+            @Config("server.metricPrefix") String = null
             @Config("server.minThreads") Integer = 8
             @Config("server.nofileHardLimit") Integer = null
             @Config("server.nofileSoftLimit") Integer = null
             @Config("server.registerDefaultExceptionMappers") Boolean = true
             @Config("server.requestLog") RequestLogFactory<Object> (with actual type LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
-            @Config("server.requestLog.appenders") List<AppenderFactory<IAccessEvent>> (with actual type ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+            @Config("server.requestLog.appenders") List<AppenderFactory<IAccessEvent>> (with actual type ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
+            @Config("server.responseMeteredLevel") ResponseMeteredLevel = COARSE
             @Config("server.rootPath") Optional<String> = Optional.empty
             @Config("server.serverPush") ServerPushFilterFactory = io.dropwizard.jetty.ServerPushFilterFactory@1111111
             @Config("server.serverPush.associatePeriod") Duration = 4 seconds
@@ -333,7 +336,9 @@ class BindingsReportTest extends Specification {
         render(new BindingsConfig()
                 .showCustomConfigOnly()
                 .showNullValues()
-                .showConfigurationTree()) == """
+                .showConfigurationTree())
+                .replace('[HEAD, DELETE, POST, GET, OPTIONS, PATCH, PUT]', '[HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]')
+                == """
 
     ComplexGenericCase (visible paths)
     │
@@ -375,7 +380,9 @@ class BindingsReportTest extends Specification {
     def "Check tree only report"() {
         expect:
         render(new BindingsConfig()
-                .showConfigurationTreeOnly()) == """
+                .showConfigurationTreeOnly())
+                .replace('[HEAD, DELETE, POST, GET, OPTIONS, PATCH, PUT]', '[HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]')
+                == """
 
     ComplexGenericCase (visible paths)
     │
@@ -393,7 +400,7 @@ class BindingsReportTest extends Specification {
     ├── health: Optional<HealthFactory> = Optional.empty
     │
     ├── logging: DefaultLoggingFactory
-    │   ├── appenders: ArrayList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+    │   ├── appenders: ArrayList<AppenderFactory<ILoggingEvent>> = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
     │   ├── level: String = "INFO"
     │   └── loggers: HashMap<String, JsonNode> = {}
     │
@@ -419,6 +426,7 @@ class BindingsReportTest extends Specification {
         ├── maxThreads: Integer = 1024
         ├── minThreads: Integer = 8
         ├── registerDefaultExceptionMappers: Boolean = true
+        ├── responseMeteredLevel: ResponseMeteredLevel = COARSE
         ├── rootPath: Optional<String> = Optional.empty
         ├── shutdownGracePeriod: Duration = 30 seconds
         │
@@ -426,13 +434,11 @@ class BindingsReportTest extends Specification {
         │   ├── bufferSize: DataSize = 8 kibibytes
         │   ├── deflateCompressionLevel: Integer = -1
         │   ├── enabled: Boolean = true
-        │   ├── excludedUserAgentPatterns: HashSet<String> = []
-        │   ├── gzipCompatibleInflation: Boolean = true
         │   ├── minimumEntitySize: DataSize = 256 bytes
         │   └── syncFlush: Boolean = false
         │
         ├── requestLog: LogbackAccessRequestLogFactory
-        │   └── appenders: ArrayList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+        │   └── appenders: ArrayList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
         │
         └── serverPush: ServerPushFilterFactory
             ├── associatePeriod: Duration = 4 seconds

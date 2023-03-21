@@ -2,9 +2,9 @@ package ru.vyarus.dropwizard.guice
 
 import com.google.inject.Injector
 import com.google.inject.ProvisionException
-import io.dropwizard.Application
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import org.glassfish.jersey.internal.inject.AbstractBinder
 import org.glassfish.jersey.internal.inject.InjectionManager
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged

@@ -1,7 +1,7 @@
 # Classpath scan
 
 !!! summary 
-    Use scan only for application package. When part of application extracted to it's own library (usually already mature part) 
+    Use scan only for application package. When part of application extracted to its own library (usually already mature part) 
     create [guicey bundle](bundles.md) for it with explicit extensions definition. Use [manual bundles installation](configuration.md) 
     or [bundle lookup mechanism](bundles.md#bundle-lookup) to install custom bundles.
 
@@ -70,7 +70,7 @@ public static class FooExceptionMapper extends AbstractExceptionMapper<IOExcepti
 In this case `FooExceptionMapper` will be ignored by classpath scanner. But you still can install extension manually.
 
 !!! tip
-    If you can't use annotation on extension for some reson, you can simply [disable extension](disables.md#disable-extensions) 
+    If you can't use annotation on extension for some reason, you can simply [disable extension](disables.md#disable-extensions) 
 
 ## Motivation
 

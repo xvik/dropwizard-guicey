@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.yaml;
 
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationTreeAwareModule;
 
 import java.util.*;
@@ -59,7 +59,8 @@ public class ConfigurationTree {
     }
 
     /**
-     * @return configuration hierarchy classes (including {@link io.dropwizard.Configuration}) and custom interfaces
+     * @return configuration hierarchy classes (including {@link io.dropwizard.core.Configuration}) and custom
+     * interfaces
      */
     public List<Class> getRootTypes() {
         return new ArrayList<>(rootTypes);

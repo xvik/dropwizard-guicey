@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.test;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.jersey.jackson.JacksonFeature;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;

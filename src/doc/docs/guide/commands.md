@@ -90,5 +90,5 @@ public class SyncCommand extends EnvironmentCommand<AppConfiguration> {
 }
 ```
 
-This example shows workaround for managed initialization in commnads: `DbManager` is some `Managed` bean which would run automatically 
+This example shows workaround for managed initialization in commands: `DbManager` is some `Managed` bean which would run automatically 
 in server mode. But commands never call managed objects, so we have to manually start and stop them.

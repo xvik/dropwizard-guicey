@@ -2,11 +2,11 @@ package ru.vyarus.dropwizard.guice.module.installer.bundle;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Module;
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.lifecycle.ServerLifecycleListener;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import org.eclipse.jetty.util.component.LifeCycle;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
@@ -330,7 +330,7 @@ public class GuiceyEnvironment {
      * @return environment instance for chained calls
      */
     public GuiceyEnvironment listenJetty(final LifeCycle.Listener listener) {
-        environment().lifecycle().addLifeCycleListener(listener);
+        environment().lifecycle().addEventListener(listener);
         return this;
     }
 

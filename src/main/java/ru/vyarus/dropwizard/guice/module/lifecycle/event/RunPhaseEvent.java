@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event;
 
-import io.dropwizard.Configuration;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig;
 import ru.vyarus.dropwizard.guice.debug.report.yaml.ConfigBindingsRenderer;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 /**
  * Base class for events, started after {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(Configuration, Environment)}
- * phase. Most events will appear before ({@link io.dropwizard.Application#run(Configuration, Environment)}).
+ * phase. Most events will appear before ({@link io.dropwizard.core.Application#run(Configuration, Environment)}).
  *
  * @author Vyacheslav Rusakov
  * @since 19.04.2018

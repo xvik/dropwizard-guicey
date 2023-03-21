@@ -98,7 +98,7 @@ multiple objects in one transaction, you have to always create them manually for
 
 Integration removes these restrictions: dao (repository) objects are normal guice beans and transaction
 scope is controlled by `@InTransaction` annotation (note that such name was intentional to avoid confusion with
-JDBI own's Transaction annotation and more common Transactional annotations).
+JDBI's own Transaction annotation and more common Transactional annotations).
 
 At the beginning of unit of work, JDBI handle is created and bound to thread (thread local).
 All repositories are simply using this bound handle and so share transaction inside unit of work.
@@ -138,8 +138,8 @@ Transaction isolation level and readonly flag could be defined with annotation:
 
 In case of nested transactions error will be thrown if:
 
-* Current transaction level is different then nested one
-* Current transaction is read only and nexted one is not  (note that some drivers, like h2, ignore readOnly flag completely)
+* Current transaction level is different than the nested one
+* Current transaction is read only and nested transaction is not  (note that some drivers, like h2, ignore readOnly flag completely)
 
 For example:
 
@@ -240,7 +240,7 @@ public interface MyRepository {
 ```
 
 Note the use of `@InTransaction`: it was used to be able to call repository methods without extra annotations
-(the lowest transaction scope it's repository itself). It will make beans "feel the same" as usual JDBI on demand
+(the lowest transaction scope its repository itself). It will make beans "feel the same" as usual JDBI on demand
 sql object proxies.
 
 `@InTransaction` annotation is handled using guice aop. You can use any other guice aop related features.
@@ -317,7 +317,7 @@ another proxy.
 ### Row mapper
 
 If you have custom implementations of `RowMapper`, it may be registered automatically. 
-You will be able to use injections there because mappers become ususal guice beans (singletons).
+You will be able to use injections there because mappers become usual guice beans (singletons).
 When classpath scan is enabled, such classes will be searched and installed automatically.
 
 ```java

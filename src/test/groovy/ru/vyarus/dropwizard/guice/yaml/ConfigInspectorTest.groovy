@@ -1,21 +1,21 @@
 package ru.vyarus.dropwizard.guice.yaml
 
-import io.dropwizard.Application
-import io.dropwizard.Configuration
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
 import io.dropwizard.jersey.filter.AllowedMethodsFilter
 import io.dropwizard.jetty.GzipHandlerFactory
 import io.dropwizard.jetty.ServerPushFilterFactory
-import io.dropwizard.logging.DefaultLoggingFactory
-import io.dropwizard.logging.LoggingFactory
-import io.dropwizard.metrics.MetricsFactory
+import io.dropwizard.logging.common.DefaultLoggingFactory
+import io.dropwizard.logging.common.LoggingFactory
+import io.dropwizard.metrics.common.MetricsFactory
 import io.dropwizard.request.logging.RequestLogFactory
-import io.dropwizard.server.DefaultServerFactory
-import io.dropwizard.server.ServerFactory
+import io.dropwizard.core.server.DefaultServerFactory
+import io.dropwizard.core.server.ServerFactory
 import io.dropwizard.servlets.tasks.TaskConfiguration
-import io.dropwizard.setup.AdminFactory
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
-import io.dropwizard.setup.HealthCheckConfiguration
+import io.dropwizard.core.setup.AdminFactory
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
+import io.dropwizard.core.setup.HealthCheckConfiguration
 import io.dropwizard.util.Duration
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath
@@ -44,7 +44,9 @@ class ConfigInspectorTest extends Specification {
         when: "check default config"
         def res = ConfigTreeBuilder.build(bootstrap, create(Configuration))
         then:
-        printConfig(res) == """[Configuration] admin (AdminFactory) = AdminFactory[healthChecks=HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
+        printConfig(res)
+                .replace('[HEAD, DELETE, POST, GET, OPTIONS, PATCH, PUT]', '[HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]')
+                == """[Configuration] admin (AdminFactory) = AdminFactory[healthChecks=HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
 [Configuration] admin.healthChecks (HealthCheckConfiguration) = HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1]
 [Configuration] admin.healthChecks.maxThreads (Integer) = 4
 [Configuration] admin.healthChecks.minThreads (Integer) = 1
@@ -53,8 +55,8 @@ class ConfigInspectorTest extends Specification {
 [Configuration] admin.tasks (TaskConfiguration) = TaskConfiguration[printStackTraceOnError=false]
 [Configuration] admin.tasks.printStackTraceOnError (Boolean) = false
 [Configuration] health (Optional<HealthFactory>) = Optional.empty
-[Configuration] logging (LoggingFactory as DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
-[Configuration] logging.appenders (List<AppenderFactory<ILoggingEvent>> as ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+[Configuration] logging (LoggingFactory as DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]}
+[Configuration] logging.appenders (List<AppenderFactory<ILoggingEvent>> as ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
 [Configuration] logging.level (String) = "INFO"
 [Configuration] logging.loggers (Map<String, JsonNode> as HashMap<String, JsonNode>) = {}
 [Configuration] metrics (MetricsFactory) = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false}
@@ -82,8 +84,6 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.gzip.enabled (Boolean) = true
 [Configuration] server.gzip.excludedMimeTypes (Set<String>) = null
 [Configuration] server.gzip.excludedPaths (Set<String>) = null
-[Configuration] server.gzip.excludedUserAgentPatterns (Set<String> as HashSet<String>) = []
-[Configuration] server.gzip.gzipCompatibleInflation (Boolean) = true
 [Configuration] server.gzip.includedMethods (Set<String>) = null
 [Configuration] server.gzip.includedPaths (Set<String>) = null
 [Configuration] server.gzip.minimumEntitySize (DataSize) = 256 bytes
@@ -91,12 +91,14 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.idleThreadTimeout (Duration) = 1 minute
 [Configuration] server.maxQueuedRequests (Integer) = 1024
 [Configuration] server.maxThreads (Integer) = 1024
+[Configuration] server.metricPrefix (String) = null
 [Configuration] server.minThreads (Integer) = 8
 [Configuration] server.nofileHardLimit (Integer) = null
 [Configuration] server.nofileSoftLimit (Integer) = null
 [Configuration] server.registerDefaultExceptionMappers (Boolean) = true
 [Configuration] server.requestLog (RequestLogFactory<Object> as LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
-[Configuration] server.requestLog.appenders (List<AppenderFactory<IAccessEvent>> as ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+[Configuration] server.requestLog.appenders (List<AppenderFactory<IAccessEvent>> as ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
+[Configuration] server.responseMeteredLevel (ResponseMeteredLevel) = COARSE
 [Configuration] server.rootPath (Optional<String>) = Optional.empty
 [Configuration] server.serverPush (ServerPushFilterFactory) = io.dropwizard.jetty.ServerPushFilterFactory@1111111
 [Configuration] server.serverPush.associatePeriod (Duration) = 4 seconds

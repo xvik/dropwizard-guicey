@@ -94,7 +94,7 @@ Example registration to admin context:
 .bundles(SpaBundle.adminApp("admin", "/com/mycompany/adminapp/", "/manager").build());
 ```
 
-Register "admin" application with resources in "/com/mycompany/adminapp/" package, served from "manager' 
+Register "admin" application with resources in "/com/mycompany/adminapp/" package, served from "manager" 
 admin context (note that admin root is already used by dropwizard admin servlet).
 
 !!! tip 

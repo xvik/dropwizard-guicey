@@ -13,7 +13,7 @@ class ReflectionHelperJarScanTest extends Specification {
     def "Check jar scan"() {
 
         when: "scan jars"
-        List<Class> classes = OReflectionHelper.getClassesFor("io.dropwizard.cli", Thread.currentThread().getContextClassLoader())
+        List<Class> classes = OReflectionHelper.getClassesFor("io.dropwizard.core.cli", Thread.currentThread().getContextClassLoader())
         then: "classes found"
         classes.size() == 6
     }

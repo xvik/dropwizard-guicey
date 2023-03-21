@@ -1,11 +1,11 @@
 package ru.vyarus.dropwizard.guice.bundles
 
-import io.dropwizard.Application
-import io.dropwizard.Configuration
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
 import io.dropwizard.lifecycle.Managed
 import io.dropwizard.lifecycle.ServerLifecycleListener
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.GuiceBundle

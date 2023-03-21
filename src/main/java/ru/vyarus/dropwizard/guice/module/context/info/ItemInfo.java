@@ -40,7 +40,7 @@ public interface ItemInfo {
 
     /**
      * Configuration items may be registered by root application class, classpath scan or guicey bundle.
-     * For registrations in application class {@link io.dropwizard.Application} is stored as context.
+     * For registrations in application class {@link io.dropwizard.core.Application} is stored as context.
      * For registration by classpath scan {@link ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner}
      * is stored as context. For registrations by
      * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle}, actual bundle class is stored

@@ -127,8 +127,8 @@ in tests (e.g. [HK2 scope control bundle](hk2.md#hk2-scope-debug)) or to install
 Bundle lookup is equivalent to registering bundle directly using builder `bundles` method.
 
 !!! note
-    Bundles from lookup will always be registered after all manually registered bundles
-    so you can use [de-cuplication](deduplication.md) to accept manual instance and deny lookup. 
+    Bundles from lookup will always be registered after all manually registered bundles,
+    so you can use [de-duplication](deduplication.md) to accept manual instance and deny lookup. 
 
 By default, two lookup mechanisms active: [by property](#system-property-lookup) and 
 [with service loader](#service-loader-lookup). 
@@ -141,7 +141,7 @@ INFO  [2019-10-17 14:50:14,304] ru.vyarus.dropwizard.guice.bundle.DefaultBundleL
     ru.vyarus.dropwizard.guice.diagnostic.support.bundle.LookupBundle
 ```
 
-You can disable default lookups with:
+You can disable default look-ups with:
 
 ```java
 bootstrap.addBundle(GuiceBundle.builder()
@@ -228,7 +228,7 @@ bootstrap.addBundle(GuiceBundle.builder()
         .build()
 ```
 
-To override the list of default lookups:
+To override the list of default look-ups:
 
 ```java
 bootstrap.addBundle(GuiceBundle.builder()
@@ -282,7 +282,7 @@ When you register dropwizard bundles through guicey api:
 
 * Bundle (and all transitive bundles) appear in [report](diagnostic/configuration-report.md)
 * Bundle itself or any transitive bundle could be [disabled](disables.md#disable-dropwizard-bundles)
-* [De-duplication mechanism](deduplication.md#dropwizard-bundles) will work for bundle and it's transitive bundles
+* [De-duplication mechanism](deduplication.md#dropwizard-bundles) will work for a bundle, and its transitive bundles
 
 So, if you have a "common bundle" problem (when 2 bundles register some common bundle and so you can use these
 bundles together) it could be solved just by registering bundle through the guicey api with 

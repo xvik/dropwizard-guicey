@@ -2,11 +2,12 @@ package ru.vyarus.dropwizard.guice.support.provider.oauth
 
 import io.dropwizard.auth.*
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.setup.Environment
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature
 
 import javax.inject.Inject
 import javax.inject.Singleton
+import javax.ws.rs.container.ContainerRequestContext
 import javax.ws.rs.core.Feature
 import javax.ws.rs.core.FeatureContext
 import javax.ws.rs.ext.Provider
@@ -34,7 +35,7 @@ class OAuthDynamicFeature extends AuthDynamicFeature {
 
     // may be external class (internal for simplicity)
     @Singleton
-    public static class OAuthAuthenticator implements Authenticator<String, User> {
+    static class OAuthAuthenticator implements Authenticator<String, User> {
 
         @Override
         Optional<User> authenticate(String credentials) throws AuthenticationException {
@@ -44,15 +45,16 @@ class OAuthDynamicFeature extends AuthDynamicFeature {
 
     // may be external class (internal for simplicity)
     @Singleton
-    public static class OAuthAuthorizer implements Authorizer<User> {
+    static class OAuthAuthorizer implements Authorizer<User> {
+
         @Override
-        public boolean authorize(User user, String role) {
+        boolean authorize(User user, String role, ContainerRequestContext requestContext) {
             return user.getName().equals("good-guy") && role.equals("ADMIN");
         }
     }
 
     // will be installed by JerseyFeatureInstaller
-    public static class ConfigurationFeature implements Feature {
+    static class ConfigurationFeature implements Feature {
         @Override
         boolean configure(FeatureContext context) {
             context.register(RolesAllowedDynamicFeature.class)

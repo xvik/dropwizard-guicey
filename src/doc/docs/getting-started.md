@@ -139,7 +139,7 @@ resources has `@Path` annotation, tasks extends `Task` etc.
 
 
 !!! tip
-    By default, auto configutation enabled for application package, but 
+    By default, auto configuration enabled for application package, but 
     you can declare manually any packages for classpath scan: 
     ```java
      .enableAutoConfig("com.mycompany.foo", "com.mycompany.bar")
@@ -370,7 +370,7 @@ public class SampleModule extends AbstractModule {
 
 Guicey will recognize all three bindings and register extensions. The difference with classpath scanning
 or manual declaration is only that guicey will not declare default bindings for extensions 
-(by default, guicey creates untargetted bindings for all extensions: `bind(Extension.class)`).
+(by default, guicey creates untargeted bindings for all extensions: `bind(Extension.class)`).
 
 !!! tip
     An extension may be found three ways: by classpath scan, explicit extension declaration on the GuiceBundle, and by 

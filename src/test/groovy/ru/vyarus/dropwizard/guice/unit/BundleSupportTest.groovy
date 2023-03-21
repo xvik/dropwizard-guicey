@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.unit
 
 import com.google.common.collect.Lists
-import io.dropwizard.Configuration
-import io.dropwizard.ConfiguredBundle
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.ConfiguredBundle
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap

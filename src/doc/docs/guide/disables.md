@@ -23,7 +23,7 @@ simply disabled to avoid installation.
 Disables are available in [main bundle](configuration.md#main-bundle) and in [guicey bundles](configuration.md#guicey-bundle).
 
 !!! warning
-    Disable is performed by class, so disabling modules and bundles disables all instances of tipe.
+    Disable is performed by class, so disabling modules and bundles disables all instances of type.
     The only way to disable exact instance is to use [disable by predicate](#disable-by-predicate). 
 
 ## Disable extensions

@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.diagnostic.support.dwbundle
 
-import io.dropwizard.ConfiguredBundle
+import io.dropwizard.core.ConfiguredBundle
 
 /**
  * @author Vyacheslav Rusakov

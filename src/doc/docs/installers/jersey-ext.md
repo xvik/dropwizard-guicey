@@ -64,7 +64,7 @@ org.glassfish.jersey.internal.inject.InjectionManager, java.lang.Class)` which i
     `@Custom` may be used directly in this case on some providers for prioritization. 
 
 `@Priority` annotation may be used for ordering providers. Value should be > 0 (but may be negative, just a convention). 
-For example, 1000 is more prioritized then 2000. See `javax.ws.rs.Priorities` for default priority constants.
+For example, 1000 is prioritized before 2000. See `javax.ws.rs.Priorities` for default priority constants.
 
 !!! note
     `@Priority` may work differently on `@Custom` qualified providers (all user providers by default)
@@ -75,7 +75,7 @@ For example, 1000 is more prioritized then 2000. See `javax.ws.rs.Priorities` fo
 ### Supplier
 
 !!! warning
-    `Supplier` is used now by hk2 as a replacement to it's own `Factory` interface.
+    `Supplier` is used now by hk2 as a replacement to its own `Factory` interface.
     
     If you were using `AbstractContainerRequestValueFactory` then use just `Supplier<T>` instead.
 

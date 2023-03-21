@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.unit
 
 import io.dropwizard.lifecycle.Managed
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.setup.Environment
 import org.eclipse.jetty.util.component.LifeCycle
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.context.option.Options

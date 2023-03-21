@@ -107,7 +107,7 @@ Or excluding methods:
 ```
 
 Now methods annotated with `@SuppressValidation` will not be validated. Note that
-`.and(new DirectMethodMatcher())` condition was added to aslo exclude synthetic and bridge methods (jvm generated methods).
+`.and(new DirectMethodMatcher())` condition was added to also exclude synthetic and bridge methods (jvm generated methods).
 
 !!! note 
     You can verify AOP appliance with guicey `.printGuiceAopMap()` report.

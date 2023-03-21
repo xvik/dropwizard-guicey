@@ -2,10 +2,10 @@ package ru.vyarus.dropwizard.guice.module.installer.bundle;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Module;
-import io.dropwizard.Application;
-import io.dropwizard.Configuration;
-import io.dropwizard.ConfiguredBundle;
-import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.ConfiguredBundle;
+import io.dropwizard.core.setup.Bootstrap;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;

@@ -12,13 +12,13 @@ GuiceBundle.builder()
 
 !!! note
     Even if custom binding report selected (`printCustomConfigurationBindings()`), guicey will always
-    bind all bindings, including dropwziard `Configuration` class. Custom config report could just shows 
+    bind all bindings, including dropwizard `Configuration` class. Custom config report could just shows 
     less for simplicity.  
 
 Will print:
 
 ```
-WARN  [2018-06-18 05:55:03,532] ru.vyarus.dropwizard.guice.module.yaml.report.DebugConfigBindings: Available configuration bindings = 
+INFO  [2018-06-18 05:55:03,532] ru.vyarus.dropwizard.guice.module.yaml.report.DebugConfigBindings: Available configuration bindings = 
 
     ComplexGenericCase (visible paths)
     │   
@@ -181,7 +181,7 @@ Here you can see:
 ## Guice
 
 Report is mostly intended to be used to see available guice bindings and that's why 
-`@Config` annotation is shown almsot everywhere. For example, 
+`@Config` annotation is shown almost everywhere. For example, 
 
 ```
 @Config("server.serverPush.enabled") Boolean = false
@@ -255,4 +255,3 @@ implementing `ReportRenderer`. Renderer not bound to guice context and assume di
 For examples of direct renderer usage see [events](../events.md) implementation:
 
 * `RunPhaseEvent.renderConfigurationBindings()` 
-          

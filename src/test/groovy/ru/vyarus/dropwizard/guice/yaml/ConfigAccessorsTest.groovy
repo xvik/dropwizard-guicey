@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.yaml
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import io.dropwizard.Application
-import io.dropwizard.Configuration
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder

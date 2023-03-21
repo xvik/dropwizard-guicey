@@ -102,7 +102,7 @@ instance     | `#!java bing(Smth.class).toInstance(obj)`
 providerinstance | `#!java bind(Smth.class).toProvider(obj)`
 linkedkey | `#!java bind(Smth.class).to(Other.class)` (`Other` may be already declared with separate binding)
 providerkey | `#!java bind(Smth.class).toProvider(DmthProv.class)`
-untargetted | `#!java bind(Smth.class)`  
+untargeted | `#!java bind(Smth.class)`  
 providermethod     | Module method annotated with `#!java @Provides`
 exposed | `#!java expose(PrivateService.class)` (service expose in `PrivateModule`) 
 
@@ -156,7 +156,7 @@ Report shows all beans affected with aop:
 For private guice modules report will show all internal bindings:
 
 ```
-WARN  [2019-10-13 09:21:21,080] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
+INFO  [2019-10-13 09:21:21,080] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
 
     4 MODULES with 4 bindings
     │   
@@ -228,7 +228,7 @@ it will physically remove relative bindings. All removed are indicated on report
 For example:
 
 ```
-WARN  [2019-10-13 09:26:59,502] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
+INFO  [2019-10-13 09:26:59,502] ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic: Guice bindings = 
 
     2 MODULES with 2 bindings
     │   

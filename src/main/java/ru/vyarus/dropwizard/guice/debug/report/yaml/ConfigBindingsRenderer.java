@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.debug.report.yaml;
 
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.debug.util.TreeNode;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath;

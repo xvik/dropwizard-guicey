@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.util;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
-import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.core.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Utility class to work with registered {@link io.dropwizard.ConfiguredBundle} objects within dropwizard
+ * Utility class to work with registered {@link io.dropwizard.core.ConfiguredBundle} objects within dropwizard
  * {@link Bootstrap} object.
  *
  * @author Vyacheslav Rusakov

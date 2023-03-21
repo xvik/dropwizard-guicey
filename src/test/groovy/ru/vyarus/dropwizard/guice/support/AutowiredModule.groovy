@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.support
 
 import com.google.inject.AbstractModule
-import io.dropwizard.Configuration
-import io.dropwizard.setup.Bootstrap
-import io.dropwizard.setup.Environment
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule
