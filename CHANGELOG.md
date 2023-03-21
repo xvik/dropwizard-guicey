@@ -1,6 +1,8 @@
 * Update to dropwizard 3
   - (breaking) Drop java 8 support
 
+DW migration guide: https://github.com/dropwizard/dropwizard/blob/release/3.0.x/docs/source/manual/upgrade-notes/upgrade-notes-3_0_x.rst    
+
 ### 5.7.1 (2023-03-09)
 * Update to dropwizard 2.1.5
 * Revert changing reports log level: now INFO used instead of WARN (#276) 
