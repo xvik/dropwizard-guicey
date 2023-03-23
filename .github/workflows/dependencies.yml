@@ -1,0 +1,24 @@
+name: Dependencies
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Dependencies
+    runs-on: ubuntu-latest
+    permissions: # The Dependency Submission API requires write permission
+      contents: write
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v3
+
+      - name: Root Gradle Dependency Submission
+        uses: mikepenz/gradle-dependency-submission@v0.8.6
+        with:
+          use-gradlew: true
+          gradle-build-module: |-
+            :
+          gradle-build-configuration: |-
+            compileClasspath
