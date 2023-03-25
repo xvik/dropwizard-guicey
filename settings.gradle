@@ -4,16 +4,17 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-plugins {
-    id "com.gradle.enterprise" version "3.12.6"
-}
 
-gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-        termsOfServiceAgree = 'yes'
-        //publishOnFailure()
-    }
-}
+// have to use different name, otherwise gradle lose its mind
+rootProject.name = 'guicey'
 
-rootProject.name = 'dropwizard-guicey'
+include 'dropwizard-guicey',
+        'guicey-eventbus',
+        'guicey-jdbi3',
+        'guicey-spa',
+        'guicey-lifecycle-annotations',
+        'guicey-server-pages',
+        'guicey-admin-rest',
+        'guicey-validation',
+        'guicey-test-spock',
+        'guicey-test-junit4'

@@ -1,104 +1,58 @@
 plugins {
-    id 'groovy'
+    id 'ru.vyarus.github-info' version '1.5.0' apply false
+    id 'ru.vyarus.quality' version '4.9.0' apply false
+    id 'org.cyclonedx.bom' version '1.7.4' apply false
+    id 'ru.vyarus.mkdocs' version '3.0.0' apply false
+
     id 'jacoco'
-    id 'project-report'
-    id 'signing'
+    id 'java-platform'
     id 'ru.vyarus.java-lib' version '2.4.0'
-    id 'ru.vyarus.github-info' version '1.5.0'
-    id 'ru.vyarus.quality' version '4.9.0'
     id 'net.researchgate.release' version '3.0.2'
     id 'io.github.gradle-nexus.publish-plugin' version '1.3.0'
     id 'com.github.ben-manes.versions' version '0.46.0'
-    id 'io.spring.dependency-management' version '1.1.0'
-    id 'ru.vyarus.mkdocs' version '3.0.0'
-    id 'org.cyclonedx.bom' version '1.7.4'
 }
-
-sourceCompatibility = 11
 
 wrapper {
-    gradleVersion = '7.5.1'
+    gradleVersion = '7.6.1'
 }
+
+description = 'Dropwizard guice integration'
 
 ext {
     dropwizard = '3.0.0-beta.5'
     guice = '5.1.0'
     hk2 = '2.6.1'
+    spockJunit5 = '1.2.0'
+    guiceExtAnn = '1.4.0'
+    guiceValidator = '2.0.1'
 }
 
-repositories { mavenLocal(); mavenCentral() }
-dependencyManagement {
-    imports {
-        mavenBom "com.google.inject:guice-bom:$guice"
-        mavenBom "io.dropwizard:dropwizard-dependencies:$dropwizard"
-    }
-    // exclusions here mostly fixes conflicts for maven projects
-    dependencies {
-        // force guava version from dropwizard bom
-        dependency "com.google.guava:guava:${dependencyManagement.importedProperties['guava.version']}"
-        dependency "org.glassfish.hk2:guice-bridge:$hk2", {
-            exclude 'com.google.inject:guice'
-            exclude 'org.glassfish.hk2:hk2-api'
-        }
-        // SPOCK excluded from bom because it would complicate older version  usage in gradle
-        dependency 'ru.vyarus:spock-junit5:1.2.0'
-
-        dependency "com.google.inject:guice:$guice", {
-            exclude 'com.google.guava:guava'
-            // jakarta-inject used instead
-            exclude 'javax.inject:javax.inject'
-        }
-
-        // add guicey itself to BOM (for version management)
-        dependency 'ru.vyarus:dropwizard-guicey:${project.version}'
-    }
-}
+// root project is a BOM
 dependencies {
-    provided 'org.junit.jupiter:junit-jupiter-api'
-    provided 'io.dropwizard:dropwizard-testing'
-    provided 'com.github.spotbugs:spotbugs-annotations:4.7.3'
-    provided "org.glassfish.hk2:guice-bridge"
+    api platform("com.google.inject:guice-bom:$guice")
+    api platform("io.dropwizard:dropwizard-dependencies:$dropwizard")
 
-    implementation 'com.google.inject:guice'
-    implementation 'com.google.inject.extensions:guice-servlet'
-    implementation 'io.dropwizard:dropwizard-core'
-    implementation 'ru.vyarus:generics-resolver:3.0.3'
+    constraints {
+        api "com.google.inject:guice:$guice"
+        api "org.glassfish.hk2:guice-bridge:$hk2"
+        api "ru.vyarus:spock-junit5:$spockJunit5"
 
-    testImplementation 'ru.vyarus:spock-junit5'
-    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+        api "ru.vyarus:guice-ext-annotations:$guiceExtAnn"
+        api "ru.vyarus:guice-validator:$guiceValidator"
 
-    testImplementation 'org.glassfish.jersey.inject:jersey-hk2'
-    testImplementation 'io.dropwizard:dropwizard-auth'
-    testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
-    testImplementation 'org.junit.platform:junit-platform-testkit'
-    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.2'
-    testImplementation "com.google.truth:truth:1.1.3"
-
-    // required for pure junit 5 tests
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
-}
-
-group = 'ru.vyarus'
-description = 'Dropwizard guice integration'
-
-github {
-    user = 'xvik'
-    license = 'MIT'
-}
-
-mkdocs {
-    publish {
-        docPath = '5.7.1'
-        rootRedirect = true
-        rootRedirectTo = 'latest'
-        versionAliases = ['latest']
+        // add subprojects to BOM
+        project.subprojects.each { api it }
     }
-    extras = [
-            'version': '5.7.1',
-            'ext': '5.7.1-1',
-            'dropwizard': project.dropwizard,
-            'guice': project.guice
-    ]
+}
+
+javaLib {
+    // aggregated test and coverage reports
+    aggregateReports()
+    // publish root BOM as custom artifact
+    bom {
+        artifactId = 'guicey-bom'
+        description = 'Guicey BOM'
+    }
 }
 
 pom {
@@ -106,43 +60,136 @@ pom {
         'guice.version' guice
         'dropwizard.version' dropwizard
         'hk2.version' hk2
+        'guice-ext-annotations.version' guiceExtAnn
     }
-    developers {
-        developer {
-            id 'xvik'
-            name 'Vyacheslav Rusakov'
-            email 'vyarus@gmail.com'
+}
+
+// maven publication related configuration applied to all projects
+allprojects {
+    apply plugin: 'project-report'
+    apply plugin: 'ru.vyarus.github-info'
+    apply plugin: 'ru.vyarus.java-lib'
+    apply plugin: 'signing'
+
+    repositories { mavenLocal(); mavenCentral(); maven { url 'https://jitpack.io' } }
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+
+    group = 'ru.vyarus'
+
+    github {
+        user = 'xvik'
+        license = 'MIT'
+        repository = 'dropwizard-guicey'
+    }
+
+    // delay required because java plugin is activated only in subprojects and without it
+    // pom closure would reference root project only
+    afterEvaluate {
+        pom {
+            developers {
+                developer {
+                    id 'xvik'
+                    name 'Vyacheslav Rusakov'
+                    email 'vyarus@gmail.com'
+                }
+            }
+        }
+    }
+
+    // don't publish gradle metadata artifact
+    javaLib.withoutGradleMetadata()
+
+    // skip signing for jitpack (snapshots)
+    tasks.withType(Sign) {onlyIf { !System.getenv('JITPACK') }}
+}
+
+// all sub-modules are normal java modules, using root BOM (like maven)
+subprojects {
+    apply plugin: 'groovy'
+    apply plugin: 'jacoco'
+    apply plugin: 'ru.vyarus.quality'
+    apply plugin: 'com.github.ben-manes.versions'
+    apply plugin: 'org.cyclonedx.bom'
+
+    sourceCompatibility = 11
+
+    dependencies {
+        implementation platform(project(':'))
+
+        compileOnly 'com.github.spotbugs:spotbugs-annotations:4.7.3'
+        compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    }
+
+    if (project.name != 'dropwizard-guicey') {
+        // extra modules use different group
+        group = 'ru.vyarus.guicey'
+
+        // common dependencies for all modules except core
+        dependencies {
+            implementation 'ru.vyarus:dropwizard-guicey'
+
+            testImplementation 'io.dropwizard:dropwizard-testing'
+        }
+
+        javaLib {
+            // java 9 auto module name
+            autoModuleName = "$group.${project.name.replace('guicey', 'ru.vyarus.dropwizard.guicey').replace('-', '.')}"
+            // use only direct dependencies in the generated pom, removing BOM mentions
+            pom.removeDependencyManagement()
+        }
+    }
+
+    test {
+//        useJUnitPlatform()
+        testLogging {
+            events 'skipped', 'failed'
+            exceptionFormat 'full'
+        }
+        maxHeapSize = '512m'
+    }
+
+    dependencyUpdates.revision = 'release'
+
+    if (!project.name.startsWith('guicey-test-')) {
+        test {
+            useJUnitPlatform()
+        }
+        dependencies {
+            testImplementation 'ru.vyarus:spock-junit5'
+            testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+            testImplementation 'org.junit.jupiter:junit-jupiter-api'
+        }
+    } else {
+        // don't compile and run tests for legacy junit4 and spock1 modules
+        tasks.withType(GroovyCompile)
+                .configureEach {it.onlyIf {JavaVersion.current() <= JavaVersion.VERSION_11} }
+        test.onlyIf { JavaVersion.current() <= JavaVersion.VERSION_11 }
+    }
+
+    // SBOM
+    cyclonedxBom {
+        includeConfigs = ["runtimeClasspath"]
+        destination = file("build/reports")
+        outputName = "bom"
+        outputFormat = "all"
+    }
+    publishing.publications.maven {
+        artifact(file('build/reports/bom.json')) {
+            classifier = 'cyclonedx'
+            builtBy cyclonedxBom
+        }
+        artifact(file('build/reports/bom.xml')) {
+            classifier = 'cyclonedx'
+            builtBy cyclonedxBom
         }
     }
 }
 
-javaLib {
-    // java 9 auto module name
-    autoModuleName = 'ru.vyarus.dropwizard.guicey'
-    // don't publish gradle metadata artifact
-    withoutGradleMetadata()
-    // put resolved dependencies versions
-    pom.forceVersions()
-}
-
-// SBOM
-cyclonedxBom {
-    includeConfigs = ["runtimeClasspath"]
-    destination = file("build/reports")
-    outputName = "bom"
-    outputFormat = "all"
-}
-publishing.publications.maven {
-    artifact(file('build/reports/bom.json')) {
-        classifier = 'cyclonedx'
-        builtBy cyclonedxBom
-    }
-    artifact(file('build/reports/bom.xml')) {
-        classifier = 'cyclonedx'
-        builtBy cyclonedxBom
-    }
-}
-
+// dependency on all subprojects required for release validation
+check.dependsOn subprojects.check
 
 nexusPublishing {
     repositories {
@@ -153,35 +200,18 @@ nexusPublishing {
     }
 }
 
-// skip signing for jitpack (snapshots)
-tasks.withType(Sign) {onlyIf { !System.getenv('JITPACK') }}
-
 // Required signing properties for release: signing.keyId, signing.password and signing.secretKeyRingFile
 // (https://docs.gradle.org/current/userguide/signing_plugin.html#sec:signatory_credentials)
 
 release.git.requireBranch.set('master')
 
+// release manages only root project (subprojects will be checked and released implicitly)
 afterReleaseBuild {
-    dependsOn = ['publishToSonatype',
-                 'closeAndReleaseSonatypeStagingRepository']
+    dependsOn 'publishToSonatype'
+    dependsOn subprojects.collect {":$it.name:publishToSonatype" }
+    dependsOn 'closeAndReleaseSonatypeStagingRepository'
     doLast {
         logger.warn "RELEASED $project.group:$project.name:$project.version"
     }
 }
 
-test {
-    useJUnitPlatform()
-    testLogging {
-        events 'skipped', 'failed'
-        exceptionFormat 'full'
-    }
-    maxHeapSize = '512m'
-}
-
-dependencyUpdates.revision = 'release'
-
-task updateGithubPom(type: Copy, group: 'other') {
-    from(generatePomFileForMavenPublication)
-    into '.github'
-    rename 'pom-default.xml', 'pom.xml'
-}

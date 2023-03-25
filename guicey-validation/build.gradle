@@ -1,0 +1,5 @@
+description = "Guice-managed beans methoods pre/post validations"
+
+dependencies {
+    implementation 'ru.vyarus:guice-validator'
+}

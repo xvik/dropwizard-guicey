@@ -18,7 +18,8 @@ jobs:
         uses: mikepenz/gradle-dependency-submission@v0.8.6
         with:
           use-gradlew: true
+          sub-module-mode: INDIVIDUAL
           gradle-build-module: |-
-            :
+            :dropwizard-guicey
           gradle-build-configuration: |-
             compileClasspath

@@ -1,0 +1,8 @@
+server:
+  rootPath: '/rest/*'
+
+logging:
+  level: INFO
+
+  loggers:
+    ru.vyarus: DEBUG

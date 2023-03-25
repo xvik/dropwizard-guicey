@@ -1,0 +1,10 @@
+description = "Guicey integration for JDBI 3"
+
+dependencies {
+    // with caffeine 3 (required for jdk 16 and above)
+    implementation 'io.dropwizard:dropwizard-jdbi3'
+    implementation 'ru.vyarus:guice-ext-annotations'
+
+    testImplementation 'org.flywaydb:flyway-core:9.16.1'
+    testImplementation 'com.h2database:h2:2.1.214'
+}

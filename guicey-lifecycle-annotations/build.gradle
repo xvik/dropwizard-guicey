@@ -1,0 +1,5 @@
+description = "Dropwizard lifecycle annotations"
+
+dependencies {
+    implementation 'ru.vyarus:guice-ext-annotations'
+}

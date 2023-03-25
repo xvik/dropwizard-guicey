@@ -1,0 +1,183 @@
+site_name: Dropwizard-guicey
+site_description: 'Dropwizard guice integration'
+site_author: 'Vyacheslav Rusakov'
+site_url: 'https://xvik.github.io/dropwizard-guicey'
+edit_uri: edit/master/dropwizard-guicey/src/doc/docs/
+
+# Repository
+repo_name: 'dropwizard-guicey'
+repo_url: 'https://github.com/xvik/dropwizard-guicey'
+
+# Copyright
+copyright: 'Copyright &copy; 2014-2023 Vyacheslav Rusakov'
+
+plugins:
+  - search
+  - markdownextradata
+
+# Meterial theme
+theme:
+  name: 'material'
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    #- navigation.tabs.sticky
+    - navigation.tracking
+    - navigation.top
+
+extra:
+#  palette:
+#    primary: 'indigo'
+#    accent: 'indigo'
+
+  version:
+    provider: mike
+
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/xvik
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/vyarus
+
+# Google Analytics
+  analytics:
+    provider: google
+    property: UA-93174150-1
+
+markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+  - md_in_html
+  - toc:
+      permalink: true
+
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+dev_addr: 127.0.0.1:3001
+
+nav:
+    - Home: index.md
+    - Getting started:
+      - Setup: getting-started.md
+      - Concepts overview: concepts.md
+      - Guice: guice.md
+      - Testing: tests.md
+      - Decomposition: decomposition.md
+    #- Development tips: dev.md
+    - User guide:
+      - Configuration: guide/configuration.md
+      - Extensions: guide/extensions.md
+      - Web: guide/web.md
+      - Extra integrations: guide/modules.md
+      - Bundles: guide/bundles.md
+      - Yaml values: guide/yaml-values.md
+      - Guice:
+          - Injector: guide/guice/injector.md
+          - Bindings: guide/guice/bindings.md
+          - Scopes: guide/guice/scopes.md
+          - Module autowiring: guide/guice/module-autowiring.md
+          - Modules analysis: guide/guice/module-analysis.md
+          - Override bindings: guide/guice/override.md
+          - ServletModule: guide/guice/servletmodule.md
+      - Diagnostic:
+        - Tools: guide/diagnostic/diagnostic-tools.md
+        - Extensions help: guide/diagnostic/extensions-report.md
+        - Configuration: guide/diagnostic/configuration-report.md
+        - Configuration model:  guide/diagnostic/configuration-model.md
+        - Installers: guide/diagnostic/installers-report.md
+        - Yaml values: guide/diagnostic/yaml-values-report.md
+        - Lifecycle: guide/diagnostic/lifecycle-report.md
+        - Guice: guide/diagnostic/guice-report.md
+        - AOP: guide/diagnostic/aop-report.md
+        - Web: guide/diagnostic/web-report.md
+        - Jersey: guide/diagnostic/jersey-report.md
+      - Test:
+        - Overview: guide/test/overview.md
+        - Spock 2: guide/test/spock2.md
+        - Junit 5: guide/test/junit5.md
+        - General support: guide/test/general.md
+        - Spock 1: guide/test/spock.md
+        - Junit 4: guide/test/junit4.md
+      - Lifecycle: guide/lifecycle.md
+      - Classpath scan: guide/scan.md
+      - Installers: guide/installers.md
+      - Ordering: guide/ordering.md
+      - Options: guide/options.md
+      - Events: guide/events.md
+      - Disables: guide/disables.md
+      - De-duplication: guide/deduplication.md
+      - Commands: guide/commands.md
+      - Hooks: guide/hooks.md
+      - Shared state: guide/shared.md
+      - HK2: guide/hk2.md
+    - Installers:
+      - Resource: installers/resource.md
+      - Task: installers/task.md
+      - Managed: installers/managed.md
+      - Lifecycle: installers/lifecycle.md
+      - Health check: installers/healthcheck.md
+      - Jersey extension: installers/jersey-ext.md
+      - Jersey feature: installers/jersey-feature.md
+      - Eager singleton: installers/eager.md
+      - Plugin: installers/plugin.md
+      - Web servlet: installers/servlet.md
+      - Web filter: installers/filter.md
+      - Web listener: installers/listener.md
+    - Modules:
+      - BOM: extras/bom.md
+      - Admin REST: extras/admin-rest.md
+      - Lifecycle annotations: extras/lifecycle-annotations.md
+      - Guava EventBus: extras/eventbus.md
+      - JDBI: extras/jdbi.md
+      - JDBI3: extras/jdbi3.md
+      - SPA: extras/spa.md
+      - Server Pages: extras/gsp.md
+      - Validation: extras/validation.md
+    - Examples:
+      - Authentication: examples/authentication.md
+      - Governator: examples/governator.md
+      - Hibernate: examples/hibernate.md
+      - EventBus: examples/eventbus.md
+      - JDBI: examples/jdbi.md
+      - JDBI3: examples/jdbi3.md
+    - About:
+      - Release notes: about/release-notes.md
+      - Compatibility: about/compatibility.md
+      - Version history: about/history.md
+      - Support: about/support.md
+      - License: about/license.md
