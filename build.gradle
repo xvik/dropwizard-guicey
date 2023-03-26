@@ -77,7 +77,7 @@ allprojects {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
 
-    group = 'ru.vyarus'
+    group = 'ru.vyarus.guicey'
 
     github {
         user = 'xvik'
