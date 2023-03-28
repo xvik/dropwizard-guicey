@@ -38,12 +38,9 @@ Features:
   
 <sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>
 
-#### Thanks to
-
-* [Sébastien Boulet](https://github.com/gontard) ([intactile design](http://intactile.com)) for very useful feedback
-* [Nicholas Pace](https://github.com/segfly) for governator integration
-
 ### Setup
+
+Try [**Dropwizard 3** compatible beta](https://github.com/xvik/dropwizard-guicey/discussions/294)
 
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus/dropwizard-guicey.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
 
