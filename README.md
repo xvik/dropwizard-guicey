@@ -42,6 +42,8 @@ Features:
 
 Try [**Dropwizard 3** compatible beta](https://github.com/xvik/dropwizard-guicey/discussions/294)
 
+**Dropwizard 4** is [currently not supported](https://github.com/xvik/dropwizard-guicey/discussions/296)  
+
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus/dropwizard-guicey.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
 
 May be used through [extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext) or directly.
