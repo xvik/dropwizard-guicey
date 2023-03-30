@@ -24,7 +24,7 @@ ext {
     hk2 = '2.6.1'
     spockJunit5 = '1.2.0'
     guiceExtAnn = '1.4.0'
-    guiceValidator = '2.0.1'
+    guiceValidator = '3.0.1'
 }
 
 // root project is a BOM
