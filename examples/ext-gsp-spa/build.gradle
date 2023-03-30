@@ -1,0 +1,4 @@
+dependencies {
+    implementation 'ru.vyarus.guicey:guicey-server-pages'
+    implementation 'io.dropwizard:dropwizard-views-freemarker'
+}
