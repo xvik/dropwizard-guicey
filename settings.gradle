@@ -6,7 +6,7 @@ pluginManagement {
 }
 
 // have to use different name, otherwise gradle lose its mind
-rootProject.name = 'guicey-parent'
+rootProject.name = 'dropwizard-guicey-parent'
 
 include 'dropwizard-guicey',
         'guicey-eventbus',
