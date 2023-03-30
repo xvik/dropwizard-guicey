@@ -1,23 +1,18 @@
 # dropwizard-guicey examples
-[![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://www.opensource.org/licenses/MIT)
-[![CI](https://github.com/xvik/dropwizard-guicey-examples/actions/workflows/CI.yml/badge.svg)](https://github.com/xvik/dropwizard-guicey-examples/actions/workflows/CI.yml)
+[![Examples CI](https://github.com/xvik/dropwizard-guicey/actions/workflows/examples-CI.yml/badge.svg)](https://github.com/xvik/dropwizard-guicey/actions/workflows/examples-CI.yml)
 
 ### About
 
-Usage examples for [dropwizard-guicey](https://github.com/xvik/dropwizard-guicey)
-(and [extensions](https://github.com/xvik/dropwizard-guicey-ext))
+NOTE: Older examples (before guicey 6, dropwizard 3) were published into the separate repository:
+ [dropwizard 2.1 examples](https://github.com/xvik/dropwizard-guicey-examples/tree/dw-2.1)
+
 
 If you can't find answer for your problem in provided examples, please request new sample by 
-[creating new issue](https://github.com/xvik/dropwizard-guicey-examples/issues).
+[creating new issue](https://github.com/xvik/dropwizard-guicey/issues).
 
-All samples build with guicey 5.7.1 (dropwizard 2.1.5). [Extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext/tree/master/#BOM) 
-used for guicey, guice and dropwizard dependencies management.
 
-* [guicey 4.2.0 examples](https://github.com/xvik/dropwizard-guicey-examples/tree/4.2.0)
-* [guicey 4.1.0 examples](https://github.com/xvik/dropwizard-guicey-examples/tree/4.1.0)
-* [Dropwizard 0.9 examples](https://github.com/xvik/dropwizard-guicey-examples/tree/dw-0.9)
 
-### Guicey examples
+### Guicey core examples
 
 * [Getting started](core-getting-started) - example application from getting started documentation chapter
 * [Extensions](core-extensions) - ways of extensions declaration 
@@ -29,7 +24,6 @@ used for guicey, guice and dropwizard dependencies management.
 
 ### Guicey ext modules examples
 
-* [JDBI](ext-jdbi) - JDBI ext module example (deprecated) 
 * [JDBI3](ext-jdbi3) - JDBI3 ext module example
 * [EventBus](ext-eventbus) - guava eventbus ext module example
 * [SPA HTML5 routes](ext-spa) - SPA ext module example: HTML5 routes correct handling on server (for single page application)
