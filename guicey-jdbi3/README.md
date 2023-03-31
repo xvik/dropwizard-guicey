@@ -1,8 +1,6 @@
 # JDBI 3 integration
 
-> [Example app](https://github.com/xvik/dropwizard-guicey-examples/tree/master/ext-jdbi3)
-
-For migration from *jdbi2* see [jdbi2 module](../guicey-jdbi#migration-to-jdbi3) .
+> [Example app](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-jdbi3)
 
 ### About
 
@@ -26,30 +24,23 @@ Added installers:
  
 ### Setup
 
-IMPORTANT: since dropwizard 2.0.22 dropwizard-jdbi3 requires Java 11 by default,
-use [guicey-jdbi3-jdk8](../guicey-jdbi3-jdk8) instead (meta package fixing classpath) for java 8 compatibility.
-
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-jdbi3.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-jdbi3)
-
-Avoid version in dependency declaration below if you use [extensions BOM](../#bom). 
-
 Maven:
 
 ```xml
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi3</artifactId>
-  <version>5.7.1-1</version>
+  <version>{guicey.version}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-jdbi3:5.7.1-1'
+implementation 'ru.vyarus.guicey:guicey-jdbi3:{guicey.version}'
 ```
 
-See the most recent version in the badge above.
+Omit version if guicey BOM used.
 
 ### Usage
 

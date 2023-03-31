@@ -127,27 +127,23 @@ dropwizard-views such things should be implemented manually, which is not good f
 
 ### Setup 
 
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-server-pages.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-server-pages)
-
-Avoid version in dependency declaration below if you use [extensions BOM](../#bom). 
-
 Maven:
 
 ```xml
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-server-pages</artifactId>
-  <version>5.7.1-1</version>
+  <version>{guicey.version}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-server-pages:5.7.1-1'
+implementation 'ru.vyarus.guicey:guicey-server-pages:{guicey.version}'
 ```
 
-See the most recent version in the badge above.
+Omit version if guicey BOM used.
 
 ### Usage
 

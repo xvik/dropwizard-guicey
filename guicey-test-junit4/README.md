@@ -7,13 +7,10 @@ Junit 4 test support
 NOTE: Module was extracted from guicey core. Package remains the same to simplify migration (only additional dependency would be required).
 Also, deprecation marks removed from rules to reduce warnings.
 
-DEPRECATED because dropwizard deprecated its junit4 rules. Consider [migration to JUnit 5](#migrating-to-junit-5)
+DEPRECATED because dropwizard deprecated its junit4 rules (dropwizard junit4 support was extracted into [separate module](https://github.com/dropwizard/dropwizard-testing-junit4)). 
+Consider [migration to JUnit 5](#migrating-to-junit-5)
 
 ### Setup
-
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-test-junit4.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-test-junit4)
-
-Avoid version in dependency declaration below if you use [extensions BOM](../#bom). 
 
 Maven:
 
@@ -21,7 +18,7 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-test-junit4</artifactId>
-  <version>5.7.1-1</version>
+  <version>{guicey.version}</version>
   <scope>test</scope>  
 </dependency>
 ```
@@ -29,10 +26,10 @@ Maven:
 Gradle:
 
 ```groovy
-testImplementation 'ru.vyarus.guicey:guicey-test-junit4:5.7.1-1'
+testImplementation 'ru.vyarus.guicey:guicey-test-junit4:{guicey.version}'
 ```
 
-See the most recent version in the badge above.
+Omit version if guicey BOM used.
 
 #### With junit 5
 
@@ -84,7 +81,7 @@ new GuiceyAppRule<>(MyApplication.class, null)
 #### Testing web logic
 
 For web component tests (servlets, filters, resources) use
-[DropwizardAppRule](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#id2).
+[DropwizardAppRule](https://github.com/dropwizard/dropwizard-testing-junit4#usage).
 
 To access guice beans use injector lookup:
 

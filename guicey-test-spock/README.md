@@ -6,13 +6,9 @@
 
 NOTE: Module was extracted from guicey core. Package remains the same to simplify migration (only additional dependency would be required).
 
-DEPRECATED because Implementation relies on deprecated junit 4 rules. Consider [migration to junit 5 (spock 2)](#migration-to-spock-2)
+DEPRECATED because implementation relies on deprecated junit 4 rules. Consider [migration to junit 5 (spock 2)](#migration-to-spock-2)
 
 ### Setup
-
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-test-spock.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-test-spock)
-
-Avoid version in dependency declaration below if you use [extensions BOM](../#bom).
 
 Maven:
 
@@ -20,7 +16,7 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-test-spock</artifactId>
-  <version>5.7.1-1</version>
+  <version>{guicey.version}</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -28,17 +24,17 @@ Maven:
 Gradle:
 
 ```groovy
-testImplementation 'ru.vyarus.guicey:guicey-test-spock:5.7.1-1'
+testImplementation 'ru.vyarus.guicey:guicey-test-spock:{guicey.version}'
 ```
 
-See the most recent version in the badge above.
+Omit version if guicey BOM used.
 
 #### With junit 5
 
 OR you can use it with junit 5 vintage engine:
 
 ```groovy
-testImplementation 'ru.vyarus.guicey:guicey-test-spock:5.7.1-1'
+testImplementation 'ru.vyarus.guicey:guicey-test-spock:{guicey.version}'
 testImplementation 'org.junit.jupiter:junit-jupiter-api'
 testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
 testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'

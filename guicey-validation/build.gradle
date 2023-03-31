@@ -1,4 +1,4 @@
-description = "Guice-managed beans methoods pre/post validations"
+description = "Guice-managed pre/post validations for bean methods"
 
 dependencies {
     implementation 'ru.vyarus:guice-validator'
