@@ -163,7 +163,6 @@ nav:
       - Admin REST: extras/admin-rest.md
       - Lifecycle annotations: extras/lifecycle-annotations.md
       - Guava EventBus: extras/eventbus.md
-      - JDBI: extras/jdbi.md
       - JDBI3: extras/jdbi3.md
       - SPA: extras/spa.md
       - Server Pages: extras/gsp.md
@@ -173,11 +172,11 @@ nav:
       - Governator: examples/governator.md
       - Hibernate: examples/hibernate.md
       - EventBus: examples/eventbus.md
-      - JDBI: examples/jdbi.md
       - JDBI3: examples/jdbi3.md
     - About:
       - Release notes: about/release-notes.md
       - Compatibility: about/compatibility.md
+      - Migration guide: about/migration.md
       - Version history: about/history.md
       - Support: about/support.md
       - License: about/license.md

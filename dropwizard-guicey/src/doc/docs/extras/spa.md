@@ -1,9 +1,6 @@
 # Single page applications support
 
-!!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-spa) module
-
-Provides a replacement for [dropwizard-assets](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#serving-assets) 
+Provides a replacement for [dropwizard-assets](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#serving-assets) 
 bundle for single page applications (SPA) to properly
 handle html5 client routing.
 
@@ -45,28 +42,23 @@ From example above, `/app/someroute` will return index page and `/app/css/some.c
 
 ## Setup
 
-
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-spa.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-spa)
-
-Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 
-
 Maven:
 
 ```xml
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-spa</artifactId>
-  <version>{{ gradle.ext }}</version>
+  <version>{{ gradle.version }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-spa:{{ gradle.ext }}'
+implementation 'ru.vyarus.guicey:guicey-spa:{{ gradle.version }}'
 ```
 
-See the most recent version in the badge above.
+Omit version if guicey BOM used
 
 ## Usage
 

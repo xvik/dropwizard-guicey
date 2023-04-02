@@ -189,8 +189,7 @@ additional configurations (thanks to classpath scan).
 Another example is [`PluginInstaller`](installers/plugin.md) which allows you to declare plugins 
 (e.g. implementing some interface) and inject all of them at once (as `Set<PluginInterface>`).
 
-[Extensions project](https://github.com/xvik/dropwizard-guicey-ext) provides special installer to 
-[register events in guava eventBus](extras/eventbus.md):
+[guicey-eventbus](extras/eventbus.md) provides special installer to register events in guava eventBus:
 `EventBusInstaller` check class methods and if any method is annotated with `@Subscribe` - register extension
 as event bus listener.
 

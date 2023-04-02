@@ -1,7 +1,7 @@
 # Junit 4
 
 !!! warning
-    Since guicey 5.5 junit 4 support was extracted from guicey to [external module](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-test-junit4):
+    Since guicey 5.5 junit 4 support was extracted from guicey to [external module](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-test-junit4):
 
     * Package remains the same to simplify migration (only additional dependency would be required)
     * Deprecation marks removed from rules to reduce warnings. 
@@ -40,7 +40,7 @@ Provided rules:
 ## Testing core logic
 
 For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like 
-[DropwizardAppRule](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#id2),
+[DropwizardAppRule](https://github.com/dropwizard/dropwizard-testing-junit4),
 but *doesn't start jetty* (and so jersey and guice web modules will not be initialized). 
 Managed and lifecycle objects supported.
 
@@ -66,7 +66,7 @@ new GuiceyAppRule<>(MyApplication.class, null)
 ## Testing web logic
 
 For web component tests (servlets, filters, resources) use 
-[DropwizardAppRule](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#id2).
+[DropwizardAppRule](https://github.com/dropwizard/dropwizard-testing-junit4).
 
 To access guice beans use injector lookup:
 

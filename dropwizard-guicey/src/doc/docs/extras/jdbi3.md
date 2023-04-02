@@ -1,9 +1,6 @@
 # JDBI3 integration
 
-!!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3) module
-
-Integrates [JDBI3](http://jdbi.org/) with guice. Based on [dropwizard-jdbi3](https://www.dropwizard.io/en/release-2.0.x/manual/jdbi3.html) integration.
+Integrates [JDBI3](http://jdbi.org/) with guice. Based on [dropwizard-jdbi3](https://www.dropwizard.io/en/release-3.0.x/manual/jdbi3.html) integration.
  
 Features:
 
@@ -18,18 +15,10 @@ Features:
 
 Added installers:
 
-* [RepositoryInstaller](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/repository/RepositoryInstaller.java) - sql proxies
-* [MapperInstaller](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/MapperInstaller.java) - row mappers  
+* [RepositoryInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/repository/RepositoryInstaller.java) - sql proxies
+* [MapperInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/MapperInstaller.java) - row mappers  
  
 ## Setup
-
-!!! important 
-    Since dropwizard 2.0.22 dropwizard-jdbi3 [requires Java 11 by default](https://github.com/dropwizard/dropwizard/releases/tag/v2.0.22),
-    use `guicey-jdbi3-jdk8` instead (meta package fixing classpath) for java 8 compatibility.
-
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-jdbi3.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-jdbi3)
-
-Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 
 
 Maven:
 
@@ -37,17 +26,17 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi3</artifactId>
-  <version>{{ gradle.ext }}</version>
+  <version>{{ gradle.version }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-jdbi3:{{ gradle.ext }}'
+implementation 'ru.vyarus.guicey:guicey-jdbi3:{{ gradle.version }}'
 ```
 
-See the most recent version in the badge above.
+Omit version if guicey BOM used
 
 !!! note ""
     [Migration from jdbi2](jdbi.md#migration-to-jdbi3)
@@ -63,7 +52,7 @@ GuiceBundle.builder()
 ```
 
 Here default JDBI instance will be created from database configuration (much like it's described in 
-[dropwizard documentation](https://www.dropwizard.io/en/release-2.0.x/manual/jdbi3.html)).
+[dropwizard documentation](https://www.dropwizard.io/en/release-3.0.x/manual/jdbi3.html)).
 
 Or build JDBI instance yourself:
 

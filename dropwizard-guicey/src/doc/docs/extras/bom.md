@@ -1,40 +1,13 @@
 # Guicey BOM
 
-!!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-bom) module
-
 Maven BOM contains guicey and guicey ext modules versions. Also includes dropwizard and guice boms.
 
 !!! tip
     BOMs are useful for versions management. After including bom you can simply include required dependencies
     (dropwizard, guice, guicey, guicey-ext) without versions: bom will control all versions.
 
-| BOM version | Guicey | Dropwizard | Guice |
-|-------------|--------|------------|-------|
-| 5.7.0-1     | 5.7.0  | 2.1.4      | 5.1.0 |
-| 5.6.1-1     | 5.6.1  | 2.1.1      | 5.1.0 |
-| 5.5.0-1     | 5.5.0  | 2.0.28     | 5.1.0 |
-| 5.4.2-1     | 5.4.2  | 2.0.28     | 5.1.0 |
-| 5.4.0-1     | 5.4.0  | 2.0.25     | 5.0.1 |
-| 5.3.0-1     | 5.3.0  | 2.0.20     | 5.0.1 |
-| 5.2.0-1     | 5.2.0  | 2.0.16     | 4.2.3 |
-| 5.1.0-2     | 5.1.0  | 2.0.10     | 4.2.3 |
-| 5.0.1-1     | 5.0.1  | 2.0.2      | 4.2.2 |
-| 5.0.0-0     | 5.0.0  | 2.0.0      | 4.2.2 |
-| 0.7.0       | 4.2.2  | 1.3.7      | 4.2.2 |
-| 0.6.0       | 4.2.2  | 1.3.7      | 4.2.2 |
-| 0.5.0       | 4.2.1  | 1.3.5      | 4.2.0 |
-| 0.4.0       | 4.2.0  | 1.3.5      | 4.2.0 |
-| 0.3.0       | 4.1.0  | 1.1.0      | 4.1.0 |
-
-Since 5.0.0 extension modules version is derived from guicey version: guiceyVersion-Number 
-(the same convention as for dropwizard modules). For example version 5.0.0-1 means
-first extensions release (1) for guicey 5.0.0. 
 
 ## Setup
-
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-bom.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-bom)
-
 
 Maven:
 
@@ -45,7 +18,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>{{ gradle.ext }}</version>
+            <version>{{ gradle.version }}</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>  
@@ -84,7 +57,7 @@ Gradle:
 ```groovy
 // declare guice and ext modules without versions 
 dependencies {
-    implementation platform('ru.vyarus.guicey:guicey-bom:{{ gradle.ext }}')
+    implementation platform('ru.vyarus.guicey:guicey-bom:{{ gradle.version }}')
     // uncomment to override dropwizard and its dependencies versions    
     //implementation platform('io.dropwizard:dropwizard-dependencies:{{ gradle.dropwizard }}')
 
@@ -94,8 +67,17 @@ dependencies {
     // Example of extension module usage
     implementation 'ru.vyarus.guicey:guicey-eventbus' 
 }
-    
 ```
+
+Bom includes:
+
+BOM           | Artifact
+--------------|-------------------------
+Guicey modules | `ru.vyarus.guicey:guicey-[module]`
+Dropwizard BOM | `io.dropwizard:dropwizard-bom`
+Guice BOM | `com.google.inject:guice-bom`
+HK2 bridge | `org.glassfish.hk2:guice-bridge`
+Spock-junit5 | `ru.vyarus:spock-junit5`
 
 ## Dependencies override
 

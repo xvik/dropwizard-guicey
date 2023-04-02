@@ -2,13 +2,12 @@
 
 !!! summary ""
     [Guice](https://github.com/google/guice) `{{ gradle.guice }}` integration for [dropwizard](http://dropwizard.io) `{{ gradle.dropwizard }}`.        
-    Compiled for `java 8`, compatible with `java 11 - 17`. 
+    Compiled for `java 11`, compatible with `java 11 - 17`. 
 
 **[Release Notes](about/release-notes.md)** - [History](about/history.md) - [Javadoc](https://javadoc.io/doc/ru.vyarus/dropwizard-guicey/) - [Support](about/support.md) - [License](about/license.md)       
 
 !!! note ""
-    If you migrate from dropwizard 1.x then see [dropwizard upgrade instructions](https://www.dropwizard.io/en/release-2.0.x/manual/upgrade-notes/upgrade-notes-2_0_x.html)
-    and [guicey migration guide](http://xvik.github.io/dropwizard-guicey/5.0.0/about/release-notes/#migration-guide).
+    For migration see [migration guide](about/migration.md)
     
 ## Main features
 
@@ -31,6 +30,27 @@
   
 <sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>
 
+## Project structure
+
+* [ru.vyarus:dropwizard-guicey](https://github.com/xvik/dropwizard-guicey/tree/master/dropwizard-guicey) - core
+    guicey module. Could be used without any extra modules
+* [ru.vyarus.guicey:guicey-[module name]](https://github.com/xvik/dropwizard-guicey) - guicey extension 
+    [modules](guide/modules.md) (use with `ru.vyarus.guicey:guicey-bom`). Modules provide additional functionality like 
+    3rd party libraries integration. Also, serve as an example of possible extension implementations. 
+* [Examples](https://github.com/xvik/dropwizard-guicey/tree/master/examples) - various usage examples for core guicey,
+    extension modules and some direct integrations
+  
+!!! note "" 
+    Before, guicey and extensions were released separately in different repositories - different packages were preserved after merge
+
+## SBOM
+
+[SBOM (cyclonedx)](https://cyclonedx.org/) is published for every guicey module with `cyclonedx` classifier (same way as dropwizard)
+as json and xml files.
+
+For example: [XML](https://repo1.maven.org/maven2/ru/vyarus/dropwizard-guicey/{{ gradle.version }}/dropwizard-guicey-{{ gradle.version }}-cyclonedx.xml),
+[JSON](https://repo1.maven.org/maven2/ru/vyarus/dropwizard-guicey/{{ gradle.version }}/dropwizard-guicey-{{ gradle.version }}-cyclonedx.json)
+
 ## Documentation Summary
 
 ### Introduction
@@ -46,12 +66,4 @@
   well as a reference if you're short on time.
 * [**Installers**](installers/resource.md) describes all guicey installers. Use it as a *extensions hand book*.
 * [**Modules**](guide/modules.md) external extension modules overview.
-* [**Examples**](examples/authentication.md) important usage examples. 
-
-## Sources structure
-
-* [Guicey repository]((https://github.com/xvik/dropwizard-guicey)): guicey itself and (these) docs
-* [Modules repository](https://github.com/xvik/dropwizard-guicey-ext): extension [modules](guide/modules.md) (integrations) 
-are maintained in the separate repository
-* [Examples repository](https://github.com/xvik/dropwizard-guicey-examples): holds code samples for main features dropwizard 
-bundles and extension modules.
+* [**Examples**](examples/authentication.md) some usage examples. 

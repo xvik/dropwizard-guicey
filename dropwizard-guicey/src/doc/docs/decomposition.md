@@ -178,8 +178,8 @@ public class ModuleImpl<C extends Configuration> extends DropwizardAwareModule<C
 ## Bundle tips     
 
 These tips show various techniques for developing bundles.  
-Mostly, these tips are based on developing [guicey extensions](https://github.com/xvik/dropwizard-guicey-ext).
-See extension sources for examples.
+Mostly, these tips are based on developing [guicey extensions](guide/modules.md).
+See [extensions source](https://github.com/xvik/dropwizard-guicey) for examples.
 
 ### Uniqueness
 
@@ -292,7 +292,7 @@ introspection.
 #### Unique sub config
 
 When creating re-usable bundle it is often required to access yaml configuration data. 
-Usually this is solved by some "configuration look-ups" like in [dropwizard-views](https://www.dropwizard.io/en/release-2.0.x/manual/views.html) 
+Usually this is solved by some "configuration look-ups" like in [dropwizard-views](https://www.dropwizard.io/en/release-3.0.x/manual/views.html) 
 
 Guicey allows you to obtain the sub-configuration object directly:
 

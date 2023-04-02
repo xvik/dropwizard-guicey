@@ -1,8 +1,5 @@
 # Lifecycle annotations
 
-!!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-lifecycle-annotations) module
-
 Allows using lifecycle annotations for initialization/destruction methods in guice beans.
 Main motivation is to replace `Managed` usage in places where it's simpler to just annotate method, rather than
 register extension.
@@ -13,28 +10,23 @@ register extension.
 
 ## Setup
 
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-lifecycle-annotations.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-lifecycle-annotations)
-
-Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 
-
 Maven:
 
 ```xml
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-lifecycle-annotations</artifactId>
-  <version>{{ gradle.ext }}</version>
+  <version>{{ gradle.version }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:lifecycle-annotations:{{ gradle.ext }}'
+implementation 'ru.vyarus.guicey:lifecycle-annotations:{{ gradle.version }}'
 ```
 
-See the most recent version in the badge above.
-
+Omit version if guicey BOM used
 
 ## Usage
 

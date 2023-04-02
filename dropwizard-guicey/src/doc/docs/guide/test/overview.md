@@ -25,7 +25,7 @@ All extensions implemented with [DropwizardTestSupport](https://www.dropwizard.i
     have spock (and groovy) expressiveness.
 
     Currently, spock 1 and junit 4 extensions considered deprecated becuase they use
-    deprecated [dropwizard rule](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#junit-4).
+    deprecated [dropwizard rule](https://www.dropwizard.io/en/release-3.0.x/manual/testing.html#junit-4).
 
 !!! tip
     [Test framework-agnostic utilities](general.md) are useful with junit 5 or spock extensions in cases when

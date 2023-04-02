@@ -6,6 +6,8 @@
 
 ## Installation
 
+Core guicey could be used directly:
+
 Maven:
 
 ```xml
@@ -24,11 +26,8 @@ implementation 'ru.vyarus:dropwizard-guicey:{{ gradle.version }}'
 
 ### BOM
 
-Guicey pom may be also used as maven BOM.
-
-!!! note
-    If you use guicey [extensions](guide/modules.md) then use [extensions BOM](extras/bom.md) 
-    instead (it already includes guicey BOM).
+But, it would be simpler to use it with BOM because of [simplified versions management for guice, dropwizard and guicey
+modules](extras/bom.md): 
 
 Gradle:
 
@@ -40,12 +39,11 @@ dependencies {
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
-       
+    
+    // example modules without versions
     implementation 'io.dropwizard:dropwizard-auth'
     implementation 'com.google.inject:guice-assistedinject'
 
-    testImplementation 'ru.vyarus:spock-junit5'
-    testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0'
     testImplementation 'io.dropwizard:dropwizard-test'
 }
 ```    
@@ -81,31 +79,10 @@ Maven:
 </dependencies>
 ```
 
-BOM includes:
-
-BOM           | Artifact
---------------|-------------------------
-Guicey itself | `ru.vyarus:dropwizard-guicey`
-Dropwizard BOM | `io.dropwizard:dropwizard-bom`
-Guice BOM | `com.google.inject:guice-bom`
-HK2 bridge | `org.glassfish.hk2:guice-bridge`
-Spock-junit5 | `ru.vyarus:spock-junit5` 
-
-!!! warning
-    Since dropwizard 2.1.0 [jackson blackbird](https://github.com/FasterXML/jackson-modules-base/tree/jackson-modules-base-2.13.3/blackbird#readme)
-    [used by default](https://www.dropwizard.io/en/release-2.1.x/manual/upgrade-notes/upgrade-notes-2_1_x.html#jackson-blackbird-as-default) 
-    instead of [afterburner](https://github.com/FasterXML/jackson-modules-base/tree/jackson-modules-base-2.13.3/afterburner#readme).
-    If you use **java 8** then apply afterburner dependency in order to switch into it:
-    ```
-    implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.13.3'
-    ```
-    (omit version if guicey or dropwizard BOM used).
-    Without it you'll always see a nasty warning on startup (afterburner is better for java 8, but for java 9+ blackbird should be used)
-
 ## Usage
 
 !!! note ""
-    Full source of example application is [published here](https://github.com/xvik/dropwizard-guicey-examples/tree/master/core-getting-started)
+    Full source of example application is [published here](https://github.com/xvik/dropwizard-guicey/tree/master/examples/core-getting-started)
 
 Register guice bundle:
 
@@ -220,7 +197,7 @@ The example resource now obtains the caller's remote ip address and returns it i
 
 ### Adding a Managed Object
 
-[Dropwizard managed objects](https://www.dropwizard.io/en/release-2.0.x/manual/core.html#managed-objects) are extremely useful for managing resources.
+[Dropwizard managed objects](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#managed-objects) are extremely useful for managing resources.
 
 Create a simple managed implementation:
 

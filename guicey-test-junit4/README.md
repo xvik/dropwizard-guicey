@@ -55,7 +55,7 @@ Provided rules:
 #### Testing core logic
 
 For integration testing of guice specific logic you can use `GuiceyAppRule`. It works almost like
-[DropwizardAppRule](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#id2),
+[DropwizardAppRule](https://github.com/dropwizard/dropwizard-testing-junit4),
 but *doesn't start jetty* (and so jersey and guice web modules will not be initialized).
 Managed and lifecycle objects supported.
 

@@ -9,7 +9,7 @@ Useful when:
 Test utils:
 
  - `TestSupport` - root utilities class, providing easy access to other helpers
- - `DropwizardTestSupport` - [dropwizard native support](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#non-junit) for full integration tests
+ - `DropwizardTestSupport` - [dropwizard native support](https://www.dropwizard.io/en/release-3.0.x/manual/testing.html#non-junit) for full integration tests
  - `GuiceyTestSupport` - guice context-only integration tests (without starting web part)
  - `ClientSupport` - web client helper (useful for calling application urls)
 
@@ -19,7 +19,7 @@ Test utils:
 
 ## Web app
 
-Core [DropwizardTestSupport](https://www.dropwizard.io/en/release-2.0.x/manual/testing.html#non-junit) class
+Core [DropwizardTestSupport](https://www.dropwizard.io/en/release-3.0.x/manual/testing.html#non-junit) class
 used to run complete application for testing:
 
 ```java

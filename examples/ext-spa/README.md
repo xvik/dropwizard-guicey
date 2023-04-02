@@ -1,6 +1,6 @@
 ### SPA HTML5 routing sample
 
-Use [SPA guicey module]((https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-spa)).
+Use [SPA guicey module]((https://github.com/xvik/dropwizard-guicey/tree/master/guicey-spa)).
 
 Sample view application is in src/main/resources/app. Application use VuewRouter with two routes
 : /foo and /bar.
