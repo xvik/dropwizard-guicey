@@ -23,7 +23,7 @@ ext {
     guice = '5.1.0'
     hk2 = '2.6.1'
     spockJunit5 = '1.2.0'
-    guiceExtAnn = '1.4.0'
+    guiceExtAnn = '1.4.1'
     guiceValidator = '2.0.1'
 }
 
@@ -73,7 +73,7 @@ allprojects {
 
     repositories { mavenLocal(); mavenCentral(); maven { url 'https://jitpack.io' } }
 
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
 
