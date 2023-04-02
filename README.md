@@ -6,16 +6,14 @@
 
 **DOCUMENTATION**: http://xvik.github.io/dropwizard-guicey/
 
-Additional repositories:
-
-* [Examples](https://github.com/xvik/dropwizard-guicey-examples)
-* [Extensions and integrations](https://github.com/xvik/dropwizard-guicey-ext)
+* [Examples](https://github.com/xvik/dropwizard-guicey/examples)
+* [Extensions and integrations](https://github.com/xvik/dropwizard-guicey/)
 
 Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 2.1.5 [guice](https://github.com/google/guice) 5.1.0 integration.
+[Dropwizard](http://dropwizard.io/) 3.0.0 [guice](https://github.com/google/guice) 5.1.0 integration.
 
 Features:
 
@@ -40,13 +38,7 @@ Features:
 
 ### Setup
 
-Try [**Dropwizard 3** compatible beta](https://github.com/xvik/dropwizard-guicey/discussions/294)
-
-**Dropwizard 4** is [currently not supported](https://github.com/xvik/dropwizard-guicey/discussions/296)  
-
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus/dropwizard-guicey.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
-
-May be used through [extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext) or directly.
 
 Maven:
 
@@ -54,18 +46,21 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>5.7.1</version>
+  <version>6.0.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:5.7.1'
+implementation 'ru.vyarus:dropwizard-guicey:6.0.0'
 ```
+
+**Dropwizard 4** is [currently not supported](https://github.com/xvik/dropwizard-guicey/discussions/296)
 
 Dropwizard | Guicey
 ----------|---------
+3.0| [6.0.0](http://xvik.github.io/dropwizard-guicey/6.0.0)
 2.1| [5.7.1](http://xvik.github.io/dropwizard-guicey/5.7.1)
 2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
@@ -75,42 +70,26 @@ Dropwizard | Guicey
 0.8 | [3.1.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.8)
 0.7 | [1.1.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7)
 
-WARNING:
-Since dropwizard 2.1.0 [jackson blackbird](https://github.com/FasterXML/jackson-modules-base/tree/jackson-modules-base-2.13.3/blackbird#readme)
-[used by default](https://www.dropwizard.io/en/release-2.1.x/manual/upgrade-notes/upgrade-notes-2_1_x.html#jackson-blackbird-as-default) instead of [afterburner](https://github.com/FasterXML/jackson-modules-base/tree/jackson-modules-base-2.13.3/afterburner#readme).
-If you use **java 8** then apply afterburner dependency in order to switch into it:
-```
-implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.13.3'
-```
-(omit version if guicey or dropwizard BOM used).
-Without it you'll always see a nasty warning on startup (afterburner is better for java 8, but for java 9+ blackbird should be used)
-
-
 #### BOM
 
-Guicey pom may be also used as maven BOM.
-
-NOTE: If you use guicey extensions then use [extensions BOM](https://github.com/xvik/dropwizard-guicey-ext) 
-instead (it already includes guicey BOM).
-
+Use [BOM](http://xvik.github.io/dropwizard-guicey/latest/extras/bom/) for guice, dropwizard and guicey modules dependency management.
 BOM usage is highly recommended as it allows you to correctly update dropwizard dependencies.
 
 Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus:dropwizard-guicey:5.7.1')
+    implementation platform('ru.vyarus.guicey:guicey-bom:6.0.0')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-dependencies:2.1.5')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:3.0.0')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
+    implementation 'ru.vyarus.guicey:guicey-eventbus'
    
     implementation 'io.dropwizard:dropwizard-auth'
     implementation 'com.google.inject:guice-assistedinject'   
     
-    testImplementation 'ru.vyarus:spock-junit5'
-    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
     testImplementation 'io.dropwizard:dropwizard-test'
 }
 ```
@@ -123,7 +102,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>dropwizard-guicey</artifactId>
-            <version>5.7.1</version>
+            <version>6.0.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -131,7 +110,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>2.1.5</version>
+            <version>3.0.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 
@@ -150,7 +129,7 @@ BOM includes:
 
 BOM           | Artifact
 --------------|-------------------------
-Guicey itself | `ru.vyarus:dropwizard-guicey`
+Guicey modules | `ru.vyarus.guicey:guicey-[module]`
 Dropwizard BOM | `io.dropwizard:dropwizard-bom`
 Guice BOM | `com.google.inject:guice-bom`
 HK2 bridge | `org.glassfish.hk2:guice-bridge`
