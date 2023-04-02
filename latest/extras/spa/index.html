@@ -12,7 +12,7 @@
         <meta name="author" content="Vyacheslav Rusakov">
       
       
-        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/5.7.1/extras/spa/">
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/6.0.0/extras/spa/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
@@ -1500,20 +1500,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../jdbi/" class="md-nav__link">
-        JDBI
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../jdbi3/" class="md-nav__link">
         JDBI3
       </a>
@@ -1748,20 +1734,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../examples/jdbi/" class="md-nav__link">
-        JDBI
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../examples/jdbi3/" class="md-nav__link">
         JDBI3
       </a>
@@ -1826,6 +1798,20 @@
     <li class="md-nav__item">
       <a href="../../about/compatibility/" class="md-nav__link">
         Compatibility
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/migration/" class="md-nav__link">
+        Migration guide
       </a>
     </li>
   
@@ -1974,17 +1960,14 @@
                 
                   
 
-  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/extras/spa.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/dropwizard-guicey/src/doc/docs/extras/spa.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
 <h1 id="single-page-applications-support">Single page applications support<a class="headerlink" href="#single-page-applications-support" title="Permanent link">&para;</a></h1>
-<div class="admonition summary">
-<p><a href="https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-spa">Extensions project</a> module</p>
-</div>
-<p>Provides a replacement for <a href="https://www.dropwizard.io/en/release-2.0.x/manual/core.html#serving-assets">dropwizard-assets</a> 
+<p>Provides a replacement for <a href="https://www.dropwizard.io/en/release-3.0.x/manual/core.html#serving-assets">dropwizard-assets</a> 
 bundle for single page applications (SPA) to properly
 handle html5 client routing.</p>
 <p>Features:</p>
@@ -2017,19 +2000,17 @@ is used to recognize most resource calls and avoid redirection (show correct 404
 <p>From example above, <code>/app/someroute</code> will return index page and <code>/app/css/some.css</code> will return css.
 <code>/app/css/unknown.css</code> will return 404 as resource call will be recognized and css file is not exists.</p>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
-<p><a href="https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-spa"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-spa.svg?style=flat" /></a></p>
-<p>Avoid version in dependency declaration below if you use <a href="../guicey-bom">extensions BOM</a>. </p>
 <p>Maven:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>ru.vyarus.guicey<span class="nt">&lt;/groupId&gt;</span>
   <span class="nt">&lt;artifactId&gt;</span>guicey-spa<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>5.7.1-1<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;version&gt;</span>6.0.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div>
 <p>Gradle:</p>
-<div class="highlight"><pre><span></span><code><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;ru.vyarus.guicey:guicey-spa:5.7.1-1&#39;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;ru.vyarus.guicey:guicey-spa:6.0.0&#39;</span><span class="w"></span>
 </code></pre></div>
-<p>See the most recent version in the badge above.</p>
+<p>Omit version if guicey BOM used</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>Register bundle:</p>
 <div class="highlight"><pre><span></span><code><span class="n">GuiceBundle</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span><span class="w"></span>
@@ -2046,7 +2027,7 @@ http://localhost:8080/someroute -&gt; application client route - index page retu
 <p>Example registration to admin context:</p>
 <div class="highlight"><pre><span></span><code><span class="p">.</span><span class="na">bundles</span><span class="p">(</span><span class="n">SpaBundle</span><span class="p">.</span><span class="na">adminApp</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/com/mycompany/adminapp/&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/manager&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">());</span><span class="w"></span>
 </code></pre></div>
-<p>Register "admin" application with resources in "/com/mycompany/adminapp/" package, served from "manager' 
+<p>Register "admin" application with resources in "/com/mycompany/adminapp/" package, served from "manager" 
 admin context (note that admin root is already used by dropwizard admin servlet).</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -2144,7 +2125,7 @@ All modern client side routers rely on it. Pay attention that path in base tag m
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2014-2022 Vyacheslav Rusakov
+      Copyright &copy; 2014-2023 Vyacheslav Rusakov
     </div>
   
   

@@ -12,14 +12,14 @@
         <meta name="author" content="Vyacheslav Rusakov">
       
       
-        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/5.7.1/examples/jdbi/">
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/6.0.0/examples/authentication/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
     
     
       
-        <title>JDBI - Dropwizard-guicey</title>
+        <title>Authentication - Dropwizard-guicey</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#jdbi-integration" class="md-skip">
+        <a href="#authentication" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              JDBI
+              Authentication
             
           </span>
         </div>
@@ -299,7 +299,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../authentication/" class="md-tabs__link md-tabs__link--active">
+      <a href="./" class="md-tabs__link md-tabs__link--active">
         Examples
       </a>
     </li>
@@ -1498,20 +1498,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extras/jdbi/" class="md-nav__link">
-        JDBI
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../extras/jdbi3/" class="md-nav__link">
         JDBI3
       </a>
@@ -1602,11 +1588,66 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../authentication/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Authentication
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Authentication
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#simple-auth" class="md-nav__link">
+    Simple auth
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chained-auth" class="md-nav__link">
+    Chained auth
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#polymorphic-auth" class="md-nav__link">
+    Polymorphic auth
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1649,82 +1690,6 @@
       <a href="../eventbus/" class="md-nav__link">
         EventBus
       </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          JDBI
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        JDBI
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#repository-definition" class="md-nav__link">
-    Repository definition
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#result-set-mapper" class="md-nav__link">
-    Result set mapper
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1812,6 +1777,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../about/migration/" class="md-nav__link">
+        Migration guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../about/history/" class="md-nav__link">
         Version history
       </a>
@@ -1881,29 +1860,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    Configuration
+  <a href="#simple-auth" class="md-nav__link">
+    Simple auth
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#repository-definition" class="md-nav__link">
-    Repository definition
+  <a href="#chained-auth" class="md-nav__link">
+    Chained auth
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#result-set-mapper" class="md-nav__link">
-    Result set mapper
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
+  <a href="#polymorphic-auth" class="md-nav__link">
+    Polymorphic auth
   </a>
   
 </li>
@@ -1922,239 +1894,121 @@
                 
                   
 
-  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/examples/jdbi.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/dropwizard-guicey/src/doc/docs/examples/authentication.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
-<h1 id="jdbi-integration">JDBI integration<a class="headerlink" href="#jdbi-integration" title="Permanent link">&para;</a></h1>
-<p>Example of <a href="../../extras/jdbi/">guicey-jdbi</a> extension usage.</p>
-<div class="admonition abstract">
-<p>Example <a href="https://github.com/xvik/dropwizard-guicey-examples/tree/master/ext-jdbi">source code</a></p>
-</div>
-<p>The <a href="../../extras/jdbi/">JDBI extension</a> allows:</p>
-<ul>
-<li>using jdbi proxies as guice beans</li>
-<li>using injection inside proxies</li>
-<li>using AOP on proxies</li>
-<li>using annotations for transaction definition</li>
-<li>automatic repository and mapper installation</li>
-</ul>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>Additional dependencies required:</p>
-<div class="highlight"><pre><span></span><code><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;ru.vyarus.guicey:guicey-jdbi:5.7.1-1&#39;</span><span class="w"></span>
-<span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;com.h2database:h2:1.4.199&#39;</span><span class="w"></span>
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>guicey-jdbi version could be managed with <a href="../../extras/bom/">BOM</a></p>
-</div>
-<p><a href="https://www.dropwizard.io/en/release-1.3.x/manual/jdbi.html">dropwizard-jdbi</a> is used to configure 
-and create dbi instance:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">JdbiAppConfiguration</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Configuration</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<h1 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h1>
+<p>Example of <a href="https://www.dropwizard.io/en/release-3.0.x/manual/auth.html">dropwizard authentication</a> usage with guice.</p>
+<h2 id="simple-auth">Simple auth<a class="headerlink" href="#simple-auth" title="Permanent link">&para;</a></h2>
+<p>Using <a href="https://www.dropwizard.io/en/release-3.0.x/manual/auth.html#oauth2">dropwizard oauth</a> example as basement.
+Other auth types are configured in similar way.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Provider</span><span class="w"></span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">OAuthDynamicFeature</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AuthDynamicFeature</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
-<span class="w">    </span><span class="nd">@Valid</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@NotNull</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@JsonProperty</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">DataSourceFactory</span><span class="w"> </span><span class="n">database</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DataSourceFactory</span><span class="p">();</span><span class="w"></span>
-
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">DataSourceFactory</span><span class="w"> </span><span class="nf">getDatabase</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">database</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</code></pre></div>
-<p>For simplicity, an embedded H2 database is used:</p>
-<div class="highlight"><pre><span></span><code><span class="nt">database</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">driverClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">org.h2.Driver</span><span class="w"></span>
-<span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sa</span><span class="w"></span>
-<span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jdbc:h2:~/sample</span><span class="w"></span>
-<span class="w">  </span><span class="nt">properties</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">charSet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">UTF-8</span><span class="w"></span>
-<span class="w">  </span><span class="nt">maxWaitForConnection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1s</span><span class="w"></span>
-<span class="w">  </span><span class="nt">validationQuery</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SELECT</span><span class="nv"> </span><span class="s">1&quot;</span><span class="w"></span>
-<span class="w">  </span><span class="nt">validationQueryTimeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3s</span><span class="w"></span>
-<span class="w">  </span><span class="nt">minSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span><span class="w"></span>
-<span class="w">  </span><span class="nt">maxSize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span><span class="w"></span>
-<span class="w">  </span><span class="nt">checkConnectionWhileIdle</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
-<span class="w">  </span><span class="nt">evictionInterval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span><span class="w"></span>
-<span class="w">  </span><span class="nt">minIdleTime</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1 minute</span><span class="w"></span>
-</code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Database scheme must be created manually. You can use 
-<a href="https://github.com/dropwizard/dropwizard-flyway">dropwizard-flyway</a> module to prepare database. 
-See <a href="https://github.com/xvik/dropwizard-guicey-examples/tree/master/ext-jdbi">example app source</a> for details. </p>
-</div>
-<p>DBI instance created exactly as described in <a href="https://www.dropwizard.io/en/release-1.3.x/manual/jdbi.html">dropwizard docs</a> 
-using provided db configuration:</p>
-<div class="highlight"><pre><span></span><code><span class="n">GuiceBundle</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span><span class="w"></span>
-<span class="w">    </span><span class="p">.</span><span class="na">bundles</span><span class="p">(</span><span class="n">JdbiBundle</span><span class="p">.</span><span class="o">&lt;</span><span class="n">JdbiAppConfiguration</span><span class="o">&gt;</span><span class="n">forDatabase</span><span class="p">((</span><span class="n">conf</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">conf</span><span class="p">.</span><span class="na">getDatabase</span><span class="p">()))</span><span class="w"></span>
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>You can use <a href="../../extras/jdbi/#usage">pre-build dbi instance</a> instead.</p>
-</div>
-<h2 id="repository-definition">Repository definition<a class="headerlink" href="#repository-definition" title="Permanent link">&para;</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>All jdbi repositories must be annotated with <code>@JdbiRepository</code> to let the <a href="../../extras/jdbi/#repository">repository installer</a>
-recognize and properly install them.</p>
-</div>
-<div class="highlight"><pre><span></span><code><span class="nd">@JdbiRepository</span><span class="w"></span>
-<span class="nd">@InTransaction</span><span class="w"></span>
-<span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserRepository</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Crud</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-
-<span class="w">    </span><span class="c1">// have to use field injection because class is still used by dbi (which is no aware of guice) for proxy creation</span><span class="w"></span>
 <span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">RandomNameGenerator</span><span class="w"> </span><span class="n">generator</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">OAuthDynamicFeature</span><span class="p">(</span><span class="n">OAuthAuthenticator</span><span class="w"> </span><span class="n">authenticator</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                                </span><span class="n">UserAuthorizer</span><span class="w"> </span><span class="n">authorizer</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                                </span><span class="n">Environment</span><span class="w"> </span><span class="n">environment</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">OAuthCredentialAuthFilter</span><span class="p">.</span><span class="na">Builder</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="w">                </span><span class="p">.</span><span class="na">setAuthenticator</span><span class="p">(</span><span class="n">authenticator</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="p">.</span><span class="na">setAuthorizer</span><span class="p">(</span><span class="n">authorizer</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="p">.</span><span class="na">setPrefix</span><span class="p">(</span><span class="s">&quot;Bearer&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="p">.</span><span class="na">buildAuthFilter</span><span class="p">());</span><span class="w"></span>
 
-<span class="w">    </span><span class="c1">// sample of hybrid method in repository, using injected service</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="nf">createRandomUser</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="kd">final</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">User</span><span class="p">();</span><span class="w"></span>
-<span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="na">setName</span><span class="p">(</span><span class="n">generator</span><span class="p">.</span><span class="na">generateName</span><span class="p">());</span><span class="w"></span>
-<span class="w">        </span><span class="n">save</span><span class="p">(</span><span class="n">user</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">user</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">environment</span><span class="p">.</span><span class="na">jersey</span><span class="p">().</span><span class="na">register</span><span class="p">(</span><span class="n">RolesAllowedDynamicFeature</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">environment</span><span class="p">.</span><span class="na">jersey</span><span class="p">().</span><span class="na">register</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">AuthValueFactoryProvider</span><span class="p">.</span><span class="na">Binder</span><span class="p">(</span><span class="n">User</span><span class="p">.</span><span class="na">class</span><span class="p">));</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
 
-<span class="w">    </span><span class="nd">@Override</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@SqlUpdate</span><span class="p">(</span><span class="s">&quot;insert into users (name, version) values (:name, :version)&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@GetGeneratedKeys</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="nd">@UserBind</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="n">entry</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// classes below may be external (internal for simplicity)</span><span class="w"></span>
 
-<span class="w">    </span><span class="nd">@SqlUpdate</span><span class="p">(</span><span class="s">&quot;update users set version=:version, name=:name where id=:id and version=:version - 1&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Override</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="nd">@UserBind</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="n">entry</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Singleton</span><span class="w"></span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">OAuthAuthenticator</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Authenticator</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
-<span class="w">    </span><span class="nd">@SqlQuery</span><span class="p">(</span><span class="s">&quot;select * from users&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findAll</span><span class="p">();</span><span class="w"></span>
-
-<span class="w">    </span><span class="nd">@SqlQuery</span><span class="p">(</span><span class="s">&quot;select * from users where name = :name&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="nf">findByName</span><span class="p">(</span><span class="nd">@Bind</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</code></pre></div>
-<p>Where <code>Crud</code> base class tries to unify repositories and provide hibernate-like optimistic locking behaviour 
-(on each entity save version field is assigned/incremented and checked during update to prevent data loss):</p>
-<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Crud</span><span class="o">&lt;</span><span class="n">T</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">IdEntity</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-
-<span class="w">    </span><span class="nd">@InTransaction</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">entry</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// hibernate-like optimistic locking mechanism: provided entity must have the same version as in database</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">entry</span><span class="p">.</span><span class="na">getId</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">entry</span><span class="p">.</span><span class="na">setVersion</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="n">entry</span><span class="p">.</span><span class="na">setId</span><span class="p">(</span><span class="n">insert</span><span class="p">(</span><span class="n">entry</span><span class="p">));</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="kd">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">entry</span><span class="p">.</span><span class="na">getVersion</span><span class="p">();</span><span class="w"></span>
-<span class="w">            </span><span class="n">entry</span><span class="p">.</span><span class="na">setVersion</span><span class="p">(</span><span class="n">ver</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">update</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ConcurrentModificationException</span><span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="na">format</span><span class="p">(</span><span class="w"></span>
-<span class="w">                        </span><span class="s">&quot;Concurrent modification for object %s %s version %s&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">                        </span><span class="n">entry</span><span class="p">.</span><span class="na">getClass</span><span class="p">().</span><span class="na">getName</span><span class="p">(),</span><span class="w"> </span><span class="n">entry</span><span class="p">.</span><span class="na">getId</span><span class="p">(),</span><span class="w"> </span><span class="n">ver</span><span class="p">));</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">entry</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">entry</span><span class="p">);</span><span class="w"></span>
-
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">entry</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</code></pre></div>
-<div class="admonition note">
-<p>You don't necessarily need to use <code>Crud</code> - it's an advanced usage example.</p>
-</div>
-<p>The repository is annotated with <code>@InTransaction</code> to allow direct usage; repository method calls are the smallest transaction scope. 
-The transaction scope can be enlarged by using annotations on calling guice beans or 
-<a href="../../extras/jdbi/#manual-transaction-definition">declaring transactions manually</a>.
-In order to better understand how transactions work, read the <a href="../../extras/jdbi/#unit-of-work">unit of work docs section</a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code>@InTransaction</code> is handled with guice AOP, so you can use any other guice aop related features.</p>
-</div>
-<div class="admonition attention">
-<p class="admonition-title">Attention</p>
-<p>Constructor injection is impossible in repositories, but you can use field injections:
-<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="nd">@Inject</span><span class="w"></span>
-<span class="w"> </span><span class="kd">private</span><span class="w"> </span><span class="n">RandomNameGenerator</span><span class="w"> </span><span class="n">generator</span><span class="p">;</span><span class="w"></span>
-</code></pre></div></p>
-</div>
-<h2 id="result-set-mapper">Result set mapper<a class="headerlink" href="#result-set-mapper" title="Permanent link">&para;</a></h2>
-<p>Result set mapper is used to map query result set to entity: </p>
-<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserMapper</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ResultSetMapper</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-
-<span class="w">    </span><span class="nd">@Override</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="nf">map</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">ResultSet</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">StatementContext</span><span class="w"> </span><span class="n">ctx</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">SQLException</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">User</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">User</span><span class="p">();</span><span class="w"></span>
-<span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="na">setId</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="na">getLong</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">));</span><span class="w"></span>
-<span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="na">setVersion</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="na">getInt</span><span class="p">(</span><span class="s">&quot;version&quot;</span><span class="p">));</span><span class="w"></span>
-<span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="na">setName</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="na">getString</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">));</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">user</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</code></pre></div>
-<p>Mappers are installed with the <a href="../../extras/jdbi/#result-set-mapper">mapper installer</a>.
-If auto scan is enabled then all mappers will be detected automatically and registered in the dbi instance.
-Mappers are instantiated as normal guice beans without restrictions which means you can use injection and aop 
-(it's only not shown in example mapper).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The mapper installer mostly automates (and unifies) registration. If your mapper does not need to be guice bean
-and you dont want to use auto configuration then you can register it manually in dbi instance, making it available for injection.</p>
-</div>
-<p>Also, see complementing binding annotation, used to bind object to query parameters:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@BindingAnnotation</span><span class="p">(</span><span class="n">UserBind</span><span class="p">.</span><span class="na">UserBinder</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="nd">@Retention</span><span class="p">(</span><span class="n">RetentionPolicy</span><span class="p">.</span><span class="na">RUNTIME</span><span class="p">)</span><span class="w"></span>
-<span class="nd">@Target</span><span class="p">(</span><span class="n">ElementType</span><span class="p">.</span><span class="na">PARAMETER</span><span class="p">)</span><span class="w"></span>
-<span class="kd">public</span><span class="w"> </span><span class="nd">@interface</span><span class="w"> </span><span class="n">UserBind</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-
-<span class="w">    </span><span class="kd">class</span> <span class="nc">UserBinder</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">BinderFactory</span><span class="o">&lt;</span><span class="n">UserBind</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">        </span><span class="nd">@Override</span><span class="w"></span>
-<span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Binder</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="n">UserBind</span><span class="w"> </span><span class="n">annotation</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">Binder</span><span class="o">&lt;</span><span class="n">UserBind</span><span class="p">,</span><span class="w"> </span><span class="n">User</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="n">bind</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                </span><span class="n">q</span><span class="p">.</span><span class="na">bind</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">.</span><span class="na">getId</span><span class="p">())</span><span class="w"></span>
-<span class="w">                        </span><span class="p">.</span><span class="na">bind</span><span class="p">(</span><span class="s">&quot;version&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">.</span><span class="na">getVersion</span><span class="p">())</span><span class="w"></span>
-<span class="w">                        </span><span class="p">.</span><span class="na">bind</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">arg</span><span class="p">.</span><span class="na">getName</span><span class="p">());</span><span class="w"></span>
-<span class="w">            </span><span class="p">};</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">credentials</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">AuthenticationException</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">fromNullable</span><span class="p">(</span><span class="s">&quot;valid&quot;</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="n">credentials</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">User</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span><span class="w">        </span><span class="p">}</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="nd">@Singleton</span><span class="w"></span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserAuthorizer</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Authorizer</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nd">@Override</span><span class="w"></span>
+<span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">authorize</span><span class="p">(</span><span class="n">User</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">role</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">user</span><span class="p">.</span><span class="na">getName</span><span class="p">().</span><span class="na">equals</span><span class="p">(</span><span class="s">&quot;good-guy&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">role</span><span class="p">.</span><span class="na">equals</span><span class="p">(</span><span class="s">&quot;ADMIN&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w">   </span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<p>See <code>@UserBind</code> usage above in repository definition.</p>
-<p>There is no custom installer for annotation because it's detected automatically by DBI.  </p>
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<p>Repositories are used as normal guice beans:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Path</span><span class="p">(</span><span class="s">&quot;/users&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="nd">@Produces</span><span class="p">(</span><span class="s">&quot;application/json&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">UserResource</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<p>The class is automatically picked up by the <a href="../../installers/jersey-ext/#dynamicfeature">jersey installer</a>.
+<code>OAuthAuthenticator</code> and <code>OAuthAuthorizer</code> are simple guice beans (no special installation required).</p>
+<p>Constructor injection is used to obtain required guice managed instances and then configure
+authentication the same way as described in dropwizard docs.</p>
+<p>If autoconfiguration is enabled, then the class will be resolved and installed automatically.</p>
+<div class="admonition note">
+<p>Complete <a href="https://github.com/xvik/dropwizard-guicey/tree/master/examples/integration-auth">OAuth example source</a></p>
+</div>
+<h2 id="chained-auth">Chained auth<a class="headerlink" href="#chained-auth" title="Permanent link">&para;</a></h2>
+<p><a href="https://www.dropwizard.io/en/release-3.0.x/manual/auth.html#chained-factories">Chained auth</a> can be used to support different authentication schemes.</p>
+<p>Integration approach is the same as in simple case:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Provider</span><span class="w"></span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ChainedAuthDynamicFeature</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AuthDynamicFeature</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
 <span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">UserRepository</span><span class="w"> </span><span class="n">repository</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">ChainedAuthDynamicFeature</span><span class="p">(</span><span class="n">BasicAuthenticator</span><span class="w"> </span><span class="n">basicAuthenticator</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                      </span><span class="n">OAuthAuthenticator</span><span class="w"> </span><span class="n">oauthAuthenticator</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                                      </span><span class="n">UserAuthorizer</span><span class="w"> </span><span class="n">authorizer</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                                      </span><span class="n">Environment</span><span class="w"> </span><span class="n">environment</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ChainedAuthFilter</span><span class="p">(</span><span class="n">Arrays</span><span class="p">.</span><span class="na">asList</span><span class="p">(</span><span class="w"></span>
+<span class="w">                </span><span class="k">new</span><span class="w"> </span><span class="n">BasicCredentialAuthFilter</span><span class="p">.</span><span class="na">Builder</span><span class="o">&lt;&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="w">                            </span><span class="p">.</span><span class="na">setAuthenticator</span><span class="p">(</span><span class="n">basicAuthenticator</span><span class="p">)</span><span class="w"></span>
+<span class="w">                            </span><span class="p">.</span><span class="na">setAuthorizer</span><span class="p">(</span><span class="n">authorizer</span><span class="p">)</span><span class="w"></span>
+<span class="w">                            </span><span class="p">.</span><span class="na">setPrefix</span><span class="p">(</span><span class="s">&quot;Basic&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                            </span><span class="p">.</span><span class="na">buildAuthFilter</span><span class="p">(),</span><span class="w"></span>
+<span class="w">                </span><span class="k">new</span><span class="w"> </span><span class="n">OAuthCredentialAuthFilter</span><span class="p">.</span><span class="na">Builder</span><span class="o">&lt;&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="w">                            </span><span class="p">.</span><span class="na">setAuthenticator</span><span class="p">(</span><span class="n">oauthAuthenticator</span><span class="p">)</span><span class="w"></span>
+<span class="w">                            </span><span class="p">.</span><span class="na">setAuthorizer</span><span class="p">(</span><span class="n">authorizer</span><span class="p">)</span><span class="w"></span>
+<span class="w">                            </span><span class="p">.</span><span class="na">setPrefix</span><span class="p">(</span><span class="s">&quot;Bearer&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                            </span><span class="p">.</span><span class="na">buildAuthFilter</span><span class="p">()</span><span class="w"></span>
+<span class="w">        </span><span class="p">)));</span><span class="w">                </span>
 
-<span class="w">    </span><span class="nd">@POST</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Path</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">User</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">User</span><span class="p">();</span><span class="w"></span>
-<span class="w">        </span><span class="n">user</span><span class="p">.</span><span class="na">setName</span><span class="p">(</span><span class="n">name</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">repository</span><span class="p">.</span><span class="na">save</span><span class="p">(</span><span class="n">user</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">environment</span><span class="p">.</span><span class="na">jersey</span><span class="p">().</span><span class="na">register</span><span class="p">(</span><span class="n">RolesAllowedDynamicFeature</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">environment</span><span class="p">.</span><span class="na">jersey</span><span class="p">().</span><span class="na">register</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">AuthValueFactoryProvider</span><span class="p">.</span><span class="na">Binder</span><span class="p">(</span><span class="n">User</span><span class="p">.</span><span class="na">class</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w">   </span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h2 id="polymorphic-auth">Polymorphic auth<a class="headerlink" href="#polymorphic-auth" title="Permanent link">&para;</a></h2>
+<p><a href="https://www.dropwizard.io/en/release-3.0.x/manual/auth.html#multiple-principals-and-authenticators">Polymorphic auth</a> allows using different auth schemes simultaneously.</p>
+<p>Integration approach is the same as in simple case:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Provider</span><span class="w"></span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">PolyAuthDynamicFeature</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">PolymorphicAuthDynamicFeature</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
-<span class="w">    </span><span class="nd">@GET</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Path</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">User</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">findAll</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">repository</span><span class="p">.</span><span class="na">findAll</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Inject</span><span class="w"></span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="nf">PolyAuthDynamicFeature</span><span class="p">(</span><span class="n">BasicAuthenticator</span><span class="w"> </span><span class="n">basicAuthenticator</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="n">OauthAuthenticator</span><span class="w"> </span><span class="n">oauthAuthenticator</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="n">UserAuthorizer</span><span class="w"> </span><span class="n">authorizer</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                   </span><span class="n">Environment</span><span class="w"> </span><span class="n">environment</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kd">super</span><span class="p">(</span><span class="n">ImmutableMap</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="w"></span>
+<span class="w">                  </span><span class="n">BasicPrincipal</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BasicCredentialAuthFilter</span><span class="p">.</span><span class="na">Builder</span><span class="o">&lt;</span><span class="n">BasicPrincipal</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="w">                                                </span><span class="p">.</span><span class="na">setAuthenticator</span><span class="p">(</span><span class="n">basicAuthenticator</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                                </span><span class="p">.</span><span class="na">setAuthorizer</span><span class="p">(</span><span class="n">authorizer</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                                </span><span class="p">.</span><span class="na">setRealm</span><span class="p">(</span><span class="s">&quot;SUPER SECRET STUFF&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                                </span><span class="p">.</span><span class="na">buildAuthFilter</span><span class="p">(),</span><span class="w"></span>
+<span class="w">                  </span><span class="n">OAuthPrincipal</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">OAuthCredentialAuthFilter</span><span class="p">.</span><span class="na">Builder</span><span class="o">&lt;</span><span class="n">OAuthPrincipal</span><span class="o">&gt;</span><span class="p">()</span><span class="w"></span>
+<span class="w">                                                </span><span class="p">.</span><span class="na">setAuthenticator</span><span class="p">(</span><span class="n">oauthAuthenticator</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                                </span><span class="p">.</span><span class="na">setAuthorizer</span><span class="p">(</span><span class="n">authorizer</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                                </span><span class="p">.</span><span class="na">setPrefix</span><span class="p">(</span><span class="s">&quot;Bearer&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                                </span><span class="p">.</span><span class="na">buildAuthFilter</span><span class="p">()));</span><span class="w">             </span>
+
+<span class="w">        </span><span class="kd">final</span><span class="w"> </span><span class="n">AbstractBinder</span><span class="w"> </span><span class="n">binder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PolymorphicAuthValueFactoryProvider</span><span class="p">.</span><span class="na">Binder</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="w"></span>
+<span class="w">            </span><span class="n">ImmutableSet</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">BasicPrincipal</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">OAuthPrincipal</span><span class="p">.</span><span class="na">class</span><span class="p">));</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">environment</span><span class="p">.</span><span class="na">jersey</span><span class="p">().</span><span class="na">register</span><span class="p">(</span><span class="n">binder</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">environment</span><span class="p">.</span><span class="na">jersey</span><span class="p">().</span><span class="na">register</span><span class="p">(</span><span class="n">RolesAllowedDynamicFeature</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<p><code>UserMapper</code> and <code>UserBind</code> are used implicitly to convert the POJO into a db record and back.</p>
-<p>You can use <code>@InTransaction</code> on repository method to enlarge transaction scope, but, in contrast
-to hibernate you dont't have to always declare it to avoid lazy initialization exception 
-(because jdbi produces simple pojos).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code>@InTrasaction</code> is named to avoid confusion with the commonly used <code>@Transactional</code> annotation.
-You <a href="../../extras/jdbi/#intransaction">can bind any annotation class</a> if you like to use a different name (the annotation is just a marker)</p>
-</div>
 
 
   
@@ -2182,7 +2036,7 @@ You <a href="../../extras/jdbi/#intransaction">can bind any annotation class</a>
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../eventbus/" class="md-footer__link md-footer__link--prev" aria-label="Previous: EventBus" rel="prev">
+        <a href="../../extras/validation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Validation" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -2191,20 +2045,20 @@ You <a href="../../extras/jdbi/#intransaction">can bind any annotation class</a>
               <span class="md-footer__direction">
                 Previous
               </span>
-              EventBus
+              Validation
             </div>
           </div>
         </a>
       
       
         
-        <a href="../jdbi3/" class="md-footer__link md-footer__link--next" aria-label="Next: JDBI3" rel="next">
+        <a href="../governator/" class="md-footer__link md-footer__link--next" aria-label="Next: Governator" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              JDBI3
+              Governator
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -2219,7 +2073,7 @@ You <a href="../../extras/jdbi/#intransaction">can bind any annotation class</a>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2014-2022 Vyacheslav Rusakov
+      Copyright &copy; 2014-2023 Vyacheslav Rusakov
     </div>
   
   

@@ -12,7 +12,7 @@
         <meta name="author" content="Vyacheslav Rusakov">
       
       
-        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/5.7.1/examples/authentication/">
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/6.0.0/examples/authentication/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
@@ -1498,20 +1498,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extras/jdbi/" class="md-nav__link">
-        JDBI
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../extras/jdbi3/" class="md-nav__link">
         JDBI3
       </a>
@@ -1715,20 +1701,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../jdbi/" class="md-nav__link">
-        JDBI
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../jdbi3/" class="md-nav__link">
         JDBI3
       </a>
@@ -1793,6 +1765,20 @@
     <li class="md-nav__item">
       <a href="../../about/compatibility/" class="md-nav__link">
         Compatibility
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/migration/" class="md-nav__link">
+        Migration guide
       </a>
     </li>
   
@@ -1908,16 +1894,16 @@
                 
                   
 
-  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/examples/authentication.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/dropwizard-guicey/src/doc/docs/examples/authentication.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
 <h1 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h1>
-<p>Example of <a href="https://www.dropwizard.io/en/release-2.0.x/manual/auth.html">dropwizard authentication</a> usage with guice.</p>
+<p>Example of <a href="https://www.dropwizard.io/en/release-3.0.x/manual/auth.html">dropwizard authentication</a> usage with guice.</p>
 <h2 id="simple-auth">Simple auth<a class="headerlink" href="#simple-auth" title="Permanent link">&para;</a></h2>
-<p>Using <a href="https://www.dropwizard.io/en/release-2.0.x/manual/auth.html#oauth2">dropwizard oauth</a> example as basement.
+<p>Using <a href="https://www.dropwizard.io/en/release-3.0.x/manual/auth.html#oauth2">dropwizard oauth</a> example as basement.
 Other auth types are configured in similar way.</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@Provider</span><span class="w"></span>
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">OAuthDynamicFeature</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AuthDynamicFeature</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -1959,12 +1945,12 @@ Other auth types are configured in similar way.</p>
 <code>OAuthAuthenticator</code> and <code>OAuthAuthorizer</code> are simple guice beans (no special installation required).</p>
 <p>Constructor injection is used to obtain required guice managed instances and then configure
 authentication the same way as described in dropwizard docs.</p>
-<p>If auto configuration is enabled, then the class will be resolved and installed automatically.</p>
+<p>If autoconfiguration is enabled, then the class will be resolved and installed automatically.</p>
 <div class="admonition note">
-<p>Complete <a href="https://github.com/xvik/dropwizard-guicey-examples/tree/master/integration-auth">OAuth example source</a></p>
+<p>Complete <a href="https://github.com/xvik/dropwizard-guicey/tree/master/examples/integration-auth">OAuth example source</a></p>
 </div>
 <h2 id="chained-auth">Chained auth<a class="headerlink" href="#chained-auth" title="Permanent link">&para;</a></h2>
-<p><a href="https://www.dropwizard.io/en/release-2.0.x/manual/auth.html#chained-factories">Chained auth</a> can be used to support different authentication schemes.</p>
+<p><a href="https://www.dropwizard.io/en/release-3.0.x/manual/auth.html#chained-factories">Chained auth</a> can be used to support different authentication schemes.</p>
 <p>Integration approach is the same as in simple case:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@Provider</span><span class="w"></span>
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ChainedAuthDynamicFeature</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">AuthDynamicFeature</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -1993,7 +1979,7 @@ authentication the same way as described in dropwizard docs.</p>
 <span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h2 id="polymorphic-auth">Polymorphic auth<a class="headerlink" href="#polymorphic-auth" title="Permanent link">&para;</a></h2>
-<p><a href="https://www.dropwizard.io/en/release-2.0.x/manual/auth.html#multiple-principals-and-authenticators">Polymorphic auth</a> allows using different auth schemes simultaneously.</p>
+<p><a href="https://www.dropwizard.io/en/release-3.0.x/manual/auth.html#multiple-principals-and-authenticators">Polymorphic auth</a> allows using different auth schemes simultaneously.</p>
 <p>Integration approach is the same as in simple case:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@Provider</span><span class="w"></span>
 <span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">PolyAuthDynamicFeature</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">PolymorphicAuthDynamicFeature</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -2087,7 +2073,7 @@ authentication the same way as described in dropwizard docs.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2014-2022 Vyacheslav Rusakov
+      Copyright &copy; 2014-2023 Vyacheslav Rusakov
     </div>
   
   

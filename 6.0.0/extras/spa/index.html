@@ -12,14 +12,14 @@
         <meta name="author" content="Vyacheslav Rusakov">
       
       
-        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/5.7.1/extras/jdbi/">
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/6.0.0/extras/spa/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
     
     
       
-        <title>JDBI - Dropwizard-guicey</title>
+        <title>SPA - Dropwizard-guicey</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#jdbi-integration" class="md-skip">
+        <a href="#single-page-applications-support" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              JDBI
+              SPA
             
           </span>
         </div>
@@ -1498,6 +1498,20 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../jdbi3/" class="md-nav__link">
+        JDBI3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -1510,12 +1524,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          JDBI
+          SPA
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        JDBI
+        SPA
       </a>
       
         
@@ -1534,6 +1548,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#problem" class="md-nav__link">
+    Problem
+  </a>
+  
+    <nav class="md-nav" aria-label="Problem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solution" class="md-nav__link">
+    Solution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#setup" class="md-nav__link">
     Setup
   </a>
@@ -1549,69 +1583,21 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#unit-of-work" class="md-nav__link">
-    Unit of work
-  </a>
-  
-    <nav class="md-nav" aria-label="Unit of work">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#intransaction" class="md-nav__link">
-    @InTransaction
+  <a href="#index-page" class="md-nav__link">
+    Index page
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#context-handle" class="md-nav__link">
-    Context Handle
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#manual-transaction-definition" class="md-nav__link">
-    Manual transaction definition
+  <a href="#prevent-redirect-regex" class="md-nav__link">
+    Prevent redirect regex
   </a>
   
 </li>
         
       </ul>
     </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#repository" class="md-nav__link">
-    Repository
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#result-set-mapper" class="md-nav__link">
-    Result set mapper
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#manual-unit-of-work-definition" class="md-nav__link">
-    Manual unit of work definition
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#migration-to-jdbi3" class="md-nav__link">
-    Migration to jdbi3
-  </a>
   
 </li>
       
@@ -1619,34 +1605,6 @@
   
 </nav>
       
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../jdbi3/" class="md-nav__link">
-        JDBI3
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../spa/" class="md-nav__link">
-        SPA
-      </a>
     </li>
   
 
@@ -1776,20 +1734,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../examples/jdbi/" class="md-nav__link">
-        JDBI
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../examples/jdbi3/" class="md-nav__link">
         JDBI3
       </a>
@@ -1854,6 +1798,20 @@
     <li class="md-nav__item">
       <a href="../../about/compatibility/" class="md-nav__link">
         Compatibility
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/migration/" class="md-nav__link">
+        Migration guide
       </a>
     </li>
   
@@ -1935,6 +1893,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#problem" class="md-nav__link">
+    Problem
+  </a>
+  
+    <nav class="md-nav" aria-label="Problem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#solution" class="md-nav__link">
+    Solution
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#setup" class="md-nav__link">
     Setup
   </a>
@@ -1950,69 +1928,21 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#unit-of-work" class="md-nav__link">
-    Unit of work
-  </a>
-  
-    <nav class="md-nav" aria-label="Unit of work">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#intransaction" class="md-nav__link">
-    @InTransaction
+  <a href="#index-page" class="md-nav__link">
+    Index page
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#context-handle" class="md-nav__link">
-    Context Handle
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#manual-transaction-definition" class="md-nav__link">
-    Manual transaction definition
+  <a href="#prevent-redirect-regex" class="md-nav__link">
+    Prevent redirect regex
   </a>
   
 </li>
         
       </ul>
     </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#repository" class="md-nav__link">
-    Repository
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#result-set-mapper" class="md-nav__link">
-    Result set mapper
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#manual-unit-of-work-definition" class="md-nav__link">
-    Manual unit of work definition
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#migration-to-jdbi3" class="md-nav__link">
-    Migration to jdbi3
-  </a>
   
 </li>
       
@@ -2030,220 +1960,107 @@
                 
                   
 
-  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/src/doc/docs/extras/jdbi.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/dropwizard-guicey/src/doc/docs/extras/spa.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
-<h1 id="jdbi-integration">JDBI integration<a class="headerlink" href="#jdbi-integration" title="Permanent link">&para;</a></h1>
-<div class="admonition summary">
-<p><a href="https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi">Extensions project</a> module</p>
-</div>
-<div class="admonition warning">
-<p><strong>DEPRECATED</strong>: because jdbi2 dropwizard module is deprecated and moved <a href="https://github.com/dropwizard/dropwizard-jdbi">outside of core modules</a>.
-Migrate <a href="#migration-to-jdbi3">to jdbi3</a> </p>
-</div>
-<p>Integrates <a href="http://jdbi.org/">JDBI2</a> with guice. Based on <a href="https://www.dropwizard.io/en/release-1.3.x/manual/jdbi.html">dropwizard-jdbi</a> integration.</p>
+<h1 id="single-page-applications-support">Single page applications support<a class="headerlink" href="#single-page-applications-support" title="Permanent link">&para;</a></h1>
+<p>Provides a replacement for <a href="https://www.dropwizard.io/en/release-3.0.x/manual/core.html#serving-assets">dropwizard-assets</a> 
+bundle for single page applications (SPA) to properly
+handle html5 client routing.</p>
 <p>Features:</p>
 <ul>
-<li>DBI instance available for injection</li>
-<li>Introduce unit of work concept, which is managed by annotations and guice aop (very like spring's @Transactional)</li>
-<li>Repositories (JDBI proxies for interfaces and abstract classes):<ul>
-<li>installed automatically (when classpath scan enabled)</li>
-<li>are normal guice beans, supporting aop and participating in global (thread bound) transaction.</li>
-<li>no need to compose repositories anymore (e.g. with @CreateSqlObject) to gain single transaction.</li>
+<li>Pure dropwizard bundle, but can be used with guicey bundles </li>
+<li>Build above dropwizard-assets servlet</li>
+<li>Support registration on main and admin contexts</li>
+<li>Multiple apps could be registered</li>
+<li>Sets no-cache headers for index page</li>
+<li>Regex could be used to tune routes detection</li>
 </ul>
-</li>
-<li>Automatic installation for custom <code>ResultSetMapper</code> </li>
-</ul>
-<p>Added installers:</p>
-<ul>
-<li><a href="https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/repository/RepositoryInstaller.java">RepositoryInstaller</a> - sql proxies</li>
-<li><a href="https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/MapperInstaller.java">MapperInstaller</a> - result set mappers  </li>
-</ul>
+<h2 id="problem">Problem<a class="headerlink" href="#problem" title="Permanent link">&para;</a></h2>
+<p>The problem with SPA is html5 routing. For example, suppose your app base url is <code>/app</code>
+and client route url is <code>/app/someroute</code> (before there were no problem because route would
+look like <code>/app/#!/someroute</code>). When user hit refresh (or bookmark) such route, server is actually
+called with route url. Server must recognize it and return index page.</p>
+<p>For example, Angular 2 router use html5 mode my default.</p>
+<h3 id="solution">Solution<a class="headerlink" href="#solution" title="Permanent link">&para;</a></h3>
+<p>The problem consists of two points:</p>
+<ol>
+<li>Correctly process resource calls (css, js, images, etc) and return 404 for missed resources</li>
+<li>Recognize application routes and return index page instead</li>
+</ol>
+<p>Bundles register dropwizard-assets servlet with special filter above it. Filter tries to process
+all incoming urls. This approach grants that all calls to resources will be processed and 
+index page will not be returned instead of resource (solves problem 1).</p>
+<p>If resource is not found - index page returned. To avoid redirection in case of bad resources request,
+filter will redirect only requests accepting 'text/html'. Additional regexp (configurable) 
+is used to recognize most resource calls and avoid redirection (show correct 404).</p>
+<p>From example above, <code>/app/someroute</code> will return index page and <code>/app/css/some.css</code> will return css.
+<code>/app/css/unknown.css</code> will return 404 as resource call will be recognized and css file is not exists.</p>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
-<p><a href="https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-jdbi"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-jdbi.svg?style=flat" /></a></p>
-<p>Avoid version in dependency declaration below if you use <a href="../bom/">extensions BOM</a>. </p>
 <p>Maven:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;dependency&gt;</span>
   <span class="nt">&lt;groupId&gt;</span>ru.vyarus.guicey<span class="nt">&lt;/groupId&gt;</span>
-  <span class="nt">&lt;artifactId&gt;</span>guicey-jdbi<span class="nt">&lt;/artifactId&gt;</span>
-  <span class="nt">&lt;version&gt;</span>5.7.1-1<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>guicey-spa<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>6.0.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div>
 <p>Gradle:</p>
-<div class="highlight"><pre><span></span><code><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;ru.vyarus.guicey:guicey-jdbi:5.7.1-1&#39;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">implementation</span><span class="w"> </span><span class="s1">&#39;ru.vyarus.guicey:guicey-spa:6.0.0&#39;</span><span class="w"></span>
 </code></pre></div>
-<p>See the most recent version in the badge above.</p>
+<p>Omit version if guicey BOM used</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <p>Register bundle:</p>
-<div class="highlight"><pre><span></span><code><span class="n">GuiceBundle</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span><span class="w">        </span>
-<span class="w">        </span><span class="p">.</span><span class="na">bundles</span><span class="p">(</span><span class="n">JdbiBundle</span><span class="p">.</span><span class="o">&lt;</span><span class="n">ConfType</span><span class="o">&gt;</span><span class="n">forDatabase</span><span class="p">((</span><span class="n">conf</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">conf</span><span class="p">.</span><span class="na">getDatabase</span><span class="p">()))</span><span class="w"></span>
-<span class="w">        </span><span class="p">...</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">GuiceBundle</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">.</span><span class="na">bundles</span><span class="p">(</span><span class="n">SpaBundle</span><span class="p">.</span><span class="na">app</span><span class="p">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/app&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">());</span><span class="w"></span>
 </code></pre></div>
-<p>Here default DBI instance will be created from database configuration (much like it's described in 
-<a href="https://www.dropwizard.io/en/release-1.3.x/manual/jdbi.html">dropwizard documentation</a>).</p>
-<p>Or build DBI instance yourself:</p>
-<div class="highlight"><pre><span></span><code><span class="n">JdbiBundle</span><span class="p">.</span><span class="na">forDbi</span><span class="p">((</span><span class="n">conf</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">locateDbi</span><span class="p">())</span><span class="w"></span>
+<p>This will register app with name "app" (name is used to name servlets and filters and must be unique).
+Application files are located in "app" package in classpath (e.g. resources inside jar).
+Application is mapped to root context (note that this will work only if rest is mapped 
+to some sub context: e.g. with <code>server.rootPath: '/rest/*'</code> configuration).</p>
+<div class="highlight"><pre><span></span><code>http://localhost:8080/ -&gt; app index
+http://loclahost:8080/css/app.css -&gt; application resource, located at /app/css/app.css in classpath
+http://localhost:8080/someroute -&gt; application client route - index page returned
 </code></pre></div>
-<h3 id="unit-of-work">Unit of work<a class="headerlink" href="#unit-of-work" title="Permanent link">&para;</a></h3>
-<p>Unit of work concept states for: every database related operation must be performed inside unit of work.</p>
-<p>In DBI such approach was implicit: you were always tied to initial handle. This lead to cumbersome usage of
-sql object proxies: if you create it on-demand it would always create new handle; if you want to combine
-multiple objects in one transaction, you have to always create them manually for each transaction.</p>
-<p>Integration removes these restrictions: dao (repository) objects are normal guice beans and transaction
-scope is controlled by <code>@InTransaction</code> annotation (note that such name was intentional to avoid confusion with
-DBI own's Transaction annotation and more common Transactional annotations).</p>
-<p>At the beginning of unit of work, DBI handle is created and bound to thread (thread local).
-All repositories are simply using this bound handle and so share transaction inside unit of work.</p>
-<h4 id="intransaction">@InTransaction<a class="headerlink" href="#intransaction" title="Permanent link">&para;</a></h4>
-<p>Annotation on method or class declares transactional scope. For example:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span><span class="w"> </span><span class="n">MyDAO</span><span class="w"> </span><span class="n">dao</span><span class="w"></span>
-
-<span class="nd">@InTransaction</span><span class="w"></span>
-<span class="kd">public</span><span class="w"> </span><span class="n">Result</span><span class="w"> </span><span class="nf">doSomething</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">   </span><span class="n">dao</span><span class="p">.</span><span class="na">select</span><span class="p">();</span><span class="w"></span>
-<span class="w">   </span><span class="p">...</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<p>Example registration to admin context:</p>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="na">bundles</span><span class="p">(</span><span class="n">SpaBundle</span><span class="p">.</span><span class="na">adminApp</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/com/mycompany/adminapp/&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/manager&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">());</span><span class="w"></span>
 </code></pre></div>
-<p>Transaction opened before doSomething() method and closed after it. 
-Dao call is also performed inside transaction.
-If exception appears during execution, it's propagated and transaction rolled back.</p>
-<p>Nested annotations are allowed (they simply ignored).</p>
-<p>Note that unit of work is not the same as transaction scope (transaction scope could be less or equal to unit of work). 
-But, for simplicity, you may think of it as the same things, if you always use <code>@InTransaction</code> annotation. </p>
-<p>If required, you may use your own annotation for transaction definition:</p>
-<div class="highlight"><pre><span></span><code><span class="n">JdbiBundle</span><span class="p">.</span><span class="na">forDatabase</span><span class="p">((</span><span class="n">conf</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">conf</span><span class="p">.</span><span class="na">getDatabase</span><span class="p">())</span><span class="w"></span>
-<span class="w">    </span><span class="p">.</span><span class="na">withTxAnnotations</span><span class="p">(</span><span class="n">MyCustomTransactional</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
-</code></pre></div>
-<p>Note that this will override default annotation support. If you want to support multiple annotations then specify
-all of them:</p>
-<div class="highlight"><pre><span></span><code><span class="n">JdbiBundle</span><span class="p">.</span><span class="na">forDatabase</span><span class="p">((</span><span class="n">conf</span><span class="p">,</span><span class="w"> </span><span class="n">env</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">conf</span><span class="p">.</span><span class="na">getDatabase</span><span class="p">())</span><span class="w"></span>
-<span class="w">    </span><span class="p">.</span><span class="na">withTxAnnotations</span><span class="p">(</span><span class="n">InTransaction</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">MyCustomTransactional</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
-</code></pre></div>
-<h4 id="context-handle">Context Handle<a class="headerlink" href="#context-handle" title="Permanent link">&para;</a></h4>
-<p>Inside unit of work you may reference current handle by using:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span><span class="w"> </span><span class="n">Provider</span><span class="o">&lt;</span><span class="n">Handle</span><span class="o">&gt;</span><span class="w"></span>
-</code></pre></div>
-<h4 id="manual-transaction-definition">Manual transaction definition<a class="headerlink" href="#manual-transaction-definition" title="Permanent link">&para;</a></h4>
-<p>You may define transaction (with unit of work) without annotation using:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span><span class="w"> </span><span class="n">TransactionTenpate</span><span class="w"> </span><span class="n">template</span><span class="p">;</span><span class="w"></span>
-<span class="p">...</span><span class="w"></span>
-<span class="n">template</span><span class="p">.</span><span class="na">inTrabsansaction</span><span class="p">((</span><span class="n">handle</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">doSomething</span><span class="p">())</span><span class="w"></span>
-</code></pre></div>
-<p>Note that inside such manual scope you may also call any repository bean, as it's absolutely the same definition as 
-with annotation.</p>
-<h3 id="repository">Repository<a class="headerlink" href="#repository" title="Permanent link">&para;</a></h3>
-<p>Declare repository (interface or abstract class) as usual, using DBI annotations. 
-It only must be annotated with <code>@JdbiRepository</code> so installer
-could recognize it and register in guice context.</p>
-<div class="admonition warning">
-<p>Singleton scope will be forced for repositories.</p>
+<p>Register "admin" application with resources in "/com/mycompany/adminapp/" package, served from "manager" 
+admin context (note that admin root is already used by dropwizard admin servlet).</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Resources location can be declared both as path (<code>/com/mycompany/adminapp/</code>) or as package (<code>com.mycompany.adminapp</code>).</p>
 </div>
-<div class="highlight"><pre><span></span><code><span class="nd">@JdbiRepository</span><span class="w"></span>
-<span class="nd">@InTransaction</span><span class="w"></span>
-<span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">MyRepository</span><span class="w"> </span><span class="p">{</span><span class="w">     </span>
-
-<span class="w">    </span><span class="nd">@SqlQuery</span><span class="p">(</span><span class="s">&quot;select name from something where id = :id&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">String</span><span class="w"> </span><span class="nf">findNameById</span><span class="p">(</span><span class="nd">@Bind</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code>http://localhost:8081/manager -&gt; admin app index
 </code></pre></div>
-<p>Note the use of <code>@InTransaction</code>: it was used to be able to call repository methods without extra annotations
-(the lowest transaction scope it's repository itself). It will make beans "feel the same" as usual DBI on demand
-sql object proxies.</p>
-<p><code>@InTransaction</code> annotation is handled using guice aop. You can use any other guice aop related features.</p>
-<p>You can also use injection inside repositories, but only field injection:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">abstract</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyRepo</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Inject</span><span class="w"> </span><span class="n">SomeBean</span><span class="w"> </span><span class="n">bean</span><span class="p">;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<p>You can register as many apps as you like. They just must use different urls and have different names:</p>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="na">bundles</span><span class="p">(</span><span class="n">SpaBundle</span><span class="p">.</span><span class="na">app</span><span class="p">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/app&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">(),</span><span class="w"></span>
+<span class="w">         </span><span class="n">SpaBundle</span><span class="p">.</span><span class="na">app</span><span class="p">(</span><span class="s">&quot;app2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/app2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">(),</span><span class="w"></span>
+<span class="w">         </span><span class="n">SpaBundle</span><span class="p">.</span><span class="na">adminApp</span><span class="p">(</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/com/mycompany/adminapp/&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/manager&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">(),</span><span class="w"></span>
+<span class="w">         </span><span class="n">SpaBundle</span><span class="p">.</span><span class="na">adminApp</span><span class="p">(</span><span class="s">&quot;admin2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/com/mycompany/adminapp2/&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/manager2&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">());</span><span class="w"></span>
 </code></pre></div>
-<p>Constructor injection is impossible, because DBI sql proxies are still used internally and DBI will not be able
-to construct proxy for class with constructor injection.</p>
-<p><em>Don't use DBI @Transaction and @CreateSqlObject annotations anymore</em>: probably they will even work, but they are not
-needed now and may confuse.</p>
-<p>All installed repositories are reported into console:</p>
-<div class="highlight"><pre><span></span><code>INFO  [2016-12-05 19:42:27,374] ru.vyarus.guicey.jdbi.installer.repository.RepositoryInstaller: repositories = 
-
-    (ru.vyarus.guicey.jdbi.support.repository.SampleRepository)
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you publish SPA application not in the root path, don't forget to set appropriate <code>&lt;base href="/path/"/&gt;</code> tag.
+All modern client side routers rely on it. Pay attention that path in base tag must end with <code>/</code>.</p>
+</div>
+<h3 id="index-page">Index page<a class="headerlink" href="#index-page" title="Permanent link">&para;</a></h3>
+<p>By default, index page assumed to be "index.html". Could be changed with:</p>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="na">bundles</span><span class="p">(</span><span class="n">SpaBundle</span><span class="p">.</span><span class="na">app</span><span class="p">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/app&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">).</span><span class="na">indexPage</span><span class="p">(</span><span class="s">&quot;main.html&quot;</span><span class="p">).</span><span class="na">build</span><span class="p">());</span><span class="w"></span>
 </code></pre></div>
-<h3 id="result-set-mapper">Result set mapper<a class="headerlink" href="#result-set-mapper" title="Permanent link">&para;</a></h3>
-<p>If you have custom implementations of <code>ResultSetMapper</code>, it may be registered automatically. 
-You will be able to use injections there because mappers become ususal guice beans (singletons).
-When classpath scan is enabled, such classes will be searched and installed automatically.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CustomMapper</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">ResutlSetMapper</span><span class="o">&lt;</span><span class="n">Custom</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Override</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">Cusom</span><span class="w"> </span><span class="nf">map</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">row</span><span class="p">,</span><span class="w"> </span><span class="n">ResultSet</span><span class="w"> </span><span class="n">rs</span><span class="p">,</span><span class="w"> </span><span class="n">StatementContext</span><span class="w"> </span><span class="n">ctx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// mapping here</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">custom</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<h3 id="prevent-redirect-regex">Prevent redirect regex<a class="headerlink" href="#prevent-redirect-regex" title="Permanent link">&para;</a></h3>
+<p>By default, the following regex is used to prevent resources redirection (to not send index for missed resource):</p>
+<div class="highlight"><pre><span></span><code>\.(html|css|js|png|jpg|jpeg|gif|ico|xml|rss|txt|eot|svg|ttf|woff|woff2|cur)(\?((r|v|rel|rev)=[\-\.\w]*)?)?$
 </code></pre></div>
-<p>And now Custom type could be used for queries:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@JdbiRepository</span><span class="w"></span>
-<span class="nd">@InTransaction</span><span class="w"></span>
-<span class="kd">public</span><span class="w"> </span><span class="kd">interface</span> <span class="nc">CustomRepository</span><span class="w"> </span><span class="p">{</span><span class="w">     </span>
-
-<span class="w">    </span><span class="nd">@SqlQuery</span><span class="p">(</span><span class="s">&quot;select * from custom where id = :id&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="n">Custom</span><span class="w"> </span><span class="nf">findNameById</span><span class="p">(</span><span class="nd">@Bind</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<p>Could be changed with:</p>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="na">bundles</span><span class="p">(</span><span class="n">SpaBundle</span><span class="p">.</span><span class="na">app</span><span class="p">(</span><span class="s">&quot;app&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/app&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="na">preventRedirectRegex</span><span class="p">(</span><span class="s">&quot;\\.\\w{2,5}(\\?.*)?$&quot;</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">.</span><span class="na">build</span><span class="p">());</span><span class="w"></span>
 </code></pre></div>
-<p>All installed mappers are reported to console:</p>
-<div class="highlight"><pre><span></span><code>INFO  [2016-12-05 20:02:25,399] ru.vyarus.guicey.jdbi.installer.MapperInstaller: jdbi mappers = 
-
-    Sample               (ru.vyarus.guicey.jdbi.support.mapper.SampleMapper)
-</code></pre></div>
-<h2 id="manual-unit-of-work-definition">Manual unit of work definition<a class="headerlink" href="#manual-unit-of-work-definition" title="Permanent link">&para;</a></h2>
-<p>If, for some reason, you don't need transaction at some place, you can declare raw unit of work and use 
-assigned handle directly:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span><span class="w"> </span><span class="n">UnitManager</span><span class="w"> </span><span class="n">manager</span><span class="p">;</span><span class="w"></span>
-
-<span class="n">manager</span><span class="p">.</span><span class="na">beginUnit</span><span class="p">();</span><span class="w"></span>
-<span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">Handle</span><span class="w"> </span><span class="n">handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">manager</span><span class="p">.</span><span class="na">get</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// logic executed in unit of work but without transaction</span><span class="w"></span>
-<span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">manager</span><span class="p">.</span><span class="na">endUnit</span><span class="p">();</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-</code></pre></div>
-<p>Repositories could also be called inside such manual unit (as unit of work is correctly started).</p>
-<h2 id="migration-to-jdbi3">Migration to jdbi3<a class="headerlink" href="#migration-to-jdbi3" title="Permanent link">&para;</a></h2>
-<ul>
-<li>
-<p>Use <a href="../jdbi3/">guicey-jdbi3</a></p>
-</li>
-<li>
-<p>Module package changed from <code>ru.vyarus.guicey.jdbi</code> to <code>ru.vyarus.guicey.jdbi3</code>.</p>
-</li>
-<li>
-<p><code>Jdbi</code> object was previously bind as <code>DBI</code> interface. Now it's bound as <code>Jdbi</code> (as interface was removed in jdbi3).</p>
-</li>
-<li>
-<p>New methods in JdbiBundle:</p>
-<ul>
-<li>withPlugins - install custom plugins</li>
-<li>withConfig - to simplify manual configuration</li>
-</ul>
-</li>
-<li>
-<p>In jdbi3 <code>ResultSetMapper</code> was changed to <code>RowMapper</code> (and ColumnMapper). Installer supports RowMapper automatic installation.</p>
-</li>
-<li>
-<p>If you were using binding annotations then:</p>
-<ul>
-<li><code>@BindingAnnotation</code> -&gt; <code>@SqlStatementCustomizingAnnotation</code></li>
-<li><code>BindingFactory</code> -&gt;  <code>SqlStatementCustomizerFactory</code></li>
-</ul>
-</li>
-<li>
-<p>Sql object proxies must be interfaces now (jdbi3 restriction). But as java 8 interfaces support default methods,
-its not a big problem</p>
-<ul>
-<li>instead of field injection (to access other proxies), now getter annotated with @Inject must be used.</li>
-</ul>
-</li>
-</ul>
-<p>See <a href="http://jdbi.org/#_upgrading_from_v2_to_v3">jdbi3 migration gude</a> for other (pure jdbi related) differences</p>
+<p>This regexp implements naive assumption that all app routes does not contain "extension".</p>
+<p>Note: regexp is applied with <code>find</code> so use <code>^</code> or <code>$</code> to apply boundaries. </p>
 
 
   
@@ -2271,7 +2088,7 @@ its not a big problem</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../eventbus/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Guava EventBus" rel="prev">
+        <a href="../jdbi3/" class="md-footer__link md-footer__link--prev" aria-label="Previous: JDBI3" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -2280,20 +2097,20 @@ its not a big problem</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Guava EventBus
+              JDBI3
             </div>
           </div>
         </a>
       
       
         
-        <a href="../jdbi3/" class="md-footer__link md-footer__link--next" aria-label="Next: JDBI3" rel="next">
+        <a href="../gsp/" class="md-footer__link md-footer__link--next" aria-label="Next: Server Pages" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              JDBI3
+              Server Pages
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -2308,7 +2125,7 @@ its not a big problem</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2014-2022 Vyacheslav Rusakov
+      Copyright &copy; 2014-2023 Vyacheslav Rusakov
     </div>
   
   
