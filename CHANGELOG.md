@@ -1,11 +1,10 @@
+### 6.0.0 (2023-04-02)
 * Update to dropwizard 3
   - (breaking) Drop java 8 support
 * Merged with guicey-ext modules repository: 
   - Ext modules version would be the same as guicey
   - dropwizard-guicey POM would not be a BOM anymore (everything moved to guicey-bom)
   - Exclusions not applied in BOM anymore, instead they applied directly in POM
-
-DW migration guide: https://github.com/dropwizard/dropwizard/blob/release/3.0.x/docs/source/manual/upgrade-notes/upgrade-notes-3_0_x.rst
 
 ### 5.7.1 (2023-03-09)
 * Update to dropwizard 2.1.5
