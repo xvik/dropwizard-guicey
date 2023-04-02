@@ -38,9 +38,6 @@ implementation 'ru.vyarus.guicey:guicey-jdbi3:{{ gradle.version }}'
 
 Omit version if guicey BOM used
 
-!!! note ""
-    [Migration from jdbi2](jdbi.md#migration-to-jdbi3)
-
 ## Usage
 
 Register bundle:

@@ -1,6 +1,6 @@
 # Authentication
 
-Example of [dropwizard authentication](dropwizard.io/en/release-3.0.x/manual/auth.html) usage with guice.
+Example of [dropwizard authentication](https://www.dropwizard.io/en/release-3.0.x/manual/auth.html) usage with guice.
 
 ## Simple auth
 
