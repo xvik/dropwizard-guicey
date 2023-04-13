@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.support.feature
 
-import javax.ws.rs.ext.ContextResolver
+import jakarta.ws.rs.ext.ContextResolver
 
 /**
  * Check other provider type installation.

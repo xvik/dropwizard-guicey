@@ -8,25 +8,25 @@ import org.glassfish.jersey.server.AsyncContext;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider;
 
-import javax.inject.Provider;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.*;
-import javax.ws.rs.ext.Providers;
+import jakarta.inject.Provider;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.ws.rs.container.ResourceInfo;
+import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.ext.Providers;
 
 import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.bindJerseyComponent;
 
 /**
  * Registers important services from jersey context, making them available for injection in guice beans.
  * <ul>
- * <li>{@link javax.ws.rs.core.Application}
- * <li>{@link javax.ws.rs.ext.Providers}
- * <li>{@link javax.ws.rs.core.UriInfo}
- * <li>{@link javax.ws.rs.container.ResourceInfo}
- * <li>{@link javax.ws.rs.core.HttpHeaders}
- * <li>{@link javax.ws.rs.core.SecurityContext}
- * <li>{@link javax.ws.rs.core.Request}
+ * <li>{@link jakarta.ws.rs.core.Application}
+ * <li>{@link jakarta.ws.rs.ext.Providers}
+ * <li>{@link jakarta.ws.rs.core.UriInfo}
+ * <li>{@link jakarta.ws.rs.container.ResourceInfo}
+ * <li>{@link jakarta.ws.rs.core.HttpHeaders}
+ * <li>{@link jakarta.ws.rs.core.SecurityContext}
+ * <li>{@link jakarta.ws.rs.core.Request}
  * <li>{@link org.glassfish.jersey.server.ContainerRequest}
  * <li>{@link org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider}
  * <li>{@link org.glassfish.jersey.server.AsyncContext}</li>

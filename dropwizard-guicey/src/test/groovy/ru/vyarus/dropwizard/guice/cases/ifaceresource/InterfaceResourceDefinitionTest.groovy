@@ -9,9 +9,9 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstal
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.inject.Inject
-import javax.ws.rs.client.Client
-import javax.ws.rs.client.ClientBuilder
+import jakarta.inject.Inject
+import jakarta.ws.rs.client.Client
+import jakarta.ws.rs.client.ClientBuilder
 
 /**
  * @author Vyacheslav Rusakov

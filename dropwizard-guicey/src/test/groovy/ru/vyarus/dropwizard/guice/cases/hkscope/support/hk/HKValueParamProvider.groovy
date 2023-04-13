@@ -6,7 +6,7 @@ import org.glassfish.jersey.server.model.Parameter
 import org.glassfish.jersey.server.spi.internal.ValueParamProvider
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 
-import javax.ws.rs.ext.Provider
+import jakarta.ws.rs.ext.Provider
 import java.util.function.Function
 
 /**

@@ -2,8 +2,8 @@ package ru.vyarus.guicey.gsp.app.filter;
 
 import ru.vyarus.guicey.gsp.app.util.TracelessException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.WebApplicationException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.WebApplicationException;
 
 /**
  * Exception indicates error serving asset (static resource) within {@link ServerPagesFilter}.

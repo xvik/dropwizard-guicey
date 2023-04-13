@@ -8,7 +8,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * By default, GSP errors mechanism intercept errors before {@link javax.ws.rs.ext.ExceptionMapper} and
+ * By default, GSP errors mechanism intercept errors before {@link jakarta.ws.rs.ext.ExceptionMapper} and
  * {@link io.dropwizard.jersey.errors.ErrorEntityWriter} and so their result is ignored. For the majority of cases
  * this is acceptable behaviour because it grants custom error pages. But in some cases, it may be required
  * to use standard mechanisms instead.

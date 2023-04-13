@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.inject.servlet.GuiceFilter;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 import java.io.IOException;
 
 /**

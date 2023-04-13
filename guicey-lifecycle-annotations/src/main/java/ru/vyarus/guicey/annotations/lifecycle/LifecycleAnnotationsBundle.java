@@ -12,10 +12,10 @@ import ru.vyarus.guicey.annotations.lifecycle.module.LifecycleAnnotationsModule;
 /**
  * Bundle enabled usage of lifecycle annotations in guice beans. Supported annotations:
  * <ul>
- * <li>{@link javax.annotation.PostConstruct} - same as {@link io.dropwizard.lifecycle.Managed#start()}</li>
+ * <li>{@link jakarta.annotation.PostConstruct} - same as {@link io.dropwizard.lifecycle.Managed#start()}</li>
  * <li>{@link PostStartup} - called after server startup
  * (dropwizard {@link io.dropwizard.lifecycle.ServerLifecycleListener} used)</li>
- * <li>{@link javax.annotation.PreDestroy} - same as {@link io.dropwizard.lifecycle.Managed#stop()}</li>
+ * <li>{@link jakarta.annotation.PreDestroy} - same as {@link io.dropwizard.lifecycle.Managed#stop()}</li>
  * </ul>
  * <p>
  * The main intention is to replace usages of {@link io.dropwizard.lifecycle.Managed} beans with annotations, because

@@ -4,7 +4,7 @@ import org.jdbi.v3.core.transaction.TransactionException
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel
 import ru.vyarus.guicey.jdbi3.tx.InTransaction
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

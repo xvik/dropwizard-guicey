@@ -80,7 +80,7 @@ public enum InstallersOptions implements Option {
      * <p>
      * When option disabled, qualifier could still be applied manually with
      * {@link org.glassfish.jersey.internal.inject.Custom} annotation on provider class. Or
-     * {@link javax.annotation.Priority} might be used instead (see {@link javax.ws.rs.Priorities} for default
+     * {@link jakarta.annotation.Priority} might be used instead (see {@link jakarta.ws.rs.Priorities} for default
      * priority constants).
      * <p>
      * Option is enabled by default to mimic default dropwizard behaviour (when extensions registered manually).
@@ -89,12 +89,12 @@ public enum InstallersOptions implements Option {
      */
     PrioritizeJerseyExtensions(Boolean.class, true),
     /**
-     * By default, jersey extensions would be recognized by type (e.g. {@link javax.ws.rs.ext.ExceptionMapper})
+     * By default, jersey extensions would be recognized by type (e.g. {@link jakarta.ws.rs.ext.ExceptionMapper})
      * (not only annotated as prvider). But, if you have complex extension hierarchies with non-abstract classes in
      * the middle, classpath scan could recognize "middle" extensions and install them. Or there might be other
      * situation when you need to avoid installation by type.
      * <p>
-     * When disabled, only extensions annotated with {@link javax.ws.rs.ext.Provider} would be recognized
+     * When disabled, only extensions annotated with {@link jakarta.ws.rs.ext.Provider} would be recognized
      * (legacy guicey behaviour).
      */
     JerseyExtensionsRecognizedByType(Boolean.class, true);

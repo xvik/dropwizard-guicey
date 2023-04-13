@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.support.feature.abstr
 
 
-import javax.ws.rs.core.Context
+import jakarta.ws.rs.core.Context
 import java.lang.reflect.Type
 
 /**

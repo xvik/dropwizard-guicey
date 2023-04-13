@@ -19,21 +19,21 @@ wrapper {
 description = 'Dropwizard guice integration'
 
 ext {
-    dropwizard = '3.0.0'
-    guice = '5.1.0'
-    hk2 = '2.6.1'
+    dropwizard = '4.0.0'
+    guice = '5.1.0-rc.1'
+    hk2 = '3.0.3'
     spockJunit5 = '1.2.0'
-    guiceExtAnn = '1.4.1'
-    guiceValidator = '2.0.1'
+    guiceExtAnn = '2.0.1'
+    guiceValidator = '3.0.2'
 }
 
 // root project is a BOM
 dependencies {
-    api platform("com.google.inject:guice-bom:$guice")
+    api platform("ru.vyarus.guice.jakarta:guice-bom:$guice")
     api platform("io.dropwizard:dropwizard-dependencies:$dropwizard")
 
     constraints {
-        api "com.google.inject:guice:$guice"
+        api "ru.vyarus.guice.jakarta:guice:$guice"
         api "org.glassfish.hk2:guice-bridge:$hk2"
         api "ru.vyarus:spock-junit5:$spockJunit5"
 
@@ -120,7 +120,7 @@ subprojects {
         implementation platform(project(':'))
 
         compileOnly 'com.github.spotbugs:spotbugs-annotations:4.7.3'
-        compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+        compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     }
 
     if (project.name != 'dropwizard-guicey') {

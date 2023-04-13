@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.debug.renderer.guice.support.exts;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * @author Vyacheslav Rusakov

@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * then declare extension in {@link org.junit.jupiter.api.extension.RegisterExtension} non-static field instead of
  * annotation.
  * <p>
- * Guice injections will work on test fields annotated with {@link javax.inject.Inject} or
+ * Guice injections will work on test fields annotated with {@link jakarta.inject.Inject} or
  * {@link com.google.inject.Inject} ({@link com.google.inject.Injector#injectMembers(Object)} applied on test instance).
  * Guice AOP will not work on test methods (because test itself is not created by guice).
  * <p>

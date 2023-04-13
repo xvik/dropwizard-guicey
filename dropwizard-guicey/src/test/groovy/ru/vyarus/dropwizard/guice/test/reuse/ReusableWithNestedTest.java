@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStart
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

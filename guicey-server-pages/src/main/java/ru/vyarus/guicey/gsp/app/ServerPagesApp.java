@@ -27,7 +27,7 @@ import ru.vyarus.guicey.gsp.info.model.GspApp;
 import ru.vyarus.guicey.gsp.views.ViewRendererConfigurationModifier;
 import ru.vyarus.guicey.spa.SpaBundle;
 
-import javax.servlet.DispatcherType;
+import jakarta.servlet.DispatcherType;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 

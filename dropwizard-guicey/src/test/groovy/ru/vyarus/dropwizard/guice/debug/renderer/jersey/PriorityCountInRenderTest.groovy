@@ -12,11 +12,11 @@ import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfigRenderer
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.annotation.Priority
-import javax.inject.Inject
-import javax.ws.rs.core.Response
-import javax.ws.rs.ext.ExceptionMapper
-import javax.ws.rs.ext.Provider
+import jakarta.annotation.Priority
+import jakarta.inject.Inject
+import jakarta.ws.rs.core.Response
+import jakarta.ws.rs.ext.ExceptionMapper
+import jakarta.ws.rs.ext.Provider
 
 /**
  * @author Vyacheslav Rusakov

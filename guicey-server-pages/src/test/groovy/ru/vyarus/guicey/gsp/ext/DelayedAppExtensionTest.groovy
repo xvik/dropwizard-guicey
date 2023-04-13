@@ -12,7 +12,7 @@ import ru.vyarus.guicey.gsp.info.GspInfoService
 import ru.vyarus.guicey.gsp.support.app.OverridableTemplateResource
 import ru.vyarus.guicey.gsp.support.app.SubTemplateResource
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

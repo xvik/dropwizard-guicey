@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.support.web.listeners
 
-import javax.servlet.ServletContextAttributeEvent
-import javax.servlet.ServletContextAttributeListener
-import javax.servlet.annotation.WebListener
+import jakarta.servlet.ServletContextAttributeEvent
+import jakarta.servlet.ServletContextAttributeListener
+import jakarta.servlet.annotation.WebListener
 
 /**
  * @author Vyacheslav Rusakov

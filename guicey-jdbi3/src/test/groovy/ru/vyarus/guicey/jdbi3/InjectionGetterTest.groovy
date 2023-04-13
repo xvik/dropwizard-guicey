@@ -5,7 +5,7 @@ import ru.vyarus.guicey.jdbi3.support.repository.CustTxRepository
 import ru.vyarus.guicey.jdbi3.support.repository.LogicfulRepository
 import ru.vyarus.guicey.jdbi3.support.repository.SampleRepository
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.debug.report.guice.model.ModuleDeclaration
 import ru.vyarus.dropwizard.guice.debug.report.guice.util.GuiceModelParser
 import spock.lang.Specification
 
-import javax.inject.Provider
+import jakarta.inject.Provider
 
 /**
  * @author Vyacheslav Rusakov

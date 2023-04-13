@@ -12,7 +12,7 @@ Installs various jersey extensions, usually annotated with jersey `#!java @Provi
 
 ## Recognition
 
-Detects known jersey extension classes and classes annotated with jersey `@javax.ws.rs.ext.Provider` annotation and register their instances in jersey.
+Detects known jersey extension classes and classes annotated with jersey `@jakarta.ws.rs.ext.Provider` annotation and register their instances in jersey.
 
 !!! attention ""
     Extensions registered as **singletons**, when no explicit scope annotation is used.
@@ -36,7 +36,7 @@ Due to specifics of [HK2 integration](lifecycle.md), you may need to use:
 
 * `#!java @JerseyManaged` to delegate bean creation to HK2
 * `#!java @LazyBinding` to delay bean creation to time when all dependencies will be available 
-* `javax.inject.Provider` as universal workaround (to wrap not immediately available dependency).
+* `jakarta.inject.Provider` as universal workaround (to wrap not immediately available dependency).
 
 Or you can enable [HK2 management for jersey extensions by default](../guide/hk2.md#use-hk2-for-jersey-extensions).
 Note that this will affect [resources](resource.md) too and guice aop will not work on jersey extensions.
@@ -64,7 +64,7 @@ org.glassfish.jersey.internal.inject.InjectionManager, java.lang.Class)` which i
     `@Custom` may be used directly in this case on some providers for prioritization. 
 
 `@Priority` annotation may be used for ordering providers. Value should be > 0 (but may be negative, just a convention). 
-For example, 1000 is prioritized before 2000. See `javax.ws.rs.Priorities` for default priority constants.
+For example, 1000 is prioritized before 2000. See `jakarta.ws.rs.Priorities` for default priority constants.
 
 !!! note
     `@Priority` may work differently on `@Custom` qualified providers (all user providers by default)
@@ -91,7 +91,7 @@ public class MySupplier implements Supplier<MyModel> {
 ```
 
 !!! tip ""
-    Suppliers in essence are very like guice (or `javax.inject`) providers (`#!java Provider`).
+    Suppliers in essence are very like guice (or `jakarta.inject`) providers (`#!java Provider`).
 
 !!! warning
     Previously, factories were used as auth objects providers. Now `Function<ContainerRequest, ?>` must be used instead: 
@@ -109,7 +109,7 @@ public class MySupplier implements Supplier<MyModel> {
 
 ### ExceptionMapper
 
-Any class implementing `#!java javax.ws.rs.ext.ExceptionMapper` (or extending abstract class implementing it). 
+Any class implementing `#!java jakarta.ws.rs.ext.ExceptionMapper` (or extending abstract class implementing it). 
 Useful for [error handling customization](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#error-handling).
 
 ```java
@@ -149,7 +149,7 @@ public class AuthFactoryProvider extends AbstractValueParamProvider {
     private final AuthFactory authFactory;
 
     @Inject
-    public AuthFactoryProvider(final javax.inject.Provider<MultivaluedParameterExtractorProvider> extractorProvider,
+    public AuthFactoryProvider(final jakarta.inject.Provider<MultivaluedParameterExtractorProvider> extractorProvider,
                                final AuthFactory factory) {
         super(extractorProvider, Parameter.Source.UNKNOWN);
         this.authFactory = factory;
@@ -194,7 +194,7 @@ class MyObjInjectionResolver implements InjectionResolver<MyObjAnn> {
 
 ### ParamConverterProvider
 
-Any class implementing [`#!java javax.ws.rs.ext.ParamConverterProvider`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ParamConverterProvider.html) (or extending abstract class implementing it).
+Any class implementing [`#!java jakarta.ws.rs.ext.ParamConverterProvider`](https://jakarta.ee/specifications/platform/9/apidocs/jakarta/ws/rs/ext/paramconverterprovider) (or extending abstract class implementing it).
 
 ```java
 public class FooParamConverter implements ParamConverterProvider {
@@ -223,7 +223,7 @@ public class FooParamConverter implements ParamConverterProvider {
 
 ### ContextResolver
 
-Any class implementing [`#!java javax.ws.rs.ext.ContextResolver`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ContextResolver.html) (or extending abstract class implementing it).
+Any class implementing [`#!java jakarta.ws.rs.ext.ContextResolver`](https://jakarta.ee/specifications/platform/9/apidocs/jakarta/ws/rs/ext/contextresolver) (or extending abstract class implementing it).
 
 ```java
 public class MyContextResolver implements ContextResolver<Context> {
@@ -239,7 +239,7 @@ public class MyContextResolver implements ContextResolver<Context> {
 
 ### MessageBodyReader
 
-Any class implementing [`#!java javax.ws.rs.ext.MessageBodyReader`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/MessageBodyReader.html) (or extending abstract class implementing it).
+Any class implementing [`#!java jakarta.ws.rs.ext.MessageBodyReader`](https://jakarta.ee/specifications/platform/9/apidocs/jakarta/ws/rs/ext/messagebodyreader) (or extending abstract class implementing it).
 Useful for [custom representations](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#custom-representations).
 
 ```java
@@ -261,7 +261,7 @@ public class TypeMessageBodyReader implements MessageBodyReader<Type> {
 
 ### MessageBodyWriter
 
-Any class implementing [`#!java javax.ws.rs.ext.MessageBodyWriter`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/MessageBodyWriter.html) (or extending abstract class implementing it).
+Any class implementing [`#!java jakarta.ws.rs.ext.MessageBodyWriter`](https://jakarta.ee/specifications/platform/9/apidocs/jakarta/ws/rs/ext/messagebodywriter) (or extending abstract class implementing it).
 Useful for [custom representations](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#custom-representations).
 
 ```java
@@ -287,7 +287,7 @@ public class TypeMessageBodyWriter implements MessageBodyWriter<Type> {
 
 ### ReaderInterceptor
 
-Any class implementing [`#!java javax.ws.rs.ext.ReaderInterceptor`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/ReaderInterceptor.html) (or extending abstract class implementing it).
+Any class implementing [`#!java jakarta.ws.rs.ext.ReaderInterceptor`](https://jakarta.ee/specifications/platform/9/apidocs/jakarta/ws/rs/ext/readerinterceptor) (or extending abstract class implementing it).
 
 ```java
 public class MyReaderInterceptor implements ReaderInterceptor {
@@ -301,7 +301,7 @@ public class MyReaderInterceptor implements ReaderInterceptor {
 
 ### WriterInterceptor
 
-Any class implementing [`#!java javax.ws.rs.ext.WriterInterceptor`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/ext/WriterInterceptor.html) (or extending abstract class implementing it).
+Any class implementing [`#!java jakarta.ws.rs.ext.WriterInterceptor`](https://jakarta.ee/specifications/platform/9/apidocs/jakarta/ws/rs/ext/writerinterceptor) (or extending abstract class implementing it).
 
 ```java
 public class MyWriterInterceptor implements WriterInterceptor {
@@ -314,7 +314,7 @@ public class MyWriterInterceptor implements WriterInterceptor {
 
 ### ContainerRequestFilter
 
-Any class implementing [`#!java javax.ws.rs.container.ContainerRequestFilter`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/ContainerRequestFilter.html) (or extending abstract class implementing it).
+Any class implementing [`#!java jakarta.ws.rs.container.ContainerRequestFilter`](https://jakarta.ee/specifications/platform/9/apidocs/jakarta/ws/rs/container/containerrequestfilter) (or extending abstract class implementing it).
 Useful for [request modifications](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#jersey-filters).
 
 ```java
@@ -328,7 +328,7 @@ public class MyContainerRequestFilter implements ContainerRequestFilter {
 
 ### ContainerResponseFilter
 
-Any class implementing [`#!java javax.ws.rs.container.ContainerResponseFilter`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/ContainerResponseFilter.html) (or extending abstract class implementing it).
+Any class implementing [`#!java jakarta.ws.rs.container.ContainerResponseFilter`](https://jakarta.ee/specifications/restful-ws/3.0/apidocs/jakarta/ws/rs/container/containerresponsefilter) (or extending abstract class implementing it).
 Useful for [response modifications](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#jersey-filters).
 
 ```java
@@ -342,7 +342,7 @@ public class MyContainerResponseFilter implements ContainerResponseFilter {
 
 ### DynamicFeature
 
-Any class implementing [`#!java javax.ws.rs.container.DynamicFeature`](https://docs.oracle.com/javaee/7/api/javax/ws/rs/container/DynamicFeature.html) (or extending abstract class implementing it).
+Any class implementing [`#!java jakarta.ws.rs.container.DynamicFeature`](https://jakarta.ee/specifications/restful-ws/3.0/apidocs/jakarta/ws/rs/container/dynamicfeature) (or extending abstract class implementing it).
 Useful for conditional [activation of filters](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#jersey-filters).
 
 ```java

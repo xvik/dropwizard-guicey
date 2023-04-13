@@ -12,7 +12,7 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

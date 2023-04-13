@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSuppor
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.DenyServletRegistrationWithClash
 

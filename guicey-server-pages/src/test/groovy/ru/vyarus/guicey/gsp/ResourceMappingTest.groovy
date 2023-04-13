@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import ru.vyarus.guicey.gsp.info.GspInfoService
 import ru.vyarus.guicey.gsp.support.app.SampleTemplateResource
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

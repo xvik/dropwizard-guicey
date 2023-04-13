@@ -9,9 +9,9 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
-import javax.inject.Inject
-import javax.servlet.annotation.WebServlet
-import javax.servlet.http.HttpServlet
+import jakarta.inject.Inject
+import jakarta.servlet.annotation.WebServlet
+import jakarta.servlet.http.HttpServlet
 
 /**
  * @author Vyacheslav Rusakov

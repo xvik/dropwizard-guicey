@@ -11,8 +11,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.module.support.scope.Prototype
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov

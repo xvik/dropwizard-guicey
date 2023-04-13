@@ -10,9 +10,9 @@ import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.inject.Inject
-import javax.ws.rs.core.Response
-import javax.ws.rs.ext.ExceptionMapper
+import jakarta.inject.Inject
+import jakarta.ws.rs.core.Response
+import jakarta.ws.rs.ext.ExceptionMapper
 
 /**
  * @author Vyacheslav Rusakov

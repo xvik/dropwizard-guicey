@@ -41,7 +41,7 @@ public class MyResource {}
 
 ## Singleton
 
-Both `com.google.inject.Singleton` and `javax.inject.Singleton` annotations could be used.
+Both `com.google.inject.Singleton` and `jakarta.inject.Singleton` annotations could be used.
 
 !!! tip
     Prefer declaring `@Singleton` scope on all beans, except cases when different scope is required.     

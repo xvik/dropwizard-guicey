@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.support.web.feature.abstr
 
-import javax.servlet.annotation.WebServlet
-import javax.servlet.http.HttpServlet
+import jakarta.servlet.annotation.WebServlet
+import jakarta.servlet.http.HttpServlet
 
 /**
  * @author Vyacheslav Rusakov 

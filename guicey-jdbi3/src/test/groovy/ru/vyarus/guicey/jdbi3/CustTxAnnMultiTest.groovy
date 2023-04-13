@@ -12,7 +12,7 @@ import ru.vyarus.guicey.jdbi3.support.repository.CustTxRepository
 import ru.vyarus.guicey.jdbi3.support.repository.SampleRepository
 import ru.vyarus.guicey.jdbi3.tx.InTransaction
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov
@@ -55,7 +55,7 @@ class SimpleServerRenderTest extends Specification {
     ADMIN /admin
     ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                                     [REQUEST]       io.dropwizard.jersey.filter.AllowedMethodsFilter-11111111
     ├── servlet    /tasks/*             async   TaskServlet                  (i.d.servlets.tasks)                                                    tasks
-    ├── servlet    /*                   async   AdminServlet                 (c.c.metrics.servlets)                                                  com.codahale.metrics.servlets.AdminServlet-11111111
+    ├── servlet    /*                   async   AdminServlet                 (i.d.metrics.servlets)                                                  io.dropwizard.metrics.servlets.AdminServlet-11111111
     └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)                                                org.eclipse.jetty.servlet.ServletHandler\$Default404Servlet-11111111
 """ as String;
     }

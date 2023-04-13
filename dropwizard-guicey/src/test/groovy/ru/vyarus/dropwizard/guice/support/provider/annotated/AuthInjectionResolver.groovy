@@ -5,8 +5,8 @@ import org.glassfish.jersey.server.internal.inject.ParamInjectionResolver
 import org.glassfish.jersey.server.model.Parameter
 import org.glassfish.jersey.server.spi.internal.ValueParamProvider
 
-import javax.inject.Inject
-import javax.ws.rs.ext.Provider
+import jakarta.inject.Inject
+import jakarta.ws.rs.ext.Provider
 import java.util.function.Function
 
 /**
@@ -17,7 +17,7 @@ import java.util.function.Function
 class AuthInjectionResolver extends ParamInjectionResolver<Auth> {
 
     @Inject
-    AuthInjectionResolver(javax.inject.Provider<ContainerRequest> request, AuthFactory factory) {
+    AuthInjectionResolver(jakarta.inject.Provider<ContainerRequest> request, AuthFactory factory) {
         super(new ParamProvider(factory), AuthFactoryProvider, request)
     }
 

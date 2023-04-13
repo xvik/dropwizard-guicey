@@ -10,7 +10,7 @@ import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 
-import javax.ws.rs.client.WebTarget;
+import jakarta.ws.rs.client.WebTarget;
 
 /**
  * {@link JerseyClient} support for direct web tests (complete dropwizard startup).

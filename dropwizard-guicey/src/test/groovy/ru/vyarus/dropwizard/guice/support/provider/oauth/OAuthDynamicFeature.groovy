@@ -5,12 +5,12 @@ import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter
 import io.dropwizard.core.setup.Environment
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature
 
-import javax.inject.Inject
-import javax.inject.Singleton
-import javax.ws.rs.container.ContainerRequestContext
-import javax.ws.rs.core.Feature
-import javax.ws.rs.core.FeatureContext
-import javax.ws.rs.ext.Provider
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
+import jakarta.ws.rs.container.ContainerRequestContext
+import jakarta.ws.rs.core.Feature
+import jakarta.ws.rs.core.FeatureContext
+import jakarta.ws.rs.ext.Provider
 
 /**
  * @author Vyacheslav Rusakov

@@ -3,9 +3,9 @@ package ru.vyarus.guicey.validation
 import ru.vyarus.guicey.validation.util.RestMethodMatcher
 import spock.lang.Specification
 
-import javax.validation.executable.ValidateOnExecution
-import javax.ws.rs.GET
-import javax.ws.rs.POST
+import jakarta.validation.executable.ValidateOnExecution
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.POST
 
 /**
  * @author Vyacheslav Rusakov

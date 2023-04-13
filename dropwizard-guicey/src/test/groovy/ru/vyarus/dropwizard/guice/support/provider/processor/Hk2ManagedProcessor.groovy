@@ -4,7 +4,7 @@ import org.glassfish.jersey.server.model.ModelProcessor
 import org.glassfish.jersey.server.model.ResourceModel
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 
-import javax.ws.rs.core.Configuration
+import jakarta.ws.rs.core.Configuration
 
 /**
  * @author Vyacheslav Rusakov

@@ -11,11 +11,11 @@ import ru.vyarus.guicey.gsp.ServerPagesBundle
 import ru.vyarus.guicey.gsp.views.template.ManualErrorHandling
 import ru.vyarus.guicey.gsp.views.template.Template
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.core.Response
-import javax.ws.rs.ext.ExceptionMapper
-import javax.ws.rs.ext.Provider
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.core.Response
+import jakarta.ws.rs.ext.ExceptionMapper
+import jakarta.ws.rs.ext.Provider
 
 /**
  * @author Vyacheslav Rusakov

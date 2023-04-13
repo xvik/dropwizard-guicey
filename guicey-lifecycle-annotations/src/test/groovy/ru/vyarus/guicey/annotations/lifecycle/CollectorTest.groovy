@@ -3,7 +3,7 @@ package ru.vyarus.guicey.annotations.lifecycle
 import ru.vyarus.guicey.annotations.lifecycle.module.collector.MethodsCollector
 import spock.lang.Specification
 
-import javax.annotation.PostConstruct
+import jakarta.annotation.PostConstruct
 
 /**
  * @author Vyacheslav Rusakov

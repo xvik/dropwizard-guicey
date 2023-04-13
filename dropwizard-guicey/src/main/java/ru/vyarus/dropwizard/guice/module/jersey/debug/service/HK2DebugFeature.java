@@ -3,10 +3,10 @@ package ru.vyarus.dropwizard.guice.module.jersey.debug.service;
 import org.glassfish.hk2.api.InstanceLifecycleListener;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.ws.rs.core.Feature;
-import javax.ws.rs.core.FeatureContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.ws.rs.core.Feature;
+import jakarta.ws.rs.core.FeatureContext;
 
 /**
  * Jersey feature registers services instantiation tracker.

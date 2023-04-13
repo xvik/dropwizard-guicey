@@ -8,8 +8,8 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
 
-import javax.ws.rs.core.Response
-import javax.ws.rs.ext.ExceptionMapper
+import jakarta.ws.rs.core.Response
+import jakarta.ws.rs.ext.ExceptionMapper
 
 /**
  * @author Vyacheslav Rusakov

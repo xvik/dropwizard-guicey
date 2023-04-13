@@ -9,8 +9,8 @@ import ru.vyarus.dropwizard.guice.support.provider.annotated.Auth
 import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthFactory
 import ru.vyarus.dropwizard.guice.support.provider.annotated.AuthFactoryProvider
 
-import javax.inject.Inject
-import javax.ws.rs.ext.Provider
+import jakarta.inject.Inject
+import jakarta.ws.rs.ext.Provider
 import java.util.function.Function
 
 /**
@@ -21,7 +21,7 @@ import java.util.function.Function
 @JerseyManaged
 class AuthInjectionResolverHK extends ParamInjectionResolver<Auth> {
     @Inject
-    AuthInjectionResolverHK(javax.inject.Provider<ContainerRequest> request, AuthFactory factory) {
+    AuthInjectionResolverHK(jakarta.inject.Provider<ContainerRequest> request, AuthFactory factory) {
         super(new ParamProvider(factory), AuthFactoryProvider, request)
     }
 

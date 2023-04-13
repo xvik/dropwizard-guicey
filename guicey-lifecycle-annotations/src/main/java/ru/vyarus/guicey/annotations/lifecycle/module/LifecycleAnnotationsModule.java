@@ -8,8 +8,8 @@ import ru.vyarus.guicey.annotations.lifecycle.PostStartup;
 import ru.vyarus.guicey.annotations.lifecycle.module.collector.MethodsCollector;
 import ru.vyarus.guicey.annotations.lifecycle.module.collector.SimpleAnnotationProcessor;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import java.lang.annotation.Annotation;
 
 /**

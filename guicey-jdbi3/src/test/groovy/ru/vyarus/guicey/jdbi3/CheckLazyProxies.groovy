@@ -3,7 +3,7 @@ package ru.vyarus.guicey.jdbi3
 import com.google.inject.name.Named
 import ru.vyarus.guicey.jdbi3.installer.repository.sql.SqlObjectProvider
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

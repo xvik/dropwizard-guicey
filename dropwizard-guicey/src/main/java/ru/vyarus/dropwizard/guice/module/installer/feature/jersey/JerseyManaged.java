@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * <p>
  * Guice context is started before HK2, but HK2 related bindings (using service locator instance) will appear
  * in guice context only after HK2 context creation. So if bean directly depends on HK2 services
- * (dependencies can't be wrapped with {@link javax.inject.Provider}, there is no way to properly create
+ * (dependencies can't be wrapped with {@link jakarta.inject.Provider}, there is no way to properly create
  * it in guice context.
  * <p>
  * Good examples for this are {@link org.glassfish.jersey.server.internal.inject.AbstractValueParamProvider}
@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
  * <p>
  * Still guice bindings could be used in HK2 managed bean (especially other extensions, installed by
  * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.provider.JerseyProviderInstaller}.
- * In case of problems with lifecycle, simply use {@link javax.inject.Provider} to wrap actual binding and
+ * In case of problems with lifecycle, simply use {@link jakarta.inject.Provider} to wrap actual binding and
  * delay it's resolution.
  * <p>
  * In fact, using this annotation is the same as registering bean directly in jersey. Installer just

@@ -4,16 +4,16 @@ import com.google.common.base.Preconditions
 import com.google.inject.Inject
 import ru.vyarus.dropwizard.guice.support.feature.DummyService
 
-import javax.servlet.ServletException
-import javax.servlet.http.HttpServlet
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.ServletException
+import jakarta.servlet.http.HttpServlet
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 12.10.2014
  */
-@javax.inject.Singleton
+@jakarta.inject.Singleton
 class DummyServlet extends HttpServlet {
 
     DummyService service

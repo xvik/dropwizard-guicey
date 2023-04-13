@@ -5,7 +5,7 @@ import ru.vyarus.guicey.jdbi3.support.SampleEagerApp
 import ru.vyarus.guicey.jdbi3.support.repository.syntetic.NamedEntity
 import ru.vyarus.guicey.jdbi3.support.repository.syntetic.RootRepo
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

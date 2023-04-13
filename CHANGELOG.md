@@ -1,3 +1,6 @@
+* Update to dropwizard 4
+    - Use custom guice, repackaged for jakarta namespace
+
 ### 6.0.0 (2023-04-02)
 * Update to dropwizard 3
   - (breaking) Drop java 8 support

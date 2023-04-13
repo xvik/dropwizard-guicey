@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @author Vyacheslav Rusakov

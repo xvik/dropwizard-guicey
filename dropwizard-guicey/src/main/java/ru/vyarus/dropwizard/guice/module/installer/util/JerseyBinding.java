@@ -16,9 +16,9 @@ import ru.vyarus.java.generics.resolver.GenericsResolver;
 import ru.vyarus.java.generics.resolver.context.GenericsContext;
 import ru.vyarus.java.generics.resolver.context.container.ParameterizedTypeImpl;
 
-import javax.annotation.Priority;
-import javax.inject.Provider;
-import javax.inject.Singleton;
+import jakarta.annotation.Priority;
+import jakarta.inject.Provider;
+import jakarta.inject.Singleton;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.function.Supplier;

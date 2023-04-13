@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.guicey.gsp.app.filter.redirect.TemplateRedirect;
 import ru.vyarus.guicey.gsp.views.template.TemplateContext;
 
-import javax.inject.Singleton;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.ext.Provider;
+import jakarta.inject.Singleton;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.ext.Provider;
 
 /**
  * Application listener for template processing exceptions detection. Listener use request listener for template

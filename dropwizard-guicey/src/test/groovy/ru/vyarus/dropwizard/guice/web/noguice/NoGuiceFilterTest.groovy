@@ -8,13 +8,13 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.inject.Inject
-import javax.inject.Provider
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.core.SecurityContext
+import jakarta.inject.Inject
+import jakarta.inject.Provider
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.core.SecurityContext
 
 /**
  * @author Vyacheslav Rusakov

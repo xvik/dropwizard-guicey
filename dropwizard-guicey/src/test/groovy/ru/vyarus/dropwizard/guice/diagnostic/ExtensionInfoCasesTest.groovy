@@ -13,8 +13,8 @@ import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
-import javax.inject.Inject
-import javax.ws.rs.Path
+import jakarta.inject.Inject
+import jakarta.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov

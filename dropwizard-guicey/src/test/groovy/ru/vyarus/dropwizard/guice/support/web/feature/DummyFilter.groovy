@@ -3,9 +3,9 @@ package ru.vyarus.dropwizard.guice.support.web.feature
 import com.google.common.base.Preconditions
 import ru.vyarus.dropwizard.guice.support.feature.DummyService
 
-import javax.inject.Inject
-import javax.servlet.*
-import javax.servlet.annotation.WebFilter
+import jakarta.inject.Inject
+import jakarta.servlet.*
+import jakarta.servlet.annotation.WebFilter
 
 /**
  * @author Vyacheslav Rusakov 

@@ -9,7 +9,7 @@ import ru.vyarus.guicey.jdbi3.tx.TxConfig;
 import ru.vyarus.guicey.jdbi3.tx.aop.config.TxConfigFactory;
 import ru.vyarus.guicey.jdbi3.tx.aop.config.TxConfigSupport;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;

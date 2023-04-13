@@ -8,7 +8,7 @@ import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
-import javax.ws.rs.core.Feature;
+import jakarta.ws.rs.core.Feature;
 import java.util.Collections;
 import java.util.List;
 

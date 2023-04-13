@@ -28,7 +28,7 @@ public class GuiceScopingVisitor
     public Class<? extends Annotation> visitScope(final Scope scope) {
         Class<? extends Annotation> res = null;
         if (Scopes.SINGLETON.equals(scope)) {
-            res = javax.inject.Singleton.class;
+            res = jakarta.inject.Singleton.class;
         }
         if (Scopes.NO_SCOPE.equals(scope)) {
             res = Prototype.class;
@@ -46,9 +46,9 @@ public class GuiceScopingVisitor
     @Override
     @SuppressWarnings("unchecked")
     public Class<? extends Annotation> visitScopeAnnotation(final Class scopeAnnotation) {
-        // always return javax.inject annotation to simplify checks
+        // always return jakarta.inject annotation to simplify checks
         if (scopeAnnotation.equals(Singleton.class)) {
-            return javax.inject.Singleton.class;
+            return jakarta.inject.Singleton.class;
         }
         return scopeAnnotation;
     }

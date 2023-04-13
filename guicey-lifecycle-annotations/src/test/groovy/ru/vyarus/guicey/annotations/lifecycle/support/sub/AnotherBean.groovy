@@ -1,6 +1,6 @@
 package ru.vyarus.guicey.annotations.lifecycle.support.sub
 
-import javax.annotation.PostConstruct
+import jakarta.annotation.PostConstruct
 
 /**
  * @author Vyacheslav Rusakov

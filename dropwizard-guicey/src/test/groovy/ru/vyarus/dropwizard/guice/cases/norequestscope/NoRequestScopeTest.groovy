@@ -13,8 +13,8 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.util.BindModule
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.inject.Inject
-import javax.inject.Provider
+import jakarta.inject.Inject
+import jakarta.inject.Provider
 
 /**
  * @author Vyacheslav Rusakov

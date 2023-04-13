@@ -10,7 +10,7 @@ import ru.vyarus.guicey.annotations.lifecycle.support.SampleBean
 import ru.vyarus.guicey.annotations.lifecycle.support.sub.AnotherBean
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

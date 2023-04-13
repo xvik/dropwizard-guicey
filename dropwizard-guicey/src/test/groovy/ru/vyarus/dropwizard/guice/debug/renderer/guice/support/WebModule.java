@@ -3,8 +3,8 @@ package ru.vyarus.dropwizard.guice.debug.renderer.guice.support;
 import com.google.inject.Singleton;
 import com.google.inject.servlet.ServletModule;
 
-import javax.servlet.http.HttpFilter;
-import javax.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpFilter;
+import jakarta.servlet.http.HttpServlet;
 
 /**
  * @author Vyacheslav Rusakov

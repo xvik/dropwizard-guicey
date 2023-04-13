@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.support.web.params
 
-import javax.servlet.ServletConfig
-import javax.servlet.ServletException
-import javax.servlet.annotation.WebInitParam
-import javax.servlet.annotation.WebServlet
-import javax.servlet.http.HttpServlet
+import jakarta.servlet.ServletConfig
+import jakarta.servlet.ServletException
+import jakarta.servlet.annotation.WebInitParam
+import jakarta.servlet.annotation.WebServlet
+import jakarta.servlet.http.HttpServlet
 
 /**
  * @author Vyacheslav Rusakov

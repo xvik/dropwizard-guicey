@@ -24,7 +24,7 @@ import ru.vyarus.guicey.jdbi3.tx.InTransaction;
 import ru.vyarus.guicey.jdbi3.tx.TransactionTemplate;
 import ru.vyarus.guicey.jdbi3.unit.UnitManager;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collections;

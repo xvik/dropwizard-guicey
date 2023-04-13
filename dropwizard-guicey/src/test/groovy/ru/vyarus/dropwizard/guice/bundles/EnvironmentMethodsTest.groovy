@@ -14,8 +14,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.inject.Inject
-import javax.ws.rs.core.FeatureContext
+import jakarta.inject.Inject
+import jakarta.ws.rs.core.FeatureContext
 
 /**
  * @author Vyacheslav Rusakov
@@ -81,7 +81,7 @@ class EnvironmentMethodsTest extends Specification {
     @EagerSingleton
     static class Ext {}
 
-    static class Feature implements javax.ws.rs.core.Feature {
+    static class Feature implements jakarta.ws.rs.core.Feature {
         static int called
 
         @Override
@@ -91,7 +91,7 @@ class EnvironmentMethodsTest extends Specification {
         }
     }
 
-    static class Feature2 implements javax.ws.rs.core.Feature {
+    static class Feature2 implements jakarta.ws.rs.core.Feature {
         static int called
 
         @Override

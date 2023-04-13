@@ -3,8 +3,8 @@ package ru.vyarus.guicey.jdbi3.support
 import io.dropwizard.core.Configuration
 import io.dropwizard.db.DataSourceFactory
 
-import javax.validation.Valid
-import javax.validation.constraints.NotNull
+import jakarta.validation.Valid
+import jakarta.validation.constraints.NotNull
 
 /**
  * @author Vyacheslav Rusakov

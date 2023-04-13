@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.support.web.listeners
 
-import javax.servlet.annotation.WebListener
-import javax.servlet.http.HttpSessionAttributeListener
-import javax.servlet.http.HttpSessionBindingEvent
+import jakarta.servlet.annotation.WebListener
+import jakarta.servlet.http.HttpSessionAttributeListener
+import jakarta.servlet.http.HttpSessionBindingEvent
 
 /**
  * @author Vyacheslav Rusakov

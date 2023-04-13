@@ -4,18 +4,18 @@ import com.google.common.base.Preconditions
 import com.google.inject.Inject
 import ru.vyarus.dropwizard.guice.support.feature.DummyService
 
-import javax.servlet.Filter
-import javax.servlet.FilterChain
-import javax.servlet.FilterConfig
-import javax.servlet.ServletException
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
+import jakarta.servlet.Filter
+import jakarta.servlet.FilterChain
+import jakarta.servlet.FilterConfig
+import jakarta.servlet.ServletException
+import jakarta.servlet.ServletRequest
+import jakarta.servlet.ServletResponse
 
 /**
  * @author Vyacheslav Rusakov 
  * @since 12.10.2014
  */
-@javax.inject.Singleton
+@jakarta.inject.Singleton
 class DummyFilter implements Filter {
 
     DummyService service

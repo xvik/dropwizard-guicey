@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.support.web.feature.abstr
 
-import javax.servlet.Filter
-import javax.servlet.annotation.WebFilter
+import jakarta.servlet.Filter
+import jakarta.servlet.annotation.WebFilter
 
 /**
  * @author Vyacheslav Rusakov 

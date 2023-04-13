@@ -3,8 +3,8 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.web;
 import java.lang.annotation.*;
 
 /**
- * Used together with {@link javax.servlet.annotation.WebServlet},
- * {@link javax.servlet.annotation.WebFilter} and {@link javax.servlet.annotation.WebListener} annotations
+ * Used together with {@link jakarta.servlet.annotation.WebServlet},
+ * {@link jakarta.servlet.annotation.WebFilter} and {@link jakarta.servlet.annotation.WebListener} annotations
  * to specify target context.
  * <p>
  * By default, web extensions target main context. Adding {@code @AdminContext} will mean registration

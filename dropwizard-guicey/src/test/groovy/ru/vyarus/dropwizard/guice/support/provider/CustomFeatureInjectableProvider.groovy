@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.support.provider
 
 import ru.vyarus.dropwizard.guice.support.feature.CustomFeature
 
-import javax.ws.rs.ext.Provider
+import jakarta.ws.rs.ext.Provider
 import java.util.function.Supplier
 
 /**

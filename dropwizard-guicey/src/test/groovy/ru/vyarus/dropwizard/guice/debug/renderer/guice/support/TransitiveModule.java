@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.debug.renderer.guice.support;
 
 import com.google.inject.AbstractModule;
 
-import javax.ws.rs.Path;
+import jakarta.ws.rs.Path;
 
 /**
  * @author Vyacheslav Rusakov

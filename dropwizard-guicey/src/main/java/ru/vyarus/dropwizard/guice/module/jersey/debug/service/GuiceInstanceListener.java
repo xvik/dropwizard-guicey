@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.module.jersey.debug.service;
 import com.google.common.collect.Lists;
 import com.google.inject.spi.ProvisionListener;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.List;
 
 /**

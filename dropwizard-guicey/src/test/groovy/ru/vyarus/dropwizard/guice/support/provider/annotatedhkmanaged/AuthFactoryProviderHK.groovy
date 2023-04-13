@@ -9,8 +9,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.support.provider.annotated.Auth
 import ru.vyarus.dropwizard.guice.support.provider.annotated.User
 
-import javax.inject.Inject
-import javax.ws.rs.ext.Provider
+import jakarta.inject.Inject
+import jakarta.ws.rs.ext.Provider
 import java.util.function.Function
 
 /**
@@ -25,7 +25,7 @@ class AuthFactoryProviderHK extends AbstractValueParamProvider {
     Function<ContainerRequest, User> authFactory;
 
     @Inject
-    public AuthFactoryProviderHK(final javax.inject.Provider<MultivaluedParameterExtractorProvider> extractorProvider,
+    public AuthFactoryProviderHK(final jakarta.inject.Provider<MultivaluedParameterExtractorProvider> extractorProvider,
                                  // also Provider<AuthFactory> could be used
                                  final AuthFactoryHK factory) {
         super(extractorProvider, Parameter.Source.UNKNOWN);

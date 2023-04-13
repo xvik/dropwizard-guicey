@@ -11,11 +11,11 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugServic
 import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.inject.Inject
-import javax.inject.Provider
-import javax.ws.rs.ext.ExceptionMapper
-import javax.ws.rs.ext.ParamConverterProvider
-import javax.ws.rs.ext.Providers
+import jakarta.inject.Inject
+import jakarta.inject.Provider
+import jakarta.ws.rs.ext.ExceptionMapper
+import jakarta.ws.rs.ext.ParamConverterProvider
+import jakarta.ws.rs.ext.Providers
 
 /**
  * @author Vyacheslav Rusakov

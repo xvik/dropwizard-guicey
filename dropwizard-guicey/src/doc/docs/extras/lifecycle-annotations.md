@@ -34,8 +34,8 @@ By default, no setup required: bundle will be loaded automatically with the bund
 So just add jar into classpath and annotations will work.
 
 ```java
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import ru.vyarus.guicey.annotations.lifecycle.PostStartup;
 
 public class SampleBean {    

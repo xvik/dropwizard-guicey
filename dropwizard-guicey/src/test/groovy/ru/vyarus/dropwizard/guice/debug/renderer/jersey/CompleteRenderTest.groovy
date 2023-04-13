@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.debug.report.jersey.JerseyConfigRenderer
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov
@@ -73,7 +73,7 @@ class CompleteRenderTest extends Specification {
         Type                           GuiceMessageBodyReader       (r.v.d.g.c.h.support)
         Type                           HKMessageBodyReader          (r.v.d.g.c.h.s.hk)         *jersey managed
         InputStream                    InputStreamProvider          (o.g.j.m.internal)                       [application/octet-stream, */*]
-        Object                         JacksonJsonProvider          (c.f.j.jaxrs.json)                       [*/*]
+        Object                         JacksonJsonProvider          (c.f.j.j.rs.json)                        [*/*]
         Object                         JacksonMessageBodyProvider   (i.d.jersey.jackson)                     [*/*]
         Reader                         ReaderProvider               (o.g.j.m.internal)                       [text/plain, */*]
         RenderedImage                  RenderedImageProvider        (o.g.j.m.internal)                       [image/*, application/octet-stream]
@@ -107,7 +107,7 @@ class CompleteRenderTest extends Specification {
         Type                           GuiceMessageBodyWriter       (r.v.d.g.c.h.support)
         Type                           HKMessageBodyWriter          (r.v.d.g.c.h.s.hk)         *jersey managed
         InputStream                    InputStreamProvider          (o.g.j.m.internal)                       [application/octet-stream, */*]
-        Object                         JacksonJsonProvider          (c.f.j.jaxrs.json)                       [*/*]
+        Object                         JacksonJsonProvider          (c.f.j.j.rs.json)                        [*/*]
         Object                         JacksonMessageBodyProvider   (i.d.jersey.jackson)                     [*/*]
         OptionalDouble                 OptionalDoubleMessageBodyWriter (i.d.jersey.optional)                 [*/*]
         OptionalInt                    OptionalIntMessageBodyWriter (i.d.jersey.optional)                    [*/*]

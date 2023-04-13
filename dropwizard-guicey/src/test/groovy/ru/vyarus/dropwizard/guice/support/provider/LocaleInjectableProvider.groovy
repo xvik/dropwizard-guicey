@@ -1,9 +1,9 @@
 package ru.vyarus.dropwizard.guice.support.provider
 
 
-import javax.inject.Inject
-import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.ext.Provider
+import jakarta.inject.Inject
+import jakarta.ws.rs.core.HttpHeaders
+import jakarta.ws.rs.ext.Provider
 import java.util.function.Supplier
 
 /**
@@ -17,10 +17,10 @@ class LocaleInjectableProvider implements Supplier<Locale> {
     static int creationCounter = 0
     static int callCounter = 0
 
-    private javax.inject.Provider<HttpHeaders> request;
+    private jakarta.inject.Provider<HttpHeaders> request;
 
     @Inject
-    LocaleInjectableProvider(javax.inject.Provider<HttpHeaders> request) {
+    LocaleInjectableProvider(jakarta.inject.Provider<HttpHeaders> request) {
         creationCounter++
         this.request = request
     }

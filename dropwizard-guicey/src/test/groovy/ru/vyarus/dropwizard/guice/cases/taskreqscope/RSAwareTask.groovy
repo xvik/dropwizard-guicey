@@ -3,9 +3,9 @@ package ru.vyarus.dropwizard.guice.cases.taskreqscope
 
 import io.dropwizard.servlets.tasks.Task
 
-import javax.inject.Inject
-import javax.inject.Provider
-import javax.servlet.http.HttpServletRequest
+import jakarta.inject.Inject
+import jakarta.inject.Provider
+import jakarta.servlet.http.HttpServletRequest
 
 /**
  * @author Vyacheslav Rusakov 

@@ -15,7 +15,7 @@ import spock.lang.Requires
 import spock.lang.Specification
 import spock.util.EmbeddedSpecRunner
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

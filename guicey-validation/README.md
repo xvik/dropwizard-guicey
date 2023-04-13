@@ -35,8 +35,8 @@ So just add jar into classpath and annotations will work.
 For example:
 
 ```java
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import ru.vyarus.guicey.annotations.lifecycle.PostStartup;
 
 public class SampleBean {    

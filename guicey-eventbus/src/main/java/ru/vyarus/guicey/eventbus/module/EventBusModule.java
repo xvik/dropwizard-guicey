@@ -10,7 +10,7 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import ru.vyarus.guicey.eventbus.service.EventSubscribersInfo;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Module binds provided {@link EventBus} instance. Publishers should inject event bus for posting events.

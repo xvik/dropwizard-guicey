@@ -32,7 +32,7 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
 

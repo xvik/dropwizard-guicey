@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 import ru.vyarus.guicey.jdbi3.module.MapperBinder;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.Collections;
 import java.util.List;
 

@@ -7,7 +7,7 @@ import ru.vyarus.dropwizard.guice.support.provider.processor.Hk2ManagedModelApp
 import ru.vyarus.dropwizard.guice.support.provider.processor.Hk2ManagedProcessor
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

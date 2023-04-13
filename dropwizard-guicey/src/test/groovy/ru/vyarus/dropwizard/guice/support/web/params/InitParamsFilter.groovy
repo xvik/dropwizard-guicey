@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.support.web.params
 
-import javax.servlet.*
-import javax.servlet.annotation.WebFilter
-import javax.servlet.annotation.WebInitParam
+import jakarta.servlet.*
+import jakarta.servlet.annotation.WebFilter
+import jakarta.servlet.annotation.WebInitParam
 
 /**
  * @author Vyacheslav Rusakov

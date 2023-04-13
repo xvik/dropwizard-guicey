@@ -3,7 +3,7 @@ package ru.vyarus.guicey.jdbi3.tx.aop.config;
 import ru.vyarus.guicey.jdbi3.tx.InTransaction;
 import ru.vyarus.guicey.jdbi3.tx.TxConfig;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Transactional config support for default {@link InTransaction} annotation.

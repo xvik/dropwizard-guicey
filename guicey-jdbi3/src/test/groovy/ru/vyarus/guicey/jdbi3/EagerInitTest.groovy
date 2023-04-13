@@ -6,7 +6,7 @@ import ru.vyarus.guicey.jdbi3.installer.repository.sql.SqlObjectProvider
 import ru.vyarus.guicey.jdbi3.support.SampleEagerApp
 import ru.vyarus.guicey.jdbi3.support.repository.SampleRepository
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

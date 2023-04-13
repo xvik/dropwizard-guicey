@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
-import javax.ws.rs.Path
+import jakarta.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov

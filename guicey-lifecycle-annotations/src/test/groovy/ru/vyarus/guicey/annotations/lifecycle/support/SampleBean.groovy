@@ -1,7 +1,7 @@
 package ru.vyarus.guicey.annotations.lifecycle.support
 
-import javax.annotation.PostConstruct
-import javax.inject.Singleton
+import jakarta.annotation.PostConstruct
+import jakarta.inject.Singleton
 
 /**
  * @author Vyacheslav Rusakov

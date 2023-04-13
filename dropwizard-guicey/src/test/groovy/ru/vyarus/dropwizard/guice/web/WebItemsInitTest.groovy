@@ -15,7 +15,7 @@ import ru.vyarus.dropwizard.guice.support.web.params.InitParamsServlet
 import ru.vyarus.dropwizard.guice.support.web.params.ServletRegFilter
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.servlet.DispatcherType
+import jakarta.servlet.DispatcherType
 
 /**
  * @author Vyacheslav Rusakov

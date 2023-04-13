@@ -4,7 +4,7 @@ import org.glassfish.jersey.internal.inject.Injectee
 import org.glassfish.jersey.internal.inject.InjectionResolver
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
 
-import javax.ws.rs.ext.Provider
+import jakarta.ws.rs.ext.Provider
 
 /**
  * @author Vyacheslav Rusakov

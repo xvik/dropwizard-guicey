@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

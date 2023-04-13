@@ -8,8 +8,8 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import ru.vyarus.guicey.gsp.views.template.Template
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov

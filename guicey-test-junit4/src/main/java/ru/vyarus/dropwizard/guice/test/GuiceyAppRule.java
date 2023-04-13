@@ -12,7 +12,7 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import org.junit.rules.ExternalResource;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;

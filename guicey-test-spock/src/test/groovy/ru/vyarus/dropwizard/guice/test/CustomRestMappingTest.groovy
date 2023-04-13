@@ -5,8 +5,8 @@ import ru.vyarus.dropwizard.guice.support.AutoScanApplication
 import ru.vyarus.dropwizard.guice.test.spock.UseDropwizardApp
 import spock.lang.Specification
 
-import javax.ws.rs.client.ClientBuilder
-import javax.ws.rs.core.Response
+import jakarta.ws.rs.client.ClientBuilder
+import jakarta.ws.rs.core.Response
 
 /**
  * @author Vyacheslav Rusakov

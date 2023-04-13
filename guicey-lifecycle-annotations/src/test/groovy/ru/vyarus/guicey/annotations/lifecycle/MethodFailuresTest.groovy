@@ -9,8 +9,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.test.TestSupport
 import spock.lang.Specification
 
-import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
 
 /**
  * @author Vyacheslav Rusakov

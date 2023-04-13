@@ -18,8 +18,8 @@ import ru.vyarus.dropwizard.guice.support.util.GuiceRestrictedConfigBundle
 import ru.vyarus.dropwizard.guice.test.EnableHook
 import spock.lang.Specification
 
-import javax.servlet.FilterRegistration
-import javax.servlet.ServletRegistration
+import jakarta.servlet.FilterRegistration
+import jakarta.servlet.ServletRegistration
 
 /**
  * Base class for tests.

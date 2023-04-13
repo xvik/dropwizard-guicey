@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import ru.vyarus.guicey.jdbi3.support.SampleApp
 import ru.vyarus.guicey.jdbi3.support.SampleConfiguration
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

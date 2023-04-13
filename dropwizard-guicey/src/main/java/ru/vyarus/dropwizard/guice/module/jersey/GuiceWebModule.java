@@ -6,7 +6,7 @@ import com.google.inject.servlet.ServletModule;
 import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.internal.AdminGuiceFilter;
 
-import javax.servlet.DispatcherType;
+import jakarta.servlet.DispatcherType;
 import java.util.EnumSet;
 
 /**

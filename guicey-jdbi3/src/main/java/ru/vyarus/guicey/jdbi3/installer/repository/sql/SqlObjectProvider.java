@@ -5,8 +5,8 @@ import org.jdbi.v3.core.TransactionalHandleSupplier;
 import org.jdbi.v3.core.extension.Extensions;
 import org.jdbi.v3.core.extension.NoSuchExtensionException;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 /**
  * Factory re-implements {@code Jdbi.onDemand(Class)} in order to create proxy, using transactional handler

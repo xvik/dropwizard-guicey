@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  * objects will be still executed correctly. Guice injectior is created before all tests in class and shut down
  * after them.
  * <p>
- * Gucie injections will work on test class (just annotate required fields with {@link javax.inject.Inject}.
+ * Gucie injections will work on test class (just annotate required fields with {@link jakarta.inject.Inject}.
  * {@link spock.lang.Shared} may be used to define common injection points for all tests in class.
  * <p>
  * Note: {@code setupSpec()} fixture is called after application start and {@code cleanupSpec()} before

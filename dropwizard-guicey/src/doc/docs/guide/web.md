@@ -36,7 +36,7 @@ public class WebModule extends ServletModule {
 
 ### Web extensions
 
-Extensions declared with standard `javax.servlet` annotations.
+Extensions declared with standard `jakarta.servlet` annotations.
 
 Servlet registration: 
 
@@ -84,7 +84,7 @@ Extension [recognized](../installers/listener.md) by `@WebListener` annotation.
     * Filter may be applied to exact servlet(s) (`#!java @WebFilter(servletNames = "servletName")`)
     * Request, servlet context or session [listeners installation](../installers/listener.md)
 
-If you don't want to use web installers or have problems with it (e.g. because they use `javax.servlet` annotations)
+If you don't want to use web installers or have problems with it (e.g. because they use `jakarta.servlet` annotations)
 you can disable all of them at once by disabling bundle:
 
 ```java

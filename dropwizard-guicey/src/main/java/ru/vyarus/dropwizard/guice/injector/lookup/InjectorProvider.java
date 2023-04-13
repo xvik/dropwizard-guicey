@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.injector.lookup;
 import com.google.inject.Injector;
 import io.dropwizard.core.Application;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 /**
  * Lazy injector provider. Used internally instead of direct injector reference when injector is not constructed yet.

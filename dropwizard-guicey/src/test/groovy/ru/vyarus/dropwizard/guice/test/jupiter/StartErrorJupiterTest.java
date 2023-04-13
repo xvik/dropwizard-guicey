@@ -17,7 +17,7 @@ import uk.org.webcompere.systemstubs.security.SystemExit;
 import uk.org.webcompere.systemstubs.stream.SystemErr;
 import uk.org.webcompere.systemstubs.stream.SystemOut;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @author Vyacheslav Rusakov

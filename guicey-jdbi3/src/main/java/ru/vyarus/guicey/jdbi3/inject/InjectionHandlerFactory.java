@@ -6,7 +6,7 @@ import org.jdbi.v3.core.extension.HandleSupplier;
 import org.jdbi.v3.sqlobject.Handler;
 import org.jdbi.v3.sqlobject.HandlerFactory;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.lang.reflect.Method;
 import java.util.Optional;
 

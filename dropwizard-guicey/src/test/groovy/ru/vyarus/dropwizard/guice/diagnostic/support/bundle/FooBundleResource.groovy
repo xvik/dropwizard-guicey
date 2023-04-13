@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.diagnostic.support.bundle
 
-import javax.ws.rs.Path
+import jakarta.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov

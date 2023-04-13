@@ -2,9 +2,9 @@ package ru.vyarus.dropwizard.guice.debug.renderer.web.support
 
 import com.google.inject.servlet.ServletModule
 
-import javax.inject.Singleton
-import javax.servlet.http.HttpFilter
-import javax.servlet.http.HttpServlet
+import jakarta.inject.Singleton
+import jakarta.servlet.http.HttpFilter
+import jakarta.servlet.http.HttpServlet
 
 /**
  * @author Vyacheslav Rusakov

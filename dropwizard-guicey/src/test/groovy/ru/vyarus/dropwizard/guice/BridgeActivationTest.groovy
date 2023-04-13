@@ -11,9 +11,9 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.test.TestSupport
 import spock.lang.Specification
 
-import javax.inject.Inject
-import javax.ws.rs.GET
-import javax.ws.rs.Path
+import jakarta.inject.Inject
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov

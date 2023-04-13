@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton
 import ru.vyarus.dropwizard.guice.module.support.scope.Prototype
 import spock.lang.Specification
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import java.lang.annotation.Annotation
 
 /**

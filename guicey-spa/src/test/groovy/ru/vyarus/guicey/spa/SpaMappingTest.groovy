@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.ClientSupport
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.ws.rs.core.MediaType
+import jakarta.ws.rs.core.MediaType
 
 /**
  * @author Vyacheslav Rusakov

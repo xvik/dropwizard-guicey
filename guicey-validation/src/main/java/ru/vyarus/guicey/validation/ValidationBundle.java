@@ -11,15 +11,15 @@ import ru.vyarus.guice.validator.ValidationModule;
 import ru.vyarus.guice.validator.aop.DeclaredMethodMatcher;
 import ru.vyarus.guicey.validation.util.RestMethodMatcher;
 
-import javax.validation.Validator;
-import javax.validation.executable.ValidateOnExecution;
-import javax.ws.rs.Path;
+import jakarta.validation.Validator;
+import jakarta.validation.executable.ValidateOnExecution;
+import jakarta.ws.rs.Path;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
  * Validation bundle activates implicit method validations for guice beans. It means that if method have
- * any javax.validtion annotations (contraints for parameters ot return value) then validations would be
+ * any jakarta.validation annotations (contraints for parameters ot return value) then validations would be
  * performed. By default, dropwizard applies validation only to rest resources, this bundle activates validations
  * for all guice beans.
  * <p>
@@ -28,10 +28,10 @@ import java.lang.reflect.Method;
  * <p>
  * See {@link ValidationModule} for more info. Bundle essentially just provide shortcuts for module configurations.
  * <p>
- * Bundle also binds {@link Validator} and {@link javax.validation.executable.ExecutableValidator}, so they become
+ * Bundle also binds {@link Validator} and {@link jakarta.validation.executable.ExecutableValidator}, so they become
  * available for injection. Custom validators may use guice injections.
  * <p>
- * WARNING: do not obtain validator directly from {@link javax.validation.ValidatorFactory} because it will not
+ * WARNING: do not obtain validator directly from {@link jakarta.validation.ValidatorFactory} because it will not
  * be able to wire guice injections for validators requiring it. Module substitute {@link Validator} instance in
  * dropwizard {@link io.dropwizard.core.setup.Environment} so custom guice-aware validators may be used on rest
  * resources too,
@@ -71,7 +71,7 @@ public class ValidationBundle extends UniqueGuiceyBundle {
 
     /**
      * Customize target methods to apply validation on. By default, all methods except annotated with rest
-     * annotations ({@link javax.ws.rs.GET}, link {@link javax.ws.rs.POST}, etc.) are allowed (see
+     * annotations ({@link jakarta.ws.rs.GET}, link {@link jakarta.ws.rs.POST}, etc.) are allowed (see
      * {@link RestMethodMatcher}. Also, synthetic methods avoided.
      * <p>
      * It is better to also exclude synthetic and bridge methods from matching: you can simply add direct method
@@ -120,10 +120,10 @@ public class ValidationBundle extends UniqueGuiceyBundle {
     }
 
     /**
-     * By default, ({@link javax.validation.groups.Default}) group is always added to groups
+     * By default, ({@link jakarta.validation.groups.Default}) group is always added to groups
      * defined with {@link ru.vyarus.guice.validator.group.annotation.ValidationGroups} annotation.
      * <p>
-     * Calling this method disables default behavior: after calling it, {@link javax.validation.groups.Default}
+     * Calling this method disables default behavior: after calling it, {@link jakarta.validation.groups.Default}
      * must be explicitly declared.
      *
      * @return bundle instance

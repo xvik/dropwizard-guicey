@@ -25,7 +25,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListe
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly
 

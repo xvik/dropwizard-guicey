@@ -22,7 +22,7 @@ class NoGuiceDenyServletModuleTest extends Specification {
         TestSupport.runWebApp(DenySMApp, null)
         then: "error"
         def ex = thrown(CreationException)
-        ex.errorMessages[0].message.equals("javax.servlet.http.HttpServletRequest was bound multiple times.")
+        ex.errorMessages[0].message.equals("jakarta.servlet.http.HttpServletRequest was bound multiple times.")
     }
 
     static class DenySMApp extends Application<Configuration> {

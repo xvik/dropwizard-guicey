@@ -10,8 +10,8 @@ import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
 import ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSupport;
 
-import javax.inject.Scope;
-import javax.inject.Singleton;
+import jakarta.inject.Scope;
+import jakarta.inject.Singleton;
 import java.lang.annotation.Annotation;
 
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.ForceSingletonForJerseyExtensions;

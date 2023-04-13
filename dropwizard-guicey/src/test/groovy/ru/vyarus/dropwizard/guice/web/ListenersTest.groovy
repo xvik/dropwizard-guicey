@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListe
 import ru.vyarus.dropwizard.guice.support.web.listeners.ContextListener
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

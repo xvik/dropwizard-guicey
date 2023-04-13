@@ -5,8 +5,8 @@ import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel
 import ru.vyarus.guicey.jdbi3.tx.InTransaction
 
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 /**
  * @author Vyacheslav Rusakov

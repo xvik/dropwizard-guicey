@@ -56,7 +56,7 @@ to control governator lifecycle:
 import io.dropwizard.lifecycle.Managed;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import com.netflix.governator.lifecycle.LifecycleManager;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class GovernatorLifecycle implements Managed {
 

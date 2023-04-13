@@ -5,7 +5,7 @@
 
 ## Recognition
 
-Detects classes implementing `#!java javax.ws.rs.core.Feature` and register their instances in jersey.
+Detects classes implementing `#!java jakarta.ws.rs.core.Feature` and register their instances in jersey.
 
 It may be useful to configure jersey inside guice components:
 

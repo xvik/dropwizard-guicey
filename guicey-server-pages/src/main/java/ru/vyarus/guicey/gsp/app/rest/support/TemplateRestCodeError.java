@@ -2,8 +2,8 @@ package ru.vyarus.guicey.gsp.app.rest.support;
 
 import ru.vyarus.guicey.gsp.app.util.TracelessException;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.container.ContainerRequestContext;
 
 /**
  * Exception indicates error processing template handling rest call, when resource directly return non 200 code

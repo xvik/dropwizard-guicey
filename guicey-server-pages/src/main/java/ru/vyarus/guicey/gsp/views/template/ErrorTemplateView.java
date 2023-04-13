@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Throwables;
 import ru.vyarus.guicey.gsp.app.filter.redirect.ErrorRedirect;
 
-import javax.annotation.Nullable;
-import javax.ws.rs.WebApplicationException;
+import jakarta.annotation.Nullable;
+import jakarta.ws.rs.WebApplicationException;
 import java.nio.charset.Charset;
 
 /**

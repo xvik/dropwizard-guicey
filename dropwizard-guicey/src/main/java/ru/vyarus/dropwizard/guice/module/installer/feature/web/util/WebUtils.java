@@ -3,10 +3,10 @@ package ru.vyarus.dropwizard.guice.module.installer.feature.web.util;
 import com.google.common.base.Strings;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext;
 
-import javax.servlet.Filter;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
+import jakarta.servlet.Filter;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
 
 /**
  * Web installers utilities.

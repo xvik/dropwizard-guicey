@@ -277,7 +277,7 @@ In the eager mode all proxies would be constructed after application initializat
 
 ### Guice beans access
 
-You can access guice beans by annotating getter with `@Inject` (javax or guice):
+You can access guice beans by annotating getter with `@Inject` (jakarta or guice):
 
 ```java
 @JdbiRepository

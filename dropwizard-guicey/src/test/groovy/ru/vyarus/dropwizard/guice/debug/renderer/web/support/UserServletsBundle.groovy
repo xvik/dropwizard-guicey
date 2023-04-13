@@ -4,11 +4,11 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext
 
-import javax.servlet.DispatcherType
-import javax.servlet.annotation.WebFilter
-import javax.servlet.annotation.WebServlet
-import javax.servlet.http.HttpFilter
-import javax.servlet.http.HttpServlet
+import jakarta.servlet.DispatcherType
+import jakarta.servlet.annotation.WebFilter
+import jakarta.servlet.annotation.WebServlet
+import jakarta.servlet.http.HttpFilter
+import jakarta.servlet.http.HttpServlet
 
 /**
  * @author Vyacheslav Rusakov

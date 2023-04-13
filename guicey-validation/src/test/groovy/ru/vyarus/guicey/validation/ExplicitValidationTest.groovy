@@ -8,10 +8,10 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
-import javax.inject.Inject
-import javax.validation.ConstraintViolationException
-import javax.validation.constraints.NotNull
-import javax.validation.executable.ValidateOnExecution
+import jakarta.inject.Inject
+import jakarta.validation.ConstraintViolationException
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.executable.ValidateOnExecution
 
 /**
  * @author Vyacheslav Rusakov

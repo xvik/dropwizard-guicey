@@ -14,7 +14,7 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.guicey.HooksGuiceyTest;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @author Vyacheslav Rusakov

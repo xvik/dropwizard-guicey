@@ -13,7 +13,7 @@ import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

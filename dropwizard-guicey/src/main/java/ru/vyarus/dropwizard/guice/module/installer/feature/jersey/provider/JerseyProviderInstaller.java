@@ -21,10 +21,10 @@ import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.container.DynamicFeature;
-import javax.ws.rs.ext.*;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.ContainerResponseFilter;
+import jakarta.ws.rs.container.DynamicFeature;
+import jakarta.ws.rs.ext.*;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +36,12 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
 
 /**
  * Jersey provider installer.
- * Looks for jersey extension classes and classes annotated with {@link javax.ws.rs.ext.Provider} and register
+ * Looks for jersey extension classes and classes annotated with {@link jakarta.ws.rs.ext.Provider} and register
  * bindings in HK context.
  * <p>
  * Registration by extension type might be disabled using
  * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsRecognizedByType} option
- * (for legacy behaviour - register classed only annotated with {@link javax.ws.rs.ext.Provider}).
+ * (for legacy behaviour - register classed only annotated with {@link jakarta.ws.rs.ext.Provider}).
  * <p>
  * By default, user providers are prioritized (with {@link org.glassfish.jersey.internal.inject.Custom}
  * qualifier). This is the default dropwizard behaviour for direct provider registration with
@@ -53,7 +53,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding.*;
  * guicey versions behaviour). When auto prioritization disabled, {@link org.glassfish.jersey.internal.inject.Custom}
  * annotation may be used directly (to prioritize exact providers).
  * <p>
- * {@link javax.annotation.Priority} may be used to order providers (see {@link javax.ws.rs.Priorities} for
+ * {@link jakarta.annotation.Priority} may be used to order providers (see {@link jakarta.ws.rs.Priorities} for
  * the default priority constants).
  * <p>
  * If provider is annotated with {@link JerseyManaged} it's instance will be created by HK2, not guice.

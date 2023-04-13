@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.bind.Config
 import ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigImpl
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

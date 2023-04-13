@@ -11,9 +11,9 @@ import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBridgeActivator;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.InstallerBinder;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
 
-import javax.inject.Provider;
-import javax.ws.rs.core.Feature;
-import javax.ws.rs.core.FeatureContext;
+import jakarta.inject.Provider;
+import jakarta.ws.rs.core.Feature;
+import jakarta.ws.rs.core.FeatureContext;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyTime;
 

@@ -14,7 +14,7 @@ import ru.vyarus.guicey.eventbus.support.Event1
 import ru.vyarus.guicey.eventbus.support.HasEvents
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

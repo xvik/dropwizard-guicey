@@ -2,7 +2,7 @@ package ru.vyarus.guicey.gsp.views.template;
 
 import ru.vyarus.guicey.gsp.app.rest.support.TemplateAnnotationFilter;
 
-import javax.ws.rs.NameBinding;
+import jakarta.ws.rs.NameBinding;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Template path could also be absolute (in this case it must start with "/" - classpath root).
  * <p>
  * Annotation is also {@link NameBinding}, which allows easily apply filters (
- * {@link javax.ws.rs.container.ContainerRequestFilter} and {@link javax.ws.rs.container.ContainerResponseFilter})
+ * {@link jakarta.ws.rs.container.ContainerRequestFilter} and {@link jakarta.ws.rs.container.ContainerResponseFilter})
  * only for template resources (see {@link TemplateAnnotationFilter} as example).
  *
  * @author Vyacheslav Rusakov

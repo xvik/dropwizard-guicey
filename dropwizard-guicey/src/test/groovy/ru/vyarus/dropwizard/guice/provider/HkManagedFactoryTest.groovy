@@ -12,8 +12,8 @@ import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.inject.Inject
-import javax.ws.rs.ext.Provider
+import jakarta.inject.Inject
+import jakarta.ws.rs.ext.Provider
 import java.util.function.Supplier
 
 /**

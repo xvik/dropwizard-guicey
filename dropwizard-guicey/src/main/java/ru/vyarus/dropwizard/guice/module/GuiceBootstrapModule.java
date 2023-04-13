@@ -15,7 +15,7 @@ import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.scope.Prototype;
 import ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Bootstrap integration guice module.

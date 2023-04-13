@@ -2,10 +2,10 @@ package ru.vyarus.dropwizard.guice.support.web.feature
 
 import ru.vyarus.dropwizard.guice.support.feature.DummyService
 
-import javax.inject.Inject
-import javax.servlet.ServletRequestEvent
-import javax.servlet.ServletRequestListener
-import javax.servlet.annotation.WebListener
+import jakarta.inject.Inject
+import jakarta.servlet.ServletRequestEvent
+import jakarta.servlet.ServletRequestListener
+import jakarta.servlet.annotation.WebListener
 
 /**
  * @author Vyacheslav Rusakov

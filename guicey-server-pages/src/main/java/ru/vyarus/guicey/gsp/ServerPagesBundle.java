@@ -104,7 +104,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * into view (so you don't have to specify template path in all methods (note that custom template path could
  * still be specified directly, when required). View class must extend
  * {@link ru.vyarus.guicey.gsp.views.template.TemplateView}. In all other aspects, it's pure dropwizard views.
- * {@link ru.vyarus.guicey.gsp.views.template.Template} annotation is jersey {@link javax.ws.rs.NameBinding} marker
+ * {@link ru.vyarus.guicey.gsp.views.template.Template} annotation is jersey {@link jakarta.ws.rs.NameBinding} marker
  * so you can apply request/response filters only (!) for template resources (see {@link TemplateAnnotationFilter}
  * as example).
  * <p>

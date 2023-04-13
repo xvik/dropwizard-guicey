@@ -7,7 +7,7 @@ Register new filter in main or admin contexts.
 
 ## Recognition
 
-Detects classes annotated with `@javax.servlet.annotation.WebFilter` annotation and register them in dropwizard environment.
+Detects classes annotated with `@jakarta.servlet.annotation.WebFilter` annotation and register them in dropwizard environment.
 
 ```java
 @WebFilter("/some/*")

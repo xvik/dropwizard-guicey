@@ -12,15 +12,15 @@ import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.inject.Inject
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.container.ResourceInfo
-import javax.ws.rs.core.HttpHeaders
-import javax.ws.rs.core.Request
-import javax.ws.rs.core.SecurityContext
-import javax.ws.rs.core.UriInfo
-import javax.ws.rs.ext.Providers
+import jakarta.inject.Inject
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.container.ResourceInfo
+import jakarta.ws.rs.core.HttpHeaders
+import jakarta.ws.rs.core.Request
+import jakarta.ws.rs.core.SecurityContext
+import jakarta.ws.rs.core.UriInfo
+import jakarta.ws.rs.ext.Providers
 
 /**
  * @author Vyacheslav Rusakov
@@ -57,7 +57,7 @@ class JerseyBindingsTest extends AbstractTest {
         @GET
         String request() {
             [MultivaluedParameterExtractorProvider,
-             javax.ws.rs.core.Application,
+             jakarta.ws.rs.core.Application,
              Providers,
              UriInfo,
              ResourceInfo,

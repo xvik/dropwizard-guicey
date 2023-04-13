@@ -3,10 +3,10 @@ package ru.vyarus.dropwizard.guice.support.resource
 import com.google.inject.Inject
 import ru.vyarus.dropwizard.guice.support.feature.DummyService
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
-import javax.ws.rs.core.Response
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.Produces
+import jakarta.ws.rs.core.Response
 
 /**
  * Single resource instance will be used for all requests.
@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response
  */
 @Path("/singleton")
 @Produces('application/json')
-@javax.inject.Singleton
+@jakarta.inject.Singleton
 class SingletonResource {
     static int creationCounter = 0
     static int callCounter = 0

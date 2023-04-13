@@ -5,7 +5,7 @@ import ru.vyarus.dropwizard.guice.support.provider.oauth.OauthCheckApplication
 import ru.vyarus.dropwizard.guice.test.ClientSupport
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.ws.rs.core.HttpHeaders
+import jakarta.ws.rs.core.HttpHeaders
 
 /**
  * @author Vyacheslav Rusakov 

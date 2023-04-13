@@ -3,8 +3,8 @@ package ru.vyarus.guicey.gsp.support.app.clash
 import ru.vyarus.guicey.gsp.views.template.Template
 import ru.vyarus.guicey.gsp.views.template.TemplateView
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov

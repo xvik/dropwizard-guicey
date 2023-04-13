@@ -9,8 +9,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.servlet.*
-import javax.servlet.annotation.WebFilter
+import jakarta.servlet.*
+import jakarta.servlet.annotation.WebFilter
 
 /**
  * @author Vyacheslav Rusakov

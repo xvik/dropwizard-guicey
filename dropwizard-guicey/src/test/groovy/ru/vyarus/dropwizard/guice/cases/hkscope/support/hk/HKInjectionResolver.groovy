@@ -5,7 +5,7 @@ import org.glassfish.jersey.internal.inject.InjectionResolver
 import ru.vyarus.dropwizard.guice.cases.hkscope.support.Ann
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 
-import javax.ws.rs.ext.Provider
+import jakarta.ws.rs.ext.Provider
 
 /**
  * @author Vyacheslav Rusakov

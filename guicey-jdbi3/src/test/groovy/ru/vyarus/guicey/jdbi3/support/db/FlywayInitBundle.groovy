@@ -8,7 +8,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.order.Order
 import ru.vyarus.guicey.jdbi3.support.SampleConfiguration
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

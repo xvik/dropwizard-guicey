@@ -1,5 +1,7 @@
 description = "Dropwizard lifecycle annotations"
 
 dependencies {
-    implementation 'ru.vyarus:guice-ext-annotations'
+    implementation ('ru.vyarus:guice-ext-annotations') {
+        exclude group: 'com.google.inject', module: 'guice'
+    }
 }

@@ -10,11 +10,11 @@ import ru.vyarus.dropwizard.guice.module.jersey.GuiceWebModule
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
-import static javax.servlet.DispatcherType.ERROR
-import static javax.servlet.DispatcherType.FORWARD
-import static javax.servlet.DispatcherType.REQUEST
+import static jakarta.servlet.DispatcherType.ERROR
+import static jakarta.servlet.DispatcherType.FORWARD
+import static jakarta.servlet.DispatcherType.REQUEST
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.GuiceFilterRegistration
 
 /**

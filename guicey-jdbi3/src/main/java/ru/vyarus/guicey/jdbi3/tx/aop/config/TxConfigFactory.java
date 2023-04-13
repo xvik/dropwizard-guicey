@@ -8,7 +8,7 @@ import java.lang.annotation.Annotation;
  * Factory converts transaction parameters from annotation into common tx config object.
  * Declared with {@link TxConfigSupport} directly on target annotation class.
  * <p>
- * IMPORTANT: Factory is obtained from guice context so prefer annotating it with {@link javax.inject.Singleton}
+ * IMPORTANT: Factory is obtained from guice context so prefer annotating it with {@link jakarta.inject.Singleton}
  * to avoid redundant instantiations (if factory is stateless).
  * <p>
  * Resolved config is cached for target method to avoid duplicate resolutions.

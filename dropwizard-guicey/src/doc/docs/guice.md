@@ -29,22 +29,22 @@ Main objects:
 
 Bindings below are not immediately available as HK2 context [starts after guice](guide/lifecycle.md):
 
-* `javax.ws.rs.core.Application`
-* `javax.ws.rs.ext.Providers`
+* `jakarta.ws.rs.core.Application`
+* `jakarta.ws.rs.ext.Providers`
 * `org.glassfish.hk2.api.ServiceLocator`
 * `org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider`
 
 Request-scoped bindings:
 
-* `javax.ws.rs.core.UriInfo`
-* `javax.ws.rs.container.ResourceInfo`
-* `javax.ws.rs.core.HttpHeaders`
-* `javax.ws.rs.core.SecurityContext`
-* `javax.ws.rs.core.Request`
+* `jakarta.ws.rs.core.UriInfo`
+* `jakarta.ws.rs.container.ResourceInfo`
+* `jakarta.ws.rs.core.HttpHeaders`
+* `jakarta.ws.rs.core.SecurityContext`
+* `jakarta.ws.rs.core.Request`
 * `org.glassfish.jersey.server.ContainerRequest`
 * `org.glassfish.jersey.server.internal.process.AsyncContext`
-* `javax.servlet.http.HttpServletRequest`
-* `javax.servlet.http.HttpServletResponse`
+* `jakarta.servlet.http.HttpServletRequest`
+* `jakarta.servlet.http.HttpServletResponse`
 
 !!! important ""
     Request scoped objects must be used through provider:

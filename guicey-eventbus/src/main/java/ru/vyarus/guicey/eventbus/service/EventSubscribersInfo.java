@@ -3,8 +3,8 @@ package ru.vyarus.guicey.eventbus.service;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.SubscriptionIntrospector;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 import java.util.Set;
 
 /**

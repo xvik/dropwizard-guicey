@@ -6,12 +6,12 @@ import ru.vyarus.guicey.gsp.views.template.ManualErrorHandling;
 import ru.vyarus.guicey.gsp.views.template.Template;
 import ru.vyarus.guicey.gsp.views.template.TemplateContext;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.ext.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.ResourceInfo;
+import jakarta.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
@@ -30,7 +30,7 @@ public class TemplateAnnotationFilter implements ContainerRequestFilter {
     private final Logger logger = LoggerFactory.getLogger(TemplateAnnotationFilter.class);
 
     @Inject
-    private javax.inject.Provider<ResourceInfo> info;
+    private jakarta.inject.Provider<ResourceInfo> info;
 
     @Override
     public void filter(final ContainerRequestContext requestContext) throws IOException {

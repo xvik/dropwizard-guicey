@@ -10,7 +10,7 @@ import ru.vyarus.guicey.eventbus.report.EventSubscribersReporter
 import ru.vyarus.guicey.eventbus.service.EventSubscribersInfo
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

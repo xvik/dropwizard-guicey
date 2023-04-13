@@ -11,10 +11,10 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import ru.vyarus.guicey.gsp.ServerPagesBundle
 import spock.lang.Specification
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.WebApplicationException
-import javax.ws.rs.core.MediaType
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.WebApplicationException
+import jakarta.ws.rs.core.MediaType
 
 /**
  * @author Vyacheslav Rusakov
@@ -67,8 +67,8 @@ class NonErrorInterceptionTest extends Specification {
 
         @GET
         @Path("/2")
-        javax.ws.rs.core.Response get2() {
-            return javax.ws.rs.core.Response.status(304).build()
+        jakarta.ws.rs.core.Response get2() {
+            return jakarta.ws.rs.core.Response.status(304).build()
         }
     }
 }

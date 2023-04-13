@@ -12,7 +12,7 @@ import ru.vyarus.guicey.gsp.ServerPagesBundle
 import ru.vyarus.guicey.gsp.support.app.SampleTemplateResource
 import spock.lang.Specification
 
-import javax.ws.rs.core.MediaType
+import jakarta.ws.rs.core.MediaType
 
 /**
  * @author Vyacheslav Rusakov

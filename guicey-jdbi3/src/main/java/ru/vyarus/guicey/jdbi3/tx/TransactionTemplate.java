@@ -8,8 +8,8 @@ import org.jdbi.v3.core.transaction.TransactionException;
 import org.jdbi.v3.core.transaction.TransactionIsolationLevel;
 import ru.vyarus.guicey.jdbi3.unit.UnitManager;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Transaction template used to both declare unit of work and start transaction.

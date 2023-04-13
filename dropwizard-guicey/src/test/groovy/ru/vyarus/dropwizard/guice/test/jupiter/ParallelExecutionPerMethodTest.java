@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestDropwizardAppExtension;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 

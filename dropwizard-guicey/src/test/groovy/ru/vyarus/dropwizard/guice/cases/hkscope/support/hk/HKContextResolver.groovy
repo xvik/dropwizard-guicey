@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.cases.hkscope.support.hk
 
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
 
-import javax.ws.rs.ext.ContextResolver
-import javax.ws.rs.ext.Provider
+import jakarta.ws.rs.ext.ContextResolver
+import jakarta.ws.rs.ext.Provider
 
 /**
  * @author Vyacheslav Rusakov

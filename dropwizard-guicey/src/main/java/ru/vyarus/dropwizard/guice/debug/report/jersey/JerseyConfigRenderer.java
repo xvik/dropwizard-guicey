@@ -6,8 +6,8 @@ import ru.vyarus.dropwizard.guice.debug.report.jersey.util.ProviderRenderUtil;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
-import javax.annotation.Priority;
-import javax.ws.rs.Priorities;
+import jakarta.annotation.Priority;
+import jakarta.ws.rs.Priorities;
 import java.util.Comparator;
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.support.feature
 
-import javax.ws.rs.ext.Provider
+import jakarta.ws.rs.ext.Provider
 
 /**
  * @author Vyacheslav Rusakov 

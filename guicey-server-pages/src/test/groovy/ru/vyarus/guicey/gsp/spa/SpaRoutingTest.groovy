@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import ru.vyarus.guicey.gsp.AbstractTest
 import ru.vyarus.guicey.gsp.ServerPagesBundle
 
-import javax.ws.rs.core.MediaType
+import jakarta.ws.rs.core.MediaType
 
 /**
  * @author Vyacheslav Rusakov

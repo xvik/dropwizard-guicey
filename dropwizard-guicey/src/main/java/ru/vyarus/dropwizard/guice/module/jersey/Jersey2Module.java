@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorProvider;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule;
 
-import javax.servlet.DispatcherType;
+import jakarta.servlet.DispatcherType;
 import java.util.EnumSet;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.GuiceFilterRegistration;

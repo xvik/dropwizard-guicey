@@ -216,18 +216,18 @@ so use `Provider` to inject these bindings.
 
 These bindings available after HK2 context start:
 
-* `javax.ws.rs.core.Application`
-* `javax.ws.rs.ext.Providers`
+* `jakarta.ws.rs.core.Application`
+* `jakarta.ws.rs.ext.Providers`
 * `org.glassfish.hk2.api.ServiceLocator`
 * `org.glassfish.jersey.server.internal.inject.MultivaluedParameterExtractorProvider`
 
 Request-scoped bindings:
 
-* `javax.ws.rs.core.UriInfo`
-* `javax.ws.rs.container.ResourceInfo`
-* `javax.ws.rs.core.HttpHeaders`
-* `javax.ws.rs.core.SecurityContext`
-* `javax.ws.rs.core.Request`
+* `jakarta.ws.rs.core.UriInfo`
+* `jakarta.ws.rs.container.ResourceInfo`
+* `jakarta.ws.rs.core.HttpHeaders`
+* `jakarta.ws.rs.core.SecurityContext`
+* `jakarta.ws.rs.core.Request`
 * `org.glassfish.jersey.server.ContainerRequest`
 * `org.glassfish.jersey.server.AsyncContext`
 
@@ -242,8 +242,8 @@ request and response objects and use under filter, servlet or resources calls (g
 If you disable guice filter with [.noGuiceFilter()](servletmodule.md) then
 guicey will bridge objects from HK2 context:
 
-* `javax.servlet.http.HttpServletRequest`
-* `javax.servlet.http.HttpServletResponse`
+* `jakarta.servlet.http.HttpServletRequest`
+* `jakarta.servlet.http.HttpServletResponse`
  
 !!! attention ""
     This means you can still inject them, but request and response will

@@ -11,8 +11,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.web.listener.WebListe
 
 /**
  * Bundle adds servlet installers for filters, servlets and listeners installation.
- * Standard java.servlet.annotation annotations ({@link javax.servlet.annotation.WebFilter},
- * {@link javax.servlet.annotation.WebServlet}, {@link javax.servlet.annotation.WebListener}) are used.
+ * Standard java.servlet.annotation annotations ({@link jakarta.servlet.annotation.WebFilter},
+ * {@link jakarta.servlet.annotation.WebServlet}, {@link jakarta.servlet.annotation.WebListener}) are used.
  * Note that these annotations are not recognized by jetty automatically, because dropwizard doesn't include
  * jetty-annotations modules.
  * <p>

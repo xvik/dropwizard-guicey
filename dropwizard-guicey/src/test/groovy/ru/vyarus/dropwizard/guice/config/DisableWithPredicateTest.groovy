@@ -17,8 +17,8 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
-import javax.inject.Inject
-import javax.ws.rs.Path
+import jakarta.inject.Inject
+import jakarta.ws.rs.Path
 
 import static ru.vyarus.dropwizard.guice.module.context.Disables.type
 import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly

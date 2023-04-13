@@ -5,7 +5,7 @@ import org.glassfish.hk2.api.ProxyCtl;
 import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 /**
  * Lazy "bridge" used to register HK2 types in guice context. Guice context is created before HK2,

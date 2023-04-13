@@ -14,7 +14,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
-import javax.ws.rs.Path;
+import jakarta.ws.rs.Path;
 import java.util.Arrays;
 import java.util.List;
 

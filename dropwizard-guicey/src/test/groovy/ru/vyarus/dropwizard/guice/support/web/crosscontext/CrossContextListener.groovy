@@ -2,10 +2,10 @@ package ru.vyarus.dropwizard.guice.support.web.crosscontext
 
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext
 
-import javax.servlet.ServletRequestEvent
-import javax.servlet.ServletRequestListener
-import javax.servlet.annotation.WebListener
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.ServletRequestEvent
+import jakarta.servlet.ServletRequestListener
+import jakarta.servlet.annotation.WebListener
+import jakarta.servlet.http.HttpServletRequest
 
 /**
  * @author Vyacheslav Rusakov

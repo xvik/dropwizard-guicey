@@ -6,8 +6,8 @@ import org.eclipse.jetty.server.Server;
 import ru.vyarus.guicey.annotations.lifecycle.PostStartup;
 import ru.vyarus.guicey.annotations.lifecycle.module.collector.MethodsCollector;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 
 /**
  * Listener bean used to process annotated methods in appropriate dropwizard lifecycle phases.

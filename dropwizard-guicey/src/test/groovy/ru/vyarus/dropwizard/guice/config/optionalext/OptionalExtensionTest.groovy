@@ -14,8 +14,8 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstal
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
-import javax.inject.Inject
-import javax.ws.rs.Path
+import jakarta.inject.Inject
+import jakarta.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov

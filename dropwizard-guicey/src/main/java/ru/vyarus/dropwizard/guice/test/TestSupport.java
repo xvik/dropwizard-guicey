@@ -8,7 +8,7 @@ import io.dropwizard.testing.DropwizardTestSupport;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Utility class combining test-framework agnostic utilities.

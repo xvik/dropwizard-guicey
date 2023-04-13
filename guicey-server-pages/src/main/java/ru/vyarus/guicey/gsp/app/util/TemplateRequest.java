@@ -1,7 +1,7 @@
 package ru.vyarus.guicey.gsp.app.util;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
 /**
  * Request wrapper used to prefix app name into original request url during redirection to rest.

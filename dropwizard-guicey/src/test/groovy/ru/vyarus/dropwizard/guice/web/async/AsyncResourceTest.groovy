@@ -9,10 +9,10 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.container.AsyncResponse
-import javax.ws.rs.container.Suspended
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.container.AsyncResponse
+import jakarta.ws.rs.container.Suspended
 import java.util.concurrent.CompletableFuture
 
 /**

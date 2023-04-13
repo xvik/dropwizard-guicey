@@ -7,7 +7,7 @@ Register new servlet in main or admin contexts.
 
 ## Recognition
 
-Detects classes annotated with `@javax.servlet.annotation.WebServlet` annotation and register them in dropwizard environment.
+Detects classes annotated with `@jakarta.servlet.annotation.WebServlet` annotation and register them in dropwizard environment.
 
 ```java
 @WebServlet("/mapped")

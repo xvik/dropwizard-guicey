@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.guicey.gsp.app.asset.AssetLookup;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import java.net.URL;
 import java.nio.charset.Charset;
 

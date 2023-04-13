@@ -5,8 +5,8 @@ import com.google.inject.Inject
 import com.google.inject.Provider
 import io.dropwizard.servlets.tasks.Task
 
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 /**
  * Just to show that this WILL NOT work, because guice filter registered only for jersey context.

@@ -13,7 +13,7 @@ import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyApp
 import ru.vyarus.dropwizard.guice.test.spock.UseGuiceyHooks
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

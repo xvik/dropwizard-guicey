@@ -36,7 +36,7 @@ import ru.vyarus.dropwizard.guice.support.feature.DummyTask
 import ru.vyarus.dropwizard.guice.support.util.BindModule
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.ws.rs.Path
+import jakarta.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov

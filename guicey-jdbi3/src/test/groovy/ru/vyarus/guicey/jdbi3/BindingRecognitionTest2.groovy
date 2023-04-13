@@ -13,7 +13,7 @@ import ru.vyarus.guicey.jdbi3.support.mapper.SampleMapper
 import ru.vyarus.guicey.jdbi3.support.model.Sample
 import ru.vyarus.guicey.jdbi3.tx.InTransaction
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

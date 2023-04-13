@@ -14,7 +14,7 @@ import ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase
 import ru.vyarus.dropwizard.guice.yaml.support.NotUniqueSubConfig
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

@@ -10,7 +10,7 @@ import ru.vyarus.guicey.gsp.ServerPagesBundle
 import ru.vyarus.guicey.gsp.support.relative.RelativeTemplateResource
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

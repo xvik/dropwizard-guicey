@@ -226,7 +226,7 @@ public final class GuiceModelParser {
             Class<? extends Annotation> scope =
                     (Class<? extends Annotation>) existingBinding.acceptScopingVisitor(SCOPE_DETECTOR);
             if (scope != null && scope.equals(EagerSingleton.class)) {
-                scope = javax.inject.Singleton.class;
+                scope = jakarta.inject.Singleton.class;
             }
             dec.setScope(scope);
             // important for untargetted bindings to look existing binding

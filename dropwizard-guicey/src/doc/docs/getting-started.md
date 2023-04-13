@@ -165,8 +165,8 @@ Call `http://localhost:8080/sample/` to make sure it works.
         rootPath: '/rest/*'
     ```
 
-Resource is a guice bean, so you can use guice injection inside it. To access request scoped objects like `javax.servlet.http.
-HttpServletRequest`, `javax.servlet.http.HttpServletResponse`, `javax.ws.rs.core.UriInfo`, `org.glassfish.jersey.server.
+Resource is a guice bean, so you can use guice injection inside it. To access request scoped objects like `jakarta.servlet.http.
+HttpServletRequest`, `jakarta.servlet.http.HttpServletResponse`, `jakarta.ws.rs.core.UriInfo`, `org.glassfish.jersey.server.
 ContainerRequest`, etc, you must wrap the desired objects in a `Provider`:
 
 ```java

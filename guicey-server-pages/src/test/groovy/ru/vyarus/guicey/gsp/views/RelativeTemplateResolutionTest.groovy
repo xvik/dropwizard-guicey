@@ -11,7 +11,7 @@ import ru.vyarus.guicey.gsp.ServerPagesBundle
 import ru.vyarus.guicey.gsp.info.GspInfoService
 import ru.vyarus.guicey.gsp.support.relative.RelativeTemplateResource
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

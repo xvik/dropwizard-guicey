@@ -2,7 +2,7 @@ package ru.vyarus.guicey.validation.util;
 
 import com.google.inject.matcher.AbstractMatcher;
 
-import javax.ws.rs.HttpMethod;
+import jakarta.ws.rs.HttpMethod;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  * Matcher denies methods annotated with jax-rs annotations. This is required to avoid
  * duplicate validations (because dropwizard already applies validations on rest).
  * <p>
- * Normally, all rest resources are annotated with {@link javax.ws.rs.Path} so it is easy to filter all rest classes.
+ * Normally, all rest resources are annotated with {@link jakarta.ws.rs.Path} so it is easy to filter all rest classes.
  * This matcher is required only for complex declaration cases.
  *
  * @author Vyacheslav Rusakov

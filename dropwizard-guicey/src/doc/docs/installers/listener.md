@@ -7,7 +7,7 @@ Register new web listener in main or admin contexts.
 
 ## Recognition
 
-Detects classes annotated with `@javax.servlet.annotation.WebListener` annotation and register them in dropwizard environment.
+Detects classes annotated with `@jakarta.servlet.annotation.WebListener` annotation and register them in dropwizard environment.
 
 ```java
 @WebListener
@@ -19,13 +19,13 @@ public class MyListener implements ServletContextListener, ServletRequestListene
 
 Supported listeners (the same as declared in annotation):
 
- * javax.servlet.ServletContextListener
- * javax.servlet.ServletContextAttributeListener
- * javax.servlet.ServletRequestListener
- * javax.servlet.ServletRequestAttributeListener
- * javax.servlet.http.HttpSessionListener
- * javax.servlet.http.HttpSessionAttributeListener
- * javax.servlet.http.HttpSessionIdListener
+ * jakarta.servlet.ServletContextListener
+ * jakarta.servlet.ServletContextAttributeListener
+ * jakarta.servlet.ServletRequestListener
+ * jakarta.servlet.ServletRequestAttributeListener
+ * jakarta.servlet.http.HttpSessionListener
+ * jakarta.servlet.http.HttpSessionAttributeListener
+ * jakarta.servlet.http.HttpSessionIdListener
 
 
 !!! warning ""

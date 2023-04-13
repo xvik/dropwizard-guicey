@@ -141,7 +141,7 @@ used because it would be impossible to automatically register health check witho
 
 ## Jersey extensions
 
-All jersey extensions are [recognized](../installers/jersey-ext.md) by `javax.ws.rs.ext.Provider` jersey annotation. 
+All jersey extensions are [recognized](../installers/jersey-ext.md) by `jakarta.ws.rs.ext.Provider` jersey annotation. 
 There are [many extensions](../installers/jersey-ext.md) supported.
 
 ```java

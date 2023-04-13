@@ -10,8 +10,8 @@ import ru.vyarus.guicey.gsp.AbstractTest
 import ru.vyarus.guicey.gsp.ServerPagesBundle
 import ru.vyarus.guicey.gsp.views.template.Template
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
 
 /**
  * @author Vyacheslav Rusakov

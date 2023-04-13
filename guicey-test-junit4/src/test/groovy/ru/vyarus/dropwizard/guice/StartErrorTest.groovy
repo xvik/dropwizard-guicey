@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.support.TestConfiguration
 import ru.vyarus.dropwizard.guice.support.feature.DummyCommand
 import ru.vyarus.dropwizard.guice.test.StartupErrorRule
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov 
