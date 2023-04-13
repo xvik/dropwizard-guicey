@@ -225,7 +225,7 @@ public class ServerPagesBundle extends UniqueGuiceyBundle {
      * Application names must be unique (when you register multiple server pages applications).
      * <p>
      * You can't register admin application on admin context root because there is already dropwizard
-     * admin servlet {@link com.codahale.metrics.servlets.AdminServlet}.
+     * admin servlet {@link io.dropwizard.metrics.servlets.AdminServlet}.
      * <p>
      * Application could be extended with {@link ServerPagesBundle#extendApp(String)} in another bundle.
      * <p>
