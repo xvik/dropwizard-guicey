@@ -36,6 +36,21 @@ Features:
   
 <sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>
 
+### Supported versions
+
+**Dropwizard 4** compatible release candidate is [published](https://github.com/xvik/dropwizard-guicey/discussions/296#discussioncomment-5627240)
+
+There were 3 major changes in dropwizard recently and, because of this, I plan to support 3 guicey versions:
+
+Dropwizard | Guicey | Reason
+----------|---------|-------
+2.1.x| 5.x | Last java 8 compatible version
+3.x | 6.x | [Changed core dropwizard packages](https://github.com/dropwizard/dropwizard/blob/release/) - old 3rd paty bundles would be incompatible
+4.x | 7.x | [Jakarta namespace migration](https://github.com/dropwizard/dropwizard/blob/release/4.0.x/docs/source/manual/upgrade-notes/upgrade-notes-4_0_x.rst), [repackaged guice used](https://github.com/xvik/guice-jakartaee) (with jakarta.inject) - 3rd party guice modules might be incompatible
+
+For guicey 6-7, project structure was changed: core guicey was merged with extension modules.
+Soon the same change would be done for 5.x (it greatly simplifies releases and keeps actual examples in one branch)
+
 ### Setup
 
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus/dropwizard-guicey.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
@@ -55,8 +70,6 @@ Gradle:
 ```groovy
 implementation 'ru.vyarus:dropwizard-guicey:6.0.0'
 ```
-
-**Dropwizard 4** is [currently not supported](https://github.com/xvik/dropwizard-guicey/discussions/296)
 
 Dropwizard | Guicey
 ----------|---------
