@@ -5,8 +5,8 @@ import ru.vyarus.dropwizard.guice.examples.validator.bean.MyBean
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
-import javax.inject.Inject
-import javax.validation.ConstraintViolationException
+import jakarta.inject.Inject
+import jakarta.validation.ConstraintViolationException
 
 /**
  * @author Vyacheslav Rusakov

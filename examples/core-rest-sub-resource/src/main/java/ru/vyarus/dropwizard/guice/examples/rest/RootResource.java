@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.examples.rest;
 
 import ru.vyarus.dropwizard.guice.examples.service.SampleService;
 
-import javax.inject.Inject;
-import javax.ws.rs.Path;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Path;
 
 /**
  * Root resource is managed by guice. Two sub resources: one with guice and other, managed by hk (and created for

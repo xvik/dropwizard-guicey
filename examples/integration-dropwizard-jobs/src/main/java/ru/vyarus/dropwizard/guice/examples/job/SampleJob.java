@@ -5,7 +5,7 @@ import io.dropwizard.jobs.annotations.Every;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Job will be registered automatically by {@link io.dropwizard.jobs.GuiceJobManager}

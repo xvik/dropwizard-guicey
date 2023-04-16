@@ -6,8 +6,8 @@ import ru.vyarus.dropwizard.guice.examples.model.Sample
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.ws.rs.client.Client
-import javax.ws.rs.core.GenericType
+import jakarta.ws.rs.client.Client
+import jakarta.ws.rs.core.GenericType
 
 /**
  * @author Vyacheslav Rusakov

@@ -4,7 +4,7 @@ import ru.vyarus.dropwizard.guice.examples.web.SampleRequestListener
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 /**
  * @author Vyacheslav Rusakov

@@ -3,9 +3,9 @@ package ru.vyarus.dropwizard.guice.examples.service;
 import ru.vyarus.dropwizard.guice.examples.validator.CustomCondition;
 import ru.vyarus.dropwizard.guice.examples.validator.bean.MyBean;
 
-import javax.inject.Singleton;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
+import jakarta.inject.Singleton;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Sample service to show validation usage.
@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Singleton
 public class SomeService {
 
-    // use existing javax.validation annotation
+    // use existing jakarta.validation annotation
     public String simpleValidation(@NotNull String value) {
         return value;
     }

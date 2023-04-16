@@ -2,9 +2,9 @@ package ru.vyarus.dropwizard.guice.examples.validator.bean;
 
 import ru.vyarus.dropwizard.guice.examples.service.SomeService;
 
-import javax.inject.Inject;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.inject.Inject;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * Validator used to validate {@link MyBean}.

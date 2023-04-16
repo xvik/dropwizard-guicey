@@ -6,9 +6,9 @@ import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.core.setup.Environment;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import javax.ws.rs.ext.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.ws.rs.ext.Provider;
 
 /**
  * Configure OAuth authentication, almost the same way as described in dropwizard guide.

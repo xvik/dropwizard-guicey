@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.examples.service;
 import ru.vyarus.dropwizard.guice.examples.installer.Marker;
 import ru.vyarus.dropwizard.guice.examples.installer.MarkersInstaller;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Service which must be recognized and installed by

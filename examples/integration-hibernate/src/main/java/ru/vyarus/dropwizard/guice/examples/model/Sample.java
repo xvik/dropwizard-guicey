@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.examples.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Sample hibernate entity.

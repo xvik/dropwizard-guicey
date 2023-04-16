@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.examples.rest;
 
 import ru.vyarus.dropwizard.guice.examples.validator.CustomCondition;
 
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.*;
 
 /**
  * Dropwizard performs method validations.

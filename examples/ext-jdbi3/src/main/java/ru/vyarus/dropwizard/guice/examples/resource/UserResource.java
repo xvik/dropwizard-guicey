@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import ru.vyarus.dropwizard.guice.examples.model.User;
 import ru.vyarus.dropwizard.guice.examples.repository.UserRepository;
 
-import javax.inject.Inject;
-import javax.ws.rs.*;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
 import java.util.List;
 
 /**

@@ -1,3 +1,5 @@
 dependencies {
-    implementation 'io.github.dropwizard-jobs:dropwizard-jobs-guice'
+    implementation ('io.github.dropwizard-jobs:dropwizard-jobs-guice') {
+        exclude group: 'com.google.guice', name: 'guice'
+    }
 }

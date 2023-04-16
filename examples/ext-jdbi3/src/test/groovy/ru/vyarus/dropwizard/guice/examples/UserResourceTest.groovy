@@ -4,9 +4,9 @@ import org.glassfish.jersey.client.JerseyClientBuilder
 import ru.vyarus.dropwizard.guice.examples.model.User
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 
-import javax.ws.rs.client.Client
-import javax.ws.rs.client.Entity
-import javax.ws.rs.core.GenericType
+import jakarta.ws.rs.client.Client
+import jakarta.ws.rs.client.Entity
+import jakarta.ws.rs.core.GenericType
 
 /**
  * @author Vyacheslav Rusakov

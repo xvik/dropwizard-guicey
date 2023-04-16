@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.examples.rest;
 
 import ru.vyarus.dropwizard.guice.examples.service.SampleService;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.PathParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PathParam;
 
 /**
  * Sub resource managed by HK. This is useful when advanced context binding is required:

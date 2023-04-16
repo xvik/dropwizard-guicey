@@ -2,11 +2,11 @@ package ru.vyarus.dropwizard.guice.examples.rest;
 
 import ru.vyarus.dropwizard.guice.examples.service.SampleService;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.inject.Singleton;
-import javax.ws.rs.GET;
-import javax.ws.rs.core.UriInfo;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
+import jakarta.inject.Singleton;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.core.UriInfo;
 
 /**
  * Guice managed sub resource. Uses UriInfo jersey service to implement functionality from

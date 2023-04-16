@@ -9,8 +9,8 @@ import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.guice.validator.ValidationModule;
 
-import javax.validation.Validator;
-import javax.ws.rs.Path;
+import jakarta.validation.Validator;
+import jakarta.ws.rs.Path;
 
 /**
  * Guice-validator integration sample application.

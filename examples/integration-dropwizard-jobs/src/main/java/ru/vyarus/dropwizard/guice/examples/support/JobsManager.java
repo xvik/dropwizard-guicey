@@ -4,8 +4,8 @@ import com.google.inject.Injector;
 import io.dropwizard.jobs.GuiceJobManager;
 import ru.vyarus.dropwizard.guice.examples.JobsAppConfiguration;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Bean will be recognized as Managed and installed automatically.

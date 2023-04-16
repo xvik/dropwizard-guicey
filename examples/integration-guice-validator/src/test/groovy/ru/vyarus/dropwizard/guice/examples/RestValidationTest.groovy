@@ -5,8 +5,8 @@ import org.glassfish.jersey.client.JerseyWebTarget
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.ws.rs.BadRequestException
-import javax.ws.rs.client.Client
+import jakarta.ws.rs.BadRequestException
+import jakarta.ws.rs.client.Client
 
 /**
  * @author Vyacheslav Rusakov

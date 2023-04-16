@@ -2,7 +2,7 @@
 
 Example show [guice-validator](https://github.com/xvik/guice-validator) 3rd party library integration.
 
-By default, dropwizard support javax.validation annotations usage on [rest resources](http://www.dropwizard.io/1.2.2/docs/manual/validation.html).
+By default, dropwizard support jakarta.validation annotations usage on [rest resources](http://www.dropwizard.io/1.2.2/docs/manual/validation.html).
 Guice-validator will allow using them on all guice beans and write custom guice-aware validators.
 
 NOTE: Integration deserves special ext module, but it's not exists now (planned), so pure example only.
@@ -149,6 +149,6 @@ public void customBeanCheck(@Valid MyBean bean) { ...
 
 
 Read more in [guice-validator](https://github.com/xvik/guice-validator) documentation (for guice-related aspects) and 
-[hibernate-validator](http://hibernate.org/validator/) documentation for javax.validation description.
+[hibernate-validator](http://hibernate.org/validator/) documentation for jakarta.validation description.
 
 See [Test](src/test/groovy/ru/vyarus/dropwizard/guice/examples/RestValidationTest.groovy) to make sure it works 

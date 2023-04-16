@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.examples.validator.bean;
 
 /**
  * Example of custom bean with attached validator.
- * Validator will be activated by {@link javax.validation.Valid} annotation.
+ * Validator will be activated by {@link jakarta.validation.Valid} annotation.
  *
  * @author Vyacheslav Rusakov
  * @since 12.01.2018

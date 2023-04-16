@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.examples.service;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * @author Vyacheslav Rusakov

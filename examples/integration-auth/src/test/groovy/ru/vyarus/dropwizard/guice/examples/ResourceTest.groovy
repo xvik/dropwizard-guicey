@@ -5,7 +5,7 @@ import ru.vyarus.dropwizard.guice.test.ClientSupport
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp
 import spock.lang.Specification
 
-import javax.ws.rs.core.HttpHeaders
+import jakarta.ws.rs.core.HttpHeaders
 
 /**
  * @author Vyacheslav Rusakov

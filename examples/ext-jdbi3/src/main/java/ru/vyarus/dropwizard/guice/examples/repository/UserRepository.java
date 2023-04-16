@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.examples.service.RandomNameGenerator;
 import ru.vyarus.guicey.jdbi3.installer.repository.JdbiRepository;
 import ru.vyarus.guicey.jdbi3.tx.InTransaction;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.List;
 
 /**

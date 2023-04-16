@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.examples.service;
 
 import ru.vyarus.dropwizard.guice.examples.installer.Marker;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
