@@ -116,7 +116,7 @@ subprojects {
     apply plugin: 'com.github.ben-manes.versions'
     apply plugin: 'org.cyclonedx.bom'
 
-    sourceCompatibility = 11
+    sourceCompatibility = 1.8
 
     dependencies {
         implementation platform(project(':'))
