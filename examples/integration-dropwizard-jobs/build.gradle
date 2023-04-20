@@ -1,0 +1,3 @@
+dependencies {
+    implementation 'io.github.dropwizard-jobs:dropwizard-jobs-guice'
+}

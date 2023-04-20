@@ -1,0 +1,55 @@
+plugins {
+    id 'com.github.ben-manes.versions' version '0.46.0'
+}
+
+wrapper {
+    gradleVersion = '7.6.1'
+}
+
+description = 'Dropwizard guicey examples'
+
+ext {
+    guiceyBom = '5.7.1-1'
+}
+
+subprojects {
+    apply plugin: 'groovy'
+    apply plugin: 'project-report'
+
+    sourceCompatibility = 1.8
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+
+    repositories { mavenLocal(); mavenCentral(); maven { url 'https://jitpack.io' }}
+    dependencies {
+        implementation platform("ru.vyarus.guicey:guicey-bom:$guiceyBom")
+
+        constraints {
+            implementation 'io.github.dropwizard-jobs:dropwizard-jobs-guice:4.0.0-RELEASE'
+            implementation 'org.flywaydb:flyway-core:9.16.1'
+            // flyway not compatible with h2 1.4.200 anymore
+            implementation 'com.h2database:h2:2.1.214'
+        }
+
+        implementation 'ru.vyarus:dropwizard-guicey'
+
+        testImplementation 'ru.vyarus:spock-junit5:1.2.0'
+        testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+        testImplementation "io.dropwizard:dropwizard-testing"
+        testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "skipped", "failed"
+            exceptionFormat "full"
+        }
+        maxHeapSize = "512m"
+    }
+
+}
+
+dependencyUpdates.revision = 'release'

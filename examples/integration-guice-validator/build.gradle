@@ -1,0 +1,3 @@
+dependencies {
+    implementation 'ru.vyarus:guice-validator'
+}

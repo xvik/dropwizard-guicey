@@ -1,0 +1,19 @@
+rootProject.name = 'dropwizard-guicey-examples'
+
+include 'core-getting-started',
+        'core-extensions',
+        'core-servlets',
+        'core-rest-sub-resource',
+        'core-bundle-plug-n-play',
+        'core-installers-reset',
+        'core-installer-custom',
+        'ext-jdbi',
+        'ext-jdbi3',
+        'ext-eventbus',
+        'ext-spa',
+        'ext-gsp',
+        'ext-gsp-spa',
+        'integration-auth',
+        'integration-hibernate',
+        'integration-guice-validator',
+        'integration-dropwizard-jobs'

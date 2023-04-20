@@ -1,0 +1,4 @@
+dependencies {
+    implementation 'io.dropwizard:dropwizard-hibernate'
+    implementation 'com.h2database:h2'
+}
