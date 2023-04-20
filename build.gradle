@@ -19,7 +19,7 @@ wrapper {
 description = 'Dropwizard guice integration'
 
 ext {
-    dropwizard = '2.1.5'
+    dropwizard = '2.1.6'
     guice = '5.1.0'
     hk2 = '2.6.1'
     spockJunit5 = '1.2.0'
@@ -40,7 +40,7 @@ dependencies {
         api "ru.vyarus:guice-ext-annotations:$guiceExtAnn"
         api "ru.vyarus:guice-validator:$guiceValidator"
 
-        api 'io.dropwizard.modules:dropwizard-jdbi:2.1.5'
+        api 'io.dropwizard.modules:dropwizard-jdbi:2.1.6'
 
         // add subprojects to BOM
         project.subprojects.each { api it }
