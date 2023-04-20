@@ -129,7 +129,7 @@ subprojects {
 
         // common dependencies for all modules except core
         dependencies {
-            implementation 'ru.vyarus:dropwizard-guicey'
+            implementation project(':dropwizard-guicey')
 
             testImplementation 'io.dropwizard:dropwizard-testing'
         }
