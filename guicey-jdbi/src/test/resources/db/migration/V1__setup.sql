@@ -1,0 +1,5 @@
+CREATE TABLE sample (
+  id IDENTITY NOT NULL,
+  name VARCHAR,
+  CONSTRAINT sample_id PRIMARY KEY (id)
+);

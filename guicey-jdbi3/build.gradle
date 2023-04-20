@@ -1,0 +1,18 @@
+description = "Guicey integration for JDBI 3"
+
+dependencies {
+    if(JavaVersion.current() == JavaVersion.VERSION_1_8) {
+        // jdk 8 compatibility (https://github.com/dropwizard/dropwizard/releases/tag/v2.0.22)
+        implementation('io.dropwizard:dropwizard-jdbi3') {
+            exclude module: 'caffeine'
+        }
+    } else {
+        // with caffeine 3 (required for jdk 16 and above)
+        implementation 'io.dropwizard:dropwizard-jdbi3'
+    }
+
+    implementation 'ru.vyarus:guice-ext-annotations'
+
+    testImplementation 'org.flywaydb:flyway-core:9.16.1'
+    testImplementation 'com.h2database:h2:2.1.214'
+}

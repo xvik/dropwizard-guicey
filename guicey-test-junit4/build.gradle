@@ -1,0 +1,10 @@
+description = 'JUnit 4 test support'
+
+dependencies {
+    implementation 'com.github.stefanbirkner:system-rules:1.19.0'
+
+    implementation 'io.dropwizard:dropwizard-testing'
+    implementation 'junit:junit'
+
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+}

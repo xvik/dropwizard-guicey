@@ -1,0 +1,13 @@
+server:
+  rootPath: '/rest/*'
+
+logging:
+  level: INFO
+
+  loggers:
+    ru.vyarus: DEBUG
+
+views:
+  freemarker:
+    # no cache for local dev
+    cache_storage: freemarker.cache.NullCacheStorage

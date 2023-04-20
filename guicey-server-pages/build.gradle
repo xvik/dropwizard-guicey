@@ -1,0 +1,11 @@
+description = "Guicey server pages"
+
+dependencies {
+    implementation 'io.dropwizard:dropwizard-views'
+    implementation project(':guicey-spa')
+
+    provided 'io.dropwizard:dropwizard-views-freemarker'
+
+    testImplementation 'io.dropwizard:dropwizard-views-mustache'
+    testImplementation 'org.webjars.npm:jquery:3.4.1'
+}

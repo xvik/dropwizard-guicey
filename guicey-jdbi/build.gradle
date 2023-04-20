@@ -1,0 +1,9 @@
+description = "Guicey integration for JDBI"
+
+dependencies {
+    implementation 'io.dropwizard.modules:dropwizard-jdbi'
+    implementation 'ru.vyarus:guice-ext-annotations'
+
+    testImplementation 'org.flywaydb:flyway-core:9.16.1'
+    testImplementation 'com.h2database:h2:2.1.214'
+}

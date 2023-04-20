@@ -6,10 +6,8 @@
 
 **DOCUMENTATION**: http://xvik.github.io/dropwizard-guicey/
 
-Additional repositories:
-
-* [Examples](https://github.com/xvik/dropwizard-guicey-examples)
-* [Extensions and integrations](https://github.com/xvik/dropwizard-guicey-ext)
+* [Examples](https://github.com/xvik/dropwizard-guicey/examples)
+* [Extensions and integrations](https://github.com/xvik/dropwizard-guicey/)
 
 Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
 
@@ -33,21 +31,14 @@ Features:
 
 ### Sponsors
 
-&nbsp;&nbsp;&nbsp;&nbsp;[![Channel](src/doc/docs/img/sponsors/zoyi-ch.png)](https://channel.io "Channel")
+&nbsp;&nbsp;&nbsp;&nbsp;[![Channel](dropwizard-guicey/src/doc/docs/img/sponsors/zoyi-ch.png)](https://channel.io "Channel")
 
   
 <sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>
 
-#### Thanks to
-
-* [Sébastien Boulet](https://github.com/gontard) ([intactile design](http://intactile.com)) for very useful feedback
-* [Nicholas Pace](https://github.com/segfly) for governator integration
-
 ### Setup
 
 [![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus/dropwizard-guicey.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
-
-May be used through [extensions project BOM](https://github.com/xvik/dropwizard-guicey-ext) or directly.
 
 Maven:
 
@@ -89,29 +80,24 @@ Without it you'll always see a nasty warning on startup (afterburner is better f
 
 #### BOM
 
-Guicey pom may be also used as maven BOM.
-
-NOTE: If you use guicey extensions then use [extensions BOM](https://github.com/xvik/dropwizard-guicey-ext) 
-instead (it already includes guicey BOM).
-
+Use [BOM](http://xvik.github.io/dropwizard-guicey/latest/extras/bom/) for guice, dropwizard and guicey modules dependency management.
 BOM usage is highly recommended as it allows you to correctly update dropwizard dependencies.
 
 Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus:dropwizard-guicey:5.7.1')
+    implementation platform('ru.vyarus.guicey:guicey-bom:5.7.1')
     // uncomment to override dropwizard and its dependencies versions    
     //implementation platform('io.dropwizard:dropwizard-dependencies:2.1.5')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
+    implementation 'ru.vyarus.guicey:guicey-eventbus'
    
     implementation 'io.dropwizard:dropwizard-auth'
     implementation 'com.google.inject:guice-assistedinject'   
     
-    testImplementation 'ru.vyarus:spock-junit5'
-    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
     testImplementation 'io.dropwizard:dropwizard-test'
 }
 ```
@@ -122,8 +108,8 @@ Maven:
 <dependencyManagement>  
     <dependencies>
         <dependency>
-            <groupId>ru.vyarus</groupId>
-            <artifactId>dropwizard-guicey</artifactId>
+            <groupId>ru.vyarus.guicey</groupId>
+            <artifactId>guicey-bom</artifactId>
             <version>5.7.1</version>
             <type>pom</type>
             <scope>import</scope>
@@ -151,7 +137,7 @@ BOM includes:
 
 BOM           | Artifact
 --------------|-------------------------
-Guicey itself | `ru.vyarus:dropwizard-guicey`
+Guicey modules | `ru.vyarus.guicey:guicey-[module]`
 Dropwizard BOM | `io.dropwizard:dropwizard-bom`
 Guice BOM | `com.google.inject:guice-bom`
 HK2 bridge | `org.glassfish.hk2:guice-bridge`

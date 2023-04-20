@@ -1,0 +1,10 @@
+description = "Guicey integration for JDBI 3 for Java 8"
+
+dependencies {
+    implementation (project(':guicey-jdbi3')) {
+        // remove caffeine 3 (incompatible with JDK 8)
+        exclude module: 'caffeine', group: 'com.github.ben-manes.caffeine'
+    }
+}
+
+publishing.publications.maven.artifacts = []

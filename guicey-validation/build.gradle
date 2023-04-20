@@ -1,0 +1,8 @@
+description = "Guice-managed pre/post validations for bean methods"
+
+dependencies {
+    implementation ('ru.vyarus:guice-validator') {
+        exclude group: 'com.google.inject', module: 'guice'
+        exclude group: 'javax.validation', module: 'validation-api'
+    }
+}
