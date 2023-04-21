@@ -6,7 +6,9 @@ plugins {
 dependencies {
     provided 'org.junit.jupiter:junit-jupiter-api'
     provided 'io.dropwizard:dropwizard-testing'
-    provided "org.glassfish.hk2:guice-bridge"
+    provided ('org.glassfish.hk2:guice-bridge') {
+        exclude group: 'com.google.inject', module: 'guice'
+    }
 
     api ('com.google.inject:guice') {
         // use dropwizard guava version
@@ -14,7 +16,9 @@ dependencies {
         // jakarta-inject used instead
         exclude group: 'javax.inject', module: 'javax.inject'
     }
-    api 'com.google.inject.extensions:guice-servlet'
+    api ('com.google.inject.extensions:guice-servlet') {
+        exclude group: 'com.google.inject', module: 'guice'
+    }
     api 'io.dropwizard:dropwizard-core'
     api 'ru.vyarus:generics-resolver:3.0.3'
 
@@ -42,14 +46,11 @@ javaLib {
 
 mkdocs {
     publish {
-        docPath = '5.7.1'
-        rootRedirect = true
-        rootRedirectTo = 'latest'
-        versionAliases = ['latest']
+        docPath = '5.8.0'
+        rootRedirect = false
     }
     extras = [
-            'version': '5.7.1',
-            'ext': '5.7.1-1',
+            'version': '5.8.0',
             'dropwizard': rootProject.dropwizard,
             'guice': rootProject.guice
     ]
