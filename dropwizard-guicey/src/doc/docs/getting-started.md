@@ -33,7 +33,7 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus:dropwizard-guicey:{{ gradle.version }}')
+    implementation platform('ru.vyarus.guicey:guicey-bom:{{ gradle.version }}')
     // uncomment to override dropwizard and its dependencies versions
 //    implementation platform('io.dropwizard:dropwizard-dependencies:{{ gradle.dropwizard }}')
 
@@ -54,8 +54,8 @@ Maven:
 <dependencyManagement>  
     <dependencies>
         <dependency>
-            <groupId>ru.vyarus</groupId>
-            <artifactId>dropwizard-guicey</artifactId>
+            <groupId>ru.vyarus.guicey</groupId>
+            <artifactId>guicey-bom</artifactId>
             <version>{{ gradle.version }}</version>
             <type>pom</type>
             <scope>import</scope>

@@ -1,6 +1,6 @@
 # AOP report
 
-Guice AOP report shows all registered aop handlers and how (what order) they apply to guicey beans. 
+Guice AOP report shows all registered aop handlers and how (what order) they apply to guice beans. 
 
 ```java
 GuiceBundle.builder()
