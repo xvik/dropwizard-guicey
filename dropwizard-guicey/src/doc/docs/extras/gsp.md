@@ -1,8 +1,5 @@
 # Guicey Server Pages
 
-!!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-server-pages) module
-
 Brings the simplicity of JSP to dropwizard-views. 
 Basement for pluggable and extendable ui applications (like dashboards).
 
@@ -123,14 +120,10 @@ Under the hood `/foo/12` will be recognized as template call and redirected (ser
 As you can see rest endpoints and templates are now "a part" of static resources.. just like good-old 
 JSP (powered with rest mappings). And it is still pure dropwizard views.
 
-GSP implements per-application error pages support so each application could use it's own errors. In pure 
-dropwizard-views such things should be implemented manually, which is not good for application incapsulation.
+GSP implements per-application error pages support so each application could use its own errors. In pure 
+dropwizard-views such things should be implemented manually, which is not good for application encapsulation.
 
 ## Setup 
-
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-server-pages.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-gsp)
-
-Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 
 
 Maven:
 
@@ -138,17 +131,17 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-server-pages</artifactId>
-  <version>{{ gradle.ext }}</version>
+  <version>{{ gradle.version }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-compile 'ru.vyarus.guicey:guicey-server-pages:{{ gradle.ext }}'
+compile 'ru.vyarus.guicey:guicey-server-pages:{{ gradle.version }}'
 ```
 
-See the most recent version in the badge above.
+Omit version if guicey BOM used
 
 ## Usage
 
@@ -347,7 +340,7 @@ relatively to application mapping root ("/" in the example above) as `/page1/act
 By default, if views mapping is not declared manually, it would be set to application name
 (`/...` -> `/projectName-ui/...`)
 
-Under startup dropwizard logs all registered rest enpoints, so you can always see original
+Under startup dropwizard logs all registered rest endpoints, so you can always see original
 rest mapping paths. For each registered GSP application list of "visible" paths will be logged as: 
 
 ```
@@ -381,7 +374,7 @@ But that's not all: you can actually map other rest prefixed to sub urls:
 ```
 
 This way, it is possible to combine rest endpoints, written for different applications
-(or simply prerare common view resource groups). Just note that in contrast to resources
+(or simply prepare common view resource groups). Just note that in contrast to resources
 mapping, only one prefix may be mapped on each url!
 
 You will also need to map static resources location accordingly if you use relative template paths.
@@ -468,7 +461,7 @@ If we call new page with `http://localhost:8080/sample/fred` we should see
 `@Template` annotation must be used on ALL template resources. It may declare default
 template for all methods in resource (`@Template("sample.ftl")`) or be just a marker annotation (`@Template`).
 
-Annotation differentiate template resources from other api resources and lets you delare jersey
+Annotation differentiate template resources from other api resources and lets you declare jersey
 extension only for template resources:
 
 ```java
@@ -789,8 +782,8 @@ You can also map addition rest prefixes:
 ```        
 
 In some cases, extensions may depend on dropwizard configuration, but
-bundles created under initialization phase. To workaround this you can 
-use delayed extensions init:
+bundles created under initialization phase. To work around this you can 
+use delayed extension init:
 
 ```java
 .bundles(ServerPagesBundle.extendApp("projectName-ui")
@@ -867,7 +860,7 @@ The same for admin app and extension.
     resources because it is not aware of custom loaders.
     
 !!! info
-    The main problem here is dropwizards `View` class which accepts only file path (String),
+    The main problem here is dropwizard's `View` class which accepts only file path (String),
     so even if correct URL object is known (which is enough to load resource) before view construction
     it can't be used further.  
     

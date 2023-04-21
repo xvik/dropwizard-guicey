@@ -35,7 +35,7 @@ them later for detection.
 * Search [for commands](commands.md#automatic-installation) (if classpath scan enabled)
 * Prepare [installers](installers.md):
     - Detect installers with classpath scan (if configured)
-    - Instantiate [not diabled](disables.md#disable-installers) installers
+    - Instantiate [not disabled](disables.md#disable-installers) installers
 * Resolve [extensions](extensions.md):
     - Validate all [enabled](disables.md#disable-extensions) manually registered extensions:
     one of prepared installers must recognize extension or error will be thrown.
@@ -87,7 +87,7 @@ them later for detection.
 
 !!! note
     Any `EnvironmentCommand` did no start jersey, so managed objects will not be started (but you can start required 
-    services [manually](commands.md#environment-commands). Also, all jersey related extensions will not be started.
+    services [manually](commands.md#environment-commands)). Also, all jersey related extensions will not be started.
     Still, core guice context will be completely operable. 
 
 !!! attention ""

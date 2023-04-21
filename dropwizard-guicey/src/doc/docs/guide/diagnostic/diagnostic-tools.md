@@ -25,7 +25,7 @@ during development. All reports may be enabled on main guice bundle:
 :   [AOP appliance](aop-report.md) map
 
 `#!java .printWebMappings()`
-:   Prints all registered [resvlets and filters](web-report.md) (including guice `ServletModule` declarations)
+:   Prints all registered [servlets and filters](web-report.md) (including guice `ServletModule` declarations)
 
 `#!java .printJerseyConfig()`
 :   Prints all registered jersey extensions (exception mappers, filters etc.): including everything registered by 
@@ -42,7 +42,7 @@ during development. All reports may be enabled on main guice bundle:
 ## Diagnostic hook
 
 It is obviously impossible to enable diagnostic reports without application re-compilation. 
-But, sometimes, it is required to validate installed application. To workaround this situation,
+But, sometimes, it is required to validate installed application. To work around this situation,
 guicey provides special diagnostic hook, which can be enabled with a system property:
 
 ```

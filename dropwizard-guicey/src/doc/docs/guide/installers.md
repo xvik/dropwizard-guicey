@@ -1,6 +1,6 @@
 # Installers
 
-Installer is a core integration concept: every extension point has it's own installer. 
+Installer is a core integration concept: every extension point has its own installer. 
 Installers are registered manually or detected by [classpath scan](scan.md).
 
 ## Default installers
@@ -145,7 +145,7 @@ public class ScheduledInstaller implements FeatureInstaller,
 ```
 
 Report method [will be called automatically](#reporting) after all extensions installation.
-More complex installers may require special reporter (like jersey extensins installer). 
+More complex installers may require special reporter (like jersey extensions installer). 
 
 
 Another example, suppose `CustomFeature` is a base class for our jersey extensions. 

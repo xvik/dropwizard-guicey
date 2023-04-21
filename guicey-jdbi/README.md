@@ -1,6 +1,6 @@
 # JDBI integration
 
-> [Example app](https://github.com/xvik/dropwizard-guicey-examples/tree/master/ext-jdbi)
+> [Example app](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-jdbi)
 
 ### About
 

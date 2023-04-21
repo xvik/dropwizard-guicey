@@ -49,7 +49,7 @@ Both `com.google.inject.Singleton` and `javax.inject.Singleton` annotations coul
 ## Request
 
 By default, `GuiceFilter` is registered for both application and admin contexts. 
-And so request (and session) scopes will be be available in both contexts.
+And so request (and session) scopes will be available in both contexts.
 
 ```java
 @RequestScoped

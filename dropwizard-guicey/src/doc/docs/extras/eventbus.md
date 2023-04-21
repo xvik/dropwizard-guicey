@@ -1,9 +1,5 @@
 # Guava EventBus integration
 
-!!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-eventbus) module
-
-
 Integrates [Guava EventBus](https://github.com/google/guava/wiki/EventBusExplained) with guice.
  
 Features:
@@ -14,27 +10,23 @@ Features:
  
 ## Setup
 
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-eventbus.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-eventbus)
-
-Remove `version` in dependency declaration below if you using [the BOM extensions](bom.md). 
-
 Maven:
 
 ```xml
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-eventbus</artifactId>
-  <version>{{ gradle.ext }}</version>
+  <version>{{ gradle.version }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-eventbus:{{ gradle.ext }}'
+implementation 'ru.vyarus.guicey:guicey-eventbus:{{ gradle.version }}'
 ```
 
-See the most recent version in the badge above.
+Omit version if guicey BOM used
 
 ## Usage
 
@@ -91,7 +83,7 @@ INFO  [2016-12-01 12:31:02,819] ru.vyarus.guicey.eventbus.report.EventsReporter:
 
 !!! note 
     Only subscriptions of beans registered at the time of injector startup will be shown.
-    For example, if MyBean has a subscription method but a binding for it is not declared (and noone depends on it),
+    For example, if MyBean has a subscription method but a binding for it is not declared (and no-one depends on it),
     a JIT binding will be created later in time (when bean will be actually used) and will not be reflected in the logs. 
 
 ### Consuming multiple events

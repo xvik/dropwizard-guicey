@@ -1,9 +1,5 @@
 # Validation
 
-!!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-validation) module
-
-
 By default, dropwizard allows you to use validation annotations on [rest services](https://www.dropwizard.io/en/stable/manual/validation.html).
 This module allows you to use validation annotations the same way on any guice bean method.
 
@@ -11,28 +7,23 @@ Bundle is actually a wrapper for [guice-validator](https://github.com/xvik/guice
 
 ## Setup
 
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-validation.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-validation)
-
-Avoid version in dependency declaration below if you use [extensions BOM](../guicey-bom). 
-
 Maven:
 
 ```xml
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-validation</artifactId>
-  <version>{{ gradle.ext }}</version>
+  <version>{{ gradle.version }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-validation:{{ gradle.ext }}'
+implementation 'ru.vyarus.guicey:guicey-validation:{{ gradle.version }}'
 ```
 
-See the most recent version in the badge above.
-
+Omit version if guicey BOM used
 
 ## Usage
 
@@ -107,7 +98,7 @@ Or excluding methods:
 ```
 
 Now methods annotated with `@SuppressValidation` will not be validated. Note that
-`.and(new DirectMethodMatcher())` condition was added to aslo exclude synthetic and bridge methods (jvm generated methods).
+`.and(new DirectMethodMatcher())` condition was added to also exclude synthetic and bridge methods (jvm generated methods).
 
 !!! note 
     You can verify AOP appliance with guicey `.printGuiceAopMap()` report.

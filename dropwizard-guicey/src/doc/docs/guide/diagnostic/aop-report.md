@@ -1,6 +1,6 @@
 # AOP report
 
-Guice AOP report shows all registered aop handlers and how (what order) they apply to gucie beans. 
+Guice AOP report shows all registered aop handlers and how (what order) they apply to guice beans. 
 
 ```java
 GuiceBundle.builder()
@@ -90,7 +90,7 @@ All appliances of exact interceptor:
     
 ## Report customization
 
-Report is implemented as guicey [event listener](../events.md) so you can register it directly 
+Report is implemented as a guicey [event listener](../events.md), so you can register it directly 
 in your bundle if required (without main bundle shortcuts):
 
 ```java     

@@ -102,7 +102,7 @@ instance     | `#!java bing(Smth.class).toInstance(obj)`
 providerinstance | `#!java bind(Smth.class).toProvider(obj)`
 linkedkey | `#!java bind(Smth.class).to(Other.class)` (`Other` may be already declared with separate binding)
 providerkey | `#!java bind(Smth.class).toProvider(DmthProv.class)`
-untargetted | `#!java bind(Smth.class)`  
+untargeted | `#!java bind(Smth.class)`  
 providermethod     | Module method annotated with `#!java @Provides`
 exposed | `#!java expose(PrivateService.class)` (service expose in `PrivateModule`) 
 

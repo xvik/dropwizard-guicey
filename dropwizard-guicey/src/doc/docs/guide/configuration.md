@@ -25,7 +25,7 @@ Guicey could be configured through:
 ### Configuration items
 
 `#!java .enableAutoConfig(String... basePackages)`
-:   Enable [classpath scan](scan.md) for automatic extensions registration, custom installers search and commands search (if enabled) 
+:   Enable [classpath scan](scan.md) for automatic extension registration, custom installers search and commands search (if enabled) 
 
 `#!java .enableAutoConfig()`
 :   Shortcut for enabling classpath scan on application package
@@ -52,11 +52,11 @@ Guicey could be configured through:
         Custom installers are registered automatically when [classpath scan](scan.md) is enabled.  
 
 `#!java .extensions(Class<?>... extensionClasses)`  
-:   Manual extensions registration. May be used together with [classpath scan](scan.md) and 
+:   Manual extension registration. May be used together with [classpath scan](scan.md) and 
     [binding extensions](guice/module-analysis.md#extensions-recognition)
 
 `#!java .extensionsOptional(Class<?>... extensionClasses)`  
-:   Optional extensions registration. The difference with `.extensions` is that such extensions
+:   Optional extension registration. The difference with `.extensions` is that such extensions
     will be automatically disabled if there are no compatible installers (instead of throwing exception).  
 
 `#!java .bundles(GuiceyBundle... bundles)` 
@@ -65,7 +65,7 @@ Guicey could be configured through:
 `#!java .bundleLookup(GuiceyBundleLookup bundleLookup)`
 :   Custom [lookup mechanism](bundles.md#bundle-lookup) for guicey bundles. By default, lookup 
     [by system property](bundles.md#system-property-lookup) and [ServiceLoader](bundles.md#service-loader-lookup) 
-    are enabled. To disable all lookups use: `#!java .disableBundleLookup()`
+    are enabled. To disable all look-ups use: `#!java .disableBundleLookup()`
 
 `#!java .dropwizardBundles(ConfiguredBundle... bundles)`
 :   Shortcut for [dropwizard bundles](bundles.md#dropwizard-bundles) registration. This way guicey could apply 
@@ -98,7 +98,7 @@ Could be also useful to "hack" third party items.
 
 ### Items de-duplication
 
-Guiey detects instances of the same type (bundles, modules). By default, two instances 
+Guicey detects instances of the same type (bundles, modules). By default, two instances 
 considered as [duplicates](deduplication.md) if they are equal, so duplicates could be controlled with proper 
 equals method implementation. When it's not possible, custom de-duplication [implementation](deduplication.md#general-unique-logic) 
 could be used.
@@ -141,7 +141,7 @@ BindConfigurationByPath | Boolean | true | [Introspect configuration](yaml-value
 TrackDropwizardBundles | Boolean | true | Recognize [transitive](bundles.md#transitive-bundles-tracking) dropwizard bundles (for bundles registered through guicey api)
 AnalyzeGuiceModules | Boolean | true | [Extension recognition](guice/module-analysis.md#extensions-recognition) in guice bindings, [transitive modules](guice/module-analysis.md#transitive-modules) disable support
 GuiceFilterRegistration | `EnumSet<DispatcherType>` | [REQUEST] | [Guice filter](guice/servletmodule.md) registration options
-UseHkBridge | Boolean | false | Activates [HK2-guice bridge](hk2.md#hk2-guice-bridge) (bridge dependency must be avaiable in classpath)  
+UseHkBridge | Boolean | false | Activates [HK2-guice bridge](hk2.md#hk2-guice-bridge) (bridge dependency must be available on the classpath)  
 
 #### InstallersOptions
 
@@ -155,7 +155,7 @@ ForceSingletonForJerseyExtensions | Boolean | true | Force [singleton](../instal
 
 `#!java .injectorFactory(InjectorFactory injectorFactory)`
 :   Use custom [injector factory](guice/injector.md#injector-factory) implementation. May be useful for tests or for [integration](test/overview.md#overriding-overridden-beans)
-    of 3rd paty library (like [governator](../examples/governator.md))
+    of 3rd party library (like [governator](../examples/governator.md))
       
 `#!java .build(Stage stage)`
 :   Build bundle with custom [guice stage](guice/injector.md#injector-stage) (by default, `Production`) 
@@ -169,20 +169,20 @@ ForceSingletonForJerseyExtensions | Boolean | true | Force [singleton](../instal
 :   Listen for guicey lifecycle [events](events.md#listeners)
   
 `#!java .noGuiceFilter()`
-:   Disable [GucieFilter](guice/servletmodule.md) registration.
+:   Disable [GuiceFilter](guice/servletmodule.md) registration.
     !!! danger ""
         This will [remove](guice/servletmodule.md#disable-servletmodule-support) guice request and session scopes and also
         it would become impossible to use `ServletModule`s
           
 `#!java .strictScopeControl()`
-:   Explicitly detect when gucie bean is instantiated with HK2 and vice versa.
+:   Explicitly detect when guice bean is instantiated with HK2 and vice versa.
     !!! note ""
         Bean target container is defined with `@JerseyManaged` and `@GuiceManaged` annotations
         or default (either guice or [hk2 used as default](hk2.md#use-hk2-for-jersey-extensions) (for jersey extensions))
   
 `#!java .useHK2ForJerseyExtensions()`
 :   Use [HK2 by default](hk2.md#use-hk2-for-jersey-extensions) for jersey extensions (change default). With this `@GuiceManaged` annotation
-    may be used to override defual for bean.
+    may be used to override default for bean.
     !!! danger ""
         Beans managed by HK2 can't use guice AOP, so AOP-based features will not work with such beans      
 

@@ -1,7 +1,7 @@
 # Junit 4
 
 !!! warning
-    Since guicey 5.5 junit 4 support was extracted from guicey to [external module](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-test-junit4):
+    Since guicey 5.5 junit 4 support was extracted from guicey to [external module](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-test-junit4):
 
     * Package remains the same to simplify migration (only additional dependency would be required)
     * Deprecation marks removed from rules to reduce warnings. 
@@ -225,6 +225,6 @@ In essence:
 
 * Use annotations instead of rules (and forget about RuleChain difficulties)
 * Test fields injection will work out of the box, so no need for additional hacks
-* JUnit 5 propose [parameter injection](junit5.md#parameter-injection), which may be not common at first, but its actually very handy
+* JUnit 5 propose [parameter injection](junit5.md#parameter-injection), which may be not common at first, but it's actually very handy
 
 Also, there is a pre-configured [http client](http://xvik.github.io/dropwizard-guicey/5.4.2/guide/test/junit5/#client) suitable for calling test application urls (or any other general url).  

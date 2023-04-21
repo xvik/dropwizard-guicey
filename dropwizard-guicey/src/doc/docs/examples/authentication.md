@@ -51,10 +51,10 @@ The class is automatically picked up by the [jersey installer](../installers/jer
 Constructor injection is used to obtain required guice managed instances and then configure
 authentication the same way as described in dropwizard docs.
 
-If auto configuration is enabled, then the class will be resolved and installed automatically.
+If autoconfiguration is enabled, then the class will be resolved and installed automatically.
 
 !!! note ""
-    Complete [OAuth example source](https://github.com/xvik/dropwizard-guicey-examples/tree/master/integration-auth)
+    Complete [OAuth example source](https://github.com/xvik/dropwizard-guicey/tree/master/examples/integration-auth)
 
 ## Chained auth
 

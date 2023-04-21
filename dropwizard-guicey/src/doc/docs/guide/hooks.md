@@ -86,7 +86,7 @@ INFO  [2019-09-16 16:26:35,229] ru.vyarus.dropwizard.guice.hook.ConfigurationHoo
 
 !!! note
     By default, guicey register [diagnostic hook](diagnostic/diagnostic-tools.md#diagnostic-hook)
-    to easily activate dignostic reports on compiled application:
+    to easily activate diagnostic reports on compiled application:
     ```
     -Dguicey.hooks=diagnistic
     ```

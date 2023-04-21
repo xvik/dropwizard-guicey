@@ -3,7 +3,7 @@
 Example of [guicey-jdbi](../extras/jdbi.md) extension usage.
 
 !!! abstract ""
-    Example [source code](https://github.com/xvik/dropwizard-guicey-examples/tree/master/ext-jdbi)
+    Example [source code](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-jdbi)
 
 
 The [JDBI extension](../extras/jdbi.md) allows:
@@ -19,7 +19,7 @@ The [JDBI extension](../extras/jdbi.md) allows:
 Additional dependencies required:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-jdbi:{{ gradle.ext }}'
+implementation 'ru.vyarus.guicey:guicey-jdbi:{{ gradle.version }}'
 implementation 'com.h2database:h2:1.4.199'
 ```
 
@@ -66,7 +66,7 @@ database:
 !!! warning
     Database scheme must be created manually. You can use 
     [dropwizard-flyway](https://github.com/dropwizard/dropwizard-flyway) module to prepare database. 
-    See [example app source](https://github.com/xvik/dropwizard-guicey-examples/tree/master/ext-jdbi) for details. 
+    See [example app source](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-jdbi) for details. 
  
 
 DBI instance created exactly as described in [dropwizard docs](https://www.dropwizard.io/en/release-1.3.x/manual/jdbi.html) 

@@ -114,7 +114,7 @@ SharedConfigurationState.get(environment)
 SharedConfigurationState.lookup(environment, XBundle.class)
 ```
 
-Special shorcut methods may be used for "get or fail behaviour":
+Special shortcut methods may be used for "get or fail behaviour":
 
 ```java
 SharedConfigurationState.lookupOrFail(app, XBundle.class, 

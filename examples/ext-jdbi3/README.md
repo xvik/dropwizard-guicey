@@ -1,6 +1,6 @@
 ### JDBI3 integration sample
 
-Use [JDBI3 guicey extension](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3) to:
+Use [JDBI3 guicey extension](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi3) to:
 * use jdbi proxies as guice beans
 * be able to use injection inside proxies
 * be able to use AOP on proxies
@@ -35,13 +35,13 @@ Note custom jdbi plugin installation for H2:
 
 #### Repository
 
-[Repositories installer](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3#repository): all jdbi proxies must be annotated with `@JdbiRepository` so installer could recognize them.
+[Repositories installer](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi3#repository): all jdbi proxies must be annotated with `@JdbiRepository` so installer could recognize them.
 See [UserRepository](src/main/java/ru/vyarus/dropwizard/guice/examples/repository/UserRepository.java) 
 
 Repository is annotated with `@InTransaction` to allow using repositories directly: repository method call is the smallest transaction scope. 
 Transaction scope could be enlarged by using annotation on calling guice beans or 
-[declaring transaction manually](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3#manual-transaction-definition).
-In order to better understand how transactions work read [unit of work docs section](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3#unit-of-work).
+[declaring transaction manually](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi3#manual-transaction-definition).
+In order to better understand how transactions work read [unit of work docs section](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi3#unit-of-work).
 
 Note that `InTransaction` is handled with guice AOP, so you can use any other guice aop related features.
 
@@ -59,7 +59,7 @@ checked during update to prevent data loss.
 
 #### Row mapper
 
-[Row mapper installer](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi3#row-mapper): detects all implementations of `RowMapper`.
+[Row mapper installer](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi3#row-mapper): detects all implementations of `RowMapper`.
 
 Row mapper is used to map query result set to entity: [UserMapper](src/main/java/ru/vyarus/dropwizard/guice/examples/repository/mapper/UserMapper.java).
 It's automatically registered in jdbi instance. Mapper are instantiated as normal guice beans without restrictions: so you can use injection and aop 

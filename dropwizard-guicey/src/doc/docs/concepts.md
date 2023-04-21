@@ -12,7 +12,7 @@ HK2 context is launched too late (after dropwizard run phase) and, for example, 
 impossible to use HK2 to instantiate dropwizard managed objects because managed 
 must be registered before HK2 context starts.
 
-Guicey use lazy factories for integration: it register providers for HK2 objects in 
+Guicey use lazy factories for integration: it registers providers for HK2 objects in 
 guice context. Guice-managed objects (extensions) are simply registered as instances.
 So most of the time you don't have to know about HK2 at all.
 
@@ -51,8 +51,8 @@ This separation of initialization and run phases makes configuration more predic
 ### Guice module
 
 In the main `GuiceBundle` guice modules registration appears under initialization phase (when
-neither `Configuration` nor `Environment` objects are available). If module require these objects 
-and it's registration can't be moved to guicey bundle's run method, then use 
+neither `Configuration` nor `Environment` objects are available). If a module requires these objects 
+and its registration can't be moved to guicey bundle's run method, then use 
 [marker interfaces](guide/guice/module-autowiring.md). For example, `ConfigurationAwareModule` will lead 
 to configuration object set into module before injector creation.
 
@@ -163,7 +163,7 @@ This force you to always use all request scoped objects through `Provider`. But,
 this avoids a jvm garbage from creating them for each request and makes everything a bit 
 faster (no extra DI work required for each request).
 
-If you think that developer comfort worth more then small performance gain, then:
+If you think that developer comfort worth more than small performance gain, then:
 
 * You can use explicit scope annotations to change singleton scope (`@RequestScoped`, `@Prototype`)
 * Switch off forced singletons (`.option(InstallerOptions.ForceSingletonForJerseyExtensions, false)`)
@@ -189,8 +189,7 @@ additional configurations (thanks to classpath scan).
 Another example is [`PluginInstaller`](installers/plugin.md) which allows you to declare plugins 
 (e.g. implementing some interface) and inject all of them at once (as `Set<PluginInterface>`).
 
-[Extensions project](https://github.com/xvik/dropwizard-guicey-ext) provides special installer to 
-[register events in guava eventBus](extras/eventbus.md):
+[guicey-eventbus](extras/eventbus.md) provides special installer to register events in guava eventBus:
 `EventBusInstaller` check class methods and if any method is annotated with `@Subscribe` - register extension
 as event bus listener.
 
@@ -206,7 +205,7 @@ and write installer to automatically register such classes in scheduler framewor
 
 ### Core installers override
 
-It is also possible to replace any core installer (e.g. to change it's behaviour) -
+It is also possible to replace any core installer (e.g. to change its behaviour) -
 you just need to disable core installer and install a replacement:
 
 ```java
@@ -241,7 +240,7 @@ The concept is great, but, in context of guice, dropwizard bundle did not allow 
 register guice modules (and, of course, guicey installers and extensions).  So there is no way to
 elegantly re-use dropwizard bundles mechanism.
 
-Guicey introduce it's own bundles:
+Guicey introduce its own bundles:
 
 ```java
 public interface GuiceyBundle {
@@ -274,7 +273,7 @@ In dropwizard bundles are helpful not just for extracting re-usable extensions, 
 separation of application logic.
 
 In guicey, you don't need to write registration code and with enabled [classpath scan](guide/scan.md),
-don't need to configure much at all. This makes guicy bundles mostly usable for 3rd party integrations (or core modules extraction for large projects), 
+don't need to configure much at all. This makes guicey bundles mostly usable for 3rd party integrations (or core modules extraction for large projects), 
 where you can't (and should not) rely on class path scan and must declare all installers and extensions manually.
 
 Many bundle examples could be found in [extension modules](guide/modules.md).
@@ -302,7 +301,7 @@ implicitly registered.
     It *does not mean* guicey loads all bundles in classpath!     
 
 !!! tip
-    ServiceLoader and property based lookups are always enabled, but you can switch them 
+    ServiceLoader and property based look-ups are always enabled, but you can switch them 
     off if required with `.disableBundleLookup()` bundle option.
     
 
@@ -440,8 +439,8 @@ GuiceBundle.builder()
 Note that "common bundle" problem for dropwizard bundles may be solved by simply 
 registering dropwizard bundles through guicey api.
 
-!!! warning "Dropwizrd bundles"
-    Only dropwizard bundles, registered through guciey api are visible.
+!!! warning "Dropwizard bundles"
+    Only dropwizard bundles, registered through guicey api are visible.
     So if there would be one bundle registered directly in dropwizard and 
     another with guicey api - guicey will not detect duplicate.
 
@@ -530,7 +529,7 @@ There is a special group of `print[Something]` methods, which are intended to he
 you understand internal state (and help with debugging).
  
 As you have seen, real life configuration could be quite complex because you may have many extensions, observed with classpath scan,
-bundles, bundles installing other bundles, many gucie modules. Also, some bundles
+bundles, bundles installing other bundles, many guicey modules. Also, some bundles
 may disable extensions, installers, guice modules (and some modules could even override bindings).
 
 During startup guicey tracks all performed configurations and you can even access [this 

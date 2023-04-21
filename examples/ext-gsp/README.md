@@ -1,6 +1,6 @@
 ### Guicey server pages example
 
-Use [GSP guicey module]((https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-server-pages)).
+Use [GSP guicey module]((https://github.com/xvik/dropwizard-guicey/tree/master/guicey-server-pages)).
 
 Sample application configures app:
 

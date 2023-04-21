@@ -1,7 +1,7 @@
 # JDBI integration
 
 !!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi) module
+    [Extensions project](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi) module
 
 !!! warning ""
     **DEPRECATED**: because jdbi2 dropwizard module is deprecated and moved [outside of core modules](https://github.com/dropwizard/dropwizard-jdbi).
@@ -21,14 +21,10 @@ Features:
 
 Added installers:
 
-* [RepositoryInstaller](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/repository/RepositoryInstaller.java) - sql proxies
-* [MapperInstaller](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/MapperInstaller.java) - result set mappers  
+* [RepositoryInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/repository/RepositoryInstaller.java) - sql proxies
+* [MapperInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/MapperInstaller.java) - result set mappers  
  
 ## Setup
-
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-jdbi.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-jdbi)
-
-Avoid version in dependency declaration below if you use [extensions BOM](bom.md). 
 
 Maven:
 
@@ -36,17 +32,17 @@ Maven:
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-jdbi</artifactId>
-  <version>{{ gradle.ext }}</version>
+  <version>{{ gradle.version }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-jdbi:{{ gradle.ext }}'
+implementation 'ru.vyarus.guicey:guicey-jdbi:{{ gradle.version }}'
 ```
 
-See the most recent version in the badge above.
+Omit version if guicey BOM used
 
 ## Usage
 

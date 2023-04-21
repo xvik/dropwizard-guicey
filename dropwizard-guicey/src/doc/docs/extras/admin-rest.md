@@ -1,8 +1,5 @@
 # Admin REST
 
-!!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey-ext/tree/master/guicey-admin-rest) module
-
 Mirror all resources in admin context: on admin side special servlet simply redirects all incoming requests into the jersey context.
 Hides admin-only resources from user context: resource is working under admin context and return 404 on user context.
 
@@ -15,27 +12,23 @@ Features:
 
 ## Setup
 
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus.guicey/guicey-admin-rest.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus.guicey/guicey-admin-rest)
-
-Remove `version` in dependency declaration below if you using [the BOM extensions](bom.md). 
-
 Maven:
 
 ```xml
 <dependency>
   <groupId>ru.vyarus.guicey</groupId>
   <artifactId>guicey-admin-rest</artifactId>
-  <version>{{ gradle.ext }}</version>
+  <version>{{ gradle.version }}</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus.guicey:guicey-admin-rest:{{ gradle.ext }}'
+implementation 'ru.vyarus.guicey:guicey-admin-rest:{{ gradle.version }}'
 ```
 
-See the most recent version in the badge above.
+Omit version if guicey BOM used
 
 ## Usage
 

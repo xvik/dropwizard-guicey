@@ -5,10 +5,10 @@
 
 ## Recognition
 
-Detects classes annotated with `#!java @EagerSingleton` annotation and register them in guice injector. 
+Detects classes annotated with `#!java @EagerSingleton` annotation and registers them in guice injector. 
 It is equivalent of eager singleton registration `#!java bind(type).asEagerSingleton()`.
 
-Useful in case when you have bean not injected by other beans (so guice can't register
+Useful in cases when you have a bean which is not injected by other beans (so guice can't register
 it through aot). Normally, you would have to manually register such bean in module.
 
 Most likely, such bean will contain initialization logic. 

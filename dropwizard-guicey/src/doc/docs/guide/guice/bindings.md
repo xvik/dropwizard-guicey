@@ -6,7 +6,7 @@ Guicey always installs `GuiceBootstrapModule` which registers the following bind
     * `io.dropwizard.setup.Bootstrap` 
     * `io.dropwizard.Configuration` 
     * `io.dropwizard.setup.Environment`
-* Detailed [configuration bindings](#configuration) (by root classes, interfaces, yaml path or unique sub type)
+* Detailed [configuration bindings](#configuration) (by root classes, interfaces, yaml path or unique subtype)
 * [Jersey objects](#jersey-specific-bindings) (including [request scoped](#request-and-response)) 
 * Guicey [special objects](#guicey-configuration)
 * All installed [extensions](#extension-bindings) 
@@ -121,7 +121,7 @@ Which could be injected directly:
 
 ### Value by path
 
-All visible configuration paths values are directly bindable:
+All visible configuration paths values can be directly bound:
 
 ```java
 public class MyConfig extends Configuration {
@@ -148,7 +148,7 @@ public class SubConf {
 
 !!! note 
     Generified types are bound only with generics (with all available type information).
-    If you will have `SubConf<T> sub` in config, then it will be bound with correct generic `SubConfig<String>`
+    If you have `SubConf<T> sub` in config, then it will be bound with correct generic `SubConfig<String>`
     (suppose generic T is declared as String).
 
 Value type, **declared in configuration class** is used for binding, but there are two exceptions.
@@ -289,11 +289,11 @@ to [guicey configuration details](../diagnostic/configuration-report.md):
     for application, but this section is important in case of problems. 
 
 In order to support guice `binder().requireExplicitBindings()` option guicey binds
-all extensions with untargetted binding: `binder().bind(YourExtension.class)`.
+all extensions with untargeted binding: `binder().bind(YourExtension.class)`.
 
 But there are three exceptions:
 
-* Installers with custom binding logic (like [plugins installer](../../installers/plugin.md))
+* Installers with custom binding logic (like a [plugins installer](../../installers/plugin.md))
 * If extension was detected from binding (obviously binding already exists)
 * If extension is annotated with`@LazyBinding`
 

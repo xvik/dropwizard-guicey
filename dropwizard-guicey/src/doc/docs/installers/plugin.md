@@ -97,7 +97,7 @@ All plugins could be referenced as map:
 
 !!! warning
     As with simple plugin bindings, at least one plugin must be registered so guice could create map binding.
-    Otherwise, you need to manually declare empty (default) plugnis map binding:
+    Otherwise, you need to manually declare empty (default) plugins map binding:
     ```java
     MapBinder.newMapBinder(binder, keyType, pluginType);
     ```

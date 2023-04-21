@@ -265,7 +265,7 @@ Index page:
     
 !!! warning
     Standard errors handling in views ([templates](https://www.dropwizard.io/en/release-2.0.x/manual/views.html#template-errors),
-    [custome pages](https://www.dropwizard.io/en/release-2.0.x/manual/views.html#custom-error-pages)) is replaced by 
+    [custom pages](https://www.dropwizard.io/en/release-2.0.x/manual/views.html#custom-error-pages)) is replaced by 
     [custom mechanism](../extras/gsp.md#error-pages), required to implement per-ui-app errors support.
     
  
