@@ -6,8 +6,8 @@
 
 **DOCUMENTATION**: http://xvik.github.io/dropwizard-guicey/
 
-* [Examples](https://github.com/xvik/dropwizard-guicey/examples)
-* [Extensions and integrations](https://github.com/xvik/dropwizard-guicey/)
+* [Examples](https://github.com/xvik/dropwizard-guicey/tree/dw-3/examples)
+* [Extensions and integrations](https://github.com/xvik/dropwizard-guicey/tree/dw-3)
 
 Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
 

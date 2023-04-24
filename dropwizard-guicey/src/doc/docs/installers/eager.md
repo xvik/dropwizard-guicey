@@ -1,7 +1,7 @@
 # Eager singleton installer
 
 !!! summary ""
-    CoreInstallersBundle / [EagerSingletonInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/eager/EagerSingletonInstaller.java)
+    CoreInstallersBundle / [EagerSingletonInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-3/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/eager/EagerSingletonInstaller.java)
 
 ## Recognition
 

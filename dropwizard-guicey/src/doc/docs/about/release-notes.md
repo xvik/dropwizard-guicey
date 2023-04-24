@@ -26,4 +26,4 @@ be used as a BOM. Instead, use `ru.vyarus.guicey:guicey-bom` - it contains every
 Also, dropwizard-guicey POM was simplified: all exclusions were moved directly into dependencies section 
 instead relying on dependencyManagement.
 
-Examples repository was also merged [inside main repo](https://github.com/xvik/dropwizard-guicey/tree/master/examples)
+Examples repository was also merged [inside main repo](https://github.com/xvik/dropwizard-guicey/tree/dw-3/examples)

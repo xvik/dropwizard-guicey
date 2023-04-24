@@ -25,7 +25,7 @@ This provider will use jersey's `InjectionManager` to lookup bean:
 injectionManagerInstance.getInstance(type);
 ```
 
-See more details in [jersey bindings module](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/jersey/hk2/GuiceBindingsModule.java).
+See more details in [jersey bindings module](https://github.com/xvik/dropwizard-guicey/tree/dw-3/src/main/java/ru/vyarus/dropwizard/guice/module/jersey/hk2/GuiceBindingsModule.java).
 
 ### Access HK2 context from guice
 
@@ -61,7 +61,7 @@ And internally this factory will obtain instance from guice injector:
 guiceInjector.getInstance(guiceType);
 ```        
 
-To see more details on how it works look [jersey providers installer](https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java).
+To see more details on how it works look [jersey providers installer](https://github.com/xvik/dropwizard-guicey/tree/dw-3/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java).
 
 ## HK2 delegation
 

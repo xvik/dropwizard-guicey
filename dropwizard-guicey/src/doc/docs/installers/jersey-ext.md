@@ -1,7 +1,7 @@
 # Jersey extension installer
 
 !!! summary ""
-    CoreInstallersBundle / [JerseyProviderInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java)        
+    CoreInstallersBundle / [JerseyProviderInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-3/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java)        
 
 Installs various jersey extensions, usually annotated with jersey `#!java @Provider` annotation and installed via `#!java environment.jersey().register()`:
 

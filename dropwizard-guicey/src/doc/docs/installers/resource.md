@@ -1,7 +1,7 @@
 # Resource installer
 
 !!! summary ""
-    CoreInstallersBundle / [ResourceInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/ResourceInstaller.java)
+    CoreInstallersBundle / [ResourceInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-3/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/ResourceInstaller.java)
 
 Installs [rest resources](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#resources).
 

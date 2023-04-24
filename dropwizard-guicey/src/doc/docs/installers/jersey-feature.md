@@ -1,7 +1,7 @@
 # Jersey feature installer
 
 !!! summary ""
-    CoreInstallersBundle / [JerseyFeatureInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/JerseyFeatureInstaller.java)
+    CoreInstallersBundle / [JerseyFeatureInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-3/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/JerseyFeatureInstaller.java)
 
 ## Recognition
 

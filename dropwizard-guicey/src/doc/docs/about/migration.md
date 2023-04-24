@@ -7,7 +7,7 @@ Java 8 support dropped! Many core packages were changed so there might be proble
 * [dropwizard upgrade instructions](https://www.dropwizard.io/en/release-3.0.x/manual/upgrade-notes/upgrade-notes-3_0_x.html)
 
 * Guicey core was merged with ext modules to unify versioning. 
-* Examples repository was also merged into the [main repository](https://github.com/xvik/dropwizard-guicey/tree/master/examples)
+* Examples repository was also merged into the [main repository](https://github.com/xvik/dropwizard-guicey/tree/dw-3/examples)
 * There is only one BOM now: `ru.vyarus.guicey:guicey-bom`. 
 * Dropwizard-guicey POM is not a BOM anymore (removing ambiguity). POM simplified by using direct exclusions instead of relying on BOM.
 

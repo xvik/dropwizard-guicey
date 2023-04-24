@@ -1,7 +1,7 @@
 # Web servlet installer
 
 !!! summary ""
-    WebInstallersBundle / [WebServletInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/web/WebServletInstaller.java)        
+    WebInstallersBundle / [WebServletInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-3/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/web/WebServletInstaller.java)        
 
 Register new servlet in main or admin contexts.
 

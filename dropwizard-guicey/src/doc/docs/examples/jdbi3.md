@@ -3,7 +3,7 @@
 Example of [guicey-jdbi3](../extras/jdbi3.md) extension usage.
 
 !!! abstract ""
-    Example [source code](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-jdbi3)
+    Example [source code](https://github.com/xvik/dropwizard-guicey/tree/dw-3/examples/ext-jdbi3)
 
 
 The [JDBI3 extension](../extras/jdbi3.md) allows:
@@ -66,7 +66,7 @@ database:
 !!! warning
     Database scheme must be created manually. You can use 
     [dropwizard-flyway](https://github.com/dropwizard/dropwizard-flyway) module to prepare database. 
-    See [example app source](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-jdbi3) for details. 
+    See [example app source](https://github.com/xvik/dropwizard-guicey/tree/dw-3/examples/ext-jdbi3) for details. 
  
 
 JDBI instance created exactly as described in [dropwizard docs](https://www.dropwizard.io/en/release-3.0.x/manual/jdbi3.html) 

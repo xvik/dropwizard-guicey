@@ -1,6 +1,6 @@
 # JDBI 3 integration
 
-> [Example app](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-jdbi3)
+> [Example app](https://github.com/xvik/dropwizard-guicey/tree/dw-3/examples/ext-jdbi3)
 
 ### About
 

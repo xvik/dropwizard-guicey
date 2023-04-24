@@ -1,7 +1,7 @@
 # Lifecycle installer
 
 !!! summary ""
-    CoreInstallersBundle / [LifeCycleInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/LifeCycleInstaller.java)        
+    CoreInstallersBundle / [LifeCycleInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-3/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/LifeCycleInstaller.java)        
 
 Installs [jetty LifeCycle](http://download.eclipse.org/jetty/stable-9/apidocs/org/eclipse/jetty/util/component/LifeCycle.html) implementations.
 

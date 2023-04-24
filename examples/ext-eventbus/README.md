@@ -1,6 +1,6 @@
 ### Guava EventBus integration example
 
-Use [eventbus guicey extension](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-eventbus) to:
+Use [eventbus guicey extension](https://github.com/xvik/dropwizard-guicey/tree/dw-3/guicey-eventbus) to:
 * automatically register listeners
 * bind eventbus (for publication)
 * print available listeners to console
