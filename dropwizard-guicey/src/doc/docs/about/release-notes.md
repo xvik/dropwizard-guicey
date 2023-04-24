@@ -1,8 +1,5 @@
 # 6.0.0 Release Notes
 
-!!! summary ""
-    [5.7.1 release notes](http://xvik.github.io/dropwizard-guicey/5.7.1/about/release-notes/)
-
 * Update to dropwizard 3.0.0
 * Extensions merged into core guicey repository
 
@@ -27,3 +24,6 @@ Also, dropwizard-guicey POM was simplified: all exclusions were moved directly i
 instead relying on dependencyManagement.
 
 Examples repository was also merged [inside main repo](https://github.com/xvik/dropwizard-guicey/tree/dw-3/examples)
+
+!!! note
+    Guicey 5.x was also migrated to the same project structure so you can move first to guicey 5.8.0 and then to 6.0
