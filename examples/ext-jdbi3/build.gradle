@@ -1,10 +1,6 @@
 dependencies {
-    if(JavaVersion.current() == JavaVersion.VERSION_1_8) {
-        implementation 'ru.vyarus.guicey:guicey-jdbi3-jdk8'
-    } else {
-        implementation 'ru.vyarus.guicey:guicey-jdbi3'
-    }
+    implementation 'ru.vyarus.guicey:guicey-jdbi3'
 
     implementation 'com.h2database:h2'
-    implementation 'org.flywaydb:flyway-core'
+    implementation 'io.dropwizard.modules:dropwizard-flyway:3.0.0-1'
 }
