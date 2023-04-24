@@ -6,7 +6,7 @@
 This version brings the same project structure as in guicey 6.x (for dropwizard 3) which 
 could slightly simplify migration to dropwizard 3.
 
-The same structure is required to keep 2.1, 3 and 4 branhces in sync
+The same structure is required to keep 2.1, 3 and 4 branches in sync
 
 
 ## Extensions merged into core guicey repository

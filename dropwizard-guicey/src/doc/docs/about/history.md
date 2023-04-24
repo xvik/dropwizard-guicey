@@ -1,10 +1,11 @@
+### [5.8.0](http://xvik.github.io/dropwizard-guicey/5.8.0) (2023-03-09)
 * Update to dropwizard 2.1.6
 * Merged with guicey-ext modules repository:
     - Ext modules version would be the same as guicey
     - dropwizard-guicey POM would not be a BOM anymore (everything moved to guicey-bom)
     - Exclusions not applied in BOM anymore, instead they applied directly in POM
 
-### ### [5.7.1](http://xvik.github.io/dropwizard-guicey/5.7.1) (2023-03-09)
+### [5.7.1](http://xvik.github.io/dropwizard-guicey/5.7.1) (2023-03-09)
 * Update to dropwizard 2.1.5
 * Revert changing reports log level: now INFO used instead of WARN (#276)
 
