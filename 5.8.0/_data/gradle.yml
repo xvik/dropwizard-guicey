@@ -1,0 +1,3 @@
+version: 5.8.0
+dropwizard: 2.1.6
+guice: 5.1.0
