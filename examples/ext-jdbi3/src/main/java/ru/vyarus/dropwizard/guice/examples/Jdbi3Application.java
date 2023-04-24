@@ -4,6 +4,7 @@ import io.dropwizard.core.Application;
 import io.dropwizard.db.PooledDataSourceFactory;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
+import io.dropwizard.flyway.FlywayBundle;
 import org.jdbi.v3.core.h2.H2DatabasePlugin;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.guicey.jdbi3.JdbiBundle;
@@ -28,13 +29,12 @@ public class Jdbi3Application extends Application<Jdbi3AppConfiguration> {
                         .withPlugins(new H2DatabasePlugin()))
                 .build());
         // used for manual run to init db
-        // todo not available yet
-//        bootstrap.addBundle(new FlywayBundle<Jdbi3AppConfiguration>() {
-//            @Override
-//            public PooledDataSourceFactory getDataSourceFactory(Jdbi3AppConfiguration configuration) {
-//                return configuration.getDatabase();
-//            }
-//        });
+        bootstrap.addBundle(new FlywayBundle<Jdbi3AppConfiguration>() {
+            @Override
+            public PooledDataSourceFactory getDataSourceFactory(Jdbi3AppConfiguration configuration) {
+                return configuration.getDatabase();
+            }
+        });
     }
 
     @Override
