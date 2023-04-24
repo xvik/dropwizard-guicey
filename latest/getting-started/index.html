@@ -2058,7 +2058,7 @@ Advanced descriptions of guicey concepts may be found in <a href="../concepts/">
 modules</a>: </p>
 <p>Gradle:</p>
 <div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="o">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="n">platform</span><span class="o">(</span><span class="s1">&#39;ru.vyarus:dropwizard-guicey:6.0.0&#39;</span><span class="o">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">implementation</span><span class="w"> </span><span class="n">platform</span><span class="o">(</span><span class="s1">&#39;ru.vyarus.guicey:guicey-bom:6.0.0&#39;</span><span class="o">)</span><span class="w"></span>
 <span class="w">    </span><span class="c1">// uncomment to override dropwizard and its dependencies versions</span><span class="w"></span>
 <span class="c1">//    implementation platform(&#39;io.dropwizard:dropwizard-dependencies:3.0.0&#39;)</span><span class="w"></span>
 
@@ -2076,8 +2076,8 @@ modules</a>: </p>
 <div class="highlight"><pre><span></span><code><span class="nt">&lt;dependencyManagement&gt;</span>  
     <span class="nt">&lt;dependencies&gt;</span>
         <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>ru.vyarus<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>dropwizard-guicey<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>ru.vyarus.guicey<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>guicey-bom<span class="nt">&lt;/artifactId&gt;</span>
             <span class="nt">&lt;version&gt;</span>6.0.0<span class="nt">&lt;/version&gt;</span>
             <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
             <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
@@ -2102,7 +2102,7 @@ modules</a>: </p>
 </code></pre></div>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
-<p>Full source of example application is <a href="https://github.com/xvik/dropwizard-guicey/tree/master/examples/core-getting-started">published here</a></p>
+<p>Full source of example application is <a href="https://github.com/xvik/dropwizard-guicey/tree/dw-3/examples/core-getting-started">published here</a></p>
 </div>
 <p>Register guice bundle:</p>
 <div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SampleApplication</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Application</span><span class="o">&lt;</span><span class="n">Configuration</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>

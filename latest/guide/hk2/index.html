@@ -1986,7 +1986,7 @@ only with lazy providers:</p>
 <p>This provider will use jersey's <code>InjectionManager</code> to lookup bean:</p>
 <div class="highlight"><pre><span></span><code><span class="n">injectionManagerInstance</span><span class="p">.</span><span class="na">getInstance</span><span class="p">(</span><span class="n">type</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
-<p>See more details in <a href="https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/jersey/hk2/GuiceBindingsModule.java">jersey bindings module</a>.</p>
+<p>See more details in <a href="https://github.com/xvik/dropwizard-guicey/tree/dw-3/src/main/java/ru/vyarus/dropwizard/guice/module/jersey/hk2/GuiceBindingsModule.java">jersey bindings module</a>.</p>
 <h3 id="access-hk2-context-from-guice">Access HK2 context from guice<a class="headerlink" href="#access-hk2-context-from-guice" title="Permanent link">&para;</a></h3>
 <p>Jersey's <code>InjectionManager</code> is available for injection inside guice context:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@Inject</span><span class="w"> </span><span class="n">Provider</span><span class="o">&lt;</span><span class="n">InjectionManager</span><span class="o">&gt;</span><span class="w"> </span><span class="n">jerseyInjector</span><span class="p">;</span><span class="w"></span>
@@ -2008,7 +2008,7 @@ and <a href="../../installers/jersey-ext/">providers</a>) are registered in HK2 
 <p>And internally this factory will obtain instance from guice injector:</p>
 <div class="highlight"><pre><span></span><code><span class="n">guiceInjector</span><span class="p">.</span><span class="na">getInstance</span><span class="p">(</span><span class="n">guiceType</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
-<p>To see more details on how it works look <a href="https://github.com/xvik/dropwizard-guicey/blob/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java">jersey providers installer</a>.</p>
+<p>To see more details on how it works look <a href="https://github.com/xvik/dropwizard-guicey/tree/dw-3/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/JerseyProviderInstaller.java">jersey providers installer</a>.</p>
 <h2 id="hk2-delegation">HK2 delegation<a class="headerlink" href="#hk2-delegation" title="Permanent link">&para;</a></h2>
 <p>You can delegate extension instance management into HK2 with <code>@JerseyManaged</code> annotation:</p>
 <div class="highlight"><pre><span></span><code><span class="nd">@Provider</span><span class="w"></span>
