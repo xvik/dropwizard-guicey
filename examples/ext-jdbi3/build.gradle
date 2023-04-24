@@ -6,5 +6,5 @@ dependencies {
     }
 
     implementation 'com.h2database:h2'
-    implementation 'io.dropwizard.modules:dropwizard-flyway'
+    implementation 'io.dropwizard.modules:dropwizard-flyway:2.1.0-4'
 }
