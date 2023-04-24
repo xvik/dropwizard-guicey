@@ -34,7 +34,7 @@
 
 * [ru.vyarus:dropwizard-guicey](https://github.com/xvik/dropwizard-guicey/tree/dw-3/dropwizard-guicey) - core
     guicey module. Could be used without any extra modules
-* [ru.vyarus.guicey:guicey-[module name]](https://github.com/xvik/dropwizard-guicey) - guicey extension 
+* [ru.vyarus.guicey:guicey-[module name]](https://github.com/xvik/dropwizard-guicey/tree/dw-3) - guicey extension 
     [modules](guide/modules.md) (use with `ru.vyarus.guicey:guicey-bom`). Modules provide additional functionality like 
     3rd party libraries integration. Also, serve as an example of possible extension implementations. 
 * [Examples](https://github.com/xvik/dropwizard-guicey/tree/dw-3/examples) - various usage examples for core guicey,
