@@ -1,7 +1,7 @@
 # Plugin installer
 
 !!! summary ""
-    CoreInstallersBundle / [PluginInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/plugin/PluginInstaller.java)
+    CoreInstallersBundle / [PluginInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/plugin/PluginInstaller.java)
 
 Allows automatic gathering of multiple implementations of some interface into bindable set or map (dynamic plugins case).  
 

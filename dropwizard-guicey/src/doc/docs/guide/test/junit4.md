@@ -1,7 +1,7 @@
 # Junit 4
 
 !!! warning
-    Since guicey 5.5 junit 4 support was extracted from guicey to [external module](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-test-junit4):
+    Since guicey 5.5 junit 4 support was extracted from guicey to [external module](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-test-junit4):
 
     * Package remains the same to simplify migration (only additional dependency would be required)
     * Deprecation marks removed from rules to reduce warnings. 

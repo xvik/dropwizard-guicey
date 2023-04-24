@@ -1,7 +1,7 @@
 # Web filter installer
 
 !!! summary ""
-    WebInstallersBundle / [WebFilterInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/web/WebFilterInstaller.java)        
+    WebInstallersBundle / [WebFilterInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/web/WebFilterInstaller.java)        
 
 Register new filter in main or admin contexts.
 

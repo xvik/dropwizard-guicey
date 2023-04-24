@@ -2,7 +2,7 @@
 
 This is an evolution of [SPA example](../ext-spa) but with dynamic base path.
 
-Use [GSP guicey module]((https://github.com/xvik/dropwizard-guicey/tree/master/guicey-server-pages))
+Use [GSP guicey module]((https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-server-pages))
 for index page to set correct base path. Note that gsp module extends spa module and so inherits its features.
 
 There are 3 examples:

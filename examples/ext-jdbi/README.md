@@ -1,6 +1,6 @@
 ### JDBI integration sample
 
-Use [JDBI guicey extension](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi) to:
+Use [JDBI guicey extension](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-jdbi) to:
 * use jdbi proxies as guice beans
 * be able to use injection inside proxies
 * be able to use AOP on proxies
@@ -29,13 +29,13 @@ using provided db configuration:
 
 #### Repository
 
-[Repositories installer](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi#repository): all jdbi proxies must be annotated with `@JdbiRepository` so installer could recognize them.
+[Repositories installer](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-jdbi#repository): all jdbi proxies must be annotated with `@JdbiRepository` so installer could recognize them.
 See [UserRepository](src/main/java/ru/vyarus/dropwizard/guice/examples/repository/UserRepository.java) 
 
 Repository is annotated with `@InTransaction` to allow using repositories directly: repository method call is the smallest transaction scope. 
 Transaction scope could be enlarged by using annotation on calling guice beans or 
-[declaring transaction manually](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi#manual-transaction-definition).
-In order to better understand how transactions work read [unit of work docs section](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi#unit-of-work).
+[declaring transaction manually](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-jdbi#manual-transaction-definition).
+In order to better understand how transactions work read [unit of work docs section](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-jdbi#unit-of-work).
 
 Note that `InTransaction` is handled with guice AOP, so you can use any other guice aop related features.
 
@@ -53,7 +53,7 @@ checked during update to prevent data loss.
 
 #### Result set mapper
 
-[Result set mapper installer](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi#result-set-mapper): detects all implementations of `ResultSetMapper`.
+[Result set mapper installer](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-jdbi#result-set-mapper): detects all implementations of `ResultSetMapper`.
 
 Result set mapper is used to map query result set to entity: [UserMapper](src/main/java/ru/vyarus/dropwizard/guice/examples/repository/mapper/UserMapper.java).
 It's automatically registered in dbi instance. Mapper are instantiated as normal guice beans without restrictions: so you can use injection and aop 

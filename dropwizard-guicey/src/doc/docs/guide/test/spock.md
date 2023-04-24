@@ -4,7 +4,7 @@
 groovy language.
 
 !!! warning
-    Since guicey 5.5 spock 1 support was extracted from guicey to [external module](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-test-spock).
+    Since guicey 5.5 spock 1 support was extracted from guicey to [external module](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-test-spock).
     Package remains the same to simplify migration (only additional dependency would be required)
     
     This was required because spock 1 does not work on JDK 16 and above.

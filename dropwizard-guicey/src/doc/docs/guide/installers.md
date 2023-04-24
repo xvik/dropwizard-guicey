@@ -185,7 +185,7 @@ In order to support [ordering](ordering.md), installer must implement `Ordered` 
     If installer doesn't implement `Ordering` extensions will not be sorted, 
     even if extensions has `@Order` annotations. 
 
-As example, see [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ManagedInstaller.java)
+As example, see [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ManagedInstaller.java)
 
 ### Options
 
@@ -199,8 +199,8 @@ Installer could also use [guicey options](options.md):
 Installers `report()` method will be called after it finish installation of all found extensions. Report provides
 user visibility of installed extensions. 
 
-To simplify reporting use predefined [Reporter](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/util/Reporter.java) class. 
-See example usage in [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ManagedInstaller.java)
+To simplify reporting use predefined [Reporter](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/src/main/java/ru/vyarus/dropwizard/guice/module/installer/util/Reporter.java) class. 
+See example usage in [ManagedInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/ManagedInstaller.java)
 
 ```
 INFO  [2016-08-21 23:49:49,534] ru.vyarus.dropwizard.guice.module.installer.feature.ManagedInstaller: managed =
@@ -209,8 +209,8 @@ INFO  [2016-08-21 23:49:49,534] ru.vyarus.dropwizard.guice.module.installer.feat
 ```
 
 For complex cases, reporter may be extended to better handle installed extensions. As examples see 
-[plugin installer reporter](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/plugin/PluginReporter.java)
-and [provider installer reporter](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/ProviderReporter.java)
+[plugin installer reporter](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/plugin/PluginReporter.java)
+and [provider installer reporter](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/provider/ProviderReporter.java)
 
 ```
 INFO  [2016-08-21 23:49:49,535] ru.vyarus.dropwizard.guice.module.installer.feature.plugin.PluginInstaller: plugins =

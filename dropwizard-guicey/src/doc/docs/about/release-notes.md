@@ -22,4 +22,4 @@ instead relying on dependencyManagement.
 
 `dopwizard-flyway` module was removed from BOM (in order to minimize external dependencies). 
 
-Examples repository was also merged [inside main repo](https://github.com/xvik/dropwizard-guicey/tree/master/examples)
+Examples repository was also merged [inside main repo](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/examples)

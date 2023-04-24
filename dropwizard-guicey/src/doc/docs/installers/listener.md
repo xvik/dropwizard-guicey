@@ -1,7 +1,7 @@
 # Web listener installer
 
 !!! summary ""
-    WebInstallersBundle / [WebListenerInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/web/listener/WebListenerInstaller.java)        
+    WebInstallersBundle / [WebListenerInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/web/listener/WebListenerInstaller.java)        
 
 Register new web listener in main or admin contexts.
 

@@ -1,7 +1,7 @@
 # JDBI integration
 
 !!! summary ""
-    [Extensions project](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi) module
+    [Extensions project](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-jdbi) module
 
 !!! warning ""
     **DEPRECATED**: because jdbi2 dropwizard module is deprecated and moved [outside of core modules](https://github.com/dropwizard/dropwizard-jdbi).
@@ -21,8 +21,8 @@ Features:
 
 Added installers:
 
-* [RepositoryInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/repository/RepositoryInstaller.java) - sql proxies
-* [MapperInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/MapperInstaller.java) - result set mappers  
+* [RepositoryInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/repository/RepositoryInstaller.java) - sql proxies
+* [MapperInstaller](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/guicey-jdbi/src/main/java/ru/vyarus/guicey/jdbi/installer/MapperInstaller.java) - result set mappers  
  
 ## Setup
 

@@ -82,7 +82,7 @@ Maven:
 ## Usage
 
 !!! note ""
-    Full source of example application is [published here](https://github.com/xvik/dropwizard-guicey/tree/master/examples/core-getting-started)
+    Full source of example application is [published here](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1/examples/core-getting-started)
 
 Register guice bundle:
 
