@@ -48,8 +48,8 @@ Dropwizard | Guicey | Reason
 3.x | 6.x | [Changed core dropwizard packages](https://github.com/dropwizard/dropwizard/blob/release/) - old 3rd paty bundles would be incompatible
 4.x | 7.x | [Jakarta namespace migration](https://github.com/dropwizard/dropwizard/blob/release/4.0.x/docs/source/manual/upgrade-notes/upgrade-notes-4_0_x.rst), [repackaged guice used](https://github.com/xvik/guice-jakartaee) (with jakarta.inject) - 3rd party guice modules might be incompatible
 
-For guicey 6-7, project structure was changed: core guicey was merged with extension modules.
-Soon the same change would be done for 5.x (it greatly simplifies releases and keeps actual examples in one branch)
+For all branches project structure was changed: core guicey was merged with extension modules.
+It greatly simplifies releases and keeps actual examples in one branch.
 
 ### Setup
 
@@ -74,7 +74,7 @@ implementation 'ru.vyarus:dropwizard-guicey:6.0.0'
 Dropwizard | Guicey
 ----------|---------
 3.0| [6.0.0](http://xvik.github.io/dropwizard-guicey/6.0.0)
-2.1| [5.7.1](http://xvik.github.io/dropwizard-guicey/5.7.1)
+2.1| [5.8.0](http://xvik.github.io/dropwizard-guicey/5.8.0)
 2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
