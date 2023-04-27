@@ -113,8 +113,8 @@ Maven:
 <dependencyManagement>  
     <dependencies>
         <dependency>
-            <groupId>ru.vyarus</groupId>
-            <artifactId>dropwizard-guicey</artifactId>
+            <groupId>ru.vyarus.guicey</groupId>
+            <artifactId>guicey-bom</artifactId>
             <version>6.0.0</version>
             <type>pom</type>
             <scope>import</scope>
