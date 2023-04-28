@@ -29,8 +29,9 @@ ext {
 
 // root project is a BOM
 dependencies {
-    api platform("com.google.inject:guice-bom:$guice")
+    // dropwizard BOM must go first to let maven select correct guava
     api platform("io.dropwizard:dropwizard-dependencies:$dropwizard")
+    api platform("com.google.inject:guice-bom:$guice")
 
     constraints {
         api "com.google.inject:guice:$guice"

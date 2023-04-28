@@ -1,3 +1,6 @@
+### 6.0.1 (2023-04-28)
+* Fix BOM for correct guava version selection in maven (#302)
+
 ### 6.0.0 (2023-04-02)
 * Update to dropwizard 3
   - (breaking) Drop java 8 support
