@@ -1,4 +1,7 @@
-### [5.8.0](http://xvik.github.io/dropwizard-guicey/5.8.0) (2023-03-09)
+### [5.8.1](http://xvik.github.io/dropwizard-guicey/5.8.1) (2023-04-28)
+* Fix BOM for correct guava version selection in maven (#302)
+
+### [5.8.0](http://xvik.github.io/dropwizard-guicey/5.8.0) (2023-04-24)
 * Update to dropwizard 2.1.6
 * Merged with guicey-ext modules repository:
     - Ext modules version would be the same as guicey

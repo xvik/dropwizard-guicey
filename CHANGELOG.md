@@ -1,3 +1,4 @@
+### 5.8.1 (2023-04-28)
 * Fix BOM for correct guava version selection in maven (#302)
 
 ### 5.8.0 (2023-04-24)
