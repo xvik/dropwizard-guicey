@@ -45,7 +45,7 @@ There were 3 major changes in dropwizard recently and, because of this, I plan t
 Dropwizard | Guicey                                                       | Reason
 ----------|--------------------------------------------------------------|-------
 2.1.x| [5.x](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1) | Last java 8 compatible version
-3.x | [6.x](https://github.com/xvik/dropwizard-guicey/tree/dw-3)   | [Changed core dropwizard packages](https://github.com/dropwizard/dropwizard/blob/release/) - old 3rd paty bundles would be incompatible
+3.x | [6.x](https://github.com/xvik/dropwizard-guicey/tree/dw-3)   | [Changed core dropwizard packages](https://github.com/dropwizard/dropwizard/blob/release/3.0.x/docs/source/manual/upgrade-notes/upgrade-notes-3_0_x.rst) - old 3rd paty bundles would be incompatible
 4.x | 7.x                                                          | [Jakarta namespace migration](https://github.com/dropwizard/dropwizard/blob/release/4.0.x/docs/source/manual/upgrade-notes/upgrade-notes-4_0_x.rst), [repackaged guice used](https://github.com/xvik/guice-jakartaee) (with jakarta.inject) - 3rd party guice modules might be incompatible
 
 For all branches project structure was changed: core guicey was merged with extension modules.
