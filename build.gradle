@@ -20,7 +20,7 @@ description = 'Dropwizard guice integration'
 
 ext {
     dropwizard = '2.1.6'
-    guice = '6.0.0-rc1'
+    guice = '6.0.0-rc2'
     hk2 = '2.6.1'
     spockJunit5 = '1.2.0'
     guiceExtAnn = '1.4.1'
