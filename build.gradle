@@ -20,7 +20,7 @@ description = 'Dropwizard guice integration'
 
 ext {
     dropwizard = '4.0.0'
-    guice = '5.1.0-rc.2'
+    guice = '7.0.0-rc1'
     hk2 = '3.0.3'
     spockJunit5 = '1.2.0'
     guiceExtAnn = '2.0.1'
@@ -31,10 +31,10 @@ ext {
 dependencies {
     // dropwizard BOM must go first to let maven select correct guava
     api platform("io.dropwizard:dropwizard-dependencies:$dropwizard")
-    api platform("ru.vyarus.guice.jakarta:guice-bom:$guice")
+    api platform("com.google.inject:guice-bom:$guice")
 
     constraints {
-        api "ru.vyarus.guice.jakarta:guice:$guice"
+        api "com.google.inject:guice:$guice"
         api "org.glassfish.hk2:guice-bridge:$hk2"
         api "ru.vyarus:spock-junit5:$spockJunit5"
 

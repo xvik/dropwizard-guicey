@@ -10,11 +10,13 @@ dependencies {
         exclude group: 'com.google.inject', module: 'guice'
     }
 
-    api ('ru.vyarus.guice.jakarta:guice') {
+    api ('com.google.inject:guice') {
         // use dropwizard guava version
         exclude group: 'com.google.guava', module: 'guava'
     }
-    api 'ru.vyarus.guice.jakarta:guice-servlet'
+    api ('com.google.inject.extensions:guice-servlet') {
+        exclude group: 'com.google.inject', module: 'guice'
+    }
     api 'io.dropwizard:dropwizard-core'
     api 'ru.vyarus:generics-resolver:3.0.3'
 

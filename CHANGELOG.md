@@ -1,5 +1,5 @@
 * Update to dropwizard 4
-    - Use custom guice, repackaged for jakarta namespace
+* Update to guice 7 (jakarta.inject namespace)    
 
 ### 6.0.0 (2023-04-02)
 * Update to dropwizard 3
