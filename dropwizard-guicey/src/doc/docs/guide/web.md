@@ -113,7 +113,7 @@ public class App extends Application {
 
 ## Resources
 
-Dropwizard provides [AssetsBundle](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#serving-assets) 
+Dropwizard provides [AssetsBundle](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#serving-assets) 
 for serving static files from classpath:
 
 ```java                       
@@ -138,14 +138,14 @@ GuiceBundle.builder()
 
 ## Templates 
 
-Dropwizard provides [ViewBundle](https://www.dropwizard.io/en/release-3.0.x/manual/views.html)
+Dropwizard provides [ViewBundle](https://www.dropwizard.io/en/release-4.0.x/manual/views.html)
 for handling templates (freemarker and mustache out of the box, more engines could be plugged).
 
 ```java
 bootstrap.addBundle(new ViewBundle());
 ```    
 
-Which allows you to serve rendered templates [from rest endpoints](https://www.dropwizard.io/en/release-3.0.x/manual/views.html).
+Which allows you to serve rendered templates [from rest endpoints](https://www.dropwizard.io/en/release-4.0.x/manual/views.html).
 
 
 ### Templates + resources
@@ -264,6 +264,6 @@ Index page:
     to be able to differentiate rest for different UI applications     
     
 !!! warning
-    Standard errors handling in views ([templates](https://www.dropwizard.io/en/release-3.0.x/manual/views.html#template-errors),
-    [custom pages](https://www.dropwizard.io/en/release-3.0.x/manual/views.html#custom-error-pages)) is replaced by 
+    Standard errors handling in views ([templates](https://www.dropwizard.io/en/release-4.0.x/manual/views.html#template-errors),
+    [custom pages](https://www.dropwizard.io/en/release-4.0.x/manual/views.html#custom-error-pages)) is replaced by 
     [custom mechanism](../extras/gsp.md#error-pages), required to implement per-ui-app errors support.

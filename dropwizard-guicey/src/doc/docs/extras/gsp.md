@@ -8,7 +8,7 @@ Basement for pluggable and extendable ui applications (like dashboards).
 
 Features:
 
-* Use standard dropwizard modules: [dropwizard-views](https://www.dropwizard.io/en/release-3.0.x/manual/views.html) and [dropwizard-assets](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#serving-assets)
+* Use standard dropwizard modules: [dropwizard-views](https://www.dropwizard.io/en/release-4.0.x/manual/views.html) and [dropwizard-assets](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#serving-assets)
 * Support direct templates rendering (without rest resource declaration) 
 * Static resources, direct templates and dropwizard-views rest endpoints are handled under the same url
 (like everything is stored in the same directory - easy to link css, js and other resources)
@@ -159,7 +159,7 @@ GuiceBundle.builder()
 
 ### Template engines
 
-Out of the box [dropwizard provides](https://www.dropwizard.io/en/release-3.0.x/manual/views.html) `freemarker` and `mustache` engines support. 
+Out of the box [dropwizard provides](https://www.dropwizard.io/en/release-4.0.x/manual/views.html) `freemarker` and `mustache` engines support. 
 You will need to add dependency to one of them (or both) in order to activate it (or, maybe, some third party engine):
 
 * implementation (`io.dropwizard:dropwizard-views-freemarker`) 
@@ -629,8 +629,8 @@ if (ex instanceof TracelessException) {
 for direct non 200 response code in rest.
 
 !!! important 
-    GSP errors handling override [ExceptionMapper](https://www.dropwizard.io/en/release-3.0.x/manual/views.html#template-errors)
-    and [views errors](https://www.dropwizard.io/en/release-3.0.x/manual/views.html#custom-error-pages)
+    GSP errors handling override [ExceptionMapper](https://www.dropwizard.io/en/release-4.0.x/manual/views.html#template-errors)
+    and [views errors](https://www.dropwizard.io/en/release-4.0.x/manual/views.html#custom-error-pages)
     mechanisms because it intercept exceptions before them (using `RequestEventListener`)! So your 
     `ExceptionMapper` will be called, but user will still see GSP error page. 
 

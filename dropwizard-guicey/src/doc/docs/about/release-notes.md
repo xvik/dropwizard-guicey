@@ -1,29 +1,24 @@
-# 6.0.0 Release Notes
+# 7.0.0 Release Notes
 
-!!! summary ""
-    [5.7.1 release notes](http://xvik.github.io/dropwizard-guicey/5.7.1/about/release-notes/)
+* Update to dropwizard 4.0.0
+* Upgrade to guice 7.0.0
 
-* Update to dropwizard 3.0.0
-* Extensions merged into core guicey repository
+## Dropwizard 4
 
-## Dropwizard 3
+See [dropwizard upgrade instructions](https://www.dropwizard.io/en/release-4.0.x/manual/upgrade-notes/upgrade-notes-4_0_x.html)
 
-See [dropwizard upgrade instructions](https://www.dropwizard.io/en/release-3.0.x/manual/upgrade-notes/upgrade-notes-3_0_x.html)
+!!! tip
+    If you're upgrading from dropwizard 2.1 it is recommended to perform step-by-step migration (due to many breaking changes):
 
-**Java 8 support was dropped**.  
-As a consequence, `guicey-jdbi` and `guicey-jdbi3-java8` modules were removed.
+    * guicey 5.8.1 - dropwizard 2.1, changed guicey project structure (same as in guicey 6)
+    * guicey 6.0.1 - dropwizard 3 (changed core dropwizard packaged)
+    * guicey 7.0.0 - dropwizard 4, guice 7
 
-Many core dropwizard packages were changed.
+Now you'll have to use `jakarta.servlet` and `jakarta.validation` apis instead of `javax.*` (this might affect used 3rd party libraries).
 
-## Extensions merged into core guicey repository
+## Guice 7
 
-Extensions were merged into core guicey repository in order to unify versioning (and simplify releases).
-Maven coordinates for modules stayed the same.
+Guice 7 [drops javax.* support](https://github.com/google/guice/wiki/Guice700) and use `jakarta.inject`, `jakarta.servlet`, 
+`jakarta.persistence` now.
 
-Dropwizard-guicey POM does not contain dependencyManagement section anymore and so can't
-be used as a BOM. Instead, use `ru.vyarus.guicey:guicey-bom` - it contains everything now.
-
-Also, dropwizard-guicey POM was simplified: all exclusions were moved directly into dependencies section 
-instead relying on dependencyManagement.
-
-Examples repository was also merged [inside main repo](https://github.com/xvik/dropwizard-guicey/tree/master/examples)
+See [migration notes](migration.md#dropwizard-40) for 3rd party libraries migration

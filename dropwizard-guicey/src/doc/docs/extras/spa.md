@@ -1,6 +1,6 @@
 # Single page applications support
 
-Provides a replacement for [dropwizard-assets](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#serving-assets) 
+Provides a replacement for [dropwizard-assets](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#serving-assets) 
 bundle for single page applications (SPA) to properly
 handle html5 client routing.
 

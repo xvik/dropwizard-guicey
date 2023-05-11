@@ -292,7 +292,7 @@ introspection.
 #### Unique sub config
 
 When creating re-usable bundle it is often required to access yaml configuration data. 
-Usually this is solved by some "configuration look-ups" like in [dropwizard-views](https://www.dropwizard.io/en/release-3.0.x/manual/views.html) 
+Usually this is solved by some "configuration look-ups" like in [dropwizard-views](https://www.dropwizard.io/en/release-4.0.x/manual/views.html) 
 
 Guicey allows you to obtain the sub-configuration object directly:
 

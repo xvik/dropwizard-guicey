@@ -7,7 +7,7 @@ Use [JDBI3 guicey extension](https://github.com/xvik/dropwizard-guicey/tree/mast
 * use annotations for transaction definition
 * automatic repositories and mapper installation
 
-[Dropwizard jdbi3 integration](https://www.dropwizard.io/en/release-3.0.x/manual/jdbi3.html) is used to configure 
+[Dropwizard jdbi3 integration](https://www.dropwizard.io/en/release-4.0.x/manual/jdbi3.html) is used to configure 
 and create jdbi instance. See [configuration](src/main/java/ru/vyarus/dropwizard/guice/examples/Jdbi3AppConfiguration.java).
 
 For simplicity, embedded H2 database used.
@@ -16,7 +16,7 @@ Database scheme must be created before launching application.
 tests use flyway directly). See [db scheme](src/main/resources/db/migration/V1__setup.sql). 
  
 
-JDBI instance created exactly as described in [dropwizard docs](https://www.dropwizard.io/en/release-3.0.x/manual/jdbi3.html) 
+JDBI instance created exactly as described in [dropwizard docs](https://www.dropwizard.io/en/release-4.0.x/manual/jdbi3.html) 
 using provided db configuration:
 
 ```java

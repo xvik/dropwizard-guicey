@@ -197,7 +197,7 @@ The example resource now obtains the caller's remote ip address and returns it i
 
 ### Adding a Managed Object
 
-[Dropwizard managed objects](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#managed-objects) are extremely useful for managing resources.
+[Dropwizard managed objects](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#managed-objects) are extremely useful for managing resources.
 
 Create a simple managed implementation:
 

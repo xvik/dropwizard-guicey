@@ -1,4 +1,5 @@
 * Update to dropwizard 4
+  - (breaking) Use jakarta namespace instead of javax (servlet, validation)
 * Update to guice 7 (jakarta.inject namespace)    
 
 ### 6.0.0 (2023-04-02)

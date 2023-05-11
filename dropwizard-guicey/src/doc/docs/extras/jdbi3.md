@@ -1,6 +1,6 @@
 # JDBI3 integration
 
-Integrates [JDBI3](http://jdbi.org/) with guice. Based on [dropwizard-jdbi3](https://www.dropwizard.io/en/release-3.0.x/manual/jdbi3.html) integration.
+Integrates [JDBI3](http://jdbi.org/) with guice. Based on [dropwizard-jdbi3](https://www.dropwizard.io/en/release-4.0.x/manual/jdbi3.html) integration.
  
 Features:
 
@@ -49,7 +49,7 @@ GuiceBundle.builder()
 ```
 
 Here default JDBI instance will be created from database configuration (much like it's described in 
-[dropwizard documentation](https://www.dropwizard.io/en/release-3.0.x/manual/jdbi3.html)).
+[dropwizard documentation](https://www.dropwizard.io/en/release-4.0.x/manual/jdbi3.html)).
 
 Or build JDBI instance yourself:
 

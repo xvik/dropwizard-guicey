@@ -3,7 +3,7 @@
 !!! summary ""
     CoreInstallersBundle / [HealthCheckInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/health/HealthCheckInstaller.java)        
 
-Installs [dropwizard health check](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#health-checks).
+Installs [dropwizard health check](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#health-checks).
 
 ## Recognition
 

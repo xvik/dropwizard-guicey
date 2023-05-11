@@ -1,3 +1,8 @@
+### [7.0.0](http://xvik.github.io/dropwizard-guicey/7.0.0) (2023-05-15)
+* Update to dropwizard 4
+    - (breaking) Use jakarta namespace instead of javax (servlet, validation)
+* Update to guice 7 (jakarta.inject namespace)
+
 ### [6.0.0](http://xvik.github.io/dropwizard-guicey/6.0.0) (2023-04-02)
 * Update to dropwizard 3
     - (breaking) Drop java 8 support

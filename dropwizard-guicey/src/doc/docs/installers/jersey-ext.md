@@ -110,7 +110,7 @@ public class MySupplier implements Supplier<MyModel> {
 ### ExceptionMapper
 
 Any class implementing `#!java jakarta.ws.rs.ext.ExceptionMapper` (or extending abstract class implementing it). 
-Useful for [error handling customization](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#error-handling).
+Useful for [error handling customization](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#error-handling).
 
 ```java
 public class DummyExceptionMapper implements ExceptionMapper<RuntimeException> {
@@ -131,11 +131,11 @@ public class DummyExceptionMapper implements ExceptionMapper<RuntimeException> {
 
 !!! tip
     You can also use `ExtendedExceptionMapper` as more flexible alternative. See example usage in
-    [dropwizard-views](https://www.dropwizard.io/en/release-3.0.x/manual/views.html#template-errors).
+    [dropwizard-views](https://www.dropwizard.io/en/release-4.0.x/manual/views.html#template-errors).
     
 !!! tip
     Default exception dropwizard mappers (registered in `io.dropwizard.setup.ExceptionMapperBinder`) could be 
-    [overridden](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#overriding-default-exception-mappers)
+    [overridden](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#overriding-default-exception-mappers)
     (see [priority section](#priority))
     or completely disabled with `server.registerDefaultExceptionMappers` option.    
 
@@ -240,7 +240,7 @@ public class MyContextResolver implements ContextResolver<Context> {
 ### MessageBodyReader
 
 Any class implementing [`#!java jakarta.ws.rs.ext.MessageBodyReader`](https://jakarta.ee/specifications/platform/9/apidocs/jakarta/ws/rs/ext/messagebodyreader) (or extending abstract class implementing it).
-Useful for [custom representations](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#custom-representations).
+Useful for [custom representations](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#custom-representations).
 
 ```java
 public class TypeMessageBodyReader implements MessageBodyReader<Type> {
@@ -262,7 +262,7 @@ public class TypeMessageBodyReader implements MessageBodyReader<Type> {
 ### MessageBodyWriter
 
 Any class implementing [`#!java jakarta.ws.rs.ext.MessageBodyWriter`](https://jakarta.ee/specifications/platform/9/apidocs/jakarta/ws/rs/ext/messagebodywriter) (or extending abstract class implementing it).
-Useful for [custom representations](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#custom-representations).
+Useful for [custom representations](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#custom-representations).
 
 ```java
 public class TypeMessageBodyWriter implements MessageBodyWriter<Type> {
@@ -315,7 +315,7 @@ public class MyWriterInterceptor implements WriterInterceptor {
 ### ContainerRequestFilter
 
 Any class implementing [`#!java jakarta.ws.rs.container.ContainerRequestFilter`](https://jakarta.ee/specifications/platform/9/apidocs/jakarta/ws/rs/container/containerrequestfilter) (or extending abstract class implementing it).
-Useful for [request modifications](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#jersey-filters).
+Useful for [request modifications](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#jersey-filters).
 
 ```java
 public class MyContainerRequestFilter implements ContainerRequestFilter {
@@ -329,7 +329,7 @@ public class MyContainerRequestFilter implements ContainerRequestFilter {
 ### ContainerResponseFilter
 
 Any class implementing [`#!java jakarta.ws.rs.container.ContainerResponseFilter`](https://jakarta.ee/specifications/restful-ws/3.0/apidocs/jakarta/ws/rs/container/containerresponsefilter) (or extending abstract class implementing it).
-Useful for [response modifications](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#jersey-filters).
+Useful for [response modifications](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#jersey-filters).
 
 ```java
 public class MyContainerResponseFilter implements ContainerResponseFilter {
@@ -343,7 +343,7 @@ public class MyContainerResponseFilter implements ContainerResponseFilter {
 ### DynamicFeature
 
 Any class implementing [`#!java jakarta.ws.rs.container.DynamicFeature`](https://jakarta.ee/specifications/restful-ws/3.0/apidocs/jakarta/ws/rs/container/dynamicfeature) (or extending abstract class implementing it).
-Useful for conditional [activation of filters](https://www.dropwizard.io/en/release-3.0.x/manual/core.html#jersey-filters).
+Useful for conditional [activation of filters](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#jersey-filters).
 
 ```java
 public class MyDynamicFeature implements DynamicFeature {
