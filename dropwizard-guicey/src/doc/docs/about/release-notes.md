@@ -1,6 +1,6 @@
 # 6.1.0 Release Notes
 
-* Update to guice 6.1.0
+* Update to guice 6.0.0
 
 ## Guice 6.0
 
