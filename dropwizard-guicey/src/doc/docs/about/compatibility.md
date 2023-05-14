@@ -1,8 +1,5 @@
 # Dropwizard compatibility
 
-!!! note 
-    Dropwizard 4 is not supported yet.
-
 Dropwizard | Guicey
 ----------|---------
 3.0.0 | [6.1.0](http://xvik.github.io/dropwizard-guicey/6.1.0)
