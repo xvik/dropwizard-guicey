@@ -1,3 +1,6 @@
+### 6.1.0 (2023-05-14)
+* Update to guice 6.0
+
 ### 6.0.1 (2023-04-28)
 * Fix BOM for correct guava version selection in maven (#302)
 
