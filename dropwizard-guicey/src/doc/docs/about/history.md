@@ -1,3 +1,6 @@
+### [5.9.0](http://xvik.github.io/dropwizard-guicey/5.9.0) (2023-05-14)
+* Update to guice 6.0
+
 ### [5.8.1](http://xvik.github.io/dropwizard-guicey/5.8.1) (2023-04-28)
 * Fix BOM for correct guava version selection in maven (#302)
 
