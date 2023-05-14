@@ -10,8 +10,8 @@ See [dropwizard upgrade instructions](https://www.dropwizard.io/en/release-4.0.x
 !!! tip
     If you're upgrading from dropwizard 2.1 it is recommended to perform step-by-step migration (due to many breaking changes):
 
-    * guicey 5.8.1 - dropwizard 2.1, changed guicey project structure (same as in guicey 6)
-    * guicey 6.0.1 - dropwizard 3 (changed core dropwizard packaged)
+    * guicey 5.9.0 - dropwizard 2.1, guice 6 (changed guicey project structure - same as in guicey 6)
+    * guicey 6.1.0 - dropwizard 3, guice 6 (changed core dropwizard packaged)
     * guicey 7.0.0 - dropwizard 4, guice 7
 
 Now you'll have to use `jakarta.servlet` and `jakarta.validation` apis instead of `javax.*` (this might affect used 3rd party libraries).

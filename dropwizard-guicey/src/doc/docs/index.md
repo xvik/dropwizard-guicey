@@ -43,6 +43,21 @@
 !!! note "" 
     Before, guicey and extensions were released separately in different repositories - different packages were preserved after merge
 
+## Supported versions
+
+Due to 3 major changes in dropwizard recently and, 3 guicey versions supported:
+
+Dropwizard | Guicey                                                       | Reason
+----------|--------------------------------------------------------------|-------
+2.1.x| [5.x](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1) | Last java 8 compatible version
+3.x | [6.x](https://github.com/xvik/dropwizard-guicey/tree/dw-3)   | [Changed core dropwizard packages](https://github.com/dropwizard/dropwizard/blob/release/3.0.x/docs/source/manual/upgrade-notes/upgrade-notes-3_0_x.rst) - old 3rd paty bundles would be incompatible
+4.x | 7.x                                                          | [Jakarta namespace migration](https://github.com/dropwizard/dropwizard/blob/release/4.0.x/docs/source/manual/upgrade-notes/upgrade-notes-4_0_x.rst), [repackaged guice used](https://github.com/xvik/guice-jakartaee) (with jakarta.inject) - 3rd party guice modules might be incompatible
+
+All branches use the same project structure: core guicey merged with extension modules.
+It greatly simplifies releases and keeps actual examples in one branch.
+
+Upcoming guicey changes would be ported in all 3 branches.
+
 ## SBOM
 
 [SBOM (cyclonedx)](https://cyclonedx.org/) is published for every guicey module with `cyclonedx` classifier (same way as dropwizard)

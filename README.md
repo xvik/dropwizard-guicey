@@ -13,7 +13,7 @@ Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | 
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 3.0.0 [guice](https://github.com/google/guice) 5.1.0 integration.
+[Dropwizard](http://dropwizard.io/) 4.0.0 [guice](https://github.com/google/guice) 7.0.0 integration.
 
 Features:
 
@@ -38,9 +38,7 @@ Features:
 
 ### Supported versions
 
-**Dropwizard 4** compatible release candidate is [published](https://github.com/xvik/dropwizard-guicey/discussions/296#discussioncomment-5627240)
-
-There were 3 major changes in dropwizard recently and, because of this, I plan to support 3 guicey versions:
+Due to 3 major changes in dropwizard recently, 3 guicey versions supported:
 
 Dropwizard | Guicey                                                       | Reason
 ----------|--------------------------------------------------------------|-------
@@ -48,8 +46,10 @@ Dropwizard | Guicey                                                       | Reas
 3.x | [6.x](https://github.com/xvik/dropwizard-guicey/tree/dw-3)   | [Changed core dropwizard packages](https://github.com/dropwizard/dropwizard/blob/release/3.0.x/docs/source/manual/upgrade-notes/upgrade-notes-3_0_x.rst) - old 3rd paty bundles would be incompatible
 4.x | 7.x                                                          | [Jakarta namespace migration](https://github.com/dropwizard/dropwizard/blob/release/4.0.x/docs/source/manual/upgrade-notes/upgrade-notes-4_0_x.rst), [repackaged guice used](https://github.com/xvik/guice-jakartaee) (with jakarta.inject) - 3rd party guice modules might be incompatible
 
-For all branches project structure was changed: core guicey was merged with extension modules.
+All branches use the same project structure: core guicey merged with extension modules.
 It greatly simplifies releases and keeps actual examples in one branch.
+
+Upcoming guicey changes would be ported in all 3 branches.
 
 ### Setup
 
@@ -61,20 +61,21 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>6.0.1</version>
+  <version>7.0.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:6.0.1'
+implementation 'ru.vyarus:dropwizard-guicey:7.0.0'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-3.0| [6.0.1](http://xvik.github.io/dropwizard-guicey/6.0.1)
-2.1| [5.8.1](http://xvik.github.io/dropwizard-guicey/5.8.1)
+4.0| [7.0.0](http://xvik.github.io/dropwizard-guicey/7.0.0)
+3.0| [6.1.0](http://xvik.github.io/dropwizard-guicey/6.1.0)
+2.1| [5.9.0](http://xvik.github.io/dropwizard-guicey/5.9.0)
 2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
@@ -92,9 +93,9 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus.guicey:guicey-bom:6.0.1')
+    implementation platform('ru.vyarus.guicey:guicey-bom:7.0.0')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-dependencies:3.0.0')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:4.0.0')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
@@ -115,7 +116,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>6.0.1</version>
+            <version>7.0.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -123,7 +124,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>3.0.0</version>
+            <version>4.0.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 

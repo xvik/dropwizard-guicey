@@ -11,9 +11,9 @@ to guice annotations (like `com.google.guice.Inject`) or use jakarta annotations
 
 If you're upgrading from dropwizard 2.1 it is recommended to perform step-by-step migration (due to many breaking changes):
 
-* guicey 5.8.1 - dropwizard 2.1, changed guicey project structure (same as in guicey 6)
-* guicey 6.0.1 - dropwizard 3 (changed core dropwizard packaged)
-* guicey 7.0.0 - dropwizard 4, guice 7 
+* guicey 5.9.0 - dropwizard 2.1, guice 6 (changed guicey project structure - same as in guicey 6)
+* guicey 6.1.0 - dropwizard 3, guice 6 (changed core dropwizard packaged)
+* guicey 7.0.0 - dropwizard 4, guice 7
 
 There might be problems with 3rd party guice libraries still using javax annotations - they would not work as planned
 if `javax.inject` annotations used. If possible, migrate such libraries to jakarta namespace or, at least,
