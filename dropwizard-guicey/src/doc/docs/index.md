@@ -45,7 +45,7 @@
 
 ## Supported versions
 
-Due to 3 major changes in dropwizard recently and, 3 guicey versions supported:
+Due to 3 major changes in dropwizard recently, 3 guicey versions supported:
 
 Dropwizard | Guicey                                                       | Reason
 ----------|--------------------------------------------------------------|-------
