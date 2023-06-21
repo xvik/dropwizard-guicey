@@ -1,8 +1,8 @@
 package ru.vyarus.guicey.validation.util;
 
-import com.google.inject.matcher.AbstractMatcher;
-
+import com.google.inject.matcher.Matcher;
 import jakarta.ws.rs.HttpMethod;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
  * @author Vyacheslav Rusakov
  * @since 26.12.2019
  */
-public class RestMethodMatcher extends AbstractMatcher<Method> {
+public class RestMethodMatcher implements Matcher<Method> {
 
     @Override
     public boolean matches(final Method method) {
