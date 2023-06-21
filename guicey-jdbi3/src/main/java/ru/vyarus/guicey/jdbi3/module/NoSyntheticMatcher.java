@@ -1,6 +1,6 @@
 package ru.vyarus.guicey.jdbi3.module;
 
-import com.google.inject.matcher.AbstractMatcher;
+import com.google.inject.matcher.Matcher;
 
 import java.lang.reflect.Method;
 
@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  * @author Vyacheslav Rusakov
  * @since 17.09.2018
  */
-public class NoSyntheticMatcher extends AbstractMatcher<Method> {
+public class NoSyntheticMatcher implements Matcher<Method> {
 
     private static final NoSyntheticMatcher NO_SYNTHETIC_MATCHER = new NoSyntheticMatcher();
 

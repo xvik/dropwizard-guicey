@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.debug.report.guice.util;
 
-import com.google.inject.matcher.AbstractMatcher;
+import com.google.inject.matcher.Matcher;
 
 import java.lang.reflect.Method;
 
@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  * @author Vyacheslav Rusakov
  * @since 23.08.2019
  */
-public class NonObjectMethodMatcher extends AbstractMatcher<Method> {
+public class NonObjectMethodMatcher implements Matcher<Method> {
 
     @Override
     public boolean matches(final Method o) {
