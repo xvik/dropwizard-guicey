@@ -1,3 +1,7 @@
+* Update to dropwizard 4.0.1
+* [jdbi]
+  - Fix jdbi 3.39 compatibility
+
 ### 7.0.0 (2023-05-14)
 * Update to dropwizard 4
   - (breaking) Use jakarta namespace instead of javax (servlet, validation)

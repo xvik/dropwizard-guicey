@@ -8,8 +8,8 @@ import com.google.inject.multibindings.Multibinder;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.TransactionalHandleSupplier;
+import org.jdbi.v3.core.extension.Extensions;
 import org.jdbi.v3.core.mapper.RowMapper;
-import org.jdbi.v3.sqlobject.Handlers;
 import ru.vyarus.guicey.jdbi3.inject.InjectionHandlerFactory;
 import ru.vyarus.guicey.jdbi3.installer.repository.RepositoryInstaller;
 import ru.vyarus.guicey.jdbi3.tx.InTransaction;
@@ -52,7 +52,7 @@ public class JdbiModule extends AbstractModule {
             // allow using guice beans inside proxies with getters, annotated by @Inject
             final InjectionHandlerFactory gettersInjector = new InjectionHandlerFactory();
             requestInjection(gettersInjector);
-            jdbi.getConfig(Handlers.class).register(gettersInjector);
+            jdbi.getConfig(Extensions.class).registerHandlerFactory(gettersInjector);
         }
 
         bind(Jdbi.class).toInstance(jdbi);

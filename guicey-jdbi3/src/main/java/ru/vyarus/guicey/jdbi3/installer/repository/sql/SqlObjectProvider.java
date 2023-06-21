@@ -69,6 +69,6 @@ public class SqlObjectProvider<T> implements Provider<T> {
         // We don't need to create jdk proxy here -  extension instance is enough.
         return jdbi.getConfig(Extensions.class)
                 .findFor(extensionType, handleProvider)
-                .orElseThrow(() -> new NoSuchExtensionException("Extension not found: " + extensionType));
+                .orElseThrow(() -> new NoSuchExtensionException(extensionType));
     }
 }
