@@ -2,7 +2,6 @@ package org.jdbi.v3.core;
 
 import org.jdbi.v3.core.config.ConfigRegistry;
 import org.jdbi.v3.core.extension.ExtensionContext;
-import org.jdbi.v3.core.extension.ExtensionMethod;
 import org.jdbi.v3.core.extension.HandleSupplier;
 
 import javax.inject.Inject;
@@ -37,14 +36,6 @@ public class TransactionalHandleSupplier implements HandleSupplier {
     @Override
     public Jdbi getJdbi() {
         return jdbi;
-    }
-
-    @Override
-    public <V> V invokeInContext(final ExtensionMethod extensionMethod,
-                                 final ConfigRegistry config,
-                                 final Callable<V> task) throws Exception {
-        // deprecated, not called due to overridden method for context
-        return null;
     }
 
     @Override

@@ -1,3 +1,7 @@
+* Update to dropwizard 3.0.1
+* [jdbi]
+    - Fix jdbi 3.39 compatibility    
+
 ### 6.1.0 (2023-05-14)
 * Update to guice 6.0
 
