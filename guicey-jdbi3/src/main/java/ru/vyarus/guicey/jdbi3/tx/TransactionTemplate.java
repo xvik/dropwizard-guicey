@@ -84,10 +84,12 @@ public class TransactionTemplate {
     private <T> T inCurrentTransaction(final TxConfig config, final TxAction<T> action) throws Exception {
         // mostly copies org.jdbi.v3.sqlobject.transaction.internal.TransactionDecorator logic
         final Handle h = manager.get();
-        final TransactionIsolationLevel currentLevel = h.getTransactionIsolationLevel();
-        if (config.isLevelSet() && currentLevel != config.getLevel()) {
-            throw new TransactionException("Tried to execute nested @Transaction(" + config.getLevel() + "), "
-                    + "but already running in a transaction with isolation level " + currentLevel + ".");
+        if (config.isLevelSet()) {
+            final TransactionIsolationLevel currentLevel = h.getTransactionIsolationLevel();
+            if (currentLevel != config.getLevel()) {
+                throw new TransactionException("Tried to execute nested @Transaction(" + config.getLevel() + "), "
+                        + "but already running in a transaction with isolation level " + currentLevel + ".");
+            }
         }
         if (h.isReadOnly() && !config.isReadOnly()) {
             throw new TransactionException("Tried to execute a nested @Transaction(readOnly=false) "
