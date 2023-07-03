@@ -1,0 +1,20 @@
+plugins {
+    id 'com.github.dkorotych.gradle-maven-exec'
+}
+
+// disable java compilation in gradle
+tasks.withType(JavaCompile).configureEach {
+    enabled = false
+}
+tasks.withType(ProcessResources).configureEach {
+    enabled = false
+}
+tasks.withType(Jar).configureEach {
+    enabled = false
+}
+
+tasks.register('maven-test', MavenExec) {
+    goals 'test'
+}
+
+tasks.build.dependsOn('maven-test')

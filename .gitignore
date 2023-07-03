@@ -145,3 +145,6 @@ $RECYCLE.BIN/
 
 # Used by previous versions of JEnv
 .jenv-version
+
+# maven wrapper
+.mvn
