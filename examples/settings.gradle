@@ -15,4 +15,6 @@ include 'core-getting-started',
         'integration-auth',
         'integration-hibernate',
         'integration-guice-validator',
-        'integration-dropwizard-jobs'
+        'integration-dropwizard-jobs',
+        'maven-bom',
+        'maven-simple'
