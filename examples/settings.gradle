@@ -14,5 +14,5 @@ include 'core-getting-started',
         'ext-gsp-spa',
         'integration-auth',
         'integration-hibernate',
-        'integration-guice-validator'
-//        'integration-dropwizard-jobs'
+        'integration-guice-validator',
+        'integration-dropwizard-jobs'

@@ -27,8 +27,7 @@ subprojects {
         implementation platform("ru.vyarus.guicey:guicey-bom:$guiceyBom")
 
         constraints {
-            // todo INCOMPATIBLE
-//            implementation 'io.github.dropwizard-jobs:dropwizard-jobs-guice:4.0.0-RELEASE'
+            implementation 'io.github.dropwizard-jobs:dropwizard-jobs-core:5.1.2'
 
             implementation 'org.flywaydb:flyway-core:9.17.0'
             // flyway not compatible with h2 1.4.200 anymore

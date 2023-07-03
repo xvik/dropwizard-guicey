@@ -1,24 +1,37 @@
 package ru.vyarus.dropwizard.guice.examples.support;
 
 import com.google.inject.Injector;
-import io.dropwizard.jobs.GuiceJobManager;
+import io.dropwizard.jobs.Job;
+import io.dropwizard.jobs.JobManager;
+import org.quartz.spi.JobFactory;
 import ru.vyarus.dropwizard.guice.examples.JobsAppConfiguration;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Set;
 
 /**
  * Bean will be recognized as Managed and installed automatically.
- * Used as a replacement for {@link io.dropwizard.jobs.GuiceJobsBundle}.
+ * Note that native dropwizard-jobs-guice module is NOT used because it scans entire injector whereas all
+ * jobs are revealed by the installer. Also, since dropwizard-jobs 5.1 guice module depends on guice 7 which can't be
+ * used with dropwizard 3.
  *
  * @author Vyacheslav Rusakov
  * @since 11.03.2018
  */
 @Singleton
-public class JobsManager extends GuiceJobManager {
+public class JobsManager extends JobManager {
+
+    private final GuiceJobFactory factory;
 
     @Inject
-    public JobsManager(Injector injector, JobsAppConfiguration configuration) {
-        super(configuration, injector);
+    public JobsManager(final Injector injector, final Set<Job> jobs, final JobsAppConfiguration config) {
+        super(config, jobs.toArray(new Job[0]));
+        this.factory = new GuiceJobFactory(injector);
+    }
+
+    @Override
+    protected JobFactory getJobFactory() {
+        return factory;
     }
 }
