@@ -1,6 +1,7 @@
 package ru.vyarus.guice.dropwizard.examples;
 
-import io.dropwizard.Configuration;
+
+import io.dropwizard.core.Configuration;
 
 /**
  * @author Vyacheslav Rusakov
