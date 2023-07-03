@@ -147,4 +147,4 @@ $RECYCLE.BIN/
 .jenv-version
 
 # maven wrapper
-.mvn
+target
