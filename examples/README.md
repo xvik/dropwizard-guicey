@@ -36,3 +36,8 @@ If you can't find answer for your problem in provided examples, please request n
 * [Hibernate](integration-hibernate) - dropwizard-hibernate integration example
 * [Guice-validator](integration-guice-validator) - guice-validator integration example
 * [Dropwizard-jobs](integration-dropwizard-jobs) - dropwizard-jobs integration example
+
+### Maven samples
+
+* [Simple](maven-simple) - dropwizard-guicey declared with direct dependency
+* [BOM](maven-bom) - dropwizard-guicey declared with guicey BOM 
