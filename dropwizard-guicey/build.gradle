@@ -13,8 +13,6 @@ dependencies {
     api ('com.google.inject:guice') {
         // use dropwizard guava version
         exclude group: 'com.google.guava', module: 'guava'
-        // jakarta-inject used instead
-        exclude group: 'javax.inject', module: 'javax.inject'
     }
     api ('com.google.inject.extensions:guice-servlet') {
         exclude group: 'com.google.inject', module: 'guice'

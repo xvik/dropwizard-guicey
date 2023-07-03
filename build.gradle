@@ -46,6 +46,26 @@ dependencies {
     }
 }
 
+// Required fix to workaround MAVEN behaviour: dropwizard BOM declares jakarta.inject as 1.0.5
+// and later guice BOM, declaring jakarta.inject as 2.0.1 is IGNORED by maven (for imported BOM only the first
+// declaration counted)
+// This could be fixed by reordering dropwizard and guice BOMs, but I can't do it because dropwizard BOM must
+// be prioritized in order to bring more recent guava version (as dropwizard release more often, it often require
+// mote recent guava version).
+// So the fix is to put required jakarta.inject version BEFORE dropwizard and guice BOMs inclusion.
+withPomXml {
+    def deps = it.dependencyManagement[0].dependencies[0]
+    def jakarta = deps.appendNode('dependency')
+    jakarta.with {
+        appendNode('groupId', 'jakarta.inject')
+        appendNode('artifactId', 'jakarta.inject-api')
+        appendNode('version', '2.0.1')
+    }
+
+    deps.remove(jakarta)
+    deps.children().add(0, jakarta)
+}
+
 javaLib {
     // aggregated test and coverage reports
     aggregateReports()
@@ -104,7 +124,7 @@ allprojects {
     javaLib.withoutGradleMetadata()
 
     // skip signing for jitpack (snapshots)
-    tasks.withType(Sign) {onlyIf { !System.getenv('JITPACK') }}
+    tasks.withType(Sign) { onlyIf { !System.getenv('JITPACK') } }
 }
 
 // all sub-modules are normal java modules, using root BOM (like maven)
@@ -166,7 +186,7 @@ subprojects {
     } else {
         // don't compile and run tests for legacy junit4 and spock1 modules
         tasks.withType(GroovyCompile)
-                .configureEach {it.onlyIf {JavaVersion.current() <= JavaVersion.VERSION_11} }
+                .configureEach { it.onlyIf { JavaVersion.current() <= JavaVersion.VERSION_11 } }
         test.onlyIf { JavaVersion.current() <= JavaVersion.VERSION_11 }
     }
 
@@ -209,7 +229,7 @@ release.git.requireBranch.set('dw-3')
 // release manages only root project (subprojects will be checked and released implicitly)
 afterReleaseBuild {
     dependsOn 'publishToSonatype'
-    dependsOn subprojects.collect {":$it.name:publishToSonatype" }
+    dependsOn subprojects.collect { ":$it.name:publishToSonatype" }
     dependsOn 'closeAndReleaseSonatypeStagingRepository'
     doLast {
         logger.warn "RELEASED $project.group:$project.name:$project.version"
