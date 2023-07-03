@@ -1,6 +1,9 @@
 * Update to dropwizard 2.1.7
+* Add missed `javax.inject` dependency (guice 6 could work with both javax and jakarta)
+* Fix BOM for MAVEN projects: incorrect `jakarta.inject` version was selected (#317)
 * [jdbi]
     - Fix jdbi 3.39 compatibility
+    - Avoid redundant transaction isolation level checks (extra queries) (#318)
 
 ### 5.9.0 (2023-05-14)
 * Update to guice 6.0
