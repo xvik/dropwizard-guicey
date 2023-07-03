@@ -8,8 +8,7 @@ import org.quartz.JobExecutionException;
 import jakarta.inject.Singleton;
 
 /**
- * Job will be registered automatically by {@link io.dropwizard.jobs.GuiceJobManager}
- * (which is activate in  {@link ru.vyarus.dropwizard.guice.examples.support.JobsManager}).
+ * Job will be registered automatically by {@link ru.vyarus.dropwizard.guice.examples.support.JobsInstaller}
  *
  * @author Vyacheslav Rusakov
  * @since 11.03.2018
