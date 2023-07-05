@@ -2,6 +2,8 @@
 * [jdbi]
   - Fix jdbi 3.39 compatibility
   - Avoid redundant transaction isolation level checks (extra queries) (#318)
+* [gsp]
+  - Fix redirection to error page after direct template rendering fails
 
 ### 7.0.0 (2023-05-14)
 * Update to dropwizard 4

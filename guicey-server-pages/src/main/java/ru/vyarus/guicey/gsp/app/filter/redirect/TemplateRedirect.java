@@ -1,5 +1,6 @@
 package ru.vyarus.guicey.gsp.app.filter.redirect;
 
+import io.dropwizard.views.common.ViewRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
@@ -13,6 +14,7 @@ import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 /**
@@ -83,17 +85,17 @@ public class TemplateRedirect {
      * thrown not found exception, received by
      * {@link ru.vyarus.guicey.gsp.app.rest.support.DirectTemplateExceptionMapper} (to render direct template instead).
      *
-     * @param request        template request
-     * @param response       template response
-     * @param page           requested template path (cleared for matching)
-     * @param directTemplate true if target path looks like template call
+     * @param request                template request
+     * @param response               template response
+     * @param page                   requested template path (cleared for matching)
+     * @param directTemplateRenderer vue renderer, recognized template or null
      * @throws IOException      on dispatching errors
      * @throws ServletException on dispatching errors
      */
     public void redirect(final HttpServletRequest request,
                          final HttpServletResponse response,
                          final String page,
-                         final boolean directTemplate) throws IOException, ServletException {
+                         final ViewRenderer directTemplateRenderer) throws IOException, ServletException {
         // for root context will be empty
         final String contextUrl = views.lookupSubContext(page);
         final String restPrefix = views.lookupRestPrefix(contextUrl);
@@ -101,7 +103,7 @@ public class TemplateRedirect {
                 mapping,
                 contextUrl,
                 restPrefix,
-                directTemplate,
+                directTemplateRenderer,
                 assets,
                 errorRedirect,
                 request,

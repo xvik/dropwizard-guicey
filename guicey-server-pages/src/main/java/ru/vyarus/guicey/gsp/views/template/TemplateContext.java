@@ -4,6 +4,7 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.dropwizard.views.common.ViewRenderer;
 import org.glassfish.jersey.server.internal.process.MappableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.WebApplicationException;
+
 import java.net.URL;
 
 /**
@@ -42,7 +44,7 @@ public class TemplateContext {
     // because resource itself may be registered on any level (due to sub mappings or different application)
     private final String restPrefix;
     // called path looks like direct template call
-    private final boolean directTemplate;
+    private final ViewRenderer directTemplateRenderer;
     private final AssetLookup assets;
     private final ErrorRedirect errorRedirect;
     private final HttpServletRequest request;
@@ -56,7 +58,7 @@ public class TemplateContext {
                            final String rootUrl,
                            final String restSubContext,
                            final String restPrefix,
-                           final boolean directTemplate,
+                           final ViewRenderer directTemplateRenderer,
                            final AssetLookup assets,
                            final ErrorRedirect errorRedirect,
                            final HttpServletRequest request,
@@ -65,7 +67,7 @@ public class TemplateContext {
         this.rootUrl = rootUrl;
         this.restSubContext = restSubContext;
         this.restPrefix = restPrefix;
-        this.directTemplate = directTemplate;
+        this.directTemplateRenderer = directTemplateRenderer;
         this.assets = assets;
         this.errorRedirect = errorRedirect;
         this.request = request;
@@ -121,13 +123,23 @@ public class TemplateContext {
     /**
      * True means that one of registered view renderers recognize path as template file. In real life, such
      * path may be handled with special rest mapping instead, so this flag is useful only for cases when
-     * no matching rest found for path (because without it it would be impossible to differentiate template not found
+     * no matching rest found for path (because, without it, it would be impossible to differentiate template not found
      * and rest path not matched cases).
      *
      * @return true if current path could be direct template call
      */
     public boolean isDirectTemplate() {
-        return directTemplate;
+        return directTemplateRenderer != null;
+    }
+
+    /**
+     * View renderer used for direct templates render (which can't be done with default dropwizard view mechanism
+     * due to the need of correct exception handling).
+     *
+     * @return view renderer, recognized template
+     */
+    public ViewRenderer getDirectTemplateRenderer() {
+        return directTemplateRenderer;
     }
 
     /**

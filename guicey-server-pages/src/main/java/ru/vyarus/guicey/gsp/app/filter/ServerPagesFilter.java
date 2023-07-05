@@ -19,6 +19,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.Response;
+
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -96,8 +97,8 @@ public class ServerPagesFilter implements Filter {
         // e.g. /some/url/file.txt?start=1 -> file.txt
         // file request could be either asset or direct template call
         final String pathFile = findFileInPath(req);
-        final boolean directTemplateCall = pathFile != null && isTemplate(pathFile);
-        if (pathFile != null && !directTemplateCall) {
+        final ViewRenderer directTemplate = pathFile != null ? findRenderer(pathFile) : null;
+        if (pathFile != null && directTemplate == null) {
             logger.debug("Serving asset: {}", requestURI);
             // delegate to asset servlet
             serveAsset(req, resp, chain);
@@ -120,7 +121,7 @@ public class ServerPagesFilter implements Filter {
         }
         // redirect to rest handling (dropwizard-view template)
         // (errors are handled with exception mapper and response filter)
-        redirect.redirect(req, resp, page, directTemplateCall);
+        redirect.redirect(req, resp, page, directTemplate);
     }
 
     @Override
@@ -149,15 +150,15 @@ public class ServerPagesFilter implements Filter {
         return path.equals(uriPath);
     }
 
-    private boolean isTemplate(final String file) {
+    private ViewRenderer findRenderer(final String file) {
         final View view = new DummyView(file);
         for (ViewRenderer renderer : renderers) {
             if (renderer.isRenderable(view)) {
                 logger.debug("Possible direct {} template {} request", renderer.getConfigurationKey(), file);
-                return true;
+                return renderer;
             }
         }
-        return false;
+        return null;
     }
 
     private void serveAsset(final HttpServletRequest req,
