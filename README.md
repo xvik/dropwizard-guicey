@@ -13,7 +13,7 @@ Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | 
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 4.0.0 [guice](https://github.com/google/guice) 7.0.0 integration.
+[Dropwizard](http://dropwizard.io/) 4.0.1 [guice](https://github.com/google/guice) 7.0.0 integration.
 
 Features:
 
@@ -61,21 +61,21 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>7.0.0</version>
+  <version>7.0.1</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:7.0.0'
+implementation 'ru.vyarus:dropwizard-guicey:7.0.1'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-4.0| [7.0.0](http://xvik.github.io/dropwizard-guicey/7.0.0)
-3.0| [6.1.0](http://xvik.github.io/dropwizard-guicey/6.1.0)
-2.1| [5.9.0](http://xvik.github.io/dropwizard-guicey/5.9.0)
+4.0| [7.0.1](http://xvik.github.io/dropwizard-guicey/7.0.1)
+3.0| [6.1.1](http://xvik.github.io/dropwizard-guicey/6.1.1)
+2.1| [5.9.1](http://xvik.github.io/dropwizard-guicey/5.9.1)
 2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
@@ -93,9 +93,9 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus.guicey:guicey-bom:7.0.0')
+    implementation platform('ru.vyarus.guicey:guicey-bom:7.0.1')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-dependencies:4.0.0')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:4.0.1')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
@@ -116,7 +116,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>7.0.0</version>
+            <version>7.0.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -124,7 +124,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>4.0.0</version>
+            <version>4.0.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 
