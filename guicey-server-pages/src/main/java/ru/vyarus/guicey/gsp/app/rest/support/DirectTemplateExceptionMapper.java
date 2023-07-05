@@ -1,5 +1,14 @@
 package ru.vyarus.guicey.gsp.app.rest.support;
 
+import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.ext.Provider;
+import org.glassfish.jersey.message.internal.HeaderValueException;
 import org.glassfish.jersey.server.monitoring.RequestEvent;
 import org.glassfish.jersey.spi.ExtendedExceptionMapper;
 import org.slf4j.Logger;
@@ -13,12 +22,9 @@ import ru.vyarus.guicey.gsp.views.template.TemplateContext;
 import ru.vyarus.guicey.gsp.views.template.TemplateNotFoundException;
 import ru.vyarus.guicey.gsp.views.template.TemplateView;
 
-import javax.inject.Inject;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Provider;
+import java.io.ByteArrayOutputStream;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * {@code NotFoundException} thrown by jersey when matching rest path not found. Exception mapper detects it
@@ -44,6 +50,8 @@ public class DirectTemplateExceptionMapper implements ExtendedExceptionMapper<No
 
     @Inject
     private javax.inject.Provider<UriInfo> info;
+    @Inject
+    private javax.inject.Provider<HttpHeaders> headers;
 
     @Override
     public boolean isMappable(final NotFoundException exception) {
@@ -60,12 +68,11 @@ public class DirectTemplateExceptionMapper implements ExtendedExceptionMapper<No
         logger.debug("Direct template rendering: '{}'", fullPath);
         Response res;
         try {
-            res = Response
-                    .ok(ErrorRedirect.hasContextError() ? new ErrorTemplateView(path) : new TemplateView(path))
-                    // for the majority of cases it would be html, for custom resource templates (css, json, etc.)
-                    // use custom view mappings where exact type could be declared
-                    .type(MediaType.TEXT_HTML_TYPE)
-                    .build();
+            // Have to render template manually here to reveal possible rendering issues and correctly redirect to
+            // error page. Relying on ViewMessageBodyWriter (by passing only model in response) would lazily
+            // delay rendering to the point where neither exception mapper nor exception application event
+            // (TemplateExceptionListener) would not be called
+            res = renderTemplate(path);
         } catch (TemplateNotFoundException ex) {
             // template not found
             final String message = "Template '" + path + "' not found";
@@ -76,14 +83,14 @@ public class DirectTemplateExceptionMapper implements ExtendedExceptionMapper<No
             // mapper fail (if exception would be thrown outside from here)
             logger.error("Error rendering direct template ex", ex);
             // either error will be redirected to error page or it's a error page rendering failure
-            TemplateContext.getInstance().redirectError(exception);
+            TemplateContext.getInstance().redirectError(ex);
             res = Response.serverError().build();
         }
         return res;
     }
 
     /**
-     * Exception event first will be catched by listener and it must not handle it initially. Then this exception
+     * Exception event first will be caught by listener, and it must not handle it initially. Then this exception
      * mapper (which should be chosen as the closest match) will render direct template. If template rendering fails
      * then exception will be redirected directly to error mapper. If it was already error rendering then 404 or
      * 500 will be returned directly.
@@ -108,5 +115,39 @@ public class DirectTemplateExceptionMapper implements ExtendedExceptionMapper<No
     private static boolean isDirectTemplateRequest() {
         final TemplateContext context = TemplateRedirect.templateContext();
         return context != null && context.isDirectTemplate();
+    }
+
+    private Response renderTemplate(final String path) throws Exception {
+        final TemplateView model = ErrorRedirect.hasContextError()
+                ? new ErrorTemplateView(path) : new TemplateView(path);
+        final TemplateContext context = TemplateRedirect.templateContext();
+
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        // important to trigger render here to correctly handle exceptions
+        context.getDirectTemplateRenderer().render(model, detectLocale(), out);
+
+        return Response.ok(out.toByteArray())
+                // for the majority of cases it would be html, for custom resource templates (css, json, etc.)
+                // use custom view mappings where exact type could be declared
+                .type(MediaType.TEXT_HTML_TYPE)
+                .build();
+    }
+
+    // copied from io.dropwizard.views.common.ViewMessageBodyWriter
+    @SuppressWarnings("PMD.PreserveStackTrace")
+    protected Locale detectLocale() {
+        final List<Locale> languages;
+        try {
+            languages = headers.get().getAcceptableLanguages();
+        } catch (HeaderValueException e) {
+            throw new WebApplicationException(e.getMessage(), Response.Status.BAD_REQUEST);
+        }
+
+        for (Locale locale : languages) {
+            if (!locale.toString().contains("*")) { // Freemarker doesn't do wildcards well
+                return locale;
+            }
+        }
+        return Locale.getDefault();
     }
 }
