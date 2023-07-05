@@ -1,3 +1,4 @@
+### 5.9.1 (2023-07-05)
 * Update to dropwizard 2.1.7
 * Add missed `javax.inject` dependency (guice 6 could work with both javax and jakarta)
 * Fix BOM for MAVEN projects: incorrect `jakarta.inject` version was selected (#317)
