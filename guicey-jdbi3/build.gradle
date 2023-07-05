@@ -8,5 +8,5 @@ dependencies {
     }
 
     testImplementation 'org.flywaydb:flyway-core:9.20.0'
-    testImplementation 'com.h2database:h2:2.1.214'
+    testImplementation 'com.h2database:h2:2.2.220'
 }
