@@ -12,7 +12,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <dropwizard-guicey.version>5.9.0</dropwizard-guicey.version>
+        <dropwizard-guicey.version>5.9.1</dropwizard-guicey.version>
     </properties>
 
     <build>
@@ -41,19 +41,6 @@
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>dropwizard-guicey</artifactId>
-        </dependency>
-
-        <!-- TODO remove after fix! -->
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>jakarta.inject</groupId>
-            <artifactId>jakarta.inject-api</artifactId>
-            <version>2.0.1</version>
         </dependency>
 
         <dependency>
