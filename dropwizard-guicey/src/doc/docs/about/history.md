@@ -1,10 +1,12 @@
-### [6.1.1](http://xvik.github.io/dropwizard-guicey/6.1.1) (2023-07-04)
+### [6.1.1](http://xvik.github.io/dropwizard-guicey/6.1.1) (2023-07-05)
 * Update to dropwizard 3.0.1
 * Add missed `javax.inject` dependency (guice 6 could work with both javax and jakarta)
 * Fix BOM for MAVEN projects: incorrect `jakarta.inject` version was selected (#317)
 * [jdbi]
     - Fix jdbi 3.39 compatibility
     - Avoid redundant transaction isolation level checks (extra queries) (#318)
+* [gsp]
+    - Fix redirection to error page after direct template rendering fails
 
 ### [6.1.0](http://xvik.github.io/dropwizard-guicey/6.1.0) (2023-05-14)
 * Update to guice 6.0
