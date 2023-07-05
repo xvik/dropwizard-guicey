@@ -12,8 +12,8 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <dropwizard-guicey.version>7.0.0</dropwizard-guicey.version>
-        <dropwizard.version>4.0.0</dropwizard.version>
+        <dropwizard-guicey.version>7.0.1</dropwizard-guicey.version>
+        <dropwizard.version>4.0.1</dropwizard.version>
     </properties>
 
     <build>
