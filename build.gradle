@@ -160,7 +160,7 @@ subprojects {
         }
         dependencies {
             testImplementation 'ru.vyarus:spock-junit5'
-            testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+            testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
             testImplementation 'org.junit.jupiter:junit-jupiter-api'
         }
     } else {
