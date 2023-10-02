@@ -1,3 +1,5 @@
+* Update to dropwizard 4.0.2
+
 ### 7.0.1 (2023-07-05)
 * Update to dropwizard 4.0.1
 * [jdbi]
