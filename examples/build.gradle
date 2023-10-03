@@ -17,7 +17,9 @@ subprojects {
     apply plugin: 'groovy'
     apply plugin: 'project-report'
 
-    sourceCompatibility = 1.8
+    java {
+        sourceCompatibility = 1.8
+    }
 
     configurations.all {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
