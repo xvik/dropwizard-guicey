@@ -18,7 +18,7 @@ You will need the following dependencies (assuming BOM used for versions managem
 
 ```groovy
 testImplementation 'ru.vyarus:spock-junit5'
-testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0'
+testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
 testImplementation 'io.dropwizard:dropwizard-testing'
 testImplementation 'org.junit.jupiter:junit-jupiter-api'
 ```
