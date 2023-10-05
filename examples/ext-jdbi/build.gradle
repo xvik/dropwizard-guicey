@@ -3,3 +3,6 @@ dependencies {
     implementation 'com.h2database:h2'
     implementation 'io.dropwizard.modules:dropwizard-flyway:2.1.0-6'
 }
+
+// cglib inside jdbi is not compatible with java 16 and above
+test.onlyIf { JavaVersion.current() <= JavaVersion.VERSION_15 }

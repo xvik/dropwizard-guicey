@@ -7,3 +7,6 @@ dependencies {
     testImplementation 'org.flywaydb:flyway-core:9.22.2'
     testImplementation 'com.h2database:h2:2.2.224'
 }
+
+// cglib inside jdbi is not compatible with java 16 and above
+test.onlyIf { JavaVersion.current() <= JavaVersion.VERSION_15 }
