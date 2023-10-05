@@ -1088,8 +1088,7 @@ public class ActualTest extends BaseTest {}
 To test application startup fails you can use [system stubs](https://github.com/webcompere/system-stubs) library
 
 ```groovy
-testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.3'
-testImplementation 'org.objenesis:objenesis:3.3'
+testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.3'
 ```
 
 Testing app startup fail:
