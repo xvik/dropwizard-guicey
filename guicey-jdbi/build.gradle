@@ -4,6 +4,6 @@ dependencies {
     implementation 'io.dropwizard.modules:dropwizard-jdbi'
     implementation 'ru.vyarus:guice-ext-annotations'
 
-    testImplementation 'org.flywaydb:flyway-core:9.17.0'
-    testImplementation 'com.h2database:h2:2.1.214'
+    testImplementation 'org.flywaydb:flyway-core:9.22.2'
+    testImplementation 'com.h2database:h2:2.2.224'
 }

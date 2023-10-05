@@ -3,5 +3,6 @@ description = "Singe page applications support"
 dependencies {
     implementation 'io.dropwizard:dropwizard-assets'
 
-    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.2'
-}    
+    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.3'
+    testImplementation 'org.objenesis:objenesis:3.3'
+}

@@ -20,7 +20,7 @@ Additional dependencies required:
 
 ```groovy
 implementation 'ru.vyarus.guicey:guicey-jdbi3:{{ gradle.version }}'
-implementation 'com.h2database:h2:1.4.199'
+implementation 'com.h2database:h2:2.2.224'
 ```
 
 !!! note
