@@ -13,7 +13,7 @@ Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | 
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 2.1.7 [guice](https://github.com/google/guice) 6.0.0 integration.
+[Dropwizard](http://dropwizard.io/) 2.1.8 [guice](https://github.com/google/guice) 6.0.0 integration.
 
 Features:
 
@@ -46,19 +46,19 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>5.9.1</version>
+  <version>5.9.2</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:5.9.1'
+implementation 'ru.vyarus:dropwizard-guicey:5.9.2'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-2.1| [5.9.1](http://xvik.github.io/dropwizard-guicey/5.9.1)
+2.1| [5.9.1](http://xvik.github.io/dropwizard-guicey/5.9.2)
 2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
@@ -75,7 +75,7 @@ If you use **java 8** then apply afterburner dependency in order to switch into 
 implementation 'com.fasterxml.jackson.module:jackson-module-afterburner:2.13.3'
 ```
 (omit version if guicey or dropwizard BOM used).
-Without it you'll always see a nasty warning on startup (afterburner is better for java 8, but for java 9+ blackbird should be used)
+Without it, you'll always see a nasty warning on startup (afterburner is better for java 8, but for java 9+ blackbird should be used)
 
 
 #### BOM
@@ -87,9 +87,9 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus.guicey:guicey-bom:5.9.1')
+    implementation platform('ru.vyarus.guicey:guicey-bom:5.9.2')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-dependencies:2.1.7')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:2.1.8')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
@@ -110,7 +110,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>5.9.1</version>
+            <version>5.9.2</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -118,7 +118,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>2.1.7</version>
+            <version>2.1.8</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 
