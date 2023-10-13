@@ -44,7 +44,7 @@ dependencies {
     implementation 'io.dropwizard:dropwizard-auth'
     implementation 'com.google.inject:guice-assistedinject'
 
-    testImplementation 'io.dropwizard:dropwizard-test'
+    testImplementation 'io.dropwizard:dropwizard-testing'
 }
 ```    
 
