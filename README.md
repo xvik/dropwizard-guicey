@@ -84,6 +84,10 @@ Dropwizard | Guicey
 0.8 | [3.1.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.8)
 0.7 | [1.1.0](https://github.com/xvik/dropwizard-guicey/tree/dw-0.7)
 
+**GRADLE 6 users**: You might face `Could not resolve com.google.guava:guava:32.1.2-jre.`
+problem. This caused by guava packaging [issue](https://github.com/google/guava/issues/6612) (affected many people). 
+Either upgrade to gradle 7-8 or [apply workaround](https://github.com/google/guava/issues/6612#issuecomment-1614992368)
+
 #### BOM
 
 Use [BOM](http://xvik.github.io/dropwizard-guicey/latest/extras/bom/) for guice, dropwizard and guicey modules dependency management.
