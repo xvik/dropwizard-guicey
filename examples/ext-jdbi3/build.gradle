@@ -1,6 +1,13 @@
 dependencies {
     if(JavaVersion.current() == JavaVersion.VERSION_1_8) {
         implementation 'ru.vyarus.guicey:guicey-jdbi3-jdk8'
+        // force jdbi version compatible with jdk8
+        // since dropwizard 2.1.9 version jdbi 3.41.3 leaked into classpath (due to metrics-jdbi3 module)
+        implementation ('org.jdbi:jdbi3-core') {
+            version {
+                strictly '3.39.1'
+            }
+        }
     } else {
         implementation 'ru.vyarus.guicey:guicey-jdbi3'
     }

@@ -5,6 +5,13 @@ dependencies {
         // remove caffeine 3 (incompatible with JDK 8)
         exclude module: 'caffeine', group: 'com.github.ben-manes.caffeine'
     }
+    // force jdbi version compatible with jdk8
+    // since dropwizard 2.1.9 version jdbi 3.41.3 leaked into classpath (due to metrics-jdbi3 module)
+    implementation ('org.jdbi:jdbi3-core') {
+        version {
+            strictly '3.39.1'
+        }
+    }
 }
 
 publishing.publications.maven.artifacts = []

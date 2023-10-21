@@ -6,6 +6,13 @@ dependencies {
         implementation('io.dropwizard:dropwizard-jdbi3') {
             exclude module: 'caffeine'
         }
+        // force jdbi version compatible with jdk8
+        // since dropwizard 2.1.9 version jdbi 3.41.3 leaked into classpath (due to metrics-jdbi3 module)
+        implementation ('org.jdbi:jdbi3-core') {
+            version {
+                strictly '3.39.1'
+            }
+        }
     } else {
         // with caffeine 3 (required for jdk 16 and above)
         implementation 'io.dropwizard:dropwizard-jdbi3'
