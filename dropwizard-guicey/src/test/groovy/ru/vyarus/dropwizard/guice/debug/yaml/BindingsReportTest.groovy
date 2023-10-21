@@ -100,7 +100,9 @@ class BindingsReportTest extends Specification {
             @Config("server.detailedJsonProcessingExceptionMapper") Boolean = false
             @Config("server.dumpAfterStart") Boolean = false
             @Config("server.dumpBeforeStop") Boolean = false
+            @Config("server.enableAdminVirtualThreads") Boolean = false
             @Config("server.enableThreadNameFilter") Boolean = true
+            @Config("server.enableVirtualThreads") Boolean = false
             @Config("server.gzip") GzipHandlerFactory = io.dropwizard.jetty.GzipHandlerFactory@1111111
             @Config("server.gzip.bufferSize") DataSize = 8 kibibytes
             @Config("server.gzip.deflateCompressionLevel") Integer = -1
@@ -176,7 +178,9 @@ class BindingsReportTest extends Specification {
         ├── detailedJsonProcessingExceptionMapper: Boolean = false
         ├── dumpAfterStart: Boolean = false
         ├── dumpBeforeStop: Boolean = false
+        ├── enableAdminVirtualThreads: Boolean = false
         ├── enableThreadNameFilter: Boolean = true
+        ├── enableVirtualThreads: Boolean = false
         ├── gid: Integer = null
         ├── group: String = null
         ├── idleThreadTimeout: Duration = 1 minute
@@ -291,7 +295,9 @@ class BindingsReportTest extends Specification {
             @Config("server.detailedJsonProcessingExceptionMapper") Boolean = false
             @Config("server.dumpAfterStart") Boolean = false
             @Config("server.dumpBeforeStop") Boolean = false
+            @Config("server.enableAdminVirtualThreads") Boolean = false
             @Config("server.enableThreadNameFilter") Boolean = true
+            @Config("server.enableVirtualThreads") Boolean = false
             @Config("server.gid") Integer = null
             @Config("server.group") String = null
             @Config("server.gzip") GzipHandlerFactory = io.dropwizard.jetty.GzipHandlerFactory@1111111
@@ -420,7 +426,9 @@ class BindingsReportTest extends Specification {
         ├── detailedJsonProcessingExceptionMapper: Boolean = false
         ├── dumpAfterStart: Boolean = false
         ├── dumpBeforeStop: Boolean = false
+        ├── enableAdminVirtualThreads: Boolean = false
         ├── enableThreadNameFilter: Boolean = true
+        ├── enableVirtualThreads: Boolean = false
         ├── idleThreadTimeout: Duration = 1 minute
         ├── maxQueuedRequests: Integer = 1024
         ├── maxThreads: Integer = 1024
