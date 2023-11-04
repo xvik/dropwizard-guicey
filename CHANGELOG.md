@@ -2,7 +2,7 @@
 
 NOTE: jdbi3 module problem for gradle: in gradle dropwizard-jdbi3 
 leaks now (through metrics-jdbi3) jdbi3 3.43.1, compiled for java 11, so you'll have to 
-manually force correct version:
+manually force the correct version:
     implementation ('org.jdbi:jdbi3-core') {
         version { strictly '3.39.1' }
     }
