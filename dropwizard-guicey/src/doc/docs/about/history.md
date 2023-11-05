@@ -1,4 +1,4 @@
-### [5.9.3](http://xvik.github.io/dropwizard-guicey/5.9.3) (2023-11-04)
+### [5.9.3](http://xvik.github.io/dropwizard-guicey/5.9.3) (2023-11-05)
 * Update to dropwizard 2.1.9
 
 NOTE: dropwizard-jdbi3 drops java 8 support in gradle because it leaks

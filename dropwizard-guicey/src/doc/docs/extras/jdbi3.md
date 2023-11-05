@@ -42,6 +42,17 @@ implementation 'ru.vyarus.guicey:guicey-jdbi3:{{ gradle.version }}'
 
 Omit version if guicey BOM used
 
+!!! note 
+    dropwizard-jdbi3 drops java 8 support in gradle because it leaks
+    (through metrics-jdbi3) jdbi3 3.43.1, compiled for java 11, so,
+    for java 8 compatibility, you'll have to manually force the correct version:
+    
+    ```groovy
+        implementation ('org.jdbi:jdbi3-core') {
+            version { strictly '3.39.1' }
+        }
+    ```
+
 ## Usage
 
 Register bundle:
