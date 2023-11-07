@@ -122,7 +122,7 @@ subprojects {
     dependencies {
         implementation platform(project(':'))
 
-        compileOnly 'com.github.spotbugs:spotbugs-annotations:4.8.0'
+        compileOnly 'com.github.spotbugs:spotbugs-annotations:4.8.1'
         compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     }
 
