@@ -59,7 +59,7 @@ implementation 'ru.vyarus:dropwizard-guicey:6.1.2'
 Dropwizard | Guicey
 ----------|---------
 3.0| [6.1.2](http://xvik.github.io/dropwizard-guicey/6.1.2)
-2.1| [5.9.2](http://xvik.github.io/dropwizard-guicey/5.9.2)
+2.1| [5.9.3](http://xvik.github.io/dropwizard-guicey/5.9.3)
 2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
 1.1, 1.2 | [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) 
