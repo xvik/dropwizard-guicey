@@ -4,6 +4,7 @@ import ru.vyarus.java.generics.resolver.context.container.ParameterizedTypeImpl;
 import ru.vyarus.java.generics.resolver.util.GenericsUtils;
 import ru.vyarus.java.generics.resolver.util.TypeToStringUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +45,7 @@ public class ConfigPath {
     private final Object value;
     private final boolean customType;
     private final boolean objectDeclaration;
+    private final Annotation qualifier;
 
     @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList"})
     public ConfigPath(
@@ -56,7 +58,8 @@ public class ConfigPath {
             final String path,
             final Object value,
             final boolean customType,
-            final boolean objectDeclaration) {
+            final boolean objectDeclaration,
+            final Annotation qualifier) {
         this.declarationClass = declarationClass;
         this.declaredType = declaredType;
         this.valueType = valueType;
@@ -67,6 +70,7 @@ public class ConfigPath {
         this.customType = customType;
         this.objectDeclaration = objectDeclaration;
         this.root = root;
+        this.qualifier = qualifier;
     }
 
     /**
@@ -186,6 +190,16 @@ public class ConfigPath {
      */
     public boolean isObjectDeclaration() {
         return objectDeclaration;
+    }
+
+    /**
+     * Custom qualifiers might be used to simplify configuration bindings (because {@code @Config} qualifier requires
+     * the exact yaml path).
+     *
+     * @return custom qualifier annotation declared on config class or null
+     */
+    public Annotation getQualifier() {
+        return qualifier;
     }
 
     /**

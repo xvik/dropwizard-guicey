@@ -9,15 +9,18 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.google.common.primitives.Primitives;
+import com.google.inject.BindingAnnotation;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.util.DataSize;
 import io.dropwizard.util.Duration;
+import jakarta.inject.Qualifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 import ru.vyarus.java.generics.resolver.context.GenericsContext;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -290,7 +293,8 @@ public final class ConfigTreeBuilder {
                 fullPath(root, prop),
                 value,
                 customType,
-                objectDeclared);
+                objectDeclared,
+                findQualifier(prop));
     }
 
     /**
@@ -477,5 +481,33 @@ public final class ConfigTreeBuilder {
 
     private static String fullPath(final ConfigPath root, final BeanPropertyDefinition prop) {
         return (root == null ? "" : root.getPath() + ".") + prop.getName();
+    }
+
+    private static Annotation findQualifier(final BeanPropertyDefinition prop) {
+        // field in priority
+        Annotation ann = null;
+        if (prop.getField() != null) {
+            ann = findQualifierAnnotation(prop.getField().getAllAnnotations().annotations());
+        }
+        // check getter
+        if (ann == null && prop.getGetter() != null) {
+            ann = findQualifierAnnotation(prop.getGetter().getAllAnnotations().annotations());
+        }
+
+        return ann;
+    }
+
+    private static Annotation findQualifierAnnotation(final Iterable<Annotation> anns) {
+        for (Annotation ann : anns) {
+            for (Annotation marker : ann.annotationType().getAnnotations()) {
+                final Class<? extends Annotation> type = marker.annotationType();
+                if (type.equals(Qualifier.class)
+                        || type.equals(javax.inject.Qualifier.class)
+                        || type.equals(BindingAnnotation.class)) {
+                    return ann;
+                }
+            }
+        }
+        return null;
     }
 }

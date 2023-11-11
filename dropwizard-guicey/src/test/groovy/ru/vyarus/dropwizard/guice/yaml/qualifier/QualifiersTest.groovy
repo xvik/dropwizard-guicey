@@ -1,0 +1,127 @@
+package ru.vyarus.dropwizard.guice.yaml.qualifier
+
+import com.google.inject.BindingAnnotation
+import com.google.inject.Inject
+import com.google.inject.name.Named
+import io.dropwizard.core.Application
+import io.dropwizard.core.Configuration
+import io.dropwizard.core.setup.Bootstrap
+import io.dropwizard.core.setup.Environment
+import ru.vyarus.dropwizard.guice.GuiceBundle
+import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
+import ru.vyarus.dropwizard.guice.debug.report.yaml.ConfigBindingsRenderer
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree
+import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
+import spock.lang.Specification
+
+import java.lang.annotation.ElementType
+import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
+import java.lang.annotation.Target
+
+/**
+ * @author Vyacheslav Rusakov
+ * @since 11.11.2023
+ */
+@TestGuiceyApp(value = App, configOverride = ["one:1", "sub.two:2", "three:3"])
+class QualifiersTest extends Specification {
+
+    @Named("one")
+    @Inject
+    String one
+
+    @Qualif
+    @Inject
+    Integer two
+
+    @Named("custom")
+    @Inject
+    String custom
+
+    @Inject
+    ConfigurationTree tree
+
+    def 'Check qualification bindings'() {
+
+        expect: "qualified bindings recognized"
+        one == "1"
+        two == 2
+        custom == "3"
+
+        and: "report correct"
+        render(new BindingsConfig()
+                .showCustomConfigOnly()) == """
+
+    Configuration object bindings:
+        @Config Config
+
+
+    Unique sub configuration objects bindings:
+
+        Config.sub
+            @Config Sub = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiersTest\$Sub@1111111
+
+
+    Qualified bindings:
+
+        Config:
+            @Named("one") String = "1"
+            @Qualif Integer = 2
+            @Named("custom") String = "3"
+
+
+    Configuration paths bindings:
+
+        Config:
+            @Config("one") String = "1"
+            @Config("sub") Sub = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiersTest\$Sub@1111111
+            @Config("sub.two") Integer = 2
+            @Config("three") String = "3"
+"""
+    }
+
+    String render(BindingsConfig config) {
+        new ConfigBindingsRenderer(tree).renderReport(config)
+                .replaceAll("\r", "")
+                .replaceAll(" +\n", "\n")
+                .replaceAll('@\\d+[^]C \n]+', '@1111111')
+    }
+
+    static class App extends Application<Config> {
+        @Override
+        void initialize(Bootstrap<Config> bootstrap) {
+            bootstrap.addBundle(GuiceBundle.builder()
+                    .printCustomConfigurationBindings()
+                    .build())
+        }
+
+        @Override
+        void run(Config config, Environment environment) throws Exception {
+        }
+    }
+
+    static class Config extends Configuration {
+        @Named("one")
+        String one
+        Sub sub = new Sub()
+
+        String three
+
+        @Named("custom")
+        String getThree() {
+            return three
+        }
+    }
+
+    static class Sub {
+        @Qualif
+        Integer two
+    }
+
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target([ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD])
+@BindingAnnotation
+public @interface Qualif {
+}
