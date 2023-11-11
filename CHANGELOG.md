@@ -1,4 +1,7 @@
 * Update to dropwizard 3.0.4
+* Add qualifier annotations support for configuration properties binding:
+    any configuration property, annotated with qualifier annotation, would be
+    directly bound with that qualifier
 
 ### 6.1.2 (2023-10-06)
 * Update to dropwizard 3.0.2

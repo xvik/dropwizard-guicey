@@ -3,8 +3,12 @@ package ru.vyarus.dropwizard.guice.debug.report.yaml;
 import io.dropwizard.core.Configuration;
 import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.debug.util.TreeNode;
+import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
 import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
@@ -44,6 +48,7 @@ public class ConfigBindingsRenderer implements ReportRenderer<BindingsConfig> {
         if (config.isShowBindings()) {
             renderRootTypes(config, res);
             renderUniqueSubConfigs(config, res);
+            renderQualified(res);
             renderPaths(config, res);
         }
         return res.toString();
@@ -104,6 +109,46 @@ public class ConfigBindingsRenderer implements ReportRenderer<BindingsConfig> {
             res.append(NEWLINE).append(TAB).append(TAB)
                     .append(item.getRootDeclarationClass().getSimpleName()).append('.').append(item.getPath())
                     .append(NEWLINE).append(TAB).append(TAB).append(TAB).append(CONFIG).append(SPACE);
+            renderPath(item, res);
+            res.append(NEWLINE);
+        }
+    }
+
+    private void renderQualified(final StringBuilder res) {
+        boolean header = false;
+        Class rootConfig = null;
+        for (ConfigPath item : tree.getPaths()) {
+            final Annotation qualifier = item.getQualifier();
+            if (qualifier == null) {
+                continue;
+            }
+            if (!header) {
+                // delayed render for no displayed items case
+                res.append(NEWLINE).append(NEWLINE).append(TAB)
+                        .append("Qualified bindings:").append(NEWLINE);
+                header = true;
+            }
+            if (rootConfig != item.getRootDeclarationClass()) {
+                // root declaring configuration class (sub section)
+                rootConfig = item.getRootDeclarationClass();
+                res.append(NEWLINE).append(TAB).append(TAB)
+                        .append(rootConfig.getSimpleName()).append(':').append(NEWLINE);
+            }
+
+            res.append(TAB).append(TAB).append(TAB).append('@')
+                    .append(qualifier.annotationType().getSimpleName());
+            // NOTE custom config annotations might contain custom values - it can't be known for sure
+            try {
+                final Method valueMethod = FeatureUtils.findMethod(qualifier.annotationType(), "value");
+                final Object value = FeatureUtils.invokeMethod(valueMethod, qualifier);
+                if (value != null) {
+                    res.append("(\"").append(value).append("\") ");
+                }
+            } catch (Exception ex) {
+                // no value field in annotation
+                res.append(' ');
+            }
+
             renderPath(item, res);
             res.append(NEWLINE);
         }

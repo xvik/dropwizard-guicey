@@ -26,9 +26,9 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath;
  * {@link ConfigurationTree} instance is also bound directly to be used for custom configuration analysis.
  *
  * @author Vyacheslav Rusakov
- * @since 04.05.2018
  * @see Config for more info on usage
  * @see ru.vyarus.dropwizard.guice.GuiceyOptions#BindConfigurationByPath
+ * @since 04.05.2018
  */
 public class ConfigBindingModule extends AbstractModule {
 
@@ -44,9 +44,23 @@ public class ConfigBindingModule extends AbstractModule {
     protected void configure() {
         bind(ConfigurationTree.class).toInstance(tree);
 
+        bindCustomQualifiers();
         bindRootTypes();
         bindUniqueSubConfigurations();
         bindValuePaths();
+    }
+
+    /**
+     * Bind configuration properties, annotated with custom qualifiers.
+     */
+    private void bindCustomQualifiers() {
+        for (ConfigPath item : tree.getPaths()) {
+            if (item.getQualifier() != null) {
+                bindValue(
+                        bind(Key.get(item.getDeclaredTypeWithGenerics(), item.getQualifier())),
+                        item.getValue());
+            }
+        }
     }
 
 
