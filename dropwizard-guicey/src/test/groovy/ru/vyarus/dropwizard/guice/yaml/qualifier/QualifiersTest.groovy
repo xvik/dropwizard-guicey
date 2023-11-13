@@ -71,12 +71,10 @@ class QualifiersTest extends Specification {
 
 
     Qualified bindings:
-
-        Config:
-            @Qualif Box = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiersTest\$Box@1111111
-            @Named("one") String = "1"
-            @Qualif Integer = 2
-            @Named("custom") String = "3"
+        @Qualif Box = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiersTest\$Box@1111111 (box)
+        @Named("one") String = "1" (one)
+        @Qualif Integer = 2 (sub.two)
+        @Named("custom") String = "3" (three)
 
 
     Configuration paths bindings:
