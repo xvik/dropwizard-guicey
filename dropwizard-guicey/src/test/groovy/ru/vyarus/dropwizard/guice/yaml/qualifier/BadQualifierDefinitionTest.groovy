@@ -23,7 +23,7 @@ class BadQualifierDefinitionTest extends Specification {
 
         then: "error"
         def ex = thrown(CreationException)
-        ex.message.contains("String annotated with @Named(value=\"one\") was bound multiple times")
+        ex.message.replace("value=", "").contains("String annotated with @Named(\"one\") was bound multiple times")
     }
 
     static class App extends Application<Config> {
