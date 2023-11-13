@@ -23,7 +23,7 @@ import java.lang.annotation.Target
  * @author Vyacheslav Rusakov
  * @since 11.11.2023
  */
-@TestGuiceyApp(value = App, configOverride = ["one:1", "sub.two:2", "three:3"])
+@TestGuiceyApp(value = App, configOverride = ["one:1", "sub.two:2", "three:3", "box.foo:4"])
 class QualifiersTest extends Specification {
 
     @Named("one")
@@ -33,6 +33,10 @@ class QualifiersTest extends Specification {
     @Qualif
     @Inject
     Integer two
+
+    @Qualif
+    @Inject
+    Box box
 
     @Named("custom")
     @Inject
@@ -46,6 +50,7 @@ class QualifiersTest extends Specification {
         expect: "qualified bindings recognized"
         one == "1"
         two == 2
+        box.foo == 4
         custom == "3"
 
         and: "report correct"
@@ -58,6 +63,9 @@ class QualifiersTest extends Specification {
 
     Unique sub configuration objects bindings:
 
+        Config.box
+            @Config Box = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiersTest\$Box@1111111
+
         Config.sub
             @Config Sub = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiersTest\$Sub@1111111
 
@@ -65,6 +73,7 @@ class QualifiersTest extends Specification {
     Qualified bindings:
 
         Config:
+            @Qualif Box = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiersTest\$Box@1111111
             @Named("one") String = "1"
             @Qualif Integer = 2
             @Named("custom") String = "3"
@@ -73,6 +82,8 @@ class QualifiersTest extends Specification {
     Configuration paths bindings:
 
         Config:
+            @Config("box") Box = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiersTest\$Box@1111111
+            @Config("box.foo") Integer = 4
             @Config("one") String = "1"
             @Config("sub") Sub = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiersTest\$Sub@1111111
             @Config("sub.two") Integer = 2
@@ -104,6 +115,7 @@ class QualifiersTest extends Specification {
         @Named("one")
         String one
         Sub sub = new Sub()
+        @Qualif Box box = new Box()
 
         String three
 
@@ -116,6 +128,10 @@ class QualifiersTest extends Specification {
     static class Sub {
         @Qualif
         Integer two
+    }
+
+    static class Box {
+        Integer foo
     }
 
 }
