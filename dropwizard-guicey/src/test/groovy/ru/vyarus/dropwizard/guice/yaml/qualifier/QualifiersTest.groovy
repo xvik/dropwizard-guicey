@@ -93,7 +93,7 @@ class QualifiersTest extends Specification {
         new ConfigBindingsRenderer(tree).renderReport(config)
                 .replaceAll("\r", "")
                 .replaceAll(" +\n", "\n")
-                .replaceAll('@\\d+[^]C \n]+', '@1111111')
+                .replaceAll('@(\\d+|[a-z])[^]C \n]+', '@1111111')
     }
 
     static class App extends Application<Config> {
