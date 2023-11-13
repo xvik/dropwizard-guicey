@@ -6,7 +6,6 @@ import io.dropwizard.core.Application
 import io.dropwizard.core.Configuration
 import io.dropwizard.core.setup.Bootstrap
 import io.dropwizard.core.setup.Environment
-import io.dropwizard.metrics.common.MetricsFactory
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
 import ru.vyarus.dropwizard.guice.debug.report.yaml.ConfigBindingsRenderer
@@ -18,24 +17,25 @@ import spock.lang.Specification
  * @author Vyacheslav Rusakov
  * @since 13.11.2023
  */
-@TestGuiceyApp(App)
-class CoreConfigObjectsQualificationBindingTest extends Specification {
+@TestGuiceyApp(value = App, configOverride = ["one1.val:1", "one2.val:2", "two.val:3"])
+class QualifiedAggregationTest extends Specification {
 
     @Inject
-    @Named("metrics")
-    MetricsFactory metrics
+    @Named("one")
+    Set<Sub> subs
 
     @Inject
-    Config config
+    @Named("two")
+    Sub two
 
     @Inject
     ConfigurationTree tree
 
-    def 'Check qualification bindings'() {
+    def "Check grouped bindings"() {
 
-        expect: "qualified bindings recognized"
-        metrics == config.getMetricsFactory()
-
+        expect:
+        subs.size() == 2
+        two.val == 3
         and: "report correct"
         render(new BindingsConfig()
                 .showCustomConfigOnly()) == """
@@ -44,23 +44,22 @@ class CoreConfigObjectsQualificationBindingTest extends Specification {
         @Config Config
 
 
-    Unique sub configuration objects bindings:
-
-        Config.metrics
-            @Config MetricsFactory = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false}
-
-
     Qualified bindings:
-        @Named("metrics") MetricsFactory = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false} (metrics)
+        @Named("one") Set<Sub> = (aggregated values)
+            Sub = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiedAggregationTest\$Sub@1111111 (one1)
+            Sub = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiedAggregationTest\$Sub@1111111 (one2)
+        @Named("two") Sub = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiedAggregationTest\$Sub@1111111 (two)
 
 
     Configuration paths bindings:
 
         Config:
-            @Config("metrics") MetricsFactory = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false}
-            @Config("metrics.frequency") Duration = 1 minute
-            @Config("metrics.reportOnStop") Boolean = false
-            @Config("metrics.reporters") List<ReporterFactory> (with actual type ArrayList<ReporterFactory>) = []
+            @Config("one1") Sub = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiedAggregationTest\$Sub@1111111
+            @Config("one1.val") Integer = 1
+            @Config("one2") Sub = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiedAggregationTest\$Sub@1111111
+            @Config("one2.val") Integer = 2
+            @Config("two") Sub = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifiedAggregationTest\$Sub@1111111
+            @Config("two.val") Integer = 3
 """
     }
 
@@ -86,11 +85,15 @@ class CoreConfigObjectsQualificationBindingTest extends Specification {
     }
 
     static class Config extends Configuration {
+        @Named("one")
+        Sub one1 = new Sub()
+        @Named("one")
+        Sub one2 = new Sub()
+        @Named("two")
+        Sub two = new Sub()
+    }
 
-        @Named("metrics")
-        @Override
-        MetricsFactory getMetricsFactory() {
-            return super.getMetricsFactory()
-        }
+    static class Sub {
+        Integer val
     }
 }
