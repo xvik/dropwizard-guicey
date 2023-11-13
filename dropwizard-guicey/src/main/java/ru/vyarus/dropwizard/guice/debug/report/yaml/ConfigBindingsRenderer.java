@@ -1,5 +1,8 @@
 package ru.vyarus.dropwizard.guice.debug.report.yaml;
 
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.inject.Key;
 import io.dropwizard.Configuration;
 import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
 import ru.vyarus.dropwizard.guice.debug.util.TreeNode;
@@ -9,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
 import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
@@ -115,10 +119,19 @@ public class ConfigBindingsRenderer implements ReportRenderer<BindingsConfig> {
     }
 
     private void renderQualified(final StringBuilder res) {
-        boolean header = false;
-        Class rootConfig = null;
+        final Multimap<Key<?>, ConfigPath> bindings = LinkedHashMultimap.create();
         for (ConfigPath item : tree.getPaths()) {
-            final Annotation qualifier = item.getQualifier();
+            if (item.getQualifier() != null) {
+                final Key<?> key = Key.get(item.getDeclaredTypeWithGenerics(), item.getQualifier());
+                bindings.put(key, item);
+            }
+        }
+
+        boolean header = false;
+        for (Key<?> key : bindings.keySet()) {
+            final Collection<ConfigPath> values = bindings.get(key);
+            final ConfigPath first = values.iterator().next();
+            final Annotation qualifier = first.getQualifier();
             if (qualifier == null) {
                 continue;
             }
@@ -128,14 +141,8 @@ public class ConfigBindingsRenderer implements ReportRenderer<BindingsConfig> {
                         .append("Qualified bindings:").append(NEWLINE);
                 header = true;
             }
-            if (rootConfig != item.getRootDeclarationClass()) {
-                // root declaring configuration class (sub section)
-                rootConfig = item.getRootDeclarationClass();
-                res.append(NEWLINE).append(TAB).append(TAB)
-                        .append(rootConfig.getSimpleName()).append(':').append(NEWLINE);
-            }
 
-            res.append(TAB).append(TAB).append(TAB).append('@')
+            res.append(TAB).append(TAB).append('@')
                     .append(qualifier.annotationType().getSimpleName());
             // NOTE custom config annotations might contain custom values - it can't be known for sure
             try {
@@ -149,8 +156,17 @@ public class ConfigBindingsRenderer implements ReportRenderer<BindingsConfig> {
                 res.append(' ');
             }
 
-            renderPath(item, res);
-            res.append(NEWLINE);
+            if (values.size() > 1) {
+                res.append("Set<").append(first.toStringDeclaredType()).append("> = (aggregated values)\n");
+                for (ConfigPath path : values) {
+                    res.append(TAB).append(TAB).append(TAB);
+                    renderPath(path, res);
+                    res.append(" (").append(path.getPath()).append(')').append(NEWLINE);
+                }
+            } else {
+                renderPath(first, res);
+                res.append(" (").append(first.getPath()).append(')').append(NEWLINE);
+            }
         }
     }
 

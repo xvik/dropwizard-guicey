@@ -1,12 +1,19 @@
 package ru.vyarus.dropwizard.guice.module.yaml.bind;
 
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.util.Providers;
 import io.dropwizard.Configuration;
-import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath;
+import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
+import ru.vyarus.java.generics.resolver.context.container.ParameterizedTypeImpl;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Binds configuration constants. Bindings are qualified with {@link Config}.
@@ -51,15 +58,33 @@ public class ConfigBindingModule extends AbstractModule {
     }
 
     /**
-     * Bind configuration properties, annotated with custom qualifiers.
+     * Bind configuration properties, annotated with custom qualifiers. If the same "qualifier + type" is detected,
+     * all such values are grouped with {@code Set}.
      */
     private void bindCustomQualifiers() {
+        final Multimap<Key<?>, ConfigPath> bindings = LinkedHashMultimap.create();
         for (ConfigPath item : tree.getPaths()) {
             if (item.getQualifier() != null) {
-                bindValue(
-                        bind(Key.get(item.getDeclaredTypeWithGenerics(), item.getQualifier())),
-                        item.getValue());
+                final Key<?> key = Key.get(item.getDeclaredTypeWithGenerics(), item.getQualifier());
+                bindings.put(key, item);
             }
+        }
+
+        for (Key<?> key : bindings.keySet()) {
+            final Collection<ConfigPath> values = bindings.get(key);
+            // single value case
+            final ConfigPath first = values.iterator().next();
+            Object value = first.getValue();
+
+            Key<?> bindingKey = key;
+            if (values.size() > 1) {
+                // aggregate multiple values into set
+                // NOTE no need to check types compatibility because matching was based on pre-computed keys
+                value = values.stream().map(ConfigPath::getValue).collect(Collectors.toSet());
+                bindingKey = Key.get(new ParameterizedTypeImpl(Set.class, first.getDeclaredTypeWithGenerics()),
+                        first.getQualifier());
+            }
+            bindValue(bind(bindingKey), value);
         }
     }
 
