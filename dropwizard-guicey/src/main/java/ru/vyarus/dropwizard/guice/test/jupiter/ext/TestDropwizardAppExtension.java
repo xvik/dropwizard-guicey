@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.platform.commons.support.AnnotationSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
-import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
@@ -62,8 +61,6 @@ import java.util.Optional;
  * @since 28.04.2020
  */
 public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
-
-    private static final String STAR = "*";
 
     private Config config;
 
@@ -156,11 +153,8 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             final String prefix, final ExtensionContext context) {
         ConfigOverride[] overrides = ConfigOverrideUtils.convert(prefix, config.configOverrides);
         if (!Strings.isNullOrEmpty(config.restMapping)) {
-            String mapping = PathUtils.leadingSlash(config.restMapping);
-            if (!mapping.endsWith(STAR)) {
-                mapping = PathUtils.trailingSlash(mapping) + STAR;
-            }
-            overrides = ConfigOverrideUtils.merge(overrides, ConfigOverride.config(prefix, "server.rootPath", mapping));
+            overrides = ConfigOverrideUtils.merge(overrides,
+                    ConfigOverrideUtils.overrideRestMapping(prefix, config.restMapping));
         }
         return config.configOverrideObjects.isEmpty() ? overrides
                 : ConfigOverrideUtils.merge(overrides,
@@ -328,6 +322,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
             res.tracker.debug = ann.debug();
             res.reuseApp = ann.reuseApplication();
+            res.clientFactory(ann.clientFactory());
             return res;
         }
     }

@@ -18,7 +18,7 @@ class RendererDetectionTest extends Specification {
     def "Check renderer requirement check"() {
 
         when: "starting app"
-        TestSupport.runWebApp(App, null)
+        TestSupport.runWebApp(App)
         then: "absent renderer detected"
         def ex = thrown(IllegalStateException)
         ex.message == 'Required template engines are missed for server pages application \'app\': fooo (available engines: freemarker, mustache)'

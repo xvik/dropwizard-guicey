@@ -16,11 +16,10 @@ class CommandInstantiationFailTest extends Specification {
     def "Check not instantiatable command"() {
 
         when: "run app"
-        TestSupport.runCoreApp(App, null)
+        TestSupport.runCoreApp(App)
         then: "error"
         def ex = thrown(IllegalStateException)
-        ex.message.startsWith(
-                "Failed to instantiate command")
+        ex.message.startsWith("Failed to instantiate command")
     }
 
     static class App extends Application<Configuration> {

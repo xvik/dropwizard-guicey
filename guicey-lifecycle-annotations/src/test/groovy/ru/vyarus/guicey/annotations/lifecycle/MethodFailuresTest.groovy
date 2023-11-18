@@ -21,7 +21,7 @@ class MethodFailuresTest extends Specification {
     def "Check PostConstruct failure"() {
 
         when: 'start method throws exception'
-        TestSupport.runCoreApp(FailedApp, null)
+        TestSupport.runCoreApp(FailedApp)
 
         then: 'entire startup fails'
         def ex = thrown(IllegalStateException)
@@ -31,7 +31,7 @@ class MethodFailuresTest extends Specification {
     def "Check PostStartup failure"() {
 
         when: 'start server method throws exception'
-        TestSupport.runWebApp(ServerFailedApp, null)
+        TestSupport.runWebApp(ServerFailedApp)
 
         then: 'entire startup fails'
         def ex = thrown(IllegalStateException)

@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.config.unique.support.SampleExt
 import ru.vyarus.dropwizard.guice.config.unique.support.SampleModule
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
+import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils
 import spock.lang.Specification
 
 /**
@@ -50,7 +51,8 @@ class DifferentClassLoaderRecognitionTest extends Specification {
 
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(ext1, ext2)
-                    .modules(new SampleModule(), cl.loadClass(SampleModule.name).newInstance())
+                    .modules(new SampleModule(),
+                            InstanceUtils.create((Class<SampleModule>) cl.loadClass(SampleModule.name)))
                     .printDiagnosticInfo()
                     .build()
             );

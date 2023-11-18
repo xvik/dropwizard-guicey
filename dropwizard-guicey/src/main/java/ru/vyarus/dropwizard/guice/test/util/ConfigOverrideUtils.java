@@ -2,8 +2,10 @@ package ru.vyarus.dropwizard.guice.test.util;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.testing.ConfigOverride;
+import jakarta.annotation.Nullable;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
+import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.Optional;
  * @since 30.04.2020
  */
 public final class ConfigOverrideUtils {
+
+    private static final String STAR = "*";
 
     private ConfigOverrideUtils() {
     }
@@ -54,7 +58,7 @@ public final class ConfigOverrideUtils {
             int i = 0;
             for (String value : props) {
                 final int idx = value.indexOf(':');
-                Preconditions.checkState(idx > 0 && idx < value.length(),
+                Preconditions.checkState(idx > 0,
                         "Incorrect configuration override declaration: must be 'key: value', but found '%s'", value);
                 overrides[i++] = ConfigOverride
                         .config(prefix, value.substring(0, idx).trim(), value.substring(idx + 1).trim());
@@ -144,5 +148,21 @@ public final class ConfigOverrideUtils {
             }
         }
         return overrides;
+    }
+
+    /**
+     * Creates config override for rest mapping. Declared mapping if automatically "fixed" to comply with required
+     * format.
+     *
+     * @param prefix      configuration override prefixes (may be null to use default prefix)
+     * @param restMapping rest mapping to configure
+     * @return config override object
+     */
+    public static ConfigOverride overrideRestMapping(final @Nullable String prefix, final String restMapping) {
+        String mapping = PathUtils.leadingSlash(restMapping);
+        if (!mapping.endsWith(STAR)) {
+            mapping = PathUtils.trailingSlash(mapping) + STAR;
+        }
+        return ConfigOverride.config(prefix == null ? "dw." : prefix, "server.rootPath", mapping);
     }
 }

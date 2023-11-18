@@ -9,6 +9,7 @@ import com.google.inject.Key;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.testing.DropwizardTestSupport;
+import jakarta.inject.Qualifier;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
@@ -18,7 +19,6 @@ import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.param.Jit;
 
-import jakarta.inject.Qualifier;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 import java.util.List;
@@ -30,6 +30,7 @@ import java.util.Optional;
  *     <li>{@link Application} or exact application class</li>
  *     <li>{@link ObjectMapper}</li>
  *     <li>{@link ClientSupport} application web client helper</li>
+ *     <li>{@link DropwizardTestSupport} support object itself</li>
  *     <li>Any existing guice binding (possibly with qualifier annotation or generified)</li>
  *     <li>{@link Jit} annotated parameter will be obtained from guice context (assume JIT binding)</li>
  * </ul>
@@ -42,7 +43,8 @@ public abstract class TestParametersSupport implements ParameterResolver {
 
     private final List<Class<?>> supportedClasses = ImmutableList.of(
             ObjectMapper.class,
-            ClientSupport.class);
+            ClientSupport.class,
+            DropwizardTestSupport.class);
 
     @Override
     @SuppressWarnings("checkstyle:ReturnCount")
@@ -91,6 +93,9 @@ public abstract class TestParametersSupport implements ParameterResolver {
         }
         if (ObjectMapper.class.equals(type)) {
             return support.getObjectMapper();
+        }
+        if (DropwizardTestSupport.class.isAssignableFrom(type)) {
+            return support;
         }
         return InjectorLookup.getInjector(support.getApplication())
                 .map(it -> it.getInstance(getKey(parameter)))

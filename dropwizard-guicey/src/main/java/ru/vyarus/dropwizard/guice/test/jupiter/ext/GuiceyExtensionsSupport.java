@@ -27,6 +27,7 @@ import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.ReusableAppUtils;
 import ru.vyarus.dropwizard.guice.test.util.StoredReusableApp;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
+import ru.vyarus.dropwizard.guice.test.util.support.TestSupportHolder;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -351,7 +352,10 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         fields.activateClassHooks();
         store.put(DW_SUPPORT, support);
         // for pure guicey tests client may seem redundant, but it can be used for calling other services
-        store.put(DW_CLIENT, new ClientSupport(support));
+        final ClientSupport client = new ClientSupport(support, config.clientFactory);
+        store.put(DW_CLIENT, client);
+        // to be able to access the support object outside of extension context
+        TestSupportHolder.setContext(support, client);
 
         tracker.enableDebugFromSystemProperty();
         tracker.logUsedHooksAndSetupObjects(configPrefix);
@@ -366,6 +370,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         final DropwizardTestSupport<?> support = getSupport(context);
         if (support != null) {
             support.after();
+            TestSupportHolder.reset();
         }
         final ClientSupport client = getClient(context);
         if (client != null) {

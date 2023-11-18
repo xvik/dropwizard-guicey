@@ -30,7 +30,7 @@ class EnvironmentListenersWuthCommandTest extends Specification {
 
 
         when: "run application normally"
-        TestSupport.runWebApp(App, null)
+        TestSupport.runWebApp(App)
         then: "listener called"
         App.lifecycleStarted
         App.guiceyStarted

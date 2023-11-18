@@ -17,7 +17,7 @@ class InstallerRegistrationFailTest extends Specification {
     def "Check no installer for extension"() {
 
         when: "run app"
-        TestSupport.runCoreApp(App, null)
+        TestSupport.runCoreApp(App)
         then: "error"
         def ex = thrown(IllegalStateException)
         ex.message.startsWith(

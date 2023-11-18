@@ -19,7 +19,7 @@ class NoGuiceDenyServletModuleTest extends Specification {
     def "Check servlet module denied without guice filter"() {
 
         when: "start app with servlet module and no filter"
-        TestSupport.runWebApp(DenySMApp, null)
+        TestSupport.runWebApp(DenySMApp)
         then: "error"
         def ex = thrown(CreationException)
         ex.errorMessages[0].message.equals("jakarta.servlet.http.HttpServletRequest was bound multiple times.")

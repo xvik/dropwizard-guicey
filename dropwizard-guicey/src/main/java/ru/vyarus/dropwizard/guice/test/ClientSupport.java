@@ -1,16 +1,14 @@
 package ru.vyarus.dropwizard.guice.test;
 
 import com.google.common.base.Preconditions;
-import io.dropwizard.jersey.jackson.JacksonFeature;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.testing.DropwizardTestSupport;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.client.HttpUrlConnectorProvider;
-import org.glassfish.jersey.client.JerseyClient;
-import org.glassfish.jersey.client.JerseyClientBuilder;
-import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
-
+import jakarta.annotation.Nullable;
 import jakarta.ws.rs.client.WebTarget;
+import org.glassfish.jersey.client.JerseyClient;
+import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
+import ru.vyarus.dropwizard.guice.test.util.client.DefaultTestClientFactory;
+import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
 
 /**
  * {@link JerseyClient} support for direct web tests (complete dropwizard startup).
@@ -18,6 +16,9 @@ import jakarta.ws.rs.client.WebTarget;
  * Client support maintains single {@link JerseyClient} instance. It may be used for calling any urls (not just
  * application). Class provides many utility methods for automatic construction of base context paths, so
  * tests could be completely independent from actual configuration.
+ * <p>
+ * Client customization is possible through custom
+ * {@link ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory} implementation.
  *
  * @author Vyacheslav Rusakov
  * @since 04.05.2020
@@ -26,10 +27,17 @@ public class ClientSupport implements AutoCloseable {
     private static final String HTTP_LOCALHOST = "http://localhost:";
 
     private final DropwizardTestSupport<?> support;
+    private final TestClientFactory factory;
     private JerseyClient client;
 
     public ClientSupport(final DropwizardTestSupport<?> support) {
+        this(support, null);
+    }
+
+    public ClientSupport(final DropwizardTestSupport<?> support,
+                         final @Nullable TestClientFactory factory) {
         this.support = support;
+        this.factory = factory == null ? new DefaultTestClientFactory() : factory;
     }
 
     /**
@@ -40,7 +48,7 @@ public class ClientSupport implements AutoCloseable {
     public JerseyClient getClient() {
         synchronized (this) {
             if (client == null) {
-                client = clientBuilder().build();
+                client = factory.create(support);
             }
             return client;
         }
@@ -148,8 +156,8 @@ public class ClientSupport implements AutoCloseable {
      *
      * @param paths zero, one or more path parts (joined with '/') and appended to base path
      * @return jersey web target object for main context
-     * @see #basePathMain() for base use construction details
      * @throws NullPointerException for guicey test
+     * @see #basePathMain() for base use construction details
      */
     public WebTarget targetMain(final String... paths) {
         return target(merge(basePathMain(), paths));
@@ -170,8 +178,8 @@ public class ClientSupport implements AutoCloseable {
      *
      * @param paths zero, one or more path parts (joined with '/') and appended to base path
      * @return jersey web target object for admin context
-     * @see #basePathAdmin() for base use construction details
      * @throws NullPointerException for guicey test
+     * @see #basePathAdmin() for base use construction details
      */
     public WebTarget targetAdmin(final String... paths) {
         return target(merge(basePathAdmin(), paths));
@@ -192,8 +200,8 @@ public class ClientSupport implements AutoCloseable {
      *
      * @param paths zero, one or more path parts (joined with '/') and appended to base path
      * @return jersey web target object for rest context
-     * @see #basePathRest() for base use construction details
      * @throws NullPointerException for guicey test
+     * @see #basePathRest() for base use construction details
      */
     public WebTarget targetRest(final String... paths) {
         return target(merge(basePathRest(), paths));
@@ -207,14 +215,6 @@ public class ClientSupport implements AutoCloseable {
                 client = null;
             }
         }
-    }
-
-    private JerseyClientBuilder clientBuilder() {
-        return new JerseyClientBuilder()
-                .register(new JacksonFeature(support.getEnvironment().getObjectMapper()))
-                .property(ClientProperties.CONNECT_TIMEOUT, 1000)
-                .property(ClientProperties.READ_TIMEOUT, 5000)
-                .property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true);
     }
 
     private String[] merge(final String base, final String... addition) {

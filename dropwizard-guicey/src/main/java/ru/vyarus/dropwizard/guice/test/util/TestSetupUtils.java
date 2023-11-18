@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
+import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
@@ -33,7 +34,7 @@ public final class TestSetupUtils {
         final List<TestEnvironmentSetup> res = new ArrayList<>();
         for (Class<? extends TestEnvironmentSetup> ext : extensions) {
             try {
-                res.add(ext.newInstance());
+                res.add(InstanceUtils.create(ext));
             } catch (Exception e) {
                 throw new IllegalStateException("Failed to instantiate test support object: " + ext.getSimpleName(), e);
             }

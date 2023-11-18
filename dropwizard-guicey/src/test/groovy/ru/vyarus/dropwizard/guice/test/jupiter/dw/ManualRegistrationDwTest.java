@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
+import ru.vyarus.dropwizard.guice.support.client.CustomTestClientFactory;
 import ru.vyarus.dropwizard.guice.support.feature.DummyExceptionMapper;
 import ru.vyarus.dropwizard.guice.support.feature.DummyManaged;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestDropwizardAppExtension;
@@ -31,6 +32,7 @@ public class ManualRegistrationDwTest {
             .restMapping("api")
             .hooks(Hook.class)
             .hooks(builder -> builder.disableExtensions(DummyManaged.class))
+            .clientFactory(new CustomTestClientFactory())
             .create();
 
     @Inject
@@ -56,6 +58,10 @@ public class ManualRegistrationDwTest {
                 .invoke();
 
         Assertions.assertEquals(200, response.getStatus());
+
+        Assertions.assertEquals(0, CustomTestClientFactory.getCalled());
+        client.getClient(); // force factory call
+        Assertions.assertEquals(1, CustomTestClientFactory.getCalled());
     }
 
     public static class Hook implements GuiceyConfigurationHook {

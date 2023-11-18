@@ -71,10 +71,10 @@ public final class PropertyUtils {
         return res;
     }
 
-    private static <T> List<T> toInstances(final Iterable<Class<T>> list) throws Exception {
+    private static <T> List<T> toInstances(final Iterable<Class<T>> list) {
         final List<T> res = Lists.newArrayList();
         for (Class<T> cls : list) {
-            res.add(cls.newInstance());
+            res.add(InstanceUtils.create(cls));
         }
         return res;
     }

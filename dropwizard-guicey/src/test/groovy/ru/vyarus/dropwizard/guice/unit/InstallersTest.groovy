@@ -29,6 +29,7 @@ import ru.vyarus.dropwizard.guice.support.web.feature.DummyWebListener
 import ru.vyarus.dropwizard.guice.support.web.feature.abstr.AbstractFilter
 import ru.vyarus.dropwizard.guice.support.web.feature.abstr.AbstractServlet
 import ru.vyarus.dropwizard.guice.support.web.feature.abstr.AbstractWebListener
+import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils
 import spock.lang.Unroll
 
 /**
@@ -60,7 +61,7 @@ class InstallersTest extends AbstractTest {
         }
 
         expect: "installer did not accept abstract class and correctly installs good one"
-        def inst = installer.newInstance()
+        def inst = InstanceUtils.create(installer)
         if (InstallerOptionsSupport.isAssignableFrom(installer)) {
             ((InstallerOptionsSupport) inst).setOptions(new Options(new OptionsSupport()))
         }
@@ -69,7 +70,7 @@ class InstallersTest extends AbstractTest {
         if (inst instanceof TypeInstaller)
             inst.install(environment, goodBean)
         if (inst instanceof InstanceInstaller)
-            inst.install(environment, goodBean.newInstance())
+            inst.install(environment, InstanceUtils.createWithAnyConstructor(goodBean))
 
         where:
         installer               | goodBean             | denyBean

@@ -1,7 +1,20 @@
 * Update to dropwizard 4.0.4
 * Add qualifier annotations support for configuration properties binding: 
-    any configuration property, annotated with qualifier annotation, would be 
-    directly bound with that qualifier
+    any configuration property (any level), annotated with qualifier annotation, would be 
+    directly bound with that qualifier. Core dropwizard objects could be qualified on overridden getter
+* Test improvements:
+  - Junit 5 extensions could inject DropwizardTestSupport object itself as test method parameter
+  - ClientSupport: inner jersey client creation is customizable now with TestClientFactory implementation
+      * new attribute "clientFactory" in @TestGuiceyApp and @TestDropwizardApp
+      * default factory would automatically configure multipart feature if available in classpath (dropwizard-forms)
+  - Context support object (DropwizardTestSupport) and client (ClientSupport) instances are accessible now statically
+      for both manual run (TestSupport) and junit extensions: TestSupport.getContext() and TestSupport.getContextClient()
+  - New generic builder for flexible DropwizardTestSupport object creation and run (when junit extension can't be used):
+      TestSupport.builder() (with lifecycle listeners support)
+  - TestSupport methods changes: 
+      * Creation and run methods updated with config override (strings) support 
+      * Add creation and run methods application class only (and optional overrides).
+      * Run methods without callback now return DropwizardTestSupport object (for example, to examine config)
 
 ### 7.0.2 (2023-10-06)
 * Update to dropwizard 4.0.2
