@@ -18,7 +18,7 @@ class NoViewsSupportTest extends Specification {
     def "Check view support absence detection"() {
 
         when: "starting app"
-        TestSupport.runWebApp(App, null)
+        TestSupport.runWebApp(App)
         then: "no views support detected"
         def ex = thrown(IllegalStateException)
         ex.message == 'Either server pages support bundle was not installed (use ServerPagesBundle.builder() to create bundle)  or it was installed after \'app\' application bundle'

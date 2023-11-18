@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter;
 
+import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.junit.platform.testkit.engine.EngineTestKit;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.TestSupport;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
@@ -41,8 +43,9 @@ public class ParallelExecutionTest {
     public static class Test1 {
 
         @Test
-        void check(ClientSupport client) {
+        void check(ClientSupport client, DropwizardTestSupport support) {
             Assertions.assertEquals(20000, client.getPort());
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
     }
 
@@ -54,8 +57,9 @@ public class ParallelExecutionTest {
     public static class Test2 {
 
         @Test
-        void check(ClientSupport client) {
+        void check(ClientSupport client, DropwizardTestSupport support) {
             Assertions.assertEquals(10000, client.getPort());
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
     }
 
@@ -66,8 +70,9 @@ public class ParallelExecutionTest {
     public static class Test3 {
 
         @Test
-        void check(TestConfiguration config) {
+        void check(TestConfiguration config, DropwizardTestSupport support) {
             Assertions.assertEquals(1, config.foo);
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
     }
 
@@ -78,8 +83,9 @@ public class ParallelExecutionTest {
     public static class Test4 {
 
         @Test
-        void check(TestConfiguration config) {
+        void check(TestConfiguration config, DropwizardTestSupport support) {
             Assertions.assertEquals(2, config.foo);
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
     }
 }

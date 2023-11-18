@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter;
 
+import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
+import ru.vyarus.dropwizard.guice.test.TestSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestDropwizardAppExtension;
 
 import javax.inject.Inject;
@@ -50,13 +52,15 @@ public class ParallelExecutionPerMethodTest {
         TestConfiguration config;
 
         @Test
-        void check() {
+        void check(DropwizardTestSupport support) {
             Assertions.assertEquals(1, config.foo);
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
 
         @Test
-        void check2() {
+        void check2(DropwizardTestSupport support) {
             Assertions.assertEquals(1, config.foo);
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
 
         @Test
@@ -83,13 +87,15 @@ public class ParallelExecutionPerMethodTest {
         TestConfiguration config;
 
         @Test
-        void check() {
+        void check(DropwizardTestSupport support) {
             Assertions.assertEquals(2, config.foo);
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
 
         @Test
-        void check2() {
+        void check2(DropwizardTestSupport support) {
             Assertions.assertEquals(2, config.foo);
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
 
         @Test
@@ -116,13 +122,15 @@ public class ParallelExecutionPerMethodTest {
         TestConfiguration config;
 
         @Test
-        void check() {
+        void check(DropwizardTestSupport support) {
             Assertions.assertEquals(3, config.foo);
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
 
         @Test
-        void check2() {
+        void check2(DropwizardTestSupport support) {
             Assertions.assertEquals(3, config.foo);
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
 
         @Test
@@ -149,13 +157,15 @@ public class ParallelExecutionPerMethodTest {
         TestConfiguration config;
 
         @Test
-        void check() {
+        void check(DropwizardTestSupport support) {
             Assertions.assertEquals(4, config.foo);
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
 
         @Test
-        void check2() {
+        void check2(DropwizardTestSupport support) {
             Assertions.assertEquals(4, config.foo);
+            Assertions.assertEquals(support, TestSupport.getContext());
         }
 
         @Test

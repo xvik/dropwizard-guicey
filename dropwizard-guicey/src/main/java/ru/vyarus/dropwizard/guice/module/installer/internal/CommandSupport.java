@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
+import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 
 import java.util.*;
 
@@ -89,10 +90,9 @@ public final class CommandSupport {
                 try {
                     final Command cmd;
                     if (EnvironmentCommand.class.isAssignableFrom(type)) {
-                        cmd = (Command) type.getConstructor(Application.class)
-                                .newInstance(bootstrap.getApplication());
+                        cmd = (Command) InstanceUtils.create(type, Application.class, bootstrap.getApplication());
                     } else {
-                        cmd = (Command) type.newInstance();
+                        cmd = (Command) InstanceUtils.create(type);
                     }
                     commands.add((Class<Command>) type);
                     commandList.add(cmd);

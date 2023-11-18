@@ -13,6 +13,8 @@ import org.junit.rules.ExternalResource;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 
 import javax.annotation.Nullable;
+import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
+
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -75,7 +77,7 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
 
     protected Application<C> newApplication() {
         try {
-            return applicationClass.newInstance();
+            return InstanceUtils.create(applicationClass);
         } catch (Exception e) {
             throw new IllegalStateException("Failed to instantiate application", e);
         }

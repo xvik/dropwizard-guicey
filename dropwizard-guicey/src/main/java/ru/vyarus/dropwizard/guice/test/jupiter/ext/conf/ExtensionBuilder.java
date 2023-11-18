@@ -7,6 +7,7 @@ import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideExtensionValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
+import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
 
 import java.util.Collections;
 import java.util.function.Supplier;
@@ -209,6 +210,17 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
      */
     public T reuseApplication() {
         cfg.reuseApp = true;
+        return self();
+    }
+
+    /**
+     * Use custom jersey client builder for {@link ru.vyarus.dropwizard.guice.test.ClientSupport} object.
+     *
+     * @param factory factory implementation
+     * @return builder instance for chained calls
+     */
+    public T clientFactory(final TestClientFactory factory) {
+        cfg.clientFactory = factory;
         return self();
     }
 

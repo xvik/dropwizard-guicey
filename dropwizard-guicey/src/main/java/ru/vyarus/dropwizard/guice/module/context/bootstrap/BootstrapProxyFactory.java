@@ -6,6 +6,7 @@ import io.dropwizard.core.setup.Bootstrap;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 
 /**
  * {@link Bootstrap} proxy delegates all calls directly to bootstrap object, except bundle addition. Instead,
@@ -32,7 +33,7 @@ public final class BootstrapProxyFactory {
             factory.setSuperclass(Bootstrap.class);
             final Class proxy = factory.createClass();
 
-            final Bootstrap res = (Bootstrap) proxy.getConstructor(Application.class).newInstance(new Object[]{null});
+            final Bootstrap res = (Bootstrap) InstanceUtils.createWithNulls(proxy, Application.class);
             ((Proxy) res).setHandler((self, thisMethod, proceed, args) -> {
                 // intercept only bundle addition
                 if ("addBundle".equals(thisMethod.getName())) {

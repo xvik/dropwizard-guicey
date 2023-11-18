@@ -1,12 +1,15 @@
 package ru.vyarus.dropwizard.guice.test.jupiter;
 
 import io.dropwizard.core.setup.Environment;
+import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 
 import javax.inject.Inject;
+import ru.vyarus.dropwizard.guice.test.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.TestSupport;
 
 /**
  * @author Vyacheslav Rusakov
@@ -19,8 +22,10 @@ public class NestedPropagationTest {
     Environment environment;
 
     @Test
-    void checkInjection() {
+    void checkInjection(DropwizardTestSupport support, ClientSupport client) {
         Assertions.assertNotNull(environment);
+        Assertions.assertEquals(support, TestSupport.getContext());
+        Assertions.assertEquals(client, TestSupport.getContextClient());
     }
 
     @Nested
@@ -30,8 +35,10 @@ public class NestedPropagationTest {
         Environment env; // intentionally different name
 
         @Test
-        void checkInjection() {
+        void checkInjection(DropwizardTestSupport support, ClientSupport client) {
             Assertions.assertNotNull(env);
+            Assertions.assertEquals(support, TestSupport.getContext());
+            Assertions.assertEquals(client, TestSupport.getContextClient());
         }
     }
 }

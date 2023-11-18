@@ -17,7 +17,7 @@ class DuplicateAppNameDetectionTest extends Specification {
     def "Check app collision detection"() {
 
         when: "starting app"
-        TestSupport.runWebApp(AppInit, null)
+        TestSupport.runWebApp(AppInit)
         then: "duplicate name error"
         def ex = thrown(IllegalArgumentException)
         ex.message == 'Server pages application with name \'app\' is already registered'

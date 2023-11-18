@@ -20,7 +20,7 @@ class StartedEventTest extends Specification {
         App.started = null
 
         when: "start-stop with jetty app"
-        TestSupport.runWebApp(App, null)
+        TestSupport.runWebApp(App)
         then: "startup called"
         App.started != null
         App.started
@@ -30,7 +30,7 @@ class StartedEventTest extends Specification {
         App.started = null
 
         when: "start-stop without jetty app"
-        TestSupport.runCoreApp(App, null)
+        TestSupport.runCoreApp(App)
         then: "start called and test env detected"
         App.started != null
         !App.started

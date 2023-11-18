@@ -1,12 +1,14 @@
 package ru.vyarus.dropwizard.guice.test.jupiter;
 
 import io.dropwizard.core.setup.Environment;
+import io.dropwizard.testing.DropwizardTestSupport;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
-
-import javax.inject.Inject;
+import ru.vyarus.dropwizard.guice.test.TestSupport;
+import ru.vyarus.dropwizard.guice.test.util.support.TestSupportHolder;
 
 /**
  * @author Vyacheslav Rusakov
@@ -32,8 +34,9 @@ public class NestedTreeTest {
             Environment env;
 
             @Test
-            void checkExtensionApplied() {
+            void checkExtensionApplied(DropwizardTestSupport support) {
                 Assertions.assertNotNull(env);
+                Assertions.assertEquals(support, TestSupport.getContext());
             }
 
             @Nested
@@ -43,8 +46,9 @@ public class NestedTreeTest {
                 Environment envr;
 
                 @Test
-                void checkExtensionApplied() {
+                void checkExtensionApplied(DropwizardTestSupport support) {
                     Assertions.assertNotNull(envr);
+                    Assertions.assertEquals(support, TestSupport.getContext());
                 }
             }
         }
@@ -58,6 +62,7 @@ public class NestedTreeTest {
         @Test
         void extensionNotApplied() {
             Assertions.assertNull(environment);
+            Assertions.assertFalse(TestSupportHolder.isContextSet());
         }
     }
 }
