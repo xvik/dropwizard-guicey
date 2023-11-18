@@ -3,9 +3,11 @@ package ru.vyarus.dropwizard.guice.test.jupiter;
 import io.dropwizard.Application;
 import org.junit.jupiter.api.extension.ExtendWith;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
-import ru.vyarus.dropwizard.guice.test.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.util.client.DefaultTestClientFactory;
+import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -154,4 +156,14 @@ public @interface TestGuiceyApp {
      * @return true to reuse application, false to start application for each test
      */
     boolean reuseApplication() default false;
+
+    /**
+     * Custom client factory for {@link ru.vyarus.dropwizard.guice.test.ClientSupport} object. Custom factory
+     * may be required in case when custom client configuration is required for test.
+     * <p>
+     * Core test does not start dropwizard web services, but client still could be used to call external services.
+     *
+     * @return client factory class
+     */
+    Class<? extends TestClientFactory> clientFactory() default DefaultTestClientFactory.class;
 }

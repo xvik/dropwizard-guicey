@@ -13,7 +13,7 @@ class LoopPreventionTest extends AbstractTest {
     def "Check bundle loop prevention"() {
 
         when: "starting app"
-        TestSupport.runCoreApp(LoopApplication, null)
+        TestSupport.runCoreApp(LoopApplication)
         then: "startup failed"
         def ex = thrown(IllegalStateException)
         ex.getMessage() == "Bundles registration loop detected: ( LoopBundle ) -> LoopBundle ..."

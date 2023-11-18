@@ -22,7 +22,7 @@ class ShutdownEventTest extends Specification {
         App.stopped = null
 
         when: "start-stop with jetty app"
-        TestSupport.runWebApp(App, null)
+        TestSupport.runWebApp(App)
         then: "shutdown called"
         App.shutdown != null
         App.shutdown
@@ -35,7 +35,7 @@ class ShutdownEventTest extends Specification {
         App.stopped = null
 
         when: "start-stop without jetty app"
-        TestSupport.runCoreApp(App, null)
+        TestSupport.runCoreApp(App)
         then: "shutdown called"
         App.shutdown != null
         !App.shutdown // indicate called event, but not started server

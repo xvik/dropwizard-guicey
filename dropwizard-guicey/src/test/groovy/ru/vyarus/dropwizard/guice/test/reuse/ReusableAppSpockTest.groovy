@@ -5,11 +5,13 @@ import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
+import io.dropwizard.testing.DropwizardTestSupport
 import org.junit.platform.engine.TestExecutionResult
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent
+import ru.vyarus.dropwizard.guice.test.TestSupport
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Requires
 import spock.lang.Specification
@@ -62,10 +64,11 @@ class ReusableAppSpockTest extends Specification {
 
         @Inject Injector injector
 
-        def "Test"() {
+        def "Test"(DropwizardTestSupport support) {
 
             expect:
             injector != null
+            support == TestSupport.getContext()
         }
     }
 
@@ -74,10 +77,12 @@ class ReusableAppSpockTest extends Specification {
 
         @Inject Injector injector
 
-        def "Test"() {
+        def "Test"(DropwizardTestSupport support) {
 
             expect:
             injector != null
+            // checking that shared support object is THE SAME
+            support == TestSupport.getContext()
         }
     }
 

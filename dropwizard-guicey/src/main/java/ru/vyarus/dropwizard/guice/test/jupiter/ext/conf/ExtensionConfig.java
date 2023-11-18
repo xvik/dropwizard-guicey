@@ -2,9 +2,11 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
 
 import io.dropwizard.testing.ConfigOverride;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
+import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -18,17 +20,16 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 12.05.2022
  */
-@SuppressWarnings({"checkstyle:VisibilityModifier", "PMD.DefaultPackage"})
+@SuppressWarnings({"checkstyle:VisibilityModifier", "PMD.DefaultPackage", "PMD.AvoidFieldNameMatchingMethodName"})
 public abstract class ExtensionConfig {
 
     public String[] configOverrides = new String[0];
     // required for lazy evaluation values
     public final List<ConfigOverride> configOverrideObjects = new ArrayList<>();
     public final List<GuiceyConfigurationHook> hooks = new ArrayList<>();
-
     public final List<TestEnvironmentSetup> extensions = new ArrayList<>();
+    public TestClientFactory clientFactory;
     // tracks source of registered setup objects
-
     public final TestExtensionsTracker tracker;
 
     public boolean reuseApp;
@@ -64,5 +65,13 @@ public abstract class ExtensionConfig {
     public final void hookClasses(final Class<? extends GuiceyConfigurationHook>... exts) {
         hooks.addAll(HooksUtil.create(exts));
         tracker.hookClasses(exts);
+    }
+
+    public final void clientFactory(final Class<? extends TestClientFactory> factoryType) {
+        try {
+            this.clientFactory = InstanceUtils.create(factoryType);
+        } catch (Exception ex) {
+            throw new IllegalStateException("Failed to instantiate test client factory", ex);
+        }
     }
 }

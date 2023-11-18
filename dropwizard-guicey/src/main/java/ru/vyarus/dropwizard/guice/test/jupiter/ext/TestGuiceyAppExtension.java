@@ -285,6 +285,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
             res.tracker.debug = ann.debug();
             res.reuseApp = ann.reuseApplication();
+            res.clientFactory(ann.clientFactory());
             return res;
         }
     }

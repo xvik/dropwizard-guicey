@@ -22,6 +22,7 @@ dependencies {
 
     testImplementation 'org.glassfish.jersey.inject:jersey-hk2'
     testImplementation 'io.dropwizard:dropwizard-auth'
+    testImplementation 'io.dropwizard:dropwizard-forms'
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
     testImplementation 'org.junit.platform:junit-platform-testkit'
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.3'

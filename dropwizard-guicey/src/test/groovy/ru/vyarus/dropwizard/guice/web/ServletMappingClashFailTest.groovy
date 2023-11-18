@@ -21,7 +21,7 @@ class ServletMappingClashFailTest extends AbstractTest {
     def "Check servlets mapping clash"() {
 
         when: "starting app with servlets clash"
-        TestSupport.runWebApp(ClashApp, null)
+        TestSupport.runWebApp(ClashApp)
         then: "exception thrown"
         def ex = thrown(IllegalStateException)
         ex.message == "Servlet registration Servlet2 clash with already installed servlets on paths: /sam"

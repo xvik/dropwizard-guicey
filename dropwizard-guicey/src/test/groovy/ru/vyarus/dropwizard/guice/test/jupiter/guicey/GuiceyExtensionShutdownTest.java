@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
+import ru.vyarus.dropwizard.guice.test.util.support.TestSupportHolder;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
@@ -30,6 +31,7 @@ public class GuiceyExtensionShutdownTest {
                 .assertStatistics(stats -> stats.succeeded(1));
 
         Assertions.assertTrue(App.shutdown);
+        Assertions.assertFalse(TestSupportHolder.isContextSet());
     }
 
     @TestGuiceyApp(App.class)

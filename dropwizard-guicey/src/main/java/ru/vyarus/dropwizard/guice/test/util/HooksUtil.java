@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 
 import java.lang.reflect.Field;
@@ -51,7 +52,7 @@ public final class HooksUtil {
         final List<GuiceyConfigurationHook> res = new ArrayList<>();
         for (Class<? extends GuiceyConfigurationHook> hook : hooks) {
             try {
-                res.add(hook.newInstance());
+                res.add(InstanceUtils.create(hook));
             } catch (Exception e) {
                 throw new IllegalStateException("Failed to instantiate guicey hook: " + hook.getSimpleName(), e);
             }

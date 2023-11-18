@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -68,6 +69,7 @@ public class ParametersInjectionDwTest {
                                 ObjectMapper mapper,
                                 Injector injector,
                                 ClientSupport client,
+                                DropwizardTestSupport support,
                                 DummyService service,
                                 @Jit JitService jit) {
         assertNotNull(app);
@@ -78,6 +80,7 @@ public class ParametersInjectionDwTest {
         assertNotNull(mapper);
         assertNotNull(injector);
         assertNotNull(client);
+        assertNotNull(support);
         assertNotNull(service);
         assertNotNull(jit);
         assertEquals(client.getPort(), 8080);

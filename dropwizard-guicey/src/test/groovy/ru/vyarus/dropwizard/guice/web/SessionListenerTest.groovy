@@ -23,7 +23,7 @@ class SessionListenerTest extends AbstractTest {
     def "Check application startup without sessions"() {
 
         when: "starting app without session configured"
-        TestSupport.runWebApp(NSApp, null)
+        TestSupport.runWebApp(NSApp)
         then: "listeners were not installed - warning printed"
         true
     }
@@ -40,7 +40,7 @@ class SessionListenerTest extends AbstractTest {
     def "Check session listener installation"() {
 
         when: "starting app with session configured"
-        TestSupport.runWebApp(SApp, null)
+        TestSupport.runWebApp(SApp)
         then: "listener installation ok"
         true
     }

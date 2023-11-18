@@ -23,6 +23,7 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
+import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,8 +31,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
-import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.ScanPackages;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.SearchCommands;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseCoreInstallers;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleResolutionTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ConfigurationTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ExtensionsRecognitionTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyBundleInitTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
 
 /**
  * Guicey initialization logic performed under dropwizard configuration phase.
@@ -222,7 +231,7 @@ public class GuiceyInitializer {
         final Options options = new Options(context.options());
         for (Class<? extends FeatureInstaller> installerClass : installerClasses) {
             try {
-                final FeatureInstaller installer = installerClass.newInstance();
+                final FeatureInstaller installer = InstanceUtils.create(installerClass);
                 installers.add(installer);
                 if (WithOptions.class.isAssignableFrom(installerClass)) {
                     ((WithOptions) installer).setOptions(options);
