@@ -41,8 +41,30 @@ testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
 
 ## Dropwizard extensions compatibility
 
-Guicey extensions can be used with dropwizard extensions. But this may be required only in edge cases
+Guicey extensions *could be used together with dropwizard extensions*. This may be required only in edge cases
 when multiple applications startup is required.
+
+For example:
+
+```java
+// run app (injector only)
+@TestGuiceyApp(App.class)
+// activate dropwizard extensions
+@ExtendWith(DropwizardExtensionsSupport.class)
+public class ClientSupportGuiceyTest {
+
+    // Use dropwizard extension to start a separate server
+    // It might be the same application or different 
+    // (application instances would be different in any case)
+    static DropwizardAppExtension app = new DropwizardAppExtension(App.class);
+
+    @Test
+    void testLimitedClient(ClientSupport client) {
+        Assertions.assertEquals(200, client.target("http://localhost:8080/dummy/")
+                .request().buildGet().invoke().getStatus());
+    }
+}
+```
 
 !!! info
     There is a difference in extensions implementation. 
