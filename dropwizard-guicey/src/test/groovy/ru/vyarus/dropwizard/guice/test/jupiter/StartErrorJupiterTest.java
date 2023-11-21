@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
 import ru.vyarus.dropwizard.guice.support.feature.DummyCommand;
-import ru.vyarus.dropwizard.guice.test.util.support.TestSupportHolder;
+import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.security.SystemExit;

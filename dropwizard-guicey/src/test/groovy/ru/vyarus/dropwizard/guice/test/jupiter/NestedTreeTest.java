@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.test.TestSupport;
-import ru.vyarus.dropwizard.guice.test.util.support.TestSupportHolder;
+import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 
 /**
  * @author Vyacheslav Rusakov

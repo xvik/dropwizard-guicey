@@ -15,6 +15,11 @@
         * Creation and run methods updated with config override (strings) support
         * Add creation and run methods application class only (and optional overrides).
         * Run methods without callback now return DropwizardTestSupport object (for example, to examine config)
+    - Commands test support:
+        * TestSupport.buildCommandRunner() - builds runner for command execution
+          with the same builder options as in generic builder (TestSupport.builder(); including same configuration)
+          and user input support.
+        * Could be used to test application startup fail (without using system mocks)
 
 
 ### 5.9.3 (2023-11-05)

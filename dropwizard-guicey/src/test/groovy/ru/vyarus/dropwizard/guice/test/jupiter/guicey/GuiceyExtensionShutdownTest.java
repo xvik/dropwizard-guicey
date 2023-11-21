@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.testkit.engine.EngineTestKit;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
-import ru.vyarus.dropwizard.guice.test.util.support.TestSupportHolder;
+import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 

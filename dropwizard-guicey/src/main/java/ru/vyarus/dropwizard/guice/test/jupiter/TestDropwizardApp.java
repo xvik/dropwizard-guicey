@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestDropwizardAppExtension;
-import ru.vyarus.dropwizard.guice.test.util.client.DefaultTestClientFactory;
-import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
+import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
+import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

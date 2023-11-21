@@ -7,7 +7,7 @@ import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideExtensionValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
-import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
+import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 
 import java.util.Collections;
 import java.util.function.Supplier;

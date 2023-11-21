@@ -8,9 +8,10 @@ import io.dropwizard.testing.DropwizardTestSupport;
 import javax.annotation.Nullable;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
-import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
-import ru.vyarus.dropwizard.guice.test.util.support.TestSupportBuilder;
-import ru.vyarus.dropwizard.guice.test.util.support.TestSupportHolder;
+import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
+import ru.vyarus.dropwizard.guice.test.cmd.CommandRunBuilder;
+import ru.vyarus.dropwizard.guice.test.builder.TestSupportBuilder;
+import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 
 /**
  * Utility class combining test-framework agnostic utilities.
@@ -47,6 +48,33 @@ public final class TestSupport {
      */
     public static <C extends Configuration> TestSupportBuilder<C> build(final Class<? extends Application<C>> app) {
         return new TestSupportBuilder<>(app);
+    }
+
+    /**
+     * Builder (similar to {@link #build(Class)}) for testing commands. In contrast to the application support object,
+     * command testing is a one-shot operation. That's why command runner would intercept all used dropwizard objects
+     * during execution (including injector, if it was created) for assertions after command shutdown.
+     * <p>
+     * Could be used to test any command: {@link io.dropwizard.core.cli.Command},
+     * {@link io.dropwizard.core.cli.ConfiguredCommand} or {@link io.dropwizard.core.cli.EnvironmentCommand}.
+     * But injector would be created only in case of environment command. Other objects, like
+     * {@link io.dropwizard.core.Configuration} or {@link io.dropwizard.core.setup.Environment} might also be absent
+     * (if they were not created).
+     * <p>
+     * Configuration is managed completely the same wat as with {@link io.dropwizard.testing.DropwizardTestSupport}
+     * object. So there is no need to put a configuration fila path inside command (it would be applied automatically,
+     * if provided in builder).
+     * <p>
+     * Suitable for application startup errors testing: in case of successful startup application would shut down
+     * immediately, preventing test freezing.
+     *
+     * @param app application to test command
+     * @param <C> configuration type
+     * @return builder to configure command execution
+     */
+    public static <C extends Configuration> CommandRunBuilder<C> buildCommandRunner(
+            final Class<? extends Application<C>> app) {
+        return new CommandRunBuilder<>(app);
     }
 
     /**
@@ -206,7 +234,7 @@ public final class TestSupport {
 
     /**
      * Shortcut for {@link #run(io.dropwizard.testing.DropwizardTestSupport,
-     * ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory,
+     * ru.vyarus.dropwizard.guice.test.client.TestClientFactory,
      * ru.vyarus.dropwizard.guice.test.TestSupport.RunCallback)}.
      *
      * @param callback callback (may be null)

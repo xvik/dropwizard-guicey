@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.support.feature.DummyManaged;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 import ru.vyarus.dropwizard.guice.test.TestSupport;
-import ru.vyarus.dropwizard.guice.test.util.support.TestSupportBuilder;
+import ru.vyarus.dropwizard.guice.test.builder.TestSupportBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
