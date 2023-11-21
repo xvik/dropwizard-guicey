@@ -27,7 +27,7 @@ import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.ReusableAppUtils;
 import ru.vyarus.dropwizard.guice.test.util.StoredReusableApp;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
-import ru.vyarus.dropwizard.guice.test.util.support.TestSupportHolder;
+import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

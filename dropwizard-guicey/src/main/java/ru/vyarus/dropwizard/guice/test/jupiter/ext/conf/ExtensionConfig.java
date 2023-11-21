@@ -6,7 +6,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
-import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
+import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;

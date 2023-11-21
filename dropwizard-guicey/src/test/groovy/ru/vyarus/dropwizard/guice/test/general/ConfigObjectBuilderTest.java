@@ -50,6 +50,16 @@ public class ConfigObjectBuilderTest {
 
         ex.printStackTrace();
         Assertions.assertEquals("Configuration object can't be used together with yaml configuration",  ex.getMessage());
+
+
+        ex = Assertions.assertThrows(IllegalStateException.class, () ->
+                TestSupport.build(AutoScanApplication.class)
+                        .config(new TestConfiguration())
+                        .config("/path/to/config")
+                        .runWeb());
+
+        ex.printStackTrace();
+        Assertions.assertEquals("Configuration object can't be used together with yaml configuration",  ex.getMessage());
     }
 
     @Test
