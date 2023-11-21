@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.util.support;
+package ru.vyarus.dropwizard.guice.test.builder;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.core.Configuration;
@@ -6,7 +6,7 @@ import io.dropwizard.testing.DropwizardTestSupport;
 import javax.annotation.Nullable;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.TestSupport;
-import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
+import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 
 
 /**

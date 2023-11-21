@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 import javax.ws.rs.client.WebTarget;
 import org.glassfish.jersey.client.JerseyClient;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
-import ru.vyarus.dropwizard.guice.test.util.client.DefaultTestClientFactory;
-import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
+import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
+import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 
 /**
  * {@link JerseyClient} support for direct web tests (complete dropwizard startup).
@@ -18,7 +18,7 @@ import ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory;
  * tests could be completely independent from actual configuration.
  * <p>
  * Client customization is possible through custom
- * {@link ru.vyarus.dropwizard.guice.test.util.client.TestClientFactory} implementation.
+ * {@link ru.vyarus.dropwizard.guice.test.client.TestClientFactory} implementation.
  *
  * @author Vyacheslav Rusakov
  * @since 04.05.2020

@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.util.client;
+package ru.vyarus.dropwizard.guice.test.client;
 
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.glassfish.jersey.client.JerseyClient;
