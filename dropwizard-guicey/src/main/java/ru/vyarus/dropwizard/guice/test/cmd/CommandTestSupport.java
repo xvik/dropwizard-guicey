@@ -60,6 +60,9 @@ import java.util.function.Consumer;
  * Class is also suitable for application server startup errors check: instead of system exit, it will provide
  * exception in the resulted object. If exception does not appear during startup, test would be failed to prevent
  * infinite run (indicating unexpected successful run).
+ * <p>
+ * Command tests can't be executed in parallel (due to system io overrides)! For junit 5 use
+ * {@code @Execution(SAME_THREAD)} on test class to prevent concurrent execution.
  *
  * @param <C> configuration type
  * @author Vyacheslav Rusakov
