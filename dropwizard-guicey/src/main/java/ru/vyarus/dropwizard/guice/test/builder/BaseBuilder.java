@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.test.builder;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
-import io.dropwizard.core.Application;
-import io.dropwizard.core.Configuration;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
 import io.dropwizard.testing.ConfigOverride;
 import javax.annotation.Nullable;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;

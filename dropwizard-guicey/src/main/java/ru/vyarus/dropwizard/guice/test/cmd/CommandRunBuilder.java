@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.test.cmd;
 
 import com.google.common.base.MoreObjects;
-import io.dropwizard.core.Application;
-import io.dropwizard.core.Configuration;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
 import ru.vyarus.dropwizard.guice.test.builder.BaseBuilder;
 
 import java.util.ArrayList;

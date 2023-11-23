@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.yaml
 
+import com.google.inject.name.Named
+import com.google.inject.name.Names
 import io.dropwizard.Application
 import io.dropwizard.Configuration
 import io.dropwizard.jersey.filter.AllowedMethodsFilter
@@ -44,7 +46,9 @@ class ConfigInspectorTest extends Specification {
         when: "check default config"
         def res = ConfigTreeBuilder.build(bootstrap, create(Configuration))
         then:
-        printConfig(res) == """[Configuration] admin (AdminFactory) = AdminFactory[healthChecks=HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
+        printConfig(res)
+                .replace('[HEAD, DELETE, POST, GET, OPTIONS, PATCH, PUT]', '[HEAD, DELETE, POST, GET, OPTIONS, PUT, PATCH]')
+                == """[Configuration] admin (AdminFactory) = AdminFactory[healthChecks=HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1], tasks=TaskConfiguration[printStackTraceOnError=false]]
 [Configuration] admin.healthChecks (HealthCheckConfiguration) = HealthCheckConfiguration[servletEnabled= true, minThreads=1, maxThreads=4, workQueueSize=1]
 [Configuration] admin.healthChecks.maxThreads (Integer) = 4
 [Configuration] admin.healthChecks.minThreads (Integer) = 1
@@ -53,8 +57,8 @@ class ConfigInspectorTest extends Specification {
 [Configuration] admin.tasks (TaskConfiguration) = TaskConfiguration[printStackTraceOnError=false]
 [Configuration] admin.tasks.printStackTraceOnError (Boolean) = false
 [Configuration] health (Optional<HealthFactory>) = Optional.empty
-[Configuration] logging (LoggingFactory as DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.ConsoleAppenderFactory@1111111]}
-[Configuration] logging.appenders (List<AppenderFactory<ILoggingEvent>> as ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+[Configuration] logging (LoggingFactory as DefaultLoggingFactory) = DefaultLoggingFactory{level=INFO, loggers={}, appenders=[io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]}
+[Configuration] logging.appenders (List<AppenderFactory<ILoggingEvent>> as ArrayList<AppenderFactory<ILoggingEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
 [Configuration] logging.level (String) = "INFO"
 [Configuration] logging.loggers (Map<String, JsonNode> as HashMap<String, JsonNode>) = {}
 [Configuration] metrics (MetricsFactory) = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false}
@@ -72,7 +76,9 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.detailedJsonProcessingExceptionMapper (Boolean) = false
 [Configuration] server.dumpAfterStart (Boolean) = false
 [Configuration] server.dumpBeforeStop (Boolean) = false
+[Configuration] server.enableAdminVirtualThreads (Boolean) = false
 [Configuration] server.enableThreadNameFilter (Boolean) = true
+[Configuration] server.enableVirtualThreads (Boolean) = false
 [Configuration] server.gid (Integer) = null
 [Configuration] server.group (String) = null
 [Configuration] server.gzip (GzipHandlerFactory) = io.dropwizard.jetty.GzipHandlerFactory@1111111
@@ -82,8 +88,6 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.gzip.enabled (Boolean) = true
 [Configuration] server.gzip.excludedMimeTypes (Set<String>) = null
 [Configuration] server.gzip.excludedPaths (Set<String>) = null
-[Configuration] server.gzip.excludedUserAgentPatterns (Set<String> as HashSet<String>) = []
-[Configuration] server.gzip.gzipCompatibleInflation (Boolean) = true
 [Configuration] server.gzip.includedMethods (Set<String>) = null
 [Configuration] server.gzip.includedPaths (Set<String>) = null
 [Configuration] server.gzip.minimumEntitySize (DataSize) = 256 bytes
@@ -97,7 +101,7 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.nofileSoftLimit (Integer) = null
 [Configuration] server.registerDefaultExceptionMappers (Boolean) = true
 [Configuration] server.requestLog (RequestLogFactory<Object> as LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
-[Configuration] server.requestLog.appenders (List<AppenderFactory<IAccessEvent>> as ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.ConsoleAppenderFactory@1111111]
+[Configuration] server.requestLog.appenders (List<AppenderFactory<IAccessEvent>> as ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
 [Configuration] server.responseMeteredLevel (ResponseMeteredLevel) = COARSE
 [Configuration] server.rootPath (Optional<String>) = Optional.empty
 [Configuration] server.serverPush (ServerPushFilterFactory) = io.dropwizard.jetty.ServerPushFilterFactory@1111111
@@ -322,6 +326,41 @@ class ConfigInspectorTest extends Specification {
         res.valuesByType(ComplexGenericCase.Sub).size() == 1
         res.valueByUniqueDeclaredType(ComplexGenericCase.Sub) != null
         res.valueByUniqueDeclaredType(ComplexGenericCase.Sub) instanceof ComplexGenericCase.Sub
+    }
+
+    def "Check qualified fields support"() {
+
+        when: "config with qualified values"
+        def config = create(AnnotatedConfig)
+        config.prop = "1"
+        config.prop2 = "2"
+        config.prop3 = 3
+        config.custom = "cust"
+        def res = ConfigTreeBuilder.build(bootstrap, config)
+        then:
+        res.findAllByAnnotation(Named).collect {it.path} == ["prop", "prop2", "prop3"]
+        res.findAllByAnnotation(CustQualifier).collect {it.path} == ["custom"]
+        res.findAllByAnnotation(Names.named("test2")).collect {it.path} == ["prop2", "prop3"]
+        res.findByAnnotation(Names.named("test")).path == "prop"
+        res.findByAnnotation(CustQualifier).path == "custom"
+
+        res.annotatedValues(Named) == ["1", "2", 3] as Set
+        res.annotatedValues(Names.named("test2")) == ["2", 3]  as Set
+        res.annotatedValues(CustQualifier) == ["cust"] as Set
+        res.annotatedValue(Names.named("test")) == "1"
+        res.annotatedValue(CustQualifier) == "cust"
+
+        when: "non-unique call"
+        res.annotatedValue(Named)
+        then:
+        def ex = thrown(IllegalStateException)
+        ex.message.startsWith("Multiple configuration paths qualified with annotation type @Named")
+
+        when: "non-unique call2"
+        res.annotatedValue(Names.named("test2"))
+        then:
+        def ex2 = thrown(IllegalStateException)
+        ex2.message.startsWith("Multiple configuration paths qualified with annotation @Named(\"test2\")")
     }
 
     def "Check item methods"() {

@@ -18,6 +18,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -114,6 +115,41 @@ public class GuiceyEnvironment {
      */
     public <T> List<? extends T> configurations(final Class<T> type) {
         return configurationTree().valuesByType(type);
+    }
+
+    /**
+     * Search for exactly one annotated configuration value. It is not possible to provide the exact annotation
+     * instance, but you can create a class implementing annotation and use it for search. For example, guice
+     * {@link com.google.inject.name.Named} annotation has {@link com.google.inject.name.Names#named(String)}:
+     * it is important that real annotation instance and "pseudo" annotation object would be equal.
+     * <p>
+     * For annotations without attributes use annotation type: {@link #annotatedConfiguration(Class)}.
+     * <p>
+     * For multiple values use {@code configurationTree().annotatedValues()}.
+     *
+     * @param annotation annotation instance (equal object) to search for an annotated config path
+     * @param <T>        value type
+     * @return qualified configuration value or null
+     * @throws java.lang.IllegalStateException if multiple values found
+     */
+    protected <T> T annotatedConfiguration(final Annotation annotation) {
+        return configurationTree().annotatedValue(annotation);
+    }
+
+    /**
+     * Search for exactly one configuration value with qualifier annotation (without attributes). For cases when
+     * annotation with attributes used - use {@link #annotatedConfiguration(java.lang.annotation.Annotation)}
+     * (current method would search only by annotation type, ignoring any (possible) attributes).
+     * <p>
+     * For multiple values use {@code configurationTree().annotatedValues()}.
+     *
+     * @param qualifierType qualifier annotation type
+     * @param <T>           value type
+     * @return qualified configuration value or null
+     * @throws java.lang.IllegalStateException if multiple values found
+     */
+    protected <T> T annotatedConfiguration(final Class<? extends Annotation> qualifierType) {
+        return configurationTree().annotatedValue(qualifierType);
     }
 
     /**

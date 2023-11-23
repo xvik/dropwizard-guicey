@@ -5,13 +5,12 @@ import com.google.common.collect.Multimap;
 import com.google.inject.Key;
 import io.dropwizard.Configuration;
 import ru.vyarus.dropwizard.guice.debug.report.ReportRenderer;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.debug.util.TreeNode;
-import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigPath;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.Collection;
 
 import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.NEWLINE;
@@ -142,19 +141,7 @@ public class ConfigBindingsRenderer implements ReportRenderer<BindingsConfig> {
                 header = true;
             }
 
-            res.append(TAB).append(TAB).append('@')
-                    .append(qualifier.annotationType().getSimpleName());
-            // NOTE custom config annotations might contain custom values - it can't be known for sure
-            try {
-                final Method valueMethod = FeatureUtils.findMethod(qualifier.annotationType(), "value");
-                final Object value = FeatureUtils.invokeMethod(valueMethod, qualifier);
-                if (value != null) {
-                    res.append("(\"").append(value).append("\") ");
-                }
-            } catch (Exception ex) {
-                // no value field in annotation
-                res.append(' ');
-            }
+            res.append(TAB).append(TAB).append(RenderUtils.renderAnnotation(qualifier)).append(' ');
 
             if (values.size() > 1) {
                 res.append("Set<").append(first.toStringDeclaredType()).append("> = (aggregated values)\n");

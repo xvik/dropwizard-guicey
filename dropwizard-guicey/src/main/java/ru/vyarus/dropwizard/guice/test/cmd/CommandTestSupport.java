@@ -5,20 +5,22 @@ import io.dropwizard.configuration.ConfigurationException;
 import io.dropwizard.configuration.ConfigurationFactory;
 import io.dropwizard.configuration.ConfigurationSourceProvider;
 import io.dropwizard.configuration.YamlConfigurationFactory;
-import io.dropwizard.core.Application;
-import io.dropwizard.core.Configuration;
-import io.dropwizard.core.ConfiguredBundle;
-import io.dropwizard.core.cli.CheckCommand;
-import io.dropwizard.core.cli.Cli;
-import io.dropwizard.core.cli.Command;
-import io.dropwizard.core.cli.ServerCommand;
-import io.dropwizard.core.setup.Bootstrap;
-import io.dropwizard.core.setup.Environment;
-import io.dropwizard.logging.common.LoggingUtil;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
+import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.cli.CheckCommand;
+import io.dropwizard.cli.Cli;
+import io.dropwizard.cli.Command;
+import io.dropwizard.cli.ServerCommand;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
+import io.dropwizard.logging.LoggingUtil;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.POJOConfigurationFactory;
 import io.dropwizard.util.JarLocation;
 import javax.annotation.Nullable;
+
+import io.dropwizard.util.Sets;
 import org.slf4j.Logger;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
@@ -118,9 +120,7 @@ public class CommandTestSupport<C extends Configuration> {
         this.applicationClass = applicationClass;
         this.configPath = configPath;
         this.configSourceProvider = configSourceProvider;
-        this.configOverrides = Optional.ofNullable(configOverrides)
-                .map(Set::of)
-                .orElse(Set.of());
+        this.configOverrides = configOverrides == null ? Collections.emptySet() : Sets.of(configOverrides);
         this.customPropertyPrefix = customPropertyPrefix;
         this.explicitConfig = false;
     }
@@ -203,8 +203,8 @@ public class CommandTestSupport<C extends Configuration> {
         applyConfigOverrides();
 
         // Redirect stdout and stderr to our byte streams
-        System.setOut(new PrintStream(stdOut, false, StandardCharsets.UTF_8));
-        System.setErr(new PrintStream(stdErr, false, StandardCharsets.UTF_8));
+        System.setOut(new PrintStream(stdOut, false, StandardCharsets.UTF_8.name()));
+        System.setErr(new PrintStream(stdErr, false, StandardCharsets.UTF_8.name()));
         System.setIn(stdIn);
 
         application = InstanceUtils.create(applicationClass);
@@ -245,7 +245,7 @@ public class CommandTestSupport<C extends Configuration> {
 
         application.initialize(bootstrap);
         // important to put it after all other bundles to be able to resolve injector
-        bootstrap.addBundle(new ConfiguredBundle<>() {
+        bootstrap.addBundle(new ConfiguredBundle<C>() {
             @Override
             public void run(final C configuration, final Environment environment) {
                 CommandTestSupport.this.environment = environment;

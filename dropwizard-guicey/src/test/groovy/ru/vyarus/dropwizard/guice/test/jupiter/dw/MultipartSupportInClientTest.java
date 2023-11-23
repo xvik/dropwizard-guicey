@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.dw;
 
 import com.google.common.base.Preconditions;
-import io.dropwizard.core.Application;
-import io.dropwizard.core.Configuration;
-import io.dropwizard.core.setup.Bootstrap;
-import io.dropwizard.core.setup.Environment;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 import io.dropwizard.forms.MultiPartBundle;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.Consumes;
