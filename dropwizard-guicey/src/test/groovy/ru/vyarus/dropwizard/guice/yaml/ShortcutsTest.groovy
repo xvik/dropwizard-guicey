@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.yaml
 
+import com.google.inject.name.Named
+import com.google.inject.name.Names
 import io.dropwizard.core.Application
 import io.dropwizard.core.Configuration
 import io.dropwizard.core.setup.Bootstrap
@@ -10,7 +12,9 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
+import ru.vyarus.dropwizard.guice.yaml.support.AnnotatedConfig
 import ru.vyarus.dropwizard.guice.yaml.support.ComplexGenericCase
+import ru.vyarus.dropwizard.guice.yaml.support.CustQualifier
 import ru.vyarus.dropwizard.guice.yaml.support.NotUniqueSubConfig
 import spock.lang.Specification
 
@@ -55,6 +59,33 @@ class ShortcutsTest extends Specification {
         mod.configuration(ComplexGenericCase.Sub) != null
         mod.configurations(ComplexGenericCase.Sub).size() == 1
 
+
+        when: "config with qualified properties"
+        config = create(AnnotatedConfig)
+        config.prop = "1"
+        config.prop2 = "2"
+        config.prop3 = 3
+        config.custom = "cust"
+        res = ConfigTreeBuilder.build(bootstrap, config)
+        mod = new DropwizardAwareModule() {}
+        mod.setConfigurationTree(res)
+        then:
+        mod.annotatedConfiguration(CustQualifier) == "cust"
+        mod.configurationTree().annotatedValues(CustQualifier) == ["cust"] as Set
+        mod.annotatedConfiguration(Names.named("test")) == "1"
+        mod.configurationTree().annotatedValues(Names.named("test2")) == ["2", 3] as Set
+        
+        when: "non-unique call"
+        mod.annotatedConfiguration(Named)
+        then:
+        def ex = thrown(IllegalStateException)
+        ex.message.startsWith("Multiple configuration paths qualified with annotation type @Named")
+
+        when: "non-unique call2"
+        mod.annotatedConfiguration(Names.named("test2"))
+        then:
+        def ex2 = thrown(IllegalStateException)
+        ex2.message.startsWith("Multiple configuration paths qualified with annotation @Named(\"test2\")")
     }
 
     def "Check bundle shortcuts"() {
@@ -88,6 +119,34 @@ class ShortcutsTest extends Specification {
         bundle.configuration(ComplexGenericCase.Sub) != null
         bundle.configurations(ComplexGenericCase.Sub).size() == 1
 
+
+        when: "config with qualified properties"
+        config = create(AnnotatedConfig)
+        config.prop = "1"
+        config.prop2 = "2"
+        config.prop3 = 3
+        config.custom = "cust"
+        res = ConfigTreeBuilder.build(bootstrap, config)
+        context = new ConfigurationContext()
+        context.configurationTree = res
+        bundle = new GuiceyEnvironment(context)
+        then:
+        bundle.annotatedConfiguration(CustQualifier) == "cust"
+        bundle.configurationTree().annotatedValues(CustQualifier) == ["cust"] as Set
+        bundle.annotatedConfiguration(Names.named("test")) == "1"
+        bundle.configurationTree().annotatedValues(Names.named("test2")) == ["2", 3] as Set
+
+        when: "non-unique call"
+        bundle.annotatedConfiguration(Named)
+        then:
+        def ex = thrown(IllegalStateException)
+        ex.message.startsWith("Multiple configuration paths qualified with annotation type @Named")
+
+        when: "non-unique call2"
+        bundle.annotatedConfiguration(Names.named("test2"))
+        then:
+        def ex2 = thrown(IllegalStateException)
+        ex2.message.startsWith("Multiple configuration paths qualified with annotation @Named(\"test2\")")
     }
 
     private <T extends Configuration> T create(Class<T> type) {

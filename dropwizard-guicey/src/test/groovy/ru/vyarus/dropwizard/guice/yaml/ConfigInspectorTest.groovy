@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.yaml
 
+import com.google.inject.name.Named
+import com.google.inject.name.Names
 import io.dropwizard.core.Application
 import io.dropwizard.core.Configuration
 import io.dropwizard.jersey.filter.AllowedMethodsFilter
@@ -324,6 +326,41 @@ class ConfigInspectorTest extends Specification {
         res.valuesByType(ComplexGenericCase.Sub).size() == 1
         res.valueByUniqueDeclaredType(ComplexGenericCase.Sub) != null
         res.valueByUniqueDeclaredType(ComplexGenericCase.Sub) instanceof ComplexGenericCase.Sub
+    }
+
+    def "Check qualified fields support"() {
+
+        when: "config with qualified values"
+        def config = create(AnnotatedConfig)
+        config.prop = "1"
+        config.prop2 = "2"
+        config.prop3 = 3
+        config.custom = "cust"
+        def res = ConfigTreeBuilder.build(bootstrap, config)
+        then:
+        res.findAllByAnnotation(Named).collect {it.path} == ["prop", "prop2", "prop3"]
+        res.findAllByAnnotation(CustQualifier).collect {it.path} == ["custom"]
+        res.findAllByAnnotation(Names.named("test2")).collect {it.path} == ["prop2", "prop3"]
+        res.findByAnnotation(Names.named("test")).path == "prop"
+        res.findByAnnotation(CustQualifier).path == "custom"
+
+        res.annotatedValues(Named) == ["1", "2", 3] as Set
+        res.annotatedValues(Names.named("test2")) == ["2", 3]  as Set
+        res.annotatedValues(CustQualifier) == ["cust"] as Set
+        res.annotatedValue(Names.named("test")) == "1"
+        res.annotatedValue(CustQualifier) == "cust"
+
+        when: "non-unique call"
+        res.annotatedValue(Named)
+        then:
+        def ex = thrown(IllegalStateException)
+        ex.message.startsWith("Multiple configuration paths qualified with annotation type @Named")
+
+        when: "non-unique call2"
+        res.annotatedValue(Names.named("test2"))
+        then:
+        def ex2 = thrown(IllegalStateException)
+        ex2.message.startsWith("Multiple configuration paths qualified with annotation @Named(\"test2\")")
     }
 
     def "Check item methods"() {
