@@ -1,9 +1,12 @@
 package ru.vyarus.dropwizard.guice.debug.util;
 
 import com.google.common.base.Joiner;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -167,6 +170,28 @@ public final class RenderUtils {
             name = type.getName().substring(type.getName().lastIndexOf('.') + 1);
         }
         return name;
+    }
+
+    /**
+     * Render annotation. Supports only "value" annotation method - other possible methods simply ignored.
+     *
+     * @param annotation annotation to render
+     * @return rendered annotation string
+     */
+    @SuppressFBWarnings("DE_MIGHT_IGNORE")
+    public static String renderAnnotation(final Annotation annotation) {
+        final StringBuilder res = new StringBuilder("@").append(annotation.annotationType().getSimpleName());
+        // NOTE custom config annotations might contain custom values - it can't be known for sure
+        try {
+            final Method valueMethod = FeatureUtils.findMethod(annotation.annotationType(), "value");
+            final Object value = FeatureUtils.invokeMethod(valueMethod, annotation);
+            if (value != null) {
+                res.append("(\"").append(value).append("\")");
+            }
+        } catch (Exception ignored) {
+            // no value field in annotation
+        }
+        return res.toString();
     }
 
     private static String renderPositionPostfix(final int pos) {

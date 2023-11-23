@@ -1,8 +1,11 @@
 package ru.vyarus.dropwizard.guice.module.yaml;
 
+import com.google.common.base.Preconditions;
 import io.dropwizard.core.Configuration;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationTreeAwareModule;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,11 @@ import java.util.stream.Collectors;
  * Also, object is accessible inside guicey bundles
  * {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment#configurationTree()} and guice modules:
  * {@link ConfigurationTreeAwareModule}.
+ * <p>
+ * Qualified configuration paths also detected: fields or getters annotated with qualifier annotation.
+ * Qualifier annotation is an annotation annotated with {@link com.google.inject.BindingAnnotation}
+ * (e.g. {@link com.google.inject.name.Named}) or {@link jakarta.inject.Qualifier}
+ * (e.g. {@link jakarta.inject.Named}).
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule
@@ -99,7 +107,7 @@ public class ConfigurationTree {
     // ---------------------------------------------------------- Structure search (tree traverse examples)
 
     /**
-     * Case insensitive exact match.
+     * Case-insensitive exact match.
      *
      * @param path path to find descriptor for
      * @return path descriptor or null if not found
@@ -109,6 +117,80 @@ public class ConfigurationTree {
                 .filter(it -> it.getPath().equalsIgnoreCase(path))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Search configuration paths annotated by qualifier annotation. It is not possible to provide the exact annotation
+     * instance, but you can create a class implementing annotation and use it for search. For example, guice
+     * {@link com.google.inject.name.Named} annotation has {@link com.google.inject.name.Names#named(String)}:
+     * it is important that real annotation instance and "pseudo" annotation object would be equal (by equals).
+     * <p>
+     * For annotations without attributes use annotation type: {@link #findAllByAnnotation(Class)}.
+     *
+     * @param annotation annotation instance (equal object) to search for annotated config paths
+     * @return list of annotated (on field or getter) configuration paths
+     */
+    public List<ConfigPath> findAllByAnnotation(final Annotation annotation) {
+        return paths.stream()
+                .filter(path -> path.getQualifier() != null && annotation.equals(path.getQualifier()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Search configuration paths annotated by qualifier annotation (without attributes). For cases when annotation
+     * with attributes used - use {@link #findAllByAnnotation(java.lang.annotation.Annotation)} (current method would
+     * also work for all annotations because it compares by type only, but it might be not what was searched for).
+     *
+     * @param qualifierType qualifier annotation type
+     * @return list of annotated (on field or getter) configuration paths
+     */
+    public List<ConfigPath> findAllByAnnotation(final Class<? extends Annotation> qualifierType) {
+        return paths.stream()
+                .filter(path -> path.getQualifier() != null
+                        && qualifierType.equals(path.getQualifier().annotationType()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Search for exactly one configuration path annotated with qualifier annotation. It is not possible to provide
+     * the exact annotation instance, but you can create a class implementing annotation and use it for search.
+     * For example, guice {@link com.google.inject.name.Named} annotation has
+     * {@link com.google.inject.name.Names#named(String)}: it is important that real annotation instance and "pseudo"
+     * annotation object would be equal (by equals).
+     * <p>
+     * For annotations without attributes use annotation type: {@link #findByAnnotation(Class)}.
+     *
+     * @param annotation annotation instance (equal object) to search for an annotated config path
+     * @return found configuration path or null
+     * @throws java.lang.IllegalStateException if multiple paths found
+     */
+    public ConfigPath findByAnnotation(final Annotation annotation) {
+        final List<ConfigPath> res = findAllByAnnotation(annotation);
+        Preconditions.checkState(res.size() <= 1,
+                "Multiple configuration paths qualified with annotation %s:\n%s",
+                RenderUtils.renderAnnotation(annotation), res.stream()
+                        .map(path -> "\t\t" + path.toString())
+                        .collect(Collectors.joining("\n")));
+        return res.isEmpty() ? null : res.get(0);
+    }
+
+    /**
+     * Search for exactly one configuration path annotated with qualified annotation. For cases when annotation with
+     * attributes used - use {@link #findByAnnotation(java.lang.annotation.Annotation)} (current method would
+     * search only by annotation type, ignoring any (possible) attributes).
+     *
+     * @param qualifierType qualifier annotation type
+     * @return found configuration path or null
+     * @throws java.lang.IllegalStateException if multiple paths found
+     */
+    public ConfigPath findByAnnotation(final Class<? extends Annotation> qualifierType) {
+        final List<ConfigPath> res = findAllByAnnotation(qualifierType);
+        Preconditions.checkState(res.size() <= 1,
+                "Multiple configuration paths qualified with annotation type @%s:\n%s",
+                qualifierType.getSimpleName(), res.stream()
+                        .map(path -> "\t\t" + path.toString())
+                        .collect(Collectors.joining("\n")));
+        return res.isEmpty() ? null : res.get(0);
     }
 
     /**
@@ -275,6 +357,82 @@ public class ConfigurationTree {
                 .findFirst()
                 .map(ConfigPath::getValue)
                 .orElse(null);
+    }
+
+    /**
+     * Search configuration values by qualifier annotation. It is not possible to provide the exact annotation instance,
+     * but you can create a class implementing annotation and use it for search. For example, guice
+     * {@link com.google.inject.name.Named} annotation has {@link com.google.inject.name.Names#named(String)}:
+     * it is important that real annotation instance and "pseudo" annotation object would be equal (by equals).
+     * <p>
+     * For annotations without attributes use annotation type: {@link #annotatedValue(Class)}.
+     *
+     * @param annotation annotation instance (equal object) to search for annotated config paths
+     * @param <T>        target value type
+     * @return all non-null annotated configuration values
+     * @see #findAllByAnnotation(java.lang.annotation.Annotation)
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Set<T> annotatedValues(final Annotation annotation) {
+        return findAllByAnnotation(annotation).stream()
+                .map(path -> (T) path.getValue())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Search configuration values by qualifier annotation (without attributes). For cases when annotation with
+     * attributes used - use {@link #annotatedValues(java.lang.annotation.Annotation)} (current method would
+     * also work for all annotations because it compares by type only, but it might be not what was searched for).
+     *
+     * @param qualifierType qualifier annotation type
+     * @param <T>           target value type
+     * @return all non-null annotated configuration values
+     * @see #findAllByAnnotation(Class)
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Set<T> annotatedValues(final Class<? extends Annotation> qualifierType) {
+        return findAllByAnnotation(qualifierType).stream()
+                .map(path -> (T) path.getValue())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Search for exactly one qualified configuration value. It is not possible to provide the exact annotation
+     * instance, but you can create a class implementing annotation and use it for search. For example, guice
+     * {@link com.google.inject.name.Named} annotation has {@link com.google.inject.name.Names#named(String)}:
+     * it is important that real annotation instance and "pseudo" annotation object would be equal (by equals).
+     * <p>
+     * For annotations without attributes use annotation type: {@link #annotatedValue(Class)}.
+     *
+     * @param annotation annotation instance (equal object) to search for an annotated config path
+     * @param <T>        value type
+     * @return qualified configuration value or null
+     * @throws java.lang.IllegalStateException if multiple values found
+     * @see #findByAnnotation(java.lang.annotation.Annotation)
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T annotatedValue(final Annotation annotation) {
+        final ConfigPath path = findByAnnotation(annotation);
+        return path == null ? null : (T) path.getValue();
+    }
+
+    /**
+     * Search for exactly one configuration value with qualifier annotation (without attributes). For cases when
+     * annotation with attributes used - use {@link #findByAnnotation(java.lang.annotation.Annotation)} (current
+     * method would search only by annotation type, ignoring any (possible) attributes).
+     *
+     * @param qualifierType qualifier annotation type
+     * @param <T>           value type
+     * @return qualified configuration value or null
+     * @throws java.lang.IllegalStateException if multiple values found
+     * @see #findByAnnotation(Class)
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T annotatedValue(final Class<? extends Annotation> qualifierType) {
+        final ConfigPath path = findByAnnotation(qualifierType);
+        return path == null ? null : (T) path.getValue();
     }
 
 
