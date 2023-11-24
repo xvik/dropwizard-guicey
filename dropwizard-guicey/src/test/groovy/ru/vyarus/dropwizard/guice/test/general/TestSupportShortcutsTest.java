@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
+import ru.vyarus.dropwizard.guice.support.feature.DummyService;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 import ru.vyarus.dropwizard.guice.test.TestSupport;
+import ru.vyarus.dropwizard.guice.test.util.RunResult;
 
 /**
  * @author Vyacheslav Rusakov
@@ -30,21 +32,26 @@ public class TestSupportShortcutsTest {
 
     @Test
     void testCoreRun() throws Exception {
-        DropwizardTestSupport<TestConfiguration> support = TestSupport.runCoreApp(AutoScanApplication.class);
+        RunResult<TestConfiguration> res = TestSupport.runCoreApp(AutoScanApplication.class);
+        Assertions.assertNotNull(res.getSupport());
+        Assertions.assertNotNull(res.getConfiguration());
+        Assertions.assertNotNull(res.getApplication());
+        Assertions.assertNotNull(res.getInjector());
+        Assertions.assertNotNull(res.getBean(DummyService.class));
+
+
+        DropwizardTestSupport<TestConfiguration> support = TestSupport.runCoreApp(AutoScanApplication.class,
+                injector -> {
+                    Preconditions.checkNotNull(injector);
+                    Preconditions.checkNotNull(TestSupport.getContextClient());
+                    return Preconditions.checkNotNull(TestSupport.getContext());
+                });
         Assertions.assertNotNull(support.getConfiguration());
 
 
-        support = TestSupport.runCoreApp(AutoScanApplication.class, injector -> {
-            Preconditions.checkNotNull(injector);
-            Preconditions.checkNotNull(TestSupport.getContextClient());
-            return Preconditions.checkNotNull(TestSupport.getContext());
-        });
-        Assertions.assertNotNull(support.getConfiguration());
-
-
-        support = TestSupport.runCoreApp(AutoScanApplication.class,
+        res = TestSupport.runCoreApp(AutoScanApplication.class,
                 "src/test/resources/ru/vyarus/dropwizard/guice/config.yml", "foo: 2", "bar: 12");
-        Assertions.assertEquals(2, support.getConfiguration().foo);
+        Assertions.assertEquals(2, res.getConfiguration().foo);
 
 
         support = TestSupport.runCoreApp(AutoScanApplication.class,
@@ -60,21 +67,26 @@ public class TestSupportShortcutsTest {
 
     @Test
     void testWebRun() throws Exception {
-        DropwizardTestSupport<TestConfiguration> support = TestSupport.runWebApp(AutoScanApplication.class);
+        RunResult<TestConfiguration> res = TestSupport.runWebApp(AutoScanApplication.class);
+        Assertions.assertNotNull(res.getSupport());
+        Assertions.assertNotNull(res.getConfiguration());
+        Assertions.assertNotNull(res.getApplication());
+        Assertions.assertNotNull(res.getInjector());
+        Assertions.assertNotNull(res.getBean(DummyService.class));
+
+
+        DropwizardTestSupport<TestConfiguration> support = TestSupport.runWebApp(AutoScanApplication.class,
+                injector -> {
+                    Preconditions.checkNotNull(injector);
+                    Preconditions.checkNotNull(TestSupport.getContextClient());
+                    return Preconditions.checkNotNull(TestSupport.getContext());
+                });
         Assertions.assertNotNull(support.getConfiguration());
 
 
-        support = TestSupport.runWebApp(AutoScanApplication.class, injector -> {
-            Preconditions.checkNotNull(injector);
-            Preconditions.checkNotNull(TestSupport.getContextClient());
-            return Preconditions.checkNotNull(TestSupport.getContext());
-        });
-        Assertions.assertNotNull(support.getConfiguration());
-
-
-        support = TestSupport.runWebApp(AutoScanApplication.class,
+        res = TestSupport.runWebApp(AutoScanApplication.class,
                 "src/test/resources/ru/vyarus/dropwizard/guice/config.yml", "foo: 2", "bar: 12");
-        Assertions.assertEquals(2, support.getConfiguration().foo);
+        Assertions.assertEquals(2, res.getConfiguration().foo);
 
 
         support = TestSupport.runWebApp(AutoScanApplication.class,
