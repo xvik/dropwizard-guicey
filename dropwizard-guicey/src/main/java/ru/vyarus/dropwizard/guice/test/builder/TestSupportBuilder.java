@@ -11,6 +11,7 @@ import ru.vyarus.dropwizard.guice.test.TestSupport;
 import ru.vyarus.dropwizard.guice.test.util.RandomPortsListener;
 import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
+import ru.vyarus.dropwizard.guice.test.util.RunResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,12 +129,12 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
      * NOTE: method not supposed to be used for multiple calls. For example, registered hooks would only work
      * on first execution.
      *
-     * @return test support object used for execution (for example, to examine configuration)
+     * @return run(webApp(appClass, configPath, overrides)
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
-    public DropwizardTestSupport<C> runCore() throws Exception {
-        return runCore(injector -> TestSupport.getContext());
+    public RunResult<C> runCore() throws Exception {
+        return runCore(injector -> new RunResult<C>(TestSupport.getContext(), injector));
     }
 
     /**
@@ -163,8 +164,8 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
-    public DropwizardTestSupport<C> runWeb() throws Exception {
-        return runWeb(injector -> TestSupport.getContext());
+    public RunResult<C> runWeb() throws Exception {
+        return runWeb(injector -> new RunResult<C>(TestSupport.getContext(), injector));
     }
 
     /**
