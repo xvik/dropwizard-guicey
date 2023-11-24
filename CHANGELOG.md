@@ -14,7 +14,7 @@
   - TestSupport methods changes: 
       * Creation and run methods updated with config override (strings) support 
       * Add creation and run methods application class only (and optional overrides).
-      * Run methods without callback now return DropwizardTestSupport object (for example, to examine config)
+      * Run methods without callback now return RunResult containing all objects, required for validation (for example, to examine config)
   - Commands test support: 
       * TestSupport.buildCommandRunner() - builds runner for command execution
           with the same builder options as in generic builder (TestSupport.builder(); including same configuration) 

@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 import ru.vyarus.dropwizard.guice.test.cmd.CommandRunBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
+import ru.vyarus.dropwizard.guice.test.util.RunResult;
 
 /**
  * Utility class combining test-framework agnostic utilities.
@@ -225,11 +226,13 @@ public final class TestSupport {
      * ru.vyarus.dropwizard.guice.test.TestSupport.RunCallback)}.
      *
      * @param support test support instance
+     * @return result object with the main objects for assertions (for example, to examine configuration)
+     * @param <C> configuration type
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
-    public static void run(final DropwizardTestSupport<?> support) throws Exception {
-        run(support, null);
+    public static <C extends Configuration> RunResult<C> run(final DropwizardTestSupport<C> support) throws Exception {
+        return run(support, injector -> new RunResult<>(TestSupport.getContext(), injector));
     }
 
     /**
@@ -281,13 +284,13 @@ public final class TestSupport {
      *
      * @param appClass application class
      * @param <C>      configuration type
-     * @return test support object used for execution (for example, to examine configuration)
+     * @return result object with the main objects for assertions (for example, to examine configuration)
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
-    public static <C extends Configuration> DropwizardTestSupport<C> runWebApp(
+    public static <C extends Configuration> RunResult<C> runWebApp(
             final Class<? extends Application<C>> appClass) throws Exception {
-        return runWebApp(appClass, null, injector -> TestSupport.getContext());
+        return runWebApp(appClass, (String) null);
     }
 
     /**
@@ -317,11 +320,11 @@ public final class TestSupport {
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
-    public static <C extends Configuration> DropwizardTestSupport<C> runWebApp(
+    public static <C extends Configuration> RunResult<C> runWebApp(
             final Class<? extends Application<C>> appClass,
             final @Nullable String configPath,
             final String... overrides) throws Exception {
-        return runWebApp(appClass, configPath, injector -> TestSupport.getContext(), overrides);
+        return run(webApp(appClass, configPath, overrides));
     }
 
     /**
@@ -350,13 +353,13 @@ public final class TestSupport {
      *
      * @param appClass application class
      * @param <C>      configuration type
-     * @return test support object used for execution (for example, to examine configuration)
+     * @return result object with the main objects for assertions (for example, to examine configuration)
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
-    public static <C extends Configuration> DropwizardTestSupport<C> runCoreApp(
+    public static <C extends Configuration> RunResult<C> runCoreApp(
             final Class<? extends Application<C>> appClass) throws Exception {
-        return runCoreApp(appClass, injector -> TestSupport.getContext());
+        return runCoreApp(appClass, (String) null);
     }
 
     /**
@@ -384,15 +387,15 @@ public final class TestSupport {
      * @param configPath configuration file path (absolute or relative to working dir) (may be null)
      * @param overrides  config override values (in format "path: value")
      * @param <C>        configuration type
-     * @return test support object used for execution (for example, to examine configuration)
+     * @return result object with the main objects for assertions (for example, to examine configuration)
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
-    public static <C extends Configuration> DropwizardTestSupport<C> runCoreApp(
+    public static <C extends Configuration> RunResult<C> runCoreApp(
             final Class<? extends Application<C>> appClass,
             final @Nullable String configPath,
             final String... overrides) throws Exception {
-        return runCoreApp(appClass, configPath, injector -> TestSupport.getContext(), overrides);
+        return run(coreApp(appClass, configPath, overrides));
     }
 
     /**

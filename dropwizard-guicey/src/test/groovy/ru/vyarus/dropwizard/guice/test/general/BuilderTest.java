@@ -17,6 +17,7 @@ import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 import ru.vyarus.dropwizard.guice.test.TestSupport;
 import ru.vyarus.dropwizard.guice.test.builder.TestSupportBuilder;
+import ru.vyarus.dropwizard.guice.test.util.RunResult;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,25 +116,25 @@ public class BuilderTest {
     @Test
     void testRunWithoutCallback() throws Exception {
         final List<String> tracker = new ArrayList<>();
-        DropwizardTestSupport<TestConfiguration> support = build(tracker).runCore();
+        RunResult<TestConfiguration> res = build(tracker).runCore();
 
-        Assertions.assertTrue(GuiceyTestSupport.class.isAssignableFrom(support.getClass()));
+        Assertions.assertTrue(GuiceyTestSupport.class.isAssignableFrom(res.getSupport().getClass()));
         Assertions.assertIterableEquals(Arrays.asList("setup", "run", "stop", "cleanup"), tracker);
         Assertions.assertEquals(0, CustomTestClientFactory.getCalled());
-        Assertions.assertEquals(support.getConfiguration().foo, 2);
-        Assertions.assertEquals(support.getConfiguration().bar, 12);
-        Assertions.assertEquals(support.getConfiguration().baa, 4);
+        Assertions.assertEquals(res.getConfiguration().foo, 2);
+        Assertions.assertEquals(res.getConfiguration().bar, 12);
+        Assertions.assertEquals(res.getConfiguration().baa, 4);
 
 
         tracker.clear();
-        support = build(tracker).runWeb();
+        res = build(tracker).runWeb();
 
-        Assertions.assertFalse(GuiceyTestSupport.class.isAssignableFrom(support.getClass()));
+        Assertions.assertFalse(GuiceyTestSupport.class.isAssignableFrom(res.getSupport().getClass()));
         Assertions.assertIterableEquals(Arrays.asList("setup", "run", "stop", "cleanup"), tracker);
         Assertions.assertEquals(0, CustomTestClientFactory.getCalled());
-        Assertions.assertEquals(support.getConfiguration().foo, 2);
-        Assertions.assertEquals(support.getConfiguration().bar, 12);
-        Assertions.assertEquals(support.getConfiguration().baa, 4);
+        Assertions.assertEquals(res.getConfiguration().foo, 2);
+        Assertions.assertEquals(res.getConfiguration().bar, 12);
+        Assertions.assertEquals(res.getConfiguration().baa, 4);
     }
 
     @Test
