@@ -13,6 +13,10 @@ import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 import ru.vyarus.dropwizard.guice.test.cmd.CommandRunBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.util.RunResult;
+import ru.vyarus.dropwizard.guice.test.util.io.EchoStream;
+
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Utility class combining test-framework agnostic utilities.
@@ -307,7 +311,7 @@ public final class TestSupport {
     public static <T, C extends Configuration> T runWebApp(
             final Class<? extends Application<C>> appClass,
             final @Nullable RunCallback<T> callback) throws Exception {
-        return runCoreApp(appClass, null, callback);
+        return runWebApp(appClass, null, callback);
     }
 
     /**
@@ -430,6 +434,34 @@ public final class TestSupport {
     }
 
     /**
+     * Simple utility to capture console output. Could be used to test application output in some situations.
+     * <p>
+     * Captured output is duplicated in console (for visual assertions).
+     * <p>
+     * Warning: due to System.in/out modification, tests using this method can't run concurrently!
+     *
+     * @param action action to record output
+     * @return captured output (out + err)
+     */
+    public static String captureOutput(final OutputCallback action) throws Exception {
+        final PrintStream originalOut = System.out;
+        final PrintStream originalErr = System.err;
+
+        final EchoStream stdOut = new EchoStream(originalOut);
+        final EchoStream stdErr = new EchoStream(stdOut);
+        System.setOut(new PrintStream(stdOut, false, StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(stdErr, false, StandardCharsets.UTF_8));
+
+        try {
+            action.run();
+            return stdOut.toString();
+        } finally {
+            System.setOut(originalOut);
+            System.setErr(originalErr);
+        }
+    }
+
+    /**
      * Callback interface used for utility run application methods in {@link TestSupport}.
      * <p>
      * Use {@link #getContext()} to access the context support object and {@link #getContextClient()} to access
@@ -449,5 +481,19 @@ public final class TestSupport {
          * @throws Exception errors propagated
          */
         T run(Injector injector) throws Exception;
+    }
+
+    /**
+     * Callback for {@link #captureOutput(ru.vyarus.dropwizard.guice.test.TestSupport.OutputCallback)} method.
+     * Void method must declare thrown error to simplify testing.
+     */
+    @FunctionalInterface
+    public interface OutputCallback {
+
+        /**
+         * Called to execute actions (usually app run) and capture console output.
+         * @throws Exception on error
+         */
+        void run() throws Exception;
     }
 }

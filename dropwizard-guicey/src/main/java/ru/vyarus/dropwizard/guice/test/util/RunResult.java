@@ -6,6 +6,7 @@ import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.testing.DropwizardTestSupport;
+import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 
 
 /**
@@ -83,5 +84,12 @@ public class RunResult<C extends Configuration> {
      */
     public <T> T getBean(final Key<T> key) {
         return injector.getInstance(key);
+    }
+
+    /**
+     * @return true for full web app run, false for core run (guice injector only)
+     */
+    public boolean isWebRun() {
+        return !(support instanceof GuiceyTestSupport);
     }
 }

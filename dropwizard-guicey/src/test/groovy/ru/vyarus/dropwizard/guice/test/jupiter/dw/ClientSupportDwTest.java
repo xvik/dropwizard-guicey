@@ -46,6 +46,7 @@ public class ClientSupportDwTest {
 
         @Test
         void testClient(ClientSupport client) {
+            Assertions.assertEquals("http://localhost:8080/", client.basePathRoot());
             Assertions.assertEquals("http://localhost:8080/", client.basePathMain());
             Assertions.assertEquals("http://localhost:8081/", client.basePathAdmin());
             Assertions.assertEquals("http://localhost:8080/", client.basePathRest());
@@ -67,6 +68,7 @@ public class ClientSupportDwTest {
             Assertions.assertNotEquals(8080, client.getPort());
             Assertions.assertNotEquals(8081, client.getAdminPort());
 
+            Assertions.assertEquals("http://localhost:" + client.getPort() + "/", client.basePathRoot());
             Assertions.assertEquals("http://localhost:" + client.getPort() + "/", client.basePathMain());
             Assertions.assertEquals("http://localhost:" + client.getAdminPort() + "/", client.basePathAdmin());
             Assertions.assertEquals("http://localhost:" + client.getPort() + "/", client.basePathRest());
@@ -83,6 +85,7 @@ public class ClientSupportDwTest {
 
         @Test
         void testClient(ClientSupport client) {
+            Assertions.assertEquals("http://localhost:8080/", client.basePathRoot());
             Assertions.assertEquals("http://localhost:8080/app/", client.basePathMain());
             Assertions.assertEquals("http://localhost:8081/admin/", client.basePathAdmin());
             Assertions.assertEquals("http://localhost:8080/app/api/", client.basePathRest());
@@ -95,6 +98,7 @@ public class ClientSupportDwTest {
 
         @Test
         void testClient(ClientSupport client) {
+            Assertions.assertEquals("http://localhost:8080/", client.basePathRoot());
             Assertions.assertEquals("http://localhost:8080/", client.basePathMain());
             Assertions.assertEquals("http://localhost:8080/admin/", client.basePathAdmin());
             Assertions.assertEquals("http://localhost:8080/rest/", client.basePathRest());
