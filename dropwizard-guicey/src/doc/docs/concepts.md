@@ -70,6 +70,8 @@ to configuration object set into module before injector creation.
             confuguration(Class) // unique sub configuration
             configuration(String) // configuration value by yaml path
             configurations(Class) // sub configuration objects by type (including subtypes)
+            annotatedConfiguration(ann) // annotaed configuration value by instance
+            annotatedConfiguration(Class) // annotaed configuration value by annotation type
             options() // access guicey options
         }
     }
@@ -269,7 +271,7 @@ Provides access to dropwizard configuration, environment and introspected config
 
 ### Bundles usage difference
 
-In dropwizard bundles are helpful not just for extracting re-usable extensions, but for
+In dropwizard, bundles are helpful not just for extracting re-usable extensions, but for
 separation of application logic.
 
 In guicey, you don't need to write registration code and with enabled [classpath scan](guide/scan.md),

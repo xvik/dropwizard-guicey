@@ -2,23 +2,25 @@
 
 * Update to dropwizard 4.0.4
 * Add qualified configuration bindings
-* Test improvements
-  - DropwizardTestSupport and ClientSupport objects availability
-  - Test client customization (ObjectSupport)
-  - Improve generic testing
-  - Support commands testing
+* Test improvements:
+    - DropwizardTestSupport and ClientSupport objects availability
+    - Web client improvements (ClientSupport)
+    - Improve generic testing
+    - Support commands testing
 
 ## Qualified configuration bindings
 
-1. Any configuration property could be bound in guice *just by annotating field or getter* with 
+1. Any configuration property could be bound to guice *just by annotating field or getter* with 
 qualifier annotation (guice or jakarta).
-2. Annotated fields with the same type and qualifier are bound aggregated with Set
+2. Annotated fields with the same type and qualifier are bound aggregated with `Set`
 3. Core dropwizard configuration objects could be bound with qualified overridden getter
 
 ```java
 public class MyConfig extends Configuration {
+    
     @Named("custom")
     private String prop1;
+    
     @CustomQualifier
     private SubObj obj1 = new SubObj();
 
@@ -68,6 +70,10 @@ The following injections would be available:
 @Inject @Named("metrics") MetricsFactory metricsFactyry;
 ```
 
+!!! note
+    Properties are grouped by exact type and annotation (exactly the same binding keys), 
+    so don't expect more complex grouping (for example, by some base class). 
+
 Configuration bindings report:
 
 ```java
@@ -86,6 +92,18 @@ Would show qualified bindings (with source property names in braces):
             String = "3" (obj1.prop3)
         @Named("custom") String = "1" (prop1)
 ```
+
+Guice modules and guicey bundles could also access annotated values 
+(through `DropwizardAwareModule` and `GuiceyEnvironment` in `GuiceyBundle#run`):
+
+* `.annotatedValue(Names.named("custom"))` - access by (equal) annotation instance (for annotations with state)
+* `.annotatedValue(CustomQualifier.class)` - access by annotation type
+
+More related methods added for `ConfigurationTree` object: 
+
+* `findAllByAnnotation` - find all annotated paths
+* `findByAnnotation` - find exactly one annotated path (fail if more found) 
+* `annotatatedValues` - all non-null values from annotated paths
 
 ## Test improvements
 
@@ -121,44 +139,116 @@ TestSupport.runCoreApp(App.class, injector -> {
 
 (works for all `TestSupport.run*` methods)
 
-New simplified (Void) runners now return DropwizardTestSupport, used for execution:
+### Web client improvements (ClientSupport)
+
+#### Simple methods
+
+The client now contains simple GET/POST/PUT/DELETE methods for simple cases:
 
 ```java
-DropwizardTestSupport support = TestSupport.runCoreApp(App.class);
+@Test
+public void testWeb(ClientSupport client) {
+    // get with result
+    Result res = client.get("rest/sample", Result.class);
+    
+    // post without result (void)
+    client.post("rest/action", new PostObject(), null);
+}
 ```
 
+All methods:
 
-### Test client customization (ObjectSupport)
+1. Methods accept paths relative to server root. In the example above: "http://localhost:8080/rest/sample"
+2. Could return mapped response. 
+3. For void calls, use null instead of the result type. In this case, only 200 and 204 (no content) responses 
+    would be considered successful
+   
+POST and PUT also accept (body) object to send. 
+But methods does not allow multipart execution.
 
-First of all, the test client automatically configures now multipart feature if dropwizard-forms is available in classpath,
+These methods could be used as examples for jersey client usage.
+
+There is also a new helper method: `client.basePathRoot()` returning the base server path (localhost + port); 
+
+#### Default client
+
+`JerseyClient` used inside `ClientSupport` now automatically configures 
+multipart feature if `dropwizard-forms` is in classpath (so the client could be used
+for sending multipart data).
+
+Request and response logging is enabled by default now to simplify writing (and debugging) tests. 
+By default, all messages are written directly into console to guarantee client
+actions visibility (logging might not be configured in tests).
+
+Example output:
+
+```
+
+[Client action]---------------------------------------------{
+1 * Sending client request on thread main
+1 > GET http://localhost:8080/sample/get
+
+}----------------------------------------------------------
+
+
+[Client action]---------------------------------------------{
+1 * Client response received on thread main
+1 < 200
+1 < Content-Length: 13
+1 < Content-Type: application/json
+1 < Date: Mon, 27 Nov 2023 10:00:40 GMT
+1 < Vary: Accept-Encoding
+{"foo":"get"}
+
+}----------------------------------------------------------
+```
+
+Console output might be disabled with a system proprty:
+
+```java
+// shortcut sets DefaultTestClientFactory.USE_LOGGER property
+DefaultTestClientFactory.disableConsoleLog()
+```
+
+With it, everything would be logged into `ClientSupport` logger under INFO
+(most likely, would be invisible in the most logger configurations, but could be enabled).
+
+
+To reset property (and get logs back into console) use:
+
+```java
+DefaultTestClientFactory.enableConsoleLog()
+```
+
+!!! note
+    Static methods added not directly into `ClientSupport` because this is 
+    the default client factory feature. You might use a completely different factory.
+
+#### Custom client factory
 
 `JerseyClient` used in `ClientSupport` could be customized now using `TestClientFactory` implementation.
 
-The default implementation looks like this:
+Simple factory example:
 
 ```java
-public class DefaultTestClientFactory implements TestClientFactory {
+public class SimpleTestClientFactory implements TestClientFactory {
 
     @Override
     public JerseyClient create(final DropwizardTestSupport<?> support) {
-        final JerseyClientBuilder builder = new JerseyClientBuilder()
+        return new JerseyClientBuilder()
                 .register(new JacksonFeature(support.getEnvironment().getObjectMapper()))
                 .property(ClientProperties.CONNECT_TIMEOUT, 1000)
                 .property(ClientProperties.READ_TIMEOUT, 5000)
-                .property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true);
-        try {
-            // when dropwizard-forms used automatically register multipart feature
-            final Class<?> cls = Class.forName("org.glassfish.jersey.media.multipart.MultiPartFeature");
-            builder.register(cls);
-        } catch (Exception ignored) {
-            // do nothing - no multipart feature available
-        }
-        return builder.build();
+                .property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true)
+                .build();
     }
 }
 ```
 
-Custom implementation could be specified directly in test annotation (junit 5, spock 2):
+!!! tip
+    See `DefaultTestClientFactory` implementation (it's a bit more complex)
+
+Custom factory could be specified directly in test annotation (junit 5, spock 2):
 
 ```java
 @TestDropwizardApp(value = MyApp.class, clientFactory = CustomTestClientFactory.class)
@@ -168,13 +258,15 @@ All other builders also support client factory as an optional parameter.
 
 ### Improve generic testing
 
+#### Generic run builder
+
 Generic builder was added to simplify application testing without test framework.
 It supports almost everything as junit 5 extensions.
 
 Example:
 
 ```java
-DropwizardTestSupport support = TestSupport.build(App.class)
+RunResult result = TestSupport.build(App.class)
         .config("src/test/resources/path/to/test/config.yml")
         .configOverrides("foo: 2", "bar: 12")
         .hooks(new MyHook())
@@ -209,7 +301,58 @@ TestSupport.build(App.class)
 All listener methods are default so only required methods could be overridden.
 
 `TestSupport` `run*` and "create" methods (`coreApp`, `webApp`) are powered now
-with a new builder (and so many of them support string config overrides now as parameter).
+with a new builder (and so many of them support string config overrides as parameter).
+
+#### Run methods improvements
+
+Extra `run*` methods added for simple cases (the same could be achieved with a new builder).
+
+Void methods now return `RunResult` object containing `DropwizardTestSupport` object and `Injector` -
+everything that could be required for assertions after application run:
+
+```java
+RunResult<MyConfig> res = TestSupport.runCoreApp(MyApp.class);
+
+Assertions.assertEquals(2, res.getConfiguration().foo);
+```
+
+Shortcut methods with config overrides:
+
+```java
+RunResult<MyConfig> res = TestSupport.runCoreApp(MyApp.class,
+        "path/to/config.yml",  // could be null
+        "foo: 2", "bar: 11");
+```
+
+#### Capture console output
+
+There is now a utility to capture console output:
+
+```java
+String out = TestSupport.captureOutput(() -> {
+        
+    // run application inside
+    TestSupport.runWebApp(App.class, injector -> {
+        ClientSupport client = TestSupport.getContextClient();
+        
+        // call application api endpoint
+        client.get("sample/get", null);
+
+        return null;
+    });
+});
+
+// uses assert4j, test that client was called (just an example) 
+Assertions.assertThat(out)
+    .contains("[Client action]---------------------------------------------{");
+```
+
+Returned output contains both `System.out` and `System.err` - same as it would be seen in console.
+
+All output is also printed into console to simplify visual validation
+
+!!! warning
+    Such tests could not be run in parallel (due to system io overrides)
 
 ### Support commands testing
 
@@ -240,8 +383,10 @@ The type of command would define what objects would be present ofter the command
     Such run never fails with an exception: any appeared exception would be 
     stored inside the response:
 
-    Assertions.assertFalse(result.isSuccessful());
+    ```java
+    Assertions.assertFalse(result.isSuccessful());  
     Assertions.assertEquals("Error message", result.getException().getMessage());
+    ```
 
 #### IO
 
@@ -257,10 +402,10 @@ Assertions.assertTrue(result.getOutput().contains("some text"))
 separately with `result.getErrorOutput()`.
 
 !!! note
-    all output is always printed to console, so you could always see it after test execution
+    All output is always printed to console, so you could always see it after test execution
     (without additional actions)
 
-User input commands are also mocked:
+Commands requiring user input could also be tested (with mocked input):
 
 ```java
 CommandResult result = TestSupport.buildCommandRunner(App.class)
@@ -272,9 +417,9 @@ At least, the required number of answers must be provided (otherwise error would
 indicating not enough inputs)
 
 !!! warning
-    Due to IO overrides, command tests could not be run in parallel. 
-    For junit 5, such tests could be annotated with `@Execution(SAME_THREAD)`
-    (to prevent execution in parallel)
+    Due to IO overrides, command tests could not run in parallel.   
+    For junit 5, such tests could be annotated with [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization)
+    (to prevent execution in parallel with other tests)
 
 #### Configuration
 
@@ -301,8 +446,8 @@ TestSupport.buildCommandRunner(App.class)
 ```
 
 !!! note
-    Config file should not be specified in command itself - build would add it, if required.
-    Of course, it would not be a mistake to use config file directly in command:
+    Config file should not be specified in command itself - builder would add it, if required.  
+    But still, it would not be a mistake to use config file directly in command:
 
     ```java
     TestSupport.buildCommandRunner(App.class)
@@ -310,7 +455,7 @@ TestSupport.buildCommandRunner(App.class)
         .run("cfg", "path/to/config.yml");
     ```
 
-    But using builder seems like more clear option.
+    Using builder for config file configuration assumed to be a preferred way.
 
 #### Listener
 
@@ -325,7 +470,7 @@ TestSupport.buildCommandRunner(App.class)
         .run("cmd")
 ```
 
-#### App startup fail
+#### Test application startup fail
 
 Command runner could also be used for application startup fail tests:
 
@@ -334,15 +479,16 @@ CommandResult result = TestSupport.buildCommandRunner(App.class)
         .run("server")
 ```
 
-or with shortcut:
+or with the shortcut:
 
 ```java
 CommandResult result = TestSupport.buildCommandRunner(App.class)
         .runApp()
 ```
 
-In case of application successful start, special check would immediately stop it
-by throwing exception (result command would contain it), so such test would never freeze.
+!!! note
+    In case of application *successful* start, special check would immediately stop it
+    by throwing exception (resulting object would contain it), so such test would never freeze.
 
-No additional mocks or rules required because running like this would not cause
-`System.exist(1)` call, performed in `Application` class.
+No additional mocks or extensions required because running like this would not cause
+`System.exist(1)` call, performed in `Application` class (see `Application.onFatalError`).

@@ -289,6 +289,47 @@ There is also support for [custom options](guide/options.md#custom-options).
 A bundle may access direct dropwizard `Configuration`, as well as individual values thanks to [yaml values](guide/yaml-values.md)
 introspection.
 
+#### Qualified properties
+
+Configuration properties, required for injection, could be simply [annotated with a
+qualifier annotations](guide/yaml-values.md#qualified-bindings):
+
+
+```java
+public class MyConfig extends Configuration {
+    
+    @Named("custom")
+    private String prop1;
+    
+    @CustomQualifier
+    private SubObj obj1 = new SubObj();
+    
+```
+
+And used directly in service:
+
+```java
+@Singleton
+public class MyService { 
+        
+    @Inject @Named("custom") String prop;   
+    @Inject @CustomQualifier SubObj obj;
+}
+```
+
+Or accessed in bundle (or guice module):
+
+```java
+public class XFeatureBundle implements GuiceyBundle {
+    @Override
+    public void run(GuiceyEnvironment environment) throws Exception {
+        SubObj config = bootstrap.annotatedValue(CustomQualifier.class);
+        ...
+    }
+}
+``` 
+
+
 #### Unique sub config
 
 When creating re-usable bundle it is often required to access yaml configuration data. 

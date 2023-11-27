@@ -3,7 +3,7 @@
 !!! note ""
     [Migration from spock 1](spock.md#migration-to-spock-2)
 
-There is no special extensions for [Spock 2](http://spockframework.org) (like it was for spock 1),
+There are no special extensions for [Spock 2](http://spockframework.org) (like it was for spock 1),
 instead I did an extra [integration library](https://github.com/xvik/spock-junit5),
 so you can use existing [Junit 5 extensions](junit5.md) with spock.
 
@@ -69,9 +69,37 @@ class MyTest extends Specification {
 Overall, you get best of both worlds: same extensions as in junit 5 (and ability to use all other junit extensions)
 and spock expressiveness for writing tests.
 
+## Testing commands
+
+!!! warning
+    Commands execution overrides System IO and so can't run in parallel with other tests!
+
+    Use [`@Isolated`](https://spockframework.org/spock/docs/2.0/all_in_one.html#_isolated_execution) 
+    on such tests to prevent parallel execution with other tests
+
+Command execution is usually a short-lived action, so it is not possible to
+write an extension for it. Command could be tested only with generic utility:
+
+```java
+def "Test command execution"() {
+    
+    when: "executing command"
+    CommandResult result = TestSupport.buildCommandRunner(App)
+            .run("cmd", "-p", "param")
+    
+    then: "success"
+    result.successful
+}
+```
+
+Read more details in [junit 5 guide](junit5.md#testing-commands)
+
+!!! note
+    The same utility could be used to test [application startup fails](junit5.md#testing-startup-error)
+
 ## Special cases
 
-Junit 5 doc [describes](junit5.md#dropwizard-startup-error)  [system stubs](https://github.com/webcompere/system-stubs) library
+Junit 5 doc [describes](junit5.md#testing-startup-error)  [system stubs](https://github.com/webcompere/system-stubs) library
 usage. It is completely valid for spock, I'll just show a few examples here on how to:
 
 * Modify (and reset) environment variables

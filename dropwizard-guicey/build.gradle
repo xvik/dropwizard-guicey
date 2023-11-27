@@ -46,13 +46,13 @@ javaLib {
 
 mkdocs {
     publish {
-        docPath = '7.0.2'
+        docPath = '7.1.0'
         rootRedirect = true
         rootRedirectTo = 'latest'
         versionAliases = ['latest']
     }
     extras = [
-            'version': '7.0.2',
+            'version': '7.1.0',
             'dropwizard': rootProject.dropwizard,
             'guice': rootProject.guice
     ]
