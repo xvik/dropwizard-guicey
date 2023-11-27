@@ -2,7 +2,7 @@
 
 Dropwizard | Guicey
 ----------|---------
-3.0.0 | [6.1.0](http://xvik.github.io/dropwizard-guicey/6.1.0)
+3.0.0 | [6.2.0](http://xvik.github.io/dropwizard-guicey/6.2.0)
 2.1.0 | [5.9.0](http://xvik.github.io/dropwizard-guicey/5.9.0)
 2.0.0 | [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3.0 | [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)

@@ -169,7 +169,7 @@ INFO  [2018-06-18 05:55:03,532] ru.vyarus.dropwizard.guice.module.yaml.report.De
             @Config("server.uid") Integer = null
             @Config("server.umask") String = null
             @Config("server.user") String = null
-```     
+```
 
 Here you can see:
 
@@ -177,6 +177,18 @@ Here you can see:
 * Types and interfaces for configuration object
 * Unique sub configuration objects
 * Values bound to guice context
+
+Also, if [manual qualification](../yaml-values.md#qualified-bindings) is used, all annotated properties would also be shown:
+
+```
+    Qualified bindings:
+        @Named("metrics") MetricsFactory = MetricsFactory{frequency=1 minute, reporters=[], reportOnStop=false} (metrics)
+        @CustomQualifier SubObj = ru.vyarus.dropwizard.guice.yaml.qualifier.QualifierSampleTest$SubObj@19e0dffe (obj1)
+        @Named("sub-prop") Set<String> = (aggregated values)
+            String = "2" (obj1.prop2)
+            String = "3" (obj1.prop3)
+        @Named("custom") String = "1" (prop1)
+```
 
 ## Guice
 

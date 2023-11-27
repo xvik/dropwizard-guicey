@@ -11,15 +11,9 @@ Deprecated:
 * [Spock 1](spock.md) 
 * [JUnit 4](junit4.md)
 
-All extensions implemented with [DropwizardTestSupport](https://www.dropwizard.io/en/latest/manual/testing.html#non-junit).
+Almost all extensions implemented with [DropwizardTestSupport](https://www.dropwizard.io/en/latest/manual/testing.html#non-junit).
 
 !!! note "History"
-    Spock 1 extensions were much more advanced than JUnit 4 rules, simply because
-    spock extensions model was much more powerful.
-
-    JUnit 5 extension model is almost equal to spock and JUnit 5 extensions were 
-    "an evolution" of the spock extensions.
-
     There is no special Spock 2 extensions, instead junit 5 extensions must be used directly.
     You get the best of both worlds - use junit extensions (and so can always easily migrate to pure junit) and 
     have spock (and groovy) expressiveness.
@@ -32,6 +26,25 @@ All extensions implemented with [DropwizardTestSupport](https://www.dropwizard.i
     assertions required after application shutdown or to test application startup errors.
 
 Additionally, guicey provides several mechanisms at its core for application customization in tests (see below).
+
+## Test concepts 
+
+Core [dropwziard testing support](https://www.dropwizard.io/en/stable/manual/testing.html)
+ proposes atomic testing approach (separate testing of each element). 
+
+With DI (guice) we have to move towards **integration testing** because:
+
+1. It is now harder to mock classes "manually" (because of DI "black box")
+2. We have a core (guice injector, without web services), starting much faster than 
+complete application.
+   
+The following kinds of tests should be used:
+
+1. Unit tests for atomic parts (usually, utility classes)
+2. Core integration tests: lightweight application start to test core services (business logic)
+3. Web integration tests: full application startup to test web endpoints (full workflow to check transport layer)
+4. Custom command tests (also kind of "integration", but depends on command)
+5. Application startup fail test (done with command runner) to check self-checks
 
 ## Setup objects
 
@@ -128,11 +141,11 @@ public class MyHook implements GuiceyConfigurationHook {
 }
 ```
 
-### Debug bundles
+## Debug bundles
 
-You can also use special guicey bundles, which modify application behaviour.
+You can also use special guicey bundles, which modify application behavior.
 Bundles could contain additional listeners or services to gather additional metrics during
-tests or validate behaviour.
+tests or validate behavior.
 
 For example, guicey tests use bundle to enable restricted guice options like 
 `disableCircularProxies`.
@@ -207,3 +220,31 @@ BindingsOverrideInjectorFactory.override(new TestOverridingModule())
     [Configuration hook](#configuration-hooks) may be used for static call (as a good integration point)
     
 After test startup, application will use customer service binding from TestOverridingModule.
+
+## Test commands
+
+Dropwizard commands could be tested with [commands test support](general.md#test-commands)
+
+For example:
+
+```java
+CommandResult result = TestSupport.buildCommandRunner(App.class)
+        .run("simple", "-u", "user")
+
+Assertions.assertTrue(result.isSuccessful());
+```
+
+There are no special junit 5 or spock 2 extensions for command tests because general run methods are 
+already the best way.
+
+## Test application startup fail
+
+To verify application self-check mechanisms (make sure application would fail with incomplete configuration, 
+or whatever other reason) use [commands runner](general.md#test-application-startup-fail).
+
+For example: 
+
+```java
+CommandResult result = TestSupport.buildCommandRunner(App.class)
+        .runApp()
+```

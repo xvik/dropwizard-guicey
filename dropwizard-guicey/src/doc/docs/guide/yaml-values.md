@@ -1,18 +1,19 @@
 # Yaml values
 
-Guicey introspects `Configuration` object instance using jackson serialization api to allow accessing yaml configuration
-values by yaml paths or sub-object types.
+Guicey introspects `Configuration` object instance using jackson serialization api to allow direct access to yaml configuration
+values.
 
-Introspected configuration:
+Introspected configuration is accessible as:
 
-* Bound directly in guice to inject direct values (by path) or sub objects 
-* Accessible from guice modules (with help of `ConfigurationAwareModule` interface) and bundles.
+* Direct guice bindigs for unique sub objects, and all properties
+* Bindings for manually qualified properties
+* `ConfigurationTree` object (binding) containing all introspection data (could be used for manual searches and, for example, for reports)
+* Guice modules and guicey bundles could access introspected configuration with help of `ConfigurationAwareModule` interface
+and `GuiceyEnvironment` object.
 
-In both cases raw introspection result object is accessible: `ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree`.
-It could be used for config analysis, reporting or something else.
 
 !!! warning
-    Jackson will see all properties which either have getter and setter or annotated with `@JsonProperty`. For example,
+    Jackson will see all properties that either have getter and setter or annotated with `@JsonProperty`. For example,
     ```java
     public class MyConfig extends Configuration {
             
@@ -96,9 +97,88 @@ public class FeatureXService {
 !!! tip
     Guicey bundles and guice modules also could use sub configuration objects directly:
     ```java
-    GuiceyBootstrap#configuration(SubConfig.class)
+    GuiceyEnvironment#configuration(SubConfig.class)
     DropwizardAwareModule#configuration(SubConfig.class)
     ```    
+
+## Qualified bindings
+
+Automatic unique objects bindings require using guicey binding annotation. 
+In some cases, this is not possible: for example, generic 3rd party guice module. 
+You can use qualified bindings then.
+
+The idea is simple: just annotate any configuration property or getter with a qualified 
+annotation and it would be bound in guice context. Moreover, if multiple properties
+(same type!) would be annotated with the same annotation - they would be bound as `Set`.
+
+For example,
+
+```java
+public class MyConfig extends Configuration {
+    
+    @Named("custom")
+    private String prop1;
+    
+    @CustomQualifier
+    private SubObj obj1 = new SubObj();
+```
+
+!!! tip
+    Custom qualifying annotation must be annotated with guice `@BindingAnnotation`
+    or jakarta `@Qualifier` (see guice and jakarta `@Named` annotations as an example).
+
+    ```java
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
+    @BindingAnnotation
+    public @interface CustomQualifier {}
+    ```
+
+Would mean two additional bindings:
+
+```java
+@Inject @Named("custom") String prop1;
+@Inject @CustomQualifier SubObj obj1;
+```
+
+And binding like this:
+
+```java
+@Named("sub-prop")
+private String prop2;
+@Named("sub-prop")
+private String prop3;
+```
+
+Would result in aggregated binding:
+
+```java
+@Inject @Named("sub-prop") Set<String> prop23;
+```
+
+!!! note
+    Qualifying annotations may be used on any configuration depth (not only in the root 
+    configuration object).
+
+Core dropwizard objects could also be bound with a qualified overridden getter:
+
+```java
+@Named("metrics")  
+@Override
+MetricsFactory getMetricsFactory() {
+    return super.getMetricsFactory();
+}
+```
+
+!!! note
+    All custom bindings are visible in the configuration report: [`.printCustomConfigurationBindings()`](diagnostic/configuration-report.md)
+
+!!! tip
+    Guicey bundles and guice modules also could use qualified configuration values directly:
+    ```java
+    GuiceyEnvironment#annotatedConfiguration(Ann.class)
+    DropwizardAwareModule#annotatedConfiguration(Ann.class)
+    ```
 
 ## Configuration by path
 
@@ -188,6 +268,23 @@ You can traverse up or down from any path (tree structure).
 * `valuesByType(Class)` - all not null values with assignable type
 * `valueByType(Class)` - first not null value with assignable type
 * `valueByUniqueDeclaredType(Class)` - value of unique sub configuration or null if value is null or config is not unique
+
+Methods to work with qualified configurations:
+
+* `findAllByAnnotation(ann | Class)` - find all annotated properties by annotation instance or annotation class
+* `findByAnnotation(ann | Class)` - find exactly one annotated property or throw error if more then one found
+* `annotatatedValues(ann | Class)` - all non-null values from annotated properties
+* `annotatatedValue(ann | Class)` - an annotated property value (throw error if more properties annotated)
+
+!!! tip
+    Searching by annotation instance if required for annotations with "state". For example,
+    `@Named("something")` and `@Named("other")` are different qualifying annotations,
+    and searching only by type would be incorrect in this case.
+
+    It is not possible to directly create annotation instance, but any annotation
+    is and interface and could be implemented. It is important that real annotation
+    (from class) and provided object would be equal. As an example see how guice `Names.named()`
+    consrtructs "@Named" insatnces.
 
 Paths are sorted by configuration class (to put custom properties upper) and by path name
 (for predictable paths order).
