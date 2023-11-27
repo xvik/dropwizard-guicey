@@ -1,3 +1,34 @@
+### [5.10.0](http://xvik.github.io/dropwizard-guicey/5.10.0) (2023-11-28)
+* Update to dropwizard 2.1.10
+* Add qualifier annotations support for configuration properties binding:
+  any configuration property (any level), annotated with qualifier annotation, would be
+  directly bound with that qualifier. Core dropwizard objects could be qualified on overridden getter
+* Test improvements:
+    - Junit 5 extensions could inject DropwizardTestSupport object itself as test method parameter
+    - ClientSupport:
+        * inner jersey client creation is customizable now with TestClientFactory implementation
+          (new attribute "clientFactory" in @TestGuiceyApp and @TestDropwizardApp)
+        * default factory would automatically configure:
+            - multipart feature if available in classpath (dropwizard-forms)
+            - direct console logging (to see requests and responses directly in console)
+        * New methods:
+            - basePathRoot - root url (only with port)
+            - get(), post(), delete(), put() - simple shortcut methods to perform basic operations relative to server root
+    - Context support object (DropwizardTestSupport) and client (ClientSupport) instances are accessible now statically
+      for both manual run (TestSupport) and junit extensions: TestSupport.getContext() and TestSupport.getContextClient()
+    - New generic builder for flexible DropwizardTestSupport object creation and run (when junit extension can't be used):
+      TestSupport.builder() (with lifecycle listeners support)
+    - TestSupport methods changes:
+        * Creation and run methods updated with config override (strings) support
+        * Add creation and run methods application class only (and optional overrides).
+        * Run methods without callback now return RunResult containing all objects, required for validation (for example, to examine config)
+        * Add captureOutput method to record console output for assertions
+    - Commands test support:
+        * TestSupport.buildCommandRunner() - builds runner for command execution
+          with the same builder options as in generic builder (TestSupport.builder(); including same configuration)
+          and user input support.
+        * Could be used to test application startup fail (without using system mocks)
+
 ### [5.9.3](http://xvik.github.io/dropwizard-guicey/5.9.3) (2023-11-05)
 * Update to dropwizard 2.1.9
 
@@ -74,7 +105,7 @@ for java 8 compatibility, you'll have to manually force the correct version:
 * Test support objects changes:
     - Add new interface TestEnvironmentSetup to simplify test environment setup
         * In contrast to guicey hooks, setup objects used only in tests to replace the need of writing
-          additional junit extensions (for example, to setup test db). It provides a simple way to
+          additional junit extensions (for example, to set up a test db). It provides a simple way to
           override application configuration (e.g. to specify credentials to just started db)
         * Registration is the same as with hooks: annotation or inside extension builder and with
           field using new annotation @EnableSetup
@@ -263,8 +294,8 @@ for java 8 compatibility, you'll have to manually force the correct version:
         * extensions registered directly (or found by classpath scan) and also bound manually in guice module 
             will not conflict anymore (as manual declaration would be detected) and so @LazyBinding workaround is not needed        
         * extensions declared in guice module may be also disabled (guicey will remove binding declaration in this case 
-            and all chains leading to this declartion to prevent possible context failures)
-        * Transitive gucie modules (installed by other modules) may be disabled with usual `disableModules()`
+            and all chains leading to this declaration to prevent possible context failures)
+        * Transitive guice modules (installed by other modules) may be disabled with usual `disableModules()`
             (but only if guice bindings analysis is not disabled).
         * enabled by default, but can be disabled with `GuiceyOptions.AnalyzeModules` option
         * `BindingInstaller` interface changed (because of direct guice bindings): 
@@ -299,7 +330,7 @@ for java 8 compatibility, you'll have to manually force the correct version:
             Reporters are no more bound to guice context (they could always be constructed manually).
         * `DebugGuiceyLifecycle` listener renamed into `LifecycleDiagnostic`
         * Guicey reports (listeners) properly implement equals and hashcode in order to 
-          use new deduplicatation mechanism and avoid reports duplication (for example,
+          use new deduplication mechanism and avoid reports duplication (for example,
           if `.printDiagnosticInfo()` would be called multiple times, only one report would be shown;
           but still different configurations will be reported separately (e.g. list `.printDiagnosticInfo()` and 
           `.printAvailableInstallers()` which internally use one listener))
@@ -446,13 +477,13 @@ to enable bridge (#28)
     - WebFilterInstaller installs filters annotated with java.servlet.annotation.WebFilter
     - WebServletInstaller installs servlets annotated with java.servlet.annotation.WebServlet
     - WebListenerInstaller installs filters annotated with java.servlet.annotation.WebListener    
-* Add general options mechanism. Used to generify core guicey options, provide runtime options access (for bundles and reporting) and allow 3rd party bundles use it's own low-level options.
+* Add general options mechanism. Used to generify core guicey options, provide runtime options access (for bundles and reporting) and allow 3rd party bundles use its own low-level options.
     - GuiceyBootstrap option(option) method provides access to defined options from bundles
     - Options guice bean provide access to options from guice services
     - Installers could access options by implementing WithOptions interface
     - OptionsInfo guice bean used for accessing options metadata (also accessible through GuiceyConfigurationInfo.getOptions())
     - Options reporting added to DiagnosticBundle
-* (breaking) remove GuiceBunldle methods: searchCommands(boolean), configureFromDropwizardBundles(boolean), bindConfigurationInterfaces(boolean) 
+* (breaking) remove GuiceBundle methods: searchCommands(boolean), configureFromDropwizardBundles(boolean), bindConfigurationInterfaces(boolean) 
     (use either shortcuts without parameters or generic options method instead)
 * (breaking) core installers bundle now always installed (for both auto scan and manual modes). May be disabled with GuiceyOptions.UseCoreInstallers option 
 * (breaking) configuration info api (GuiceyConfigurationInfo.getData()) changed to use java8 Predicate instead of guava
@@ -500,7 +531,7 @@ NOTE: if used FeaturesHolder (internal api bean), now it's renamed to Extensions
     - Default: check 'guicey.bundles' system property and install bundles described there. May be useful for tests to enable debug bundles.
     - Default: use ServiceLoader mechanism to load declared GuiceyBundle services. Useful for automatic loading of third party extensions.
     - Add builder bundleLookup method to register custom lookup implementation
-    - Add builder disableBundleLookup to disable default lookups
+    - Add builder disableBundleLookup to disable default look-ups
     - Default lookup implementation logs all resolved bundles
 * Fix JerseyProviderInstaller: prevent HK2 beans duplicate instantiations; fix DynamicFeature support.
 * Add HK2DebugBundle. When enabled, checks that beans are instantiated by guice only and annotated with @HK2Managed 

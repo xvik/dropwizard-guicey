@@ -104,6 +104,29 @@ See complete description in [the user guide](http://xvik.github.io/dropwizard-gu
     bindings. It is executed *before* injector creation and so could be used for problems diagnosis. 
     Bindings [may change](guide/guice/bindings.md#value-by-path) with configuration values changes (e.g. `server` section depends on server implementation used).    
 
+You can also annotate any configuration property (or getter) with qualifier annotation
+and property value [would be bound with this qualifier directly](guide/yaml-values.md#qualified-bindings):
+
+```java
+public class MyConfig extends Configuration {
+    
+    @Named("custom")
+    private String prop1;
+    
+    @CustomQualifier
+    private SubObj obj1 = new SubObj();
+    
+    ...
+
+@Singleton
+public class MyService { 
+        
+    @Inject @Named("custom") String prop;   
+    @Inject @CustomQualifier SubObj obj;
+}
+```
+
+
 ## Extensions and AOP   
 
 As it [was mentioned](concepts.md#extensions) guice knows about extensions either by 

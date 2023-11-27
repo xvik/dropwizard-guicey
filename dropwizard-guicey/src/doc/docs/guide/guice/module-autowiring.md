@@ -53,6 +53,8 @@ public class MyModule extends DropwizardAwareModule<MyConfiguration> {
         confuguration(Class) // unique sub configuration
         configuration(String) // configuration value by yaml path
         configurations(Class) // sub configuration objects by type (including subtypes)
+        annotatedConfiguration(ann) // annotaed configuration value by instance
+        annotatedConfiguration(Class) // annotaed configuration value by annotation type
         options() // access guicey options   
         sharedState(Class) // shared sctate access
     }

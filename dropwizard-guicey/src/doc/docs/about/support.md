@@ -1,5 +1,5 @@
 # Support
 
-* [Discussions](https://github.com/xvik/dropwizard-guicey/discussions) - most likely will replace google group
-* [Gitter](https://gitter.im/xvik/dropwizard-guicey) - chat
-* [Github issues](https://github.com/xvik/dropwizard-guicey/issues) - problems / enhancements
+* [Github issues](https://github.com/xvik/dropwizard-guicey/issues) - bug reports / enhancement requests
+* [Github discussions](https://github.com/xvik/dropwizard-guicey/discussions) - questions / propositions / discussions
+* [Gitter](https://app.gitter.im/#/room/#xvik_dropwizard-guicey:gitter.im) - chat

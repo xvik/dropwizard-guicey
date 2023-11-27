@@ -1,6 +1,13 @@
 # Testing
 
-You can use all existing [dropwizard testing tools](https://www.dropwizard.io/en/stable/manual/testing.html) for unit tests.
+Core [dropwziard testing support](https://www.dropwizard.io/en/stable/manual/testing.html)
+proposes atomic testing approach (separate testing of each element, which you still could use when possible).
+
+With DI (guice) we have to move towards **integration testing** because:
+
+1. It is now harder to mock classes "manually" (because of DI "black box")
+2. We have a core (guice injector, without web services), starting much faster than
+   complete application.
 
 ## Guicey tests
 
@@ -130,7 +137,7 @@ public class MyTest {
          ...  
     }       
 }
-``` 
+```
 
 ## Spock
 
@@ -167,3 +174,30 @@ class MyTest extends Specification {
 ```
 
 See [Spock 2 docs](guide/test/spock2.md) for more details.
+
+## Testing commands
+
+Guicey also provides special support for [testing dropwizard commands](guide/test/general.md#test-commands):
+
+```java
+CommandResult result = TestSupport.buildCommandRunner(App.class)
+        .run("simple", "-u", "user")
+
+Assertions.assertTrue(result.isSuccessful());
+```
+
+* Such run never fails (in case of error exception would be inside result object)
+* Result countain all required objects for assertions and contains 
+* Full console output is accessible for assertions
+* Could mock user input (for commands requiring interaction)
+
+Also commands could be used to check application failures on startup (self-checks testing):
+
+```java
+CommandResult result = TestSupport.buildCommandRunner(App.class)
+        .runApp()
+```
+
+Such test would fail in case of successful application start.
+No additional mocks or extensions required because running like this would not cause
+`System.exist(1)` call, performed in `Application` class (see `Application.onFatalError`).

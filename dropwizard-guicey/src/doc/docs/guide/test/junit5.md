@@ -73,28 +73,31 @@ public class ClientSupportGuiceyTest {
     junit extension `@ExtendWith(DropwizardExtensionsSupport.class)` looks for fields 
     implementing `DropwizardExtension` (like `DropwizardAppExtension`) and start/stop them according to test lifecycle.
     
-    Guicey extensions completely implemented as junit extensions (and only hook fields are manually searched). 
-    Also, guciey extension rely on junit parameters injection. Both options has pros and cons.
+    Guicey extensions implemented as separate junit extensions (and only hook fields are manually searched). 
+    Also, guciey extensions implement junit parameters injection (for test and lifecycle methods). 
     
 
 ## Extensions
 
-Provided extensions:
-
 * `@TestGuiceyApp` - for lightweight tests (without starting web part, only guice context)
 * `@TestDropwizardApp` - for complete integration tests
 
+!!! note ""
+    For most tests `@TestGuiceyApp` assumed to be used as it only starts guice injector
+    (which is much faster than complete application startup). Such tests are ideal for testing 
+      business logic (services).
+    
+    `@TestDropwizardApp` (full integration test) used only to check web endpoints and full workflow
+    (assuming all business logic was already tested with lightweight tests)
+
 Both extensions allow using injections directly in test fields.
 
-Extensions are compatible with [parallel execution](#parallel-execution) (no side effects).
+Extensions could be used under junit [parallel execution](#parallel-execution) (no side effects).
 
 [Alternative declaration](#alternative-declaration) might be used for [deferred configuration](#deferred-configuration)
 or [starting application for each test method](#start-application-by-test-method). 
 
-Pre-configured [http client](#client) might be used for calling testing application endpoints.
-
-!!! note
-    You can use junit 5 extensions with [Spock 2](spock2.md)
+Pre-configured [http client](#client) might be used for calling test application endpoints (or external).
 
 Test environment might be prepared with [setup objects](#test-environment-setup)
 and application might be re-configured with [hooks](#application-test-modification)
@@ -159,7 +162,7 @@ In order to start application on random port you can use configuration shortcut:
 ```
 
 !!! note
-    Random ports will be applied even if configuration with exact ports provided:
+    Random ports setting override exact ports in configuration:
     ```groovy
     @TestDropwizardApp(value = MyApplication, 
                       config = 'path/to/my/config.yml', 
@@ -187,18 +190,19 @@ more resides in root). When used with existing configuration file, this paramete
 
 ## Guice injections
 
-Any guice bean may be injected directly into test field:
+Any guice bean could be injected directly into the test field:
 
 ```groovy
 @Inject
 SomeBean bean
 ```
 
-This may be even bean not declared in guice modules (JIT injection will occur).
+This will work even for not declared (in guice modules) beans (JIT injection will occur).
 
 To better understand injection scopes look the following test:
 
 ```groovy
+// one application instance started for all test methods
 @TestGuiceyApp(AutoScanApplication.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class InjectionScopeTest {
@@ -244,20 +248,21 @@ public class InjectionScopeTest {
 
 
 !!! note
-    Guice AOP will not work on test methods (because test instances not created by guice).
+    Guice AOP *will not work* on test methods (because test instances are not created by guice).
 
 ## Parameter injection
 
-Any **declared** guice bean may be injected as method parameter:
+Any **declared** guice bean may be injected as test method parameter:
 
 ```java
 @Test
 public void testSomthing(DummyBean bean) 
 ```
 
-(where `DummyBean` is manually declared in some module or JIT-instantiated during injector creation).
+(where `DummyBean` is manually declared in some module or requested as a dependency 
+(JIT-instantiated) during injector creation).
 
-For not declared beans injection (JIT) special annotation must be used:
+For unknown beans injection (not declared and not used during startup) special annotation must be used:
 
 ```java
 @Test
@@ -283,6 +288,7 @@ Also, there are special objects available as parameters:
 * `Application` or exact application class (`MyApplication`)
 * `ObjectMapper`
 * `ClientSupport` application web client helper
+* `DropwizardTestSupport` test support object used internally
 
 !!! note
     Parameter injection will work on test methods as well as lifecyle methods (beforeAll, afterEach etc.) 
@@ -331,6 +337,7 @@ public class ParametersInjectionDwTest {
                                 ObjectMapper mapper,
                                 Injector injector,
                                 ClientSupport client,
+                                DropwizardTestSupport support,
                                 DummyService service,
                                 @Jit JitService jit) {
         assertNotNull(app);
@@ -341,6 +348,7 @@ public class ParametersInjectionDwTest {
         assertNotNull(mapper);
         assertNotNull(injector);
         assertNotNull(client);
+        assertNotNull(support);
         assertNotNull(service);
         assertNotNull(jit);
         assertEquals(client.getPort(), 8080);
@@ -358,6 +366,14 @@ public class ParametersInjectionDwTest {
     }
 }
 ```
+
+!!! tip
+    `DropwizardTestSupport` and `ClientSupport` objects are also available with a static calls (in the same thread):
+    
+    ```java
+    DropwizardTestSupport support = TestSupport.getContext();
+    ClientSupport client = TestSupport.getContextClient();
+    ```
 
 ## Client
 
@@ -428,6 +444,19 @@ client.target("http://somedomain:8080/dummy/").request().buildGet().invoke()
 !!! warning 
     Client object could be injected with both dropwizard and guicey extensions, but in case of guicey extension,
     only raw client could be used (because web part not started all other methods will throw NPE)
+
+### Client factory
+
+Internal `JerseyClient` creation could be customized with `TestClientFactory` implementation.
+
+Default implementation (`DefaultTestClientFactory`) applies timeouts and auto-registers multipart support if `dropwizard-forms` module
+is available in classpath.
+
+Custom implementation could be specified directly in the test annotation:
+
+```java
+@TestDropwizardApp(value = MyApp.class, clientFactory = CustomTestClientFactory.class)
+```
 
 ## Configuration
 
@@ -1102,38 +1131,97 @@ public class BaseTest {}
 public class ActualTest extends BaseTest {} 
 ```
 
-## Dropwizard startup error
+## Testing commands
 
 !!! warning
-    Tests written in such way CAN'T run in parallel due to `System.*` modifications.
-       
-To test application startup fails you can use [system stubs](https://github.com/webcompere/system-stubs) library
+    Commands execution overrides System IO and so can't run in parallel with other tests!
+
+    Use [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization) 
+    on such tests to prevent parallel execution with other tests
+
+Command execution is usually a short-lived action, so it is not possible to
+write an extension for it. Command could be tested only with generic utility:
+
+```java
+@Test
+public class testCommand() {
+    CommandResult result = TestSupport.buildCommandRunner(App.class)
+            .run("cmd", "-p", "param");
+    
+    Assertions.assertTrue(result.isSuccessful());
+}
+```
+
+Run command arguments are the same as real command arguments (the same `Cli` used for commands parsing).
+You can only omit configuration path and use builder instead:
+
+```java
+    CommandResult result = TestSupport.buildCommandRunner(App.class)
+            .config("path/to/config.yml")
+            .configOverride("prop: 1")
+            .run("cmd", "-p", "param");
+```
+
+!!! important
+    Command execution never throws an exception - any appeared exception would be
+    inside resulted object.
+
+    Output is intercepted and could be used for assertions:
+    ```java
+    Assertions.assertTrue(result.getOutput().contains("some text"))
+    ```
+
+    All special objects (like configuration, environment etc), created during command execution
+    are all stored inside the result object (this is the only way to access them). 
+
+Commands requiring user input are also supported:
+
+```java
+CommandResult result = TestSupport.buildCommandRunner(App.class)
+        .consoleInputs("1", "two", "something else")
+        .run("quiz")
+```
+
+This could be used to test any command (simple, configuration or environment), but
+injector would be created only for environment command.
+
+## Testing startup error
+
+!!! warning
+    Commands execution overrides System IO and so can't run in parallel with other tests!
+
+    Use [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization) 
+    on such tests to prevent parallel execution with other tests
+
+Tests for application startup fail often required to check some startup conditions.
+The problem is that it's not enough to simply run the application with "bad" configuration file
+because on error application calls `System.exit(1)` (see `Application.onFatalError`)
+
+Instead, you can use command run utility:
+
+```java
+CommandResult result = TestSupport.buildCommandRunner(App.class)
+        .runApp()
+```
+
+!!! note
+    [Test framework-agnostic utilities](general.md) provides simple utilities to run application
+    (core or web). Could be useful when testing several applications interaction. 
+    
+
+## Environment variables
+
+!!! warning
+    Such modifications are not suitable for parallel tests execution!
+
+    Use [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization) 
+    on such tests to prevent parallel execution with other tests
+
+To modify environment variables for test use [system stubs](https://github.com/webcompere/system-stubs) library
 
 ```groovy
 testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.0.3'
 ```
-
-Testing app startup fail:
-
-```java
-@ExtendWith(SystemStubsExtension.class)
-public class MyTest {
-    @SystemStub
-    SystemExit exit;
-    @SystemStub
-    SystemErr err;
-    
-    @Test
-    public void testStartupError() {
-        exit.execute(() -> new App().run('server'));
-        
-        Assertions.assertEquals(1, exit.getExitCode());
-        Assertions.assertTrue(err.getTest().contains("Error message text"));
-    }     
-}
-```
-
-Note that you can also substitute environment variables and system properties and validate output:
 
 ```java
 @ExtendWith(SystemStubsExtension.class)
@@ -1162,10 +1250,6 @@ public class MyTest {
 ```
 
 Pay attention that there is no need for cleanup: system properties and environment variables would be re-set automatically!
-
-!!! note
-    Use [test framework-agnostic utilities](general.md) to run application with configuration or to run
-    application without web part (for faster test).
 
 ## 3rd party extensions integration
 

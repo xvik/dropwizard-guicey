@@ -313,6 +313,8 @@ Shortcuts:
 `#!java .configuration(String yamlPath)`  
 `#!java .configuration(Class<T> type)`  
 `#!java .configurations(Class<T> type)`  
+`#!java .annotatedConfiguration(ann)`  
+`#!java .annotatedConfiguration(Class)`  
 `#!java .configurationTree()`   
 
 Modules registration:
