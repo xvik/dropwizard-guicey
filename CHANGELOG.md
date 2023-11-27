@@ -4,9 +4,15 @@
     directly bound with that qualifier. Core dropwizard objects could be qualified on overridden getter
 * Test improvements:
   - Junit 5 extensions could inject DropwizardTestSupport object itself as test method parameter
-  - ClientSupport: inner jersey client creation is customizable now with TestClientFactory implementation
-      * new attribute "clientFactory" in @TestGuiceyApp and @TestDropwizardApp
-      * default factory would automatically configure multipart feature if available in classpath (dropwizard-forms)
+  - ClientSupport: 
+      * inner jersey client creation is customizable now with TestClientFactory implementation
+        (new attribute "clientFactory" in @TestGuiceyApp and @TestDropwizardApp)
+      * default factory would automatically configure:
+         - multipart feature if available in classpath (dropwizard-forms)
+         - direct console logging (to see requests and responses directly in console)
+      * New methods:
+         - basePathRoot - root url (only with port)
+         - get(), post(), delete(), put() - simple shortcut methods to perform basic operations relative to server root
   - Context support object (DropwizardTestSupport) and client (ClientSupport) instances are accessible now statically
       for both manual run (TestSupport) and junit extensions: TestSupport.getContext() and TestSupport.getContextClient()
   - New generic builder for flexible DropwizardTestSupport object creation and run (when junit extension can't be used):
@@ -15,6 +21,7 @@
       * Creation and run methods updated with config override (strings) support 
       * Add creation and run methods application class only (and optional overrides).
       * Run methods without callback now return RunResult containing all objects, required for validation (for example, to examine config)
+      * Add captureOutput method to record console output for assertions
   - Commands test support: 
       * TestSupport.buildCommandRunner() - builds runner for command execution
           with the same builder options as in generic builder (TestSupport.builder(); including same configuration) 
