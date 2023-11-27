@@ -38,6 +38,7 @@ public class TestSupportShortcutsTest {
         Assertions.assertNotNull(res.getApplication());
         Assertions.assertNotNull(res.getInjector());
         Assertions.assertNotNull(res.getBean(DummyService.class));
+        Assertions.assertFalse(res.isWebRun());
 
 
         DropwizardTestSupport<TestConfiguration> support = TestSupport.runCoreApp(AutoScanApplication.class,
@@ -73,6 +74,7 @@ public class TestSupportShortcutsTest {
         Assertions.assertNotNull(res.getApplication());
         Assertions.assertNotNull(res.getInjector());
         Assertions.assertNotNull(res.getBean(DummyService.class));
+        Assertions.assertTrue(res.isWebRun());
 
 
         DropwizardTestSupport<TestConfiguration> support = TestSupport.runWebApp(AutoScanApplication.class,
