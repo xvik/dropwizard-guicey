@@ -45,6 +45,12 @@ and `GuiceyEnvironment` object.
     public String getProp() { ... }
     ```
 
+!!! important
+    Guice [does not allow null value bindings](https://github.com/google/guice/wiki/NULL_INJECTED_INTO_NON_NULLABLE) 
+    by default, so if you bind configuration property with null value injector creation would fail.
+    
+    To workaround it, use `@jakarta.inject.Nullable` for injected field.
+
 ## Unique sub configuration
 
 It is quite common to group configuration properties into sub objects like:
@@ -140,6 +146,10 @@ Would mean two additional bindings:
 @Inject @Named("custom") String prop1;
 @Inject @CustomQualifier SubObj obj1;
 ```
+
+!!! important
+    If you expect null values then identify it (otherwise injector creation would fail for null value):   
+    `@Inject @Named("custom") @jakarta.inject.Nullable String prop1;` 
 
 And binding like this:
 
