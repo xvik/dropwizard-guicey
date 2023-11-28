@@ -42,5 +42,18 @@ for java 8 compatibility, you'll have to manually force the correct version:
     }
 ```
 
+H2 NOTE: if BOM used, be aware that dropwizard-dependencies force H2 2.2 version,
+so if you need to use 1.4 then force version manually:
+
+In gradle:
+
+```groovy
+implementation ('com.h2database:h2') {
+  version {strictly '1.4.196'}
+}
+```
+
+In maven: put a correct version as top-level dependency
+
 
 Read [guicey-jdbi3 usage docs](../guicey-jdbi3).

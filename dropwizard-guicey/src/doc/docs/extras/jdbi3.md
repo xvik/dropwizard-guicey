@@ -53,6 +53,20 @@ Omit version if guicey BOM used
         }
     ```
 
+!!! warning "H2"
+    If BOM used, be aware that dropwizard-dependencies force H2 2.2 version,
+    so if you need to use 1.4 then force version manually:
+
+    in gradle:
+    
+    ```groovy
+    implementation ('com.h2database:h2') {
+      version {strictly '1.4.196'}
+    }
+    ```
+    
+    In maven: put a correct version as top-level dependency
+
 ## Usage
 
 Register bundle:
