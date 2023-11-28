@@ -32,4 +32,15 @@ implementation 'ru.vyarus.guicey:guicey-jdbi3-jdk8:{guicey.version}'
 
 It will bring in [guicey-jdbi3](../guicey-jdbi3) but without caffeine 3.
 
+NOTE: dropwizard-jdbi3 drops java 8 support **in gradle** because it leaks
+(through metrics-jdbi3) jdbi3 3.43.1, compiled for java 11, so,
+for java 8 compatibility, you'll have to manually force the correct version:
+
+```groovy
+    implementation ('org.jdbi:jdbi3-core') {
+        version { strictly '3.39.1' }
+    }
+```
+
+
 Read [guicey-jdbi3 usage docs](../guicey-jdbi3).
