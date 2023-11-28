@@ -21,7 +21,8 @@ import java.lang.annotation.Target
  * @author Vyacheslav Rusakov
  * @since 22.11.2023
  */
-@TestGuiceyApp(value = App, configOverride = ["prop1:1", "obj1.prop2:2", "obj1.prop3:3"])
+// see also QualifiedSampleNullValuesTest
+@TestGuiceyApp(value = App, configOverride = ["prop1:1", "ee:11", "obj1.prop2:2", "obj1.prop3:3"])
 class QualifierSampleTest extends Specification {
 
     @Inject @Named("custom") String prop1
@@ -29,12 +30,18 @@ class QualifierSampleTest extends Specification {
     @Inject @Named("sub-prop") Set<String> prop23
     @Inject @Named("metrics") MetricsFactory metricsFactyry
 
+    // both annotations work
+    @Inject @jakarta.inject.Named("ee") String ee
+    @Inject @Named("ee") String ee2
+
     def "Check qualified bindings"() {
 
         expect:
         prop1 == "1"
         obj1 != null
         obj1.prop2 == "2"
+        ee != null
+        ee2 != null
         prop23 == ["2", "3"] as Set
         metricsFactyry != null
     }
@@ -59,6 +66,8 @@ class QualifierSampleTest extends Specification {
         private String prop1
         @CustomQualifier
         private SubObj obj1 = new SubObj()
+        @jakarta.inject.Named("ee")
+        private String ee
 
         String getProp1() {
             return prop1
@@ -66,6 +75,10 @@ class QualifierSampleTest extends Specification {
 
         SubObj getObj1() {
             return obj1
+        }
+
+        String getEe() {
+            return ee
         }
 
         @Named("metrics")  // dropwizard object bind
