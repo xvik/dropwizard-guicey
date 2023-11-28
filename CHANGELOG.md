@@ -1,3 +1,4 @@
+### 5.10.0 (2023-11-28)
 * Update to dropwizard 2.1.10
 * Add jsr305 as direct dependency to simplify usage `@javax.annotation.Nullable`
   (annotation is required for guice when nullable value could be injected)
@@ -29,7 +30,6 @@
           with the same builder options as in generic builder (TestSupport.builder(); including same configuration)
           and user input support.
         * Could be used to test application startup fail (without using system mocks)
-
 
 ### 5.9.3 (2023-11-05)
 * Update to dropwizard 2.1.9
