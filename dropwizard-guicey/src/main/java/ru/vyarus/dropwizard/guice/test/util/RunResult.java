@@ -2,9 +2,9 @@ package ru.vyarus.dropwizard.guice.test.util;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import io.dropwizard.core.Application;
-import io.dropwizard.core.Configuration;
-import io.dropwizard.core.setup.Environment;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
+import io.dropwizard.setup.Environment;
 import io.dropwizard.testing.DropwizardTestSupport;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 

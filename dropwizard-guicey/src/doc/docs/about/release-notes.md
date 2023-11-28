@@ -1,12 +1,23 @@
 # 5.10.0 Release Notes
 
 * Update to dropwizard 2.1.10
+* Add jsr305 as transitive dependency
 * Add qualified configuration bindings
 * Test improvements:
     - DropwizardTestSupport and ClientSupport objects availability
     - Web client improvements (ClientSupport)
     - Improve generic testing
     - Support commands testing
+    
+## JSR305 dependency
+
+`com.google.code.findbugs:jsr305:3.0.2` is now a transitive dependency to simplify
+`javax.annotation.Nullable` usage (note that jsr305 dependency become optional in guice 6.0).
+
+Guice, by default, [does not allow null values injection](https://github.com/google/guice/wiki/NULL_INJECTED_INTO_NON_NULLABLE).
+Nullable injections should be explicitly annotated with `@Nullable`.
+
+This might be useful for (potentially nullable) configuration properties injection.
 
 ## Qualified configuration bindings
 

@@ -33,8 +33,8 @@ import java.util.stream.Collectors;
  * <p>
  * Qualified configuration paths also detected: fields or getters annotated with qualifier annotation.
  * Qualifier annotation is an annotation annotated with {@link com.google.inject.BindingAnnotation}
- * (e.g. {@link com.google.inject.name.Named}) or {@link jakarta.inject.Qualifier}
- * (e.g. {@link jakarta.inject.Named}).
+ * (e.g. {@link com.google.inject.name.Named}) or {@link javax.inject.Qualifier}
+ * (e.g. {@link javax.inject.Named}) and jakarta annotations.
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule
@@ -67,7 +67,7 @@ public class ConfigurationTree {
     }
 
     /**
-     * @return configuration hierarchy classes (including {@link io.dropwizard.core.Configuration}) and custom
+     * @return configuration hierarchy classes (including {@link io.dropwizard.Configuration}) and custom
      * interfaces
      */
     public List<Class> getRootTypes() {

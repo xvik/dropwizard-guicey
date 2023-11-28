@@ -162,7 +162,7 @@ public class BuilderTest {
                 .clientFactory(new CustomTestClientFactory());
 
         if (listenerTracker != null) {
-            res.listen(new TestSupportBuilder.TestListener<>() {
+            res.listen(new TestSupportBuilder.TestListener<TestConfiguration>() {
                 @Override
                 public void setup(DropwizardTestSupport<TestConfiguration> support) throws Exception {
                     Preconditions.checkNotNull(support);

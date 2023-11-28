@@ -39,7 +39,7 @@ import java.util.function.Consumer;
 /**
  * Test helper for running (any) commands. The class is almost similar to
  * {@link io.dropwizard.testing.DropwizardTestSupport}, but duffers in a way command is executed: this class
- * use {@link io.dropwizard.core.cli.Cli} which selects exactly the same command as in real use. Also, command
+ * use {@link io.dropwizard.cli.Cli} which selects exactly the same command as in real use. Also, command
  * execution is a one-shot operation and so all validations could be performed only after command execution
  * (and not in the middle, as with usual application tests). That's why the resulting object contains all
  * objects used during execution - there is no other way to access them.
@@ -47,7 +47,7 @@ import java.util.function.Consumer;
  * Supposed to be used through builder: {@link ru.vyarus.dropwizard.guice.test.TestSupport#buildCommandRunner(Class)}.
  * <p>
  * All types of dropwizard commands are supported, but depending on the command type, some objects in result would be
- * null. Note that guicey could only be used with {@link io.dropwizard.core.cli.EnvironmentCommand} - for other
+ * null. Note that guicey could only be used with {@link io.dropwizard.cli.EnvironmentCommand} - for other
  * commands it would be simply ignored (because dropwizard would not call bundle's run method).
  * <p>
  * Configurations support is the same as in dropwizard support: config object or configuration file with config
@@ -239,7 +239,7 @@ public class CommandTestSupport<C extends Configuration> {
     }
 
     private void initializeBootstrap(final boolean preventServerStart) {
-        // register default command (see io.dropwizard.core.Application.addDefaultCommands)
+        // register default command (see io.dropwizard.Application.addDefaultCommands)
         bootstrap.addCommand(new ServerCommand<>(application));
         bootstrap.addCommand(new CheckCommand<>(application));
 

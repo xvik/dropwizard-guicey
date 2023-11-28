@@ -74,7 +74,7 @@ public class CommandResult<C extends Configuration> {
 
     /**
      * Note that default command
-     * {@link Command#onError(io.dropwizard.core.cli.Cli, net.sourceforge.argparse4j.inf.Namespace, Throwable)}
+     * {@link Command#onError(io.dropwizard.cli.Cli, net.sourceforge.argparse4j.inf.Namespace, Throwable)}
      * implementation simply prints error stack trace to console, so output would contain this trace.
      *
      * @return console output (together with error stream to get output exactly as it would be in console) or
@@ -88,7 +88,7 @@ public class CommandResult<C extends Configuration> {
 
     /**
      * Note that default command
-     * {@link Command#onError(io.dropwizard.core.cli.Cli, net.sourceforge.argparse4j.inf.Namespace, Throwable)}
+     * {@link Command#onError(io.dropwizard.cli.Cli, net.sourceforge.argparse4j.inf.Namespace, Throwable)}
      * implementation simply prints error stack trace to console, so output would contain this trace.
      *
      * @return error output or empty string
@@ -142,7 +142,7 @@ public class CommandResult<C extends Configuration> {
     }
 
     /**
-     * Note: injector created only for {@link io.dropwizard.core.cli.EnvironmentCommand}.
+     * Note: injector created only for {@link io.dropwizard.cli.EnvironmentCommand}.
      *
      * @return injector instance or null (for non-environment commands or due to injector startup errors)
      */

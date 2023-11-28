@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.yaml.support
 
 import com.google.inject.name.Named
-import io.dropwizard.core.Configuration
+import io.dropwizard.Configuration
 
 /**
  * @author Vyacheslav Rusakov

@@ -4,12 +4,12 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
-import io.dropwizard.core.Application;
-import io.dropwizard.core.cli.Command;
-import io.dropwizard.core.cli.ConfiguredCommand;
-import io.dropwizard.core.cli.EnvironmentCommand;
-import io.dropwizard.core.setup.Bootstrap;
-import io.dropwizard.core.setup.Environment;
+import io.dropwizard.Application;
+import io.dropwizard.cli.Command;
+import io.dropwizard.cli.ConfiguredCommand;
+import io.dropwizard.cli.EnvironmentCommand;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
@@ -219,7 +219,7 @@ public class CommandRunTest {
         final List<String> track = new ArrayList<>();
         CommandResult<TestConfiguration> res = TestSupport.buildCommandRunner(App.class)
                 .propertyPrefix("custom")
-                .listen(new CommandRunBuilder.CommandListener<>() {
+                .listen(new CommandRunBuilder.CommandListener<TestConfiguration>() {
                     @Override
                     public void setup(String[] args) {
                         Preconditions.checkState(args.length == 1 && "env".equals(args[0]));

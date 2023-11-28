@@ -38,7 +38,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
     }
 
     /**
-     * Must not be used if {@link #config(io.dropwizard.core.Configuration)} used.
+     * Must not be used if {@link #config(io.dropwizard.Configuration)} used.
      *
      * @param path configuration file path
      * @return builder instance for chained calls
@@ -62,7 +62,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
     }
 
     /**
-     * Must not be used if {@link #config(io.dropwizard.core.Configuration)} used.
+     * Must not be used if {@link #config(io.dropwizard.Configuration)} used.
      *
      * @param provider configuration source provider
      * @return builder instance for chained calls
@@ -73,7 +73,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
     }
 
     /**
-     * Must not be used if {@link #config(io.dropwizard.core.Configuration)} used.
+     * Must not be used if {@link #config(io.dropwizard.Configuration)} used.
      *
      * @param overrides config override values (in format "path: value")
      * @return builder instance for chained calls
@@ -86,7 +86,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
     }
 
     /**
-     * Must not be used if {@link #config(io.dropwizard.core.Configuration)} used.
+     * Must not be used if {@link #config(io.dropwizard.Configuration)} used.
      *
      * @param override config override value (in format "path: value")
      * @return builder instance for chained calls
@@ -102,7 +102,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
     }
 
     /**
-     * Must not be used if {@link #config(io.dropwizard.core.Configuration)} used.
+     * Must not be used if {@link #config(io.dropwizard.Configuration)} used.
      *
      * @param key   configuration path
      * @param value overriding value
@@ -113,7 +113,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
     }
 
     /**
-     * Must not be used if {@link #config(io.dropwizard.core.Configuration)} used.
+     * Must not be used if {@link #config(io.dropwizard.Configuration)} used.
      *
      * @param key   configuration path
      * @param value overriding value provider

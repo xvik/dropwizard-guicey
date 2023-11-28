@@ -1,15 +1,15 @@
 package ru.vyarus.dropwizard.guice.test.general;
 
-import io.dropwizard.core.Application;
-import io.dropwizard.core.Configuration;
-import io.dropwizard.core.setup.Bootstrap;
-import io.dropwizard.core.setup.Environment;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import io.dropwizard.Application;
+import io.dropwizard.Configuration;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
@@ -38,7 +38,7 @@ public class ClientSupportShortcutsTest {
             Assertions.assertThatThrownBy(() -> client.get("sample/getErr", null))
                     .hasMessageContaining("Invalid response: 500");
             Assertions.assertThatThrownBy(() -> client.get("sample/getErr2", ResModel.class))
-                    .hasMessageContaining("HTTP 500 Server Error");
+                    .hasMessageContaining("HTTP 500 Internal Server Error");
 
 
             // POST
@@ -53,7 +53,7 @@ public class ClientSupportShortcutsTest {
             Assertions.assertThatThrownBy(() -> client.post("sample/postErr", null, null))
                     .hasMessageContaining("Invalid response: 500");
             Assertions.assertThatThrownBy(() -> client.post("sample/postErr2", null, ResModel.class))
-                    .hasMessageContaining("HTTP 500 Server Error");
+                    .hasMessageContaining("HTTP 500 Internal Server Error");
 
 
             // PUT
@@ -69,7 +69,7 @@ public class ClientSupportShortcutsTest {
             Assertions.assertThatThrownBy(() -> client.put("sample/putErr", new InModel("tt"), null))
                     .hasMessageContaining("Invalid response: 500");
             Assertions.assertThatThrownBy(() -> client.put("sample/putErr2", new InModel("tt"), ResModel.class))
-                    .hasMessageContaining("HTTP 500 Server Error");
+                    .hasMessageContaining("HTTP 500 Internal Server Error");
 
 
 
@@ -82,7 +82,7 @@ public class ClientSupportShortcutsTest {
             Assertions.assertThatThrownBy(() -> client.delete("sample/delErr", null))
                     .hasMessageContaining("Invalid response: 500");
             Assertions.assertThatThrownBy(() -> client.delete("sample/delErr2", ResModel.class))
-                    .hasMessageContaining("HTTP 500 Server Error");
+                    .hasMessageContaining("HTTP 500 Internal Server Error");
 
             return null;
         });

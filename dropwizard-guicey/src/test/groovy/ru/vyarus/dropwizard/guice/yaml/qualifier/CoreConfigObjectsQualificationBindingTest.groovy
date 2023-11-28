@@ -2,11 +2,11 @@ package ru.vyarus.dropwizard.guice.yaml.qualifier
 
 import com.google.inject.Inject
 import com.google.inject.name.Named
-import io.dropwizard.core.Application
-import io.dropwizard.core.Configuration
-import io.dropwizard.core.setup.Bootstrap
-import io.dropwizard.core.setup.Environment
-import io.dropwizard.metrics.common.MetricsFactory
+import io.dropwizard.Application
+import io.dropwizard.Configuration
+import io.dropwizard.setup.Bootstrap
+import io.dropwizard.setup.Environment
+import io.dropwizard.metrics.MetricsFactory
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.debug.report.yaml.BindingsConfig
 import ru.vyarus.dropwizard.guice.debug.report.yaml.ConfigBindingsRenderer

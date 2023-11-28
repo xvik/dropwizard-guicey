@@ -60,10 +60,10 @@ public final class TestSupport {
      * command testing is a one-shot operation. That's why command runner would intercept all used dropwizard objects
      * during execution (including injector, if it was created) for assertions after command shutdown.
      * <p>
-     * Could be used to test any command: {@link io.dropwizard.core.cli.Command},
-     * {@link io.dropwizard.core.cli.ConfiguredCommand} or {@link io.dropwizard.core.cli.EnvironmentCommand}.
+     * Could be used to test any command: {@link io.dropwizard.cli.Command},
+     * {@link io.dropwizard.cli.ConfiguredCommand} or {@link io.dropwizard.cli.EnvironmentCommand}.
      * But injector would be created only in case of environment command. Other objects, like
-     * {@link io.dropwizard.core.Configuration} or {@link io.dropwizard.core.setup.Environment} might also be absent
+     * {@link io.dropwizard.Configuration} or {@link io.dropwizard.setup.Environment} might also be absent
      * (if they were not created).
      * <p>
      * Configuration is managed completely the same wat as with {@link io.dropwizard.testing.DropwizardTestSupport}
@@ -449,8 +449,8 @@ public final class TestSupport {
 
         final EchoStream stdOut = new EchoStream(originalOut);
         final EchoStream stdErr = new EchoStream(stdOut);
-        System.setOut(new PrintStream(stdOut, false, StandardCharsets.UTF_8));
-        System.setErr(new PrintStream(stdErr, false, StandardCharsets.UTF_8));
+        System.setOut(new PrintStream(stdOut, false, StandardCharsets.UTF_8.name()));
+        System.setErr(new PrintStream(stdErr, false, StandardCharsets.UTF_8.name()));
 
         try {
             action.run();
