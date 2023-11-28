@@ -20,6 +20,10 @@ dependencies {
     api 'io.dropwizard:dropwizard-core'
     api 'ru.vyarus:generics-resolver:3.0.3'
 
+    // optional dependency for guice, but making it direct dependency to allow @Nullable usage
+    // (required to be able to inject null values for yaml properties bindings)
+    api 'com.google.code.findbugs:jsr305:3.0.2'
+
     testImplementation 'org.glassfish.jersey.inject:jersey-hk2'
     testImplementation 'io.dropwizard:dropwizard-auth'
     testImplementation 'io.dropwizard:dropwizard-forms'

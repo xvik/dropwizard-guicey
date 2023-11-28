@@ -1,5 +1,7 @@
 ### [6.2.0](http://xvik.github.io/dropwizard-guicey/6.2.0) (2023-11-28)
 * Update to dropwizard 3.0.4
+* Add jsr305 as direct dependency to simplify usage `@javax.annotation.Nullable`
+  (annotation is required for guice when nullable value could be injected)
 * Add qualifier annotations support for configuration properties binding:
   any configuration property (any level), annotated with qualifier annotation, would be
   directly bound with that qualifier. Core dropwizard objects could be qualified on overridden getter
