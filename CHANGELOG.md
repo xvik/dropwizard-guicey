@@ -1,3 +1,4 @@
+### 6.2.0 (2023-11-28)
 * Update to dropwizard 3.0.4
 * Add jsr305 as direct dependency to simplify usage `@javax.annotation.Nullable`
   (annotation is required for guice when nullable value could be injected)
