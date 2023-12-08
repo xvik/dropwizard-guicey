@@ -14,7 +14,7 @@ import io.dropwizard.core.Configuration;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.util.DataSize;
 import io.dropwizard.util.Duration;
-import jakarta.inject.Qualifier;
+import javax.inject.Qualifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
@@ -502,7 +502,7 @@ public final class ConfigTreeBuilder {
             for (Annotation marker : ann.annotationType().getAnnotations()) {
                 final Class<? extends Annotation> type = marker.annotationType();
                 if (type.equals(Qualifier.class)
-                        || type.equals(javax.inject.Qualifier.class)
+                        || type.equals(Qualifier.class)
                         || type.equals(BindingAnnotation.class)) {
                     return ann;
                 }
