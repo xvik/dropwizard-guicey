@@ -80,6 +80,15 @@ public final class ConfigTreeBuilder {
             List.class, Set.class, Map.class, Multimap.class
     );
 
+    /**
+     * jakarta.inject annotations should be present in classpath because guice 6 supports it, but in cases
+     * when dropwizard BOM used, jakarta.inject-api 1 used instead of 2 and so jakarta annotations not available.
+     * Using string representation for checks to support such "not quite normal" cases.
+     */
+    private static final ImmutableSet<String> QUALIFIER_ANNOTATIONS = ImmutableSet.of(
+            BindingAnnotation.class.getName(), Qualifier.class.getName(), "jakarta.inject.Qualifier"
+    );
+
     private ConfigTreeBuilder() {
     }
 
@@ -500,10 +509,9 @@ public final class ConfigTreeBuilder {
     private static Annotation findQualifierAnnotation(final Iterable<Annotation> anns) {
         for (Annotation ann : anns) {
             for (Annotation marker : ann.annotationType().getAnnotations()) {
-                final Class<? extends Annotation> type = marker.annotationType();
-                if (type.equals(Qualifier.class)
-                        || type.equals(Qualifier.class)
-                        || type.equals(BindingAnnotation.class)) {
+                final String type = marker.annotationType().getName();
+                // like this to avoid direct dependency on jakarta and so work when it's not in classpath
+                if (QUALIFIER_ANNOTATIONS.contains(type)) {
                     return ann;
                 }
             }

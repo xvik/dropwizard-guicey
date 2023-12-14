@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.BindingAnnotation;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -40,6 +41,15 @@ import java.util.Optional;
  * @since 29.04.2020
  */
 public abstract class TestParametersSupport implements ParameterResolver {
+
+    /**
+     * jakarta.inject annotations should be present in classpath because guice 6 supports it, but in cases
+     * when dropwizard BOM used, jakarta.inject-api 1 used instead of 2 and so jakarta annotations not available.
+     * Using string representation for checks to support such "not quite normal" cases.
+     */
+    private static final ImmutableSet<String> QUALIFIER_ANNOTATIONS = ImmutableSet.of(
+            BindingAnnotation.class.getName(), Qualifier.class.getName(), "jakarta.inject.Qualifier"
+    );
 
     private final List<Class<?>> supportedClasses = ImmutableList.of(
             ObjectMapper.class,
@@ -121,11 +131,17 @@ public abstract class TestParametersSupport implements ParameterResolver {
     protected abstract Optional<Injector> getInjector(ExtensionContext extensionContext);
 
     private boolean isQualifierAnnotation(final Annotation... annotations) {
-        final Annotation ann = annotations[0];
-        return annotations.length == 1
-                && (AnnotationSupport.isAnnotated(ann.annotationType(), Qualifier.class)
-                || AnnotationSupport.isAnnotated(ann.annotationType(), jakarta.inject.Qualifier.class)
-                || AnnotationSupport.isAnnotated(ann.annotationType(), BindingAnnotation.class));
+        if (annotations.length == 1) {
+            final Annotation ann = annotations[0];
+            for (Annotation marker : ann.annotationType().getAnnotations()) {
+                final String type = marker.annotationType().getName();
+                // like this to avoid direct dependency on jakarta and so work when it's not in classpath
+                if (QUALIFIER_ANNOTATIONS.contains(type)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private Key<?> getKey(final Parameter parameter) {
