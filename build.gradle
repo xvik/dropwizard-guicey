@@ -122,7 +122,7 @@ subprojects {
     dependencies {
         implementation platform(project(':'))
 
-        compileOnly 'com.github.spotbugs:spotbugs-annotations:4.8.2'
+        compileOnly 'com.github.spotbugs:spotbugs-annotations:4.8.3'
     }
 
     if (project.name != 'dropwizard-guicey') {
