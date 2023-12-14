@@ -7,6 +7,6 @@ dependencies {
         exclude group: 'com.google.inject', module: 'guice'
     }
 
-    testImplementation 'org.flywaydb:flyway-core:9.22.3'
+    testImplementation 'org.flywaydb:flyway-core:10.3.0'
     testImplementation 'com.h2database:h2:2.2.224'
 }
