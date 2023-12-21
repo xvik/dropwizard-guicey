@@ -41,7 +41,7 @@ dependencies {
         api "ru.vyarus:guice-ext-annotations:$guiceExtAnn"
         api "ru.vyarus:guice-validator:$guiceValidator"
 
-        api 'io.dropwizard.modules:dropwizard-jdbi:2.1.10'
+        api 'io.dropwizard.modules:dropwizard-jdbi:2.1.11'
 
         // add subprojects to BOM
         project.subprojects.each { api it }
