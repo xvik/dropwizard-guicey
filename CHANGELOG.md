@@ -1,3 +1,5 @@
+* Update to dropwizard 4.0.5
+
 ### 7.1.0 (2023-11-28)
 * Update to dropwizard 4.0.4
 * Add qualifier annotations support for configuration properties binding: 
