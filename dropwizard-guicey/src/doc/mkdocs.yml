@@ -9,7 +9,7 @@ repo_name: 'dropwizard-guicey'
 repo_url: 'https://github.com/xvik/dropwizard-guicey'
 
 # Copyright
-copyright: 'Copyright &copy; 2014-2023 Vyacheslav Rusakov'
+copyright: 'Copyright &copy; 2014-2024 Vyacheslav Rusakov'
 
 plugins:
   - search
