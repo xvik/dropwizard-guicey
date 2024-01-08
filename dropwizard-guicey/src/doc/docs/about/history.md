@@ -1,3 +1,6 @@
+### [5.10.1](http://xvik.github.io/dropwizard-guicey/5.10.1) (2024-01-08)
+* Update to dropwizard 2.1.11
+
 ### [5.10.0](http://xvik.github.io/dropwizard-guicey/5.10.0) (2023-11-28)
 * Update to dropwizard 2.1.10
 * Add jsr305 as direct dependency to simplify usage `@javax.annotation.Nullable`
