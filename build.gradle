@@ -1,7 +1,7 @@
 plugins {
     id 'ru.vyarus.github-info' version '1.5.0' apply false
     id 'ru.vyarus.quality' version '4.9.0' apply false
-    id 'org.cyclonedx.bom' version '1.8.1' apply false
+    id 'org.cyclonedx.bom' version '1.8.2' apply false
     id 'ru.vyarus.mkdocs' version '3.0.0' apply false
 
     id 'jacoco'
@@ -9,7 +9,7 @@ plugins {
     id 'ru.vyarus.java-lib' version '2.4.0'
     id 'net.researchgate.release' version '3.0.2'
     id 'io.github.gradle-nexus.publish-plugin' version '1.3.0'
-    id 'com.github.ben-manes.versions' version '0.50.0'
+    id 'com.github.ben-manes.versions' version '0.51.0'
 }
 
 wrapper {
@@ -41,7 +41,7 @@ dependencies {
         api "ru.vyarus:guice-ext-annotations:$guiceExtAnn"
         api "ru.vyarus:guice-validator:$guiceValidator"
 
-        api 'io.dropwizard.modules:dropwizard-jdbi:2.1.11'
+        api 'io.dropwizard.modules:dropwizard-jdbi:2.1.12'
 
         // add subprojects to BOM
         project.subprojects.each { api it }
