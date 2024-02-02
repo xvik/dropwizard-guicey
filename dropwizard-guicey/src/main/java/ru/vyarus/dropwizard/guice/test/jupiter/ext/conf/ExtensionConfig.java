@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.testing.ConfigOverride;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
@@ -67,6 +68,7 @@ public abstract class ExtensionConfig {
         tracker.hookClasses(exts);
     }
 
+    @SuppressFBWarnings("PA_PUBLIC_PRIMITIVE_ATTRIBUTE")
     public final void clientFactory(final Class<? extends TestClientFactory> factoryType) {
         try {
             this.clientFactory = InstanceUtils.create(factoryType);
