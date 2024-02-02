@@ -1,3 +1,5 @@
+* Update to dropwizard 3.0.6
+
 ### 6.2.1 (2024-01-08)
 * Avoid direct jakarta.inject annotations usages to work properly when jakarta.inject 1
     is forced in classpath (by dropwizard BOM)
