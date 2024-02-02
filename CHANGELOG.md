@@ -1,3 +1,5 @@
+* Update to dropwizard 2.1.12
+
 ### 5.10.1 (2024-01-08)
 * Update to dropwizard 2.1.11
 
