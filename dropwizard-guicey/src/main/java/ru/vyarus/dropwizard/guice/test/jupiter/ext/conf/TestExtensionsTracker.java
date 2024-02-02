@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
@@ -101,6 +102,7 @@ public class TestExtensionsTracker {
     /**
      * In some cases it might be simpler to use system property to enable debug: {@code -Dguicey.extensions.debug=true}.
      */
+    @SuppressFBWarnings("PA_PUBLIC_PRIMITIVE_ATTRIBUTE")
     public void enableDebugFromSystemProperty() {
         if (!debug && DEBUG_ENABLED.equalsIgnoreCase(System.getProperty(GUICEY_EXTENSIONS_DEBUG))) {
             debug = true;

@@ -121,7 +121,7 @@ public class ItemInfoImpl implements ItemInfo {
     /**
      * Counts instance appearances by scope.
      */
-    private static class InstanceCounter {
+    private static final class InstanceCounter {
 
         private final Map<ItemId, Integer> counts = new HashMap<>();
 

@@ -63,7 +63,7 @@ public class GuiceStatsTracker {
     /**
      * Intercept guice stats logs.
      */
-    private class LogsInterceptor extends Handler {
+    private final class LogsInterceptor extends Handler {
 
         @Override
         public void publish(final LogRecord logRecord) {

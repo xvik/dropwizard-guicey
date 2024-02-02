@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
@@ -28,6 +29,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ScanTime;
  * @author Vyacheslav Rusakov
  * @since 31.08.2014
  */
+@SuppressFBWarnings("CT_CONSTRUCTOR_THROW")
 public class ClasspathScanner {
     private static final int SCAN_THRESHOLD = 1000;
 

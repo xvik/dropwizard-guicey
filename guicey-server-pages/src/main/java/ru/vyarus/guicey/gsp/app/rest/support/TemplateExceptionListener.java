@@ -44,7 +44,7 @@ public class TemplateExceptionListener implements ApplicationEventListener {
     /**
      * Jersey request listener used to detect exceptions.
      */
-    private static class RequestListener implements RequestEventListener {
+    private static final class RequestListener implements RequestEventListener {
         private final Logger logger = LoggerFactory.getLogger(TemplateExceptionListener.class);
 
         @Override

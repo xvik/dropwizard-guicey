@@ -260,7 +260,7 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
     /**
      * Jetty listener.
      */
-    private class JettyLifecycleListener implements LifeCycle.Listener {
+    private final class JettyLifecycleListener implements LifeCycle.Listener {
         @Override
         public void lifeCycleStarting(final LifeCycle event) {
             log("Jetty starting...");
@@ -286,7 +286,7 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
     /**
      * Jersey listener.
      */
-    private class JerseyEventListener implements ApplicationEventListener {
+    private final class JerseyEventListener implements ApplicationEventListener {
         @Override
         @SuppressWarnings({"checkstyle:MissingSwitchDefault", "PMD.SwitchStmtsShouldHaveDefault"})
         @SuppressFBWarnings("SF_SWITCH_NO_DEFAULT")
