@@ -1,6 +1,6 @@
 plugins {
     id 'ru.vyarus.github-info' version '1.5.0' apply false
-    id 'ru.vyarus.quality' version '4.9.0' apply false
+    id 'ru.vyarus.quality' version '5.0.0' apply false
     id 'org.cyclonedx.bom' version '1.8.2' apply false
     id 'ru.vyarus.mkdocs' version '3.0.0' apply false
 
@@ -121,8 +121,6 @@ subprojects {
 
     dependencies {
         implementation platform(project(':'))
-
-        compileOnly 'com.github.spotbugs:spotbugs-annotations:4.8.3'
     }
 
     if (project.name != 'dropwizard-guicey') {
