@@ -1,3 +1,6 @@
+### [7.1.2](http://xvik.github.io/dropwizard-guicey/7.1.2) (2024-02-17)
+* Update to dropwizard 4.0.6
+
 ### [7.1.1](http://xvik.github.io/dropwizard-guicey/7.1.1) (2024-01-08)
 * Update to dropwizard 4.0.5
 
