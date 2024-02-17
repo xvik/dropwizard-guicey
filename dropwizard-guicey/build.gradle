@@ -50,11 +50,11 @@ javaLib {
 
 mkdocs {
     publish {
-        docPath = '6.2.1'
+        docPath = '6.2.2'
         rootRedirect = false
     }
     extras = [
-            'version': '6.2.1',
+            'version': '6.2.2',
             'dropwizard': rootProject.dropwizard,
             'guice': rootProject.guice
     ]
