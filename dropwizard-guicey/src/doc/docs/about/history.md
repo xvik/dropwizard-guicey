@@ -1,3 +1,6 @@
+### [5.10.2](http://xvik.github.io/dropwizard-guicey/5.10.2) (2024-02-17)
+* Update to dropwizard 2.1.12
+
 ### [5.10.1](http://xvik.github.io/dropwizard-guicey/5.10.1) (2024-01-08)
 * Update to dropwizard 2.1.11
 
