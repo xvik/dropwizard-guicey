@@ -378,7 +378,6 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
      * Called after application shutdown. Triggered by jetty lifecycle stopping event (
      * {@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStopped(
      * org.eclipse.jetty.util.component.LifeCycle)}).
-     * <p>
      *
      * @param event event object
      * @see GuiceyLifecycle#ApplicationStopped
