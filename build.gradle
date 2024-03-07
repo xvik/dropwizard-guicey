@@ -13,7 +13,7 @@ plugins {
 }
 
 wrapper {
-    gradleVersion = '8.4'
+    gradleVersion = '8.6'
 }
 
 description = 'Dropwizard guice integration'
@@ -158,7 +158,7 @@ subprojects {
         }
         dependencies {
             testImplementation 'ru.vyarus:spock-junit5'
-            testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+            testImplementation 'org.spockframework:spock-core:2.4-M2-groovy-4.0'
             testImplementation 'org.junit.jupiter:junit-jupiter-api'
         }
     } else {
