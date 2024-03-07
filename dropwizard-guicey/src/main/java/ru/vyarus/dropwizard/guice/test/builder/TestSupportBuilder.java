@@ -54,6 +54,7 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
     /**
      * Use random http ports (applicable only for web). Useful to separate concurrent web instances runs.
      *
+     * @param randomPorts true to use random ports
      * @return builder instance for chained calls
      */
     public TestSupportBuilder<C> randomPorts(final boolean randomPorts) {
@@ -129,7 +130,7 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
      * NOTE: method not supposed to be used for multiple calls. For example, registered hooks would only work
      * on first execution.
      *
-     * @return run(webApp(appClass, configPath, overrides)
+     * @return action result
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
@@ -160,7 +161,7 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
      * NOTE: method not supposed to be used for multiple calls. For example, registered hooks would only work
      * on first execution.
      *
-     * @return test support object used for execution (for example, to examine configuration)
+     * @return result action
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
