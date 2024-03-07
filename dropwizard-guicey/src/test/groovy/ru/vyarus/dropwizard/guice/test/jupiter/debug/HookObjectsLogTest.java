@@ -47,6 +47,8 @@ public class HookObjectsLogTest {
         System.err.println(output);
 
         assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
+                // jdk 21
+                .replaceAll("\\$\\$Lambda/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
                 .replaceAll("\\) {8,}\t", ")        \t"))
                 .contains("Guicey test extensions (Test1.):\n" +
                         "\n" +
@@ -82,6 +84,8 @@ public class HookObjectsLogTest {
         System.err.println(output);
 
         assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
+                // jdk 21
+                .replaceAll("\\$\\$Lambda/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
                 .replaceAll("\\) {8,}\t", ")        \t"))
                 .contains("Guicey test extensions (Test2.):\n" +
                         "\n" +
