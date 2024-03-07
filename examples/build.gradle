@@ -10,7 +10,7 @@ wrapper {
 description = 'Dropwizard guicey examples'
 
 ext {
-    guiceyBom = '7.1.1'
+    guiceyBom = '7.1.2'
 }
 
 subprojects {
