@@ -86,6 +86,7 @@ public final class TestSupport {
      * Obtains a context support object used by test application running in the current thread.
      * Works for manual runs (using run* methods below) and junit extension runs.
      *
+     * @param <C> configuration type
      * @return support object running application
      * @throws java.lang.IllegalStateException if context support object is not registered for the current thread
      */
@@ -230,8 +231,8 @@ public final class TestSupport {
      * ru.vyarus.dropwizard.guice.test.TestSupport.RunCallback)}.
      *
      * @param support test support instance
+     * @param <C>     configuration type
      * @return result object with the main objects for assertions (for example, to examine configuration)
-     * @param <C> configuration type
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
@@ -319,6 +320,7 @@ public final class TestSupport {
      *
      * @param appClass   application class
      * @param configPath configuration file path (absolute or relative to working dir) (may be null)
+     * @param overrides  config override values (in format "path: value")
      * @param <C>        configuration type
      * @return test support object used for execution (for example, to examine configuration)
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
@@ -442,6 +444,7 @@ public final class TestSupport {
      *
      * @param action action to record output
      * @return captured output (out + err)
+     * @throws java.lang.Exception on action errors (exceptions bypassed)
      */
     public static String captureOutput(final OutputCallback action) throws Exception {
         final PrintStream originalOut = System.out;
@@ -492,6 +495,7 @@ public final class TestSupport {
 
         /**
          * Called to execute actions (usually app run) and capture console output.
+         *
          * @throws Exception on error
          */
         void run() throws Exception;

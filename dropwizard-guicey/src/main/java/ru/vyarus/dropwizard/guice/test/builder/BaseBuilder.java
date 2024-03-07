@@ -184,6 +184,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      * (usually early PoC phase). It allows you to map servlet into application root in test (because rest is no
      * more resided in root). When used with existing configuration file, this parameter will override file definition.
      *
+     * @param restMapping rest mapping path
      * @return builder instance for chained calls
      */
     public T restMapping(final String restMapping) {
