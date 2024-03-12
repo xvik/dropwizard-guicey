@@ -6,7 +6,7 @@ plugins {
 
     id 'jacoco'
     id 'java-platform'
-    id 'ru.vyarus.java-lib' version '2.4.0'
+    id 'ru.vyarus.java-lib' version '3.0.0'
     id 'net.researchgate.release' version '3.0.2'
     id 'io.github.gradle-nexus.publish-plugin' version '1.3.0'
     id 'com.github.ben-manes.versions' version '0.51.0'
@@ -56,13 +56,13 @@ javaLib {
     }
 }
 
-pom {
-    delegate.properties {
-        'guice.version' guice
-        'dropwizard.version' dropwizard
-        'hk2.version' hk2
-        'guice-ext-annotations.version' guiceExtAnn
-    }
+maven.pom {
+    properties = [
+            'guice.version'                : guice,
+            'dropwizard.version'           : dropwizard,
+            'hk2.version'                  : hk2,
+            'guice-ext-annotations.version': guiceExtAnn
+    ]
 }
 
 // maven publication related configuration applied to all projects
@@ -88,13 +88,13 @@ allprojects {
 
     // delay required because java plugin is activated only in subprojects and without it
     // pom closure would reference root project only
-    afterEvaluate {
-        pom {
+    pluginManager.withPlugin("ru.vyarus.pom") {
+        maven.pom {
             developers {
                 developer {
-                    id 'xvik'
-                    name 'Vyacheslav Rusakov'
-                    email 'vyarus@gmail.com'
+                    id = 'xvik'
+                    name = 'Vyacheslav Rusakov'
+                    email = 'vyarus@gmail.com'
                 }
             }
         }
@@ -104,7 +104,7 @@ allprojects {
     javaLib.withoutGradleMetadata()
 
     // skip signing for jitpack (snapshots)
-    tasks.withType(Sign) {onlyIf { !System.getenv('JITPACK') }}
+    tasks.withType(Sign) { onlyIf { !System.getenv('JITPACK') } }
 }
 
 // all sub-modules are normal java modules, using root BOM (like maven)
@@ -137,9 +137,10 @@ subprojects {
         javaLib {
             // java 9 auto module name
             autoModuleName = "$group.${project.name.replace('guicey', 'ru.vyarus.dropwizard.guicey').replace('-', '.')}"
-            // use only direct dependencies in the generated pom, removing BOM mentions
-            pom.removeDependencyManagement()
         }
+
+        // use only direct dependencies in the generated pom, removing BOM mentions
+        maven.removeDependencyManagement()
     }
 
     test {
@@ -164,7 +165,7 @@ subprojects {
     } else {
         // don't compile and run tests for legacy junit4 and spock1 modules
         tasks.withType(GroovyCompile)
-                .configureEach {it.onlyIf {JavaVersion.current() <= JavaVersion.VERSION_11} }
+                .configureEach { it.onlyIf { JavaVersion.current() <= JavaVersion.VERSION_11 } }
         test.onlyIf { JavaVersion.current() <= JavaVersion.VERSION_11 }
     }
 
@@ -207,7 +208,7 @@ release.git.requireBranch.set('master')
 // release manages only root project (subprojects will be checked and released implicitly)
 afterReleaseBuild {
     dependsOn 'publishToSonatype'
-    dependsOn subprojects.collect {":$it.name:publishToSonatype" }
+    dependsOn subprojects.collect { ":$it.name:publishToSonatype" }
     dependsOn 'closeAndReleaseSonatypeStagingRepository'
     doLast {
         logger.warn "RELEASED $project.group:$project.name:$project.version"

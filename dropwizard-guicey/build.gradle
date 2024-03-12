@@ -40,9 +40,10 @@ description = 'Dropwizard guice integration'
 javaLib {
     // java 9 auto module name
     autoModuleName = 'ru.vyarus.dropwizard.guicey'
-    // use only direct dependencies in the generated pom, removing BOM mentions
-    pom.removeDependencyManagement()
 }
+
+// use only direct dependencies in the generated pom, removing BOM mentions
+maven.removeDependencyManagement()
 
 mkdocs {
     publish {
