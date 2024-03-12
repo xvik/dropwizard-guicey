@@ -1,5 +1,5 @@
 plugins {
-    id 'ru.vyarus.github-info' version '1.5.0' apply false
+    id 'ru.vyarus.github-info' version '2.0.0' apply false
     id 'ru.vyarus.quality' version '5.0.0' apply false
     id 'org.cyclonedx.bom' version '1.8.2' apply false
     id 'ru.vyarus.mkdocs' version '3.0.0' apply false
