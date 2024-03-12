@@ -55,8 +55,8 @@ dependencies {
 // be prioritized in order to bring more recent guava version (as dropwizard release more often, it often require
 // mote recent guava version).
 // So the fix is to put required jakarta.inject version BEFORE dropwizard and guice BOMs inclusion.
-withPomXml {
-    def deps = it.dependencyManagement[0].dependencies[0]
+maven.withPomXml {
+    def deps = asNode().dependencyManagement[0].dependencies[0]
     def jakarta = deps.appendNode('dependency')
     jakarta.with {
         appendNode('groupId', 'jakarta.inject')
