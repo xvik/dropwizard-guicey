@@ -46,7 +46,7 @@ public class OAuthDynamicFeature extends AuthDynamicFeature {
 ```
 
 The class is automatically picked up by the [jersey installer](../installers/jersey-ext.md#dynamicfeature).
-`OAuthAuthenticator` and `OAuthAuthorizer` are simple guice beans (no special installation required).
+`OAuthAuthenticator` and `UserAuthorizer` are simple guice beans (no special installation required).
 
 Constructor injection is used to obtain required guice managed instances and then configure
 authentication the same way as described in dropwizard docs.
