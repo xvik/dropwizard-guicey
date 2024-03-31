@@ -1,0 +1,3365 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Dropwizard guice integration">
+      
+      
+        <meta name="author" content="Vyacheslav Rusakov">
+      
+      
+        <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/6.2.3/about/history/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
+    
+    
+      
+        <title>Version history - Dropwizard-guicey</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-93174150-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");ga("send","event","feedback","click",t,e),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){ga("send","pageview",e.pathname)})});var e=document.createElement("script");e.async=!0,e.src="https://www.google-analytics.com/analytics.js",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#623-2024-03-31" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Dropwizard-guicey" class="md-header__button md-logo" aria-label="Dropwizard-guicey" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Dropwizard-guicey
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Version history
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/xvik/dropwizard-guicey" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting-started/" class="md-tabs__link">
+        Getting started
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../guide/configuration/" class="md-tabs__link">
+        User guide
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../installers/resource/" class="md-tabs__link">
+        Installers
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../extras/bom/" class="md-tabs__link">
+        Modules
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../examples/authentication/" class="md-tabs__link">
+        Examples
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../release-notes/" class="md-tabs__link md-tabs__link--active">
+        About
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Dropwizard-guicey" class="md-nav__button md-logo" aria-label="Dropwizard-guicey" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Dropwizard-guicey
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/xvik/dropwizard-guicey" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    dropwizard-guicey
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Getting started
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Getting started" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Getting started
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        Setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/" class="md-nav__link">
+        Concepts overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guice/" class="md-nav__link">
+        Guice
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tests/" class="md-nav__link">
+        Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../decomposition/" class="md-nav__link">
+        Decomposition
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          User guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="User guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          User guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/configuration/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/web/" class="md-nav__link">
+        Web
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/modules/" class="md-nav__link">
+        Extra integrations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/bundles/" class="md-nav__link">
+        Bundles
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/yaml-values/" class="md-nav__link">
+        Yaml values
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_7" type="checkbox" id="__nav_3_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_7">
+          Guice
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guice" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_7">
+          <span class="md-nav__icon md-icon"></span>
+          Guice
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/guice/injector/" class="md-nav__link">
+        Injector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/guice/bindings/" class="md-nav__link">
+        Bindings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/guice/scopes/" class="md-nav__link">
+        Scopes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/guice/module-autowiring/" class="md-nav__link">
+        Module autowiring
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/guice/module-analysis/" class="md-nav__link">
+        Modules analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/guice/override/" class="md-nav__link">
+        Override bindings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/guice/servletmodule/" class="md-nav__link">
+        ServletModule
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_8" type="checkbox" id="__nav_3_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_8">
+          Diagnostic
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Diagnostic" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_8">
+          <span class="md-nav__icon md-icon"></span>
+          Diagnostic
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/diagnostic-tools/" class="md-nav__link">
+        Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/extensions-report/" class="md-nav__link">
+        Extensions help
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/configuration-report/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/configuration-model/" class="md-nav__link">
+        Configuration model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/installers-report/" class="md-nav__link">
+        Installers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/yaml-values-report/" class="md-nav__link">
+        Yaml values
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/lifecycle-report/" class="md-nav__link">
+        Lifecycle
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/guice-report/" class="md-nav__link">
+        Guice
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/aop-report/" class="md-nav__link">
+        AOP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/web-report/" class="md-nav__link">
+        Web
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/diagnostic/jersey-report/" class="md-nav__link">
+        Jersey
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_9" type="checkbox" id="__nav_3_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_9">
+          Test
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Test" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_9">
+          <span class="md-nav__icon md-icon"></span>
+          Test
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/test/overview/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/test/spock2/" class="md-nav__link">
+        Spock 2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/test/junit5/" class="md-nav__link">
+        Junit 5
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/test/general/" class="md-nav__link">
+        General support
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/test/spock/" class="md-nav__link">
+        Spock 1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/test/junit4/" class="md-nav__link">
+        Junit 4
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/lifecycle/" class="md-nav__link">
+        Lifecycle
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/scan/" class="md-nav__link">
+        Classpath scan
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/installers/" class="md-nav__link">
+        Installers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/ordering/" class="md-nav__link">
+        Ordering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/options/" class="md-nav__link">
+        Options
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/events/" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/disables/" class="md-nav__link">
+        Disables
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/deduplication/" class="md-nav__link">
+        De-duplication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/commands/" class="md-nav__link">
+        Commands
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/hooks/" class="md-nav__link">
+        Hooks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/shared/" class="md-nav__link">
+        Shared state
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../guide/hk2/" class="md-nav__link">
+        HK2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Installers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Installers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Installers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/resource/" class="md-nav__link">
+        Resource
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/task/" class="md-nav__link">
+        Task
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/managed/" class="md-nav__link">
+        Managed
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/lifecycle/" class="md-nav__link">
+        Lifecycle
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/healthcheck/" class="md-nav__link">
+        Health check
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/jersey-ext/" class="md-nav__link">
+        Jersey extension
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/jersey-feature/" class="md-nav__link">
+        Jersey feature
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/eager/" class="md-nav__link">
+        Eager singleton
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/plugin/" class="md-nav__link">
+        Plugin
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/servlet/" class="md-nav__link">
+        Web servlet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/filter/" class="md-nav__link">
+        Web filter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installers/listener/" class="md-nav__link">
+        Web listener
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Modules
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Modules" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Modules
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/bom/" class="md-nav__link">
+        BOM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/admin-rest/" class="md-nav__link">
+        Admin REST
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/lifecycle-annotations/" class="md-nav__link">
+        Lifecycle annotations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/eventbus/" class="md-nav__link">
+        Guava EventBus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/jdbi3/" class="md-nav__link">
+        JDBI3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/spa/" class="md-nav__link">
+        SPA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/gsp/" class="md-nav__link">
+        Server Pages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extras/validation/" class="md-nav__link">
+        Validation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Examples" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Examples
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/authentication/" class="md-nav__link">
+        Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/governator/" class="md-nav__link">
+        Governator
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/hibernate/" class="md-nav__link">
+        Hibernate
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/eventbus/" class="md-nav__link">
+        EventBus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/jdbi3/" class="md-nav__link">
+        JDBI3
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          About
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../release-notes/" class="md-nav__link">
+        Release notes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compatibility/" class="md-nav__link">
+        Compatibility
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migration/" class="md-nav__link">
+        Migration guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Version history
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Version history
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#623-2024-03-31" class="md-nav__link">
+    6.2.3 (2024-03-31)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#622-2024-02-17" class="md-nav__link">
+    6.2.2 (2024-02-17)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#621-2024-01-08" class="md-nav__link">
+    6.2.1 (2024-01-08)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#620-2023-11-28" class="md-nav__link">
+    6.2.0 (2023-11-28)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#612-2023-10-06" class="md-nav__link">
+    6.1.2 (2023-10-06)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#611-2023-07-05" class="md-nav__link">
+    6.1.1 (2023-07-05)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#610-2023-05-14" class="md-nav__link">
+    6.1.0 (2023-05-14)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#601-2023-04-28" class="md-nav__link">
+    6.0.1 (2023-04-28)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#600-2023-04-02" class="md-nav__link">
+    6.0.0 (2023-04-02)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#571-2023-03-09" class="md-nav__link">
+    5.7.1 (2023-03-09)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#570-2022-12-29" class="md-nav__link">
+    5.7.0 (2022-12-29)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#561-2022-07-02" class="md-nav__link">
+    5.6.1 (2022-07-02)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#560-2022-06-07" class="md-nav__link">
+    5.6.0 (2022-06-07)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#550-2022-03-30" class="md-nav__link">
+    5.5.0 (2022-03-30)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#542-2022-01-26" class="md-nav__link">
+    5.4.2 (2022-01-26)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#541-2021-12-19" class="md-nav__link">
+    5.4.1 (2021-12-19)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#540-2021-10-21" class="md-nav__link">
+    5.4.0 (2021-10-21)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#530-2021-03-06" class="md-nav__link">
+    5.3.0 (2021-03-06)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#520-2020-11-29" class="md-nav__link">
+    5.2.0 (2020-11-29)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#510-2020-06-02" class="md-nav__link">
+    5.1.0 (2020-06-02)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#501-2020-03-13" class="md-nav__link">
+    5.0.1 (2020-03-13)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#500-2019-12-15" class="md-nav__link">
+    5.0.0 (2019-12-15)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#422-2018-11-26" class="md-nav__link">
+    4.2.2 (2018-11-26)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#421-2018-07-23" class="md-nav__link">
+    4.2.1 (2018-07-23)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#420-2018-06-25" class="md-nav__link">
+    4.2.0 (2018-06-25)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#410-2017-05-09" class="md-nav__link">
+    4.1.0 (2017-05-09)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#401-2016-11-18" class="md-nav__link">
+    4.0.1 (2016-11-18)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#400-2016-08-22" class="md-nav__link">
+    4.0.0 (2016-08-22)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#330-2016-08-02" class="md-nav__link">
+    3.3.0 (2016-08-02)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#320-2016-01-23" class="md-nav__link">
+    3.2.0 (2016-01-23)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#311-2015-11-24" class="md-nav__link">
+    3.1.1 (2015-11-24)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#310-2015-09-06" class="md-nav__link">
+    3.1.0 (2015-09-06)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#301-2015-07-04" class="md-nav__link">
+    3.0.1 (2015-07-04)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#300-2015-04-26" class="md-nav__link">
+    3.0.0 (2015-04-26)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#220-2015-04-17" class="md-nav__link">
+    2.2.0 (2015-04-17)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#212-2015-03-03" class="md-nav__link">
+    2.1.2 (2015-03-03)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#211-2015-01-25" class="md-nav__link">
+    2.1.1 (2015-01-25)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#210-2015-01-04" class="md-nav__link">
+    2.1.0 (2015-01-04)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#200-2014-11-25" class="md-nav__link">
+    2.0.0 (2014-11-25)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#110-2014-10-23" class="md-nav__link">
+    1.1.0 (2014-10-23)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#100-2014-10-14" class="md-nav__link">
+    1.0.0 (2014-10-14)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#090-2014-09-05" class="md-nav__link">
+    0.9.0 (2014-09-05)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../support/" class="md-nav__link">
+        Support
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#623-2024-03-31" class="md-nav__link">
+    6.2.3 (2024-03-31)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#622-2024-02-17" class="md-nav__link">
+    6.2.2 (2024-02-17)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#621-2024-01-08" class="md-nav__link">
+    6.2.1 (2024-01-08)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#620-2023-11-28" class="md-nav__link">
+    6.2.0 (2023-11-28)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#612-2023-10-06" class="md-nav__link">
+    6.1.2 (2023-10-06)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#611-2023-07-05" class="md-nav__link">
+    6.1.1 (2023-07-05)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#610-2023-05-14" class="md-nav__link">
+    6.1.0 (2023-05-14)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#601-2023-04-28" class="md-nav__link">
+    6.0.1 (2023-04-28)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#600-2023-04-02" class="md-nav__link">
+    6.0.0 (2023-04-02)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#571-2023-03-09" class="md-nav__link">
+    5.7.1 (2023-03-09)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#570-2022-12-29" class="md-nav__link">
+    5.7.0 (2022-12-29)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#561-2022-07-02" class="md-nav__link">
+    5.6.1 (2022-07-02)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#560-2022-06-07" class="md-nav__link">
+    5.6.0 (2022-06-07)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#550-2022-03-30" class="md-nav__link">
+    5.5.0 (2022-03-30)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#542-2022-01-26" class="md-nav__link">
+    5.4.2 (2022-01-26)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#541-2021-12-19" class="md-nav__link">
+    5.4.1 (2021-12-19)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#540-2021-10-21" class="md-nav__link">
+    5.4.0 (2021-10-21)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#530-2021-03-06" class="md-nav__link">
+    5.3.0 (2021-03-06)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#520-2020-11-29" class="md-nav__link">
+    5.2.0 (2020-11-29)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#510-2020-06-02" class="md-nav__link">
+    5.1.0 (2020-06-02)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#501-2020-03-13" class="md-nav__link">
+    5.0.1 (2020-03-13)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#500-2019-12-15" class="md-nav__link">
+    5.0.0 (2019-12-15)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#422-2018-11-26" class="md-nav__link">
+    4.2.2 (2018-11-26)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#421-2018-07-23" class="md-nav__link">
+    4.2.1 (2018-07-23)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#420-2018-06-25" class="md-nav__link">
+    4.2.0 (2018-06-25)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#410-2017-05-09" class="md-nav__link">
+    4.1.0 (2017-05-09)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#401-2016-11-18" class="md-nav__link">
+    4.0.1 (2016-11-18)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#400-2016-08-22" class="md-nav__link">
+    4.0.0 (2016-08-22)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#330-2016-08-02" class="md-nav__link">
+    3.3.0 (2016-08-02)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#320-2016-01-23" class="md-nav__link">
+    3.2.0 (2016-01-23)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#311-2015-11-24" class="md-nav__link">
+    3.1.1 (2015-11-24)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#310-2015-09-06" class="md-nav__link">
+    3.1.0 (2015-09-06)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#301-2015-07-04" class="md-nav__link">
+    3.0.1 (2015-07-04)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#300-2015-04-26" class="md-nav__link">
+    3.0.0 (2015-04-26)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#220-2015-04-17" class="md-nav__link">
+    2.2.0 (2015-04-17)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#212-2015-03-03" class="md-nav__link">
+    2.1.2 (2015-03-03)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#211-2015-01-25" class="md-nav__link">
+    2.1.1 (2015-01-25)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#210-2015-01-04" class="md-nav__link">
+    2.1.0 (2015-01-04)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#200-2014-11-25" class="md-nav__link">
+    2.0.0 (2014-11-25)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#110-2014-10-23" class="md-nav__link">
+    1.1.0 (2014-10-23)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#100-2014-10-14" class="md-nav__link">
+    1.0.0 (2014-10-14)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#090-2014-09-05" class="md-nav__link">
+    0.9.0 (2014-09-05)
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/dropwizard-guicey/src/doc/docs/about/history.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+  <h1>Version history</h1>
+
+<h3 id="623-2024-03-31"><a href="http://xvik.github.io/dropwizard-guicey/6.2.3">6.2.3</a> (2024-03-31)<a class="headerlink" href="#623-2024-03-31" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 3.0.7</li>
+<li>Fix guicey ApplicationShutdownEvent typo (#387)</li>
+</ul>
+<h3 id="622-2024-02-17"><a href="http://xvik.github.io/dropwizard-guicey/6.2.2">6.2.2</a> (2024-02-17)<a class="headerlink" href="#622-2024-02-17" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 3.0.6</li>
+</ul>
+<h3 id="621-2024-01-08"><a href="http://xvik.github.io/dropwizard-guicey/6.2.1">6.2.1</a> (2024-01-08)<a class="headerlink" href="#621-2024-01-08" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Avoid direct jakarta.inject annotations usages to work properly when jakarta.inject 1
+  is forced in classpath (by dropwizard BOM)</li>
+<li>Update to dropwizard 3.0.5</li>
+</ul>
+<h3 id="620-2023-11-28"><a href="http://xvik.github.io/dropwizard-guicey/6.2.0">6.2.0</a> (2023-11-28)<a class="headerlink" href="#620-2023-11-28" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 3.0.4</li>
+<li>Add jsr305 as direct dependency to simplify usage <code>@javax.annotation.Nullable</code>
+  (annotation is required for guice when nullable value could be injected)</li>
+<li>Add qualifier annotations support for configuration properties binding:
+  any configuration property (any level), annotated with qualifier annotation, would be
+  directly bound with that qualifier. Core dropwizard objects could be qualified on overridden getter</li>
+<li>Test improvements:<ul>
+<li>Junit 5 extensions could inject DropwizardTestSupport object itself as test method parameter</li>
+<li>ClientSupport:<ul>
+<li>inner jersey client creation is customizable now with TestClientFactory implementation
+  (new attribute "clientFactory" in @TestGuiceyApp and @TestDropwizardApp)</li>
+<li>default factory would automatically configure:<ul>
+<li>multipart feature if available in classpath (dropwizard-forms)</li>
+<li>direct console logging (to see requests and responses directly in console)</li>
+</ul>
+</li>
+<li>New methods:<ul>
+<li>basePathRoot - root url (only with port)</li>
+<li>get(), post(), delete(), put() - simple shortcut methods to perform basic operations relative to server root</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Context support object (DropwizardTestSupport) and client (ClientSupport) instances are accessible now statically
+  for both manual run (TestSupport) and junit extensions: TestSupport.getContext() and TestSupport.getContextClient()</li>
+<li>New generic builder for flexible DropwizardTestSupport object creation and run (when junit extension can't be used):
+  TestSupport.builder() (with lifecycle listeners support)</li>
+<li>TestSupport methods changes:<ul>
+<li>Creation and run methods updated with config override (strings) support</li>
+<li>Add creation and run methods application class only (and optional overrides).</li>
+<li>Run methods without callback now return RunResult containing all objects, required for validation (for example, to examine config)</li>
+<li>Add captureOutput method to record console output for assertions</li>
+</ul>
+</li>
+<li>Commands test support:<ul>
+<li>TestSupport.buildCommandRunner() - builds runner for command execution
+  with the same builder options as in generic builder (TestSupport.builder(); including same configuration)
+  and user input support.</li>
+<li>Could be used to test application startup fail (without using system mocks)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="612-2023-10-06"><a href="http://xvik.github.io/dropwizard-guicey/6.1.2">6.1.2</a> (2023-10-06)<a class="headerlink" href="#612-2023-10-06" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 3.0.2</li>
+</ul>
+<h3 id="611-2023-07-05"><a href="http://xvik.github.io/dropwizard-guicey/6.1.1">6.1.1</a> (2023-07-05)<a class="headerlink" href="#611-2023-07-05" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 3.0.1</li>
+<li>Add missed <code>javax.inject</code> dependency (guice 6 could work with both javax and jakarta)</li>
+<li>Fix BOM for MAVEN projects: incorrect <code>jakarta.inject</code> version was selected (#317)</li>
+<li>[jdbi]<ul>
+<li>Fix jdbi 3.39 compatibility</li>
+<li>Avoid redundant transaction isolation level checks (extra queries) (#318)</li>
+</ul>
+</li>
+<li>[gsp]<ul>
+<li>Fix redirection to error page after direct template rendering fails</li>
+</ul>
+</li>
+</ul>
+<h3 id="610-2023-05-14"><a href="http://xvik.github.io/dropwizard-guicey/6.1.0">6.1.0</a> (2023-05-14)<a class="headerlink" href="#610-2023-05-14" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to guice 6.0</li>
+</ul>
+<h3 id="601-2023-04-28"><a href="http://xvik.github.io/dropwizard-guicey/6.0.1">6.0.1</a> (2023-04-28)<a class="headerlink" href="#601-2023-04-28" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix BOM for correct guava version selection in maven (#302)</li>
+</ul>
+<h3 id="600-2023-04-02"><a href="http://xvik.github.io/dropwizard-guicey/6.0.0">6.0.0</a> (2023-04-02)<a class="headerlink" href="#600-2023-04-02" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 3<ul>
+<li>(breaking) Drop java 8 support</li>
+</ul>
+</li>
+<li>Merged with guicey-ext modules repository:<ul>
+<li>Ext modules version would be the same as guicey</li>
+<li>dropwizard-guicey POM would not be a BOM anymore (everything moved to guicey-bom)</li>
+<li>Exclusions not applied in BOM anymore, instead they applied directly in POM</li>
+</ul>
+</li>
+</ul>
+<h3 id="571-2023-03-09"><a href="http://xvik.github.io/dropwizard-guicey/5.7.1">5.7.1</a> (2023-03-09)<a class="headerlink" href="#571-2023-03-09" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 2.1.5</li>
+<li>Revert changing reports log level: now INFO used instead of WARN (#276)</li>
+</ul>
+<h3 id="570-2022-12-29"><a href="http://xvik.github.io/dropwizard-guicey/5.7.0">5.7.0</a> (2022-12-29)<a class="headerlink" href="#570-2022-12-29" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 2.1.4</li>
+<li>Fix NoClassDefFoundError(AbstractCollectionJaxbProvider) appeared for some jersey provider registrations (#240)</li>
+<li>Jersey extensions might omit <code>@Provider</code> on known extension types (ExceptionMapper, MessageBodyReader, etc.).
+  Unifies usage with pure dropwizard (no additional <code>@Provider</code> annotation required). (#265)<ul>
+<li>New option InstallerOptions.JerseyExtensionsRecognizedByType could disable new behaviour</li>
+</ul>
+</li>
+<li>Support ModelProcessor jersey extension installation (#186)</li>
+<li>Add extensions help: .printExtensionsHelp() showing extension signs recognized by installers (in recognition order)<ul>
+<li>Custom installers could participate in report by overriding FeatureInstaller.getRecognizableSigns()
+  (default interface method).</li>
+</ul>
+</li>
+<li>Change reports log level from INFO to WARN to comply with default dropwizard level</li>
+<li>Support application reuse between tests (#269)<ul>
+<li>new reuseApplication parameter in extensions enables reuse</li>
+<li>reusable application must be declared in base test class: all tests derived
+  from this base class would use the same application instance</li>
+</ul>
+</li>
+<li>Add SBOM (json and xml with cyclonedx classifier)</li>
+<li>Add .enableAutoConfig() no-args shortcut for enabling classpath scan in application package</li>
+</ul>
+<h3 id="561-2022-07-02"><a href="http://xvik.github.io/dropwizard-guicey/5.6.1">5.6.1</a> (2022-07-02)<a class="headerlink" href="#561-2022-07-02" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)</li>
+<li>Fix classpath scan recognition of inner static classes inside jars (#231)</li>
+<li>Junit 5 extensions:<ul>
+<li>Fix parallel test methods support (configuration overrides were applied incorrectly)</li>
+<li>Add "debug" option: when enabled, prints registered setup objects, hooks and
+  applied configuration overrides<ul>
+<li>Setup objects and hooks not printed by default as before, only when debug enabled</li>
+<li>Debug could be also enabled with system property -Dguicey.extensions.debug=true
+  or with alias TestSupport.debugExtensions()</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="560-2022-06-07"><a href="http://xvik.github.io/dropwizard-guicey/5.6.0">5.6.0</a> (2022-06-07)<a class="headerlink" href="#560-2022-06-07" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update dropwizard to 2.1.0</li>
+<li>Test support objects changes:<ul>
+<li>Add new interface TestEnvironmentSetup to simplify test environment setup<ul>
+<li>In contrast to guicey hooks, setup objects used only in tests to replace the need of writing
+  additional junit extensions (for example, to set up a test db). It provides a simple way to
+  override application configuration (e.g. to specify credentials to just started db)</li>
+<li>Registration is the same as with hooks: annotation or inside extension builder and with
+  field using new annotation @EnableSetup</li>
+</ul>
+</li>
+<li>Hooks and setup objects configured in test are logged now in execution order and
+  with registration source hint</li>
+<li>@EnableHook fields might be declared with custom classes (not only raw hook interface)</li>
+</ul>
+</li>
+<li>Junit 5 extensions field registration (@RegisterExtension) changes<ul>
+<li>Application might be started per-test-method now (when extension registered in non-static field)<ul>
+<li>In this case support objects might also be registered in non-static fields</li>
+</ul>
+</li>
+<li>Add configOverrideByExtension method to read configuration override value
+  registered by 3<sup>rd</sup> party junit 5 extension (from junit extension store).</li>
+<li>hooks(Class) method accepts multiple classes</li>
+<li>configOverrides(String...) now aggregates multiple calls</li>
+</ul>
+</li>
+</ul>
+<h3 id="550-2022-03-30"><a href="http://xvik.github.io/dropwizard-guicey/5.5.0">5.5.0</a> (2022-03-30)<a class="headerlink" href="#550-2022-03-30" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Test framework-agnostic utilities:<ul>
+<li>Add GuiceyTestSupport to simplify guice-only manual application runs
+  (by analogy to DropwizardTestSupport class)</li>
+<li>Add TestSupport class as a root for test framework-agnostic utilities.
+  Suitable for application startup errors testing and integration within not supported test runner.</li>
+</ul>
+</li>
+<li>Add Spock 2 support: there is no custom extensions, instead existing junit 5 extensions would be used
+  through a special library spock-junit5 (developed specifically for this integration)</li>
+<li>Change "hooks in base test class" behaviour: hooks from static fields from base classes applied before hooks in test itself.
+  Such behaviour is more natural - "base classes declarations go first"
+  (before all field hooks were applied after annotation hooks)</li>
+<li>Extract Spock 1 and Junit 4 extensions from core into ext modules:<ul>
+<li>packages remain the same, so there should be no issues with it (just add new dependency)</li>
+<li>removed deprecation markers from Junit 4 rules (entire module assumed to be deprecated; fewer warnings on build)</li>
+</ul>
+</li>
+<li>BOM changes:<ul>
+<li>spock version removed in order to avoid problems downgrading spock version for spock1 module</li>
+<li>system-rules removed because it targets junit4 (ext module provides it)</li>
+<li>groovy libraries removed (newer groovy 2.x was required for spock1 to run on java 11)</li>
+<li>add spock-junit5 version</li>
+</ul>
+</li>
+</ul>
+<h3 id="542-2022-01-26"><a href="http://xvik.github.io/dropwizard-guicey/5.4.2">5.4.2</a> (2022-01-26)<a class="headerlink" href="#542-2022-01-26" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update dropwizard to 2.0.28</li>
+<li>Update guice to 5.1.0 (java 17 support)</li>
+</ul>
+<h3 id="541-2021-12-19"><a href="http://xvik.github.io/dropwizard-guicey/5.4.1">5.4.1</a> (2021-12-19)<a class="headerlink" href="#541-2021-12-19" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix inner guice class usage in always executable code (#187, OSGi issue)</li>
+<li>Update dropwizard to 2.0.27 (many dependency updates in the latest versions fixing java 17 support)</li>
+</ul>
+<h3 id="540-2021-10-21"><a href="http://xvik.github.io/dropwizard-guicey/5.4.0">5.4.0</a> (2021-10-21)<a class="headerlink" href="#540-2021-10-21" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Use direct dependency versions in pom to simplify resolution (dependencyManagement section remains but for usage as BOM only)</li>
+<li>Fix lambda modules support (modules declared with lambda expression) (#160)</li>
+<li>Exclude "sun.*" objects from configuration analysis (#170, #180)</li>
+<li>Fix junit5 extensions support for @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+  (class instance injections now processed in beforeEach hook instead of instancePostProcessor)</li>
+<li>Add error message when junit5 extensions incorrectly registered with non-static fields (to avoid confusion)</li>
+<li>SharedConfigurationState:<ul>
+<li>Add ability for direct static lookup during startup (from main thread):
+  SharedConfigurationState.getStartupInstance()
+  (option required for places where neither application not environment object accessible
+  (e.g. binding installer, bundle lookup, etc.); and could be used for common objects resolution where otherwise
+  they are not directly accessible)</li>
+<li>Add shortcut methods on state instance producing providers (lazy) for common objects:
+  getBootstrap, getApplication, getEnvironment, getConfiguration, getConfigurationTree
+  (example usage during startup: SharedConfigurationState.getStartupInstance().getApplication() returns Provider<Application>)</li>
+</ul>
+</li>
+<li>Unify shared state access methods in GuiceyBootstrap, GuiceyEnvironment and DropwizardAwareModule
+  (removes implicit limitation that shared state must be initialized only in init phase)</li>
+</ul>
+<h3 id="530-2021-03-06"><a href="http://xvik.github.io/dropwizard-guicey/5.3.0">5.3.0</a> (2021-03-06)<a class="headerlink" href="#530-2021-03-06" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to guice <a href="https://github.com/google/guice/wiki/Guice501">5.0.1</a>
+  (java15 support, removes cglib, fixes "illegal reflective access" warnings, update Guava to LATEST 30.1-jre)</li>
+<li>Update to dropwizard 2.0.20</li>
+<li>Unify GuiceyAppRule (junit4) behaviour with DropwizardAppRule: config overrides should initialize just
+  before test and not in the constructor. The issue was causing early evaluation of lazy (deferred) overrides (#151)</li>
+<li>Add custom ConfigOverride objects support for junit 5 extensions (registered with @RegisterExtension)  </li>
+</ul>
+<h3 id="520-2020-11-29"><a href="http://xvik.github.io/dropwizard-guicey/5.2.0">5.2.0</a> (2020-11-29)<a class="headerlink" href="#520-2020-11-29" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 2.0.16</li>
+<li>Remove direct usages of logback-classic classes to unlock logger switching (#127)</li>
+<li>Fix stackoverflow on config introspection caused by EnumMap fields (#87) </li>
+<li>Prioritize registered jersey provider extensions and add support for @Priority annotation (#97)
+  Unifies raw dropwizard and guicey behaviour. Possibly breaking, see note below.</li>
+<li>Add lifecycle event: ApplicationStoppedEvent (triggered on jersey lifecycle stop)   </li>
+</ul>
+<h3 id="510-2020-06-02"><a href="http://xvik.github.io/dropwizard-guicey/5.1.0">5.1.0</a> (2020-06-02)<a class="headerlink" href="#510-2020-06-02" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update guice to 4.2.3 (<a href="https://github.com/google/guice/wiki/Guice423#changes-since-guice-422">java 14 support</a>)</li>
+<li>Update to dropwizard 2.0.10</li>
+<li>Add junit 5 extensions (#74). Works much like existing spock extensions:<ul>
+<li>@TestGuiceyApp for replacement of GuiceyAppRule</li>
+<li>@TestDropwizardApp for using instead of DropwizardAppRule (or current dropwizard extension)</li>
+</ul>
+</li>
+<li>Spock extensions updates:<ul>
+<li>Internally, use DropwizardTestSupport instead of deprecated junit 4 rules</li>
+<li>New features (port features from junit 5 extensions):<ul>
+<li>@UseDropwizardApp got new configurations: randomPorts and restMapping </li>
+<li>@UseGuiceyHooks deprecated: instead additional hooks may be declared in static test field</li>
+<li>ClientSupport test field will be injected with client support object instance</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Junit 4 rules deprecated GuiceyAppRule, StartupErrorRules             </li>
+<li>Fix parallel tests support: guice logs interception wasn't thread safe (#103)     </li>
+<li>Fix invalid Automatic-Module-Name to 'ru.vyarus.dropwizard.guicey' (#106) </li>
+</ul>
+<h3 id="501-2020-03-13"><a href="http://xvik.github.io/dropwizard-guicey/5.0.1">5.0.1</a> (2020-03-13)<a class="headerlink" href="#501-2020-03-13" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 2.0.2 (address <a href="https://github.com/advisories/GHSA-3mcp-9wr4-cjqf">CVE-2020-5245</a>)</li>
+<li>Fix yaml bindings report rendering with values containing string format parameters like %s (#77)</li>
+</ul>
+<h3 id="500-2019-12-15"><a href="http://xvik.github.io/dropwizard-guicey/5.0.0">5.0.0</a> (2019-12-15)<a class="headerlink" href="#500-2019-12-15" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 2.0.0<ul>
+<li>(breaking in jersey 2.26)<ul>
+<li>Jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
+  This allows complete hk2 avoidance in the future. Right now it means that all direct hk2 classes must be replaced
+  by jersey abstractions (but still hk2 is the only production ready integration)<ul>
+<li>Jersey <code>InjectionManager</code> now bound to guice context instead of hk2 <code>ServiceLocator</code> 
+    (locator still can be retrieved from manager)</li>
+<li>Rename HK2 mentions into jersey (because now jersey is not tied to hk2)<ul>
+<li><code>@HK2Managed</code> renamed to <code>@JerseyManaged</code>   </li>
+</ul>
+</li>
+<li>JerseyProviderInstaller (installs classes annotated with <code>@Provider</code>) changes:     <ul>
+<li><code>ValueParamProvider</code> detected instead of <code>ValueFactoryProvider</code>  </li>
+<li><code>Supplier</code> detected instead <code>Factory</code> (Factory implementations are not recognized anymore!)</li>
+<li><code>org.glassfish.jersey.internal.inject.InjectionResolver</code> detected instead of <code>org.glassfish.hk2.api.InjectionResolver</code></li>
+</ul>
+</li>
+<li>Jersey installers use <code>org.glassfish.jersey.internal.inject.AbstractBinder</code>
+  instead of hk specific <code>org.glassfish.hk2.utilities.binding.AbstractBinder</code></li>
+<li>Mark all hk2-related methods and options as deprecated (to be removed in the next version)       </li>
+</ul>
+</li>
+<li>Jersey 2.26 implements jax-rs 2.1 which forced it to change some of it's apis.<ul>
+<li><code>org.glassfish.jersey.server.AsyncContext</code> binding used instead of 
+    <code>org.glassfish.jersey.server.internal.process.AsyncContext</code>                                  </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>(breaking dw 2.0) <ul>
+<li>Deprecated <code>Bundle</code> usages replaced with <code>ConfigurableBundle</code>
+   (in new dropwizard version <code>Bundle extends ConfigurableBundle</code>)<ul>
+<li>Guicey configuration scope <code>ConfigSope.DropwizardBundle</code> now use <code>ConfigurableBundle</code> class for marking guice 
+   bundle scope instead of <code>Bundle</code></li>
+</ul>
+</li>
+<li><code>dropwizard-bom</code> now includes only dropwizard modules. All 3<sup>rd</sup> party dependencies are moved to
+    <code>dropwizard-dependencies</code> package. So you'll have to update two boms now in order to update dropwizard version.</li>
+</ul>
+</li>
+<li>Update hk2 guice-bridge to 2.6.1            </li>
+</ul>
+</li>
+<li>(breaking) Guicey configuration and lifecycle changes:<ul>
+<li><code>GuiceyBundle</code> contract and behaviour changed to match dropwizard lifecycle: <ul>
+<li>GuiceyBundle now contains two methods <code>initialize</code> and <code>run</code> and called according to dropwizard lifecycle.
+    Now guicey bundles are complete replacement for dropwizard bundles, but with good interoperability 
+    with pure dropwizard bundles </li>
+<li>The following guicey initializations were moved into dropwizard configuration phase:<ul>
+<li>Guicey bundles lookup and initialization (to be able to install dropwizard bundles inside guicey bundles)</li>
+<li>Installers classpath search and instantiation</li>
+<li>Extensions classpath search and validation (but on run phase it is still possible to disable extensions)</li>
+</ul>
+</li>
+<li>Extensions initialization moved outside injector creation scope. It will affect time report and, in case of
+   extension installation error, exception will be thrown directly instead of Guice's CreationException.        </li>
+<li>A lot of guicey lifecycle events obviously changed (and new added) <ul>
+<li>Add special <code>ApplicationStarted</code> event: always fired after complete dropwizard startup. 
+    Supposed to be used to simplify diagnostic reporting.</li>
+<li>Support lifecycle listeners deduplication for correct report behaviour in case of multiple registrations.
+   <code>LinkedHashSet</code> used as listeners holder, so only proper equals and hashcode methods implementation is required for deduplication          </li>
+</ul>
+</li>
+<li>Removed <code>GuiceyOptions.ConfigureFromDropwizardBundles</code> option because it's useless with new bundles lifecycle.
+    (if required, the same behaviour may be implemented with custom bundles lookup)</li>
+</ul>
+</li>
+<li>Removed <code>GuiceyOptions.BindConfigurationInterfaces</code> option (interfaces are already bound with <code>@Config</code> qualifier)</li>
+<li>Guicey web installers (<code>WebInstallersBundle</code>) enabled by default. 
+  <code>GuiceBundle.builder()#useWebInstallers()</code> option removed</li>
+<li>Direct dropwizard bundles support: bundles could be registered directly in main bundle (<code>GuiceBundle.dropwizardBundles()</code>)
+  or inside guicey bundle (<code>GuiceyBundle.dropwizardBundles()</code>). These bundles could be disabled (same as guicey bundles - with 
+  <code>.disableDropwizardBundles()</code> methods) and are show in reporting.<ul>
+<li>Transitive dropwizard bundles tracking: all dropwizard bundles registered through guicey api are tracked for
+  transitive registration with bootstrap proxy. That means that all transitive bundles are shown in reports and 
+  any transitive bundle could be disabled (with <code>.disableDropwizardBundle</code> or custom predicate). Also, deduplication checks 
+  will work (same as for guicey bundles and guice modules).
+  Tracking may be disabled with <code>GuieyOptions.TrackDropwizardBundles</code> option.  </li>
+</ul>
+</li>
+<li>Allow registration of multiple instances for guice modules and guicey bundles 
+    (multiple instances of the same class)<ul>
+<li>By default, equal instances of the same type considered duplicate (only one registered).
+    So, to grant uniqueness of bundle or module, implement correct equals method.
+    For custom cases (when custom equals method is impossible), <code>DuplicateConfigDetector</code> may be implemented 
+    and registered with <code>GuiceBundle.Builder#duplicateConfigDetector()</code> </li>
+<li>Legacy behaviour (1 instance per type) could be simulated with: <code>.duplicateConfigDetector(new LegacyModeDuplicatesDetector())</code>
+  OR method <code>GuiceBundle.Builder#uniqueItems(Class...)</code> may be used to specify
+  exact items to grant uniqueness for </li>
+<li><code>ItemId</code> is now used as identity instead of pure <code>Class</code>. ItemId compute object hash string
+    and preserve it for instance identification. Class types does not contain hash in id.
+    Required because even scopes, represented previously as classes now could be duplicated
+    as multiple instances of the same bundle class could be registered. For simplicity,
+    ItemId equals method consider class-only id's equal to any type instance id.</li>
+<li>Add bundle loops detection: as multiple bundle instances allowed loops are highly possible
+    Entire bundle chain is provided in exception to simplify fixing loops.</li>
+<li>Add base classes for unique bundles and modules (with correct equals and hash code implementations):
+  <code>UniqueGuiceyBundle</code> and <code>UniqueModule</code> or <code>UniqueDropwizardAwareModule</code> (use class name strings for 
+  comparison to correctly detect even instances of classes from different class loaders). 
+  Note: no such class for dropwizard bundle because it's useless (if you use guicey - use GuiceyBundle instead 
+  and if you need dropwizard bundle - it shouldn't be dependent on guicey classes)     </li>
+</ul>
+</li>
+<li>Support extensions recognition from guice modules (jersey1-guice style): <ul>
+<li>extensions are detected from declaration in specified guice modules 
+    (essentially same as classpath scan, but from bindings)            </li>
+<li>extensions declared in:<ul>
+<li>direct type bindings (all generified or qualified declarations ignored)</li>
+<li>linked bindings (right part) bind(Something).to(Extension) are also recognized
+    (which must also be non qualified)    </li>
+</ul>
+</li>
+<li>like in classpath scan <code>@InvisibleForScanner</code> prevents recognition
+    (or bean may be simply qualified)</li>
+<li>all extension registration types may work together (classpath scan, manual declaration and binding declaration)    </li>
+<li>extensions registered directly (or found by classpath scan) and also bound manually in guice module 
+    will not conflict anymore (as manual declaration would be detected) and so @LazyBinding workaround is not needed        </li>
+<li>extensions declared in guice module may be also disabled (guicey will remove binding declaration in this case 
+    and all chains leading to this declaration to prevent possible context failures)</li>
+<li>Transitive guice modules (installed by other modules) may be disabled with usual <code>disableModules()</code>
+    (but only if guice bindings analysis is not disabled).</li>
+<li>enabled by default, but can be disabled with <code>GuiceyOptions.AnalyzeModules</code> option</li>
+<li><code>BindingInstaller</code> interface changed (because of direct guice bindings): 
+    it now contains 3 methods for class binding, manual binding validation and reporting</li>
+</ul>
+</li>
+<li>Extension classes loaded by different class loaders now detected as duplicate extension registration        </li>
+</ul>
+</li>
+<li>Guicey hooks, initially supposed to be used for testing only, now considered to be also used for
+    diagnostic tools<ul>
+<li>Add guicey hooks lookup from system property <code>guicey.hooks</code> as comma-separated list of classes.</li>
+<li>Add hook aliases support: alias name assumed to be used instead of full class name in system property (<code>-Dguicey.hooks</code>).
+  Alias registered with <code>GuiceBundle.builder()#hookAlias()</code>. All registered aliases are logged at startup.</li>
+<li>Add diagnostic hook, which enables diagnostic reports and lifecycle logs. 
+    Could be enabled with system property: <code>-Dguicey.hooks=diagnostic</code> (where diagnostic is pre-registered hook alias) 
+    Useful to enable diagnostic logs on compiled (deployed) application.</li>
+<li>(breaking) Removed hooks recognition on registered GuiceyLifecycleLister (as it was very confusing feature)                         </li>
+</ul>
+</li>
+<li>Add shared configuration state (for special configuration-time needs like bundles communication). 
+    This is required only in very special cases. But such unified place will replace all current and future hacks.<ul>
+<li>Static access by application: <code>SharedConfigurationState.get(app)</code> or <code>SharedConfigurationState.lookup(app, key)</code></li>
+<li>Static access by environment: <code>SharedConfigurationState.get(env)</code> or <code>SharedConfigurationState.lookup(env, key)</code> </li>
+<li>Value access from guicey bundle: <code>boostrap.sharedState(key, defSupplier)</code>, <code>environment.sharedState(key)</code></li>
+<li>Value access from <code>DropwizardAwareModule</code>: <code>sharedState</code></li>
+<li>Hooks can use <code>GuiceBundle.Builder.withSharedState</code> to access application state.</li>
+<li>(breaking) <code>InjectorLookup</code> now use global shared state        <ul>
+<li><code>clear()</code> method removed, but <code>SharedConfigurationState.clear()</code> could be used instead   </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>(breaking) Test support changes<ul>
+<li>Rename test extensions for guicey hooks registration: <ul>
+<li><code>GuiceyConfigurationRule</code> into <code>GuiceyHooksRule</code> </li>
+<li><code>@UseGuiceyConfiguration</code> (spock extension) into <code>@UseGuiceyHooks</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>(breaking) Reporting changes<ul>
+<li>All reports moved into one top-level <code>debug</code> package.</li>
+<li>All guicey reports are now guicey lifecycle listeners<ul>
+<li><code>DiagnosticBundle</code> bundle become <code>ConfigurationDiagnostic</code> guicey listener.
+    Reporters are no more bound to guice context (they could always be constructed manually).</li>
+<li><code>DebugGuiceyLifecycle</code> listener renamed into <code>LifecycleDiagnostic</code></li>
+<li>Guicey reports (listeners) properly implement equals and hashcode in order to 
+  use new deduplication mechanism and avoid reports duplication (for example,
+  if <code>.printDiagnosticInfo()</code> would be called multiple times, only one report would be shown;
+  but still different configurations will be reported separately (e.g. list <code>.printDiagnosticInfo()</code> and 
+  <code>.printAvailableInstallers()</code> which internally use one listener))</li>
+</ul>
+</li>
+<li>Report all diagnostic reports as one log message in order to differentiate <code>.printDiagnosticInfo()</code> 
+    and <code>.printAvailableInstallers()</code> reports when both active      </li>
+<li>Diagnostic report changes (<code>.printDiagnosticInfo()</code>):         <ul>
+<li>Show both dropwizard and guicey bundles together (dropwizard bundles marked with DW)</li>
+<li>Always show "empty" bundles (bundles without sub registrations) - important for dw bundles</li>
+<li>Add "-" before ignored or disabled items (to visually differentiate from accepted items)</li>
+<li>Identify instance deduplication:<ul>
+<li>Instead of registrations count (REG(2)) show exact counter of all registered and accepted items: REG(5/12)</li>
+<li>Show ignored items even in context where items of the same type were accepted</li>
+<li>Show exact number of ignored items in context (DUPLICATE(3))</li>
+</ul>
+</li>
+<li>Show extension recognized from guice bindings (as sub report)</li>
+<li>Stats report improved:<ul>
+<li>Show guice internal stat logs in stats diagnostic report (intercept guice logs)</li>
+<li>Show guicey time by phases (init/run/jersey)</li>
+<li>Show guice modules analysis stats                      </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Show installer marker interfaces in <code>printAvailableInstallers()</code> report to indicate installer actions
+    (installation by type or instance, custom guice or jersey bindings, options support).</li>
+<li>Detailed lifecycle report (<code>.printLifecyclePhasesDetailed</code>) show context data for each event                                                                                                     </li>
+<li>Add guice bindings report (<code>printGuiceBindings()</code> or <code>printAllGuiceBindings()</code>)</li>
+<li>Add guice aop appliance report (<code>.printGuiceAopMap()</code>). This report supposed to be used as "a tool" to look exact 
+  services and so configurable method version is directly available: 
+  <code>.printGuiceAopMap(new GuiceAopConfig().types(...).methods(...))</code></li>
+<li>Add web mappings report (<code>.printWebMappings()</code>): prints all registered servlets and filters</li>
+<li>Add jersey config report (<code>.printJerseyConfig</code>): prints all registered jersey extensions        </li>
+</ul>
+</li>
+<li>Fix configuration bindings for recursive configuration object declarations (#60)</li>
+<li>Guicey version added into BOM (dependencyManagement section in guicey pom) to avoid duplicate versions declarations</li>
+<li>Java 11 compatibility. Automatic module name (in meta-inf): <code>dropwizard-guicey.core</code></li>
+<li>(breaking) AdminRestBundle moved into ext modules (bundle become guicey bundle, 
+    now return 404 instead of 403 on main context for admin-only resources)</li>
+<li>(breaking) Remove useless configuration generic on main bundle: <code>GuiceBundle.&lt;MyConfig&gt;builder()</code> must be just <code>GuiceBundle.builder()</code></li>
+<li>InjectorLookup:<ul>
+<li>Add lookup by environment instance: <code>InjectorLookup.get(environment)</code> </li>
+<li>Add direct lookup for bean instance: <code>InjectorLookup.getInstance(app, MyBean.class)</code> (or with environment)      </li>
+</ul>
+</li>
+<li>Update installers console reporting to use more readable class format: SimpleName   (reduced package)</li>
+<li>Add optional extensions support: optional extension automatically become disabled when no compatible installer found
+    Could be registered with new method in main and guicey bundles: <code>.extensionsOptional</code>  </li>
+</ul>
+<h3 id="422-2018-11-26"><a href="http://xvik.github.io/dropwizard-guicey/4.2.2">4.2.2</a> (2018-11-26)<a class="headerlink" href="#422-2018-11-26" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to guice 4.2.2 (java 11 compatible)</li>
+<li>Update to dropwizard 1.3.7</li>
+<li>Fix inner non static classes detection by classpath scan</li>
+<li>Fix lifecycle debug messages decoration (unicode fix)</li>
+</ul>
+<h3 id="421-2018-07-23"><a href="http://xvik.github.io/dropwizard-guicey/4.2.1">4.2.1</a> (2018-07-23)<a class="headerlink" href="#421-2018-07-23" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Show warning when configuration path's value resolution failed instead of startup fail (#53)</li>
+<li>Add GuiceyOptions.BindConfigurationByPath to be able to disable configuration introspection (for edge cases) (#53)</li>
+<li>Fix unique sub configuration object access (#54) </li>
+</ul>
+<h3 id="420-2018-06-25"><a href="http://xvik.github.io/dropwizard-guicey/4.2.0">4.2.0</a> (2018-06-25)<a class="headerlink" href="#420-2018-06-25" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to guice 4.2.0<ul>
+<li>remove guice-multibindings dependency as it's moved to guice core</li>
+</ul>
+</li>
+<li>Update to dropwizard 1.3.5    </li>
+<li>Add more disable items (mostly for tests): guicey bundles, guice modules (directly registered) and extensions:<ul>
+<li>Guicey bundles disabled through main builder only: .disableBundles() </li>
+<li>Other disable methods available in both main bundle and guicey bundles bootstrap:<ul>
+<li>.disableModules(Class...) - disable guice modules</li>
+<li>.disableExtensions(Class...) - extensions disabling (for possible replacement) </li>
+<li>generic disable method by predicate: .disable(Predicate) (for example, disable all extensions in package or all installed by some bundle etc.)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Add direct support for guice bindings override (using Modules.override() internally) to main bundle and guicey bundle bootstrap: 
+    .modulesOverride(Module...)<ul>
+<li>Add BindingsOverrideInjectorFactory to override already overridden bindings (with modulesOverride) in test (edge case)     </li>
+</ul>
+</li>
+<li>Add hooks for configuration override in integration tests (#23):<ul>
+<li>New GuiceyConfigurationHook interface: hook receive bundle builder instance after application configuration and so could modify configuration (with new disable* methods)</li>
+<li>Junit:<ul>
+<li>New rule GuiceyConfigurationRule for hook registration </li>
+</ul>
+</li>
+<li>Spock:<ul>
+<li>New @UseGuiceyConfiguration extension allows base hook definition (in base class)</li>
+<li>New attribute hooks in @UseGuiceyApp and @UseDropwizardApp extensions to declare test-specific hooks                      </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Add guicey lifecycle events (16 events): provide access to all possible internal state, available at this moment. 
+    It may be used to write instance specific features (post processing) or just advanced logging<ul>
+<li>Add new method in main bundle or guicey bundle bootstrap: .listen(GuiceyLifecycleListener...)      </li>
+<li>Add guicey lifecycle phases reporting methods in main bundle (useful for debugging startup logic):<ul>
+<li>.printLifecyclePhases() - identify configuration stages in console logs </li>
+<li>.printLifecyclePhasesDetailed() -  identify lifecycle phases with detailed configuration report (in console logs) </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Improve options support:<ul>
+<li>Add OptionsAwareModule interface to let guice modules access options</li>
+<li>Add OptionsMapper helper to simplify mapping of system properties and environment variables in builder.options() </li>
+</ul>
+</li>
+<li>Add ability to manage jersey extensions with HK2 by default (#41). 
+    It's like using @HK2Managed on all jersey-related beans (resources, filters etc). 
+    This is useful, for example, if you get common to jersey resources features like @Context injection.   <ul>
+<li>Add option InstallersOptions.JerseyExtensionsManagedByGuice set to false enable HK2 management by default.
+    HK2 bridge must be enabled (GuiceyOptions.UseHkBridge) for HK2-first mode (exception thrown if not).</li>
+<li>Add @GuiceManaged annotation to mark exceptions in HK2-first mode (when @HK2Managed become useless).
+   In guice-first mode this annotation is useless.    </li>
+<li>Builder shortcut: .useHK2ForJerseyExtensions() to simplify HK2-first mode enabling.</li>
+</ul>
+</li>
+<li>Guice beans scope-related improvements:<ul>
+<li>Singleton scope is not forced for jersey extensions with explicit scoping annotation </li>
+<li>Add option for disabling forced singletons for jersey extensions: InstallerOptions.ForceSingletonForJerseyExtensions</li>
+<li>Add annotation for guice prototype scope: @Prototype. Useful to declare some jersey extensions as default-scoped even when forced singletons enabled</li>
+<li>Fix guice request scope delegation support (ServletScopes.transferRequest) for jersey-manager request objects (#49)</li>
+</ul>
+</li>
+<li>Add Bootstrap object accessible in GuiceyBundle: bootstrap() (return dropwizard bootstrap object)</li>
+<li>Add ConfigScope enum for special scopes description (to not remember special classes).<ul>
+<li>Add shortcut methods in config related apis (Filters, Disables, GuiceyConfigurationInfo)        </li>
+</ul>
+</li>
+<li>(breaking) Config reporting api changes:<ul>
+<li>Diagnostic report configuration method rename: DiagnosticConfig.printDisabledInstallers renamed to printDisabledItems and affects now all disabled items</li>
+<li>Diagnostic tree report could hide application scope in ContextTreeConfig.hideScopes(ConfigItems.Application)</li>
+</ul>
+</li>
+<li>New configuration bindings:<ul>
+<li>Configuration object could be bound as:<ul>
+<li>any class from configuration class hierarchy (as before)</li>
+<li>any class from hierarchy with @Config qualifier: @Inject @Config Configuration conf</li>
+<li>interface, implemented by any class in hierarchy with qualifier: @Inject @Config ConfInterface config</li>
+<li>(Deprecated) GuiceyOptions.BindConfigurationInterfaces: when enabled it would bind configuration with interface (as before),
+    but prefer binding interfaces with qualifier (@Config), which is always available.
+    Option will be removed in the future versions</li>
+<li>(Deprecated) bundle's builder.bindConfigurationInterfaces()                 </li>
+</ul>
+</li>
+<li>Configuration value (property value) could be bound by path: @Inject @Config("server.serverPush.enabled") Boolean enabledPush
+    Or entire sub configuration object: @Inject @Config("server") ServerFactory serverCfg</li>
+<li>Sub configuration objects could be bound without path if object type appear only once in configuration:
+    @Inject @Config ServerFactory serverCfg</li>
+<li>ConfigurationTree - configuration introspection object is available for direct binding<ul>
+<li>and from GuiceyConfigurationInfo bean: getConfigurationTree()</li>
+</ul>
+</li>
+<li>Alternative configuration access:<ul>
+<li>New configuration access methods available inside GuiceyBundle and module (DropwizardAwareModule):<ul>
+<li>configuration(String) - configuration value by path</li>
+<li>configuration(Class) - unique sub configuration object</li>
+<li>configurations(Class) - all sub configuration objects with assignable type (on any depth)</li>
+<li>configurationTree() - access raw introspection data for more complex searches                </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Reports to see available config bindings (before injector creation for potential problems solving) in main bundle:<ul>
+<li>.printConfigurationBindings() - log all bindings (including dropwizard Configuration) </li>
+<li>.printCustomConfigurationBindings() - log only custom bindings (from custom configuration classes)                  </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Includes much improved <a href="https://github.com/xvik/generics-resolver/releases/tag/3.0.0">generics-resolver</a></li>
+</ul>
+<h3 id="410-2017-05-09"><a href="http://xvik.github.io/dropwizard-guicey/4.1.0">4.1.0</a> (2017-05-09)<a class="headerlink" href="#410-2017-05-09" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 1.1.0</li>
+<li>Add StartupErrorRule to simplify dropwizard startup error testing</li>
+<li>(breaking) HK2 guice-bridge dependency become optional. New option GuiceyOptions.UseHkBridge could be used 
+to enable bridge (#28)  </li>
+<li>Fix NPE when used with JRebel (#29)</li>
+<li>Add binding for jersey javax.ws.rs.container.ResourceInfo (#26)</li>
+<li>Fix loggers for GuiceyAppRule (junit) and @UseGuiceyApp (spock) (#32)</li>
+<li>Fix guava conflict in guicey pom. Make guicey pom usable as BOM.</li>
+</ul>
+<h3 id="401-2016-11-18"><a href="http://xvik.github.io/dropwizard-guicey/4.0.1">4.0.1</a> (2016-11-18)<a class="headerlink" href="#401-2016-11-18" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 1.0.5 and fix compatibility (#24)</li>
+<li>Fix guice version conflict for maven (#20)</li>
+</ul>
+<h3 id="400-2016-08-22"><a href="https://github.com/xvik/dropwizard-guicey/tree/4.0.0">4.0.0</a> (2016-08-22)<a class="headerlink" href="#400-2016-08-22" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to dropwizard 1.0.0</li>
+<li>(breaking) Remove AdminServletInstaller and AdminFilterInstaller (replaced with new web bundle)</li>
+<li>Add WebInstallersBundle (not installed by default) to install servlet and filters in both main and admin contexts:<ul>
+<li>WebFilterInstaller installs filters annotated with java.servlet.annotation.WebFilter</li>
+<li>WebServletInstaller installs servlets annotated with java.servlet.annotation.WebServlet</li>
+<li>WebListenerInstaller installs filters annotated with java.servlet.annotation.WebListener    </li>
+</ul>
+</li>
+<li>Add general options mechanism. Used to generify core guicey options, provide runtime options access (for bundles and reporting) and allow 3<sup>rd</sup> party bundles use its own low-level options.<ul>
+<li>GuiceyBootstrap option(option) method provides access to defined options from bundles</li>
+<li>Options guice bean provide access to options from guice services</li>
+<li>Installers could access options by implementing WithOptions interface</li>
+<li>OptionsInfo guice bean used for accessing options metadata (also accessible through GuiceyConfigurationInfo.getOptions())</li>
+<li>Options reporting added to DiagnosticBundle</li>
+</ul>
+</li>
+<li>(breaking) remove GuiceBundle methods: searchCommands(boolean), configureFromDropwizardBundles(boolean), bindConfigurationInterfaces(boolean) 
+    (use either shortcuts without parameters or generic options method instead)</li>
+<li>(breaking) core installers bundle now always installed (for both auto scan and manual modes). May be disabled with GuiceyOptions.UseCoreInstallers option </li>
+<li>(breaking) configuration info api (GuiceyConfigurationInfo.getData()) changed to use java8 Predicate instead of guava</li>
+<li>(breaking) InjectorLookup changed to use java8 Optional instead of guava    </li>
+<li>Add ability to customize guice filter mapping DispatcherTypes (by default only REQUEST): GuiceyOptions.GuiceFilterRegistration option </li>
+<li>Add ability to disable guice filter registration and guice servlet modules support (no request and session scopes, but request and response still may be injected in resources) </li>
+<li>Jersey request specific services UriInfo, HttpHeaders, SecurityContext, Request, ContainerRequest, AsyncContext no longer bound in request scope (scope controlled by HK2)</li>
+<li>Add methods to GuiceBundle builder:<ul>
+<li>option(option, value) - used to specify custom option value</li>
+<li>options(Map) - used to provide multiple options at once (for custom options lookup mechanisms)</li>
+<li>printAvailableInstallers() - diagnostic reporting configured to show only available installers (to easily spot available features)</li>
+<li>useWebInstallers() - shortcut for installing WebInstallersBundle</li>
+<li>noGuiceFilter() - disables guice filter installation for both contexts and guice servlet modules support  </li>
+<li>noDefaultInstallers() - disables CoreInstallersBundle automatic installation</li>
+</ul>
+</li>
+</ul>
+<h3 id="330-2016-08-02"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.3.0">3.3.0</a> (2016-08-02)<a class="headerlink" href="#330-2016-08-02" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update to guice 4.1.0</li>
+<li>Update to dropwizard 0.9.3</li>
+<li>Grant compatibility with guice options: disableCircularProxies, requireExactBindingAnnotations and requireExplicitBindings</li>
+<li>ResourceInstaller looks for @Path on directly implemented interface (#10)</li>
+<li>Fix bundles lookup reporting (correct multiline)</li>
+<li>Fix duplicate extensions installation when registered both manually and by auto scan</li>
+<li>Restrict extension installation to one installer (first matching, according to installers order)</li>
+<li>Improve dropwizard configuration class binding:<ul>
+<li>Complete configuration hierarchy bound (root, all classes between root and Configuration and Configuration itself)</li>
+<li>(optional) Bind interfaces directly implemented by classes in configuration hierarchy except interfaces from java and groovy packages 
+ (it's common to use HasSomeConfig interface convention and now interface may be directly used for binding (when bindConfigurationInterfaces()))</li>
+</ul>
+</li>
+<li>Add GuiceyBootstrap methods (extend GuiceyBundle abilities):<ul>
+<li>bundles(): add transitive guicey bundles support (to install other guicey bundles from bundle). Duplicate bundles are detected by type.</li>
+<li>application(): returns current application instance</li>
+</ul>
+</li>
+<li>Rewrite internal configuration mechanism (bundles, installers etc) to generalize it and introduce complete configuration tracking: store registration sources, disabling, used installers and other specific information for each item<ul>
+<li>Add GuiceyConfigurationInfo service to access tracked guicey configuration information (may be used for configuration diagnostic purposes, performing post configuration checks, printing complete configuration tree etc)</li>
+<li>Add DiagnosticBundle to log configuration items diagnostic information. Log format is configurable. Rendering is externalized and may be re-used (e.g. for web page). </li>
+</ul>
+</li>
+<li>Add GuiceBundle builder configuration options:<ul>
+<li>bindConfigurationInterfaces() to enable configuration interface bindings</li>
+<li>strictScopeControl() is shortcut to enable HK2DebugBundle (to control beans creation scope during development and tests)</li>
+<li>printDiagnosticInfo() is shortcut to enable DiagnosticBundle with default preset (enable diagnostic logs)</li>
+<li>shortcut methods for disabled boolean options: searchCommands(), configureFromDropwizardBundles() and bindConfigurationInterfaces()</li>
+</ul>
+</li>
+</ul>
+<p>NOTE: if used FeaturesHolder (internal api bean), now it's renamed to ExtensionsHolder to force upgrade: use new GuiceyConfigurationInfo bean instead (public api)    </p>
+<h3 id="320-2016-01-23"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.2.0">3.2.0</a> (2016-01-23)<a class="headerlink" href="#320-2016-01-23" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Clear possible duplicate guicey bundle instances</li>
+<li>Add GuiceyBundleLookup to automatically resolve and install guicey bundles from various sources.<ul>
+<li>Default: check 'guicey.bundles' system property and install bundles described there. May be useful for tests to enable debug bundles.</li>
+<li>Default: use ServiceLoader mechanism to load declared GuiceyBundle services. Useful for automatic loading of third party extensions.</li>
+<li>Add builder bundleLookup method to register custom lookup implementation</li>
+<li>Add builder disableBundleLookup to disable default look-ups</li>
+<li>Default lookup implementation logs all resolved bundles</li>
+</ul>
+</li>
+<li>Fix JerseyProviderInstaller: prevent HK2 beans duplicate instantiations; fix DynamicFeature support.</li>
+<li>Add HK2DebugBundle. When enabled, checks that beans are instantiated by guice only and annotated with @HK2Managed 
+are managed by HK2 only. May be used in tests as extra validation.</li>
+<li>Add JerseyFeatureInstaller (included in code bundle) which installs javax.ws.rs.core.Feature. Useful for low level configuration. </li>
+<li>Update to dropwizard 0.9</li>
+<li>Revert system exit on guice injector creation error (added in 3.1.1)</li>
+</ul>
+<h3 id="311-2015-11-24"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.1.1">3.1.1</a> (2015-11-24)<a class="headerlink" href="#311-2015-11-24" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Exit on guice injector creation error.</li>
+<li>Add classpath scan packages validation for intersection (to prevent duplicate instances)</li>
+</ul>
+<h3 id="310-2015-09-06"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.1.0">3.1.0</a> (2015-09-06)<a class="headerlink" href="#310-2015-09-06" title="Permanent link">&para;</a></h3>
+<ul>
+<li>JerseyProviderInstaller: </li>
+<li>add support for: ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter, ReaderInterceptor, WriterInterceptor,
+  ContainerRequestFilter, ContainerResponseFilter, DynamicFeature, ApplicationEventListener</li>
+<li>support multiple extension interfaces on the same bean</li>
+<li>Introduce bundles (GuiceyBundle) to simplify extensions:</li>
+<li>core installers now registered with CoreInstallersBundle and classpath scan on core installers package is removed</li>
+<li>builder bundles() method to add guicey bundles</li>
+<li>builder configureFromDropwizardBundles method enables all registered dropwizard bundles lookup if they implement GuiceyBundle (unified extension mechanism)</li>
+<li>Add admin context rest support (AdminRestBundle)</li>
+<li>Add request scoped beans support in admin context</li>
+</ul>
+<h3 id="301-2015-07-04"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.0.1">3.0.1</a> (2015-07-04)<a class="headerlink" href="#301-2015-07-04" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Add DropwizardAwareModule abstract module to remove boilerplate of using all aware interfaces</li>
+</ul>
+<h3 id="300-2015-04-26"><a href="https://github.com/xvik/dropwizard-guicey/tree/3.0.0">3.0.0</a> (2015-04-26)<a class="headerlink" href="#300-2015-04-26" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix HealthCheckInstaller: now installs only NamedHealthCheck classes and ignore other HealthCheck types (which it can't install properly) </li>
+<li>(breaking) Remove static state from GuiceBundle:</li>
+<li>GuiceBundle.getInjector method remain, but its now instance specific (instead of static)</li>
+<li>Injector could be referenced statically using application instance: InjectorLookup.getInjector(app).get() </li>
+<li>JerseyInstaller interface signature changed: now install method receives injector instance</li>
+</ul>
+<h3 id="220-2015-04-17"><a href="https://github.com/xvik/dropwizard-guicey/tree/2.2.0">2.2.0</a> (2015-04-17)<a class="headerlink" href="#220-2015-04-17" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix ExceptionMapper registration</li>
+<li>Add installers ordering support with @Order annotation. Default installers are ordered now with indexes from 10 to 100 with gap 10 
+(to simplify custom installers injection between them)</li>
+</ul>
+<h3 id="212-2015-03-03"><a href="https://github.com/xvik/dropwizard-guicey/tree/2.1.2">2.1.2</a> (2015-03-03)<a class="headerlink" href="#212-2015-03-03" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Spock 1.0 compatibility</li>
+</ul>
+<h3 id="211-2015-01-25"><a href="https://github.com/xvik/dropwizard-guicey/tree/2.1.1">2.1.1</a> (2015-01-25)<a class="headerlink" href="#211-2015-01-25" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Dropwizard 0.8-rc2 compatibility</li>
+</ul>
+<h3 id="210-2015-01-04"><a href="https://github.com/xvik/dropwizard-guicey/tree/2.1.0">2.1.0</a> (2015-01-04)<a class="headerlink" href="#210-2015-01-04" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Add ability to customize injector creation (required by some guice third party modules, like governator). Contributed by <a href="https://github.com/segfly">Nicholas Pace</a></li>
+<li>Add spock extensions to use injections directly in specification (like spock-guice do)</li>
+</ul>
+<h3 id="200-2014-11-25"><a href="https://github.com/xvik/dropwizard-guicey/tree/2.0.0">2.0.0</a> (2014-11-25)<a class="headerlink" href="#200-2014-11-25" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Dropwizard 0.8 integration (as result, no more depends on jersey-guice, but depends on guice-bridge(HK2)).
+Jersey integration completely rewritten.</li>
+<li>Add JerseyInstaller installer type</li>
+<li>Add @LazyBinding annotation, which allows extension not to be registered in guice context (it will be created on first request)</li>
+</ul>
+<h3 id="110-2014-10-23"><a href="https://github.com/xvik/dropwizard-guicey/tree/1.1.0">1.1.0</a> (2014-10-23)<a class="headerlink" href="#110-2014-10-23" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fix interface generics resolution to support nested generics and moved generics resolution into GenericsUtils instead of FeatureUtils</li>
+<li>Drop java 1.6 compatibility, because dropwizard is 1.7 compatible</li>
+<li>Add junit rule for lightweight testing (run guice without starting jetty)</li>
+</ul>
+<h3 id="100-2014-10-14"><a href="https://github.com/xvik/dropwizard-guicey/tree/1.0.0">1.0.0</a> (2014-10-14)<a class="headerlink" href="#100-2014-10-14" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Add dependency on guice-multibindings</li>
+<li>Installers may choose now from three types of installation (binding, type or instance) or combine them.</li>
+<li>Add PluginInstaller: shortcut for multibindings mechanism</li>
+<li>Updated guice (4.0.beta4 -&gt; 4.0.beta5)</li>
+<li>Force singleton for resources</li>
+<li>@Eager renamed to @EagerSingleton and now forces singleton scope for bean</li>
+<li>Add dropwizard style reporting for installed features (like resources or tasks)</li>
+<li>Removed JerseyInjectableProviderInstaller. Now injectable providers must be annotated with @Provider</li>
+<li>Add extensions ordering support using @Order annotation (by default for LifeCycle and Managed installers)</li>
+<li>Add admin context filter and servlet installers</li>
+<li>Rename bundle options: features -&gt; installers, disabledFeatures -&gt; disabledInstallers, beans -&gt; extensions</li>
+</ul>
+<h3 id="090-2014-09-05"><a href="https://github.com/xvik/dropwizard-guicey/tree/0.9.0">0.9.0</a> (2014-09-05)<a class="headerlink" href="#090-2014-09-05" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Initial release</li>
+</ul>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../migration/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Migration guide" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Migration guide
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../support/" class="md-footer__link md-footer__link--next" aria-label="Next: Support" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Support
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2014-2024 Vyacheslav Rusakov
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/xvik" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.8492ddcf.min.js"></script>
+      
+    
+  </body>
+</html>
