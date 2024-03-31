@@ -6,7 +6,7 @@ import io.dropwizard.setup.Bootstrap
 import io.dropwizard.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShotdownEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShutdownEvent
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent
 import ru.vyarus.dropwizard.guice.test.TestSupport
 import spock.lang.Specification
@@ -53,7 +53,7 @@ class ShutdownEventTest extends Specification {
             bootstrap.addBundle(GuiceBundle.builder()
                     .listen(new GuiceyLifecycleAdapter() {
                         @Override
-                        protected void applicationShutdown(ApplicationShotdownEvent event) {
+                        protected void applicationShutdown(ApplicationShutdownEvent event) {
                             shutdown = event.jettyStarted
                         }
 

@@ -30,7 +30,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.Dropwizar
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ManualExtensionsValidatedEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShotdownEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShutdownEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
@@ -250,7 +250,7 @@ public final class LifecycleSupport {
     }
 
     private void applicationShutdown() {
-        broadcast(new ApplicationShotdownEvent(context));
+        broadcast(new ApplicationShutdownEvent(context));
     }
 
     private void applicationStopped() {

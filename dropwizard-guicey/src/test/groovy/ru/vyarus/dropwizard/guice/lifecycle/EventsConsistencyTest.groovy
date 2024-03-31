@@ -290,7 +290,7 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
-        protected void applicationShutdown(ApplicationShotdownEvent event) {
+        protected void applicationShutdown(ApplicationShutdownEvent event) {
             jerseyCheck(event)
             assert event.jettyStarted
         }
