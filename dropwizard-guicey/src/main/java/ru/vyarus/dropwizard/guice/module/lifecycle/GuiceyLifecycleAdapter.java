@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.Dropwizar
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InitializedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.InstallersResolvedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ManualExtensionsValidatedEvent;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShotdownEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShutdownEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
@@ -109,7 +109,7 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
                 applicationStarted((ApplicationStartedEvent) event);
                 break;
             case ApplicationShutdown:
-                applicationShutdown((ApplicationShotdownEvent) event);
+                applicationShutdown((ApplicationShutdownEvent) event);
                 break;
             case ApplicationStopped:
                 applicationStopped((ApplicationStoppedEvent) event);
@@ -370,7 +370,7 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
      * @param event event object
      * @see GuiceyLifecycle#ApplicationShutdown
      */
-    protected void applicationShutdown(final ApplicationShotdownEvent event) {
+    protected void applicationShutdown(final ApplicationShutdownEvent event) {
         // empty
     }
 

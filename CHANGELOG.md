@@ -1,4 +1,9 @@
 * Update to dropwizard 4.0.7
+* Fix guicey ApplicationShutdownEvent typo (#387)
+          
+NOTE: If your code uses this event directly (name with typo: ApplicationShotdownEvent), then it would 
+be a breaking change and event name must be corrected manually in your code (to ApplicationShutdownEvent).
+Sorry, can't do it in a backwards-compatible way, but I assume rare usage so should not affect many.
 
 ### 7.1.2 (2024-02-17)
 * Update to dropwizard 4.0.6

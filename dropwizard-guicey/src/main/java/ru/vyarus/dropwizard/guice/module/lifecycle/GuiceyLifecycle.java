@@ -198,7 +198,7 @@ public enum GuiceyLifecycle {
      * <p>
      * May be used to perform some shutdown logic.
      */
-    ApplicationShutdown(ApplicationShotdownEvent.class),
+    ApplicationShutdown(ApplicationShutdownEvent.class),
     /**
      * Called after application shutdown. Triggered by jetty lifecycle stopping event (
      * {@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStopped(
