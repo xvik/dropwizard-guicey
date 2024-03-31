@@ -1,3 +1,7 @@
+### [7.1.3](http://xvik.github.io/dropwizard-guicey/7.1.3) (2024-03-31)
+* Update to dropwizard 4.0.7
+* Fix guicey ApplicationShutdownEvent typo (#387)
+
 ### [7.1.2](http://xvik.github.io/dropwizard-guicey/7.1.2) (2024-02-17)
 * Update to dropwizard 4.0.6
 
