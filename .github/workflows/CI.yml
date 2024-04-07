@@ -35,8 +35,9 @@ jobs:
       - name: Build coverage report
         run: ./gradlew jacocoTestReport --no-daemon
 
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v4
         with:
           files: build/reports/jacoco/test/jacocoTestReport.xml
           flags: LINUX
-          fail_ci_if_error: false
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
