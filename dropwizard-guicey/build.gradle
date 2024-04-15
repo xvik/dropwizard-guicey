@@ -51,6 +51,7 @@ mkdocs {
         rootRedirect = true
         rootRedirectTo = 'latest'
         versionAliases = ['latest']
+        hideOldBugfixVersions = true
     }
     extras = [
             'version': '7.1.3',
