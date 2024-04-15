@@ -14,8 +14,15 @@
       
         <link rel="canonical" href="https://xvik.github.io/dropwizard-guicey/7.1.3/about/release-notes/">
       
+      
+        <link rel="prev" href="../../examples/jdbi3/">
+      
+      
+        <link rel="next" href="../compatibility/">
+      
+      
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -23,15 +30,17 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bcfcd587.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
-        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
+
     
+    
+      
     
     
       
@@ -52,9 +61,7 @@
   
   
 
-
-  <script id="__analytics">function __md_analytics(){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-93174150-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");ga("send","event","feedback","click",t,e),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){ga("send","pageview",e.pathname)})});var e=document.createElement("script");e.async=!0,e.src="https://www.google-analytics.com/analytics.js",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
-
+<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","UA-93174150-1"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","UA-93174150-1",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=UA-93174150-1",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
   
     <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
   
@@ -72,11 +79,8 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
-    
-    
-      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -93,7 +97,7 @@
       
     </div>
     
-      <div data-md-component="outdated" hidden>
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
         
       </div>
     
@@ -109,6 +113,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
+      
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
@@ -128,31 +133,39 @@
       </div>
     </div>
     
-      <form class="md-header__option" data-md-component="palette">
-        
-          
-          
-          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
-          
-            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-            </label>
-          
-        
-          
-          
-          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
-          
-            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
-            </label>
-          
-        
-      </form>
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
       <label class="md-header__button md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
@@ -161,12 +174,15 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
@@ -178,7 +194,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -190,7 +206,7 @@
         <a href="https://github.com/xvik/dropwizard-guicey" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     dropwizard-guicey
@@ -209,32 +225,21 @@
           
             
 <nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
-  <div class="md-tabs__inner md-grid">
+  <div class="md-grid">
     <ul class="md-tabs__list">
       
         
   
   
-
-
-  <li class="md-tabs__item">
-    <a href="../.." class="md-tabs__link">
-      Home
-    </a>
-  </li>
-
-      
-        
-  
-  
-
-
-  
-  
   
     <li class="md-tabs__item">
-      <a href="../../getting-started/" class="md-tabs__link">
-        Getting started
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
       </a>
     </li>
   
@@ -243,64 +248,90 @@
         
   
   
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../getting-started/" class="md-tabs__link">
+          
+  
+  Getting started
 
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../guide/configuration/" class="md-tabs__link">
-        User guide
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../installers/resource/" class="md-tabs__link">
-        Installers
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
         
   
   
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../guide/configuration/" class="md-tabs__link">
+          
+  
+  User guide
 
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../extras/bom/" class="md-tabs__link">
-        Modules
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
         
   
   
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../installers/resource/" class="md-tabs__link">
+          
+  
+  Installers
 
+        </a>
+      </li>
+    
+  
 
+      
+        
   
   
   
-    <li class="md-tabs__item">
-      <a href="../../examples/authentication/" class="md-tabs__link">
-        Examples
-      </a>
-    </li>
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../extras/bom/" class="md-tabs__link">
+          
+  
+  Modules
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../examples/authentication/" class="md-tabs__link">
+          
+  
+  Examples
+
+        </a>
+      </li>
+    
   
 
       
@@ -309,16 +340,18 @@
   
     
   
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  About
 
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="./" class="md-tabs__link md-tabs__link--active">
-        About
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -338,6 +371,7 @@
                   <div class="md-sidebar__inner">
                     
 
+
   
 
 
@@ -356,7 +390,7 @@
       <a href="https://github.com/xvik/dropwizard-guicey" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     dropwizard-guicey
@@ -368,14 +402,19 @@
     
       
       
-      
-
+  
   
   
   
     <li class="md-nav__item">
       <a href="../.." class="md-nav__link">
-        Home
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
       </a>
     </li>
   
@@ -383,1333 +422,1957 @@
     
       
       
-      
-
+  
   
   
   
     
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_2">
-          Getting started
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Getting started" data-md-level="1">
-        <label class="md-nav__title" for="__nav_2">
-          <span class="md-nav__icon md-icon"></span>
-          Getting started
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
           
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Getting started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../getting-started/" class="md-nav__link">
-        Setup
+        
+  
+  <span class="md-ellipsis">
+    Setup
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../concepts/" class="md-nav__link">
-        Concepts overview
+        
+  
+  <span class="md-ellipsis">
+    Concepts overview
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guice/" class="md-nav__link">
-        Guice
+        
+  
+  <span class="md-ellipsis">
+    Guice
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../tests/" class="md-nav__link">
-        Testing
+        
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../decomposition/" class="md-nav__link">
-        Decomposition
+        
+  
+  <span class="md-ellipsis">
+    Decomposition
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
+  
   
   
   
     
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_3">
-          User guide
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="User guide" data-md-level="1">
-        <label class="md-nav__title" for="__nav_3">
-          <span class="md-nav__icon md-icon"></span>
-          User guide
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
           
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    User guide
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            User guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/configuration/" class="md-nav__link">
-        Configuration
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/extensions/" class="md-nav__link">
-        Extensions
+        
+  
+  <span class="md-ellipsis">
+    Extensions
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/web/" class="md-nav__link">
-        Web
+        
+  
+  <span class="md-ellipsis">
+    Web
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/modules/" class="md-nav__link">
-        Extra integrations
+        
+  
+  <span class="md-ellipsis">
+    Extra integrations
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/bundles/" class="md-nav__link">
-        Bundles
+        
+  
+  <span class="md-ellipsis">
+    Bundles
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/yaml-values/" class="md-nav__link">
-        Yaml values
+        
+  
+  <span class="md-ellipsis">
+    Yaml values
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_7" type="checkbox" id="__nav_3_7" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_3_7">
-          Guice
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Guice" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_7">
-          <span class="md-nav__icon md-icon"></span>
-          Guice
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        
           
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Guice
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            Guice
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/guice/injector/" class="md-nav__link">
-        Injector
+        
+  
+  <span class="md-ellipsis">
+    Injector
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/guice/bindings/" class="md-nav__link">
-        Bindings
+        
+  
+  <span class="md-ellipsis">
+    Bindings
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/guice/scopes/" class="md-nav__link">
-        Scopes
+        
+  
+  <span class="md-ellipsis">
+    Scopes
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/guice/module-autowiring/" class="md-nav__link">
-        Module autowiring
+        
+  
+  <span class="md-ellipsis">
+    Module autowiring
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/guice/module-analysis/" class="md-nav__link">
-        Modules analysis
+        
+  
+  <span class="md-ellipsis">
+    Modules analysis
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/guice/override/" class="md-nav__link">
-        Override bindings
+        
+  
+  <span class="md-ellipsis">
+    Override bindings
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/guice/servletmodule/" class="md-nav__link">
-        ServletModule
+        
+  
+  <span class="md-ellipsis">
+    ServletModule
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_8" type="checkbox" id="__nav_3_8" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_3_8">
-          Diagnostic
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Diagnostic" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_8">
-          <span class="md-nav__icon md-icon"></span>
-          Diagnostic
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
+        
           
+          <label class="md-nav__link" for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Diagnostic
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            Diagnostic
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/diagnostic-tools/" class="md-nav__link">
-        Tools
+        
+  
+  <span class="md-ellipsis">
+    Tools
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/extensions-report/" class="md-nav__link">
-        Extensions help
+        
+  
+  <span class="md-ellipsis">
+    Extensions help
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/configuration-report/" class="md-nav__link">
-        Configuration
+        
+  
+  <span class="md-ellipsis">
+    Configuration
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/configuration-model/" class="md-nav__link">
-        Configuration model
+        
+  
+  <span class="md-ellipsis">
+    Configuration model
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/installers-report/" class="md-nav__link">
-        Installers
+        
+  
+  <span class="md-ellipsis">
+    Installers
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/yaml-values-report/" class="md-nav__link">
-        Yaml values
+        
+  
+  <span class="md-ellipsis">
+    Yaml values
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/lifecycle-report/" class="md-nav__link">
-        Lifecycle
+        
+  
+  <span class="md-ellipsis">
+    Lifecycle
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/guice-report/" class="md-nav__link">
-        Guice
+        
+  
+  <span class="md-ellipsis">
+    Guice
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/aop-report/" class="md-nav__link">
-        AOP
+        
+  
+  <span class="md-ellipsis">
+    AOP
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/web-report/" class="md-nav__link">
-        Web
+        
+  
+  <span class="md-ellipsis">
+    Web
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/diagnostic/jersey-report/" class="md-nav__link">
-        Jersey
+        
+  
+  <span class="md-ellipsis">
+    Jersey
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_9" type="checkbox" id="__nav_3_9" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_3_9">
-          Test
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Test" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_9">
-          <span class="md-nav__icon md-icon"></span>
-          Test
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_9" >
+        
           
+          <label class="md-nav__link" for="__nav_3_9" id="__nav_3_9_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Test
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_9">
+            <span class="md-nav__icon md-icon"></span>
+            Test
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/test/overview/" class="md-nav__link">
-        Overview
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/test/spock2/" class="md-nav__link">
-        Spock 2
+        
+  
+  <span class="md-ellipsis">
+    Spock 2
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/test/junit5/" class="md-nav__link">
-        Junit 5
+        
+  
+  <span class="md-ellipsis">
+    Junit 5
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/test/general/" class="md-nav__link">
-        General support
+        
+  
+  <span class="md-ellipsis">
+    General support
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/test/spock/" class="md-nav__link">
-        Spock 1
+        
+  
+  <span class="md-ellipsis">
+    Spock 1
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/test/junit4/" class="md-nav__link">
-        Junit 4
+        
+  
+  <span class="md-ellipsis">
+    Junit 4
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/lifecycle/" class="md-nav__link">
-        Lifecycle
+        
+  
+  <span class="md-ellipsis">
+    Lifecycle
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/scan/" class="md-nav__link">
-        Classpath scan
+        
+  
+  <span class="md-ellipsis">
+    Classpath scan
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/installers/" class="md-nav__link">
-        Installers
+        
+  
+  <span class="md-ellipsis">
+    Installers
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/ordering/" class="md-nav__link">
-        Ordering
+        
+  
+  <span class="md-ellipsis">
+    Ordering
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/options/" class="md-nav__link">
-        Options
+        
+  
+  <span class="md-ellipsis">
+    Options
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/events/" class="md-nav__link">
-        Events
+        
+  
+  <span class="md-ellipsis">
+    Events
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/disables/" class="md-nav__link">
-        Disables
+        
+  
+  <span class="md-ellipsis">
+    Disables
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/deduplication/" class="md-nav__link">
-        De-duplication
+        
+  
+  <span class="md-ellipsis">
+    De-duplication
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/commands/" class="md-nav__link">
-        Commands
+        
+  
+  <span class="md-ellipsis">
+    Commands
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/hooks/" class="md-nav__link">
-        Hooks
+        
+  
+  <span class="md-ellipsis">
+    Hooks
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/shared/" class="md-nav__link">
-        Shared state
+        
+  
+  <span class="md-ellipsis">
+    Shared state
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../guide/hk2/" class="md-nav__link">
-        HK2
+        
+  
+  <span class="md-ellipsis">
+    HK2
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
+  
   
   
   
     
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_4">
-          Installers
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Installers" data-md-level="1">
-        <label class="md-nav__title" for="__nav_4">
-          <span class="md-nav__icon md-icon"></span>
-          Installers
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
           
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Installers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Installers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/resource/" class="md-nav__link">
-        Resource
+        
+  
+  <span class="md-ellipsis">
+    Resource
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/task/" class="md-nav__link">
-        Task
+        
+  
+  <span class="md-ellipsis">
+    Task
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/managed/" class="md-nav__link">
-        Managed
+        
+  
+  <span class="md-ellipsis">
+    Managed
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/lifecycle/" class="md-nav__link">
-        Lifecycle
+        
+  
+  <span class="md-ellipsis">
+    Lifecycle
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/healthcheck/" class="md-nav__link">
-        Health check
+        
+  
+  <span class="md-ellipsis">
+    Health check
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/jersey-ext/" class="md-nav__link">
-        Jersey extension
+        
+  
+  <span class="md-ellipsis">
+    Jersey extension
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/jersey-feature/" class="md-nav__link">
-        Jersey feature
+        
+  
+  <span class="md-ellipsis">
+    Jersey feature
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/eager/" class="md-nav__link">
-        Eager singleton
+        
+  
+  <span class="md-ellipsis">
+    Eager singleton
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/plugin/" class="md-nav__link">
-        Plugin
+        
+  
+  <span class="md-ellipsis">
+    Plugin
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/servlet/" class="md-nav__link">
-        Web servlet
+        
+  
+  <span class="md-ellipsis">
+    Web servlet
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/filter/" class="md-nav__link">
-        Web filter
+        
+  
+  <span class="md-ellipsis">
+    Web filter
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../installers/listener/" class="md-nav__link">
-        Web listener
+        
+  
+  <span class="md-ellipsis">
+    Web listener
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
+  
   
   
   
     
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_5">
-          Modules
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Modules" data-md-level="1">
-        <label class="md-nav__title" for="__nav_5">
-          <span class="md-nav__icon md-icon"></span>
-          Modules
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
           
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Modules
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Modules
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../extras/bom/" class="md-nav__link">
-        BOM
+        
+  
+  <span class="md-ellipsis">
+    BOM
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../extras/admin-rest/" class="md-nav__link">
-        Admin REST
+        
+  
+  <span class="md-ellipsis">
+    Admin REST
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../extras/lifecycle-annotations/" class="md-nav__link">
-        Lifecycle annotations
+        
+  
+  <span class="md-ellipsis">
+    Lifecycle annotations
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../extras/eventbus/" class="md-nav__link">
-        Guava EventBus
+        
+  
+  <span class="md-ellipsis">
+    Guava EventBus
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../extras/jdbi3/" class="md-nav__link">
-        JDBI3
+        
+  
+  <span class="md-ellipsis">
+    JDBI3
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../extras/spa/" class="md-nav__link">
-        SPA
+        
+  
+  <span class="md-ellipsis">
+    SPA
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../extras/gsp/" class="md-nav__link">
-        Server Pages
+        
+  
+  <span class="md-ellipsis">
+    Server Pages
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../extras/validation/" class="md-nav__link">
-        Validation
+        
+  
+  <span class="md-ellipsis">
+    Validation
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
+  
   
   
   
     
+    
+    
+      
+      
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
-      
-      
-      
-      
-        <label class="md-nav__link" for="__nav_6">
-          Examples
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="Examples" data-md-level="1">
-        <label class="md-nav__title" for="__nav_6">
-          <span class="md-nav__icon md-icon"></span>
-          Examples
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
           
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Examples
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Examples
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/authentication/" class="md-nav__link">
-        Authentication
+        
+  
+  <span class="md-ellipsis">
+    Authentication
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/governator/" class="md-nav__link">
-        Governator
+        
+  
+  <span class="md-ellipsis">
+    Governator
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/hibernate/" class="md-nav__link">
-        Hibernate
+        
+  
+  <span class="md-ellipsis">
+    Hibernate
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/eventbus/" class="md-nav__link">
-        EventBus
+        
+  
+  <span class="md-ellipsis">
+    EventBus
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../../examples/jdbi3/" class="md-nav__link">
-        JDBI3
+        
+  
+  <span class="md-ellipsis">
+    JDBI3
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
     
       
       
-      
-
   
   
     
   
   
+  
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+    
+      
+        
+        
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
-      
-      
-      
-        <label class="md-nav__link" for="__nav_7">
-          About
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <nav class="md-nav" aria-label="About" data-md-level="1">
-        <label class="md-nav__title" for="__nav_7">
-          <span class="md-nav__icon md-icon"></span>
-          About
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
           
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
+                
   
   
     
+  
   
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
         
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Release notes
+          
+  
+  <span class="md-ellipsis">
+    Release notes
+  </span>
+  
+
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Release notes
+        
+  
+  <span class="md-ellipsis">
+    Release notes
+  </span>
+  
+
       </a>
       
         
@@ -1729,14 +2392,18 @@
       
         <li class="md-nav__item">
   <a href="#qualified-configuration-bindings" class="md-nav__link">
-    Qualified configuration bindings
+    <span class="md-ellipsis">
+      Qualified configuration bindings
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#test-improvements" class="md-nav__link">
-    Test improvements
+    <span class="md-ellipsis">
+      Test improvements
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Test improvements">
@@ -1744,14 +2411,18 @@
         
           <li class="md-nav__item">
   <a href="#dropwizardtestsupport-and-clientsupport-objects-availability" class="md-nav__link">
-    DropwizardTestSupport and ClientSupport objects availability
+    <span class="md-ellipsis">
+      DropwizardTestSupport and ClientSupport objects availability
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#web-client-improvements-clientsupport" class="md-nav__link">
-    Web client improvements (ClientSupport)
+    <span class="md-ellipsis">
+      Web client improvements (ClientSupport)
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Web client improvements (ClientSupport)">
@@ -1759,21 +2430,27 @@
         
           <li class="md-nav__item">
   <a href="#simple-methods" class="md-nav__link">
-    Simple methods
+    <span class="md-ellipsis">
+      Simple methods
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#default-client" class="md-nav__link">
-    Default client
+    <span class="md-ellipsis">
+      Default client
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#custom-client-factory" class="md-nav__link">
-    Custom client factory
+    <span class="md-ellipsis">
+      Custom client factory
+    </span>
   </a>
   
 </li>
@@ -1785,7 +2462,9 @@
         
           <li class="md-nav__item">
   <a href="#improve-generic-testing" class="md-nav__link">
-    Improve generic testing
+    <span class="md-ellipsis">
+      Improve generic testing
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Improve generic testing">
@@ -1793,21 +2472,27 @@
         
           <li class="md-nav__item">
   <a href="#generic-run-builder" class="md-nav__link">
-    Generic run builder
+    <span class="md-ellipsis">
+      Generic run builder
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#run-methods-improvements" class="md-nav__link">
-    Run methods improvements
+    <span class="md-ellipsis">
+      Run methods improvements
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#capture-console-output" class="md-nav__link">
-    Capture console output
+    <span class="md-ellipsis">
+      Capture console output
+    </span>
   </a>
   
 </li>
@@ -1819,7 +2504,9 @@
         
           <li class="md-nav__item">
   <a href="#support-commands-testing" class="md-nav__link">
-    Support commands testing
+    <span class="md-ellipsis">
+      Support commands testing
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Support commands testing">
@@ -1827,28 +2514,36 @@
         
           <li class="md-nav__item">
   <a href="#io" class="md-nav__link">
-    IO
+    <span class="md-ellipsis">
+      IO
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#configuration" class="md-nav__link">
-    Configuration
+    <span class="md-ellipsis">
+      Configuration
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#listener" class="md-nav__link">
-    Listener
+    <span class="md-ellipsis">
+      Listener
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#test-application-startup-fail" class="md-nav__link">
-    Test application startup fail
+    <span class="md-ellipsis">
+      Test application startup fail
+    </span>
   </a>
   
 </li>
@@ -1870,80 +2565,116 @@
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../compatibility/" class="md-nav__link">
-        Compatibility
+        
+  
+  <span class="md-ellipsis">
+    Compatibility
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../migration/" class="md-nav__link">
-        Migration guide
+        
+  
+  <span class="md-ellipsis">
+    Migration guide
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../history/" class="md-nav__link">
-        Version history
+        
+  
+  <span class="md-ellipsis">
+    Version history
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../support/" class="md-nav__link">
-        Support
+        
+  
+  <span class="md-ellipsis">
+    Support
+  </span>
+  
+
       </a>
     </li>
   
 
-            
-          
+              
             
               
+                
+  
   
   
   
     <li class="md-nav__item">
       <a href="../license/" class="md-nav__link">
-        License
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
       </a>
     </li>
   
 
+              
             
-          
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1976,14 +2707,18 @@
       
         <li class="md-nav__item">
   <a href="#qualified-configuration-bindings" class="md-nav__link">
-    Qualified configuration bindings
+    <span class="md-ellipsis">
+      Qualified configuration bindings
+    </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#test-improvements" class="md-nav__link">
-    Test improvements
+    <span class="md-ellipsis">
+      Test improvements
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Test improvements">
@@ -1991,14 +2726,18 @@
         
           <li class="md-nav__item">
   <a href="#dropwizardtestsupport-and-clientsupport-objects-availability" class="md-nav__link">
-    DropwizardTestSupport and ClientSupport objects availability
+    <span class="md-ellipsis">
+      DropwizardTestSupport and ClientSupport objects availability
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#web-client-improvements-clientsupport" class="md-nav__link">
-    Web client improvements (ClientSupport)
+    <span class="md-ellipsis">
+      Web client improvements (ClientSupport)
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Web client improvements (ClientSupport)">
@@ -2006,21 +2745,27 @@
         
           <li class="md-nav__item">
   <a href="#simple-methods" class="md-nav__link">
-    Simple methods
+    <span class="md-ellipsis">
+      Simple methods
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#default-client" class="md-nav__link">
-    Default client
+    <span class="md-ellipsis">
+      Default client
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#custom-client-factory" class="md-nav__link">
-    Custom client factory
+    <span class="md-ellipsis">
+      Custom client factory
+    </span>
   </a>
   
 </li>
@@ -2032,7 +2777,9 @@
         
           <li class="md-nav__item">
   <a href="#improve-generic-testing" class="md-nav__link">
-    Improve generic testing
+    <span class="md-ellipsis">
+      Improve generic testing
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Improve generic testing">
@@ -2040,21 +2787,27 @@
         
           <li class="md-nav__item">
   <a href="#generic-run-builder" class="md-nav__link">
-    Generic run builder
+    <span class="md-ellipsis">
+      Generic run builder
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#run-methods-improvements" class="md-nav__link">
-    Run methods improvements
+    <span class="md-ellipsis">
+      Run methods improvements
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#capture-console-output" class="md-nav__link">
-    Capture console output
+    <span class="md-ellipsis">
+      Capture console output
+    </span>
   </a>
   
 </li>
@@ -2066,7 +2819,9 @@
         
           <li class="md-nav__item">
   <a href="#support-commands-testing" class="md-nav__link">
-    Support commands testing
+    <span class="md-ellipsis">
+      Support commands testing
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Support commands testing">
@@ -2074,28 +2829,36 @@
         
           <li class="md-nav__item">
   <a href="#io" class="md-nav__link">
-    IO
+    <span class="md-ellipsis">
+      IO
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#configuration" class="md-nav__link">
-    Configuration
+    <span class="md-ellipsis">
+      Configuration
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#listener" class="md-nav__link">
-    Listener
+    <span class="md-ellipsis">
+      Listener
+    </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#test-application-startup-fail" class="md-nav__link">
-    Test application startup fail
+    <span class="md-ellipsis">
+      Test application startup fail
+    </span>
   </a>
   
 </li>
@@ -2124,10 +2887,8 @@
                 
                   
 
-  <a href="https://github.com/xvik/dropwizard-guicey/edit/master/dropwizard-guicey/src/doc/docs/about/release-notes.md" title="Edit this page" class="md-content__button md-icon">
-    
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
-  </a>
+  
+  
 
 
 <h1 id="710-release-notes">7.1.0 Release Notes<a class="headerlink" href="#710-release-notes" title="Permanent link">&para;</a></h1>
@@ -2149,55 +2910,55 @@ qualifier annotation (guice or jakarta).</li>
 <li>Annotated fields with the same type and qualifier are bound aggregated with <code>Set</code></li>
 <li>Core dropwizard configuration objects could be bound with qualified overridden getter</li>
 </ol>
-<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyConfig</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Configuration</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyConfig</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Configuration</span><span class="w"> </span><span class="p">{</span>
 
-<span class="w">    </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;custom&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">prop1</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;custom&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">prop1</span><span class="p">;</span>
 
-<span class="w">    </span><span class="nd">@CustomQualifier</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">SubObj</span><span class="w"> </span><span class="n">obj1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SubObj</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@CustomQualifier</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">SubObj</span><span class="w"> </span><span class="n">obj1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SubObj</span><span class="p">();</span>
 
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getProp1</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">prop1</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getProp1</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">prop1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">SubObj</span><span class="w"> </span><span class="nf">getSubObj</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">obj1</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">SubObj</span><span class="w"> </span><span class="nf">getSubObj</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">obj1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;metrics&quot;</span><span class="p">)</span><span class="w">  </span><span class="c1">// dropwizard object bind</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Override</span><span class="w"></span>
-<span class="w">    </span><span class="n">MetricsFactory</span><span class="w"> </span><span class="nf">getMetricsFactory</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kd">super</span><span class="p">.</span><span class="na">getMetricsFactory</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;metrics&quot;</span><span class="p">)</span><span class="w">  </span><span class="c1">// dropwizard object bind</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="n">MetricsFactory</span><span class="w"> </span><span class="nf">getMetricsFactory</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kd">super</span><span class="p">.</span><span class="na">getMetricsFactory</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SubObj</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">prop2</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">prop3</span><span class="p">;</span><span class="w"></span>
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SubObj</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">prop2</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">prop3</span><span class="p">;</span>
 
-<span class="w">    </span><span class="c1">// aggregated binding (same type + qualifier)</span><span class="w"></span>
-<span class="w">    </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;sub-prop&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getProp2</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">prop2</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// aggregated binding (same type + qualifier)</span>
+<span class="w">    </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;sub-prop&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getProp2</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">prop2</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;sub-prop&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getProp3</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">prop3</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;sub-prop&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">getProp3</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">prop3</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="nd">@Retention</span><span class="p">(</span><span class="n">RetentionPolicy</span><span class="p">.</span><span class="na">RUNTIME</span><span class="p">)</span><span class="w"></span>
-<span class="nd">@Target</span><span class="p">({</span><span class="n">ElementType</span><span class="p">.</span><span class="na">FIELD</span><span class="p">,</span><span class="w"> </span><span class="n">ElementType</span><span class="p">.</span><span class="na">PARAMETER</span><span class="p">,</span><span class="w"> </span><span class="n">ElementType</span><span class="p">.</span><span class="na">METHOD</span><span class="p">})</span><span class="w"></span>
-<span class="nd">@BindingAnnotation</span><span class="w"></span>
-<span class="kd">public</span><span class="w"> </span><span class="nd">@interface</span><span class="w"> </span><span class="n">CustomQualifier</span><span class="w"> </span><span class="p">{}</span><span class="w"></span>
+<span class="nd">@Retention</span><span class="p">(</span><span class="n">RetentionPolicy</span><span class="p">.</span><span class="na">RUNTIME</span><span class="p">)</span>
+<span class="nd">@Target</span><span class="p">({</span><span class="n">ElementType</span><span class="p">.</span><span class="na">FIELD</span><span class="p">,</span><span class="w"> </span><span class="n">ElementType</span><span class="p">.</span><span class="na">PARAMETER</span><span class="p">,</span><span class="w"> </span><span class="n">ElementType</span><span class="p">.</span><span class="na">METHOD</span><span class="p">})</span>
+<span class="nd">@BindingAnnotation</span>
+<span class="kd">public</span><span class="w"> </span><span class="nd">@interface</span><span class="w"> </span><span class="n">CustomQualifier</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div>
 <p>The following injections would be available:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span><span class="w"> </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;custom&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">prop1</span><span class="p">;</span><span class="w"></span>
-<span class="nd">@Inject</span><span class="w"> </span><span class="nd">@CustomQualifier</span><span class="w"> </span><span class="n">SubObj</span><span class="w"> </span><span class="n">obj1</span><span class="p">;</span><span class="w"></span>
-<span class="nd">@Inject</span><span class="w"> </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;sub-prop&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">prop23</span><span class="p">;</span><span class="w"></span>
-<span class="nd">@Inject</span><span class="w"> </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;metrics&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">MetricsFactory</span><span class="w"> </span><span class="n">metricsFactyry</span><span class="p">;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nd">@Inject</span><span class="w"> </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;custom&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">prop1</span><span class="p">;</span>
+<span class="nd">@Inject</span><span class="w"> </span><span class="nd">@CustomQualifier</span><span class="w"> </span><span class="n">SubObj</span><span class="w"> </span><span class="n">obj1</span><span class="p">;</span>
+<span class="nd">@Inject</span><span class="w"> </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;sub-prop&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">prop23</span><span class="p">;</span>
+<span class="nd">@Inject</span><span class="w"> </span><span class="nd">@Named</span><span class="p">(</span><span class="s">&quot;metrics&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">MetricsFactory</span><span class="w"> </span><span class="n">metricsFactyry</span><span class="p">;</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2205,8 +2966,8 @@ qualifier annotation (guice or jakarta).</li>
 so don't expect more complex grouping (for example, by some base class). </p>
 </div>
 <p>Configuration bindings report:</p>
-<div class="highlight"><pre><span></span><code><span class="n">GuiceBundle</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">printCustomConfigurationBindings</span><span class="p">()</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">GuiceBundle</span><span class="p">.</span><span class="na">builder</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="na">printCustomConfigurationBindings</span><span class="p">()</span>
 </code></pre></div>
 <p>Would show qualified bindings (with source property names in braces):</p>
 <div class="highlight"><pre><span></span><code>    Qualified bindings:
@@ -2233,36 +2994,36 @@ so don't expect more complex grouping (for example, by some base class). </p>
 <h3 id="dropwizardtestsupport-and-clientsupport-objects-availability">DropwizardTestSupport and ClientSupport objects availability<a class="headerlink" href="#dropwizardtestsupport-and-clientsupport-objects-availability" title="Permanent link">&para;</a></h3>
 <p>In junit 5 and spock 2 <code>DropwizardTestSupport</code> object could now be injected as test parameter 
 (or constructor, or lifecycle method parameter):</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Test</span><span class="w"></span>
-<span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testSomething</span><span class="p">(</span><span class="n">DropwizardTestSupport</span><span class="w"> </span><span class="n">support</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testSomething</span><span class="p">(</span><span class="n">DropwizardTestSupport</span><span class="w"> </span><span class="n">support</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 
-<span class="p">}</span><span class="w"></span>
+<span class="p">}</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><code>GuiceyTestSupport extends DropwizardTestSupport</code> so this works for both web and core runs.</p>
 </div>
 <p>Also, context <code>DropwizardTestSupport</code> and <code>ClientSupport</code> objects now available statically (at the same thread):</p>
-<div class="highlight"><pre><span></span><code><span class="n">DropwizardTestSupport</span><span class="w"> </span><span class="n">support</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">getContext</span><span class="p">();</span><span class="w"></span>
-<span class="n">ClientSupport</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">getContextClient</span><span class="p">();</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">DropwizardTestSupport</span><span class="w"> </span><span class="n">support</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">getContext</span><span class="p">();</span>
+<span class="n">ClientSupport</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">getContextClient</span><span class="p">();</span>
 </code></pre></div>
 <p>These static references would also work inside generic run callbacks, like:</p>
-<div class="highlight"><pre><span></span><code><span class="n">TestSupport</span><span class="p">.</span><span class="na">runCoreApp</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">injector</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">DropwizardTestSupport</span><span class="w"> </span><span class="n">support</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">getContext</span><span class="p">();</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">TestSupport</span><span class="p">.</span><span class="na">runCoreApp</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">injector</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">DropwizardTestSupport</span><span class="w"> </span><span class="n">support</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">getContext</span><span class="p">();</span>
+<span class="p">});</span>
 </code></pre></div>
 <p>(works for all <code>TestSupport.run*</code> methods)</p>
 <h3 id="web-client-improvements-clientsupport">Web client improvements (ClientSupport)<a class="headerlink" href="#web-client-improvements-clientsupport" title="Permanent link">&para;</a></h3>
 <h4 id="simple-methods">Simple methods<a class="headerlink" href="#simple-methods" title="Permanent link">&para;</a></h4>
 <p>The client now contains simple GET/POST/PUT/DELETE methods for simple cases:</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@Test</span><span class="w"></span>
-<span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testWeb</span><span class="p">(</span><span class="n">ClientSupport</span><span class="w"> </span><span class="n">client</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// get with result</span><span class="w"></span>
-<span class="w">    </span><span class="n">Result</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&quot;rest/sample&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nd">@Test</span>
+<span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">testWeb</span><span class="p">(</span><span class="n">ClientSupport</span><span class="w"> </span><span class="n">client</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// get with result</span>
+<span class="w">    </span><span class="n">Result</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&quot;rest/sample&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Result</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
 
-<span class="w">    </span><span class="c1">// post without result (void)</span><span class="w"></span>
-<span class="w">    </span><span class="n">client</span><span class="p">.</span><span class="na">post</span><span class="p">(</span><span class="s">&quot;rest/action&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PostObject</span><span class="p">(),</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// post without result (void)</span>
+<span class="w">    </span><span class="n">client</span><span class="p">.</span><span class="na">post</span><span class="p">(</span><span class="s">&quot;rest/action&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">PostObject</span><span class="p">(),</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>All methods:</p>
 <ol>
@@ -2302,13 +3063,13 @@ actions visibility (logging might not be configured in tests).</p>
 }----------------------------------------------------------
 </code></pre></div>
 <p>Console output might be disabled with a system proprty:</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// shortcut sets DefaultTestClientFactory.USE_LOGGER property</span><span class="w"></span>
-<span class="n">DefaultTestClientFactory</span><span class="p">.</span><span class="na">disableConsoleLog</span><span class="p">()</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="c1">// shortcut sets DefaultTestClientFactory.USE_LOGGER property</span>
+<span class="n">DefaultTestClientFactory</span><span class="p">.</span><span class="na">disableConsoleLog</span><span class="p">()</span>
 </code></pre></div>
 <p>With it, everything would be logged into <code>ClientSupport</code> logger under INFO
 (most likely, would be invisible in the most logger configurations, but could be enabled).</p>
 <p>To reset property (and get logs back into console) use:</p>
-<div class="highlight"><pre><span></span><code><span class="n">DefaultTestClientFactory</span><span class="p">.</span><span class="na">enableConsoleLog</span><span class="p">()</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">DefaultTestClientFactory</span><span class="p">.</span><span class="na">enableConsoleLog</span><span class="p">()</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2318,25 +3079,25 @@ the default client factory feature. You might use a completely different factory
 <h4 id="custom-client-factory">Custom client factory<a class="headerlink" href="#custom-client-factory" title="Permanent link">&para;</a></h4>
 <p><code>JerseyClient</code> used in <code>ClientSupport</code> could be customized now using <code>TestClientFactory</code> implementation.</p>
 <p>Simple factory example:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SimpleTestClientFactory</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">TestClientFactory</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">SimpleTestClientFactory</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">TestClientFactory</span><span class="w"> </span><span class="p">{</span>
 
-<span class="w">    </span><span class="nd">@Override</span><span class="w"></span>
-<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">JerseyClient</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">DropwizardTestSupport</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">support</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JerseyClientBuilder</span><span class="p">()</span><span class="w"></span>
-<span class="w">                </span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">JacksonFeature</span><span class="p">(</span><span class="n">support</span><span class="p">.</span><span class="na">getEnvironment</span><span class="p">().</span><span class="na">getObjectMapper</span><span class="p">()))</span><span class="w"></span>
-<span class="w">                </span><span class="p">.</span><span class="na">property</span><span class="p">(</span><span class="n">ClientProperties</span><span class="p">.</span><span class="na">CONNECT_TIMEOUT</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span><span class="w"></span>
-<span class="w">                </span><span class="p">.</span><span class="na">property</span><span class="p">(</span><span class="n">ClientProperties</span><span class="p">.</span><span class="na">READ_TIMEOUT</span><span class="p">,</span><span class="w"> </span><span class="mi">5000</span><span class="p">)</span><span class="w"></span>
-<span class="w">                </span><span class="p">.</span><span class="na">property</span><span class="p">(</span><span class="n">HttpUrlConnectorProvider</span><span class="p">.</span><span class="na">SET_METHOD_WORKAROUND</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"></span>
-<span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="n">JerseyClient</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">DropwizardTestSupport</span><span class="o">&lt;?&gt;</span><span class="w"> </span><span class="n">support</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JerseyClientBuilder</span><span class="p">()</span>
+<span class="w">                </span><span class="p">.</span><span class="na">register</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">JacksonFeature</span><span class="p">(</span><span class="n">support</span><span class="p">.</span><span class="na">getEnvironment</span><span class="p">().</span><span class="na">getObjectMapper</span><span class="p">()))</span>
+<span class="w">                </span><span class="p">.</span><span class="na">property</span><span class="p">(</span><span class="n">ClientProperties</span><span class="p">.</span><span class="na">CONNECT_TIMEOUT</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">property</span><span class="p">(</span><span class="n">ClientProperties</span><span class="p">.</span><span class="na">READ_TIMEOUT</span><span class="p">,</span><span class="w"> </span><span class="mi">5000</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">property</span><span class="p">(</span><span class="n">HttpUrlConnectorProvider</span><span class="p">.</span><span class="na">SET_METHOD_WORKAROUND</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+<span class="w">                </span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>See <code>DefaultTestClientFactory</code> implementation (it's a bit more complex)</p>
 </div>
 <p>Custom factory could be specified directly in test annotation (junit 5, spock 2):</p>
-<div class="highlight"><pre><span></span><code><span class="nd">@TestDropwizardApp</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MyApp</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">clientFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CustomTestClientFactory</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nd">@TestDropwizardApp</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MyApp</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">clientFactory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CustomTestClientFactory</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
 </code></pre></div>
 <p>All other builders also support client factory as an optional parameter.</p>
 <h3 id="improve-generic-testing">Improve generic testing<a class="headerlink" href="#improve-generic-testing" title="Permanent link">&para;</a></h3>
@@ -2344,30 +3105,30 @@ the default client factory feature. You might use a completely different factory
 <p>Generic builder was added to simplify application testing without test framework.
 It supports almost everything as junit 5 extensions.</p>
 <p>Example:</p>
-<div class="highlight"><pre><span></span><code><span class="n">RunResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">build</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">config</span><span class="p">(</span><span class="s">&quot;src/test/resources/path/to/test/config.yml&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">configOverrides</span><span class="p">(</span><span class="s">&quot;foo: 2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar: 12&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">hooks</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MyHook</span><span class="p">())</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">runCore</span><span class="p">()</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">RunResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">build</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">config</span><span class="p">(</span><span class="s">&quot;src/test/resources/path/to/test/config.yml&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">configOverrides</span><span class="p">(</span><span class="s">&quot;foo: 2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar: 12&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">hooks</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MyHook</span><span class="p">())</span>
+<span class="w">        </span><span class="p">.</span><span class="na">runCore</span><span class="p">()</span>
 </code></pre></div>
 <p>or with action:</p>
-<div class="highlight"><pre><span></span><code><span class="n">Object</span><span class="w"> </span><span class="n">serviceValue</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">build</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">config</span><span class="p">(</span><span class="s">&quot;src/test/resources/path/to/test/config.yml&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">configOverrides</span><span class="p">(</span><span class="s">&quot;foo: 2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar: 12&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">hooks</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MyHook</span><span class="p">())</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">runWeb</span><span class="p">(</span><span class="n">injector</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">injector</span><span class="p">.</span><span class="na">getInstance</span><span class="p">(</span><span class="n">FooService</span><span class="p">.</span><span class="na">class</span><span class="p">).</span><span class="na">getSomething</span><span class="p">();</span><span class="w"></span>
-<span class="w">        </span><span class="p">})</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">Object</span><span class="w"> </span><span class="n">serviceValue</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">build</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">config</span><span class="p">(</span><span class="s">&quot;src/test/resources/path/to/test/config.yml&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">configOverrides</span><span class="p">(</span><span class="s">&quot;foo: 2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar: 12&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">hooks</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">MyHook</span><span class="p">())</span>
+<span class="w">        </span><span class="p">.</span><span class="na">runWeb</span><span class="p">(</span><span class="n">injector</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">injector</span><span class="p">.</span><span class="na">getInstance</span><span class="p">(</span><span class="n">FooService</span><span class="p">.</span><span class="na">class</span><span class="p">).</span><span class="na">getSomething</span><span class="p">();</span>
+<span class="w">        </span><span class="p">})</span>
 </code></pre></div>
 <p>Builder provide simple listener support to simplify setup and cleanup logic (without test framework):</p>
-<div class="highlight"><pre><span></span><code><span class="n">TestSupport</span><span class="p">.</span><span class="na">build</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">listen</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">TestSupportBuilder</span><span class="p">.</span><span class="na">TestListener</span><span class="o">&lt;&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">DropwizardTestSupport</span><span class="o">&lt;</span><span class="n">C</span><span class="o">&gt;</span><span class="w"> </span><span class="n">support</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">                </span><span class="c1">// do before test</span><span class="w"></span>
-<span class="w">            </span><span class="p">}</span><span class="w"></span>
-<span class="w">            </span><span class="p">...</span><span class="w"></span>
-<span class="w">        </span><span class="p">})</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">runCore</span><span class="p">();</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">TestSupport</span><span class="p">.</span><span class="na">build</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">listen</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">TestSupportBuilder</span><span class="p">.</span><span class="na">TestListener</span><span class="o">&lt;&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="kd">final</span><span class="w"> </span><span class="n">DropwizardTestSupport</span><span class="o">&lt;</span><span class="n">C</span><span class="o">&gt;</span><span class="w"> </span><span class="n">support</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// do before test</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="p">...</span>
+<span class="w">        </span><span class="p">})</span>
+<span class="w">        </span><span class="p">.</span><span class="na">runCore</span><span class="p">();</span>
 </code></pre></div>
 <p>All listener methods are default so only required methods could be overridden.</p>
 <p><code>TestSupport</code> <code>run*</code> and "create" methods (<code>coreApp</code>, <code>webApp</code>) are powered now
@@ -2376,33 +3137,33 @@ with a new builder (and so many of them support string config overrides as param
 <p>Extra <code>run*</code> methods added for simple cases (the same could be achieved with a new builder).</p>
 <p>Void methods now return <code>RunResult</code> object containing <code>DropwizardTestSupport</code> object and <code>Injector</code> -
 everything that could be required for assertions after application run:</p>
-<div class="highlight"><pre><span></span><code><span class="n">RunResult</span><span class="o">&lt;</span><span class="n">MyConfig</span><span class="o">&gt;</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">runCoreApp</span><span class="p">(</span><span class="n">MyApp</span><span class="p">.</span><span class="na">class</span><span class="p">);</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">RunResult</span><span class="o">&lt;</span><span class="n">MyConfig</span><span class="o">&gt;</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">runCoreApp</span><span class="p">(</span><span class="n">MyApp</span><span class="p">.</span><span class="na">class</span><span class="p">);</span>
 
-<span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">res</span><span class="p">.</span><span class="na">getConfiguration</span><span class="p">().</span><span class="na">foo</span><span class="p">);</span><span class="w"></span>
+<span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">res</span><span class="p">.</span><span class="na">getConfiguration</span><span class="p">().</span><span class="na">foo</span><span class="p">);</span>
 </code></pre></div>
 <p>Shortcut methods with config overrides:</p>
-<div class="highlight"><pre><span></span><code><span class="n">RunResult</span><span class="o">&lt;</span><span class="n">MyConfig</span><span class="o">&gt;</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">runCoreApp</span><span class="p">(</span><span class="n">MyApp</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;path/to/config.yml&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// could be null</span><span class="w"></span>
-<span class="w">        </span><span class="s">&quot;foo: 2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar: 11&quot;</span><span class="p">);</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">RunResult</span><span class="o">&lt;</span><span class="n">MyConfig</span><span class="o">&gt;</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">runCoreApp</span><span class="p">(</span><span class="n">MyApp</span><span class="p">.</span><span class="na">class</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;path/to/config.yml&quot;</span><span class="p">,</span><span class="w">  </span><span class="c1">// could be null</span>
+<span class="w">        </span><span class="s">&quot;foo: 2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bar: 11&quot;</span><span class="p">);</span>
 </code></pre></div>
 <h4 id="capture-console-output">Capture console output<a class="headerlink" href="#capture-console-output" title="Permanent link">&para;</a></h4>
 <p>There is now a utility to capture console output:</p>
-<div class="highlight"><pre><span></span><code><span class="n">String</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">captureOutput</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">String</span><span class="w"> </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">captureOutput</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
 
-<span class="w">    </span><span class="c1">// run application inside</span><span class="w"></span>
-<span class="w">    </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">runWebApp</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">injector</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">ClientSupport</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">getContextClient</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// run application inside</span>
+<span class="w">    </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">runWebApp</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">,</span><span class="w"> </span><span class="n">injector</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ClientSupport</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">getContextClient</span><span class="p">();</span>
 
-<span class="w">        </span><span class="c1">// call application api endpoint</span><span class="w"></span>
-<span class="w">        </span><span class="n">client</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&quot;sample/get&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="c1">// call application api endpoint</span>
+<span class="w">        </span><span class="n">client</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="s">&quot;sample/get&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
 
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">});</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">});</span>
 
-<span class="c1">// uses assert4j, test that client was called (just an example) </span><span class="w"></span>
-<span class="n">Assertions</span><span class="p">.</span><span class="na">assertThat</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">.</span><span class="na">contains</span><span class="p">(</span><span class="s">&quot;[Client action]---------------------------------------------{&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// uses assert4j, test that client was called (just an example) </span>
+<span class="n">Assertions</span><span class="p">.</span><span class="na">assertThat</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+<span class="w">    </span><span class="p">.</span><span class="na">contains</span><span class="p">(</span><span class="s">&quot;[Client action]---------------------------------------------{&quot;</span><span class="p">);</span>
 </code></pre></div>
 <p>Returned output contains both <code>System.out</code> and <code>System.err</code> - same as it would be seen in console.</p>
 <p>All output is also printed into console to simplify visual validation</p>
@@ -2420,10 +3181,10 @@ That's why command runner would include in the result all possible dropwizard ob
 created during execution (because it would be impossible to reference them after execution).</p>
 <p>New builder (very similar to application execution builder, described above) was added to 
 simplify commands execution:</p>
-<div class="highlight"><pre><span></span><code><span class="n">CommandResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;simple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-u&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;user&quot;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">CommandResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;simple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;-u&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;user&quot;</span><span class="p">)</span>
 
-<span class="n">Assertions</span><span class="p">.</span><span class="na">assertTrue</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="na">isSuccessful</span><span class="p">());</span><span class="w"></span>
+<span class="n">Assertions</span><span class="p">.</span><span class="na">assertTrue</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="na">isSuccessful</span><span class="p">());</span>
 </code></pre></div>
 <p>This runner could be used to run <em>any</em> command type (simple, configured, environment). 
 The type of command would define what objects would be present ofter the command execution
@@ -2433,13 +3194,13 @@ The type of command would define what objects would be present ofter the command
 <p>Such run never fails with an exception: any appeared exception would be 
 stored inside the response:</p>
 <div class="highlight"><pre><span></span><code><span class="n">Assertions</span><span class="p">.</span><span class="na">assertFalse</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="na">isSuccessful</span><span class="p">());</span><span class="w">  </span>
-<span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="s">&quot;Error message&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getException</span><span class="p">().</span><span class="na">getMessage</span><span class="p">());</span><span class="w"></span>
+<span class="n">Assertions</span><span class="p">.</span><span class="na">assertEquals</span><span class="p">(</span><span class="s">&quot;Error message&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getException</span><span class="p">().</span><span class="na">getMessage</span><span class="p">());</span>
 </code></pre></div>
 </div>
 <h4 id="io">IO<a class="headerlink" href="#io" title="Permanent link">&para;</a></h4>
 <p>Runner use System.in/err/out replacement. All output is intercepted and could be
 asserted:</p>
-<div class="highlight"><pre><span></span><code><span class="n">Assertions</span><span class="p">.</span><span class="na">assertTrue</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="na">getOutput</span><span class="p">().</span><span class="na">contains</span><span class="p">(</span><span class="s">&quot;some text&quot;</span><span class="p">))</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">Assertions</span><span class="p">.</span><span class="na">assertTrue</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="na">getOutput</span><span class="p">().</span><span class="na">contains</span><span class="p">(</span><span class="s">&quot;some text&quot;</span><span class="p">))</span>
 </code></pre></div>
 <p><code>result.getOutput()</code> contains both <code>out</code> and <code>err</code> streams together
 (the same way as user would see it in console). Error output is also available
@@ -2450,9 +3211,9 @@ separately with <code>result.getErrorOutput()</code>.</p>
 (without additional actions)</p>
 </div>
 <p>Commands requiring user input could also be tested (with mocked input):</p>
-<div class="highlight"><pre><span></span><code><span class="n">CommandResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">consoleInputs</span><span class="p">(</span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;two&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;something else&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;quiz&quot;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">CommandResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">consoleInputs</span><span class="p">(</span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;two&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;something else&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;quiz&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>At least, the required number of answers must be provided (otherwise error would be thrown,
 indicating not enough inputs)</p>
@@ -2465,50 +3226,50 @@ For junit 5, such tests could be annotated with <a href="https://junit.org/junit
 <h4 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h4>
 <p>Configuration could be applied the same way as in run builder: direct configuration instance,
 file or (with) overrides:</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// override only</span><span class="w"></span>
-<span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">configOverride</span><span class="p">(</span><span class="s">&quot;foo: 12&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;cfg&quot;</span><span class="p">);</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="c1">// override only</span>
+<span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">configOverride</span><span class="p">(</span><span class="s">&quot;foo: 12&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;cfg&quot;</span><span class="p">);</span>
 
-<span class="c1">// file with overrides</span><span class="w"></span>
-<span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">config</span><span class="p">(</span><span class="s">&quot;src/test/resources/path/to/config.yml&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">configOverride</span><span class="p">(</span><span class="s">&quot;foo: 12&quot;</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;cfg&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// file with overrides</span>
+<span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">config</span><span class="p">(</span><span class="s">&quot;src/test/resources/path/to/config.yml&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">configOverride</span><span class="p">(</span><span class="s">&quot;foo: 12&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;cfg&quot;</span><span class="p">);</span>
 
-<span class="c1">// direct config object</span><span class="w"></span>
+<span class="c1">// direct config object</span>
 <span class="n">MyConfig</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MyConfig</span><span class="p">();</span><span class="w">         </span>
-<span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;cfg&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;cfg&quot;</span><span class="p">);</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Config file should not be specified in command itself - builder would add it, if required.<br />
 But still, it would not be a mistake to use config file directly in command:</p>
-<div class="highlight"><pre><span></span><code><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// note .config(&quot;...&quot;) was not used (otherwise two files would appear)!</span><span class="w"></span>
-<span class="w">    </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;cfg&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path/to/config.yml&quot;</span><span class="p">);</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">    </span><span class="c1">// note .config(&quot;...&quot;) was not used (otherwise two files would appear)!</span>
+<span class="w">    </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;cfg&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;path/to/config.yml&quot;</span><span class="p">);</span>
 </code></pre></div>
 <p>Using builder for config file configuration assumed to be a preferred way.</p>
 </div>
 <h4 id="listener">Listener<a class="headerlink" href="#listener" title="Permanent link">&para;</a></h4>
 <p>There is a simple listener support (like in application run builder) for setup-cleanup actions:</p>
-<div class="highlight"><pre><span></span><code><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">listen</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">CommandRunBuilder</span><span class="p">.</span><span class="na">CommandListener</span><span class="o">&lt;&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">            </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="n">CommandResult</span><span class="o">&lt;</span><span class="n">TestConfiguration</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">        </span><span class="p">})</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;cmd&quot;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">listen</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">CommandRunBuilder</span><span class="p">.</span><span class="na">CommandListener</span><span class="o">&lt;&gt;</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">            </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="n">CommandResult</span><span class="o">&lt;</span><span class="n">TestConfiguration</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="p">})</span>
+<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;cmd&quot;</span><span class="p">)</span>
 </code></pre></div>
 <h4 id="test-application-startup-fail">Test application startup fail<a class="headerlink" href="#test-application-startup-fail" title="Permanent link">&para;</a></h4>
 <p>Command runner could also be used for application startup fail tests:</p>
-<div class="highlight"><pre><span></span><code><span class="n">CommandResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;server&quot;</span><span class="p">)</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">CommandResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="s">&quot;server&quot;</span><span class="p">)</span>
 </code></pre></div>
 <p>or with the shortcut:</p>
-<div class="highlight"><pre><span></span><code><span class="n">CommandResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span><span class="w"></span>
-<span class="w">        </span><span class="p">.</span><span class="na">runApp</span><span class="p">()</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="n">CommandResult</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TestSupport</span><span class="p">.</span><span class="na">buildCommandRunner</span><span class="p">(</span><span class="n">App</span><span class="p">.</span><span class="na">class</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="na">runApp</span><span class="p">()</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2517,6 +3278,13 @@ by throwing exception (resulting object would contain it), so such test would ne
 </div>
 <p>No additional mocks or extensions required because running like this would not cause
 <code>System.exist(1)</code> call, performed in <code>Application</code> class (see <code>Application.onFatalError</code>).</p>
+
+
+
+
+
+
+
 
 
   
@@ -2529,52 +3297,18 @@ by throwing exception (resulting object would contain it), so such test would ne
             </div>
           
           
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
-          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
-            Back to top
-          </a>
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
         
       </main>
       
         <footer class="md-footer">
-  
-    
-    <nav class="md-footer__inner md-grid" aria-label="Footer" >
-      
-        
-        <a href="../../examples/jdbi3/" class="md-footer__link md-footer__link--prev" aria-label="Previous: JDBI3" rel="prev">
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
-          </div>
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              JDBI3
-            </div>
-          </div>
-        </a>
-      
-      
-        
-        <a href="../compatibility/" class="md-footer__link md-footer__link--next" aria-label="Next: Compatibility" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Compatibility
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
-          </div>
-        </a>
-      
-    </nav>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -2596,11 +3330,13 @@ by throwing exception (resulting object would contain it), so such test would ne
   
     
     
+    
+    
       
       
     
     <a href="https://github.com/xvik" target="_blank" rel="noopener" title="github.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
     </a>
   
 </div>
@@ -2614,10 +3350,11 @@ by throwing exception (resulting object would contain it), so such test would ne
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.top"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tracking", "navigation.top"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.8492ddcf.min.js"></script>
+      <script src="../../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
     
   </body>
