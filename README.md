@@ -31,7 +31,7 @@ Features:
 
 ### Sponsors
 
-&nbsp;&nbsp;&nbsp;&nbsp;[![Channel](dropwizard-guicey/src/doc/docs/img/sponsors/zoyi-ch.png)](https://channel.io "Channel")
+&nbsp;&nbsp;&nbsp;&nbsp;[![Channel](dropwizard-guicey/src/doc/docs/img/sponsors/channel.png)](https://channel.io "Channel")
 
   
 <sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>

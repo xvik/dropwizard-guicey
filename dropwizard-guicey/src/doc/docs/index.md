@@ -25,7 +25,7 @@
 
 ## Sponsors
 
-:   [![Channel](img/sponsors/zoyi-ch.png)](https://channel.io "Channel")
+:   [![Channel](img/sponsors/channel.png)](https://channel.io "Channel")
 
   
 <sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>
