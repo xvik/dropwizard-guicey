@@ -27,7 +27,7 @@ dependencies {
     testImplementation 'org.junit.platform:junit-platform-testkit'
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.6'
     testImplementation 'com.google.truth:truth:1.4.2'
-    testImplementation 'org.objenesis:objenesis:3.3'
+    testImplementation 'org.objenesis:objenesis:3.4'
 
     // required for pure junit 5 tests
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
