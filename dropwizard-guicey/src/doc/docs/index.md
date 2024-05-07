@@ -25,7 +25,7 @@
 
 ## Sponsors
 
-:   [![Channel Talk](img/sponsors/channel.png)](https://channel.io "Channel Talk")
+:   [![Channel Talk](img/sponsors/channel2.png)](https://channel.io "Channel Talk")
 
   
 <sup>If guicey makes your life easier, you can [support its development](https://www.patreon.com/guicey).</sup>
