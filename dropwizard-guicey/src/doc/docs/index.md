@@ -2,7 +2,7 @@
 
 !!! summary ""
     [Guice](https://github.com/google/guice) `{{ gradle.guice }}` integration for [dropwizard](http://dropwizard.io) `{{ gradle.dropwizard }}`.        
-    Compiled for `java 11`, compatible with `java 11 - 17`. 
+    Compiled for `java 11`, compatible with `java 11 - 21`. 
 
 **[Release Notes](about/release-notes.md)** - [History](about/history.md) - [Javadoc](https://javadoc.io/doc/ru.vyarus/dropwizard-guicey/) - [Support](about/support.md) - [License](about/license.md)       
 
