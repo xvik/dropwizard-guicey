@@ -856,7 +856,7 @@ application would be started before all test methods and shut down after last te
 If you want to start application *for each test method* then declare extension in non-static field:
 
 ```java
-RegisterExtension
+@RegisterExtension
 TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class).create()
 
 // injection would be re-newed for each test method
