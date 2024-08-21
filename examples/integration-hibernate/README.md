@@ -31,7 +31,7 @@
  
      @Override
      protected void configure() {
-         bind(SessionFactory.class).toInstance(hbnBundle.getSessionFactory());
+         bind(SessionFactory.class).toProvider(hbnBundle::getSessionFactory);
      }
  }
  ```
