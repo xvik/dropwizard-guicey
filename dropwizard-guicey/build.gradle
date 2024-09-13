@@ -51,11 +51,11 @@ maven.removeDependencyManagement()
 
 mkdocs {
     publish {
-        docPath = '6.2.3'
+        docPath = '6.2.4'
         rootRedirect = false
     }
     extras = [
-            'version': '6.2.3',
+            'version': '6.2.4',
             'dropwizard': rootProject.dropwizard,
             'guice': rootProject.guice
     ]
