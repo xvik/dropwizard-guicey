@@ -23,8 +23,7 @@ class BindingInstallationTest extends Specification {
         TestSupport.runCoreApp(App, 'src/test/resources/test-config.yml')
         then: "error"
         def ex = thrown(CreationException)
-        ex.getCause().getMessage()
-                .replace('java.base/jdk.internal', 'sun') == "JDBI repository BaseRepository can't be installed from binding: sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)"
+        ex.getCause().getMessage() == "JDBI repository BaseRepository can't be installed from binding: org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)"
     }
 
     static class App extends Application<SampleConfiguration> {

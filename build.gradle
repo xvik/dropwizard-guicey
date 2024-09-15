@@ -1,8 +1,8 @@
 plugins {
     id 'ru.vyarus.github-info' version '2.0.0' apply false
     id 'ru.vyarus.quality' version '5.0.0' apply false
-    id 'org.cyclonedx.bom' version '1.8.2' apply false
-    id 'ru.vyarus.mkdocs' version '3.0.0' apply false
+    id 'org.cyclonedx.bom' version '1.10.0' apply false
+    id 'ru.vyarus.mkdocs' version '4.0.1' apply false
 
     id 'jacoco'
     id 'java-platform'
@@ -180,7 +180,7 @@ subprojects {
         }
         dependencies {
             testImplementation 'ru.vyarus:spock-junit5'
-            testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+            testImplementation 'org.spockframework:spock-core:2.4-M2-groovy-4.0'
             testImplementation 'org.junit.jupiter:junit-jupiter-api'
         }
     } else {
