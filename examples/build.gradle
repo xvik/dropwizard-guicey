@@ -40,7 +40,7 @@ subprojects {
         implementation 'ru.vyarus:dropwizard-guicey'
 
         testImplementation 'ru.vyarus:spock-junit5:1.2.0'
-        testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+        testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
         testImplementation "io.dropwizard:dropwizard-testing"
         testImplementation 'org.junit.jupiter:junit-jupiter-api'
     }
