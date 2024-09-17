@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture
  * @since 18.08.2016
  */
 @TestDropwizardApp(AsyncRestApp)
+// todo FIXME - problem!! LOOK!!
 class AsyncResourceTest extends Specification {
 
     def "Check async resource"() {
@@ -38,7 +39,7 @@ class AsyncResourceTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(new AdminRestBundle("/api/*"))
+                    .bundles(new AdminRestBundle("/api/*").identifyAdminContextInRequestLogs())
                     .extensions(AsyncResource)
                     .build())
         }

@@ -47,16 +47,17 @@ class SimpleServerRenderTest extends Specification {
 
     MAIN /app
     ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                                     [REQUEST]       io.dropwizard.jersey.filter.AllowedMethodsFilter-11111111
+    ├── filter     /*                   async   ZipExceptionHandlingServletFilter (io.dropwizard.jetty)                              [REQUEST]       io.dropwizard.jetty.ZipExceptionHandlingServletFilter-11111111
     ├── filter     /*                   async   ThreadNameFilter             (i.d.servlets)                                          [REQUEST]       io.dropwizard.servlets.ThreadNameFilter-11111111
     ├── servlet    /rest/*              async   JerseyServletContainer       (i.d.jersey.setup)                                                      jersey
-    └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)                                                org.eclipse.jetty.servlet.ServletHandler\$Default404Servlet-11111111
+    └── servlet    /                    async   Default404Servlet            (o.e.j.e.s.ServletHandler)                                              org.eclipse.jetty.ee10.servlet.ServletHandler\$Default404Servlet-11111111
 
 
     ADMIN /admin
     ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                                     [REQUEST]       io.dropwizard.jersey.filter.AllowedMethodsFilter-11111111
     ├── servlet    /tasks/*             async   TaskServlet                  (i.d.servlets.tasks)                                                    tasks
     ├── servlet    /*                   async   AdminServlet                 (i.d.metrics.servlets)                                                  io.dropwizard.metrics.servlets.AdminServlet-11111111
-    └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)                                                org.eclipse.jetty.servlet.ServletHandler\$Default404Servlet-11111111
+    └── servlet    /                    async   Default404Servlet            (o.e.j.e.s.ServletHandler)                                              org.eclipse.jetty.ee10.servlet.ServletHandler\$Default404Servlet-11111111
 """ as String;
     }
 

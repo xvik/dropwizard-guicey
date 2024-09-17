@@ -53,6 +53,7 @@ class ConfiguredRenderTest extends Specification {
     ├── filter     /2/*                         --"--
     ├── filter     /*                   async   GuiceFilter                  (c.g.inject.servlet)                                    [REQUEST]       Guice Filter
     ├── filter     /*                   async   AllowedMethodsFilter         (i.d.jersey.filter)                                     [REQUEST]       io.dropwizard.jersey.filter.AllowedMethodsFilter-11111111
+    ├── filter     /*                   async   ZipExceptionHandlingServletFilter (io.dropwizard.jetty)                              [REQUEST]       io.dropwizard.jetty.ZipExceptionHandlingServletFilter-11111111
     ├── filter     /*                   async   ThreadNameFilter             (i.d.servlets)                                          [REQUEST]       io.dropwizard.servlets.ThreadNameFilter-11111111
     │
     ├── servlet    /foo                         MainServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    target
@@ -62,7 +63,7 @@ class ConfiguredRenderTest extends Specification {
     ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .both
     ├── servlet    /async               async   AsyncServlet                 (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .async
     ├── servlet    /*                   async   JerseyServletContainer       (i.d.jersey.setup)                                                      jersey
-    └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)                                                org.eclipse.jetty.servlet.ServletHandler\$Default404Servlet-11111111
+    └── servlet    /                    async   Default404Servlet            (o.e.j.e.s.ServletHandler)                                              org.eclipse.jetty.ee10.servlet.ServletHandler\$Default404Servlet-11111111
 
 
     ADMIN /
@@ -76,7 +77,7 @@ class ConfiguredRenderTest extends Specification {
     ├── servlet    /baradmin                    --"--
     ├── servlet    /both                        BothServlet                  (r.v.d.g.d.r.w.s.UserServletsBundle)                                    .both
     ├── servlet    /*                   async   AdminServlet                 (i.d.metrics.servlets)                                                  io.dropwizard.metrics.servlets.AdminServlet-11111111
-    └── servlet    /                    async   Default404Servlet            (o.e.j.s.ServletHandler)                                                org.eclipse.jetty.servlet.ServletHandler\$Default404Servlet-11111111
+    └── servlet    /                    async   Default404Servlet            (o.e.j.e.s.ServletHandler)                                              org.eclipse.jetty.ee10.servlet.ServletHandler\$Default404Servlet-11111111
 """ as String;
     }
 

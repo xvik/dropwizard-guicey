@@ -6,7 +6,6 @@ import io.dropwizard.core.Application
 import io.dropwizard.core.Configuration
 import io.dropwizard.jersey.filter.AllowedMethodsFilter
 import io.dropwizard.jetty.GzipHandlerFactory
-import io.dropwizard.jetty.ServerPushFilterFactory
 import io.dropwizard.logging.common.DefaultLoggingFactory
 import io.dropwizard.logging.common.LoggingFactory
 import io.dropwizard.metrics.common.MetricsFactory
@@ -104,20 +103,14 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.requestLog.appenders (List<AppenderFactory<IAccessEvent>> as ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
 [Configuration] server.responseMeteredLevel (ResponseMeteredLevel) = COARSE
 [Configuration] server.rootPath (Optional<String>) = Optional.empty
-[Configuration] server.serverPush (ServerPushFilterFactory) = io.dropwizard.jetty.ServerPushFilterFactory@1111111
-[Configuration] server.serverPush.associatePeriod (Duration) = 4 seconds
-[Configuration] server.serverPush.enabled (Boolean) = false
-[Configuration] server.serverPush.maxAssociations (Integer) = 16
-[Configuration] server.serverPush.refererHosts (List<String>) = null
-[Configuration] server.serverPush.refererPorts (List<Integer>) = null
 [Configuration] server.shutdownGracePeriod (Duration) = 30 seconds
 [Configuration] server.startsAsRoot (Boolean) = null
 [Configuration] server.uid (Integer) = null
 [Configuration] server.umask (String) = null
 [Configuration] server.user (String) = null"""
         res.rootTypes == [Configuration]
-        res.uniqueTypePaths.size() == 9
-        res.paths.size() == 67
+        res.uniqueTypePaths.size() == 8
+        res.paths.size() == 61
         check(res, "server", DefaultServerFactory)
         check(res, "server.maxThreads", Integer, 1024)
         check(res, "server.idleThreadTimeout", Duration, Duration.minutes(1))
@@ -132,8 +125,8 @@ class ConfigInspectorTest extends Specification {
 [SimpleConfig] foo (String) = null
 [SimpleConfig] prim (Integer) = 0"""
         res.rootTypes == [SimpleConfig, Configuration]
-        res.uniqueTypePaths.size() == 9
-        res.paths.size() == 70
+        res.uniqueTypePaths.size() == 8
+        res.paths.size() == 64
         check(res, "foo", String)
         check(res, "bar", Boolean)
         check(res, "prim", Integer)
@@ -144,8 +137,8 @@ class ConfigInspectorTest extends Specification {
         then: "Object remain as declared type"
         printConfig(res) == "[ObjectPropertyConfig] sub (Object) = null"
         res.rootTypes == [ObjectPropertyConfig, Configuration]
-        res.uniqueTypePaths.size() == 9
-        res.paths.size() == 68
+        res.uniqueTypePaths.size() == 8
+        res.paths.size() == 62
         check(res, "sub", Object)
         elt.isObjectDeclaration()
         elt.declaredType == Object
@@ -175,10 +168,10 @@ class ConfigInspectorTest extends Specification {
 [ComplexConfig] sub.two (ComplexConfig.Parametrized<String>) = null
 [ComplexConfig] sub.two.list (List<String>) = null"""
         res.rootTypes == [ComplexConfig, Iface, Configuration]
-        res.uniqueTypePaths.size() == 10
+        res.uniqueTypePaths.size() == 9
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.SubConfig } != null
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.Parametrized } == null
-        res.paths.size() == 73
+        res.paths.size() == 67
         check(res, "sub", ComplexConfig.SubConfig)
         check(res, "sub.sub", String)
         check(res, "sub.two", ComplexConfig.Parametrized, null, String)
@@ -243,7 +236,7 @@ class ConfigInspectorTest extends Specification {
         def res = ConfigTreeBuilder.build(bootstrap, create(NotUniqueSubConfig))
         then:
         res.getUniqueTypePaths().collect { it.getDeclaredType() } as Set ==
-                [ServerPushFilterFactory, LoggingFactory, ServerFactory, GzipHandlerFactory, MetricsFactory, RequestLogFactory,
+                [LoggingFactory, ServerFactory, GzipHandlerFactory, MetricsFactory, RequestLogFactory,
                  TaskConfiguration, AdminFactory, HealthCheckConfiguration] as Set
         res.findByPath("sub1").getDeclaredType() == NotUniqueSubConfig.SubConfig
         res.findByPath("sub1.sub").getDeclaredType() == String
@@ -264,7 +257,7 @@ class ConfigInspectorTest extends Specification {
         res = ConfigTreeBuilder.build(bootstrap, config)
         then:
         res.getUniqueTypePaths().collect { it.getDeclaredType() } as Set ==
-                [ComplexConfig.SubConfig, ServerPushFilterFactory, LoggingFactory, ServerFactory, GzipHandlerFactory, MetricsFactory, RequestLogFactory,
+                [ComplexConfig.SubConfig, LoggingFactory, ServerFactory, GzipHandlerFactory, MetricsFactory, RequestLogFactory,
                  TaskConfiguration, AdminFactory, HealthCheckConfiguration] as Set
         res.findByPath("sub").getDeclaredType() == ComplexConfig.SubConfig
         res.findByPath("sub.sub").getDeclaredType() == String

@@ -42,6 +42,7 @@ class FilterMarkerRenderTest extends Specification {
 
     Exception mappers
         Throwable                      ExceptionMapperBinder\$1      (i.d.core.setup)
+        Throwable                      DefaultExceptionMapper       (o.g.jersey.server)
         EofException                   EarlyEofExceptionMapper      (i.d.jersey.errors)
         EmptyOptionalException         EmptyOptionalExceptionMapper (i.d.jersey.optional)
         IOException                    ExMapper                     (r.v.d.g.d.r.j.FilterMarkerRenderTest) *only @FilterAnn

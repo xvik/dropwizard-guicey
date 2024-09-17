@@ -67,3 +67,32 @@ public String admin() {
 
 This (annotated) method will return 404 error when called from main context, but will function normally 
 when called from the admin context.
+
+#### Logs
+
+As admin servlet just redirects to the main context, then all admin rest requests would be logged like this
+
+```
+127.0.0.1 - - [17/Sep/2024:09:27:43 +0000] "GET /async HTTP/1.1" 200 5 "-" "Java/17.0.2" 342
+```
+
+If custom mapping path is used then admin requests could be identified easily:
+
+```
+127.0.0.1 - - [17/Sep/2024:09:27:43 +0000] "GET /api/async HTTP/1.1" 200 5 "-" "Java/17.0.2" 202
+```
+
+(here "/async" path showed under "/api" context, whereas in the main context it is mapped on root)
+
+If you need an additional identification, then enable it with `identifyAdminContextInRequestLogs`:
+
+```java
+GuiceBundle.builder()
+    .bundles(new AdminRestBundle().identifyAdminContextInRequestLogs());
+```
+
+With it all admin calls would have " (ADMIN REST)" identity appended to uri:
+
+```
+127.0.0.1 - - [17/Sep/2024:09:32:16 +0000] "GET /api/async (ADMIN REST) HTTP/1.1" 200 5 "-" "Java/17.0.2" 202
+```

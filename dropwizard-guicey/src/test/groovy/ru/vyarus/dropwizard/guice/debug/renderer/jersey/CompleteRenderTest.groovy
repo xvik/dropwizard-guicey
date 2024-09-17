@@ -39,6 +39,7 @@ class CompleteRenderTest extends Specification {
 
     Exception mappers
         Throwable                      ExceptionMapperBinder\$1      (i.d.core.setup)
+        Throwable                      DefaultExceptionMapper       (o.g.jersey.server)
         EofException                   EarlyEofExceptionMapper      (i.d.jersey.errors)
         EmptyOptionalException         EmptyOptionalExceptionMapper (i.d.jersey.optional)
         IOException                    GuiceExceptionMapper         (r.v.d.g.c.h.support)
@@ -66,6 +67,7 @@ class CompleteRenderTest extends Specification {
         byte[]                         ByteArrayProvider            (o.g.j.m.internal)                       [application/octet-stream, */*]
         DataSource                     DataSourceProvider           (o.g.j.m.internal)                       [application/octet-stream, */*]
         Document                       DocumentProvider             (o.g.j.jaxb.internal)                    [application/xml, text/xml, */*]
+        List<EntityPart>               EntityPartReader             (o.g.j.m.m.internal)                     [multipart/form-data]
         Enum                           EnumMessageProvider          (o.g.j.m.internal)                       [text/plain]
         File                           FileProvider                 (o.g.j.m.internal)                       [application/octet-stream, */*]
         MultivaluedMap<String, String> FormMultivaluedMapProvider   (o.g.j.m.internal)                       [application/x-www-form-urlencoded]
@@ -75,8 +77,11 @@ class CompleteRenderTest extends Specification {
         InputStream                    InputStreamProvider          (o.g.j.m.internal)                       [application/octet-stream, */*]
         Object                         JacksonJsonProvider          (c.f.j.j.rs.json)                        [*/*]
         Object                         JacksonMessageBodyProvider   (i.d.jersey.jackson)                     [*/*]
+        MultiPart                      MultiPartReaderServerSide    (o.g.j.m.m.internal)                     [multipart/*]
+        Path                           PathProvider                 (o.g.j.m.internal)                       [application/octet-stream, */*]
         Reader                         ReaderProvider               (o.g.j.m.internal)                       [text/plain, */*]
         RenderedImage                  RenderedImageProvider        (o.g.j.m.internal)                       [image/*, application/octet-stream]
+        EntityPart                     SingleEntityPartReader       (o.g.j.m.m.internal)
         DOMSource                      DomSourceReader              (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
         SAXSource                      SaxSourceReader              (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
         StreamSource                   StreamSourceReader           (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
@@ -100,6 +105,7 @@ class CompleteRenderTest extends Specification {
         ChunkedOutput<Object>          ChunkedResponseWriter        (o.g.jersey.server)
         DataSource                     DataSourceProvider           (o.g.j.m.internal)                       [application/octet-stream, */*]
         Document                       DocumentProvider             (o.g.j.jaxb.internal)                    [application/xml, text/xml, */*]
+        List<EntityPart>               EntityPartWriter             (o.g.j.m.m.internal)                     [multipart/form-data]
         Enum                           EnumMessageProvider          (o.g.j.m.internal)                       [text/plain]
         File                           FileProvider                 (o.g.j.m.internal)                       [application/octet-stream, */*]
         MultivaluedMap<String, String> FormMultivaluedMapProvider   (o.g.j.m.internal)                       [application/x-www-form-urlencoded]
@@ -109,13 +115,16 @@ class CompleteRenderTest extends Specification {
         InputStream                    InputStreamProvider          (o.g.j.m.internal)                       [application/octet-stream, */*]
         Object                         JacksonJsonProvider          (c.f.j.j.rs.json)                        [*/*]
         Object                         JacksonMessageBodyProvider   (i.d.jersey.jackson)                     [*/*]
+        MultiPart                      MultiPartWriter              (o.g.j.m.m.internal)                     [multipart/*]
         OptionalDouble                 OptionalDoubleMessageBodyWriter (i.d.jersey.optional)                 [*/*]
         OptionalInt                    OptionalIntMessageBodyWriter (i.d.jersey.optional)                    [*/*]
         OptionalLong                   OptionalLongMessageBodyWriter (i.d.jersey.optional)                   [*/*]
         Optional<Object>               OptionalMessageBodyWriter    (i.d.jersey.guava)                       [*/*]
         Optional<Object>               OptionalMessageBodyWriter    (i.d.jersey.optional)                    [*/*]
+        Path                           PathProvider                 (o.g.j.m.internal)                       [application/octet-stream, */*]
         Reader                         ReaderProvider               (o.g.j.m.internal)                       [text/plain, */*]
         RenderedImage                  RenderedImageProvider        (o.g.j.m.internal)                       [image/*]
+        EntityPart                     SingleEntityPartWriter       (o.g.j.m.m.internal)
         Source                         SourceWriter                 (o.g.j.m.i.SourceProvider)               [application/xml, text/xml, */*]
         StreamingOutput                StreamingOutputProvider      (o.g.j.m.internal)                       [application/octet-stream, */*]
         String                         StringMessageProvider        (o.g.j.m.internal)                       [text/plain, */*]
@@ -161,6 +170,7 @@ class CompleteRenderTest extends Specification {
         CookieParamValueParamProvider (o.g.j.s.i.inject)
         DelegatedInjectionValueParamProvider (o.g.j.s.i.inject)
         EntityParamValueParamProvider (o.g.j.s.i.inject)
+        FormDataParamValueParamProvider (o.g.j.m.m.internal)
         FormParamValueParamProvider  (o.g.j.s.i.inject)
         GuiceValueParamProvider      (r.v.d.g.c.h.support)
         HKValueParamProvider         (r.v.d.g.c.h.s.hk)         *jersey managed
@@ -184,6 +194,7 @@ class CompleteRenderTest extends Specification {
         @QueryParam                     ParamInjectionResolver       (o.g.j.s.i.inject)          using QueryParamValueParamProvider
         @Uri                            ParamInjectionResolver       (o.g.j.s.i.inject)          using WebTargetValueParamProvider
         @BeanParam                      ParamInjectionResolver       (o.g.j.s.i.inject)          using BeanParamValueParamProvider
+        @FormDataParam                  ParamInjectionResolver       (o.g.j.s.i.inject)          using FormDataParamValueParamProvider
 """ as String;
     }
 

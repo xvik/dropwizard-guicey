@@ -13,13 +13,13 @@ plugins {
 }
 
 wrapper {
-    gradleVersion = '8.6'
+    gradleVersion = '8.10.1'
 }
 
 description = 'Dropwizard guice integration'
 
 ext {
-    dropwizard = '4.0.8'
+    dropwizard = '5.0.0-alpha.2'
     guice = '7.0.0'
     hk2 = '3.0.6'
     spockJunit5 = '1.2.0'
@@ -116,7 +116,7 @@ subprojects {
     apply plugin: 'org.cyclonedx.bom'
 
     java {
-        sourceCompatibility = 11
+        sourceCompatibility = JavaVersion.VERSION_17
     }
 
     dependencies {
@@ -159,7 +159,7 @@ subprojects {
         }
         dependencies {
             testImplementation 'ru.vyarus:spock-junit5'
-            testImplementation 'org.spockframework:spock-core:2.4-M2-groovy-4.0'
+            testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
             testImplementation 'org.junit.jupiter:junit-jupiter-api'
         }
     } else {

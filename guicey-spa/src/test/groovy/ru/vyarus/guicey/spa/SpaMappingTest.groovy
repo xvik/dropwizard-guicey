@@ -78,7 +78,7 @@ class SpaMappingTest extends AbstractTest {
 
         when: "calling with empty type"
         res = client.targetMain('/some').request(" ").get()
-        then: "no redirect"
+        then: "empty response type not allowed"
         res.status == 404
 
     }

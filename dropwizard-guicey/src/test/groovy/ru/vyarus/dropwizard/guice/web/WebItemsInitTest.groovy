@@ -5,9 +5,9 @@ import io.dropwizard.core.Application
 import io.dropwizard.core.Configuration
 import io.dropwizard.core.setup.Bootstrap
 import io.dropwizard.core.setup.Environment
-import org.eclipse.jetty.servlet.FilterHolder
-import org.eclipse.jetty.servlet.FilterMapping
-import org.eclipse.jetty.servlet.ServletHolder
+import org.eclipse.jetty.ee10.servlet.FilterHolder
+import org.eclipse.jetty.ee10.servlet.FilterMapping
+import org.eclipse.jetty.ee10.servlet.ServletHolder
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.web.params.InitParamsFilter

@@ -78,9 +78,9 @@ class SpaRoutingTest extends AbstractTest {
         then: "no redirect"
         res.status == 404
 
-        when: "calling with empty type"
+        when: "calling with empty type not allowed"
         res = client.targetMain('/some').request(" ").get()
-        then: "no redirect"
+        then: "empty response type "
         res.status == 404
 
     }

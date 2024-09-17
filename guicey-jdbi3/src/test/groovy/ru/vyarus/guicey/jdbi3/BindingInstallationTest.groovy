@@ -23,7 +23,8 @@ class BindingInstallationTest extends Specification {
         TestSupport.runCoreApp(App, 'src/test/resources/test-config.yml')
         then: "error"
         def ex = thrown(CreationException)
-        ex.getCause().getMessage() == "JDBI repository BaseRepository can't be installed from binding: org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)"
+        ex.getCause().getMessage()
+                .startsWith("JDBI repository BaseRepository can't be installed from binding: ")
     }
 
     static class App extends Application<SampleConfiguration> {

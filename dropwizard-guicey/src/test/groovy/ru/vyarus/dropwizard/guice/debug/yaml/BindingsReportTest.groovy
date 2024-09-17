@@ -65,9 +65,6 @@ class BindingsReportTest extends Specification {
         Configuration.server.requestLog
             @Config RequestLogFactory<Object> (with actual type LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
 
-        Configuration.server.serverPush
-            @Config ServerPushFilterFactory = io.dropwizard.jetty.ServerPushFilterFactory@1111111
-
 
     Configuration paths bindings:
 
@@ -118,10 +115,6 @@ class BindingsReportTest extends Specification {
             @Config("server.requestLog.appenders") List<AppenderFactory<IAccessEvent>> (with actual type ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
             @Config("server.responseMeteredLevel") ResponseMeteredLevel = COARSE
             @Config("server.rootPath") Optional<String> = Optional.empty
-            @Config("server.serverPush") ServerPushFilterFactory = io.dropwizard.jetty.ServerPushFilterFactory@1111111
-            @Config("server.serverPush.associatePeriod") Duration = 4 seconds
-            @Config("server.serverPush.enabled") Boolean = false
-            @Config("server.serverPush.maxAssociations") Integer = 16
             @Config("server.shutdownGracePeriod") Duration = 30 seconds
 """
     }
@@ -211,15 +204,8 @@ class BindingsReportTest extends Specification {
         │   ├── minimumEntitySize: DataSize = 256 bytes
         │   └── syncFlush: Boolean = false
         │
-        ├── requestLog: LogbackAccessRequestLogFactory
-        │   └── appenders: ArrayList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
-        │
-        └── serverPush: ServerPushFilterFactory
-            ├── associatePeriod: Duration = 4 seconds
-            ├── enabled: Boolean = false
-            ├── maxAssociations: Integer = 16
-            ├── refererHosts: List<String> = null
-            └── refererPorts: List<Integer> = null
+        └── requestLog: LogbackAccessRequestLogFactory
+            └── appenders: ArrayList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
 
 
     Configuration object bindings:
@@ -255,9 +241,6 @@ class BindingsReportTest extends Specification {
 
         Configuration.server.requestLog
             @Config RequestLogFactory<Object> (with actual type LogbackAccessRequestLogFactory) = io.dropwizard.request.logging.LogbackAccessRequestLogFactory@1111111
-
-        Configuration.server.serverPush
-            @Config ServerPushFilterFactory = io.dropwizard.jetty.ServerPushFilterFactory@1111111
 
 
     Configuration paths bindings:
@@ -323,12 +306,6 @@ class BindingsReportTest extends Specification {
             @Config("server.requestLog.appenders") List<AppenderFactory<IAccessEvent>> (with actual type ArrayList<AppenderFactory<IAccessEvent>>) = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
             @Config("server.responseMeteredLevel") ResponseMeteredLevel = COARSE
             @Config("server.rootPath") Optional<String> = Optional.empty
-            @Config("server.serverPush") ServerPushFilterFactory = io.dropwizard.jetty.ServerPushFilterFactory@1111111
-            @Config("server.serverPush.associatePeriod") Duration = 4 seconds
-            @Config("server.serverPush.enabled") Boolean = false
-            @Config("server.serverPush.maxAssociations") Integer = 16
-            @Config("server.serverPush.refererHosts") List<String> = null
-            @Config("server.serverPush.refererPorts") List<Integer> = null
             @Config("server.shutdownGracePeriod") Duration = 30 seconds
             @Config("server.startsAsRoot") Boolean = null
             @Config("server.uid") Integer = null
@@ -445,13 +422,8 @@ class BindingsReportTest extends Specification {
         │   ├── minimumEntitySize: DataSize = 256 bytes
         │   └── syncFlush: Boolean = false
         │
-        ├── requestLog: LogbackAccessRequestLogFactory
-        │   └── appenders: ArrayList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
-        │
-        └── serverPush: ServerPushFilterFactory
-            ├── associatePeriod: Duration = 4 seconds
-            ├── enabled: Boolean = false
-            └── maxAssociations: Integer = 16
+        └── requestLog: LogbackAccessRequestLogFactory
+            └── appenders: ArrayList<AppenderFactory<IAccessEvent>> = [io.dropwizard.logging.common.ConsoleAppenderFactory@1111111]
 """
     }
 

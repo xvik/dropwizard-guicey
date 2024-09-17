@@ -43,6 +43,7 @@ class ExtendedExceptionMapperRenderTest extends Specification {
 
     Exception mappers
         Throwable                      ExceptionMapperBinder\$1      (i.d.core.setup)
+        Throwable                      DefaultExceptionMapper       (o.g.jersey.server)
         EofException                   EarlyEofExceptionMapper      (i.d.jersey.errors)
         EmptyOptionalException         EmptyOptionalExceptionMapper (i.d.jersey.optional)
         IOException                    ExtMapper                    (r.v.d.g.d.r.j.ExtendedExceptionMapperRenderTest) *extended

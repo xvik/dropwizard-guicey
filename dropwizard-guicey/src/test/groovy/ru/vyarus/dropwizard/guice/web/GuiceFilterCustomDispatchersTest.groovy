@@ -4,7 +4,7 @@ import io.dropwizard.core.Application
 import io.dropwizard.core.Configuration
 import io.dropwizard.core.setup.Bootstrap
 import io.dropwizard.core.setup.Environment
-import org.eclipse.jetty.servlet.FilterMapping
+import org.eclipse.jetty.ee10.servlet.FilterMapping
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.jersey.GuiceWebModule
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp

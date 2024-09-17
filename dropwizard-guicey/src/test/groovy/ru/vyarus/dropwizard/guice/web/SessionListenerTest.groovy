@@ -4,7 +4,7 @@ import io.dropwizard.core.Application
 import io.dropwizard.core.Configuration
 import io.dropwizard.core.setup.Bootstrap
 import io.dropwizard.core.setup.Environment
-import org.eclipse.jetty.server.session.SessionHandler
+import org.eclipse.jetty.ee10.servlet.SessionHandler
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.support.web.session.SessionListener
@@ -32,7 +32,7 @@ class SessionListenerTest extends AbstractTest {
         TestSupport.runWebApp(NSFailApp, 'src/test/resources/ru/vyarus/dropwizard/guice/simple-server.yml')
         then: "error"
         def ex = thrown(IllegalStateException)
-        ex.message == 'Can\'t register session listeners for application context because sessions support is not enabled: SessionListener'
+        ex.message == 'Can\'t register session listeners for root because sessions support is not enabled: SessionListener'
     }
 
     def "Check session listener installation"() {

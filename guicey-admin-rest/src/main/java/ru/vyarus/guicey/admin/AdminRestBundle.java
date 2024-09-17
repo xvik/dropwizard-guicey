@@ -2,12 +2,13 @@ package ru.vyarus.guicey.admin;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.core.setup.Environment;
+import io.dropwizard.lifecycle.Managed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueGuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
+import ru.vyarus.guicey.admin.log.LogbackAccessRequestLogAwareCustomHandler;
 import ru.vyarus.guicey.admin.rest.AdminResourceFilter;
 import ru.vyarus.guicey.admin.rest.AdminRestServlet;
 
@@ -33,6 +34,7 @@ public class AdminRestBundle extends UniqueGuiceyBundle {
     private final Logger logger = LoggerFactory.getLogger(AdminRestBundle.class);
 
     private final String path;
+    private boolean identifyAdminContext;
 
     /**
      * Admin rest will be mapped on the same path as main rest if rest mapping is different from '/*'.
@@ -52,6 +54,28 @@ public class AdminRestBundle extends UniqueGuiceyBundle {
         this.path = path;
     }
 
+    /**
+     * Shortcut for {@code identifyAdminPathsInRequestLogs(true)}.
+     *
+     * @return bundle instance
+     */
+    public AdminRestBundle identifyAdminContextInRequestLogs() {
+        return identifyAdminContextInRequestLogs(true);
+    }
+
+    /**
+     * As admin rest just redirects to main context rest, then all admin rest calls would be logged. It might
+     * be hard to identify admin calls in such logs (if rest contexts are the same and resources used from both
+     * contexts). When enabled, " (ADMIN REST)" string is appended for loggable request uri.
+     *
+     * @param identifyAdminPathsInRequestLogs true to identify admin calls in request logs
+     * @return bundle instance
+     */
+    public AdminRestBundle identifyAdminContextInRequestLogs(final boolean identifyAdminPathsInRequestLogs) {
+        this.identifyAdminContext = identifyAdminPathsInRequestLogs;
+        return this;
+    }
+
     @Override
     public void run(final GuiceyEnvironment environment) throws Exception {
         environment.manage(new ServletRegistration(environment.environment()));
@@ -62,6 +86,12 @@ public class AdminRestBundle extends UniqueGuiceyBundle {
                 .addServlet("adminRest", new AdminRestServlet(environment.getJerseyServletContainer()))
                 .addMapping(path);
         environment.jersey().register(AdminResourceFilter.class);
+        // dropwizard request logging consists of two parts: LogbackAccessRequestLogAwareHandler
+        // prepares request for logging and LogbackAccessRequestLog performs log
+        // In admin context LogbackAccessRequestLogAwareHandler not registered, but our admin servlet calls
+        // the main context, which will trigger LogbackAccessRequestLog, but without a proper handler it would fail
+        environment.getAdminContext()
+                .insertHandler(new LogbackAccessRequestLogAwareCustomHandler(identifyAdminContext));
         logger.info("Admin REST registered on path: {}", path);
     }
 

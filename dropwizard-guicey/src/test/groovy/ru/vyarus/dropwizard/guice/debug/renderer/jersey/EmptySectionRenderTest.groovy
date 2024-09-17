@@ -39,6 +39,7 @@ class EmptySectionRenderTest extends Specification {
 
     Exception mappers
         Throwable                      ExceptionMapperBinder\$1      (i.d.core.setup)
+        Throwable                      DefaultExceptionMapper       (o.g.jersey.server)
         EofException                   EarlyEofExceptionMapper      (i.d.jersey.errors)
         EmptyOptionalException         EmptyOptionalExceptionMapper (i.d.jersey.optional)
         IllegalStateException          IllegalStateExceptionMapper  (i.d.jersey.errors)

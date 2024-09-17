@@ -1,3 +1,7 @@
+* Update to dropwizard 5 (requires java 17)
+* [admin-rest]
+  - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
+
 ### 7.1.4 (2024-09-14)
 * Update to dropwizard 4.0.8
 

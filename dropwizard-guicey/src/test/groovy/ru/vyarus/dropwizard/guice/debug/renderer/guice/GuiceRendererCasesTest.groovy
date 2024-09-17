@@ -138,7 +138,7 @@ class GuiceRendererCasesTest extends Specification {
         expect:
         render(new GuiceConfig()) == """
 
-    8 MODULES with 113 bindings
+    8 MODULES with 106 bindings
     │
     ├── CasesModule                  (r.v.d.g.d.r.g.support)
     │   ├── <typelistener>                        CustomTypeListener                              at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.CasesModule.configure(CasesModule.java:19)
@@ -205,7 +205,6 @@ class GuiceRendererCasesTest extends Specification {
             ├── instance             [@Singleton]     @Config MetricsFactory                          at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:117)
             ├── instance             [@Singleton]     @Config RequestLogFactory<Object>               at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:117)
             ├── instance             [@Singleton]     @Config ServerFactory                           at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:117)
-            ├── instance             [@Singleton]     @Config ServerPushFilterFactory                 at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:117)
             ├── instance             [@Singleton]     @Config TaskConfiguration                       at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:117)
             ├── instance             [@Singleton]     @Config("admin") AdminFactory                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── instance             [@Singleton]     @Config("admin.healthChecks") HealthCheckConfiguration   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
@@ -253,10 +252,6 @@ class GuiceRendererCasesTest extends Specification {
             ├── instance             [@Singleton]     @Config("server.requestLog.appenders") List<AppenderFactory<IAccessEvent>>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── instance             [@Singleton]     @Config("server.responseMeteredLevel") ResponseMeteredLevel   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── instance             [@Singleton]     @Config("server.rootPath") Optional<String>     at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
-            ├── instance             [@Singleton]     @Config("server.serverPush") ServerPushFilterFactory   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
-            ├── instance             [@Singleton]     @Config("server.serverPush.associatePeriod") Duration   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
-            ├── instance             [@Singleton]     @Config("server.serverPush.enabled") Boolean    at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
-            ├── instance             [@Singleton]     @Config("server.serverPush.maxAssociations") Integer   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── instance             [@Singleton]     @Config("server.shutdownGracePeriod") Duration   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── providerinstance     [@Prototype]     @Config("server.gid") Integer                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── providerinstance     [@Prototype]     @Config("server.group") String                  at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
@@ -268,8 +263,6 @@ class GuiceRendererCasesTest extends Specification {
             ├── providerinstance     [@Prototype]     @Config("server.metricPrefix") String           at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── providerinstance     [@Prototype]     @Config("server.nofileHardLimit") Integer       at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── providerinstance     [@Prototype]     @Config("server.nofileSoftLimit") Integer       at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
-            ├── providerinstance     [@Prototype]     @Config("server.serverPush.refererHosts") List<String>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
-            ├── providerinstance     [@Prototype]     @Config("server.serverPush.refererPorts") List<Integer>   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── providerinstance     [@Prototype]     @Config("server.startsAsRoot") Boolean          at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── providerinstance     [@Prototype]     @Config("server.uid") Integer                   at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
             ├── providerinstance     [@Prototype]     @Config("server.umask") String                  at ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)
