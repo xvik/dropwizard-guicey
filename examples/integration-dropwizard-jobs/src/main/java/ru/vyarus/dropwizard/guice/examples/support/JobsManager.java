@@ -8,6 +8,8 @@ import ru.vyarus.dropwizard.guice.examples.JobsAppConfiguration;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -26,7 +28,7 @@ public class JobsManager extends JobManager {
 
     @Inject
     public JobsManager(final Injector injector, final Set<Job> jobs, final JobsAppConfiguration config) {
-        super(config, jobs.toArray(new Job[0]));
+        super(config, new ArrayList<>(jobs));
         this.factory = new GuiceJobFactory(injector);
     }
 
