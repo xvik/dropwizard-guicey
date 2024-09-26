@@ -25,7 +25,7 @@ dependencies {
     testImplementation 'io.dropwizard:dropwizard-forms'
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
     testImplementation 'org.junit.platform:junit-platform-testkit'
-    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.6'
+    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.7'
     testImplementation 'com.google.truth:truth:1.4.4'
     testImplementation 'org.objenesis:objenesis:3.4'
 
