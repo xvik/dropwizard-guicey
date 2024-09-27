@@ -1,5 +1,5 @@
 description = "Mirror rest in admin context"
 
 dependencies {
-    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.6'
+    testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.7'
 }
