@@ -141,8 +141,8 @@ class ConfigOptionsRenderTest extends Specification {
         Type                           GuiceMessageBodyWriter       (r.v.d.g.c.h.support)
         Type                           HKMessageBodyWriter          (r.v.d.g.c.h.s.hk)         *jersey managed
         InputStream                    InputStreamProvider          (o.g.j.m.internal)                       [application/octet-stream, */*]
-        Object                         JacksonJsonProvider          (c.f.j.j.rs.json)                        [*/*]
-        Object                         JacksonMessageBodyProvider   (i.d.jersey.jackson)                     [*/*]
+        Object                         JacksonJsonProvider          (c.f.j.j.rs.json)                        [application/json, text/json, */*]
+        Object                         JacksonMessageBodyProvider   (i.d.jersey.jackson)                     [application/json, text/json, */*]
         MultiPart                      MultiPartWriter              (o.g.j.m.m.internal)                     [multipart/*]
         OptionalDouble                 OptionalDoubleMessageBodyWriter (i.d.jersey.optional)                 [*/*]
         OptionalInt                    OptionalIntMessageBodyWriter (i.d.jersey.optional)                    [*/*]
