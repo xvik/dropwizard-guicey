@@ -1,3 +1,5 @@
+* Update to dropwizard 3.0.9
+
 ### 6.2.4 (2024-09-14)
 * Update to dropwizard 3.0.8
 
