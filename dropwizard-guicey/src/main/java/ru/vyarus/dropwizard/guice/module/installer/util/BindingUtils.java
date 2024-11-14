@@ -2,10 +2,13 @@ package ru.vyarus.dropwizard.guice.module.installer.util;
 
 import com.google.inject.Binding;
 import com.google.inject.Module;
+import com.google.inject.ScopeAnnotation;
 import com.google.inject.internal.util.StackTraceElements;
 import com.google.inject.spi.Element;
 import com.google.inject.spi.ElementSource;
+import jakarta.inject.Scope;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -145,6 +148,31 @@ public final class BindingUtils {
             // on registration, but there would not be any possibility to disable such module
             if (res.isEmpty()) {
                 res.add(Module.class.getName());
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Searches for scoping annotation on class. Base classes are not checked as scope is not inheritable.
+     *
+     * @param type               class to search for
+     * @param countGuiceSpecific true to count guice-specific annotations (with {@link ScopeAnnotation})
+     * @return detected annotation or null
+     */
+    public static Class<? extends Annotation> findScopingAnnotation(final Class<?> type,
+                                                                    final boolean countGuiceSpecific) {
+        Class<? extends Annotation> res = null;
+        for (Annotation ann : type.getAnnotations()) {
+            final Class<? extends Annotation> annType = ann.annotationType();
+            if (annType.isAnnotationPresent(Scope.class)) {
+                res = annType;
+                break;
+            }
+            // guice has special marker annotation
+            if (countGuiceSpecific && annType.isAnnotationPresent(ScopeAnnotation.class)) {
+                res = annType;
+                break;
             }
         }
         return res;
