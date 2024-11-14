@@ -69,7 +69,7 @@ class ScopingVisitorTest extends Specification {
     def "Check direct visitor cases"() {
 
         expect: "correct scope annotations"
-        visitor.visitNoScoping() == Prototype
+        visitor.visitNoScoping() == null
         visitor.visitEagerSingleton() == EagerSingleton
 
         visitor.visitScope(Scopes.SINGLETON) == Singleton
@@ -85,12 +85,12 @@ class ScopingVisitorTest extends Specification {
     }
 
     Class<? extends Annotation> scope(Injector injector, Class type) {
-        injector.getExistingBinding(Key.get(type)).acceptScopingVisitor(visitor)
+        visitor.performDetection(injector.getExistingBinding(Key.get(type)))
     }
 
     Class<? extends Annotation> scope(List<Element> elements, Class type) {
-        (elements.find { it instanceof Binding && (it as Binding).getKey().getTypeLiteral().getRawType() == type } as Binding)
-                .acceptScopingVisitor(visitor)
+        visitor.performDetection(
+                elements.find { it instanceof Binding && (it as Binding).getKey().getTypeLiteral().getRawType() == type } as Binding)
     }
 
     static class Module extends AbstractModule {

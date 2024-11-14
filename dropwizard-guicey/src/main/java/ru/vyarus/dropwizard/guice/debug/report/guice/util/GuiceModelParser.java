@@ -21,7 +21,15 @@ import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton;
 import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Guice introspection utils. Parse guice SPI model. Supports both elements from modules and injector bindings.
@@ -223,8 +231,7 @@ public final class GuiceModelParser {
                     return;
                 }
             }
-            Class<? extends Annotation> scope =
-                    (Class<? extends Annotation>) existingBinding.acceptScopingVisitor(SCOPE_DETECTOR);
+            Class<? extends Annotation> scope = SCOPE_DETECTOR.performDetection(existingBinding);
             if (scope != null && scope.equals(EagerSingleton.class)) {
                 scope = javax.inject.Singleton.class;
             }

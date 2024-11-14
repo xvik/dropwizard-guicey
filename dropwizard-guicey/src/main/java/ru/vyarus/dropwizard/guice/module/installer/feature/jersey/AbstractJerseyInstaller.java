@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.feature.jersey;
 
 import com.google.inject.Binder;
-import com.google.inject.ScopeAnnotation;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +8,9 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding;
 import ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSupport;
+import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 
-import javax.inject.Scope;
 import javax.inject.Singleton;
-import java.lang.annotation.Annotation;
 
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.ForceSingletonForJerseyExtensions;
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
@@ -92,19 +90,6 @@ public abstract class AbstractJerseyInstaller<T> extends InstallerOptionsSupport
      * @return true if scope annotation found, false otherwise
      */
     private boolean hasScopeAnnotation(final Class<?> type, final boolean hkManaged) {
-        boolean found = false;
-        for (Annotation ann : type.getAnnotations()) {
-            final Class<? extends Annotation> annType = ann.annotationType();
-            if (annType.isAnnotationPresent(Scope.class)) {
-                found = true;
-                break;
-            }
-            // guice has special marker annotation
-            if (!hkManaged && annType.isAnnotationPresent(ScopeAnnotation.class)) {
-                found = true;
-                break;
-            }
-        }
-        return found;
+        return BindingUtils.findScopingAnnotation(type, !hkManaged) != null;
     }
 }

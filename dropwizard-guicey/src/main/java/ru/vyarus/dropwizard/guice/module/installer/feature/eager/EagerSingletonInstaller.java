@@ -54,11 +54,11 @@ public class EagerSingletonInstaller implements FeatureInstaller, BindingInstall
     public <T> void manualBinding(final Binder binder, final Class<T> type, final Binding<T> binding) {
         // we can only validate existing binding here (actually entire extension is pretty useless in case of manual
         // binding)
-        final Class<? extends Annotation> scope = binding.acceptScopingVisitor(VISITOR);
-        // in production all services will work as eager singletons, for report (TOOL stage) consider also valid
+        final Class<? extends Annotation> scope = VISITOR.performDetection(binding);
+        // in production, all services will work as eager singletons, for report (TOOL stage) consider also valid
         Preconditions.checkArgument(scope.equals(EagerSingleton.class)
                         || (!binder.currentStage().equals(Stage.DEVELOPMENT)
-                        && scope.equals(Singleton.class)),
+                        && (scope.equals(Singleton.class) || scope.equals(jakarta.inject.Singleton.class))),
                 // intentionally no "at" before stacktrtace because idea may hide error in some cases
                 "Eager bean, declared manually is not marked .asEagerSingleton(): %s (%s)",
                 type.getName(), BindingUtils.getDeclarationSource(binding));
