@@ -1,4 +1,4 @@
-* Update to dropwizard 4.0.9
+* Update to dropwizard 4.0.11
 * Improve guice bindings report:
   - fixed scope accuracy for linked bindings 
 
