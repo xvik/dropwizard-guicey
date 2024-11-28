@@ -7,6 +7,9 @@ environment:
         - job_name: Java 17
           appveyor_build_worker_image: Visual Studio 2019
           JAVA_HOME: C:\Program Files\Java\jdk17
+        - job_name: Java 21
+          appveyor_build_worker_image: Visual Studio 2022
+          JAVA_HOME: C:\Program Files\Java\jdk21
 
 build_script:
   - ./gradlew assemble --no-daemon
