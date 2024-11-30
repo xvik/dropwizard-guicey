@@ -1,8 +1,8 @@
 # Dropwizard guice integration
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://www.opensource.org/licenses/MIT)
-[![CI](https://github.com/xvik/dropwizard-guicey/actions/workflows/CI.yml/badge.svg)](https://github.com/xvik/dropwizard-guicey/actions/workflows/CI.yml)
-[![Appveyor build status](https://ci.appveyor.com/api/projects/status/github/xvik/dropwizard-guicey?svg=true&branch=master)](https://ci.appveyor.com/project/xvik/dropwizard-guicey/branch/master)
-[![codecov](https://codecov.io/gh/xvik/dropwizard-guicey/branch/master/graph/badge.svg)](https://codecov.io/gh/xvik/dropwizard-guicey)
+[![CI](https://github.com/xvik/dropwizard-guicey/actions/workflows/CI.yml/badge.svg?branch=dw-4)](https://github.com/xvik/dropwizard-guicey/actions/workflows/CI.yml?query=branch%3Adw-4)
+[![Appveyor build status](https://ci.appveyor.com/api/projects/status/github/xvik/dropwizard-guicey?svg=true&branch=dw-4)](https://ci.appveyor.com/project/xvik/dropwizard-guicey/branch/dw-4)
+[![codecov](https://codecov.io/gh/xvik/dropwizard-guicey/branch/dw-4/graph/badge.svg)](https://codecov.io/gh/xvik/dropwizard-guicey/tree/dw-4)
 
 **DOCUMENTATION**: http://xvik.github.io/dropwizard-guicey/
 
