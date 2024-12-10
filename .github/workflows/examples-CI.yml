@@ -22,7 +22,7 @@ jobs:
       - name: Add snapshots repo to maven
         uses: whelk-io/maven-settings-xml-action@v22
         with:
-          servers: '[{ "id": "github", "username": "${{ github.actor }}", "password": "${{ secrets.GITHUB_TOKEN }}" }]'
+          servers: '[{ "id": "github", "username": "${env.USERNAME}", "password": "${env.TOKEN}" }]'
 
       - uses: actions/checkout@v4
 
