@@ -12,8 +12,9 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <dropwizard-guicey.version>7.1.4</dropwizard-guicey.version>
-        <dropwizard.version>4.0.8</dropwizard.version>
+        <!--        provided by gradle-->
+<!--        <dropwizard-guicey.version>8.0.0-SNAPSHOT</dropwizard-guicey.version>-->
+<!--        <dropwizard.version>4.0.11</dropwizard.version>-->
     </properties>
 
     <build>
@@ -41,5 +42,15 @@
         </dependency>
 
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/xvik/dropwizard-guicey</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>

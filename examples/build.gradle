@@ -10,7 +10,8 @@ wrapper {
 description = 'Dropwizard guicey examples'
 
 ext {
-    guiceyBom = '7.1.4'
+    guiceyBom = '8.0.0-SNAPSHOT'
+    dwVersion = '5.0.0-alpha.5'
 }
 
 subprojects {
@@ -25,7 +26,16 @@ subprojects {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
 
-    repositories { mavenLocal(); mavenCentral(); maven { url 'https://jitpack.io' }}
+    repositories { mavenLocal(); mavenCentral();
+        // for github package (used on CI)
+        maven {
+            url  = 'https://maven.pkg.github.com/xvik/dropwizard-guicey'
+            credentials {
+                username = findProperty('gpr.user') ?: System.getenv("USERNAME")
+                password = findProperty('gpr.key') ?: System.getenv("TOKEN")
+            }
+        }
+    }
     dependencies {
         implementation platform("ru.vyarus.guicey:guicey-bom:$guiceyBom")
 

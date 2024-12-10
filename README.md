@@ -155,88 +155,103 @@ Spock-junit5 | `ru.vyarus:spock-junit5`
 ### Snapshots
 
 <details>
-      <summary>Snapshots may be used through JitPack</summary>
+      <summary>Snapshots may be used through GitHub packages</summary>
 
-Add [JitPack](https://jitpack.io/#ru.vyarus/dropwizard-guicey) repository:
+WARNING: Accessing GitHub package requires [GitHub authorization](https://docs.github.com/en/enterprise-cloud@latest/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#authenticating-to-github-packages)!
 
-```groovy
-repositories { maven { url 'https://jitpack.io' } }
-```
+An actual published version could be seen on [package page](https://github.com/xvik/dropwizard-guicey/packages/2340608)
 
-For spring dependencies plugin (when guicey pom used as BOM):
+For [Gradle](https://docs.github.com/en/enterprise-cloud@latest/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry):
 
-```groovy
-dependencyManagement {
-    resolutionStrategy {
-        cacheChangingModulesFor 0, 'seconds'
+* Add [GitHub](https://jitpack.io/#ru.vyarus/dropwizard-guicey) repository in build.gradle:
+
+    ```groovy
+    repositories {
+        maven {
+            url  = 'https://maven.pkg.github.com/xvik/dropwizard-guicey'
+            credentials {
+                username = settings.ext.find('gpr.user') ?: System.getenv("USERNAME")
+                password = settings.ext.find('gpr.key') ?: System.getenv("TOKEN")
+            }
+        }
     }
-    imports {
-        mavenBom "ru.vyarus:dropwizard-guicey:master-SNAPSHOT"
+    ```
+    
+    or in settings.gradle:
+    
+    ```groovy
+    dependencyResolutionManagement {
+        repositories {
+            mavenCentral()
+            maven { ... same as above  }
+        }
     }
-}
-``` 
+    ```
 
-For direct guicey dependency:
+* In global gradle file `~/.gradle/gradle.properties` add
+    ```
+    gpr.user=<your github user name>
+    gpr.key=<your github password or classic token>
+    ```                                            
+    (or credentials must be declared in environment: USERNAME/TOKEN (more usable for CI))
+    Read [personal access tokens creation guide](https://docs.github.com/en/enterprise-cloud@latest/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)
+    Note that token needs only "package/read" permission
+* Use a snapshot version (as usual):
+    ```groovy
+    dependencies {
+        implementation 'ru.vyarus:dropwizard-guicey:8.0.0-SNAPSHOT'
+    }
+    ```
+* If there would be problems loading the latest snapshot, change cache policy:
+    ```groovy
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }   
+    ```
 
-```groovy
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
+For [Maven](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry),
 
-dependencies {
-    implementation 'ru.vyarus:dropwizard-guicey:master-SNAPSHOT'
-}
-```
-
-Note that in both cases `resolutionStrategy` setting required for correct updating snapshot with recent commits
-(without it you will not always have up-to-date snapshot)
-
-OR you can depend on exact commit:
-
-* Go to [JitPack project page](https://jitpack.io/#ru.vyarus/dropwizard-guicey)
-* Select `Commits` section and click `Get it` on commit you want to use and 
- use commit hash as version: `ru.vyarus:dropwizard-guicey:56537f7d23`
-
-
-Maven:
-
-```xml
-<repositories>
+* Add credentials into ~/.m2/settings.xml:
+    ```xml
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                          http://maven.apache.org/xsd/settings-1.0.0.xsd">            
+    
+        <servers>
+            <server>
+                <id>github</id>
+                <username>USERNAME</username>
+                <password>TOKEN</password>
+            </server>
+        </servers>
+    </settings>  
+    ```
+  (where USERNAME- github username and TOKEN - [classic token with packages:read permission](https://docs.github.com/en/enterprise-cloud@latest/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic))
+* Add repository (in project or using profile in settings.xml)
+  ```xml
+  <repositories>    
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>  
+          <id>github</id>
+          <url>https://maven.pkg.github.com/xvik/dropwizard-guicey</url>
+          <snapshots>
+              <enabled>true</enabled>
+          </snapshots>
+      </repository>
+  </repositories>
+  ```            
+  (repository name MUST be the same as declared server)
 
-<dependencyManagement>
+* Use dependency
+    ```xml
     <dependencies>
         <dependency>
             <groupId>ru.vyarus</groupId>
             <artifactId>dropwizard-guicey</artifactId>
-            <version>master-SNAPSHOT</version>
-            <type>pom</type>
-            <scope>import</scope>
+            <version>8.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-</dependencyManagement>
-
-<dependencies>
-    <dependency>
-        <groupId>ru.vyarus</groupId>
-        <artifactId>dropwizard-guicey</artifactId>
-    </dependency>
-</dependencies>
-```     
-
-Or simply change version if used as direct dependency (repository must be also added):
-
-```xml
-<dependency>
-    <groupId>ru.vyarus</groupId>
-    <artifactId>dropwizard-guicey</artifactId>
-    <version>master-SNAPSHOT</version>
-</dependency>
-```
+    ```     
 
 </details> 
 
