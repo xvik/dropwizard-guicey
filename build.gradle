@@ -112,7 +112,7 @@ allprojects {
             repositories {
                 maven {
                     name = "GitHub"
-                    url = "https://maven.pkg.github.com/xvik/gradle-animalsniffer-plugin"
+                    url = "https://maven.pkg.github.com/xvik/dropwizard-guicey"
                     credentials {
                         username = System.getenv("GITHUB_ACTOR")
                         password = System.getenv("GITHUB_TOKEN")
