@@ -18,12 +18,6 @@ jobs:
         java: [17, 21]
 
     steps:
-      # for maven samples
-      - name: Add snapshots repo to maven
-        uses: whelk-io/maven-settings-xml-action@v22
-        with:
-          servers: '[{ "id": "github", "username": "${env.USERNAME}", "password": "${env.TOKEN}" }]'
-
       - uses: actions/checkout@v4
 
       - name: Set up JDK ${{ matrix.java }}
