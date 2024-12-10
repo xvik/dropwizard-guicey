@@ -170,8 +170,8 @@ For [Gradle](https://docs.github.com/en/enterprise-cloud@latest/packages/working
         maven {
             url  = 'https://maven.pkg.github.com/xvik/dropwizard-guicey'
             credentials {
-                username = settings.ext.find('gpr.user') ?: System.getenv("USERNAME")
-                password = settings.ext.find('gpr.key') ?: System.getenv("TOKEN")
+                username = findProperty('gpr.user') ?: System.getenv("USERNAME")
+                password = findProperty('gpr.key') ?: System.getenv("TOKEN")
             }
         }
     }
@@ -183,7 +183,13 @@ For [Gradle](https://docs.github.com/en/enterprise-cloud@latest/packages/working
     dependencyResolutionManagement {
         repositories {
             mavenCentral()
-            maven { ... same as above  }
+            maven {
+                url  = 'https://maven.pkg.github.com/xvik/dropwizard-guicey'
+                credentials {
+                    username = settings.ext.find('gpr.user') ?: System.getenv("USERNAME")
+                    password = settings.ext.find('gpr.key') ?: System.getenv("TOKEN")
+                }
+            }
         }
     }
     ```
