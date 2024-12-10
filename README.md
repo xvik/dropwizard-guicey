@@ -163,7 +163,7 @@ An actual published version could be seen on [package page](https://github.com/x
 
 For [Gradle](https://docs.github.com/en/enterprise-cloud@latest/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry):
 
-* Add [GitHub](https://jitpack.io/#ru.vyarus/dropwizard-guicey) repository in build.gradle:
+* Add GitHub repository in build.gradle:
 
     ```groovy
     repositories {
