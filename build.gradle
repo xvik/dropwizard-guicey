@@ -104,7 +104,23 @@ allprojects {
     javaLib.withoutGradleMetadata()
 
     // skip signing for jitpack (snapshots)
-    tasks.withType(Sign) { onlyIf { !System.getenv('JITPACK') } }
+    tasks.withType(Sign) { onlyIf { !(System.getenv('JITPACK') || System.getenv('SNAPSHOT')) } }
+
+    if (System.getenv("SNAPSHOT")) {
+        // https://docs.github.com/en/actions/use-cases-and-examples/publishing-packages/publishing-java-packages-with-gradle#publishing-packages-to-github-packages
+        publishing {
+            repositories {
+                maven {
+                    name = "GitHub"
+                    url = "https://maven.pkg.github.com/xvik/gradle-animalsniffer-plugin"
+                    credentials {
+                        username = System.getenv("GITHUB_ACTOR")
+                        password = System.getenv("GITHUB_TOKEN")
+                    }
+                }
+            }
+        }
+    }
 }
 
 // all sub-modules are normal java modules, using root BOM (like maven)
