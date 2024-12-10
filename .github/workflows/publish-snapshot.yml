@@ -26,10 +26,10 @@ jobs:
       - name: Build without tests
         run: |
           chmod +x gradlew
-          ./gradlew build -x test --no-daemon
+          ./gradlew build -x test -x check --no-daemon
 
       - name: Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SNAPSHOT: true
-        run: ./gradlew publishAllPublicationsToGitHubRepository --no-daemon
+        run: ./gradlew publishToGitHub --no-daemon

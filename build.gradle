@@ -231,3 +231,8 @@ afterReleaseBuild {
     }
 }
 
+tasks.register('publishToGitHub') {
+    description = 'Publish snapshot into GitHub repository'
+    dependsOn(':publishAllPublicationsToGitHubRepository')
+    dependsOn(subprojects.collect { ":$it.name:publishAllPublicationsToGitHubRepository" })
+}
