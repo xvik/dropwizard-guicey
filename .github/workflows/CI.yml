@@ -35,11 +35,11 @@ jobs:
         run: ./gradlew check --no-daemon
 
       - name: Build coverage report
-        if: github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
         run: ./gradlew jacocoTestReport --no-daemon
 
       - uses: codecov/codecov-action@v4
-        if: github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
         with:
           files: build/reports/jacoco/test/jacocoTestReport.xml
           flags: LINUX
@@ -48,12 +48,12 @@ jobs:
 
 #  publish snapshot after successful tests
   publish:
-    if: github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
     needs: build
     uses: ./.github/workflows/publish-snapshot.yml
 
 # run examples with published snapshot
   examples:
-    if: github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
     needs: publish
     uses: ./.github/workflows/examples-CI.yml
