@@ -159,7 +159,10 @@ Spock-junit5 | `ru.vyarus:spock-junit5`
 
 WARNING: Accessing GitHub package requires [GitHub authorization](https://docs.github.com/en/enterprise-cloud@latest/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#authenticating-to-github-packages)!
 
+Read the [detailed guide](https://blog.vyarus.ru/using-github-packages-in-gradle-and-maven-projects) for token creation
+
 An actual published version could be seen on [package page](https://github.com/xvik/dropwizard-guicey/packages/2340608)
+ 
 
 For [Gradle](https://docs.github.com/en/enterprise-cloud@latest/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry):
 
