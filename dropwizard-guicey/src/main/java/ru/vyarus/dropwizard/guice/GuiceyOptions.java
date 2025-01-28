@@ -39,6 +39,16 @@ public enum GuiceyOptions implements Option {
     ScanPackages(String[].class, new String[0]),
 
     /**
+     * Enables package-private and protected (nested) classes acception by scanner (as extension).
+     * By default, only public extension classes are searched.
+     * <p>
+     * Option exists only for rare cases when extension classes are protected by historical reasons.
+     * Otherwise, try to avoid using protected classes as extensions (no problems with that, just semantically not
+     * correct)
+     */
+    ScanProtectedClasses(Boolean.class, false),
+
+    /**
      * Enables commands search in classpath and dynamic installation. Requires auto scan mode.
      * Disabled by default.
      *
