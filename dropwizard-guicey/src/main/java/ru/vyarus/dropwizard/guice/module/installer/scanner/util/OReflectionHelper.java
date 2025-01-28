@@ -29,9 +29,16 @@ public final class OReflectionHelper {
     private OReflectionHelper() {
     }
 
-    @SuppressFBWarnings("DCN_NULLPOINTER_EXCEPTION")
+    // preserved for backwards compatibility
     public static List<Class<?>> getClassesFor(final String iPackageName,
                                                final ClassLoader iClassLoader) throws ClassNotFoundException {
+        return getClassesFor(iPackageName, iClassLoader, false);
+    }
+
+    @SuppressFBWarnings("DCN_NULLPOINTER_EXCEPTION")
+    public static List<Class<?>> getClassesFor(final String iPackageName,
+                                               final ClassLoader iClassLoader,
+                                               final boolean acceptProtectedClasses) throws ClassNotFoundException {
         // This will hold a list of directories matching the pckgname.
         // There may be more than one if a package is split over multiple jars/paths
         final List<Class<?>> classes = new ArrayList<Class<?>>();
@@ -56,7 +63,7 @@ public final class OReflectionHelper {
                             if (e.getName().startsWith(iPackageName.replace('.', '/')) && e.getName().endsWith(CLASS_EXTENSION)) {
                                 final String className = e.getName().replace("/", ".").substring(0, e.getName().length() - 6);
                                 final Class<?> cls = Class.forName(className, true, iClassLoader);
-                                if (isAcceptibleClass(cls)) {
+                                if (isAcceptibleClass(cls, acceptProtectedClasses)) {
                                     classes.add(cls);
                                 }
                             }
@@ -82,13 +89,13 @@ public final class OReflectionHelper {
                 if (files != null) {
                     for (File file : files) {
                         if (file.isDirectory()) {
-                            classes.addAll(findClasses(file, iPackageName, iClassLoader));
+                            classes.addAll(findClasses(file, iPackageName, iClassLoader, acceptProtectedClasses));
                         } else {
                             String className;
                             if (file.getName().endsWith(CLASS_EXTENSION)) {
                                 className = file.getName().substring(0, file.getName().length() - CLASS_EXTENSION.length());
                                 final Class<?> cls = Class.forName(iPackageName + '.' + className, true, iClassLoader);
-                                if (isAcceptibleClass(cls)) {
+                                if (isAcceptibleClass(cls, acceptProtectedClasses)) {
                                     classes.add(cls);
                                 }
                             }
@@ -111,7 +118,8 @@ public final class OReflectionHelper {
      * @throws ClassNotFoundException
      */
     private static List<Class<?>> findClasses(final File iDirectory, String iPackageName,
-                                              ClassLoader iClassLoader) throws ClassNotFoundException {
+                                              ClassLoader iClassLoader,
+                                              boolean acceptProtected) throws ClassNotFoundException {
         final List<Class<?>> classes = new ArrayList<Class<?>>();
         if (!iDirectory.exists()) {
             return classes;
@@ -127,11 +135,11 @@ public final class OReflectionHelper {
                     if (file.getName().contains(".")) {
                         continue;
                     }
-                    classes.addAll(findClasses(file, iPackageName, iClassLoader));
+                    classes.addAll(findClasses(file, iPackageName, iClassLoader, acceptProtected));
                 } else if (file.getName().endsWith(CLASS_EXTENSION)) {
                     className = file.getName().substring(0, file.getName().length() - CLASS_EXTENSION.length());
                     final Class<?> cls = Class.forName(iPackageName + '.' + className, true, iClassLoader);
-                    if (isAcceptibleClass(cls)) {
+                    if (isAcceptibleClass(cls, acceptProtected)) {
                         classes.add(cls);
                     }
                 }
@@ -140,8 +148,10 @@ public final class OReflectionHelper {
         return classes;
     }
 
-    private static boolean isAcceptibleClass(final Class type) {
+    private static boolean isAcceptibleClass(final Class type, final boolean acceptProtected) {
         // only public non-anonymous classes allowed
-        return Modifier.isPublic(type.getModifiers());
+        return Modifier.isPublic(type.getModifiers()) || (acceptProtected &&
+                // package private or protected
+                (type.getModifiers() == 0 || Modifier.isProtected(type.getModifiers())));
     }
 }

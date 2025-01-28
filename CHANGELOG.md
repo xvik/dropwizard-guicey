@@ -1,6 +1,8 @@
 * Update to dropwizard 4.0.13
 * Improve guice bindings report:
-  - fixed scope accuracy for linked bindings 
+    - fixed scope accuracy for linked bindings
+* Classpath scan could detect package-private and protected extensions with a new option:
+    GuiceyOptions.ScanProtectedClasses (by default, false) (#404)
 
 ### 7.1.4 (2024-09-14)
 * Update to dropwizard 4.0.8

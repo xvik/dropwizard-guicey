@@ -48,6 +48,7 @@ class OptionsRendererTest extends Specification {
 
     Guicey                    (r.v.dropwizard.guice.GuiceyOptions)
         ScanPackages                   = [com.foo, com.bat]             *CUSTOM
+        ScanProtectedClasses           = false
         SearchCommands                 = false
         UseCoreInstallers              = true
         BindConfigurationByPath        = true
@@ -82,6 +83,7 @@ class OptionsRendererTest extends Specification {
 
     Guicey                    (r.v.dropwizard.guice.GuiceyOptions)
         ScanPackages                   = [com.foo, com.bat]             *CUSTOM
+        ScanProtectedClasses           = false
         SearchCommands                 = false
         UseCoreInstallers              = true
         BindConfigurationByPath        = true
@@ -135,6 +137,7 @@ class OptionsRendererTest extends Specification {
 
     Guicey                    (r.v.dropwizard.guice.GuiceyOptions)
         ScanPackages                   = [com.foo, com.bat]             *CUSTOM
+        ScanProtectedClasses           = false
         SearchCommands                 = false
         UseCoreInstallers              = true
         BindConfigurationByPath        = true
