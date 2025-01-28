@@ -1,6 +1,8 @@
 * Update to dropwizard 5 (requires java 17)
 * Improve guice bindings report:
     - fixed scope accuracy for linked bindings
+* Classpath scan could detect package-private and protected extensions with a new option:
+    GuiceyOptions.ScanProtectedClasses (by default, false) (#404)
 * [admin-rest]
   - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
 

@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.ScanPackages;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.SearchCommands;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.ScanProtectedClasses;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseCoreInstallers;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleResolutionTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleTime;
@@ -85,13 +86,15 @@ public class GuiceyInitializer {
         this.bootstrap = bootstrap;
         this.context = context;
         final String[] packages = context.option(ScanPackages);
+        final boolean acceptProtected = context.option(ScanProtectedClasses);
         // configuration shortcut for all packages starting from application location
         if (packages.length == 1 && APP_PKG.equals(packages[0])) {
             packages[0] = bootstrap.getApplication().getClass().getPackage().getName();
         }
         // classpath scan performed immediately (if required)
         this.scanner = packages.length > 0
-                ? new ClasspathScanner(Sets.newHashSet(Arrays.asList(packages)), context.stat()) : null;
+                ? new ClasspathScanner(
+                        Sets.newHashSet(Arrays.asList(packages)), acceptProtected, context.stat()) : null;
     }
 
     /**

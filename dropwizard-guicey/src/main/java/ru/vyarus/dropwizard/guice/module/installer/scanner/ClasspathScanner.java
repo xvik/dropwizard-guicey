@@ -38,15 +38,19 @@ public class ClasspathScanner {
     private final StatsTracker tracker;
 
     private final Set<String> packages;
+    private final boolean acceptProtectedClasses;
     private List<Class> scanned;
 
     public ClasspathScanner(final Set<String> packages) {
         // for backwards compatibility allow using without tracker
-        this(packages, null);
+        this(packages, false, null);
     }
 
-    public ClasspathScanner(final Set<String> packages, final StatsTracker tracker) {
+    public ClasspathScanner(final Set<String> packages,
+                            final boolean acceptProtectedClasses,
+                            final StatsTracker tracker) {
         this.packages = validate(packages);
+        this.acceptProtectedClasses = acceptProtectedClasses;
         this.tracker = tracker;
         // perform scan before to fill cache and get accurate traversing stats
         performScan();
@@ -107,7 +111,8 @@ public class ClasspathScanner {
         for (String pkg : packages) {
             final List<Class<?>> found;
             try {
-                found = OReflectionHelper.getClassesFor(pkg, Thread.currentThread().getContextClassLoader());
+                found = OReflectionHelper.getClassesFor(
+                        pkg, Thread.currentThread().getContextClassLoader(), acceptProtectedClasses);
             } catch (ClassNotFoundException e) {
                 throw new IllegalStateException("Failed to scan classpath", e);
             }
