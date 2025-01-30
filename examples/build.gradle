@@ -26,7 +26,7 @@ subprojects {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
 
-    repositories { mavenLocal(); mavenCentral();
+    repositories { mavenCentral(); mavenLocal();
         // for github package (used on CI)
         maven {
             url  = 'https://maven.pkg.github.com/xvik/dropwizard-guicey'
