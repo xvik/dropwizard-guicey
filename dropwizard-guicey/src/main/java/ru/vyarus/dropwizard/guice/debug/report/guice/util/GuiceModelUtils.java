@@ -50,8 +50,12 @@ public final class GuiceModelUtils {
         }
         final Map<Key, BindingDeclaration> res = new HashMap<>();
         visitBindings(modules, it -> {
-            if (it.getKey() != null) {
-                res.put(it.getKey(), it);
+            final Key key = it.getKey();
+            // Duplicate could be in private modules: two bindings with the same key - one is real declaration and
+            // another is expose declaration. The Original declaration could be a linked declaration, which
+            // is more important than expose (considering that this index is used for jit and removed detection)
+            if (key != null && (!res.containsKey(key) || it.getTarget() != null)) {
+                res.put(key, it);
             }
         });
         return res;
