@@ -41,20 +41,28 @@ class GuiceRendererPrivateModuleTest extends Specification {
                 .hideGuiceBindings()
                 .hideGuiceyBindings()) == """
 
-    4 MODULES with 4 bindings
+    4 MODULES with 6 bindings
     │
     └── OuterModule                  (r.v.d.g.d.r.g.s.privt)
         │
         └── InnerModule                  (r.v.d.g.d.r.g.s.privt)    *PRIVATE
-            ├── untargetted          [@Prototype]     InnerService                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.InnerModule.configure(InnerModule.java:14)
-            ├── untargetted          [@Prototype]     OuterService                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.InnerModule.configure(InnerModule.java:15) *EXPOSED
-            ├── exposed              [@Prototype]     OuterService                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.InnerModule.configure(InnerModule.java:17)
+            ├── untargetted          [@Prototype]     InnerService                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.InnerModule.configure(InnerModule.java:16)
+            ├── untargetted          [@Prototype]     OuterService                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.InnerModule.configure(InnerModule.java:17) *EXPOSED
+            ├── linkedkey            [@Prototype]     OService --> IndirectOuterService               at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.InnerModule.configure(InnerModule.java:19) *EXPOSED
+            ├── exposed              [@Prototype]     OuterService                                    at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.InnerModule.configure(InnerModule.java:21)
+            ├── exposed              [@Prototype]     OService                                        at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.InnerModule.configure(InnerModule.java:22)
+            ├── providerinstance     [@Prototype]     OuterProviderService                            at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.InnerModule.getService(InnerModule.java:27) *EXPOSED
+            ├── exposed              [@Prototype]     OuterProviderService                            at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.InnerModule.getService(InnerModule.java:27)
             │
             └── Inner2Module                 (r.v.d.g.d.r.g.s.privt)
                 ├── untargetted          [@Prototype]     InnerService2                                   at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.Inner2Module.configure(Inner2Module.java:14)
                 │
                 └── Inner3Module                 (r.v.d.g.d.r.g.s.privt)    *PRIVATE
                     └── untargetted          [@Prototype]     OutServ                                         at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.privt.Inner3Module.configure(Inner3Module.java:13) *EXPOSED
+
+
+    BINDING CHAINS
+    └── OService  --[linked]-->  IndirectOuterService
 """ as String;
     }
 

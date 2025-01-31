@@ -171,7 +171,7 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
                 jitBindings.remove(dec.getKey());
             }
             // remove "JIT" bindings from key declaration: bind(A.class).to(B.class) will lead to jit binding creation
-            // for B class, but we dont need to know about it - only pure JIT bindings required
+            // for B class, but we don't need to know about it - only pure JIT bindings required
             if (dec.getTarget() != null) {
                 jitBindings.remove(dec.getTarget());
             }
