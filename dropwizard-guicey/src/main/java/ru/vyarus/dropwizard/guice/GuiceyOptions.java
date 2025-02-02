@@ -131,6 +131,17 @@ public enum GuiceyOptions implements Option {
     AnalyzeGuiceModules(Boolean.class, true),
 
     /**
+     * Support private modules analysis: in private module only exposed services could be visible.
+     * As guicey works with extension classes only (for simplicity), for private modules it might be required to
+     * add additional exposes (to expose extension binding directly). Also, for disabled extensions bindings would
+     * be removed inside private modules too.
+     * <p>
+     * There are many different possible situations with private modules and quite possibly that not all of them
+     * covered. Disable this option in case of problems to avoid disabling analysis entirely.
+     */
+    AnalyzePrivateGuiceModules(Boolean.class, true),
+
+    /**
      * Guice injector stage used for injector creation.
      * Production by default.
      *

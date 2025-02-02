@@ -256,6 +256,10 @@ public final class GuiceModelParser {
             final Object source = element.getSource();
             if (source instanceof Class) {
                 dec.setSource(((Class) source).getName());
+            } else if (source instanceof String) {
+                // possible for synthetic bindings, created by guicey for extensions not directly exposed in
+                // private modules
+                dec.setSource((String) source);
             } else {
                 LOGGER.warn("Unknown element '{}' source: {}", dec, source);
             }
