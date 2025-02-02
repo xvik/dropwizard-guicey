@@ -4,6 +4,11 @@
     - Fixed bindings for private modules (missed exposed linked bindings)
 * Classpath scan could detect package-private and protected extensions with a new option:
     GuiceyOptions.ScanProtectedClasses (by default, false) (#404)
+* Add private modules analysis: extensions searched in private module bindings too
+  (also important for avoiding duplicate binding registration after classpath scan)
+    - Add AnalyzePrivateGuiceModules option (enabled by default) to disable private modules 
+      analysis (in case of problems)
+* Disabled modules remove would also affect private modules now (but only first level) 
 * [admin-rest]
   - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
 
