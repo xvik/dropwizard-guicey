@@ -597,9 +597,13 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
-         * Extensions disable is mostly useful for testing. In some cases, it could be used to disable some extra
-         * extensions installed with classpath scan or bundle. But, generally, try to avoid manual extensions
-         * disabling for clearer application configuration.
+         * Extensions disable mostly useful for testing. In some cases, it could be used to disable some extra
+         * extensions installed with classpath scan or bundle.
+         * <p>
+         * Disabling could be used for removing some temporal extensions like rest api stubs.
+         * <p>
+         * For extensions, detected from guice bindings, disabling extension would remove existing guice binding
+         * (when module analysis enabled).
          *
          * @param extensions extensions to disable (manually added, registered by bundles or with classpath scan)
          * @return builder instance for chained calls
@@ -671,7 +675,8 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * Essentially, predicates are the same as calling direct disable methods: items, disabled by predicate,
          * will be marked as disabled by predicate registration context (application or guicey bundle).
          * <p>
-         * Mostly useful for testing, but in some cases could be used directly.
+         * Mostly useful for testing, but in some cases could be used directly (e.g. could be used for sisabling
+         * temporary extensions, like rest api stubs).
          * <p>
          * Use {@link Predicate#and(Predicate)}, {@link Predicate#or(Predicate)} and {@link Predicate#negate()}
          * to combine complex predicates from simple ones from
