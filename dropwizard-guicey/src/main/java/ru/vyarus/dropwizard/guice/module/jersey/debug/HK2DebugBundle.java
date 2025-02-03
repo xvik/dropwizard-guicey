@@ -30,12 +30,12 @@ import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2InstanceListene
  * Module intended to be used in tests.
  * {@link ru.vyarus.dropwizard.guice.module.jersey.debug.service.ContextDebugService} collects all tracked classes
  * instantiated by both guice and HK2 and may provide lists of classes accordingly. It may be used in test conditions.
+ * <p>
+ * Soft deprecation: try to avoid hk2 direct usage if possible, someday HK2 support will be removed
  *
  * @author Vyacheslav Rusakov
  * @since 15.01.2016
- * @deprecated in the next version HK2 support will be removed and bundle will become useless
  */
-@Deprecated
 public class HK2DebugBundle extends UniqueGuiceyBundle {
 
     @Override
