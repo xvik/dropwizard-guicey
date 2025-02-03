@@ -178,9 +178,9 @@ public enum GuiceyOptions implements Option {
      * service by HK2 when it also depends on guice services.
      * <p>
      * IMPORTANT: requires extra dependency on HK2 guice-bridge: 'org.glassfish.hk2:guice-bridge:2.6.1'
-     * @deprecated in the next version HK2 support will be removed
+     * <p>
+     * Soft deprecation: try to avoid hk2 direct usage if possible, someday HK2 support will be removed
      */
-    @Deprecated
     UseHkBridge(Boolean.class, false);
 
     private Class<?> type;

@@ -53,9 +53,9 @@ public enum InstallersOptions implements Option {
      * Startup will fail if HK2 bridge is not enabled
      * (see {@link ru.vyarus.dropwizard.guice.GuiceyOptions#UseHkBridge}) because without it you can't inject
      * any guice beans into HK2 managed instances (and if you don't need to then you don't need guice support at all).
-     * @deprecated in the next version HK2 support will be removed
+     * <p>
+     * Soft deprecation: try to avoid hk2 direct usage if possible, someday HK2 support will be removed
      */
-    @Deprecated
     JerseyExtensionsManagedByGuice(Boolean.class, true),
     /**
      * Force singleton scope for jersey extensions (including resources). It is highly recommended using singletons

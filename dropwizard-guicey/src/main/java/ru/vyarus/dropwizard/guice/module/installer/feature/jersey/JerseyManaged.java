@@ -30,15 +30,15 @@ import java.lang.annotation.Target;
  * <p>
  * Annotation will do nothing if HK2-first mode enabled:
  * {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsManagedByGuice}
+ * <p>
+ * Soft deprecation: try to avoid hk2 direct usage if possible, someday HK2 support will be removed
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.module.installer.install.binding.LazyBinding as alternative solution
  * @see GuiceManaged
  * @since 21.11.2014
- * @deprecated in the next version HK2 support will be removed and annotation will become useless
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Deprecated
 public @interface JerseyManaged {
 }

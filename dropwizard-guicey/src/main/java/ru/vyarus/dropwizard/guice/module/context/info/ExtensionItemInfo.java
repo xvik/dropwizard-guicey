@@ -30,12 +30,12 @@ public interface ExtensionItemInfo extends ClassItemInfo, ScanSupport, DisableSu
 
     /**
      * Indicates extension management by jersey instead of guice.
+     * <p>
+     * Soft deprecation: try to avoid hk2 direct usage if possible, someday HK2 support will be removed
      *
      * @return true if extension annotated with
      * {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged}, false otherwise
-     * @deprecated in the next version HK2 support will be removed and annotation will become useless
      */
-    @Deprecated
     boolean isJerseyManaged();
 
     /**
