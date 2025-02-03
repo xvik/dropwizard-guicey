@@ -475,12 +475,13 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * objects provider injections still may be used in resources (will work through HK2 provider).
          * <p>
          * Guice servlets initialization took ~50ms, so injector creation will be a bit faster after disabling.
+         * <p>
+         * Soft deprecation: try to avoid hk2 direct usage if possible, someday HK2 support will be removed.
+         * In case of hk2 remove, guice request scope will be mandatory.
          *
          * @return builder instance for chained calls
          * @see GuiceyOptions#GuiceFilterRegistration
-         * @deprecated in the next version HK2 support will be removed and guice request scope will be mandatory
          */
-        @Deprecated
         public Builder noGuiceFilter() {
             return option(GuiceFilterRegistration, EnumSet.noneOf(DispatcherType.class));
         }
@@ -731,12 +732,12 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * <p>
          * To implicitly enable this check in all tests use
          * {@code PropertyBundleLookup.enableBundles(HK2DebugBundle.class)}.
+         * <p>
+         * Soft deprecation: try to avoid hk2 direct usage if possible, someday HK2 support will be removed
          *
          * @return builder instance for chained calls
          * @see HK2DebugBundle
-         * @deprecated in the next version HK2 support will be removed and option will become useless
          */
-        @Deprecated
         public Builder strictScopeControl() {
             bundle.context.registerBundles(new HK2DebugBundle());
             return this;
@@ -753,14 +754,14 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * dependency is not available.
          * <p>
          * WARNING: you will not be able to use guice AOP on beans managed by HK2!
+         * <p>
+         * Soft deprecation: try to avoid hk2 direct usage if possible, someday HK2 support will be removed
          *
          * @return builder instance for chained calls
          * @see InstallersOptions#JerseyExtensionsManagedByGuice
          * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged
          * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.GuiceManaged
-         * @deprecated in the next version HK2 support will be removed
          */
-        @Deprecated
         public Builder useHK2ForJerseyExtensions() {
             option(JerseyExtensionsManagedByGuice, false);
             option(UseHkBridge, true);

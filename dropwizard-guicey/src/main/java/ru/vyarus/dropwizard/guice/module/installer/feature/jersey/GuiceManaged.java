@@ -10,14 +10,14 @@ import java.lang.annotation.Target;
  * extensions are already managed by guice and so annotation is useless. But when hk-first mode enabled
  * (see {@link ru.vyarus.dropwizard.guice.module.installer.InstallersOptions#JerseyExtensionsManagedByGuice}) then
  * annotation could be used to mark exceptional beans which still must be managed by guice.
+ * <p>
+ * Soft deprecation: try to avoid hk2 direct usage if possible, someday HK2 support will be removed
  *
  * @author Vyacheslav Rusakov
  * @see JerseyManaged
  * @since 28.04.2018
- * @deprecated in the next version HK2 support will be removed and annotation will become useless
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Deprecated
 public @interface GuiceManaged {
 }
