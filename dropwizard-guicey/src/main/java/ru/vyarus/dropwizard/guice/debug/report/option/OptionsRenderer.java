@@ -103,6 +103,7 @@ public class OptionsRenderer implements ReportRenderer<OptionsConfig> {
                 || (!config.isShowNotDefinedOptions() && !info.getOptions().isSet(option));
     }
 
+    @SuppressWarnings("unchecked")
     private String valueToString(final Object value) {
         final String res;
         if (value == null) {
