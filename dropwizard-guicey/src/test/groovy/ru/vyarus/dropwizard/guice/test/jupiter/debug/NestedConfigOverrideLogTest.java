@@ -41,6 +41,7 @@ public class NestedConfigOverrideLogTest {
 
         String output = out.getText().replace("\r", "");
         System.err.println(output);
+        output = output.replaceAll("\\d+\\.\\d+ ms", "111 ms");
 
         assertThat(output).contains("Guicey test extensions (Test1.Inner.test1.):");
         assertThat(output).contains("Applied configuration overrides (Test1.Inner.test1.): \n" +
@@ -51,6 +52,20 @@ public class NestedConfigOverrideLogTest {
         assertThat(output).contains("Applied configuration overrides (Test1.Inner.test2.): \n" +
                 "\n" +
                 "\t                  foo = 2");
+
+        assertThat(output).contains(
+                "Guicey time after [After each] of Inner#test1(): 111 ms ( + 111 ms)\n" +
+                "\n" +
+                "\t[Before each]                      : 111 ms\n" +
+                "\t\tGuicey fields search               : 111 ms\n" +
+                "\t\tGuicey hooks registration          : 111 ms\n" +
+                "\t\tGuicey setup objects execution     : 111 ms\n" +
+                "\t\tDropwizardTestSupport creation     : 111 ms\n" +
+                "\t\tApplication start                  : 111 ms\n" +
+                "\t\tGuice fields injection             : 111 ms\n" +
+                "\n" +
+                "\t[After each]                       : 111 ms\n" +
+                "\t\tApplication stop                   : 111 ms");
     }
 
     public static class Test1 {

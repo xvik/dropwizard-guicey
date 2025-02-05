@@ -43,6 +43,7 @@ public class SetupObjectsLogTest {
 
         String output = out.getText().replace("\r", "");
         System.err.println(output);
+        output = output.replaceAll("\\d+\\.\\d+ ms", "111 ms");
 
         assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
                 .replaceAll("\\) {8,}\t", ")        \t"))

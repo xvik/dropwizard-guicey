@@ -45,6 +45,7 @@ public class HookObjectsLogTest {
 
         String output = out.getText().replace("\r", "");
         System.err.println(output);
+        output = output.replaceAll("\\d+\\.\\d+ ms", "111 ms");
 
         assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
                 .replaceAll("\\) {8,}\t", ")        \t"))
@@ -64,6 +65,24 @@ public class HookObjectsLogTest {
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext1\n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext2\n");
+
+        assertThat(output).contains(
+                "Guicey time after [After all] of HookObjectsLogTest$Test1: 111 ms ( + 111 ms)\n" +
+                        "\n" +
+                        "\t[Before all]                       : 111 ms\n" +
+                        "\t\tGuicey fields search               : 111 ms\n" +
+                        "\t\tGuicey hooks registration          : 111 ms\n" +
+                        "\t\tGuicey setup objects execution     : 111 ms\n" +
+                        "\t\tDropwizardTestSupport creation     : 111 ms\n" +
+                        "\t\tApplication start                  : 111 ms\n" +
+                        "\n" +
+                        "\t[Before each]                      : 111 ms\n" +
+                        "\t\tGuice fields injection             : 111 ms\n" +
+                        "\n" +
+                        "\t[After each]                       : 111 ms\n" +
+                        "\n" +
+                        "\t[After all]                        : 111 ms\n" +
+                        "\t\tApplication stop                   : 111 ms");
     }
 
     @Test
@@ -80,6 +99,7 @@ public class HookObjectsLogTest {
 
         String output = out.getText().replace("\r", "");
         System.err.println(output);
+        output = output.replaceAll("\\d+\\.\\d+ ms", "111 ms");
 
         assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
                 .replaceAll("\\) {8,}\t", ")        \t"))
@@ -101,6 +121,24 @@ public class HookObjectsLogTest {
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test2.ext1\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test2.ext2\n");
+
+        assertThat(output).contains(
+                "Guicey time after [After all] of HookObjectsLogTest$Test2: 111 ms ( + 111 ms)\n" +
+                        "\n" +
+                        "\t[Before all]                       : 111 ms\n" +
+                        "\t\tGuicey fields search               : 111 ms\n" +
+                        "\t\tGuicey hooks registration          : 111 ms\n" +
+                        "\t\tGuicey setup objects execution     : 111 ms\n" +
+                        "\t\tDropwizardTestSupport creation     : 111 ms\n" +
+                        "\t\tApplication start                  : 111 ms\n" +
+                        "\n" +
+                        "\t[Before each]                      : 111 ms\n" +
+                        "\t\tGuice fields injection             : 111 ms\n" +
+                        "\n" +
+                        "\t[After each]                       : 111 ms\n" +
+                        "\n" +
+                        "\t[After all]                        : 111 ms\n" +
+                        "\t\tApplication stop                   : 111 ms");
     }
 
     public static class Base {
