@@ -27,7 +27,7 @@ public class GuiceyTestSupportTest {
         support.after();
 
         Assertions.assertThatThrownBy(() -> support.getBean(DummyService.class))
-                .hasMessage("Injector not available");
+                .hasMessage("Guice injector not available");
     }
 
     @Test

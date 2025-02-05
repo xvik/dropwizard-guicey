@@ -10,6 +10,7 @@
       analysis (in case of problems)
 * Disabled modules remove would also affect private modules now (but only first level)
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
+* Track guicey test extensions time (would appear when debug option enabled)
 * [admin-rest]
   - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
 

@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.test;
 
+import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import io.dropwizard.core.Application;
@@ -17,6 +18,7 @@ import ru.vyarus.dropwizard.guice.test.util.io.EchoStream;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 /**
  * Utility class combining test-framework agnostic utilities.
@@ -188,7 +190,7 @@ public final class TestSupport {
      */
     public static Injector getInjector(final DropwizardTestSupport<?> support) {
         return InjectorLookup.getInjector(support.getApplication())
-                .orElseThrow(() -> new IllegalStateException("Injector not available"));
+                .orElseThrow(() -> new IllegalStateException("Guice injector not available"));
     }
 
     /**
@@ -221,9 +223,12 @@ public final class TestSupport {
      *
      * @param support test support object (dropwizard or guicey)
      * @param target  target instance to inject beans
+     * @return injection duration (could be useful for slow injection detection)
      */
-    public static void injectBeans(final DropwizardTestSupport<?> support, final Object target) {
+    public static Duration injectBeans(final DropwizardTestSupport<?> support, final Object target) {
+        final Stopwatch timer = Stopwatch.createStarted();
         getInjector(support).injectMembers(target);
+        return timer.elapsed();
     }
 
     /**

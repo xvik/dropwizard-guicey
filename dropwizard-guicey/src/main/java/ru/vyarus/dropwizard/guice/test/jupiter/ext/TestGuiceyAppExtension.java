@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.testing.ConfigOverride;
@@ -14,6 +15,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.GuiceyTestTime;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
@@ -133,9 +135,14 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         // setups from @EnableSetup fields go last
         config.extensions.addAll(setups);
         TestSetupUtils.executeSetup(config, context);
+        final Stopwatch timer = Stopwatch.createStarted();
         HooksUtil.register(config.hooks);
+        tracker.performanceTrack(GuiceyTestTime.HooksRegistration, timer.elapsed(), true);
 
-        return create(configPrefix, config.app, config.configPath, context);
+        timer.reset().start();
+        final DropwizardTestSupport<?> res = create(configPrefix, config.app, config.configPath, context);
+        tracker.performanceTrack(GuiceyTestTime.DropwizardTestSupport, timer.elapsed());
+        return res;
     }
 
     @SuppressWarnings({"unchecked", "checkstyle:Indentation"})

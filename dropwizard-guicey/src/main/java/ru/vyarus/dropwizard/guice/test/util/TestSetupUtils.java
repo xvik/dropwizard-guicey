@@ -1,11 +1,13 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
+import com.google.common.base.Stopwatch;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.GuiceyTestTime;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -51,6 +53,7 @@ public final class TestSetupUtils {
      */
     public static void executeSetup(final ExtensionConfig config, final ExtensionContext context) {
         if (!config.extensions.isEmpty()) {
+            final Stopwatch timer = Stopwatch.createStarted();
             final TestExtension builder = new TestExtension(config);
             final ExtensionContext.Store store = context.getStore(
                     ExtensionContext.Namespace.create(TestEnvironmentSetup.class));
@@ -64,6 +67,7 @@ public final class TestSetupUtils {
                     store.put(support.getClass(), ClosableWrapper.create(res));
                 }
             }
+            config.tracker.performanceTrack(GuiceyTestTime.SetupObjectsExecution, timer.elapsed());
         }
     }
 
