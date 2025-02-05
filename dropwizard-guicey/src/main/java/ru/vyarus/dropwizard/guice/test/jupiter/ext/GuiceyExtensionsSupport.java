@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.AfterAllCallback;
@@ -18,16 +19,18 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
+import ru.vyarus.dropwizard.guice.test.TestSupport;
+import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.GuiceyTestTime;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.ReusableAppUtils;
 import ru.vyarus.dropwizard.guice.test.util.StoredReusableApp;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
-import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -98,6 +101,8 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
     @Override
     public void beforeAll(final ExtensionContext context) throws Exception {
+        final Stopwatch timer = Stopwatch.createStarted();
+        tracker.lifecyclePhase(context, GuiceyTestTime.BeforeAll);
         synchronized (SYNC) {
             // check if app is reusable and start it (or apply already started to context)
             checkReusableApp(context);
@@ -120,10 +125,13 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                             + "Please report this case to guicey developer.");
             localStore.put(INHERITED_DW_SUPPORT, true);
         }
+        tracker.performanceTrack(GuiceyTestTime.BeforeAll, timer.elapsed());
     }
 
     @Override
     public void beforeEach(final ExtensionContext context) throws Exception {
+        final Stopwatch timer = Stopwatch.createStarted();
+        tracker.lifecyclePhase(context, GuiceyTestTime.BeforeEach);
         // run-per-method support (activated with @RegisterExtension on non-static field only)
         if (!lookupSupport(context).isPresent()) {
             start(context, context.getTestInstance().get());
@@ -142,20 +150,32 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                 "Guicey test support was not initialized: most likely, you are trying to manually "
                         + "register extension using non-static field - such usage is not supported.");
 
-        InjectorLookup.getInjector(support.getApplication()).orElseThrow(() ->
-                        new IllegalStateException("Can't find guicey injector to process test fields injections"))
-                .injectMembers(testInstance);
+        tracker.performanceTrack(GuiceyTestTime.GuiceInjection,
+                TestSupport.injectBeans(support, testInstance));
+        tracker.performanceTrack(GuiceyTestTime.BeforeEach, timer.elapsed());
+        // log guicey time on each test method to see how overall time increase (and where)
+        tracker.logGuiceyTestTime(GuiceyTestTime.BeforeEach, context);
     }
 
     @Override
     public void afterEach(final ExtensionContext context) throws Exception {
-        if (getLocalExtensionStore(context).get(PER_METHOD_DW_SUPPORT) != null) {
+        final Stopwatch timer = Stopwatch.createStarted();
+        tracker.lifecyclePhase(context, GuiceyTestTime.AfterEach);
+        final boolean perMethod = getLocalExtensionStore(context).get(PER_METHOD_DW_SUPPORT) != null;
+        if (perMethod) {
             stop(context);
+        }
+        tracker.performanceTrack(GuiceyTestTime.AfterEach, timer.elapsed());
+        if (perMethod) {
+            tracker.logGuiceyTestTime(GuiceyTestTime.AfterEach, context);
         }
     }
 
     @Override
+    @SuppressWarnings("PMD.PrematureDeclaration")
     public void afterAll(final ExtensionContext context) throws Exception {
+        final Stopwatch timer = Stopwatch.createStarted();
+        tracker.lifecyclePhase(context, GuiceyTestTime.AfterAll);
         // do nothing in application per test method mode
         if (lookupSupport(context).isPresent()) {
 
@@ -168,6 +188,8 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
             stop(context);
         }
+        tracker.performanceTrack(GuiceyTestTime.AfterAll, timer.elapsed());
+        tracker.logGuiceyTestTime(GuiceyTestTime.AfterAll, context);
     }
 
     // --------------------------------------------------------- 3rd party extensions support
@@ -304,8 +326,10 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                                 + "is already registered", source, context.getRequiredTestClass().getSimpleName(),
                         globalApp.getSource());
                 // highlight ignored extensions (@EnableSetup, @EnableSetup)
+                final Stopwatch timer = Stopwatch.createStarted();
                 new FieldSupport(context.getRequiredTestClass(), null, null)
                         .hintIgnoredFields(config.reuseDeclarationClass);
+                tracker.performanceTrack(GuiceyTestTime.ReusableAppWarnings, timer.elapsed());
                 if (store.get(DW_SUPPORT) == null) {
                     // global app already started, simply use it for current test (extension treat this case the same
                     // way as with nested test)
@@ -359,7 +383,9 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
         tracker.enableDebugFromSystemProperty();
         tracker.logUsedHooksAndSetupObjects(configPrefix);
+        final Stopwatch timer = Stopwatch.createStarted();
         support.before();
+        tracker.performanceTrack(GuiceyTestTime.SupportStart, timer.elapsed());
         tracker.logOverriddenConfigs(configPrefix);
     }
 
@@ -369,8 +395,10 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
         final DropwizardTestSupport<?> support = getSupport(context);
         if (support != null) {
+            final Stopwatch timer = Stopwatch.createStarted();
             support.after();
             TestSupportHolder.reset();
+            tracker.performanceTrack(GuiceyTestTime.SupportStop, timer.stop().elapsed());
         }
         final ClientSupport client = getClient(context);
         if (client != null) {
@@ -400,6 +428,8 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             this.testClass = testClass;
             this.instance = instance;
             this.tracker = tracker;
+
+            final Stopwatch timer = Stopwatch.createStarted();
             // find and validate all fields
             final boolean includeInstanceFields = instance != null;
             ownHookFields = findHookFields(testClass, includeInstanceFields);
@@ -407,8 +437,15 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                     .filter(field -> !testClass.equals(field.getDeclaringClass()))
                     .collect(Collectors.toList());
             ownHookFields.removeAll(parentHookFields);
+            if (tracker != null) {
+                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+            }
 
+            timer.reset().start();
             extensionFields = findSetupFields(testClass, includeInstanceFields);
+            if (tracker != null) {
+                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+            }
         }
 
         /**
@@ -423,6 +460,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
          * @param declarationClass base class where reusable app is declared
          */
         public void hintIncorrectFieldsUsage(final Class<?> declarationClass) {
+            final Stopwatch timer = Stopwatch.createStarted();
             final List<String> wrong = findNonBaseFields(declarationClass);
             if (!wrong.isEmpty()) {
                 LOGGER.warn("The following extensions were used during reusable app startup in test {}, but they did "
@@ -430,6 +468,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                                 + "be ignored if reusable app would start by different test: \n{}",
                         testClass.getName(), declarationClass.getName(), Joiner.on("\n").join(wrong));
             }
+            tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
         }
 
         /**
@@ -439,29 +478,42 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
          * @param declarationClass base class where reusable app is declared
          */
         public void hintIgnoredFields(final Class<?> declarationClass) {
+            final Stopwatch timer = Stopwatch.createStarted();
             final List<String> wrong = findNonBaseFields(declarationClass);
             if (!wrong.isEmpty()) {
                 LOGGER.warn("The following extensions were ignored in test {} because reusable application was "
                                 + "already started by another test: \n{}",
                         testClass.getName(), Joiner.on("\n").join(wrong));
             }
+            if (tracker != null) {
+                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+            }
         }
 
         public List<TestEnvironmentSetup> getSetupObjects() {
-            tracker.extensionsFromFields(extensionFields, instance);
-            return extensionFields.isEmpty() ? Collections.emptyList() : getFieldValues(extensionFields);
+            final Stopwatch timer = Stopwatch.createStarted();
+            try {
+                tracker.extensionsFromFields(extensionFields, instance);
+                return extensionFields.isEmpty() ? Collections.emptyList() : getFieldValues(extensionFields);
+            } finally {
+                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+            }
         }
 
         public void activateBaseHooks() {
+            final Stopwatch timer = Stopwatch.createStarted();
             // activate hooks declared in base classes
             activateFieldHooks(parentHookFields);
             tracker.hooksFromFields(parentHookFields, true, instance);
+            tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
         }
 
         public void activateClassHooks() {
+            final Stopwatch timer = Stopwatch.createStarted();
             // activate all remaining hooks (in test class)
             activateFieldHooks(ownHookFields);
             tracker.hooksFromFields(ownHookFields, false, instance);
+            tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
         }
 
         private List<String> findNonBaseFields(final Class<?> declarationClass) {
@@ -484,7 +536,9 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         }
 
         private void activateFieldHooks(final List<Field> fields) {
+            final Stopwatch timer = Stopwatch.createStarted();
             HooksUtil.register(getFieldValues(fields));
+            tracker.performanceTrack(GuiceyTestTime.HooksRegistration, timer.elapsed(), true);
         }
 
         @SuppressWarnings("unchecked")

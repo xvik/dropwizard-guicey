@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import com.google.common.base.Strings;
 import io.dropwizard.core.Application;
 import io.dropwizard.testing.ConfigOverride;
@@ -13,6 +14,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.GuiceyTestTime;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
@@ -135,12 +137,16 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         // setups from @EnableSetup fields go last
         config.extensions.addAll(setups);
         TestSetupUtils.executeSetup(config, context);
+        final Stopwatch timer = Stopwatch.createStarted();
         HooksUtil.register(config.hooks);
+        tracker.performanceTrack(GuiceyTestTime.HooksRegistration, timer.elapsed(), true);
 
+        timer.reset().start();
         final DropwizardTestSupport support = new DropwizardTestSupport(config.app,
                 config.configPath,
                 configPrefix,
                 buildConfigOverrides(configPrefix, context));
+        tracker.performanceTrack(GuiceyTestTime.DropwizardTestSupport, timer.elapsed());
 
         if (config.randomPorts) {
             support.addListener(new RandomPortsListener());

@@ -51,7 +51,7 @@ public class ExtensionsApiTest {
 
         Assertions.assertEquals(Arrays.asList(
                 "started", "reusable1: true", "reusable1: true", "stopped", "reusable2: true",
-                "Error: (IllegalStateException) Can't find guicey injector to process test fields injections"), actions);
+                "Error: (IllegalStateException) Guice injector not available"), actions);
         Assertions.assertEquals(1, App.cnt);
     }
 
