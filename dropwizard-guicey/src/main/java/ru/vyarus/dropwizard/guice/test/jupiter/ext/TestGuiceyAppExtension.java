@@ -290,6 +290,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             res.configOverrides = ann.configOverride();
             res.hooksFromAnnotation(ann.annotationType(), ann.hooks());
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
+            res.injectOnce = ann.injectOnce();
             res.tracker.debug = ann.debug();
             res.reuseApp = ann.reuseApplication();
             res.clientFactory(ann.clientFactory());
