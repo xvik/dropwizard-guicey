@@ -3,7 +3,11 @@ package ru.vyarus.dropwizard.guice.module.context;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.google.inject.Module;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.core.Configuration;
@@ -20,7 +24,12 @@ import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.bootstrap.BootstrapProxyFactory;
 import ru.vyarus.dropwizard.guice.module.context.bootstrap.DropwizardBundleTracker;
-import ru.vyarus.dropwizard.guice.module.context.info.*;
+import ru.vyarus.dropwizard.guice.module.context.info.DropwizardBundleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.GuiceyBundleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.InstanceItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
+import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.InstanceItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
@@ -39,7 +48,15 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -69,6 +86,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.DropwizardBund
 public final class ConfigurationContext {
     private final Logger logger = LoggerFactory.getLogger(ConfigurationContext.class);
 
+    private final List<Predicate<Class<?>>> autoScanFilters = new ArrayList<>();
     private final SharedConfigurationState sharedState = new SharedConfigurationState();
     private DuplicateConfigDetector duplicates;
     private Bootstrap bootstrap;
@@ -132,6 +150,26 @@ public final class ConfigurationContext {
      */
     private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new Options(optionsSupport), sharedState);
 
+    /**
+     * Add extra filter for scanned classes (classpath scan and bindings recognition).
+     *
+     * @param filter filter instance
+     */
+    public void addAutoScanFilter(final Predicate<Class<?>> filter) {
+        autoScanFilters.add(filter);
+    }
+
+    /**
+     * @return true if extension class could be used, false otherwise (auto scan filter)
+     */
+    public boolean isAcceptableAutoScanClass(final Class<?> clazz) {
+        for (Predicate<Class<?>> filter : autoScanFilters) {
+            if (!filter.test(clazz)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * Change default duplicates detector.
