@@ -10,6 +10,9 @@
       analysis (in case of problems)
 * Disabled modules remove would also affect private modules now (but only first level)
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
+* Add extensions scan filters: GuiceBundle.builder().autoScanFilter(cls -> !cls.isAnnotationPresent(Skip.class))
+  Could be used either to skip some classes from scanning (without @InvisibleForScanner) annotation
+  or to accept only annotated classes (spring style) (#419)
 * Test improvements:
   - Track guicey test extensions time (would appear when debug option enabled)
   - Add injectOnce option into test extensions to call injectMemebers once per test instance 

@@ -166,11 +166,10 @@ public class GuiceyInitializer {
                     // avoid duplicate extension installation, but register it's appearance in auto scan scope
                     context.getOrRegisterExtension(type, true);
                     extensions.add(type);
-                } else {
+                } else if (context.isAcceptableAutoScanClass(type)
+                        && ExtensionsSupport.registerExtension(context, type, true)) {
                     // if matching installer found - extension recognized, otherwise - not an extension
-                    if (ExtensionsSupport.registerExtension(context, type, true)) {
-                        extensions.add(type);
-                    }
+                    extensions.add(type);
                 }
             });
             context.lifecycle().classpathExtensionsResolved(extensions);

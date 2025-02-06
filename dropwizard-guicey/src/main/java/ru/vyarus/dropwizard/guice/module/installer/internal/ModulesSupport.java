@@ -272,7 +272,8 @@ public final class ModulesSupport {
         if (isPossibleExtension(key, privateFilter)) {
             context.stat().count(Stat.AnalyzedBindingsCount, 1);
             final Class type = key.getTypeLiteral().getRawType();
-            if (ExtensionsSupport.registerExtensionBinding(context, type,
+            if (context.isAcceptableAutoScanClass(type)
+                    && ExtensionsSupport.registerExtensionBinding(context, type,
                     binding, BindingUtils.getTopDeclarationModule(binding))) {
                 LOGGER.debug("Extension detected from guice binding: {}", type.getSimpleName());
                 extensions.add(type);
@@ -313,7 +314,9 @@ public final class ModulesSupport {
                 continue;
             }
             // try to detect extension in linked type (binding already analyzed so no need to count)
-            if (!extensions.contains(type) && ExtensionsSupport.registerExtensionBinding(context, type,
+            if (!extensions.contains(type)
+                    && context.isAcceptableAutoScanClass(type)
+                    && ExtensionsSupport.registerExtensionBinding(context, type,
                     binding, BindingUtils.getTopDeclarationModule(binding))) {
                 LOGGER.debug("Extension detected from guice linked binding: {}", type.getSimpleName());
                 extensions.add(type);

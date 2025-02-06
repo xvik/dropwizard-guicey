@@ -339,6 +339,36 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
+         * Filter classes which could be recognized as an extension. Filter applied before extension recognition,
+         * so you could slightly increase startup time by avoiding extension detection for some classes.
+         * Filter also applied for guice bindings (extensions recognized from guice bindings).
+         * <p>
+         * For example, if you want to exclude all annotated classes:
+         * {@code autoConfigFilter(type -> !type.isAnnotationPresent(Stub.class))}
+         * <p>
+         * Another example, suppose you want spring-style configuration: accept only classes with some annotation:
+         * {@code autoConfigFilter(type -> type.isAnnotationPresent(Component.class))}
+         * <p>
+         * The difference with {@link #disable(java.util.function.Predicate[])} predicate: by default, guicey would
+         * apply all installers for each class to detect extension and disable predicate prevents recognized extension
+         * installation, whereas this filter prevents classes from being detected. As a result, even if filtered class
+         * was an actual extension - it would not be recognized and not registered (not visible in reports).
+         * <p>
+         * Multiple filters could be specified.
+         * Filter applied only for extensions (does not affect commands and installers search).
+         * <p>
+         * Be aware that filter would be also called for all guice bindings (if extension from binding recognition
+         * enabled). No worries, it's normal (and filter could be used to filter recognitions from bindings).
+         *
+         * @param filter filter predicate for classes suitable for extensions detection
+         * @return builder instance for chained calls
+         */
+        public Builder autoConfigFilter(final Predicate<Class<?>> filter) {
+            bundle.context.addAutoScanFilter(filter);
+            return this;
+        }
+
+        /**
          * Duplicate configuration detector decides what configuration items, registered as instance (guicey bundle,
          * guice module) to consider duplicate (and so avoid duplicates installation). By default, multiple instances
          * of the same type allowed (the same as with dropwizard bundles - you can register multiple instances). But
