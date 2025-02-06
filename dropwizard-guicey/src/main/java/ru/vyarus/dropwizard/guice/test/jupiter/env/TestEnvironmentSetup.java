@@ -20,6 +20,13 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
  * <p>
  * To avoid confusion with guicey hooks: setup object required to prepare test environment before test (and apply
  * required configurations) whereas hooks is a general mechanism for application customization (not only in tests).
+ * Setup objects do not duplicate all hook methods, instead a new hook could be registered from the setup object
+ * (e.g., if you need extension context access in hook - you should register a setup object and then create hook
+ * (inside it) providing entire junit context or just some stored values.
+ * <p>
+ * For simplicity, a setup object could directly implement
+ * {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook} and register itself as a hook:
+ * {@code extension.hooks(this)}.
  *
  * @author Vyacheslav Rusakov
  * @since 12.05.2022

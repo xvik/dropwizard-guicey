@@ -54,7 +54,7 @@ public final class TestSetupUtils {
     public static void executeSetup(final ExtensionConfig config, final ExtensionContext context) {
         if (!config.extensions.isEmpty()) {
             final Stopwatch timer = Stopwatch.createStarted();
-            final TestExtension builder = new TestExtension(config);
+            final TestExtension builder = new TestExtension(config, context);
             final ExtensionContext.Store store = context.getStore(
                     ExtensionContext.Namespace.create(TestEnvironmentSetup.class));
             for (TestEnvironmentSetup support : config.extensions) {

@@ -10,9 +10,12 @@
       analysis (in case of problems)
 * Disabled modules remove would also affect private modules now (but only first level)
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
-* Track guicey test extensions time (would appear when debug option enabled)
-* Add injectOnce option into test extensions to call injectMemebers once per test instance 
-  (useful when TestInstance.Lifecycle.PER_CLASS used) (#394)
+* Test improvements:
+  - Track guicey test extensions time (would appear when debug option enabled)
+  - Add injectOnce option into test extensions to call injectMemebers once per test instance 
+   (useful when TestInstance.Lifecycle.PER_CLASS used) (discussion #394)
+  - Add getJunitContext() method for TestEnvironmentSetup (@EnableSetup) to be able to configure
+    test application with full context access (a setup object could register hooks) (discussion #388)
 
 ### 6.2.4 (2024-09-14)
 * Update to dropwizard 3.0.8
