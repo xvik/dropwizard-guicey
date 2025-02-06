@@ -11,6 +11,8 @@
 * Disabled modules remove would also affect private modules now (but only first level)
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
 * Track guicey test extensions time (would appear when debug option enabled)
+* Add injectOnce option into test extensions to call injectMemebers once per test instance 
+  (useful when TestInstance.Lifecycle.PER_CLASS used) (#394)
 
 ### 7.1.4 (2024-09-14)
 * Update to dropwizard 4.0.8
