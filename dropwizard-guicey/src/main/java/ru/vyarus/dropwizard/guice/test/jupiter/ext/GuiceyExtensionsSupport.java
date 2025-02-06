@@ -37,8 +37,10 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -89,6 +91,8 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     private static final String INHERITED_DW_SUPPORT = "INHERITED_DW_SUPPORT";
     // indicator storage key for case when application started for each method in test
     private static final String PER_METHOD_DW_SUPPORT = "PER_METHOD_DW_SUPPORT";
+    // list of test instance hashes where injection was performed (injectOnce option tracker)
+    private static final String INJECTION_INTSTANCE_HASH = "INJECTION_INTSTANCE_HASH";
 
     // required for proper initialization under parallel tests
     private static final Object SYNC = new Object();
@@ -143,15 +147,8 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         // and @TestInstance(TestInstance.Lifecycle.PER_CLASS) (in later case BeforeAllCallback called after
         // TestInstancePostProcessor, making it not usable for this task)
 
-        final Object testInstance = context.getTestInstance()
-                .orElseThrow(() -> new IllegalStateException("Unable to get the current test instance"));
+        injectMembers(context);
 
-        final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(context),
-                "Guicey test support was not initialized: most likely, you are trying to manually "
-                        + "register extension using non-static field - such usage is not supported.");
-
-        tracker.performanceTrack(GuiceyTestTime.GuiceInjection,
-                TestSupport.injectBeans(support, testInstance));
         tracker.performanceTrack(GuiceyTestTime.BeforeEach, timer.elapsed());
         // log guicey time on each test method to see how overall time increase (and where)
         tracker.logGuiceyTestTime(GuiceyTestTime.BeforeEach, context);
@@ -403,6 +400,33 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         final ClientSupport client = getClient(context);
         if (client != null) {
             client.close();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void injectMembers(final ExtensionContext context) {
+        final Object testInstance = context.getTestInstance()
+                .orElseThrow(() -> new IllegalStateException("Unable to get the current test instance"));
+        final Integer instanceHash = System.identityHashCode(testInstance);
+
+        final DropwizardTestSupport<?> support = Preconditions.checkNotNull(getSupport(context),
+                "Guicey test support was not initialized: most likely, you are trying to manually "
+                        + "register extension using non-static field - such usage is not supported.");
+
+        // parent would always present as current is a method context
+        final ExtensionContext.Store localStore = getLocalExtensionStore(context.getParent().get());
+        Set<Integer> lastInstanceHash = (Set<Integer>) localStore.get(INJECTION_INTSTANCE_HASH, Set.class);
+        if (lastInstanceHash == null) {
+            lastInstanceHash = new HashSet<>();
+        }
+
+        final boolean injectOnce = getConfig(context).injectOnce;
+        // inject each time, except if only one injection requested per test instance
+        if (!injectOnce || !lastInstanceHash.contains(instanceHash)) {
+            tracker.performanceTrack(GuiceyTestTime.GuiceInjection,
+                    TestSupport.injectBeans(support, testInstance));
+            lastInstanceHash.add(instanceHash);
+            localStore.put(INJECTION_INTSTANCE_HASH, lastInstanceHash);
         }
     }
 

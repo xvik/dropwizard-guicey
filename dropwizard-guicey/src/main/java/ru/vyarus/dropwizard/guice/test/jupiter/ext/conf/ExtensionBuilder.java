@@ -173,9 +173,27 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
     }
 
     /**
+     * When test lifecycle is {@link org.junit.jupiter.api.TestInstance.Lifecycle#PER_CLASS} same test instance
+     * used for all test methods. By default, guicey would perform fields injection before each method because
+     * there might be prototype beans that must be refreshed for each test method. If you don't rely on
+     * prototypes, injections could be performed just once (for the first test method).
+     *
+     * @return builder instance for chained calls
+     */
+    public T injectOnce() {
+        cfg.injectOnce = true;
+        return self();
+    }
+
+    /**
      * Enables debug output for extension: used setup objects, hooks and applied config overrides. Might be useful
      * for concurrent tests too because each message includes configuration prefix (exactly pointing to context test
      * or method).
+     * <p>
+     * Also, shows guicey extension time, so if you suspect that guicey spent too much time, use the debug option to
+     * be sure. Performance report is published after each "before each" phase and after "after all" to let you
+     * see how extension time increased with each test method (for non-static guicey extension (executed per method),
+     * performance printed after "before each" and "after each" because before/after all not available)
      * <p>
      * Configuration overrides are printed after application startup (but before the test) because overridden values
      * are resolved from system properties (applied by {@link io.dropwizard.testing.DropwizardTestSupport#before()}).
@@ -194,9 +212,9 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
     }
 
     /**
-     * By default, new application instance is started for each test. If you want to re-use the same application
-     * instance between several tests then put extension declaration in BASE test class and enable reuse option: all
-     * tests derived from this base class would use the same application instance.
+     * By default, a new application instance is started for each test. If you want to re-use the same application
+     * instance between several tests, then put extension declaration in BASE test class and enable the reuse option:
+     * all tests derived from this base class would use the same application instance.
      * <p>
      * You may have multiple base classes with reusable application declaration (different test hierarchies) - in
      * this case, multiple applications would be kept running during tests execution.

@@ -213,8 +213,12 @@ public class TestExtensionsTracker {
             performance.forEach(PerformanceTrack::applyIncrease);
 
             final StringBuilder title = new StringBuilder();
-            title.append("\n\\\\\\---------------------------------------------------------------------------------"
-                            + "\nGuicey time after [").append(phase.getDisplayName()).append("] of ")
+            String inst = "---------------------------------";
+            if (context.getTestInstance().isPresent()) {
+                inst = "/ test instance = " + System.identityHashCode(context.getTestInstance().get()) + " /";
+            }
+            title.append("\n\\\\\\-----------------------------------------------------------------").append(inst)
+                    .append("\nGuicey time after [").append(phase.getDisplayName()).append("] of ")
                     .append(getContextTestName(context))
                     .append(": ").append(PerformanceTrack.renderTime(overall,
                             lastOverall == null ? null : overall.minus(lastOverall)));

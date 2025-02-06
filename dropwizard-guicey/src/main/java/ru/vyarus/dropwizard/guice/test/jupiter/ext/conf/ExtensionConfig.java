@@ -30,6 +30,7 @@ public abstract class ExtensionConfig {
     public final List<GuiceyConfigurationHook> hooks = new ArrayList<>();
     public final List<TestEnvironmentSetup> extensions = new ArrayList<>();
     public TestClientFactory clientFactory;
+    public boolean injectOnce;
     // tracks source of registered setup objects
     public final TestExtensionsTracker tracker;
 

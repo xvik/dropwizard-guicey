@@ -326,6 +326,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             res.restMapping = ann.restMapping();
             res.hooksFromAnnotation(ann.annotationType(), ann.hooks());
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
+            res.injectOnce = ann.injectOnce();
             res.tracker.debug = ann.debug();
             res.reuseApp = ann.reuseApplication();
             res.clientFactory(ann.clientFactory());
