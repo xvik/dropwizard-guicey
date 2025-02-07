@@ -4,6 +4,7 @@ import com.google.common.base.Stopwatch;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.ListenersSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
@@ -51,10 +52,12 @@ public final class TestSetupUtils {
      * @param config  extension config
      * @param context junit extension context
      */
-    public static void executeSetup(final ExtensionConfig config, final ExtensionContext context) {
+    public static void executeSetup(final ExtensionConfig config,
+                                    final ExtensionContext context,
+                                    final ListenersSupport listeners) {
         if (!config.extensions.isEmpty()) {
             final Stopwatch timer = Stopwatch.createStarted();
-            final TestExtension builder = new TestExtension(config, context);
+            final TestExtension builder = new TestExtension(config, context, listeners);
             final ExtensionContext.Store store = context.getStore(
                     ExtensionContext.Namespace.create(TestEnvironmentSetup.class));
             for (TestEnvironmentSetup support : config.extensions) {

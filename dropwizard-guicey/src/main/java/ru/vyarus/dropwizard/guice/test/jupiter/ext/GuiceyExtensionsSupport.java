@@ -16,12 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
-import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.TestSupport;
 import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.ListenersSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.GuiceyTestTime;
@@ -83,6 +83,8 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
     // dropwizard support storage key (store visible for all relative tests)
     private static final String DW_SUPPORT = "DW_SUPPORT";
+    // injector storage key
+    private static final String INJECTOR = "INJECTOR";
     // storage key used to indicate reusable app usage instead of test-specific instance (even for first test)
     private static final String DW_SUPPORT_GLOBAL = "DW_SUPPORT_GLOBAL";
     // ClientFactory instance
@@ -98,9 +100,11 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     private static final Object SYNC = new Object();
 
     protected final TestExtensionsTracker tracker;
+    protected final ListenersSupport listeners;
 
     public GuiceyExtensionsSupport(final TestExtensionsTracker tracker) {
         this.tracker = tracker;
+        this.listeners = new ListenersSupport(tracker);
     }
 
     @Override
@@ -129,6 +133,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                             + "Please report this case to guicey developer.");
             localStore.put(INHERITED_DW_SUPPORT, true);
         }
+        listeners.broadcastBeforeAll(context);
         tracker.performanceTrack(GuiceyTestTime.BeforeAll, timer.elapsed());
     }
 
@@ -149,6 +154,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
         injectMembers(context);
 
+        listeners.broadcastBefore(context);
         tracker.performanceTrack(GuiceyTestTime.BeforeEach, timer.elapsed());
         // log guicey time on each test method to see how overall time increase (and where)
         tracker.logGuiceyTestTime(GuiceyTestTime.BeforeEach, context);
@@ -162,6 +168,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         if (perMethod) {
             stop(context);
         }
+        listeners.broadcastAfter(context);
         tracker.performanceTrack(GuiceyTestTime.AfterEach, timer.elapsed());
         if (perMethod) {
             tracker.logGuiceyTestTime(GuiceyTestTime.AfterEach, context);
@@ -174,17 +181,12 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         final Stopwatch timer = Stopwatch.createStarted();
         tracker.lifecyclePhase(context, GuiceyTestTime.AfterAll);
         // do nothing in application per test method mode
-        if (lookupSupport(context).isPresent()) {
-
-            // nested tests support
-            final Object nestedTestMarker = getLocalExtensionStore(context).remove(INHERITED_DW_SUPPORT);
-            if (nestedTestMarker != null) {
-                // do nothing: extension managed on upper context
-                return;
-            }
-
+        if (lookupSupport(context).isPresent()
+                // nested tests support: do nothing for nested - extension managed on upper context
+                && getLocalExtensionStore(context).remove(INHERITED_DW_SUPPORT) == null) {
             stop(context);
         }
+        listeners.broadcastAfterAll(context);
         tracker.performanceTrack(GuiceyTestTime.AfterAll, timer.elapsed());
         tracker.logGuiceyTestTime(GuiceyTestTime.AfterAll, context);
     }
@@ -198,7 +200,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      * should not be a problem.
      *
      * @param extensionContext extension context
-     * @return dropwizard support object prepared by guicey extension, or null if no guicey extension used or
+     * @return dropwizard support object prepared by guicey extension, or empty optional if no guicey extension used or
      * its beforeAll hook was not called yet
      */
     public static Optional<DropwizardTestSupport<?>> lookupSupport(final ExtensionContext extensionContext) {
@@ -206,15 +208,16 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     }
 
     /**
-     * Shortcut for application injector resolution be used by other extensions.
+     * Lookup test-specific injector.
      * <p>
-     * Custom extension must be activated after main guicey extension!
+     * {@link ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup} mechanism not used here because
+     * it does not provide injector after application stop, which is not very usable for tests.
      *
      * @param extensionContext extension context
-     * @return application injector or null if not available
+     * @return application injector or empty optional
      */
     public static Optional<Injector> lookupInjector(final ExtensionContext extensionContext) {
-        return lookupSupport(extensionContext).flatMap(it -> InjectorLookup.getInjector(it.getApplication()));
+        return Optional.ofNullable((Injector) getExtensionStore(extensionContext).get(INJECTOR));
     }
 
     /**
@@ -223,7 +226,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      * Custom extension must be activated after main guicey extension!
      *
      * @param extensionContext extension context
-     * @return client factory object or null if not available
+     * @return client factory object or empty optional
      */
     public static Optional<ClientSupport> lookupClient(final ExtensionContext extensionContext) {
         return Optional.ofNullable((ClientSupport) getExtensionStore(extensionContext).get(DW_CLIENT));
@@ -331,6 +334,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                     // global app already started, simply use it for current test (extension treat this case the same
                     // way as with nested test)
                     store.put(DW_SUPPORT, globalApp.getSupport());
+                    store.put(INJECTOR, TestSupport.getInjector(globalApp.getSupport()));
                     // new client created for each test
                     store.put(DW_CLIENT, globalApp.getClient());
                 } else {
@@ -382,8 +386,11 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         tracker.logUsedHooksAndSetupObjects(configPrefix);
         final Stopwatch timer = Stopwatch.createStarted();
         support.before();
+        // store injector directly because InjectorLookup mechanism would not work after application stop
+        store.put(INJECTOR, TestSupport.getInjector(support));
         tracker.performanceTrack(GuiceyTestTime.SupportStart, timer.elapsed());
         tracker.logOverriddenConfigs(configPrefix);
+        listeners.broadcastStart(context);
     }
 
     private void stop(final ExtensionContext context) throws Exception {
@@ -396,6 +403,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             support.after();
             TestSupportHolder.reset();
             tracker.performanceTrack(GuiceyTestTime.SupportStop, timer.stop().elapsed());
+            listeners.broadcastStop(context);
         }
         final ClientSupport client = getClient(context);
         if (client != null) {
