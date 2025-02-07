@@ -47,7 +47,11 @@ public enum GuiceyTestTime {
     /**
      * Test support after() executed (application stopped).
      */
-    SupportStop("Application stop");
+    SupportStop("Application stop"),
+    /**
+     * Test listeners time (registered in setup objects).
+     */
+    TestListeners("Listeners execution");
 
     private final String name;
 

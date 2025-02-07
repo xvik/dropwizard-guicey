@@ -2,13 +2,19 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
 
 /**
  * Extension for guicey junit 5 test extensions ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp}
- * and {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}). Called before test application
- * execution. Useful for management of additional environment objects like embedded database and
+ * and {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}). Called before test support object and
+ * test application creation. Provides additional abilities to configure test.
+ * <p>
+ * Useful for management of additional environment objects like embedded database and
  * overriding test application configuration. Consider this as a simpler option to writing custom junit extensions.
  * <p>
  * If you need to take action after test execution (e.g. shutdown database) then return {@link java.lang.AutoCloseable}
  * or {@link org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource} object, and it would be
  * closed automatically.
+ * <p>
+ * If auto close is not enough, use
+ * {@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension#listen(TestExecutionListener)} listener for
+ * reacting on exact test phases.
  * <p>
  * The same could be achieved with an additional junit 5 extensions, but it might be harder to properly synchronize
  * lifecycles (extensions order would be important). Environment support assumed to be a simpler alternative.

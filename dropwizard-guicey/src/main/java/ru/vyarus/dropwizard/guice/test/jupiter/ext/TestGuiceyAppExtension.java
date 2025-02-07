@@ -134,7 +134,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
                                                           final List<TestEnvironmentSetup> setups) {
         // setups from @EnableSetup fields go last
         config.extensions.addAll(setups);
-        TestSetupUtils.executeSetup(config, context);
+        TestSetupUtils.executeSetup(config, context, listeners);
         final Stopwatch timer = Stopwatch.createStarted();
         HooksUtil.register(config.hooks);
         tracker.performanceTrack(GuiceyTestTime.HooksRegistration, timer.elapsed(), true);

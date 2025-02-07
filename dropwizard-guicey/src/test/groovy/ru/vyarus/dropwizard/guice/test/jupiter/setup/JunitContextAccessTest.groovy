@@ -6,7 +6,6 @@ import io.dropwizard.core.Configuration
 import io.dropwizard.core.setup.Bootstrap
 import io.dropwizard.core.setup.Environment
 import jakarta.inject.Inject
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle

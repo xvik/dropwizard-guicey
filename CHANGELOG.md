@@ -19,6 +19,9 @@
    (useful when TestInstance.Lifecycle.PER_CLASS used) (discussion #394)
   - Add getJunitContext() method for TestEnvironmentSetup (@EnableSetup) to be able to configure
     test application with full context access (a setup object could register hooks) (discussion #388)
+  - Add test lifecycle listeners: could be registered with TestEnvironmentSetup (listen() method) and provide
+    notifications for guicey extension lifecycle (app start/stop, before/after test).
+    This is a simple alternative to writing junit extensions for an additional integrations (db, testcontainers etc.).
 * [admin-rest]
   - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
 
