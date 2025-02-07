@@ -13,10 +13,14 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 public class TestExtension extends ExtensionBuilder<TestExtension, ExtensionConfig> {
 
     private final ExtensionContext context;
+    private final ListenersSupport listeners;
 
-    public TestExtension(final ExtensionConfig cfg, final ExtensionContext context) {
+    public TestExtension(final ExtensionConfig cfg,
+                         final ExtensionContext context,
+                         final ListenersSupport listeners) {
         super(cfg);
         this.context = context;
+        this.listeners = listeners;
     }
 
     /**
@@ -33,5 +37,18 @@ public class TestExtension extends ExtensionBuilder<TestExtension, ExtensionConf
      */
     public ExtensionContext getJunitContext() {
         return context;
+    }
+
+    /**
+     * Listen for test lifecycle. Useful when not only resource close is required (achievable by returning
+     * a closable object from setup), but writing a separate junit extension is not desirable.
+     * Moreover, this listener is synchronized with guicey extension lifecycle.
+     *
+     * @param listener listener object
+     * @return builder instance for chained calls
+     */
+    public TestExtension listen(final TestExecutionListener listener) {
+        listeners.addListener(listener);
+        return this;
     }
 }
