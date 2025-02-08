@@ -12,6 +12,9 @@ import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.spock.InjectClient;
+import ru.vyarus.dropwizard.guice.test.util.AnnotatedField;
+import ru.vyarus.dropwizard.guice.test.util.TestFieldUtils;
 import spock.lang.Shared;
 
 import java.lang.reflect.Field;
@@ -32,7 +35,7 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     private final EnvironmentSupport support;
     private final List<GuiceyConfigurationHook> hooks;
     private final Set<InjectionPoint> injectionPoints;
-    private final List<Field> clientFields;
+    private final List<AnnotatedField<InjectClient, ClientSupport>> clientFields;
     private Injector injector;
 
     public GuiceyInterceptor(final SpecInfo spec, final EnvironmentSupport support,
@@ -40,7 +43,8 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
         this.support = support;
         this.hooks = hooks;
         injectionPoints = InjectionPoint.forInstanceMethodsAndFields(spec.getReflection());
-        clientFields = SpecialFieldsSupport.findClientFields(spec.getReflection());
+        clientFields = TestFieldUtils
+                .findAnnotatedFields(spec.getReflection(), InjectClient.class, ClientSupport.class);
     }
 
     @Override

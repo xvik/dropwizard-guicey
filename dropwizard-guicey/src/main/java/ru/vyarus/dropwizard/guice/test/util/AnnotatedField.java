@@ -14,14 +14,14 @@ import java.lang.reflect.Modifier;
  * @author Vyacheslav Rusakov
  * @since 07.02.2025
  */
-public class FieldAccess<A extends Annotation, T> {
+public class AnnotatedField<A extends Annotation, T> {
     private final A annotation;
     private final Field field;
     private final Class<?> testClass;
 
-    public FieldAccess(final A annotation,
-                       final Field field,
-                       final Class<?> testClass) {
+    public AnnotatedField(final A annotation,
+                          final Field field,
+                          final Class<?> testClass) {
         this.annotation = annotation;
         this.field = ReflectionUtils.makeAccessible(field);
         this.testClass = testClass;
