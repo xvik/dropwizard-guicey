@@ -26,7 +26,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.GuiceyTestTime;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubsSupport;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
-import ru.vyarus.dropwizard.guice.test.util.FieldAccess;
+import ru.vyarus.dropwizard.guice.test.util.AnnotatedField;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.ReusableAppUtils;
 import ru.vyarus.dropwizard.guice.test.util.StoredReusableApp;
@@ -458,9 +458,9 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         // test instance in application per test method case (beforeEach)
         private final Object instance;
         private final TestExtensionsTracker tracker;
-        private final List<FieldAccess<EnableHook, GuiceyConfigurationHook>> parentHookFields;
-        private final List<FieldAccess<EnableHook, GuiceyConfigurationHook>> ownHookFields;
-        private final List<FieldAccess<EnableSetup, TestEnvironmentSetup>> extensionFields;
+        private final List<AnnotatedField<EnableHook, GuiceyConfigurationHook>> parentHookFields;
+        private final List<AnnotatedField<EnableHook, GuiceyConfigurationHook>> ownHookFields;
+        private final List<AnnotatedField<EnableSetup, TestEnvironmentSetup>> extensionFields;
 
         FieldSupport(final Class<?> testClass, final Object instance, final TestExtensionsTracker tracker) {
             this.testClass = testClass;
@@ -474,7 +474,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                     testClass, EnableHook.class, GuiceyConfigurationHook.class);
             if (staticFieldsRequired) {
                 // only static fields could be processed for beforeAll
-                ownHookFields.forEach(FieldAccess::requireStatic);
+                ownHookFields.forEach(AnnotatedField::requireStatic);
             }
             parentHookFields = TestFieldUtils.getInheritedFields(ownHookFields);
             ownHookFields.removeAll(parentHookFields);
@@ -487,7 +487,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                     testClass, EnableSetup.class, TestEnvironmentSetup.class);
             if (staticFieldsRequired) {
                 // only static fields could be processed for beforeAll
-                extensionFields.forEach(FieldAccess::requireStatic);
+                extensionFields.forEach(AnnotatedField::requireStatic);
             }
             if (tracker != null) {
                 tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
@@ -566,14 +566,14 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         @SuppressWarnings("unchecked")
         private List<String> findNonBaseFields(final Class<?> declarationClass) {
             final List<String> wrong = new ArrayList<>();
-            checkFieldsDeclaration(wrong, (List<FieldAccess<?, ?>>) (List) parentHookFields, declarationClass);
-            checkFieldsDeclaration(wrong, (List<FieldAccess<?, ?>>) (List) ownHookFields, declarationClass);
-            checkFieldsDeclaration(wrong, (List<FieldAccess<?, ?>>) (List) extensionFields, declarationClass);
+            checkFieldsDeclaration(wrong, (List<AnnotatedField<?, ?>>) (List) parentHookFields, declarationClass);
+            checkFieldsDeclaration(wrong, (List<AnnotatedField<?, ?>>) (List) ownHookFields, declarationClass);
+            checkFieldsDeclaration(wrong, (List<AnnotatedField<?, ?>>) (List) extensionFields, declarationClass);
             return wrong;
         }
 
         private void checkFieldsDeclaration(final List<String> wrong,
-                                            final List<FieldAccess<?, ?>> fields,
+                                            final List<AnnotatedField<?, ?>> fields,
                                             final Class<?> baseClass) {
             fields.forEach(field -> {
                 if (!field.getDeclaringClass().isAssignableFrom(baseClass)) {
@@ -583,7 +583,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             });
         }
 
-        private void activateFieldHooks(final List<FieldAccess<EnableHook, GuiceyConfigurationHook>> fields) {
+        private void activateFieldHooks(final List<AnnotatedField<EnableHook, GuiceyConfigurationHook>> fields) {
             final Stopwatch timer = Stopwatch.createStarted();
             HooksUtil.register(TestFieldUtils.getValues(fields, instance));
             tracker.performanceTrack(GuiceyTestTime.HooksRegistration, timer.elapsed(), true);

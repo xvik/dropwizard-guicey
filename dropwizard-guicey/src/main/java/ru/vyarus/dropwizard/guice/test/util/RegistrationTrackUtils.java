@@ -50,7 +50,7 @@ public final class RegistrationTrackUtils {
      */
     public static void fromField(final List<String> info,
                                  final String prefix,
-                                 final List<FieldAccess<?, ?>> fields,
+                                 final List<AnnotatedField<?, ?>> fields,
                                  final Object instance) {
         track(info, fields,
                 field -> field.getValue(instance).getClass(),

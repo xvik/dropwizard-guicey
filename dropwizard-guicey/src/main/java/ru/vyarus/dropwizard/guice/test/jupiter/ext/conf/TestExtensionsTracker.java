@@ -10,7 +10,7 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
-import ru.vyarus.dropwizard.guice.test.util.FieldAccess;
+import ru.vyarus.dropwizard.guice.test.util.AnnotatedField;
 import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
 
 import java.lang.annotation.Annotation;
@@ -62,10 +62,10 @@ public class TestExtensionsTracker {
     }
 
     @SuppressWarnings("unchecked")
-    public final void extensionsFromFields(final List<FieldAccess<EnableSetup, TestEnvironmentSetup>> fields,
+    public final void extensionsFromFields(final List<AnnotatedField<EnableSetup, TestEnvironmentSetup>> fields,
                                            final Object instance) {
         RegistrationTrackUtils.fromField(extensionsSource, "@" + EnableSetup.class.getSimpleName(),
-                (List<FieldAccess<?, ?>>) (List) fields, instance);
+                (List<AnnotatedField<?, ?>>) (List) fields, instance);
     }
 
     @SafeVarargs
@@ -79,7 +79,7 @@ public class TestExtensionsTracker {
     }
 
     @SuppressWarnings("unchecked")
-    public final void hooksFromFields(final List<FieldAccess<EnableHook, GuiceyConfigurationHook>> fields,
+    public final void hooksFromFields(final List<AnnotatedField<EnableHook, GuiceyConfigurationHook>> fields,
                                       final boolean baseHooks,
                                       final Object instance) {
         if (!fields.isEmpty()) {
@@ -89,7 +89,7 @@ public class TestExtensionsTracker {
                 hooksSource.clear();
             }
             RegistrationTrackUtils.fromField(hooksSource, "@" + EnableHook.class.getSimpleName(),
-                    (List<FieldAccess<?, ?>>) (List) fields, instance);
+                    (List<AnnotatedField<?, ?>>) (List) fields, instance);
             hooksSource.addAll(tmp);
         }
     }
