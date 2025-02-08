@@ -6,9 +6,11 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 
@@ -20,6 +22,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
  */
 @TestGuiceyApp(value = PerMethodInjectOnceGuiceyTest.App.class, injectOnce = true, debug = true)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD) // default
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PerMethodInjectOnceGuiceyTest {
 
     @Inject
