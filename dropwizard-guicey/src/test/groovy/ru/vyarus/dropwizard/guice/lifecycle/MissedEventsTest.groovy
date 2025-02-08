@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import spock.lang.Specification
 
@@ -22,6 +23,7 @@ class MissedEventsTest extends Specification {
 
         expect: "only few events called"
         Listener.events.contains(GuiceyLifecycle.Initialized)
+        Listener.events.contains(GuiceyLifecycle.ConfigurationHooksProcessed)
         Listener.events.contains(GuiceyLifecycle.BundlesResolved)
         Listener.events.contains(GuiceyLifecycle.InjectorCreation)
         Listener.events.contains(GuiceyLifecycle.InstallersResolved)
@@ -30,7 +32,6 @@ class MissedEventsTest extends Specification {
 
 
         and: "not called"
-        !Listener.events.contains(GuiceyLifecycle.ConfigurationHooksProcessed)
         !Listener.events.contains(GuiceyLifecycle.BundlesFromLookupResolved)
         !Listener.events.contains(GuiceyLifecycle.BundlesInitialized)
         !Listener.events.contains(GuiceyLifecycle.CommandsResolved)
@@ -68,7 +69,9 @@ class MissedEventsTest extends Specification {
             if (!events.contains(event.getType())) {
                 events.add(event.getType())
             }
-            if (event.getType() == GuiceyLifecycle.ConfigurationHooksProcessed) {
+            if (event.getType() == GuiceyLifecycle.ConfigurationHooksProcessed
+                    // one hook from StubsSupport
+                    && ((ConfigurationHooksProcessedEvent)event).getHooks().size() > 1) {
                 throw new IllegalStateException("Hooks used!")
             }
             if (event.getType() == GuiceyLifecycle.BundlesFromLookupResolved) {

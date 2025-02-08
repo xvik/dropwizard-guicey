@@ -19,9 +19,12 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 18.05.2022
  */
-@TestGuiceyApp(AutoScanApplication.class)
+@TestGuiceyApp(value = AutoScanApplication.class, debug = true)
 public class SetupAndHookInOneFieldTest {
 
+    // NOTE: in debug hook would appear two times: 1 from auto registration from setup and one from field
+    // (setup objects processed before class hook fields)
+    // Still, hook would be called only once
     @EnableHook
     @EnableSetup
     static Hook hook = new Hook();

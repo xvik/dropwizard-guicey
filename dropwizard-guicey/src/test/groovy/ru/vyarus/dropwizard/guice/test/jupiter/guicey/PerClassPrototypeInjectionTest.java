@@ -16,12 +16,12 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 
 /**
  * @author Vyacheslav Rusakov
- * @since 06.02.2025
+ * @since 28.06.2024
  */
-@TestGuiceyApp(value = PerClassInjectOnceGuiceyTest.App.class, injectOnce = true, debug = true)
+@TestGuiceyApp(PerClassPrototypeInjectionTest.App.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PerClassInjectOnceGuiceyTest {
+public class PerClassPrototypeInjectionTest {
 
     @Inject
     Bean bean;
@@ -41,10 +41,8 @@ public class PerClassInjectOnceGuiceyTest {
     @Order(2)
     void injectTest2() {
         Assertions.assertNotNull(bean);
-        // same test instance
         Assertions.assertEquals(testId, System.identityHashCode(this));
-        // same bean (no second injection - prototype not replaced)
-        Assertions.assertEquals(beanId, System.identityHashCode(bean));
+        Assertions.assertNotEquals(beanId, System.identityHashCode(bean));
     }
 
     public static class App extends Application<Configuration> {

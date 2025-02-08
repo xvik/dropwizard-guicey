@@ -53,18 +53,20 @@ public class HookObjectsLogTest {
                         "\n" +
                         "\tSetup objects = \n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test1.setup\n" +
+                        "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tdefault extension\n" +
                         "\n" +
                         "\tTest hooks = \n" +
                         "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base1\n" +
                         "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base2\n" +
                         "\t\tExt1                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
                         "\t\tExt2                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
+                        "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tStubsSupport instance\n" +
                         "\t\tExt3                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 class\n" +
                         "\t\tExt4                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 class\n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext1\n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext2\n");
+                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext2");
 
         assertThat(output).contains(
                 "Guicey time after [After all] of HookObjectsLogTest$Test1: 111 ms ( + 111 ms)\n" +
@@ -75,14 +77,18 @@ public class HookObjectsLogTest {
                         "\t\tGuicey setup objects execution     : 111 ms\n" +
                         "\t\tDropwizardTestSupport creation     : 111 ms\n" +
                         "\t\tApplication start                  : 111 ms\n" +
+                        "\t\tListeners execution                : 111 ms\n" +
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
                         "\t\tGuice fields injection             : 111 ms\n" +
+                        "\t\tListeners execution                : 111 ms\n" +
                         "\n" +
                         "\t[After each]                       : 111 ms\n" +
+                        "\t\tListeners execution                : 111 ms\n" +
                         "\n" +
                         "\t[After all]                        : 111 ms\n" +
-                        "\t\tApplication stop                   : 111 ms");
+                        "\t\tApplication stop                   : 111 ms\n" +
+                        "\t\tListeners execution                : 111 ms\n");
     }
 
     @Test
@@ -107,6 +113,7 @@ public class HookObjectsLogTest {
                         "\n" +
                         "\tSetup objects = \n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test2.setup\n" +
+                        "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tdefault extension\n" +
                         "\n" +
                         "\tTest hooks = \n" +
                         "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base1\n" +
@@ -115,6 +122,7 @@ public class HookObjectsLogTest {
                         "\t\tExt2                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@RegisterExtension class\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
+                        "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tStubsSupport instance\n" +
                         "\t\tExt3                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 class\n" +
                         "\t\tExt4                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 class\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +
@@ -131,14 +139,18 @@ public class HookObjectsLogTest {
                         "\t\tGuicey setup objects execution     : 111 ms\n" +
                         "\t\tDropwizardTestSupport creation     : 111 ms\n" +
                         "\t\tApplication start                  : 111 ms\n" +
+                        "\t\tListeners execution                : 111 ms\n" +
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
                         "\t\tGuice fields injection             : 111 ms\n" +
+                        "\t\tListeners execution                : 111 ms\n" +
                         "\n" +
                         "\t[After each]                       : 111 ms\n" +
+                        "\t\tListeners execution                : 111 ms\n" +
                         "\n" +
                         "\t[After all]                        : 111 ms\n" +
-                        "\t\tApplication stop                   : 111 ms");
+                        "\t\tApplication stop                   : 111 ms\n" +
+                        "\t\tListeners execution                : 111 ms\n");
     }
 
     public static class Base {

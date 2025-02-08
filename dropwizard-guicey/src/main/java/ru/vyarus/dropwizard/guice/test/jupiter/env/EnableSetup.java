@@ -19,6 +19,10 @@ import java.lang.annotation.Target;
  * <p>
  * Field might be not static only if extension is registered in non-static field (application started for each test
  * method), otherwise it must be static. Incorrect usage will be indicated with an exception.
+ * <p>
+ * If setup object implements hook ({@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook})
+ * and/or listener ({@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestExecutionListener}) it would be
+ * registered automatically (no need for manual registration). Manual registration would not create duplicate.
  *
  * @author Vyacheslav Rusakov
  * @see ru.vyarus.dropwizard.guice.test.EnableHook

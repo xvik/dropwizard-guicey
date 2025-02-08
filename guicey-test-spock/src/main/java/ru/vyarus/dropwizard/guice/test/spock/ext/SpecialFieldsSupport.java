@@ -4,7 +4,8 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.spock.InjectClient;
-import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
+import ru.vyarus.dropwizard.guice.test.util.FieldAccess;
+import ru.vyarus.dropwizard.guice.test.util.TestFieldUtils;
 import spock.lang.Shared;
 
 import java.lang.reflect.Field;
@@ -33,11 +34,10 @@ public final class SpecialFieldsSupport {
      */
     public static List<GuiceyConfigurationHook> findHooks(final Class<?> test) {
         final List<GuiceyConfigurationHook> hooks = new ArrayList<>();
-        final List<Field> fields = findFields(test, field -> field.isAnnotationPresent(EnableHook.class));
-        HooksUtil.validateFieldHooks(fields, false);
-        for (Field field : fields) {
-            field.setAccessible(true);
-            final GuiceyConfigurationHook hook = getValue(field);
+        final List<FieldAccess<EnableHook, GuiceyConfigurationHook>> fields = TestFieldUtils.findAnnotatedFields(
+                test, EnableHook.class, GuiceyConfigurationHook.class);
+        fields.forEach(FieldAccess::requireStatic);
+        for (GuiceyConfigurationHook hook : TestFieldUtils.getValues(fields, null)) {
             if (hook != null) {
                 hooks.add(hook);
             }
