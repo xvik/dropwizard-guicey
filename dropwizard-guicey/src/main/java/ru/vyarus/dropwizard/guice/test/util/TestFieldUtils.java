@@ -32,13 +32,13 @@ public final class TestFieldUtils {
      * @param <T>          field (base) type
      * @return detected fields
      */
-    public static <A extends Annotation, T> List<FieldAccess<A, T>> findAnnotatedFields(
+    public static <A extends Annotation, T> List<AnnotatedField<A, T>> findAnnotatedFields(
             final Class<?> testClass,
             final Class<A> ann,
             final Class<T> requiredType) {
         final List<Field> fields = AnnotationSupport.findAnnotatedFields(testClass, ann);
 
-        final List<FieldAccess<A, T>> res = new ArrayList<>(fields.size());
+        final List<AnnotatedField<A, T>> res = new ArrayList<>(fields.size());
         for (Field field : fields) {
             if (!requiredType.isAssignableFrom(field.getType())) {
                 throw new IllegalStateException(String.format(
@@ -46,7 +46,7 @@ public final class TestFieldUtils {
                         toString(field), ann.getSimpleName(), requiredType.getSimpleName()
                 ));
             }
-            res.add(new FieldAccess<>(field.getAnnotation(ann), field, testClass));
+            res.add(new AnnotatedField<>(field.getAnnotation(ann), field, testClass));
         }
         // sort static fields first
         res.sort(Comparator.comparing(field -> field.isStatic() ? 0 : 1));
@@ -61,8 +61,8 @@ public final class TestFieldUtils {
      * @param <T>    field type
      * @return fields not directly declared in test class
      */
-    public static <A extends Annotation, T> List<FieldAccess<A, T>> getInheritedFields(
-            final List<FieldAccess<A, T>> fields) {
+    public static <A extends Annotation, T> List<AnnotatedField<A, T>> getInheritedFields(
+            final List<AnnotatedField<A, T>> fields) {
         return fields.stream()
                 .filter(fieldAccess -> !fieldAccess.isTestOwnField())
                 .collect(Collectors.toList());
@@ -76,10 +76,10 @@ public final class TestFieldUtils {
      * @param <T>    field type
      * @return fields directly declared in test class
      */
-    public static <A extends Annotation, T> List<FieldAccess<A, T>> getTestOwnFields(
-            final List<FieldAccess<A, T>> fields) {
+    public static <A extends Annotation, T> List<AnnotatedField<A, T>> getTestOwnFields(
+            final List<AnnotatedField<A, T>> fields) {
         return fields.stream()
-                .filter(FieldAccess::isTestOwnField)
+                .filter(AnnotatedField::isTestOwnField)
                 .collect(Collectors.toList());
     }
 
@@ -93,9 +93,9 @@ public final class TestFieldUtils {
      * @return field values
      */
     public static <A extends Annotation, T> List<T> getValues(
-            final List<FieldAccess<A, T>> fields, final Object instance) {
+            final List<AnnotatedField<A, T>> fields, final Object instance) {
         final List<T> res = new ArrayList<>();
-        for (final FieldAccess<A, T> field : fields) {
+        for (final AnnotatedField<A, T> field : fields) {
             res.add(field.getValue(instance));
         }
         return res;

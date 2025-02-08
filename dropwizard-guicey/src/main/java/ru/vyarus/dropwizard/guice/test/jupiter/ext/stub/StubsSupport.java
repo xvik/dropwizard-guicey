@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
-import ru.vyarus.dropwizard.guice.test.util.FieldAccess;
+import ru.vyarus.dropwizard.guice.test.util.AnnotatedField;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 public class StubsSupport implements TestEnvironmentSetup, GuiceyConfigurationHook, TestExecutionListener {
 
     private boolean appPerClass;
-    private List<FieldAccess<StubBean, Object>> fields;
+    private List<AnnotatedField<StubBean, Object>> fields;
 
     @Override
     public Object setup(final TestExtension extension) {
@@ -77,8 +77,8 @@ public class StubsSupport implements TestEnvironmentSetup, GuiceyConfigurationHo
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void collectOverrideBindings(final List<FieldAccess<StubBean, Object>> fields, final Binder binder) {
-        for (final FieldAccess<StubBean, Object> field : fields) {
+    private <T> void collectOverrideBindings(final List<AnnotatedField<StubBean, Object>> fields, final Binder binder) {
+        for (final AnnotatedField<StubBean, Object> field : fields) {
             final Class<? super T> key = (Class<? super T>) field.getAnnotation().value();
             // bind original type to stub - guice will instantiate it
             // IMPORTANT to bind as singleton - otherwise different instances would be everywhere
@@ -92,7 +92,7 @@ public class StubsSupport implements TestEnvironmentSetup, GuiceyConfigurationHo
         }
     }
 
-    private void stubLifecycle(final List<FieldAccess<StubBean, Object>> fields,
+    private void stubLifecycle(final List<AnnotatedField<StubBean, Object>> fields,
                                final Object testInstance,
                                final Consumer<StubLifecycle> callback) {
         fields.forEach(field -> {
@@ -103,7 +103,7 @@ public class StubsSupport implements TestEnvironmentSetup, GuiceyConfigurationHo
         });
     }
 
-    private void injectStubs(final List<FieldAccess<StubBean, Object>> fields,
+    private void injectStubs(final List<AnnotatedField<StubBean, Object>> fields,
                              final Object testInstance,
                              final Injector injector) {
         fields.forEach(field -> {
@@ -115,7 +115,7 @@ public class StubsSupport implements TestEnvironmentSetup, GuiceyConfigurationHo
     }
 
     @SuppressWarnings("PMD.SystemPrintln")
-    private void reportStubs(final List<FieldAccess<StubBean, Object>> fields) {
+    private void reportStubs(final List<AnnotatedField<StubBean, Object>> fields) {
         if (!fields.isEmpty()) {
             final StringBuilder report = new StringBuilder("\nApplied stubs (@")
                     .append(StubBean.class.getSimpleName()).append("):\n");
