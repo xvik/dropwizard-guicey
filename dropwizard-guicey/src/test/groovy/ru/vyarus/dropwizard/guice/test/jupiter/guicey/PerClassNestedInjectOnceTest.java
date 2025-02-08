@@ -6,10 +6,12 @@ import io.dropwizard.core.Configuration;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 
@@ -18,6 +20,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
  * @since 06.02.2025
  */
 @TestGuiceyApp(value = PerClassNestedInjectOnceTest.App.class, debug = true, injectOnce = true)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PerClassNestedInjectOnceTest {
 
     @Nested

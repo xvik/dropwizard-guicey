@@ -10,14 +10,15 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
+import ru.vyarus.dropwizard.guice.test.util.FieldAccess;
 import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +61,11 @@ public class TestExtensionsTracker {
         contextHook = hook;
     }
 
-    public final void extensionsFromFields(final List<Field> fields, final Object instance) {
-        RegistrationTrackUtils.fromField(extensionsSource, "@" + EnableSetup.class.getSimpleName(), fields, instance);
+    @SuppressWarnings("unchecked")
+    public final void extensionsFromFields(final List<FieldAccess<EnableSetup, TestEnvironmentSetup>> fields,
+                                           final Object instance) {
+        RegistrationTrackUtils.fromField(extensionsSource, "@" + EnableSetup.class.getSimpleName(),
+                (List<FieldAccess<?, ?>>) (List) fields, instance);
     }
 
     @SafeVarargs
@@ -74,14 +78,18 @@ public class TestExtensionsTracker {
         extensionsSource.addAll(tmp);
     }
 
-    public final void hooksFromFields(final List<Field> fields, final boolean baseHooks, final Object instance) {
+    @SuppressWarnings("unchecked")
+    public final void hooksFromFields(final List<FieldAccess<EnableHook, GuiceyConfigurationHook>> fields,
+                                      final boolean baseHooks,
+                                      final Object instance) {
         if (!fields.isEmpty()) {
             // hooks from fields in base classes activated before configured hooks
             final List<String> tmp = baseHooks ? new ArrayList<>(hooksSource) : Collections.emptyList();
             if (baseHooks) {
                 hooksSource.clear();
             }
-            RegistrationTrackUtils.fromField(hooksSource, "@" + EnableHook.class.getSimpleName(), fields, instance);
+            RegistrationTrackUtils.fromField(hooksSource, "@" + EnableHook.class.getSimpleName(),
+                    (List<FieldAccess<?, ?>>) (List) fields, instance);
             hooksSource.addAll(tmp);
         }
     }
@@ -101,6 +109,12 @@ public class TestExtensionsTracker {
     public final void extensionClasses(final Class<? extends TestEnvironmentSetup>... exts) {
         RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s class",
                 RegisterExtension.class.getSimpleName()), exts);
+    }
+
+    @SafeVarargs
+    public final List<TestEnvironmentSetup> defaultExtensions(final TestEnvironmentSetup... exts) {
+        RegistrationTrackUtils.fromInstance(extensionsSource, "default extension", exts);
+        return Arrays.asList(exts);
     }
 
     public final void hookInstances(final GuiceyConfigurationHook... exts) {
@@ -271,7 +285,7 @@ public class TestExtensionsTracker {
             if (this.duration == null) {
                 this.duration = duration;
             } else {
-                if (append) {
+                if (this.increase == null && append) {
                     // immediate append (for timers executed several times)
                     this.duration = this.duration.plus(duration);
                 } else {

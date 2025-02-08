@@ -22,6 +22,16 @@
   - Add test lifecycle listeners: could be registered with TestEnvironmentSetup (listen() method) and provide
     notifications for guicey extension lifecycle (app start/stop, before/after test).
     This is a simple alternative to writing junit extensions for an additional integrations (db, testcontainers etc.).
+  - Add annotated fields search api in test class for setup objects (TestEnvironmentSetup): findFields(..)
+    (to simplify writing annotation-driven extensions).
+  - If setup object (TestEnvironmentSetup) implements hook and/or listener interface, it would be
+    registered automatically as hook and/or listener.
+  - Add debug state into setup object (TestEnvironmentSetup) so setup objects could
+    show debug output when debug opion is enabled on guicey extension
+  - Add shortcut method isApplicationStartedForClass() for TestEnvironmentSetup to simplify beforeAll/beforeEach 
+    extension lifecycle detection
+  - Add test stub fields: @StubBean(Service.class) ServiceStub
+    (use guice modules override feature to replace existing service into stub)
 
 ### 7.1.4 (2024-09-14)
 * Update to dropwizard 4.0.8

@@ -1,9 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
-import org.junit.platform.commons.util.ReflectionUtils;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -43,7 +41,7 @@ public final class RegistrationTrackUtils {
     }
 
     /**
-     * Stores tracking info for recognized test class fields.
+     * Store tracking info for recognized test class fields.
      *
      * @param info     info holder
      * @param prefix   source identity
@@ -52,12 +50,12 @@ public final class RegistrationTrackUtils {
      */
     public static void fromField(final List<String> info,
                                  final String prefix,
-                                 final List<Field> fields,
+                                 final List<FieldAccess<?, ?>> fields,
                                  final Object instance) {
         track(info, fields,
-                field -> ReflectionUtils.tryToReadFieldValue(field, instance)
-                        .orElseTry(() -> new Exception()).toOptional().map(Object::getClass).get(),
-                field -> prefix + " field " + field.getDeclaringClass().getSimpleName() + "." + field.getName()
+                field -> field.getValue(instance).getClass(),
+                field -> prefix + " field " + field.getDeclaringClass().getSimpleName()
+                        + "." + field.getName()
         );
     }
 

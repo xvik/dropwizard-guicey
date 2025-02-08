@@ -30,9 +30,9 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
  * (e.g., if you need extension context access in hook - you should register a setup object and then create hook
  * (inside it) providing entire junit context or just some stored values.
  * <p>
- * For simplicity, a setup object could directly implement
- * {@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook} and register itself as a hook:
- * {@code extension.hooks(this)}.
+ * AUTO REGISTRATION: If setup object implements hook ({@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook})
+ * and/or listener ({@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestExecutionListener}) it would be
+ * registered automatically. Manual registration would not create duplicate.
  *
  * @author Vyacheslav Rusakov
  * @since 12.05.2022
@@ -41,9 +41,10 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
 public interface TestEnvironmentSetup {
 
     /**
-     * Called before test application startup under junit "before all" phase. Assumed to be used for starting
-     * additional test objects (like embedded database) and application configuration (configuration overrides).
-     * Provided object allow you to provide direct configuration overrides (e.g. to override database credentials).
+     * Called before test application startup under junit "before all" phase or "before each" (depends on extension
+     * registration). Assumed to be used for starting additional test objects (like embedded database) and application
+     * configuration (configuration overrides).Provided object allow you to provide direct configuration overrides
+     * (e.g. to override database credentials).
      * <p>
      * For simplicity, any non closable returned object simply ignored. This was done to simplify lambas usage:
      * {@code TestEnvironmentSetup env = ext -> ext.configOverrides("foo:1")} - here configuration object
