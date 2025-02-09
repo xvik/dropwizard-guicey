@@ -1,10 +1,13 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
+import org.junit.jupiter.api.extension.TestInstances;
 import org.junit.platform.commons.util.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Annotated field wrapper. Used to simplify work with test fields by hiding all required reflection.
@@ -14,10 +17,13 @@ import java.lang.reflect.Modifier;
  * @author Vyacheslav Rusakov
  * @since 07.02.2025
  */
+@SuppressWarnings("PMD.GodClass")
 public class AnnotatedField<A extends Annotation, T> {
     private final A annotation;
     private final Field field;
     private final Class<?> testClass;
+    // custom data assigned during processing
+    private Map<String, Object> data;
 
     public AnnotatedField(final A annotation,
                           final Field field,
@@ -74,12 +80,28 @@ public class AnnotatedField<A extends Annotation, T> {
             throw new IllegalStateException("Field " + toStringField()
                     + " is not static: test instance required for obtaining value");
         }
+        if (!isCompatible(instance)) {
+            throw new IllegalStateException("Invalid instance provided: "
+                    + (instance == null ? null : instance.getClass())
+                    + " for field " + toStringField());
+        }
         try {
             return (T) field.get(instance);
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Failed to get field " + toStringField()
                     + " value", e);
         }
+    }
+
+    /**
+     * In case of nested test, there would be root class instance and nested instance. It is important to select
+     * the correct instance for field manipulation: the correct test instance would be selected by preserved test class.
+     *
+     * @param instances test instances
+     * @return field value
+     */
+    public T getValue(final TestInstances instances) {
+        return getValue(findRequiredInstance(instances));
     }
 
     /**
@@ -92,11 +114,27 @@ public class AnnotatedField<A extends Annotation, T> {
             throw new IllegalStateException("Field " + toStringField()
                     + " is not static: test instance required for setting value");
         }
+        if (!isCompatible(instance)) {
+            throw new IllegalStateException("Invalid instance provided: "
+                    + (instance == null ? null : instance.getClass())
+                    + " for field " + toStringField());
+        }
         try {
             field.set(instance, value);
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Failed to set field " + toStringField() + " value to " + value, e);
         }
+    }
+
+    /**
+     * In case of nested test, there would be root class instance and nested instance. It is important to select
+     * the correct instance for field manipulation: the correct test instance would be selected by preserved test class.
+     *
+     * @param instances test instances
+     * @param value     value to set
+     */
+    public void setValue(final TestInstances instances, final T value) {
+        setValue(findRequiredInstance(instances), value);
     }
 
     /**
@@ -138,6 +176,78 @@ public class AnnotatedField<A extends Annotation, T> {
     }
 
     /**
+     * Required to prevent incorrect usage (field resolution with a wrong instance).
+     *
+     * @param instance instance to check
+     * @return true if the provided instance is a field class instance, false otherwise
+     */
+    public boolean isCompatible(final Object instance) {
+        return isStatic() || (instance != null && testClass.isAssignableFrom(instance.getClass()));
+    }
+
+    /**
+     * In case of nested tests, test instances would contain multiple test instances. It is important to
+     * select the correct one (using preserved original test class).
+     *
+     * @param instances test instances
+     * @return test instance or null
+     * @throws java.lang.IllegalStateException if a test instances object provided but does not contain the
+     *                                         required test instance
+     */
+    public Object findRequiredInstance(final TestInstances instances) {
+        if (instances == null) {
+            return null;
+        }
+        return instances.findInstance(testClass).orElseThrow(() ->
+                new IllegalStateException("No test instance found for test class: " + testClass));
+    }
+
+    /**
+     * Apply custom value for the field object. Useful during field processing to mark is as processed or assign
+     * an additional state.
+     *
+     * @param key   key
+     * @param value value
+     */
+    public void setCustomData(final String key, final Object value) {
+        if (data == null) {
+            data = new HashMap<>();
+        }
+        data.put(key, value);
+    }
+
+    /**
+     * Get custom value.
+     *
+     * @param key key
+     * @param <K> value type
+     * @return value or null
+     */
+    @SuppressWarnings("unchecked")
+    public <K> K getCustomData(final String key) {
+        return data == null ? null : (K) data.get(key);
+    }
+
+    /**
+     * Note: if key set with null value - it would be considered as false.
+     *
+     * @param key key
+     * @return true if non null custom value set
+     */
+    public boolean isCustomDataSet(final String key) {
+        return data != null && data.get(key) != null;
+    }
+
+    /**
+     * Clear custom state.
+     */
+    public void clearCustomData() {
+        if (data != null) {
+            data.clear();
+        }
+    }
+
+    /**
      * @return to string field with class and reduced package
      */
     public String toStringField() {
@@ -147,7 +257,7 @@ public class AnnotatedField<A extends Annotation, T> {
     @Override
     public String toString() {
         return toStringField() + " ("
-                + (isStatic() ? "static " : "") + "@" + annotation.annotationType().getSimpleName()
+                + "@" + annotation.annotationType().getSimpleName() + (isStatic() ? " static" : "")
                 + " " + field.getType().getSimpleName()
                 + ")";
     }

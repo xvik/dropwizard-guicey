@@ -13,6 +13,10 @@ import java.lang.annotation.Target;
  * {@code bind(Service.class).to(ServiceStub.class).in(Singleton.class)} so guice would create stub instead of
  * the original service. Guice would create stub instance, so injections would work inside it.
  * <p>
+ * If stub field is initialized manually, then manual instance would be injected into guice context. In case when
+ * guicey extension started per class and non-static stub field is initialized, guicey will throw an error
+ * (because it is impossible to get non-static field value in time of guice context creation).
+ * <p>
  * More canonical example with interface: suppose we have {@code bind(IServie.clas).to(ServiceImpl.class))}. In this
  * case, stub could simply implement interface, instead of extending class:
  * {@code class ServiceStub implements IService}. Stub field must declare interface as a binding key:
