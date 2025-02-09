@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.util.AnnotatedField;
 import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
+import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
 import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
@@ -127,7 +128,7 @@ public class TestExtensionsTracker {
     }
 
     public void lifecyclePhase(final ExtensionContext context, final GuiceyTestTime phase) {
-        logger.debug("[{}] started for {}", phase.getDisplayName(), getContextTestName(context));
+        logger.debug("[{}] started for {}", phase.getDisplayName(), TestSetupUtils.getContextTestName(context));
         testPhase = phase;
     }
 
@@ -233,7 +234,7 @@ public class TestExtensionsTracker {
             }
             title.append("\n\\\\\\-----------------------------------------------------------------").append(inst)
                     .append("\nGuicey time after [").append(phase.getDisplayName()).append("] of ")
-                    .append(getContextTestName(context))
+                    .append(TestSetupUtils.getContextTestName(context))
                     .append(": ").append(PerformanceTrack.renderTime(overall,
                             lastOverall == null ? null : overall.minus(lastOverall)));
             lastOverall = overall;
@@ -242,14 +243,6 @@ public class TestExtensionsTracker {
         }
     }
 
-    private String getContextTestName(final ExtensionContext context) {
-        // display name will show the correct name in case of groovy test (or will show @DisplayName value)
-        String res = context.getDisplayName();
-        if (context.getTestMethod().isPresent()) {
-            res = context.getParent().get().getDisplayName() + '#' + res;
-        }
-        return res;
-    }
 
     private String getHookContext() {
         // hook might be registered from manual extension in filed or within setup object and in this case

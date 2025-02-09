@@ -43,7 +43,7 @@ public class TestExtension extends ExtensionBuilder<TestExtension, ExtensionConf
      * @return true if application started once per test class, false if application started for each test method
      */
     public boolean isApplicationStartedForClass() {
-        return getJunitContext().getTestMethod().isPresent();
+        return getJunitContext().getTestMethod().isEmpty();
     }
 
     /**

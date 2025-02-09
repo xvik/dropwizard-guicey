@@ -73,6 +73,21 @@ public final class TestSetupUtils {
         }
     }
 
+    /**
+     * Use display names, so would correctly show spock test name or junit test with @DisplayName.
+     *
+     * @param context junit context
+     * @return context string (test name of beforeAll and test + method for beforeEach)
+     */
+    public static String getContextTestName(final ExtensionContext context) {
+        // display name will show the correct name in case of groovy test (or will show @DisplayName value)
+        String res = context.getDisplayName();
+        if (context.getTestMethod().isPresent()) {
+            res = context.getParent().get().getDisplayName() + '#' + res;
+        }
+        return res;
+    }
+
     private static Object setup(final TestEnvironmentSetup support,
                                 final ExtensionConfig config,
                                 final TestExtension builder) {
