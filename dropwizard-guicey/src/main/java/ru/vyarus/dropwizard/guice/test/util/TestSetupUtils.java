@@ -9,7 +9,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.GuiceyTestTime;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
 
 import java.util.ArrayList;
 import java.util.List;

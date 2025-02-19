@@ -1,22 +1,18 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
+package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
-import ru.vyarus.dropwizard.guice.test.util.AnnotatedField;
-import ru.vyarus.dropwizard.guice.test.util.RegistrationTrackUtils;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
+import ru.vyarus.dropwizard.guice.test.util.PrintUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
 import java.lang.annotation.Annotation;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,8 +47,6 @@ public class TestExtensionsTracker {
     protected final List<String> extensionsSource = new ArrayList<>();
     protected final List<String> hooksSource = new ArrayList<>();
     private final List<PerformanceTrack> performance = new ArrayList<>();
-
-    private final Logger logger = LoggerFactory.getLogger(TestExtensionsTracker.class);
 
     private GuiceyTestTime testPhase;
     private Duration lastOverall;
@@ -128,7 +122,6 @@ public class TestExtensionsTracker {
     }
 
     public void lifecyclePhase(final ExtensionContext context, final GuiceyTestTime phase) {
-        logger.debug("[{}] started for {}", phase.getDisplayName(), TestSetupUtils.getContextTestName(context));
         testPhase = phase;
     }
 
@@ -227,16 +220,10 @@ public class TestExtensionsTracker {
             // merge increase delta to start tracking new increases
             performance.forEach(PerformanceTrack::applyIncrease);
 
-            final StringBuilder title = new StringBuilder();
-            String inst = "---------------------------------";
-            if (context.getTestInstance().isPresent()) {
-                inst = "/ test instance = " + System.identityHashCode(context.getTestInstance().get()) + " /";
-            }
-            title.append("\n\\\\\\-----------------------------------------------------------------").append(inst)
-                    .append("\nGuicey time after [").append(phase.getDisplayName()).append("] of ")
-                    .append(TestSetupUtils.getContextTestName(context))
-                    .append(": ").append(PerformanceTrack.renderTime(overall,
-                            lastOverall == null ? null : overall.minus(lastOverall)));
+            final String title = PrintUtils.getPerformanceReportSeparator(context)
+                    + "Guicey time after [" + phase.getDisplayName() + "] of "
+                    + TestSetupUtils.getContextTestName(context)
+                    + ": " + PrintUtils.renderTime(overall, lastOverall == null ? null : overall.minus(lastOverall));
             lastOverall = overall;
 
             System.out.println(title + "\n" + res);
@@ -313,18 +300,7 @@ public class TestExtensionsTracker {
             if (isRoot()) {
                 title = "[" + title + "]";
             }
-            return String.format("%-35s: %s", title, renderTime(getOverall(), increase));
-        }
-
-        public static String renderTime(final Duration overall, final Duration increase) {
-            return overall == null ? "--" : (ms(overall)
-                    + (increase != null && increase.toNanos() > 0 ? (" ( + " + ms(increase) + ")") : ""));
-        }
-
-        public static String ms(final Duration duration) {
-            return new BigDecimal(duration.toNanos())
-                    .divide(BigDecimal.valueOf(1_000_000), 2, RoundingMode.UP)
-                    .doubleValue() + " ms";
+            return String.format("%-35s: %s", title, PrintUtils.renderTime(getOverall(), increase));
         }
     }
 }

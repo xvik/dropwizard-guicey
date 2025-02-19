@@ -30,8 +30,18 @@
     show debug output when debug opion is enabled on guicey extension
   - Add shortcut method isApplicationStartedForClass() for TestEnvironmentSetup to simplify beforeAll/beforeEach 
     extension lifecycle detection
+  - Add base class for annotated fields extensions: AnnotatedTestFieldSetup
+    (handles fields validation and value injection lifecycle, including proper nested tests support)
   - Add test stub fields: @StubBean(Service.class) ServiceStub
     (use guice modules override feature to replace existing service into stub)
+  - Add mockito mock support: @MockBean Service. Mock automatically created  
+    and override real dependency (module overrides used)
+  - Add mockito spy support: @SpyBean Service. Spy automatically created 
+    and "proxy" real service (using aop) 
+  - Add service trackers: @TrackBean Tracker<Service>. Tracker records all service 
+    methods execution and could provide recordings for test verification or print performance 
+    stats. A simpler replacement for mockito stubs. It could be used with mocks, spies and stubs
+  - Add option to disable default annotated fields extensions: useDefaultExtensions
 
 ### 6.2.4 (2024-09-14)
 * Update to dropwizard 3.0.8

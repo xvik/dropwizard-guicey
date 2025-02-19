@@ -1,16 +1,12 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.stub;
 
-import io.dropwizard.core.Application;
-import io.dropwizard.core.Configuration;
-import io.dropwizard.core.setup.Bootstrap;
-import io.dropwizard.core.setup.Environment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.testkit.engine.EngineTestKit;
-import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubBean;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
@@ -46,12 +42,12 @@ public class IncorrectManualStubDeclarationTest {
         System.err.println(out.getText());
 
         Assertions.assertEquals("Incorrect @StubBean 'r.v.d.g.t.j.s.s.IncorrectManualStubDeclarationTest$Test1.stub' " +
-                "declaration: field value can't be used as stub because guice context starts in beforeAll phase. " +
-                "Either make field static or remove value (guice will create stub instance with guice injector)", msg);
+                "declaration: field value can't be used because guice context starts in beforeAll phase. Either make " +
+                "field static or remove value (guice will create instance with guice injector)", msg);
     }
 
 
-    @TestGuiceyApp(value = Test1.App.class, debug = true)
+    @TestGuiceyApp(value = DefaultTestApp.class, debug = true)
     @Disabled // prevent direct execution
     public static class Test1 {
 
@@ -61,18 +57,6 @@ public class IncorrectManualStubDeclarationTest {
         @Test
         void test() {
             Assertions.assertNotNull(stub);
-        }
-
-        public static class App extends Application<Configuration> {
-
-            @Override
-            public void initialize(Bootstrap<Configuration> bootstrap) {
-                bootstrap.addBundle(GuiceBundle.builder().build());
-            }
-
-            @Override
-            public void run(Configuration configuration, Environment environment) throws Exception {
-            }
         }
 
         public static class Service {}

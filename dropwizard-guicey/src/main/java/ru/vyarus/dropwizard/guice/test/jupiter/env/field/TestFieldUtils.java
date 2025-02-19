@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.util;
+package ru.vyarus.dropwizard.guice.test.jupiter.env.field;
 
 import org.junit.platform.commons.support.AnnotationSupport;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;

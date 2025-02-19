@@ -13,7 +13,6 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ConfigurationHooksProcessedEvent;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubsSupport;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -36,7 +35,7 @@ public class HooksOrderDeepTest {
         static GuiceyConfigurationHook hook2 = new MiddleHook();
     }
 
-    @TestGuiceyApp(value = App.class, hooks = TestHook.class)
+    @TestGuiceyApp(value = App.class, hooks = TestHook.class, useDefaultExtensions = false)
     @Nested
     public class TestOrder extends Middle {
 
@@ -53,9 +52,9 @@ public class HooksOrderDeepTest {
                     .listen(new GuiceyLifecycleAdapter() {
                         @Override
                         protected void configurationHooksProcessed(ConfigurationHooksProcessedEvent event) {
-                            Assertions.assertEquals(4, event.getHooks().size());
+                            Assertions.assertEquals(3, event.getHooks().size());
                             // hooks is a set, but linked implementation used to preserve order
-                            Assertions.assertEquals(Arrays.asList(BaseHook.class, MiddleHook.class, TestHook.class, StubsSupport.class),
+                            Assertions.assertEquals(Arrays.asList(BaseHook.class, MiddleHook.class, TestHook.class),
                                     event.getHooks()
                                             .stream()
                                             .map(GuiceyConfigurationHook::getClass)

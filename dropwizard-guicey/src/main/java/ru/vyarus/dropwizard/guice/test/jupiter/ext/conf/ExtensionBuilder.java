@@ -232,6 +232,22 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
     }
 
     /**
+     * Default extensions: {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.mock.MockBean},
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubBean},
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.spy.SpyBean},
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackBean}.
+     * <p>
+     * By default, these extensions enabled and this option could disable them (if there are problems with them or
+     * fields analysis took too much time).
+     *
+     * @return builder instance for chained calls
+     */
+    public T disableDefaultExtensions() {
+        cfg.defaultExtensionsEnabled = false;
+        return self();
+    }
+
+    /**
      * Use custom jersey client builder for {@link ru.vyarus.dropwizard.guice.test.ClientSupport} object.
      *
      * @param factory factory implementation
@@ -241,7 +257,6 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
         cfg.clientFactory = factory;
         return self();
     }
-
 
     @SuppressWarnings("unchecked")
     private T self() {

@@ -1,15 +1,11 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.stub;
 
-import io.dropwizard.core.Application;
-import io.dropwizard.core.Configuration;
-import io.dropwizard.core.setup.Bootstrap;
-import io.dropwizard.core.setup.Environment;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubBean;
 
@@ -20,7 +16,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubBean;
 public class NestedPerMethodStubTest {
 
     @RegisterExtension
-    TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class)
+    TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(DefaultTestApp.class)
             .debug().create();
 
     @StubBean(Service.class)
@@ -126,18 +122,6 @@ public class NestedPerMethodStubTest {
         @Override
         public String foo() {
             return "bar";
-        }
-    }
-
-    public static class App extends Application<Configuration> {
-
-        @Override
-        public void initialize(Bootstrap<Configuration> bootstrap) {
-            bootstrap.addBundle(GuiceBundle.builder().build());
-        }
-
-        @Override
-        public void run(Configuration configuration, Environment environment) throws Exception {
         }
     }
 }
