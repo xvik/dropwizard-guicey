@@ -20,6 +20,8 @@ dependencies {
     api 'io.dropwizard:dropwizard-core'
     api 'ru.vyarus:generics-resolver:3.0.3'
 
+    optional 'org.mockito:mockito-core'
+
     testImplementation 'org.glassfish.jersey.inject:jersey-hk2'
     testImplementation 'io.dropwizard:dropwizard-auth'
     testImplementation 'io.dropwizard:dropwizard-forms'

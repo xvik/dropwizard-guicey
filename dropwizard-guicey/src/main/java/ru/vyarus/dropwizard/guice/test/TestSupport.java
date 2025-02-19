@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.test.builder.TestSupportBuilder;
 import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 import ru.vyarus.dropwizard.guice.test.cmd.CommandRunBuilder;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.util.RunResult;
 import ru.vyarus.dropwizard.guice.test.util.io.EchoStream;
 

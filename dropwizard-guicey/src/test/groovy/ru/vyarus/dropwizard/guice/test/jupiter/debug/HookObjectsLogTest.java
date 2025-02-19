@@ -56,6 +56,9 @@ public class HookObjectsLogTest {
                         "\tSetup objects = \n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test1.setup\n" +
                         "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tdefault extension\n" +
+                        "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tdefault extension\n" +
+                        "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tdefault extension\n" +
+                        "\t\tTrackersSupport              (r.v.d.g.t.j.e.track)        \tdefault extension\n" +
                         "\n" +
                         "\tTest hooks = \n" +
                         "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base1\n" +
@@ -63,6 +66,9 @@ public class HookObjectsLogTest {
                         "\t\tExt1                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
                         "\t\tExt2                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
                         "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tStubsSupport instance\n" +
+                        "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tMocksSupport instance\n" +
+                        "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tSpiesSupport instance\n" +
+                        "\t\tTrackersSupport              (r.v.d.g.t.j.e.track)        \tTrackersSupport instance\n" +
                         "\t\tExt3                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 class\n" +
                         "\t\tExt4                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 class\n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
@@ -118,6 +124,9 @@ public class HookObjectsLogTest {
                         "\tSetup objects = \n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test2.setup\n" +
                         "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tdefault extension\n" +
+                        "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tdefault extension\n" +
+                        "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tdefault extension\n" +
+                        "\t\tTrackersSupport              (r.v.d.g.t.j.e.track)        \tdefault extension\n" +
                         "\n" +
                         "\tTest hooks = \n" +
                         "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base1\n" +
@@ -127,6 +136,9 @@ public class HookObjectsLogTest {
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
                         "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tStubsSupport instance\n" +
+                        "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tMocksSupport instance\n" +
+                        "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tSpiesSupport instance\n" +
+                        "\t\tTrackersSupport              (r.v.d.g.t.j.e.track)        \tTrackersSupport instance\n" +
                         "\t\tExt3                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 class\n" +
                         "\t\tExt4                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 class\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +

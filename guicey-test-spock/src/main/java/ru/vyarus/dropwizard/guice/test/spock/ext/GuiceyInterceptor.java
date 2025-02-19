@@ -13,8 +13,8 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.spock.InjectClient;
-import ru.vyarus.dropwizard.guice.test.util.AnnotatedField;
-import ru.vyarus.dropwizard.guice.test.util.TestFieldUtils;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.field.TestFieldUtils;
 import spock.lang.Shared;
 
 import java.lang.reflect.Field;

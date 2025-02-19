@@ -3,8 +3,8 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.GuiceyTestTime;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

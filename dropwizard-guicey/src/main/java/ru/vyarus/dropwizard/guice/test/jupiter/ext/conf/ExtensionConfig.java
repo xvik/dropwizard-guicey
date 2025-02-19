@@ -5,6 +5,7 @@ import io.dropwizard.testing.ConfigOverride;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
@@ -31,6 +32,7 @@ public abstract class ExtensionConfig {
     public final List<TestEnvironmentSetup> extensions = new ArrayList<>();
     public TestClientFactory clientFactory;
     public boolean injectOnce;
+    public boolean defaultExtensionsEnabled = true;
     // tracks source of registered setup objects
     public final TestExtensionsTracker tracker;
 

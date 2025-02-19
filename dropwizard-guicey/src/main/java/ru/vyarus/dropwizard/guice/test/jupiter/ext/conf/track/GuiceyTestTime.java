@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
+package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track;
 
 /**
  * Guicey timers for test extensions performance measurement.
