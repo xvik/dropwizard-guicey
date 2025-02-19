@@ -1,12 +1,15 @@
-package ru.vyarus.dropwizard.guice.test.util;
+package ru.vyarus.dropwizard.guice.test.jupiter.env.field;
 
 import org.junit.jupiter.api.extension.TestInstances;
 import org.junit.platform.commons.util.ReflectionUtils;
+import ru.vyarus.java.generics.resolver.util.GenericsUtils;
+import ru.vyarus.java.generics.resolver.util.map.EmptyGenericsMap;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +27,10 @@ public class AnnotatedField<A extends Annotation, T> {
     private final Class<?> testClass;
     // custom data assigned during processing
     private Map<String, Object> data;
+    // required to overcome "bindings report" case, when bindings re-processed
+    private boolean ignoreChanges;
+    // required to track value change (last value set or get)
+    private T cachedValue;
 
     public AnnotatedField(final A annotation,
                           final Field field,
@@ -45,7 +52,20 @@ public class AnnotatedField<A extends Annotation, T> {
      */
     @SuppressWarnings("unchecked")
     public Class<T> getType() {
+        // no generics used - assume type variables will never be used for the filed type itself
         return (Class<T>) field.getType();
+    }
+
+    /**
+     * For example if the field type is: {@code RootType<Param1, Param2>}. Then the method would return
+     * [Param1, Param2].
+     * <p>
+     * Implementation does not expect not resolved variables (simple case).
+     *
+     * @return type arguments
+     */
+    public List<Class<?>> getTypeParameters() {
+        return GenericsUtils.resolveGenericsOf(field.getGenericType(), EmptyGenericsMap.getInstance());
     }
 
     /**
@@ -86,7 +106,8 @@ public class AnnotatedField<A extends Annotation, T> {
                     + " for field " + toStringField());
         }
         try {
-            return (T) field.get(instance);
+            cachedValue = (T) field.get(instance);
+            return cachedValue;
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Failed to get field " + toStringField()
                     + " value", e);
@@ -110,6 +131,9 @@ public class AnnotatedField<A extends Annotation, T> {
      * @throws java.lang.IllegalStateException if non-static field set with null instance or other error appear
      */
     public void setValue(final Object instance, final T value) {
+        if (ignoreChanges) {
+            return;
+        }
         if (instance == null && !isStatic()) {
             throw new IllegalStateException("Field " + toStringField()
                     + " is not static: test instance required for setting value");
@@ -121,6 +145,7 @@ public class AnnotatedField<A extends Annotation, T> {
         }
         try {
             field.set(instance, value);
+            cachedValue = value;
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Failed to set field " + toStringField() + " value to " + value, e);
         }
@@ -210,10 +235,12 @@ public class AnnotatedField<A extends Annotation, T> {
      * @param value value
      */
     public void setCustomData(final String key, final Object value) {
-        if (data == null) {
-            data = new HashMap<>();
+        if (!ignoreChanges) {
+            if (data == null) {
+                data = new HashMap<>();
+            }
+            data.put(key, value);
         }
-        data.put(key, value);
     }
 
     /**
@@ -242,7 +269,7 @@ public class AnnotatedField<A extends Annotation, T> {
      * Clear custom state.
      */
     public void clearCustomData() {
-        if (data != null) {
+        if (!ignoreChanges && data != null) {
             data.clear();
         }
     }
@@ -252,6 +279,44 @@ public class AnnotatedField<A extends Annotation, T> {
      */
     public String toStringField() {
         return TestFieldUtils.toString(field);
+    }
+
+    @SuppressWarnings("PMD.CompareObjectsWithEquals")
+    public T checkValueNotChanged(final TestInstances instance) {
+        final T currentValue = cachedValue;
+        // get will overwrite cache
+        final T value = getValue(instance);
+        if (value != currentValue) {
+            throw new IllegalStateException(String.format(
+                    "Field %s annotated with @%s value was changed: most likely, it happen in test setup method, "
+                            + "which is called after Injector startup and so too late to change binding values. "
+                            + "Manual initialization is possible in field directly.",
+                    toStringField(), annotation.annotationType().getSimpleName()
+            ));
+        }
+        return value;
+    }
+
+    /**
+     * @return true if the field rejects all changes
+     */
+    public boolean isIgnoreChanges() {
+        return ignoreChanges;
+    }
+
+    /**
+     * WARNING: for internal usage in {@link ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedTestFieldSetup}.
+     * Ignore all modifications. Required to overcome guice reporting case when modules would be processed
+     * second time (to build a report) and, with allowed field modifications, it would override field state
+     * with invalid values.
+     * <p>
+     * This is not an ideal solution, but, extensions should rely on field state, so not required modifications
+     * should be "invisible" for the main logic.
+     *
+     * @param ignoreChanges true to ignore all filed changes (custom data and value setting)
+     */
+    public void setIgnoreChanges(final boolean ignoreChanges) {
+        this.ignoreChanges = ignoreChanges;
     }
 
     @Override

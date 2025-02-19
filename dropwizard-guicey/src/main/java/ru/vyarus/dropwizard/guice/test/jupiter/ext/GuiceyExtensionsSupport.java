@@ -21,16 +21,19 @@ import ru.vyarus.dropwizard.guice.test.builder.TestSupportHolder;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.ListenersSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.field.TestFieldUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.GuiceyTestTime;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.mock.MocksSupport;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.spy.SpiesSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubsSupport;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackersSupport;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
-import ru.vyarus.dropwizard.guice.test.util.AnnotatedField;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.ReusableAppUtils;
 import ru.vyarus.dropwizard.guice.test.util.StoredReusableApp;
-import ru.vyarus.dropwizard.guice.test.util.TestFieldUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +72,7 @@ import java.util.Set;
  * @see TestParametersSupport for supported test parameters
  * @since 29.04.2020
  */
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports", "ClassDataAbstractionCoupling", "ClassFanOutComplexity"})
 public abstract class GuiceyExtensionsSupport extends TestParametersSupport implements
         BeforeAllCallback,
         AfterAllCallback,
@@ -369,7 +372,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         // config overrides work through system properties, so it is important to have unique prefixes
         final String configPrefix = ConfigOverrideUtils.createPrefix(context);
         final DropwizardTestSupport<?> support = prepareTestSupport(configPrefix, context,
-                addDefaultSetupObjects(fields.getSetupObjects()));
+                addDefaultSetupObjects(fields.getSetupObjects(), config.defaultExtensionsEnabled));
         // activate hooks declared in test static fields (so hooks declared in annotation goes before)
         fields.activateClassHooks();
         store.put(DW_SUPPORT, support);
@@ -408,11 +411,17 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         }
     }
 
-    private List<TestEnvironmentSetup> addDefaultSetupObjects(final List<TestEnvironmentSetup> fields) {
+    private List<TestEnvironmentSetup> addDefaultSetupObjects(final List<TestEnvironmentSetup> fields,
+                                                              final boolean useDefaultExtensions) {
         final List<TestEnvironmentSetup> res = new ArrayList<>();
-        res.addAll(tracker.defaultExtensions(
-                new StubsSupport()
-        ));
+        if (useDefaultExtensions) {
+            res.addAll(tracker.defaultExtensions(
+                    new StubsSupport(),
+                    new MocksSupport(),
+                    new SpiesSupport(),
+                    new TrackersSupport()
+            ));
+        }
         res.addAll(fields);
         return res;
     }

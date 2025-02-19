@@ -14,8 +14,8 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.GuiceyTestTime;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.TestExtensionsTracker;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
@@ -329,6 +329,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             res.injectOnce = ann.injectOnce();
             res.tracker.debug = ann.debug();
             res.reuseApp = ann.reuseApplication();
+            res.defaultExtensionsEnabled = ann.useDefaultExtensions();
             res.clientFactory(ann.clientFactory());
             return res;
         }

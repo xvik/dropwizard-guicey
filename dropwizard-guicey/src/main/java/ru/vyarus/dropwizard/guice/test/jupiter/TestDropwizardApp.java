@@ -201,6 +201,17 @@ public @interface TestDropwizardApp {
     boolean reuseApplication() default false;
 
     /**
+     * Default extensions: {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.mock.MockBean},
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubBean},
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.spy.SpyBean},
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackBean}.
+     * <p>
+     * By default, these extensions enabled and this option could disable them (if there are problems with them or
+     * fields analysis took too much time).
+     */
+    boolean useDefaultExtensions() default true;
+
+    /**
      * Custom client factory for {@link ru.vyarus.dropwizard.guice.test.ClientSupport} object. Custom factory
      * may be required in case when custom client configuration is required for test.
      *

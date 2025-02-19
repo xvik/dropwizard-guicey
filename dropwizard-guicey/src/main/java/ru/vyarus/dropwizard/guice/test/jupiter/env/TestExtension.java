@@ -3,8 +3,8 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
-import ru.vyarus.dropwizard.guice.test.util.AnnotatedField;
-import ru.vyarus.dropwizard.guice.test.util.TestFieldUtils;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.field.TestFieldUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -77,16 +77,6 @@ public class TestExtension extends ExtensionBuilder<TestExtension, ExtensionConf
     public TestExtension listen(final TestExecutionListener listener) {
         listeners.addListener(listener);
         return this;
-    }
-
-    /**
-     * @param annotation annotation to search
-     * @param <A>        annotation type
-     * @return annotated test fields (including fields from base test class).
-     */
-    public <A extends Annotation> List<AnnotatedField<A, Object>> findAnnotatedFields(
-            final Class<A> annotation) {
-        return findAnnotatedFields(annotation, Object.class);
     }
 
     /**

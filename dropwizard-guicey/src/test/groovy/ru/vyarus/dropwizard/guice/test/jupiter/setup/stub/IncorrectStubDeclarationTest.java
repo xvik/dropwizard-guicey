@@ -1,15 +1,11 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.stub;
 
-import io.dropwizard.core.Application;
-import io.dropwizard.core.Configuration;
-import io.dropwizard.core.setup.Bootstrap;
-import io.dropwizard.core.setup.Environment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.testkit.engine.EngineTestKit;
-import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubBean;
 
@@ -33,7 +29,7 @@ public class IncorrectStubDeclarationTest {
                 .execute().allEvents().failed().stream()
                 .forEach(event -> {
                     Throwable err = event.getPayload(TestExecutionResult.class).get().getThrowable().get();
-                    msg = err.getCause().getMessage();
+                    msg = err.getMessage();
                 });
 
         Assertions.assertEquals("Incorrect @StubBean 'r.v.d.g.t.j.s.s.IncorrectStubDeclarationTest$Test1.stub' " +
@@ -41,7 +37,7 @@ public class IncorrectStubDeclarationTest {
     }
 
 
-    @TestGuiceyApp(Test1.App.class)
+    @TestGuiceyApp(DefaultTestApp.class)
     @Disabled // prevent direct execution
     public static class Test1 {
 
@@ -51,18 +47,6 @@ public class IncorrectStubDeclarationTest {
         @Test
         void test() {
             Assertions.assertNotNull(stub);
-        }
-
-        public static class App extends Application<Configuration> {
-
-            @Override
-            public void initialize(Bootstrap<Configuration> bootstrap) {
-                bootstrap.addBundle(GuiceBundle.builder().build());
-            }
-
-            @Override
-            public void run(Configuration configuration, Environment environment) throws Exception {
-            }
         }
 
         public static class Service {}

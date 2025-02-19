@@ -42,7 +42,7 @@ import jakarta.ws.rs.Path
  * @author Vyacheslav Rusakov
  * @since 23.04.2018
  */
-@TestDropwizardApp(value = App, hooks = XConf)
+@TestDropwizardApp(value = App, hooks = XConf, useDefaultExtensions = false)
 class EventsConsistencyTest extends AbstractTest {
 
     def "Check events consistency"() {
@@ -138,7 +138,7 @@ class EventsConsistencyTest extends AbstractTest {
         @Override
         protected void configurationHooksProcessed(ConfigurationHooksProcessedEvent event) {
             baseChecks(event)
-            assert event.hooks.size() == 3
+            assert event.hooks.size() == 2
             assert event.hooks[0].toString().contains(AbstractTest.simpleName)
             assert event.hooks[1] instanceof XConf
         }

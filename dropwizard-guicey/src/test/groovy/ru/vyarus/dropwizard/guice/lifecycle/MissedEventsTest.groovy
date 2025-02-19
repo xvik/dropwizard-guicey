@@ -16,14 +16,13 @@ import spock.lang.Specification
  * @author Vyacheslav Rusakov
  * @since 24.04.2018
  */
-@TestGuiceyApp(App)
+@TestGuiceyApp(value = App, useDefaultExtensions = false)
 class MissedEventsTest extends Specification {
 
     def "Check missed events"() {
 
         expect: "only few events called"
         Listener.events.contains(GuiceyLifecycle.Initialized)
-        Listener.events.contains(GuiceyLifecycle.ConfigurationHooksProcessed)
         Listener.events.contains(GuiceyLifecycle.BundlesResolved)
         Listener.events.contains(GuiceyLifecycle.InjectorCreation)
         Listener.events.contains(GuiceyLifecycle.InstallersResolved)
@@ -32,6 +31,7 @@ class MissedEventsTest extends Specification {
 
 
         and: "not called"
+        !Listener.events.contains(GuiceyLifecycle.ConfigurationHooksProcessed)
         !Listener.events.contains(GuiceyLifecycle.BundlesFromLookupResolved)
         !Listener.events.contains(GuiceyLifecycle.BundlesInitialized)
         !Listener.events.contains(GuiceyLifecycle.CommandsResolved)
@@ -69,9 +69,7 @@ class MissedEventsTest extends Specification {
             if (!events.contains(event.getType())) {
                 events.add(event.getType())
             }
-            if (event.getType() == GuiceyLifecycle.ConfigurationHooksProcessed
-                    // one hook from StubsSupport
-                    && ((ConfigurationHooksProcessedEvent)event).getHooks().size() > 1) {
+            if (event.getType() == GuiceyLifecycle.ConfigurationHooksProcessed) {
                 throw new IllegalStateException("Hooks used!")
             }
             if (event.getType() == GuiceyLifecycle.BundlesFromLookupResolved) {

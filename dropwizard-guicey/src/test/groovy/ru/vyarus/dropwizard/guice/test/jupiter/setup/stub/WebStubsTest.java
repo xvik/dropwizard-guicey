@@ -1,9 +1,5 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.stub;
 
-import io.dropwizard.core.Application;
-import io.dropwizard.core.Configuration;
-import io.dropwizard.core.setup.Bootstrap;
-import io.dropwizard.core.setup.Environment;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -11,6 +7,7 @@ import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubBean;
@@ -31,17 +28,13 @@ public class WebStubsTest {
         Assertions.assertEquals("override", res);
     }
 
-    public static class App extends Application<Configuration> {
+    public static class App extends DefaultTestApp {
 
         @Override
-        public void initialize(Bootstrap<Configuration> bootstrap) {
-            bootstrap.addBundle(GuiceBundle.builder()
+        protected GuiceBundle configure() {
+            return GuiceBundle.builder()
                     .extensions(Resource.class)
-                    .build());
-        }
-
-        @Override
-        public void run(Configuration configuration, Environment environment) throws Exception {
+                    .build();
         }
     }
 
