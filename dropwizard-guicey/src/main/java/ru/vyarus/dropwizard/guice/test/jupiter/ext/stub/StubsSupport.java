@@ -1,11 +1,11 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.stub;
 
 import com.google.inject.Binder;
-import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedTestFieldSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
 
 import java.util.List;
 
@@ -63,22 +63,19 @@ public class StubsSupport extends AnnotatedTestFieldSetup<StubBean, Object> {
     }
 
     @Override
-    protected void validateBinding(final ExtensionContext context,
-                                   final AnnotatedField<StubBean, Object> field, final Injector injector) {
+    protected void validateBinding(final EventContext context, final AnnotatedField<StubBean, Object> field) {
         // nothing
     }
 
     @Override
-    protected Object getFieldValue(final ExtensionContext context,
-                                   final AnnotatedField<StubBean, Object> field,
-                                   final Injector injector) {
+    protected Object getFieldValue(final EventContext context, final AnnotatedField<StubBean, Object> field) {
         // if not declared, stub value created by guice
-        return injector.getInstance(field.getAnnotation().value());
+        return context.getBean(field.getAnnotation().value());
     }
 
     @Override
     @SuppressWarnings("PMD.SystemPrintln")
-    protected void report(final ExtensionContext context,
+    protected void report(final EventContext context,
                           final List<AnnotatedField<StubBean, Object>> fields) {
         final StringBuilder report = new StringBuilder("\nApplied stubs (@")
                 .append(StubBean.class.getSimpleName()).append(") on ").append(setupContextName).append(":\n\n");
@@ -92,7 +89,7 @@ public class StubsSupport extends AnnotatedTestFieldSetup<StubBean, Object> {
     }
 
     @Override
-    protected void beforeTest(final ExtensionContext context,
+    protected void beforeTest(final EventContext context,
                               final AnnotatedField<StubBean, Object> field,
                               final Object value) {
         if (value instanceof StubLifecycle) {
@@ -101,7 +98,7 @@ public class StubsSupport extends AnnotatedTestFieldSetup<StubBean, Object> {
     }
 
     @Override
-    protected void afterTest(final ExtensionContext context,
+    protected void afterTest(final EventContext context,
                              final AnnotatedField<StubBean, Object> field,
                              final Object value) {
         if (value instanceof StubLifecycle) {

@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.inject.Binder;
 import com.google.inject.Binding;
-import com.google.inject.Injector;
 import com.google.inject.matcher.Matchers;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedTestFieldSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.stat.TrackerStats;
 import ru.vyarus.dropwizard.guice.test.util.PrintUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
@@ -72,23 +72,21 @@ public class TrackersSupport extends AnnotatedTestFieldSetup<TrackBean, Tracker>
     }
 
     @Override
-    protected void validateBinding(final ExtensionContext context,
-                                   final AnnotatedField<TrackBean, Tracker> field, final Injector injector) {
+    protected void validateBinding(final EventContext context, final AnnotatedField<TrackBean, Tracker> field) {
         final Tracker tracker = Preconditions.checkNotNull(field.getCustomData(FIELD_TRACKER));
-        final Binding binding = injector.getBinding(tracker.getType());
+        final Binding binding = context.getInjector().getBinding(tracker.getType());
         Preconditions.checkState(!isInstanceBinding(binding), getDeclarationErrorPrefix(field)
                 + "target bean '%s' bound by instance and so can't be tracked", tracker.getType().getSimpleName());
     }
 
     @Override
-    protected Tracker getFieldValue(final ExtensionContext context,
-                                    final AnnotatedField<TrackBean, Tracker> field, final Injector injector) {
+    protected Tracker getFieldValue(final EventContext context, final AnnotatedField<TrackBean, Tracker> field) {
         return field.getCustomData(FIELD_TRACKER);
     }
 
     @Override
     @SuppressWarnings("PMD.SystemPrintln")
-    protected void report(final ExtensionContext context,
+    protected void report(final EventContext context,
                           final List<AnnotatedField<TrackBean, Tracker>> annotatedFields) {
         final StringBuilder report = new StringBuilder("\nApplied trackers (@")
                 .append(TrackBean.class.getSimpleName()).append(") on ").append(setupContextName).append(DOUBLE_NL);
@@ -100,23 +98,23 @@ public class TrackersSupport extends AnnotatedTestFieldSetup<TrackBean, Tracker>
     }
 
     @Override
-    protected void beforeTest(final ExtensionContext context,
+    protected void beforeTest(final EventContext context,
                               final AnnotatedField<TrackBean, Tracker> field, final Tracker value) {
         // no clean to keep tracks from setup stage
     }
 
     @Override
     @SuppressWarnings("PMD.SystemPrintln")
-    protected void afterTest(final ExtensionContext context,
+    protected void afterTest(final EventContext context,
                              final AnnotatedField<TrackBean, Tracker> field, final Tracker value) {
         final TrackBean ann = field.getAnnotation();
         if (ann.printSummary()) {
             final Tracker tracker = field.getCustomData(FIELD_TRACKER);
             // report for exact tracker (activated with the annotation option - works without debug enabling)
             if (!tracker.isEmpty()) {
-                System.out.println(PrintUtils.getPerformanceReportSeparator(context)
+                System.out.println(PrintUtils.getPerformanceReportSeparator(context.getJunitContext())
                         + "Tracker<" + tracker.getType().getSimpleName() + ">" + " stats (sorted by median) for "
-                        + TestSetupUtils.getContextTestName(context) + DOUBLE_NL
+                        + TestSetupUtils.getContextTestName(context.getJunitContext()) + DOUBLE_NL
                         + tracker.getStats().render());
             }
         }
@@ -127,16 +125,16 @@ public class TrackersSupport extends AnnotatedTestFieldSetup<TrackBean, Tracker>
 
     @Override
     @SuppressWarnings("PMD.SystemPrintln")
-    public void afterEach(final ExtensionContext context) {
+    public void afterEach(final EventContext context) {
         if (debug) {
             final Tracker[] trackers = fields.stream()
                     .map(field -> (Tracker) field.getCustomData(FIELD_TRACKER))
                     .toArray(Tracker[]::new);
             if (trackers.length > 0) {
                 // report all trackers - works only with debug
-                System.out.println(PrintUtils.getPerformanceReportSeparator(context)
+                System.out.println(PrintUtils.getPerformanceReportSeparator(context.getJunitContext())
                         + "Trackers stats (sorted by median) for "
-                        + TestSetupUtils.getContextTestName(context) + DOUBLE_NL
+                        + TestSetupUtils.getContextTestName(context.getJunitContext()) + DOUBLE_NL
                         + new TrackerStats(trackers).render());
             }
         }
