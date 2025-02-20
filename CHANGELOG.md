@@ -19,8 +19,8 @@
    (useful when TestInstance.Lifecycle.PER_CLASS used) (discussion #394)
   - Add getJunitContext() method for TestEnvironmentSetup (@EnableSetup) to be able to configure
     test application with full context access (a setup object could register hooks) (discussion #388)
-  - Add test lifecycle listeners: could be registered with TestEnvironmentSetup (listen() method) and provide
-    notifications for guicey extension lifecycle (app start/stop, before/after test).
+  - Add test lifecycle listeners: could be registered with TestEnvironmentSetup (listen() method or lambda-based on* methods) 
+    and provide notifications for guicey extension lifecycle (app start/stop, before/after test).
     This is a simple alternative to writing junit extensions for an additional integrations (db, testcontainers etc.).
   - Add annotated fields search api in test class for setup objects (TestEnvironmentSetup): findFields(..)
     (to simplify writing annotation-driven extensions).

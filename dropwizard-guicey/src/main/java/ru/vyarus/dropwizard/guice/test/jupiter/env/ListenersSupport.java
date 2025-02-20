@@ -3,6 +3,8 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
 
@@ -30,27 +32,27 @@ public class ListenersSupport {
     }
 
     public void broadcastStart(final ExtensionContext context) {
-        broadcast(listener -> listener.started(context), false);
+        broadcast(listener -> listener.started(new EventContext(context)), false);
     }
 
     public void broadcastBeforeAll(final ExtensionContext context) {
-        broadcast(listener -> listener.beforeAll(context), true);
+        broadcast(listener -> listener.beforeAll(new EventContext(context)), true);
     }
 
     public void broadcastBefore(final ExtensionContext context) {
-        broadcast(listener -> listener.beforeEach(context), true);
+        broadcast(listener -> listener.beforeEach(new EventContext(context)), true);
     }
 
     public void broadcastAfter(final ExtensionContext context) {
-        broadcast(listener -> listener.afterEach(context), true);
+        broadcast(listener -> listener.afterEach(new EventContext(context)), true);
     }
 
     public void broadcastAfterAll(final ExtensionContext context) {
-        broadcast(listener -> listener.afterAll(context), true);
+        broadcast(listener -> listener.afterAll(new EventContext(context)), true);
     }
 
     public void broadcastStop(final ExtensionContext context) {
-        broadcast(listener -> listener.stopped(context), false);
+        broadcast(listener -> listener.stopped(new EventContext(context)), false);
     }
 
     private void broadcast(final Consumer<TestExecutionListener> action, final boolean append) {

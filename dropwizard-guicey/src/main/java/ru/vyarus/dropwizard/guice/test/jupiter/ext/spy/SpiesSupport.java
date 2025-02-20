@@ -3,7 +3,6 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext.spy;
 import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
 import com.google.inject.Binding;
-import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -13,6 +12,7 @@ import org.mockito.Mockito;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedTestFieldSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.mock.MockBean;
 import ru.vyarus.dropwizard.guice.test.util.PrintUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
@@ -51,7 +51,6 @@ public class SpiesSupport extends AnnotatedTestFieldSetup<SpyBean, Object> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected <K> void bindFieldValue(final Binder binder,
                                       final AnnotatedField<SpyBean, Object> field, final Object value) {
         throw new IllegalStateException(getDeclarationErrorPrefix(field) + "manual spy declaration is not supported. "
@@ -68,17 +67,15 @@ public class SpiesSupport extends AnnotatedTestFieldSetup<SpyBean, Object> {
     }
 
     @Override
-    protected void validateBinding(final ExtensionContext context,
-                                   final AnnotatedField<SpyBean, Object> field, final Injector injector) {
+    protected void validateBinding(final EventContext context, final AnnotatedField<SpyBean, Object> field) {
         final SpiedBean spy = Preconditions.checkNotNull(field.getCustomData(FIELD_SPY));
-        final Binding binding = injector.getBinding(spy.getType());
+        final Binding binding = context.getInjector().getBinding(spy.getType());
         Preconditions.checkState(!isInstanceBinding(binding), getDeclarationErrorPrefix(field)
                 + "target bean '%s' bound by instance and so can't be spied", spy.getType().getSimpleName());
     }
 
     @Override
-    protected Object getFieldValue(final ExtensionContext context,
-                                   final AnnotatedField<SpyBean, Object> field, final Injector injector) {
+    protected Object getFieldValue(final EventContext context, final AnnotatedField<SpyBean, Object> field) {
         // inject already initialized spy from aop interceptor
         final SpiedBean aop = field.getCustomData(FIELD_SPY);
         return aop.getSpy();
@@ -86,7 +83,7 @@ public class SpiesSupport extends AnnotatedTestFieldSetup<SpyBean, Object> {
 
     @Override
     @SuppressWarnings("PMD.SystemPrintln")
-    protected void report(final ExtensionContext context, final List<AnnotatedField<SpyBean, Object>> annotatedFields) {
+    protected void report(final EventContext context, final List<AnnotatedField<SpyBean, Object>> annotatedFields) {
         final StringBuilder report = new StringBuilder("\nApplied spies (@")
                 .append(SpyBean.class.getSimpleName()).append(") on ").append(setupContextName).append(":\n\n");
         fields.forEach(field -> report.append(
@@ -97,20 +94,20 @@ public class SpiesSupport extends AnnotatedTestFieldSetup<SpyBean, Object> {
     }
 
     @Override
-    protected void beforeTest(final ExtensionContext context,
+    protected void beforeTest(final EventContext context,
                               final AnnotatedField<SpyBean, Object> field, final Object value) {
         // only after test (spy might be used in setup)
     }
 
     @Override
     @SuppressWarnings("PMD.SystemPrintln")
-    protected void afterTest(final ExtensionContext context,
+    protected void afterTest(final EventContext context,
                              final AnnotatedField<SpyBean, Object> field, final Object value) {
         if (field.getAnnotation().printSummary()) {
             final String res = Mockito.mockingDetails(value).printInvocations();
-            System.out.println(PrintUtils.getPerformanceReportSeparator(context)
+            System.out.println(PrintUtils.getPerformanceReportSeparator(context.getJunitContext())
                     + "@" + SpyBean.class.getSimpleName() + " stats on [After each] for "
-                    + TestSetupUtils.getContextTestName(context) + ":\n\n"
+                    + TestSetupUtils.getContextTestName(context.getJunitContext()) + ":\n\n"
                     + Arrays.stream(res.split("\n")).map(s -> "\t" + s).collect(Collectors.joining("\n")));
         }
         if (field.getAnnotation().autoReset()) {

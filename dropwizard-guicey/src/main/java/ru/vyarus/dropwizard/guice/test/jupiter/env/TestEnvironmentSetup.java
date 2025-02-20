@@ -13,8 +13,9 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
  * closed automatically.
  * <p>
  * If auto close is not enough, use
- * {@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension#listen(TestExecutionListener)} listener for
- * reacting on exact test phases.
+ * {@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension#listen(
+ * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)} listener for reacting on exact test
+ * phases (or lambda-based listener methods: on*).
  * <p>
  * The same could be achieved with an additional junit 5 extensions, but it might be harder to properly synchronize
  * lifecycles (extensions order would be important). Environment support assumed to be a simpler alternative.
@@ -31,7 +32,7 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
  * (inside it) providing entire junit context or just some stored values.
  * <p>
  * AUTO REGISTRATION: If setup object implements hook ({@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook})
- * and/or listener ({@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestExecutionListener}) it would be
+ * and/or listener ({@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener}) it would be
  * registered automatically. Manual registration would not create duplicate.
  *
  * @author Vyacheslav Rusakov

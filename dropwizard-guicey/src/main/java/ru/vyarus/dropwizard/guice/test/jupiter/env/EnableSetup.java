@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
  * method), otherwise it must be static. Incorrect usage will be indicated with an exception.
  * <p>
  * If setup object implements hook ({@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook})
- * and/or listener ({@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestExecutionListener}) it would be
+ * and/or listener ({@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener}) it would be
  * registered automatically (no need for manual registration). Manual registration would not create duplicate.
  *
  * @author Vyacheslav Rusakov

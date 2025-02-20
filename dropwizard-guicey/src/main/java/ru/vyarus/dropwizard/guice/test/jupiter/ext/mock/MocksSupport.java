@@ -2,13 +2,13 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext.mock;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
-import com.google.inject.Injector;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.mockito.Mockito;
 import org.mockito.internal.util.MockUtil;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedTestFieldSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
 import ru.vyarus.dropwizard.guice.test.util.PrintUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
@@ -66,20 +66,18 @@ public class MocksSupport extends AnnotatedTestFieldSetup<MockBean, Object> {
     }
 
     @Override
-    protected void validateBinding(final ExtensionContext context,
-                                   final AnnotatedField<MockBean, Object> field, final Injector injector) {
+    protected void validateBinding(final EventContext context, final AnnotatedField<MockBean, Object> field) {
         // nothing: no existing binding validation because jit injections might be used
     }
 
     @Override
-    protected Object getFieldValue(final ExtensionContext context,
-                                   final AnnotatedField<MockBean, Object> field, final Injector injector) {
+    protected Object getFieldValue(final EventContext context, final AnnotatedField<MockBean, Object> field) {
         return Preconditions.checkNotNull(field.getCustomData(FIELD_MOCK), "Mock not created");
     }
 
     @Override
     @SuppressWarnings("PMD.SystemPrintln")
-    protected void report(final ExtensionContext context,
+    protected void report(final EventContext context,
                           final List<AnnotatedField<MockBean, Object>> annotatedFields) {
         final StringBuilder report = new StringBuilder("\nApplied mocks (@")
                 .append(MockBean.class.getSimpleName()).append(") on ").append(setupContextName).append(":\n\n");
@@ -92,20 +90,20 @@ public class MocksSupport extends AnnotatedTestFieldSetup<MockBean, Object> {
     }
 
     @Override
-    protected void beforeTest(final ExtensionContext context,
+    protected void beforeTest(final EventContext context,
                               final AnnotatedField<MockBean, Object> field, final Object value) {
         // only after test (mock might be used in setup)
     }
 
     @Override
     @SuppressWarnings("PMD.SystemPrintln")
-    protected void afterTest(final ExtensionContext context,
+    protected void afterTest(final EventContext context,
                              final AnnotatedField<MockBean, Object> field, final Object value) {
         if (field.getAnnotation().printSummary()) {
             final String res = Mockito.mockingDetails(value).printInvocations();
-            System.out.println(PrintUtils.getPerformanceReportSeparator(context)
+            System.out.println(PrintUtils.getPerformanceReportSeparator(context.getJunitContext())
                     + "@" + MockBean.class.getSimpleName() + " stats on [After each] for "
-                    + TestSetupUtils.getContextTestName(context) + ":\n\n"
+                    + TestSetupUtils.getContextTestName(context.getJunitContext()) + ":\n\n"
                     + Arrays.stream(res.split("\n")).map(s -> "\t" + s).collect(Collectors.joining("\n")));
         }
         if (field.getAnnotation().autoReset()) {
