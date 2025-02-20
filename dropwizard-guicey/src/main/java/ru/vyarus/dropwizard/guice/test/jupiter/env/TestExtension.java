@@ -1,6 +1,10 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.env;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.lambda.ListenerEvent;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.lambda.LambdaTestListener;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.lambda.TestExecutionListenerLambdaAdapter;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
@@ -19,6 +23,7 @@ public class TestExtension extends ExtensionBuilder<TestExtension, ExtensionConf
 
     private final ExtensionContext context;
     private final ListenersSupport listeners;
+    private TestExecutionListenerLambdaAdapter listenerAdapter;
 
     public TestExtension(final ExtensionConfig cfg,
                          final ExtensionContext context,
@@ -70,12 +75,112 @@ public class TestExtension extends ExtensionBuilder<TestExtension, ExtensionConf
      * If {@link ru.vyarus.dropwizard.guice.test.GuiceyTestSupport} object implements listener interface directly,
      * it would be registered as listener automatically. Still, manual registration ({@code listen(this)}) would
      * not be a mistake (no duplicate appears).
+     * <p>
+     * Listener could also be registered with lambdas using on* methods like
+     * {@link #onApplicationStart(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.lambda.LambdaTestListener)}.
+     * Lambda version might be more convenient in case when setup object is a lambda itself.
      *
      * @param listener listener object
      * @return builder instance for chained calls
      */
     public TestExtension listen(final TestExecutionListener listener) {
         listeners.addListener(listener);
+        return this;
+    }
+
+    /**
+     * Lambda version of {@link #listen(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)}
+     * for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener#started(
+     * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext)}. Lambda listener version is more useful in
+     * case when setup object is declared as a lambda itself.
+     * <p>
+     * Might be called multiple times.
+     *
+     * @param listener listener called after application start (could be beforeAll (default) or beforeEach phase)
+     * @return builder instance for chained calls
+     */
+    public TestExtension onApplicationStart(final LambdaTestListener listener) {
+        registerListener(ListenerEvent.Started, listener);
+        return this;
+    }
+
+    /**
+     * Lambda version of {@link #listen(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)}
+     * for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener#beforeAll(
+     * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext)}. Lambda listener version is more useful in
+     * case when setup object is declared as a lambda itself.
+     * <p>
+     * Might be called multiple times.
+     *
+     * @param listener listener called (might not be called!) before all test methods
+     * @return builder instance for chained calls
+     */
+    public TestExtension onBeforeAll(final LambdaTestListener listener) {
+        registerListener(ListenerEvent.BeforeAll, listener);
+        return this;
+    }
+
+    /**
+     * Lambda version of {@link #listen(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)}
+     * for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener#beforeEach(
+     * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext)}. Lambda listener version is more useful in
+     * case when setup object is declared as a lambda itself.
+     * <p>
+     * Might be called multiple times.
+     *
+     * @param listener listener called before each test method
+     * @return builder instance for chained calls
+     */
+    public TestExtension onBeforeEach(final LambdaTestListener listener) {
+        registerListener(ListenerEvent.BeforeEach, listener);
+        return this;
+    }
+
+    /**
+     * Lambda version of {@link #listen(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)}
+     * for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener#afterEach(
+     * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext)}. Lambda listener version is more useful in
+     * case when setup object is declared as a lambda itself.
+     * <p>
+     * Might be called multiple times.
+     *
+     * @param listener listener called after each test method
+     * @return builder instance for chained calls
+     */
+    public TestExtension onAfterEach(final LambdaTestListener listener) {
+        registerListener(ListenerEvent.AfterEach, listener);
+        return this;
+    }
+
+    /**
+     * Lambda version of {@link #listen(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)}
+     * for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener#afterAll(
+     * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext)}. Lambda listener version is more useful in
+     * case when setup object is declared as a lambda itself.
+     * <p>
+     * Might be called multiple times.
+     *
+     * @param listener listener called (might not be called!) after all test methods
+     * @return builder instance for chained calls
+     */
+    public TestExtension onAfterAll(final LambdaTestListener listener) {
+        registerListener(ListenerEvent.AfterAll, listener);
+        return this;
+    }
+
+    /**
+     * Lambda version of {@link #listen(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)}
+     * for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener#stopped(
+     * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext)}. Lambda listener version is more useful in
+     * case when setup object is declared as a lambda itself.
+     * <p>
+     * Might be called multiple times.
+     *
+     * @param listener listener called after application stop (could be afterAll (default) or afterEach phase)
+     * @return builder instance for chained calls
+     */
+    public TestExtension onApplicationStop(final LambdaTestListener listener) {
+        registerListener(ListenerEvent.Stopped, listener);
         return this;
     }
 
@@ -92,5 +197,14 @@ public class TestExtension extends ExtensionBuilder<TestExtension, ExtensionConf
             final Class<A> annotation,
             final Class<T> requiredFieldType) {
         return TestFieldUtils.findAnnotatedFields(context.getRequiredTestClass(), annotation, requiredFieldType);
+    }
+
+    private void registerListener(final ListenerEvent event, final LambdaTestListener listener) {
+        // create adapter on demand and register once - all other lambdas will refer to the same adapter instance
+        if (listenerAdapter == null) {
+            listenerAdapter = new TestExecutionListenerLambdaAdapter();
+            listen(listenerAdapter);
+        }
+        listenerAdapter.listen(event, listener);
     }
 }

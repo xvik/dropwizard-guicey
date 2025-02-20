@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env.field;
 
 import com.google.inject.Binder;
 import com.google.inject.Binding;
-import com.google.inject.Injector;
 import com.google.inject.Stage;
 import com.google.inject.spi.InstanceBinding;
 import com.google.inject.spi.ProviderInstanceBinding;
@@ -12,8 +11,9 @@ import org.junit.jupiter.api.extension.TestInstances;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
-import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
 import java.lang.annotation.Annotation;
@@ -117,7 +117,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * validated. Also, if guice context started per each test method, validation would be called only for the first
      * test method because fields would be searched just once - no need to validate each time.
      *
-     * @param context junit context (just in case)
+     * @param context junit context
      * @param field  annotated fields
      */
     protected abstract void validateDeclaration(ExtensionContext context, AnnotatedField<A, T> field);
@@ -154,15 +154,13 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * when extension relies on AOP and so would not work. Such validation is impossible to do before (in time
      * of binding overrides).
      * <p>
-     * Called before {@link #getFieldValue(org.junit.jupiter.api.extension.ExtensionContext, AnnotatedField,
-     * com.google.inject.Injector)}.
+     * Called before {@link #getFieldValue(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext,
+     * AnnotatedField)}.
      *
-     * @param context  junit context
+     * @param context  event context
      * @param field    annotated field
-     * @param injector guice injector
      */
-    protected abstract void validateBinding(ExtensionContext context,
-                                            AnnotatedField<A, T> field, Injector injector);
+    protected abstract void validateBinding(EventContext context, AnnotatedField<A, T> field);
 
     /**
      * Get test field value (would be immediately injected into the test field). Called only if field was not
@@ -170,17 +168,16 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * from guice context (if guice was re-configured with module overrides).
      * <p>
      * Warning: not called for manually initialized fields (because value already set)! To validate binding use
-     * {@link #validateBinding(org.junit.jupiter.api.extension.ExtensionContext, AnnotatedField,
-     * com.google.inject.Injector)} method instead (which is called for all fields).
+     * {@link #validateBinding(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext, AnnotatedField)}
+     * method instead (which is called for all fields).
      * <p>
      * Application already completely started and test extension initialized at this moment (beforeEach test phase).
      *
-     * @param context  junit context (just in case)
+     * @param context  event context
      * @param field    annotated field
-     * @param injector guice injector
      * @return created field value
      */
-    protected abstract T getFieldValue(ExtensionContext context, AnnotatedField<A, T> field, Injector injector);
+    protected abstract T getFieldValue(EventContext context, AnnotatedField<A, T> field);
 
     /**
      * Called when debug is enabled on guicey extension to report registered fields.
@@ -194,43 +191,43 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * - {@link #FIELD_MANUAL} field value was initialized by user, otherwise automatic
      * - {@link #FIELD_INJECTED} field injection instance (test instance)
      *
-     * @param context junit context (just in case), IMPORTANT - this would be setup context and not current
+     * @param context event context, IMPORTANT - this would be setup context and not current
      * @param fields  fields to report
      */
-    protected abstract void report(ExtensionContext context, List<AnnotatedField<A, T>> fields);
+    protected abstract void report(EventContext context, List<AnnotatedField<A, T>> fields);
 
     /**
      * Called before each test to pre-process field value (if required).
      *
-     * @param context junit context (just in case)
+     * @param context event context
      * @param field   filed descriptor
      * @param value   value instance
      */
-    protected abstract void beforeTest(ExtensionContext context, AnnotatedField<A, T> field, T value);
+    protected abstract void beforeTest(EventContext context, AnnotatedField<A, T> field, T value);
 
     /**
      * Called after each test to post-process field value (if required).
      *
-     * @param context junit context (just in case)
+     * @param context event context
      * @param field   filed descriptor
      * @param value   value instance
      */
-    protected abstract void afterTest(ExtensionContext context, AnnotatedField<A, T> field, T value);
+    protected abstract void afterTest(EventContext context, AnnotatedField<A, T> field, T value);
 
     @Override
-    public void started(final ExtensionContext context) {
+    public void started(final EventContext context) {
         // here because manual stubs detection will appear only during injector startup
         if (debug && !fields.isEmpty()) {
-            report(setupContext, fields);
+            report(new EventContext(setupContext), fields);
         }
     }
 
     @Override
-    public void beforeAll(final ExtensionContext context) {
+    public void beforeAll(final EventContext context) {
         // inject static fields
-        final Class<?> testClass = context.getRequiredTestClass();
+        final Class<?> testClass = context.getJunitContext().getRequiredTestClass();
         if (testClass == regTestClass) {
-            injectValues(context, fields, null, getInjector(context));
+            injectValues(context, fields, null);
         } else {
             // in case on nested tests - search for declared fields and fail because injector already created
             validateUnreachableFieldsInNestedTest(testClass);
@@ -238,22 +235,22 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
     }
 
     @Override
-    public void beforeEach(final ExtensionContext context) {
+    public void beforeEach(final EventContext context) {
         // inject non-static fields
-        final TestInstances testInstances = context.getRequiredTestInstances();
-        injectValues(context, fields, testInstances, getInjector(context));
+        final TestInstances testInstances = context.getJunitContext().getRequiredTestInstances();
+        injectValues(context, fields, testInstances);
         // call lifecycle methods on stub if required
         valueLifecycle(context, fields, testInstances, true);
     }
 
     @Override
-    public void afterEach(final ExtensionContext context) {
+    public void afterEach(final EventContext context) {
         // call lifecycle methods on stub if required
-        valueLifecycle(context, fields, context.getRequiredTestInstances(), false);
+        valueLifecycle(context, fields, context.getJunitContext().getRequiredTestInstances(), false);
     }
 
     @Override
-    public void stopped(final ExtensionContext context) {
+    public void stopped(final EventContext context) {
         // after app shutdown clear static fields injected with guice-managed bean
         // otherwise it would be impossible to differentiate it from manual stub for the next test (on per method)
         fields.forEach(field -> {
@@ -338,16 +335,14 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * Inject field values into test instance (under beforeEach). User defined values stay as is. Value is injected
      * only once for test instance.
      *
-     * @param context       junit context
+     * @param context       event context
      * @param fields        annotated fields
      * @param testInstances tests instances (might be several for nested tests)
-     * @param injector      injector instance
      */
     @SuppressWarnings({"CyclomaticComplexity", "PMD.SimplifiedTernary"})
-    protected void injectValues(final ExtensionContext context,
+    protected void injectValues(final EventContext context,
                                 final List<AnnotatedField<A, T>> fields,
-                                final TestInstances testInstances,
-                                final Injector injector) {
+                                final TestInstances testInstances) {
         final boolean checkFieldValueInvisibleOnInitialization = testInstances != null && appPerClass;
         fields.forEach(field -> {
             if (checkFieldValueInvisibleOnInitialization && !field.isStatic()) {
@@ -355,7 +350,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
                 // and fail on wrong usage
                 failIfInstanceFieldInitialized(field, testInstances);
             }
-            validateBinding(context, field, injector);
+            validateBinding(context, field);
 
             // exact instance required because it must be stored
             final Object instance = field.findRequiredInstance(testInstances);
@@ -365,7 +360,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
                     || (!field.isStatic() && instance == field.getCustomData(FIELD_INJECTED));
             // static fields might be not initialized in beforeAll (so do it in beforeEach)
             if ((instance != null || field.isStatic()) && !isAlreadyInjected) {
-                field.setValue(instance, getFieldValue(context, field, injector));
+                field.setValue(instance, getFieldValue(context, field));
                 field.setCustomData(FIELD_INJECTED, field.isStatic() ? true : instance);
             }
         });
@@ -379,7 +374,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * @param testInstances test instances (might be several for nested tests)
      * @param before        true for beforeEach, false for afterEach
      */
-    protected void valueLifecycle(final ExtensionContext context,
+    protected void valueLifecycle(final EventContext context,
                                   final List<AnnotatedField<A, T>> fields,
                                   final TestInstances testInstances,
                                   final boolean before) {

@@ -6,13 +6,13 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
-import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,7 +62,7 @@ public class SetupObjectAutoRegistrationTest {
         }
 
         @Override
-        public void beforeEach(ExtensionContext context) {
+        public void beforeEach(EventContext context) {
             actions.add("beforeEach");
         }
     }

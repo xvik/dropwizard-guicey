@@ -8,7 +8,6 @@ import io.dropwizard.core.setup.Environment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.testkit.engine.EngineTestKit;
@@ -16,8 +15,9 @@ import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
-import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
 
 import java.util.ArrayList;
@@ -123,57 +123,63 @@ public class ListenerTest {
        public Object setup(TestExtension extension) {
            extension.listen(new TestExecutionListener() {
                @Override
-               public void started(ExtensionContext context) {
+               public void started(EventContext context) {
                    Preconditions.checkNotNull(context);
-                   getSupport(context);
-                   getInjector(context);
-                   getClient(context);
-                   getBean(context, GuiceyConfigurationInfo.class).getActiveScopes();
+                   Preconditions.checkNotNull(context.getJunitContext());
+                   Preconditions.checkNotNull(context.getSupport());
+                   Preconditions.checkNotNull(context.getInjector());
+                   Preconditions.checkNotNull(context.getClient());
+                   Preconditions.checkNotNull(context.getBean(GuiceyConfigurationInfo.class).getActiveScopes());
                    actions.add("started");
                }
 
                @Override
-               public void beforeAll(ExtensionContext context) {
+               public void beforeAll(EventContext context) {
                    Preconditions.checkNotNull(context);
-                   getSupport(context);
-                   getInjector(context);
-                   getClient(context);
+                   Preconditions.checkNotNull(context.getJunitContext());
+                   Preconditions.checkNotNull(context.getSupport());
+                   Preconditions.checkNotNull(context.getInjector());
+                   Preconditions.checkNotNull(context.getClient());
                    actions.add("beforeAll");
                }
 
                @Override
-               public void beforeEach(ExtensionContext context) {
+               public void beforeEach(EventContext context) {
                    Preconditions.checkNotNull(context);
-                   getSupport(context);
-                   getInjector(context);
-                   getClient(context);
+                   Preconditions.checkNotNull(context.getJunitContext());
+                   Preconditions.checkNotNull(context.getSupport());
+                   Preconditions.checkNotNull(context.getInjector());
+                   Preconditions.checkNotNull(context.getClient());
                    actions.add("beforeEach");
                }
 
                @Override
-               public void afterEach(ExtensionContext context) {
+               public void afterEach(EventContext context) {
                    Preconditions.checkNotNull(context);
-                   getSupport(context);
-                   getInjector(context);
-                   getClient(context);
+                   Preconditions.checkNotNull(context.getJunitContext());
+                   Preconditions.checkNotNull(context.getSupport());
+                   Preconditions.checkNotNull(context.getInjector());
+                   Preconditions.checkNotNull(context.getClient());
                    actions.add("afterEach");
                }
 
                @Override
-               public void afterAll(ExtensionContext context) {
+               public void afterAll(EventContext context) {
                    Preconditions.checkNotNull(context);
-                   getSupport(context);
-                   getInjector(context);
-                   getClient(context);
+                   Preconditions.checkNotNull(context.getJunitContext());
+                   Preconditions.checkNotNull(context.getSupport());
+                   Preconditions.checkNotNull(context.getInjector());
+                   Preconditions.checkNotNull(context.getClient());
                    actions.add("afterAll");
                }
 
                @Override
-               public void stopped(ExtensionContext context) {
+               public void stopped(EventContext context) {
                    Preconditions.checkNotNull(context);
-                   getSupport(context);
-                   getInjector(context);
-                   getClient(context);
+                   Preconditions.checkNotNull(context.getJunitContext());
+                   Preconditions.checkNotNull(context.getSupport());
+                   Preconditions.checkNotNull(context.getInjector());
+                   Preconditions.checkNotNull(context.getClient());
                    actions.add("stopped");
                }
            });
