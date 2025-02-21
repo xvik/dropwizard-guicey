@@ -25,7 +25,7 @@ import org.glassfish.jersey.internal.inject.AbstractBinder;
  * @since 16.11.2014
  * @see ru.vyarus.dropwizard.guice.module.installer.feature.jersey.AbstractJerseyInstaller base class
  */
-public interface JerseyInstaller<T> {
+public interface JerseyInstaller<T> extends WebInstaller {
 
     /**
      * Called on jersey start to inject extensions into HK context.

@@ -13,6 +13,10 @@
 * Add extensions scan filters: GuiceBundle.builder().autoScanFilter(cls -> !cls.isAnnotationPresent(Skip.class))
   Could be used either to skip some classes from scanning (without @InvisibleForScanner) annotation
   or to accept only annotated classes (spring style) (#419)
+* Add WebInstaller marker interface to identify web extensions (extensions started with jersey) 
+* Improve disable predicate:
+    - fix predicate applied for extension too early (without installer set)
+    - Add more predicates to Disables class
 * Test improvements:
   - Track guicey test extensions time (would appear when debug option enabled)
   - Add injectOnce option into test extensions to call injectMemebers once per test instance 

@@ -54,4 +54,23 @@ public interface ExtensionItemInfo extends ClassItemInfo, ScanSupport, DisableSu
      * @return true if extension is optional
      */
     boolean isOptional();
+
+    /**
+     * Web extensions detected by {@link ru.vyarus.dropwizard.guice.module.installer.install.WebInstaller} marker
+     * interface on detected installer. Web extensions are: resources, servlets, filters, rest and all related
+     * jersey extensions. Everything that is not starts with lightweight guicey test should be marked as web.
+     *
+     * @return true if extension is a web extension
+     */
+    boolean isWebExtension();
+
+    /**
+     * Jersey extensions detected by {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}
+     * interface. Note that jersey extensions are {@link #isWebExtension()}.
+     * <p>
+     * Don't confuse with {@link #isJerseyManaged()} which indicates what ioc manage extension instance (guice/hk2).
+     *
+     * @return true if extension is a jersey extension
+     */
+    boolean isJerseyExtension();
 }

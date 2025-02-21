@@ -10,6 +10,7 @@ import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.util.WebUtils;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.WebInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSupport;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
@@ -54,7 +55,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Deny
  */
 @Order(90)
 public class WebServletInstaller extends InstallerOptionsSupport
-        implements FeatureInstaller, InstanceInstaller<HttpServlet>, Ordered {
+        implements FeatureInstaller, InstanceInstaller<HttpServlet>, Ordered, WebInstaller {
 
     private final Logger logger = LoggerFactory.getLogger(WebServletInstaller.class);
     private final Reporter reporter = new Reporter(WebServletInstaller.class, "servlets =");
