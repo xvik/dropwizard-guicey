@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.util.WebUtils;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.WebInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
@@ -47,7 +48,7 @@ import java.util.List;
  */
 @Order(100)
 public class WebFilterInstaller implements FeatureInstaller,
-        InstanceInstaller<Filter>, Ordered {
+        InstanceInstaller<Filter>, Ordered, WebInstaller {
 
     private final Reporter reporter = new Reporter(WebFilterInstaller.class, "filters =");
 

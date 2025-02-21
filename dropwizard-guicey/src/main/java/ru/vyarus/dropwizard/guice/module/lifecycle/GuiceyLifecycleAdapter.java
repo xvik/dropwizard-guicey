@@ -305,7 +305,8 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
 
     /**
      * Called after
-     * {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(io.dropwizard.Configuration, io.dropwizard.setup.Environment)}
+     * {@link ru.vyarus.dropwizard.guice.GuiceBundle#run(io.dropwizard.core.Configuration,
+     * io.dropwizard.core.setup.Environment)}
      * when guicey context is started, extensions installed (but not hk extensions, because neither jersey nor jetty
      * isn't start yet).
      *

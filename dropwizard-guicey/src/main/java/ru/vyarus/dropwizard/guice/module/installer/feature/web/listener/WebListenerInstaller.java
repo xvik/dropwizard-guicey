@@ -7,6 +7,7 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.AdminContext;
 import ru.vyarus.dropwizard.guice.module.installer.feature.web.util.WebUtils;
 import ru.vyarus.dropwizard.guice.module.installer.install.InstanceInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.WebInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.option.InstallerOptionsSupport;
 import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
@@ -52,7 +53,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Deny
  */
 @Order(110)
 public class WebListenerInstaller extends InstallerOptionsSupport
-        implements FeatureInstaller, InstanceInstaller<EventListener>, Ordered {
+        implements FeatureInstaller, InstanceInstaller<EventListener>, Ordered, WebInstaller {
 
     private static final List<Class<? extends EventListener>> CONTEXT_LISTENERS = ImmutableList.of(
             ServletContextListener.class,

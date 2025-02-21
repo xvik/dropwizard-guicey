@@ -119,4 +119,12 @@ public interface ItemInfo {
      * @return number of ignored items in all scopes of specified type
      */
     int getIgnoresByScope(Class<?> scope);
+
+    /**
+     * For example, item for extension might be registered before recognition with installer, and it is
+     * important to wait for installer before applying disable predicates (which potentially may rely on installer).
+     *
+     * @return true if item completely initialized (all related data provided)
+     */
+    boolean isAllDataCollected();
 }

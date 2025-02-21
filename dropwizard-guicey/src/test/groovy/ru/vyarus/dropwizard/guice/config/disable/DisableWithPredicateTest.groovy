@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.config
+package ru.vyarus.dropwizard.guice.config.disable
 
 import com.google.inject.AbstractModule
 import io.dropwizard.core.Application

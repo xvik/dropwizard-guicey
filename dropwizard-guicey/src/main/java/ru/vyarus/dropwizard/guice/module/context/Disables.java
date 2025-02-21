@@ -1,7 +1,12 @@
 package ru.vyarus.dropwizard.guice.module.context;
 
+import ru.vyarus.dropwizard.guice.module.context.info.DropwizardBundleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.GuiceyBundleItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -68,6 +73,13 @@ public final class Disables {
     }
 
     /**
+     * @return extension item predicate
+     */
+    public static Predicate<ItemInfo> extension(final Predicate<ExtensionItemInfo> predicate) {
+        return extension().and(item -> predicate.test((ExtensionItemInfo) item));
+    }
+
+    /**
      * Note that only directly registered modules are covered.
      *
      * @return guice module item predicate
@@ -77,10 +89,26 @@ public final class Disables {
     }
 
     /**
+     * Note that only directly registered modules are covered.
+     *
+     * @return guice module item predicate
+     */
+    public static Predicate<ItemInfo> module(final Predicate<ModuleItemInfo> predicate) {
+        return module().and(item -> predicate.test((ModuleItemInfo) item));
+    }
+
+    /**
      * @return guicey bundle item predicate
      */
     public static Predicate<ItemInfo> bundle() {
         return itemType(ConfigItem.Bundle);
+    }
+
+    /**
+     * @return guicey bundle item predicate
+     */
+    public static Predicate<ItemInfo> bundle(final Predicate<GuiceyBundleItemInfo> predicate) {
+        return bundle().and(item -> predicate.test((GuiceyBundleItemInfo) item));
     }
 
     /**
@@ -93,10 +121,26 @@ public final class Disables {
     }
 
     /**
+     * Note that only directly registered dropwizard bundles are covered.
+     *
+     * @return guicey dropwizard bundle item predicate
+     */
+    public static Predicate<ItemInfo> dropwizardBundle(final Predicate<DropwizardBundleItemInfo> predicate) {
+        return dropwizardBundle().and(item -> predicate.test((DropwizardBundleItemInfo) item));
+    }
+
+    /**
      * @return installer item predicate
      */
     public static Predicate<ItemInfo> installer() {
         return itemType(ConfigItem.Installer);
+    }
+
+    /**
+     * @return installer item predicate
+     */
+    public static Predicate<ItemInfo> installer(final Predicate<InstallerItemInfo> predicate) {
+        return installer().and(item -> predicate.test((InstallerItemInfo) item));
     }
 
     /**
@@ -118,5 +162,26 @@ public final class Disables {
             final String typePkg = input.getType().getPackage().getName();
             return Arrays.stream(pkgs).anyMatch(typePkg::startsWith);
         };
+    }
+
+    /**
+     * Web extensions are all extensions activated with jetty (including jersey extensions like rest resources).
+     * (web extensions identified by installers, implementing
+     * {@link ru.vyarus.dropwizard.guice.module.installer.install.WebInstaller})
+     *
+     * @return web extensions predicate
+     */
+    public static Predicate<ItemInfo> webExtension() {
+        return extension().and(item -> ((ExtensionItemInfo) item).isWebExtension());
+    }
+
+    /**
+     * Jersey extensions are extensions installed with
+     * {@link ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller}.
+     *
+     * @return jersey extensions predicate
+     */
+    public static Predicate<ItemInfo> jerseyExtension() {
+        return extension().and(item -> ((ExtensionItemInfo) item).isJerseyExtension());
     }
 }

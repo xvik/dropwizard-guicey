@@ -58,6 +58,8 @@ public final class ExtensionsSupport {
             info.setLazy(type.isAnnotationPresent(LazyBinding.class));
             info.setJerseyManaged(JerseyBinding.isJerseyManaged(type, context.option(JerseyExtensionsManagedByGuice)));
             info.setInstaller(installer);
+            context.notifyExtensionRecognized(info);
+
         } else if (!fromScan) {
             final ExtensionItemInfoImpl info = context.getOrRegisterExtension(type, fromScan);
             if (info.isOptional()) {
@@ -108,6 +110,7 @@ public final class ExtensionsSupport {
 
             info.setManualBinding(manualBinding);
             info.setInstaller(installer);
+            context.notifyExtensionRecognized(info);
         }
         return recognized;
     }

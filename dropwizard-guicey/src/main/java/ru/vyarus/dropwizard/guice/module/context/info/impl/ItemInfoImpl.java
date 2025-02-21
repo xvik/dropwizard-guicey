@@ -17,6 +17,9 @@ import java.util.Set;
  * @since 06.07.2016
  */
 public class ItemInfoImpl implements ItemInfo {
+    // indicates complete initialization (useful for extensions - installer might be not set)
+    protected boolean complete = true;
+
     private final ItemId id;
     private final ConfigItem itemType;
     private final Set<ItemId> registeredBy = Sets.newLinkedHashSet();
@@ -102,6 +105,11 @@ public class ItemInfoImpl implements ItemInfo {
     @Override
     public int getIgnoresByScope(final Class<?> scope) {
         return getIgnoresByScope(ItemId.from(scope));
+    }
+
+    @Override
+    public boolean isAllDataCollected() {
+        return complete;
     }
 
     public void countRegistrationAttempt(final ItemId scope) {
