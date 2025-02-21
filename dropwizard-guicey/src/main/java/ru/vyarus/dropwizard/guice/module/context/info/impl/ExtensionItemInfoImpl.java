@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.context.info.impl;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import com.google.inject.Binding;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
@@ -7,6 +8,8 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.JerseyInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.install.WebInstaller;
 
 import java.util.Set;
 
@@ -29,6 +32,8 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
 
     public ExtensionItemInfoImpl(final Class<?> type) {
         super(ConfigItem.Extension, type);
+        // not initialized while installer not set
+        this.complete = false;
     }
 
     @Override
@@ -94,9 +99,20 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
     public void setInstaller(final FeatureInstaller installer) {
         this.installer = installer;
         this.installedBy = installer.getClass();
+        this.complete = true;
     }
 
     public void setOptional(final boolean optional) {
         this.optional = optional;
+    }
+
+    @Override
+    public boolean isWebExtension() {
+        return WebInstaller.class.isAssignableFrom(Preconditions.checkNotNull(installedBy));
+    }
+
+    @Override
+    public boolean isJerseyExtension() {
+        return JerseyInstaller.class.isAssignableFrom(Preconditions.checkNotNull(installedBy));
     }
 }

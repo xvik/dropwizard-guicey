@@ -4,6 +4,7 @@ import com.google.inject.Injector;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.GuiceyExtensionsSupport;
 
 /**
@@ -71,5 +72,12 @@ public class EventContext {
     public ClientSupport getClient() {
         return GuiceyExtensionsSupport.lookupClient(context)
                 .orElseThrow(() -> new IllegalStateException("Client not found"));
+    }
+
+    /**
+     * @return true if complete application started, false for guice-only part
+     */
+    public boolean isWebStarted() {
+        return !(getSupport() instanceof GuiceyTestSupport<?>);
     }
 }

@@ -608,6 +608,17 @@ public final class ConfigurationContext {
     }
 
     /**
+     * Extension recognized by installer, which means it is now completely initialized and disable predicates
+     * could be applied now.
+     *
+     * @param extension extension after setting installer
+     */
+    public void notifyExtensionRecognized(final ExtensionItemInfoImpl extension) {
+        Preconditions.checkState(extension.isAllDataCollected());
+        fireRegistration(extension, true);
+    }
+
+    /**
      * Extension manual disable registration from
      * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableExtensions(Class[])}.
      *
@@ -908,6 +919,8 @@ public final class ConfigurationContext {
                 .build()
                 .stream()
                 .<ItemInfo>map(this::getInfo)
+                // avoid extensions without installer set (could be important for disable)
+                .filter(ItemInfo::isAllDataCollected)
                 .forEach(item -> applyDisablePredicates(predicates, item));
     }
 
@@ -943,7 +956,7 @@ public final class ConfigurationContext {
         // if registered multiple times in one scope attempts will reveal it
         info.countRegistrationAttempt(getScope());
 
-        fireRegistration(info);
+        fireRegistration(info, false);
         return info;
     }
 
@@ -1064,9 +1077,11 @@ public final class ConfigurationContext {
         return original;
     }
 
-    private void fireRegistration(final ItemInfo item) {
-        // fire event only for initial registration and for items which could be disabled
-        if (item instanceof DisableSupport && item.getRegistrationAttempts() == 1) {
+    private void fireRegistration(final ItemInfo item, final boolean afterCompleteInitialization) {
+        // Fire event only for initial registration and for items which could be disabled
+        // Apply predicate ONLY when all required data prepared (affects extensions)
+        if (item instanceof DisableSupport && item.isAllDataCollected()
+                && (item.getRegistrationAttempts() == 1 || afterCompleteInitialization)) {
             applyDisablePredicates(disablePredicates, item);
         }
     }
