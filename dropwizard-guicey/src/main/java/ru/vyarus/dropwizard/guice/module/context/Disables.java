@@ -7,8 +7,10 @@ import ru.vyarus.dropwizard.guice.module.context.info.InstallerItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
+import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -59,24 +61,28 @@ public final class Disables {
      * Generic item type predicate. It could be installer, bundle, extension or module.
      *
      * @param types configuration types to match
+     * @param <T>   expected info container type (if used within single configuration type)
      * @return items of specific type predicate
      */
-    public static Predicate<ItemInfo> itemType(final ConfigItem... types) {
+    public static <T extends ItemInfo> Predicate<T> itemType(final ConfigItem... types) {
         return Filters.type(types);
     }
 
     /**
      * @return extension item predicate
      */
-    public static Predicate<ItemInfo> extension() {
+    public static Predicate<ExtensionItemInfo> extension() {
         return itemType(ConfigItem.Extension);
     }
 
     /**
-     * @return extension item predicate
+     * @param installers installers
+     * @return predicate for extensions installed by provided installer
      */
-    public static Predicate<ItemInfo> extension(final Predicate<ExtensionItemInfo> predicate) {
-        return extension().and(item -> predicate.test((ExtensionItemInfo) item));
+    @SafeVarargs
+    public static Predicate<ExtensionItemInfo> installedBy(final Class<? extends FeatureInstaller>... installers) {
+        final List<Class<? extends FeatureInstaller>> deny = Arrays.asList(installers);
+        return extension().and(info -> deny.contains(info.getInstalledBy()));
     }
 
     /**
@@ -84,63 +90,31 @@ public final class Disables {
      *
      * @return guice module item predicate
      */
-    public static Predicate<ItemInfo> module() {
+    public static Predicate<ModuleItemInfo> module() {
         return itemType(ConfigItem.Module);
     }
 
     /**
-     * Note that only directly registered modules are covered.
-     *
-     * @return guice module item predicate
-     */
-    public static Predicate<ItemInfo> module(final Predicate<ModuleItemInfo> predicate) {
-        return module().and(item -> predicate.test((ModuleItemInfo) item));
-    }
-
-    /**
      * @return guicey bundle item predicate
      */
-    public static Predicate<ItemInfo> bundle() {
+    public static Predicate<GuiceyBundleItemInfo> bundle() {
         return itemType(ConfigItem.Bundle);
     }
 
     /**
-     * @return guicey bundle item predicate
-     */
-    public static Predicate<ItemInfo> bundle(final Predicate<GuiceyBundleItemInfo> predicate) {
-        return bundle().and(item -> predicate.test((GuiceyBundleItemInfo) item));
-    }
-
-    /**
      * Note that only directly registered dropwizard bundles are covered.
      *
      * @return guicey dropwizard bundle item predicate
      */
-    public static Predicate<ItemInfo> dropwizardBundle() {
+    public static Predicate<DropwizardBundleItemInfo> dropwizardBundle() {
         return itemType(ConfigItem.DropwizardBundle);
     }
 
     /**
-     * Note that only directly registered dropwizard bundles are covered.
-     *
-     * @return guicey dropwizard bundle item predicate
-     */
-    public static Predicate<ItemInfo> dropwizardBundle(final Predicate<DropwizardBundleItemInfo> predicate) {
-        return dropwizardBundle().and(item -> predicate.test((DropwizardBundleItemInfo) item));
-    }
-
-    /**
      * @return installer item predicate
      */
-    public static Predicate<ItemInfo> installer() {
+    public static Predicate<InstallerItemInfo> installer() {
         return itemType(ConfigItem.Installer);
-    }
-
-    /**
-     * @return installer item predicate
-     */
-    public static Predicate<ItemInfo> installer(final Predicate<InstallerItemInfo> predicate) {
-        return installer().and(item -> predicate.test((InstallerItemInfo) item));
     }
 
     /**
@@ -171,8 +145,8 @@ public final class Disables {
      *
      * @return web extensions predicate
      */
-    public static Predicate<ItemInfo> webExtension() {
-        return extension().and(item -> ((ExtensionItemInfo) item).isWebExtension());
+    public static Predicate<ExtensionItemInfo> webExtension() {
+        return extension().and(ExtensionItemInfo::isWebExtension);
     }
 
     /**
@@ -181,7 +155,7 @@ public final class Disables {
      *
      * @return jersey extensions predicate
      */
-    public static Predicate<ItemInfo> jerseyExtension() {
-        return extension().and(item -> ((ExtensionItemInfo) item).isJerseyExtension());
+    public static Predicate<ExtensionItemInfo> jerseyExtension() {
+        return extension().and(ExtensionItemInfo::isJerseyExtension);
     }
 }

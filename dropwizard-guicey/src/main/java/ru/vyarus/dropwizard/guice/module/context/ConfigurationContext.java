@@ -696,10 +696,12 @@ public final class ConfigurationContext {
      *
      * @param predicates disable predicates
      */
-    @SuppressWarnings("PMD.UseVarargs")
-    public void registerDisablePredicates(final Predicate<ItemInfo>[] predicates) {
+    @SuppressWarnings({"PMD.UseVarargs", "unchecked"})
+    public void registerDisablePredicates(final Predicate<? extends ItemInfo>[] predicates) {
+        // accept typed predicates, but downgrade to base entity (assumed that predicate would be formed
+        // correctly with Disables.* methods)
         final List<PredicateHandler> list = Arrays.stream(predicates)
-                .map(p -> new PredicateHandler(p, getScope()))
+                .map(p -> new PredicateHandler((Predicate<ItemInfo>) p, getScope()))
                 .collect(Collectors.toList());
         disablePredicates.addAll(list);
         applyPredicatesForRegisteredItems(list);
