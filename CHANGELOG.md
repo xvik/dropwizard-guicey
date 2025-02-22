@@ -22,6 +22,12 @@
   - Add test lifecycle listeners: could be registered with TestEnvironmentSetup (listen() method or lambda-based on* methods) 
     and provide notifications for guicey extension lifecycle (app start/stop, before/after test).
     This is a simple alternative to writing junit extensions for an additional integrations (db, testcontainers etc.).
+  - Add ability to disable managed objects lifecycle for lightweight guicey tests 
+    (start/stop methods on managed objects not called; might be useful for tests with mocks):
+    * new GuiceyTestSupport().disableManagedLifecycle()
+    * @TestGuiceyApp(.., managedLifecycle = false)
+    * TestGuiceyAppExtension.forApp(..).disableManagedLifecycle()
+    * TestSupport.build(App.class).runCoreWithoutManaged(..)
   - Add annotated fields search api in test class for setup objects (TestEnvironmentSetup): findFields(..)
     (to simplify writing annotation-driven extensions).
   - If setup object (TestEnvironmentSetup) implements hook and/or listener interface, it would be

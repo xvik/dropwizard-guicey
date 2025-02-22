@@ -6,6 +6,8 @@ import io.dropwizard.core.cli.EnvironmentCommand;
 import io.dropwizard.core.setup.Environment;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.eclipse.jetty.util.component.ContainerLifeCycle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Lightweight variation of server command for testing purposes.
@@ -17,22 +19,33 @@ import org.eclipse.jetty.util.component.ContainerLifeCycle;
  */
 public class TestCommand<C extends Configuration> extends EnvironmentCommand<C> {
 
+    private final Logger logger = LoggerFactory.getLogger(TestCommand.class);
     private final Class<C> configurationClass;
+    private final boolean simulateManaged;
     private ContainerLifeCycle container;
 
     public TestCommand(final Application<C> application) {
+        this(application, true);
+    }
+
+    public TestCommand(final Application<C> application, final boolean simulateManaged) {
         super(application, "guicey-test", "Specific command to run guice context without jetty server");
         cleanupAsynchronously();
         configurationClass = application.getConfigurationClass();
+        this.simulateManaged = simulateManaged;
     }
 
     @Override
     protected void run(final Environment environment, final Namespace namespace,
                        final C configuration) throws Exception {
         // simulating managed objects lifecycle support
-        container = new ContainerLifeCycle();
-        environment.lifecycle().attach(container);
-        container.start();
+        if (simulateManaged) {
+            container = new ContainerLifeCycle();
+            environment.lifecycle().attach(container);
+            container.start();
+        } else {
+            logger.info("NOTE: Managed lifecycle support disabled!");
+        }
     }
 
     public void stop() {

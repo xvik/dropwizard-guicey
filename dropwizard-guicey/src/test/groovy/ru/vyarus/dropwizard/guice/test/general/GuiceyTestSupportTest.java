@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Key;
 import io.dropwizard.configuration.FileConfigurationSourceProvider;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
+import io.dropwizard.core.Configuration;
 import org.apache.commons.text.StringSubstitutor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,5 +41,16 @@ public class GuiceyTestSupportTest {
             Preconditions.checkNotNull(injector.getInstance(DummyService.class));
             return null;
         });
+    }
+
+    @Test
+    void testRunWithoutManagedLifecycle() throws Exception {
+        GuiceyTestSupport<Configuration> support = new GuiceyTestSupport<>(BuilderRunCoreWithoutManaged.App.class, (String) null)
+                .disableManagedLifecycle();
+
+        BuilderRunCoreWithoutManaged.UnusedManaged managed = support
+                .run(injector -> injector.getInstance(BuilderRunCoreWithoutManaged.UnusedManaged.class));
+        Assertions.assertThat(managed.started).isFalse();
+        Assertions.assertThat(managed.stopped).isFalse();
     }
 }
