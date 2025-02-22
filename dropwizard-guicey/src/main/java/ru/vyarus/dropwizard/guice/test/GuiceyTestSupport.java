@@ -61,6 +61,16 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
     }
 
     /**
+     * By default, guicey simulates {@link io.dropwizard.lifecycle.Managed} (and
+     * {@link org.eclipse.jetty.util.component.LifeCycle}) lifecycles. It might be not required for tests with
+     * mocks.
+     */
+    public GuiceyTestSupport<C> disableManagedLifecycle() {
+        ((CmdProvider<C>) this.commandInstantiator).disableManagedSimulation();
+        return this;
+    }
+
+    /**
      * Normally, {@link #before()} and {@link #after()} methods are called separately. This method is a shortcut
      * mostly for errors testing when {@link #before()} assumed to fail to make sure {@link #after()} will be called
      * in any case: {@code testSupport.run(null)}.
@@ -108,12 +118,18 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
     @SuppressWarnings("checkstyle:VisibilityModifier")
     static class CmdProvider<C extends Configuration> implements Function<Application<C>, Command> {
 
+        private boolean simulateManaged = true;
         public TestCommand<C> command;
+
+        public void disableManagedSimulation() {
+            Preconditions.checkState(command == null, "Command already initialized");
+            simulateManaged = false;
+        }
 
         @Override
         public Command apply(final Application<C> application) {
             Preconditions.checkState(command == null, "Command already created");
-            command = new TestCommand<>(application);
+            command = new TestCommand<>(application, simulateManaged);
             return command;
         }
     }

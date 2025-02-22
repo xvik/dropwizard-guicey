@@ -152,10 +152,14 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             final String configPath,
             final ExtensionContext context) {
         // NOTE: DropwizardTestSupport.ServiceListener listeners would be called ONLY on start!
-        return new GuiceyTestSupport<C>((Class<? extends Application<C>>) app,
+        final GuiceyTestSupport support = new GuiceyTestSupport<C>((Class<? extends Application<C>>) app,
                 configPath,
                 configPrefix,
                 buildConfigOverrides(configPrefix, context));
+        if (!config.managedLifecycle) {
+            support.disableManagedLifecycle();
+        }
+        return support;
     }
 
     @SuppressWarnings("unchecked")
@@ -238,6 +242,19 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         }
 
         /**
+         * By default, guicey simulates {@link io.dropwizard.lifecycle.Managed} (and
+         * {@link org.eclipse.jetty.util.component.LifeCycle}) lifecycles. It might be not required for tests with
+         * mocks.
+         *
+         * @return true to simulate managed objects lifecycle
+         * @return builder instance for chained calls
+         */
+        public Builder disableManagedLifecycle() {
+            cfg.managedLifecycle = false;
+            return this;
+        }
+
+        /**
          * Creates extension.
          * <p>
          * Note that extension must be assigned to static field! Extension instance does not provide additional
@@ -257,6 +274,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
     private static class Config extends ExtensionConfig {
         Class<? extends Application> app;
         String configPath = "";
+        boolean managedLifecycle = true;
 
         Config() {
             super(new TestExtensionsTracker());
@@ -295,6 +313,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             res.reuseApp = ann.reuseApplication();
             res.defaultExtensionsEnabled = ann.useDefaultExtensions();
             res.clientFactory(ann.clientFactory());
+            res.managedLifecycle = ann.managedLifecycle();
             return res;
         }
     }

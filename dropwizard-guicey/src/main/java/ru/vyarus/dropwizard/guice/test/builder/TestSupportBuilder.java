@@ -155,6 +155,25 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
     }
 
     /**
+     * Start and stop application without web services. Provided action would be executed in time of application life.
+     * Does not simulate {@link io.dropwizard.lifecycle.Managed} objects lifecycle (start/stop would not be called).
+     * <p>
+     * NOTE: method not supposed to be used for multiple calls. For example, registered hooks would only work
+     * on first execution.
+     *
+     * @param action action to execute while the application is running
+     * @param <T>    result type
+     * @return action result
+     * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
+     *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
+     */
+    public <T> T runCoreWithoutManaged(final @Nullable TestSupport.RunCallback<T> action) throws Exception {
+        return run(buildCoreInternal().disableManagedLifecycle(), action);
+    }
+
+
+
+    /**
      * Start and stop application with web services. Mostly useful to test application startup errors
      * (with proper application shutdown).
      * <p>
