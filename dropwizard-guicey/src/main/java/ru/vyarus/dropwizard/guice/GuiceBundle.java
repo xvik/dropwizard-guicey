@@ -745,7 +745,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * @see ru.vyarus.dropwizard.guice.module.context.Disables for common predicates
          */
         @SafeVarargs
-        public final Builder disable(final Predicate<ItemInfo>... predicates) {
+        public final Builder disable(final Predicate<? extends ItemInfo>... predicates) {
             bundle.context.registerDisablePredicates(predicates);
             return this;
         }

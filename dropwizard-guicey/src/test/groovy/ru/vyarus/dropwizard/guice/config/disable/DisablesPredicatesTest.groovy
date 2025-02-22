@@ -70,27 +70,30 @@ class DisablesPredicatesTest extends AbstractTest {
     def "Check extension predicates"() {
 
         expect:
-        Disables.extension {it.installedBy == ManagedInstaller }
+        Disables.extension().and {it.installedBy == ManagedInstaller }
                 .test(extension(Sample, ManagedInstaller))
-        !Disables.extension {it.installedBy == HealthCheckInstaller }
+        !Disables.extension().and {it.installedBy == HealthCheckInstaller }
                 .test(extension(Sample, ManagedInstaller))
+        
+        !Disables.installedBy(HealthCheckInstaller).test(extension(Sample, ManagedInstaller))
+        Disables.installedBy(HealthCheckInstaller).test(extension(Sample, HealthCheckInstaller))
 
         Disables.webExtension().test(extension(Sample, WebFilterInstaller))
         !Disables.webExtension().test(extension(Sample, ManagedInstaller))
         Disables.jerseyExtension().test(extension(Sample, ResourceInstaller))
         !Disables.jerseyExtension().test(extension(Sample, ManagedInstaller))
 
-        !Disables.module {it.overriding}.test(module())
-        Disables.module {it.overriding}.test(module(true))
+        !Disables.module().and {it.overriding}.test(module())
+        Disables.module().and {it.overriding}.test(module(true))
 
-        !Disables.bundle {it.fromLookup}.test(bundle(Sample))
-        Disables.bundle {it.fromLookup}.test(bundle(Sample, true))
+        !Disables.bundle().and {it.fromLookup}.test(bundle(Sample))
+        Disables.bundle().and {it.fromLookup}.test(bundle(Sample, true))
 
-        Disables.dropwizardBundle {it.enabled}.test(dropwizardBundle(Sample))
-        !Disables.dropwizardBundle {it.enabled}.test(dropwizardBundle(Sample, true))
+        Disables.dropwizardBundle().and {it.enabled}.test(dropwizardBundle(Sample))
+        !Disables.dropwizardBundle().and {it.enabled}.test(dropwizardBundle(Sample, true))
 
-        Disables.installer {it.enabled}.test(installer(Sample))
-        !Disables.installer {it.enabled}.test(installer(Sample, true))
+        Disables.installer().and {it.enabled}.test(installer(Sample))
+        !Disables.installer().and {it.enabled}.test(installer(Sample, true))
     }
 
     def "Check composition"() {
