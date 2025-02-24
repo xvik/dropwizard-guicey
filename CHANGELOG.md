@@ -8,6 +8,9 @@
   (also important for avoiding duplicate binding registration after classpath scan)
     - Add AnalyzePrivateGuiceModules option (enabled by default) to disable private modules 
       analysis (in case of problems)
+* Add shortcut listeners in GuiceBundle and GuiceyBundle (bootstrap and environment) objects:
+    onGuiceyStartup, onApplicationStartup, onApplicationShutdown, listenJetty, listenServer
+   (before, methods were present only in GuiceyBindle's environment object)
 * Disabled modules remove would also affect private modules now (but only first level)
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
 * Add extensions scan filters: GuiceBundle.builder().autoScanFilter(cls -> !cls.isAnnotationPresent(Skip.class))

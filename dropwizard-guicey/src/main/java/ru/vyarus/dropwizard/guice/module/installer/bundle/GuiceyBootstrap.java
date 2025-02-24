@@ -6,13 +6,15 @@ import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.ConfiguredBundle;
 import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
-import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ListenersRegistration;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -35,12 +37,13 @@ import java.util.function.Supplier;
  * @since 01.08.2015
  */
 @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
-public class GuiceyBootstrap {
+public class GuiceyBootstrap extends ListenersRegistration<GuiceyBootstrap> {
 
     private final ConfigurationContext context;
     private final List<GuiceyBundle> iterationBundles;
 
     public GuiceyBootstrap(final ConfigurationContext context, final List<GuiceyBundle> iterationBundles) {
+        super(context);
         this.context = context;
         this.iterationBundles = iterationBundles;
     }
@@ -245,24 +248,6 @@ public class GuiceyBootstrap {
     }
 
     /**
-     * Guicey broadcast a lot of events in order to indicate lifecycle phases
-     * ({@linkplain ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle}). Listener, registered in bundles
-     * could listen events from {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle#BundlesInitialized}.
-     * <p>
-     * Listener is not registered if equal listener was already registered ({@link java.util.Set} used as
-     * listeners storage), so if you need to be sure that only one instance of some listener will be used
-     * implement {@link Object#equals(Object)}.
-     *
-     * @param listeners guicey lifecycle listeners
-     * @return bootstrap instance for chained calls
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(GuiceyLifecycleListener...)
-     */
-    public GuiceyBootstrap listen(final GuiceyLifecycleListener... listeners) {
-        context.lifecycle().register(listeners);
-        return this;
-    }
-
-    /**
      * Share global state to be used in other bundles (during configuration). This was added for very special cases
      * when shared state is unavoidable (to not re-invent the wheel each time)!
      * <p>
@@ -330,5 +315,10 @@ public class GuiceyBootstrap {
      */
     public <T> T sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
         return context.getSharedState().getOrFail(key, message, args);
+    }
+
+    @Override
+    protected void withEnvironment(final Consumer<Environment> action) {
+        onGuiceyStartup((config, env, injector) -> action.accept(env));
     }
 }
