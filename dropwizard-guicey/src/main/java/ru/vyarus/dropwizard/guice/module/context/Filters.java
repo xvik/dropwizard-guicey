@@ -19,6 +19,7 @@ import java.util.function.Predicate;
  * @author Vyacheslav Rusakov
  * @since 06.07.2016
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public final class Filters {
 
     private Filters() {
@@ -36,6 +37,19 @@ public final class Filters {
      */
     public static <T extends ItemInfo> Predicate<T> enabled() {
         return input -> !(input instanceof DisableSupport) || ((DisableSupport) input).isEnabled();
+    }
+
+    /**
+     * Filter for disabled items. Not all items support disable ({@link DisableSupport}).
+     * Items not supporting disable considered enabled (so it's safe to apply filter for
+     * all items).
+     *
+     * @param <T> expected info container type (if used within single configuration type)
+     * @return enabled items filter
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends ItemInfo> Predicate<T> disabled() {
+        return ((Predicate<T>) enabled()).negate();
     }
 
     /**
@@ -213,7 +227,28 @@ public final class Filters {
         return Filters.<T>type(ConfigItem.Bundle).or(type(ConfigItem.DropwizardBundle));
     }
 
+    /**
+     * @return guicey bundles predicate
+     */
+    public static Predicate<GuiceyBundleItemInfo> guiceyBundles() {
+        return Filters.type(ConfigItem.Bundle);
+    }
+
+    /**
+     * @return dropwizard bundles predicate
+     */
+    public static Predicate<GuiceyBundleItemInfo> dropwizardBundles() {
+        return Filters.type(ConfigItem.DropwizardBundle);
+    }
+
     // --------------------------------------------------------------------------- EXTENSIONS
+
+    /**
+     * @return extensions predicate
+     */
+    public static Predicate<ExtensionItemInfo> extensions() {
+        return type(ConfigItem.Extension);
+    }
 
     /**
      * Filter for extensions installed by specified installer. Use only for {@link ConfigItem#Extension} items.
@@ -234,7 +269,33 @@ public final class Filters {
         return ExtensionItemInfo::isGuiceBinding;
     }
 
+    /**
+     * Filter for web extensions (everything web-related, including jersey extensions). Use only for
+     * {@link ConfigItem#Extension} items.
+     *
+     * @return web extensions matcher
+     */
+    public static Predicate<ExtensionItemInfo> webExtension() {
+        return ExtensionItemInfo::isWebExtension;
+    }
+
+    /**
+     * Filter for jersey extensions. Use only for {@link ConfigItem#Extension} items.
+     *
+     * @return jersey extensions matcher
+     */
+    public static Predicate<ExtensionItemInfo> jerseyExtension() {
+        return ExtensionItemInfo::isJerseyExtension;
+    }
+
     // --------------------------------------------------------------------------- MODULES
+
+    /**
+     * @return guice modules predicate
+     */
+    public static Predicate<ModuleItemInfo> modules() {
+        return type(ConfigItem.Module);
+    }
 
     /**
      * Filter for overriding modules. Use only for {@link ConfigItem#Module} items.
@@ -243,5 +304,14 @@ public final class Filters {
      */
     public static Predicate<ModuleItemInfo> overridingModule() {
         return ModuleItemInfo::isOverriding;
+    }
+
+    // --------------------------------------------------------------------------- INSTALLERS
+
+    /**
+     * @return installers predicate
+     */
+    public static Predicate<InstallerItemInfo> installers() {
+        return type(ConfigItem.Installer);
     }
 }
