@@ -39,11 +39,12 @@ public class TestCommand<C extends Configuration> extends EnvironmentCommand<C> 
     protected void run(final Environment environment, final Namespace namespace,
                        final C configuration) throws Exception {
         // simulating managed objects lifecycle support
-        if (simulateManaged) {
-            container = new ContainerLifeCycle();
-            environment.lifecycle().attach(container);
-            container.start();
-        } else {
+        // if managed lifecycle is not required, just prevent such objects registration, but
+        // preserve simulation itself as guicey application events rely on it
+        container = simulateManaged ? new ContainerLifeCycle() : new NoManagedContainerLifeCycle();
+        environment.lifecycle().attach(container);
+        container.start();
+        if (!simulateManaged) {
             logger.info("NOTE: Managed lifecycle support disabled!");
         }
     }
@@ -63,5 +64,19 @@ public class TestCommand<C extends Configuration> extends EnvironmentCommand<C> 
     @Override
     protected Class<C> getConfigurationClass() {
         return configurationClass;
+    }
+
+    /**
+     * Custom container lifecycle with additional objects ignorance. It is important to presence lifecycle
+     * itsef due to {@link #addEventListener(java.util.EventListener)}, used for application start/stop detection
+     * (and some reports).
+     */
+    public static class NoManagedContainerLifeCycle extends ContainerLifeCycle {
+
+        @Override
+        public boolean addBean(final Object o) {
+            // ignore registrations (for Managed and LifeCycle objects)
+            return false;
+        }
     }
 }

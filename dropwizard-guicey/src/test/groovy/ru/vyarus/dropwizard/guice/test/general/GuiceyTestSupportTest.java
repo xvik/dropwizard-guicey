@@ -12,6 +12,9 @@ import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
 import ru.vyarus.dropwizard.guice.support.feature.DummyService;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
+import ru.vyarus.dropwizard.guice.test.util.RunResult;
+
+import java.util.Arrays;
 
 /**
  * @author Vyacheslav Rusakov
@@ -48,9 +51,12 @@ public class GuiceyTestSupportTest {
         GuiceyTestSupport<Configuration> support = new GuiceyTestSupport<>(BuilderRunCoreWithoutManaged.App.class, (String) null)
                 .disableManagedLifecycle();
 
-        BuilderRunCoreWithoutManaged.UnusedManaged managed = support
-                .run(injector -> injector.getInstance(BuilderRunCoreWithoutManaged.UnusedManaged.class));
+        RunResult<Configuration> result = support.run();
+        BuilderRunCoreWithoutManaged.UnusedManaged managed = result.getBean(BuilderRunCoreWithoutManaged.UnusedManaged.class);
         Assertions.assertThat(managed.started).isFalse();
         Assertions.assertThat(managed.stopped).isFalse();
+
+        org.junit.jupiter.api.Assertions.assertEquals(Arrays.asList("lifeCycleStarting", "lifeCycleStarted", "lifeCycleStopping", "lifeCycleStopped"),
+                result.<BuilderRunCoreWithoutManaged.App>getApplication().events);
     }
 }

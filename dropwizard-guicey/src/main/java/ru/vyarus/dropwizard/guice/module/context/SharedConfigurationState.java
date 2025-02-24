@@ -230,6 +230,15 @@ public class SharedConfigurationState {
         return new HashSet<>(state.keySet());
     }
 
+    /**
+     * Clear state for exact application. Normally, state should shut down automatically (as it is a managed object).
+     * But in tests with disabled lifecycle this will not happen and so cleanup must be manual.
+     */
+    @VisibleForTesting
+    public void shutdown() {
+        STATE.remove(application);
+    }
+
     @Override
     public String toString() {
         return "Shared state with " + state.size() + " objects: " + String.join(", ", getKeys());
@@ -256,7 +265,7 @@ public class SharedConfigurationState {
     protected void listen(final Environment environment) {
         // storing application reference in context attributes (to be able to reference shared state by environment)
         environment.getApplicationContext().setAttribute(CONTEXT_APPLICATION_PROPERTY, application);
-        environment.lifecycle().manage(new RegistryShutdown(application));
+        environment.lifecycle().manage(new RegistryShutdown(this));
     }
 
     /**
@@ -437,20 +446,15 @@ public class SharedConfigurationState {
      * this hook).
      */
     private static class RegistryShutdown implements Managed {
-        private final Application application;
+        private final SharedConfigurationState state;
 
-        protected RegistryShutdown(final Application application) {
-            this.application = application;
-        }
-
-        @Override
-        public void start() throws Exception {
-            // not used
+        protected RegistryShutdown(final SharedConfigurationState state) {
+            this.state = state;
         }
 
         @Override
         public void stop() throws Exception {
-            STATE.remove(application);
+            state.shutdown();
         }
     }
 }
