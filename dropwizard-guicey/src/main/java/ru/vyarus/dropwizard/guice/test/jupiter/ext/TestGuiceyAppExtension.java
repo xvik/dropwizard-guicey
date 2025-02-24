@@ -152,7 +152,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             final String configPath,
             final ExtensionContext context) {
         // NOTE: DropwizardTestSupport.ServiceListener listeners would be called ONLY on start!
-        final GuiceyTestSupport support = new GuiceyTestSupport<C>((Class<? extends Application<C>>) app,
+        final GuiceyTestSupport<C> support = new GuiceyTestSupport<>((Class<? extends Application<C>>) app,
                 configPath,
                 configPrefix,
                 buildConfigOverrides(configPrefix, context));
