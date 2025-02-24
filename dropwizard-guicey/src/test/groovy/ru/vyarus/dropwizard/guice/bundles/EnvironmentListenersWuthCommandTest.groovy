@@ -11,6 +11,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment
 import ru.vyarus.dropwizard.guice.test.TestSupport
+import ru.vyarus.dropwizard.guice.test.util.RunResult
 import spock.lang.Specification
 
 /**
@@ -22,25 +23,30 @@ class EnvironmentListenersWuthCommandTest extends Specification {
     def "Check lifecycle under command"() {
 
         when: "run command"
-        new App().run(['test'] as String[])
+        App app = new App()
+                app.run(['test'] as String[])
         then: "listener not called"
-        !App.lifecycleStarted
-        App.guiceyStarted
-        !App.serverStarted
+        !app.lifecycleStarted
+        app.guiceyStarted
+        !app.serverStarted
+        !app.appShutdown
 
 
         when: "run application normally"
-        TestSupport.runWebApp(App)
+        RunResult res = TestSupport.runWebApp(App)
         then: "listener called"
-        App.lifecycleStarted
-        App.guiceyStarted
-        App.serverStarted
+        App app1 = res.application
+        app1.lifecycleStarted
+        app1.guiceyStarted
+        app1.serverStarted
+        app1.appShutdown
     }
 
     static class App extends Application<Configuration> {
-        static boolean lifecycleStarted
-        static boolean guiceyStarted
-        static boolean serverStarted
+        boolean lifecycleStarted
+        boolean guiceyStarted
+        boolean serverStarted
+        boolean appShutdown
 
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
@@ -58,6 +64,7 @@ class EnvironmentListenersWuthCommandTest extends Specification {
                                     })
                                     .onGuiceyStartup({ a, b, c -> guiceyStarted = true })
                                     .onApplicationStartup({ serverStarted = true })
+                                    .onApplicationShutdown {appShutdown = true}
                         }
                     })
                     .build())

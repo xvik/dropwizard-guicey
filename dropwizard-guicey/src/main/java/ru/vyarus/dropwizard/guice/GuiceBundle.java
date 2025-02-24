@@ -9,10 +9,18 @@ import io.dropwizard.core.Configuration;
 import io.dropwizard.core.ConfiguredBundle;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
+import jakarta.servlet.DispatcherType;
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
-import ru.vyarus.dropwizard.guice.debug.*;
+import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.ExtensionsHelpDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.GuiceAopDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.JerseyConfigDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.WebMappingsDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.YamlBindingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook;
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig;
@@ -38,18 +46,21 @@ import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
 import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ListenersRegistration;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
-import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
 
-import jakarta.servlet.DispatcherType;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static ru.vyarus.dropwizard.guice.GuiceyOptions.*;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.GuiceFilterRegistration;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.ScanPackages;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.SearchCommands;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseCoreInstallers;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseHkBridge;
 import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.JerseyExtensionsManagedByGuice;
 
 /**
@@ -98,8 +109,8 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Jers
  * @see ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo for configuratio diagnostic
  * @since 31.08.2014
  */
-@SuppressWarnings({
-        "PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.TooManyMethods", "PMD.ExcessivePublicCount"})
+@SuppressWarnings({"PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.TooManyMethods",
+        "PMD.ExcessivePublicCount", "PMD.GodClass"})
 public final class GuiceBundle implements ConfiguredBundle<Configuration> {
 
     private final ConfigurationContext context = new ConfigurationContext();
@@ -163,7 +174,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
      * @return builder instance to construct bundle
      */
     public static Builder builder() {
-        return new Builder()
+        return new Builder(new GuiceBundle())
                 // allow enabling diagnostic logs with system property (on compiled app): -Dguicey.hooks=diagnostic
                 .hookAlias("diagnostic", DiagnosticHook.class);
     }
@@ -172,37 +183,12 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
      * Builder encapsulates bundle configuration options.
      */
     @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
-    public static class Builder {
-        private final GuiceBundle bundle = new GuiceBundle();
+    public static class Builder extends ListenersRegistration<Builder> {
+        private final GuiceBundle bundle;
 
-        /**
-         * Guicey broadcast a lot of events in order to indicate lifecycle phases
-         * ({@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle}). This could be useful
-         * for diagnostic logging (like {@link #printLifecyclePhases()}) or to implement special
-         * behaviours on installers, bundles, modules extensions (listeners have access to everything).
-         * For example, {@link ConfigurationAwareModule} like support for guice modules could be implemented
-         * with listeners.
-         * <p>
-         * Configuration items (modules, extensions, bundles) are not aware of each other and listeners
-         * could be used to tie them. For example, to tell bundle if some other bundles registered (limited
-         * applicability, but just for example).
-         * <p>
-         * You can also use {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter} when you need to
-         * handle multiple events (it replaces direct events handling with simple methods).
-         * <p>
-         * Listener is not registered if equal listener were already registered ({@link java.util.Set} used as
-         * listeners storage), so if you need to be sure that only one instance of some listener will be used
-         * implement {@link Object#equals(Object)} and {@link Object#hashCode()}.
-         *
-         * @param listeners guicey lifecycle listeners
-         * @return builder instance for chained calls
-         * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
-         * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
-         * @see ru.vyarus.dropwizard.guice.module.lifecycle.UniqueGuiceyLifecycleListener
-         */
-        public Builder listen(final GuiceyLifecycleListener... listeners) {
-            bundle.context.lifecycle().register(listeners);
-            return this;
+        public Builder(final GuiceBundle bundle) {
+            super(bundle.context);
+            this.bundle = bundle;
         }
 
         /**
@@ -1061,6 +1047,11 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         public GuiceBundle build() {
             bundle.context.runHooks(this);
             return bundle;
+        }
+
+        @Override
+        protected void withEnvironment(final Consumer<Environment> action) {
+            onGuiceyStartup((config, env, injector) -> action.accept(env));
         }
     }
 }
