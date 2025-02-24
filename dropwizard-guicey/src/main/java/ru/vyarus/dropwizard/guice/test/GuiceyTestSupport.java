@@ -118,8 +118,8 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
     @SuppressWarnings("checkstyle:VisibilityModifier")
     static class CmdProvider<C extends Configuration> implements Function<Application<C>, Command> {
 
-        private boolean simulateManaged = true;
         public TestCommand<C> command;
+        private boolean simulateManaged = true;
 
         public void disableManagedSimulation() {
             Preconditions.checkState(command == null, "Command already initialized");
