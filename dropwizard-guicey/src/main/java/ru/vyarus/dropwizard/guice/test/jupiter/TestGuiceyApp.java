@@ -194,9 +194,13 @@ public @interface TestGuiceyApp {
     Class<? extends TestClientFactory> clientFactory() default DefaultTestClientFactory.class;
 
     /**
-     * By default, guicey simulates {@link io.dropwizard.lifecycle.Managed} (and
-     * {@link org.eclipse.jetty.util.component.LifeCycle}) lifecycles. It might be not required for tests with
-     * mocks.
+     * By default, guicey simulates {@link io.dropwizard.lifecycle.Managed} objects lifecycle.
+     * <p>
+     * It might be required in test to avoid starting managed objects (especially all managed in application) because
+     * important (for test) services replaced with mocks (and no need to wait for the rest of the application).
+     * <p>
+     * Note that {@link org.eclipse.jetty.util.component.LifeCycle} would still be supported as internal events rely on
+     * it (it is assumed that the application use only managed objects to initialize logic).
      *
      * @return true to simulate managed objects lifecycle, false to disable simulation
      */

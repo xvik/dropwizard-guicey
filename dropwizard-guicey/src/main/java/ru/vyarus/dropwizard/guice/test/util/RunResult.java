@@ -46,7 +46,7 @@ public class RunResult<C extends Configuration> {
     /**
      * @return application instance (used for run)
      */
-    public Application<C> getApplication() {
+    public <T extends Application<C>> T getApplication() {
         return support.getApplication();
     }
 

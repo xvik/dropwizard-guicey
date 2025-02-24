@@ -10,6 +10,8 @@ import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 
 import jakarta.annotation.Nullable;
+import ru.vyarus.dropwizard.guice.test.util.RunResult;
+
 import java.util.function.Function;
 
 
@@ -61,9 +63,11 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
     }
 
     /**
-     * By default, guicey simulates {@link io.dropwizard.lifecycle.Managed} (and
-     * {@link org.eclipse.jetty.util.component.LifeCycle}) lifecycles. It might be not required for tests with
-     * mocks.
+     * By default, guicey simulates jetty lifecycle to support for {@link io.dropwizard.lifecycle.Managed} and
+     * {@link org.eclipse.jetty.util.component.LifeCycle} objects.
+     * <p>
+     * It might be required in test to avoid starting managed objects (especially all managed in application) because
+     * important (for test) services replaced with mocks (and no need to wait for the rest of the application).
      */
     public GuiceyTestSupport<C> disableManagedLifecycle() {
         ((CmdProvider<C>) this.commandInstantiator).disableManagedSimulation();
@@ -82,6 +86,18 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      */
     public <T> T run(final @Nullable TestSupport.RunCallback<T> callback) throws Exception {
         return TestSupport.run(this, callback);
+    }
+
+    /**
+     * Normally, {@link #before()} and {@link #after()} methods are called separately. This method is a shortcut
+     * mostly for errors testing when {@link #before()} assumed to fail to make sure {@link #after()} will be called
+     * in any case: {@code testSupport.run(null)}.
+     *
+     * @return execution result (with all required objects for verification)
+     * @throws Exception any appeared exception
+     */
+    public RunResult<C> run() throws Exception {
+        return TestSupport.run(this);
     }
 
     /**
