@@ -4,23 +4,18 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Module;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
-import io.dropwizard.lifecycle.Managed;
-import io.dropwizard.lifecycle.ServerLifecycleListener;
 import io.dropwizard.core.setup.Environment;
-import org.eclipse.jetty.util.component.LifeCycle;
+import io.dropwizard.lifecycle.Managed;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationStartupListener;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationStartupListenerAdapter;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.GuiceyStartupListener;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.GuiceyStartupListenerAdapter;
-import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ListenersRegistration;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -34,11 +29,12 @@ import java.util.function.Supplier;
  * @since 13.06.2019
  */
 @SuppressWarnings("PMD.TooManyMethods")
-public class GuiceyEnvironment {
+public class GuiceyEnvironment extends ListenersRegistration<GuiceyEnvironment> {
 
     private final ConfigurationContext context;
 
     public GuiceyEnvironment(final ConfigurationContext context) {
+        super(context);
         this.context = context;
     }
 
@@ -316,61 +312,6 @@ public class GuiceyEnvironment {
     }
 
     /**
-     * Guicey broadcast a lot of events in order to indicate lifecycle phases
-     * ({@linkplain ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle}). Listener, registered in run phase
-     * could listen events from {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle#BundlesStarted}.
-     * <p>
-     * Listener is not registered if equal listener was already registered ({@link java.util.Set} used as
-     * listeners storage), so if you need to be sure that only one instance of some listener will be used
-     * implement {@link Object#equals(Object)}.
-     *
-     * @param listeners guicey lifecycle listeners
-     * @return bootstrap instance for chained calls
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#listen(GuiceyLifecycleListener...)
-     */
-    public GuiceyEnvironment listen(final GuiceyLifecycleListener... listeners) {
-        context.lifecycle().register(listeners);
-        return this;
-    }
-
-    /**
-     * Shortcut for {@link ServerLifecycleListener} registration.
-     * <p>
-     * Note that server listener is called only when jetty starts up and so will not be called with lightweight
-     * guicey test helpers {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}. Prefer using
-     * {@link #onApplicationStartup(ApplicationStartupListener)} to be correctly called in tests (of course, if not
-     * server only execution is desired).
-     * <p>
-     * Obviously not called for custom command execution.
-     *
-     * @param listener server startup listener.
-     * @return environment instance for chained calls
-     */
-    public GuiceyEnvironment listenServer(final ServerLifecycleListener listener) {
-        environment().lifecycle().addServerLifecycleListener(listener);
-        return this;
-    }
-
-    /**
-     * Shortcut for jetty lifecycle listener {@link LifeCycle.Listener listener} registration.
-     * <p>
-     * Lifecycle listeners are called with lightweight guicey test helpers
-     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp} which makes them perfectly suitable for reporting.
-     * <p>
-     * If only startup event is required, prefer {@link #onApplicationStartup(ApplicationStartupListener)} method
-     * as more expressive and easier to use.
-     * <p>
-     * Listeners are not called on custom command execution.
-     *
-     * @param listener jetty
-     * @return environment instance for chained calls
-     */
-    public GuiceyEnvironment listenJetty(final LifeCycle.Listener listener) {
-        environment().lifecycle().addEventListener(listener);
-        return this;
-    }
-
-    /**
      * Share global state to be used in other bundles (during configuration). This was added for very special cases
      * when shared state is unavoidable (to not re-invent the wheel each time)!
      * <p>
@@ -446,40 +387,8 @@ public class GuiceyEnvironment {
         return context.getSharedState().getOrFail(key, message, args);
     }
 
-    /**
-     * Code to execute after guice injector creation (but still under run phase). May be used for manual
-     * configurations (registrations into dropwizard environment).
-     * <p>
-     * Listener will be called on environment command start too.
-     * <p>
-     * Note: there is no registration method for this listener in main guice bundle builder
-     * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder}) because it is assumed, that such blocks would
-     * always be wrapped with bundles to improve application readability.
-     *
-     * @param listener listener to call after injector creation
-     * @return environment instance for chained calls
-     */
-    public GuiceyEnvironment onGuiceyStartup(final GuiceyStartupListener listener) {
-        return listen(new GuiceyStartupListenerAdapter(listener));
+    @Override
+    protected void withEnvironment(final Consumer<Environment> action) {
+        action.accept(environment());
     }
-
-    /**
-     * Code to execute after complete application startup. For server command it would happen after jetty startup
-     * and for lightweight guicey test helpers ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}) - after
-     * guicey start (as jetty not started in this case). In both cases, application completely started at this moment.
-     * Suitable for reporting.
-     * <p>
-     * If you need to listen only for real server startup then use {@link #listenServer(ServerLifecycleListener)}
-     * instead.
-     * <p>
-     * Not called on custom command execution (because no lifecycle involved in this case). In this case you can use
-     * {@link #onGuiceyStartup(GuiceyStartupListener)} as always executed point.
-     *
-     * @param listener listener to call on server startup
-     * @return environment instance for chained calls
-     */
-    public GuiceyEnvironment onApplicationStartup(final ApplicationStartupListener listener) {
-        return listen(new ApplicationStartupListenerAdapter(listener));
-    }
-
 }
