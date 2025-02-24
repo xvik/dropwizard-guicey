@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.TestSupport;
@@ -404,6 +405,8 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             TestSupportHolder.reset();
             tracker.performanceTrack(GuiceyTestTime.SupportStop, timer.stop().elapsed());
             listeners.broadcastStop(context);
+            // just in case (might not be called automatically for guicey test without managed lifecycle)
+            SharedConfigurationState.get(support.getEnvironment()).ifPresent(SharedConfigurationState::shutdown);
         }
         final ClientSupport client = getClient(context);
         if (client != null) {

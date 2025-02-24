@@ -242,9 +242,14 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         }
 
         /**
-         * By default, guicey simulates {@link io.dropwizard.lifecycle.Managed} (and
-         * {@link org.eclipse.jetty.util.component.LifeCycle}) lifecycles. It might be not required for tests with
-         * mocks.
+         * By default, guicey simulates {@link io.dropwizard.lifecycle.Managed} and
+         * {@link org.eclipse.jetty.util.component.LifeCycle} lifecycle.
+         * <p>
+         * It might be required in test to avoid starting managed objects (especially all managed in application)
+         * because important (for test) services replaced with mocks (and no need to wait for the rest of the
+         * application).
+         * <p>
+         * Warning: some guice reports might stop working, because they rely on application start event
          *
          * @return true to simulate managed objects lifecycle
          * @return builder instance for chained calls
