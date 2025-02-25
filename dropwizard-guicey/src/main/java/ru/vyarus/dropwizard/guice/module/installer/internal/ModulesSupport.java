@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
@@ -25,6 +24,7 @@ import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 import ru.vyarus.dropwizard.guice.module.support.BootstrapAwareModule;
 import ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule;
@@ -99,7 +99,7 @@ public final class ModulesSupport {
      * @return modules for injector creation
      */
     public static Iterable<Module> prepareModules(final ConfigurationContext context) {
-        final Stopwatch timer = context.stat().timer(ModulesProcessingTime);
+        final StatTimer timer = context.stat().timer(ModulesProcessingTime);
         final List<Module> overridingModules = context.getOverridingModules();
         // repackage normal modules to reveal all guice extensions
         final List<Module> normalModules = analyzeModules(context, timer);
@@ -123,7 +123,7 @@ public final class ModulesSupport {
      * @return list of repackaged modules to use
      */
     private static List<Module> analyzeModules(final ConfigurationContext context,
-                                               final Stopwatch modulesTimer) {
+                                               final StatTimer modulesTimer) {
         List<Module> modules = context.getNormalModules();
         final Boolean configureFromGuice = context.option(AnalyzeGuiceModules);
         // one module mean no user modules registered
@@ -132,7 +132,7 @@ public final class ModulesSupport {
             final GuiceBootstrapModule bootstrap = (GuiceBootstrapModule) modules.remove(modules.size() - 1);
             try {
                 // find extensions and remove bindings if required (disabled extensions)
-                final Stopwatch gtime = context.stat().timer(Stat.BindingsResolutionTime);
+                final StatTimer gtime = context.stat().timer(Stat.BindingsResolutionTime);
                 final List<Element> elements = new ArrayList<>(
                         Elements.getElements(context.option(InjectorStage), modules));
                 gtime.stop();
@@ -165,8 +165,8 @@ public final class ModulesSupport {
     private static void analyzeAndFilterBindings(final ConfigurationContext context,
                                                  final List<Module> analyzedModules,
                                                  final List<Element> elements) {
-        final Stopwatch itimer = context.stat().timer(InstallersTime);
-        final Stopwatch timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
+        final StatTimer itimer = context.stat().timer(InstallersTime);
+        final StatTimer timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
         final List<String> disabledModules = prepareDisabledModules(context);
 
         final AnalysisResult result = analyzeElements(context, elements, disabledModules, null);

@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice.module.context;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
@@ -38,6 +37,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -148,7 +148,8 @@ public final class ConfigurationContext {
     /**
      * Guicey lifecycle listeners support.
      */
-    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new Options(optionsSupport), sharedState);
+    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new Options(optionsSupport), sharedState,
+            tracker::verifyTimersDone);
 
     /**
      * Add extra filter for scanned classes (classpath scan and bindings recognition).
@@ -734,8 +735,8 @@ public final class ConfigurationContext {
         this.sharedState.put(Bootstrap.class, bootstrap);
         this.sharedState.assignTo(bootstrap.getApplication());
         // delayed init of registered dropwizard bundles
-        final Stopwatch time = stat().timer(BundleTime);
-        final Stopwatch dwtime = stat().timer(DropwizardBundleInitTime);
+        final StatTimer time = stat().timer(BundleTime);
+        final StatTimer dwtime = stat().timer(DropwizardBundleInitTime);
         for (ConfiguredBundle bundle : getEnabledDropwizardBundles()) {
             registerDropwizardBundle(bundle);
         }
