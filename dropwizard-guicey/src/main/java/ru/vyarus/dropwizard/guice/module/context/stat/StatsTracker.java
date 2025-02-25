@@ -1,9 +1,11 @@
 package ru.vyarus.dropwizard.guice.module.context.stat;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyTime;
@@ -17,7 +19,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyTime;
  * @since 27.07.2016
  */
 public final class StatsTracker {
-    private final Map<Stat, Stopwatch> timers = Maps.newEnumMap(Stat.class);
+    private final Map<Stat, StatTimer> timers = Maps.newEnumMap(Stat.class);
     private final Map<Stat, Integer> counters = Maps.newEnumMap(Stat.class);
     private final GuiceStatsTracker guiceStats = new GuiceStatsTracker();
 
@@ -29,9 +31,10 @@ public final class StatsTracker {
      * @param name statistic name
      * @return timer to measure time
      */
-    public Stopwatch timer(final Stat name) {
-        final Stopwatch watch = timers.computeIfAbsent(name, k -> Stopwatch.createUnstarted());
-        // if watch was performed before then new time will sum with current
+    public StatTimer timer(final Stat name) {
+        final StatTimer watch = timers.computeIfAbsent(name, k -> new StatTimer(Stopwatch.createUnstarted()));
+        // if time was measured before then new time will sum with current (if timer already started then current
+        // start would be ignored)
         watch.start();
         return watch;
     }
@@ -80,7 +83,8 @@ public final class StatsTracker {
      * @return collected timers map
      */
     public Map<Stat, Stopwatch> getTimers() {
-        return timers;
+        return timers.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getStopwatch()));
     }
 
     /**
@@ -95,5 +99,16 @@ public final class StatsTracker {
      */
     public GuiceStatsTracker getGuiceStats() {
         return guiceStats;
+    }
+
+    /**
+     * Verify all timers stopped on application complete startup. As timers are inlinable, it is quite possible
+     * to not call stop enough times.
+     */
+    public void verifyTimersDone() {
+        for (final Map.Entry<Stat, Stopwatch> entry : getTimers().entrySet()) {
+            Preconditions.checkState(!entry.getValue().isRunning(),
+                    "Timer is still running after application startup", entry.getKey());
+        }
     }
 }

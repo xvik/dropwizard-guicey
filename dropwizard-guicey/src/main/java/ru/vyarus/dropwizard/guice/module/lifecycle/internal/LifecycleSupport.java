@@ -63,12 +63,15 @@ public final class LifecycleSupport {
     private final Logger logger = LoggerFactory.getLogger(LifecycleSupport.class);
 
     private final EventsContext context;
+    private final Runnable startupHook;
     private GuiceyLifecycle currentStage;
 
     private final Set<GuiceyLifecycleListener> listeners = new LinkedHashSet<>();
 
-    public LifecycleSupport(final Options options, final SharedConfigurationState sharedState) {
+    public LifecycleSupport(final Options options, final SharedConfigurationState sharedState,
+                            final Runnable startupHook) {
         this.context = new EventsContext(options, sharedState);
+        this.startupHook = startupHook;
     }
 
     public void register(final GuiceyLifecycleListener... listeners) {
@@ -247,6 +250,7 @@ public final class LifecycleSupport {
 
     private void applicationStarted() {
         broadcast(new ApplicationStartedEvent(context));
+        startupHook.run();
     }
 
     private void applicationShutdown() {

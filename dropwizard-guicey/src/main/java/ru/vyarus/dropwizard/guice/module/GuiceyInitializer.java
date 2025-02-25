@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.module;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import io.dropwizard.core.cli.Command;
@@ -12,6 +11,7 @@ import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.ScanPackages;
-import static ru.vyarus.dropwizard.guice.GuiceyOptions.SearchCommands;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.ScanProtectedClasses;
+import static ru.vyarus.dropwizard.guice.GuiceyOptions.SearchCommands;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.UseCoreInstallers;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleResolutionTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleTime;
@@ -68,8 +68,8 @@ public class GuiceyInitializer {
     private static final OrderComparator COMPARATOR = new OrderComparator();
     private final Logger logger = LoggerFactory.getLogger(GuiceyInitializer.class);
 
-    private final Stopwatch guiceyTimer;
-    private final Stopwatch confTimer;
+    private final StatTimer guiceyTimer;
+    private final StatTimer confTimer;
 
     private final Bootstrap bootstrap;
     private final ConfigurationContext context;
@@ -103,14 +103,14 @@ public class GuiceyInitializer {
      * @param bundleLookup bundle lookup object
      */
     public void initializeBundles(final GuiceyBundleLookup bundleLookup) {
-        final Stopwatch timer = context.stat().timer(BundleTime);
-        final Stopwatch resolutionTimer = context.stat().timer(BundleResolutionTime);
+        final StatTimer timer = context.stat().timer(BundleTime);
+        final StatTimer resolutionTimer = context.stat().timer(BundleResolutionTime);
         if (context.option(UseCoreInstallers)) {
             context.registerBundles(new CoreInstallersBundle());
         }
         context.registerLookupBundles(bundleLookup.lookup());
         resolutionTimer.stop();
-        final Stopwatch btime = context.stat().timer(GuiceyBundleInitTime);
+        final StatTimer btime = context.stat().timer(GuiceyBundleInitTime);
         BundleSupport.initBundles(context);
         btime.stop();
         timer.stop();
@@ -134,7 +134,7 @@ public class GuiceyInitializer {
      * Perform classpath scan to find installers. Create enabled installer instances.
      */
     public void resolveInstallers() {
-        final Stopwatch timer = context.stat().timer(InstallersTime);
+        final StatTimer timer = context.stat().timer(InstallersTime);
         final List<Class<? extends FeatureInstaller>> installerClasses = findInstallers();
         final List<FeatureInstaller> installers = prepareInstallers(installerClasses);
         context.installersResolved(installers);
@@ -147,8 +147,8 @@ public class GuiceyInitializer {
      */
     @SuppressWarnings("PMD.PrematureDeclaration")
     public void resolveExtensions() {
-        final Stopwatch itimer = context.stat().timer(InstallersTime);
-        final Stopwatch timer = context.stat().timer(ExtensionsRecognitionTime);
+        final StatTimer itimer = context.stat().timer(InstallersTime);
+        final StatTimer timer = context.stat().timer(ExtensionsRecognitionTime);
         final ExtensionsHolder holder = context.getExtensionsHolder();
         final List<Class<?>> manual = context.getEnabledExtensions();
         for (Class<?> type : manual) {

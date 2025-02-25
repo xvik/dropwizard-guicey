@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module;
 
-import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import io.dropwizard.core.Configuration;
@@ -9,6 +8,7 @@ import ru.vyarus.dropwizard.guice.injector.InjectorFactory;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ModulesSupport;
@@ -17,7 +17,13 @@ import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 import java.util.ArrayList;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage;
-import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.CommandTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ExtensionsInstallationTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InjectorCreationTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ModulesProcessingTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.RunTime;
 
 /**
  * Guicey run logic performed under dropwizard run phase.
@@ -27,8 +33,8 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.*;
  */
 public class GuiceyRunner {
 
-    private final Stopwatch guiceyTime;
-    private final Stopwatch runTime;
+    private final StatTimer guiceyTime;
+    private final StatTimer runTime;
 
     private final ConfigurationContext context;
 
@@ -53,7 +59,7 @@ public class GuiceyRunner {
      * @throws Exception if something goes wrong
      */
     public void runBundles() throws Exception {
-        final Stopwatch timer = context.stat().timer(BundleTime);
+        final StatTimer timer = context.stat().timer(BundleTime);
         BundleSupport.runBundles(context);
         timer.stop();
     }
@@ -62,7 +68,7 @@ public class GuiceyRunner {
      * Prepare guice modules for injector creation.
      */
     public void prepareModules() {
-        final Stopwatch timer = context.stat().timer(ModulesProcessingTime);
+        final StatTimer timer = context.stat().timer(ModulesProcessingTime);
         // dropwizard specific bindings and jersey integration
         context.registerModules(new GuiceBootstrapModule(context));
         ModulesSupport.configureModules(context);
@@ -98,7 +104,7 @@ public class GuiceyRunner {
      * @param modules         guice modules to use for injector
      */
     public void createInjector(final InjectorFactory injectorFactory, final Iterable<Module> modules) {
-        final Stopwatch timer = context.stat().timer(InjectorCreationTime);
+        final StatTimer timer = context.stat().timer(InjectorCreationTime);
         context.lifecycle().injectorCreation(
                 new ArrayList<>(context.getNormalModules()),
                 new ArrayList<>(context.getOverridingModules()),
@@ -117,7 +123,7 @@ public class GuiceyRunner {
      * Execute extensions installation (by type and instance).
      */
     public void installExtensions() {
-        final Stopwatch timer = context.stat().timer(ExtensionsInstallationTime);
+        final StatTimer timer = context.stat().timer(ExtensionsInstallationTime);
         ExtensionsSupport.installExtensions(context, injector);
         timer.stop();
     }
@@ -128,7 +134,7 @@ public class GuiceyRunner {
      */
     @SuppressWarnings("unchecked")
     public void injectCommands() {
-        final Stopwatch timer = context.stat().timer(CommandTime);
+        final StatTimer timer = context.stat().timer(CommandTime);
         CommandSupport.initCommands(context.getBootstrap().getCommands(), injector);
         timer.stop();
     }
