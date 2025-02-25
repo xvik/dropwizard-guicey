@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
-import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.cli.Command;
@@ -9,12 +8,18 @@ import io.dropwizard.core.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.CommandTime;
 
@@ -42,7 +47,7 @@ public final class CommandSupport {
      */
     public static List<Command> registerCommands(final Bootstrap bootstrap, final ClasspathScanner scanner,
                                                  final ConfigurationContext context) {
-        final Stopwatch timer = context.stat().timer(CommandTime);
+        final StatTimer timer = context.stat().timer(CommandTime);
         final CommandClassVisitor visitor = new CommandClassVisitor(bootstrap);
         scanner.scan(visitor);
         context.registerCommands(visitor.getCommands());

@@ -2,11 +2,11 @@ package ru.vyarus.dropwizard.guice.module.installer.scanner;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.util.OReflectionHelper;
 
@@ -105,7 +105,7 @@ public class ClasspathScanner {
 
     @SuppressWarnings("PMD.PrematureDeclaration")
     private void performScan() {
-        final Stopwatch timer = tracker == null ? null : tracker.timer(ScanTime);
+        final StatTimer timer = tracker == null ? null : tracker.timer(ScanTime);
         int count = 0;
         scanned = Lists.newArrayList();
         for (String pkg : packages) {
