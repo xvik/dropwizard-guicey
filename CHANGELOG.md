@@ -55,6 +55,8 @@
   - Add service trackers: @TrackBean Tracker<Service>. Tracker records all service 
     methods execution and could provide recordings for test verification or print performance 
     stats. A simpler replacement for mockito stubs. It could be used with mocks, spies and stubs
+  - Add REST stub (@StubRest): ability to start rest (or part of rest services) under @TestGuiceyApp 
+    (without starting full container; same as dropwizard's ResourceExtension)
   - Add option to disable default annotated fields extensions: useDefaultExtensions
 
 ### 6.2.4 (2024-09-14)

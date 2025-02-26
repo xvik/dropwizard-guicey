@@ -286,6 +286,7 @@ class EventsConsistencyTest extends AbstractTest {
         protected void applicationStarted(ApplicationStartedEvent event) {
             jerseyCheck(event)
             assert event.jettyStarted
+            assert event.jerseyStarted
             assert event.renderJerseyConfig(new JerseyConfig()) != null
         }
 
@@ -293,6 +294,7 @@ class EventsConsistencyTest extends AbstractTest {
         protected void applicationShutdown(ApplicationShutdownEvent event) {
             jerseyCheck(event)
             assert event.jettyStarted
+            assert event.jerseyStarted
         }
 
         @Override
@@ -339,6 +341,7 @@ class EventsConsistencyTest extends AbstractTest {
         private void jerseyCheck(JerseyPhaseEvent event) {
             injectorChecks(event)
             assert event.getInjectionManager() != null
+            assert event.jerseyStarted
         }
     }
 }

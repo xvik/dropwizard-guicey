@@ -53,6 +53,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
     protected Class<?> regTestClass;
     protected String setupContextName;
     protected List<AnnotatedField<A, T>> fields;
+    protected ExtensionContext setupContext;
 
     // inner state
     private final Class<A> fieldAnnotation;
@@ -62,7 +63,6 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
 
     // private to not confuse sub-classes with setup-only instances
     private TestInstances regTestInstance;
-    private ExtensionContext setupContext;
 
     /**
      * On extending, use a default constructor and specify required parameters manually.

@@ -53,6 +53,7 @@ public class HookObjectsLogTest {
                         "\n" +
                         "\tSetup objects = \n" +
                         "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test1.setup\n" +
+                        "\t\tRestStubSupport              (r.v.d.g.t.j.ext.rest)        \tdefault extension\n" +
                         "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tdefault extension\n" +
                         "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tdefault extension\n" +
                         "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tdefault extension\n" +
@@ -63,6 +64,7 @@ public class HookObjectsLogTest {
                         "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base2\n" +
                         "\t\tExt1                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
                         "\t\tExt2                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
+                        "\t\tRestStubSupport              (r.v.d.g.t.j.ext.rest)        \tRestStubSupport instance\n" +
                         "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tStubsSupport instance\n" +
                         "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tMocksSupport instance\n" +
                         "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tSpiesSupport instance\n" +
@@ -119,6 +121,7 @@ public class HookObjectsLogTest {
                         "\n" +
                         "\tSetup objects = \n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test2.setup\n" +
+                        "\t\tRestStubSupport              (r.v.d.g.t.j.ext.rest)        \tdefault extension\n" +
                         "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tdefault extension\n" +
                         "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tdefault extension\n" +
                         "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tdefault extension\n" +
@@ -131,6 +134,7 @@ public class HookObjectsLogTest {
                         "\t\tExt2                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@RegisterExtension class\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
                         "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
+                        "\t\tRestStubSupport              (r.v.d.g.t.j.ext.rest)        \tRestStubSupport instance\n" +
                         "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tStubsSupport instance\n" +
                         "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tMocksSupport instance\n" +
                         "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tSpiesSupport instance\n" +

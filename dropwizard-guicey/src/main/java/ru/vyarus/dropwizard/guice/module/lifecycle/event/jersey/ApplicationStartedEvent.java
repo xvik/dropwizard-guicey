@@ -48,7 +48,7 @@ public class ApplicationStartedEvent extends JerseyPhaseEvent {
      */
     public String renderJerseyConfig(final JerseyConfig config) {
         final Boolean guiceFirstMode = getOptions().get(InstallersOptions.JerseyExtensionsManagedByGuice);
-        return isJettyStarted()
+        return isJerseyStarted()
                 ? new JerseyConfigRenderer(getInjectionManager(), guiceFirstMode).renderReport(config)
                 : "";
     }
