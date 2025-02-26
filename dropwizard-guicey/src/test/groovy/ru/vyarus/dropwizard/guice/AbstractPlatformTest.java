@@ -29,6 +29,12 @@ public abstract class AbstractPlatformTest {
         return Preconditions.checkNotNull(th, "Exception expected, but was not thrown");
     }
 
+    protected String runSuccess(Class... tests) {
+        String res = run(tests);
+        Preconditions.checkState(th == null, "Exception was not expected, but thrown: %s", th != null ? th.getMessage() : null);
+        return res;
+    }
+
     protected String run(Class... tests) {
         th = null;
         EngineTestKit

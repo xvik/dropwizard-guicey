@@ -30,6 +30,8 @@ dependencies {
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.7'
     testImplementation 'com.google.truth:truth:1.4.4'
     testImplementation 'org.objenesis:objenesis:3.4'
+    // test rest stubs
+    //testImplementation 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2'
 
     // required for pure junit 5 tests
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter'

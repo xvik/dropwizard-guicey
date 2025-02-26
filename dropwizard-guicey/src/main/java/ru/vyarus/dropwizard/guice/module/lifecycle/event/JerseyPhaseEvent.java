@@ -35,4 +35,13 @@ public abstract class JerseyPhaseEvent extends InjectorPhaseEvent {
     public InjectionManager getInjectionManager() {
         return injectionManager;
     }
+
+    /**
+     * Jersey (rest) could start without jetty (web) only in lightweight guicey tests (rest stubs).
+     *
+     * @return true if jersey started, false otherwise
+     */
+    public boolean isJerseyStarted() {
+        return getInjectionManager() != null;
+    }
 }
