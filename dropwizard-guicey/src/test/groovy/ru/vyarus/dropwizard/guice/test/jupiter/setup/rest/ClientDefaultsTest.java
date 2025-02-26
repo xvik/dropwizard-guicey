@@ -20,7 +20,7 @@ public class ClientDefaultsTest extends AbstractPlatformTest {
     void testDefaults() {
         String out = run(Test1.class);
         Assertions.assertThat(out).contains("[Client action]---------------------------------------------{\n" +
-                "1 * Sending client request on thread main\n" +
+                "1 * Sending client request on thread ddd\n" +
                 "1 > GET http://localhost:0/1/foo?par1=val1&par2=val2\n" +
                 "1 > Accept: application/json\n" +
                 "1 > Boo: baz\n" +
@@ -53,6 +53,6 @@ public class ClientDefaultsTest extends AbstractPlatformTest {
 
     @Override
     protected String clean(String out) {
-        return out;
+        return out.replaceAll("on thread ([^\n]+)", "on thread ddd");
     }
 }
