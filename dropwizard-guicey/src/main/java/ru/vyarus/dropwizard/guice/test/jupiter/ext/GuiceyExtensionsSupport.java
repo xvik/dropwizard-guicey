@@ -28,6 +28,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.mock.MocksSupport;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.RestStubSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.spy.SpiesSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubsSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackersSupport;
@@ -406,7 +407,11 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             tracker.performanceTrack(GuiceyTestTime.SupportStop, timer.stop().elapsed());
             listeners.broadcastStop(context);
             // just in case (might not be called automatically for guicey test without managed lifecycle)
-            SharedConfigurationState.get(support.getEnvironment()).ifPresent(SharedConfigurationState::shutdown);
+            if (lookupInjector(context).isPresent()) {
+                // if startup failed, there would be no environment object - to avoid confusing error verifying by
+                // injector
+                SharedConfigurationState.get(support.getEnvironment()).ifPresent(SharedConfigurationState::shutdown);
+            }
         }
         final ClientSupport client = getClient(context);
         if (client != null) {
@@ -419,6 +424,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         final List<TestEnvironmentSetup> res = new ArrayList<>();
         if (useDefaultExtensions) {
             res.addAll(tracker.defaultExtensions(
+                    new RestStubSupport(),
                     new StubsSupport(),
                     new MocksSupport(),
                     new SpiesSupport(),

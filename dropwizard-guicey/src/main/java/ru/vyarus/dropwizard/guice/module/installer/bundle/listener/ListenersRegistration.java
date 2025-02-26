@@ -69,6 +69,7 @@ public abstract class ListenersRegistration<T> {
      * always be wrapped with bundles to improve application readability.
      *
      * @param listener listener to call after injector creation
+     * @param <C> configuration type
      * @return builder instance for chained calls
      */
     public <C extends Configuration> T onGuiceyStartup(final GuiceyStartupListener<C> listener) {

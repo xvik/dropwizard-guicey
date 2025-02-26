@@ -25,7 +25,7 @@ public class JerseyConfigDiagnostic extends UniqueGuiceyLifecycleListener {
 
     @Override
     protected void applicationStarted(final ApplicationStartedEvent event) {
-        if (!event.isJettyStarted()) {
+        if (!event.isJerseyStarted()) {
             // report can't be shown in lightweight tests (jersey injector not started)
             return;
         }

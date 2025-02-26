@@ -161,6 +161,7 @@ public final class ConfigurationContext {
     }
 
     /**
+     * @param clazz class to test
      * @return true if extension class could be used, false otherwise (auto scan filter)
      */
     public boolean isAcceptableAutoScanClass(final Class<?> clazz) {
