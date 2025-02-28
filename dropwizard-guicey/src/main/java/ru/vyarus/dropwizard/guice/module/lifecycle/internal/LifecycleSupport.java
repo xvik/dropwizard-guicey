@@ -20,6 +20,7 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BeforeInitEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesFromLookupResolvedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesInitializedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesResolvedEvent;
@@ -88,11 +89,14 @@ public final class LifecycleSupport {
         }
     }
 
-    public void initializationStarted(final Bootstrap bootstrap,
-                                      final List<ConfiguredBundle> bundles,
-                                      final List<ConfiguredBundle> disabled,
-                                      final List<ConfiguredBundle> ignored) {
+    public void beforeInit(final Bootstrap bootstrap) {
         this.context.setBootstrap(bootstrap);
+        broadcast(new BeforeInitEvent(context));
+    }
+
+    public void dropwizardBundlesInitialized(final List<ConfiguredBundle> bundles,
+                                             final List<ConfiguredBundle> disabled,
+                                             final List<ConfiguredBundle> ignored) {
         if (!bundles.isEmpty()) {
             broadcast(new DropwizardBundlesInitializedEvent(context, bundles, disabled, ignored));
         }

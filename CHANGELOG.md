@@ -12,6 +12,7 @@
     onGuiceyStartup, onApplicationStartup, onApplicationShutdown, listenJetty, listenServer
    (before, methods were present only in GuiceyBindle's environment object)
 * Disabled modules remove would also affect private modules now (but only first level)
+* Add BeforeInit guicey event (the first point with available Bootstrap)
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
 * Add extensions scan filters: GuiceBundle.builder().autoScanFilter(cls -> !cls.isAnnotationPresent(Skip.class))
   Could be used either to skip some classes from scanning (without @InvisibleForScanner) annotation
