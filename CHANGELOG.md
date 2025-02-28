@@ -58,6 +58,7 @@
     stats. A simpler replacement for mockito stubs. It could be used with mocks, spies and stubs
   - Add REST stub (@StubRest): ability to start rest (or part of rest services) under @TestGuiceyApp 
     (without starting full container; same as dropwizard's ResourceExtension)
+  - Add logs testing support (@RecordLogs): record required logs for validation (only logback)
   - Add option to disable default annotated fields extensions: useDefaultExtensions
 * [admin-rest]
   - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
