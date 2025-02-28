@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle;
 
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.GuiceyLifecycleEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BeforeInitEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesFromLookupResolvedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesInitializedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BundlesResolvedEvent;
@@ -44,6 +45,9 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
         switch (event.getType()) {
             case ConfigurationHooksProcessed:
                 configurationHooksProcessed((ConfigurationHooksProcessedEvent) event);
+                break;
+            case BeforeInit:
+                beforeInit((BeforeInitEvent) event);
                 break;
             case DropwizardBundlesInitialized:
                 dropwizardBundlesInitialized((DropwizardBundlesInitializedEvent) event);
@@ -126,6 +130,20 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
      * @see GuiceyLifecycle#ConfigurationHooksProcessed
      */
     protected void configurationHooksProcessed(final ConfigurationHooksProcessedEvent event) {
+        // empty
+    }
+
+    /**
+     * Special meta event, called before all {@link ru.vyarus.dropwizard.guice.GuiceBundle} configuration phase logic.
+     * {@link io.dropwizard.core.setup.Bootstrap} object is available, but dropwizard bundles (registered through
+     * guicey) are not yet registered (note that {@link ru.vyarus.dropwizard.guice.GuiceBundle} is not yet added to
+     * bootstrap also because dropwizard calls bundle initialization before registering bundle (and so all dropwizard
+     * bundles, registered by guicey, will run before {@link ru.vyarus.dropwizard.guice.GuiceBundle} run).
+     *
+     * @param event event object
+     * @see GuiceyLifecycle#BeforeInit
+     */
+    protected void beforeInit(final BeforeInitEvent event) {
         // empty
     }
 

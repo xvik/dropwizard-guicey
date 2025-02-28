@@ -144,6 +144,11 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
+        protected void beforeInit(BeforeInitEvent event) {
+            confChecks(event)
+        }
+
+        @Override
         protected void dropwizardBundlesInitialized(DropwizardBundlesInitializedEvent event) {
             confChecks(event)
             assert event.getBundles().size() == 1

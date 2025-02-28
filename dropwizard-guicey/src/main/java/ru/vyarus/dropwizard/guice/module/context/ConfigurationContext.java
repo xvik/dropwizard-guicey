@@ -738,10 +738,11 @@ public final class ConfigurationContext {
         // delayed init of registered dropwizard bundles
         final StatTimer time = stat().timer(BundleTime);
         final StatTimer dwtime = stat().timer(DropwizardBundleInitTime);
+        lifecycle().beforeInit(bootstrap);
         for (ConfiguredBundle bundle : getEnabledDropwizardBundles()) {
             registerDropwizardBundle(bundle);
         }
-        lifecycle().initializationStarted(bootstrap, getEnabledDropwizardBundles(),
+        lifecycle().dropwizardBundlesInitialized(getEnabledDropwizardBundles(),
                 getDisabledDropwizardBundles(), getIgnoredItems(ConfigItem.DropwizardBundle));
         dwtime.stop();
         time.stop();
