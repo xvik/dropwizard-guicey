@@ -204,7 +204,11 @@ public @interface TestDropwizardApp {
      * Default extensions: {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.mock.MockBean},
      * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubBean},
      * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.spy.SpyBean},
-     * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackBean}.
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackBean},
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordLogs},
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest}.
+     * <p>
+     * Disables service lookup for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup}.
      * <p>
      * By default, these extensions enabled and this option could disable them (if there are problems with them or
      * fields analysis took too much time).

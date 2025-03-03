@@ -27,16 +27,13 @@ import ru.vyarus.dropwizard.guice.test.jupiter.env.field.TestFieldUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordedLogsSupport;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.mock.MocksSupport;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.RestStubSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.spy.SpiesSupport;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubsSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackersSupport;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.ReusableAppUtils;
 import ru.vyarus.dropwizard.guice.test.util.StoredReusableApp;
+import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -425,13 +422,14 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         final List<TestEnvironmentSetup> res = new ArrayList<>();
         if (useDefaultExtensions) {
             res.addAll(tracker.defaultExtensions(
-                    new RecordedLogsSupport(),
-                    new RestStubSupport(),
-                    new StubsSupport(),
-                    new MocksSupport(),
+                    TestSetupUtils.lookup()
+            ));
+            // extensions use aop and so must go last
+            res.addAll(tracker.defaultExtensions(
                     new SpiesSupport(),
                     new TrackersSupport()
             ));
+
         }
         res.addAll(fields);
         return res;
