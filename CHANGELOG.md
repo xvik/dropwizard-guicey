@@ -45,6 +45,7 @@
     show debug output when debug opion is enabled on guicey extension
   - Add shortcut method isApplicationStartedForClass() for TestEnvironmentSetup to simplify beforeAll/beforeEach 
     extension lifecycle detection
+  - Add automatic setup objects (TestEnvironmentSetup) loading with service loader (simplify plugging-in extensions)
   - Add base class for annotated fields extensions: AnnotatedTestFieldSetup
     (handles fields validation and value injection lifecycle, including proper nested tests support)
   - Add test stub fields: @StubBean(Service.class) ServiceStub

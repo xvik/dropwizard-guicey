@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Lists;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
@@ -13,6 +14,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceLoader;
 
 /**
  * Guicey {@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup} test utilities.
@@ -23,6 +25,14 @@ import java.util.List;
 public final class TestSetupUtils {
 
     private TestSetupUtils() {
+    }
+
+    /**
+     * @return environment setup objects from service lookup
+     */
+    public static TestEnvironmentSetup[] lookup() {
+        return Lists.newArrayList(ServiceLoader.load(TestEnvironmentSetup.class))
+                .toArray(TestEnvironmentSetup[]::new);
     }
 
     /**
