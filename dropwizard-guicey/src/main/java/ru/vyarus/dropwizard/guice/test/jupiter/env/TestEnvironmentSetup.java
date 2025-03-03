@@ -34,6 +34,10 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
  * AUTO REGISTRATION: If setup object implements hook ({@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook})
  * and/or listener ({@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener}) it would be
  * registered automatically. Manual registration would not create duplicate.
+ * <p>
+ * Environment setup could be loaded with {@link java.util.ServiceLoader} to avoid manual registration: add
+ * {@code META-INF/services/ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup} file with one or more
+ * implementation classes (one per line).
  *
  * @author Vyacheslav Rusakov
  * @since 12.05.2022
