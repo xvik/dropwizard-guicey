@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.testing.ConfigOverride;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.function.ThrowingConsumer;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
@@ -35,6 +36,22 @@ public abstract class ExtensionBuilder<K extends Configuration,
 
     public ExtensionBuilder(final C cfg) {
         this.cfg = cfg;
+    }
+
+    /**
+     * Custom block to perform manual configurations inside. It is better suited for lambda configurations
+     * (when builder configured in test field). Also, it captures exceptions (no need for manual try-catch blocks).
+     *
+     * @param action action to execute
+     * @return builder instance for chained calls
+     */
+    public T with(final ThrowingConsumer<T> action) {
+        try {
+            action.accept(self());
+        } catch (Throwable e) {
+            throw new IllegalStateException("Test configuration failed", e);
+        }
+        return self();
     }
 
     /**
