@@ -66,6 +66,7 @@
     Supported by all test extensions (junit5 annotations, setup object, generic builders, command runner)
   - Add manual configuration object creation support for junit 5 extensions (registered in field)
      and TestEnvironmentSetup: .config(() - {...})
+  - Add custom configuration block for junit5 extensions and TestEnvironmentSetup (to simplify lambda-based configurations): .with({...})
 * [admin-rest]
   - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
 
