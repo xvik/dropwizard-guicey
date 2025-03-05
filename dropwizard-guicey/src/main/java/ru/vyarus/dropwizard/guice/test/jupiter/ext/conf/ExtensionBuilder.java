@@ -111,6 +111,21 @@ public abstract class ExtensionBuilder<K extends Configuration,
     }
 
     /**
+     * Shortcut for config override registration.
+     * <p>
+     * Note that overrides order is not predictable so don't specify multiple values for the same property
+     * (see {@link io.dropwizard.testing.DropwizardTestSupport} holds overrides in {@link java.util.Set}).
+     *
+     * @param key property name
+     * @param value property value
+     * @return builder instance for chained calls
+     */
+    public T configOverride(final String key, final String value) {
+        configOverrides(key + ":" + value);
+        return self();
+    }
+
+    /**
      * Register config override with a supplier. Useful for values with delayed resolution
      * (e.g. provided by some other extension).
      * <p>
@@ -227,7 +242,7 @@ public abstract class ExtensionBuilder<K extends Configuration,
      * use {@link #configModifiers(Class[])}.
      *
      * @param modifiers configuration modifiers
-     * @param <P> configuration type
+     * @param <P>       configuration type
      * @return builder instance for chained calls
      */
     @SafeVarargs

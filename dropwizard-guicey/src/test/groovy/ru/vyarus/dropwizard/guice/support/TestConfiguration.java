@@ -19,4 +19,7 @@ public class TestConfiguration extends Configuration {
 
     @JsonProperty
     public int baa;
+
+    @JsonProperty
+    public int boo;
 }
