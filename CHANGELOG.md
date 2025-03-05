@@ -66,6 +66,7 @@
     Supported by all test extensions (junit5 annotations, setup object, generic builders, command runner)
   - Add manual configuration object creation support for junit 5 extensions (registered in field)
      and TestEnvironmentSetup: .config(() - {...})
+  - Add custom configuration block for junit5 extensions and TestEnvironmentSetup (to simplify lambda-based configurations): .with({...})
 
 ### 6.2.4 (2024-09-14)
 * Update to dropwizard 3.0.8
