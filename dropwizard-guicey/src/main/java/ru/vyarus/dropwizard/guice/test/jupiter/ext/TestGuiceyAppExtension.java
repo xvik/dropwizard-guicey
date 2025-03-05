@@ -258,7 +258,6 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          * <p>
          * Warning: some guice reports might stop working, because they rely on application start event
          *
-         * @return true to simulate managed objects lifecycle
          * @return builder instance for chained calls
          */
         public Builder<C> disableManagedLifecycle() {

@@ -72,6 +72,8 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      * <p>
      * It might be required in test to avoid starting managed objects (especially all managed in application) because
      * important (for test) services replaced with mocks (and no need to wait for the rest of the application).
+     *
+     * @return test support instance for chained calls
      */
     public GuiceyTestSupport<C> disableManagedLifecycle() {
         ((CmdProvider<C>) this.commandInstantiator).disableManagedSimulation();
