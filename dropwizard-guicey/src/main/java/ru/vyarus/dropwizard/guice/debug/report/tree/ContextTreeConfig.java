@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.debug.report.tree;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -127,7 +127,7 @@ public final class ContextTreeConfig {
      * @see ItemInfo#getRegisteredBy() for more info about scopes
      */
     public ContextTreeConfig hideScopes(final Class<?>... avoid) {
-        scopes.addAll(Arrays.asList(avoid));
+        Collections.addAll(scopes, avoid);
         return this;
     }
 
