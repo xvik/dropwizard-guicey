@@ -7,11 +7,14 @@ import io.dropwizard.core.Configuration;
 import io.dropwizard.testing.ConfigOverride;
 import jakarta.annotation.Nullable;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -29,6 +32,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
     protected String configPath;
     protected ConfigurationSourceProvider configSourceProvider;
     protected final Map<String, Supplier<String>> configOverrides = new HashMap<>();
+    protected final List<ConfigModifier<C>> modifiers = new ArrayList<>();
     protected C configObject;
     protected String propertyPrefix;
     private String restMapping;
@@ -77,6 +81,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      *
      * @param overrides config override values (in format "path: value")
      * @return builder instance for chained calls
+     * @see #configModifiers(ru.vyarus.dropwizard.guice.test.util.ConfigModifier[])
      */
     public T configOverrides(final String... overrides) {
         for (String over : overrides) {
@@ -90,6 +95,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      *
      * @param override config override value (in format "path: value")
      * @return builder instance for chained calls
+     * @see #configModifiers(ru.vyarus.dropwizard.guice.test.util.ConfigModifier[])
      */
     public T configOverride(final @Nullable String override) {
         if (override != null) {
@@ -107,6 +113,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      * @param key   configuration path
      * @param value overriding value
      * @return builder instance for chained calls
+     * @see #configModifiers(ru.vyarus.dropwizard.guice.test.util.ConfigModifier[])
      */
     public T configOverride(final String key, final String value) {
         return configOverride(key, () -> value);
@@ -121,6 +128,47 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      */
     public T configOverride(final String key, final Supplier<String> value) {
         this.configOverrides.put(key, value);
+        return self();
+    }
+
+    /**
+     * Configuration modifier is an alternative for configuration override, which is limited for simple
+     * property types (for example, a collection could not be overridden).
+     * <p>
+     * Modifier is called before application run phase. Only logger configuration is applied at this moment (and so you
+     * can't change it). Modifier would work with both yaml ({@link #config(String)}) and instance
+     * ({@link #config(io.dropwizard.core.Configuration)}) based configurations.
+     * <p>
+     * Method supposed to be used with lambdas and so limited for application configuration class.
+     * For generic configurations (based on configuration subclass or raw {@link io.dropwizard.core.Configuration})
+     * use {@link #configModifiers(Class[])}.
+     *
+     * @param modifiers configuration modifiers
+     * @return builder instance for chained calls
+     */
+    @SafeVarargs
+    public final T configModifiers(final ConfigModifier<C>... modifiers) {
+        this.modifiers.addAll(Arrays.asList(modifiers));
+        return self();
+    }
+
+    /**
+     * Configuration modifier is an alternative for configuration override, which is limited for simple
+     * property types (for example, a collection could not be overridden).
+     * <p>
+     * Modifier is called before application run phase. Only logger configuration is applied at this moment (and so you
+     * can't change it). Modifier would work with both yaml ({@link #config(String)}) and instance
+     * ({@link #config(io.dropwizard.core.Configuration)}) based configurations.
+     * <p>
+     * Method is useful for generic modifiers (based on configuration subclass or raw
+     * {@link io.dropwizard.core.Configuration}).
+     *
+     * @param modifiers configuration modifiers
+     * @return builder instance for chained calls
+     */
+    @SafeVarargs
+    public final T configModifiers(final Class<? extends ConfigModifier<? extends Configuration>>... modifiers) {
+        this.modifiers.addAll(ConfigOverrideUtils.createModifiers(modifiers));
         return self();
     }
 

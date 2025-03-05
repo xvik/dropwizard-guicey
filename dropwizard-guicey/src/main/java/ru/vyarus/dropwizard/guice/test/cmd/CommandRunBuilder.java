@@ -106,6 +106,7 @@ public class CommandRunBuilder<C extends Configuration> extends BaseBuilder<C, C
             support = new CommandTestSupport<>(app, configPath, configSourceProvider,
                     prefix, prepareOverrides(prefix));
         }
+        support.configModifiers(modifiers);
 
         return support;
     }

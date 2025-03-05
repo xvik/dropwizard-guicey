@@ -20,7 +20,7 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 22.02.2025
  */
-public class BuilderRunCoreWithoutManaged {
+public class BuilderRunCoreWithoutManagedTest {
 
     @Test
     void testCoreRun() throws Exception {

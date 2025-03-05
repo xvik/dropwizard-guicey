@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import ru.vyarus.dropwizard.guice.test.general.BuilderRunCoreWithoutManaged;
+import ru.vyarus.dropwizard.guice.test.general.BuilderRunCoreWithoutManagedTest;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
 
 /**
@@ -14,12 +14,12 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
 public class NoManagedLifecycleManualTest {
 
     @RegisterExtension
-    static TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(BuilderRunCoreWithoutManaged.App.class)
+    static TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(BuilderRunCoreWithoutManagedTest.App.class)
             .disableManagedLifecycle()
             .create();
 
     @Inject
-    BuilderRunCoreWithoutManaged.UnusedManaged managed;
+    BuilderRunCoreWithoutManagedTest.UnusedManaged managed;
 
     @Test
     void testManagedNotStarted() {

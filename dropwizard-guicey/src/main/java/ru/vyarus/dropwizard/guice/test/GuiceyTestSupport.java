@@ -10,8 +10,12 @@ import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 
 import jakarta.annotation.Nullable;
+import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
 import ru.vyarus.dropwizard.guice.test.util.RunResult;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 
@@ -71,6 +75,28 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      */
     public GuiceyTestSupport<C> disableManagedLifecycle() {
         ((CmdProvider<C>) this.commandInstantiator).disableManagedSimulation();
+        return this;
+    }
+
+    /**
+     * Register configuration modifiers.
+     *
+     * @param modifiers configuration modifiers
+     * @return support object instance for chained calls
+     */
+    @SafeVarargs
+    public final GuiceyTestSupport<C> configModifiers(final ConfigModifier<C>... modifiers) {
+        return configModifiers(Arrays.asList(modifiers));
+    }
+
+    /**
+     * Register configuration modifiers.
+     *
+     * @param modifiers configuration modifiers
+     * @return support object instance for chained calls
+     */
+    public GuiceyTestSupport<C> configModifiers(final List<ConfigModifier<C>> modifiers) {
+        ((CmdProvider<C>) this.commandInstantiator).configModifiers(modifiers);
         return this;
     }
 
@@ -136,16 +162,22 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
 
         public TestCommand<C> command;
         private boolean simulateManaged = true;
+        private final List<ConfigModifier<C>> modifiers = new ArrayList<>();
 
         public void disableManagedSimulation() {
             Preconditions.checkState(command == null, "Command already initialized");
             simulateManaged = false;
         }
 
+        public void configModifiers(final List<ConfigModifier<C>> modifiers) {
+            Preconditions.checkState(command == null, "Command already initialized");
+            this.modifiers.addAll(modifiers);
+        }
+
         @Override
         public Command apply(final Application<C> application) {
             Preconditions.checkState(command == null, "Command already created");
-            command = new TestCommand<>(application, simulateManaged);
+            command = new TestCommand<>(application, simulateManaged, modifiers);
             return command;
         }
     }

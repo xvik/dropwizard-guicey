@@ -17,6 +17,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
+import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
@@ -94,8 +95,8 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
      * @param app application class
      * @return builder for extension configuration.
      */
-    public static Builder forApp(final Class<? extends Application> app) {
-        return new Builder(app);
+    public static <C extends Configuration> Builder<C> forApp(final Class<? extends Application<C>> app) {
+        return new Builder<>(app);
     }
 
     @Override
@@ -155,7 +156,8 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
         final GuiceyTestSupport<C> support = new GuiceyTestSupport<>((Class<? extends Application<C>>) app,
                 configPath,
                 configPrefix,
-                buildConfigOverrides(configPrefix, context));
+                buildConfigOverrides(configPrefix, context))
+                .configModifiers((List<ConfigModifier<C>>) (List) config.configModifiers);
         if (!config.managedLifecycle) {
             support.disableManagedLifecycle();
         }
@@ -176,10 +178,12 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
 
     /**
      * Builder used for manual extension registration ({@link #forApp(Class)}).
+     *
+     * @param <C> configuration type (resolved automatically by application clas
      */
-    public static class Builder extends ExtensionBuilder<Builder, Config> {
+    public static class Builder<C extends Configuration> extends ExtensionBuilder<C, Builder<C>, Config> {
 
-        public Builder(final Class<? extends Application> app) {
+        public Builder(final Class<? extends Application<C>> app) {
             super(new Config());
             this.cfg.app = Preconditions.checkNotNull(app, "Application class must be provided");
         }
@@ -190,7 +194,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          * @param configPath configuration file path
          * @return builder instance for chained calls
          */
-        public Builder config(final String configPath) {
+        public Builder<C> config(final String configPath) {
             cfg.configPath = configPath;
             return this;
         }
@@ -214,7 +218,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          * @return builder instance for chained calls
          */
         @SafeVarargs
-        public final Builder setup(final Class<? extends TestEnvironmentSetup>... support) {
+        public final Builder<C> setup(final Class<? extends TestEnvironmentSetup>... support) {
             cfg.extensionClasses(support);
             return this;
         }
@@ -236,7 +240,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          * @param support support object instances
          * @return builder instance for chained calls
          */
-        public Builder setup(final TestEnvironmentSetup... support) {
+        public Builder<C> setup(final TestEnvironmentSetup... support) {
             cfg.extensionInstances(support);
             return this;
         }
@@ -254,7 +258,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
          * @return true to simulate managed objects lifecycle
          * @return builder instance for chained calls
          */
-        public Builder disableManagedLifecycle() {
+        public Builder<C> disableManagedLifecycle() {
             cfg.managedLifecycle = false;
             return this;
         }
@@ -311,6 +315,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             res.app = ann.value();
             res.configPath = ann.config();
             res.configOverrides = ann.configOverride();
+            res.configModifiersFromAnnotation(ann.annotationType(), ann.configModifiers());
             res.hooksFromAnnotation(ann.annotationType(), ann.hooks());
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
             res.injectOnce = ann.injectOnce();
