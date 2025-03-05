@@ -1,19 +1,23 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
 
+import com.google.common.base.Preconditions;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import io.dropwizard.core.Configuration;
 import io.dropwizard.testing.ConfigOverride;
+import org.junit.jupiter.api.function.ThrowingSupplier;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
+import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
-import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
+import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
-import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +32,7 @@ import java.util.List;
 public abstract class ExtensionConfig {
 
     public String[] configOverrides = new String[0];
+    public ThrowingSupplier<? extends Configuration> confInstance;
     // required for lazy evaluation values
     public final List<ConfigOverride> configOverrideObjects = new ArrayList<>();
     public final List<ConfigModifier<?>> configModifiers = new ArrayList<>();
@@ -99,5 +104,26 @@ public abstract class ExtensionConfig {
         } catch (Exception ex) {
             throw new IllegalStateException("Failed to instantiate test client factory", ex);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public <C extends Configuration> C getConfiguration(final String configPath) {
+        C cfg = null;
+        if (confInstance != null) {
+            Preconditions.checkState(configPath.isEmpty(),
+                    "Configuration path can't be used with manual configuration instance: %s", configPath);
+            Preconditions.checkState(configOverrides.length == 0,
+                    "Configuration overrides can't be used with manual configuration instance: %s",
+                    Arrays.toString(configOverrides));
+            Preconditions.checkState(configOverrideObjects.isEmpty(),
+                    "Configuration overrides can't be used with manual configuration instance");
+            try {
+                cfg = (C) confInstance.get();
+            } catch (Throwable e) {
+                throw new IllegalStateException("Manual configuration instance construction failed", e);
+            }
+            Preconditions.checkNotNull(cfg, "Configuration can't be null");
+        }
+        return cfg;
     }
 }

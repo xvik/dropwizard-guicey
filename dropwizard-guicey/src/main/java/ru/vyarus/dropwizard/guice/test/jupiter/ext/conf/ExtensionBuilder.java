@@ -1,8 +1,10 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
 
+import com.google.common.base.Preconditions;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.testing.ConfigOverride;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.function.ThrowingSupplier;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
@@ -33,6 +35,20 @@ public abstract class ExtensionBuilder<K extends Configuration,
 
     public ExtensionBuilder(final C cfg) {
         this.cfg = cfg;
+    }
+
+    /**
+     * Specify configuration instance directly, instead of parsing yaml file.
+     * <p>
+     * NOTE: Configuration overrides will not work! But configuration modifiers will work.
+     *
+     * @param configProvider configuration instance provider
+     * @return builder instance for chained calls
+     */
+    public T config(final ThrowingSupplier<K> configProvider) {
+        Preconditions.checkState(cfg.confInstance == null, "Manual configuration instance already set");
+        cfg.confInstance = configProvider;
+        return self();
     }
 
     /**

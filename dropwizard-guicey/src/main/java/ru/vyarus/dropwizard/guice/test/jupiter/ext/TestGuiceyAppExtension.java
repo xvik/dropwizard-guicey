@@ -152,12 +152,15 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             final Class<? extends Application> app,
             final String configPath,
             final ExtensionContext context) {
+        final C manualConfig = config.getConfiguration(config.configPath);
         // NOTE: DropwizardTestSupport.ServiceListener listeners would be called ONLY on start!
-        final GuiceyTestSupport<C> support = new GuiceyTestSupport<>((Class<? extends Application<C>>) app,
+        final GuiceyTestSupport<C> support = manualConfig == null
+                ? new GuiceyTestSupport<>((Class<? extends Application<C>>) app,
                 configPath,
                 configPrefix,
                 buildConfigOverrides(configPrefix, context))
-                .configModifiers((List<ConfigModifier<C>>) (List) config.configModifiers);
+                : new GuiceyTestSupport<>((Class<? extends Application<C>>) app, manualConfig);
+        support.configModifiers((List<ConfigModifier<C>>) (List) config.configModifiers);
         if (!config.managedLifecycle) {
             support.disableManagedLifecycle();
         }
