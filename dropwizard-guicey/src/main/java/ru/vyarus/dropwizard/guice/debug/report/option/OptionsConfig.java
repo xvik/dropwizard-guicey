@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.debug.report.option;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -83,7 +83,7 @@ public class OptionsConfig {
      */
     @SafeVarargs
     public final OptionsConfig hideGroups(final Class<Enum>... groups) {
-        hiddenGroups.addAll(Arrays.asList(groups));
+        Collections.addAll(hiddenGroups, groups);
         return this;
     }
 
@@ -94,7 +94,7 @@ public class OptionsConfig {
      * @return config instance for chained calls
      */
     public OptionsConfig hideOptions(final Enum... options) {
-        hidden.addAll(Arrays.asList(options));
+        Collections.addAll(hidden, options);
         return this;
     }
 }

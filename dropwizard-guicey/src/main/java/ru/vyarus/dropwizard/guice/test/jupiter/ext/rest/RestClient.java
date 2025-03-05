@@ -14,6 +14,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -202,7 +203,7 @@ public class RestClient {
      * @see jakarta.ws.rs.core.MediaType
      */
     public RestClient defaultAccept(final String... accept) {
-        this.defaultAccepts.addAll(Arrays.asList(accept));
+        Collections.addAll(this.defaultAccepts, accept);
         return this;
     }
 

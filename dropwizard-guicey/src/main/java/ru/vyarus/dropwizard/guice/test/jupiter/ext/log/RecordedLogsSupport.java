@@ -15,6 +15,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class RecordedLogsSupport extends AnnotatedTestFieldSetup<RecordLogs, Rec
         final List<String> loggers = new ArrayList<>(Arrays.stream(config.value())
                 .map(Class::getName).collect(Collectors.toList()));
         if (config.loggers() != null) {
-            loggers.addAll(Arrays.asList(config.loggers()));
+            Collections.addAll(loggers, config.loggers());
         }
 
         final Recorder recorder = new Recorder(field.toStringField(), config.level(), loggers);
@@ -124,7 +125,7 @@ public class RecordedLogsSupport extends AnnotatedTestFieldSetup<RecordLogs, Rec
             final RecordLogs config = field.getAnnotation();
             final List<String> loggers = new ArrayList<>();
             Arrays.stream(config.value()).map(Class::getSimpleName).forEach(loggers::add);
-            loggers.addAll(Arrays.asList(config.loggers()));
+            Collections.addAll(loggers, config.loggers());
             report.append(
                     String.format("\t%-30s %-6s %s%n", '#' + field.getField().getName(), config.level(),
                             String.join(",", loggers))

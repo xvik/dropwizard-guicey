@@ -13,6 +13,7 @@ import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,7 +149,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      */
     @SafeVarargs
     public final T configModifiers(final ConfigModifier<C>... modifiers) {
-        this.modifiers.addAll(Arrays.asList(modifiers));
+        Collections.addAll(this.modifiers, modifiers);
         return self();
     }
 
