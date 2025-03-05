@@ -1,15 +1,22 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
 import com.google.common.base.Preconditions;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.cli.Command;
+import io.dropwizard.core.cli.ServerCommand;
 import io.dropwizard.testing.ConfigOverride;
 import javax.annotation.Nullable;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
+import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Config override handling utils.
@@ -164,5 +171,62 @@ public final class ConfigOverrideUtils {
             mapping = PathUtils.trailingSlash(mapping) + STAR;
         }
         return ConfigOverride.config(prefix == null ? "dw." : prefix, "server.rootPath", mapping);
+    }
+
+    /**
+     * Instantiates provided configuration modifiers.
+     *
+     * @param modifiers configuration modifiers to instantiate
+     * @return hooks instances
+     */
+    @SafeVarargs
+    @SuppressWarnings("unchecked")
+    public static <C extends Configuration> List<ConfigModifier<C>> createModifiers(
+            final Class<? extends ConfigModifier<?>>... modifiers) {
+        final List<ConfigModifier<C>> res = new ArrayList<>();
+        for (Class<? extends ConfigModifier<?>> modifier : modifiers) {
+            try {
+                res.add((ConfigModifier<C>) InstanceUtils.create(modifier));
+            } catch (Exception e) {
+                throw new IllegalStateException("Failed to instantiate configuration modifier: "
+                        + modifier.getSimpleName(), e);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Runs configuration modifiers.
+     *
+     * @param configuration configuration instance
+     * @param modifiers     configuration modifiers
+     * @param <C>           configuration type
+     * @throws java.lang.IllegalStateException if modifier fails to execute
+     */
+    @SuppressWarnings("unchecked")
+    public static <C extends Configuration> void runModifiers(
+            final C configuration, final List<ConfigModifier<C>> modifiers) {
+        for (final ConfigModifier modifier : modifiers) {
+            try {
+                modifier.modify(configuration);
+            } catch (Exception e) {
+                throw new IllegalStateException("Configuration modification failed for "
+                        + modifier.getClass().getName(), e);
+            }
+        }
+    }
+
+    /**
+     * Create server command function with configuration modifiers support.
+     *
+     * @param modifiers configuration modifiers
+     * @param <C>       configuration type (required to align input)
+     * @return server command function with configuration modifiers support.
+     */
+    public static <C extends Configuration> Function<Application<C>, Command> buildCommandFactory(
+            final List<ConfigModifier<C>> modifiers) {
+        return modifiers.isEmpty()
+                ? ServerCommand::new
+                : application -> new ConfigModifierServerCommand<>(application, modifiers);
     }
 }

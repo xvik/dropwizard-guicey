@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.common.base.Strings;
 import io.dropwizard.core.Application;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.cli.Command;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -16,6 +18,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
+import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
@@ -27,6 +30,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * {@link TestDropwizardApp} junit 5 extension implementation. Normally, extension should be activated with annotation,
@@ -62,6 +66,7 @@ import java.util.Optional;
  * @author Vyacheslav Rusakov
  * @since 28.04.2020
  */
+@SuppressWarnings("PMD.ExcessiveImports")
 public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
 
     private Config config;
@@ -94,8 +99,8 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
      * @param app application class
      * @return builder for extension configuration.
      */
-    public static Builder forApp(final Class<? extends Application> app) {
-        return new Builder(app);
+    public static <C extends Configuration> Builder<C> forApp(final Class<? extends Application<C>> app) {
+        return new Builder<>(app);
     }
 
     @Override
@@ -144,7 +149,9 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         timer.reset().start();
         final DropwizardTestSupport support = new DropwizardTestSupport(config.app,
                 config.configPath,
+                null,
                 configPrefix,
+                createCommandFactory(),
                 buildConfigOverrides(configPrefix, context));
         tracker.performanceTrack(GuiceyTestTime.DropwizardTestSupport, timer.elapsed());
 
@@ -152,6 +159,11 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             support.addListener(new RandomPortsListener());
         }
         return support;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <C extends Configuration> Function<Application<C>, Command> createCommandFactory() {
+        return ConfigOverrideUtils.buildCommandFactory((List<ConfigModifier<C>>) (List) config.configModifiers);
     }
 
     @SuppressWarnings("unchecked")
@@ -173,10 +185,12 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
 
     /**
      * Builder used for manual extension registration ({@link #forApp(Class)}).
+     *
+     * @param <C> configuration type (resolved automatically by application class)
      */
-    public static class Builder extends ExtensionBuilder<Builder, Config> {
+    public static class Builder<C extends Configuration> extends ExtensionBuilder<C, Builder<C>, Config> {
 
-        public Builder(final Class<? extends Application> app) {
+        public Builder(final Class<? extends Application<C>> app) {
             super(new Config());
             this.cfg.app = Preconditions.checkNotNull(app, "Application class must be provided");
         }
@@ -187,7 +201,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * @param configPath configuration file path
          * @return builder instance for chained calls
          */
-        public Builder config(final String configPath) {
+        public Builder<C> config(final String configPath) {
             cfg.configPath = configPath;
             return this;
         }
@@ -198,7 +212,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * @param randomPorts true to use random ports
          * @return builder instance for chained calls
          */
-        public Builder randomPorts(final boolean randomPorts) {
+        public Builder<C> randomPorts(final boolean randomPorts) {
             cfg.randomPorts = randomPorts;
             return this;
         }
@@ -208,7 +222,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          *
          * @return builder instance for chained calls
          */
-        public Builder randomPorts() {
+        public Builder<C> randomPorts() {
             return randomPorts(true);
         }
 
@@ -218,7 +232,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * @param mapping rest mapping path
          * @return builder instance for chained calls
          */
-        public Builder restMapping(final String mapping) {
+        public Builder<C> restMapping(final String mapping) {
             cfg.restMapping = mapping;
             return this;
         }
@@ -242,7 +256,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * @return builder instance for chained calls
          */
         @SafeVarargs
-        public final Builder setup(final Class<? extends TestEnvironmentSetup>... support) {
+        public final Builder<C> setup(final Class<? extends TestEnvironmentSetup>... support) {
             cfg.extensionsClasses(support);
             return this;
         }
@@ -264,7 +278,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
          * @param support support object instances
          * @return builder instance for chained calls
          */
-        public Builder setup(final TestEnvironmentSetup... support) {
+        public Builder<C> setup(final TestEnvironmentSetup... support) {
             cfg.extensionInstances(support);
             return this;
         }
@@ -324,6 +338,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
             res.configOverrides = ann.configOverride();
             res.randomPorts = ann.randomPorts();
             res.restMapping = ann.restMapping();
+            res.configModifiersFromAnnotation(ann.annotationType(), ann.configModifiers());
             res.hooksFromAnnotation(ann.annotationType(), ann.hooks());
             res.extensionsFromAnnotation(ann.annotationType(), ann.setup());
             res.injectOnce = ann.injectOnce();

@@ -4,17 +4,20 @@ import com.google.common.base.MoreObjects;
 import com.google.inject.Injector;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
+import io.dropwizard.core.cli.Command;
 import io.dropwizard.testing.DropwizardTestSupport;
 import javax.annotation.Nullable;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 import ru.vyarus.dropwizard.guice.test.TestSupport;
-import ru.vyarus.dropwizard.guice.test.util.RandomPortsListener;
 import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
+import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
+import ru.vyarus.dropwizard.guice.test.util.RandomPortsListener;
 import ru.vyarus.dropwizard.guice.test.util.RunResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Builder and runner for {@link io.dropwizard.testing.DropwizardTestSupport} and
@@ -230,6 +233,7 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
             final String prefix = MoreObjects.firstNonNull(propertyPrefix, "dw.");
             support = new GuiceyTestSupport<>(app, configPath, configSourceProvider, prefix, prepareOverrides(prefix));
         }
+        support.configModifiers(modifiers);
         if (randomPorts) {
             support.addListener(new RandomPortsListener<>());
         }
@@ -240,15 +244,16 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
     // "unsafe" building (without listeners check)
     private DropwizardTestSupport<C> buildWebInternal() {
         final DropwizardTestSupport<C> support;
+        final Function<Application<C>, Command> cmd = ConfigOverrideUtils.buildCommandFactory(modifiers);
         if (configObject != null) {
             if (configPath != null || !configOverrides.isEmpty() || configSourceProvider != null) {
                 throw new IllegalStateException("Configuration object can't be used together with yaml configuration");
             }
-            support = new DropwizardTestSupport<>(app, configObject);
+            support = new DropwizardTestSupport<>(app, configObject, cmd);
         } else {
             final String prefix = MoreObjects.firstNonNull(propertyPrefix, "dw.");
             support = new DropwizardTestSupport<>(app, configPath, configSourceProvider,
-                    prefix, prepareOverrides(prefix));
+                    prefix, cmd, prepareOverrides(prefix));
         }
         if (randomPorts) {
             support.addListener(new RandomPortsListener<>());

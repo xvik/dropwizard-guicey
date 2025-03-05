@@ -8,6 +8,7 @@ import io.dropwizard.core.Application;
 import io.dropwizard.core.cli.Command;
 import io.dropwizard.core.cli.ConfiguredCommand;
 import io.dropwizard.core.cli.EnvironmentCommand;
+import io.dropwizard.core.server.DefaultServerFactory;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -250,6 +251,37 @@ public class CommandRunTest {
         Assertions.assertThat(res.getBootstrap()).isNotNull();
         Assertions.assertThat(res.getInjector()).isNotNull();
         Assertions.assertThat(res.getInjector().getInstance(FooService.class).isCalled()).isTrue();
+    }
+
+    @Test
+    void testConfigModificationsApplied() {
+        final CommandResult<TestConfiguration> res = TestSupport.buildCommandRunner(App.class)
+                .config("src/test/resources/ru/vyarus/dropwizard/guice/config.yml")
+                .configOverrides("foo: 2", "bar: 3", "baa: 4")
+                .configModifiers(config -> config.foo = 11)
+                .configModifiers(BuilderConfigModifyTest.BarModifier.class, BuilderConfigModifyTest.GenericModifier.class)
+                .run("env");
+
+        final TestConfiguration config = res.getConfiguration();
+        Assertions.assertThat(config.foo).isEqualTo(11);
+        Assertions.assertThat(config.bar).isEqualTo(12);
+        Assertions.assertThat(config.baa).isEqualTo(4);
+        Assertions.assertThat(((DefaultServerFactory) config.getServerFactory()).getAdminMaxThreads()).isEqualTo(22);
+    }
+
+    @Test
+    void testConfigModificationAppliedForInstance() {
+        final CommandResult<TestConfiguration> res = TestSupport.buildCommandRunner(App.class)
+                .config(new TestConfiguration())
+                .configModifiers(config -> config.foo = 11)
+                .configModifiers(BuilderConfigModifyTest.BarModifier.class, BuilderConfigModifyTest.GenericModifier.class)
+                .run("env");
+
+        final TestConfiguration config = res.getConfiguration();
+        Assertions.assertThat(config.foo).isEqualTo(11);
+        Assertions.assertThat(config.bar).isEqualTo(12);
+        Assertions.assertThat(config.baa).isEqualTo(0);
+        Assertions.assertThat(((DefaultServerFactory) config.getServerFactory()).getAdminMaxThreads()).isEqualTo(22);
     }
 
     public static class App extends Application<TestConfiguration> {

@@ -7,6 +7,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestDropwizardAppExtension;
 import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
+import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -79,8 +80,17 @@ public @interface TestDropwizardApp {
      * of annotation.
      *
      * @return list of overridden configuration values (may be used even without real configuration)
+     * @see #configModifiers()
      */
     String[] configOverride() default {};
+
+    /**
+     * Configuration modifier is an alternative for configuration override, which is limited for simple
+     * property types (for example, a collection could not be overridden).
+     *
+     * @return configuration modifiers
+     */
+    Class<? extends ConfigModifier<?>>[] configModifiers() default {};
 
     /**
      * Hooks provide access to guice builder allowing complete customization of application context

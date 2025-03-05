@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.env;
 
+import io.dropwizard.core.Configuration;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.lambda.ListenerEvent;
@@ -19,7 +20,8 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 15.05.2022
  */
-public class TestExtension extends ExtensionBuilder<TestExtension, ExtensionConfig> {
+// no configuration parameter because it could brake existing code (without declared generic types work incorrectly)
+public class TestExtension extends ExtensionBuilder<Configuration, TestExtension, ExtensionConfig> {
 
     private final ExtensionContext context;
     private final ListenersSupport listeners;

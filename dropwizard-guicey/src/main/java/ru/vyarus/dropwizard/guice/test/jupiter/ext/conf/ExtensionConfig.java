@@ -6,6 +6,8 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
+import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
+import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
@@ -28,6 +30,7 @@ public abstract class ExtensionConfig {
     public String[] configOverrides = new String[0];
     // required for lazy evaluation values
     public final List<ConfigOverride> configOverrideObjects = new ArrayList<>();
+    public final List<ConfigModifier<?>> configModifiers = new ArrayList<>();
     public final List<GuiceyConfigurationHook> hooks = new ArrayList<>();
     public final List<TestEnvironmentSetup> extensions = new ArrayList<>();
     public TestClientFactory clientFactory;
@@ -69,6 +72,24 @@ public abstract class ExtensionConfig {
     public final void hookClasses(final Class<? extends GuiceyConfigurationHook>... exts) {
         hooks.addAll(HooksUtil.create(exts));
         tracker.hookClasses(exts);
+    }
+
+    @SafeVarargs
+    public final void configModifiersFromAnnotation(final Class<? extends Annotation> ann,
+                                          final Class<? extends ConfigModifier<?>>... modifiers) {
+        configModifiers.addAll(ConfigOverrideUtils.createModifiers(modifiers));
+        tracker.configModifiersFromAnnotation(ann, modifiers);
+    }
+
+    @SafeVarargs
+    public final void configModifierClasses(final Class<? extends ConfigModifier<?>>... modifiers) {
+        configModifiers.addAll(ConfigOverrideUtils.createModifiers(modifiers));
+        tracker.configModifierClasses(modifiers);
+    }
+
+    public final void configModifierInstances(final ConfigModifier<?>... modifiers) {
+        Collections.addAll(configModifiers, modifiers);
+        tracker.configModifierInstances(modifiers);
     }
 
     @SuppressFBWarnings("PA_PUBLIC_PRIMITIVE_ATTRIBUTE")
