@@ -30,6 +30,7 @@ public class ObjectConfigOverrideDwTest {
     static TestDropwizardAppExtension app = TestDropwizardAppExtension.forApp(AutoScanApplication.class)
             .config("src/test/resources/ru/vyarus/dropwizard/guice/config.yml")
             .configOverrides("foo: 1")
+            .configOverride("boo", "2")
             .configOverride("bar", () -> ext.getValue())
             .configOverrides(new ConfigOverrideValue("baa", () -> "44"))
             .create();
@@ -48,6 +49,7 @@ public class ObjectConfigOverrideDwTest {
         Assertions.assertEquals(config.foo, 1);
         Assertions.assertEquals(config.bar, 22);
         Assertions.assertEquals(config.baa, 44);
+        Assertions.assertEquals(config.boo, 2);
     }
 
     public static class FooExtension implements BeforeAllCallback {
