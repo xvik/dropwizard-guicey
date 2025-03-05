@@ -64,6 +64,8 @@
   - Add configuration modifiers - an alternative for limited configuration override:
     ability to modify configuration instance before application startup.
     Supported by all test extensions (junit5 annotations, setup object, generic builders, command runner)
+  - Add manual configuration object creation support for junit 5 extensions (registered in field)
+     and TestEnvironmentSetup: .config(() - {...})
 * [admin-rest]
   - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
 

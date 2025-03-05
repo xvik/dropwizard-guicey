@@ -147,12 +147,15 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         tracker.performanceTrack(GuiceyTestTime.HooksRegistration, timer.elapsed(), true);
 
         timer.reset().start();
-        final DropwizardTestSupport support = new DropwizardTestSupport(config.app,
+        final Configuration manualConfig = config.getConfiguration(config.configPath);
+        final DropwizardTestSupport support = manualConfig == null
+                ? new DropwizardTestSupport(config.app,
                 config.configPath,
                 null,
                 configPrefix,
                 createCommandFactory(),
-                buildConfigOverrides(configPrefix, context));
+                buildConfigOverrides(configPrefix, context))
+                : new DropwizardTestSupport(config.app, manualConfig, createCommandFactory());
         tracker.performanceTrack(GuiceyTestTime.DropwizardTestSupport, timer.elapsed());
 
         if (config.randomPorts) {
