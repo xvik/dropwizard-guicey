@@ -177,6 +177,7 @@ public final class ConfigOverrideUtils {
      * Instantiates provided configuration modifiers.
      *
      * @param modifiers configuration modifiers to instantiate
+     * @param <C> configuration type
      * @return hooks instances
      */
     @SafeVarargs
