@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.cmd;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
 import io.dropwizard.configuration.ConfigurationException;
 import io.dropwizard.configuration.ConfigurationFactory;
@@ -22,6 +23,8 @@ import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
+import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
+import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.io.EchoStream;
 import ru.vyarus.dropwizard.guice.test.util.io.SystemInMock;
 
@@ -29,7 +32,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -75,6 +81,7 @@ public class CommandTestSupport<C extends Configuration> {
     protected final String configPath;
     protected final ConfigurationSourceProvider configSourceProvider;
     protected final Set<ConfigOverride> configOverrides;
+    protected final List<ConfigModifier<C>> modifiers = new ArrayList<>();
     protected final String customPropertyPrefix;
 
     /**
@@ -123,6 +130,31 @@ public class CommandTestSupport<C extends Configuration> {
                 .orElse(Set.of());
         this.customPropertyPrefix = customPropertyPrefix;
         this.explicitConfig = false;
+    }
+
+    /**
+     * Register configuration modifiers.
+     *
+     * @param modifier configuration modifiers
+     * @return command support instance for chained calls
+     * @throws java.lang.IllegalStateException if called after application startup
+     */
+    @SafeVarargs
+    public final CommandTestSupport<C> configModifiers(final ConfigModifier<C>... modifier) {
+        return configModifiers(Arrays.asList(modifier));
+    }
+
+    /**
+     * Register configuration modifiers.
+     *
+     * @param modifiers configuration modifiers
+     * @return command support instance for chained calls
+     * @throws java.lang.IllegalStateException if called after application startup
+     */
+    public CommandTestSupport<C> configModifiers(final List<ConfigModifier<C>> modifiers) {
+        Preconditions.checkState(application == null, "Application is already created");
+        this.modifiers.addAll(modifiers);
+        return this;
     }
 
     /**
@@ -266,6 +298,8 @@ public class CommandTestSupport<C extends Configuration> {
         }
 
         if (explicitConfig) {
+            // pojo factory does nothing - it's ok to run modifiers here
+            ConfigOverrideUtils.runModifiers(configuration, modifiers);
             bootstrap.setConfigurationFactoryFactory((klass, validator, objectMapper, propertyPrefix) ->
                     new POJOConfigurationFactory<>(configuration));
         } else if (customPropertyPrefix != null) {
@@ -273,7 +307,10 @@ public class CommandTestSupport<C extends Configuration> {
             bootstrap.setConfigurationFactoryFactory((klass, validator, objectMapper, propertyPrefix) ->
                     new ConfigInterceptor<>(new YamlConfigurationFactory<>(klass, validator, objectMapper, prefix),
                             // the only way to intercept command instance in case of ConfiguredCommand
-                            c -> this.configuration = c));
+                            c -> {
+                                ConfigOverrideUtils.runModifiers(c, modifiers);
+                                this.configuration = c;
+                            }));
         }
     }
 

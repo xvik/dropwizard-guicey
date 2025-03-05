@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
+import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
 import ru.vyarus.dropwizard.guice.test.util.PrintUtils;
 import ru.vyarus.dropwizard.guice.test.util.TestSetupUtils;
 
@@ -30,6 +31,7 @@ import java.util.Map;
  * @author Vyacheslav Rusakov
  * @since 27.05.2022
  */
+@SuppressWarnings("PMD.GodClass")
 public class TestExtensionsTracker {
 
     /**
@@ -46,6 +48,7 @@ public class TestExtensionsTracker {
 
     protected final List<String> extensionsSource = new ArrayList<>();
     protected final List<String> hooksSource = new ArrayList<>();
+    protected final List<String> configModifierSource = new ArrayList<>();
     private final List<PerformanceTrack> performance = new ArrayList<>();
 
     private GuiceyTestTime testPhase;
@@ -121,6 +124,21 @@ public class TestExtensionsTracker {
         RegistrationTrackUtils.fromClass(hooksSource, String.format("%s class", getHookContext()), exts);
     }
 
+    @SafeVarargs
+    public final void configModifiersFromAnnotation(final Class<? extends Annotation> ann,
+                                          final Class<? extends ConfigModifier>... exts) {
+        RegistrationTrackUtils.fromClass(configModifierSource, "@" + ann.getSimpleName(), exts);
+    }
+
+    @SafeVarargs
+    public final void configModifierClasses(final Class<? extends ConfigModifier>... mods) {
+        RegistrationTrackUtils.fromClass(configModifierSource, String.format("%s class", getHookContext()), mods);
+    }
+
+    public final void configModifierInstances(final ConfigModifier... exts) {
+        RegistrationTrackUtils.fromInstance(configModifierSource, String.format("%s instance", getHookContext()), exts);
+    }
+
     public void lifecyclePhase(final ExtensionContext context, final GuiceyTestTime phase) {
         testPhase = phase;
     }
@@ -169,6 +187,11 @@ public class TestExtensionsTracker {
             if (!hooksSource.isEmpty()) {
                 res.append("\tTest hooks = \n");
                 logTracks(res, hooksSource);
+            }
+
+            if (!configModifierSource.isEmpty()) {
+                res.append("\tConfig modifiers = \n");
+                logTracks(res, configModifierSource);
             }
 
             System.out.println(res);

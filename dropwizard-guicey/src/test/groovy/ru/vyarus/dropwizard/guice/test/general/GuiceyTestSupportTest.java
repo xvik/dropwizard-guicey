@@ -48,15 +48,15 @@ public class GuiceyTestSupportTest {
 
     @Test
     void testRunWithoutManagedLifecycle() throws Exception {
-        GuiceyTestSupport<Configuration> support = new GuiceyTestSupport<>(BuilderRunCoreWithoutManaged.App.class, (String) null)
+        GuiceyTestSupport<Configuration> support = new GuiceyTestSupport<>(BuilderRunCoreWithoutManagedTest.App.class, (String) null)
                 .disableManagedLifecycle();
 
         RunResult<Configuration> result = support.run();
-        BuilderRunCoreWithoutManaged.UnusedManaged managed = result.getBean(BuilderRunCoreWithoutManaged.UnusedManaged.class);
+        BuilderRunCoreWithoutManagedTest.UnusedManaged managed = result.getBean(BuilderRunCoreWithoutManagedTest.UnusedManaged.class);
         Assertions.assertThat(managed.started).isFalse();
         Assertions.assertThat(managed.stopped).isFalse();
 
         org.junit.jupiter.api.Assertions.assertEquals(Arrays.asList("lifeCycleStarting", "lifeCycleStarted", "lifeCycleStopping", "lifeCycleStopped"),
-                result.<BuilderRunCoreWithoutManaged.App>getApplication().events);
+                result.<BuilderRunCoreWithoutManagedTest.App>getApplication().events);
     }
 }

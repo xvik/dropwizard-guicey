@@ -61,6 +61,9 @@
     (without starting full container; same as dropwizard's ResourceExtension)
   - Add logs testing support (@RecordLogs): record required logs for validation (only logback)
   - Add option to disable default annotated fields extensions: useDefaultExtensions
+  - Add configuration modifiers - an alternative for limited configuration override:
+    ability to modify configuration instance before application startup.
+    Supported by all test extensions (junit5 annotations, setup object, generic builders, command runner)
 
 ### 7.1.4 (2024-09-14)
 * Update to dropwizard 4.0.8

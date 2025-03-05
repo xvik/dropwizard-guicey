@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
+import io.dropwizard.core.Configuration;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -202,8 +203,10 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      * @return dropwizard support object prepared by guicey extension, or empty optional if no guicey extension used or
      * its beforeAll hook was not called yet
      */
-    public static Optional<DropwizardTestSupport<?>> lookupSupport(final ExtensionContext extensionContext) {
-        return Optional.ofNullable((DropwizardTestSupport<?>) getExtensionStore(extensionContext).get(DW_SUPPORT));
+    @SuppressWarnings("unchecked")
+    public static <C extends Configuration> Optional<DropwizardTestSupport<C>> lookupSupport(
+            final ExtensionContext extensionContext) {
+        return Optional.ofNullable((DropwizardTestSupport<C>) getExtensionStore(extensionContext).get(DW_SUPPORT));
     }
 
     /**

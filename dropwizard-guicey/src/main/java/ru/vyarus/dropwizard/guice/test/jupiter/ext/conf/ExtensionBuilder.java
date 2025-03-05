@@ -1,13 +1,15 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf;
 
+import io.dropwizard.core.Configuration;
 import io.dropwizard.testing.ConfigOverride;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
+import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideExtensionValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue;
 import ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix;
-import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 
 import java.util.Collections;
 import java.util.function.Supplier;
@@ -18,12 +20,15 @@ import java.util.function.Supplier;
  * {@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup} builders (to avoid duplicating
  * method implementations).
  *
+ * @param <K> dropwizard configuration type
  * @param <C> config object type
  * @param <T> builder type
  * @author Vyacheslav Rusakov
  * @since 12.05.2022
  */
-public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends ExtensionConfig> {
+public abstract class ExtensionBuilder<K extends Configuration,
+        T extends ExtensionBuilder<K, T, C>,
+        C extends ExtensionConfig> {
     protected final C cfg;
 
     public ExtensionBuilder(final C cfg) {
@@ -41,6 +46,7 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
      * @return builder instance for chained calls
      * @see #configOverrides(io.dropwizard.testing.ConfigOverride...)
      * for using {@link io.dropwizard.testing.ConfigOverride} objects directly
+     * @see #configModifiers(ru.vyarus.dropwizard.guice.test.util.ConfigModifier[])
      */
     public T configOverrides(final String... values) {
         cfg.configOverrides = ConfigOverrideUtils.mergeRaw(cfg.configOverrides, values);
@@ -63,6 +69,7 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
      * @return builder instance for chained calls
      * @see ru.vyarus.dropwizard.guice.test.util.ConfigOverrideValue for an exmample of required implementation
      * @see #configOverride(String, java.util.function.Supplier) for supplier shortcut
+     * @see #configModifiers(ru.vyarus.dropwizard.guice.test.util.ConfigModifier[])
      */
     @SafeVarargs
     public final <K extends ConfigOverride & ConfigurablePrefix> T configOverrides(final K... values) {
@@ -80,6 +87,7 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
      * @param key      configuration key
      * @param supplier value supplier
      * @return builder instance for chained calls
+     * @see #configModifiers(ru.vyarus.dropwizard.guice.test.util.ConfigModifier[])
      */
     public T configOverride(final String key, final Supplier<String> supplier) {
         configOverrides(new ConfigOverrideValue(key, supplier));
@@ -94,6 +102,7 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
      * @param namespace junit storage namespace to resolve value in
      * @param key       value name in namespace and overriding property name
      * @return builder instance for chained calls
+     * @see #configModifiers(ru.vyarus.dropwizard.guice.test.util.ConfigModifier[])
      */
     public T configOverrideByExtension(final ExtensionContext.Namespace namespace, final String key) {
         return configOverrideByExtension(namespace, key, key);
@@ -123,6 +132,7 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
      * @param storageKey value name in namespace
      * @param configPath overriding property name
      * @return builder instance for chained calls
+     * @see #configModifiers(ru.vyarus.dropwizard.guice.test.util.ConfigModifier[])
      */
     public T configOverrideByExtension(final ExtensionContext.Namespace namespace,
                                        final String storageKey,
@@ -169,6 +179,47 @@ public abstract class ExtensionBuilder<T extends ExtensionBuilder, C extends Ext
      */
     public T hooks(final GuiceyConfigurationHook... hooks) {
         cfg.hookInstances(hooks);
+        return self();
+    }
+
+    /**
+     * Configuration modifier is an alternative for configuration override, which is limited for simple
+     * property types (for example, a collection could not be overridden).
+     * <p>
+     * Modifier is called before application run phase. Only logger configuration is applied at this moment (and so you
+     * can't change it). Modifier would work with both yaml and instance-based configurations.
+     * <p>
+     * Method supposed to be used with lambdas and so limited for application configuration class.
+     * For generic configurations (based on configuration subclass or raw {@link io.dropwizard.core.Configuration})
+     * use {@link #configModifiers(Class[])}.
+     *
+     * @param modifiers configuration modifiers
+     * @param <P> configuration type
+     * @return builder instance for chained calls
+     */
+    @SafeVarargs
+    // generic required for cases when the configuration type is not provided (env. setup object)
+    public final <P extends K> T configModifiers(final ConfigModifier<P>... modifiers) {
+        cfg.configModifierInstances(modifiers);
+        return self();
+    }
+
+    /**
+     * Configuration modifier is an alternative for configuration override, which is limited for simple
+     * property types (for example, a collection could not be overridden).
+     * <p>
+     * Modifier is called before application run phase. Only logger configuration is applied at this moment (and so you
+     * can't change it). Modifier would work with both yaml and instance-based configurations.
+     * <p>
+     * Method is useful for generic modifiers (based on configuration subclass or raw
+     * {@link io.dropwizard.core.Configuration}).
+     *
+     * @param modifiers configuration modifiers
+     * @return builder instance for chained calls
+     */
+    @SafeVarargs
+    public final T configModifiers(final Class<? extends ConfigModifier<? extends Configuration>>... modifiers) {
+        cfg.configModifierClasses(modifiers);
         return self();
     }
 

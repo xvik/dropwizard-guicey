@@ -72,6 +72,7 @@ public class TrackersSupport extends AnnotatedTestFieldSetup<TrackBean, Tracker>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void validateBinding(final EventContext context, final AnnotatedField<TrackBean, Tracker> field) {
         final Tracker tracker = Preconditions.checkNotNull(field.getCustomData(FIELD_TRACKER));
         final Binding binding = context.getInjector().getBinding(tracker.getType());
