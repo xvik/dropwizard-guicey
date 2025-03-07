@@ -142,7 +142,7 @@ public final class PrintUtils {
         if (context.getTestInstance().isPresent()) {
             inst = "/ test instance = " + identity(context.getTestInstance().get()) + " /\n";
         }
-        return "\n\\\\\\-----------------------------------------------------------------" + inst;
+        return "\n\\\\\\------------------------------------------------------------" + inst;
     }
 
     @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")

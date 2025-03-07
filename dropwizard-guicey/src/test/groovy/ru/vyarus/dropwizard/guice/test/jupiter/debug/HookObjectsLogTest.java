@@ -40,10 +40,10 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                 "\t\t<lambda>                       \t@EnableHook Base#base2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base2\n" +
                 "\t\tExt1                           \t@TestGuiceyApp(hooks)\n" +
                 "\t\tExt2                           \t@TestGuiceyApp(hooks)\n" +
-                "\t\tExt3                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:166)\n" +
-                "\t\tExt4                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:166)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:167)\n" +
-                "\t\tExt5                           \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:167)\n" +
+                "\t\tExt3                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:152)\n" +
+                "\t\tExt4                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:152)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:153)\n" +
+                "\t\tExt5                           \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:153)\n" +
                 "\t\tRecordedLogsSupport            \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
                 "\t\tRestStubSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
                 "\t\tStubsSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
@@ -54,7 +54,7 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                 "\t\t<lambda>                       \t@EnableHook Test1#ext2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#ext2");
 
         assertThat(output).contains(
-                "Guicey time after [After all] of HookObjectsLogTest$Test1: 111 ms ( + 111 ms)\n" +
+                "Guicey time after [Before each] of HookObjectsLogTest$Test1#test(): 111 ms\n" +
                         "\n" +
                         "\t[Before all]                       : 111 ms\n" +
                         "\t\tGuicey fields search               : 111 ms\n" +
@@ -66,13 +66,6 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
                         "\t\tGuice fields injection             : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
-                        "\n" +
-                        "\t[After each]                       : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
-                        "\n" +
-                        "\t[After all]                        : 111 ms\n" +
-                        "\t\tApplication stop                   : 111 ms\n" +
                         "\t\tListeners execution                : 111 ms\n");
     }
 
@@ -93,14 +86,14 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                 "\tTest hooks = \n" +
                 "\t\t<lambda>                       \t@EnableHook Base#base1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base1\n" +
                 "\t\t<lambda>                       \t@EnableHook Base#base2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base2\n" +
-                "\t\tExt1                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:184)\n" +
-                "\t\tExt2                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:184)\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:185)\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:185)\n" +
-                "\t\tExt3                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:191)\n" +
-                "\t\tExt4                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:191)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:192)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:192)\n" +
+                "\t\tExt1                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:170)\n" +
+                "\t\tExt2                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:170)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:171)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:171)\n" +
+                "\t\tExt3                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:177)\n" +
+                "\t\tExt4                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:177)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:178)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:178)\n" +
                 "\t\tRecordedLogsSupport            \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
                 "\t\tRestStubSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
                 "\t\tStubsSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
@@ -111,7 +104,7 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                 "\t\tExt5                           \t@EnableHook Test2#ext2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#ext2\n");
 
         assertThat(output).contains(
-                "Guicey time after [After all] of HookObjectsLogTest$Test2: 111 ms ( + 111 ms)\n" +
+                "Guicey time after [Before each] of HookObjectsLogTest$Test2#test(): 111 ms\n" +
                         "\n" +
                         "\t[Before all]                       : 111 ms\n" +
                         "\t\tGuicey fields search               : 111 ms\n" +
@@ -123,13 +116,6 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
                         "\t\tGuice fields injection             : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
-                        "\n" +
-                        "\t[After each]                       : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
-                        "\n" +
-                        "\t[After all]                        : 111 ms\n" +
-                        "\t\tApplication stop                   : 111 ms\n" +
                         "\t\tListeners execution                : 111 ms\n");
     }
 
