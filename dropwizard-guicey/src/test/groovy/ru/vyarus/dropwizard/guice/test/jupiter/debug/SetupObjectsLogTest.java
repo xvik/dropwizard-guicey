@@ -2,94 +2,79 @@ package ru.vyarus.dropwizard.guice.test.jupiter.debug;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.platform.testkit.engine.EngineTestKit;
+import ru.vyarus.dropwizard.guice.AbstractPlatformTest;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
-import ru.vyarus.dropwizard.guice.test.TestSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
-import uk.org.webcompere.systemstubs.jupiter.SystemStub;
-import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
-import uk.org.webcompere.systemstubs.stream.SystemOut;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
  * @author Vyacheslav Rusakov
  * @since 29.05.2022
  */
-@ExtendWith(SystemStubsExtension.class)
-public class SetupObjectsLogTest {
-
-    @SystemStub
-    SystemOut out;
+public class SetupObjectsLogTest extends AbstractPlatformTest {
 
     @Test
     void checkSetupOutputForAnnotation() {
-        TestSupport.debugExtensions();
-        EngineTestKit
-                .engine("junit-jupiter")
-                .configurationParameter("junit.jupiter.conditions.deactivate", "org.junit.*DisabledCondition")
-                .selectors(selectClass(Test1.class))
-                .execute()
-                .testEvents()
-                .debug()
-                .assertStatistics(stats -> stats.succeeded(1));
-
-        String output = out.getText().replace("\r", "");
-        System.err.println(output);
-        output = output.replaceAll("\\d+\\.\\d+ ms", "111 ms");
-
-        assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
-                // jdk 21
-                .replaceAll("\\$\\$Lambda/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
-                .replaceAll("\\) {8,}\t", ")        \t"))
-                .contains("Guicey test extensions (Test1.):\n" +
+        String output = run(Test1.class);
+        assertThat(output).contains("Guicey test extensions (Test1.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
-                        "\t\tExt1                         (r.v.d.g.t.j.d.SetupObjectsLogTest)        \t@TestGuiceyApp\n" +
-                        "\t\tExt2                         (r.v.d.g.t.j.d.SetupObjectsLogTest)        \t@TestGuiceyApp\n" +
-                        "\t\tSetupObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Base.base1\n" +
-                        "\t\tSetupObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Base.base2\n" +
-                        "\t\tSetupObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test1.ext1\n" +
-                        "\t\tSetupObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test1.ext2\n");
+                "\t\tExt1                           \t@TestGuiceyApp(setup)\n" +
+                "\t\tExt2                           \t@TestGuiceyApp(setup)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Base#base1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base1\n" +
+                "\t\t<lambda>                       \t@EnableSetup Base#base2                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base2\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test1#ext1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Test1#ext1\n" +
+                "\t\tExt3                           \t@EnableSetup Test1#ext2                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Test1#ext2\n" +
+                "\t\tRecordedLogsSupport            \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tRestStubSupport                \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tStubsSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tMocksSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tSpiesSupport                   \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
+                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
+                "\n" +
+                "\tTest hooks = \n" +
+                "\t\tRecordedLogsSupport            \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tRestStubSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tStubsSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tMocksSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tSpiesSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tTrackersSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n");
     }
 
     @Test
     void checkSetupOutputForManualRegistration() {
-        TestSupport.debugExtensions();
-        EngineTestKit
-                .engine("junit-jupiter")
-                .configurationParameter("junit.jupiter.conditions.deactivate", "org.junit.*DisabledCondition")
-                .selectors(selectClass(Test2.class))
-                .execute()
-                .testEvents()
-                .debug()
-                .assertStatistics(stats -> stats.succeeded(1));
-
-        String output = out.getText().replace("\r", "");
-        System.err.println(output);
-
-        assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
-                // jdk 21
-                .replaceAll("\\$\\$Lambda/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
-                .replaceAll("\\) {8,}\t", ")        \t"))
-                .contains("Guicey test extensions (Test2.):\n" +
+        String output = run(Test2.class);
+        assertThat(output).contains("Guicey test extensions (Test2.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
-                        "\t\tExt1                         (r.v.d.g.t.j.d.SetupObjectsLogTest)        \t@RegisterExtension class\n" +
-                        "\t\tExt2                         (r.v.d.g.t.j.d.SetupObjectsLogTest)        \t@RegisterExtension class\n" +
-                        "\t\tSetupObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
-                        "\t\tSetupObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
-                        "\t\tSetupObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Base.base1\n" +
-                        "\t\tSetupObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Base.base2\n" +
-                        "\t\tSetupObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test2.ext1\n" +
-                        "\t\tSetupObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test2.ext2\n");
+                "\t\tExt1                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:118)\n" +
+                "\t\tExt2                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:118)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:119)\n" +
+                "\t\tExt3                           \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:119)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Base#base1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base1\n" +
+                "\t\t<lambda>                       \t@EnableSetup Base#base2                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base2\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#ext1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Test2#ext1\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#ext2                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Test2#ext2\n" +
+                "\t\tRecordedLogsSupport            \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tRestStubSupport                \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tStubsSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tMocksSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tSpiesSupport                   \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
+                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
+                "\n" +
+                "\tTest hooks = \n" +
+                "\t\tRecordedLogsSupport            \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tRestStubSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tStubsSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tMocksSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tSpiesSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tTrackersSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n");
     }
 
     public static class Base {
@@ -109,14 +94,16 @@ public class SetupObjectsLogTest {
 
     public static class Ext2 extends Ext1 {}
 
+    public static class Ext3 extends Ext1 {}
+
     @Disabled // prevent direct execution
-    @TestGuiceyApp(value = AutoScanApplication.class, setup = {Ext1.class, Ext2.class})
+    @TestGuiceyApp(value = AutoScanApplication.class, setup = {Ext1.class, Ext2.class}, debug = true)
     public static class Test1 extends Base {
 
         @EnableSetup
         static TestEnvironmentSetup ext1 = it -> null;
         @EnableSetup
-        static TestEnvironmentSetup ext2 = it -> null;
+        static TestEnvironmentSetup ext2 = new Ext3();
 
         @Test
         void test() {
@@ -129,7 +116,8 @@ public class SetupObjectsLogTest {
         @RegisterExtension
         static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(AutoScanApplication.class)
                 .setup(Ext1.class, Ext2.class)
-                .setup(it -> null, it -> null)
+                .setup(it -> null, new Ext3())
+                .debug()
                 .create();
 
         @EnableSetup
@@ -140,5 +128,10 @@ public class SetupObjectsLogTest {
         @Test
         void test() {
         }
+    }
+
+    @Override
+    protected String clean(String out) {
+        return out.replaceAll("\\d+\\.\\d+ ms", "111 ms");
     }
 }
