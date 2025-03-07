@@ -32,34 +32,34 @@ public class ListenersSupport {
     }
 
     public void broadcastStart(final ExtensionContext context) {
-        broadcast(listener -> listener.started(new EventContext(context)), false);
+        broadcast(listener -> listener.started(new EventContext(context)));
     }
 
     public void broadcastBeforeAll(final ExtensionContext context) {
-        broadcast(listener -> listener.beforeAll(new EventContext(context)), true);
+        broadcast(listener -> listener.beforeAll(new EventContext(context)));
     }
 
     public void broadcastBefore(final ExtensionContext context) {
-        broadcast(listener -> listener.beforeEach(new EventContext(context)), true);
+        broadcast(listener -> listener.beforeEach(new EventContext(context)));
     }
 
     public void broadcastAfter(final ExtensionContext context) {
-        broadcast(listener -> listener.afterEach(new EventContext(context)), true);
+        broadcast(listener -> listener.afterEach(new EventContext(context)));
     }
 
     public void broadcastAfterAll(final ExtensionContext context) {
-        broadcast(listener -> listener.afterAll(new EventContext(context)), true);
+        broadcast(listener -> listener.afterAll(new EventContext(context)));
     }
 
     public void broadcastStop(final ExtensionContext context) {
-        broadcast(listener -> listener.stopped(new EventContext(context)), false);
+        broadcast(listener -> listener.stopped(new EventContext(context)));
     }
 
-    private void broadcast(final Consumer<TestExecutionListener> action, final boolean append) {
+    private void broadcast(final Consumer<TestExecutionListener> action) {
         if (!listeners.isEmpty()) {
             final Stopwatch timer = Stopwatch.createStarted();
             listeners.forEach(action);
-            tracker.performanceTrack(GuiceyTestTime.TestListeners, timer.elapsed(), append);
+            tracker.performanceTrack(GuiceyTestTime.TestListeners, timer.elapsed());
         }
     }
 }
