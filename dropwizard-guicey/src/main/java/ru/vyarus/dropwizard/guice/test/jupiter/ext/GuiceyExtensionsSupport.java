@@ -500,7 +500,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             parentHookFields = TestFieldUtils.getInheritedFields(ownHookFields);
             ownHookFields.removeAll(parentHookFields);
             if (tracker != null) {
-                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed());
             }
 
             timer.reset().start();
@@ -511,7 +511,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                 extensionFields.forEach(AnnotatedField::requireStatic);
             }
             if (tracker != null) {
-                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed());
             }
         }
 
@@ -535,7 +535,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                                 + "be ignored if reusable app would start by different test: \n{}",
                         testClass.getName(), declarationClass.getName(), Joiner.on("\n").join(wrong));
             }
-            tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+            tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed());
         }
 
         /**
@@ -553,7 +553,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                         testClass.getName(), Joiner.on("\n").join(wrong));
             }
             if (tracker != null) {
-                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed());
             }
         }
 
@@ -564,7 +564,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
                 return extensionFields.isEmpty() ? Collections.emptyList()
                         : TestFieldUtils.getValues(extensionFields, instance);
             } finally {
-                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+                tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed());
             }
         }
 
@@ -573,7 +573,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             // activate hooks declared in base classes
             activateFieldHooks(parentHookFields);
             tracker.hooksFromFields(parentHookFields, true, instance);
-            tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+            tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed());
         }
 
         public void activateClassHooks() {
@@ -581,7 +581,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             // activate all remaining hooks (in test class)
             activateFieldHooks(ownHookFields);
             tracker.hooksFromFields(ownHookFields, false, instance);
-            tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed(), true);
+            tracker.performanceTrack(GuiceyTestTime.GuiceyFieldsSearch, timer.stop().elapsed());
         }
 
         @SuppressWarnings("unchecked")
@@ -607,7 +607,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         private void activateFieldHooks(final List<AnnotatedField<EnableHook, GuiceyConfigurationHook>> fields) {
             final Stopwatch timer = Stopwatch.createStarted();
             HooksUtil.register(TestFieldUtils.getValues(fields, instance));
-            tracker.performanceTrack(GuiceyTestTime.HooksRegistration, timer.elapsed(), true);
+            tracker.performanceTrack(GuiceyTestTime.HooksRegistration, timer.elapsed());
         }
     }
 }

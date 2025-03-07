@@ -30,11 +30,11 @@ public class ConfigOverrideLogTest extends AbstractPlatformTest {
                 "\n" +
                 "Configuration modifiers:\n" +
                 "\t\tCfgModify1                     \t@TestGuiceyApp(configModifiers)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test1#setup.configModifiers(obj)      at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:103)\n" +
-                "\t\tCfgModify2                     \t@EnableSetup Test1#setup.configModifiers(class)    at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:104)");
+                "\t\t<lambda>                       \t@EnableSetup Test1#setup.configModifiers(obj)      at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:89)\n" +
+                "\t\tCfgModify2                     \t@EnableSetup Test1#setup.configModifiers(class)    at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:90)");
 
         assertThat(output).contains(
-                "Guicey time after [After all] of ConfigOverrideLogTest$Test1: 111 ms ( + 111 ms)\n" +
+                "Guicey time after [Before each] of ConfigOverrideLogTest$Test1#test(): 111 ms\n" +
                         "\n" +
                         "\t[Before all]                       : 111 ms\n" +
                         "\t\tGuicey fields search               : 111 ms\n" +
@@ -46,14 +46,7 @@ public class ConfigOverrideLogTest extends AbstractPlatformTest {
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
                         "\t\tGuice fields injection             : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
-                        "\n" +
-                        "\t[After each]                       : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
-                        "\n" +
-                        "\t[After all]                        : 111 ms\n" +
-                        "\t\tApplication stop                   : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n");
+                        "\t\tListeners execution                : 111 ms");
     }
 
     @Test
@@ -65,13 +58,13 @@ public class ConfigOverrideLogTest extends AbstractPlatformTest {
                 "\t                  bar = 11\n" +
                 "\n" +
                 "Configuration modifiers:\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.configModifiers(obj)            at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:118)\n" +
-                "\t\tCfgModify1                     \t@RegisterExtension.configModifiers(class)          at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:119)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test2#setup.configModifiers(obj)      at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:125)\n" +
-                "\t\tCfgModify2                     \t@EnableSetup Test2#setup.configModifiers(class)    at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:126)");
+                "\t\t<lambda>                       \t@RegisterExtension.configModifiers(obj)            at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:104)\n" +
+                "\t\tCfgModify1                     \t@RegisterExtension.configModifiers(class)          at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:105)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.configModifiers(obj)      at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:111)\n" +
+                "\t\tCfgModify2                     \t@EnableSetup Test2#setup.configModifiers(class)    at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:112)");
 
         assertThat(output).contains(
-                "Guicey time after [After all] of ConfigOverrideLogTest$Test2: 111 ms ( + 111 ms)\n" +
+                "Guicey time after [Before each] of ConfigOverrideLogTest$Test2#test(): 111 ms\n" +
                         "\n" +
                         "\t[Before all]                       : 111 ms\n" +
                         "\t\tGuicey fields search               : 111 ms\n" +
@@ -83,13 +76,6 @@ public class ConfigOverrideLogTest extends AbstractPlatformTest {
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
                         "\t\tGuice fields injection             : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
-                        "\n" +
-                        "\t[After each]                       : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
-                        "\n" +
-                        "\t[After all]                        : 111 ms\n" +
-                        "\t\tApplication stop                   : 111 ms\n" +
                         "\t\tListeners execution                : 111 ms\n");
     }
 

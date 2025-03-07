@@ -29,7 +29,7 @@ public class NestedConfigOverrideLogTest extends AbstractPlatformTest {
                 "\t                  foo = 2");
 
         assertThat(output).contains(
-                "Guicey time after [After each] of Inner#test1(): 111 ms ( + 111 ms)\n" +
+                "Guicey time after [Before each] of Inner#test1(): 111 ms\n" +
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
                         "\t\tGuicey fields search               : 111 ms\n" +
@@ -38,11 +38,7 @@ public class NestedConfigOverrideLogTest extends AbstractPlatformTest {
                         "\t\tDropwizardTestSupport creation     : 111 ms\n" +
                         "\t\tApplication start                  : 111 ms\n" +
                         "\t\tListeners execution                : 111 ms\n" +
-                        "\t\tGuice fields injection             : 111 ms\n" +
-                        "\n" +
-                        "\t[After each]                       : 111 ms\n" +
-                        "\t\tApplication stop                   : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n");
+                        "\t\tGuice fields injection             : 111 ms");
     }
 
     public static class Test1 {

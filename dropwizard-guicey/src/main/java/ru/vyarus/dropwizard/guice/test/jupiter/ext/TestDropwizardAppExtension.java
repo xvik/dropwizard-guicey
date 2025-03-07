@@ -144,7 +144,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         TestSetupUtils.executeSetup(config, context, listeners);
         final Stopwatch timer = Stopwatch.createStarted();
         HooksUtil.register(config.hooks);
-        tracker.performanceTrack(GuiceyTestTime.HooksRegistration, timer.elapsed(), true);
+        tracker.performanceTrack(GuiceyTestTime.HooksRegistration, timer.elapsed());
 
         timer.reset().start();
         final Configuration manualConfig = config.getConfiguration(config.configPath);
