@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ import java.util.Map;
  * @author Vyacheslav Rusakov
  * @since 27.05.2022
  */
-@SuppressWarnings("PMD.GodClass")
+@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods"})
 public class TestExtensionsTracker {
 
     /**
@@ -53,17 +54,25 @@ public class TestExtensionsTracker {
 
     private GuiceyTestTime testPhase;
     private Duration lastOverall;
-    private Class<? extends TestEnvironmentSetup> contextHook;
+    private Class<? extends TestEnvironmentSetup> contextSetupObject;
+    // setup object in field could be a lambda, and it could register hook with lambda - need to remember field name
+    // to provide meaningful registration context in the report
+    private final Map<Class<?>, String> fieldSetupObjectsReference = new HashMap<>();
 
-    public void setContextHook(final Class<? extends TestEnvironmentSetup> hook) {
-        contextHook = hook;
+    public void setContextSetupObject(final Class<? extends TestEnvironmentSetup> setup) {
+        contextSetupObject = setup;
     }
 
     @SuppressWarnings("unchecked")
     public final void extensionsFromFields(final List<AnnotatedField<EnableSetup, TestEnvironmentSetup>> fields,
                                            final Object instance) {
-        RegistrationTrackUtils.fromField(extensionsSource, "@" + EnableSetup.class.getSimpleName(),
+        final String prefix = "@" + EnableSetup.class.getSimpleName();
+        RegistrationTrackUtils.fromField(extensionsSource, prefix,
                 (List<AnnotatedField<?, ?>>) (List) fields, instance);
+        // store meaningful names to clearly identify lambda hook registration source
+        fields.forEach(field -> fieldSetupObjectsReference
+                .put(field.getCachedValue().getClass(), prefix + " "
+                        + RegistrationTrackUtils.getFieldDescriptor(field)));
     }
 
     @SafeVarargs
@@ -72,7 +81,7 @@ public class TestExtensionsTracker {
         // sync actual extension registration order with tracking info
         final List<String> tmp = new ArrayList<>(extensionsSource);
         extensionsSource.clear();
-        RegistrationTrackUtils.fromClass(extensionsSource, "@" + ann.getSimpleName(), exts);
+        RegistrationTrackUtils.fromClass(extensionsSource, "@" + ann.getSimpleName() + "(setup)", exts, true);
         extensionsSource.addAll(tmp);
     }
 
@@ -95,18 +104,24 @@ public class TestExtensionsTracker {
     @SafeVarargs
     public final void hooksFromAnnotation(final Class<? extends Annotation> ann,
                                           final Class<? extends GuiceyConfigurationHook>... exts) {
-        RegistrationTrackUtils.fromClass(hooksSource, "@" + ann.getSimpleName(), exts);
+        RegistrationTrackUtils.fromClass(hooksSource, "@" + ann.getSimpleName() + "(hooks)", exts, true);
     }
 
     public final void extensionInstances(final TestEnvironmentSetup... exts) {
-        RegistrationTrackUtils.fromInstance(extensionsSource, String.format("@%s instance",
+        RegistrationTrackUtils.fromInstance(extensionsSource, String.format("@%s.setup(obj)",
                 RegisterExtension.class.getSimpleName()), exts);
     }
 
     @SafeVarargs
     public final void extensionClasses(final Class<? extends TestEnvironmentSetup>... exts) {
-        RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s class",
-                RegisterExtension.class.getSimpleName()), exts);
+        RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s.setup(class)",
+                RegisterExtension.class.getSimpleName()), exts, false);
+    }
+
+    @SafeVarargs
+    public final List<TestEnvironmentSetup> lookupExtensions(final TestEnvironmentSetup... exts) {
+        RegistrationTrackUtils.fromInstance(extensionsSource, "lookup (service loader)", exts);
+        return Arrays.asList(exts);
     }
 
     @SafeVarargs
@@ -116,27 +131,30 @@ public class TestExtensionsTracker {
     }
 
     public final void hookInstances(final GuiceyConfigurationHook... exts) {
-        RegistrationTrackUtils.fromInstance(hooksSource, String.format("%s instance", getHookContext()), exts);
+        RegistrationTrackUtils.fromInstance(hooksSource, String.format("%s.hooks(obj)", getHookContext()), exts);
     }
 
     @SafeVarargs
     public final void hookClasses(final Class<? extends GuiceyConfigurationHook>... exts) {
-        RegistrationTrackUtils.fromClass(hooksSource, String.format("%s class", getHookContext()), exts);
+        RegistrationTrackUtils.fromClass(hooksSource, String.format("%s.hooks(class)", getHookContext()), exts, false);
     }
 
     @SafeVarargs
     public final void configModifiersFromAnnotation(final Class<? extends Annotation> ann,
-                                          final Class<? extends ConfigModifier>... exts) {
-        RegistrationTrackUtils.fromClass(configModifierSource, "@" + ann.getSimpleName(), exts);
+                                                    final Class<? extends ConfigModifier>... exts) {
+        RegistrationTrackUtils.fromClass(configModifierSource, "@" + ann.getSimpleName() + "(configModifiers)",
+                exts, true);
     }
 
     @SafeVarargs
     public final void configModifierClasses(final Class<? extends ConfigModifier>... mods) {
-        RegistrationTrackUtils.fromClass(configModifierSource, String.format("%s class", getHookContext()), mods);
+        RegistrationTrackUtils.fromClass(configModifierSource, String.format("%s.configModifiers(class)",
+                getHookContext()), mods, false);
     }
 
     public final void configModifierInstances(final ConfigModifier... exts) {
-        RegistrationTrackUtils.fromInstance(configModifierSource, String.format("%s instance", getHookContext()), exts);
+        RegistrationTrackUtils.fromInstance(configModifierSource, String.format("%s.configModifiers(obj)",
+                getHookContext()), exts);
     }
 
     public void lifecyclePhase(final ExtensionContext context, final GuiceyTestTime phase) {
@@ -188,12 +206,6 @@ public class TestExtensionsTracker {
                 res.append("\tTest hooks = \n");
                 logTracks(res, hooksSource);
             }
-
-            if (!configModifierSource.isEmpty()) {
-                res.append("\tConfig modifiers = \n");
-                logTracks(res, configModifierSource);
-            }
-
             System.out.println(res);
         }
     }
@@ -206,7 +218,7 @@ public class TestExtensionsTracker {
     @SuppressWarnings("PMD.SystemPrintln")
     public void logOverriddenConfigs(final String configPrefix) {
         if (debug) {
-            final StringBuilder res = new StringBuilder();
+            final StringBuilder res = new StringBuilder(100);
             for (Map.Entry<Object, Object> entry : System.getProperties().entrySet()) {
                 final String key = (String) entry.getKey();
                 if (key.startsWith(configPrefix)) {
@@ -214,9 +226,16 @@ public class TestExtensionsTracker {
                             key.substring(configPrefix.length() + 1), entry.getValue()));
                 }
             }
-            if (!res.isEmpty()) {
-                System.out.println("\nApplied configuration overrides (" + configPrefix + ".): \n\n" + res);
+
+            final boolean hasOverrides = !res.isEmpty();
+
+            if (!configModifierSource.isEmpty()) {
+                res.append("\nConfiguration modifiers:\n");
+                logTracks(res, configModifierSource);
             }
+
+            System.out.println((hasOverrides ? "\nConfiguration overrides (" + configPrefix + ".):\n" : "")
+                    + res);
         }
     }
 
@@ -253,12 +272,20 @@ public class TestExtensionsTracker {
         }
     }
 
-
     private String getHookContext() {
         // hook might be registered from manual extension in filed or within setup object and in this case
         // tracking setup object class
-        return contextHook != null
-                ? RenderUtils.getClassName(contextHook) : "@" + RegisterExtension.class.getSimpleName();
+        String res;
+        if (contextSetupObject != null) {
+            // special case: hook registartion under setup object from @EnableSetup field (both could be lambda)
+            res = fieldSetupObjectsReference.get(contextSetupObject);
+            if (res == null) {
+                res = RenderUtils.getClassName(contextSetupObject);
+            }
+        } else {
+            res = "@" + RegisterExtension.class.getSimpleName();
+        }
+        return res;
     }
 
     private void logTracks(final StringBuilder res, final List<String> tracks) {

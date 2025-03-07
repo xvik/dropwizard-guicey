@@ -201,6 +201,15 @@ public class AnnotatedField<A extends Annotation, T> {
     }
 
     /**
+     * Use this method to avoid duplicate value readings when you're SURE that value was already resolved.
+     *
+     * @return last obtained or set value
+     */
+    public Object getCachedValue() {
+        return cachedValue;
+    }
+
+    /**
      * Required to prevent incorrect usage (field resolution with a wrong instance).
      *
      * @param instance instance to check

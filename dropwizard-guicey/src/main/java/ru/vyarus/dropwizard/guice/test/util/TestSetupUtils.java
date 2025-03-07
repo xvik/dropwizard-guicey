@@ -70,8 +70,6 @@ public final class TestSetupUtils {
             final ExtensionContext.Store store = context.getStore(
                     ExtensionContext.Namespace.create(TestEnvironmentSetup.class));
             for (TestEnvironmentSetup support : config.extensions) {
-                // required to recognize hooks registered from setup objects
-                config.tracker.setContextHook(support.getClass());
                 final Object res = setup(support, config, builder);
                 // method could return anything, but only closable object would be tracked
                 if (res instanceof AutoCloseable || res instanceof ExtensionContext.Store.CloseableResource) {
@@ -101,6 +99,8 @@ public final class TestSetupUtils {
     private static Object setup(final TestEnvironmentSetup support,
                                 final ExtensionConfig config,
                                 final TestExtension builder) {
+        // required to recognize hooks registered from setup objects
+        config.tracker.setContextSetupObject(support.getClass());
         final Object res = support.setup(builder);
         // auto registration of hook (note: hook still might be registered from @EnableHook annotation in the same
         // class, but only one hook instance would be used - only two records would be in debug)
@@ -111,6 +111,7 @@ public final class TestSetupUtils {
         if (support instanceof TestExecutionListener) {
             builder.listen((TestExecutionListener) support);
         }
+        config.tracker.setContextSetupObject(null);
         return res;
     }
 

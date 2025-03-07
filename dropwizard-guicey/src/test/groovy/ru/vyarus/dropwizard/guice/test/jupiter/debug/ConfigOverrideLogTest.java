@@ -2,49 +2,36 @@ package ru.vyarus.dropwizard.guice.test.jupiter.debug;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.platform.testkit.engine.EngineTestKit;
+import ru.vyarus.dropwizard.guice.AbstractPlatformTest;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
-import ru.vyarus.dropwizard.guice.test.TestSupport;
+import ru.vyarus.dropwizard.guice.support.TestConfiguration;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
+import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
-import uk.org.webcompere.systemstubs.jupiter.SystemStub;
-import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
-import uk.org.webcompere.systemstubs.stream.SystemOut;
+import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
  * @author Vyacheslav Rusakov
  * @since 25.06.2022
  */
-@ExtendWith(SystemStubsExtension.class)
-public class ConfigOverrideLogTest {
-
-    @SystemStub
-    SystemOut out;
+public class ConfigOverrideLogTest extends AbstractPlatformTest {
 
     @Test
     void checkSetupOutputForAnnotation() {
-        TestSupport.debugExtensions();
-        EngineTestKit
-                .engine("junit-jupiter")
-                .configurationParameter("junit.jupiter.conditions.deactivate", "org.junit.*DisabledCondition")
-                .selectors(selectClass(Test1.class))
-                .execute()
-                .testEvents()
-                .debug()
-                .assertStatistics(stats -> stats.succeeded(1));
+        String output = run(Test1.class);
 
-        String output = out.getText().replace("\r", "");
-        System.err.println(output);
-        output = output.replaceAll("\\d+\\.\\d+ ms", "111 ms");
-
-        assertThat(output).contains("Applied configuration overrides (Test1.): \n" +
+        assertThat(output).contains("Configuration overrides (Test1.):\n" +
+                "\t                  bar = 11\n" +
+                "\t                  foo = 1\n" +
                 "\n" +
-                "\t                  foo = 1");
+                "Configuration modifiers:\n" +
+                "\t\tCfgModify1                     \t@TestGuiceyApp(configModifiers)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test1#setup.configModifiers(obj)      at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:103)\n" +
+                "\t\tCfgModify2                     \t@EnableSetup Test1#setup.configModifiers(class)    at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:104)");
 
         assertThat(output).contains(
                 "Guicey time after [After all] of ConfigOverrideLogTest$Test1: 111 ms ( + 111 ms)\n" +
@@ -71,23 +58,17 @@ public class ConfigOverrideLogTest {
 
     @Test
     void checkSetupOutputForManualRegistration() {
-        TestSupport.debugExtensions();
-        EngineTestKit
-                .engine("junit-jupiter")
-                .configurationParameter("junit.jupiter.conditions.deactivate", "org.junit.*DisabledCondition")
-                .selectors(selectClass(Test2.class))
-                .execute()
-                .testEvents()
-                .debug()
-                .assertStatistics(stats -> stats.succeeded(1));
+        String output = run(Test2.class);
 
-        String output = out.getText().replace("\r", "");
-        System.err.println(output);
-        output = output.replaceAll("\\d+\\.\\d+ ms", "111 ms");
-
-        assertThat(output).contains("Applied configuration overrides (Test2.): \n" +
+        assertThat(output).contains("Configuration overrides (Test2.):\n" +
+                "\t                  foo = 2\n" +
+                "\t                  bar = 11\n" +
                 "\n" +
-                "\t                  foo = 2");
+                "Configuration modifiers:\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.configModifiers(obj)            at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:118)\n" +
+                "\t\tCfgModify1                     \t@RegisterExtension.configModifiers(class)          at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:119)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.configModifiers(obj)      at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:125)\n" +
+                "\t\tCfgModify2                     \t@EnableSetup Test2#setup.configModifiers(class)    at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:126)");
 
         assertThat(output).contains(
                 "Guicey time after [After all] of ConfigOverrideLogTest$Test2: 111 ms ( + 111 ms)\n" +
@@ -113,8 +94,15 @@ public class ConfigOverrideLogTest {
     }
 
     @Disabled // prevent direct execution
-    @TestGuiceyApp(value = AutoScanApplication.class, configOverride = "foo: 1", debug = true)
+    @TestGuiceyApp(value = AutoScanApplication.class, configOverride = "foo: 1",
+            configModifiers = CfgModify1.class, debug = true)
     public static class Test1 {
+
+        @EnableSetup
+        static TestEnvironmentSetup setup = ext ->
+                ext.configModifiers(config -> {})
+                        .configModifiers(CfgModify2.class)
+                        .configOverride("bar", "11");
 
         @Test
         void test() {
@@ -127,12 +115,33 @@ public class ConfigOverrideLogTest {
         @RegisterExtension
         static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(AutoScanApplication.class)
                 .configOverrides("foo: 2")
+                .configModifiers(config -> {})
+                .configModifiers(CfgModify1.class)
                 .debug()
                 .create();
+
+        @EnableSetup
+        static TestEnvironmentSetup setup = ext -> ext
+                .configModifiers(config -> {})
+                .configModifiers(CfgModify2.class)
+                .configOverride("bar", "11");
 
         @Test
         void test() {
         }
 
+    }
+
+    public static class CfgModify1 implements ConfigModifier<TestConfiguration> {
+        @Override
+        public void modify(TestConfiguration config) throws Exception {
+        }
+    }
+
+    public static class CfgModify2 extends CfgModify1 {}
+
+    @Override
+    protected String clean(String out) {
+        return out.replaceAll("\\d+\\.\\d+ ms", "111 ms");
     }
 }
