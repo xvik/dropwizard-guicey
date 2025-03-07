@@ -422,9 +422,10 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
     private List<TestEnvironmentSetup> addDefaultSetupObjects(final List<TestEnvironmentSetup> fields,
                                                               final boolean useDefaultExtensions) {
-        final List<TestEnvironmentSetup> res = new ArrayList<>();
+        // fields resolution already tracked, so they must be registered first
+        final List<TestEnvironmentSetup> res = new ArrayList<>(fields);
         if (useDefaultExtensions) {
-            res.addAll(tracker.defaultExtensions(
+            res.addAll(tracker.lookupExtensions(
                     TestSetupUtils.lookup()
             ));
             // extensions use aop and so must go last
@@ -434,7 +435,6 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             ));
 
         }
-        res.addAll(fields);
         return res;
     }
 

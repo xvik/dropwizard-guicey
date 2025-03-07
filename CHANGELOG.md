@@ -24,6 +24,7 @@
     - Predicates for exact type (module, bundle etc.) in Disables now raise item type to simplify further declarations 
 * Test improvements:
   - Track guicey test extensions time (would appear when debug option enabled)
+  - Improve debug report: setup objects and hooks registration point are clear now (with direct code links) 
   - Add injectOnce option into test extensions to call injectMemebers once per test instance 
    (useful when TestInstance.Lifecycle.PER_CLASS used) (discussion #394)
   - Add getJunitContext() method for TestEnvironmentSetup (@EnableSetup) to be able to configure

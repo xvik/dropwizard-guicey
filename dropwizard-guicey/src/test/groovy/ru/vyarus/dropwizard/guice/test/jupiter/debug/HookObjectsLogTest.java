@@ -2,81 +2,56 @@ package ru.vyarus.dropwizard.guice.test.jupiter.debug;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.platform.testkit.engine.EngineTestKit;
+import ru.vyarus.dropwizard.guice.AbstractPlatformTest;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
-import ru.vyarus.dropwizard.guice.test.TestSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.EnableSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
-import uk.org.webcompere.systemstubs.jupiter.SystemStub;
-import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
-import uk.org.webcompere.systemstubs.stream.SystemOut;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
  * @author Vyacheslav Rusakov
  * @since 29.05.2022
  */
-@ExtendWith(SystemStubsExtension.class)
-public class HookObjectsLogTest {
-
-    @SystemStub
-    SystemOut out;
+public class HookObjectsLogTest extends AbstractPlatformTest {
 
     @Test
     void checkSetupOutputForAnnotation() {
-        TestSupport.debugExtensions();
-        EngineTestKit
-                .engine("junit-jupiter")
-                .configurationParameter("junit.jupiter.conditions.deactivate", "org.junit.*DisabledCondition")
-                .selectors(selectClass(Test1.class))
-                .execute()
-                .testEvents()
-                .debug()
-                .assertStatistics(stats -> stats.succeeded(1));
-
-        String output = out.getText().replace("\r", "");
-        System.err.println(output);
-        output = output.replaceAll("\\d+\\.\\d+ ms", "111 ms");
-
-        assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
-                .replaceAll("\\) {8,}\t", ")        \t"))
-                .contains("Guicey test extensions (Test1.):\n" +
+        String output = run(Test1.class);
+        assertThat(output).contains("Guicey test extensions (Test1.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test1.setup\n" +
-                        "\t\tRecordedLogsSupport          (r.v.d.g.t.j.ext.log)        \tdefault extension\n" +
-                        "\t\tRestStubSupport              (r.v.d.g.t.j.ext.rest)        \tdefault extension\n" +
-                        "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tdefault extension\n" +
-                        "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tdefault extension\n" +
-                        "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tdefault extension\n" +
-                        "\t\tTrackersSupport              (r.v.d.g.t.j.e.track)        \tdefault extension\n" +
-                        "\n" +
-                        "\tTest hooks = \n" +
-                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base1\n" +
-                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base2\n" +
-                        "\t\tExt1                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
-                        "\t\tExt2                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@TestGuiceyApp\n" +
-                        "\t\tRecordedLogsSupport          (r.v.d.g.t.j.ext.log)        \tRecordedLogsSupport instance\n" +
-                        "\t\tRestStubSupport              (r.v.d.g.t.j.ext.rest)        \tRestStubSupport instance\n" +
-                        "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tStubsSupport instance\n" +
-                        "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tMocksSupport instance\n" +
-                        "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tSpiesSupport instance\n" +
-                        "\t\tTrackersSupport              (r.v.d.g.t.j.e.track)        \tTrackersSupport instance\n" +
-                        "\t\tExt3                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 class\n" +
-                        "\t\tExt4                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 class\n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test1$$Lambda$111/1111111 instance\n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext1\n" +
-                        "\t\tHookObjectsLogTest$Test1$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test1.ext2");
+                "\t\t<lambda>                       \t@EnableSetup Test1#setup                           at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#setup\n" +
+                "\t\tRecordedLogsSupport            \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tRestStubSupport                \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tStubsSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tMocksSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tSpiesSupport                   \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
+                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
+                "\n" +
+                "\tTest hooks = \n" +
+                "\t\t<lambda>                       \t@EnableHook Base#base1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base1\n" +
+                "\t\t<lambda>                       \t@EnableHook Base#base2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base2\n" +
+                "\t\tExt1                           \t@TestGuiceyApp(hooks)\n" +
+                "\t\tExt2                           \t@TestGuiceyApp(hooks)\n" +
+                "\t\tExt3                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:166)\n" +
+                "\t\tExt4                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:166)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:167)\n" +
+                "\t\tExt5                           \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:167)\n" +
+                "\t\tRecordedLogsSupport            \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tRestStubSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tStubsSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tMocksSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tSpiesSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tTrackersSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\t<lambda>                       \t@EnableHook Test1#ext1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#ext1\n" +
+                "\t\t<lambda>                       \t@EnableHook Test1#ext2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#ext2");
 
         assertThat(output).contains(
                 "Guicey time after [After all] of HookObjectsLogTest$Test1: 111 ms ( + 111 ms)\n" +
@@ -103,52 +78,37 @@ public class HookObjectsLogTest {
 
     @Test
     void checkSetupOutputForManualRegistration() {
-        TestSupport.debugExtensions();
-        EngineTestKit
-                .engine("junit-jupiter")
-                .configurationParameter("junit.jupiter.conditions.deactivate", "org.junit.*DisabledCondition")
-                .selectors(selectClass(Test2.class))
-                .execute()
-                .testEvents()
-                .debug()
-                .assertStatistics(stats -> stats.succeeded(1));
-
-        String output = out.getText().replace("\r", "");
-        System.err.println(output);
-        output = output.replaceAll("\\d+\\.\\d+ ms", "111 ms");
-
-        assertThat(output.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
-                .replaceAll("\\) {8,}\t", ")        \t"))
-                .contains("Guicey test extensions (Test2.):\n" +
+        String output = run(Test2.class);
+        assertThat(output).contains("Guicey test extensions (Test2.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableSetup field Test2.setup\n" +
-                        "\t\tRecordedLogsSupport          (r.v.d.g.t.j.ext.log)        \tdefault extension\n" +
-                        "\t\tRestStubSupport              (r.v.d.g.t.j.ext.rest)        \tdefault extension\n" +
-                        "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tdefault extension\n" +
-                        "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tdefault extension\n" +
-                        "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tdefault extension\n" +
-                        "\t\tTrackersSupport              (r.v.d.g.t.j.e.track)        \tdefault extension\n" +
-                        "\n" +
-                        "\tTest hooks = \n" +
-                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base1\n" +
-                        "\t\tHookObjectsLogTest$Base$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Base.base2\n" +
-                        "\t\tExt1                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@RegisterExtension class\n" +
-                        "\t\tExt2                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \t@RegisterExtension class\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@RegisterExtension instance\n" +
-                        "\t\tRecordedLogsSupport          (r.v.d.g.t.j.ext.log)        \tRecordedLogsSupport instance\n" +
-                        "\t\tRestStubSupport              (r.v.d.g.t.j.ext.rest)        \tRestStubSupport instance\n" +
-                        "\t\tStubsSupport                 (r.v.d.g.t.j.ext.stub)        \tStubsSupport instance\n" +
-                        "\t\tMocksSupport                 (r.v.d.g.t.j.ext.mock)        \tMocksSupport instance\n" +
-                        "\t\tSpiesSupport                 (r.v.d.g.t.j.ext.spy)        \tSpiesSupport instance\n" +
-                        "\t\tTrackersSupport              (r.v.d.g.t.j.e.track)        \tTrackersSupport instance\n" +
-                        "\t\tExt3                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 class\n" +
-                        "\t\tExt4                         (r.v.d.g.t.j.d.HookObjectsLogTest)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 class\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \tHookObjectsLogTest$Test2$$Lambda$111/1111111 instance\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test2.ext1\n" +
-                        "\t\tHookObjectsLogTest$Test2$$Lambda$111/1111111 (r.v.d.g.t.j.debug)        \t@EnableHook field Test2.ext2\n");
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup                           at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#setup\n" +
+                "\t\tRecordedLogsSupport            \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tRestStubSupport                \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tStubsSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tMocksSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
+                "\t\tSpiesSupport                   \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
+                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
+                "\n" +
+                "\tTest hooks = \n" +
+                "\t\t<lambda>                       \t@EnableHook Base#base1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base1\n" +
+                "\t\t<lambda>                       \t@EnableHook Base#base2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base2\n" +
+                "\t\tExt1                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:184)\n" +
+                "\t\tExt2                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:184)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:185)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:185)\n" +
+                "\t\tExt3                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:191)\n" +
+                "\t\tExt4                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:191)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:192)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:192)\n" +
+                "\t\tRecordedLogsSupport            \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tRestStubSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tStubsSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tMocksSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tSpiesSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tTrackersSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\t<lambda>                       \t@EnableHook Test2#ext1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#ext1\n" +
+                "\t\tExt5                           \t@EnableHook Test2#ext2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#ext2\n");
 
         assertThat(output).contains(
                 "Guicey time after [After all] of HookObjectsLogTest$Test2: 111 ms ( + 111 ms)\n" +
@@ -194,15 +154,17 @@ public class HookObjectsLogTest {
 
     public static class Ext4 extends Ext1 {}
 
+    public static class Ext5 extends Ext1 {}
+
 
     @Disabled // prevent direct execution
-    @TestGuiceyApp(value = AutoScanApplication.class, hooks = {Ext1.class, Ext2.class})
+    @TestGuiceyApp(value = AutoScanApplication.class, hooks = {Ext1.class, Ext2.class}, debug = true)
     public static class Test1 extends Base {
 
         @EnableSetup
         static TestEnvironmentSetup setup = it -> it
                 .hooks(Ext3.class, Ext4.class)
-                .hooks(t -> {}, t -> {});
+                .hooks(t -> {}, new Ext5());
 
         @EnableHook
         static GuiceyConfigurationHook ext1 = it -> {};
@@ -221,6 +183,7 @@ public class HookObjectsLogTest {
         static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(AutoScanApplication.class)
                 .hooks(Ext1.class, Ext2.class)
                 .hooks(it -> {}, it -> {})
+                .debug()
                 .create();
 
         @EnableSetup
@@ -231,10 +194,15 @@ public class HookObjectsLogTest {
         @EnableHook
         static GuiceyConfigurationHook ext1 = it -> {};
         @EnableHook
-        static GuiceyConfigurationHook ext2 = it -> {};
+        static GuiceyConfigurationHook ext2 = new Ext5();
 
         @Test
         void test() {
         }
+    }
+
+    @Override
+    protected String clean(String out) {
+        return out.replaceAll("\\d+\\.\\d+ ms", "111 ms");
     }
 }
