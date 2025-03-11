@@ -30,8 +30,8 @@ public class ConfigOverrideLogTest extends AbstractPlatformTest {
                 "\n" +
                 "Configuration modifiers:\n" +
                 "\t\tCfgModify1                     \t@TestGuiceyApp(configModifiers)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test1#setup.configModifiers(obj)      at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:89)\n" +
-                "\t\tCfgModify2                     \t@EnableSetup Test1#setup.configModifiers(class)    at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:90)");
+                "\t\t<lambda>                       \t@EnableSetup Test1#setup.configModifiers(obj)      at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:85)\n" +
+                "\t\tCfgModify2                     \t@EnableSetup Test1#setup.configModifiers(class)    at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:86)");
 
         assertThat(output).contains(
                 "Guicey time after [Before each] of ConfigOverrideLogTest$Test1#test(): 111 ms\n" +
@@ -42,11 +42,9 @@ public class ConfigOverrideLogTest extends AbstractPlatformTest {
                         "\t\tGuicey setup objects execution     : 111 ms\n" +
                         "\t\tDropwizardTestSupport creation     : 111 ms\n" +
                         "\t\tApplication start                  : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
-                        "\t\tGuice fields injection             : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms");
+                        "\t\tGuice fields injection             : 111 ms\n");
     }
 
     @Test
@@ -58,10 +56,10 @@ public class ConfigOverrideLogTest extends AbstractPlatformTest {
                 "\t                  bar = 11\n" +
                 "\n" +
                 "Configuration modifiers:\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.configModifiers(obj)            at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:104)\n" +
-                "\t\tCfgModify1                     \t@RegisterExtension.configModifiers(class)          at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:105)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test2#setup.configModifiers(obj)      at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:111)\n" +
-                "\t\tCfgModify2                     \t@EnableSetup Test2#setup.configModifiers(class)    at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:112)");
+                "\t\t<lambda>                       \t@RegisterExtension.configModifiers(obj)            at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:100)\n" +
+                "\t\tCfgModify1                     \t@RegisterExtension.configModifiers(class)          at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:101)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.configModifiers(obj)      at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:107)\n" +
+                "\t\tCfgModify2                     \t@EnableSetup Test2#setup.configModifiers(class)    at r.v.d.g.t.j.d.ConfigOverrideLogTest.(ConfigOverrideLogTest.java:108)");
 
         assertThat(output).contains(
                 "Guicey time after [Before each] of ConfigOverrideLogTest$Test2#test(): 111 ms\n" +
@@ -72,11 +70,9 @@ public class ConfigOverrideLogTest extends AbstractPlatformTest {
                         "\t\tGuicey setup objects execution     : 111 ms\n" +
                         "\t\tDropwizardTestSupport creation     : 111 ms\n" +
                         "\t\tApplication start                  : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
-                        "\t\tGuice fields injection             : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n");
+                        "\t\tGuice fields injection             : 111 ms\n");
     }
 
     @Disabled // prevent direct execution

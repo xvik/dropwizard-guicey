@@ -74,10 +74,6 @@ public class TestExtension extends ExtensionBuilder<Configuration, TestExtension
      * a closable object from setup), but writing a separate junit extension is not desirable.
      * Moreover, this listener is synchronized with guicey extension lifecycle.
      * <p>
-     * If {@link ru.vyarus.dropwizard.guice.test.GuiceyTestSupport} object implements listener interface directly,
-     * it would be registered as listener automatically. Still, manual registration ({@code listen(this)}) would
-     * not be a mistake (no duplicate appears).
-     * <p>
      * Listener could also be registered with lambdas using on* methods like
      * {@link #onApplicationStart(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.lambda.LambdaTestListener)}.
      * Lambda version might be more convenient in case when setup object is a lambda itself.

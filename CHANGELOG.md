@@ -41,8 +41,6 @@
     * TestSupport.build(App.class).runCoreWithoutManaged(..)
   - Add annotated fields search api in test class for setup objects (TestEnvironmentSetup): findFields(..)
     (to simplify writing annotation-driven extensions).
-  - If setup object (TestEnvironmentSetup) implements hook and/or listener interface, it would be
-    registered automatically as hook and/or listener.
   - Add debug state into setup object (TestEnvironmentSetup) so setup objects could
     show debug output when debug opion is enabled on guicey extension
   - Add shortcut method isApplicationStartedForClass() for TestEnvironmentSetup to simplify beforeAll/beforeEach 

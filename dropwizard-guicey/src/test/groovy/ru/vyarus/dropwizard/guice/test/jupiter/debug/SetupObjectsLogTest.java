@@ -36,15 +36,7 @@ public class SetupObjectsLogTest extends AbstractPlatformTest {
                 "\t\tStubsSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
                 "\t\tMocksSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
                 "\t\tSpiesSupport                   \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
-                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
-                "\n" +
-                "\tTest hooks = \n" +
-                "\t\tRecordedLogsSupport            \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tRestStubSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tStubsSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tMocksSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tSpiesSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tTrackersSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n");
+                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n");
     }
 
     @Test
@@ -53,10 +45,10 @@ public class SetupObjectsLogTest extends AbstractPlatformTest {
         assertThat(output).contains("Guicey test extensions (Test2.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
-                "\t\tExt1                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:118)\n" +
-                "\t\tExt2                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:118)\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:119)\n" +
-                "\t\tExt3                           \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:119)\n" +
+                "\t\tExt1                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:102)\n" +
+                "\t\tExt2                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:102)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:103)\n" +
+                "\t\tExt3                           \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:103)\n" +
                 "\t\t<lambda>                       \t@EnableSetup Base#base1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base1\n" +
                 "\t\t<lambda>                       \t@EnableSetup Base#base2                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base2\n" +
                 "\t\t<lambda>                       \t@EnableSetup Test2#ext1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Test2#ext1\n" +
@@ -66,15 +58,7 @@ public class SetupObjectsLogTest extends AbstractPlatformTest {
                 "\t\tStubsSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
                 "\t\tMocksSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
                 "\t\tSpiesSupport                   \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
-                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
-                "\n" +
-                "\tTest hooks = \n" +
-                "\t\tRecordedLogsSupport            \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tRestStubSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tStubsSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tMocksSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tSpiesSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tTrackersSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n");
+                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n");
     }
 
     public static class Base {
