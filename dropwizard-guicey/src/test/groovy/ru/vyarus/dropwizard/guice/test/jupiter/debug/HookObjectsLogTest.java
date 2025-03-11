@@ -40,16 +40,10 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                 "\t\t<lambda>                       \t@EnableHook Base#base2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base2\n" +
                 "\t\tExt1                           \t@TestGuiceyApp(hooks)\n" +
                 "\t\tExt2                           \t@TestGuiceyApp(hooks)\n" +
-                "\t\tExt3                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:152)\n" +
-                "\t\tExt4                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:152)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:153)\n" +
-                "\t\tExt5                           \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:153)\n" +
-                "\t\tRecordedLogsSupport            \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tRestStubSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tStubsSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tMocksSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tSpiesSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tTrackersSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tExt3                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:136)\n" +
+                "\t\tExt4                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:136)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:137)\n" +
+                "\t\tExt5                           \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:137)\n" +
                 "\t\t<lambda>                       \t@EnableHook Test1#ext1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#ext1\n" +
                 "\t\t<lambda>                       \t@EnableHook Test1#ext2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#ext2");
 
@@ -62,11 +56,9 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                         "\t\tGuicey setup objects execution     : 111 ms\n" +
                         "\t\tDropwizardTestSupport creation     : 111 ms\n" +
                         "\t\tApplication start                  : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
-                        "\t\tGuice fields injection             : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n");
+                        "\t\tGuice fields injection             : 111 ms\n");
     }
 
     @Test
@@ -86,20 +78,14 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                 "\tTest hooks = \n" +
                 "\t\t<lambda>                       \t@EnableHook Base#base1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base1\n" +
                 "\t\t<lambda>                       \t@EnableHook Base#base2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base2\n" +
-                "\t\tExt1                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:170)\n" +
-                "\t\tExt2                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:170)\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:171)\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:171)\n" +
-                "\t\tExt3                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:177)\n" +
-                "\t\tExt4                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:177)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:178)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:178)\n" +
-                "\t\tRecordedLogsSupport            \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tRestStubSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tStubsSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tMocksSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tSpiesSupport                   \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
-                "\t\tTrackersSupport                \tauto recognition                                   at r.v.d.g.test.util.(TestSetupUtils.java:108)\n" +
+                "\t\tExt1                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:154)\n" +
+                "\t\tExt2                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:154)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:155)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:155)\n" +
+                "\t\tExt3                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:161)\n" +
+                "\t\tExt4                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:161)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:162)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:162)\n" +
                 "\t\t<lambda>                       \t@EnableHook Test2#ext1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#ext1\n" +
                 "\t\tExt5                           \t@EnableHook Test2#ext2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#ext2\n");
 
@@ -112,11 +98,9 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                         "\t\tGuicey setup objects execution     : 111 ms\n" +
                         "\t\tDropwizardTestSupport creation     : 111 ms\n" +
                         "\t\tApplication start                  : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
                         "\n" +
                         "\t[Before each]                      : 111 ms\n" +
-                        "\t\tGuice fields injection             : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n");
+                        "\t\tGuice fields injection             : 111 ms\n");
     }
 
     public static class Base {

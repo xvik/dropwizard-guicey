@@ -31,12 +31,6 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms)\n" +
                 "\t\t\t\tBundle builder time                : 111 ms\n" +
                 "\t\t\t\tHooks processing                   : 111 ms\n" +
-                "\t\t\t\t\tRecordedLogsSupport                : 111 ms\n" +
-                "\t\t\t\t\tRestStubSupport                    : 111 ms\n" +
-                "\t\t\t\t\tStubsSupport                       : 111 ms\n" +
-                "\t\t\t\t\tMocksSupport                       : 111 ms\n" +
-                "\t\t\t\t\tSpiesSupport                       : 111 ms\n" +
-                "\t\t\t\t\tTrackersSupport                    : 111 ms\n" +
                 "\t\t\t\t\tStartupDiagnosticTest$Test1$$Lambda$111/1111111: 111 ms\n" +
                 "\t\t\t\tClasspath scan                     : 111 ms\n" +
                 "\t\t\t\tCommands processing                : 111 ms\n" +
@@ -96,12 +90,6 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms)\n" +
                 "\t\t\t\tBundle builder time                : 111 ms\n" +
                 "\t\t\t\tHooks processing                   : 111 ms\n" +
-                "\t\t\t\t\tRecordedLogsSupport                : 111 ms\n" +
-                "\t\t\t\t\tRestStubSupport                    : 111 ms\n" +
-                "\t\t\t\t\tStubsSupport                       : 111 ms\n" +
-                "\t\t\t\t\tMocksSupport                       : 111 ms\n" +
-                "\t\t\t\t\tSpiesSupport                       : 111 ms\n" +
-                "\t\t\t\t\tTrackersSupport                    : 111 ms\n" +
                 "\t\t\t\t\tStartupDiagnosticTest$Test2$$Lambda$111/1111111: 111 ms\n" +
                 "\t\t\t\tClasspath scan                     : 111 ms\n" +
                 "\t\t\t\tCommands processing                : 111 ms\n" +
@@ -161,12 +149,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms)\n" +
                 "\t\t\t\tBundle builder time                : 111 ms\n" +
                 "\t\t\t\tHooks processing                   : 111 ms\n" +
-                "\t\t\t\t\tRecordedLogsSupport                : 111 ms\n" +
                 "\t\t\t\t\tRestStubSupport                    : 111 ms\n" +
-                "\t\t\t\t\tStubsSupport                       : 111 ms\n" +
-                "\t\t\t\t\tMocksSupport                       : 111 ms\n" +
-                "\t\t\t\t\tSpiesSupport                       : 111 ms\n" +
-                "\t\t\t\t\tTrackersSupport                    : 111 ms\n" +
                 "\t\t\t\t\tStartupDiagnosticTest$Test3$$Lambda$111/1111111: 111 ms\n" +
                 "\t\t\t\tClasspath scan                     : 111 ms\n" +
                 "\t\t\t\tCommands processing                : 111 ms\n" +

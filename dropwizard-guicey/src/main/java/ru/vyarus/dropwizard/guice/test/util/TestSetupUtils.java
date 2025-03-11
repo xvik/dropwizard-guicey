@@ -3,11 +3,9 @@ package ru.vyarus.dropwizard.guice.test.util;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.ListenersSupport;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
-import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
@@ -102,15 +100,6 @@ public final class TestSetupUtils {
         // required to recognize hooks registered from setup objects
         config.tracker.setContextSetupObject(support.getClass());
         final Object res = support.setup(builder);
-        // auto registration of hook (note: hook still might be registered from @EnableHook annotation in the same
-        // class, but only one hook instance would be used - only two records would be in debug)
-        if (support instanceof GuiceyConfigurationHook && !config.hooks.contains(support)) {
-            builder.hooks((GuiceyConfigurationHook) support);
-        }
-        // auto registration of listener
-        if (support instanceof TestExecutionListener) {
-            builder.listen((TestExecutionListener) support);
-        }
         config.tracker.setContextSetupObject(null);
         return res;
     }

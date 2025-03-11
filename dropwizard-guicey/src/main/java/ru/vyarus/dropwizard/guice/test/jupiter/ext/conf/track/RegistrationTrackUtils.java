@@ -17,8 +17,6 @@ import java.util.function.Function;
 @SuppressWarnings("PMD.UseVarargs")
 public final class RegistrationTrackUtils {
 
-    private static final String AUTO_RECOGNITION = "at r.v.d.g.test.util.(TestSetupUtils.java:108)";
-
     private RegistrationTrackUtils() {
     }
 
@@ -77,8 +75,7 @@ public final class RegistrationTrackUtils {
 
     private static String buildSourceLocation(final String prefix) {
         final String source = StackUtils.getTestExtensionSource();
-        return formatSourceLocation(
-                (AUTO_RECOGNITION.equals(source) ? "auto recognition" : prefix), source);
+        return formatSourceLocation(prefix, source);
     }
 
     private static String formatSourceLocation(final String prefix, final String src) {
