@@ -128,6 +128,6 @@ public class ConfigOverrideLogTest extends AbstractPlatformTest {
 
     @Override
     protected String clean(String out) {
-        return out.replaceAll("\\d+\\.\\d+ ms", "111 ms");
+        return out.replaceAll("\\d+(\\.\\d+)? ms", "111 ms");
     }
 }

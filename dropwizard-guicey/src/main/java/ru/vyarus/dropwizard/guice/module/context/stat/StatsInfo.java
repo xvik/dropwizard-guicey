@@ -3,8 +3,9 @@ package ru.vyarus.dropwizard.guice.module.context.stat;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 
+import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
 /**
  * Provides access to starts collected at startup.
@@ -29,13 +30,22 @@ public final class StatsInfo {
      * In contrast, when using {@link #humanTime(Stat)} for such timers, correct value will be printed.
      *
      * @param name statistic name
-     * @return collected time in milliseconds or 0 (is stat value is not available)
+     * @return collected time in milliseconds or 0 (if stat value is not available)
      * @throws IllegalStateException if provided stat is not time stat
      */
     public long time(final Stat name) {
+        return duration(name).toMillis();
+    }
+
+    /***
+     * @param name statistic name
+     * @return collected time duration or 0 (if stat value is not available)
+     * @throws IllegalStateException if provided stat is not time stat
+     */
+    public Duration duration(final Stat name) {
         name.requiresTimer();
         final Stopwatch stopwatch = tracker.getTimers().get(name);
-        return stopwatch == null ? 0 : stopwatch.elapsed(TimeUnit.MILLISECONDS);
+        return stopwatch == null ? Duration.ZERO : stopwatch.elapsed();
     }
 
     /**
@@ -68,5 +78,15 @@ public final class StatsInfo {
      */
     public List<String> getGuiceStats() {
         return tracker.getGuiceStats().getMessages();
+    }
+
+    /**
+     * Detailed stats used to track duration for exact entity (command or guicey bundle).
+     *
+     * @param stat required stat
+     * @return all collected detailed stats of type
+     */
+    public Map<Class<?>, Duration> getDetailedStats(final DetailStat stat) {
+        return tracker.getDetails(stat);
     }
 }

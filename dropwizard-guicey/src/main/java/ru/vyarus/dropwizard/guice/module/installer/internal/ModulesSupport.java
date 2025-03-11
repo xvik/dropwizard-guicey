@@ -120,6 +120,7 @@ public final class ModulesSupport {
      * provide the same disable semantic as with usual extensions).
      *
      * @param context configuration context
+     * @param modulesTimer modules processing timer
      * @return list of repackaged modules to use
      */
     private static List<Module> analyzeModules(final ConfigurationContext context,
@@ -167,6 +168,7 @@ public final class ModulesSupport {
                                                  final List<Element> elements) {
         final StatTimer itimer = context.stat().timer(InstallersTime);
         final StatTimer timer = context.stat().timer(Stat.ExtensionsRecognitionTime);
+        final StatTimer analysisTimer = context.stat().timer(Stat.BindingsAnalysisTime);
         final List<String> disabledModules = prepareDisabledModules(context);
 
         final AnalysisResult result = analyzeElements(context, elements, disabledModules, null);
@@ -179,6 +181,7 @@ public final class ModulesSupport {
         context.stat().count(Stat.RemovedBindingsCount, result.removedBindings.size());
         context.lifecycle().modulesAnalyzed(analyzedModules, result.extensions,
                 toModuleClasses(result.actuallyDisabledModules), result.removedBindings);
+        analysisTimer.stop();
         timer.stop();
         itimer.stop();
     }

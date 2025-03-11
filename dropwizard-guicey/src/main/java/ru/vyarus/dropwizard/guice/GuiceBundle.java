@@ -19,6 +19,7 @@ import ru.vyarus.dropwizard.guice.debug.GuiceAopDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.JerseyConfigDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.StartupTimeDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.WebMappingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.YamlBindingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook;
@@ -38,6 +39,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
+import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
 import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
 import ru.vyarus.dropwizard.guice.module.context.unique.UniqueItemsDuplicatesDetector;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
@@ -119,6 +121,9 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
 
     GuiceBundle() {
         // Bundle should be instantiated only from builder
+        context.stat().timer(Stat.GuiceyTime);
+        context.stat().timer(Stat.ConfigurationTime);
+        context.stat().timer(Stat.BundleBuilderTime);
     }
 
     @Override
@@ -994,6 +999,30 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
+         * Prints detailed application startup (and shutdown) times. Useful for startup slowness investigations and
+         * initialization order validation (executed hooks and budles order).
+         * <p>
+         * Time measured from guice bundle creation. Report instruments {@link io.dropwizard.core.setup.Bootstrap}
+         * and {@link io.dropwizard.lifecycle.setup.LifecycleEnvironment} objects to measure bunldes and managed
+         * objects times.
+         * <p>
+         * Init time measured as time from guice bundle creation until the last dropwizard bundle init
+         * (bundles registered before guice bundle can't be measured; application init method time will go
+         * to run phase).
+         * Run tim measured as time from init until the last dropwizard bundle run (configuration and environment
+         * creation measured separately appears under run phase; application run method time will go to web phase).
+         * Web time is a time after run until jersey lifecycle notification (server started).
+         * <p>
+         * Overall, report shows almost all application startup time with exact phases. Plus all guicey internal
+         * actions.
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder printStartupTime() {
+            return listen(new StartupTimeDiagnostic());
+        }
+
+        /**
          * Guicey hooks ({@link GuiceyConfigurationHook}) may be loaded with system property "guicey.hooks". But
          * it may be not comfortable to always declare full class name (e.g. -Dguicey.hooks=com.foo.bar.Hook,..).
          * Instead short alias name may be used: -Dguicey.hooks=alias1, alias2.
@@ -1046,6 +1075,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          */
         public GuiceBundle build() {
             bundle.context.runHooks(this);
+            bundle.context.stat().stopTimer(Stat.BundleBuilderTime);
             return bundle;
         }
 

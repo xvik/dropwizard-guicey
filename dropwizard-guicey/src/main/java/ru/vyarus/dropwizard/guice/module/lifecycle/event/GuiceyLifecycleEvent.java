@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.module.lifecycle.event;
 import com.google.common.base.Preconditions;
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
@@ -27,6 +28,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 public abstract class GuiceyLifecycleEvent {
 
     private final GuiceyLifecycle type;
+    private final StatsInfo stats;
     private final Options options;
     private final SharedConfigurationState sharedState;
 
@@ -36,6 +38,7 @@ public abstract class GuiceyLifecycleEvent {
         Preconditions.checkState(type.getType().equals(getClass()),
                 "Wrong event type %s used for class %s", type, getClass().getSimpleName());
         this.type = type;
+        this.stats = new StatsInfo(context.getTracker());
         this.options = context.getOptions();
         this.sharedState = context.getSharedState();
     }
@@ -57,6 +60,13 @@ public abstract class GuiceyLifecycleEvent {
      */
     public Options getOptions() {
         return options;
+    }
+
+    /**
+     * @return tracked stats
+     */
+    public StatsInfo getStats() {
+        return stats;
     }
 
     /**

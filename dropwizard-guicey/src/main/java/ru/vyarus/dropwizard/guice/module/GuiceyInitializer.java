@@ -41,6 +41,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ConfigurationT
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ExtensionsRecognitionTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyBundleInitTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersResolutionTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
 
 /**
@@ -68,16 +69,11 @@ public class GuiceyInitializer {
     private static final OrderComparator COMPARATOR = new OrderComparator();
     private final Logger logger = LoggerFactory.getLogger(GuiceyInitializer.class);
 
-    private final StatTimer guiceyTimer;
-    private final StatTimer confTimer;
-
     private final Bootstrap bootstrap;
     private final ConfigurationContext context;
     private final ClasspathScanner scanner;
 
     public GuiceyInitializer(final Bootstrap bootstrap, final ConfigurationContext context) {
-        guiceyTimer = context.stat().timer(GuiceyTime);
-        confTimer = context.stat().timer(ConfigurationTime);
 
         // this will also trigger registered dropwizard bundles initialization
         // (so dropwizard bundles init before guicey bundles)
@@ -134,11 +130,13 @@ public class GuiceyInitializer {
      * Perform classpath scan to find installers. Create enabled installer instances.
      */
     public void resolveInstallers() {
-        final StatTimer timer = context.stat().timer(InstallersTime);
+        final StatTimer itimer = context.stat().timer(InstallersTime);
+        final StatTimer timer = context.stat().timer(InstallersResolutionTime);
         final List<Class<? extends FeatureInstaller>> installerClasses = findInstallers();
         final List<FeatureInstaller> installers = prepareInstallers(installerClasses);
-        context.installersResolved(installers);
         timer.stop();
+        itimer.stop();
+        context.installersResolved(installers);
     }
 
     /**
@@ -187,8 +185,8 @@ public class GuiceyInitializer {
         }
         context.lifecycle().initialized();
 
-        confTimer.stop();
-        guiceyTimer.stop();
+        context.stat().stopTimer(ConfigurationTime);
+        context.stat().stopTimer(GuiceyTime);
     }
 
     /**
