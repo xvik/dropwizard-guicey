@@ -34,7 +34,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tStartupDiagnosticTest$Test1$$Lambda$111/1111111: 111 ms\n" +
                 "\t\t\t\tClasspath scan                     : 111 ms\n" +
                 "\t\t\t\tCommands processing                : 111 ms\n" +
-                "\t\t\t\t\tDummyCommand                       : 111 ms\n" +
+                "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
                 "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
                 "\t\t\t\tBundles lookup                     : 111 ms\n" +
                 "\t\t\t\tGuicey bundles init                : 111 ms\n" +
@@ -93,7 +93,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tStartupDiagnosticTest$Test2$$Lambda$111/1111111: 111 ms\n" +
                 "\t\t\t\tClasspath scan                     : 111 ms\n" +
                 "\t\t\t\tCommands processing                : 111 ms\n" +
-                "\t\t\t\t\tDummyCommand                       : 111 ms\n" +
+                "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
                 "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
                 "\t\t\t\tBundles lookup                     : 111 ms\n" +
                 "\t\t\t\tGuicey bundles init                : 111 ms\n" +
@@ -153,7 +153,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tStartupDiagnosticTest$Test3$$Lambda$111/1111111: 111 ms\n" +
                 "\t\t\t\tClasspath scan                     : 111 ms\n" +
                 "\t\t\t\tCommands processing                : 111 ms\n" +
-                "\t\t\t\t\tDummyCommand                       : 111 ms\n" +
+                "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
                 "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
                 "\t\t\t\tBundles lookup                     : 111 ms\n" +
                 "\t\t\t\tGuicey bundles init                : 111 ms\n" +
@@ -202,7 +202,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
     public static class Test1 {
 
         @EnableHook
-        static GuiceyConfigurationHook hook = GuiceBundle.Builder::printStartupTime;
+        static GuiceyConfigurationHook hook = builder -> builder.printStartupTime();
 
         @Test
         void test() {
@@ -243,6 +243,9 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 // jdk 21
                 .replaceAll("\\$\\$Lambda/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
                 
-                .replaceAll("\\d+(\\.\\d+)? ms", "111 ms");
+                .replaceAll("\\d+(\\.\\d+)? ms", "111 ms")
+
+                // commands order may differ due to commands scan
+                .replace("DummyCommand                       : 111 ms", "NonInjactableCommand               : 111 ms");
     }
 }
