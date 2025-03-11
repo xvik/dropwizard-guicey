@@ -4,11 +4,15 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 
+import java.time.Duration;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.JerseyTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.OverallTime;
 
 /**
  * Internal object, used to record startup stats. Guava {#Stopwatch} used for time measurements
@@ -22,6 +26,12 @@ public final class StatsTracker {
     private final Map<Stat, StatTimer> timers = Maps.newEnumMap(Stat.class);
     private final Map<Stat, Integer> counters = Maps.newEnumMap(Stat.class);
     private final GuiceStatsTracker guiceStats = new GuiceStatsTracker();
+    private final Map<DetailStat, Map<Class<?>, Stopwatch>> detailStats = Maps.newEnumMap(DetailStat.class);
+
+    public StatsTracker() {
+        // start measuring overall time since guice bundle creation
+        timer(OverallTime);
+    }
 
     /**
      * If measured first time, returns new instance. For second and following measures returns the same instance
@@ -37,6 +47,27 @@ public final class StatsTracker {
         // start would be ignored)
         watch.start();
         return watch;
+    }
+
+    /**
+     * Stop running timer.
+     *
+     * @param name timer name
+     */
+    public void stopTimer(final Stat name) {
+        Preconditions.checkNotNull(timers.get(name), "No started timer for " + name).stop();
+    }
+
+    /**
+     * Detail stats used to record exact entity metric (like guicey bundle init or run time).
+     *
+     * @param name detail name
+     * @param type target type
+     * @return detail timer
+     */
+    public Stopwatch detailTimer(final DetailStat name, final Class<?> type) {
+        return detailStats.computeIfAbsent(name, detailStat -> new LinkedHashMap<>())
+                .computeIfAbsent(type, aClass -> Stopwatch.createUnstarted()).start();
     }
 
     /**
@@ -88,6 +119,20 @@ public final class StatsTracker {
     }
 
     /**
+     * @param name detail stat name
+     * @return detail stats
+     */
+    public Map<Class<?>, Duration> getDetails(final DetailStat name) {
+        final Map<Class<?>, Stopwatch> details = detailStats.get(name);
+        if (details == null) {
+            return Collections.emptyMap();
+        }
+        final Map<Class<?>, Duration> res = new LinkedHashMap<>();
+        details.forEach((type, stopwatch) -> res.put(type, stopwatch.elapsed()));
+        return res;
+    }
+
+    /**
      * @return collected counters map
      */
     public Map<Stat, Integer> getCounters() {
@@ -106,6 +151,7 @@ public final class StatsTracker {
      * to not call stop enough times.
      */
     public void verifyTimersDone() {
+        timers.get(OverallTime).stop();
         for (final Map.Entry<Stat, Stopwatch> entry : getTimers().entrySet()) {
             Preconditions.checkState(!entry.getValue().isRunning(),
                     "Timer is still running after application startup", entry.getKey());

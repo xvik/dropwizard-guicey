@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
+import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
@@ -63,15 +66,17 @@ import java.util.Set;
 public final class LifecycleSupport {
     private final Logger logger = LoggerFactory.getLogger(LifecycleSupport.class);
 
+    private final StatsTracker tracker;
     private final EventsContext context;
     private final Runnable startupHook;
     private GuiceyLifecycle currentStage;
 
     private final Set<GuiceyLifecycleListener> listeners = new LinkedHashSet<>();
 
-    public LifecycleSupport(final Options options, final SharedConfigurationState sharedState,
-                            final Runnable startupHook) {
-        this.context = new EventsContext(options, sharedState);
+    public LifecycleSupport(final StatsTracker tracker, final Options options,
+                            final SharedConfigurationState sharedState, final Runnable startupHook) {
+        this.tracker = tracker;
+        this.context = new EventsContext(tracker, options, sharedState);
         this.startupHook = startupHook;
     }
 
@@ -248,7 +253,9 @@ public final class LifecycleSupport {
     }
 
     private void broadcast(final GuiceyLifecycleEvent event) {
+        final StatTimer timer = tracker.timer(Stat.ListenersTime);
         listeners.forEach(l -> l.onEvent(event));
+        timer.stop();
         currentStage = event.getType();
     }
 

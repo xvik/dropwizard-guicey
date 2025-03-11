@@ -7,6 +7,7 @@ import io.dropwizard.core.setup.Environment;
 import org.glassfish.jersey.internal.inject.InjectionManager;
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 /**
@@ -17,6 +18,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
  */
 public class EventsContext {
 
+    private final StatsTracker tracker;
     private final Options options;
     private final SharedConfigurationState sharedState;
     private Bootstrap bootstrap;
@@ -26,7 +28,10 @@ public class EventsContext {
     private Injector injector;
     private InjectionManager injectionManager;
 
-    public EventsContext(final Options options, final SharedConfigurationState sharedState) {
+    public EventsContext(final StatsTracker tracker,
+                         final Options options,
+                         final SharedConfigurationState sharedState) {
+        this.tracker = tracker;
         this.options = options;
         this.sharedState = sharedState;
     }
@@ -53,6 +58,10 @@ public class EventsContext {
 
     public void setInjectionManager(final InjectionManager injectionManager) {
         this.injectionManager = injectionManager;
+    }
+
+    public StatsTracker getTracker() {
+        return tracker;
     }
 
     public Options getOptions() {

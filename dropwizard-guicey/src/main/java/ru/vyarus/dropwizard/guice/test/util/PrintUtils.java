@@ -56,7 +56,7 @@ public final class PrintUtils {
      * - Objects represented as ObjectType@instanceHash
      * - null is "null"
      *
-     * @param value value to convert to string
+     * @param value     value to convert to string
      * @param maxLength maximum string length to keep
      * @return string representation for the object
      */
@@ -85,7 +85,7 @@ public final class PrintUtils {
     /**
      * Render duration together with increase indication: overall time (increase since last report).
      *
-     * @param overall overall duration (including increase) (could be null)
+     * @param overall  overall duration (including increase) (could be null)
      * @param increase increase since last report (could be null)
      * @return string representation for suration
      */
@@ -101,9 +101,23 @@ public final class PrintUtils {
      * @return string representation
      */
     public static String ms(final Duration duration) {
-        return new BigDecimal(duration.toNanos())
-                .divide(BigDecimal.valueOf(1_000_000), 2, RoundingMode.UP)
-                .doubleValue() + " ms";
+        return ms(duration.toNanos());
+    }
+
+    /**
+     * @param nanos time in nanoseconds
+     * @return string representation
+     */
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
+    public static String ms(final long nanos) {
+        final long millis = Math.round((double) nanos / 1_000_000);
+        if (millis > 10) {
+            return millis + " ms";
+        } else {
+            return new BigDecimal(nanos)
+                    .divide(BigDecimal.valueOf(1_000_000), 2, RoundingMode.UP)
+                    .doubleValue() + " ms";
+        }
     }
 
     /**

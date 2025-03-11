@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.test.hook
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker
 import spock.lang.Specification
 
 /**
@@ -24,7 +25,7 @@ class ConfigurationHooksSupportTest extends Specification {
         ConfigurationHooksSupport.count() == 1
 
         when: "check processing"
-        ConfigurationHooksSupport.run(GuiceBundle.builder())
+        ConfigurationHooksSupport.run(GuiceBundle.builder(), new StatsTracker())
         then: "hooks flushed"
         ConfigurationHooksSupport.count() == 0
 
@@ -41,7 +42,7 @@ class ConfigurationHooksSupportTest extends Specification {
 
         when:
         ({ init = true } as GuiceyConfigurationHook).register()
-        ConfigurationHooksSupport.run(GuiceBundle.builder())
+        ConfigurationHooksSupport.run(GuiceBundle.builder(), new StatsTracker())
         then: "called"
         init
 

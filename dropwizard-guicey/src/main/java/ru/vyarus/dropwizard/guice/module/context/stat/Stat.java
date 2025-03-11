@@ -11,6 +11,11 @@ import com.google.common.base.Preconditions;
 public enum Stat {
 
     /**
+     * Timer started in time of guice bundle creation for measuring entire application startup time
+     * (used for measuring time since startup).
+     */
+    OverallTime(true),
+    /**
      * Overall guicey startup time (including configuration, run and jersey parts). All other timers represents this
      * timer detalization.
      */
@@ -19,6 +24,14 @@ public enum Stat {
      * Guicey time in dropwizard configuration phase. Part of {@link #GuiceyTime}.
      */
     ConfigurationTime(true),
+    /**
+     * Time of bundle configuration. Part of {@link #ConfigurationTime}
+     */
+    BundleBuilderTime(true),
+    /**
+     * Hooks resolution and processing time. Part of {@link #ConfigurationTime}.
+     */
+    HooksTime(true),
     /**
      * Commands processing time. Includes environment commands members injection (always performed)
      * and commands registration from classpath scan (disabled by default). Part of {@link #ConfigurationTime} and
@@ -57,16 +70,32 @@ public enum Stat {
      */
     InstallersTime(true),
     /**
+     * Installers search and instantiation time. Part of {@link #InstallersTime}.
+     */
+    InstallersResolutionTime(true),
+    /**
      * Time spent on extensions resolution (matching all extension classes with configured installers ).
      * Does not contain classpath scan time, because already use cached scan result (actual scan performed
      * before initializations). Part of {@link #InstallersTime}.
      */
     ExtensionsRecognitionTime(true),
+    /**
+     * Guicey listeners execution time.
+     */
+    ListenersTime(true),
 
     /**
      * Guicey time in dropwizard run phase (without jersey time). Part of {@link #GuiceyTime}.
      */
     RunTime(true),
+    /**
+     * Time of configuration object parsing (to bind later by value). Part of {@link #RunTime}.
+     */
+    ConfigurationAnalysis(true),
+    /**
+     * Time of guicey bundles run execution. Part of {@link #BundleTime} and {@link #RunTime}.
+     */
+    GuiceyBundleRunTime(true),
     /**
      * Modules pre processing time (include Aware* interfaces processing and bindings analysis).
      * Also includes part of {@link #ExtensionsRecognitionTime}.
@@ -96,11 +125,17 @@ public enum Stat {
      */
     RemovedInnerModules(false),
     /**
-     * Guice SPI time of modules elements resolution. When bindings inspection is disabled with
-     * {@link ru.vyarus.dropwizard.guice.GuiceyOptions#AnalyzeGuiceModules}, this time become a part of
-     * overall injector creation time.
+     * Guice SPI time of modules elements resolution (part of {@link #ModulesProcessingTime}). When bindings
+     * inspection is disabled with {@link ru.vyarus.dropwizard.guice.GuiceyOptions#AnalyzeGuiceModules}, this stat
+     * will be 0, but injector creation time will increase accordingly because guice will have to do the same
+     * ({@link #InjectorCreationTime}).
      */
     BindingsResolutionTime(true),
+
+    /**
+     * Time of parsed bindings analysis. Part of {@link #ExtensionsRecognitionTime}.
+     */
+    BindingsAnalysisTime(true),
     /**
      * Guice injector creation time. Part of {@link #RunTime}.
      */

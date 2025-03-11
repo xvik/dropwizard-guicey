@@ -20,6 +20,7 @@ import static ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.CommandTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ExtensionsInstallationTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyBundleRunTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InjectorCreationTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ModulesProcessingTime;
@@ -33,18 +34,14 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.RunTime;
  */
 public class GuiceyRunner {
 
-    private final StatTimer guiceyTime;
-    private final StatTimer runTime;
-
     private final ConfigurationContext context;
-
     private Injector injector;
 
     public GuiceyRunner(final ConfigurationContext context,
                         final Configuration configuration,
                         final Environment environment) {
-        guiceyTime = context.stat().timer(GuiceyTime);
-        runTime = context.stat().timer(RunTime);
+        context.stat().timer(GuiceyTime);
+        context.stat().timer(RunTime);
 
         context.runPhaseStarted(configuration, environment);
         this.context = context;
@@ -60,7 +57,9 @@ public class GuiceyRunner {
      */
     public void runBundles() throws Exception {
         final StatTimer timer = context.stat().timer(BundleTime);
+        final StatTimer runTimer = context.stat().timer(GuiceyBundleRunTime);
         BundleSupport.runBundles(context);
+        runTimer.stop();
         timer.stop();
     }
 
@@ -135,7 +134,7 @@ public class GuiceyRunner {
     @SuppressWarnings("unchecked")
     public void injectCommands() {
         final StatTimer timer = context.stat().timer(CommandTime);
-        CommandSupport.initCommands(context.getBootstrap().getCommands(), injector);
+        CommandSupport.initCommands(context.getBootstrap().getCommands(), injector, context.stat());
         timer.stop();
     }
 
@@ -145,7 +144,7 @@ public class GuiceyRunner {
     public void runFinished() {
         context.bundleStarted();
 
-        runTime.stop();
-        guiceyTime.stop();
+        context.stat().stopTimer(RunTime);
+        context.stat().stopTimer(GuiceyTime);
     }
 }
