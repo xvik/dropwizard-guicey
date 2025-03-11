@@ -29,29 +29,23 @@ public class PerformanceLogTest extends AbstractPlatformTest {
                 "\t\tGuicey setup objects execution     : 111 ms\n" +
                 "\t\tDropwizardTestSupport creation     : 111 ms\n" +
                 "\t\tApplication start                  : 111 ms\n" +
-                "\t\tListeners execution                : 111 ms\n" +
                 "\n" +
                 "\t[Before each]                      : 111 ms\n" +
-                "\t\tGuice fields injection             : 111 ms\n" +
-                "\t\tListeners execution                : 111 ms");
+                "\t\tGuice fields injection             : 111 ms\n");
 
         Assertions.assertThat(output).contains("Guicey time after [Before each] of PerformanceLogTest$Test1#test2(): 111 ms ( + 111 ms)\n" +
                 "\n" +
                 "\t[Before each]                      : 111 ms ( + 111 ms)\n" +
                 "\t\tGuice fields injection             : 111 ms ( + 111 ms)\n" +
-                "\t\tListeners execution                : 111 ms ( + 111 ms)\n" +
                 "\n" +
-                "\t[After each]                       : 111 ms\n" +
-                "\t\tListeners execution                : 111 ms");
+                "\t[After each]                       : 111 ms\n");
 
         Assertions.assertThat(output).contains("Guicey time after [After all] of PerformanceLogTest$Test1: 111 ms ( + 111 ms)\n" +
                 "\n" +
                 "\t[After each]                       : 111 ms ( + 111 ms)\n" +
-                "\t\tListeners execution                : 111 ms ( + 111 ms)\n" +
                 "\n" +
                 "\t[After all]                        : 111 ms\n" +
-                "\t\tApplication stop                   : 111 ms\n" +
-                "\t\tListeners execution                : 111 ms");
+                "\t\tApplication stop                   : 111 ms\n");
     }
 
     @Disabled

@@ -37,7 +37,6 @@ public class NestedConfigOverrideLogTest extends AbstractPlatformTest {
                         "\t\tGuicey setup objects execution     : 111 ms\n" +
                         "\t\tDropwizardTestSupport creation     : 111 ms\n" +
                         "\t\tApplication start                  : 111 ms\n" +
-                        "\t\tListeners execution                : 111 ms\n" +
                         "\t\tGuice fields injection             : 111 ms");
     }
 

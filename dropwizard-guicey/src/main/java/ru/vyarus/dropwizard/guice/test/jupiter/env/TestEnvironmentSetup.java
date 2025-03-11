@@ -31,9 +31,10 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
  * (e.g., if you need extension context access in hook - you should register a setup object and then create hook
  * (inside it) providing entire junit context or just some stored values.
  * <p>
- * AUTO REGISTRATION: If setup object implements hook ({@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook})
- * and/or listener ({@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener}) it would be
- * registered automatically. Manual registration would not create duplicate.
+ * For complex extensions it is recommended to implement hook
+ * ({@link ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook}) and/or listener
+ * ({@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener}) interfaces directly
+ * (and register them as {@code .hooks(this).listen(this)}).
  * <p>
  * Environment setup could be loaded with {@link java.util.ServiceLoader} to avoid manual registration: add
  * {@code META-INF/services/ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup} file with one or more

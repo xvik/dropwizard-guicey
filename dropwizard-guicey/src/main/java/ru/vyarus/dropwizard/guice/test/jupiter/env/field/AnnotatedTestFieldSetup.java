@@ -93,17 +93,19 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
         // For nested test and guice extension per method initialization, all fields resolved for top classes
         // must also be included (otherwise their values would remain null)
         fields = lookupFields(setupContext, () -> extension.findAnnotatedFields(fieldAnnotation, fieldType));
+        if (!fields.isEmpty()) {
+            // avoid registration if no fields declared
+            extension.hooks(this).listen(this);
+        }
         return null;
     }
 
     @Override
     public void configure(final GuiceBundle.Builder builder) {
         // called immediately after setup - may use instance fields
-        if (!fields.isEmpty()) {
-            // configure guicey (most likely, override bindings)
-            // override real beans with stubs
-            builder.modulesOverride(binder -> collectOverrideBindings(fields, binder));
-        }
+        // configure guicey (most likely, override bindings)
+        // override real beans with stubs
+        builder.modulesOverride(binder -> collectOverrideBindings(fields, binder));
     }
 
     /**
@@ -118,7 +120,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * test method because fields would be searched just once - no need to validate each time.
      *
      * @param context junit context
-     * @param field  annotated fields
+     * @param field   annotated fields
      */
     protected abstract void validateDeclaration(ExtensionContext context, AnnotatedField<A, T> field);
 
@@ -157,8 +159,8 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * Called before {@link #getFieldValue(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext,
      * AnnotatedField)}.
      *
-     * @param context  event context
-     * @param field    annotated field
+     * @param context event context
+     * @param field   annotated field
      */
     protected abstract void validateBinding(EventContext context, AnnotatedField<A, T> field);
 
@@ -173,8 +175,8 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * <p>
      * Application already completely started and test extension initialized at this moment (beforeEach test phase).
      *
-     * @param context  event context
-     * @param field    annotated field
+     * @param context event context
+     * @param field   annotated field
      * @return created field value
      */
     protected abstract T getFieldValue(EventContext context, AnnotatedField<A, T> field);
