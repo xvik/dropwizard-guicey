@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.installer.internal;
 
+import com.google.common.base.Stopwatch;
 import com.google.inject.Injector;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.cli.Command;
@@ -8,7 +9,9 @@ import io.dropwizard.core.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
+import ru.vyarus.dropwizard.guice.module.context.stat.DetailStat;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
@@ -48,7 +51,7 @@ public final class CommandSupport {
     public static List<Command> registerCommands(final Bootstrap bootstrap, final ClasspathScanner scanner,
                                                  final ConfigurationContext context) {
         final StatTimer timer = context.stat().timer(CommandTime);
-        final CommandClassVisitor visitor = new CommandClassVisitor(bootstrap);
+        final CommandClassVisitor visitor = new CommandClassVisitor(bootstrap, context.stat());
         scanner.scan(visitor);
         context.registerCommands(visitor.getCommands());
         timer.stop();
@@ -63,11 +66,14 @@ public final class CommandSupport {
      * @param commands registered commands
      * @param injector guice injector object
      */
-    public static void initCommands(final List<Command> commands, final Injector injector) {
+    public static void initCommands(final List<Command> commands, final Injector injector,
+                                    final StatsTracker tracker) {
         if (commands != null) {
             for (Command cmd : commands) {
                 if (cmd instanceof EnvironmentCommand) {
+                    final Stopwatch timer = tracker.detailTimer(DetailStat.Command, cmd.getClass());
                     injector.injectMembers(cmd);
+                    timer.stop();
                 }
             }
         }
@@ -80,12 +86,14 @@ public final class CommandSupport {
      */
     private static class CommandClassVisitor implements ClassVisitor {
         private final Bootstrap bootstrap;
+        private final StatsTracker stats;
         // sort commands to unify order on different environments
         private final Set<Class<Command>> commands = new TreeSet<>(Comparator.comparing(Class::getName));
         private final List<Command> commandList = new ArrayList<>();
 
-        CommandClassVisitor(final Bootstrap bootstrap) {
+        CommandClassVisitor(final Bootstrap bootstrap, final StatsTracker stats) {
             this.bootstrap = bootstrap;
+            this.stats = stats;
         }
 
         @Override
@@ -94,11 +102,13 @@ public final class CommandSupport {
             if (FeatureUtils.is(type, Command.class)) {
                 try {
                     final Command cmd;
+                    final Stopwatch timer = stats.detailTimer(DetailStat.Command, type);
                     if (EnvironmentCommand.class.isAssignableFrom(type)) {
                         cmd = (Command) InstanceUtils.create(type, Application.class, bootstrap.getApplication());
                     } else {
                         cmd = (Command) InstanceUtils.create(type);
                     }
+                    timer.stop();
                     commands.add((Class<Command>) type);
                     commandList.add(cmd);
                     bootstrap.addCommand(cmd);

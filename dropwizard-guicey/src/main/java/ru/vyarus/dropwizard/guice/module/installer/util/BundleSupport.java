@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.installer.util;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import io.dropwizard.core.setup.Bootstrap;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
+import ru.vyarus.dropwizard.guice.module.context.stat.DetailStat;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
@@ -66,7 +68,9 @@ public final class BundleSupport {
     public static void runBundles(final ConfigurationContext context) throws Exception {
         final GuiceyEnvironment env = new GuiceyEnvironment(context);
         for (GuiceyBundle bundle : context.getEnabledBundles()) {
+            final Stopwatch timer = context.stat().detailTimer(DetailStat.BundleRun, bundle.getClass());
             bundle.run(env);
+            timer.stop();
         }
         context.lifecycle().bundlesStarted(context.getEnabledBundles());
     }
@@ -145,7 +149,9 @@ public final class BundleSupport {
         final ItemId id = ItemId.from(bundle);
         if (context.isBundleEnabled(id)) {
             context.openScope(id);
+            final Stopwatch timer = context.stat().detailTimer(DetailStat.BundleInit, bundle.getClass());
             bundle.initialize(bootstrap);
+            timer.stop();
             context.closeScope();
         }
 

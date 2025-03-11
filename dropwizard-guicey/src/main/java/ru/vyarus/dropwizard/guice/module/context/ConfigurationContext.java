@@ -37,6 +37,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.sign.DisableSupport;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.option.internal.OptionsSupport;
+import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
@@ -148,8 +149,8 @@ public final class ConfigurationContext {
     /**
      * Guicey lifecycle listeners support.
      */
-    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(new Options(optionsSupport), sharedState,
-            tracker::verifyTimersDone);
+    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(tracker, new Options(optionsSupport),
+            sharedState, tracker::verifyTimersDone);
 
     /**
      * Add extra filter for scanned classes (classpath scan and bindings recognition).
@@ -715,6 +716,7 @@ public final class ConfigurationContext {
      * @param builder bundle builder
      */
     public void runHooks(final GuiceBundle.Builder builder) {
+        final StatTimer timer = stat().timer(Stat.HooksTime);
         ConfigurationHooksSupport.logRegisteredAliases();
         // lookup hooks from system property "guicey.hooks" (lookup executed after builder configuration to
         // let user declare alias hooks)
@@ -722,8 +724,9 @@ public final class ConfigurationContext {
         // Support for external configuration (for tests)
         // Use special scope to distinguish external configuration
         openScope(ConfigScope.Hook.getKey());
-        final Set<GuiceyConfigurationHook> hooks = ConfigurationHooksSupport.run(builder);
+        final Set<GuiceyConfigurationHook> hooks = ConfigurationHooksSupport.run(builder, stat());
         closeScope();
+        timer.stop();
         lifecycle().configurationHooksProcessed(hooks);
     }
 
@@ -735,17 +738,17 @@ public final class ConfigurationContext {
         // register in shared state just in case
         this.sharedState.put(Bootstrap.class, bootstrap);
         this.sharedState.assignTo(bootstrap.getApplication());
+        lifecycle().beforeInit(bootstrap);
         // delayed init of registered dropwizard bundles
         final StatTimer time = stat().timer(BundleTime);
         final StatTimer dwtime = stat().timer(DropwizardBundleInitTime);
-        lifecycle().beforeInit(bootstrap);
         for (ConfiguredBundle bundle : getEnabledDropwizardBundles()) {
             registerDropwizardBundle(bundle);
         }
-        lifecycle().dropwizardBundlesInitialized(getEnabledDropwizardBundles(),
-                getDisabledDropwizardBundles(), getIgnoredItems(ConfigItem.DropwizardBundle));
         dwtime.stop();
         time.stop();
+        lifecycle().dropwizardBundlesInitialized(getEnabledDropwizardBundles(),
+                getDisabledDropwizardBundles(), getIgnoredItems(ConfigItem.DropwizardBundle));
     }
 
     /**
@@ -754,8 +757,10 @@ public final class ConfigurationContext {
      */
     public void runPhaseStarted(final Configuration configuration, final Environment environment) {
         this.configuration = configuration;
+        final StatTimer timer = stat().timer(Stat.ConfigurationAnalysis);
         this.configurationTree = ConfigTreeBuilder
                 .build(bootstrap, configuration, option(BindConfigurationByPath));
+        timer.stop();
         this.environment = environment;
         // register in shared state just in case
         this.sharedState.put(Configuration.class, configuration);

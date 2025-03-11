@@ -1,12 +1,20 @@
 package ru.vyarus.dropwizard.guice.hook;
 
+import com.google.common.base.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.module.context.stat.DetailStat;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.util.PropertyUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Extra configuration mechanism to apply external configuration to bundle builder after manual configuration in
@@ -114,12 +122,17 @@ public final class ConfigurationHooksSupport {
      * Could be used in tests to disable configuration items and (probably) replace them.
      *
      * @param builder just created builder
+     * @param stat    stats tracker
      * @return used hooks
      */
-    public static Set<GuiceyConfigurationHook> run(final GuiceBundle.Builder builder) {
+    public static Set<GuiceyConfigurationHook> run(final GuiceBundle.Builder builder, final StatsTracker stat) {
         final Set<GuiceyConfigurationHook> hooks = HOOKS.get();
         if (hooks != null) {
-            hooks.forEach(l -> l.configure(builder));
+            hooks.forEach(l -> {
+                final Stopwatch timer = stat.detailTimer(DetailStat.Hook, l.getClass());
+                l.configure(builder);
+                timer.stop();
+            });
         }
         // clear hooks just after init
         reset();

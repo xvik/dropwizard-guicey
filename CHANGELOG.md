@@ -1,4 +1,5 @@
 * Update to dropwizard 4.0.13
+* Add application startup (and shutdown) time detalization report: .printStartupTime()
 * Improve guice bindings report:
     - fixed scope accuracy for linked bindings
     - Fixed bindings for private modules (missed exposed linked bindings)
