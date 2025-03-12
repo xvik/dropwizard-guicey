@@ -1,6 +1,8 @@
 package ru.vyarus.dropwizard.guice.debug.report.start;
 
+import com.google.common.base.MoreObjects;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
+import ru.vyarus.dropwizard.guice.module.context.stat.DetailStat;
 import ru.vyarus.dropwizard.guice.test.util.PrintUtils;
 
 import java.time.Duration;
@@ -15,17 +17,47 @@ public class ShutdownTimeRenderer {
 
     public String render(final ShutdownTimeInfo info) {
         final StringBuilder res = new StringBuilder(200);
-        res.append("\n\n\t").append(format("Application shutdown", info.getStopTime()));
+        res.append("\n\n").append(line(1, "Application shutdown", info.getStopTime()));
 
         info.getManagedTimes().forEach((type, duration) -> {
-            res.append(String.format("\t\t%-10s", info.getManagedTypes().get(type)))
-                    .append(format(RenderUtils.getClassName(type), duration));
+            res.append(tab(2)).append(String.format("%-10s", info.getManagedTypes().get(type)))
+                    .append(line(0, RenderUtils.getClassName(type), duration));
+        });
+
+        res.append(line(2, "Listeners time", info.getListenersTime()));
+        info.getStats().getDetailedStats(DetailStat.Listener).forEach((type, time) -> {
+            if (info.getEvents().contains(type)) {
+                res.append(line(3, type.getSimpleName(), time));
+            }
         });
 
         return res.toString();
     }
 
-    private String format(final String name, final Duration duration) {
-        return String.format("%-35s: %s%n", name, PrintUtils.ms(duration));
+    private String line(final int shift,
+                        final String name,
+                        final Duration duration) {
+        return line(shift, name, null, duration, null);
+    }
+
+    private String line(final int shift,
+                        final String name,
+                        final String prefix,
+                        final Duration duration,
+                        final String postfix) {
+        return tab(shift) + format(name, prefix, duration, postfix);
+    }
+
+    private String format(final String name, final String prefix, final Duration duration, final String postfix) {
+        return String.format("%-35s: %s%s%s%n", name, MoreObjects.firstNonNull(prefix, ""),
+                PrintUtils.ms(duration), MoreObjects.firstNonNull(postfix, ""));
+    }
+
+    private String tab(final int shift) {
+        final StringBuilder res = new StringBuilder();
+        for (int i = 0; i < shift; i++) {
+            res.append('\t');
+        }
+        return res.toString();
     }
 }

@@ -11,10 +11,17 @@ import ru.vyarus.dropwizard.guice.debug.report.start.ShutdownTimeRenderer;
 import ru.vyarus.dropwizard.guice.debug.report.start.StartupTimeInfo;
 import ru.vyarus.dropwizard.guice.debug.report.start.StartupTimeRenderer;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
+import ru.vyarus.dropwizard.guice.module.context.stat.DetailStat;
+import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
+import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 import ru.vyarus.dropwizard.guice.module.lifecycle.UniqueGuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.BeforeInitEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ApplicationRunEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.BeforeRunEvent;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Startup time report. Timers could count only time AFTER guice bundle creation (with guice bundle itself).
@@ -64,6 +71,8 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
 
             private final Stopwatch startTime = Stopwatch.createUnstarted();
             private final Stopwatch stopTime = Stopwatch.createUnstarted();
+            private final List<Class<?>> startupEvents = new ArrayList<>();
+            private Duration startListenersTime;
 
             @Override
             public void lifeCycleStarting(final LifeCycle event) {
@@ -77,7 +86,13 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
                 // timer for more accurate value)
                 start.setWebTime(bundlesTracker.getWebTimer().stop().elapsed());
                 start.setLifecycleTime(startTime.elapsed());
-                start.setStats(event.getInjector().getInstance(GuiceyConfigurationInfo.class).getStats());
+                final StatsInfo stats = event.getInjector().getInstance(GuiceyConfigurationInfo.class).getStats();
+                start.setStats(stats);
+                startupEvents.addAll(stats.getDetailedStats(DetailStat.Listener).keySet());
+                startListenersTime = stats.duration(Stat.ListenersTime);
+                start.getWebEvents().addAll(startupEvents);
+                start.getWebEvents().removeAll(start.getInitEvents());
+                start.getWebEvents().removeAll(start.getRunEvents());
                 logger.info("Application startup time: {}", new StartupTimeRenderer().render(start));
             }
 
@@ -89,6 +104,10 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
             @Override
             public void lifeCycleStopped(final LifeCycle event) {
                 stop.setStopTime(stopTime.stop().elapsed());
+                stop.getEvents().addAll(start.getStats().getDetailedStats(DetailStat.Listener).keySet());
+                stop.getEvents().removeAll(startupEvents);
+                stop.setListenersTime(start.getStats().duration(Stat.ListenersTime).minus(startListenersTime));
+                stop.setStats(start.getStats());
                 logger.info("Application shutdown time: {}", new ShutdownTimeRenderer().render(stop));
             }
         });

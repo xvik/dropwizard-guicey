@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.internal;
 
+import com.google.common.base.Stopwatch;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
+import ru.vyarus.dropwizard.guice.module.context.stat.DetailStat;
 import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
@@ -253,9 +255,13 @@ public final class LifecycleSupport {
     }
 
     private void broadcast(final GuiceyLifecycleEvent event) {
-        final StatTimer timer = tracker.timer(Stat.ListenersTime);
-        listeners.forEach(l -> l.onEvent(event));
-        timer.stop();
+        if (!listeners.isEmpty()) {
+            final StatTimer timer = tracker.timer(Stat.ListenersTime);
+            final Stopwatch eventTimer = tracker.detailTimer(DetailStat.Listener, event.getClass());
+            listeners.forEach(l -> l.onEvent(event));
+            eventTimer.stop();
+            timer.stop();
+        }
         currentStage = event.getType();
     }
 

@@ -77,14 +77,7 @@ public class RecordedLogsSupport extends AnnotatedTestFieldSetup<RecordLogs, Rec
                 // (dropwizard bundles, registered by guicey are always go before guice bundle itself because
                 // dropwizard calls initialization BEFORE adding bundle - no way to register them after)
                 if (event.getType().equals(GuiceyLifecycle.BeforeInit)) {
-                    ((BeforeInitEvent) event).getBootstrap().addBundle(new ConfiguredBundle<Configuration>() {
-                        @Override
-                        public void run(final Configuration configuration,
-                                        final Environment environment) throws Exception {
-                            fields.forEach(field ->
-                                    field.<Recorder>getCustomData(FIELD_RECORDER).attach());
-                        }
-                    });
+                    ((BeforeInitEvent) event).getBootstrap().addBundle(new RecordedLogsTrackingBundle());
                 }
             });
         }
@@ -159,5 +152,14 @@ public class RecordedLogsSupport extends AnnotatedTestFieldSetup<RecordLogs, Rec
             }
         });
         super.stopped(context);
+    }
+
+    private final class RecordedLogsTrackingBundle implements ConfiguredBundle<Configuration> {
+        @Override
+        public void run(final Configuration configuration,
+                        final Environment environment) throws Exception {
+            fields.forEach(field ->
+                    field.<Recorder>getCustomData(FIELD_RECORDER).attach());
+        }
     }
 }
