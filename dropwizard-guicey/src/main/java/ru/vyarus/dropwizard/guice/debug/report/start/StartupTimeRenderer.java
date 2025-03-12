@@ -26,7 +26,7 @@ public class StartupTimeRenderer {
                 .append(line(1, "Application startup", info.getStats().duration(Stat.OverallTime)))
 
                 .append(line(2, "Dropwizard initialization", info.getInitTime()));
-        info.getInitPoints().forEach((s, point) -> {
+        info.getBundlesInitPoints().forEach((s, point) -> {
             if (GuiceBundle.class.getSimpleName().equals(s)) {
                 printGuiceyInit(3, point, info, res);
             } else {
@@ -36,7 +36,7 @@ public class StartupTimeRenderer {
 
         res.append('\n').append(line(2, "Dropwizard run", info.getRunPoint().minus(info.getInitTime())))
                 .append(line(3, "Configuration and Environment", info.getDwPreRunTime()));
-        info.getRunTimes().forEach((s, duration) -> {
+        info.getBundlesRunTimes().forEach((s, duration) -> {
             if (GuiceBundle.class.getSimpleName().equals(s)) {
                 printGuiceyRun(3, duration, info, res);
             } else {
@@ -89,6 +89,11 @@ public class StartupTimeRenderer {
                 .append(line(shift + 2, "Extensions recognition", info.getInitExtensionsTime()))
 
                 .append(line(shift + 1, "Listeners time", info.getInitListenersTime()));
+        info.getStats().getDetailedStats(DetailStat.Listener).forEach((type, time) -> {
+            if (info.getInitEvents().contains(type)) {
+                res.append(line(shift + 2, type.getSimpleName(), time));
+            }
+        });
     }
 
     private void printGuiceyRun(final int shift,
@@ -123,6 +128,11 @@ public class StartupTimeRenderer {
         });
 
         res.append(line(shift + 1, "Listeners time", info.getRunListenersTime()));
+        info.getStats().getDetailedStats(DetailStat.Listener).forEach((type, time) -> {
+            if (info.getRunEvents().contains(type)) {
+                res.append(line(shift + 2, type.getSimpleName(), time));
+            }
+        });
     }
 
     private void printGuiceyWeb(final int shift,
@@ -137,7 +147,13 @@ public class StartupTimeRenderer {
                 .minus(info.getRunListenersTime()).minus(info.getInitListenersTime());
         res.append(line(shift, "Guicey time", info.getStats().duration(Stat.JerseyTime).plus(listenersTime)))
                 .append(line(shift + 1, "Installers time", info.getStats().duration(Stat.JerseyInstallerTime)))
+
                 .append(line(shift + 1, "Listeners time", listenersTime));
+        info.getStats().getDetailedStats(DetailStat.Listener).forEach((type, time) -> {
+            if (info.getWebEvents().contains(type)) {
+                res.append(line(shift + 2, type.getSimpleName(), time));
+            }
+        });
     }
 
     private String line(final int shift,

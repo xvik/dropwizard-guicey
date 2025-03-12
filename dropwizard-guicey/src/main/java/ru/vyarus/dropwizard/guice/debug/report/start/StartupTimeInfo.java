@@ -4,7 +4,9 @@ import org.eclipse.jetty.util.Uptime;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,6 +18,7 @@ import java.util.Map;
  * @author Vyacheslav Rusakov
  * @since 07.03.2025
  */
+@SuppressWarnings("PMD.TooManyFields")
 public class StartupTimeInfo {
 
     // jvm time before application start
@@ -29,9 +32,9 @@ public class StartupTimeInfo {
     private Duration webTime;
 
     // time since start for each dropwizard bundle (can't be counted exclusively)
-    private final Map<String, Duration> initPoints = new LinkedHashMap<>();
+    private final Map<String, Duration> bundlesInitPoints = new LinkedHashMap<>();
     // exclusive run time for each bundle
-    private final Map<String, Duration> runTimes = new LinkedHashMap<>();
+    private final Map<String, Duration> bundlesRunTimes = new LinkedHashMap<>();
 
     private Duration initListenersTime;
     private Duration runListenersTime;
@@ -47,6 +50,10 @@ public class StartupTimeInfo {
     private final Map<Class, Duration> managedTimes = new LinkedHashMap<>();
     // managed or lifecycle
     private final Map<Class, String> managedTypes = new LinkedHashMap<>();
+
+    private final List<Class> initEvents = new ArrayList<>();
+    private final List<Class> runEvents = new ArrayList<>();
+    private final List<Class> webEvents = new ArrayList<>();
 
     private StatsInfo stats;
 
@@ -78,12 +85,12 @@ public class StartupTimeInfo {
         this.webTime = webTime;
     }
 
-    public Map<String, Duration> getInitPoints() {
-        return initPoints;
+    public Map<String, Duration> getBundlesInitPoints() {
+        return bundlesInitPoints;
     }
 
-    public Map<String, Duration> getRunTimes() {
-        return runTimes;
+    public Map<String, Duration> getBundlesRunTimes() {
+        return bundlesRunTimes;
     }
 
     public Duration getInitListenersTime() {
@@ -140,6 +147,18 @@ public class StartupTimeInfo {
 
     public Map<Class, String> getManagedTypes() {
         return managedTypes;
+    }
+
+    public List<Class> getInitEvents() {
+        return initEvents;
+    }
+
+    public List<Class> getRunEvents() {
+        return runEvents;
+    }
+
+    public List<Class> getWebEvents() {
+        return webEvents;
     }
 
     public StatsInfo getStats() {

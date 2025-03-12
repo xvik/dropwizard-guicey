@@ -60,6 +60,7 @@ public class ManagedTracker extends ArrayList<LifeCycle> {
         throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("unchecked")
     private void injectTracker(final LifecycleEnvironment lifecycle) {
         try {
             final Field managedObjects = LifecycleEnvironment.class.getDeclaredField("managedObjects");

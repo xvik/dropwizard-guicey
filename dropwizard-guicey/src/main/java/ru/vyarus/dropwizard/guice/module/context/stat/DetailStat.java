@@ -22,5 +22,9 @@ public enum DetailStat {
     /**
      * Guicey bundle run time.
      */
-    BundleRun
+    BundleRun,
+    /**
+     * Listeners of type processing.
+     */
+    Listener
 }
