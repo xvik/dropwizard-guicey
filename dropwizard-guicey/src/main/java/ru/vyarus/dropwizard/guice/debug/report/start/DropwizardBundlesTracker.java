@@ -8,6 +8,9 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
+import ru.vyarus.dropwizard.guice.module.context.stat.DetailStat;
 import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
 
@@ -59,12 +62,17 @@ public class DropwizardBundlesTracker extends ArrayList<ConfiguredBundle> {
         super.add(new BundleRunTracker(configuredBundle));
         // register time since initialization start! Because bundles can init other bundles we can't know exact
         // bundle init time, but can show time point when init was done!
-        info.getInitPoints().put(configuredBundle.getClass().getSimpleName(), stats.duration(Stat.OverallTime));
+        info.getBundlesInitPoints().put(RenderUtils.getClassName(configuredBundle.getClass()),
+                stats.duration(Stat.OverallTime));
         // last init done - init phase completed
         info.setInitTime(stats.duration(Stat.OverallTime));
         info.setInitInstallersTime(stats.duration(Stat.InstallersTime));
         info.setInitExtensionsTime(stats.duration(Stat.ExtensionsRecognitionTime));
         info.setInitListenersTime(stats.duration(Stat.ListenersTime));
+
+        if (configuredBundle instanceof GuiceBundle) {
+            info.getInitEvents().addAll(stats.getDetailedStats(DetailStat.Listener).keySet());
+        }
         return true;
     }
 
@@ -88,6 +96,7 @@ public class DropwizardBundlesTracker extends ArrayList<ConfiguredBundle> {
         throw new UnsupportedOperationException();
     }
 
+    @SuppressWarnings("unchecked")
     private void injectTracker(final Bootstrap bootstrap) {
         try {
             final Field configuredBundles = Bootstrap.class.getDeclaredField("configuredBundles");
@@ -96,7 +105,7 @@ public class DropwizardBundlesTracker extends ArrayList<ConfiguredBundle> {
             if (!existing.isEmpty()) {
                 logger.warn("Initialization time not tracked for bundles (move them after guice bundle to "
                         + "measure time): {}", existing.stream()
-                        .map(configuredBundle -> configuredBundle.getClass().getSimpleName())
+                        .map(configuredBundle -> RenderUtils.getClassName(configuredBundle.getClass()))
                         .collect(Collectors.joining(", ")));
                 // pack with tracker (for run phase)
                 existing.forEach(this::add);
@@ -119,6 +128,7 @@ public class DropwizardBundlesTracker extends ArrayList<ConfiguredBundle> {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public void run(final Configuration configuration, final Environment environment) throws Exception {
             if (info.getDwPreRunTime() == null) {
                 // time between last dw bundle init and first run (config and environment creation)
@@ -126,12 +136,17 @@ public class DropwizardBundlesTracker extends ArrayList<ConfiguredBundle> {
             }
             final Stopwatch bundleTimer = Stopwatch.createStarted();
             bundle.run(configuration, environment);
-            info.getRunTimes().put(bundle.getClass().getSimpleName(), bundleTimer.stop().elapsed());
+            info.getBundlesRunTimes().put(RenderUtils.getClassName(bundle.getClass()), bundleTimer.stop().elapsed());
             // last bundle run end - end of run phase (application run can't be tracked)
             info.setRunPoint(stats.duration(Stat.OverallTime));
             info.setRunListenersTime(stats.duration(Stat.ListenersTime).minus(info.getInitListenersTime()));
             // reset because it would start after each dropwizard bundle run
             webTimer.reset().start();
+
+            if (bundle instanceof GuiceBundle) {
+                info.getRunEvents().addAll(stats.getDetailedStats(DetailStat.Listener).keySet());
+                info.getRunEvents().removeAll(info.getInitEvents());
+            }
         }
     }
 }
