@@ -142,20 +142,29 @@ public class StartupTimeRenderer {
     private void printGuiceyWeb(final int shift,
                                 final StartupTimeInfo info,
                                 final StringBuilder res) {
-        res.append(line(shift, "Lifecycle time", info.getLifecycleTime()));
+
+        final boolean lifecycleSimulation = info.getJerseyTime() == null;
+        res.append(line(shift, lifecycleSimulation ? "Lifecycle simulation time"
+                : "Jetty lifecycle time", info.getLifecycleTime()));
+
         info.getManagedTimes().forEach((type, duration) ->
                 res.append(tab(shift + 1)).append(String.format("%-10s", info.getManagedTypes().get(type)))
                         .append(line(0, RenderUtils.getClassName(type), duration)));
 
+        final int prefix = lifecycleSimulation ? shift : shift + 1;
+        if (!lifecycleSimulation) {
+            res.append(line(prefix, "Jersey time", info.getJerseyTime()));
+        }
+
         final Duration listenersTime = info.getStats().duration(Stat.ListenersTime)
                 .minus(info.getRunListenersTime()).minus(info.getInitListenersTime());
-        res.append(line(shift, "Guicey time", info.getStats().duration(Stat.JerseyTime).plus(listenersTime)))
-                .append(line(shift + 1, "Installers time", info.getStats().duration(Stat.JerseyInstallerTime)))
+        res.append(line(prefix + 1, "Guicey time", info.getStats().duration(Stat.JerseyTime).plus(listenersTime)))
+                .append(line(prefix + 2, "Installers time", info.getStats().duration(Stat.JerseyInstallerTime)))
 
-                .append(line(shift + 1, "Listeners time", listenersTime));
+                .append(line(prefix + 2, "Listeners time", listenersTime));
         info.getStats().getDetailedStats(DetailStat.Listener).forEach((type, time) -> {
             if (info.getWebEvents().contains(type)) {
-                res.append(line(shift + 2, type.getSimpleName(), time));
+                res.append(line(prefix + 3, type.getSimpleName(), time));
             }
         });
     }
