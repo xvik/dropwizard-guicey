@@ -60,13 +60,15 @@ public final class BundleSupport {
     }
 
     /**
-     * Run all enabled bundles.
+     * Run all enabled bundles (and delayed configurations).
      *
      * @param context bundles context
      * @throws Exception if something goes wrong
      */
     public static void runBundles(final ConfigurationContext context) throws Exception {
         final GuiceyEnvironment env = new GuiceyEnvironment(context);
+        // process delayed configurations before bundles
+        context.processDelayedConfigurations(env);
         for (GuiceyBundle bundle : context.getEnabledBundles()) {
             final Stopwatch timer = context.stat().detailTimer(DetailStat.BundleRun, bundle.getClass());
             bundle.run(env);

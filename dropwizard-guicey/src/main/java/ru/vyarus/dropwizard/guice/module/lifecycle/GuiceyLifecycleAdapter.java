@@ -67,9 +67,6 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
             case InstallersResolved:
                 installersResolved((InstallersResolvedEvent) event);
                 break;
-            case ManualExtensionsValidated:
-                manualExtensionsValidated((ManualExtensionsValidatedEvent) event);
-                break;
             case ClasspathExtensionsResolved:
                 classpathExtensionsResolved((ClasspathExtensionsResolvedEvent) event);
                 break;
@@ -81,6 +78,9 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
                 break;
             case BundlesStarted:
                 bundlesStarted((BundlesStartedEvent) event);
+                break;
+            case ManualExtensionsValidated:
+                manualExtensionsValidated((ManualExtensionsValidatedEvent) event);
                 break;
             case ModulesAnalyzed:
                 modulesAnalyzed((ModulesAnalyzedEvent) event);
@@ -214,18 +214,6 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
     }
 
     /**
-     * Called when all manually registered extension classes are recognized by installers (validated). But only
-     * extensions, known to be enabled at that time are actually validated (this way it is possible to exclude
-     * extensions for non existing installers). Called only if at least one manual extension registered.
-     *
-     * @param event event object
-     * @see GuiceyLifecycle#ManualExtensionsValidated
-     */
-    protected void manualExtensionsValidated(final ManualExtensionsValidatedEvent event) {
-        // empty
-    }
-
-    /**
      * Called when classes from classpath scan analyzed and all extensions detected. Called only if classpath scan
      * is enabled and at least one extension detected.
      *
@@ -265,6 +253,18 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
      * @see GuiceyLifecycle#BundlesStarted
      */
     protected void bundlesStarted(final BundlesStartedEvent event) {
+        // empty
+    }
+
+    /**
+     * Called when all manually registered extension classes are recognized by installers (validated). But only
+     * extensions, known to be enabled at that time are actually validated (this way it is possible to exclude
+     * extensions for non existing installers). Called only if at least one manual extension registered.
+     *
+     * @param event event object
+     * @see GuiceyLifecycle#ManualExtensionsValidated
+     */
+    protected void manualExtensionsValidated(final ManualExtensionsValidatedEvent event) {
         // empty
     }
 

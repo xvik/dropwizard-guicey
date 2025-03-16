@@ -12,6 +12,8 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
  */
 public class DiagnosticHook implements GuiceyConfigurationHook {
 
+    public static final String ALIAS = "diagnostic";
+
     @Override
     public void configure(final GuiceBundle.Builder builder) {
         builder.printDiagnosticInfo()

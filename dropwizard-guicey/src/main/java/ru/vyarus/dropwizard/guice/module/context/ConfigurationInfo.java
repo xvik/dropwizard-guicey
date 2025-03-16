@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
@@ -43,7 +44,10 @@ public final class ConfigurationInfo {
     // preserve all instance types together
     private final Multimap<Class<?>, ItemInfo> instanceTypes = LinkedHashMultimap.create();
 
+    private final List<Class<? extends GuiceyConfigurationHook>> hooks;
+
     public ConfigurationInfo(final ConfigurationContext context) {
+        hooks = context.getExecutedHookTypes();
         // convert all objects into types (more suitable for analysis)
         for (ConfigItem type : ConfigItem.values()) {
             for (Object item : context.getItems(type)) {
@@ -181,6 +185,13 @@ public final class ConfigurationInfo {
         // if item is only disabled without actual registration
         final T res = (T) classTypes.get(id);
         return res == null ? Collections.emptyList() : Collections.singletonList(res);
+    }
+
+    /**
+     * @return types of executed hooks
+     */
+    public List<Class<? extends GuiceyConfigurationHook>> getHooks() {
+        return hooks;
     }
 
     private <T, K extends ItemInfo> List<ItemId<T>> filter(final List<ItemId<T>> items, final Predicate<K> filter) {

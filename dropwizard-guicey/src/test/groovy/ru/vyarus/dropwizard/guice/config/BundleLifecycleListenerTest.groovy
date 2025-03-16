@@ -24,13 +24,9 @@ class BundleLifecycleListenerTest extends AbstractTest {
 
         expect: "listener called"
         XListener.events.size() > 1
-        App.delayedListenerCalled
     }
 
     static class App extends Application<Configuration> {
-
-        static boolean delayedListenerCalled
-
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
@@ -38,7 +34,6 @@ class BundleLifecycleListenerTest extends AbstractTest {
                         @Override
                         void initialize(GuiceyBootstrap gbootstrap) {
                             gbootstrap.listen(new XListener())
-                            .onApplicationStartup {delayedListenerCalled = true}
                         }
                     }).build())
         }

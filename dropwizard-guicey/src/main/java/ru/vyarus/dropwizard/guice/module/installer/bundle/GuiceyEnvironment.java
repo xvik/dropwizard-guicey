@@ -4,18 +4,26 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Module;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.lifecycle.Managed;
+import io.dropwizard.lifecycle.ServerLifecycleListener;
+import org.eclipse.jetty.util.component.LifeCycle;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ListenersRegistration;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationShutdownListener;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationShutdownListenerAdapter;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationStartupListener;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationStartupListenerAdapter;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.GuiceyStartupListener;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.GuiceyStartupListenerAdapter;
+import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigTreeBuilder;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -28,13 +36,12 @@ import java.util.function.Supplier;
  * @author Vyacheslav Rusakov
  * @since 13.06.2019
  */
-@SuppressWarnings("PMD.TooManyMethods")
-public class GuiceyEnvironment extends ListenersRegistration<GuiceyEnvironment> {
+@SuppressWarnings({"PMD.TooManyMethods", "ClassFanOutComplexity"})
+public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnvironment> {
 
     private final ConfigurationContext context;
 
     public GuiceyEnvironment(final ConfigurationContext context) {
-        super(context);
         this.context = context;
     }
 
@@ -174,103 +181,6 @@ public class GuiceyEnvironment extends ListenersRegistration<GuiceyEnvironment> 
     }
 
     /**
-     * Application instance may be useful for complex (half manual) integrations where access for
-     * injector is required.
-     * For example, manually registered
-     * {@link io.dropwizard.lifecycle.Managed} may access injector in it's start method by calling
-     * {@link ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup#getInjector(Application)}.
-     * <p>
-     * NOTE: it will work in this example, because injector access will be after injector creation.
-     * Directly inside bundle initialization method injector could not be obtained as it's not exists yet.
-     *
-     * @return dropwizard application instance
-     */
-    public Application application() {
-        return context.getBootstrap().getApplication();
-    }
-
-    /**
-     * Read option value. Options could be set only in application root
-     * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#option(Enum, Object)}.
-     * If value wasn't set there then default value will be returned. Null may return only if it was default value
-     * and no new value were assigned.
-     * <p>
-     * Option access is tracked as option usage (all tracked data is available through
-     * {@link ru.vyarus.dropwizard.guice.module.context.option.OptionsInfo}).
-     *
-     * @param option option enum
-     * @param <V>    option value type
-     * @param <T>    helper type to define option
-     * @return assigned option value or default value
-     * @see Option more options info
-     * @see ru.vyarus.dropwizard.guice.GuiceyOptions options example
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#option(java.lang.Enum, java.lang.Object)
-     * options definition
-     */
-    public <V, T extends Enum & Option> V option(final T option) {
-        return context.option(option);
-    }
-
-    /**
-     * Register guice modules.
-     * <p>
-     * Note that this registration appear in run phase and so you already have access
-     * to environment and configuration (and don't need to use Aware* interfaces, but if you will they will also
-     * work, of course). This may look like misconception because configuration appear not in configuration phase,
-     * but it's not: for example, in pure dropwizard you can register jersey configuration modules in run phase too.
-     * This brings the simplicity of use: 3rd party guice modules often require configuration values to
-     * be passed directly to constructor, which is impossible in initialization phase (and so you have to use Aware*
-     * workarounds).
-     *
-     * @param modules one or more guice modules
-     * @return environment instance for chained calls
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modules(com.google.inject.Module...)
-     */
-    public GuiceyEnvironment modules(final Module... modules) {
-        Preconditions.checkState(modules.length > 0, "Specify at least one module");
-        context.registerModules(modules);
-        return this;
-    }
-
-    /**
-     * Override modules (using guice {@link com.google.inject.util.Modules#override(Module...)}).
-     *
-     * @param modules overriding modules
-     * @return environment instance for chained calls
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(Module...)
-     */
-    public GuiceyEnvironment modulesOverride(final Module... modules) {
-        context.registerModulesOverride(modules);
-        return this;
-    }
-
-    /**
-     * @param extensions extensions to disable (manually added, registered by bundles or with classpath scan)
-     * @return environment instance for chained calls
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableExtensions(Class[])
-     */
-    public final GuiceyEnvironment disableExtensions(final Class<?>... extensions) {
-        context.disableExtensions(extensions);
-        return this;
-    }
-
-    /**
-     * Disable both usual and overriding guice modules.
-     * <p>
-     * If bindings analysis is not disabled, could also disable inner (transitive) modules, but only inside
-     * normal modules.
-     *
-     * @param modules guice module types to disable
-     * @return environment instance for chained calls
-     * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#disableModules(Class[])
-     */
-    @SafeVarargs
-    public final GuiceyEnvironment disableModules(final Class<? extends Module>... modules) {
-        context.disableModules(modules);
-        return this;
-    }
-
-    /**
      * Shortcut for {@code environment().jersey().register()} for direct registration of jersey extensions.
      * For the most cases prefer automatic installation of jersey extensions with guicey installer.
      *
@@ -312,83 +222,220 @@ public class GuiceyEnvironment extends ListenersRegistration<GuiceyEnvironment> 
     }
 
     /**
-     * Share global state to be used in other bundles (during configuration). This was added for very special cases
-     * when shared state is unavoidable (to not re-invent the wheel each time)!
+     * Code to execute after guice injector creation (but still under run phase). May be used for manual
+     * configurations (registrations into dropwizard environment).
      * <p>
-     * It is preferred to initialize shared state under initialization phase to avoid problems related to
-     * initialization order (assuming state is used under run phase). But, in some cases, it is not possible.
+     * Listener will be called on environment command start too.
      * <p>
-     * Internally, state is linked to application instance, so it would be safe to use with concurrent tests.
-     * Value could be accessed statically with application instance:
-     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#lookup(Application, Class)}.
-     * <p>
-     * During application strartup, shared state could be requested with a static call
-     * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#getStartupInstance()}, but only
-     * from main thread.
-     * <p>
-     * In some cases, it is preferred to use bundle class as key. Value could be set only once
-     * (to prevent hard to track situations).
-     * <p>
-     * If initialization point could vary (first access should initialize it) use
-     * {@link #sharedState(Class, java.util.function.Supplier)} instead.
+     * Note: there is no registration method for this listener in main guice bundle builder
+     * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder}) because it is assumed, that such blocks would
+     * always be wrapped with bundles to improve application readability.
      *
-     * @param key   shared object key
-     * @param value shared object
-     * @return bootstrap instance for chained calls
-     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     * @param listener listener to call after injector creation
+     * @param <C> configuration type
+     * @return builder instance for chained calls
      */
+    public <C extends Configuration> GuiceyEnvironment onGuiceyStartup(final GuiceyStartupListener<C> listener) {
+        return listen(new GuiceyStartupListenerAdapter<C>(listener));
+    }
+
+    /**
+     * Code to execute after complete application startup. For server command it would happen after jetty startup
+     * and for lightweight guicey test helpers ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}) - after
+     * guicey start (as jetty not started in this case). In both cases, application completely started at this moment.
+     * Suitable for reporting.
+     * <p>
+     * If you need to listen only for real server startup then use
+     * {@link #listenServer(io.dropwizard.lifecycle.ServerLifecycleListener)} instead.
+     * <p>
+     * Not called on custom command execution (because no lifecycle involved in this case). In this case you can use
+     * {@link #onGuiceyStartup(GuiceyStartupListener)} as always executed point.
+     *
+     * @param listener listener to call on server startup
+     * @return builder instance for chained calls
+     */
+    public GuiceyEnvironment onApplicationStartup(final ApplicationStartupListener listener) {
+        return listen(new ApplicationStartupListenerAdapter(listener));
+    }
+
+    /**
+     * Code to execute after complete application shutdown. Called not only for real application but for
+     * environment commands and lightweight guicey test helpers
+     * ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}). Suitable for closing additional resources.
+     * <p>
+     * If you need to listen only for real server shutdown then use
+     * {@link #listenServer(io.dropwizard.lifecycle.ServerLifecycleListener)} instead.
+     * <p>
+     * Not called on command execution because no lifecycle involved in this case.
+     *
+     * @param listener listener to call on server startup
+     * @return builder instance for chained calls
+     */
+    public GuiceyEnvironment onApplicationShutdown(final ApplicationShutdownListener listener) {
+        return listen(new ApplicationShutdownListenerAdapter(listener));
+    }
+
+    /**
+     * Shortcut for {@code environment().lifecycle().addServerLifecycleListener} registration.
+     * <p>
+     * Note that server listener is called only when jetty starts up and so will not be called with lightweight
+     * guicey test helpers {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}. Prefer using
+     * {@link #onApplicationStartup(ApplicationStartupListener)} to be correctly called in tests (of course, if not
+     * server-only execution is desired).
+     * <p>
+     * Not called for custom command execution.
+     *
+     * @param listener server startup listener.
+     * @return builder instance for chained calls
+     */
+    public GuiceyEnvironment listenServer(final ServerLifecycleListener listener) {
+        environment().lifecycle().addServerLifecycleListener(listener);
+        return this;
+    }
+
+    /**
+     * Shortcut for jetty lifecycle listener {@code environment().lifecycle().addEventListener(listener)}
+     * registration.
+     * <p>
+     * Lifecycle listeners are called with lightweight guicey test helpers
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp} which makes them perfectly suitable for reporting.
+     * <p>
+     * If only startup event is required, prefer {@link #onApplicationStartup(ApplicationStartupListener)} method
+     * as more expressive and easier to use.
+     * <p>
+     * Listeners are not called on custom command execution.
+     *
+     * @param listener jetty
+     * @return builder instance for chained calls
+     */
+    public GuiceyEnvironment listenJetty(final LifeCycle.Listener listener) {
+        environment().lifecycle().addEventListener(listener);
+        return this;
+    }
+
+    // ------------------------------------------------------------------ COMMON METHODS
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <K extends Configuration> Bootstrap<K> bootstrap() {
+        return context.getBootstrap();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public <K extends Configuration> Application<K> application() {
+        return context.getBootstrap().getApplication();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <V, K extends Enum & Option> V option(final K option) {
+        return context.option(option);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GuiceyEnvironment modules(final Module... modules) {
+        Preconditions.checkState(modules.length > 0, "Specify at least one module");
+        context.registerModules(modules);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GuiceyEnvironment modulesOverride(final Module... modules) {
+        context.registerModulesOverride(modules);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GuiceyEnvironment extensions(final Class<?>... extensionClasses) {
+        context.registerExtensions(extensionClasses);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GuiceyEnvironment extensionsOptional(final Class<?>... extensionClasses) {
+        context.registerExtensionsOptional(extensionClasses);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GuiceyEnvironment disableExtensions(final Class<?>... extensions) {
+        context.disableExtensions(extensions);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SafeVarargs
+    public final GuiceyEnvironment disableModules(final Class<? extends Module>... modules) {
+        context.disableModules(modules);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GuiceyEnvironment listen(final GuiceyLifecycleListener... listeners) {
+        context.lifecycle().register(listeners);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GuiceyEnvironment shareState(final Class<?> key, final Object value) {
         context.getSharedState().put(key, value);
         return this;
     }
 
     /**
-     * Alternative shared value initialization for cases when first accessed bundle should init state value
-     * and all other just use it.
-     * <p>
-     * It is preferred to initialize shared state under initialization phase to avoid problems related to
-     * initialization order (assuming state is used under run phase). But, in some cases, it is not possible.
-     *
-     * @param key          shared object key
-     * @param defaultValue default object provider
-     * @param <T>          shared object type
-     * @return shared object (possibly just created)
-     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     * {@inheritDoc}
      */
-    public <T> T sharedState(final Class<?> key, final Supplier<T> defaultValue) {
+    @Override
+    public <K> K sharedState(final Class<?> key, final Supplier<K> defaultValue) {
         return context.getSharedState().get(key, defaultValue);
     }
 
     /**
-     * Access shared value.
-     *
-     * @param key shared object key
-     * @param <T> shared object type
-     * @return shared object
-     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     * {@inheritDoc}
      */
-    public <T> Optional<T> sharedState(final Class<?> key) {
+    @Override
+    public <K> Optional<K> sharedState(final Class<?> key) {
         return Optional.ofNullable(context.getSharedState().get(key));
     }
 
     /**
-     * Used to access shared state value and immediately fail if value not yet set (most likely due to incorrect
-     * configuration order).
-     *
-     * @param key     shared object key
-     * @param message exception message (could use {@link String#format(String, Object...)} placeholders)
-     * @param args    placeholder arguments for error message
-     * @param <T>     shared object type
-     * @return shared object
-     * @throws IllegalStateException if not value available
-     * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
+     * {@inheritDoc}
      */
-    public <T> T sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
-        return context.getSharedState().getOrFail(key, message, args);
-    }
-
     @Override
-    protected void withEnvironment(final Consumer<Environment> action) {
-        action.accept(environment());
+    public <K> K sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
+        return context.getSharedState().getOrFail(key, message, args);
     }
 }

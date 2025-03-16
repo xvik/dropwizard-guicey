@@ -10,19 +10,25 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
+import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ModulesSupport;
 import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
+import ru.vyarus.dropwizard.guice.module.installer.util.FeatureUtils;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.InjectorStage;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.BundleTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.CommandTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ExtensionsInstallationTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ExtensionsRecognitionTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyBundleRunTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.GuiceyTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InjectorCreationTime;
+import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.InstallersTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ModulesProcessingTime;
 import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.RunTime;
 
@@ -61,6 +67,39 @@ public class GuiceyRunner {
         BundleSupport.runBundles(context);
         runTimer.stop();
         timer.stop();
+    }
+
+    /**
+     * Extensions could be registered in run phase too. Auto scan was performed under configuration phase, but without
+     * registration (only recognition) - now register all extensions.
+     */
+    public void registerExtensions() {
+        context.stat().timer(InstallersTime);
+        context.stat().timer(ExtensionsRecognitionTime);
+        final ExtensionsHolder holder = context.getExtensionsHolder();
+        final List<Class<?>> manual = context.getEnabledExtensions();
+        for (Class<?> type : manual) {
+            if (!ExtensionsSupport.registerExtension(context, type, false)) {
+                throw new IllegalStateException("No installer found for extension " + type.getName()
+                        + ". Available installers: " + holder.getInstallerTypes()
+                        .stream().map(FeatureUtils::getInstallerExtName).collect(Collectors.joining(", ")));
+            }
+        }
+        context.lifecycle().manualExtensionsValidated(context.getItems(ConfigItem.Extension), manual);
+        // install pre-selected classpath scan extensions
+        if (holder.getScanExtensions() != null) {
+             holder.getScanExtensions().forEach(cand -> {
+                 final Class<?> type = cand.getType();
+                 if (manual.contains(type)) {
+                     // avoid duplicate extension installation, but register it's appearance in auto scan scope
+                     context.getOrRegisterExtension(type, true);
+                 } else {
+                     ExtensionsSupport.registerExtension(context, type, cand.getInstaller(), true);
+                 }
+             });
+        }
+        context.stat().stopTimer(ExtensionsRecognitionTime);
+        context.stat().stopTimer(InstallersTime);
     }
 
     /**

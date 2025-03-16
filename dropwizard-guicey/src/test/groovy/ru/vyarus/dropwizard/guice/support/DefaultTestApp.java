@@ -27,4 +27,9 @@ public class DefaultTestApp extends Application<Configuration> {
     @Override
     public void run(Configuration configuration, Environment environment) throws Exception {
     }
+
+    @Override
+    protected void onFatalError(Throwable t) {
+        throw new RuntimeException(t);
+    }
 }

@@ -197,13 +197,6 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
-        protected void manualExtensionsValidated(ManualExtensionsValidatedEvent event) {
-            confChecks(event)
-            assert event.extensions.size() == 1
-            assert event.validated.size() == 0
-        }
-
-        @Override
         protected void classpathExtensionsResolved(ClasspathExtensionsResolvedEvent event) {
             confChecks(event)
             assert event.extensions.size() == 15
@@ -224,6 +217,13 @@ class EventsConsistencyTest extends AbstractTest {
         protected void bundlesStarted(BundlesStartedEvent event) {
             runChecks(event)
             assert event.getBundles().size() == 5
+        }
+
+        @Override
+        protected void manualExtensionsValidated(ManualExtensionsValidatedEvent event) {
+            confChecks(event)
+            assert event.extensions.size() == 1
+            assert event.validated.size() == 0
         }
 
         @Override
