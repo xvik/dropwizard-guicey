@@ -66,12 +66,6 @@ public enum GuiceyLifecycle {
      */
     InstallersResolved(InstallersResolvedEvent.class),
     /**
-     * Called when all manually registered extension classes are recognized by installers (validated). But only
-     * extensions, known to be enabled at that time are actually validated (this way it is possible to exclude
-     * extensions for non existing installers). Called only if at least one manual extension registered.
-     */
-    ManualExtensionsValidated(ManualExtensionsValidatedEvent.class),
-    /**
      * Called when classes from classpath scan analyzed and all extensions detected.
      * Called only if classpath scan is enabled and at least one extension detected.
      */
@@ -101,6 +95,14 @@ public enum GuiceyLifecycle {
      * guice bundle processing.
      */
     BundlesStarted(BundlesStartedEvent.class),
+    /**
+     * Called when all manually registered extension classes are recognized by installers (validated). But only
+     * extensions, known to be enabled at that time are actually validated (this way it is possible to exclude
+     * extensions for non existing installers). Called only if at least one manual extension registered.
+     * <p>
+     * Performed in run phase because extensions could be registered in both phases.
+     */
+    ManualExtensionsValidated(ManualExtensionsValidatedEvent.class),
     /**
      * Called after guice modules analysis and repackaging. Reveals all detected extensions and removed bindings info.
      * Called only if bindings analysis is enabled.

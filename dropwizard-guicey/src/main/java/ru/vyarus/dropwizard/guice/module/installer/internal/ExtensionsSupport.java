@@ -48,7 +48,14 @@ public final class ExtensionsSupport {
     public static boolean registerExtension(final ConfigurationContext context,
                                             final Class<?> type,
                                             final boolean fromScan) {
-        final FeatureInstaller installer = findInstaller(type, context.getExtensionsHolder());
+        final FeatureInstaller installer = findInstaller(type, context.getExtensionsHolder().getInstallers());
+        return registerExtension(context, type, installer, fromScan);
+    }
+
+    public static boolean registerExtension(final ConfigurationContext context,
+                                            final Class<?> type,
+                                            final FeatureInstaller installer,
+                                            final boolean fromScan) {
         boolean recognized = installer != null;
         // during classpath scan checks, non extension classes may come, so its not possible to move info creation
         // here from both branches
@@ -91,7 +98,7 @@ public final class ExtensionsSupport {
             // manually hidden annotation from scanning
             return false;
         }
-        final FeatureInstaller installer = findInstaller(type, context.getExtensionsHolder());
+        final FeatureInstaller installer = findInstaller(type, context.getExtensionsHolder().getInstallers());
         final boolean recognized = installer != null;
         if (recognized) {
             // important to force config creation for extension from scan to allow disabling by matcher
@@ -162,12 +169,11 @@ public final class ExtensionsSupport {
      * used (note that installers are ordered).
      *
      * @param type   extension type
-     * @param holder extensions holder bean
+     * @param installers installers
      * @return matching installer or null if no matching installer found
      */
-    @SuppressWarnings("unchecked")
-    private static FeatureInstaller findInstaller(final Class<?> type, final ExtensionsHolder holder) {
-        for (FeatureInstaller installer : holder.getInstallers()) {
+    public static FeatureInstaller findInstaller(final Class<?> type, final List<FeatureInstaller> installers) {
+        for (FeatureInstaller installer : installers) {
             if (installer.matches(type)) {
                 return installer;
             }

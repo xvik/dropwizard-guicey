@@ -43,6 +43,7 @@ import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.context.unique.DuplicateConfigDetector;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClasspathScanner;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.LifecycleSupport;
@@ -58,6 +59,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -88,6 +90,7 @@ public final class ConfigurationContext {
     private final Logger logger = LoggerFactory.getLogger(ConfigurationContext.class);
 
     private final List<Predicate<Class<?>>> autoScanFilters = new ArrayList<>();
+    private final List<Consumer<GuiceyEnvironment>> delayedConfigurations = new ArrayList<>();
     private final SharedConfigurationState sharedState = new SharedConfigurationState();
     private DuplicateConfigDetector duplicates;
     private Bootstrap bootstrap;
@@ -97,6 +100,10 @@ public final class ConfigurationContext {
     private Environment environment;
     private ExtensionsHolder extensionsHolder;
 
+    /**
+     * Record executed hook classes.
+     */
+    private final List<Class<? extends GuiceyConfigurationHook>> hookTypes = new ArrayList<>();
 
     /**
      * Configured items (bundles, installers, extensions etc).
@@ -187,6 +194,24 @@ public final class ConfigurationContext {
         this.duplicates = detector;
     }
 
+    /**
+     * Add delayed configuration from the main builder (or hook) to run under run phase (when configuration would be
+     * available).
+     *
+     * @param config delayed configuration
+     */
+    public void addDelayedConfiguration(final Consumer<GuiceyEnvironment> config) {
+        delayedConfigurations.add(config);
+    }
+
+    /**
+     * Process delayed builder (or hooks) configurations.
+     */
+    public void processDelayedConfigurations(final GuiceyEnvironment environment) {
+        for (Consumer<GuiceyEnvironment> action : delayedConfigurations) {
+            action.accept(environment);
+        }
+    }
 
     // --------------------------------------------------------------------------- SCOPE
 
@@ -725,6 +750,7 @@ public final class ConfigurationContext {
         // Use special scope to distinguish external configuration
         openScope(ConfigScope.Hook.getKey());
         final Set<GuiceyConfigurationHook> hooks = ConfigurationHooksSupport.run(builder, stat());
+        hooks.forEach(hook -> hookTypes.add(hook.getClass()));
         closeScope();
         timer.stop();
         lifecycle().configurationHooksProcessed(hooks);
@@ -908,6 +934,13 @@ public final class ConfigurationContext {
      */
     public SharedConfigurationState getSharedState() {
         return sharedState;
+    }
+
+    /**
+     * @return types of executed hooks
+     */
+    public List<Class<? extends GuiceyConfigurationHook>> getExecutedHookTypes() {
+        return hookTypes;
     }
 
     private ItemId getScope() {

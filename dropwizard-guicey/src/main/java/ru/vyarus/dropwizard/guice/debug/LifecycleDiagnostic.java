@@ -126,18 +126,6 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
     }
 
     @Override
-    protected void manualExtensionsValidated(final ManualExtensionsValidatedEvent event) {
-        log("%s manual extensions validated (of %s registered)",
-                event.getValidated().size(), event.getExtensions().size());
-        if (showDetails) {
-            logDetails("validated", event.getValidated());
-            final List<Class<?>> ignored = new ArrayList<>(event.getExtensions());
-            ignored.removeAll(event.getValidated());
-            logDetails("ignored", ignored);
-        }
-    }
-
-    @Override
     protected void classpathExtensionsResolved(final ClasspathExtensionsResolvedEvent event) {
         log("%s classpath extensions detected", event.getExtensions().size());
         if (showDetails) {
@@ -150,6 +138,18 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
         log("Started %s GuiceyBundles", event.getBundles().size());
         if (showDetails) {
             logDetails(BUNDLES, event.getBundles());
+        }
+    }
+
+    @Override
+    protected void manualExtensionsValidated(final ManualExtensionsValidatedEvent event) {
+        log("%s manual extensions validated (of %s registered)",
+                event.getValidated().size(), event.getExtensions().size());
+        if (showDetails) {
+            logDetails("validated", event.getValidated());
+            final List<Class<?>> ignored = new ArrayList<>(event.getExtensions());
+            ignored.removeAll(event.getValidated());
+            logDetails("ignored", ignored);
         }
     }
 

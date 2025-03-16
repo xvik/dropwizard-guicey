@@ -1,5 +1,18 @@
 * Update to dropwizard 4.0.13
+* Support extensions registration in GuiceyBundle run (.extensions() and .extensionsOptional()) 
+    - ManualExtensionsValidatedEvent moved from configuration into run phase
+    - As before, classpath scan performed under configuration phase (but actual extensions registration moved to run phase) 
+* Add methods to the main builder (and hooks) to simplify usage without guicey bundle: 
+    - .whenConfigurationReady(...) - delayed configuration (same as GuiceyBunle.run):  
+       simplify extensions or guice modules registration, requiring configuration
+    - .onGuiceyStartup() - executes after injector creation (under run phase). 
+       Useful for manual dropwizard configurations
+    - .onApplicationStartup() - executes after complete application startup (including guicey lightweight test)
+    - .onApplicationShutdown() - executes after application shutdown
+    - .listenServer() - shortcut for jetty server startup listen
+    - .listenJetty() - shortcut for jetty lifecycle listening
 * Add application startup (and shutdown) time detalization report: .printStartupTime()
+    - Add hook alias for showing report on compiled applicaton: -Dguicey.hooks=startup-time
 * Improve guice bindings report:
     - fixed scope accuracy for linked bindings
     - Fixed bindings for private modules (missed exposed linked bindings)
@@ -9,9 +22,7 @@
   (also important for avoiding duplicate binding registration after classpath scan)
     - Add AnalyzePrivateGuiceModules option (enabled by default) to disable private modules 
       analysis (in case of problems)
-* Add shortcut listeners in GuiceBundle and GuiceyBundle (bootstrap and environment) objects:
-    onGuiceyStartup, onApplicationStartup, onApplicationShutdown, listenJetty, listenServer
-   (before, methods were present only in GuiceyBindle's environment object)
+* Add onApplicationShutdown() listener method for GuiceyEnvironment (GuiceyBundle.run)
 * Disabled modules remove would also affect private modules now (but only first level)
 * Add BeforeInit guicey event (the first point with available Bootstrap)
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
