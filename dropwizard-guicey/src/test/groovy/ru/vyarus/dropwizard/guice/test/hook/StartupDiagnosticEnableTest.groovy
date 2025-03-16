@@ -6,7 +6,7 @@ import io.dropwizard.core.Configuration
 import io.dropwizard.core.setup.Bootstrap
 import io.dropwizard.core.setup.Environment
 import ru.vyarus.dropwizard.guice.GuiceBundle
-import ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook
+import ru.vyarus.dropwizard.guice.debug.hook.StartupTimeHook
 import ru.vyarus.dropwizard.guice.hook.ConfigurationHooksSupport
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
@@ -14,10 +14,10 @@ import spock.lang.Specification
 
 /**
  * @author Vyacheslav Rusakov
- * @since 18.08.2019
+ * @since 14.03.2025
  */
 @TestGuiceyApp(App)
-class DiagnosticHookEnableTest extends Specification {
+class StartupDiagnosticEnableTest extends Specification {
 
     void cleanup() {
         ConfigurationHooksSupport.reset()
@@ -26,16 +26,16 @@ class DiagnosticHookEnableTest extends Specification {
     @Inject
     GuiceyConfigurationInfo info
 
-    def "Diagnostic hook enable"() {
+    def "Startup hook enable"() {
 
         expect:
-        info.getData().getHooks().contains(DiagnosticHook)
+        info.getData().getHooks().contains(StartupTimeHook)
     }
 
     static class App extends Application<Configuration> {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
-            System.setProperty(ConfigurationHooksSupport.HOOKS_PROPERTY, DiagnosticHook.ALIAS)
+            System.setProperty(ConfigurationHooksSupport.HOOKS_PROPERTY, StartupTimeHook.ALIAS)
             bootstrap.addBundle(GuiceBundle.builder().build())
         }
 

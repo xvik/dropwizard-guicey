@@ -8,7 +8,6 @@ import io.dropwizard.core.setup.Bootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
-import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
@@ -16,7 +15,6 @@ import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
-import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsSupport;
 import ru.vyarus.dropwizard.guice.module.installer.option.WithOptions;
 import ru.vyarus.dropwizard.guice.module.installer.order.OrderComparator;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.ClassVisitor;
@@ -29,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.ScanPackages;
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.ScanProtectedClasses;
@@ -140,36 +137,23 @@ public class GuiceyInitializer {
     }
 
     /**
-     * Performs classpath scan to search for extensions. Register all extensions (note that extensions may be disabled
-     * on run phase).
+     * Performs classpath scan to search for extensions. No registration performed because manual extensions could
+     * be added in run phase (and it is important to register manual extension first).
      */
     @SuppressWarnings("PMD.PrematureDeclaration")
-    public void resolveExtensions() {
+    public void scanExtensions() {
         final StatTimer itimer = context.stat().timer(InstallersTime);
         final StatTimer timer = context.stat().timer(ExtensionsRecognitionTime);
         final ExtensionsHolder holder = context.getExtensionsHolder();
-        final List<Class<?>> manual = context.getEnabledExtensions();
-        for (Class<?> type : manual) {
-            if (!ExtensionsSupport.registerExtension(context, type, false)) {
-                throw new IllegalStateException("No installer found for extension " + type.getName()
-                        + ". Available installers: " + holder.getInstallerTypes()
-                        .stream().map(FeatureUtils::getInstallerExtName).collect(Collectors.joining(", ")));
-            }
-        }
-        context.lifecycle().manualExtensionsValidated(context.getItems(ConfigItem.Extension), manual);
         if (scanner != null) {
             final List<Class<?>> extensions = new ArrayList<>();
             scanner.scan(type -> {
-                if (manual.contains(type)) {
-                    // avoid duplicate extension installation, but register it's appearance in auto scan scope
-                    context.getOrRegisterExtension(type, true);
-                    extensions.add(type);
-                } else if (context.isAcceptableAutoScanClass(type)
-                        && ExtensionsSupport.registerExtension(context, type, true)) {
-                    // if matching installer found - extension recognized, otherwise - not an extension
+                // detect by installer - if installer found for sure it is an extension
+                if (context.isAcceptableAutoScanClass(type) && holder.acceptScanCandidate(type)) {
                     extensions.add(type);
                 }
             });
+            // fire event with detected extensions, but they are not registered yet
             context.lifecycle().classpathExtensionsResolved(extensions);
         }
         timer.stop();

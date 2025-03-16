@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration;
 
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.ConfigurationPhaseEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.RunPhaseEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 01.09.2019
  */
-public class ManualExtensionsValidatedEvent extends ConfigurationPhaseEvent {
+public class ManualExtensionsValidatedEvent extends RunPhaseEvent {
 
     private final List<Class<?>> extensions;
     private final List<Class<?>> validated;

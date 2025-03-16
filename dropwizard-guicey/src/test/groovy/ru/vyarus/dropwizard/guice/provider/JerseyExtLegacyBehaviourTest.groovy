@@ -10,6 +10,7 @@ import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
 
 import jakarta.ws.rs.core.Response
 import jakarta.ws.rs.ext.ExceptionMapper
+import ru.vyarus.dropwizard.guice.support.DefaultTestApp
 
 /**
  * @author Vyacheslav Rusakov
@@ -23,11 +24,11 @@ class JerseyExtLegacyBehaviourTest extends AbstractTest {
         new App().run("server")
 
         then: "extension denied"
-        def ex = thrown(IllegalStateException)
-        ex.message.startsWith('No installer found for extension ru.vyarus.dropwizard.guice.provider.JerseyExtLegacyBehaviourTest$ExM.')
+        def ex = thrown(RuntimeException)
+        ex.cause.message.startsWith('No installer found for extension ru.vyarus.dropwizard.guice.provider.JerseyExtLegacyBehaviourTest$ExM.')
     }
 
-    static class App extends Application<Configuration> {
+    static class App extends DefaultTestApp {
 
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
@@ -39,7 +40,6 @@ class JerseyExtLegacyBehaviourTest extends AbstractTest {
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
-
         }
     }
 

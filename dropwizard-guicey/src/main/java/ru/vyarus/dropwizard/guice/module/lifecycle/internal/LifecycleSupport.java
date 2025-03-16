@@ -140,12 +140,6 @@ public final class LifecycleSupport {
         broadcast(new InstallersResolvedEvent(context, installers, disabled));
     }
 
-    public void manualExtensionsValidated(final List<Class<?>> extensions, final List<Class<?>> validated) {
-        if (!extensions.isEmpty()) {
-            broadcast(new ManualExtensionsValidatedEvent(context, extensions, validated));
-        }
-    }
-
     public void classpathExtensionsResolved(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
             broadcast(new ClasspathExtensionsResolvedEvent(context, extensions));
@@ -185,6 +179,12 @@ public final class LifecycleSupport {
     public void bundlesStarted(final List<GuiceyBundle> bundles) {
         if (!bundles.isEmpty()) {
             broadcast(new BundlesStartedEvent(context, bundles));
+        }
+    }
+
+    public void manualExtensionsValidated(final List<Class<?>> extensions, final List<Class<?>> validated) {
+        if (!extensions.isEmpty()) {
+            broadcast(new ManualExtensionsValidatedEvent(context, extensions, validated));
         }
     }
 

@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
 import ru.vyarus.dropwizard.guice.module.installer.order.OrderComparator;
 import ru.vyarus.dropwizard.guice.module.installer.order.Ordered;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import java.util.Map;
  */
 public class ExtensionsHolder {
     private final List<FeatureInstaller> installers;
+    private final List<ScanItem> scanExtensions = new ArrayList<>();
     private List<ExtensionItemInfoImpl> extensionsData;
     private final List<Class<? extends FeatureInstaller>> installerTypes;
     private final Map<Class<? extends FeatureInstaller>, List<Class<?>>> extensions = Maps.newHashMap();
@@ -29,6 +31,28 @@ public class ExtensionsHolder {
     public ExtensionsHolder(final List<FeatureInstaller> installers) {
         this.installers = installers;
         this.installerTypes = Lists.transform(installers, FeatureInstaller::getClass);
+    }
+
+    /**
+     * @return extensions recognized by classpath scan
+     */
+    public List<ScanItem> getScanExtensions() {
+        return scanExtensions;
+    }
+
+    /**
+     * Auto scan performed under configuration phase, but actual extensions registration only in run phase
+     * because manual extensions could be added at run phase (and manual extensions must be registered in priority).
+     *
+     * @param candidate potential extension
+     */
+    public boolean acceptScanCandidate(final Class<?> candidate) {
+        final FeatureInstaller installer = ExtensionsSupport.findInstaller(candidate, installers);
+        final boolean recognized = installer != null;
+        if (recognized) {
+            scanExtensions.add(new ScanItem(candidate, installer));
+        }
+        return recognized;
     }
 
     /**
@@ -94,6 +118,27 @@ public class ExtensionsHolder {
                 }
                 extensions.sort(comparator);
             }
+        }
+    }
+
+    /**
+     * Extension item, detected with classpath scan.
+     */
+    public static class ScanItem {
+        private final Class<?> type;
+        private final FeatureInstaller installer;
+
+        public ScanItem(final Class<?> type, final FeatureInstaller installer) {
+            this.type = type;
+            this.installer = installer;
+        }
+
+        public Class<?> getType() {
+            return type;
+        }
+
+        public FeatureInstaller getInstaller() {
+            return installer;
         }
     }
 }

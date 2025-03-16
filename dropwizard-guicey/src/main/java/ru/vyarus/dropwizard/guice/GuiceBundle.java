@@ -9,7 +9,9 @@ import io.dropwizard.core.Configuration;
 import io.dropwizard.core.ConfiguredBundle;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
+import io.dropwizard.lifecycle.ServerLifecycleListener;
 import jakarta.servlet.DispatcherType;
+import org.eclipse.jetty.util.component.LifeCycle;
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
@@ -23,6 +25,7 @@ import ru.vyarus.dropwizard.guice.debug.StartupTimeDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.WebMappingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.YamlBindingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook;
+import ru.vyarus.dropwizard.guice.debug.hook.StartupTimeHook;
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceConfig;
@@ -48,9 +51,15 @@ import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
 import ru.vyarus.dropwizard.guice.module.installer.WebInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
-import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ListenersRegistration;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationShutdownListener;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationShutdownListenerAdapter;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationStartupListener;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationStartupListenerAdapter;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.GuiceyStartupListener;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.GuiceyStartupListenerAdapter;
 import ru.vyarus.dropwizard.guice.module.installer.internal.CommandSupport;
 import ru.vyarus.dropwizard.guice.module.jersey.debug.HK2DebugBundle;
+import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 
 import java.util.EnumSet;
 import java.util.Map;
@@ -137,8 +146,8 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         starter.findCommands();
         // scan for installers (if scan enabled) and installers initialization
         starter.resolveInstallers();
-        // scan for extensions (if scan enabled) and validation of all registered extensions
-        starter.resolveExtensions();
+        // scan for extensions, if scan enabled. (no installation because more extensions could be added in run phase)
+        starter.scanExtensions();
 
         starter.initFinished();
     }
@@ -150,6 +159,8 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
 
         // process guicey bundles
         runner.runBundles();
+        // register all manual and classpath scan extensions (bundles may register more extensions)
+        runner.registerExtensions();
         // prepare guice modules for injector creation
         runner.prepareModules();
         // create injector
@@ -179,22 +190,20 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
      * @return builder instance to construct bundle
      */
     public static Builder builder() {
-        return new Builder(new GuiceBundle())
-                // allow enabling diagnostic logs with system property (on compiled app): -Dguicey.hooks=diagnostic
-                .hookAlias("diagnostic", DiagnosticHook.class);
+        return new Builder()
+                // enable diagnostic logs with system property (on compiled app): -Dguicey.hooks=diagnostic
+                .hookAlias(DiagnosticHook.ALIAS, DiagnosticHook.class)
+                // enable startup logs with system property (on compiled app): -Dguicey.hooks=startup-time
+                .hookAlias(StartupTimeHook.ALIAS, StartupTimeHook.class);
     }
 
     /**
      * Builder encapsulates bundle configuration options.
      */
     @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity"})
-    public static class Builder extends ListenersRegistration<Builder> {
-        private final GuiceBundle bundle;
-
-        public Builder(final GuiceBundle bundle) {
-            super(bundle.context);
-            this.bundle = bundle;
-        }
+    public static class Builder {
+        private final GuiceBundle bundle = new GuiceBundle();
+        private boolean buildCalled;
 
         /**
          * Options is a generic mechanism to provide internal configuration values for guicey and 3rd party bundles.
@@ -415,7 +424,10 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * These modules are registered under initialization phase where you don't have access for configuration
          * or environment objects. To workaround this you can use *AwareModule interfaces, or extend from
          * {@link ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule} and required objects will be set
-         * just before configuration start. Another option is to register module inside
+         * just before configuration start.
+         * <p>
+         * Alternatively, registration could be delayed with
+         * {@link #whenConfigurationReady(java.util.function.Consumer)}.And another option is to register module inside
          * {@link GuiceyBundle#run(GuiceyEnvironment)}, which is called under run phase.
          *
          * @param modules one or more guice modules
@@ -533,6 +545,10 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * <p>
          * Alternatively, you can manually bind extensions in guice module and they would be recognized
          * ({@link GuiceyOptions#AnalyzeGuiceModules}).
+         * <p>
+         * If extension registration depends on configuration value then use
+         * {@link #whenConfigurationReady(java.util.function.Consumer)} or register extension inside
+         * {@link GuiceyBundle#run(GuiceyEnvironment)}, which is called under run phase.
          *
          * @param extensionClasses extension bean classes to register
          * @return builder instance for chained calls
@@ -742,6 +758,36 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
+         * Guicey broadcast a lot of events in order to indicate lifecycle phases
+         * ({@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle}). This could be useful
+         * for diagnostic logging (like {@link #printLifecyclePhases()}) or to implement special
+         * behaviours on installers, bundles, modules extensions (listeners have access to everything).
+         * For example, {@link ru.vyarus.dropwizard.guice.module.support.ConfigurationAwareModule} like support for
+         * guice modules could be implemented with listeners.
+         * <p>
+         * Configuration items (modules, extensions, bundles) are not aware of each other and listeners
+         * could be used to tie them. For example, to tell bundle if some other bundles registered (limited
+         * applicability, but just for example).
+         * <p>
+         * You can also use {@link ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter} when you need to
+         * handle multiple events (it replaces direct events handling with simple methods).
+         * <p>
+         * Listener is not registered if equal listener were already registered ({@link java.util.Set} used as
+         * listeners storage), so if you need to be sure that only one instance of some listener will be used
+         * implement {@link Object#equals(Object)} and {@link Object#hashCode()}.
+         *
+         * @param listeners guicey lifecycle listeners
+         * @return builder instance for chained calls
+         * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle
+         * @see ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter
+         * @see ru.vyarus.dropwizard.guice.module.lifecycle.UniqueGuiceyLifecycleListener
+         */
+        public Builder listen(final GuiceyLifecycleListener... listeners) {
+            bundle.context.lifecycle().register(listeners);
+            return this;
+        }
+
+        /**
          * Enables strict control of beans instantiation context: all beans must be instantiated by guice, except
          * beans annotated with {@link ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged}.
          * When bean instantiated in wrong context exception would be thrown.
@@ -815,7 +861,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * <p>
          * Not that custom installers must provide this information by overriding
          * {@link ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller#getRecognizableSigns()}.
-         * 
+         *
          * @return builder instance for chained calls
          */
         public Builder printExtensionsHelp() {
@@ -1040,6 +1086,29 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
+         * Delayed configuration block. Would run under run phase where configuration and environment objects would
+         * be available. Essentially, this is the same point as guicey bundles run
+         * ({@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle#run(
+         * ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment)}), but called just before bundles
+         * processing.
+         * <p>
+         * Useful when guice modules require configuration values or when extensions registration depends on
+         * configuration values.
+         * <p>
+         * Note: guice injector is not available yet!
+         * <p>
+         * Method is not started with "on" or "listen" as other methods to differentiate this configuration
+         * method from pure listeners.
+         *
+         * @param runPhaseAction action to execute under run phase
+         * @return builder instance for chained calls
+         */
+        public Builder whenConfigurationReady(final Consumer<GuiceyEnvironment> runPhaseAction) {
+            bundle.context.addDelayedConfiguration(runPhaseAction);
+            return this;
+        }
+
+        /**
          * Guicey manage application-wide shared state object to simplify cases when such state is required during
          * configuration. It may be used by bundles or hooks to "communicate". For example, server pages bundles
          * use this to unify global configuration. Unified place intended to replace all separate "hacks" and
@@ -1060,6 +1129,99 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
+         * Code to execute after guice injector creation (but still under run phase). May be used for manual
+         * configurations (registrations into dropwizard environment).
+         * <p>
+         * Listener will be called on environment command start too.
+         * <p>
+         * Note: there is no registration method for this listener in main guice bundle builder
+         * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder}) because it is assumed, that such blocks would
+         * always be wrapped with bundles to improve application readability.
+         *
+         * @param listener listener to call after injector creation
+         * @param <C> configuration type
+         * @return builder instance for chained calls
+         */
+        public <C extends Configuration> Builder onGuiceyStartup(final GuiceyStartupListener<C> listener) {
+            return listen(new GuiceyStartupListenerAdapter<C>(listener));
+        }
+
+        /**
+         * Code to execute after complete application startup. For server command it would happen after jetty startup
+         * and for lightweight guicey test helpers ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}) -
+         * after guicey start (as jetty not started in this case). In both cases, application completely started at
+         * this moment. Suitable for reporting.
+         * <p>
+         * If you need to listen only for real server startup then use
+         * {@link #listenServer(io.dropwizard.lifecycle.ServerLifecycleListener)} instead.
+         * <p>
+         * Not called on custom command execution (because no lifecycle involved in this case). In this case you can
+         * use {@link #onGuiceyStartup(GuiceyStartupListener)} as always executed point.
+         *
+         * @param listener listener to call on server startup
+         * @return builder instance for chained calls
+         */
+        public Builder onApplicationStartup(final ApplicationStartupListener listener) {
+            return listen(new ApplicationStartupListenerAdapter(listener));
+        }
+
+        /**
+         * Code to execute after complete application shutdown. Called not only for real application but for
+         * environment commands and lightweight guicey test helpers
+         * ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}). Suitable for closing additional resources.
+         * <p>
+         * If you need to listen only for real server shutdown then use
+         * {@link #listenServer(io.dropwizard.lifecycle.ServerLifecycleListener)} instead.
+         * <p>
+         * Not called on command execution because no lifecycle involved in this case.
+         *
+         * @param listener listener to call on server startup
+         * @return builder instance for chained calls
+         */
+        public Builder onApplicationShutdown(final ApplicationShutdownListener listener) {
+            return listen(new ApplicationShutdownListenerAdapter(listener));
+        }
+
+        /**
+         * Shortcut for {@code environment().lifecycle().addServerLifecycleListener} registration.
+         * <p>
+         * Note that server listener is called only when jetty starts up and so will not be called with lightweight
+         * guicey test helpers {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}. Prefer using
+         * {@link #onApplicationStartup(ApplicationStartupListener)} to be correctly called in tests (of course, if not
+         * server-only execution is desired).
+         * <p>
+         * Not called for custom command execution.
+         *
+         * @param listener server startup listener.
+         * @return builder instance for chained calls
+         */
+        public Builder listenServer(final ServerLifecycleListener listener) {
+            withEnvironment(environment -> environment.lifecycle().addServerLifecycleListener(listener));
+            return this;
+        }
+
+        /**
+         * Shortcut for jetty lifecycle listener {@code environment().lifecycle().addEventListener(listener)}
+         * registration.
+         * <p>
+         * Lifecycle listeners are called with lightweight guicey test helpers
+         * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp} which makes them perfectly suitable for
+         * reporting.
+         * <p>
+         * If only startup event is required, prefer {@link #onApplicationStartup(ApplicationStartupListener)} method
+         * as more expressive and easier to use.
+         * <p>
+         * Listeners are not called on custom command execution.
+         *
+         * @param listener jetty
+         * @return builder instance for chained calls
+         */
+        public Builder listenJetty(final LifeCycle.Listener listener) {
+            withEnvironment(environment -> environment.lifecycle().addEventListener(listener));
+            return this;
+        }
+
+        /**
          * @param stage stage to run injector with
          * @return bundle instance
          * @see GuiceyOptions#InjectorStage
@@ -1074,13 +1236,16 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * @see GuiceyOptions#InjectorStage
          */
         public GuiceBundle build() {
+            Preconditions.checkState(!buildCalled,
+                    ".build() was already called for guice bundle. Most likely, it was called second time in "
+                            + GuiceyConfigurationHook.class.getSimpleName());
+            buildCalled = true;
             bundle.context.runHooks(this);
             bundle.context.stat().stopTimer(Stat.BundleBuilderTime);
             return bundle;
         }
 
-        @Override
-        protected void withEnvironment(final Consumer<Environment> action) {
+        private void withEnvironment(final Consumer<Environment> action) {
             onGuiceyStartup((config, env, injector) -> action.accept(env));
         }
     }

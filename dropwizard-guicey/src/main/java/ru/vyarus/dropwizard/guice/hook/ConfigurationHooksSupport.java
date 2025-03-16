@@ -136,7 +136,7 @@ public final class ConfigurationHooksSupport {
         }
         // clear hooks just after init
         reset();
-        return hooks;
+        return hooks == null ? Collections.emptySet() : hooks;
     }
 
     /**
