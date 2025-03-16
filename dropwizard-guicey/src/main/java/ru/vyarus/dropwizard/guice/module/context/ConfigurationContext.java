@@ -90,7 +90,7 @@ public final class ConfigurationContext {
     private final Logger logger = LoggerFactory.getLogger(ConfigurationContext.class);
 
     private final List<Predicate<Class<?>>> autoScanFilters = new ArrayList<>();
-    private final List<Consumer<GuiceyEnvironment>> delayedConfigurations = new ArrayList<>();
+    private final List<DelayedConfig> delayedConfigurations = new ArrayList<>();
     private final SharedConfigurationState sharedState = new SharedConfigurationState();
     private DuplicateConfigDetector duplicates;
     private Bootstrap bootstrap;
@@ -201,15 +201,15 @@ public final class ConfigurationContext {
      * @param config delayed configuration
      */
     public void addDelayedConfiguration(final Consumer<GuiceyEnvironment> config) {
-        delayedConfigurations.add(config);
+        delayedConfigurations.add(new DelayedConfig(getScope(), config));
     }
 
     /**
      * Process delayed builder (or hooks) configurations.
      */
     public void processDelayedConfigurations(final GuiceyEnvironment environment) {
-        for (Consumer<GuiceyEnvironment> action : delayedConfigurations) {
-            action.accept(environment);
+        for (DelayedConfig action : delayedConfigurations) {
+            action.process(environment);
         }
     }
 
@@ -1218,6 +1218,27 @@ public final class ConfigurationContext {
                 currentScope = scope;
             }
             return test;
+        }
+    }
+
+    /**
+     * Delayed configuration action with preserved source context.
+     */
+    private class DelayedConfig {
+        private final ItemId scope;
+        private final Consumer<GuiceyEnvironment> action;
+
+        DelayedConfig(final ItemId scope, final Consumer<GuiceyEnvironment> action) {
+            this.scope = scope;
+            this.action = action;
+        }
+
+        public void process(final GuiceyEnvironment environment) {
+            final ItemId original = currentScope;
+            // change scope to indicate actual registration scope (diff. app scope and hook)
+            currentScope = scope;
+            action.accept(environment);
+            currentScope = original;
         }
     }
 }
