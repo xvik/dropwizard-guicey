@@ -50,7 +50,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
                 "\t\t\t\t\tInstallers resolution              : 111 ms\n" +
-                "\t\t\t\t\tExtensions recognition             : 111 ms\n" +
+                "\t\t\t\t\tScanned extensions recognition     : 111 ms\n" +
                 "\t\t\t\tListeners time                     : 111 ms\n" +
                 "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms\n" +
                 "\t\t\t\t\tBeforeInitEvent                    : 111 ms\n" +
@@ -71,6 +71,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\tGuice modules processing           : 111 ms\n" +
                 "\t\t\t\t\tBindings resolution                : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
+                "\t\t\t\t\tExtensions registration            : 111 ms\n" +
                 "\t\t\t\t\tGuice bindings analysis            : 111 ms\n" +
                 "\t\t\t\t\tExtensions installation            : 111 ms\n" +
                 "\t\t\t\tInjector creation                  : 111 ms\n");
@@ -129,7 +130,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
                 "\t\t\t\t\tInstallers resolution              : 111 ms\n" +
-                "\t\t\t\t\tExtensions recognition             : 111 ms\n" +
+                "\t\t\t\t\tScanned extensions recognition     : 111 ms\n" +
                 "\t\t\t\tListeners time                     : 111 ms\n" +
                 "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms\n" +
                         "\t\t\t\t\tBeforeInitEvent                    : 111 ms\n" +
@@ -150,6 +151,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\tGuice modules processing           : 111 ms\n" +
                 "\t\t\t\t\tBindings resolution                : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
+                "\t\t\t\t\tExtensions registration            : 111 ms\n" +
                 "\t\t\t\t\tGuice bindings analysis            : 111 ms\n" +
                 "\t\t\t\t\tExtensions installation            : 111 ms\n" +
                 "\t\t\t\tInjector creation                  : 111 ms\n");
@@ -212,7 +214,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
                 "\t\t\t\t\tInstallers resolution              : 111 ms\n" +
-                "\t\t\t\t\tExtensions recognition             : 111 ms\n" +
+                "\t\t\t\t\tScanned extensions recognition     : 111 ms\n" +
                 "\t\t\t\tListeners time                     : 111 ms\n" +
                 "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms\n" +
                         "\t\t\t\t\tBeforeInitEvent                    : 111 ms\n" +
@@ -233,6 +235,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\tGuice modules processing           : 111 ms\n" +
                 "\t\t\t\t\tBindings resolution                : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
+                "\t\t\t\t\tExtensions registration            : 111 ms\n" +
                 "\t\t\t\t\tGuice bindings analysis            : 111 ms\n" +
                 "\t\t\t\t\tExtensions installation            : 111 ms\n" +
                 "\t\t\t\tInjector creation                  : 111 ms\n");
