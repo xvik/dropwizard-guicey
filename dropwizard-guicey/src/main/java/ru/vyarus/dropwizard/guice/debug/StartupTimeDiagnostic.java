@@ -2,6 +2,10 @@ package ru.vyarus.dropwizard.guice.debug;
 
 import com.google.common.base.Stopwatch;
 import org.eclipse.jetty.util.component.LifeCycle;
+import org.glassfish.jersey.server.monitoring.ApplicationEvent;
+import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
+import org.glassfish.jersey.server.monitoring.RequestEvent;
+import org.glassfish.jersey.server.monitoring.RequestEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.debug.report.start.DropwizardBundlesTracker;
@@ -41,6 +45,7 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 07.03.2025
  */
+@SuppressWarnings({"ClassDataAbstractionCoupling", "ClassFanOutComplexity"})
 public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
     private final Logger logger = LoggerFactory.getLogger(StartupTimeDiagnostic.class);
 
@@ -60,6 +65,24 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
     protected void beforeRun(final BeforeRunEvent event) {
         // for tracking managed objects execution
         new ManagedTracker(start, stop, event.getEnvironment().lifecycle());
+        final Stopwatch jerseyTime = Stopwatch.createUnstarted();
+        // listener would be called on normal run and for grizzly 2 rest stubs
+        event.getEnvironment().jersey().register(new ApplicationEventListener() {
+            @Override
+            public void onEvent(final ApplicationEvent applicationEvent) {
+                final ApplicationEvent.Type type = applicationEvent.getType();
+                if (type == ApplicationEvent.Type.INITIALIZATION_START) {
+                    jerseyTime.start();
+                } else if (type == ApplicationEvent.Type.INITIALIZATION_FINISHED) {
+                    start.setJerseyTime(jerseyTime.elapsed());
+                }
+            }
+
+            @Override
+            public RequestEventListener onRequest(final RequestEvent requestEvent) {
+                return null;
+            }
+        });
     }
 
     // guicey run done
@@ -67,7 +90,7 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
     @SuppressWarnings("AnonInnerLength")
     protected void applicationRun(final ApplicationRunEvent event) {
         // apply custom listener instead of guicey events to run AFTER all guicey events
-        event.getEnvironment().lifecycle().addEventListener(new LifeCycle.Listener() {
+        event.registerJettyListener(new LifeCycle.Listener() {
 
             private final Stopwatch startTime = Stopwatch.createUnstarted();
             private final Stopwatch stopTime = Stopwatch.createUnstarted();

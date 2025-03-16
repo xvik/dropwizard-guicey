@@ -87,14 +87,14 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tApplicationRunEvent                : 111 ms\n" +
                 "\n" +
                 "\t\tWeb server startup                 : 111 ms\n" +
-                "\t\t\tLifecycle time                     : 111 ms\n" +
+                "\t\t\tLifecycle simulation time          : 111 ms\n" +
                 "\t\t\t\tmanaged   ExecutorServiceManager             : 111 ms\n" +
                 "\t\t\t\tmanaged   RegistryShutdown                   : 111 ms\n" +
                 "\t\t\t\tmanaged   DummyManaged                       : 111 ms\n" +
-                "\t\t\tGuicey time                        : 111 ms\n" +
-                "\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\tListeners time                     : 111 ms\n" +
-                "\t\t\t\t\tApplicationStartedEvent            : 111 ms");
+                "\t\t\t\tGuicey time                        : 111 ms\n" +
+                "\t\t\t\t\tInstallers time                    : 111 ms\n" +
+                "\t\t\t\t\tListeners time                     : 111 ms\n" +
+                "\t\t\t\t\t\tApplicationStartedEvent            : 111 ms");
 
         Assertions.assertThat(out).contains("Application shutdown time: \n" +
                 "\n" +
@@ -167,17 +167,18 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                         "\t\t\t\t\tApplicationRunEvent                : 111 ms\n" +
                 "\n" +
                 "\t\tWeb server startup                 : 111 ms\n" +
-                "\t\t\tLifecycle time                     : 111 ms\n" +
+                "\t\t\tJetty lifecycle time               : 111 ms\n" +
                 "\t\t\t\tmanaged   ExecutorServiceManager             : 111 ms\n" +
                 "\t\t\t\tmanaged   RegistryShutdown                   : 111 ms\n" +
                 "\t\t\t\tmanaged   DummyManaged                       : 111 ms\n" +
-                "\t\t\tGuicey time                        : 111 ms\n" +
-                "\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\tListeners time                     : 111 ms\n" +
-                "\t\t\t\t\tJerseyConfigurationEvent           : 111 ms\n" +
-                "\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms\n" +
-                "\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms\n" +
-                "\t\t\t\t\tApplicationStartedEvent            : 111 ms");
+                "\t\t\t\tJersey time                        : 111 ms\n" +
+                "\t\t\t\t\tGuicey time                        : 111 ms\n" +
+                "\t\t\t\t\t\tInstallers time                    : 111 ms\n" +
+                "\t\t\t\t\t\tListeners time                     : 111 ms\n" +
+                "\t\t\t\t\t\t\tJerseyConfigurationEvent           : 111 ms\n" +
+                "\t\t\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms\n" +
+                "\t\t\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms\n" +
+                "\t\t\t\t\t\t\tApplicationStartedEvent            : 111 ms");
 
         Assertions.assertThat(out).contains("Application shutdown time: \n" +
                 "\n" +
@@ -256,14 +257,14 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                         "\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms\n" +
                 "\n" +
                 "\t\tWeb server startup                 : 111 ms\n" +
-                "\t\t\tLifecycle time                     : 111 ms\n" +
+                "\t\t\tLifecycle simulation time          : 111 ms\n" +
                 "\t\t\t\tmanaged   ExecutorServiceManager             : 111 ms\n" +
                 "\t\t\t\tmanaged   RegistryShutdown                   : 111 ms\n" +
                 "\t\t\t\tmanaged   DummyManaged                       : 111 ms\n" +
-                "\t\t\tGuicey time                        : 111 ms\n" +
-                "\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\tListeners time                     : 111 ms\n" +
-                "\t\t\t\t\tApplicationStartedEvent            : 111 ms");
+                "\t\t\t\tGuicey time                        : 111 ms\n" +
+                "\t\t\t\t\tInstallers time                    : 111 ms\n" +
+                "\t\t\t\t\tListeners time                     : 111 ms\n" +
+                "\t\t\t\t\t\tApplicationStartedEvent            : 111 ms");
 
         Assertions.assertThat(out).contains("Application shutdown time: \n" +
                 "\n" +
