@@ -86,7 +86,7 @@ public class StartupTimeRenderer {
         res.append(line(shift + 1, "Installers time", info.getInitInstallersTime()))
                 .append(line(shift + 2, "Installers resolution",
                         info.getStats().duration(Stat.InstallersResolutionTime)))
-                .append(line(shift + 2, "Extensions recognition", info.getInitExtensionsTime()))
+                .append(line(shift + 2, "Scanned extensions recognition", info.getInitExtensionsTime()))
 
                 .append(line(shift + 1, "Listeners time", info.getInitListenersTime()));
         info.getStats().getDetailedStats(DetailStat.Listener).forEach((type, time) -> {
@@ -108,14 +108,18 @@ public class StartupTimeRenderer {
         info.getStats().getDetailedStats(DetailStat.BundleRun).forEach((type, time) ->
                 res.append(line(shift + 2, RenderUtils.getClassName(type), time)));
 
+        final Duration bindingsAnalysisTime = info.getStats().duration(Stat.BindingsAnalysisTime);
         res.append(line(shift + 1, "Guice modules processing", info.getStats().duration(Stat.ModulesProcessingTime)))
                 .append(line(shift + 2, "Bindings resolution", info.getStats().duration(Stat.BindingsResolutionTime)))
 
                 .append(line(shift + 1, "Installers time", info.getStats().duration(Stat.InstallersTime)
                         .minus(info.getInitInstallersTime())
                         .plus(info.getStats().duration(Stat.ExtensionsInstallationTime))))
-                .append(line(shift + 2, "Guice bindings analysis", info.getStats()
-                        .duration(Stat.BindingsAnalysisTime)))
+                .append(line(shift + 2, "Extensions registration", info.getStats()
+                        .duration(Stat.ExtensionsRecognitionTime)
+                        .minus(info.getInitExtensionsTime())
+                        .minus(bindingsAnalysisTime)))
+                .append(line(shift + 2, "Guice bindings analysis", bindingsAnalysisTime))
                 .append(line(shift + 2, "Extensions installation", info.getStats()
                         .duration(Stat.ExtensionsInstallationTime)))
 
