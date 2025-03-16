@@ -309,6 +309,16 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
         Assertions.assertThat(out).contains("managed   StartupDiagnosticTest$Test7$1      : 111 ms");
     }
 
+    @Test
+    void testNoLifecycle() {
+        String out = run(Test8.class);
+
+        // lifecycle still used, just managed objects not processed
+        Assertions.assertThat(out).contains("\t\tWeb server startup                 : 111 ms\n" +
+                "\t\t\tLifecycle simulation time          : 111 ms\n" +
+                "\t\t\t\tGuicey time                        : 111 ms");
+    }
+
     @Disabled
     @TestGuiceyApp(AutoScanApplication.class)
     public static class Test1 {
@@ -405,6 +415,18 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
         }
     }
 
+
+    @Disabled
+    @TestGuiceyApp(value = DefaultTestApp.class, managedLifecycle = false)
+    public static class Test8 {
+
+        @EnableHook
+        static GuiceyConfigurationHook hook = builder -> builder.printStartupTime();
+
+        @Test
+        void test() {
+        }
+    }
 
 
     @Override
