@@ -44,6 +44,8 @@ public class StartupTimeInfo {
     // configuration and environment creation time
     private Duration dwPreRunTime;
 
+    // pure jersey time
+    private Duration jerseyTime;
     // time between lifecycle starting and start
     private Duration lifecycleTime;
     // have to separate - otherwise can't differentiate them
@@ -131,6 +133,14 @@ public class StartupTimeInfo {
 
     public void setDwPreRunTime(final Duration dwPreRunTime) {
         this.dwPreRunTime = dwPreRunTime;
+    }
+
+    public Duration getJerseyTime() {
+        return jerseyTime;
+    }
+
+    public void setJerseyTime(final Duration jerseyTime) {
+        this.jerseyTime = jerseyTime;
     }
 
     public Duration getLifecycleTime() {
