@@ -22,7 +22,8 @@ class SharedStateUsageTest extends Specification {
     def "Check shared state usage"() {
 
         expect: "all asserts ok"
-        true
+        GlobalBundle.called
+        EqualBundle.called
     }
 
     static class App extends Application<Configuration> {
@@ -47,9 +48,11 @@ class SharedStateUsageTest extends Specification {
     }
 
     static class GlobalBundle implements GuiceyBundle {
+        static boolean called
         @Override
         void initialize(GuiceyBootstrap bootstrap) {
             bootstrap.shareState(GlobalBundle, "12")
+            bootstrap.whenSharedStateReady(GlobalBundle, { assert it == "12"; called = true})
             assert bootstrap.sharedState(GlobalBundle, null) != null
         }
     }
@@ -89,6 +92,9 @@ class SharedStateUsageTest extends Specification {
     }
 
     static class EqualBundle implements GuiceyBundle {
+
+        static boolean called
+
         @Override
         void initialize(GuiceyBootstrap bootstrap) {
             def state = bootstrap.sharedState(EqualBundle, { "13" })
@@ -99,6 +105,7 @@ class SharedStateUsageTest extends Specification {
 
         @Override
         void run(GuiceyEnvironment environment) throws Exception {
+            environment.whenSharedStateReady(EqualBundle, { assert it == "13"; called = true})
             assert environment.sharedState(EqualBundle).get() == "13"
             assert environment.sharedStateOrFail(EqualBundle, "sds") == "13"
         }

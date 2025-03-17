@@ -25,6 +25,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -452,5 +453,13 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
     @Override
     public <K> K sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
         return context.getSharedState().getOrFail(key, message, args);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <V> void whenSharedStateReady(final Class<?> key, final Consumer<V> action) {
+        context.getSharedState().whenReady(key, action);
     }
 }
