@@ -34,7 +34,11 @@
 * Improve disable extensions predicate (bundle.disable(...)):
     - Fix predicate applied for extension too early (without installer set)
     - Add disable predicates: Disables.jerseyExtension, Disabled.webExtension and Disables.installedBy  
-    - Predicates for exact type (module, bundle etc.) in Disables now raise item type to simplify further declarations 
+    - Predicates for exact type (module, bundle etc.) in Disables now raise item type to simplify further declarations
+* Shared state improvements:
+    - Add .whenReady() method for reactive state value access
+      Add .whenSharedStateReady() for GuiceyBootstrap and GuiceyEnvironment
+      (not required for the main bundle as there is withSharedState() method where whenReady() could be used directly)
 * Test improvements:
   - Track guicey test extensions time (would appear when debug option enabled)
   - Improve debug report: setup objects and hooks registration point are clear now (with direct code links) 
