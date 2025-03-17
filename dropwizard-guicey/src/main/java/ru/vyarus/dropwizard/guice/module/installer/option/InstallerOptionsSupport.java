@@ -28,7 +28,7 @@ public abstract class InstallerOptionsSupport implements WithOptions {
      * @see Options#get(java.lang.Enum) for details
      * @see ru.vyarus.dropwizard.guice.GuiceyOptions for options example
      */
-    protected <V, T extends Enum & Option> V option(final T option) {
+    protected <V, T extends Enum<? extends Option> & Option> V option(final T option) {
         return options.get(option);
     }
 }
