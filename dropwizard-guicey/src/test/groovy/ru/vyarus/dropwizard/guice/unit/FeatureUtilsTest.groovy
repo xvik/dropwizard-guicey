@@ -24,8 +24,8 @@ class FeatureUtilsTest extends Specification {
         when: "calling not allowed method"
         FeatureUtils.invokeMethod(FeatureUtils.findMethod(Clz, "call"), null)
         then: "err"
-        def ex = thrown(IllegalStateException)
-        ex.message.startsWith("Failed to invoke method")
+        def ex = thrown(IllegalArgumentException)
+        ex.message.startsWith("null object for public void ru.vyarus.dropwizard.guice.unit.FeatureUtilsTest\$Clz.call()")
     }
 
     static class Clz {

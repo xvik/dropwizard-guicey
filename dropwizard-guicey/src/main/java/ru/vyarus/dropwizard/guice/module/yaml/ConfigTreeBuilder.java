@@ -465,7 +465,7 @@ public final class ConfigTreeBuilder {
         final Object res;
         final AccessibleObject accessor = (AccessibleObject) member.getMember();
         // case: private field
-        if (!accessor.isAccessible()) {
+        if (!accessor.canAccess(object)) {
             accessor.setAccessible(true);
             try {
                 res = member.getValue(object);

@@ -352,7 +352,7 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
      * {@inheritDoc}
      */
     @Override
-    public <V, K extends Enum & Option> V option(final K option) {
+    public <V, K extends Enum<? extends Option> & Option> V option(final K option) {
         return context.option(option);
     }
 
