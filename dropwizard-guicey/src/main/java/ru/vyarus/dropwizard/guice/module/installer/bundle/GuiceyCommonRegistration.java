@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -244,4 +245,14 @@ public interface GuiceyCommonRegistration<T> {
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
     <K> K sharedStateOrFail(Class<?> key, String message, Object... args);
+
+    /**
+     * Reactive shared value access: if value already available action called immediately, otherwise action would
+     * be called when value set (note that value could be set only once).
+     *
+     * @param key    shared object key
+     * @param action action to execute when value would be set
+     * @param <V>    value type
+     */
+    <V> void whenSharedStateReady(Class<?> key, Consumer<V> action);
 }

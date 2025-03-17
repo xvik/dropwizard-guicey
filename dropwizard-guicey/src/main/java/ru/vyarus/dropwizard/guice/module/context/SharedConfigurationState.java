@@ -3,21 +3,24 @@ package ru.vyarus.dropwizard.guice.module.context;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.google.inject.Injector;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
-import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
+import io.dropwizard.lifecycle.Managed;
+import jakarta.inject.Provider;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
-import jakarta.inject.Provider;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -73,6 +76,9 @@ public class SharedConfigurationState {
     private static final ThreadLocal<SharedConfigurationState> STARTUP_INSTANCE = new ThreadLocal<>();
 
     private final Map<String, Object> state = new HashMap<>();
+    // reactive values
+    // NOTE: no validation for not called listeners to allow optional reactive states
+    private final Multimap<Class<?>, Consumer> listeners = LinkedHashMultimap.create();
     private Application application;
 
     public SharedConfigurationState() {
@@ -127,6 +133,25 @@ public class SharedConfigurationState {
             throw new IllegalStateException(Strings.lenientFormat(message, args));
         }
         return res;
+    }
+
+    /**
+     * Reactive shared value access: if value already available action called immediately, otherwise action would
+     * be called when value set (note that value could be set only once).
+     * <p>
+     * Note: listener would not be called if the state is never set. This assumed to be used for optional state cases.
+     *
+     * @param key    shared object key
+     * @param action action to execute when value would be set
+     * @param <V>    value type
+     */
+    public <V> void whenReady(final Class<?> key, final Consumer<V> action) {
+        final V value = get(key);
+        if (value != null) {
+            action.accept(value);
+        } else {
+            listeners.put(key, action);
+        }
     }
 
     // ---- providers for common objects
@@ -212,6 +237,7 @@ public class SharedConfigurationState {
      * @param key   shared object key
      * @param value shared value (usually configuration object)
      */
+    @SuppressWarnings("unchecked")
     public void put(final Class<?> key, final Object value) {
         Preconditions.checkArgument(key != null, "Shared state key can't be null");
         // just to avoid dummy mistakes
@@ -219,6 +245,8 @@ public class SharedConfigurationState {
         final String name = key.getName();
         Preconditions.checkState(!state.containsKey(name), "Shared state for key %s already defined", name);
         state.put(name, value);
+        // processed one time
+        listeners.removeAll(key).forEach(consumer -> consumer.accept(value));
     }
 
     /**

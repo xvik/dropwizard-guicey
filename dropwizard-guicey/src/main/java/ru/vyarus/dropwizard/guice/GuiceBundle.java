@@ -1113,12 +1113,12 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * Guicey manage application-wide shared state object to simplify cases when such state is required during
          * configuration. It may be used by bundles or hooks to "communicate". For example, server pages bundles
          * use this to unify global configuration. Unified place intended to replace all separate "hacks" and
-         * so simplify testing. Shared application state could be access statically anywhere during application
+         * so simplify testing. Shared application state could be accessed statically anywhere during application
          * life.
          * <p>
          * Caution: this is intended to be used only in cases when there is no other option except global state.
          * <p>
-         * This method could be useful for possible hook needы (maybe hooks communications) because there is no
+         * This method could be useful for possible hook needs (maybe hooks communications) because there is no
          * other way to access shared state by hooks (bundles may use special api or reference by application instance)
          *
          * @param stateAction state action
