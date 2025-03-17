@@ -9,6 +9,7 @@ import io.dropwizard.core.setup.Environment;
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.lifecycle.ServerLifecycleListener;
 import org.eclipse.jetty.util.component.LifeCycle;
+import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationShutdownListener;
@@ -311,6 +312,20 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
     public GuiceyEnvironment listenJetty(final LifeCycle.Listener listener) {
         environment().lifecycle().addEventListener(listener);
         return this;
+    }
+
+    /**
+     * Shortcut for jetty events and requests listener {@code environment().jersey().register(listener)}
+     * registration.
+     * <p>
+     * Listeners are not called on custom command execution.
+     *
+     * @param listener listener instance
+     * @return builder instance for chained calls
+     */
+    public GuiceyEnvironment listenJersey(final ApplicationEventListener listener) {
+       environment().jersey().register(listener);
+       return this;
     }
 
     // ------------------------------------------------------------------ COMMON METHODS

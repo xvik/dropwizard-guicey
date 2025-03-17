@@ -12,6 +12,7 @@ import io.dropwizard.core.setup.Environment;
 import io.dropwizard.lifecycle.ServerLifecycleListener;
 import javax.servlet.DispatcherType;
 import org.eclipse.jetty.util.component.LifeCycle;
+import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
 import ru.vyarus.dropwizard.guice.bundle.DefaultBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.bundle.lookup.VoidBundleLookup;
@@ -1218,6 +1219,20 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          */
         public Builder listenJetty(final LifeCycle.Listener listener) {
             withEnvironment(environment -> environment.lifecycle().addEventListener(listener));
+            return this;
+        }
+
+        /**
+         * Shortcut for jetty events and requests listener {@code environment().jersey().register(listener)}
+         * registration.
+         * <p>
+         * Listeners are not called on custom command execution.
+         *
+         * @param listener listener instance
+         * @return builder instance for chained calls
+         */
+        public Builder listenJersey(final ApplicationEventListener listener) {
+            withEnvironment(environment -> environment.jersey().register(listener));
             return this;
         }
 

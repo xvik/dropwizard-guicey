@@ -2,6 +2,10 @@ package ru.vyarus.dropwizard.guice;
 
 import org.assertj.core.api.Assertions;
 import org.eclipse.jetty.util.component.LifeCycle;
+import org.glassfish.jersey.server.monitoring.ApplicationEvent;
+import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
+import org.glassfish.jersey.server.monitoring.RequestEvent;
+import org.glassfish.jersey.server.monitoring.RequestEventListener;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
@@ -16,7 +20,7 @@ import java.util.List;
  * @since 14.03.2025
  */
 
-public class ListenersTest extends AbstractPlatformTest{
+public class ListenersTest extends AbstractPlatformTest {
 
     @Test
     void testListenerMethods() {
@@ -25,10 +29,14 @@ public class ListenersTest extends AbstractPlatformTest{
                 "whenConfigurationReady",
                 "onGuiceyStartup",
                 "lifeCycleStarting",
+                "INITIALIZATION_START",
+                "INITIALIZATION_APP_FINISHED",
+                "INITIALIZATION_FINISHED",
                 "onApplicationStartup",
                 "lifeCycleStarted",
                 "listenServer",
                 "lifeCycleStopping",
+                "DESTROY_FINISHED",
                 "onApplicationShutdown",
                 "lifeCycleStopped"
         ));
@@ -72,6 +80,17 @@ public class ListenersTest extends AbstractPlatformTest{
                             @Override
                             public void lifeCycleStopped(LifeCycle event) {
                                 actions.add("lifeCycleStopped");
+                            }
+                        })
+                        .listenJersey(new ApplicationEventListener() {
+                            @Override
+                            public void onEvent(ApplicationEvent event) {
+                                actions.add(event.getType().name());
+                            }
+
+                            @Override
+                            public RequestEventListener onRequest(RequestEvent requestEvent) {
+                                return null;
                             }
                         })
                         .listenServer(server -> actions.add("listenServer"))

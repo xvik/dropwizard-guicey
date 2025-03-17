@@ -11,6 +11,7 @@
     - .onApplicationShutdown() - executes after application shutdown
     - .listenServer() - shortcut for jetty server startup listen
     - .listenJetty() - shortcut for jetty lifecycle listening
+    - .listenJersey() - shortcut for jersey startup events and requests listening
 * Add application startup (and shutdown) time detalization report: .printStartupTime()
     - Add hook alias for showing report on compiled applicaton: -Dguicey.hooks=startup-time
 * Improve guice bindings report:
@@ -22,7 +23,7 @@
   (also important for avoiding duplicate binding registration after classpath scan)
     - Add AnalyzePrivateGuiceModules option (enabled by default) to disable private modules 
       analysis (in case of problems)
-* Add onApplicationShutdown() listener method for GuiceyEnvironment (GuiceyBundle.run)
+* Add onApplicationShutdown() and listenJersey() listener methods for GuiceyEnvironment (GuiceyBundle.run)
 * Disabled modules remove would also affect private modules now (but only first level)
 * Add BeforeInit guicey event (the first point with available Bootstrap)
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
