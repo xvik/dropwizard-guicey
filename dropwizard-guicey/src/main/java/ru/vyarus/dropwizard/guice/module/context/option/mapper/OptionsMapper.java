@@ -58,7 +58,7 @@ public class OptionsMapper {
 
     private static final String PROP_PREFIX = "prop: ";
 
-    private final Map<Enum, Object> options = new HashMap<>();
+    private final Map<Enum<? extends Option>, Object> options = new HashMap<>();
     private final Set<String> mappedProps = new HashSet<>();
     private boolean print;
 
@@ -96,7 +96,7 @@ public class OptionsMapper {
      * @param <T>    helper option type
      * @return mapper instance for chained calls
      */
-    public <T extends Enum & Option> OptionsMapper props(final String prefix) {
+    public <T extends Enum<? extends Option> & Option> OptionsMapper props(final String prefix) {
         for (Object key : System.getProperties().keySet()) {
             final String name = (String) key;
             // don't look for directly mapped properties
@@ -117,7 +117,7 @@ public class OptionsMapper {
      * @param <T>    helper option type
      * @return mapper instance for chained calls
      */
-    public <T extends Enum & Option> OptionsMapper prop(final String name, final T option) {
+    public <T extends Enum<? extends Option> & Option> OptionsMapper prop(final String name, final T option) {
         return prop(name, option, null);
     }
 
@@ -134,7 +134,7 @@ public class OptionsMapper {
      * @param <V>       value type
      * @return mapper instance for chained calls
      */
-    public <V, T extends Enum & Option> OptionsMapper prop(final String name, final T option,
+    public <V, T extends Enum<? extends Option> & Option> OptionsMapper prop(final String name, final T option,
                                                            final Function<String, V> converter) {
         mappedProps.add(name);
         register(PROP_PREFIX + name, option, System.getProperty(name), converter);
@@ -149,7 +149,7 @@ public class OptionsMapper {
      * @param <T>    helper option type
      * @return mapper instance for chained calls
      */
-    public <T extends Enum & Option> OptionsMapper env(final String name, final T option) {
+    public <T extends Enum<? extends Option> & Option> OptionsMapper env(final String name, final T option) {
         return env(name, option, null);
     }
 
@@ -163,7 +163,7 @@ public class OptionsMapper {
      * @param <T>       helper option type
      * @return mapper instance for chained calls
      */
-    public <V, T extends Enum & Option> OptionsMapper env(final String name, final T option,
+    public <V, T extends Enum<? extends Option> & Option> OptionsMapper env(final String name, final T option,
                                                           final Function<String, V> converter) {
         register("env: " + name, option, System.getenv(name), converter);
         return this;
@@ -178,7 +178,7 @@ public class OptionsMapper {
      * @param <T>    helper option type
      * @return mapper instance for chained calls
      */
-    public <V, T extends Enum & Option> OptionsMapper string(final T option, final String value) {
+    public <V, T extends Enum<? extends Option> & Option> OptionsMapper string(final T option, final String value) {
         return string(option, value, null);
     }
 
@@ -192,7 +192,7 @@ public class OptionsMapper {
      * @param <T>       helper option type
      * @return mapper instance for chained calls
      */
-    public <V, T extends Enum & Option> OptionsMapper string(final T option, final String value,
+    public <V, T extends Enum<? extends Option> & Option> OptionsMapper string(final T option, final String value,
                                                              final Function<String, V> converter) {
         register("", option, value, converter);
         return this;
@@ -201,13 +201,15 @@ public class OptionsMapper {
     /**
      * @return map of resolved options
      */
-    public Map<Enum, Object> map() {
+    public Map<Enum<? extends Option>, Object> map() {
         return options;
     }
 
     @SuppressWarnings("PMD.SystemPrintln")
-    private <T extends Enum & Option> void register(final String source, final T option, final String value,
-                                                    final Function<String, ?> converter) {
+    private <T extends Enum<? extends Option> & Option> void register(final String source,
+                                                                      final T option,
+                                                                      final String value,
+                                                                      final Function<String, ?> converter) {
         if (StringUtils.isNotBlank(value)) {
             options.put(option, converter == null ? OptionParser.parseValue(option, value)
                     : converter.apply(value));

@@ -129,7 +129,7 @@ public final class FeatureUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> T invokeMethod(final Method method, final Object instance, final Object... args) {
-        final boolean acc = method.isAccessible();
+        final boolean acc = method.canAccess(instance);
         method.setAccessible(true);
         try {
             return (T) method.invoke(instance, args);

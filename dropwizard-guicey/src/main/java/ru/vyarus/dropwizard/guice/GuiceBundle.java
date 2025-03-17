@@ -239,7 +239,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * @see GuiceyOptions
          * @see ru.vyarus.dropwizard.guice.module.installer.InstallersOptions
          */
-        public <K extends Enum & Option> Builder option(final K option, final Object value) {
+        public <K extends Enum<? extends Option> & Option> Builder option(final K option, final Object value) {
             bundle.context.setOption(option, value);
             return this;
         }

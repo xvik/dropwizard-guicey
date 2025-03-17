@@ -66,7 +66,7 @@ public interface GuiceyCommonRegistration<T> {
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#option(java.lang.Enum, java.lang.Object)
      * options definition
      */
-    <V, K extends Enum & Option> V option(K option);
+    <V, K extends Enum<? extends Option> & Option> V option(K option);
 
     /**
      * Register guice modules.

@@ -100,7 +100,7 @@ public final class GuiceModelUtils {
             res.append('@').append(key.getAnnotationType().getSimpleName());
             for (Method method : key.getAnnotationType().getMethods()) {
                 if ("value".equals(method.getName()) && method.getReturnType().equals(String.class)) {
-                    final boolean accessible = method.isAccessible();
+                    final boolean accessible = method.canAccess(key.getAnnotation());
                     try {
                         method.setAccessible(true);
                         final String qualifier = (String) method.invoke(key.getAnnotation());
