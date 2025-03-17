@@ -8,6 +8,10 @@ import io.dropwizard.lifecycle.Managed
 import io.dropwizard.lifecycle.ServerLifecycleListener
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.util.component.LifeCycle
+import org.glassfish.jersey.server.monitoring.ApplicationEvent
+import org.glassfish.jersey.server.monitoring.ApplicationEventListener
+import org.glassfish.jersey.server.monitoring.RequestEvent
+import org.glassfish.jersey.server.monitoring.RequestEventListener
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -33,6 +37,7 @@ class EnvironmentListenersShortcutsTest extends AbstractPlatformTest {
         Mng.stop
         LListener.start
         LListener.stop
+        JListener.called
         SListener.start
         Bundle.onGuiceyStartup
         Bundle.onStartup
@@ -47,6 +52,7 @@ class EnvironmentListenersShortcutsTest extends AbstractPlatformTest {
         void test() {
             Assertions.assertTrue(Mng.start)
             Assertions.assertTrue(LListener.start)
+            Assertions.assertTrue(JListener.called)
             Assertions.assertTrue(SListener.start)
             Assertions.assertTrue(Bundle.onGuiceyStartup)
             Assertions.assertTrue(Bundle.onStartup)
@@ -75,6 +81,7 @@ class EnvironmentListenersShortcutsTest extends AbstractPlatformTest {
         void run(GuiceyEnvironment environment) {
             environment.manage(new Mng())
             environment.listenJetty(new LListener())
+            environment.listenJersey(new JListener())
             environment.listenServer(new SListener())
             environment.onGuiceyStartup({ cfg, env, inj ->
                 onGuiceyStartup = true
@@ -129,6 +136,20 @@ class EnvironmentListenersShortcutsTest extends AbstractPlatformTest {
         @Override
         void serverStarted(Server server) {
             start = true
+        }
+    }
+
+    static class JListener implements ApplicationEventListener {
+        static boolean called
+
+        @Override
+        void onEvent(ApplicationEvent event) {
+            called = true
+        }
+
+        @Override
+        RequestEventListener onRequest(RequestEvent requestEvent) {
+            return null
         }
     }
 
