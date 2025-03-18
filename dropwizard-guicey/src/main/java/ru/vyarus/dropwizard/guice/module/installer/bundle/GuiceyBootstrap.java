@@ -9,6 +9,7 @@ import io.dropwizard.core.setup.Bootstrap;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
+import ru.vyarus.dropwizard.guice.module.installer.util.BundleSupport;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleListener;
 
 import java.util.List;
@@ -39,11 +40,13 @@ import java.util.function.Supplier;
 public class GuiceyBootstrap implements GuiceyCommonRegistration<GuiceyBootstrap> {
 
     private final ConfigurationContext context;
-    private final List<GuiceyBundle> iterationBundles;
+    // path for tracking bundles installation loops (a bundle registers another bundle and so on)
+    // managed outside the bootstrap object, but need the reference for transitive bundles registration
+    private final List<Class<? extends GuiceyBundle>> bundlesPath;
 
-    public GuiceyBootstrap(final ConfigurationContext context, final List<GuiceyBundle> iterationBundles) {
+    public GuiceyBootstrap(final ConfigurationContext context, final List<Class<? extends GuiceyBundle>> bundlesPath) {
         this.context = context;
-        this.iterationBundles = iterationBundles;
+        this.bundlesPath = bundlesPath;
     }
 
     /**
@@ -62,7 +65,8 @@ public class GuiceyBootstrap implements GuiceyCommonRegistration<GuiceyBootstrap
     }
 
     /**
-     * Register other guicey bundles for installation.
+     * Register other guicey bundles for installation. Bundles initialized immediately (same as transitive dropwizard
+     * bundles and guice modules).
      * <p>
      * Equal instances of the same type will be considered as duplicate.
      *
@@ -71,8 +75,8 @@ public class GuiceyBootstrap implements GuiceyCommonRegistration<GuiceyBootstrap
      * @see ru.vyarus.dropwizard.guice.GuiceBundle.Builder#bundles(GuiceyBundle...)
      */
     public GuiceyBootstrap bundles(final GuiceyBundle... bundles) {
-        // remember only non duplicate bundles
-        iterationBundles.addAll(context.registerBundles(bundles));
+        // immediate registration (same as for dropwizard bundles and guice modules)
+        BundleSupport.initBundles(context, this, bundlesPath, context.registerBundles(bundles));
         return this;
     }
 
