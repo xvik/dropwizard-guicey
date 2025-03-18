@@ -17,7 +17,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.Reporter;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycleAdapter;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ApplicationRunEvent;
-import ru.vyarus.guicey.gsp.app.GlobalConfig;
+import ru.vyarus.guicey.gsp.app.ServerPagesGlobalState;
 import ru.vyarus.guicey.gsp.app.ServerPagesApp;
 import ru.vyarus.guicey.gsp.app.ServerPagesAppBundle.AppBuilder;
 import ru.vyarus.guicey.gsp.app.asset.freemarker.FreemarkerTemplateLoader;
@@ -145,9 +145,9 @@ public class ServerPagesBundle extends UniqueGuiceyBundle {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerPagesBundle.class);
 
-    private final GlobalConfig config;
+    private final ServerPagesGlobalState config;
 
-    public ServerPagesBundle(final GlobalConfig config) {
+    public ServerPagesBundle(final ServerPagesGlobalState config) {
         this.config = config;
     }
 
@@ -351,7 +351,7 @@ public class ServerPagesBundle extends UniqueGuiceyBundle {
 
         // register global config
         bootstrap
-                .shareState(ServerPagesBundle.class, config)
+                .shareState(ServerPagesGlobalState.class, config)
                 .modules(new GspInfoModule())
                 .dropwizardBundles(new ConfiguredViewBundle(config))
                 .extensions(
@@ -419,7 +419,7 @@ public class ServerPagesBundle extends UniqueGuiceyBundle {
      */
     public static class ViewsBuilder {
 
-        private final GlobalConfig config = new GlobalConfig();
+        private final ServerPagesGlobalState config = new ServerPagesGlobalState();
 
         /**
          * Additional view renderers (template engines support) to use for {@link ViewBundle} configuration.

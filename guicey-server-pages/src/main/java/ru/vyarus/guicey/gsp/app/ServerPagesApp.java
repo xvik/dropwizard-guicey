@@ -99,7 +99,7 @@ public class ServerPagesApp {
      * @param environment dropwizard environment object
      * @param config      global configuration object
      */
-    public void install(final Environment environment, final GlobalConfig config) {
+    public void install(final Environment environment, final ServerPagesGlobalState config) {
         final ServletEnvironment context = mainContext ? environment.servlets() : environment.admin();
 
         // apply possible context (if servlet registered not to root, e.g. most likely in case of flat admin context)
@@ -138,7 +138,7 @@ public class ServerPagesApp {
         started = true;
     }
 
-    public GspApp getInfo(final GlobalConfig config) {
+    public GspApp getInfo(final ServerPagesGlobalState config) {
         final GspApp res = new GspApp();
         res.setName(name);
         res.setMainContext(mainContext);
@@ -177,7 +177,7 @@ public class ServerPagesApp {
         return started;
     }
 
-    private AssetLookup collectAssets(final GlobalConfig config) {
+    private AssetLookup collectAssets(final ServerPagesGlobalState config) {
         final AssetSources ext = config.getAssetExtensions(name);
         if (ext != null) {
             assetLocations.merge(ext);
@@ -211,7 +211,7 @@ public class ServerPagesApp {
         return new AssetLookup(mainAssetsPath, urlsBuilder.build(), loadersBuilder.build());
     }
 
-    private ViewRestLookup collectViews(final GlobalConfig config) {
+    private ViewRestLookup collectViews(final ServerPagesGlobalState config) {
         final ViewRestSources ext = config.getViewExtensions(name);
         if (ext != null) {
             viewPrefixes.merge(ext);

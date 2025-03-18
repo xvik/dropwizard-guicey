@@ -24,16 +24,16 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * Application-wide shared state assumed to be used in configuration phase. For example,
+ * Application-wide shared state assumed to be used in the configuration phase. For example,
  * in complex cases when bundles must share some global state (otherwise it would require to maintain
- * some {@link ThreadLocal} field in bundle). But other cases could arise too. Intended to be used for very rare cases:
- * use it only if you can't avoid shared state in configuration time (for example, like guicey gsp bundle,
+ * some {@link ThreadLocal} field in a bundle). But other cases could arise too. Intended to be used for very rare
+ * cases: use it only if you can't avoid shared state in configuration time (for example, like the guicey gsp bundle,
  * which requires global configuration, accessible by multiple bundles).
  * <p>
  * Internally, guicey use it to store created {@link com.google.inject.Injector} and make it available statically
  * (see {@link ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup}).
  * <p>
- * Universal sharing place should simplify testing in the future: if new global state will appear, there would be no
+ * Universal sharing place should simplify testing in the future: if a new global state appeared, there would be no
  * need to reset anything in tests (to clear state, for example, on testing errors). One "dirty" place to replace
  * all separate hacks.
  * <p>
@@ -47,7 +47,7 @@ import java.util.function.Supplier;
  * from application main thread. This might be required for places where neither application nor environment
  * object available. After guice bundle's run method finishes, startup instance is unlinked.
  * <p>
- * Classes are used as state keys to simplify usage (in most cases, bundle class will be used as key).
+ * Classes are used as state keys to simplify usage.
  * Shared value could be set only once (to prevent complex situations with state substitutions). It is advised
  * to initialize shared value only in initialization phase (to avoid potential static access errors).
  * <p>
@@ -69,12 +69,13 @@ public class SharedConfigurationState {
     private static final Map<Application, SharedConfigurationState> STATE = Maps.newConcurrentMap();
 
     /**
-     * During application startup all initialization performed in the single thread and so it is possible
-     * to reference shared state instance with a simple static call. This is required because in some cases
-     * neither Application nor Environment objects are accessible (e.g. BindingInstaller, BundlesLookup).
+     * During application startup all initialization performed in the single thread, and so it is possible
+     * to reference shared state instance with a simple static call. This is required because in some cases,
+     * neither Application nor Environment objects are accessible (e.g., BindingInstaller, BundlesLookup).
      */
     private static final ThreadLocal<SharedConfigurationState> STARTUP_INSTANCE = new ThreadLocal<>();
 
+    // string used as key to workaround potential problems with different class loaders
     private final Map<String, Object> state = new HashMap<>();
     // reactive values
     // NOTE: no validation for not called listeners to allow optional reactive states
@@ -87,16 +88,27 @@ public class SharedConfigurationState {
     }
 
     /**
-     * Note: in spite of fact that class is used for key, actual value is stored with full class name string.
+     * Note: although class is used for key, actual value is stored with full class name string.
      * So classes, loaded from different class loaders will lead to the same value.
      *
      * @param key shared object key
      * @param <V> shared object type
      * @return value or null
      */
+    public <V> V get(final Class<V> key) {
+        return get(key.getName());
+    }
+
+    /**
+     * Special string-based state access for revising state with {@link #getKeys()}.
+     *
+     * @param key state key
+     * @return state value or null
+     * @param <V> value type
+     */
     @SuppressWarnings("unchecked")
-    public <V> V get(final Class<?> key) {
-        return (V) state.get(key.getName());
+    public <V> V get(final String key) {
+        return (V) state.get(key);
     }
 
     /**
@@ -107,7 +119,7 @@ public class SharedConfigurationState {
      * @param <V>          shared object type
      * @return stored or default (just stored) value
      */
-    public <V> V get(final Class<?> key, final Supplier<V> defaultValue) {
+    public <V> V get(final Class<V> key, final Supplier<V> defaultValue) {
         V res = get(key);
         if (res == null && defaultValue != null) {
             res = defaultValue.get();
@@ -118,16 +130,16 @@ public class SharedConfigurationState {
 
     /**
      * Shortcut for {@link #get(Class)} to immediately fail if value not set. Supposed to be used by shared state
-     * consumers (to validate situations when value must exists for sure).
+     * consumers (to validate situations when value must exist for sure).
      *
      * @param key     shared object key
      * @param message exception message (could use {@link String#format(String, Object...)} placeholders)
      * @param args    placeholder arguments for error message
      * @param <V>     shared object type
      * @return stored object (never null)
-     * @throws IllegalStateException if value not set
+     * @throws IllegalStateException if value isn't set
      */
-    public <V> V getOrFail(final Class<?> key, final String message, final Object... args) {
+    public <V> V getOrFail(final Class<V> key, final String message, final Object... args) {
         final V res = get(key);
         if (res == null) {
             throw new IllegalStateException(Strings.lenientFormat(message, args));
@@ -145,7 +157,7 @@ public class SharedConfigurationState {
      * @param action action to execute when value would be set
      * @param <V>    value type
      */
-    public <V> void whenReady(final Class<?> key, final Consumer<V> action) {
+    public <V> void whenReady(final Class<V> key, final Consumer<V> action) {
         final V value = get(key);
         if (value != null) {
             action.accept(value);
@@ -163,6 +175,7 @@ public class SharedConfigurationState {
      * @param <C> configuration type
      * @return bootstrap instance provider (would fail if called too early)
      */
+    @SuppressWarnings("unchecked")
     public <C extends Configuration> Provider<Bootstrap<C>> getBootstrap() {
         return () -> Preconditions.checkNotNull(get(Bootstrap.class), "Bootstrap object not yet available");
     }
@@ -175,7 +188,7 @@ public class SharedConfigurationState {
      */
     @SuppressWarnings("unchecked")
     public <C extends Configuration> Provider<Application<C>> getApplication() {
-        return () -> Optional.<Bootstrap>ofNullable(get(Bootstrap.class))
+        return () -> Optional.ofNullable(get(Bootstrap.class))
                 .map(b -> (Application<C>) b.getApplication())
                 .orElseThrow(() -> new NullPointerException("Application instance is not yet available"));
     }
@@ -196,8 +209,9 @@ public class SharedConfigurationState {
      * @param <C> configuration type
      * @return configuration instance provider (would fail if called too early)
      */
+    @SuppressWarnings("unchecked")
     public <C extends Configuration> Provider<C> getConfiguration() {
-        return () -> Preconditions.checkNotNull(get(Configuration.class),
+        return () -> (C) Preconditions.checkNotNull(get(Configuration.class),
                 "Configuration is not yet available");
     }
 
@@ -218,7 +232,7 @@ public class SharedConfigurationState {
      * @see ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup for simpler lookup method
      */
     public Provider<Injector> getInjector() {
-        return () -> Preconditions.checkNotNull(get(ConfigurationTree.class),
+        return () -> Preconditions.checkNotNull(get(Injector.class),
                 "Injector is not yet available");
     }
 
@@ -236,9 +250,10 @@ public class SharedConfigurationState {
      *
      * @param key   shared object key
      * @param value shared value (usually configuration object)
+     * @param <V> value type
      */
     @SuppressWarnings("unchecked")
-    public void put(final Class<?> key, final Object value) {
+    public <V> void put(final Class<V> key, final V value) {
         Preconditions.checkArgument(key != null, "Shared state key can't be null");
         // just to avoid dummy mistakes
         Preconditions.checkArgument(value != null, "Shared state does not accept null values");
@@ -332,7 +347,7 @@ public class SharedConfigurationState {
      * @param <V>         shared object key
      * @return value optional
      */
-    public static <V> Optional<V> lookup(final Application application, final Class<?> key) {
+    public static <V> Optional<V> lookup(final Application application, final Class<V> key) {
         return get(application).map(value -> value.get(key));
     }
 
@@ -344,7 +359,7 @@ public class SharedConfigurationState {
      * @param <V>         shared object key
      * @return value optional
      */
-    public static <V> Optional<V> lookup(final Environment environment, final Class<?> key) {
+    public static <V> Optional<V> lookup(final Environment environment, final Class<V> key) {
         return get(environment).map(value -> value.get(key));
     }
 
@@ -359,12 +374,11 @@ public class SharedConfigurationState {
      * @return value (never null)
      * @throws IllegalStateException if value not available
      */
-    @SuppressWarnings("unchecked")
     public static <V> V lookupOrFail(final Application application,
-                                     final Class<?> key,
+                                     final Class<V> key,
                                      final String message,
                                      final Object... args) {
-        return ((Optional<V>) lookup(application, key))
+        return lookup(application, key)
                 .orElseThrow(() -> new IllegalStateException(Strings.lenientFormat(message, args)));
     }
 
@@ -379,12 +393,11 @@ public class SharedConfigurationState {
      * @return value (never null)
      * @throws IllegalStateException if value not available
      */
-    @SuppressWarnings("unchecked")
     public static <V> V lookupOrFail(final Environment environment,
-                                     final Class<?> key,
+                                     final Class<V> key,
                                      final String message,
                                      final Object... args) {
-        return ((Optional<V>) lookup(environment, key))
+        return lookup(environment, key)
                 .orElseThrow(() -> new IllegalStateException(Strings.lenientFormat(message, args)));
     }
 
