@@ -39,6 +39,8 @@
     - Add .whenReady() method for reactive state value access
       Add .whenSharedStateReady() for GuiceyBootstrap and GuiceyEnvironment
       (not required for the main bundle as there is withSharedState() method where whenReady() could be used directly)
+    - (breaking) Tie a state key to the stored object type to simplify usage (type-safe) and force
+       state objects usage instead of whatever values 
 * Test improvements:
   - Track guicey test extensions time (would appear when debug option enabled)
   - Improve debug report: setup objects and hooks registration point are clear now (with direct code links) 

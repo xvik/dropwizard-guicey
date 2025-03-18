@@ -38,7 +38,7 @@ public class ServerPagesAppBundle implements GuiceyBundle {
     private static final String COMMA = ", ";
 
     private final ServerPagesApp app;
-    private GlobalConfig config;
+    private ServerPagesGlobalState config;
 
     public ServerPagesAppBundle(final ServerPagesApp app) {
         this.app = app;
@@ -46,7 +46,7 @@ public class ServerPagesAppBundle implements GuiceyBundle {
 
     @Override
     public void initialize(final GuiceyBootstrap bootstrap) {
-        this.config = bootstrap.sharedStateOrFail(ServerPagesBundle.class,
+        this.config = bootstrap.sharedStateOrFail(ServerPagesGlobalState.class,
                 "Either server pages support bundle was not installed (use %s.builder() to create bundle) "
                         + " or it was installed after '%s' application bundle",
                 ServerPagesBundle.class.getSimpleName(), app.name);

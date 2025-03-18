@@ -426,7 +426,7 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
      * {@inheritDoc}
      */
     @Override
-    public GuiceyEnvironment shareState(final Class<?> key, final Object value) {
+    public <K> GuiceyEnvironment shareState(final Class<K> key, final K value) {
         context.getSharedState().put(key, value);
         return this;
     }
@@ -435,7 +435,7 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
      * {@inheritDoc}
      */
     @Override
-    public <K> K sharedState(final Class<?> key, final Supplier<K> defaultValue) {
+    public <K> K sharedState(final Class<K> key, final Supplier<K> defaultValue) {
         return context.getSharedState().get(key, defaultValue);
     }
 
@@ -443,7 +443,7 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
      * {@inheritDoc}
      */
     @Override
-    public <K> Optional<K> sharedState(final Class<?> key) {
+    public <K> Optional<K> sharedState(final Class<K> key) {
         return Optional.ofNullable(context.getSharedState().get(key));
     }
 
@@ -451,7 +451,7 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
      * {@inheritDoc}
      */
     @Override
-    public <K> K sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
+    public <K> K sharedStateOrFail(final Class<K> key, final String message, final Object... args) {
         return context.getSharedState().getOrFail(key, message, args);
     }
 
@@ -459,7 +459,7 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
      * {@inheritDoc}
      */
     @Override
-    public <V> void whenSharedStateReady(final Class<?> key, final Consumer<V> action) {
+    public <V> void whenSharedStateReady(final Class<V> key, final Consumer<V> action) {
         context.getSharedState().whenReady(key, action);
     }
 }

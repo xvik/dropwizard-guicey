@@ -27,7 +27,7 @@ class SharedStateDirectAccessTest extends Specification {
     def "Check shared state direct availability"() {
 
         expect:
-        noState()
+        noStartupState()
     }
 
     static class App extends Application<Configuration> {
@@ -40,7 +40,7 @@ class SharedStateDirectAccessTest extends Specification {
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
-            noState()
+            noStartupState()
         }
     }
 
@@ -86,12 +86,12 @@ class SharedStateDirectAccessTest extends Specification {
             assert state
             assert state.bootstrap.get()
             assert state.environment.get()
-            noInjector(state)
+            assert state.injector.get()
         }
 
         @Override
         protected void applicationStarted(ApplicationStartedEvent event) {
-            noState()
+            noStartupState()
         }
     }
 
@@ -131,7 +131,7 @@ class SharedStateDirectAccessTest extends Specification {
         }
     }
 
-    private static boolean noState() {
+    private static boolean noStartupState() {
         try {
             SharedConfigurationState.getStartupInstance()
             assert false

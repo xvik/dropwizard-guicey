@@ -202,17 +202,18 @@ public interface GuiceyCommonRegistration<T> {
      *
      * @param key   shared object key
      * @param value shared object
+     * @param <K> shared object type
      * @return builder instance for chained calls
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
-    T shareState(Class<?> key, Object value);
+    <K> T shareState(Class<K> key, K value);
 
     /**
      * Alternative shared value initialization for cases when first accessed bundle should init state value
-     * and all other just use it.
+     * and all others just use it.
      * <p>
      * It is preferred to initialize shared state under initialization phase to avoid problems related to
-     * initialization order (assuming state is used under run phase). But, in some cases, it is not possible.
+     * initialization order (assuming state is used under run phase). But in some cases, it is not possible.
      *
      * @param key          shared object key
      * @param defaultValue default object provider
@@ -220,7 +221,7 @@ public interface GuiceyCommonRegistration<T> {
      * @return shared object (possibly just created)
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
-    <K> K sharedState(Class<?> key, Supplier<K> defaultValue);
+    <K> K sharedState(Class<K> key, Supplier<K> defaultValue);
 
     /**
      * Access shared value.
@@ -230,7 +231,7 @@ public interface GuiceyCommonRegistration<T> {
      * @return shared object
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
-    <K> Optional<K> sharedState(Class<?> key);
+    <K> Optional<K> sharedState(Class<K> key);
 
     /**
      * Used to access shared state value and immediately fail if value not yet set (most likely due to incorrect
@@ -244,7 +245,7 @@ public interface GuiceyCommonRegistration<T> {
      * @throws IllegalStateException if no value available
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
-    <K> K sharedStateOrFail(Class<?> key, String message, Object... args);
+    <K> K sharedStateOrFail(Class<K> key, String message, Object... args);
 
     /**
      * Reactive shared value access: if value already available action called immediately, otherwise action would
@@ -254,5 +255,5 @@ public interface GuiceyCommonRegistration<T> {
      * @param action action to execute when value would be set
      * @param <V>    value type
      */
-    <V> void whenSharedStateReady(Class<?> key, Consumer<V> action);
+    <V> void whenSharedStateReady(Class<V> key, Consumer<V> action);
 }

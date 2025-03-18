@@ -25,7 +25,7 @@ class SharedStateAccessInModuleTest extends AbstractTest {
     def "Check shared state access within module"() {
 
         expect: "module modified state"
-        SharedConfigurationState.lookup(environment, Mod).get()["module"] == "i was here"
+        SharedConfigurationState.lookup(environment, ModState).get()["module"] == "i was here"
     }
 
     static class App extends Application<Configuration> {
@@ -33,7 +33,7 @@ class SharedStateAccessInModuleTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
             // init sample value in shared state
-                    .withSharedState({ it.put(Mod, new HashMap()) })
+                    .withSharedState({ it.put(ModState, new ModState()) })
                     .modules(new Mod())
                     .build())
         }
@@ -48,19 +48,22 @@ class SharedStateAccessInModuleTest extends AbstractTest {
         @Override
         protected void configure() {
             assert !sharedState(List).isPresent()
-            assert sharedState(Mod).isPresent()
-            def val = sharedStateOrFail(Mod, "No mod initialized")
+            assert sharedState(ModState).isPresent()
+            def val = sharedStateOrFail(ModState, "No mod initialized")
             assert val instanceof Map
 
             val.put("module", "i was here")
 
 
-            shareState(List, "fafa")
-            assert sharedState(List).get() == "fafa"
+            shareState(List, Collections.singletonList("fafa"))
+            assert sharedState(List).get()[0] == "fafa"
 
 
-            sharedState(List, { "ff" }) == "ff"
-            sharedState(Queue, { "tt" }) == "tt"
+            sharedState(List, { ["ff"] }).iterator().next() == "ff"
+            sharedState(Queue, { ["tt"] }).iterator().next() == "tt"
         }
+    }
+
+    static class ModState extends HashMap<String, String> {
     }
 }

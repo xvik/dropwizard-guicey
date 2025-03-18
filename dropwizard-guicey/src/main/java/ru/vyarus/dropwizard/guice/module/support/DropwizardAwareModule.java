@@ -242,9 +242,10 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      *
      * @param key   shared object key
      * @param value shared object
+     * @param <V> shared object type
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
-    public void shareState(final Class<?> key, final Object value) {
+    public <V> void shareState(final Class<V> key, final V value) {
         SharedConfigurationState.getOrFail(environment(), STATE_NOT_FOUND).put(key, value);
     }
 
@@ -261,7 +262,7 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      * @return shared object (possibly just created)
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
-    public <T> T sharedState(final Class<?> key, final Supplier<T> defaultValue) {
+    public <T> T sharedState(final Class<T> key, final Supplier<T> defaultValue) {
         return SharedConfigurationState.getOrFail(environment(), STATE_NOT_FOUND).get(key, defaultValue);
     }
 
@@ -275,7 +276,7 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      * @return shared object
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
-    protected <T> Optional<T> sharedState(final Class<?> key) {
+    protected <T> Optional<T> sharedState(final Class<T> key) {
         return SharedConfigurationState.lookup(environment(), key);
     }
 
@@ -291,7 +292,7 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      * @throws IllegalStateException if not value available
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */
-    protected <T> T sharedStateOrFail(final Class<?> key, final String message, final Object... args) {
+    protected <T> T sharedStateOrFail(final Class<T> key, final String message, final Object... args) {
         return SharedConfigurationState.lookupOrFail(environment(), key, message, args);
     }
 }
