@@ -37,9 +37,9 @@ class SharedStateUsageTest extends Specification {
 
             def app = bootstrap.getApplication()
             assert SharedConfigurationState.get(app) != null
-            assert SharedConfigurationState.lookup(app, GlobalBundle).isPresent()
-            assert !SharedConfigurationState.lookup(app, ChildBundle).isPresent()
-            assert SharedConfigurationState.lookup(app, EqualBundle).isPresent()
+            assert SharedConfigurationState.lookup(app, GlobalState).isPresent()
+            assert !SharedConfigurationState.lookup(app, ChildState).isPresent()
+            assert SharedConfigurationState.lookup(app, EqualState).isPresent()
         }
 
         @Override
@@ -51,20 +51,20 @@ class SharedStateUsageTest extends Specification {
         static boolean called
         @Override
         void initialize(GuiceyBootstrap bootstrap) {
-            bootstrap.shareState(GlobalBundle, "12")
-            bootstrap.whenSharedStateReady(GlobalBundle, { assert it == "12"; called = true})
-            assert bootstrap.sharedState(GlobalBundle, null) != null
+            bootstrap.shareState(GlobalState, new GlobalState(value: "12"))
+            bootstrap.whenSharedStateReady(GlobalState, { assert it.value == "12"; called = true})
+            assert bootstrap.sharedState(GlobalState, null) != null
         }
     }
 
     static class ChildBundle implements GuiceyBundle {
         @Override
         void initialize(GuiceyBootstrap bootstrap) {
-            assert bootstrap.sharedStateOrFail(GlobalBundle, "no state") == "12"
+            assert bootstrap.sharedStateOrFail(GlobalState, "no state").value == "12"
 
             try {
                 // access other state
-                bootstrap.sharedStateOrFail(ChildBundle, "ups")
+                bootstrap.sharedStateOrFail(ChildState, "ups")
                 assert false
             } catch (IllegalStateException ex) {
                 assert ex.message == 'ups'
@@ -73,21 +73,21 @@ class SharedStateUsageTest extends Specification {
 
         @Override
         void run(GuiceyEnvironment environment) throws Exception {
-            assert environment.sharedState(GlobalBundle).get() == "12"
-            assert environment.sharedStateOrFail(GlobalBundle, "sds") == "12"
+            assert environment.sharedState(GlobalState).get().value == "12"
+            assert environment.sharedStateOrFail(GlobalState, "sds").value == "12"
 
             try {
                 // access other state
-                environment.sharedStateOrFail(ChildBundle, "ups")
+                environment.sharedStateOrFail(ChildState, "ups")
                 assert false
             } catch (IllegalStateException ex) {
                 assert ex.message == 'ups'
             }
 
             // check state sharing in run phase
-            environment.shareState(Map, "foo")
-            assert environment.sharedState(Map, null) == "foo"
-            assert environment.sharedState(List, { "baa" }) == "baa"
+            environment.shareState(String, "foo")
+            assert environment.sharedState(String, null) == "foo"
+            assert environment.sharedState(List, { ["baa"] })[0] == "baa"
         }
     }
 
@@ -97,17 +97,29 @@ class SharedStateUsageTest extends Specification {
 
         @Override
         void initialize(GuiceyBootstrap bootstrap) {
-            def state = bootstrap.sharedState(EqualBundle, { "13" })
-            assert state == "13"
+            def state = bootstrap.sharedState(EqualState, { new EqualState(value: "13") })
+            assert state.value == "13"
 
-            assert bootstrap.sharedState(EqualBundle).get() == "13"
+            assert bootstrap.sharedState(EqualState).get().value == "13"
         }
 
         @Override
         void run(GuiceyEnvironment environment) throws Exception {
-            environment.whenSharedStateReady(EqualBundle, { assert it == "13"; called = true})
-            assert environment.sharedState(EqualBundle).get() == "13"
-            assert environment.sharedStateOrFail(EqualBundle, "sds") == "13"
+            environment.whenSharedStateReady(EqualState, { assert it.value == "13"; called = true})
+            assert environment.sharedState(EqualState).get().value == "13"
+            assert environment.sharedStateOrFail(EqualState, "sds").value == "13"
         }
+    }
+
+    static class GlobalState {
+        String value
+    }
+
+    static class ChildState {
+        String value
+    }
+
+    static class EqualState {
+        String value
     }
 }

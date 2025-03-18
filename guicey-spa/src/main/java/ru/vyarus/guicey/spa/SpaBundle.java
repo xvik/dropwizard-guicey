@@ -1,22 +1,21 @@
 package ru.vyarus.guicey.spa;
 
 import com.google.common.base.Joiner;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.jetty.setup.ServletEnvironment;
 import io.dropwizard.servlets.assets.AssetServlet;
-import io.dropwizard.core.setup.Environment;
+import jakarta.servlet.DispatcherType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
+import ru.vyarus.guicey.spa.filter.SpaBundleState;
 import ru.vyarus.guicey.spa.filter.SpaRoutingFilter;
 
-import jakarta.servlet.DispatcherType;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -58,11 +57,8 @@ public class SpaBundle implements GuiceyBundle {
     @Override
     public void initialize(final GuiceyBootstrap bootstrap) {
         // list shared between all spa bundles
-        final List<String> used = bootstrap.sharedState(SpaBundle.class, ArrayList::new);
-        // important because name used for filter mapping
-        checkArgument(!used.contains(assetName),
-                "SPA with name '%s' is already registered", assetName);
-        used.add(assetName);
+        // NOTE: not a static field for proper parallel tests support
+        bootstrap.sharedState(SpaBundleState.class, SpaBundleState::new).checkUnique(assetName);
     }
 
     @Override

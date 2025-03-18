@@ -3,7 +3,7 @@ package ru.vyarus.guicey.gsp.app.ext;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 import ru.vyarus.guicey.gsp.ServerPagesBundle;
-import ru.vyarus.guicey.gsp.app.GlobalConfig;
+import ru.vyarus.guicey.gsp.app.ServerPagesGlobalState;
 
 /**
  * Bundle for extending (or overriding) registered server pages app resources (through
@@ -25,7 +25,7 @@ public class ServerPagesAppExtensionBundle implements GuiceyBundle {
 
     @Override
     public void run(final GuiceyEnvironment environment) throws Exception {
-        environment.<GlobalConfig>sharedStateOrFail(ServerPagesBundle.class,
+        environment.sharedStateOrFail(ServerPagesGlobalState.class,
                 "Either server pages support bundle was not installed (use %s.builder() to create bundle) "
                         + " or it was installed after '%s' application extension bundle",
                 ServerPagesBundle.class.getSimpleName(), this.ext.getName())

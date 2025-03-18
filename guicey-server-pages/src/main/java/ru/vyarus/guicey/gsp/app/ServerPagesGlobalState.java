@@ -26,7 +26,7 @@ import static com.google.common.base.Preconditions.checkState;
  * @author Vyacheslav Rusakov
  * @since 06.12.2018
  */
-public class GlobalConfig {
+public class ServerPagesGlobalState {
 
     private final List<String> names = new ArrayList<>();
     private final List<ServerPagesApp> apps = new ArrayList<>();

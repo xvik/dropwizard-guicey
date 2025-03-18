@@ -4,8 +4,7 @@ import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.context.unique.item.UniqueModule;
 import ru.vyarus.dropwizard.guice.module.support.EnvironmentAwareModule;
-import ru.vyarus.guicey.gsp.ServerPagesBundle;
-import ru.vyarus.guicey.gsp.app.GlobalConfig;
+import ru.vyarus.guicey.gsp.app.ServerPagesGlobalState;
 
 /**
  * GSP registrations Information module.
@@ -19,8 +18,9 @@ public class GspInfoModule extends UniqueModule implements EnvironmentAwareModul
 
     @Override
     protected void configure() {
-        final GlobalConfig config = SharedConfigurationState.lookupOrFail(environment, ServerPagesBundle.class,
-                "%s bundle not registered", ServerPagesBundle.class.getSimpleName());
+        final ServerPagesGlobalState config = SharedConfigurationState
+                .lookupOrFail(environment, ServerPagesGlobalState.class,
+                "%s bundle not registered", ServerPagesGlobalState.class.getSimpleName());
         bind(GspInfoService.class).toInstance(new GspInfoService(config));
     }
 

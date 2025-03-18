@@ -4,7 +4,7 @@ import io.dropwizard.core.Configuration;
 import io.dropwizard.views.common.ViewBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.vyarus.guicey.gsp.app.GlobalConfig;
+import ru.vyarus.guicey.gsp.app.ServerPagesGlobalState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,9 +20,9 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
  */
 public class ConfiguredViewBundle extends ViewBundle<Configuration> {
     private final Logger logger = LoggerFactory.getLogger(ConfiguredViewBundle.class);
-    private final GlobalConfig globalConfig;
+    private final ServerPagesGlobalState globalConfig;
 
-    public ConfiguredViewBundle(final GlobalConfig globalConfig) {
+    public ConfiguredViewBundle(final ServerPagesGlobalState globalConfig) {
         super(globalConfig.getRenderers());
         this.globalConfig = globalConfig;
     }
