@@ -41,6 +41,7 @@
       (not required for the main bundle as there is withSharedState() method where whenReady() could be used directly)
     - (breaking) Tie a state key to the stored object type to simplify usage (type-safe) and force
        state objects usage instead of whatever values 
+* Transitive guicey bundles initialize immediately after registration (unify behavior with dropwizard bundles and guice modules) 
 * Test improvements:
   - Track guicey test extensions time (would appear when debug option enabled)
   - Improve debug report: setup objects and hooks registration point are clear now (with direct code links) 

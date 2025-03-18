@@ -44,19 +44,36 @@ public final class BundleSupport {
      * </ul>
      * Bundles duplicates are checked by type: only one bundle instance may be registered.
      *
-     * @param context bundles context
+     * @param context configuration context
      */
     public static void initBundles(final ConfigurationContext context) {
+        final List<Class<? extends GuiceyBundle>> path = new ArrayList<>();
         final List<GuiceyBundle> bundles = context.getEnabledBundles();
-        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, bundles);
+        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, path);
 
-        for (GuiceyBundle bundle : new ArrayList<>(bundles)) {
-            // iterating bundles as tree in order to detect cycles
-            initBundle(Collections.emptyList(), bundle, bundles, context, guiceyBootstrap);
-        }
+        initBundles(context, guiceyBootstrap, path, bundles);
 
         context.lifecycle().bundlesInitialized(context.getEnabledBundles(), context.getDisabledBundles(),
                 context.getIgnoredItems(ConfigItem.Bundle));
+    }
+
+    /**
+     * Point of root (registered in guice bundle) bundles installation. Also, called in guicey bootstrap
+     * for transitive bundles installation (immediate initialization).
+     *
+     * @param context   configuration context
+     * @param bootstrap guicey bootstrap object
+     * @param path      transitive bundles installation path
+     * @param bundles   bundles to install
+     */
+    public static void initBundles(final ConfigurationContext context,
+                                   final GuiceyBootstrap bootstrap,
+                                   final List<Class<? extends GuiceyBundle>> path,
+                                   final List<GuiceyBundle> bundles) {
+        for (GuiceyBundle bundle : bundles) {
+            // iterating bundles as tree in order to detect cycles
+            initBundle(path, bundle, context, bootstrap);
+        }
     }
 
     /**
@@ -132,10 +149,8 @@ public final class BundleSupport {
 
     private static void initBundle(final List<Class<? extends GuiceyBundle>> path,
                                    final GuiceyBundle bundle,
-                                   final List<GuiceyBundle> wrk,
                                    final ConfigurationContext context,
                                    final GuiceyBootstrap bootstrap) {
-        wrk.clear();
         final Class<? extends GuiceyBundle> bundleType = bundle.getClass();
 
         if (path.contains(bundleType)) {
@@ -144,26 +159,21 @@ public final class BundleSupport {
                     path.stream().map(Class::getSimpleName).collect(Collectors.joining(" -> "))
                             .replace(name, "( " + name), name));
         }
-        LOGGER.debug("Initializing bundle ({} level): {}", path.size() + 1, bundleType.getName());
+        // same path instance used for all bundles installation, so it's important to clear its state
+        path.add(bundleType);
+        LOGGER.debug("Initializing bundle ({} level): {}", path.size(), bundleType.getName());
 
         // disabled bundles are not processed (so nothing will be registered from it)
         // important to check here because transitive bundles may appear to be disabled
         final ItemId id = ItemId.from(bundle);
         if (context.isBundleEnabled(id)) {
-            context.openScope(id);
-            final Stopwatch timer = context.stat().detailTimer(DetailStat.BundleInit, bundle.getClass());
+            final ItemId currentScope = context.replaceContextScope(id);
+            final Stopwatch timer = context.stat().detailTimer(DetailStat.BundleInit, bundleType);
             bundle.initialize(bootstrap);
             timer.stop();
-            context.closeScope();
+            context.replaceContextScope(currentScope);
         }
-
-        if (!wrk.isEmpty()) {
-            final List<Class<? extends GuiceyBundle>> nextPath = new ArrayList<>(path);
-            nextPath.add(bundleType);
-            for (GuiceyBundle nextBundle : new ArrayList<>(wrk)) {
-                initBundle(nextPath, nextBundle, wrk, context, bootstrap);
-            }
-        }
+        path.remove(bundleType);
     }
 
     @SuppressWarnings("unchecked")
