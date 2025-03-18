@@ -9,6 +9,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigScope;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.Filters;
 import ru.vyarus.dropwizard.guice.module.context.info.ExtensionItemInfo;
+import ru.vyarus.dropwizard.guice.module.context.info.GuiceyBundleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
@@ -21,9 +22,12 @@ import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
 import jakarta.inject.Inject;
+
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static ru.vyarus.dropwizard.guice.module.context.info.ItemId.typesOnly;
 
@@ -206,11 +210,33 @@ public class GuiceyConfigurationInfo {
     /**
      * Note that multiple instances could be installed for some bundles, but returned list will contain just
      * bundle type (no matter how many instances were actually installed).
+     * <p>
+     * Important: bundles returned in the registration order; if initialization order is required see
+     * {@link #getGuiceyBundlesInInitOrder()} (different because of transitive bundles).
      *
      * @return types of all installed and enabled bundles (including lookup bundles) or empty list
      */
     public List<Class<GuiceyBundle>> getGuiceyBundles() {
         return typesOnly(getGuiceyBundleIds());
+    }
+
+    /**
+     * Guicey bundle could register another guicey bundle then this transitive bundle would
+     * be initialized before the root bundle. This method sorts registered bundles according to
+     * actual initialization order (not by when init started, but when init finished -
+     * the same order as for transitive dropwizard bundles).
+     *
+     * @return applied guicey bundles in initialization order.
+     */
+    @SuppressWarnings("unchecked")
+    public List<Class<? extends GuiceyBundle>> getGuiceyBundlesInInitOrder() {
+        final List<GuiceyBundleItemInfo> infos = context.getInfos(ConfigItem.Bundle, Filters.enabled());
+        return infos.stream()
+                // sort by initialization time to move transitive bundles up
+                // (by default, bundles in the registration order)
+                .sorted(Comparator.comparingInt(GuiceyBundleItemInfo::getInitOrder))
+                .map(info -> (Class<? extends GuiceyBundle>) info.getType())
+                .collect(Collectors.toList());
     }
 
     /**

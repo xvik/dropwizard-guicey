@@ -11,6 +11,8 @@ import ru.vyarus.dropwizard.guice.AbstractPlatformTest;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.debug.report.start.DropwizardBundlesTracker;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
@@ -46,8 +48,8 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
                 "\t\t\t\tBundles lookup                     : 111 ms\n" +
                 "\t\t\t\tGuicey bundles init                : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
                 "\t\t\t\t\tInstallers resolution              : 111 ms\n" +
                 "\t\t\t\t\tScanned extensions recognition     : 111 ms\n" +
@@ -66,8 +68,8 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\tGuiceBundle                        : 111 ms\n" +
                 "\t\t\t\tConfiguration analysis             : 111 ms\n" +
                 "\t\t\t\tGuicey bundles run                 : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\tGuice modules processing           : 111 ms\n" +
                 "\t\t\t\t\tBindings resolution                : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
@@ -126,28 +128,28 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
                 "\t\t\t\tBundles lookup                     : 111 ms\n" +
                 "\t\t\t\tGuicey bundles init                : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
                 "\t\t\t\t\tInstallers resolution              : 111 ms\n" +
                 "\t\t\t\t\tScanned extensions recognition     : 111 ms\n" +
                 "\t\t\t\tListeners time                     : 111 ms\n" +
                 "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms\n" +
-                        "\t\t\t\t\tBeforeInitEvent                    : 111 ms\n" +
-                        "\t\t\t\t\tBundlesResolvedEvent               : 111 ms\n" +
-                        "\t\t\t\t\tBundlesInitializedEvent            : 111 ms\n" +
-                        "\t\t\t\t\tCommandsResolvedEvent              : 111 ms\n" +
-                        "\t\t\t\t\tInstallersResolvedEvent            : 111 ms\n" +
-                        "\t\t\t\t\tClasspathExtensionsResolvedEvent   : 111 ms\n" +
-                        "\t\t\t\t\tInitializedEvent                   : 111 ms\n" +
+                "\t\t\t\t\tBeforeInitEvent                    : 111 ms\n" +
+                "\t\t\t\t\tBundlesResolvedEvent               : 111 ms\n" +
+                "\t\t\t\t\tBundlesInitializedEvent            : 111 ms\n" +
+                "\t\t\t\t\tCommandsResolvedEvent              : 111 ms\n" +
+                "\t\t\t\t\tInstallersResolvedEvent            : 111 ms\n" +
+                "\t\t\t\t\tClasspathExtensionsResolvedEvent   : 111 ms\n" +
+                "\t\t\t\t\tInitializedEvent                   : 111 ms\n" +
                 "\n" +
                 "\t\tDropwizard run                     : 111 ms\n" +
                 "\t\t\tConfiguration and Environment      : 111 ms\n" +
                 "\t\t\tGuiceBundle                        : 111 ms\n" +
                 "\t\t\t\tConfiguration analysis             : 111 ms\n" +
                 "\t\t\t\tGuicey bundles run                 : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\tGuice modules processing           : 111 ms\n" +
                 "\t\t\t\t\tBindings resolution                : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
@@ -158,13 +160,13 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
 
         Assertions.assertThat(out).contains("\t\t\t\tListeners time                     : 111 ms\n" +
                 "\t\t\t\t\tBeforeRunEvent                     : 111 ms\n" +
-                        "\t\t\t\t\tBundlesStartedEvent                : 111 ms\n" +
-                        "\t\t\t\t\tModulesAnalyzedEvent               : 111 ms\n" +
-                        "\t\t\t\t\tExtensionsResolvedEvent            : 111 ms\n" +
-                        "\t\t\t\t\tInjectorCreationEvent              : 111 ms\n" +
-                        "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms\n" +
-                        "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms\n" +
-                        "\t\t\t\t\tApplicationRunEvent                : 111 ms\n" +
+                "\t\t\t\t\tBundlesStartedEvent                : 111 ms\n" +
+                "\t\t\t\t\tModulesAnalyzedEvent               : 111 ms\n" +
+                "\t\t\t\t\tExtensionsResolvedEvent            : 111 ms\n" +
+                "\t\t\t\t\tInjectorCreationEvent              : 111 ms\n" +
+                "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms\n" +
+                "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms\n" +
+                "\t\t\t\t\tApplicationRunEvent                : 111 ms\n" +
                 "\n" +
                 "\t\tWeb server startup                 : 111 ms\n" +
                 "\t\t\tJetty lifecycle time               : 111 ms\n" +
@@ -211,28 +213,28 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
                 "\t\t\t\tBundles lookup                     : 111 ms\n" +
                 "\t\t\t\tGuicey bundles init                : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
                 "\t\t\t\t\tInstallers resolution              : 111 ms\n" +
                 "\t\t\t\t\tScanned extensions recognition     : 111 ms\n" +
                 "\t\t\t\tListeners time                     : 111 ms\n" +
                 "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms\n" +
-                        "\t\t\t\t\tBeforeInitEvent                    : 111 ms\n" +
-                        "\t\t\t\t\tBundlesResolvedEvent               : 111 ms\n" +
-                        "\t\t\t\t\tBundlesInitializedEvent            : 111 ms\n" +
-                        "\t\t\t\t\tCommandsResolvedEvent              : 111 ms\n" +
-                        "\t\t\t\t\tInstallersResolvedEvent            : 111 ms\n" +
-                        "\t\t\t\t\tClasspathExtensionsResolvedEvent   : 111 ms\n" +
-                        "\t\t\t\t\tInitializedEvent                   : 111 ms\n" +
+                "\t\t\t\t\tBeforeInitEvent                    : 111 ms\n" +
+                "\t\t\t\t\tBundlesResolvedEvent               : 111 ms\n" +
+                "\t\t\t\t\tBundlesInitializedEvent            : 111 ms\n" +
+                "\t\t\t\t\tCommandsResolvedEvent              : 111 ms\n" +
+                "\t\t\t\t\tInstallersResolvedEvent            : 111 ms\n" +
+                "\t\t\t\t\tClasspathExtensionsResolvedEvent   : 111 ms\n" +
+                "\t\t\t\t\tInitializedEvent                   : 111 ms\n" +
                 "\n" +
                 "\t\tDropwizard run                     : 111 ms\n" +
                 "\t\t\tConfiguration and Environment      : 111 ms\n" +
                 "\t\t\tGuiceBundle                        : 111 ms\n" +
                 "\t\t\t\tConfiguration analysis             : 111 ms\n" +
                 "\t\t\t\tGuicey bundles run                 : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
                 "\t\t\t\tGuice modules processing           : 111 ms\n" +
                 "\t\t\t\t\tBindings resolution                : 111 ms\n" +
                 "\t\t\t\tInstallers time                    : 111 ms\n" +
@@ -245,16 +247,16 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
         // NOTE: jersey events here because rest stub runs at rnu phase
         Assertions.assertThat(out).contains("\t\t\t\tListeners time                     : 111 ms\n" +
                 "\t\t\t\t\tBeforeRunEvent                     : 111 ms\n" +
-                        "\t\t\t\t\tBundlesStartedEvent                : 111 ms\n" +
-                        "\t\t\t\t\tModulesAnalyzedEvent               : 111 ms\n" +
-                        "\t\t\t\t\tExtensionsResolvedEvent            : 111 ms\n" +
-                        "\t\t\t\t\tInjectorCreationEvent              : 111 ms\n" +
-                        "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms\n" +
-                        "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms\n" +
-                        "\t\t\t\t\tApplicationRunEvent                : 111 ms\n" +
-                        "\t\t\t\t\tJerseyConfigurationEvent           : 111 ms\n" +
-                        "\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms\n" +
-                        "\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms\n" +
+                "\t\t\t\t\tBundlesStartedEvent                : 111 ms\n" +
+                "\t\t\t\t\tModulesAnalyzedEvent               : 111 ms\n" +
+                "\t\t\t\t\tExtensionsResolvedEvent            : 111 ms\n" +
+                "\t\t\t\t\tInjectorCreationEvent              : 111 ms\n" +
+                "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms\n" +
+                "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms\n" +
+                "\t\t\t\t\tApplicationRunEvent                : 111 ms\n" +
+                "\t\t\t\t\tJerseyConfigurationEvent           : 111 ms\n" +
+                "\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms\n" +
+                "\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms\n" +
                 "\n" +
                 "\t\tWeb server startup                 : 111 ms\n" +
                 "\t\t\tLifecycle simulation time          : 111 ms\n" +
@@ -317,6 +319,24 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
         Assertions.assertThat(out).contains("\t\tWeb server startup                 : 111 ms\n" +
                 "\t\t\tLifecycle simulation time          : 111 ms\n" +
                 "\t\t\t\tGuicey time                        : 111 ms");
+    }
+
+    @Test
+    void testTransitiveBundles() {
+        String out = run(Test9.class);
+        Assertions.assertThat(out).contains("\t\t\t\tGuicey bundles init                : 111 ms\n" +
+                "\t\t\t\t\tLastBundle                         : 111 ms\n" +
+                "\t\t\t\t\tMiddleBundle                       : 111 ms\n" +
+                "\t\t\t\t\tRootBundle                         : 111 ms\n" +
+                "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms");
+
+        Assertions.assertThat(out).contains("\t\t\t\tGuicey bundles run                 : 111 ms\n" +
+                "\t\t\t\t\tLastBundle                         : 111 ms\n" +
+                "\t\t\t\t\tMiddleBundle                       : 111 ms\n" +
+                "\t\t\t\t\tRootBundle                         : 111 ms\n" +
+                "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms");
     }
 
     @Disabled
@@ -425,6 +445,59 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
 
         @Test
         void test() {
+        }
+    }
+
+    @Disabled
+    @TestGuiceyApp(Test9.App.class)
+    public static class Test9 {
+
+        @Test
+        void test() {
+        }
+
+        public static class App extends DefaultTestApp {
+            @Override
+            public void initialize(Bootstrap<Configuration> bootstrap) {
+                bootstrap.addBundle(GuiceBundle.builder()
+                        .bundles(new RootBundle())
+                        .printStartupTime().build());
+            }
+        }
+
+        public static class RootBundle implements GuiceyBundle {
+            @Override
+            public void initialize(GuiceyBootstrap bootstrap) {
+                bootstrap.bundles(new MiddleBundle());
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        public static class MiddleBundle implements GuiceyBundle {
+            @Override
+            public void initialize(GuiceyBootstrap bootstrap) {
+                bootstrap.bundles(new LastBundle());
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        public static class LastBundle implements GuiceyBundle {
+            @Override
+            public void initialize(GuiceyBootstrap bootstrap) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 

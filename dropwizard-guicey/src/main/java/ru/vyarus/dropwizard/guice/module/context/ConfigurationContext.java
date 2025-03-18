@@ -30,6 +30,7 @@ import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.ModuleItemInfo;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ExtensionItemInfoImpl;
+import ru.vyarus.dropwizard.guice.module.context.info.impl.GuiceyBundleItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.InstanceItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ItemInfoImpl;
 import ru.vyarus.dropwizard.guice.module.context.info.impl.ModuleItemInfoImpl;
@@ -99,6 +100,7 @@ public final class ConfigurationContext {
     private ConfigurationTree configurationTree;
     private Environment environment;
     private ExtensionsHolder extensionsHolder;
+    private List<GuiceyBundle> initOrder;
 
     /**
      * Record executed hook classes.
@@ -321,6 +323,32 @@ public final class ConfigurationContext {
     }
 
     /**
+     * Store initialization order of bundles. Due to transitive bundles immediate installation, real initialization
+     * order could differ from registration order (because the root bundle would be registered before
+     * a transitive bundle, but its processing would be finished after it).
+     *
+     * @param orderedBundles bundles in initialization order
+     */
+    public void storeBundlesInitOrder(final List<GuiceyBundle> orderedBundles) {
+        initOrder = orderedBundles;
+        int order = 1;
+        for (GuiceyBundle bundle : orderedBundles) {
+            ((GuiceyBundleItemInfoImpl) getInfo(bundle)).setInitOrder(order++);
+        }
+    }
+
+    /**
+     * It is important to call bundles run in the same order as bundles were initialized (it would
+     * differ from registration order due to transitive bundles).
+     *
+     * @return all bundles in the initialization order
+     */
+    public List<GuiceyBundle> getBundlesOrdered() {
+        return initOrder;
+    }
+
+
+    /**
      * Note: before configuration finalization this returns all actually disabled bundles and after
      * finalization all disables (including never registered bundles).
      *
@@ -359,7 +387,7 @@ public final class ConfigurationContext {
             // register only non duplicate bundles
             // bundles, registered in root GuiceBundle will be registered as soon as bootstrap would be available
             if (info.getRegistrationAttempts() == 1 && bootstrap != null) {
-                registerDropwizardBundle(bundle);
+                installDropwizardBundle(bundle);
             }
         }
     }
@@ -769,7 +797,7 @@ public final class ConfigurationContext {
         final StatTimer time = stat().timer(BundleTime);
         final StatTimer dwtime = stat().timer(DropwizardBundleInitTime);
         for (ConfiguredBundle bundle : getEnabledDropwizardBundles()) {
-            registerDropwizardBundle(bundle);
+            installDropwizardBundle(bundle);
         }
         dwtime.stop();
         time.stop();
@@ -1181,7 +1209,7 @@ public final class ConfigurationContext {
     }
 
     @SuppressWarnings("unchecked")
-    private void registerDropwizardBundle(final ConfiguredBundle bundle) {
+    private void installDropwizardBundle(final ConfiguredBundle bundle) {
         // register decorated dropwizard bundle to track transitive bundles
         // or bundle directly if tracking disabled
         bootstrap.addBundle(option(GuiceyOptions.TrackDropwizardBundles)
