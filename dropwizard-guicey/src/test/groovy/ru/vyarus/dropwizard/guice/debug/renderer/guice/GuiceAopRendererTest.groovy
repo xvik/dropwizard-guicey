@@ -67,6 +67,7 @@ class GuiceAopRendererTest extends Specification {
     │   ├── getExtensionsRegisteredManually()                                 Interceptor1
     │   ├── getGuiceyBundleIds()                                              Interceptor1
     │   ├── getGuiceyBundles()                                                Interceptor1
+    │   ├── getGuiceyBundlesInInitOrder()                                     Interceptor1
     │   ├── getInfo(Class<? extends Object>)                                  Interceptor1
     │   ├── getInfos(Class<? extends Object>)                                 Interceptor1
     │   ├── getInstallers()                                                   Interceptor1
@@ -146,6 +147,7 @@ class GuiceAopRendererTest extends Specification {
     │   ├── getExtensionsRegisteredManually()                                 Interceptor1
     │   ├── getGuiceyBundleIds()                                              Interceptor1
     │   ├── getGuiceyBundles()                                                Interceptor1
+    │   ├── getGuiceyBundlesInInitOrder()                                     Interceptor1
     │   ├── getInfos(Class<? extends Object>)                                 Interceptor1
     │   ├── getInstallers()                                                   Interceptor1
     │   ├── getInstallersDisabled()                                           Interceptor1

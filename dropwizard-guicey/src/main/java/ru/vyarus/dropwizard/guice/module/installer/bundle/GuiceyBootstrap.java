@@ -43,10 +43,14 @@ public class GuiceyBootstrap implements GuiceyCommonRegistration<GuiceyBootstrap
     // path for tracking bundles installation loops (a bundle registers another bundle and so on)
     // managed outside the bootstrap object, but need the reference for transitive bundles registration
     private final List<Class<? extends GuiceyBundle>> bundlesPath;
+    private final List<GuiceyBundle> initOrder;
 
-    public GuiceyBootstrap(final ConfigurationContext context, final List<Class<? extends GuiceyBundle>> bundlesPath) {
+    public GuiceyBootstrap(final ConfigurationContext context,
+                           final List<Class<? extends GuiceyBundle>> bundlesPath,
+                           final List<GuiceyBundle> initOrder) {
         this.context = context;
         this.bundlesPath = bundlesPath;
+        this.initOrder = initOrder;
     }
 
     /**
@@ -76,7 +80,7 @@ public class GuiceyBootstrap implements GuiceyCommonRegistration<GuiceyBootstrap
      */
     public GuiceyBootstrap bundles(final GuiceyBundle... bundles) {
         // immediate registration (same as for dropwizard bundles and guice modules)
-        BundleSupport.initBundles(context, this, bundlesPath, context.registerBundles(bundles));
+        BundleSupport.initBundles(context, this, bundlesPath, initOrder, context.registerBundles(bundles));
         return this;
     }
 
