@@ -23,4 +23,11 @@ public interface GuiceyBundleItemInfo extends BundleItemInfo<GuiceyBundle> {
      * @see ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup
      */
     boolean isFromLookup();
+
+    /**
+     * Useful for sorting bundles in initialization order (to correctly order transitive bundles).
+     *
+     * @return initialization order (starting from 1)
+     */
+    int getInitOrder();
 }

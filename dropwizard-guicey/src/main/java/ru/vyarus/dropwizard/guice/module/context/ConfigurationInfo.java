@@ -188,6 +188,18 @@ public final class ConfigurationInfo {
     }
 
     /**
+     * The simple way to receive a large set of info objects, instead of just ids. Useful for sorting.
+     *
+     * @param type   required item type
+     * @param filter filter
+     * @param <T>    item type
+     * @return all registrations matching filter or empty list if nothing registered
+     */
+    public <T extends ItemInfo> List<T> getInfos(final ConfigItem type, final Predicate<T> filter) {
+        return filterInfos(getItems(type), filter);
+    }
+
+    /**
      * @return types of executed hooks
      */
     public List<Class<? extends GuiceyConfigurationHook>> getHooks() {
@@ -196,5 +208,12 @@ public final class ConfigurationInfo {
 
     private <T, K extends ItemInfo> List<ItemId<T>> filter(final List<ItemId<T>> items, final Predicate<K> filter) {
         return items.stream().filter(it -> filter.test(getInfo(it))).collect(Collectors.toList());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <K extends ItemInfo> List<K> filterInfos(final List<ItemId<Object>> items, final Predicate<K> filter) {
+        return items.stream()
+                .map(itemId -> (K) getInfo(itemId))
+                .filter(filter).collect(Collectors.toList());
     }
 }

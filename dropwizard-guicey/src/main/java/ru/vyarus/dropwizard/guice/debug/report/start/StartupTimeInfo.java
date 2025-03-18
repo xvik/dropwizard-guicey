@@ -1,7 +1,10 @@
 package ru.vyarus.dropwizard.guice.debug.report.start;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import org.eclipse.jetty.util.Uptime;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatsInfo;
+import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -32,9 +35,11 @@ public class StartupTimeInfo {
     private Duration webTime;
 
     // time since start for each dropwizard bundle (can't be counted exclusively)
-    private final Map<String, Duration> bundlesInitPoints = new LinkedHashMap<>();
+    private final Map<Class<?>, Duration> bundlesInitPoints = new LinkedHashMap<>();
+    private final Multimap<Class<?>, Class<?>> guiceyBundleTransitives = ArrayListMultimap.create();
+    private List<Class<? extends GuiceyBundle>> guiceyBundlesInitOrder;
     // exclusive run time for each bundle
-    private final Map<String, Duration> bundlesRunTimes = new LinkedHashMap<>();
+    private final Map<Class<?>, Duration> bundlesRunTimes = new LinkedHashMap<>();
 
     private Duration initListenersTime;
     private Duration runListenersTime;
@@ -71,6 +76,18 @@ public class StartupTimeInfo {
         this.initTime = initTime;
     }
 
+    public Multimap<Class<?>, Class<?>> getGuiceyBundleTransitives() {
+        return guiceyBundleTransitives;
+    }
+
+    public List<Class<? extends GuiceyBundle>> getGuiceyBundlesInitOrder() {
+        return guiceyBundlesInitOrder;
+    }
+
+    public void setGuiceyBundlesInitOrder(final List<Class<? extends GuiceyBundle>> guiceyBundlesInitOrder) {
+        this.guiceyBundlesInitOrder = guiceyBundlesInitOrder;
+    }
+
     public Duration getRunPoint() {
         return runPoint;
     }
@@ -87,11 +104,11 @@ public class StartupTimeInfo {
         this.webTime = webTime;
     }
 
-    public Map<String, Duration> getBundlesInitPoints() {
+    public Map<Class<?>, Duration> getBundlesInitPoints() {
         return bundlesInitPoints;
     }
 
-    public Map<String, Duration> getBundlesRunTimes() {
+    public Map<Class<?>, Duration> getBundlesRunTimes() {
         return bundlesRunTimes;
     }
 

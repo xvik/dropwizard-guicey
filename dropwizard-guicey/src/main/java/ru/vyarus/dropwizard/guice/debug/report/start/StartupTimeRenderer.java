@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
 import ru.vyarus.dropwizard.guice.test.util.PrintUtils;
 
 import java.time.Duration;
+import java.util.Map;
 
 /**
  * Render startup times.
@@ -27,20 +28,20 @@ public class StartupTimeRenderer {
 
                 .append(line(2, "Dropwizard initialization", info.getInitTime()));
         info.getBundlesInitPoints().forEach((s, point) -> {
-            if (GuiceBundle.class.getSimpleName().equals(s)) {
+            if (GuiceBundle.class.equals(s)) {
                 printGuiceyInit(3, point, info, res);
             } else {
-                res.append(line(3, s, "finished since start at ", point, null));
+                res.append(line(3, RenderUtils.getClassName(s), "finished since start at ", point, null));
             }
         });
 
         res.append('\n').append(line(2, "Dropwizard run", info.getRunPoint().minus(info.getInitTime())))
                 .append(line(3, "Configuration and Environment", info.getDwPreRunTime()));
         info.getBundlesRunTimes().forEach((s, duration) -> {
-            if (GuiceBundle.class.getSimpleName().equals(s)) {
+            if (GuiceBundle.class.equals(s)) {
                 printGuiceyRun(3, duration, info, res);
             } else {
-                res.append(line(3, s, duration));
+                res.append(line(3, RenderUtils.getClassName(s), duration));
             }
         });
 
@@ -80,8 +81,16 @@ public class StartupTimeRenderer {
         res.append(line(shift + 1, "Bundles lookup", info.getStats().duration(Stat.BundleResolutionTime)))
 
                 .append(line(shift + 1, "Guicey bundles init", info.getStats().duration(Stat.GuiceyBundleInitTime)));
-        info.getStats().getDetailedStats(DetailStat.BundleInit).forEach((type, duration) ->
-                res.append(line(shift + 2, RenderUtils.getClassName(type), duration)));
+        final Map<Class<?>, Duration> detailedStats = info.getStats().getDetailedStats(DetailStat.BundleInit);
+        // bundle stats would contain incorrect init order
+        info.getGuiceyBundlesInitOrder().forEach(type -> {
+            Duration actual = detailedStats.get(type);
+            // exclude transitive bundles time
+            for (Class<?> transitive : info.getGuiceyBundleTransitives().get(type)) {
+                actual = actual.minus(detailedStats.get(transitive));
+            }
+            res.append(line(shift + 2, RenderUtils.getClassName(type), actual));
+        });
 
         res.append(line(shift + 1, "Installers time", info.getInitInstallersTime()))
                 .append(line(shift + 2, "Installers resolution",
@@ -105,6 +114,7 @@ public class StartupTimeRenderer {
                 .append(line(shift + 1, "Configuration analysis", info.getStats().duration(Stat.ConfigurationAnalysis)))
                 .append(line(shift + 1, "Guicey bundles run", info.getStats().duration(Stat.GuiceyBundleRunTime)));
 
+        // here order would be correct because there is no transitive bundles installation
         info.getStats().getDetailedStats(DetailStat.BundleRun).forEach((type, time) ->
                 res.append(line(shift + 2, RenderUtils.getClassName(type), time)));
 

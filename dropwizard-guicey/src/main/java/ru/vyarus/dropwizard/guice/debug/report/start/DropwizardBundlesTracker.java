@@ -62,8 +62,7 @@ public class DropwizardBundlesTracker extends ArrayList<ConfiguredBundle> {
         super.add(new BundleRunTracker(configuredBundle));
         // register time since initialization start! Because bundles can init other bundles we can't know exact
         // bundle init time, but can show time point when init was done!
-        info.getBundlesInitPoints().put(RenderUtils.getClassName(configuredBundle.getClass()),
-                stats.duration(Stat.OverallTime));
+        info.getBundlesInitPoints().put(configuredBundle.getClass(), stats.duration(Stat.OverallTime));
         // last init done - init phase completed
         info.setInitTime(stats.duration(Stat.OverallTime));
         info.setInitInstallersTime(stats.duration(Stat.InstallersTime));
@@ -136,7 +135,7 @@ public class DropwizardBundlesTracker extends ArrayList<ConfiguredBundle> {
             }
             final Stopwatch bundleTimer = Stopwatch.createStarted();
             bundle.run(configuration, environment);
-            info.getBundlesRunTimes().put(RenderUtils.getClassName(bundle.getClass()), bundleTimer.stop().elapsed());
+            info.getBundlesRunTimes().put(bundle.getClass(), bundleTimer.stop().elapsed());
             // last bundle run end - end of run phase (application run can't be tracked)
             info.setRunPoint(stats.duration(Stat.OverallTime));
             info.setRunListenersTime(stats.duration(Stat.ListenersTime).minus(info.getInitListenersTime()));

@@ -13,6 +13,8 @@ import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBundle;
  */
 public class GuiceyBundleItemInfoImpl extends BundleItemInfoImpl<GuiceyBundle> implements GuiceyBundleItemInfo {
 
+    private int initOrder;
+
     // disable only
     public GuiceyBundleItemInfoImpl(final Class<? extends GuiceyBundle> type) {
         super(ConfigItem.Bundle, type);
@@ -37,5 +39,14 @@ public class GuiceyBundleItemInfoImpl extends BundleItemInfoImpl<GuiceyBundle> i
     @Override
     public boolean isDropwizard() {
         return false;
+    }
+
+    @Override
+    public int getInitOrder() {
+        return initOrder;
+    }
+
+    public void setInitOrder(final int initOrder) {
+        this.initOrder = initOrder;
     }
 }

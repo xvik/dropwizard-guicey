@@ -49,11 +49,12 @@ public final class BundleSupport {
     public static void initBundles(final ConfigurationContext context) {
         final List<Class<? extends GuiceyBundle>> path = new ArrayList<>();
         final List<GuiceyBundle> bundles = context.getEnabledBundles();
-        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, path);
+        final List<GuiceyBundle> initOrder = new ArrayList<>();
+        final GuiceyBootstrap guiceyBootstrap = new GuiceyBootstrap(context, path, initOrder);
 
-        initBundles(context, guiceyBootstrap, path, bundles);
-
-        context.lifecycle().bundlesInitialized(context.getEnabledBundles(), context.getDisabledBundles(),
+        initBundles(context, guiceyBootstrap, path, initOrder, bundles);
+        context.storeBundlesInitOrder(initOrder);
+        context.lifecycle().bundlesInitialized(new ArrayList<>(initOrder), context.getDisabledBundles(),
                 context.getIgnoredItems(ConfigItem.Bundle));
     }
 
@@ -69,10 +70,11 @@ public final class BundleSupport {
     public static void initBundles(final ConfigurationContext context,
                                    final GuiceyBootstrap bootstrap,
                                    final List<Class<? extends GuiceyBundle>> path,
+                                   final List<GuiceyBundle> initOrder,
                                    final List<GuiceyBundle> bundles) {
         for (GuiceyBundle bundle : bundles) {
             // iterating bundles as tree in order to detect cycles
-            initBundle(path, bundle, context, bootstrap);
+            initBundle(path, initOrder, bundle, context, bootstrap);
         }
     }
 
@@ -86,12 +88,14 @@ public final class BundleSupport {
         final GuiceyEnvironment env = new GuiceyEnvironment(context);
         // process delayed configurations before bundles
         context.processDelayedConfigurations(env);
-        for (GuiceyBundle bundle : context.getEnabledBundles()) {
+        // important to process bundles in the same order as they were initialized
+        final List<GuiceyBundle> bundlesOrdered = context.getBundlesOrdered();
+        for (GuiceyBundle bundle : bundlesOrdered) {
             final Stopwatch timer = context.stat().detailTimer(DetailStat.BundleRun, bundle.getClass());
             bundle.run(env);
             timer.stop();
         }
-        context.lifecycle().bundlesStarted(context.getEnabledBundles());
+        context.lifecycle().bundlesStarted(bundlesOrdered);
     }
 
     /**
@@ -148,6 +152,7 @@ public final class BundleSupport {
     }
 
     private static void initBundle(final List<Class<? extends GuiceyBundle>> path,
+                                   final List<GuiceyBundle> initOrder,
                                    final GuiceyBundle bundle,
                                    final ConfigurationContext context,
                                    final GuiceyBootstrap bootstrap) {
@@ -171,6 +176,8 @@ public final class BundleSupport {
             final Stopwatch timer = context.stat().detailTimer(DetailStat.BundleInit, bundleType);
             bundle.initialize(bootstrap);
             timer.stop();
+            // collect bundles in initialization order to run at the same order
+            initOrder.add(bundle);
             context.replaceContextScope(currentScope);
         }
         path.remove(bundleType);
