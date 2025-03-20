@@ -21,7 +21,7 @@ import java.util.Set;
  * @since 09.08.2016
  */
 @SuppressWarnings("unchecked")
-public final class OptionsSupport<T extends Enum & Option> {
+public final class OptionsSupport<T extends Enum<? extends Option> & Option> {
 
     private final Map<T, OptionHolder> options = Maps.newHashMap();
 
