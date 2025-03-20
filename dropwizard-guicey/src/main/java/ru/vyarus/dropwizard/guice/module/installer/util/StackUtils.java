@@ -39,9 +39,13 @@ public final class StackUtils {
      */
     public static Optional<StackWalker.StackFrame> getCaller(final List<Class<?>> skip) {
         return WALKER.walk(stream ->
-                stream.dropWhile(frame -> frame.getDeclaringClass().equals(StackUtils.class)
-                        || skip.contains(frame.getDeclaringClass())
-                        || skip.contains(frame.getDeclaringClass().getEnclosingClass())).findFirst()
+                stream.dropWhile(frame -> {
+                    final Class<?> type = frame.getDeclaringClass();
+                    return type.equals(StackUtils.class)
+                            || type.getPackage().getName().startsWith("org.codehaus.groovy.vmplugin")
+                            || skip.contains(type)
+                            || skip.contains(type.getEnclosingClass());
+                }).findFirst()
         );
     }
 
