@@ -53,8 +53,9 @@ public interface GuiceyBundle {
      * bundles should be activated.
      *
      * @param bootstrap guicey bootstrap object
+     * @throws java.lang.Exception if something goes wrong
      */
-    default void initialize(final GuiceyBootstrap bootstrap) {
+    default void initialize(final GuiceyBootstrap bootstrap) throws Exception {
         // void
     }
 

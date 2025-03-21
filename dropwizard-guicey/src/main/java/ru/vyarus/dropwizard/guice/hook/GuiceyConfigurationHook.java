@@ -51,8 +51,9 @@ public interface GuiceyConfigurationHook {
      * ({@link GuiceBundle.Builder#printDiagnosticInfo()}).
      *
      * @param builder just created bundle's builder
+     * @throws java.lang.Exception on error (simplify usage)
      */
-    void configure(GuiceBundle.Builder builder);
+    void configure(GuiceBundle.Builder builder) throws Exception;
 
     /**
      * Register hook. Note that it must be called before guicey bundle creation, otherwise will never be called.

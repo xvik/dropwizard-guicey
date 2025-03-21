@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
@@ -99,9 +100,14 @@ public final class TestSetupUtils {
                                 final TestExtension builder) {
         // required to recognize hooks registered from setup objects
         config.tracker.setContextSetupObject(support.getClass());
-        final Object res = support.setup(builder);
-        config.tracker.setContextSetupObject(null);
-        return res;
+        try {
+            final Object res = support.setup(builder);
+            config.tracker.setContextSetupObject(null);
+            return res;
+        } catch (Exception ex) {
+            Throwables.throwIfUnchecked(ex);
+            throw new IllegalStateException("Failed to run test setup object", ex);
+        }
     }
 
     /**
