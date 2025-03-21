@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.GuiceyOptions;
 import ru.vyarus.dropwizard.guice.module.GuiceBootstrapModule;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.stat.Stat;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
@@ -72,7 +71,6 @@ public final class ModulesSupport {
      */
     @SuppressWarnings("unchecked")
     public static void configureModules(final ConfigurationContext context) {
-        final Options options = new Options(context.options());
         for (Module mod : context.getEnabledModules()) {
             if (mod instanceof BootstrapAwareModule) {
                 ((BootstrapAwareModule) mod).setBootstrap(context.getBootstrap());
@@ -87,7 +85,7 @@ public final class ModulesSupport {
                 ((EnvironmentAwareModule) mod).setEnvironment(context.getEnvironment());
             }
             if (mod instanceof OptionsAwareModule) {
-                ((OptionsAwareModule) mod).setOptions(options);
+                ((OptionsAwareModule) mod).setOptions(context.optionsReadOnly());
             }
         }
     }

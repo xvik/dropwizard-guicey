@@ -41,6 +41,7 @@
     - Add .whenReady() method for reactive state value access
       Add .whenSharedStateReady() for GuiceyBootstrap and GuiceyEnvironment
       (not required for the main bundle as there is withSharedState() method where whenReady() could be used directly)
+    - Add Options (read only accessor) object: state.getOptions()
     - (breaking) Tie a state key to the stored object type to simplify usage (type-safe) and force
        state objects usage instead of whatever values
     - Fix null value supplier behavior (not allowed): .get(key, supplier)
