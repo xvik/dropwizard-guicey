@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.module.installer.util;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Stopwatch;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import io.dropwizard.core.setup.Bootstrap;
 import org.slf4j.Logger;
@@ -151,6 +152,7 @@ public final class BundleSupport {
         return bundles;
     }
 
+    @SuppressWarnings("PMD.PrematureDeclaration")
     private static void initBundle(final List<Class<? extends GuiceyBundle>> path,
                                    final List<GuiceyBundle> initOrder,
                                    final GuiceyBundle bundle,
@@ -174,7 +176,12 @@ public final class BundleSupport {
         if (context.isBundleEnabled(id)) {
             final ItemId currentScope = context.replaceContextScope(id);
             final Stopwatch timer = context.stat().detailTimer(DetailStat.BundleInit, bundleType);
-            bundle.initialize(bootstrap);
+            try {
+                bundle.initialize(bootstrap);
+            } catch (Exception ex) {
+                Throwables.throwIfUnchecked(ex);
+                throw new IllegalStateException("Guicey bundle initialization failed", ex);
+            }
             timer.stop();
             // collect bundles in initialization order to run at the same order
             initOrder.add(bundle);

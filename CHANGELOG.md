@@ -1,7 +1,9 @@
 * Update to dropwizard 4.0.13
+* Add throws Exception for GuiceyConfigurationHook#configure() to simplify usage
+* Add throws Exception for GuiceyBundle#initialize() to simplify usage
 * Support extensions registration in GuiceyBundle run (.extensions() and .extensionsOptional()) 
     - ManualExtensionsValidatedEvent moved from configuration into run phase
-    - As before, classpath scan performed under configuration phase (but actual extensions registration moved to run phase) 
+    - As before, classpath scan performed under configuration phase (but actual extensions registration moved to run phase)
 * Add methods to the main builder (and hooks) to simplify usage without guicey bundle: 
     - .whenConfigurationReady(...) - delayed configuration (same as GuiceyBunle.run):  
        simplify extensions or guice modules registration, requiring configuration
@@ -45,6 +47,7 @@
     - Add shared state usage report: .printSharedStateUsage()
 * Transitive guicey bundles initialize immediately after registration (unify behavior with dropwizard bundles and guice modules) 
 * Test improvements:
+  - Add throws Exception for TestEnvironmentSetup#setup() to simplify usage
   - Track guicey test extensions time (would appear when debug option enabled)
   - Improve debug report: setup objects and hooks registration point are clear now (with direct code links) 
   - Add injectOnce option into test extensions to call injectMemebers once per test instance 

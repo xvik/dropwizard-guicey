@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.hook;
 
 import com.google.common.base.Stopwatch;
+import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
@@ -125,12 +126,18 @@ public final class ConfigurationHooksSupport {
      * @param stat    stats tracker
      * @return used hooks
      */
+    @SuppressWarnings("PMD.PrematureDeclaration")
     public static Set<GuiceyConfigurationHook> run(final GuiceBundle.Builder builder, final StatsTracker stat) {
         final Set<GuiceyConfigurationHook> hooks = HOOKS.get();
         if (hooks != null) {
             hooks.forEach(l -> {
                 final Stopwatch timer = stat.detailTimer(DetailStat.Hook, l.getClass());
-                l.configure(builder);
+                try {
+                    l.configure(builder);
+                } catch (Exception ex) {
+                    Throwables.throwIfUnchecked(ex);
+                    throw new IllegalStateException("Failed to run hook", ex);
+                }
                 timer.stop();
             });
         }
