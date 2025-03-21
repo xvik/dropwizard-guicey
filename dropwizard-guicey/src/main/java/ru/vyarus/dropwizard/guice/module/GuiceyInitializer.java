@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.bundle.GuiceyBundleLookup;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
-import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.context.stat.StatTimer;
 import ru.vyarus.dropwizard.guice.module.installer.CoreInstallersBundle;
 import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
@@ -211,14 +210,12 @@ public class GuiceyInitializer {
     private List<FeatureInstaller> prepareInstallers(
             final List<Class<? extends FeatureInstaller>> installerClasses) {
         final List<FeatureInstaller> installers = Lists.newArrayList();
-        // different instance then used in guice context, but it's just an accessor object
-        final Options options = new Options(context.options());
         for (Class<? extends FeatureInstaller> installerClass : installerClasses) {
             try {
                 final FeatureInstaller installer = InstanceUtils.create(installerClass);
                 installers.add(installer);
                 if (WithOptions.class.isAssignableFrom(installerClass)) {
-                    ((WithOptions) installer).setOptions(options);
+                    ((WithOptions) installer).setOptions(context.optionsReadOnly());
                 }
             } catch (Exception e) {
                 throw new IllegalStateException("Failed to register installer " + installerClass.getName(), e);

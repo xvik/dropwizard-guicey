@@ -13,6 +13,7 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.lifecycle.Managed;
 import javax.inject.Provider;
+import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.util.StackUtils;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
@@ -56,8 +57,8 @@ import java.util.function.Supplier;
  * <p>
  * Objects available in shared state by default: {@link io.dropwizard.core.setup.Bootstrap},
  * {@link io.dropwizard.core.Configuration}, {@link Environment},
- * {@link ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree}, {@link com.google.inject.Injector}
- * (see shortcut instance methods).
+ * {@link ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree}, {@link com.google.inject.Injector},
+ * {@link ru.vyarus.dropwizard.guice.module.context.option.Options} (see shortcut instance methods).
  * <p>
  * To debug shared state access use {@link #getAccessReport()}
  * (or {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#printSharedStateUsage()}).
@@ -181,6 +182,15 @@ public class SharedConfigurationState {
     }
 
     // ---- providers for common objects
+
+    /**
+     * Options access object is always available.
+     *
+     * @return options access object
+     */
+    public Options getOptions() {
+        return Preconditions.checkNotNull(get(Options.class), "Options object not yet available");
+    }
 
     /**
      * Bootstrap object is available since guice bundle initialization start. It will not be available for
