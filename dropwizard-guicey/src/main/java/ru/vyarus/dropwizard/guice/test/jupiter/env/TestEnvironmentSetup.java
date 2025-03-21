@@ -60,6 +60,8 @@ public interface TestEnvironmentSetup {
      * @return {@link java.lang.AutoCloseable} or
      * {@link org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource} if something needs to be
      * shut down after test, any other object would be ignored (including null)
+     *
+     * @throws java.lang.Exception on error (to simplify usage)
      */
-    Object setup(TestExtension extension);
+    Object setup(TestExtension extension) throws Exception;
 }
