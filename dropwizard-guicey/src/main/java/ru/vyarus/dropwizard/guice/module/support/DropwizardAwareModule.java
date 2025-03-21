@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -294,5 +295,17 @@ public abstract class DropwizardAwareModule<C extends Configuration> extends Abs
      */
     protected <T> T sharedStateOrFail(final Class<T> key, final String message, final Object... args) {
         return SharedConfigurationState.lookupOrFail(environment(), key, message, args);
+    }
+
+    /**
+     * Reactive shared value access: if value already available action called immediately, otherwise action would
+     * be called when value set (note that value could be set only once).
+     *
+     * @param key    shared object key
+     * @param action action to execute when value would be set
+     * @param <V>    value type
+     */
+    protected <V> void whenSharedStateReady(final Class<V> key, final Consumer<V> action) {
+        SharedConfigurationState.getOrFail(environment(), "Shared state not available").whenReady(key, action);
     }
 }
