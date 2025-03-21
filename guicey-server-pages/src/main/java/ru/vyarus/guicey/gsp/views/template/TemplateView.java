@@ -1,11 +1,11 @@
 package ru.vyarus.guicey.gsp.views.template;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.base.Charsets;
 import io.dropwizard.views.common.View;
 
 import javax.annotation.Nullable;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * View template rendering model. Must be used as base class for models instead of pure {@link View}.
@@ -38,7 +38,7 @@ public class TemplateView extends View {
      * @param templatePath template path or null (to use annotation value)
      */
     public TemplateView(@Nullable final String templatePath) {
-        this(templatePath, Charsets.UTF_8);
+        this(templatePath, StandardCharsets.UTF_8);
     }
 
     /**
