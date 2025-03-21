@@ -50,6 +50,7 @@ class SharedStateDirectAccessTest extends Specification {
         protected void configurationHooksProcessed(ConfigurationHooksProcessedEvent event) {
             def state = SharedConfigurationState.getStartupInstance()
             assert state
+            assert state.options
             noBootstrap(state)
         }
 
@@ -57,6 +58,7 @@ class SharedStateDirectAccessTest extends Specification {
         protected void dropwizardBundlesInitialized(DropwizardBundlesInitializedEvent event) {
             def state = SharedConfigurationState.getStartupInstance()
             assert state
+            assert state.options
             assert state.bootstrap.get()
             noEnvironment(state)
         }
@@ -65,6 +67,7 @@ class SharedStateDirectAccessTest extends Specification {
         protected void initialized(InitializedEvent event) {
             def state = SharedConfigurationState.getStartupInstance()
             assert state
+            assert state.options
             assert state.bootstrap.get()
             noEnvironment(state)
         }
@@ -73,6 +76,7 @@ class SharedStateDirectAccessTest extends Specification {
         protected void beforeRun(BeforeRunEvent event) {
             def state = SharedConfigurationState.getStartupInstance()
             assert state
+            assert state.options
             assert state.bootstrap.get()
             assert state.environment.get()
             assert state.configuration.get()
@@ -84,6 +88,7 @@ class SharedStateDirectAccessTest extends Specification {
         protected void applicationRun(ApplicationRunEvent event) {
             def state = SharedConfigurationState.getStartupInstance()
             assert state
+            assert state.options
             assert state.bootstrap.get()
             assert state.environment.get()
             assert state.injector.get()

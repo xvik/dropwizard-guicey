@@ -155,11 +155,17 @@ public final class ConfigurationContext {
      * Used to set and get options within guicey.
      */
     private final OptionsSupport optionsSupport = new OptionsSupport();
+    private final Options readOnlyOptions = new Options(optionsSupport);
     /**
      * Guicey lifecycle listeners support.
      */
-    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(tracker, new Options(optionsSupport),
+    private final LifecycleSupport lifecycleTracker = new LifecycleSupport(tracker, readOnlyOptions,
             sharedState, tracker::verifyTimersDone);
+
+    public ConfigurationContext() {
+        // always available
+        sharedState.put(Options.class, readOnlyOptions);
+    }
 
     /**
      * Add extra filter for scanned classes (classpath scan and bindings recognition).
@@ -740,6 +746,13 @@ public final class ConfigurationContext {
      */
     public OptionsSupport options() {
         return optionsSupport;
+    }
+
+    /**
+     * @return read-only options
+     */
+    public Options optionsReadOnly() {
+        return readOnlyOptions;
     }
 
     // --------------------------------------------------------------------------- GENERAL
