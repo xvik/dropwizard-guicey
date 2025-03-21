@@ -22,6 +22,7 @@ import ru.vyarus.dropwizard.guice.debug.GuiceAopDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.JerseyConfigDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.SharedStateDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.StartupTimeDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.WebMappingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.YamlBindingsDiagnostic;
@@ -1067,6 +1068,26 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          */
         public Builder printStartupTime() {
             return listen(new StartupTimeDiagnostic());
+        }
+
+        /**
+         * Prints {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState} usage history after
+         * application startup. The report shows:
+         * <ul>
+         *  <li>What objects stored in state
+         *  <li>Who accessed stored objects (preserving access order)
+         *  <li>Misses (requesting not yet available values)
+         *  <li>Never set, but requested objects (including never called state value listeners).
+         * </ul>
+         * <p>
+         * Note that report could be obtained at any time from the shared state object directly:
+         * {@link ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState#getAccessReport()}
+         * (could be useful for resolving problems before application startup).
+         *
+         * @return builder instance for chained calls
+         */
+        public Builder printSharedStateUsage() {
+            return listen(new SharedStateDiagnostic());
         }
 
         /**

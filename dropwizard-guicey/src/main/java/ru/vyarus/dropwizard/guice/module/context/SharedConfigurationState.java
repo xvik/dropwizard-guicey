@@ -13,10 +13,13 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.lifecycle.Managed;
 import jakarta.inject.Provider;
+import ru.vyarus.dropwizard.guice.module.installer.util.StackUtils;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
 
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -47,7 +50,7 @@ import java.util.function.Supplier;
  * from application main thread. This might be required for places where neither application nor environment
  * object available. After guice bundle's run method finishes, startup instance is unlinked.
  * <p>
- * Classes are used as state keys to simplify usage.
+ * Classes are used as state keys to simplify usage (shared object class is the key).
  * Shared value could be set only once (to prevent complex situations with state substitutions). It is advised
  * to initialize shared value only in initialization phase (to avoid potential static access errors).
  * <p>
@@ -55,6 +58,9 @@ import java.util.function.Supplier;
  * {@link io.dropwizard.core.Configuration}, {@link Environment},
  * {@link ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree}, {@link com.google.inject.Injector}
  * (see shortcut instance methods).
+ * <p>
+ * To debug shared state access use {@link #getAccessReport()}
+ * (or {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#printSharedStateUsage()}).
  *
  * @author Vyacheslav Rusakov
  * @since 26.09.2019
@@ -76,10 +82,17 @@ public class SharedConfigurationState {
     private static final ThreadLocal<SharedConfigurationState> STARTUP_INSTANCE = new ThreadLocal<>();
 
     // string used as key to workaround potential problems with different class loaders
-    private final Map<String, Object> state = new HashMap<>();
+    private final Map<String, Object> state = new LinkedHashMap<>();
+
+    // put calls
+    private final Map<String, String> statePopulationTrack = new LinkedHashMap<>();
+    // get calls (including misses)
+    private final Multimap<String, String> stateAccessTrack = LinkedHashMultimap.create();
+    // listener registration (to show state delayed access correctly)
+    private final Map<Consumer, String> listenersTrack = new LinkedHashMap<>();
     // reactive values
     // NOTE: no validation for not called listeners to allow optional reactive states
-    private final Multimap<Class<?>, Consumer> listeners = LinkedHashMultimap.create();
+    private final Multimap<String, Consumer> listeners = LinkedHashMultimap.create();
     private Application application;
 
     public SharedConfigurationState() {
@@ -103,12 +116,14 @@ public class SharedConfigurationState {
      * Special string-based state access for revising state with {@link #getKeys()}.
      *
      * @param key state key
-     * @return state value or null
      * @param <V> value type
+     * @return state value or null
      */
     @SuppressWarnings("unchecked")
     public <V> V get(final String key) {
-        return (V) state.get(key);
+        final V v = (V) state.get(key);
+        stateAccessTrack.put(key, (v == null ? "MISS " : "GET  ") + StackUtils.getSharedStateSource());
+        return v;
     }
 
     /**
@@ -120,12 +135,10 @@ public class SharedConfigurationState {
      * @return stored or default (just stored) value
      */
     public <V> V get(final Class<V> key, final Supplier<V> defaultValue) {
-        V res = get(key);
-        if (res == null && defaultValue != null) {
-            res = defaultValue.get();
-            put(key, res);
+        if (!state.containsKey(key.getName())) {
+            put(key, defaultValue.get());
         }
-        return res;
+        return get(key);
     }
 
     /**
@@ -158,11 +171,12 @@ public class SharedConfigurationState {
      * @param <V>    value type
      */
     public <V> void whenReady(final Class<V> key, final Consumer<V> action) {
-        final V value = get(key);
-        if (value != null) {
-            action.accept(value);
+        final String name = key.getName();
+        if (state.containsKey(name)) {
+            action.accept(get(name));
         } else {
-            listeners.put(key, action);
+            listeners.put(name, action);
+            listenersTrack.put(action, StackUtils.getSharedStateSource());
         }
     }
 
@@ -250,7 +264,7 @@ public class SharedConfigurationState {
      *
      * @param key   shared object key
      * @param value shared value (usually configuration object)
-     * @param <V> value type
+     * @param <V>   value type
      */
     @SuppressWarnings("unchecked")
     public <V> void put(final Class<V> key, final V value) {
@@ -260,8 +274,12 @@ public class SharedConfigurationState {
         final String name = key.getName();
         Preconditions.checkState(!state.containsKey(name), "Shared state for key %s already defined", name);
         state.put(name, value);
+        statePopulationTrack.put(name, StackUtils.getSharedStateSource());
         // processed one time
-        listeners.removeAll(key).forEach(consumer -> consumer.accept(value));
+        listeners.removeAll(name).forEach(consumer -> {
+            consumer.accept(value);
+            stateAccessTrack.put(name, "GET " + listenersTrack.get(consumer));
+        });
     }
 
     /**
@@ -276,6 +294,8 @@ public class SharedConfigurationState {
     /**
      * Clear state for exact application. Normally, state should shut down automatically (as it is a managed object).
      * But in tests with disabled lifecycle this will not happen and so cleanup must be manual.
+     *
+     * @see SharedConfigurationState#clear() to remove all states (for tests)
      */
     @VisibleForTesting
     public void shutdown() {
@@ -303,7 +323,7 @@ public class SharedConfigurationState {
     /**
      * Called on run phase to assign to application lifecycle and listen for shutdown.
      *
-     * @param environment environment  object
+     * @param environment environment object
      */
     protected void listen(final Environment environment) {
         // storing application reference in context attributes (to be able to reference shared state by environment)
@@ -479,6 +499,55 @@ public class SharedConfigurationState {
     @VisibleForTesting
     public static int statesCount() {
         return STATE.size();
+    }
+
+    /**
+     * Shows all objects in state with a link to assignment source and all state access attempts (success or misses).
+     *
+     * @return shared state usage report
+     */
+    public String getAccessReport() {
+        final StringBuilder report = new StringBuilder(200);
+        boolean blankLineAdded = false;
+        for (Map.Entry<String, String> entry : statePopulationTrack.entrySet()) {
+            final String k = entry.getKey();
+            final String value = entry.getValue();
+            final Collection<String> gets = stateAccessTrack.get(k);
+            report.append(!blankLineAdded && (report.isEmpty() || !gets.isEmpty()) ? "\n" : "").append("\tSET ")
+                    .append(String.format("%-80s\t %s%n", renderKey(k), value));
+            blankLineAdded = false;
+            gets.forEach(s -> report.append("\t\t").append(s).append('\n'));
+            if (!gets.isEmpty()) {
+                report.append('\n');
+                blankLineAdded = true;
+            }
+        }
+
+        final Set<String> notset = new LinkedHashSet<>(stateAccessTrack.keySet());
+        notset.removeAll(statePopulationTrack.keySet());
+        notset.forEach(key -> {
+            report.append("\n\tNEVER SET ").append(renderKey(key)).append('\n');
+            stateAccessTrack.get(key).forEach(s -> report.append("\t\t").append(s).append('\n'));
+            // never called listeners
+            listeners.get(key).forEach(consumer ->
+                    report.append("\t\tMISS ").append(listenersTrack.get(consumer)).append('\n'));
+        });
+
+        // listeners-only missed access
+        listeners.keySet().forEach(key -> {
+            if (!notset.contains(key)) {
+                report.append("\n\tNEVER SET ").append(renderKey(key)).append('\n');
+                listeners.get(key).forEach(consumer ->
+                        report.append("\t\tMISS ").append(listenersTrack.get(consumer)).append('\n'));
+            }
+        });
+
+        return report.toString();
+    }
+
+    private String renderKey(final String key) {
+        final int lastDot = key.lastIndexOf('.');
+        return key.substring(lastDot + 1) + " (" + key.substring(0, lastDot) + ")";
     }
 
     /**
