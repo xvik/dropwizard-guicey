@@ -39,13 +39,15 @@ import java.util.stream.Collectors;
  * track init time of bundles registered before guice bundle.
  * <p>
  * Entire application startup time (measured since guice bundle creation) is split into 3 chunks:
- *  - init phase - all dropwizard bundle init methods called
- *  - run phase - all dropwizard bundles run methods called (+ time of Configuration and Environment creation);
- *      also includes application init method
- *  - web phase - everything after last dropwizard bundle run (including application run method)
- *  <p>
- *  To avoid confusion with server startup time - jvm start time is also shown (time from jvm start and before
- *  guice bundle creation).
+ * <ul>
+ * <li> init phase - all dropwizard bundle init methods called
+ * <li> run phase - all dropwizard bundles run methods called (+ time of Configuration and Environment creation);
+ * also includes application init method
+ * <li> web phase - everything after last dropwizard bundle run (including application run method)
+ * </ul>
+ * <p>
+ * To avoid confusion with server startup time - jvm start time is also shown (time from jvm start and before
+ * guice bundle creation).
  *
  * @author Vyacheslav Rusakov
  * @since 07.03.2025
@@ -105,7 +107,7 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
         // remember transitive bundles to correctly calculate each bundle time
         event.getConfigurationInfo().getGuiceyBundleIds().forEach(id -> {
             final List<Class<?>> transitive = event.getConfigurationInfo().getData().getItems(itemInfo ->
-                    ConfigItem.Bundle.equals(itemInfo.getItemType()) && itemInfo.getRegistrationScope().equals(id))
+                            ConfigItem.Bundle.equals(itemInfo.getItemType()) && itemInfo.getRegistrationScope().equals(id))
                     .stream().map(ItemId::getType).collect(Collectors.toList());
             if (!transitive.isEmpty()) {
                 start.getGuiceyBundleTransitives().putAll(id.getType(), transitive);
@@ -122,12 +124,14 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
         private final List<Class<?>> startupEvents;
         private final ApplicationRunEvent event;
         private Duration startListenersTime;
+        private final StatsInfo stats;
 
         JettyListener(final ApplicationRunEvent event) {
             this.event = event;
             startTime = Stopwatch.createUnstarted();
             stopTime = Stopwatch.createUnstarted();
             startupEvents = new ArrayList<>();
+            stats = event.getInjector().getInstance(GuiceyConfigurationInfo.class).getStats();
         }
 
         @Override
@@ -142,7 +146,6 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
             // timer for more accurate value)
             start.setWebTime(bundlesTracker.getWebTimer().stop().elapsed());
             start.setLifecycleTime(startTime.elapsed());
-            final StatsInfo stats = event.getInjector().getInstance(GuiceyConfigurationInfo.class).getStats();
             start.setStats(stats);
             startupEvents.addAll(stats.getDetailedStats(DetailStat.Listener).keySet());
             startListenersTime = stats.duration(Stat.ListenersTime);
@@ -160,10 +163,12 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
         @Override
         public void lifeCycleStopped(final LifeCycle event) {
             stop.setStopTime(stopTime.stop().elapsed());
-            stop.getEvents().addAll(start.getStats().getDetailedStats(DetailStat.Listener).keySet());
+            stop.getEvents().addAll(stats.getDetailedStats(DetailStat.Listener).keySet());
             stop.getEvents().removeAll(startupEvents);
-            stop.setListenersTime(start.getStats().duration(Stat.ListenersTime).minus(startListenersTime));
-            stop.setStats(start.getStats());
+            final Duration shutdownListeners = stats.duration(Stat.ListenersTime);
+            stop.setListenersTime(startListenersTime != null ? shutdownListeners.minus(startListenersTime)
+                    : shutdownListeners);
+            stop.setStats(stats);
             logger.info("Application shutdown time: {}", new ShutdownTimeRenderer().render(stop));
         }
     }
