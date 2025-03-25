@@ -34,78 +34,78 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
         String out = run(Test1.class);
         Assertions.assertThat(out).contains("Application startup time: \n" +
                 "\n" +
-                "\tJVM time before                    : 111 ms\n" +
+                "\tJVM time before                    : 111 ms \n" +
                 "\n" +
-                "\tApplication startup                : 111 ms\n" +
-                "\t\tDropwizard initialization          : 111 ms\n" +
-                "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms)\n" +
-                "\t\t\t\tBundle builder time                : 111 ms\n" +
-                "\t\t\t\tHooks processing                   : 111 ms\n" +
-                "\t\t\t\t\tStartupDiagnosticTest$Test1$$Lambda$111/1111111: 111 ms\n" +
-                "\t\t\t\tClasspath scan                     : 111 ms\n" +
-                "\t\t\t\tCommands processing                : 111 ms\n" +
-                "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
-                "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
-                "\t\t\t\tBundles lookup                     : 111 ms\n" +
-                "\t\t\t\tGuicey bundles init                : 111 ms\n" +
-                "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
-                "\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\t\tInstallers resolution              : 111 ms\n" +
-                "\t\t\t\t\tScanned extensions recognition     : 111 ms\n" +
-                "\t\t\t\tListeners time                     : 111 ms\n" +
-                "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms\n" +
-                "\t\t\t\t\tBeforeInitEvent                    : 111 ms\n" +
-                "\t\t\t\t\tBundlesResolvedEvent               : 111 ms\n" +
-                "\t\t\t\t\tBundlesInitializedEvent            : 111 ms\n" +
-                "\t\t\t\t\tCommandsResolvedEvent              : 111 ms\n" +
-                "\t\t\t\t\tInstallersResolvedEvent            : 111 ms\n" +
-                "\t\t\t\t\tClasspathExtensionsResolvedEvent   : 111 ms\n" +
-                "\t\t\t\t\tInitializedEvent                   : 111 ms\n" +
+                "\tApplication startup                : 111 ms \n" +
+                "\t\tDropwizard initialization          : 111 ms \n" +
+                "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms )\n" +
+                "\t\t\t\tBundle builder time                : 111 ms \n" +
+                "\t\t\t\tHooks processing                   : 111 ms \n" +
+                "\t\t\t\t\tStartupDiagnosticTest$Test1$$Lambda$111/1111111: 111 ms \n" +
+                "\t\t\t\tClasspath scan                     : 111 ms \n" +
+                "\t\t\t\tCommands processing                : 111 ms \n" +
+                "\t\t\t\t\tNonInjactableCommand               : 111 ms \n" +
+                "\t\t\t\t\tNonInjactableCommand               : 111 ms \n" +
+                "\t\t\t\tBundles lookup                     : 111 ms \n" +
+                "\t\t\t\tGuicey bundles init                : 111 ms \n" +
+                "\t\t\t\t\tWebInstallersBundle                : 111 ms \n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms \n" +
+                "\t\t\t\tInstallers time                    : 111 ms \n" +
+                "\t\t\t\t\tInstallers resolution              : 111 ms \n" +
+                "\t\t\t\t\tScanned extensions recognition     : 111 ms \n" +
+                "\t\t\t\tListeners time                     : 111 ms \n" +
+                "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms \n" +
+                "\t\t\t\t\tBeforeInitEvent                    : 111 ms \n" +
+                "\t\t\t\t\tBundlesResolvedEvent               : 111 ms \n" +
+                "\t\t\t\t\tBundlesInitializedEvent            : 111 ms \n" +
+                "\t\t\t\t\tCommandsResolvedEvent              : 111 ms \n" +
+                "\t\t\t\t\tInstallersResolvedEvent            : 111 ms \n" +
+                "\t\t\t\t\tClasspathExtensionsResolvedEvent   : 111 ms \n" +
+                "\t\t\t\t\tInitializedEvent                   : 111 ms \n" +
                 "\n" +
-                "\t\tDropwizard run                     : 111 ms\n" +
-                "\t\t\tConfiguration and Environment      : 111 ms\n" +
-                "\t\t\tGuiceBundle                        : 111 ms\n" +
-                "\t\t\t\tConfiguration analysis             : 111 ms\n" +
-                "\t\t\t\tGuicey bundles run                 : 111 ms\n" +
-                "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
-                "\t\t\t\tGuice modules processing           : 111 ms\n" +
-                "\t\t\t\t\tBindings resolution                : 111 ms\n" +
-                "\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\t\tExtensions registration            : 111 ms\n" +
-                "\t\t\t\t\tGuice bindings analysis            : 111 ms\n" +
-                "\t\t\t\t\tExtensions installation            : 111 ms\n" +
-                "\t\t\t\tInjector creation                  : 111 ms\n");
+                "\t\tDropwizard run                     : 111 ms \n" +
+                "\t\t\tConfiguration and Environment      : 111 ms \n" +
+                "\t\t\tGuiceBundle                        : 111 ms \n" +
+                "\t\t\t\tConfiguration analysis             : 111 ms \n" +
+                "\t\t\t\tGuicey bundles run                 : 111 ms \n" +
+                "\t\t\t\t\tWebInstallersBundle                : 111 ms \n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms \n" +
+                "\t\t\t\tGuice modules processing           : 111 ms \n" +
+                "\t\t\t\t\tBindings resolution                : 111 ms \n" +
+                "\t\t\t\tInstallers time                    : 111 ms \n" +
+                "\t\t\t\t\tExtensions registration            : 111 ms \n" +
+                "\t\t\t\t\tGuice bindings analysis            : 111 ms \n" +
+                "\t\t\t\t\tExtensions installation            : 111 ms \n" +
+                "\t\t\t\tInjector creation                  : 111 ms");
 
-        Assertions.assertThat(out).contains("\t\t\t\tListeners time                     : 111 ms\n" +
-                "\t\t\t\t\tBeforeRunEvent                     : 111 ms\n" +
-                "\t\t\t\t\tBundlesStartedEvent                : 111 ms\n" +
-                "\t\t\t\t\tModulesAnalyzedEvent               : 111 ms\n" +
-                "\t\t\t\t\tExtensionsResolvedEvent            : 111 ms\n" +
-                "\t\t\t\t\tInjectorCreationEvent              : 111 ms\n" +
-                "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms\n" +
-                "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms\n" +
-                "\t\t\t\t\tApplicationRunEvent                : 111 ms\n" +
+        Assertions.assertThat(out).contains("Listeners time                     : 111 ms \n" +
+                "\t\t\t\t\tBeforeRunEvent                     : 111 ms \n" +
+                "\t\t\t\t\tBundlesStartedEvent                : 111 ms \n" +
+                "\t\t\t\t\tModulesAnalyzedEvent               : 111 ms \n" +
+                "\t\t\t\t\tExtensionsResolvedEvent            : 111 ms \n" +
+                "\t\t\t\t\tInjectorCreationEvent              : 111 ms \n" +
+                "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms \n" +
+                "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms \n" +
+                "\t\t\t\t\tApplicationRunEvent                : 111 ms \n" +
                 "\n" +
-                "\t\tWeb server startup                 : 111 ms\n" +
-                "\t\t\tLifecycle simulation time          : 111 ms\n" +
-                "\t\t\t\tmanaged   ExecutorServiceManager             : 111 ms\n" +
-                "\t\t\t\tmanaged   RegistryShutdown                   : 111 ms\n" +
-                "\t\t\t\tmanaged   DummyManaged                       : 111 ms\n" +
-                "\t\t\t\tGuicey time                        : 111 ms\n" +
-                "\t\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\t\tListeners time                     : 111 ms\n" +
+                "\t\tWeb server startup                 : 111 ms \n" +
+                "\t\t\tLifecycle simulation time          : 111 ms \n" +
+                "\t\t\t\tmanaged   ExecutorServiceManager             : 111 ms \n" +
+                "\t\t\t\tmanaged   RegistryShutdown                   : 111 ms \n" +
+                "\t\t\t\tmanaged   DummyManaged                       : 111 ms \n" +
+                "\t\t\t\tGuicey time                        : 111 ms \n" +
+                "\t\t\t\t\tInstallers time                    : 111 ms \n" +
+                "\t\t\t\t\tListeners time                     : 111 ms \n" +
                 "\t\t\t\t\t\tApplicationStartedEvent            : 111 ms");
 
         Assertions.assertThat(out).contains("Application shutdown time: \n" +
                 "\n" +
-                "\tApplication shutdown               : 111 ms\n" +
-                "\t\tmanaged   DummyManaged                       : 111 ms\n" +
-                "\t\tmanaged   RegistryShutdown                   : 111 ms\n" +
-                "\t\tmanaged   ExecutorServiceManager             : 111 ms\n" +
-                "\t\tListeners time                     : 111 ms\n" +
-                "\t\t\tApplicationShutdownEvent           : 111 ms\n" +
+                "\tApplication shutdown               : 111 ms \n" +
+                "\t\tmanaged   DummyManaged                       : 111 ms \n" +
+                "\t\tmanaged   RegistryShutdown                   : 111 ms \n" +
+                "\t\tmanaged   ExecutorServiceManager             : 111 ms \n" +
+                "\t\tListeners time                     : 111 ms \n" +
+                "\t\t\tApplicationShutdownEvent           : 111 ms \n" +
                 "\t\t\tApplicationStoppedEvent            : 111 ms");
     }
 
@@ -114,82 +114,82 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
         String out = run(Test2.class);
         Assertions.assertThat(out).contains("Application startup time: \n" +
                 "\n" +
-                "\tJVM time before                    : 111 ms\n" +
+                "\tJVM time before                    : 111 ms \n" +
                 "\n" +
-                "\tApplication startup                : 111 ms\n" +
-                "\t\tDropwizard initialization          : 111 ms\n" +
-                "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms)\n" +
-                "\t\t\t\tBundle builder time                : 111 ms\n" +
-                "\t\t\t\tHooks processing                   : 111 ms\n" +
-                "\t\t\t\t\tStartupDiagnosticTest$Test2$$Lambda$111/1111111: 111 ms\n" +
-                "\t\t\t\tClasspath scan                     : 111 ms\n" +
-                "\t\t\t\tCommands processing                : 111 ms\n" +
-                "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
-                "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
-                "\t\t\t\tBundles lookup                     : 111 ms\n" +
-                "\t\t\t\tGuicey bundles init                : 111 ms\n" +
-                "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
-                "\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\t\tInstallers resolution              : 111 ms\n" +
-                "\t\t\t\t\tScanned extensions recognition     : 111 ms\n" +
-                "\t\t\t\tListeners time                     : 111 ms\n" +
-                "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms\n" +
-                "\t\t\t\t\tBeforeInitEvent                    : 111 ms\n" +
-                "\t\t\t\t\tBundlesResolvedEvent               : 111 ms\n" +
-                "\t\t\t\t\tBundlesInitializedEvent            : 111 ms\n" +
-                "\t\t\t\t\tCommandsResolvedEvent              : 111 ms\n" +
-                "\t\t\t\t\tInstallersResolvedEvent            : 111 ms\n" +
-                "\t\t\t\t\tClasspathExtensionsResolvedEvent   : 111 ms\n" +
-                "\t\t\t\t\tInitializedEvent                   : 111 ms\n" +
+                "\tApplication startup                : 111 ms \n" +
+                "\t\tDropwizard initialization          : 111 ms \n" +
+                "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms )\n" +
+                "\t\t\t\tBundle builder time                : 111 ms \n" +
+                "\t\t\t\tHooks processing                   : 111 ms \n" +
+                "\t\t\t\t\tStartupDiagnosticTest$Test2$$Lambda$111/1111111: 111 ms \n" +
+                "\t\t\t\tClasspath scan                     : 111 ms \n" +
+                "\t\t\t\tCommands processing                : 111 ms \n" +
+                "\t\t\t\t\tNonInjactableCommand               : 111 ms \n" +
+                "\t\t\t\t\tNonInjactableCommand               : 111 ms \n" +
+                "\t\t\t\tBundles lookup                     : 111 ms \n" +
+                "\t\t\t\tGuicey bundles init                : 111 ms \n" +
+                "\t\t\t\t\tWebInstallersBundle                : 111 ms \n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms \n" +
+                "\t\t\t\tInstallers time                    : 111 ms \n" +
+                "\t\t\t\t\tInstallers resolution              : 111 ms \n" +
+                "\t\t\t\t\tScanned extensions recognition     : 111 ms \n" +
+                "\t\t\t\tListeners time                     : 111 ms \n" +
+                "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms \n" +
+                "\t\t\t\t\tBeforeInitEvent                    : 111 ms \n" +
+                "\t\t\t\t\tBundlesResolvedEvent               : 111 ms \n" +
+                "\t\t\t\t\tBundlesInitializedEvent            : 111 ms \n" +
+                "\t\t\t\t\tCommandsResolvedEvent              : 111 ms \n" +
+                "\t\t\t\t\tInstallersResolvedEvent            : 111 ms \n" +
+                "\t\t\t\t\tClasspathExtensionsResolvedEvent   : 111 ms \n" +
+                "\t\t\t\t\tInitializedEvent                   : 111 ms \n" +
                 "\n" +
-                "\t\tDropwizard run                     : 111 ms\n" +
-                "\t\t\tConfiguration and Environment      : 111 ms\n" +
-                "\t\t\tGuiceBundle                        : 111 ms\n" +
-                "\t\t\t\tConfiguration analysis             : 111 ms\n" +
-                "\t\t\t\tGuicey bundles run                 : 111 ms\n" +
-                "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
-                "\t\t\t\tGuice modules processing           : 111 ms\n" +
-                "\t\t\t\t\tBindings resolution                : 111 ms\n" +
-                "\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\t\tExtensions registration            : 111 ms\n" +
-                "\t\t\t\t\tGuice bindings analysis            : 111 ms\n" +
-                "\t\t\t\t\tExtensions installation            : 111 ms\n" +
-                "\t\t\t\tInjector creation                  : 111 ms\n");
+                "\t\tDropwizard run                     : 111 ms \n" +
+                "\t\t\tConfiguration and Environment      : 111 ms \n" +
+                "\t\t\tGuiceBundle                        : 111 ms \n" +
+                "\t\t\t\tConfiguration analysis             : 111 ms \n" +
+                "\t\t\t\tGuicey bundles run                 : 111 ms \n" +
+                "\t\t\t\t\tWebInstallersBundle                : 111 ms \n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms \n" +
+                "\t\t\t\tGuice modules processing           : 111 ms \n" +
+                "\t\t\t\t\tBindings resolution                : 111 ms \n" +
+                "\t\t\t\tInstallers time                    : 111 ms \n" +
+                "\t\t\t\t\tExtensions registration            : 111 ms \n" +
+                "\t\t\t\t\tGuice bindings analysis            : 111 ms \n" +
+                "\t\t\t\t\tExtensions installation            : 111 ms \n" +
+                "\t\t\t\tInjector creation                  : 111 ms ");
 
-        Assertions.assertThat(out).contains("\t\t\t\tListeners time                     : 111 ms\n" +
-                "\t\t\t\t\tBeforeRunEvent                     : 111 ms\n" +
-                "\t\t\t\t\tBundlesStartedEvent                : 111 ms\n" +
-                "\t\t\t\t\tModulesAnalyzedEvent               : 111 ms\n" +
-                "\t\t\t\t\tExtensionsResolvedEvent            : 111 ms\n" +
-                "\t\t\t\t\tInjectorCreationEvent              : 111 ms\n" +
-                "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms\n" +
-                "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms\n" +
-                "\t\t\t\t\tApplicationRunEvent                : 111 ms\n" +
+        Assertions.assertThat(out).contains("Listeners time                     : 111 ms \n" +
+                "\t\t\t\t\tBeforeRunEvent                     : 111 ms \n" +
+                "\t\t\t\t\tBundlesStartedEvent                : 111 ms \n" +
+                "\t\t\t\t\tModulesAnalyzedEvent               : 111 ms \n" +
+                "\t\t\t\t\tExtensionsResolvedEvent            : 111 ms \n" +
+                "\t\t\t\t\tInjectorCreationEvent              : 111 ms \n" +
+                "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms \n" +
+                "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms \n" +
+                "\t\t\t\t\tApplicationRunEvent                : 111 ms \n" +
                 "\n" +
-                "\t\tWeb server startup                 : 111 ms\n" +
-                "\t\t\tJetty lifecycle time               : 111 ms\n" +
-                "\t\t\t\tmanaged   ExecutorServiceManager             : 111 ms\n" +
-                "\t\t\t\tmanaged   RegistryShutdown                   : 111 ms\n" +
-                "\t\t\t\tmanaged   DummyManaged                       : 111 ms\n" +
-                "\t\t\t\tJersey time                        : 111 ms\n" +
-                "\t\t\t\t\tGuicey time                        : 111 ms\n" +
-                "\t\t\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\t\t\tListeners time                     : 111 ms\n" +
-                "\t\t\t\t\t\t\tJerseyConfigurationEvent           : 111 ms\n" +
-                "\t\t\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms\n" +
-                "\t\t\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms\n" +
+                "\t\tWeb server startup                 : 111 ms \n" +
+                "\t\t\tJetty lifecycle time               : 111 ms \n" +
+                "\t\t\t\tmanaged   ExecutorServiceManager             : 111 ms \n" +
+                "\t\t\t\tmanaged   RegistryShutdown                   : 111 ms \n" +
+                "\t\t\t\tmanaged   DummyManaged                       : 111 ms \n" +
+                "\t\t\t\tJersey time                        : 111 ms \n" +
+                "\t\t\t\t\tGuicey time                        : 111 ms \n" +
+                "\t\t\t\t\t\tInstallers time                    : 111 ms \n" +
+                "\t\t\t\t\t\tListeners time                     : 111 ms \n" +
+                "\t\t\t\t\t\t\tJerseyConfigurationEvent           : 111 ms \n" +
+                "\t\t\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms \n" +
+                "\t\t\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms \n" +
                 "\t\t\t\t\t\t\tApplicationStartedEvent            : 111 ms");
 
         Assertions.assertThat(out).contains("Application shutdown time: \n" +
                 "\n" +
-                "\tApplication shutdown               : 111 ms\n" +
-                "\t\tmanaged   DummyManaged                       : 111 ms\n" +
-                "\t\tmanaged   RegistryShutdown                   : 111 ms\n" +
-                "\t\tmanaged   ExecutorServiceManager             : 111 ms\n" +
-                "\t\tListeners time                     : 111 ms\n" +
-                "\t\t\tApplicationShutdownEvent           : 111 ms\n" +
+                "\tApplication shutdown               : 111 ms \n" +
+                "\t\tmanaged   DummyManaged                       : 111 ms \n" +
+                "\t\tmanaged   RegistryShutdown                   : 111 ms \n" +
+                "\t\tmanaged   ExecutorServiceManager             : 111 ms \n" +
+                "\t\tListeners time                     : 111 ms \n" +
+                "\t\t\tApplicationShutdownEvent           : 111 ms \n" +
                 "\t\t\tApplicationStoppedEvent            : 111 ms");
     }
 
@@ -198,84 +198,84 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
         String out = run(Test3.class);
         Assertions.assertThat(out).contains("Application startup time: \n" +
                 "\n" +
-                "\tJVM time before                    : 111 ms\n" +
+                "\tJVM time before                    : 111 ms \n" +
                 "\n" +
-                "\tApplication startup                : 111 ms\n" +
-                "\t\tDropwizard initialization          : 111 ms\n" +
-                "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms)\n" +
-                "\t\t\t\tBundle builder time                : 111 ms\n" +
-                "\t\t\t\tHooks processing                   : 111 ms\n" +
-                "\t\t\t\t\tRestStubSupport                    : 111 ms\n" +
-                "\t\t\t\t\tStartupDiagnosticTest$Test3$$Lambda$111/1111111: 111 ms\n" +
-                "\t\t\t\tClasspath scan                     : 111 ms\n" +
-                "\t\t\t\tCommands processing                : 111 ms\n" +
-                "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
-                "\t\t\t\t\tNonInjactableCommand               : 111 ms\n" +
-                "\t\t\t\tBundles lookup                     : 111 ms\n" +
-                "\t\t\t\tGuicey bundles init                : 111 ms\n" +
-                "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
-                "\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\t\tInstallers resolution              : 111 ms\n" +
-                "\t\t\t\t\tScanned extensions recognition     : 111 ms\n" +
-                "\t\t\t\tListeners time                     : 111 ms\n" +
-                "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms\n" +
-                "\t\t\t\t\tBeforeInitEvent                    : 111 ms\n" +
-                "\t\t\t\t\tBundlesResolvedEvent               : 111 ms\n" +
-                "\t\t\t\t\tBundlesInitializedEvent            : 111 ms\n" +
-                "\t\t\t\t\tCommandsResolvedEvent              : 111 ms\n" +
-                "\t\t\t\t\tInstallersResolvedEvent            : 111 ms\n" +
-                "\t\t\t\t\tClasspathExtensionsResolvedEvent   : 111 ms\n" +
-                "\t\t\t\t\tInitializedEvent                   : 111 ms\n" +
+                "\tApplication startup                : 111 ms \n" +
+                "\t\tDropwizard initialization          : 111 ms \n" +
+                "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms )\n" +
+                "\t\t\t\tBundle builder time                : 111 ms \n" +
+                "\t\t\t\tHooks processing                   : 111 ms \n" +
+                "\t\t\t\t\tRestStubSupport                    : 111 ms \n" +
+                "\t\t\t\t\tStartupDiagnosticTest$Test3$$Lambda$111/1111111: 111 ms \n" +
+                "\t\t\t\tClasspath scan                     : 111 ms \n" +
+                "\t\t\t\tCommands processing                : 111 ms \n" +
+                "\t\t\t\t\tNonInjactableCommand               : 111 ms \n" +
+                "\t\t\t\t\tNonInjactableCommand               : 111 ms \n" +
+                "\t\t\t\tBundles lookup                     : 111 ms \n" +
+                "\t\t\t\tGuicey bundles init                : 111 ms \n" +
+                "\t\t\t\t\tWebInstallersBundle                : 111 ms \n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms \n" +
+                "\t\t\t\tInstallers time                    : 111 ms \n" +
+                "\t\t\t\t\tInstallers resolution              : 111 ms \n" +
+                "\t\t\t\t\tScanned extensions recognition     : 111 ms \n" +
+                "\t\t\t\tListeners time                     : 111 ms \n" +
+                "\t\t\t\t\tConfigurationHooksProcessedEvent   : 111 ms \n" +
+                "\t\t\t\t\tBeforeInitEvent                    : 111 ms \n" +
+                "\t\t\t\t\tBundlesResolvedEvent               : 111 ms \n" +
+                "\t\t\t\t\tBundlesInitializedEvent            : 111 ms \n" +
+                "\t\t\t\t\tCommandsResolvedEvent              : 111 ms \n" +
+                "\t\t\t\t\tInstallersResolvedEvent            : 111 ms \n" +
+                "\t\t\t\t\tClasspathExtensionsResolvedEvent   : 111 ms \n" +
+                "\t\t\t\t\tInitializedEvent                   : 111 ms \n" +
                 "\n" +
-                "\t\tDropwizard run                     : 111 ms\n" +
-                "\t\t\tConfiguration and Environment      : 111 ms\n" +
-                "\t\t\tGuiceBundle                        : 111 ms\n" +
-                "\t\t\t\tConfiguration analysis             : 111 ms\n" +
-                "\t\t\t\tGuicey bundles run                 : 111 ms\n" +
-                "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
-                "\t\t\t\t\tCoreInstallersBundle               : 111 ms\n" +
-                "\t\t\t\tGuice modules processing           : 111 ms\n" +
-                "\t\t\t\t\tBindings resolution                : 111 ms\n" +
-                "\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\t\tExtensions registration            : 111 ms\n" +
-                "\t\t\t\t\tGuice bindings analysis            : 111 ms\n" +
-                "\t\t\t\t\tExtensions installation            : 111 ms\n" +
-                "\t\t\t\tInjector creation                  : 111 ms\n");
+                "\t\tDropwizard run                     : 111 ms \n" +
+                "\t\t\tConfiguration and Environment      : 111 ms \n" +
+                "\t\t\tGuiceBundle                        : 111 ms \n" +
+                "\t\t\t\tConfiguration analysis             : 111 ms \n" +
+                "\t\t\t\tGuicey bundles run                 : 111 ms \n" +
+                "\t\t\t\t\tWebInstallersBundle                : 111 ms \n" +
+                "\t\t\t\t\tCoreInstallersBundle               : 111 ms \n" +
+                "\t\t\t\tGuice modules processing           : 111 ms \n" +
+                "\t\t\t\t\tBindings resolution                : 111 ms \n" +
+                "\t\t\t\tInstallers time                    : 111 ms \n" +
+                "\t\t\t\t\tExtensions registration            : 111 ms \n" +
+                "\t\t\t\t\tGuice bindings analysis            : 111 ms \n" +
+                "\t\t\t\t\tExtensions installation            : 111 ms \n" +
+                "\t\t\t\tInjector creation                  : 111 ms \n");
 
 
         // NOTE: jersey events here because rest stub runs at rnu phase
-        Assertions.assertThat(out).contains("\t\t\t\tListeners time                     : 111 ms\n" +
-                "\t\t\t\t\tBeforeRunEvent                     : 111 ms\n" +
-                "\t\t\t\t\tBundlesStartedEvent                : 111 ms\n" +
-                "\t\t\t\t\tModulesAnalyzedEvent               : 111 ms\n" +
-                "\t\t\t\t\tExtensionsResolvedEvent            : 111 ms\n" +
-                "\t\t\t\t\tInjectorCreationEvent              : 111 ms\n" +
-                "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms\n" +
-                "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms\n" +
-                "\t\t\t\t\tApplicationRunEvent                : 111 ms\n" +
-                "\t\t\t\t\tJerseyConfigurationEvent           : 111 ms\n" +
-                "\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms\n" +
-                "\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms\n" +
+        Assertions.assertThat(out).contains("\t\t\t\tListeners time                     : 111 ms \n" +
+                "\t\t\t\t\tBeforeRunEvent                     : 111 ms \n" +
+                "\t\t\t\t\tBundlesStartedEvent                : 111 ms \n" +
+                "\t\t\t\t\tModulesAnalyzedEvent               : 111 ms \n" +
+                "\t\t\t\t\tExtensionsResolvedEvent            : 111 ms \n" +
+                "\t\t\t\t\tInjectorCreationEvent              : 111 ms \n" +
+                "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms \n" +
+                "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms \n" +
+                "\t\t\t\t\tApplicationRunEvent                : 111 ms \n" +
+                "\t\t\t\t\tJerseyConfigurationEvent           : 111 ms \n" +
+                "\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms \n" +
+                "\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms \n" +
                 "\n" +
-                "\t\tWeb server startup                 : 111 ms\n" +
-                "\t\t\tLifecycle simulation time          : 111 ms\n" +
-                "\t\t\t\tmanaged   ExecutorServiceManager             : 111 ms\n" +
-                "\t\t\t\tmanaged   RegistryShutdown                   : 111 ms\n" +
-                "\t\t\t\tmanaged   DummyManaged                       : 111 ms\n" +
-                "\t\t\t\tGuicey time                        : 111 ms\n" +
-                "\t\t\t\t\tInstallers time                    : 111 ms\n" +
-                "\t\t\t\t\tListeners time                     : 111 ms\n" +
+                "\t\tWeb server startup                 : 111 ms \n" +
+                "\t\t\tLifecycle simulation time          : 111 ms \n" +
+                "\t\t\t\tmanaged   ExecutorServiceManager             : 111 ms \n" +
+                "\t\t\t\tmanaged   RegistryShutdown                   : 111 ms \n" +
+                "\t\t\t\tmanaged   DummyManaged                       : 111 ms \n" +
+                "\t\t\t\tGuicey time                        : 111 ms \n" +
+                "\t\t\t\t\tInstallers time                    : 111 ms \n" +
+                "\t\t\t\t\tListeners time                     : 111 ms \n" +
                 "\t\t\t\t\t\tApplicationStartedEvent            : 111 ms");
 
         Assertions.assertThat(out).contains("Application shutdown time: \n" +
                 "\n" +
-                "\tApplication shutdown               : 111 ms\n" +
-                "\t\tmanaged   DummyManaged                       : 111 ms\n" +
-                "\t\tmanaged   RegistryShutdown                   : 111 ms\n" +
-                "\t\tmanaged   ExecutorServiceManager             : 111 ms\n" +
-                "\t\tListeners time                     : 111 ms\n" +
-                "\t\t\tApplicationShutdownEvent           : 111 ms\n" +
+                "\tApplication shutdown               : 111 ms \n" +
+                "\t\tmanaged   DummyManaged                       : 111 ms \n" +
+                "\t\tmanaged   RegistryShutdown                   : 111 ms \n" +
+                "\t\tmanaged   ExecutorServiceManager             : 111 ms \n" +
+                "\t\tListeners time                     : 111 ms \n" +
+                "\t\t\tApplicationShutdownEvent           : 111 ms \n" +
                 "\t\t\tApplicationStoppedEvent            : 111 ms");
     }
 
@@ -284,31 +284,31 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
         String out = run(Test5.class);
         Assertions.assertThat(out).contains("Initialization time not tracked for bundles (move them after guice bundle to measure time): Bundle");
 
-        Assertions.assertThat(out).contains("\tApplication startup                : 111 ms\n" +
-                "\t\tDropwizard initialization          : 111 ms\n" +
-                "\t\t\tBundle                             : finished since start at 111 ms\n" +
-                "\t\t\tRecordedLogsTrackingBundle         : finished since start at 111 ms\n" +
-                "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms)");
+        Assertions.assertThat(out).contains("\tApplication startup                : 111 ms \n" +
+                "\t\tDropwizard initialization          : 111 ms \n" +
+                "\t\t\tBundle                             : finished since start at 111 ms \n" +
+                "\t\t\tRecordedLogsTrackingBundle         : finished since start at 111 ms \n" +
+                "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms )");
 
-        Assertions.assertThat(out).contains("\t\tDropwizard run                     : 111 ms\n" +
-                "\t\t\tConfiguration and Environment      : 111 ms\n" +
-                "\t\t\tBundle                             : 111 ms\n" +
-                "\t\t\tRecordedLogsTrackingBundle         : 111 ms\n" +
-                "\t\t\tGuiceBundle                        : 111 ms");
+        Assertions.assertThat(out).contains("\t\tDropwizard run                     : 111 ms \n" +
+                "\t\t\tConfiguration and Environment      : 111 ms \n" +
+                "\t\t\tBundle                             : 111 ms \n" +
+                "\t\t\tRecordedLogsTrackingBundle         : 111 ms \n" +
+                "\t\t\tGuiceBundle                        : 111 ms ");
     }
 
     @Test
     void testAnonymousBundle() {
         String out = run(Test6.class);
 
-        Assertions.assertThat(out).contains("StartupDiagnosticTest$Test6$App$1  : finished since start at 111 ms");
+        Assertions.assertThat(out).contains("StartupDiagnosticTest$Test6$App$1  : finished since start at 111 ms ");
     }
 
     @Test
     void testAnonymousManaged() {
         String out = run(Test7.class);
 
-        Assertions.assertThat(out).contains("managed   StartupDiagnosticTest$Test7$1      : 111 ms");
+        Assertions.assertThat(out).contains("managed   StartupDiagnosticTest$Test7$1      : 111 ms ");
     }
 
     @Test
@@ -316,26 +316,26 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
         String out = run(Test8.class);
 
         // lifecycle still used, just managed objects not processed
-        Assertions.assertThat(out).contains("\t\tWeb server startup                 : 111 ms\n" +
-                "\t\t\tLifecycle simulation time          : 111 ms\n" +
+        Assertions.assertThat(out).contains("\t\tWeb server startup                 : 111 ms \n" +
+                "\t\t\tLifecycle simulation time          : 111 ms \n" +
                 "\t\t\t\tGuicey time                        : 111 ms");
     }
 
     @Test
     void testTransitiveBundles() {
         String out = run(Test9.class);
-        Assertions.assertThat(out).contains("\t\t\t\tGuicey bundles init                : 111 ms\n" +
-                "\t\t\t\t\tLastBundle                         : 111 ms\n" +
-                "\t\t\t\t\tMiddleBundle                       : 111 ms\n" +
-                "\t\t\t\t\tRootBundle                         : 111 ms\n" +
-                "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
+        Assertions.assertThat(out).contains("\t\t\t\tGuicey bundles init                : 111 ms \n" +
+                "\t\t\t\t\tLastBundle                         : 111 ms \n" +
+                "\t\t\t\t\tMiddleBundle                       : 111 ms \n" +
+                "\t\t\t\t\tRootBundle                         : 111 ms \n" +
+                "\t\t\t\t\tWebInstallersBundle                : 111 ms \n" +
                 "\t\t\t\t\tCoreInstallersBundle               : 111 ms");
 
-        Assertions.assertThat(out).contains("\t\t\t\tGuicey bundles run                 : 111 ms\n" +
-                "\t\t\t\t\tLastBundle                         : 111 ms\n" +
-                "\t\t\t\t\tMiddleBundle                       : 111 ms\n" +
-                "\t\t\t\t\tRootBundle                         : 111 ms\n" +
-                "\t\t\t\t\tWebInstallersBundle                : 111 ms\n" +
+        Assertions.assertThat(out).contains("\t\t\t\tGuicey bundles run                 : 111 ms \n" +
+                "\t\t\t\t\tLastBundle                         : 111 ms \n" +
+                "\t\t\t\t\tMiddleBundle                       : 111 ms \n" +
+                "\t\t\t\t\tRootBundle                         : 111 ms \n" +
+                "\t\t\t\t\tWebInstallersBundle                : 111 ms \n" +
                 "\t\t\t\t\tCoreInstallersBundle               : 111 ms");
     }
 
@@ -504,11 +504,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
 
     @Override
     protected String clean(String out) {
-        return out.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
-                // jdk 21
-                .replaceAll("\\$\\$Lambda/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
-
-                .replaceAll("\\d+(\\.\\d+)? ms", "111 ms")
+        return unifyLambdas(unifyMs(out))
 
                 // commands order may differ due to commands scan
                 .replace("DummyCommand                       : 111 ms", "NonInjactableCommand               : 111 ms");

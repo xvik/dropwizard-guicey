@@ -15,7 +15,10 @@
     - .listenJetty() - shortcut for jetty lifecycle listening
     - .listenJersey() - shortcut for jersey startup events and requests listening
 * Add application startup (and shutdown) time detalization report: .printStartupTime()
-    - Add hook alias for showing report on compiled applicaton: -Dguicey.hooks=startup-time
+    - Add hook alias for showing report on compiled application: -Dguicey.hooks=startup-time
+* Add guice provision time report (time of guice beans creation): .printGuiceProvisionTime()
+    - Add hook alias for showing report on compiled application: -Dguicey.hooks=provision-time
+    - GuiceProvisionTimeHook could be used in tests to record beans creation at runtime
 * Improve guice bindings report:
     - fixed scope accuracy for linked bindings
     - Fixed bindings for private modules (missed exposed linked bindings)

@@ -70,4 +70,14 @@ public abstract class AbstractPlatformTest {
     }
 
     protected abstract String clean(String out);
+
+    protected String unifyMs(String out) {
+        return out.replaceAll("\\d+(\\.\\d+)? ms( +)?", "111 ms ");
+    }
+    
+    protected String unifyLambdas(String out) {
+        return out.replaceAll("\\$\\$Lambda\\$\\d+/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111")
+                // jdk 21
+                .replaceAll("\\$\\$Lambda/\\d+(x[a-z\\d]+)?", "\\$\\$Lambda\\$111/1111111");
+    }
 }

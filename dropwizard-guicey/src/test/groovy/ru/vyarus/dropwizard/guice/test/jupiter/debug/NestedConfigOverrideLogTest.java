@@ -29,14 +29,14 @@ public class NestedConfigOverrideLogTest extends AbstractPlatformTest {
                 "\t                  foo = 2");
 
         assertThat(output).contains(
-                "Guicey time after [Before each] of Inner#test1(): 111 ms\n" +
+                "Guicey time after [Before each] of Inner#test1(): 111 ms \n" +
                         "\n" +
-                        "\t[Before each]                      : 111 ms\n" +
-                        "\t\tGuicey fields search               : 111 ms\n" +
-                        "\t\tGuicey hooks registration          : 111 ms\n" +
-                        "\t\tGuicey setup objects execution     : 111 ms\n" +
-                        "\t\tDropwizardTestSupport creation     : 111 ms\n" +
-                        "\t\tApplication start                  : 111 ms\n" +
+                        "\t[Before each]                      : 111 ms \n" +
+                        "\t\tGuicey fields search               : 111 ms \n" +
+                        "\t\tGuicey hooks registration          : 111 ms \n" +
+                        "\t\tGuicey setup objects execution     : 111 ms \n" +
+                        "\t\tDropwizardTestSupport creation     : 111 ms \n" +
+                        "\t\tApplication start                  : 111 ms \n" +
                         "\t\tGuice fields injection             : 111 ms");
     }
 
@@ -63,6 +63,6 @@ public class NestedConfigOverrideLogTest extends AbstractPlatformTest {
 
     @Override
     protected String clean(String out) {
-        return out.replaceAll("\\d+(\\.\\d+)? ms", "111 ms");
+        return unifyMs(out);
     }
 }

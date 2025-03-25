@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.debug.report.guice.util;
 
+import com.google.inject.Binding;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.internal.util.StackTraceElements;
@@ -7,9 +8,12 @@ import com.google.inject.spi.Element;
 import com.google.inject.spi.ElementSource;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.BindingDeclaration;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.ModuleDeclaration;
+import ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor.GuiceScopingVisitor;
+import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton;
 import ru.vyarus.java.generics.resolver.util.TypeToStringUtils;
 import ru.vyarus.java.generics.resolver.util.map.EmptyGenericsMap;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Consumer;
@@ -21,6 +25,8 @@ import java.util.function.Consumer;
  * @since 15.08.2019
  */
 public final class GuiceModelUtils {
+
+    private static final GuiceScopingVisitor SCOPE_DETECTOR = new GuiceScopingVisitor();
 
     private GuiceModelUtils() {
     }
@@ -87,6 +93,20 @@ public final class GuiceModelUtils {
     }
 
     /**
+     * Detects binding scope.
+     *
+     * @param binding binding
+     * @return binding scope
+     */
+    public static Class<? extends Annotation> getScope(final Binding<?> binding) {
+        Class<? extends Annotation> scope = SCOPE_DETECTOR.performDetection(binding);
+        if (scope != null && scope.equals(EagerSingleton.class)) {
+            scope = jakarta.inject.Singleton.class;
+        }
+        return scope;
+    }
+
+    /**
      * @param key guice binding key
      * @return string representation for key or "-" if key is null
      */
@@ -139,5 +159,29 @@ public final class GuiceModelUtils {
             }
         }
         return traceElement;
+    }
+
+    /**
+     * Render element declaration source.
+     *
+     * @param element guice element
+     * @return element declaration source or null
+     */
+    public static String renderSource(final Element element) {
+        final StackTraceElement trace = getDeclarationSource(element);
+        String res = null;
+        if (trace != null) {
+            // using full stacktrace element to grant proper link highlight in idea
+            res = trace.toString();
+        } else {
+            final Object source = element.getSource();
+            // source instanceof Class - JIT binding
+            if (source instanceof String) {
+                // possible for synthetic bindings, created by guicey for extensions not directly exposed in
+                // private modules
+                res = (String) source;
+            }
+        }
+        return res;
     }
 }
