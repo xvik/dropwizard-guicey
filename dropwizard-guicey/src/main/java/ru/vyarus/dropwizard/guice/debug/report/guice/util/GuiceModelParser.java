@@ -15,12 +15,9 @@ import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.BindingDeclaration;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.ModuleDeclaration;
 import ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor.GuiceElementVisitor;
-import ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor.GuiceScopingVisitor;
 import ru.vyarus.dropwizard.guice.debug.report.guice.util.visitor.PrivateModuleException;
-import ru.vyarus.dropwizard.guice.module.installer.feature.eager.EagerSingleton;
 import ru.vyarus.dropwizard.guice.module.installer.util.BindingUtils;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,7 +38,6 @@ import java.util.Set;
 public final class GuiceModelParser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GuiceModelParser.class);
-    private static final GuiceScopingVisitor SCOPE_DETECTOR = new GuiceScopingVisitor();
     private static final GuiceElementVisitor ELEMENT_VISITOR = new GuiceElementVisitor();
 
     private GuiceModelParser() {
@@ -231,11 +227,7 @@ public final class GuiceModelParser {
                     return;
                 }
             }
-            Class<? extends Annotation> scope = SCOPE_DETECTOR.performDetection(existingBinding);
-            if (scope != null && scope.equals(EagerSingleton.class)) {
-                scope = jakarta.inject.Singleton.class;
-            }
-            dec.setScope(scope);
+            dec.setScope(GuiceModelUtils.getScope(existingBinding));
             // important for untargetted bindings to look existing binding
             if (existingBinding instanceof ConstructorBinding) {
                 final int aops = ((ConstructorBinding) existingBinding).getMethodInterceptors().size();

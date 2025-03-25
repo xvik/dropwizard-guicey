@@ -106,8 +106,9 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
     protected void applicationRun(final ApplicationRunEvent event) {
         // remember transitive bundles to correctly calculate each bundle time
         event.getConfigurationInfo().getGuiceyBundleIds().forEach(id -> {
-            final List<Class<?>> transitive = event.getConfigurationInfo().getData().getItems(itemInfo ->
-                            ConfigItem.Bundle.equals(itemInfo.getItemType()) && itemInfo.getRegistrationScope().equals(id))
+            final List<Class<?>> transitive = event.getConfigurationInfo().getData()
+                    .getItems(itemInfo -> ConfigItem.Bundle.equals(itemInfo.getItemType())
+                            && itemInfo.getRegistrationScope().equals(id))
                     .stream().map(ItemId::getType).collect(Collectors.toList());
             if (!transitive.isEmpty()) {
                 start.getGuiceyBundleTransitives().putAll(id.getType(), transitive);
