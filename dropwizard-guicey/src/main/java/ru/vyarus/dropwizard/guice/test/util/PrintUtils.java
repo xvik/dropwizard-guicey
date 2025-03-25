@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @author Vyacheslav Rusakov
  * @since 12.02.2025
  */
+@SuppressWarnings("PMD.GodClass")
 public final class PrintUtils {
 
     private static final String DURATION_FORMATION = "%2.3f %s";
@@ -111,13 +112,36 @@ public final class PrintUtils {
     @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     public static String ms(final long nanos) {
         final long millis = Math.round((double) nanos / 1_000_000);
+        final String res;
         if (millis > 10) {
-            return millis + " ms";
+            res = millis + " ms";
+        } else if (nanos < 10) {
+            res = "0.00 ms";
+        } else if (nanos < 100) {
+            // bigger precision for too small numbers (to avoid confusion by showing raw nanos)
+            res = formatMs(nanos, 5);
+        } else if (nanos < 1000) {
+            res = formatMs(nanos, 4);
+        } else if (nanos < 10_000) {
+            res = formatMs(nanos, 3);
         } else {
-            return new BigDecimal(nanos)
-                    .divide(BigDecimal.valueOf(1_000_000), 2, RoundingMode.UP)
-                    .doubleValue() + " ms";
+            res = formatMs(nanos, 2);
         }
+        return res;
+    }
+
+    /**
+     * Format nano value in milliseconds with required precision (decimal numbers).
+     *
+     * @param nanos     value in nanoseconds
+     * @param precision required precision (decimal numbers)
+     * @return formatted value
+     */
+    public static String formatMs(final long nanos, final int precision) {
+        final String format = "%." + precision + "f ms";
+        return String.format(format, new BigDecimal(nanos)
+                .divide(BigDecimal.valueOf(1_000_000), precision, RoundingMode.HALF_UP)
+                .doubleValue());
     }
 
     /**

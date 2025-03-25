@@ -61,4 +61,26 @@ class PrintUtilsTest extends Specification {
         100   | TimeUnit.HOURS        | "0.000 h"
         100   | TimeUnit.DAYS         | "0.000 d"
     }
+
+    def "Check nanos format"() {
+        expect:
+        PrintUtils.ms(value) == result
+
+        where:
+        value    | result
+        5        | "0.00 ms"
+        10       | "0.00001 ms"
+        50       | "0.00005 ms"
+        100      | "0.0001 ms"
+        150      | "0.0002 ms"
+        500      | "0.0005 ms"
+        1_000    | "0.001 ms"
+        1_500    | "0.002 ms"
+        5_000    | "0.005 ms"
+        10_000   | "0.01 ms"
+        15_000   | "0.02 ms"
+        100_000  | "0.10 ms"
+        150_000  | "0.15 ms"
+        1000_000 | "1.00 ms"
+    }
 }

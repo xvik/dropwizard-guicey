@@ -20,6 +20,7 @@ import ru.vyarus.dropwizard.guice.debug.ConfigurationDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.ExtensionsHelpDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.GuiceAopDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.GuiceBindingsDiagnostic;
+import ru.vyarus.dropwizard.guice.debug.GuiceProvisionDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.JerseyConfigDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.LifecycleDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.SharedStateDiagnostic;
@@ -27,6 +28,7 @@ import ru.vyarus.dropwizard.guice.debug.StartupTimeDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.WebMappingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.YamlBindingsDiagnostic;
 import ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook;
+import ru.vyarus.dropwizard.guice.debug.hook.GuiceProvisionTimeHook;
 import ru.vyarus.dropwizard.guice.debug.hook.StartupTimeHook;
 import ru.vyarus.dropwizard.guice.debug.report.diagnostic.DiagnosticConfig;
 import ru.vyarus.dropwizard.guice.debug.report.guice.GuiceAopConfig;
@@ -195,8 +197,10 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         return new Builder()
                 // enable diagnostic logs with system property (on compiled app): -Dguicey.hooks=diagnostic
                 .hookAlias(DiagnosticHook.ALIAS, DiagnosticHook.class)
-                // enable startup logs with system property (on compiled app): -Dguicey.hooks=startup-time
-                .hookAlias(StartupTimeHook.ALIAS, StartupTimeHook.class);
+                // enable startup logs with: -Dguicey.hooks=startup-time
+                .hookAlias(StartupTimeHook.ALIAS, StartupTimeHook.class)
+                // enable guice provision time logs with: -Dguicey.hooks=provision-time
+                .hookAlias(GuiceProvisionTimeHook.ALIAS, GuiceProvisionTimeHook.class);
     }
 
     /**
@@ -852,6 +856,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          *
          * @return builder instance for chained calls
          * @see ConfigurationDiagnostic
+         * @see ru.vyarus.dropwizard.guice.debug.hook.DiagnosticHook
          */
         public Builder printDiagnosticInfo() {
             return listen(new ConfigurationDiagnostic());
@@ -991,6 +996,44 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
         }
 
         /**
+         * Prints guice beans construction time (during application startup) and number of created beans.
+         * Suitable for:
+         * <ul>
+         *   <li>Verifying providers (and provider methods) performance
+         *   <li>Prototype scope mis-usage (detect too many bean instantiations)
+         *   <li>Jit bindings misuse (usually mistakes)
+         * </ul>
+         * Report tries to detect common mistakes: JIT binding appeared for configuration values due to missed
+         * qualifier annotation (with annotation it is a correct instance injection, whereas without annotation it
+         * would be a new JIT binding). Such situations might appear due to lombok usage: lombok generated constructor,
+         * but did not copy qualifier annotation from fields.
+         * <p>
+         * By default, the report prints only startup time data. If you need to measure time for application runtime,
+         * construct diagnostic manually:
+         * <pre><code>
+         *     // false to avoid startup report
+         *     GuiceProvisionDiagnostic report = new GuiceProvisionDiagnostic(false);
+         *     // registre report
+         *     GuiceBundle....bundles(report);
+         *
+         *     // clear collected data before required point
+         *     report.clear();
+         *     ...
+         *     // generate report after measured actions
+         *     logger.info("Guice provision time {}", report.renderReport());
+         * </code></pre>
+         * This might be used in tests to control guice beans creation amount and time.
+         * <p>
+         * For compiled application report could be activated with: {@code -Dguicey.hooks=provision-time}
+         *
+         * @return builder instance for chained calls
+         * @see ru.vyarus.dropwizard.guice.debug.hook.GuiceProvisionTimeHook for simple usage in tests
+         */
+        public Builder printGuiceProvisionTime() {
+            return bundles(new GuiceProvisionDiagnostic(true));
+        }
+
+        /**
          * Split logs with major lifecycle stage names. Useful for debugging (to better understand
          * at what stage your code is executed). Also, could be used for light profiling as
          * time since startup is printed for each phase (and for shutdown phases). And, of course,
@@ -1063,8 +1106,11 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * <p>
          * Overall, report shows almost all application startup time with exact phases. Plus all guicey internal
          * actions.
+         * <p>
+         * For compiled application report could be activated with: {@code -Dguicey.hooks=startup-time}
          *
          * @return builder instance for chained calls
+         * @see ru.vyarus.dropwizard.guice.debug.hook.StartupTimeHook
          */
         public Builder printStartupTime() {
             return listen(new StartupTimeDiagnostic());
