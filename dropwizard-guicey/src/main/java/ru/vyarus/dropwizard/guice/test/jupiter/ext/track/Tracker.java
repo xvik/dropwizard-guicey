@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * <p>
  * Use metrics timer to aggregate method calls statistics. Use {@link #getStats()} for report building.
  * <p>
- * Tracked methods filtering implemented with mockito: {@link #find(java.util.function.Function)}.
+ * Tracked methods filtering implemented with mockito: {@link #findTracks(java.util.function.Function)}.
  * <p>
  * By default, recorded tracks cleared after each test.
  *
@@ -143,7 +143,8 @@ public class Tracker<T> {
      * @param where search condition definition
      * @return list of matched tracks
      */
-    public List<MethodTrack> find(final Function<T, OngoingStubbing<?>> where) {
+    // not just find for groovy support (find is a default groovy method)
+    public List<MethodTrack> findTracks(final Function<T, OngoingStubbing<?>> where) {
         final OngoingStubbing<?> apply = where.apply(mock());
         final InvocationContainerImpl invocationContainer = MockUtil.getInvocationContainer(mock());
         try {
@@ -223,7 +224,7 @@ public class Tracker<T> {
     }
 
     /**
-     * @return mock to use for methods search ({@link #find(java.util.function.Function)})
+     * @return mock to use for methods search ({@link #findTracks(java.util.function.Function)})
      */
     @SuppressWarnings("unchecked")
     private T mock() {
