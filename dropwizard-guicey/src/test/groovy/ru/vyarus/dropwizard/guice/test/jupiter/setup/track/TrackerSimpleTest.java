@@ -63,7 +63,7 @@ public class TrackerSimpleTest {
 
 
         // search with mockito api
-        tracks = serviceTracker.find(mock -> when(
+        tracks = serviceTracker.findTracks(mock -> when(
                 mock.foo(Mockito.anyInt()))
         );
         Assertions.assertEquals(2, tracks.size());
@@ -72,7 +72,7 @@ public class TrackerSimpleTest {
         Assertions.assertEquals("foo", tracks.get(0).getMethod().getName());
         Assertions.assertEquals("foo", tracks.get(1).getMethod().getName());
 
-        tracks = serviceTracker.find(mock -> when(
+        tracks = serviceTracker.findTracks(mock -> when(
                 mock.foo(Mockito.intThat(argument -> argument == 1)))
         );
         Assertions.assertEquals(1, tracks.size());
@@ -81,7 +81,7 @@ public class TrackerSimpleTest {
         // and another call to make sure results not cached
         Assertions.assertEquals("1 call", service.foo(1));
 
-        tracks = serviceTracker.find(mock -> when(
+        tracks = serviceTracker.findTracks(mock -> when(
                 mock.foo(Mockito.intThat(argument -> argument == 1)))
         );
         Assertions.assertEquals(2, tracks.size());
