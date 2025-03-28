@@ -19,7 +19,7 @@ wrapper {
 description = 'Dropwizard guice integration'
 
 ext {
-    dropwizard = '5.0.0-rc.1'
+    dropwizard = '5.0.0-rc.2'
     guice = '7.0.0'
     hk2 = '3.0.6'
     spockJunit5 = '1.2.0'
@@ -177,6 +177,9 @@ subprojects {
             testImplementation 'ru.vyarus:spock-junit5'
             testImplementation 'org.spockframework:spock-core:2.4-M5-groovy-4.0'
             testImplementation 'org.junit.jupiter:junit-jupiter-api'
+
+            // required for junit 5.12 in current gradle version
+            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         }
     } else {
         // don't compile and run tests for legacy junit4 and spock1 modules
