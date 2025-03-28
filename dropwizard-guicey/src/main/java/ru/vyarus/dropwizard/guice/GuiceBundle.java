@@ -352,8 +352,12 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * For example, if you want to exclude all annotated classes:
          * {@code autoConfigFilter(type -> !type.isAnnotationPresent(Stub.class))}
          * <p>
+         * For simplicity, use {@link ru.vyarus.dropwizard.guice.test.util.ClassFilters} utility with static import
+         * for building predicates:
+         * {@code autoConfigFilter(ignoreAnnotated(Stub.class))}
+         * <p>
          * Another example, suppose you want spring-style configuration: accept only classes with some annotation:
-         * {@code autoConfigFilter(type -> type.isAnnotationPresent(Component.class))}
+         * {@code autoConfigFilter(annotated(Component.class))}
          * <p>
          * The difference with {@link #disable(java.util.function.Predicate[])} predicate: by default, guicey would
          * apply all installers for each class to detect extension and disable predicate prevents recognized extension
@@ -364,10 +368,11 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * Filter applied only for extensions (does not affect commands and installers search).
          * <p>
          * Be aware that filter would be also called for all guice bindings (if extension from binding recognition
-         * enabled). No worries, it's normal (and filter could be used to filter recognitions from bindings).
+         * enabled). So filter could be used to filter recognitions from bindings too.
          *
          * @param filter filter predicate for classes suitable for extensions detection
          * @return builder instance for chained calls
+         * @see ru.vyarus.dropwizard.guice.test.util.ClassFilters for simple annotation predicates implementation
          */
         public Builder autoConfigFilter(final Predicate<Class<?>> filter) {
             bundle.context.addAutoScanFilter(filter);

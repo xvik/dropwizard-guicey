@@ -14,6 +14,8 @@ import ru.vyarus.dropwizard.guice.module.installer.scanner.InvisibleForScanner
 import ru.vyarus.dropwizard.guice.support.DefaultTestApp
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 
+import static ru.vyarus.dropwizard.guice.test.util.ClassFilters.declaredIn
+
 /**
  * @author Vyacheslav Rusakov
  * @since 21.02.2025
@@ -36,7 +38,7 @@ class DisablesPredicateByInstallerTest {
             return GuiceBundle.builder()
                     .enableAutoConfig()
                     // scan only inside class
-                    .autoConfigFilter { DisablesPredicateByInstallerTest == it.getDeclaringClass() }
+                    .autoConfigFilter(declaredIn(DisablesPredicateByInstallerTest))
                     .option(GuiceyOptions.ScanProtectedClasses, true)
                     .extensions(DirectFilter)
             .modules(new Module() {
