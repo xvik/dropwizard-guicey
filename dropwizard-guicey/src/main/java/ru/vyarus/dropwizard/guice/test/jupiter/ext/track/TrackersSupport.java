@@ -127,7 +127,7 @@ public class TrackersSupport extends AnnotatedTestFieldSetup<TrackBean, Tracker>
     @Override
     @SuppressWarnings("PMD.SystemPrintln")
     public void afterEach(final EventContext context) {
-        if (debug) {
+        if (context.isDebug()) {
             final Tracker[] trackers = fields.stream()
                     .map(field -> (Tracker) field.getCustomData(FIELD_TRACKER))
                     .toArray(Tracker[]::new);
