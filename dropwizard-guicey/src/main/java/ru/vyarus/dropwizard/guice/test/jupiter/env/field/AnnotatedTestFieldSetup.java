@@ -48,7 +48,6 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
     protected static final String FIELD_MANUAL = "manual_creation";
     protected static final String FIELD_INJECTED = "value_injected";
 
-    protected boolean debug;
     protected boolean appPerClass;
     protected Class<?> regTestClass;
     protected String setupContextName;
@@ -85,8 +84,6 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
         setupContext = extension.getJunitContext();
         regTestClass = setupContext.getRequiredTestClass();
         regTestInstance = setupContext.getTestInstances().orElse(null);
-        // for report
-        debug = extension.isDebug();
         this.setupContextName = TestSetupUtils.getContextTestName(setupContext);
 
         // find all annotated fields in test class (if not already found)
@@ -219,8 +216,8 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
     @Override
     public void started(final EventContext context) {
         // here because manual stubs detection will appear only during injector startup
-        if (debug && !fields.isEmpty()) {
-            report(new EventContext(setupContext), fields);
+        if (context.isDebug() && !fields.isEmpty()) {
+            report(new EventContext(setupContext, true), fields);
         }
     }
 
