@@ -2,7 +2,9 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
+import com.google.common.base.Throwables;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.function.ThrowingConsumer;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
@@ -10,7 +12,6 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTrac
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * Guicey test listeners support object.
@@ -55,10 +56,17 @@ public class ListenersSupport {
         broadcast(listener -> listener.stopped(new EventContext(context)));
     }
 
-    private void broadcast(final Consumer<TestExecutionListener> action) {
+    private void broadcast(final ThrowingConsumer<TestExecutionListener> action) {
         if (!listeners.isEmpty()) {
             final Stopwatch timer = Stopwatch.createStarted();
-            listeners.forEach(action);
+            listeners.forEach(l -> {
+                try {
+                    action.accept(l);
+                } catch (Throwable ex) {
+                    Throwables.throwIfUnchecked(ex);
+                    throw new IllegalStateException("Failed to execute listener", ex);
+                }
+            });
             tracker.performanceTrack(GuiceyTestTime.TestListeners, timer.elapsed());
         }
     }
