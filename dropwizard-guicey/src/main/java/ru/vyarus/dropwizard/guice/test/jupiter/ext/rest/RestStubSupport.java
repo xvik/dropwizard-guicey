@@ -198,7 +198,7 @@ public class RestStubSupport extends AnnotatedTestFieldSetup<StubRest, RestClien
 
     private void start(final StubRest config, final Environment environment) {
         if (!fields.isEmpty()) {
-            Preconditions.checkState(!new EventContext(setupContext).isWebStarted(),
+            Preconditions.checkState(!new EventContext(setupContext, false).isWebStarted(),
                     "Resources stubbing is useless when application is fully started. Use it with @"
                             + TestGuiceyApp.class.getSimpleName() + " where web services not started in order to "
                             + "start lightweight container with rest services.");

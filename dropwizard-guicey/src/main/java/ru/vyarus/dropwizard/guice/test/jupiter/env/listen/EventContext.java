@@ -18,9 +18,11 @@ import ru.vyarus.dropwizard.guice.test.jupiter.ext.GuiceyExtensionsSupport;
 public class EventContext {
 
     private final ExtensionContext context;
+    private final boolean debug;
 
-    public EventContext(final ExtensionContext context) {
+    public EventContext(final ExtensionContext context, final boolean debug) {
         this.context = context;
+        this.debug = debug;
     }
 
     /**
@@ -28,6 +30,15 @@ public class EventContext {
      */
     public ExtensionContext getJunitContext() {
         return context;
+    }
+
+    /**
+     * Useful to bind debug options on the extension debug (no need for additional keys).
+     *
+     * @return true if debug is enabled on guicey extension
+     */
+    public boolean isDebug() {
+        return debug;
     }
 
     /**

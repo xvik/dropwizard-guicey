@@ -33,27 +33,27 @@ public class ListenersSupport {
     }
 
     public void broadcastStart(final ExtensionContext context) {
-        broadcast(listener -> listener.started(new EventContext(context)));
+        broadcast(listener -> listener.started(new EventContext(context, tracker.debug)));
     }
 
     public void broadcastBeforeAll(final ExtensionContext context) {
-        broadcast(listener -> listener.beforeAll(new EventContext(context)));
+        broadcast(listener -> listener.beforeAll(new EventContext(context, tracker.debug)));
     }
 
     public void broadcastBefore(final ExtensionContext context) {
-        broadcast(listener -> listener.beforeEach(new EventContext(context)));
+        broadcast(listener -> listener.beforeEach(new EventContext(context, tracker.debug)));
     }
 
     public void broadcastAfter(final ExtensionContext context) {
-        broadcast(listener -> listener.afterEach(new EventContext(context)));
+        broadcast(listener -> listener.afterEach(new EventContext(context, tracker.debug)));
     }
 
     public void broadcastAfterAll(final ExtensionContext context) {
-        broadcast(listener -> listener.afterAll(new EventContext(context)));
+        broadcast(listener -> listener.afterAll(new EventContext(context, tracker.debug)));
     }
 
     public void broadcastStop(final ExtensionContext context) {
-        broadcast(listener -> listener.stopped(new EventContext(context)));
+        broadcast(listener -> listener.stopped(new EventContext(context, tracker.debug)));
     }
 
     private void broadcast(final ThrowingConsumer<TestExecutionListener> action) {
