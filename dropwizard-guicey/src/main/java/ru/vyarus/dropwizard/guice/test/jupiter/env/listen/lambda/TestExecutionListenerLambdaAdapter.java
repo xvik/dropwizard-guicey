@@ -28,39 +28,38 @@ public class TestExecutionListenerLambdaAdapter implements TestExecutionListener
     }
 
     @Override
-    public void started(final EventContext context) {
+    public void started(final EventContext context) throws Exception {
         callListeners(context, ListenerEvent.Started);
     }
 
     @Override
-    public void beforeAll(final EventContext context) {
+    public void beforeAll(final EventContext context) throws Exception {
         callListeners(context, ListenerEvent.BeforeAll);
     }
 
     @Override
-    public void beforeEach(final EventContext context) {
+    public void beforeEach(final EventContext context) throws Exception {
         callListeners(context, ListenerEvent.BeforeEach);
     }
 
     @Override
-    public void afterEach(final EventContext context) {
+    public void afterEach(final EventContext context) throws Exception {
         callListeners(context, ListenerEvent.AfterEach);
     }
 
     @Override
-    public void afterAll(final EventContext context) {
+    public void afterAll(final EventContext context) throws Exception {
         callListeners(context, ListenerEvent.AfterAll);
     }
 
     @Override
-    public void stopped(final EventContext context) {
+    public void stopped(final EventContext context) throws Exception {
         callListeners(context, ListenerEvent.Stopped);
     }
 
-    private void callListeners(final EventContext context, final ListenerEvent event) {
+    private void callListeners(final EventContext context, final ListenerEvent event) throws Exception {
         for (LambdaTestListener listener : listeners.get(event)) {
             listener.onTestEvent(context);
         }
     }
-
 }

@@ -26,8 +26,9 @@ public interface TestExecutionListener {
      *
      * @param context context object providing access to all required objects (junit context, injector,
      *                test support, etc.)
+     * @throws java.lang.Exception on error
      */
-    default void started(final EventContext context) {
+    default void started(final EventContext context) throws Exception {
         // empty default
     }
 
@@ -42,8 +43,9 @@ public interface TestExecutionListener {
      *
      * @param context context object providing access to all required objects (junit context, injector,
      *                test support, etc.)
+     * @throws java.lang.Exception on error
      */
-    default void beforeAll(final EventContext context) {
+    default void beforeAll(final EventContext context) throws Exception {
         // empty default
     }
 
@@ -53,8 +55,9 @@ public interface TestExecutionListener {
      *
      * @param context context object providing access to all required objects (junit context, injector,
      *                test support, etc.)
+     * @throws java.lang.Exception on error
      */
-    default void beforeEach(final EventContext context) {
+    default void beforeEach(final EventContext context) throws Exception {
         // empty default
     }
 
@@ -64,8 +67,9 @@ public interface TestExecutionListener {
      *
      * @param context context object providing access to all required objects (junit context, injector,
      *                test support, etc.)
+     * @throws java.lang.Exception on error
      */
-    default void afterEach(final EventContext context) {
+    default void afterEach(final EventContext context) throws Exception {
         // empty default
     }
 
@@ -80,8 +84,9 @@ public interface TestExecutionListener {
      *
      * @param context context object providing access to all required objects (junit context, injector,
      *                test support, etc.)
+     * @throws java.lang.Exception on error
      */
-    default void afterAll(final EventContext context) {
+    default void afterAll(final EventContext context) throws Exception {
         // empty default
     }
 
@@ -98,8 +103,9 @@ public interface TestExecutionListener {
      *
      * @param context context object providing access to all required objects (junit context, injector,
      *                test support, etc.)
+     * @throws java.lang.Exception on error
      */
-    default void stopped(final EventContext context) {
+    default void stopped(final EventContext context) throws Exception {
         // empty default
     }
 }
