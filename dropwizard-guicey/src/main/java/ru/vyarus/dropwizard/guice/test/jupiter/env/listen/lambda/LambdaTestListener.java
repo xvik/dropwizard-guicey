@@ -6,7 +6,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
  * Lambda version for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener}. Requires
  * {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.lambda.TestExecutionListenerLambdaAdapter}. Assumed to
  * be used with {@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup} object, when its declared
- * as lambda itself and complete listenere implementation (
+ * as lambda itself and complete listener implementation (
  * {@link ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension#listen(
  * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)}) would look clumsy.
  *
@@ -21,6 +21,7 @@ public interface LambdaTestListener {
      * for events description.
      *
      * @param context context object providing access to all required objects
+     * @throws java.lang.Exception on error
      */
-    void onTestEvent(EventContext context);
+    void onTestEvent(EventContext context) throws Exception;
 }
