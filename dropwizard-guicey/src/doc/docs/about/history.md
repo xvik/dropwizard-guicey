@@ -1,3 +1,113 @@
+* Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
+* Add methods to the main builder (and hooks) to simplify usage without guicey bundle:
+    - .whenConfigurationReady(...) - delayed configuration (same as GuiceyBunle.run):  
+      simplify extensions or guice modules registration, requiring configuration
+    - .onGuiceyStartup() - executes after injector creation (under run phase).
+      Useful for manual dropwizard configurations
+    - .onApplicationStartup() - executes after complete application startup (including guicey lightweight test)
+    - .onApplicationShutdown() - executes after application shutdown
+    - .listenServer() - shortcut for jetty server startup listen
+    - .listenJetty() - shortcut for jetty lifecycle listening
+    - .listenJersey() - shortcut for jersey startup events and requests listening
+* Diagnostic reports:
+    - Add application startup (and shutdown) time detalization report: .printStartupTime()
+        * Add hook alias for showing report on compiled application: -Dguicey.hooks=startup-time
+    - Add guice provision time report (time of guice beans creation): .printGuiceProvisionTime()
+        * Add hook alias for showing report on compiled application: -Dguicey.hooks=provision-time
+        * GuiceProvisionTimeHook could be used in tests to record beans creation at runtime
+    - Add the shared state usage report: .printSharedStateUsage()
+    - Improve guice bindings report (.printGuiceBindings()):
+        * Fixed scope accuracy for linked bindings
+        * Fixed bindings for private modules (missed exposed linked bindings)
+* Guicey bundles:
+    - Add "throws Exception" for GuiceyBundle#initialize() to simplify usage
+    - Support extensions registration in GuiceyBundle run (.extensions() and .extensionsOptional())
+        * ManualExtensionsValidatedEvent moved from configuration into run phase
+        * As before, classpath scan performed under configuration phase (but actual extensions registration moved to run phase)
+    - Transitive guicey bundles (.bundles(...)) initialize immediately after registration (unify behavior with dropwizard bundles and guice modules)
+    - Add onApplicationShutdown() and listenJersey() listener methods for GuiceyEnvironment (GuiceyBundle.run) 
+* Add "throws Exception" for GuiceyConfigurationHook#configure() to simplify usage
+* Private guice modules support:
+    - Add private modules analysis: extensions searched in private module bindings too
+      (also important for avoiding duplicate binding registration after classpath scan)
+    - Add AnalyzePrivateGuiceModules option (enabled by default) to disable private modules
+      analysis (in case of problems)
+    - Disabled modules remove would also affect private modules now (but only first level)
+* Classpath scan:
+    - Add extensions scan filters: GuiceBundle.builder().autoConfigFilter(cls -> !cls.isAnnotationPresent(Skip.class))
+      Could be used either to skip some classes from scanning (without @InvisibleForScanner) annotation
+      or to accept only annotated classes (spring style) (#419)
+        * Added ClassFilters utility with common predicates: .autoConfigFilter(ignoreAnnotated(Skip.class))
+    - Scan could detect package-private and protected extensions with a new option:
+      GuiceyOptions.ScanProtectedClasses (by default, false) (#404) 
+* Improve disable extensions predicate (bundle.disable(...)):
+    - Fix predicate applied for extension too early (without installer set)
+    - Add disable predicates: Disables.jerseyExtension, Disabled.webExtension and Disables.installedBy
+    - Predicates for exact type (module, bundle etc.) in Disables now raise item type to simplify further declarations
+* Shared state: 
+    - (breaking) Tie a state key to the stored object type to simplify usage (type-safe) and force
+      state objects usage instead of whatever values
+    - Fix null value supplier behavior (not allowed): .get(key, supplier)
+    - Add Options (read only accessor) object: state.getOptions()
+    - Add .whenReady() method for reactive state value access
+        * Add .whenSharedStateReady() for GuiceyBootstrap and GuiceyEnvironment
+          (not required for the main bundle as there is withSharedState() method where whenReady() could be used directly) 
+    - Shared state usage report could be obtained at any time directly from the shared state
+      object (sharedState.getAccessReport())
+* Tests:
+    - Add the ability to disable managed objects lifecycle for lightweight guicey tests
+      (start/stop methods on managed objects not called; might be useful for tests with mocks):
+        * new GuiceyTestSupport().disableManagedLifecycle()
+        * @TestGuiceyApp(.., managedLifecycle = false)
+        * TestGuiceyAppExtension.forApp(..).disableManagedLifecycle()
+        * TestSupport.build(App.class).runCoreWithoutManaged(..)
+    - Add manual configuration object creation support for junit 5 extensions registered in field (@EnableSetup)
+      and TestEnvironmentSetup: .config(() -> {...})
+    - Add missed configOverride(key, value) method for a single key-value pair
+    - Add configuration modifiers (`ConfigModifier`) - an alternative for configuration override mechanism:
+      ability to modify configuration instance before application startup.
+      Supported by all test extensions (junit5 annotations, setup object, generic builders, command runner)
+    - Add custom configuration block for junit5 extensions and TestEnvironmentSetup (to simplify lambda-based configurations): .with({...}) 
+    - Debug option:
+        * Track guicey test extensions time (would appear when debug enabled)
+        * Improve debug report: setup objects and hooks registration point are clear now (with direct code links)
+    - Add injectOnce option into test extensions to call injectMembers once per test instance
+      (useful when TestInstance.Lifecycle.PER_CLASS used) (discussion #394)
+    - Setup objects (TestEnvironmentSetup):
+        * Add "throws Exception" for TestEnvironmentSetup#setup() to simplify usage
+        * TestExtension builder improvements (TestEnvironmentSetup#setup(TestExtension)):
+            - Add getJunitContext() method to be able to configure test application with full context access (discussion #388)
+            - Add test lifecycle listeners: could be registered with listen() method or lambda-based on* methods
+              and provide notifications for guicey extension lifecycle (app start/stop, before/after test).
+              This is a simple alternative to writing junit extensions for additional integrations (db, testcontainers etc.).
+            - Add junit extension debug state method isDebug() so setup objects could
+              show debug output when debug option is enabled on guicey extension
+            - Add shortcut method isApplicationStartedForClass() to simplify beforeAll/beforeEach extension lifecycle detection
+            - Add annotated fields search api: findAnnotatedFields(..) to simplify writing annotation-driven extensions
+        * Add automatic setup objects (TestEnvironmentSetup) loading with service loader (simplify plugging-in extensions)
+        * Add base class for annotated fields extensions: AnnotatedTestFieldSetup
+          Handles fields validation and value injection lifecycle, including proper nested tests support
+          (all new test extensions based on it)
+    - New field-based test extensions:
+        * Add test stub fields: @StubBean(Service.class) ServiceStub
+          (use guice modules override feature to replace existing service into stub)
+        * Add mockito mock support: @MockBean Service. Mock automatically created  
+          and override real dependency (module overrides used)
+        * Add mockito spy support: @SpyBean Service. Spy automatically created
+          and "proxy" real service (using aop)
+        * Add service trackers: @TrackBean Tracker<Service>. Tracker records all service
+          methods execution and could provide recordings for test verification or print performance
+          stats. A simpler replacement for mockito stubs. It could be used with mocks, spies and stubs
+        * Add REST stub (@StubRest): ability to start rest (or part of rest services) under @TestGuiceyApp
+          (without starting full container; same as dropwizard's ResourceExtension)
+        * Add logs testing support (@RecordLogs): record required logs for validation (only logback)
+    - Add option to disable default (new) annotated fields extensions: useDefaultExtensions 
+* Internal:
+    - Add BeforeInit guicey event (the first point with available Bootstrap)
+    - Add WebInstaller marker interface to identify web extensions (extensions started with jersey)
+* [admin-rest]
+    - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
+
 ### [7.1.4](http://xvik.github.io/dropwizard-guicey/7.1.4) (2024-09-14)
 * Update to dropwizard 4.0.8
 
