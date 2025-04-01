@@ -346,12 +346,15 @@ public class RestClient {
 
     /**
      * Reset configured defaults.
+     *
+     * @return rest client itself for chained calls
      */
-    public void reset() {
+    public RestClient reset() {
         defaultHeaders.clear();
         defaultQueryParams.clear();
         defaultAccepts.clear();
         defaultStatus = DEFAULT_OK;
+        return this;
     }
 
     private WebTarget applyDefaults(final WebTarget request) {
