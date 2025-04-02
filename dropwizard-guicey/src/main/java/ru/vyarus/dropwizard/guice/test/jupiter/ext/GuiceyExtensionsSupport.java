@@ -200,6 +200,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
      * should not be a problem.
      *
      * @param extensionContext extension context
+     * @param <C>              configuration type
      * @return dropwizard support object prepared by guicey extension, or empty optional if no guicey extension used or
      * its beforeAll hook was not called yet
      */

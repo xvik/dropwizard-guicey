@@ -45,6 +45,7 @@ public interface GuiceyCommonRegistration<T> {
      * NOTE: it will work in this example, because injector access will be after injector creation.
      * Directly inside bundle initialization method injector could not be obtained as it's not exists yet.
      *
+     * @param <K> configuration type
      * @return dropwizard application instance
      */
     <K extends Configuration> Application<K> application();
@@ -202,7 +203,7 @@ public interface GuiceyCommonRegistration<T> {
      *
      * @param key   shared object key
      * @param value shared object
-     * @param <K> shared object type
+     * @param <K>   shared object type
      * @return builder instance for chained calls
      * @see ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState
      */

@@ -45,6 +45,7 @@ public class ExtensionsHolder {
      * because manual extensions could be added at run phase (and manual extensions must be registered in priority).
      *
      * @param candidate potential extension
+     * @return true if extension accepted
      */
     public boolean acceptScanCandidate(final Class<?> candidate) {
         final FeatureInstaller installer = ExtensionsSupport.findInstaller(candidate, installers);
