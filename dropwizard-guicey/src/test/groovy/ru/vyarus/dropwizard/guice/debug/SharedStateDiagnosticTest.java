@@ -161,7 +161,7 @@ public class SharedStateDiagnosticTest extends AbstractPlatformTest {
                 "\t\tGET  at r.v.d.g.d.SharedStateDiagnosticTest.(SharedStateDiagnosticTest.java:82)\n" +
                 "\t\tGET  at r.v.d.g.d.SharedStateDiagnosticTest.(SharedStateDiagnosticTest.java:84)\n" +
                 "\n" +
-                "\tSET Bootstrap (io.dropwizard.core.setup)                                            \t at r.v.d.g.m.context.(ConfigurationContext.java:806)\n" +
+                "\tSET Bootstrap (io.dropwizard.core.setup)                                            \t at r.v.d.g.m.context.(ConfigurationContext.java:808)\n" +
                 "\n" +
                 "\tSET Map (java.util)                                                                 \t at r.v.d.g.d.SharedStateDiagnosticTest.(SharedStateDiagnosticTest.java:97)\n" +
                 "\t\tMISS at r.v.d.g.d.SharedStateDiagnosticTest.(SharedStateDiagnosticTest.java:93)\n" +
@@ -171,9 +171,9 @@ public class SharedStateDiagnosticTest extends AbstractPlatformTest {
                 "\t\tGET  at r.v.d.g.d.SharedStateDiagnosticTest.(SharedStateDiagnosticTest.java:101)\n" +
                 "\n" +
                 "\tSET Queue (java.util)                                                               \t at r.v.d.g.d.SharedStateDiagnosticTest.(SharedStateDiagnosticTest.java:102)\n" +
-                "\tSET Configuration (io.dropwizard.core)                                              \t at r.v.d.g.m.context.(ConfigurationContext.java:833)\n" +
-                "\tSET ConfigurationTree (ru.vyarus.dropwizard.guice.module.yaml)                      \t at r.v.d.g.m.context.(ConfigurationContext.java:834)\n" +
-                "\tSET Environment (io.dropwizard.core.setup)                                          \t at r.v.d.g.m.context.(ConfigurationContext.java:835)\n" +
+                "\tSET Configuration (io.dropwizard.core)                                              \t at r.v.d.g.m.context.(ConfigurationContext.java:835)\n" +
+                "\tSET ConfigurationTree (ru.vyarus.dropwizard.guice.module.yaml)                      \t at r.v.d.g.m.context.(ConfigurationContext.java:836)\n" +
+                "\tSET Environment (io.dropwizard.core.setup)                                          \t at r.v.d.g.m.context.(ConfigurationContext.java:837)\n" +
                 "\n" +
                 "\tSET Set (java.util)                                                                 \t at r.v.d.g.d.SharedStateDiagnosticTest.(SharedStateDiagnosticTest.java:114)\n" +
                 "\t\tMISS at r.v.d.g.d.SharedStateDiagnosticTest.(SharedStateDiagnosticTest.java:110)\n" +

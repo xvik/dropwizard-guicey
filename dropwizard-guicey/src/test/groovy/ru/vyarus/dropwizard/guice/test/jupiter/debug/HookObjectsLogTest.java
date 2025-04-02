@@ -28,12 +28,12 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                         "\n" +
                         "\tSetup objects = \n" +
                 "\t\t<lambda>                       \t@EnableSetup Test1#setup                           at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#setup\n" +
-                "\t\tRecordedLogsSupport            \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
-                "\t\tRestStubSupport                \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
-                "\t\tStubsSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
-                "\t\tMocksSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
-                "\t\tSpiesSupport                   \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
-                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
+                "\t\tRecordedLogsSupport            \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:429)\n" +
+                "\t\tRestStubSupport                \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:429)\n" +
+                "\t\tStubsSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:429)\n" +
+                "\t\tMocksSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:429)\n" +
+                "\t\tSpiesSupport                   \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:433)\n" +
+                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:433)\n" +
                 "\n" +
                 "\tTest hooks = \n" +
                 "\t\t<lambda>                       \t@EnableHook Base#base1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base1\n" +
@@ -68,12 +68,12 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                         "\n" +
                         "\tSetup objects = \n" +
                 "\t\t<lambda>                       \t@EnableSetup Test2#setup                           at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#setup\n" +
-                "\t\tRecordedLogsSupport            \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
-                "\t\tRestStubSupport                \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
-                "\t\tStubsSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
-                "\t\tMocksSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:428)\n" +
-                "\t\tSpiesSupport                   \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
-                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:432)\n" +
+                "\t\tRecordedLogsSupport            \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:429)\n" +
+                "\t\tRestStubSupport                \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:429)\n" +
+                "\t\tStubsSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:429)\n" +
+                "\t\tMocksSupport                   \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:429)\n" +
+                "\t\tSpiesSupport                   \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:433)\n" +
+                "\t\tTrackersSupport                \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:433)\n" +
                 "\n" +
                 "\tTest hooks = \n" +
                 "\t\t<lambda>                       \t@EnableHook Base#base1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base1\n" +
