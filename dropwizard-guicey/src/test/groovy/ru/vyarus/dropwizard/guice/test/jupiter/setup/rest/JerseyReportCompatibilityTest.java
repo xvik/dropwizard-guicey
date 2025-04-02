@@ -26,14 +26,13 @@ public class JerseyReportCompatibilityTest extends AbstractPlatformTest {
                  "\n" +
                  "    Exception mappers\n" +
                  "        Throwable                      ExceptionMapperBinder$1      (i.d.core.setup)           \n" +
-                 "        Throwable                      DefaultExceptionMapper       (o.g.jersey.server)        \n" +
                  "        EofException                   EarlyEofExceptionMapper      (i.d.jersey.errors)        \n" +
                  "        EmptyOptionalException         EmptyOptionalExceptionMapper (i.d.jersey.optional)      \n" +
                  "        IllegalStateException          IllegalStateExceptionMapper  (i.d.jersey.errors)        \n" +
                  "        JerseyViolationException       JerseyViolationExceptionMapper (i.d.j.validation)         \n" +
                  "        JsonProcessingException        JsonProcessingExceptionMapper (i.d.jersey.jackson)       \n" +
                  "        Exception                      RestExceptionMapper          (r.v.d.g.t.j.s.r.support)  \n" +
-                 "        ValidationException            ValidationExceptionMapper    (o.g.j.s.v.internal)       \n");
+                 "        ValidationException            ValidationExceptionMapper    (o.g.j.s.v.internal)");
     }
 
     @TestGuiceyApp(RestStubApp.class)

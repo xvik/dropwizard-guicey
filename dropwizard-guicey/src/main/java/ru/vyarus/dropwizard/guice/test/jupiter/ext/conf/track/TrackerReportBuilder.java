@@ -87,7 +87,7 @@ public final class TrackerReportBuilder {
             }
         }
 
-        final boolean hasOverrides = !res.isEmpty();
+        final boolean hasOverrides = res.length() > 0;
 
         if (!modifiers.isEmpty()) {
             res.append("\nConfiguration modifiers:\n");

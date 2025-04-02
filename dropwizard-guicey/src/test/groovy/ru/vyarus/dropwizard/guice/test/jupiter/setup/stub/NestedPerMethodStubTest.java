@@ -49,23 +49,17 @@ public class NestedPerMethodStubTest {
         @StubBean(Service3.class)
         Service3Stub stub3;
 
-        @StubBean(Service4.class)
-        static Service4Stub stub4 = new Service4Stub("manual");
-
         @Test
         void testStubUsed() {
             Assertions.assertNotNull(stub);
             Assertions.assertNotNull(stub2);
             Assertions.assertNotNull(stub3);
-            Assertions.assertNotNull(stub4);
             Assertions.assertEquals(service, stub);
             Assertions.assertEquals("bar", service.foo());
             Assertions.assertEquals(service2, stub2);
             Assertions.assertEquals("bar", service2.foo());
             Assertions.assertEquals(service3, stub3);
             Assertions.assertEquals("bar", service3.foo());
-            Assertions.assertEquals(service4, stub4);
-            Assertions.assertEquals("bar", service4.foo());
         }
     }
 

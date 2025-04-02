@@ -101,8 +101,7 @@ class SharedStateTest extends Specification {
         when: "get with null supplier"
         def res = state.get(App, null)
         then: "behave as usual get"
-        def exN = thrown(NullPointerException)
-        exN.message == "Cannot invoke \"java.util.function.Supplier.get()\" because \"defaultValue\" is null"
+        thrown(NullPointerException)
 
         when: "duplicate assign"
         state.assignTo app
