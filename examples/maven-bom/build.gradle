@@ -15,7 +15,7 @@ tasks.withType(Jar).configureEach {
 
 tasks.register('maven-test', MavenExec) {
     goals 'test'
-    define=[ 'dropwizard-guicey.version':rootProject.ext.guiceyBom]
+    define=[ 'dropwizard-guicey.version':rootProject.ext.guiceyBom, 'dropwizard.version': rootProject.ext.dwVersion]
 }
 
 tasks.build.dependsOn('maven-test')

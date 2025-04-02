@@ -1,6 +1,6 @@
 plugins {
     id 'com.github.ben-manes.versions' version '0.52.0'
-    id 'com.github.dkorotych.gradle-maven-exec' version '4.0.0' apply false
+    id 'com.github.dkorotych.gradle-maven-exec' version '3.0.2' apply false
 }
 
 wrapper {
@@ -31,9 +31,9 @@ subprojects {
         implementation platform("ru.vyarus.guicey:guicey-bom:$guiceyBom")
 
         constraints {
-            implementation 'io.github.dropwizard-jobs:dropwizard-jobs-core:6.0.1'
+            implementation 'io.github.dropwizard-jobs:dropwizard-jobs-core:5.1.4'
 
-            implementation 'org.flywaydb:flyway-core:10.18.0'
+            implementation 'org.flywaydb:flyway-core:9.22.3'
             // flyway not compatible with h2 1.4.200 anymore
             implementation 'com.h2database:h2:2.3.232'
         }
