@@ -4,13 +4,13 @@ plugins {
 }
 
 wrapper {
-    gradleVersion = '8.3'
+    gradleVersion = '8.11'
 }
 
 description = 'Dropwizard guicey examples'
 
 ext {
-    guiceyBom = '7.1.4'
+    guiceyBom = '7.2.0-rc.1-SNAPSHOT'
     dwVersion = '4.0.13'
 }
 
