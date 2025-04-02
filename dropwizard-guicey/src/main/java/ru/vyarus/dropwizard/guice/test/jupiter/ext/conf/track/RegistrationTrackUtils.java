@@ -26,6 +26,7 @@ public final class RegistrationTrackUtils {
      * @param info    info holder
      * @param prefix  source identity
      * @param classes items to append
+     * @param fromAnnotation indicates class declaration in annotation
      */
     public static void fromClass(final List<String> info, final String prefix, final Class<?>[] classes,
                                  final boolean fromAnnotation) {

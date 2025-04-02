@@ -222,6 +222,8 @@ public @interface TestDropwizardApp {
      * <p>
      * By default, these extensions enabled and this option could disable them (if there are problems with them or
      * fields analysis took too much time).
+     *
+     * @return true to use default extensions
      */
     boolean useDefaultExtensions() default true;
 

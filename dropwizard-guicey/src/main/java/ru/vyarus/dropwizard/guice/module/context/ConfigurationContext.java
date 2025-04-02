@@ -214,6 +214,8 @@ public final class ConfigurationContext {
 
     /**
      * Process delayed builder (or hooks) configurations.
+     *
+     * @param environment guicey environment
      */
     public void processDelayedConfigurations(final GuiceyEnvironment environment) {
         for (DelayedConfig action : delayedConfigurations) {
@@ -381,7 +383,7 @@ public final class ConfigurationContext {
      * Direct dropwizard bundle registration from
      * {@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#dropwizardBundles(ConfiguredBundle...)}
      * or {@link ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap#dropwizardBundles(
-     * ConfiguredBundle[])}.
+     *ConfiguredBundle[])}.
      * Context class is set to currently processed bundle.
      *
      * @param bundles dropwizard bundles

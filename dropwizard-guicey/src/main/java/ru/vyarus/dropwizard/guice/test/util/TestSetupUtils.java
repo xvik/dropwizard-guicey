@@ -57,8 +57,9 @@ public final class TestSetupUtils {
      * Execute all configured support objects. If object returns closable then register it in junit storage
      * for automatic closing.
      *
-     * @param config  extension config
-     * @param context junit extension context
+     * @param config    extension config
+     * @param context   junit extension context
+     * @param listeners listeners support
      */
     public static void executeSetup(final ExtensionConfig config,
                                     final ExtensionContext context,

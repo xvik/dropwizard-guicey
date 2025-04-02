@@ -66,6 +66,7 @@ public final class BundleSupport {
      * @param context   configuration context
      * @param bootstrap guicey bootstrap object
      * @param path      transitive bundles installation path
+     * @param initOrder bundles initialization order (appendable)
      * @param bundles   bundles to install
      */
     public static void initBundles(final ConfigurationContext context,

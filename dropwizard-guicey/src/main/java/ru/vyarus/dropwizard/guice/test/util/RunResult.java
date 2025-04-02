@@ -44,6 +44,7 @@ public class RunResult<C extends Configuration> {
     }
 
     /**
+     * @param <T> application type
      * @return application instance (used for run)
      */
     public <T extends Application<C>> T getApplication() {
