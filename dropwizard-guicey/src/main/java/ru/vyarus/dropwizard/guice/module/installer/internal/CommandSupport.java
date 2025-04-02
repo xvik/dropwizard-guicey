@@ -65,6 +65,7 @@ public final class CommandSupport {
      *
      * @param commands registered commands
      * @param injector guice injector object
+     * @param tracker stats tracker
      */
     public static void initCommands(final List<Command> commands, final Injector injector,
                                     final StatsTracker tracker) {

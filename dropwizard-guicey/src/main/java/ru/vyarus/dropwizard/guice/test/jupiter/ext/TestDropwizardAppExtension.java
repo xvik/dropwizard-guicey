@@ -97,6 +97,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
      * additional dropwizard or guicey bundle (which will be the same as listener above).
      *
      * @param app application class
+     * @param <C> configuration type
      * @return builder for extension configuration.
      */
     public static <C extends Configuration> Builder<C> forApp(final Class<? extends Application<C>> app) {
