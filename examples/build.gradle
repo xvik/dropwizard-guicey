@@ -44,6 +44,9 @@ subprojects {
         testImplementation 'org.spockframework:spock-core:2.4-M5-groovy-4.0'
         testImplementation "io.dropwizard:dropwizard-testing"
         testImplementation 'org.junit.jupiter:junit-jupiter-api'
+
+        // required for junit 5.12 in current gradle version
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
     test {
