@@ -1,15 +1,15 @@
 plugins {
     id 'ru.vyarus.github-info' version '2.0.0' apply false
     id 'ru.vyarus.quality' version '5.0.0' apply false
-    id 'org.cyclonedx.bom' version '2.0.0' apply false
+    id 'org.cyclonedx.bom' version '2.2.0' apply false
     id 'ru.vyarus.mkdocs' version '4.0.1' apply false
 
     id 'jacoco'
     id 'java-platform'
     id 'ru.vyarus.java-lib' version '3.0.0'
-    id 'net.researchgate.release' version '3.0.2'
+    id 'net.researchgate.release' version '3.1.0'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
-    id 'com.github.ben-manes.versions' version '0.51.0'
+    id 'com.github.ben-manes.versions' version '0.52.0'
 }
 
 wrapper {
@@ -19,7 +19,7 @@ wrapper {
 description = 'Dropwizard guice integration'
 
 ext {
-    dropwizard = '4.0.12'
+    dropwizard = '4.0.13'
     guice = '7.0.0'
     hk2 = '3.0.6'
     spockJunit5 = '1.2.0'
@@ -159,8 +159,11 @@ subprojects {
         }
         dependencies {
             testImplementation 'ru.vyarus:spock-junit5'
-            testImplementation 'org.spockframework:spock-core:2.4-M2-groovy-4.0'
+            testImplementation 'org.spockframework:spock-core:2.4-M5-groovy-4.0'
             testImplementation 'org.junit.jupiter:junit-jupiter-api'
+
+            // required for junit 5.12 in current gradle version
+            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
         }
     } else {
         // don't compile and run tests for legacy junit4 and spock1 modules
