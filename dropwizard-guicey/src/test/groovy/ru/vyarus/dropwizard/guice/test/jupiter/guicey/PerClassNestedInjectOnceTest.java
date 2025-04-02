@@ -30,8 +30,8 @@ public class PerClassNestedInjectOnceTest {
         @Inject
         Bean bean;
 
-        static int testId;
-        static int beanId;
+        int testId;
+        int beanId;
 
         @Test
         @Order(1)

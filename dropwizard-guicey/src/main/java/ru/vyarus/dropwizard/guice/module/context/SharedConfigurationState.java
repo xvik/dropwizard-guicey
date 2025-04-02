@@ -523,7 +523,7 @@ public class SharedConfigurationState {
             final String k = entry.getKey();
             final String value = entry.getValue();
             final Collection<String> gets = stateAccessTrack.get(k);
-            report.append(!blankLineAdded && (report.isEmpty() || !gets.isEmpty()) ? "\n" : "").append("\tSET ")
+            report.append(!blankLineAdded && (report.length() == 0 || !gets.isEmpty()) ? "\n" : "").append("\tSET ")
                     .append(String.format("%-80s\t %s%n", renderKey(k), value));
             blankLineAdded = false;
             gets.forEach(s -> report.append("\t\t").append(s).append('\n'));
