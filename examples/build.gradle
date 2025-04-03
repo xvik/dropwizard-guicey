@@ -1,10 +1,10 @@
 plugins {
-    id 'com.github.ben-manes.versions' version '0.51.0'
+    id 'com.github.ben-manes.versions' version '0.52.0'
     id 'com.github.dkorotych.gradle-maven-exec' version '3.0.2' apply false
 }
 
 wrapper {
-    gradleVersion = '8.3'
+    gradleVersion = '8.11'
 }
 
 description = 'Dropwizard guicey examples'
@@ -32,17 +32,20 @@ subprojects {
         constraints {
             implementation 'io.github.dropwizard-jobs:dropwizard-jobs-core:5.1.4'
 
-            implementation 'org.flywaydb:flyway-core:9.22.2'
+            implementation 'org.flywaydb:flyway-core:9.22.3'
             // flyway not compatible with h2 1.4.200 anymore
-            implementation 'com.h2database:h2:2.2.224'
+            implementation 'com.h2database:h2:2.3.232'
         }
 
         implementation 'ru.vyarus:dropwizard-guicey'
 
         testImplementation 'ru.vyarus:spock-junit5:1.2.0'
-        testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+        testImplementation 'org.spockframework:spock-core:2.4-M5-groovy-4.0'
         testImplementation "io.dropwizard:dropwizard-testing"
         testImplementation 'org.junit.jupiter:junit-jupiter-api'
+
+        // required for junit 5.12 in current gradle version
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
     test {
