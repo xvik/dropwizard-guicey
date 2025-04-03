@@ -4,15 +4,12 @@ environment:
     matrix:
         - job_name: Java 11
           JAVA_HOME: C:\Program Files\Java\jdk11
-          PYTHON: "C:\\Python34-x64"
         - job_name: Java 17
           appveyor_build_worker_image: Visual Studio 2019
           JAVA_HOME: C:\Program Files\Java\jdk17
-          PYTHON: "C:\\Python36-x64"
-
-install:
-  - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
-  - pip install codecov --user
+        - job_name: Java 21
+          appveyor_build_worker_image: Visual Studio 2022
+          JAVA_HOME: C:\Program Files\Java\jdk21
 
 build_script:
   - ./gradlew assemble --no-daemon
@@ -21,7 +18,10 @@ test_script:
 
 on_success:
   - ./gradlew jacocoTestReport --no-daemon
-  - python -m codecov -f build\reports\jacoco\test\jacocoTestReport.xml -F windows
+  - ps: |
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe -Outfile codecov.exe
+      .\codecov.exe -f build\reports\jacoco\test\jacocoTestReport.xml -F windows
 
 cache:
   - C:\Users\appveyor\.gradle\caches
