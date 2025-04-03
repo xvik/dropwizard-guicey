@@ -11,6 +11,7 @@ description = 'Dropwizard guicey examples'
 
 ext {
     guiceyBom = '6.2.4'
+    dwVersion = '3.0.8'
 }
 
 subprojects {
@@ -25,7 +26,7 @@ subprojects {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
 
-    repositories { mavenLocal(); mavenCentral(); maven { url 'https://jitpack.io' }}
+    repositories { mavenLocal(); mavenCentral()}
     dependencies {
         implementation platform("ru.vyarus.guicey:guicey-bom:$guiceyBom")
 
