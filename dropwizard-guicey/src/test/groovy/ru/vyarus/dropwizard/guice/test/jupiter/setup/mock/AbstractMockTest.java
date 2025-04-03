@@ -13,6 +13,6 @@ public abstract class AbstractMockTest extends AbstractPlatformTest {
         return out
                 .replaceAll("@[\\da-z]{6,10}", "@11111111")
                 .replaceAll("hashCode: \\d+", "hashCode: 11111111")
-                .replaceAll("\\d+\\.\\d+ ms", "11.11 ms");
+                .replaceAll("\\d+(\\.\\d+) ms", "11.11 ms");
     }
 }
