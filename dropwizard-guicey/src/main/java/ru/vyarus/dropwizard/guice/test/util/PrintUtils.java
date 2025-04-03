@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -139,7 +140,7 @@ public final class PrintUtils {
      */
     public static String formatMs(final long nanos, final int precision) {
         final String format = "%." + precision + "f ms";
-        return String.format(format, new BigDecimal(nanos)
+        return String.format(Locale.US, format, new BigDecimal(nanos)
                 .divide(BigDecimal.valueOf(1_000_000), precision, RoundingMode.HALF_UP)
                 .doubleValue());
     }
@@ -163,9 +164,9 @@ public final class PrintUtils {
      */
     public static String formatMetric(final double time, final TimeUnit unit) {
         if (unit == null) {
-            return String.format(VALUE_FORMATION, time);
+            return String.format(Locale.US, VALUE_FORMATION, time);
         } else {
-            return String.format(DURATION_FORMATION, convertDuration(time, unit), toStringUnit(unit));
+            return String.format(Locale.US, DURATION_FORMATION, convertDuration(time, unit), toStringUnit(unit));
         }
     }
 
