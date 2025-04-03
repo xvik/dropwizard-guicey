@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;

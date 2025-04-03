@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.stub
 
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
+import javax.inject.Inject
+import javax.inject.Singleton
 import ru.vyarus.dropwizard.guice.support.DefaultTestApp
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubBean

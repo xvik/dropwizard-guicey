@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.spy;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

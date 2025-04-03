@@ -1,12 +1,12 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.rest;
 
-import jakarta.annotation.Nullable;
-import jakarta.ws.rs.client.Client;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.MultivaluedHashMap;
-import jakarta.ws.rs.core.Response;
+import javax.annotation.Nullable;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.Response;
 import org.eclipse.jetty.http.HttpStatus;
 import org.glassfish.jersey.test.JerseyTest;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
@@ -99,11 +99,11 @@ public class RestClient {
     }
 
     /**
-     * Returns the pre-configured {@link jakarta.ws.rs.client.Client} for this test. For sending
+     * Returns the pre-configured {@link javax.ws.rs.client.Client} for this test. For sending
      * requests prefer {@link #target(String...)}. Use {@link #target(String...)} method to avoid specifying
      * full target path.
      *
-     * @return the {@link JerseyTest} configured {@link jakarta.ws.rs.client.Client}
+     * @return the {@link JerseyTest} configured {@link javax.ws.rs.client.Client}
      */
     public Client client() {
         return getJerseyTest().client();
@@ -200,7 +200,7 @@ public class RestClient {
      *
      * @param accept accept values
      * @return client itself for chained calls
-     * @see jakarta.ws.rs.core.MediaType
+     * @see javax.ws.rs.core.MediaType
      */
     public RestClient defaultAccept(final String... accept) {
         Collections.addAll(this.defaultAccepts, accept);
@@ -244,7 +244,7 @@ public class RestClient {
     /**
      * Simple POST call shortcut. Provided path should include only the target rest path.
      * Body object assumed to be a json entity (would be serialized as json). For file sending use method with generic
-     * entity {@link #post(String, jakarta.ws.rs.client.Entity, Class)}.
+     * entity {@link #post(String, javax.ws.rs.client.Entity, Class)}.
      * <p>
      * To provide additional headers and query params see {@link #defaultHeader(String, String)}
      * ({@link #defaultAccept(String...)}) and {@link #defaultQueryParam(String, String)}.
@@ -284,7 +284,7 @@ public class RestClient {
     /**
      * Simple PUT call shortcut. Provided path should include only the target rest path.
      * Body object assumed to be a json entity (would be serialized as json). For file sending use method with generic
-     * entity {@link #put(String, jakarta.ws.rs.client.Entity, Class)}.
+     * entity {@link #put(String, javax.ws.rs.client.Entity, Class)}.
      * <p>
      * To provide additional headers and query params see {@link #defaultHeader(String, String)}
      * ({@link #defaultAccept(String...)}) and {@link #defaultQueryParam(String, String)}.

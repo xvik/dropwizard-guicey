@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.test.general;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.lifecycle.Managed;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

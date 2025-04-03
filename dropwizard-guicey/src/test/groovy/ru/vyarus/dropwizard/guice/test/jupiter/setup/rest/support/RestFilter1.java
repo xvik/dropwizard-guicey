@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support;
 
-import jakarta.inject.Singleton;
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.container.ContainerResponseContext;
-import jakarta.ws.rs.container.ContainerResponseFilter;
-import jakarta.ws.rs.ext.Provider;
+import javax.inject.Singleton;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.ext.Provider;
 
 import java.io.IOException;
 

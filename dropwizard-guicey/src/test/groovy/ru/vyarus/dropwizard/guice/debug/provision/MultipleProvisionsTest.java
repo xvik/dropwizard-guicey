@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.debug.provision;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

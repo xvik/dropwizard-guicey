@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.stub;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;

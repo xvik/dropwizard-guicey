@@ -4,8 +4,8 @@ import io.dropwizard.core.Application
 import io.dropwizard.core.Configuration
 import io.dropwizard.core.setup.Bootstrap
 import io.dropwizard.core.setup.Environment
-import jakarta.inject.Inject
-import jakarta.ws.rs.Path
+import javax.inject.Inject
+import javax.ws.rs.Path
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo

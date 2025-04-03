@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest;
 
-import jakarta.ws.rs.core.MediaType;
+import javax.ws.rs.core.MediaType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

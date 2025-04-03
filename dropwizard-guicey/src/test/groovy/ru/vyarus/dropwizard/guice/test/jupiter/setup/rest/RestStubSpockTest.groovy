@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest
 
 import com.google.inject.Inject
-import jakarta.ws.rs.WebApplicationException
+import javax.ws.rs.WebApplicationException
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.jersey.debug.service.HK2DebugFeature

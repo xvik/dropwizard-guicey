@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.stub;
 
 import com.google.common.base.Preconditions;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

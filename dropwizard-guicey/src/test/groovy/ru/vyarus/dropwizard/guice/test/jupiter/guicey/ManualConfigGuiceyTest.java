@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.guicey;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;

@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest;
 
 import com.google.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

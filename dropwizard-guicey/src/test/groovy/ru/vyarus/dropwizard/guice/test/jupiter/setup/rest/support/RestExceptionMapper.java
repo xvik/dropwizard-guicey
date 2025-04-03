@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support;
 
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.ExceptionMapper;
-import jakarta.ws.rs.ext.Provider;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
 /**
  * @author Vyacheslav Rusakov

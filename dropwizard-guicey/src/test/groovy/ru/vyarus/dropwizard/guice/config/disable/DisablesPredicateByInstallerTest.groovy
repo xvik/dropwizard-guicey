@@ -3,8 +3,8 @@ package ru.vyarus.dropwizard.guice.config.disable
 import com.google.inject.Binder
 import com.google.inject.Inject
 import com.google.inject.Module
-import jakarta.servlet.annotation.WebFilter
-import jakarta.servlet.http.HttpFilter
+import javax.servlet.annotation.WebFilter
+import javax.servlet.http.HttpFilter
 import org.junit.jupiter.api.Test
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.GuiceyOptions

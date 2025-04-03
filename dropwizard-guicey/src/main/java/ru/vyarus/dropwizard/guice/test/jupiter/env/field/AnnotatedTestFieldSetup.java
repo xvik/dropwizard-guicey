@@ -5,7 +5,7 @@ import com.google.inject.Binding;
 import com.google.inject.Stage;
 import com.google.inject.spi.InstanceBinding;
 import com.google.inject.spi.ProviderInstanceBinding;
-import jakarta.inject.Provider;
+import javax.inject.Provider;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstances;
 import ru.vyarus.dropwizard.guice.GuiceBundle;

@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.bundles;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.lifecycle.Managed;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.GuiceBundle;

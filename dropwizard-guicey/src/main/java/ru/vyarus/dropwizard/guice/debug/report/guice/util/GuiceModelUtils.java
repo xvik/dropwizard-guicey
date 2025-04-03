@@ -101,7 +101,7 @@ public final class GuiceModelUtils {
     public static Class<? extends Annotation> getScope(final Binding<?> binding) {
         Class<? extends Annotation> scope = SCOPE_DETECTOR.performDetection(binding);
         if (scope != null && scope.equals(EagerSingleton.class)) {
-            scope = jakarta.inject.Singleton.class;
+            scope = javax.inject.Singleton.class;
         }
         return scope;
     }

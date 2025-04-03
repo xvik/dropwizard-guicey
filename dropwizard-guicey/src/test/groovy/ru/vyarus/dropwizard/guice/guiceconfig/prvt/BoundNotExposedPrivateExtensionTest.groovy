@@ -8,7 +8,7 @@ import io.dropwizard.core.Configuration
 import io.dropwizard.core.setup.Bootstrap
 import io.dropwizard.core.setup.Environment
 import io.dropwizard.lifecycle.Managed
-import jakarta.inject.Provider
+import javax.inject.Provider
 import ru.vyarus.dropwizard.guice.AbstractTest
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
