@@ -1,6 +1,7 @@
 # 7.2.0 Release Notes
 
 The release contains:
+
 * Many improvements simplifying usage (main bundle, guicey bundles, shared state).
 * New reports for measuring application startup performance.
 * Private guice modules support
