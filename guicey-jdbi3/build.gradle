@@ -10,3 +10,8 @@ dependencies {
     testImplementation 'org.flywaydb:flyway-core:9.22.3'
     testImplementation 'com.h2database:h2:2.3.232'
 }
+
+// skip tests on appveyor for java 11 (too old (buggy) java 11.0.2)
+if (JavaVersion.current().is(JavaVersion.VERSION_11) && System.getenv("APPVEYOR") != null) {
+    test.enabled = false
+}
