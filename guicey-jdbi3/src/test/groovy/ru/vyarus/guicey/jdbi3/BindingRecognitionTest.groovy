@@ -22,7 +22,7 @@ import javax.inject.Inject
  */
 @TestGuiceyApp(value = App, config = 'src/test/resources/test-config.yml')
 // on appveyor test fails due to jvm bug (used 11.0.2)
-@IgnoreIf({ sys["APPVEYOR"] })
+@IgnoreIf({ env["APPVEYOR"] })
 class BindingRecognitionTest extends AbstractTest {
 
     @Inject
