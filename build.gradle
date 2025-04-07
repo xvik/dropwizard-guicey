@@ -13,7 +13,7 @@ plugins {
 }
 
 wrapper {
-    gradleVersion = '8.11'
+    gradleVersion = '8.6'
 }
 
 description = 'Dropwizard guice integration'
