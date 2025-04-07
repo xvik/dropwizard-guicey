@@ -12,6 +12,7 @@ import ru.vyarus.guicey.jdbi3.support.SampleConfiguration
 import ru.vyarus.guicey.jdbi3.support.mapper.SampleMapper
 import ru.vyarus.guicey.jdbi3.support.model.Sample
 import ru.vyarus.guicey.jdbi3.tx.InTransaction
+import spock.lang.IgnoreIf
 
 import javax.inject.Inject
 
@@ -20,6 +21,8 @@ import javax.inject.Inject
  * @since 15.01.2022
  */
 @TestGuiceyApp(value = App, config = 'src/test/resources/test-config.yml')
+// on appveyor test fails due to jvm bug (used 11.0.2)
+@IgnoreIf({ sys["APPVEYOR"] })
 class BindingRecognitionTest extends AbstractTest {
 
     @Inject
