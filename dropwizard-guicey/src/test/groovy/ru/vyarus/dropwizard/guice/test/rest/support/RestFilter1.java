@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support;
+package ru.vyarus.dropwizard.guice.test.rest.support;
 
 import jakarta.inject.Singleton;
 import jakarta.ws.rs.container.ContainerRequestContext;
@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 @Provider
 @Singleton
-public class RestFilter2 implements ContainerResponseFilter {
+public class RestFilter1 implements ContainerResponseFilter {
 
     public boolean called = false;
 

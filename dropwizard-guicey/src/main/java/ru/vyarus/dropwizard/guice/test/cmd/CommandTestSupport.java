@@ -42,7 +42,7 @@ import java.util.function.Consumer;
 
 /**
  * Test helper for running (any) commands. The class is almost similar to
- * {@link io.dropwizard.testing.DropwizardTestSupport}, but duffers in a way command is executed: this class
+ * {@link io.dropwizard.testing.DropwizardTestSupport}, but differs in a way command is executed: this class
  * use {@link io.dropwizard.core.cli.Cli} which selects exactly the same command as in real use. Also, command
  * execution is a one-shot operation and so all validations could be performed only after command execution
  * (and not in the middle, as with usual application tests). That's why the resulting object contains all
@@ -54,7 +54,7 @@ import java.util.function.Consumer;
  * null. Note that guicey could only be used with {@link io.dropwizard.core.cli.EnvironmentCommand} - for other
  * commands it would be simply ignored (because dropwizard would not call bundle's run method).
  * <p>
- * Configurations support is the same as in dropwizard support: config object or configuration file with config
+ * Configuration support is the same as in dropwizard support: config object or configuration file with config
  * overrides might be used. When a configuration file is used, it would be automatically added to called command
  * (as a second argument).
  * <p>

@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.rest;
 
+import ru.vyarus.dropwizard.guice.test.rest.TestContainerPolicy;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -31,7 +33,7 @@ import java.lang.annotation.Target;
  * <p>
  * Only one rest stub field could be declared in test! Rest client is injected into the declared field: use it to call
  * rest methods: {@code Something result = rest.get("/relative/rest/path", Something.class)} (see
- * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.RestClient} class for usage info).
+ * {@link ru.vyarus.dropwizard.guice.test.rest.RestClient} class for usage info).
  * <p>
  * To limit started rest resources, simply specify what resources to start (test could start only one resource to
  * test it): {@code @StubRest(Resources1.class, Resource2.class)}. Alternatively, if many resources required,
@@ -130,7 +132,7 @@ public @interface StubRest {
 
     /**
      * By default, the rest client state is re-set after each test. Client could be reset with manual
-     * {@link RestClient#reset()} call.
+     * {@link ru.vyarus.dropwizard.guice.test.rest.RestClient#reset()} call.
      *
      * @return false to disable automatic rest client state reset
      */
