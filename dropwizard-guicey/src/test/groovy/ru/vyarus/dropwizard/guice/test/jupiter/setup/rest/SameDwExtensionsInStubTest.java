@@ -12,9 +12,9 @@ import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.InstallersOptions;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.RestClient;
+import ru.vyarus.dropwizard.guice.test.rest.RestClient;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support.RestStubApp;
+import ru.vyarus.dropwizard.guice.test.rest.support.RestStubApp;
 
 /**
  * Important because dropwizard extensions registered manually (same as in dropwizard test:

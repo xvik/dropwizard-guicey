@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support;
+package ru.vyarus.dropwizard.guice.test.rest.support;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

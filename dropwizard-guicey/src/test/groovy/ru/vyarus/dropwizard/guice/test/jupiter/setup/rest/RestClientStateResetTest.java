@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import ru.vyarus.dropwizard.guice.AbstractPlatformTest;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.RestClient;
+import ru.vyarus.dropwizard.guice.test.rest.RestClient;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support.RestStubApp;
+import ru.vyarus.dropwizard.guice.test.rest.support.RestStubApp;
 
 /**
  * @author Vyacheslav Rusakov

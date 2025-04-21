@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.ext.rest;
+package ru.vyarus.dropwizard.guice.test.rest.support;
 
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;
 import ru.vyarus.dropwizard.guice.module.context.Filters;

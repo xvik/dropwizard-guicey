@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support;
+package ru.vyarus.dropwizard.guice.test.rest.support;
 
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;

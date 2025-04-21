@@ -8,9 +8,9 @@ import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.RestClient;
+import ru.vyarus.dropwizard.guice.test.rest.RestClient;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support.RestStubApp;
+import ru.vyarus.dropwizard.guice.test.rest.support.RestStubApp;
 
 /**
  * @author Vyacheslav Rusakov
@@ -32,8 +32,8 @@ public class JerseyReportCompatibilityTest extends AbstractPlatformTest {
                  "        IllegalStateException          IllegalStateExceptionMapper  (i.d.jersey.errors)        \n" +
                  "        JerseyViolationException       JerseyViolationExceptionMapper (i.d.j.validation)         \n" +
                  "        JsonProcessingException        JsonProcessingExceptionMapper (i.d.jersey.jackson)       \n" +
-                 "        Exception                      RestExceptionMapper          (r.v.d.g.t.j.s.r.support)  \n" +
-                 "        ValidationException            ValidationExceptionMapper    (o.g.j.s.v.internal)       \n");
+                 "        Exception                      RestExceptionMapper          (r.v.d.g.t.r.support)      \n" +
+                 "        ValidationException            ValidationExceptionMapper    (o.g.j.s.v.internal)");
     }
 
     @TestGuiceyApp(RestStubApp.class)

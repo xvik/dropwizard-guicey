@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.ext.rest;
+package ru.vyarus.dropwizard.guice.test.rest;
 
 /**
  * Jersey test container implementation selection policy.
