@@ -8,9 +8,9 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.JerseyManaged;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.RestClient;
+import ru.vyarus.dropwizard.guice.test.rest.RestClient;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support.RestStubApp;
+import ru.vyarus.dropwizard.guice.test.rest.support.RestStubApp;
 
 /**
  * @author Vyacheslav Rusakov

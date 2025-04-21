@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.ext.rest;
+package ru.vyarus.dropwizard.guice.test.rest.support;
 
 import com.google.common.base.Preconditions;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -15,19 +15,22 @@ import org.glassfish.jersey.test.TestProperties;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
+import ru.vyarus.dropwizard.guice.test.rest.TestContainerPolicy;
 
 import java.net.URI;
 import java.util.logging.Level;
 import java.util.stream.StreamSupport;
 
 /**
- * Jersey rest stubs implementation (based on {@link org.glassfish.jersey.test.JerseyTest}.
+ * Jersey rest stubs implementation (based on {@link org.glassfish.jersey.test.JerseyTest}).
  * Configures:
- * - Random port
- * - Requests logging
- * - Enables restricted headers and method workaround (for url connection)
- * - Set default timeouts to avoid infinite calls
- * - Enable multipart support (if available in classpath)
+ * <ul>
+ * <li>Random port
+ * <li>Requests logging
+ * <li>Enables restricted headers and method workaround (for url connection)
+ * <li>Set default timeouts to avoid infinite calls
+ * <li>Enable multipart support (if available in classpath)
+ * </ul>
  * <p>
  * Application deployment context used (same as in normal dropwizard application). Guicey disables not wanted
  * extensions, if required.

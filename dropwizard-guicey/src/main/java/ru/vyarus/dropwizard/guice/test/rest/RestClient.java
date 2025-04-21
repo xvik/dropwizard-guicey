@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.ext.rest;
+package ru.vyarus.dropwizard.guice.test.rest;
 
 import javax.annotation.Nullable;
 import javax.ws.rs.client.Client;
@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 import org.eclipse.jetty.http.HttpStatus;
 import org.glassfish.jersey.test.JerseyTest;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
+import ru.vyarus.dropwizard.guice.test.rest.support.GuiceyJerseyTest;
 
 import java.net.URI;
 import java.util.ArrayList;

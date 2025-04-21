@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support;
+package ru.vyarus.dropwizard.guice.test.rest.support;
 
 import com.google.common.base.Preconditions;
 import javax.ws.rs.GET;

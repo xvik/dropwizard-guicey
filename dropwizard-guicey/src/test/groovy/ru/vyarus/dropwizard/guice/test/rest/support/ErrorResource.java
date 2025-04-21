@@ -1,6 +1,5 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support;
+package ru.vyarus.dropwizard.guice.test.rest.support;
 
-import com.google.common.base.Preconditions;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,30 +14,31 @@ import javax.ws.rs.core.UriInfo;
  * @author Vyacheslav Rusakov
  * @since 22.02.2025
  */
-@Path("/1/")
+@Path("/error/")
 @Produces("application/json")
-public class Resource1 {
+public class ErrorResource {
 
     @GET
     @Path("/{foo}")
     public String get(@PathParam("foo") String foo, @Context UriInfo uriInfo) {
-        Preconditions.checkNotNull(uriInfo);
-        return foo;
+        throw new IllegalStateException("error");
     }
 
     @POST
     @Path("/{foo}")
     public void post(@PathParam("foo") String foo) {
+        throw new IllegalStateException("error");
     }
 
     @PUT
     @Path("/{foo}")
     public String put(@PathParam("foo") String foo) {
-        return foo;
+        throw new IllegalStateException("error");
     }
 
     @DELETE
     @Path("/{foo}")
     public void delete(@PathParam("foo") String foo) {
+        throw new IllegalStateException("error");
     }
 }

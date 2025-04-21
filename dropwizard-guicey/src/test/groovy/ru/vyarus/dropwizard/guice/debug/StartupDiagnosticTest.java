@@ -20,7 +20,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordLogs;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordedLogs;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.RestClient;
+import ru.vyarus.dropwizard.guice.test.rest.RestClient;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest;
 
 /**

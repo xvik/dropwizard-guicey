@@ -1,4 +1,4 @@
-package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest.support;
+package ru.vyarus.dropwizard.guice.test.rest.support;
 
 import com.google.inject.Singleton;
 import io.dropwizard.lifecycle.Managed;
