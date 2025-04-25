@@ -158,6 +158,20 @@ public final class ConfigOverrideUtils {
     }
 
     /**
+     * Applies "/*" if not already specified in rest mapping.
+     *
+     * @param restMapping user-declared rest mapping string
+     * @return formatted rest mapping (for using in configuration)
+     */
+    public static String formatRestMapping(final String restMapping) {
+        String mapping = PathUtils.leadingSlash(restMapping);
+        if (!mapping.endsWith(STAR)) {
+            mapping = PathUtils.trailingSlash(mapping) + STAR;
+        }
+        return mapping;
+    }
+
+    /**
      * Creates config override for rest mapping. Declared mapping if automatically "fixed" to comply with required
      * format.
      *
@@ -166,18 +180,15 @@ public final class ConfigOverrideUtils {
      * @return config override object
      */
     public static ConfigOverride overrideRestMapping(final @Nullable String prefix, final String restMapping) {
-        String mapping = PathUtils.leadingSlash(restMapping);
-        if (!mapping.endsWith(STAR)) {
-            mapping = PathUtils.trailingSlash(mapping) + STAR;
-        }
-        return ConfigOverride.config(prefix == null ? "dw." : prefix, "server.rootPath", mapping);
+        return ConfigOverride.config(prefix == null ? "dw." : prefix,
+                "server.rootPath", formatRestMapping(restMapping));
     }
 
     /**
      * Instantiates provided configuration modifiers.
      *
      * @param modifiers configuration modifiers to instantiate
-     * @param <C> configuration type
+     * @param <C>       configuration type
      * @return hooks instances
      */
     @SafeVarargs

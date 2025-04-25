@@ -36,7 +36,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
     protected final List<ConfigModifier<C>> modifiers = new ArrayList<>();
     protected C configObject;
     protected String propertyPrefix;
-    private String restMapping;
+    protected String restMapping;
 
     public BaseBuilder(final Class<? extends Application<C>> app) {
         this.app = app;

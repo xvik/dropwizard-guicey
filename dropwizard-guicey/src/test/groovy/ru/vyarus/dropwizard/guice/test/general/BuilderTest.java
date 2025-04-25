@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.test.general;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
+import io.dropwizard.core.server.AbstractServerFactory;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -148,6 +149,17 @@ public class BuilderTest {
         ex = Assertions.assertThrows(IllegalStateException.class,
                 () -> build(new ArrayList<>()).buildWeb());
         Assertions.assertEquals("Listeners could be used only with run* methods.", ex.getMessage());
+    }
+
+    @Test
+    void testRestMappingWithManualConfig() throws Exception {
+        final RunResult<TestConfiguration> result = TestSupport.build(AutoScanApplication.class)
+                .config(new TestConfiguration())
+                .restMapping("foo")
+                .runWeb();
+
+        Assertions.assertEquals("/foo/*", ((AbstractServerFactory) result.getConfiguration()
+                .getServerFactory()).getJerseyRootPath().get());
     }
 
     protected TestSupportBuilder<TestConfiguration> build(List<String> listenerTracker) {
