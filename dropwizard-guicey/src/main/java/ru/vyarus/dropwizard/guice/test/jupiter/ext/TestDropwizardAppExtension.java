@@ -6,6 +6,7 @@ import com.google.common.base.Strings;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.cli.Command;
+import io.dropwizard.core.server.AbstractServerFactory;
 import io.dropwizard.testing.ConfigOverride;
 import io.dropwizard.testing.DropwizardTestSupport;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -149,6 +150,12 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
 
         timer.reset().start();
         final Configuration manualConfig = config.getConfiguration(config.configPath);
+        if (manualConfig != null && config.restMapping != null && !config.restMapping.isEmpty()) {
+            // rest mapping can't be applied with config override in case of a raw config object,
+            // so need to use modifier instead
+            config.configModifiers.add(conf -> ((AbstractServerFactory) conf.getServerFactory())
+                    .setJerseyRootPath(ConfigOverrideUtils.formatRestMapping(config.restMapping)));
+        }
         final DropwizardTestSupport support = manualConfig == null
                 ? new DropwizardTestSupport(config.app,
                 config.configPath,
