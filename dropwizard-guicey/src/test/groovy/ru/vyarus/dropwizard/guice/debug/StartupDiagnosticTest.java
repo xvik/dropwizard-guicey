@@ -206,6 +206,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\tBundle builder time                : 111 ms \n" +
                 "\t\t\t\tHooks processing                   : 111 ms \n" +
                 "\t\t\t\t\tRestStubSupport                    : 111 ms \n" +
+                "\t\t\t\t\tRestStubsRunner                    : 111 ms \n" +
                 "\t\t\t\t\tStartupDiagnosticTest$Test3$$Lambda$111/1111111: 111 ms \n" +
                 "\t\t\t\tClasspath scan                     : 111 ms \n" +
                 "\t\t\t\tCommands processing                : 111 ms \n" +

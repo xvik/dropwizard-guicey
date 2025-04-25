@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.cli.Command;
+import io.dropwizard.core.server.AbstractServerFactory;
 import io.dropwizard.testing.DropwizardTestSupport;
 import jakarta.annotation.Nullable;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
@@ -244,6 +245,12 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
     // "unsafe" building (without listeners check)
     private DropwizardTestSupport<C> buildWebInternal() {
         final DropwizardTestSupport<C> support;
+        if (configObject != null && restMapping != null && !restMapping.isEmpty()) {
+            // rest mapping can't be applied with config override in case of a raw config object,
+            // so need to use modifier instead
+            configModifiers(config -> ((AbstractServerFactory) config.getServerFactory())
+                    .setJerseyRootPath(ConfigOverrideUtils.formatRestMapping(restMapping)));
+        }
         final Function<Application<C>, Command> cmd = ConfigOverrideUtils.buildCommandFactory(modifiers);
         if (configObject != null) {
             if (configPath != null || !configOverrides.isEmpty() || configSourceProvider != null) {
