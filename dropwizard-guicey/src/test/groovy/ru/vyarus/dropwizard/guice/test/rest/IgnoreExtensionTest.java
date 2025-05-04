@@ -27,7 +27,7 @@ public class IgnoreExtensionTest {
 
     @Test
     void testIgnoredExtension() throws Exception {
-        final RestStubsRunner rest = RestStubsRunner.builder()
+        final RestStubsHook rest = RestStubsHook.builder()
                 .disableResources(Resource2.class)
                 .disableJerseyExtensions(RestFilter2.class, RestExceptionMapper.class)
                 .disableDropwizardExceptionMappers(true)
@@ -64,7 +64,7 @@ public class IgnoreExtensionTest {
 
     @Test
     void testIgnoreAllExtensions() throws Exception {
-        final RestStubsRunner rest = RestStubsRunner.builder()
+        final RestStubsHook rest = RestStubsHook.builder()
                 .disableAllJerseyExtensions(true)
                 .disableDropwizardExceptionMappers(true)
                 .build();
@@ -98,7 +98,7 @@ public class IgnoreExtensionTest {
 
     @Test
     void testExactExtensions() throws Exception {
-        final RestStubsRunner rest = RestStubsRunner.builder()
+        final RestStubsHook rest = RestStubsHook.builder()
                 .resources(Resource1.class, ErrorResource.class)
                 .jerseyExtensions(RestFilter1.class)
                 .disableDropwizardExceptionMappers(true)
@@ -134,7 +134,7 @@ public class IgnoreExtensionTest {
 
     @Test
     void testDisableDropwizardExtensions() throws Exception {
-        final RestStubsRunner rest = RestStubsRunner.builder()
+        final RestStubsHook rest = RestStubsHook.builder()
                 .disableDropwizardExceptionMappers(true)
                 .build();
         TestSupport.build(RestStubApp.class)

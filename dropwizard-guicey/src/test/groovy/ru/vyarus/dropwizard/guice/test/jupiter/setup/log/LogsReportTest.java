@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.AbstractPlatformTest;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordLogs;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordedLogs;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support.LogRecordsApp;
+import ru.vyarus.dropwizard.guice.test.log.RecordedLogs;
+import ru.vyarus.dropwizard.guice.test.log.support.LogRecordsApp;
 
 /**
  * @author Vyacheslav Rusakov

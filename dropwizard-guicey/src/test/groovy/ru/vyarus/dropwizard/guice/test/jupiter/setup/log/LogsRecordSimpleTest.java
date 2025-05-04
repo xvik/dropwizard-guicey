@@ -13,7 +13,7 @@ import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordLogs;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordedLogs;
+import ru.vyarus.dropwizard.guice.test.log.RecordedLogs;
 
 /**
  * @author Vyacheslav Rusakov

@@ -32,6 +32,10 @@ public class ListenersSupport {
         listeners.add(Preconditions.checkNotNull(listener, "Listener must not be null"));
     }
 
+    public void broadcastStarting(final ExtensionContext context) {
+        broadcast(listener -> listener.starting(new EventContext(context, tracker.debug)));
+    }
+
     public void broadcastStart(final ExtensionContext context) {
         broadcast(listener -> listener.started(new EventContext(context, tracker.debug)));
     }
@@ -50,6 +54,10 @@ public class ListenersSupport {
 
     public void broadcastAfterAll(final ExtensionContext context) {
         broadcast(listener -> listener.afterAll(new EventContext(context, tracker.debug)));
+    }
+
+    public void broadcastStopping(final ExtensionContext context) {
+        broadcast(listener -> listener.stopping(new EventContext(context, tracker.debug)));
     }
 
     public void broadcastStop(final ExtensionContext context) {

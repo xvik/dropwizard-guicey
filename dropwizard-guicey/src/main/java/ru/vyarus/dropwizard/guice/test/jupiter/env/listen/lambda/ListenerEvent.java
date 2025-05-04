@@ -8,5 +8,5 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env.listen.lambda;
  * @since 20.02.2025
  */
 public enum ListenerEvent {
-    Started, Stopped, BeforeAll, AfterAll, BeforeEach, AfterEach
+    Starting, Started, Stopping, Stopped, BeforeAll, AfterAll, BeforeEach, AfterEach
 }

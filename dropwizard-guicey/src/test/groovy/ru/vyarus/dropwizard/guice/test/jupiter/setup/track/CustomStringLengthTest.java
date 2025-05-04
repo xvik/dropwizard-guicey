@@ -5,9 +5,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.MethodTrack;
+import ru.vyarus.dropwizard.guice.test.track.MethodTrack;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackBean;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.Tracker;
+import ru.vyarus.dropwizard.guice.test.track.Tracker;
 
 /**
  * @author Vyacheslav Rusakov

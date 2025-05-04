@@ -32,7 +32,7 @@ public class IncorrectStubDeclarationTest {
                     msg = err.getMessage();
                 });
 
-        Assertions.assertEquals("Incorrect @StubBean 'r.v.d.g.t.j.s.s.IncorrectStubDeclarationTest$Test1.stub' " +
+        Assertions.assertEquals("Incorrect @StubBean 'IncorrectStubDeclarationTest$Test1.stub' " +
                 "declaration: ServiceStub is not assignable to Service", msg);
     }
 

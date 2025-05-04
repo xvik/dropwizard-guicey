@@ -13,7 +13,7 @@ public class ContainerSelectionTest {
 
     @Test
     void testContainerSelection() throws Exception {
-        final RestStubsRunner rest = RestStubsRunner.builder()
+        final RestStubsHook rest = RestStubsHook.builder()
                 .container(TestContainerPolicy.GRIZZLY)
                 .build();
 

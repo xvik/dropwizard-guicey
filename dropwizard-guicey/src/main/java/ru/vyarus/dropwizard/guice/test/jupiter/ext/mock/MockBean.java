@@ -27,6 +27,12 @@ import java.lang.annotation.Target;
  * <p>
  * Mocks reset called after each test method. Could be disabled with {@link #autoReset()}
  * <p>
+ * Could also be used for spy objects registration of beans bound by instance (!)
+ * (so {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.spy.SpyBean} could not be used):
+ * {@code @MockBean Service spy = Mockito.spy(new Service())}.
+ * Spy should also be used when mock must be created from an abstract class (preserving abstract methods):
+ * {@code @MockBean AbstractService mock = Mockito.spy(AbstractService.class)}.
+ * <p>
  * Mockito provide the detailed report of used mock methods and redundant stub definitions. Use {@link #printSummary()}
  * to enable this report (printed after each test method).
  * <p>

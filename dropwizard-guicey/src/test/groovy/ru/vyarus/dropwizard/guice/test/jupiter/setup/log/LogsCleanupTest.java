@@ -8,8 +8,8 @@ import org.slf4j.event.Level;
 import ru.vyarus.dropwizard.guice.AbstractPlatformTest;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordLogs;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordedLogs;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support.LogRecordsApp;
+import ru.vyarus.dropwizard.guice.test.log.RecordedLogs;
+import ru.vyarus.dropwizard.guice.test.log.support.LogRecordsApp;
 
 /**
  * @author Vyacheslav Rusakov
@@ -26,7 +26,7 @@ public class LogsCleanupTest extends AbstractPlatformTest {
     @Disabled
     public static class Test1 {
 
-        @RecordLogs(loggers = "ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support", level = Level.TRACE)
+        @RecordLogs(loggers = "ru.vyarus.dropwizard.guice.test.log.support", level = Level.TRACE)
         static RecordedLogs logs;
 
         @Test
@@ -44,7 +44,7 @@ public class LogsCleanupTest extends AbstractPlatformTest {
     @Disabled
     public static class Test2 {
 
-        @RecordLogs(loggers = "ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support",
+        @RecordLogs(loggers = "ru.vyarus.dropwizard.guice.test.log.support",
                 level = Level.TRACE, autoReset = false)
         static RecordedLogs logs;
 

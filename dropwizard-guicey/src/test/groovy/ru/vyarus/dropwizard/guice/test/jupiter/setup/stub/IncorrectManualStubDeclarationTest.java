@@ -41,7 +41,7 @@ public class IncorrectManualStubDeclarationTest {
                 });
         System.err.println(out.getText());
 
-        Assertions.assertEquals("Incorrect @StubBean 'r.v.d.g.t.j.s.s.IncorrectManualStubDeclarationTest$Test1.stub' " +
+        Assertions.assertEquals("Incorrect @StubBean 'IncorrectManualStubDeclarationTest$Test1.stub' " +
                 "declaration: field value can't be used because guice context starts in beforeAll phase. Either make " +
                 "field static or remove value (guice will create instance with guice injector)", msg);
     }

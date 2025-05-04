@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  * <p>
  * Stub object would not be re-created for each test in case of per-class test (where application created once for
  * all test methods). If you need to perform some cleanups between tests, stub class must implement
- * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubLifecycle} and it's before() and after() methods
+ * {@link ru.vyarus.dropwizard.guice.test.stub.StubLifecycle} and it's before() and after() methods
  * would be called before and after each test method.
  * <p>
  * Just in case: guice injection will also return stabbed bean (because stub instance is created by guice or
