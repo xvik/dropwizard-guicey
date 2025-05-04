@@ -28,6 +28,11 @@ public class TestExecutionListenerLambdaAdapter implements TestExecutionListener
     }
 
     @Override
+    public void starting(final EventContext context) throws Exception {
+        callListeners(context, ListenerEvent.Starting);
+    }
+
+    @Override
     public void started(final EventContext context) throws Exception {
         callListeners(context, ListenerEvent.Started);
     }
@@ -50,6 +55,11 @@ public class TestExecutionListenerLambdaAdapter implements TestExecutionListener
     @Override
     public void afterAll(final EventContext context) throws Exception {
         callListeners(context, ListenerEvent.AfterAll);
+    }
+
+    @Override
+    public void stopping(final EventContext context) throws Exception {
+        callListeners(context, ListenerEvent.Stopping);
     }
 
     @Override

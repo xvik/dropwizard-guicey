@@ -40,7 +40,7 @@ public class FieldsSearchTest {
             TestFieldUtils.findAnnotatedFields(Root.class, MockBean.class, Base.class);
             Assertions.fail();
         } catch (IllegalStateException e) {
-            Assertions.assertEquals("Field r.v.d.g.t.j.s.FieldsSearchTest$Base.bmock1 annotated with @MockBean, but its type is not Base", e.getMessage());
+            Assertions.assertEquals("Field FieldsSearchTest$Base.bmock1 annotated with @MockBean, but its type is not Base", e.getMessage());
         }
     }
 
@@ -53,7 +53,7 @@ public class FieldsSearchTest {
                 .filter(field -> field.getName().equals("bmock1"))
                 .findFirst().get();
 
-        Assertions.assertEquals("r.v.d.g.t.j.s.FieldsSearchTest$Base.bmock1 (@MockBean static Service)", bmock1.toString());
+        Assertions.assertEquals("FieldsSearchTest$Base.bmock1 (@MockBean static Service)", bmock1.toString());
 
         bmock1.requireStatic();
 
@@ -61,7 +61,7 @@ public class FieldsSearchTest {
             bmock1.requireNonStatic();
             Assertions.fail();
         } catch (IllegalStateException e) {
-            Assertions.assertEquals("Field r.v.d.g.t.j.s.FieldsSearchTest$Base.bmock1 annotated with @MockBean, must not be static", e.getMessage());
+            Assertions.assertEquals("Field FieldsSearchTest$Base.bmock1 annotated with @MockBean, must not be static", e.getMessage());
         }
 
 
@@ -69,7 +69,7 @@ public class FieldsSearchTest {
                 .filter(field -> field.getName().equals("bmock2"))
                 .findFirst().get();
 
-        Assertions.assertEquals("r.v.d.g.t.j.s.FieldsSearchTest$Base.bmock2 (@MockBean Service)", bmock2.toString());
+        Assertions.assertEquals("FieldsSearchTest$Base.bmock2 (@MockBean Service)", bmock2.toString());
 
         bmock2.requireNonStatic();
 
@@ -77,7 +77,7 @@ public class FieldsSearchTest {
             bmock2.requireStatic();
             Assertions.fail();
         } catch (IllegalStateException e) {
-            Assertions.assertEquals("Field r.v.d.g.t.j.s.FieldsSearchTest$Base.bmock2 annotated with @MockBean, must be static", e.getMessage());
+            Assertions.assertEquals("Field FieldsSearchTest$Base.bmock2 annotated with @MockBean, must be static", e.getMessage());
         }
     }
 
@@ -120,7 +120,7 @@ public class FieldsSearchTest {
             bmock2.setValue(null, new Service());
             Assertions.fail();
         } catch (IllegalStateException e) {
-            Assertions.assertEquals("Field r.v.d.g.t.j.s.FieldsSearchTest$Base.bmock2 is not static: test instance required for setting value", e.getMessage());
+            Assertions.assertEquals("Field FieldsSearchTest$Base.bmock2 is not static: test instance required for setting value", e.getMessage());
         }
 
         bmock2.setValue(new Base(), new Service());
@@ -129,21 +129,21 @@ public class FieldsSearchTest {
             bmock2.setValue(new Object(), new Service());
             Assertions.fail();
         } catch (IllegalStateException e) {
-            Assertions.assertEquals("Invalid instance provided: class java.lang.Object for field r.v.d.g.t.j.s.FieldsSearchTest$Base.bmock2", e.getMessage());
+            Assertions.assertEquals("Invalid instance provided: class java.lang.Object for field FieldsSearchTest$Base.bmock2", e.getMessage());
         }
 
         try {
             Assertions.assertNotNull(bmock2.getValue(null));
             Assertions.fail();
         } catch (IllegalStateException e) {
-            Assertions.assertEquals("Field r.v.d.g.t.j.s.FieldsSearchTest$Base.bmock2 is not static: test instance required for obtaining value", e.getMessage());
+            Assertions.assertEquals("Field FieldsSearchTest$Base.bmock2 is not static: test instance required for obtaining value", e.getMessage());
         }
 
         try {
             Assertions.assertNotNull(bmock2.getValue(new Object()));
             Assertions.fail();
         } catch (IllegalStateException e) {
-            Assertions.assertEquals("Invalid instance provided: class java.lang.Object for field r.v.d.g.t.j.s.FieldsSearchTest$Base.bmock2", e.getMessage());
+            Assertions.assertEquals("Invalid instance provided: class java.lang.Object for field FieldsSearchTest$Base.bmock2", e.getMessage());
         }
     }
 
@@ -165,49 +165,10 @@ public class FieldsSearchTest {
             bmock1.checkValueNotChanged(null);
             Assertions.fail();
         } catch (IllegalStateException e) {
-            Assertions.assertEquals("Field r.v.d.g.t.j.s.FieldsSearchTest$Base.bmock1 annotated with @MockBean value was changed: " +
+            Assertions.assertEquals("Field FieldsSearchTest$Base.bmock1 annotated with @MockBean value was changed: " +
                     "most likely, it happen in test setup method, which is called after Injector startup and so too late to change " +
                     "binding values. Manual initialization is possible in field directly.", e.getMessage());
         }
-    }
-
-
-    @Test
-    void testIgnoreChanges() {
-        final List<AnnotatedField<MockBean, Object>> fields = TestFieldUtils
-                .findAnnotatedFields(Base.class, MockBean.class, Object.class);
-
-        AnnotatedField<MockBean, Object> bmock1 = fields.stream()
-                .filter(field -> field.getName().equals("bmock1"))
-                .findFirst().get();
-
-        bmock1.setValue(null, new Service());
-
-        bmock1.setIgnoreChanges(true);
-        Assertions.assertTrue(bmock1.isIgnoreChanges());
-        bmock1.setValue(null, null);
-        Assertions.assertNotNull(bmock1.getValue(null));
-
-        bmock1.setIgnoreChanges(false);
-        bmock1.setValue(null, null);
-        Assertions.assertNull(bmock1.getValue(null));
-
-        bmock1.setIgnoreChanges(true);
-        bmock1.setCustomData("TEST", 1);
-        Assertions.assertNull(bmock1.getCustomData("TEST"));
-
-        bmock1.setIgnoreChanges(false);
-        bmock1.setCustomData("TEST", 1);
-        Assertions.assertEquals(1, bmock1.<Integer>getCustomData("TEST"));
-
-        bmock1.setIgnoreChanges(true);
-        bmock1.clearCustomData();
-        Assertions.assertEquals(1, bmock1.<Integer>getCustomData("TEST"));
-
-        bmock1.setIgnoreChanges(false);
-        bmock1.clearCustomData();
-        Assertions.assertNull(bmock1.<Integer>getCustomData("TEST"));
-
     }
 
     public static class Base {

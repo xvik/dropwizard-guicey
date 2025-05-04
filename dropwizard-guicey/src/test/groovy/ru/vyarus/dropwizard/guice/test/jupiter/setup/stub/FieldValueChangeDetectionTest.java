@@ -35,7 +35,7 @@ public class FieldValueChangeDetectionTest {
                     msg = err.getMessage();
                 });
 
-        org.junit.jupiter.api.Assertions.assertEquals("Field r.v.d.g.t.j.s.s.FieldValueChangeDetectionTest$Test1.stub1 " +
+        org.junit.jupiter.api.Assertions.assertEquals("Field FieldValueChangeDetectionTest$Test1.stub1 " +
                 "annotated with @StubBean value was changed: most likely, it happen in test setup method, which is " +
                 "called after Injector startup and so too late to change binding values. Manual initialization is possible " +
                 "in field directly.", msg);
@@ -54,7 +54,7 @@ public class FieldValueChangeDetectionTest {
                     msg = err.getMessage();
                 });
 
-        org.junit.jupiter.api.Assertions.assertEquals("Field r.v.d.g.t.j.s.s.FieldValueChangeDetectionTest$Test2.stub2 " +
+        org.junit.jupiter.api.Assertions.assertEquals("Field FieldValueChangeDetectionTest$Test2.stub2 " +
                 "annotated with @StubBean value was changed: most likely, it happen in test setup method, which is called " +
                 "after Injector startup and so too late to change binding values. Manual initialization is possible " +
                 "in field directly.", msg);

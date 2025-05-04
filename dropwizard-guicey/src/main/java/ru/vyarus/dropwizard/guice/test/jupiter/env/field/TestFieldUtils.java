@@ -106,6 +106,6 @@ public final class TestFieldUtils {
      * @return string field representation with class and reduced package (for reports and logs).
      */
     public static String toString(final Field field) {
-        return RenderUtils.renderClass(field.getDeclaringClass()) + "." + field.getName();
+        return RenderUtils.getFullClassName(field.getDeclaringClass()) + "." + field.getName();
     }
 }

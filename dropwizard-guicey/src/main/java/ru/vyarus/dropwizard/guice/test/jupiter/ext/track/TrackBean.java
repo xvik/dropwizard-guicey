@@ -97,7 +97,7 @@ public @interface TrackBean {
     int maxStringLength() default 30;
 
     /**
-     * Note: tracker could be cleared manually with {@link Tracker#clear()}.
+     * Note: tracker could be cleared manually with {@link ru.vyarus.dropwizard.guice.test.track.Tracker#clear()}.
      *
      * @return true to reset tracker (remove collected stats) after each test method
      */

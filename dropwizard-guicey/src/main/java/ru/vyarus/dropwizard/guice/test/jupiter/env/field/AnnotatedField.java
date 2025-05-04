@@ -27,8 +27,6 @@ public class AnnotatedField<A extends Annotation, T> {
     private final Class<?> testClass;
     // custom data assigned during processing
     private Map<String, Object> data;
-    // required to overcome "bindings report" case, when bindings re-processed
-    private boolean ignoreChanges;
     // required to track value change (last value set or get)
     private T cachedValue;
 
@@ -131,9 +129,6 @@ public class AnnotatedField<A extends Annotation, T> {
      * @throws java.lang.IllegalStateException if non-static field set with null instance or other error appear
      */
     public void setValue(final Object instance, final T value) {
-        if (ignoreChanges) {
-            return;
-        }
         if (instance == null && !isStatic()) {
             throw new IllegalStateException("Field " + toStringField()
                     + " is not static: test instance required for setting value");
@@ -244,12 +239,10 @@ public class AnnotatedField<A extends Annotation, T> {
      * @param value value
      */
     public void setCustomData(final String key, final Object value) {
-        if (!ignoreChanges) {
-            if (data == null) {
-                data = new HashMap<>();
-            }
-            data.put(key, value);
+        if (data == null) {
+            data = new HashMap<>();
         }
+        data.put(key, value);
     }
 
     /**
@@ -278,7 +271,7 @@ public class AnnotatedField<A extends Annotation, T> {
      * Clear custom state.
      */
     public void clearCustomData() {
-        if (!ignoreChanges && data != null) {
+        if (data != null) {
             data.clear();
         }
     }
@@ -304,28 +297,6 @@ public class AnnotatedField<A extends Annotation, T> {
             ));
         }
         return value;
-    }
-
-    /**
-     * @return true if the field rejects all changes
-     */
-    public boolean isIgnoreChanges() {
-        return ignoreChanges;
-    }
-
-    /**
-     * WARNING: for internal usage in {@link ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedTestFieldSetup}.
-     * Ignore all modifications. Required to overcome guice reporting case when modules would be processed
-     * second time (to build a report) and, with allowed field modifications, it would override field state
-     * with invalid values.
-     * <p>
-     * This is not an ideal solution, but, extensions should rely on field state, so not required modifications
-     * should be "invisible" for the main logic.
-     *
-     * @param ignoreChanges true to ignore all filed changes (custom data and value setting)
-     */
-    public void setIgnoreChanges(final boolean ignoreChanges) {
-        this.ignoreChanges = ignoreChanges;
     }
 
     @Override

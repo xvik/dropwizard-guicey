@@ -173,6 +173,17 @@ public final class RenderUtils {
     }
 
     /**
+     * The same as {@link #getClassName(Class)} but for inner classes would preserve upper classes.
+     * For example, would print {@code SomeClass$Inner} instead of just {@code Inner} for inner class.
+     *
+     * @param type  type to get class name from
+     * @return full class name (including root classes for inner class declarations)
+     */
+    public static String getFullClassName(final Class<?> type) {
+        return type.getName().substring(type.getName().lastIndexOf('.') + 1);
+    }
+
+    /**
      * Render annotation. Supports only "value" annotation method - other possible methods simply ignored.
      *
      * @param annotation annotation to render

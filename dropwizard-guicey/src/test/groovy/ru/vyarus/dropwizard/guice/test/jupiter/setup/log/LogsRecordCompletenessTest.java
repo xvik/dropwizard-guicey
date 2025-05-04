@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.event.Level;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordLogs;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordedLogs;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support.DBundle1;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support.DBundleAfter;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support.DBundleBefore;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support.DManaged;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support.GBundle1;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support.GModule;
-import ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support.LogRecordsApp;
+import ru.vyarus.dropwizard.guice.test.log.RecordedLogs;
+import ru.vyarus.dropwizard.guice.test.log.support.DBundle1;
+import ru.vyarus.dropwizard.guice.test.log.support.DBundleAfter;
+import ru.vyarus.dropwizard.guice.test.log.support.DBundleBefore;
+import ru.vyarus.dropwizard.guice.test.log.support.DManaged;
+import ru.vyarus.dropwizard.guice.test.log.support.GBundle1;
+import ru.vyarus.dropwizard.guice.test.log.support.GModule;
+import ru.vyarus.dropwizard.guice.test.log.support.LogRecordsApp;
 
 import java.util.Arrays;
 
@@ -23,7 +23,7 @@ import java.util.Arrays;
 @TestGuiceyApp(LogRecordsApp.class)
 public class LogsRecordCompletenessTest {
 
-    @RecordLogs(loggers = "ru.vyarus.dropwizard.guice.test.jupiter.setup.log.support", level = Level.TRACE)
+    @RecordLogs(loggers = "ru.vyarus.dropwizard.guice.test.log.support", level = Level.TRACE)
     RecordedLogs logs;
 
     @Test

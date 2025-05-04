@@ -26,7 +26,7 @@ public class RestStubTest {
 
     @Test
     void testSimpleRun() throws Exception {
-        final RestStubsRunner rest = RestStubsRunner.builder()
+        final RestStubsHook rest = RestStubsHook.builder()
                 .disableDropwizardExceptionMappers(true)
                 .build();
         TestSupport.build(RestStubApp.class)
