@@ -28,8 +28,8 @@ import ru.vyarus.dropwizard.guice.test.jupiter.env.field.TestFieldUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.GuiceyTestTime;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.spy.SpiesSupport;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackersSupport;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.spy.SpyFieldsSupport;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackerFieldsSupport;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
 import ru.vyarus.dropwizard.guice.test.util.HooksUtil;
 import ru.vyarus.dropwizard.guice.test.util.ReusableAppUtils;
@@ -387,6 +387,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         TestSupportHolder.setContext(support, client);
 
         tracker.enableDebugFromSystemProperty();
+        listeners.broadcastStarting(context);
         tracker.logUsedHooksAndSetupObjects(configPrefix);
         final Stopwatch timer = Stopwatch.createStarted();
         support.before();
@@ -403,6 +404,7 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
 
         final DropwizardTestSupport<?> support = getSupport(context);
         if (support != null) {
+            listeners.broadcastStopping(context);
             final Stopwatch timer = Stopwatch.createStarted();
             support.after();
             TestSupportHolder.reset();
@@ -431,8 +433,8 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
             ));
             // extensions use aop and so must go last
             res.addAll(tracker.defaultExtensions(
-                    new SpiesSupport(),
-                    new TrackersSupport()
+                    new SpyFieldsSupport(),
+                    new TrackerFieldsSupport()
             ));
 
         }

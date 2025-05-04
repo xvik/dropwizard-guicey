@@ -19,7 +19,7 @@ import ru.vyarus.dropwizard.guice.test.EnableHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordLogs;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordedLogs;
+import ru.vyarus.dropwizard.guice.test.log.RecordedLogs;
 import ru.vyarus.dropwizard.guice.test.rest.RestClient;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest;
 
@@ -205,8 +205,8 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\tGuiceBundle                        : 111 ms (finished since start at 111 ms )\n" +
                 "\t\t\t\tBundle builder time                : 111 ms \n" +
                 "\t\t\t\tHooks processing                   : 111 ms \n" +
-                "\t\t\t\t\tRestStubSupport                    : 111 ms \n" +
-                "\t\t\t\t\tRestStubsRunner                    : 111 ms \n" +
+                "\t\t\t\t\tRestStubsHook                      : 111 ms \n" +
+                "\t\t\t\t\tRestStubFieldsSupport              : 111 ms \n" +
                 "\t\t\t\t\tStartupDiagnosticTest$Test3$$Lambda$111/1111111: 111 ms \n" +
                 "\t\t\t\tClasspath scan                     : 111 ms \n" +
                 "\t\t\t\tCommands processing                : 111 ms \n" +

@@ -8,7 +8,7 @@ import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackBean;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.Tracker;
+import ru.vyarus.dropwizard.guice.test.track.Tracker;
 
 /**
  * @author Vyacheslav Rusakov
@@ -21,7 +21,7 @@ public class InstanceTrackDetectionTest extends AbstractTrackerTest{
 
         Throwable th = runFailed(Test1.class);
         Assertions.assertThat(th.getMessage()).isEqualTo(
-                "Incorrect @TrackBean 'r.v.d.g.t.j.s.t.InstanceTrackDetectionTest$Test1.tracker' declaration: target " +
+                "Incorrect @TrackBean 'InstanceTrackDetectionTest$Test1.tracker' declaration: target " +
                         "bean 'Service' bound by instance and so can't be tracked");
     }
 

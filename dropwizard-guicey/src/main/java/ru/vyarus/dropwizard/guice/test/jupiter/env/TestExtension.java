@@ -88,6 +88,22 @@ public class TestExtension extends ExtensionBuilder<Configuration, TestExtension
 
     /**
      * Lambda version of {@link #listen(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)}
+     * for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener#starting(
+     * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext)}. Lambda listener version is more useful in
+     * case when setup object is declared as a lambda itself.
+     * <p>
+     * Might be called multiple times.
+     *
+     * @param listener listener called before application start (could be beforeAll (default) or beforeEach phase)
+     * @return builder instance for chained calls
+     */
+    public TestExtension onApplicationStarting(final LambdaTestListener listener) {
+        registerListener(ListenerEvent.Starting, listener);
+        return this;
+    }
+
+    /**
+     * Lambda version of {@link #listen(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)}
      * for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener#started(
      * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext)}. Lambda listener version is more useful in
      * case when setup object is declared as a lambda itself.
@@ -163,6 +179,22 @@ public class TestExtension extends ExtensionBuilder<Configuration, TestExtension
      */
     public TestExtension onAfterAll(final LambdaTestListener listener) {
         registerListener(ListenerEvent.AfterAll, listener);
+        return this;
+    }
+
+    /**
+     * Lambda version of {@link #listen(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener)}
+     * for {@link ru.vyarus.dropwizard.guice.test.jupiter.env.listen.TestExecutionListener#stopping(
+     * ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext)}. Lambda listener version is more useful in
+     * case when setup object is declared as a lambda itself.
+     * <p>
+     * Might be called multiple times.
+     *
+     * @param listener listener called before application stop (could be afterAll (default) or afterEach phase)
+     * @return builder instance for chained calls
+     */
+    public TestExtension onApplicationStopping(final LambdaTestListener listener) {
+        registerListener(ListenerEvent.Stopping, listener);
         return this;
     }
 

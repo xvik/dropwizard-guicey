@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubBean;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubLifecycle;
+import ru.vyarus.dropwizard.guice.test.stub.StubLifecycle;
 
 /**
  * @author Vyacheslav Rusakov

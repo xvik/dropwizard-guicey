@@ -43,7 +43,7 @@ public class IncorrectNestedStubDeclarationTest {
                 });
         System.err.println(out.getText());
 
-        Assertions.assertEquals("Incorrect @StubBean 'r.v.d.g.t.j.s.s.IncorrectNestedStubDeclarationTest$Test1$Inner.stub2' " +
+        Assertions.assertEquals("Incorrect @StubBean 'IncorrectNestedStubDeclarationTest$Test1$Inner.stub2' " +
                 "declaration: nested test runs under already started application and so new fields could not be added. " +
                 "Either remove annotated fields in nested tests or run application for each test method (with non-static @RegisterExtension field)", msg);
     }

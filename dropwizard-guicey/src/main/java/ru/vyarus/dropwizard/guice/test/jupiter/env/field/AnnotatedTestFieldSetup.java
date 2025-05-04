@@ -1,15 +1,11 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.env.field;
 
-import com.google.inject.Binder;
 import com.google.inject.Binding;
-import com.google.inject.Stage;
 import com.google.inject.spi.InstanceBinding;
 import com.google.inject.spi.ProviderInstanceBinding;
 import jakarta.inject.Provider;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstances;
-import ru.vyarus.dropwizard.guice.GuiceBundle;
-import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestExtension;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext;
@@ -21,14 +17,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class for annotated test field extensions.
+ * Base class for annotated test field extensions. The main purpose is to hide all complexity of junit test instance
+ * management (including potential nested tests support), simplifying actual extension implementation.
+ * <p>
  * Encapsulates:
- * - fields detection and processing
- * - declaration validations
- * - nested tests support
- * - manual user values support
- * - injected field lifecycle support (if required to rest an object before each test)
- * - guice bindings report compatibility (when guice bindings evaluated the second time)
+ * <ul>
+ *  <li>fields detection and processing
+ *  <li> declaration validations
+ *  <li> nested tests support (avoid duplicate fields initialization)
+ *  <li> manual user values support
+ *  <li> injected field lifecycle support (if required to reset an object before each test)
+ * </ul>
+ * <p>
+ * The overall process is: find all annotated fields, request supporting object initialization (field value might
+ * be provided by user), request a field value object to inject into test (not calling if already initialized).
+ * <p>
+ * Each field is represented by a self-contained object
+ * ({@link ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField}), which could hold an additional managing
+ * object to avoid external state requirement (all related objects already presented in field instance - no need for
+ * an external state).
+ * <p>
+ * It is recommended to encapsulate the main logic into a separate hook (a hook object would perform required
+ * application modifications). Setup object should only provide the required configuration to this hook. This
+ * should greatly simplify the extension and make it more testable.
  * <p>
  * All methods are protected to simplify overriding logic if required.
  * <p>
@@ -42,7 +53,7 @@ import java.util.List;
  */
 @SuppressWarnings("PMD.TooManyMethods")
 public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implements
-        TestEnvironmentSetup, GuiceyConfigurationHook, TestExecutionListener {
+        TestEnvironmentSetup, TestExecutionListener {
 
     // field custom data
     protected static final String FIELD_MANUAL = "manual_creation";
@@ -92,17 +103,10 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
         fields = lookupFields(setupContext, () -> extension.findAnnotatedFields(fieldAnnotation, fieldType));
         if (!fields.isEmpty()) {
             // avoid registration if no fields declared
-            extension.hooks(this).listen(this);
+            registerHooks(extension);
+            extension.listen(this);
         }
         return null;
-    }
-
-    @Override
-    public void configure(final GuiceBundle.Builder builder) {
-        // called immediately after setup - may use instance fields
-        // configure guicey (most likely, override bindings)
-        // override real beans with stubs
-        builder.modulesOverride(binder -> collectOverrideBindings(fields, binder));
     }
 
     /**
@@ -119,47 +123,45 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * @param context junit context
      * @param field   annotated fields
      */
-    protected abstract void validateDeclaration(ExtensionContext context, AnnotatedField<A, T> field);
+    protected abstract void fieldDetected(ExtensionContext context, AnnotatedField<A, T> field);
 
     /**
-     * Configure guice override for field with user value. Binder belongs to a new guice module, registered as
-     * overriding
-     * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(com.google.inject.Module...)}):
-     * any binding for an existing application key will OVERRIDE it.
+     * Called to register additional guicey hooks, if required. Called only when at least one annotated field is
+     * detected.
+     *
+     * @param extension extension configuration object
+     */
+    protected abstract void registerHooks(TestExtension extension);
+
+
+    /**
+     * Configure application for a field (user value might be provided). There might be field object instance creation
+     * (e.g. mocks initialization), guice overrides registration, etc. The main initialization point.
      * <p>
      * NOTE: If user-provided values are not allowed, throw an exception here
      *
-     * @param binder guice overriding module binder
-     * @param field  annotated field
-     * @param value  user-provided value to bind
-     * @param <K>    type for aligning a binding key with value types (cheating on guice type checks)
+     * @param field     annotated field
+     * @param userValue user-provided field value (pre-initialized)
+     * @param <K>       type for aligning a binding key with value types (cheating on guice type checks)
      */
-    protected abstract <K> void bindFieldValue(Binder binder, AnnotatedField<A, T> field, T value);
+    protected abstract <K> void initializeField(AnnotatedField<A, T> field, T userValue);
 
     /**
-     * Configure guice override for field with user value. Binder belongs to a new guice module, registered as
-     * overriding
-     * ({@link ru.vyarus.dropwizard.guice.GuiceBundle.Builder#modulesOverride(com.google.inject.Module...)}):
-     * any binding for an existing application key will OVERRIDE it.
-     *
-     * @param binder guice overriding module binder
-     * @param field  annotated field
-     * @param <K>    type for aligning a binding key with value types (cheating on guice type checks)
-     */
-    protected abstract <K> void bindField(Binder binder, AnnotatedField<A, T> field);
-
-    /**
-     * Called after application startup to validate binding correctness. For example, to detect instance bindings
-     * when extension relies on AOP and so would not work. Such validation is impossible to do before (in time
-     * of binding overrides).
+     * Called after application startup and before field value injection. Useful for additional validations, which
+     * can't be performed before, like binding correctness validation (requiring the created injector): for example,
+     * to detect instance bindings when extension relies on AOP and so would not work. Such validation is impossible
+     * to do before (in time of binding overrides).
      * <p>
-     * Called before {@link #getFieldValue(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext,
-     * AnnotatedField)}.
+     * Called before {@link #injectFieldValue(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext,
+     * AnnotatedField)}. At this point, non-static fields could be resolved (test instance present).
+     * <p>
+     * Important: method called for all fields, even initialized by user! Inject value method might not be called
+     * after it!
      *
      * @param context event context
      * @param field   annotated field
      */
-    protected abstract void validateBinding(EventContext context, AnnotatedField<A, T> field);
+    protected abstract void beforeValueInjection(EventContext context, AnnotatedField<A, T> field);
 
     /**
      * Get test field value (would be immediately injected into the test field). Called only if field was not
@@ -167,7 +169,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * from guice context (if guice was re-configured with module overrides).
      * <p>
      * Warning: not called for manually initialized fields (because value already set)! To validate binding use
-     * {@link #validateBinding(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext, AnnotatedField)}
+     * {@link #beforeValueInjection(ru.vyarus.dropwizard.guice.test.jupiter.env.listen.EventContext, AnnotatedField)}
      * method instead (which is called for all fields).
      * <p>
      * Application already completely started and test extension initialized at this moment (beforeEach test phase).
@@ -176,7 +178,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * @param field   annotated field
      * @return created field value
      */
-    protected abstract T getFieldValue(EventContext context, AnnotatedField<A, T> field);
+    protected abstract T injectFieldValue(EventContext context, AnnotatedField<A, T> field);
 
     /**
      * Called when debug is enabled on guicey extension to report registered fields.
@@ -187,8 +189,10 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * <p>
      * Special custom data markers used in field objects
      * ({@link AnnotatedField#getCustomData(String)}):
-     * - {@link #FIELD_MANUAL} field value was initialized by user, otherwise automatic
-     * - {@link #FIELD_INJECTED} field injection instance (test instance)
+     * <ul>
+     *  <li>{@link #FIELD_MANUAL} field value was initialized by user, otherwise automatic
+     *  <li>{@link #FIELD_INJECTED} field injection instance (test instance)
+     * </ul>
      *
      * @param context event context, IMPORTANT - this would be setup context and not current
      * @param fields  fields to report
@@ -213,6 +217,30 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      */
     protected abstract void afterTest(EventContext context, AnnotatedField<A, T> field, T value);
 
+    // the application is ready to be started, but test instance is already available
+    @Override
+    public void starting(final EventContext context) throws Exception {
+        for (final AnnotatedField<A, T> field : fields) {
+            // look if field already initialized
+            if (regTestInstance != null || field.isStatic()) {
+                final T existing = field.getValue(regTestInstance);
+                if (existing != null) {
+                    // use manually initialized instance (field value)
+                    initializeField(field, existing);
+                    field.setCustomData(FIELD_MANUAL, true);
+                    // mark static value as injected: no need to re-inject
+                    field.setCustomData(FIELD_INJECTED, field.isStatic() ? field.getDeclaringClass()
+                            : field.findRequiredInstance(regTestInstance));
+                    continue;
+                }
+            }
+
+            // bind as type - guice will create instance
+            initializeField(field, null);
+        }
+    }
+
+    // the application started
     @Override
     public void started(final EventContext context) {
         // here because manual stubs detection will appear only during injector startup
@@ -283,7 +311,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
             if (!res.isEmpty()) {
                 // validate only own fields - top level fields assumed to be already validated (we are inside nested
                 // test)
-                res.forEach(field -> validateDeclaration(context, field));
+                res.forEach(field -> fieldDetected(context, field));
             }
             getStore(ctx).put(storageKey, res);
         }
@@ -296,39 +324,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
         return res;
     }
 
-    /**
-     * Create bind for annotated fields in overriding guice module. For user-provided values,
-     * value binding should be used. For not initialized fields - value must be created (e.g., by guice context).
-     *
-     * @param fields annotated fields
-     * @param binder overriding module binder
-     */
-    @SuppressWarnings("PMD.SimplifiedTernary")
-    protected void collectOverrideBindings(final List<AnnotatedField<A, T>> fields, final Binder binder) {
-        // binder might be called the second time for guice report - in this case all changes must be denied
-        // (only bindings required to show in the report, but field changes would be incorrect anyway)
-        final boolean ignoreChanges = binder.currentStage() == Stage.TOOL;
-        for (final AnnotatedField<A, T> field : fields) {
-            field.setIgnoreChanges(ignoreChanges);
-            // look if field already initialized
-            if (regTestInstance != null || field.isStatic()) {
-                final T existing = field.getValue(regTestInstance);
-                if (existing != null) {
-                    // use manually initialized instance (field value)
-                    bindFieldValue(binder, field, existing);
-                    field.setCustomData(FIELD_MANUAL, true);
-                    // mark static value as injected: no need to re-inject
-                    field.setCustomData(FIELD_INJECTED, field.isStatic() ? true
-                            : field.findRequiredInstance(regTestInstance));
-                    continue;
-                }
-            }
 
-            // bind as type - guice will create instance
-            bindField(binder, field);
-            field.setIgnoreChanges(false);
-        }
-    }
 
     /**
      * Inject field values into test instance (under beforeEach). User defined values stay as is. Value is injected
@@ -349,7 +345,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
                 // and fail on wrong usage
                 failIfInstanceFieldInitialized(field, testInstances);
             }
-            validateBinding(context, field);
+            beforeValueInjection(context, field);
 
             // exact instance required because it must be stored
             final Object instance = field.findRequiredInstance(testInstances);
@@ -359,7 +355,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
                     || (!field.isStatic() && instance == field.getCustomData(FIELD_INJECTED));
             // static fields might be not initialized in beforeAll (so do it in beforeEach)
             if ((instance != null || field.isStatic()) && !isAlreadyInjected) {
-                field.setValue(instance, getFieldValue(context, field));
+                field.setValue(instance, injectFieldValue(context, field));
                 field.setCustomData(FIELD_INJECTED, field.isStatic() ? true : instance);
             }
         });

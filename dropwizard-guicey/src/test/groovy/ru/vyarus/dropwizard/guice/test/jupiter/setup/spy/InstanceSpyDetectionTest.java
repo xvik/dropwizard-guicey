@@ -21,7 +21,7 @@ public class InstanceSpyDetectionTest extends AbstractSpyTest {
         Throwable th = runFailed(Test1.class);
 
         Assertions.assertThat(th.getMessage()).isEqualTo(
-                "Incorrect @SpyBean 'r.v.d.g.t.j.s.s.InstanceSpyDetectionTest$Test1.spy' declaration: target bean 'Service' " +
+                "Incorrect @SpyBean 'InstanceSpyDetectionTest$Test1.spy' declaration: target bean 'Service' " +
                         "bound by instance and so can't be spied");
     }
 

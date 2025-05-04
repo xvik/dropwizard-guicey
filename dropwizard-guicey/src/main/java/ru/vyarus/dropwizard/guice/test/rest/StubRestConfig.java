@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Stub rest configuration for {@link ru.vyarus.dropwizard.guice.test.rest.RestStubsRunner}.
+ * Stub rest configuration for {@link RestStubsHook}.
  *
  * @author Vyacheslav Rusakov
  * @since 20.04.2025

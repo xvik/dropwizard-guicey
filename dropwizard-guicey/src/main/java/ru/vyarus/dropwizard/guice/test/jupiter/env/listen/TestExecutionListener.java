@@ -15,6 +15,23 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env.listen;
 public interface TestExecutionListener {
 
     /**
+     * Called before dropwizard (or guicey) application starting. It could be beforeAll or beforeEach phase
+     * (if important, look {@link org.junit.jupiter.api.extension.ExtensionContext#getTestMethod()} to make sure).
+     * Application could start/stop multiple times within one test class (if extension registered in non-static field).
+     * <p>
+     * NOTE: At this stage, injections not yet performed inside test instance.
+     * <p>
+     * This method could be used instead of beforeAll because normally extension is created under beforeAll, but
+     * for extensions created under beforeEach - it would be impossible to notify about beforeAll anyway.
+     *
+     * @param context context object providing access to all available objects (junit context, test support, etc.)
+     * @throws java.lang.Exception on error
+     */
+    default void starting(final EventContext context) throws Exception {
+        // default empty
+    }
+
+    /**
      * Called when dropwizard (or guicey) application started. It could be beforeAll or beforeEach phase
      * (if important, look {@link org.junit.jupiter.api.extension.ExtensionContext#getTestMethod()} to make sure).
      * Application could start/stop multiple times within one test class (if extension registered in non-static field).
@@ -87,6 +104,25 @@ public interface TestExecutionListener {
      * @throws java.lang.Exception on error
      */
     default void afterAll(final EventContext context) throws Exception {
+        // empty default
+    }
+
+    /**
+     * Called before dropwizard (or guicey) application stopping. It could be afterAll or afterEach phase
+     * (if important, look {@link org.junit.jupiter.api.extension.ExtensionContext#getTestMethod()} to make sure).
+     * Application could start/stop multiple times within one test class (if extension registered in non-static field).
+     * <p>
+     * Note that in case of global application usage or for nested tests this method might not be called because
+     * application lifecycle would be managed by the top-most test.
+     * <p>
+     * This method could be used instead of afterAll because normally extension is stopped under afterAll, but
+     * for extensions stopped under afterEach - it would be impossible to notify about afterAll anyway.
+     *
+     * @param context context object providing access to all required objects (junit context, injector,
+     *                test support, etc.)
+     * @throws java.lang.Exception on error
+     */
+    default void stopping(final EventContext context) throws Exception {
         // empty default
     }
 

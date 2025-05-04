@@ -25,17 +25,18 @@ import java.lang.annotation.Target;
  * <p>
  * Could be used for a quick logger configuration changes in tests (easy switch to TRACE, for example).
  * <p>
- * Recorded events could be inspected with {@link RecordedLogs} object: {@code logs.getEvents()} for raw event
- * objects or {@code logs.getMessages()} for logged messages. There are many other methods to filter events.
+ * Recorded events could be inspected with {@link ru.vyarus.dropwizard.guice.test.log.RecordedLogs} object:
+ * {@code logs.getEvents()} for raw event objects or {@code logs.getMessages()} for logged messages. There are many
+ * other methods to filter events.
  * <p>
  * Events recorded for the entire application startup. Dropwizard resets loggers two times: in application constructor
  * and just before the run phase (log configuration factory init), so logs listener appender have to be re-registered.
  * LIMITATION: would not see run phase logs of dropwizard bundles, registered BEFORE
  * {@link ru.vyarus.dropwizard.guice.GuiceBundle} (no way re-attach listener before it). For dropwizard bundles,
- * registered after guice bundle (or inside it) - all logs would be visible
+ * registered after guice bundle (or inside it) - all logs would be visible.
  * <p>
  * Recorded logs are cleared after each test. Use {@link #autoReset()} to disable. Also, clean could be performed
- * manually with {@link RecordedLogs#clear()}.
+ * manually with {@link ru.vyarus.dropwizard.guice.test.log.RecordedLogs#clear()}.
  *
  * @author Vyacheslav Rusakov
  * @since 26.02.2025
@@ -73,7 +74,7 @@ public @interface RecordLogs {
 
     /**
      * By default, recorded event reset after each test method. Use to disable automatic cleanup. Note that
-     * events could be cleared directly with {@link RecordedLogs#clear()}.
+     * events could be cleared directly with {@link ru.vyarus.dropwizard.guice.test.log.RecordedLogs#clear()}.
      *
      * @return true to clean up recorded events after test
      */

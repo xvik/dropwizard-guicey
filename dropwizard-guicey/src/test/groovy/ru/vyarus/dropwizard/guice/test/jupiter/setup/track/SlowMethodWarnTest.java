@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackBean;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.Tracker;
+import ru.vyarus.dropwizard.guice.test.track.Tracker;
 
 import java.time.temporal.ChronoUnit;
 
@@ -25,7 +25,7 @@ public class SlowMethodWarnTest extends AbstractTrackerTest {
 
         org.assertj.core.api.Assertions.assertThat(output)
                 // warn
-                .contains("WARN  [2025-22-22 11:11:11] ru.vyarus.dropwizard.guice.test.jupiter.ext.track.Tracker: \n" +
+                .contains("WARN  [2025-22-22 11:11:11] ru.vyarus.dropwizard.guice.test.track.Tracker: \n" +
                         "\\\\\\---[Tracker<Service>] 11.11 ms      <@11111111> .foo() = \"foo\"");
     }
 
@@ -35,7 +35,7 @@ public class SlowMethodWarnTest extends AbstractTrackerTest {
         String output = run(Test2.class);
 
         org.assertj.core.api.Assertions.assertThat(output)
-                .doesNotContain("WARN  [2025-22-22 11:11:11] ru.vyarus.dropwizard.guice.test.jupiter.ext.track.Tracker: \n" +
+                .doesNotContain("WARN  [2025-22-22 11:11:11] ru.vyarus.dropwizard.guice.test.track.Tracker: \n" +
                         "\\\\\\---[Tracker<Service>] 11.11 ms      <@11111111> .foo() = \"foo\"");
     }
 

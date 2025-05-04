@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.TrackBean;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.track.Tracker;
+import ru.vyarus.dropwizard.guice.test.track.Tracker;
+import ru.vyarus.dropwizard.guice.test.track.TrackerConfig;
 
 /**
  * @author Vyacheslav Rusakov
@@ -18,7 +19,7 @@ public class IncorrectDeclarationTest extends AbstractTrackerTest {
     void testIncorrectFieldType() {
         Throwable th = runFailed(Test1.class);
         Assertions.assertThat(th.getMessage()).isEqualTo(
-                "Field r.v.d.g.t.j.s.t.IncorrectDeclarationTest$Test1.service annotated with @TrackBean, but its type is not Tracker");
+                "Field IncorrectDeclarationTest$Test1.service annotated with @TrackBean, but its type is not Tracker");
     }
 
     @Test
@@ -26,7 +27,7 @@ public class IncorrectDeclarationTest extends AbstractTrackerTest {
 
         Throwable th = runFailed(Test2.class);
         Assertions.assertThat(th.getMessage()).isEqualTo(
-                "Incorrect @TrackBean 'r.v.d.g.t.j.s.t.IncorrectDeclarationTest$Test2.service' declaration: " +
+                "Incorrect @TrackBean 'IncorrectDeclarationTest$Test2.service' declaration: " +
                         "tracked service must be declared as a tracker object generic: Tracker<Bean>");
     }
 
@@ -69,7 +70,7 @@ public class IncorrectDeclarationTest extends AbstractTrackerTest {
     public static class Test3 {
 
         @TrackBean
-        static Tracker<Service> service = new Tracker<>(Service.class, false, true, null, null);
+        static Tracker<Service> service = new Tracker<>(Service.class, new TrackerConfig(), null);
 
         @Test
         void test() {
