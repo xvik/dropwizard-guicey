@@ -17,4 +17,5 @@ include 'core-getting-started',
         'integration-guice-validator',
         'integration-dropwizard-jobs',
         'maven-bom',
-        'maven-simple'
+        'maven-simple',
+        'openapi-client-server'
