@@ -1,0 +1,60 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+plugins {
+    id 'org.openapi.generator'
+}
+
+java {
+    withSourcesJar()
+}
+
+dependencies {
+    implementation 'io.dropwizard:dropwizard-forms'
+    implementation 'com.github.scribejava:scribejava-core:8.3.3'
+
+    // OPENAPI CODEGEN
+    // additional dependency required for codegen, but conflicts with dropwizard (need to disable feature)
+    implementation 'org.glassfish.jersey.media:jersey-media-json-jackson'
+
+    compileOnly 'io.swagger.core.v3:swagger-annotations:2.2.30'
+}
+
+// https://openapi-generator.tech/docs/generators/java
+openApiGenerate {
+    generatorName = "java"
+    inputSpec = "$projectDir/src/main/openapi/petStore.yaml"
+    outputDir = "$buildDir/petstore/client"
+    apiPackage = "com.petstore.api"
+    invokerPackage = "com.petstore"
+    modelPackage = "com.petstore.api.model"
+    configOptions = [
+            library: "jersey3",
+            dateLibrary: "java8",
+            openApiNullable: "false",
+            hideGenerationTimestamp: "true"
+    ]
+}
+
+
+// https://openapi-generator.tech/docs/generators/jaxrs-jersey
+tasks.register('openApiGenerateServer', GenerateTask) {
+    group = 'openapi tools'
+    generatorName = "jaxrs-jersey"
+    inputSpec = "$projectDir/src/main/openapi/petStore.yaml"
+    outputDir = "$buildDir/petstore/server"
+    apiPackage = "com.petstore.server.api"
+    invokerPackage = "com.petstore.server"
+    modelPackage = "com.petstore.server.api.model"
+    configOptions = [
+            library    : "jersey3",
+            dateLibrary: "java8",
+            openApiNullable: "false",
+            hideGenerationTimestamp: "true"
+    ]
+}
+
+compileJava.dependsOn 'openApiGenerate', 'openApiGenerateServer'
+tasks.sourcesJar.dependsOn 'openApiGenerate', 'openApiGenerateServer'
+sourceSets.main.java.srcDir "${openApiGenerate.outputDir.get()}/src/main/java"
+// note main folder not attached! (sources were copied manually)
+sourceSets.main.java.srcDir "${openApiGenerateServer.outputDir.get()}/src/gen/java"
