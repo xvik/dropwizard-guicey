@@ -325,23 +325,16 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
 
         /**
          * Enables auto scan feature: search for installers and extensions in provided packages.
+         * <p>
+         * When no packages specified, scan would be performed for application class package.
          *
          * @param basePackages packages to scan extensions in
          * @return builder instance for chained calls
          * @see GuiceyOptions#ScanPackages
          */
         public Builder enableAutoConfig(final String... basePackages) {
-            Preconditions.checkState(basePackages.length > 0, "Specify at least one package to scan");
-            return option(ScanPackages, basePackages);
-        }
-
-        /**
-         * Shortcut for enabling auto config for application package (package with application class).
-         *
-         * @return builder instance for chained calls
-         */
-        public Builder enableAutoConfig() {
-            return enableAutoConfig(GuiceyInitializer.APP_PKG);
+            final String[] packs = basePackages.length > 0 ? basePackages : new String[]{GuiceyInitializer.APP_PKG};
+            return option(ScanPackages, packs);
         }
 
         /**
@@ -1212,7 +1205,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * always be wrapped with bundles to improve application readability.
          *
          * @param listener listener to call after injector creation
-         * @param <C> configuration type
+         * @param <C>      configuration type
          * @return builder instance for chained calls
          */
         public <C extends Configuration> Builder onGuiceyStartup(final GuiceyStartupListener<C> listener) {
