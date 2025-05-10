@@ -62,6 +62,7 @@ public class MockFieldsSupport extends AnnotatedTestFieldSetup<MockBean, Object>
                     + "and let extension create mock automatically.");
             hook.mock(type, (K) userValue);
         } else {
+            // no need to store custom data for manual value - injectFieldValue not called for manual values
             field.setCustomData(FIELD_MOCK, hook.mock(type));
         }
     }

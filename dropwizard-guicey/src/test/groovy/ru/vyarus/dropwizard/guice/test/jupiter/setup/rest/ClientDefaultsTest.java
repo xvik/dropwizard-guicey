@@ -33,7 +33,7 @@ public class ClientDefaultsTest extends AbstractPlatformTest {
     @Disabled
     public static class Test1 {
 
-        @StubRest(logRequests = true)
+        @StubRest
         RestClient rest;
 
         @Test

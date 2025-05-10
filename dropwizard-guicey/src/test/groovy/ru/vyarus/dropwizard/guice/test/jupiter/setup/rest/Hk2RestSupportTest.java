@@ -22,7 +22,7 @@ public class Hk2RestSupportTest {
     @EnableHook
     static GuiceyConfigurationHook hook = builder -> builder.extensions(HkResource.class);
 
-    @StubRest(value = HkResource.class, logRequests = true)
+    @StubRest(HkResource.class)
     RestClient rest;
 
     @Test

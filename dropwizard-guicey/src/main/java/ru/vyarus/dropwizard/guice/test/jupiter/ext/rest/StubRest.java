@@ -139,11 +139,11 @@ public @interface StubRest {
     boolean autoReset() default true;
 
     /**
-     * Requests log disabled by default (in contrast to {@link ru.vyarus.dropwizard.guice.test.ClientSupport}).
+     * Requests log enabled by default (like in {@link ru.vyarus.dropwizard.guice.test.ClientSupport}).
      *
      * @return true to print all requests and responses into console
      */
-    boolean logRequests() default false;
+    boolean logRequests() default true;
 
     /**
      * By default, use a lightweight in-memory container, but switch to grizzly when it's available in classpath
