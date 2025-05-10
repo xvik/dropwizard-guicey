@@ -67,12 +67,13 @@
     - Add configuration modifiers (`ConfigModifier`) - an alternative for configuration override mechanism:
       ability to modify configuration instance before application startup.
       Supported by all test extensions (junit5 annotations, setup object, generic builders, command runner)
-    - Add custom configuration block for junit5 extensions and TestEnvironmentSetup (to simplify lambda-based configurations): .with({...}) 
+    - Add custom configuration block for junit5 extensions and TestEnvironmentSetup (to simplify lambda-based configurations): .with({...})
+    - Junit ExtensionContext object could be injected as test method parameter
     - Debug option:
         * Track guicey test extensions time (would appear when debug enabled)
         * Improve debug report: setup objects and hooks registration point are clear now (with direct code links)
     - Add injectOnce option into test extensions to call injectMembers once per test instance
-      (useful when TestInstance.Lifecycle.PER_CLASS used) (discussion #394)
+      (useful when TestInstance.Lifecycle.PER_CLASS used) (discussion #394) 
     - Setup objects (TestEnvironmentSetup):
         * Add "throws Exception" for TestEnvironmentSetup#setup() to simplify usage
         * TestExtension builder improvements (TestEnvironmentSetup#setup(TestExtension)):

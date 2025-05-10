@@ -216,15 +216,15 @@ create call).
 
 ## Migrating to JUnit 5
 
-* Instead of `GuiceyAppRule` use [@TestGuiceyApp](junit5.md#testguiceyapp) extension.
-* Instead of `DropwizardAppRule` use [@TestDropwizardApp](junit5.md#testdropwizardapp) extension.
-* `GuiceyHooksRule` can be substituted with hooks declaration [in extensions](junit5.md#application-test-modification) or as [test fields](junit5.md#hook-fields)
+* Instead of `GuiceyAppRule` use [@TestGuiceyApp](junit5/run.md#testing-core-logic) extension.
+* Instead of `DropwizardAppRule` use [@TestDropwizardApp](junit5/run.md#testing-web-logic) extension.
+* `GuiceyHooksRule` can be substituted with hooks declaration [in extensions](junit5/hooks.md) or as [test fields](junit5/hooks.md#hook-fields)
 * Instead of `StartupErrorRule` use [system-stubs](https://github.com/webcompere/system-stubs) - the successor of system rules
 
 In essence:
 
 * Use annotations instead of rules (and forget about RuleChain difficulties)
 * Test fields injection will work out of the box, so no need for additional hacks
-* JUnit 5 propose [parameter injection](junit5.md#parameter-injection), which may be not common at first, but it's actually very handy
+* JUnit 5 propose [parameter injection](junit5/inject.md#parameter-injection), which may be not common at first, but it's actually very handy
 
 Also, there is a pre-configured [http client](http://xvik.github.io/dropwizard-guicey/5.4.2/guide/test/junit5/#client) suitable for calling test application urls (or any other general url).  

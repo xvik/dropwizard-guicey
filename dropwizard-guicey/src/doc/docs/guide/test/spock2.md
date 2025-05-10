@@ -5,7 +5,7 @@
 
 There are no special extensions for [Spock 2](http://spockframework.org) (like it was for spock 1),
 instead I did an extra [integration library](https://github.com/xvik/spock-junit5),
-so you can use existing [Junit 5 extensions](junit5.md) with spock.
+so you can use existing [Junit 5 extensions](junit5/setup.md) with spock.
 
 !!! note
     You are not limited to guicey junit 5 extensions, you can use ([almost](https://github.com/xvik/spock-junit5#what-is-supported)) any junit 5 extensions.
@@ -34,7 +34,7 @@ testImplementation 'org.junit.jupiter:junit-jupiter-api'
 
 ## Usage
 
-See [junit 5 extensions docs](junit5.md) for usage details (it's all used the same).
+See [junit 5 extensions docs](junit5/setup.md) for usage details (it's all used the same).
 
 !!! warning
     Junit 5 extensions would not work with `@Shared` spock fields! You can still use
@@ -64,7 +64,7 @@ class MyTest extends Specification {
 ```
 
 !!! tip
-    Note that [parameter injection](junit5.md#parameter-injection) will also work in test and fixture (setup/cleanup) methods
+    Note that [parameter injection](junit5/inject.md#parameter-injection) will also work in test and fixture (setup/cleanup) methods
 
 Overall, you get best of both worlds: same extensions as in junit 5 (and ability to use all other junit extensions)
 and spock expressiveness for writing tests.
@@ -92,14 +92,14 @@ def "Test command execution"() {
 }
 ```
 
-Read more details in [junit 5 guide](junit5.md#testing-commands)
+Read more details in [junit 5 guide](junit5/command.md)
 
 !!! note
-    The same utility could be used to test [application startup fails](junit5.md#testing-startup-error)
+    The same utility could be used to test [application startup fails](junit5/startup.md)
 
 ## Special cases
 
-Junit 5 doc [describes](junit5.md#testing-startup-error)  [system stubs](https://github.com/webcompere/system-stubs) library
+Junit 5 doc [describes](junit5/startup.md)  [system stubs](https://github.com/webcompere/system-stubs) library
 usage. It is completely valid for spock, I'll just show a few examples here on how to:
 
 * Modify (and reset) environment variables
@@ -156,5 +156,5 @@ class EnvironmentChangeTest extends Specification {
 ```
 
 !!! note
-    Use [test framework-agnostic utilities](general.md) to run application with configuration or to run
+    Use [test framework-agnostic utilities](general/general.md) to run application with configuration or to run
     application without web part (for faster test).

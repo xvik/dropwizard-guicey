@@ -115,7 +115,7 @@ Or just override exact values (without declaring config file):
 
 In many cases, you don't need the entire application, but just a working `Injector` to check core application logic.
 
-For such cases, guicey provides lightweight extensions like [@TestGuiceyApp](guide/test/junit5.md#testguiceyapp):
+For such cases, guicey provides lightweight extensions like [@TestGuiceyApp](guide/test/junit5/run.md#testing-core-logic):
 
 - will not start jetty (no ports bind, no HK2 launched)
 - start `Managed` objects to simulate lifecycle
@@ -177,7 +177,7 @@ See [Spock 2 docs](guide/test/spock2.md) for more details.
 
 ## Testing commands
 
-Guicey also provides special support for [testing dropwizard commands](guide/test/general.md#test-commands):
+Guicey also provides special support for [testing dropwizard commands](guide/test/general/command.md):
 
 ```java
 CommandResult result = TestSupport.buildCommandRunner(App.class)
