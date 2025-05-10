@@ -501,7 +501,7 @@ Note that `server.rootPath` could be configured with `restMapping` annotation pr
 
 ### Alternative declaration
 
-You may also use [alternative declaration](junit5.md#alternative-declaration):
+You may also use [alternative declaration](junit5/run.md#alternative-declaration):
 
 ```groovy
 class MyTest extends Specification {
