@@ -32,6 +32,7 @@ import java.util.Optional;
  *     <li>{@link ObjectMapper}</li>
  *     <li>{@link ClientSupport} application web client helper</li>
  *     <li>{@link DropwizardTestSupport} support object itself</li>
+ *     <li>{@link ExtensionContext} junit extension context</li>
  *     <li>Any existing guice binding (possibly with qualifier annotation or generified)</li>
  *     <li>{@link Jit} annotated parameter will be obtained from guice context (assume JIT binding)</li>
  * </ul>
@@ -54,7 +55,8 @@ public abstract class TestParametersSupport implements ParameterResolver {
     private final List<Class<?>> supportedClasses = ImmutableList.of(
             ObjectMapper.class,
             ClientSupport.class,
-            DropwizardTestSupport.class);
+            DropwizardTestSupport.class,
+            ExtensionContext.class);
 
     @Override
     @SuppressWarnings("checkstyle:ReturnCount")
@@ -106,6 +108,9 @@ public abstract class TestParametersSupport implements ParameterResolver {
         }
         if (DropwizardTestSupport.class.isAssignableFrom(type)) {
             return support;
+        }
+        if (ExtensionContext.class.isAssignableFrom(type)) {
+            return extensionContext;
         }
         return InjectorLookup.getInjector(support.getApplication())
                 .map(it -> it.getInstance(getKey(parameter)))

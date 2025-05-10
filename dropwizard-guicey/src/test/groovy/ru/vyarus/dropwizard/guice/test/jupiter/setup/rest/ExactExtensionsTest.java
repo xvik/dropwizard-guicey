@@ -30,8 +30,7 @@ public class ExactExtensionsTest {
 
     @StubRest(value = {Resource1.class, ErrorResource.class},
             jerseyExtensions = RestFilter1.class,
-            disableDropwizardExceptionMappers = true,
-            logRequests = true)
+            disableDropwizardExceptionMappers = true)
     RestClient rest;
 
     @Inject

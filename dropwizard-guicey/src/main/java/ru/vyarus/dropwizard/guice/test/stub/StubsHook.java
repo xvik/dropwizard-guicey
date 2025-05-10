@@ -108,12 +108,8 @@ public class StubsHook implements GuiceyConfigurationHook {
     }
 
     private void lifecycle(final boolean before) {
-        stubs.forEach((type, o) -> {
-            Object stub = o;
-            if (o instanceof Class) {
-                // instance managed by guice
-                stub = stubProviders.get(type).get();
-            }
+        stubs.keySet().forEach(type -> {
+            final Object stub = getStub(type);
             if (stub instanceof StubLifecycle) {
                 final StubLifecycle lifecycle = (StubLifecycle) stub;
                 if (before) {
@@ -133,7 +129,10 @@ public class StubsHook implements GuiceyConfigurationHook {
      */
     @SuppressWarnings("unchecked")
     public <T, P extends T> P getStub(final Class<T> type) {
-        return (P) Preconditions.checkNotNull(stubs.get(type), "Stub not registered for type %s", type.getSimpleName());
+        final Object stub = Preconditions.checkNotNull(stubs.get(type),
+                "Stub not registered for type %s", type.getSimpleName());
+        // stub instance might be guice-managed
+        return (P) (stub instanceof Class ? stubProviders.get(type).get() : stub);
     }
 
     @SuppressWarnings("unchecked")

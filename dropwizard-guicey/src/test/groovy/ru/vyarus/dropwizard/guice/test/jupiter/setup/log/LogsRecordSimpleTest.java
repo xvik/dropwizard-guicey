@@ -47,6 +47,7 @@ public class LogsRecordSimpleTest {
         Assertions.assertEquals(3, logs.count());
         Assertions.assertTrue(logs.has(Level.WARN));
         Assertions.assertEquals(1, logs.level(Level.WARN).count());
+        Assertions.assertEquals("Foo called", logs.lastMessage());
     }
 
     @Singleton

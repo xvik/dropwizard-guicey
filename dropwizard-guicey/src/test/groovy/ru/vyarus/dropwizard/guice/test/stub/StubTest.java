@@ -37,6 +37,8 @@ public class StubTest {
                     hook.after();
                     Assertions.assertTrue(stub.afterCalled);
 
+                    Assertions.assertEquals(stub, hook.getStub(Service1.class));
+
                     return null;
                 });
     }
