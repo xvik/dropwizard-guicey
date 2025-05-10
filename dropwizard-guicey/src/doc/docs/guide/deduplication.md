@@ -20,14 +20,14 @@ install the same common bundle it would be installed twice:
 ```java
 public class Feature1Bundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         bootstrap.bundles(new CommonBundle);
     }
 }
 
 public class Feature2Bundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         bootstrap.bundles(new CommonBundle);
     }
 }

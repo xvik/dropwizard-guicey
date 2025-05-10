@@ -28,7 +28,7 @@ Guicey could be configured through:
 :   Enable [classpath scan](scan.md) for automatic extension registration, custom installers search and commands search (if enabled) 
 
 `#!java .enableAutoConfig()`
-:   Shortcut for enabling classpath scan on application package
+:   (without packages) Enabling classpath scan on application package
    
 `#!java .modules(Module... modules)`
 :   Guice modules registration
@@ -167,6 +167,27 @@ ForceSingletonForJerseyExtensions | Boolean | true | Force [singleton](../instal
 
 `#!java .listen(GuiceyLifecycleListener... listeners)`
 :   Listen for guicey lifecycle [events](events.md#listeners)
+
+`#!java .onGuiceyStartup(GuiceyStartupListener listener)`
+:   Shortcut for manual configuration under run phase with available injector
+
+`#!java .onApplicationStartup(ApplicationStartupListener listener)`
+:   Shortcut for manual actions after complete application start (jetty started)
+
+    !!! note ""
+        It is also called after guicey initialization in lightweight guicey tests
+
+`#!java .onApplicationShutdown(ApplicationShutdownListener listener)`
+:   Shortcut for manual actions after complete application shutdown
+
+`#!java .listenServer(ServerLifecycleListener listener)`
+:   Shortcut for `#!java environment().lifecycle().addServerLifecycleListener()`
+
+`#!java .listenJetty(LifeCycle.Listener listener)`
+:   Shortcut for `#!java environment().lifecycle().addLifeCycleListener()`
+
+`#!java .listenJersey(new ApplicationEventListener() {...})`
+:   Shortcut for `#!java environment.jersey().register(listener)`
   
 `#!java .noGuiceFilter()`
 :   Disable [GuiceFilter](guice/servletmodule.md) registration.
@@ -210,6 +231,20 @@ See [diagnostic section](diagnostic/diagnostic-tools.md) for a full list of avai
 :   This method is mainly useful for hooks, because it's the only way to access application
     [shared state](shared.md) from [hook](#hooks).
 
+### Configuration awareness
+
+To configure bundle when application configuration object is required:
+
+```java
+GuiceBundle.builder()
+   ...
+   .whenConfigurationReady(env -> {
+        // env is GuiceyEnvironment, like in GuiceyBundle#run
+        AppConfig config = env.configuration();
+        env.modules(new GuiceModule(config));
+   });
+```
+
 ## Guicey bundle
 
 `GuiceyBundle`s are like dropwizard bundles, but with [greater abilities](bundles.md). Supposed to be used instead of 
@@ -222,7 +257,7 @@ dropwizard bundles. Bundles are registered either directly (in main bundle or ot
 public class MyBundle implements GuiceyBundle {
        
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         ...
     }      
 }
@@ -279,14 +314,16 @@ Shortcuts:
 public class MyBundle implements GuiceyBundle {
        
     @Override
-    public void run(GuiceyEnvironment environment) {
+    public void run(GuiceyEnvironment environment) throws Exception {
         ...
     }      
 }
 ```
 
-Everything is configured under initialization phase. On run phase
-bundle allows only modules registration and extensions disable.  
+All bundles must be registered under initialization phase.
+
+On run phase modules and extensions registration is available (to perform registration,
+using application configuration, or avoid extension registration based on configuration value).  
 
 Shortcuts:
 
@@ -307,6 +344,10 @@ Shortcuts:
 
 `#!java .listenJetty(LifeCycle.Listener listener)`
 :   Shortcut for `#!java environment().lifecycle().addLifeCycleListener()`
+
+`#!java .listenJersey(new ApplicationEventListener() {...})`
+:   Shortcut for `#!java environment.jersey().register(listener)`
+
 
 [Extended configuration](yaml-values.md) access:
 
@@ -354,6 +395,9 @@ Guicey [listeners](events.md#listeners):
 
     !!! note ""
         It is also called after guicey initialization in lightweight guicey tests
+
+`#!java .onApplicationShutdown(ApplicationShutdownListener listener)`
+:   Shortcut for manual actions after complete application shutdown
 
 ## Hooks
 

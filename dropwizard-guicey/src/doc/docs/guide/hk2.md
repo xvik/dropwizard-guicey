@@ -1,11 +1,15 @@
 # HK2
 
 !!! danger
-    Guicey will get rid of HK2 usage completely in the next version and all
+    Someday guicey will get rid of HK2 usage completely, which means
     HK2-related api and features would be removed.
+
+    But, as it requires a lot of efforts, all HK2-related apis and **deprecated softly**
+    not - this means, there are no direct deprecation and only
+    javadoc mention "soft deprecation". Please try to avoid using HK2 at all.      
     
-    All api supposed to be removed is marked as deprecated now. But there are no
-    replacemenets provided. Please try to avoid using HK2 at all.
+    Previous strong deprecation was removed because there are no
+    replacemenets provided for current api (and its not clear when complete removal whill happen). 
     
 By default, guicey manage all extensions under guice context and only register 
 extensions in HK2 by instance. Normally you shouldn't know about HK2 at all.

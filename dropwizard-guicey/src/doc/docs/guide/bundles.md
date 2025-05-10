@@ -21,7 +21,7 @@ public interface ConfiguredBundle<T> {
 }
 
 public interface GuiceyBundle {
-    default void initialize(GuiceyBootstrap bootstrap) {} 
+    default void initialize(GuiceyBootstrap bootstrap) throws Exception {} 
     default void run(GuiceyEnvironment environment) throws Exception {}
 }
 ```
@@ -39,7 +39,7 @@ Example Guicey bundle:
 public class MyFeatureBundle implements GuiceyBundle {
 
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         bootstrap
             .installers(MyFeatureExtensionInstaller.class)
             // dropwizard bundle usage
@@ -81,13 +81,10 @@ Even more examples are in [extensions modules](../extras/bom.md)
 See all [bundle configuration options](configuration.md#guicey-bundle)
 
 !!! note
-    Most configurations only appear during the initialization phase. This was done in order
-    to follow dropwizard conventions (all configuration during init and all initialization on run).
+    Most configurations appear during the initialization phase.
 
-The only exception to this rule is the registration of guice modules. Bundles are allowed to register modules in both phases. 
-Guice modules often require direct configuration values. Without this exception, Guicey Bundle authors would be required to create 
-wrappers around [guicey-aware](guice/module-autowiring.md) modules for proper guice registrations. Dropwizard itself shares a 
-similar exception in that HK2 modules may only be registered during the run phase.   
+On run phase it is possible to register guice modules, often requiring direct configuration values.
+Also, some extension registration may depend on configuration value.
 
 ## Bundle De-duplication
 
@@ -254,7 +251,7 @@ and in bundles:
 ```java
 public class MyBundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         bootstrap.dropwizardBundle(new MyDwBundle());
     }
 }
@@ -267,7 +264,7 @@ public class MyBundle implements GuiceyBundle {
     ```java
     public class XIntegratuionBundle implements GuiceyBundle {
         @Override
-        public void initialize(GuiceyBootstrap bootstrap) {
+        public void initialize(GuiceyBootstrap bootstrap) throws Exception {
             bootstrap
                 .dropwizardBundle(new DropwizardXBundle());
                 .modules(new XBindingsModule())
@@ -304,7 +301,7 @@ bootstrap object:
 ```java
 public class MyBundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         bootstrap.bootstrap().addBundle(new MyDwBundle());
     }
 }

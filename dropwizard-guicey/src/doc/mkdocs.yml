@@ -116,6 +116,7 @@ nav:
           - ServletModule: guide/guice/servletmodule.md
       - Diagnostic:
         - Tools: guide/diagnostic/diagnostic-tools.md
+        - Startup times: guide/diagnostic/startup-report.md
         - Extensions help: guide/diagnostic/extensions-report.md
         - Configuration: guide/diagnostic/configuration-report.md
         - Configuration model:  guide/diagnostic/configuration-model.md
@@ -123,6 +124,7 @@ nav:
         - Yaml values: guide/diagnostic/yaml-values-report.md
         - Lifecycle: guide/diagnostic/lifecycle-report.md
         - Guice: guide/diagnostic/guice-report.md
+        - Guice provision time: guide/diagnostic/guice-provision-report.md
         - AOP: guide/diagnostic/aop-report.md
         - Web: guide/diagnostic/web-report.md
         - Jersey: guide/diagnostic/jersey-report.md

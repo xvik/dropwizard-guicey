@@ -174,7 +174,7 @@ For example, guicey tests use a custom bundle to enable restricted guice options
 public class GuiceRestrictedConfigBundle implements GuiceyBundle {
 
     @Override
-    void initialize(GuiceyBootstrap bootstrap) {
+    void initialize(GuiceyBootstrap bootstrap) throws Exception {
         bootstrap.modules(new GRestrictModule());
     }
 
