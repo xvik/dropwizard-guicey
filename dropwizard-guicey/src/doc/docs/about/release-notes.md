@@ -131,8 +131,8 @@ INFO  [2025-03-27 09:12:27,435] ru.vyarus.dropwizard.guice.debug.StartupTimeDiag
 ```
 
 !!! note "Limitations"
-* Can't show init time of dropwizard bundles, registered before the guice bundle (obviously)
-* `Applicaion#run` method time measured as part of "web" (the bundle can't see this point, but should not be a problem)
+    * Can't show init time of dropwizard bundles, registered before the guice bundle (obviously)
+    * `Applicaion#run` method time measured as part of "web" (the bundle can't see this point, but should not be a problem)
 
 The report could be also enabled for compiled application: `-Dguicey.hooks=startup-time` 
 
@@ -175,7 +175,7 @@ guice will create a JIT binding (create new object instance) instead of injectin
 declared instance. This might be hard to spot, especially when lombok is used (which may not
 copy field annotation into constructor).
 
-```java
+```
 INFO  [2025-03-27 09:21:33,438] ru.vyarus.dropwizard.guice.debug.GuiceProvisionDiagnostic: Guice bindings provision time: 
 
 	Possible mistakes (unqualified JIT bindings):
@@ -217,7 +217,7 @@ Detection will also work for generified bindings:
 
 The report could be also enabled for compiled application: `-Dguicey.hooks=provision-time`
 
-The report shows only provisions performed in application startup, but it could be used in 
+The report shows only provisions performed on application startup, but it could be used in 
 tests to detect provision problems at runtime:
 
 ```java
@@ -453,7 +453,7 @@ GuiceBundle.builder()
 
 ### Extensions scan filters
 
-By default, classpath scanner checks all available classes, and the only way to extension avoid 
+By default, classpath scanner checks all available classes, and the only way to avoid extension 
 recognition is `@InvisibleForScanner` annotation.
 
 Now custom conditions could be specified:
@@ -626,7 +626,7 @@ static TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(..)
 ```
 
 In this case, start/stop method would not be called for managed objects.
-This might be useful for disabling some heavy application initialization ligic,
+This might be useful for disabling some heavy application initialization logic,
 defined in managed objects, but not required in tests.
 
 !!! note
@@ -654,7 +654,7 @@ Or in setup object:
 
 ```java
 @EnableSetup
-static TestEnvironmentSetup setup = ext -> ext.config(() -> new MyConfig())
+static **TestEnvironmentSetup** setup = ext -> ext.config(() -> new MyConfig())
 ```
 
 !!! important
@@ -932,11 +932,13 @@ application (started/stopped):
 
 ```java
 public interface TestExecutionListener {
+    default void starting(final EventContext context) throws Exception {}
     default void started(final EventContext context) throws Exception {}
     default void beforeAll(final EventContext context) throws Exception {}
     default void beforeEach(final EventContext context) throws Exception {}
     default void afterEach(final EventContext context) throws Exception {}
     default void afterAll(final EventContext context) throws Exception {}
+    default void stopping(final EventContext context) throws Exception {}
     default void stopped(final EventContext context) throws Exception {}
 }
 ```
@@ -1349,7 +1351,7 @@ If there was just one call: `MethodTrack track = tracker.getLastTrack()`
 In the case of many recorded executions, search could be used:
 
 ```java
-// search by mehtod (any argument value)
+// search by method (any argument value)
 tracks = tracker.findTracks(mock -> when(
                mock.foo(Mockito.anyInt()))
          );
@@ -1402,7 +1404,7 @@ due to jvm warm-up first executions would be much slower, but percentiles should
 show more correct values (closer to hot execution). 
 
 !!! tip
-    For each tracker, an individual report could be activated with: `@TrackBeam(printSummary = true)`
+    For each tracker, an individual report could be activated with: `@TrackBean(printSummary = true)`
     This report does not depend on the extension debug flag. 
 
 The summary report also shows the number of service instances involved in stats (in the example 
@@ -1539,6 +1541,8 @@ public class Test {
 }
 ```
 
+Without dropwizard exception mapper, we can verify exact exception:
+
 ```java
 public class Test {
 
@@ -1615,14 +1619,13 @@ REST stub (@StubRest) started on DebugReportTest$Test1:
 
 ##### Requests logging
 
-By default, rest client would not log requests and responses, but logging could be enabled
-with `logRequests = true`:
+By default, rest client would log requests and responses:
 
 ```java
 @TestGuiceyApp(...)
 public class Test {
     
-    @StubRest(logRequests = true)
+    @StubRest
     RestClient rest;
     
     @Test
@@ -1650,6 +1653,8 @@ something
 
 }----------------------------------------------------------
 ```
+
+Logging could be disabled with `logRequests` option: ` @StubRest(logRequests = false)`
 
 ##### Container
 

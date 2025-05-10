@@ -18,6 +18,9 @@ To enable automatic reload of static resources:
     classpath, which may be harmful for some applications. In case of dropwizard
     applications there should be no problems still (only with your custom logic dealing with 
     classpath directly)
+
+* Advanced settings 
+  - Click "Allow auto-make to start even if developed application is currently running"
     
 Now static resources would "hot swap".  
 

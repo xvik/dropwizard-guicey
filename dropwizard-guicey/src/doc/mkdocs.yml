@@ -127,12 +127,49 @@ nav:
         - Web: guide/diagnostic/web-report.md
         - Jersey: guide/diagnostic/jersey-report.md
       - Test:
-        - Overview: guide/test/overview.md
+        - Base concepts: guide/test/overview.md
+        - AssertJ: guide/test/assertj.md
+        - General tools:
+          - Overview: guide/test/general/general.md
+          - Testing application: guide/test/general/run.md
+          - Testing REST: guide/test/general/rest.md
+          - Testing web (HTTP client): guide/test/general/client.md
+          - Testing commands: guide/test/general/command.md
+          - Testing startup fails: guide/test/general/startup.md
+          - Testing console output: guide/test/general/output.md
+          - Testing logs: guide/test/general/logs.md
+          - Testing with stubs: guide/test/general/stubs.md
+          - Testing with mocks: guide/test/general/mocks.md
+          - Testing with spies: guide/test/general/spies.md
+          - Testing performance (bean tracking): guide/test/general/tracks.md
+        - Junit 5:
+          - Setup: guide/test/junit5/setup.md
+          - Testing application: guide/test/junit5/run.md
+          - Application modification: guide/test/junit5/hooks.md
+          - Application configuration: guide/test/junit5/config.md
+          - Guice injections: guide/test/junit5/inject.md
+          - Test environment setup: guide/test/junit5/setup-object.md
+          - Testing REST: guide/test/junit5/rest.md
+          - Testing web (HTTP client): guide/test/junit5/client.md
+          - Testing commands: guide/test/junit5/command.md
+          - Testing startup fails: guide/test/junit5/startup.md
+          - Testing console output: guide/test/junit5/output.md
+          - Testing logs: guide/test/junit5/logs.md
+          - Testing with stubs: guide/test/junit5/stubs.md
+          - Testing with mocks: guide/test/junit5/mocks.md
+          - Testing with spies: guide/test/junit5/spies.md
+          - Testing performance (bean tracking): guide/test/junit5/tracks.md
+          - Tests unification: guide/test/junit5/unification.md
+          - Debug: guide/test/junit5/debug.md
+          - Nested tests: guide/test/junit5/nested.md
+          - Environment variables: guide/test/junit5/env.md
+          - Parallel execution: guide/test/junit5/parallel.md
+          - Junit extensions integration: guide/test/junit5/junit-ext.md
+          - Testing extensions: guide/test/junit5/test-ext.md
         - Spock 2: guide/test/spock2.md
-        - Junit 5: guide/test/junit5.md
-        - General support: guide/test/general.md
         - Spock 1: guide/test/spock.md
         - Junit 4: guide/test/junit4.md
+        - OpenAPI fake server: guide/test/openapi-server.md
       - Lifecycle: guide/lifecycle.md
       - Classpath scan: guide/scan.md
       - Installers: guide/installers.md
