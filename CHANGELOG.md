@@ -69,6 +69,7 @@
       ability to modify configuration instance before application startup.
       Supported by all test extensions (junit5 annotations, setup object, generic builders, command runner)
     - Add custom configuration block for junit5 extensions and TestEnvironmentSetup (to simplify lambda-based configurations): .with({...})
+    - Junit ExtensionContext object could be injected as test method parameter
     - Debug option:
         * Track guicey test extensions time (would appear when debug enabled)
         * Improve debug report: setup objects and hooks registration point are clear now (with direct code links)

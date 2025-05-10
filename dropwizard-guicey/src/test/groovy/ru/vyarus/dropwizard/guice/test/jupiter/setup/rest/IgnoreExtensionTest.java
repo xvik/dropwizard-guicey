@@ -30,8 +30,7 @@ public class IgnoreExtensionTest {
 
     @StubRest(disableResources = Resource2.class,
             disableJerseyExtensions = {RestFilter2.class, RestExceptionMapper.class},
-            disableDropwizardExceptionMappers = true,
-            logRequests = true)
+            disableDropwizardExceptionMappers = true)
     RestClient rest;
 
     @Inject

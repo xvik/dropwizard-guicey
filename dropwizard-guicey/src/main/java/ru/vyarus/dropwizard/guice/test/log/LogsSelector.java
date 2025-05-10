@@ -63,6 +63,21 @@ public class LogsSelector {
     }
 
     /**
+     * @return the last recorded event
+     */
+    public ILoggingEvent lastEvent() {
+        return list.isEmpty() ? null : list.get(list.size() - 1);
+    }
+
+    /**
+     * @return the last recorded message
+     */
+    public String lastMessage() {
+        final ILoggingEvent lastEvent = lastEvent();
+        return lastEvent == null ? null : lastEvent.getFormattedMessage();
+    }
+
+    /**
      * @param loggerName logger name
      * @return true if logged messages found for required logger
      */

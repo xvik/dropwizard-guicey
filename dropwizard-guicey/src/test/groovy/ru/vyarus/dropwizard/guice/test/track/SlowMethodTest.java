@@ -17,8 +17,7 @@ public class SlowMethodTest {
     void testSlowMethods() throws Exception {
         TrackersHook hook = new TrackersHook();
         hook.track(Service.class)
-                .slowMethods(1)
-                .slowMethodsUnit(ChronoUnit.MILLIS)
+                .slowMethods(1, ChronoUnit.MILLIS)
                 .add();
 
         final String out = TestSupport.captureOutput(() ->
@@ -37,6 +36,27 @@ public class SlowMethodTest {
                 .contains("WARN  [2025-22-22 11:11:11] ru.vyarus.dropwizard.guice.test.track.Tracker: \n" +
                 "\\\\\\---[Tracker<Service>] 11.11 ms      <@11111111> .foo() = \"foo\"");
     }
+
+    @Test
+    void testSlowMethodDisable() throws Exception {
+        TrackersHook hook = new TrackersHook();
+        hook.track(Service.class)
+                // change default
+                .slowMethods(1, ChronoUnit.MILLIS)
+                .disableSlowMethodsLogging()
+                .add();
+
+        final String out = TestSupport.captureOutput(() ->
+                TestSupport.build(DefaultTestApp.class)
+                        .hooks(hook)
+                        .runCore(injector -> {
+                            injector.getInstance(Service.class).foo();
+                            return null;
+                        }));
+
+        Assertions.assertThat(out.replace("\r", "")).doesNotContain("\\\\\\---[Tracker<Service>]");
+    }
+
 
     public static class Service {
         public String foo() {

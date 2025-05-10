@@ -36,6 +36,13 @@ public class RestClientDebugTest extends AbstractPlatformTest {
                 "}----------------------------------------------------------");
     }
 
+    @Test
+    void testClientDebugDisabled() {
+        String out = run(Test2.class);
+
+        Assertions.assertThat(out).doesNotContain("[Client action]---------------------------------------------{");
+    }
+
     @Override
     protected String clean(String out) {
         return out.replaceAll("on thread ([^\n]+)", "on thread ddd");
@@ -45,7 +52,21 @@ public class RestClientDebugTest extends AbstractPlatformTest {
     @Disabled
     public static class Test1 {
 
-        @StubRest(logRequests = true)
+        @StubRest
+        RestClient rest;
+
+        @Test
+        void test() {
+            String res = rest.get("/1/foo", String.class);
+            org.junit.jupiter.api.Assertions.assertEquals("foo", res);
+        }
+    }
+
+    @TestGuiceyApp(RestStubApp.class)
+    @Disabled
+    public static class Test2 {
+
+        @StubRest(logRequests = false)
         RestClient rest;
 
         @Test

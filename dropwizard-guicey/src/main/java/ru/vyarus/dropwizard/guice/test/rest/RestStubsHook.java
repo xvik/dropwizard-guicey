@@ -205,46 +205,118 @@ public class RestStubsHook implements GuiceyConfigurationHook {
     public static class Builder {
         private final StubRestConfig config = new StubRestConfig();
 
+        /**
+         * By default, all resources would be available. Use this option to run a subset of resources.
+         *
+         * @param resources resources to use in staub
+         * @return builder instance for chained calls
+         * @see #disableResources(Class[]) to disable some default resources
+         */
         public Builder resources(final Class<?>... resources) {
             Collections.addAll(config.getResources(), resources);
             return this;
         }
 
+        /**
+         * NOTE: if resources specified in {@link #resources(Class[])} then the disable option would be ignored (all
+         * required resources already specified). This option is useful to exclude only some resources from the
+         * registered application resources
+         * <p>
+         * Important: affects only resources, recognized as guicey extensions. Manually registered resources
+         * would remain!
+         *
+         * @param disableResources resources to disable
+         * @return builder instance for chained calls
+         */
         public Builder disableResources(final Class<?>... disableResources) {
             Collections.addAll(config.getDisableResources(), disableResources);
             return this;
         }
 
+        /**
+         * By default, all jersey extension, registered in application, would be registered. Use this option to specify
+         * exact required extensions (all other application extensions would be disabled).
+         * <p>
+         * Important: this affects only guicey extensions (all other guicey extension would be simply disabled).
+         * To disable core dropwizard exception mappers use {@link #disableDropwizardExceptionMappers(boolean)}.
+         *
+         * @param jerseyExtensions  jersey extensions to use in stub
+         * @return builder instance for chained calls
+         */
         public Builder jerseyExtensions(final Class<?>... jerseyExtensions) {
             Collections.addAll(config.getJerseyExtensions(), jerseyExtensions);
             return this;
         }
 
+        /**
+         * NOTE: if extensions specified in {@link #jerseyExtensions(Class[])} then the disable option would be ignored
+         * (all required extensions already specified).
+         * <p>
+         * Does not affect dropwizard default extensions (only affects extension, controlled by guicey).
+         * Dropwizard exception mappers could be disabled with {@link #disableDropwizardExceptionMappers(boolean)} ()}.
+         *
+         * @param disableAllJerseyExtensions true to disable all application jersey extensions
+         * @return builder instance for chained calls
+         */
         public Builder disableAllJerseyExtensions(final boolean disableAllJerseyExtensions) {
             config.setDisableAllJerseyExtensions(disableAllJerseyExtensions);
             return this;
         }
 
+        /**
+         * By default, all dropwizard exception mappers registered (same as in real application). For tests, it might be
+         * more convenient to disable them and receive direct exception objects after test.
+         *
+         * @param disableDropwizardExceptionMappers true dropwizard exception mappers
+         * @return builder instance for chained calls
+         */
         public Builder disableDropwizardExceptionMappers(final boolean disableDropwizardExceptionMappers) {
             config.setDisableDropwizardExceptionMappers(disableDropwizardExceptionMappers);
             return this;
         }
 
+        /**
+         * NOTE: if extensions specified in {@link #jerseyExtensions(Class[])} then the disable option would be ignored
+         * (all required extensions already specified). This option is useful to exclude only some extensions from the
+         * registered application jersey extensions.
+         * <p>
+         * Does not affect dropwizard default extensions (only affects extension, controlled by guicey).
+         * Dropwizard exception mappers could be disabled with {@link #disableDropwizardExceptionMappers(boolean)}.
+         *
+         * @param disableJerseyExtensions jersey extensions to disable
+         * @return builder instance for chained calls
+         */
         public Builder disableJerseyExtensions(final Class<?>... disableJerseyExtensions) {
             Collections.addAll(config.getDisableJerseyExtensions(), disableJerseyExtensions);
             return this;
         }
 
+        /**
+         * Requests log enabled by default (like in {@link ru.vyarus.dropwizard.guice.test.ClientSupport}).
+         *
+         * @param logRequests true to print all requests and responses into console
+         * @return builder instance for chained calls
+         */
         public Builder logRequests(final boolean logRequests) {
             config.setLogRequests(logRequests);
             return this;
         }
 
+        /**
+         * By default, use a lightweight in-memory container, but switch to grizzly when it's available in classpath
+         * (this is the default behavior of {@link org.glassfish.jersey.test.JerseyTest}).
+         *
+         * @param policy required test container policy
+         * @return builder instance for chained calls
+         */
         public Builder container(final TestContainerPolicy policy) {
             config.setContainer(policy);
             return this;
         }
 
+        /**
+         * @return configured hook
+         */
         public RestStubsHook build() {
             return new RestStubsHook(config);
         }

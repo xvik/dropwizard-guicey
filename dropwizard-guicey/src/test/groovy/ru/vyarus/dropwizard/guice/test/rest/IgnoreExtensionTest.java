@@ -31,7 +31,6 @@ public class IgnoreExtensionTest {
                 .disableResources(Resource2.class)
                 .disableJerseyExtensions(RestFilter2.class, RestExceptionMapper.class)
                 .disableDropwizardExceptionMappers(true)
-                .logRequests(true)
                 .build();
         TestSupport.build(RestStubApp.class)
                 .hooks(rest)
@@ -102,7 +101,6 @@ public class IgnoreExtensionTest {
                 .resources(Resource1.class, ErrorResource.class)
                 .jerseyExtensions(RestFilter1.class)
                 .disableDropwizardExceptionMappers(true)
-                .logRequests(true)
                 .build();
         TestSupport.build(RestStubApp.class)
                 .hooks(rest)

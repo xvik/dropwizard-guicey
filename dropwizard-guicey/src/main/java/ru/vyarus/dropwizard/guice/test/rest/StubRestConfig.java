@@ -17,7 +17,7 @@ public class StubRestConfig {
     private boolean disableAllJerseyExtensions;
     private boolean disableDropwizardExceptionMappers;
     private final List<Class<?>> disableJerseyExtensions = new ArrayList<>();
-    private boolean logRequests;
+    private boolean logRequests = true;
     private TestContainerPolicy container = TestContainerPolicy.DEFAULT;
 
     /**
@@ -116,7 +116,7 @@ public class StubRestConfig {
     }
 
     /**
-     * Requests log disabled by default (in contrast to {@link ru.vyarus.dropwizard.guice.test.ClientSupport}).
+     * Requests log enabled by default (like in {@link ru.vyarus.dropwizard.guice.test.ClientSupport}).
      *
      * @param logRequests true to print all requests and responses into console
      */

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import ru.vyarus.dropwizard.guice.support.AutoScanApplication;
 import ru.vyarus.dropwizard.guice.support.TestConfiguration;
 import ru.vyarus.dropwizard.guice.support.feature.DummyService;
@@ -70,6 +71,7 @@ public class ParametersInjectionDwTest {
                                 Injector injector,
                                 ClientSupport client,
                                 DropwizardTestSupport support,
+                                ExtensionContext junitContext,
                                 DummyService service,
                                 @Jit JitService jit) {
         assertNotNull(app);
@@ -81,6 +83,7 @@ public class ParametersInjectionDwTest {
         assertNotNull(injector);
         assertNotNull(client);
         assertNotNull(support);
+        assertNotNull(junitContext);
         assertNotNull(service);
         assertNotNull(jit);
         assertEquals(client.getPort(), 8080);

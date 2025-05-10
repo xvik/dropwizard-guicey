@@ -63,8 +63,7 @@ public class TrackerFieldsSupport extends AnnotatedTestFieldSetup<TrackBean, Tra
         final TrackBean ann = field.getAnnotation();
         final Tracker<?> tracker = hook.track(type)
                 .trace(ann.trace())
-                .slowMethods(ann.slowMethods())
-                .slowMethodsUnit(ann.slowMethodsUnit())
+                .slowMethods(ann.slowMethods(), ann.slowMethodsUnit())
                 .keepRawObjects(ann.keepRawObjects())
                 .maxStringLength(ann.maxStringLength())
                 .add();

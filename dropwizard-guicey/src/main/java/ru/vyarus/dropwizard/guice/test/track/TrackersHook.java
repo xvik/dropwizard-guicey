@@ -122,25 +122,27 @@ public class TrackersHook implements GuiceyConfigurationHook {
         }
 
         /**
-         * Print warnings about methods executing longer than the specified threshold. Set to 0 to disable warnings.
+         * Print warnings about methods executing longer than the specified threshold.
          *
-         * @param slowMethods slow method threshold (in seconds, by default - see
-         *                    {@link #slowMethodsUnit(java.time.temporal.ChronoUnit)})
+         * @param maxTime slow method threshold
+         * @param unit    threshold unit
          * @return builder instance for chained calls
+         * @see #disableSlowMethodsLogging() for disabling slow time logging
          */
-        public Builder<T> slowMethods(final long slowMethods) {
-            config.setSlowMethods(slowMethods);
+        public Builder<T> slowMethods(final long maxTime, final ChronoUnit unit) {
+            config.setSlowMethods(maxTime);
+            config.setSlowMethodsUnit(unit);
             return this;
         }
 
         /**
-         * Unit for {@link #slowMethods(long)} threshold value (seconds by default).
+         * Disable slow methods warning (by default, showing methods executed longer than 5 seconds).
          *
-         * @param slowMethodsUnit unit for threshold value
          * @return builder instance for chained calls
+         * @see #slowMethods(long, java.time.temporal.ChronoUnit) for changing the default threshold
          */
-        public Builder<T> slowMethodsUnit(final ChronoUnit slowMethodsUnit) {
-            config.setSlowMethodsUnit(slowMethodsUnit);
+        public Builder<T> disableSlowMethodsLogging() {
+            config.setSlowMethods(0);
             return this;
         }
 
