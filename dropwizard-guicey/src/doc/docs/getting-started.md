@@ -406,7 +406,7 @@ The Guicey Bundle **lifecycle and methods are the same** as Dropwizard Bundles. 
     
     ```java
     public class MyBundle implements GuiceyBundle {
-         default void initialize(GuiceyBootstrap bootstrap) {
+         default void initialize(GuiceyBootstrap bootstrap) throws Exception {
              bootstrap.dropwizardBundles(new MyDropeizardBundle());
          }
     }

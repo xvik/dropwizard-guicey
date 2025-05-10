@@ -3,6 +3,9 @@
 Guicey provide many bundled console reports to help with problems diagnostic (or to simply clarify how application works)
 during development. All reports may be enabled on main guice bundle:
 
+`#!java .printStartupTime()`
+:   Detailed application [startup time](startup-report.md)
+
 `#!java .printExtensionsHelp()`
 :   Extensions [recognition help](extensions-report.md)
 
@@ -18,7 +21,10 @@ during development. All reports may be enabled on main guice bundle:
   
 `#!java .printGuiceBindings()`  
 `#!java .printAllGuiceBindings()`
-:   [Guice bindings](guice-report.md) from registered modules    
+:   [Guice bindings](guice-report.md) from registered modules
+
+`#!java .printGuiceProvisionTime()`
+:   [Guice provision time](guice-report.md) 
 
 `#!java .printGuiceAopMap()`  
 `#!java .printGuiceAopMap(GuiceAopConfig config)`
@@ -34,6 +40,9 @@ during development. All reports may be enabled on main guice bundle:
 `#!java .printLifecyclePhases()`  
 `#!java .printLifecyclePhasesDetailed()`  
 :   [Guicey lifecycle stages](lifecycle-report.md) (separates logs to clearly see what messages relates to what phase)
+
+`#!java .printSharedStateUsage()`
+:   [Shared state usage](shared-state-report.md) 
 
 `#!java .strictScopeControl()`
 :   In case of doubts about extension owner (guice or HK2) and suspicious for duplicate instantiation, 
