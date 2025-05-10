@@ -72,7 +72,7 @@ public class MyBundle implements ConfiguredBundle {
 ```java
 public class MyBundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
             bootstrap
                 .dropwizardBundles(new DwBundle())
                 .bundles(new MyOtherBundle());
@@ -223,7 +223,7 @@ To work around this, you can conditionally disable extensions:
 public class MyFeatureBundle implements GuiceyBundle {
 
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {   
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {   
         // always register extension
         bootstrap.extensions(OptionalExtension.class);     
     }   
@@ -250,7 +250,7 @@ requires a modified service. Your bundle may disable the core module, and instal
 public class MyFeatureBundle implements GuiceyBundle {
 
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {           
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {           
         bootstrap
             .disableModules(CoreModule.class)
             .modules(new CustomizedCoreModule());     
@@ -271,7 +271,7 @@ Bundles can use the guicey [options mechanism](guide/options.md) to access guice
 ```java
 public class MyBundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         if (bootstrap.option(GuiceyOptions.UseHkBridge)) {
             // show warning that bridge required
         } 
@@ -501,7 +501,7 @@ bundle will initialize the shared state and others simply use it:
 ```java
 public class EqualBundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         // either obtain already shared object or share new object                                                             
         SomeState state = bootstrap.sharedState(EqualBundle, () -> new SomeState());
         ...
@@ -517,7 +517,7 @@ bundles, which use or append to this global state:
 ```java
 public class GlobalBundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         // share global state object
         bootstrap.shareState(GlobalBundle, new GlobalState());
     }        
@@ -525,7 +525,7 @@ public class GlobalBundle implements GuiceyBundle {
 
 public class ChildBundle implements GuiceyBundle {
     @Override
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         // access shared object or fail when not found
         GlobalState state = environment.sharedStateOrFail(GlobalBundle, 
                 "Failed to obtain global state - check if global bundle registered");

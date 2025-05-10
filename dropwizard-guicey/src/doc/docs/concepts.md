@@ -323,7 +323,7 @@ Suppose you have some 3rd party bundle:
 
 ```java
 public class XBundle implements GuiceyBundle {
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         bootstrap
             .extensions(...)
             .modules(new XModule(), new XAddonModule());
@@ -398,14 +398,14 @@ bundle:
 
 ```java
 public class Feature1Bundle implements GuiceyBundle {
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         bootstrap.bundles(new CommonBundle()); 
         ...
     }    
 }
 
 public class Feature2Bundle implements GuiceyBundle {
-    public void initialize(GuiceyBootstrap bootstrap) {
+    public void initialize(GuiceyBootstrap bootstrap) throws Exception {
         bootstrap.bundles(new CommonBundle());  
         ...
     }    
