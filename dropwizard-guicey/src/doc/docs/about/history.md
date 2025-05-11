@@ -1,3 +1,8 @@
+* Update to dropwizard 5.0.0
+* [admin-rest]
+    - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs 
+
+### [7.2.0](http://xvik.github.io/dropwizard-guicey/7.2.0) (2025-05-11)
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
 * Add methods to the main builder (and hooks) to simplify usage without guicey bundle:
     - .whenConfigurationReady(...) - delayed configuration (same as GuiceyBunle.run):  
@@ -106,8 +111,6 @@
 * Internal:
     - Add BeforeInit guicey event (the first point with available Bootstrap)
     - Add WebInstaller marker interface to identify web extensions (extensions started with jersey)
-* [admin-rest]
-    - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
 
 ### [7.1.4](http://xvik.github.io/dropwizard-guicey/7.1.4) (2024-09-14)
 * Update to dropwizard 4.0.8
