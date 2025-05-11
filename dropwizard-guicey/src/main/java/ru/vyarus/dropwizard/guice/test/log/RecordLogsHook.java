@@ -124,6 +124,12 @@ public class RecordLogsHook implements GuiceyConfigurationHook {
             return this;
         }
 
+        /**
+         * Class loggers to listen.
+         *
+         * @param typedLoggers loggers
+         * @return builder instance
+         */
         public Builder loggers(final Class<?>... typedLoggers) {
             Collections.addAll(this.typedLoggers, typedLoggers);
             return this;

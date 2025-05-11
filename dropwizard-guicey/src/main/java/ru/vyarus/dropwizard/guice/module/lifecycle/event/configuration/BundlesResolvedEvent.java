@@ -24,6 +24,14 @@ public class BundlesResolvedEvent extends ConfigurationPhaseEvent {
     private final List<GuiceyBundle> disabled;
     private final List<GuiceyBundle> ignored;
 
+    /**
+     * Create event.
+     *
+     * @param context  event context
+     * @param bundles  actual bundles
+     * @param disabled disabled bundles
+     * @param ignored  ignored bundles (duplicates)
+     */
     public BundlesResolvedEvent(final EventsContext context,
                                 final List<GuiceyBundle> bundles,
                                 final List<GuiceyBundle> disabled,

@@ -79,6 +79,11 @@ public class RestStubsHook implements GuiceyConfigurationHook {
     private GuiceyJerseyTest jerseyStub;
     private RestClient restClient;
 
+    /**
+     * Create hook.
+     *
+     * @param config configuration
+     */
     public RestStubsHook(final StubRestConfig config) {
         this.config = config;
     }
@@ -240,7 +245,7 @@ public class RestStubsHook implements GuiceyConfigurationHook {
          * Important: this affects only guicey extensions (all other guicey extension would be simply disabled).
          * To disable core dropwizard exception mappers use {@link #disableDropwizardExceptionMappers(boolean)}.
          *
-         * @param jerseyExtensions  jersey extensions to use in stub
+         * @param jerseyExtensions jersey extensions to use in stub
          * @return builder instance for chained calls
          */
         public Builder jerseyExtensions(final Class<?>... jerseyExtensions) {

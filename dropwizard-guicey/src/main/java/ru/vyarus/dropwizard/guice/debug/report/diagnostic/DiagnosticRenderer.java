@@ -87,6 +87,11 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
 
     private final GuiceyConfigurationInfo service;
 
+    /**
+     * Create renderer.
+     *
+     * @param service info service
+     */
     public DiagnosticRenderer(final GuiceyConfigurationInfo service) {
         this.service = service;
     }
@@ -151,7 +156,7 @@ public class DiagnosticRenderer implements ReportRenderer<DiagnosticConfig> {
             final List<String> dwMarker = Collections.singletonList(DW);
             for (Class<Object> bundle : service.getBundlesDisabled()) {
                 res.append(TAB).append(TAB).append(renderDisabledClassLine(bundle, 0,
-                        ConfiguredBundle.class.isAssignableFrom(bundle) ? dwMarker : null))
+                                ConfiguredBundle.class.isAssignableFrom(bundle) ? dwMarker : null))
                         .append(NEWLINE);
             }
         }

@@ -75,6 +75,14 @@ public final class LifecycleSupport {
 
     private final Set<GuiceyLifecycleListener> listeners = new LinkedHashSet<>();
 
+    /**
+     * Create support.
+     *
+     * @param tracker     stats tracker
+     * @param options     options
+     * @param sharedState shared state
+     * @param startupHook startup hook
+     */
     public LifecycleSupport(final StatsTracker tracker, final Options options,
                             final SharedConfigurationState sharedState, final Runnable startupHook) {
         this.tracker = tracker;
@@ -82,6 +90,11 @@ public final class LifecycleSupport {
         this.startupHook = startupHook;
     }
 
+    /**
+     * Listener registration.
+     *
+     * @param listeners lifecycle listener
+     */
     public void register(final GuiceyLifecycleListener... listeners) {
         Arrays.asList(listeners).forEach(l -> {
             if (!this.listeners.add(l)) {
@@ -90,17 +103,34 @@ public final class LifecycleSupport {
         });
     }
 
+    /**
+     * Hooks processed.
+     *
+     * @param hooks processed hooks
+     */
     public void configurationHooksProcessed(final Set<GuiceyConfigurationHook> hooks) {
         if (hooks != null && !hooks.isEmpty()) {
             broadcast(new ConfigurationHooksProcessedEvent(context, hooks));
         }
     }
 
+    /**
+     * Before gucie bundle initialization.
+     *
+     * @param bootstrap bootstrap
+     */
     public void beforeInit(final Bootstrap bootstrap) {
         this.context.setBootstrap(bootstrap);
         broadcast(new BeforeInitEvent(context));
     }
 
+    /**
+     * Dropwizard bundles initialized.
+     *
+     * @param bundles  actual bundles
+     * @param disabled disabled bundles
+     * @param ignored  ignored bundles (duplicates)
+     */
     public void dropwizardBundlesInitialized(final List<ConfiguredBundle> bundles,
                                              final List<ConfiguredBundle> disabled,
                                              final List<ConfiguredBundle> ignored) {
@@ -109,18 +139,37 @@ public final class LifecycleSupport {
         }
     }
 
+    /**
+     * Bundles from lookup resolved.
+     *
+     * @param bundles resolved bundles
+     */
     public void bundlesFromLookupResolved(final List<GuiceyBundle> bundles) {
         if (!bundles.isEmpty()) {
             broadcast(new BundlesFromLookupResolvedEvent(context, bundles));
         }
     }
 
+    /**
+     * All bundles resolved.
+     *
+     * @param bundles  actual bundles
+     * @param disabled disabled bundles
+     * @param ignored  ignored bundles (duplicates)
+     */
     public void bundlesResolved(final List<GuiceyBundle> bundles,
                                 final List<GuiceyBundle> disabled,
                                 final List<GuiceyBundle> ignored) {
         broadcast(new BundlesResolvedEvent(context, bundles, disabled, ignored));
     }
 
+    /**
+     * Guicey bundles initialized.
+     *
+     * @param bundles  actual bundles
+     * @param disabled disabled bundles
+     * @param ignored  ignored bundles (duplicates)
+     */
     public void bundlesInitialized(final List<GuiceyBundle> bundles,
                                    final List<GuiceyBundle> disabled,
                                    final List<GuiceyBundle> ignored) {
@@ -129,27 +178,53 @@ public final class LifecycleSupport {
         }
     }
 
+    /**
+     * Commands resolved.
+     *
+     * @param installed registered commands
+     */
     public void commandsResolved(final List<Command> installed) {
         if (installed != null && !installed.isEmpty()) {
             broadcast(new CommandsResolvedEvent(context, installed));
         }
     }
 
+    /**
+     * Installers resolved.
+     *
+     * @param installers actual installers
+     * @param disabled   disabled installers
+     */
     public void installersResolved(final List<FeatureInstaller> installers,
                                    final List<Class<? extends FeatureInstaller>> disabled) {
         broadcast(new InstallersResolvedEvent(context, installers, disabled));
     }
 
+    /**
+     * Classpath scan done.
+     *
+     * @param extensions extensions detected
+     */
     public void classpathExtensionsResolved(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
             broadcast(new ClasspathExtensionsResolvedEvent(context, extensions));
         }
     }
 
+    /**
+     * Guice bundle initialization done.
+     */
     public void initialized() {
         broadcast(new InitializedEvent(context));
     }
 
+    /**
+     * Guice bundle run.
+     *
+     * @param configuration     configuration
+     * @param configurationTree parsed configuration
+     * @param environment       environment
+     */
     public void runPhase(final Configuration configuration,
                          final ConfigurationTree configurationTree,
                          final Environment environment) {
@@ -176,18 +251,37 @@ public final class LifecycleSupport {
         });
     }
 
+    /**
+     * Guicey bundles run done.
+     *
+     * @param bundles started bundles
+     */
     public void bundlesStarted(final List<GuiceyBundle> bundles) {
         if (!bundles.isEmpty()) {
             broadcast(new BundlesStartedEvent(context, bundles));
         }
     }
 
+    /**
+     * Manual extensions validated.
+     *
+     * @param extensions all extensions
+     * @param validated  manual extensions
+     */
     public void manualExtensionsValidated(final List<Class<?>> extensions, final List<Class<?>> validated) {
         if (!extensions.isEmpty()) {
             broadcast(new ManualExtensionsValidatedEvent(context, extensions, validated));
         }
     }
 
+    /**
+     * Guice modules analyzed.
+     *
+     * @param modules                  modules
+     * @param extensions               resolved extensions
+     * @param transitiveModulesRemoved removed modules
+     * @param bindingsRemoved          removed bindings
+     */
     public void modulesAnalyzed(final List<Module> modules,
                                 final List<Class<?>> extensions,
                                 final List<Class<? extends Module>> transitiveModulesRemoved,
@@ -195,10 +289,24 @@ public final class LifecycleSupport {
         broadcast(new ModulesAnalyzedEvent(context, modules, extensions, transitiveModulesRemoved, bindingsRemoved));
     }
 
+    /**
+     * Extensions resolved.
+     *
+     * @param extensions actual extensions
+     * @param disabled   disabled extensions
+     */
     public void extensionsResolved(final List<Class<?>> extensions, final List<Class<?>> disabled) {
         broadcast(new ExtensionsResolvedEvent(context, extensions, disabled));
     }
 
+    /**
+     * Before injector creation.
+     *
+     * @param modules    guice modules
+     * @param overriding overriding modules
+     * @param disabled   disabled modules
+     * @param ignored    ignored modules (duplicate)
+     */
     public void injectorCreation(final List<Module> modules,
                                  final List<Module> overriding,
                                  final List<Module> disabled,
@@ -206,10 +314,21 @@ public final class LifecycleSupport {
         broadcast(new InjectorCreationEvent(context, modules, overriding, disabled, ignored));
     }
 
+    /**
+     * Injector available.
+     *
+     * @param injector injector
+     */
     public void injectorPhase(final Injector injector) {
         this.context.setInjector(injector);
     }
 
+    /**
+     * Extensions installed.
+     *
+     * @param installer installer type
+     * @param installed extensions
+     */
     public void extensionsInstalled(final Class<? extends FeatureInstaller> installer,
                                     final List<Class<?>> installed) {
         if (installed != null && !installed.isEmpty()) {
@@ -217,23 +336,40 @@ public final class LifecycleSupport {
         }
     }
 
+    /**
+     * All extensions installed.
+     *
+     * @param extensions installed extensions
+     */
     public void extensionsInstalled(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
             broadcast(new ExtensionsInstalledEvent(context, extensions));
         }
     }
 
+    /**
+     * Guice bundle started. Application run is up ahead.
+     */
     public void applicationRun() {
         broadcast(new ApplicationRunEvent(context));
     }
 
-
+    /**
+     * Jersey configuration started.
+     *
+     * @param injectionManager injection manager
+     */
     public void jerseyConfiguration(final InjectionManager injectionManager) {
         this.context.setInjectionManager(injectionManager);
         broadcast(new JerseyConfigurationEvent(context));
     }
 
-
+    /**
+     * Jersey extensions installed.
+     *
+     * @param installer installer type
+     * @param installed installed extensions
+     */
     public void jerseyExtensionsInstalled(final Class<? extends FeatureInstaller> installer,
                                           final List<Class<?>> installed) {
         if (installed != null && !installed.isEmpty()) {
@@ -241,6 +377,11 @@ public final class LifecycleSupport {
         }
     }
 
+    /**
+     * All jersey extensions installed.
+     *
+     * @param extensions installed extensions
+     */
     public void jerseyExtensionsInstalled(final List<Class<?>> extensions) {
         if (!extensions.isEmpty()) {
             broadcast(new JerseyExtensionsInstalledEvent(context, extensions));

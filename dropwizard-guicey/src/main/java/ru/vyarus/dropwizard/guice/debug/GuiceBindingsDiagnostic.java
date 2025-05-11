@@ -23,6 +23,11 @@ public class GuiceBindingsDiagnostic extends UniqueGuiceyLifecycleListener {
     private final Logger logger = LoggerFactory.getLogger(GuiceBindingsDiagnostic.class);
     private final GuiceConfig config;
 
+    /**
+     * Create bindings report.
+     *
+     * @param config report config
+     */
     public GuiceBindingsDiagnostic(final GuiceConfig config) {
         this.config = config;
     }

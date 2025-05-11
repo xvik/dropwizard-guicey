@@ -56,7 +56,7 @@ public class SpaBundle implements GuiceyBundle {
 
     @Override
     public void initialize(final GuiceyBootstrap bootstrap) {
-        // list shared between all spa bundles
+        // state shared between all spa bundles
         // NOTE: not a static field for proper parallel tests support
         bootstrap.sharedState(SpaBundleState.class, SpaBundleState::new).checkUnique(assetName);
     }

@@ -51,6 +51,12 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
     private final Environment environment;
     private final List<Module> modules;
 
+    /**
+     * Create renderer.
+     *
+     * @param environment environment
+     * @param info        guicey info
+     */
     public WebMappingsRenderer(final Environment environment,
                                final GuiceyConfigurationInfo info) {
         this.environment = environment;

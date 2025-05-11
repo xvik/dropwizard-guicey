@@ -15,10 +15,21 @@ public class EchoStream extends OutputStream {
     private final OutputStream out;
     private final OutputStream collector;
 
+    /**
+     * Create stream.
+     *
+     * @param out output streadm
+     */
     public EchoStream(final OutputStream out) {
         this(out, new ByteArrayOutputStream());
     }
 
+    /**
+     * Create stream.
+     *
+     * @param out       output stream
+     * @param collector "echo" stream
+     */
     public EchoStream(final OutputStream out, final OutputStream collector) {
         this.out = out;
         this.collector = collector;

@@ -36,6 +36,11 @@ public class OptionsRenderer implements ReportRenderer<OptionsConfig> {
 
     private final GuiceyConfigurationInfo info;
 
+    /**
+     * Create renderer.
+     *
+     * @param info guicey info
+     */
     public OptionsRenderer(final GuiceyConfigurationInfo info) {
         this.info = info;
     }

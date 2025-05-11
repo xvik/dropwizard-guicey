@@ -15,8 +15,8 @@ import java.util.function.Supplier;
  * Original code taken from <a href="https://github.com/stefanbirkner/system-rules">System rules library</a> (see
  * TextFromStandardInputStream) with some modifications.
  *
- * @since 20.11.2023
  * @author Stefan Birkner
+ * @since 20.11.2023
  */
 public class SystemInMock extends InputStream {
     private StringReader currentReader;
@@ -26,10 +26,16 @@ public class SystemInMock extends InputStream {
             "Console input (" + getReads() + ") not provided");
     private int reads;
 
+    /**
+     * Create system in substitutor.
+     */
     public SystemInMock() {
         provideText();
     }
 
+    /**
+     * @param lines mock system in source
+     */
     public void provideText(final String... lines) {
         final String separator = System.getProperty("line.separator");
         // all lines must end with a new line

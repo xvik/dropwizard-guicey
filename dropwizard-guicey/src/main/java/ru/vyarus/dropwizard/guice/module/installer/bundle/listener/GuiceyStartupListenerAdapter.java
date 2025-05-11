@@ -8,13 +8,18 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ApplicationRunEvent
 /**
  * {@link GuiceyStartupListener} adapter for guicey lifecycle.
  *
+ * @param <C> configuration type
  * @author Vyacheslav Rusakov
  * @since 28.09.2019
- * @param <C> configuration type
  */
 public class GuiceyStartupListenerAdapter<C extends Configuration> extends GuiceyLifecycleAdapter {
     private final GuiceyStartupListener<C> listener;
 
+    /**
+     * Create adapter.
+     *
+     * @param listener listener
+     */
     public GuiceyStartupListenerAdapter(final GuiceyStartupListener<C> listener) {
         this.listener = listener;
     }

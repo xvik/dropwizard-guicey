@@ -19,6 +19,12 @@ public class ExtensionsInstalledEvent extends InjectorPhaseEvent {
 
     private final List<Class<?>> extensions;
 
+    /**
+     * Create event.
+     *
+     * @param context    event context
+     * @param extensions installed extensions
+     */
     public ExtensionsInstalledEvent(final EventsContext context,
                                     final List<Class<?>> extensions) {
         super(GuiceyLifecycle.ExtensionsInstalled, context);

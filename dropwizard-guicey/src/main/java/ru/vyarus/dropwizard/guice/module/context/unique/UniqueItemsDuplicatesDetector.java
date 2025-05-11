@@ -17,6 +17,11 @@ public class UniqueItemsDuplicatesDetector implements DuplicateConfigDetector {
 
     private final Set<String> items = new HashSet<>();
 
+    /**
+     * Create detector.
+     *
+     * @param uniqueItems unique items
+     */
     public UniqueItemsDuplicatesDetector(final Class<?>... uniqueItems) {
         Preconditions.checkArgument(uniqueItems.length > 0, "No unique items to configured");
         // use strings to correctly detect class from different class loaders (as core mechanism will correctly

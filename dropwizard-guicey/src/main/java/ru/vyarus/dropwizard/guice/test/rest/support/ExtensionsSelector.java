@@ -19,6 +19,11 @@ public class ExtensionsSelector {
 
     private final GuiceyConfigurationInfo info;
 
+    /**
+     * Create selector.
+     *
+     * @param info guicey info
+     */
     public ExtensionsSelector(final GuiceyConfigurationInfo info) {
         this.info = info;
     }

@@ -43,6 +43,9 @@ public class SpyFieldsSupport extends AnnotatedTestFieldSetup<SpyBean, Object> {
 
     private final SpiesHook hook = new SpiesHook();
 
+    /**
+     * Create support.
+     */
     public SpyFieldsSupport() {
         super(SpyBean.class, Object.class, TEST_SPY_FIELDS);
     }

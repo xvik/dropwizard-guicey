@@ -32,6 +32,9 @@ public class StubFieldsSupport extends AnnotatedTestFieldSetup<StubBean, Object>
     private static final String TEST_STUB_FIELDS = "TEST_STUB_FIELDS";
     private final StubsHook hook = new StubsHook();
 
+    /**
+     * Create support.
+     */
     public StubFieldsSupport() {
         super(StubBean.class, Object.class, TEST_STUB_FIELDS);
     }

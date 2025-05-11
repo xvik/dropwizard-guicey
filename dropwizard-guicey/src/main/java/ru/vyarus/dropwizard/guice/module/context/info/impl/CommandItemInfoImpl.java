@@ -13,6 +13,11 @@ import ru.vyarus.dropwizard.guice.module.context.info.CommandItemInfo;
  */
 public class CommandItemInfoImpl extends ClassItemInfoImpl implements CommandItemInfo {
 
+    /**
+     * Create item.
+     *
+     * @param type command type
+     */
     public CommandItemInfoImpl(final Class<?> type) {
         super(ConfigItem.Command, type);
     }

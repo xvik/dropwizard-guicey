@@ -41,11 +41,23 @@ public class TestExtensionsTracker {
      */
     public static final String DEBUG_ENABLED = "true";
 
+    /**
+     * Extension debug state.
+     */
     @SuppressWarnings("checkstyle:VisibilityModifier")
     public boolean debug;
 
+    /**
+     * Setup objects registration sources.
+     */
     protected final List<String> extensionsSource = new ArrayList<>();
+    /**
+     * Hooks registration sources.
+     */
     protected final List<String> hooksSource = new ArrayList<>();
+    /**
+     * Configuration modifiers registration sources.
+     */
     protected final List<String> configModifierSource = new ArrayList<>();
     private final List<PerformanceTrack> performance = new ArrayList<>();
 
@@ -55,10 +67,19 @@ public class TestExtensionsTracker {
     // to provide meaningful registration context in the report
     private final Map<Class<?>, String> fieldSetupObjectsReference = new HashMap<>();
 
+    /**
+     * @param setup context test extension
+     */
     public void setContextSetupObject(final Class<? extends TestEnvironmentSetup> setup) {
         contextSetupObject = setup;
     }
 
+    /**
+     * Register setup objects from test fields.
+     *
+     * @param fields   fields
+     * @param instance test instance
+     */
     @SuppressWarnings("unchecked")
     public final void extensionsFromFields(final List<AnnotatedField<EnableSetup, TestEnvironmentSetup>> fields,
                                            final Object instance) {
@@ -71,6 +92,12 @@ public class TestExtensionsTracker {
                         + RegistrationTrackUtils.getFieldDescriptor(field)));
     }
 
+    /**
+     * Register setup objects from annotation.
+     *
+     * @param ann  annotation type
+     * @param exts setup objects
+     */
     @SafeVarargs
     public final void extensionsFromAnnotation(final Class<? extends Annotation> ann,
                                                final Class<? extends TestEnvironmentSetup>... exts) {
@@ -81,6 +108,13 @@ public class TestExtensionsTracker {
         extensionsSource.addAll(tmp);
     }
 
+    /**
+     * Register hooks from test fields.
+     *
+     * @param fields    fields
+     * @param baseHooks hooks from base class
+     * @param instance  test instance
+     */
     @SuppressWarnings("unchecked")
     public final void hooksFromFields(final List<AnnotatedField<EnableHook, GuiceyConfigurationHook>> fields,
                                       final boolean baseHooks,
@@ -97,44 +131,88 @@ public class TestExtensionsTracker {
         }
     }
 
+    /**
+     * Register hooks from annotation.
+     *
+     * @param ann  annotation type
+     * @param exts hooks
+     */
     @SafeVarargs
     public final void hooksFromAnnotation(final Class<? extends Annotation> ann,
                                           final Class<? extends GuiceyConfigurationHook>... exts) {
         RegistrationTrackUtils.fromClass(hooksSource, "@" + ann.getSimpleName() + "(hooks)", exts, true);
     }
 
+    /**
+     * Register setup objects instances.
+     *
+     * @param exts setup objects
+     */
     public final void extensionInstances(final TestEnvironmentSetup... exts) {
         RegistrationTrackUtils.fromInstance(extensionsSource, String.format("@%s.setup(obj)",
                 RegisterExtension.class.getSimpleName()), exts);
     }
 
+    /**
+     * Register setup objects classes.
+     *
+     * @param exts setup object classes
+     */
     @SafeVarargs
     public final void extensionClasses(final Class<? extends TestEnvironmentSetup>... exts) {
         RegistrationTrackUtils.fromClass(extensionsSource, String.format("@%s.setup(class)",
                 RegisterExtension.class.getSimpleName()), exts, false);
     }
 
+    /**
+     * Register setup objects resolved with service loader.
+     *
+     * @param exts setup objects
+     * @return setup object instances
+     */
     @SafeVarargs
     public final List<TestEnvironmentSetup> lookupExtensions(final TestEnvironmentSetup... exts) {
         RegistrationTrackUtils.fromInstance(extensionsSource, "lookup (service loader)", exts);
         return Arrays.asList(exts);
     }
 
+    /**
+     * Register default setup objects (which must be registered last due to AOP usage).
+     *
+     * @param exts setup objects
+     * @return setup objects instances
+     */
     @SafeVarargs
     public final List<TestEnvironmentSetup> defaultExtensions(final TestEnvironmentSetup... exts) {
         RegistrationTrackUtils.fromInstance(extensionsSource, "default extension", exts);
         return Arrays.asList(exts);
     }
 
+    /**
+     * Register hook instances.
+     *
+     * @param exts hooks
+     */
     public final void hookInstances(final GuiceyConfigurationHook... exts) {
         RegistrationTrackUtils.fromInstance(hooksSource, String.format("%s.hooks(obj)", getHookContext()), exts);
     }
 
+    /**
+     * Register hook classes.
+     *
+     * @param exts hooks
+     */
     @SafeVarargs
     public final void hookClasses(final Class<? extends GuiceyConfigurationHook>... exts) {
         RegistrationTrackUtils.fromClass(hooksSource, String.format("%s.hooks(class)", getHookContext()), exts, false);
     }
 
+    /**
+     * Register config modifiers from annotation.
+     *
+     * @param ann  annotation type
+     * @param exts modifiers
+     */
     @SafeVarargs
     public final void configModifiersFromAnnotation(final Class<? extends Annotation> ann,
                                                     final Class<? extends ConfigModifier>... exts) {
@@ -142,21 +220,43 @@ public class TestExtensionsTracker {
                 exts, true);
     }
 
+    /**
+     * Register config modifier classes.
+     *
+     * @param mods modifiers
+     */
     @SafeVarargs
     public final void configModifierClasses(final Class<? extends ConfigModifier>... mods) {
         RegistrationTrackUtils.fromClass(configModifierSource, String.format("%s.configModifiers(class)",
                 getHookContext()), mods, false);
     }
 
+    /**
+     * Register config modifier instances.
+     *
+     * @param exts modifiers
+     */
     public final void configModifierInstances(final ConfigModifier... exts) {
         RegistrationTrackUtils.fromInstance(configModifierSource, String.format("%s.configModifiers(obj)",
                 getHookContext()), exts);
     }
 
+    /**
+     * Indicate current phase.
+     *
+     * @param context junit context
+     * @param phase   phase
+     */
     public void lifecyclePhase(final ExtensionContext context, final GuiceyTestTime phase) {
         testPhase = phase;
     }
 
+    /**
+     * Record performance.
+     *
+     * @param name     tracker name
+     * @param duration duration
+     */
     public void performanceTrack(final GuiceyTestTime name, final Duration duration) {
         PerformanceTrack track = performance.stream()
                 .filter(tr -> tr.phase == testPhase && tr.name == name)
@@ -202,6 +302,12 @@ public class TestExtensionsTracker {
         }
     }
 
+    /**
+     * Record guicey time.
+     *
+     * @param phase   phase
+     * @param context junit context
+     */
     @SuppressWarnings("PMD.SystemPrintln")
     public void logGuiceyTestTime(final GuiceyTestTime phase, final ExtensionContext context) {
         if (debug) {

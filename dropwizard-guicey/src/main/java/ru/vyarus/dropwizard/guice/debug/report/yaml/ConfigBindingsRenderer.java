@@ -38,6 +38,11 @@ public class ConfigBindingsRenderer implements ReportRenderer<BindingsConfig> {
 
     private final ConfigurationTree tree;
 
+    /**
+     * Create configuration renderer.
+     *
+     * @param tree parsed configuration
+     */
     public ConfigBindingsRenderer(final ConfigurationTree tree) {
         this.tree = tree;
     }

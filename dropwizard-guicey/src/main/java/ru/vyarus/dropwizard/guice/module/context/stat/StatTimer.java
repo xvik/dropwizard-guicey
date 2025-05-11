@@ -16,6 +16,11 @@ public class StatTimer {
     private final Stopwatch stopwatch;
     private int started;
 
+    /**
+     * Create timer.
+     *
+     * @param stopwatch watch
+     */
     public StatTimer(final Stopwatch stopwatch) {
         this.stopwatch = stopwatch;
     }

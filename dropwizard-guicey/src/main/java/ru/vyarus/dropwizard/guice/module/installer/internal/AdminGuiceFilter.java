@@ -20,6 +20,11 @@ public class AdminGuiceFilter implements Filter {
 
     private final GuiceFilter filter;
 
+    /**
+     * Create admin filter for existing guice filter.
+     *
+     * @param filter guice filter
+     */
     public AdminGuiceFilter(final GuiceFilter filter) {
         this.filter = filter;
     }

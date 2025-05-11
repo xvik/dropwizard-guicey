@@ -22,6 +22,11 @@ public final class Options {
 
     private final OptionsSupport optionsSupport;
 
+    /**
+     * Create options.
+     *
+     * @param optionsSupport options support
+     */
     public Options(final OptionsSupport optionsSupport) {
         this.optionsSupport = optionsSupport;
     }

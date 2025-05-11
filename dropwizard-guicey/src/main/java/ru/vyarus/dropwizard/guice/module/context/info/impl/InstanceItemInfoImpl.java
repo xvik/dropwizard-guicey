@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Instance item info implementation.
  *
- * @author Vyacheslav Rusakov
  * @param <T> instance type
+ * @author Vyacheslav Rusakov
  * @since 04.07.2019
  */
 public abstract class InstanceItemInfoImpl<T> extends ItemInfoImpl implements InstanceItemInfo<T> {
@@ -20,12 +20,23 @@ public abstract class InstanceItemInfoImpl<T> extends ItemInfoImpl implements In
     private int instanceCount;
     private final List<ItemId> duplicates = new ArrayList<>();
 
-    // special constructor for disable-only items (without actual registration)
+    /**
+     * Create disable-only info (special constructor for disable-only items (without actual registration).
+     *
+     * @param itemType item type
+     * @param type     item class
+     */
     public InstanceItemInfoImpl(final ConfigItem itemType, final Class type) {
         super(itemType, ItemId.from(type));
         this.instance = null;
     }
 
+    /**
+     * Create item.
+     *
+     * @param itemType item type
+     * @param instance item instance
+     */
     public InstanceItemInfoImpl(final ConfigItem itemType, final T instance) {
         super(itemType, ItemId.from(instance));
         this.instance = instance;
@@ -41,6 +52,9 @@ public abstract class InstanceItemInfoImpl<T> extends ItemInfoImpl implements In
         return instanceCount;
     }
 
+    /**
+     * @param instanceCount instances count
+     */
     public void setInstanceCount(final int instanceCount) {
         this.instanceCount = instanceCount;
     }

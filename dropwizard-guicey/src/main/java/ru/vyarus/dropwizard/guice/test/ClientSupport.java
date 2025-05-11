@@ -39,10 +39,21 @@ public class ClientSupport implements AutoCloseable {
     private final TestClientFactory factory;
     private JerseyClient client;
 
+    /**
+     * Create client.
+     *
+     * @param support dropwizard test support
+     */
     public ClientSupport(final DropwizardTestSupport<?> support) {
         this(support, null);
     }
 
+    /**
+     * Create client with custom factory.
+     *
+     * @param support dropwizard test support
+     * @param factory custom client factory
+     */
     public ClientSupport(final DropwizardTestSupport<?> support,
                          final @Nullable TestClientFactory factory) {
         this.support = support;

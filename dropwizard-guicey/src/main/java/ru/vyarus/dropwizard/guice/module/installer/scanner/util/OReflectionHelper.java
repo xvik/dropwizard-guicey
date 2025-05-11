@@ -29,12 +29,28 @@ public final class OReflectionHelper {
     private OReflectionHelper() {
     }
 
-    // preserved for backwards compatibility
+    /**
+     * Preserved for backwards compatibility.
+     *
+     * @param iPackageName package
+     * @param iClassLoader class loader
+     * @return classes in package
+     * @throws ClassNotFoundException on error
+     */
     public static List<Class<?>> getClassesFor(final String iPackageName,
                                                final ClassLoader iClassLoader) throws ClassNotFoundException {
         return getClassesFor(iPackageName, iClassLoader, false);
     }
 
+    /**
+     * Search for classes in package.
+     *
+     * @param iPackageName           package
+     * @param iClassLoader           class loader
+     * @param acceptProtectedClasses true to accept protected classes
+     * @return classes in package
+     * @throws ClassNotFoundException on error
+     */
     @SuppressFBWarnings("DCN_NULLPOINTER_EXCEPTION")
     public static List<Class<?>> getClassesFor(final String iPackageName,
                                                final ClassLoader iClassLoader,

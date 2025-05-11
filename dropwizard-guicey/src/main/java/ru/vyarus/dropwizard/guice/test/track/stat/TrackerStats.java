@@ -22,6 +22,11 @@ public class TrackerStats {
 
     private final List<MethodSummary> methods;
 
+    /**
+     * Create stats.
+     *
+     * @param trackers trackers
+     */
     @SuppressWarnings("unchecked")
     public TrackerStats(final Tracker... trackers) {
         this((List<MethodTrack>) Arrays.stream(trackers)
@@ -30,6 +35,11 @@ public class TrackerStats {
                 .collect(Collectors.<MethodTrack>toList()));
     }
 
+    /**
+     * Create stats.
+     *
+     * @param tracks tracks
+     */
     public TrackerStats(final List<MethodTrack> tracks) {
         methods = buildSummary(tracks);
     }

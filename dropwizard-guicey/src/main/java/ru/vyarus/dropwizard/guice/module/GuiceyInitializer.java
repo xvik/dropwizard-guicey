@@ -69,6 +69,12 @@ public class GuiceyInitializer {
     private final ConfigurationContext context;
     private final ClasspathScanner scanner;
 
+    /**
+     * Create initializer.
+     *
+     * @param bootstrap bootstrap
+     * @param context   configuration context
+     */
     public GuiceyInitializer(final Bootstrap bootstrap, final ConfigurationContext context) {
 
         // this will also trigger registered dropwizard bundles initialization
@@ -86,7 +92,7 @@ public class GuiceyInitializer {
         // classpath scan performed immediately (if required)
         this.scanner = packages.length > 0
                 ? new ClasspathScanner(
-                        Sets.newHashSet(Arrays.asList(packages)), acceptProtected, context.stat()) : null;
+                Sets.newHashSet(Arrays.asList(packages)), acceptProtected, context.stat()) : null;
     }
 
     /**

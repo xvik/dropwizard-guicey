@@ -28,6 +28,11 @@ public class ExtensionsHolder {
     private final List<Class<? extends FeatureInstaller>> installerTypes;
     private final Map<Class<? extends FeatureInstaller>, List<Class<?>>> extensions = Maps.newHashMap();
 
+    /**
+     * Create extensions holder.
+     *
+     * @param installers installers
+     */
     public ExtensionsHolder(final List<FeatureInstaller> installers) {
         this.installers = installers;
         this.installerTypes = Lists.transform(installers, FeatureInstaller::getClass);
@@ -129,15 +134,27 @@ public class ExtensionsHolder {
         private final Class<?> type;
         private final FeatureInstaller installer;
 
+        /**
+         * Create item.
+         *
+         * @param type      extension type
+         * @param installer recognized installer
+         */
         public ScanItem(final Class<?> type, final FeatureInstaller installer) {
             this.type = type;
             this.installer = installer;
         }
 
+        /**
+         * @return extension type
+         */
         public Class<?> getType() {
             return type;
         }
 
+        /**
+         * @return recognized installer
+         */
         public FeatureInstaller getInstaller() {
             return installer;
         }

@@ -45,6 +45,12 @@ public class GuiceyBootstrap implements GuiceyCommonRegistration<GuiceyBootstrap
     private final List<Class<? extends GuiceyBundle>> bundlesPath;
     private final List<GuiceyBundle> initOrder;
 
+    /**
+     * Create bootstrap.
+     * @param context   configuration context
+     * @param bundlesPath paths to track bundles installation loops
+     * @param initOrder holder for bundles initialization order
+     */
     public GuiceyBootstrap(final ConfigurationContext context,
                            final List<Class<? extends GuiceyBundle>> bundlesPath,
                            final List<GuiceyBundle> initOrder) {

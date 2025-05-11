@@ -23,6 +23,13 @@ public class ManualExtensionsValidatedEvent extends RunPhaseEvent {
     private final List<Class<?>> extensions;
     private final List<Class<?>> validated;
 
+    /**
+     * Create event.
+     *
+     * @param context    event context
+     * @param extensions all extensions
+     * @param validated  manual extensions
+     */
     public ManualExtensionsValidatedEvent(final EventsContext context,
                                           final List<Class<?>> extensions,
                                           final List<Class<?>> validated) {

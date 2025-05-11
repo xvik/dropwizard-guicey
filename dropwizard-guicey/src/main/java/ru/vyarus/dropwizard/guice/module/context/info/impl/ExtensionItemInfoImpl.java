@@ -30,6 +30,11 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
     private FeatureInstaller installer;
     private boolean optional;
 
+    /**
+     * Create item.
+     *
+     * @param type extension type
+     */
     public ExtensionItemInfoImpl(final Class<?> type) {
         super(ConfigItem.Extension, type);
         // not initialized while installer not set
@@ -76,32 +81,53 @@ public class ExtensionItemInfoImpl extends ClassItemInfoImpl implements Extensio
         return optional;
     }
 
+    /**
+     * @param lazy lazy extension
+     */
     public void setLazy(final boolean lazy) {
         this.lazy = lazy;
     }
 
+    /**
+     * @param jerseyManaged jersey managed extension
+     */
     public void setJerseyManaged(final boolean jerseyManaged) {
         this.jerseyManaged = jerseyManaged;
     }
 
+    /**
+     * @param manualBinding manually declared guice binding
+     */
     public void setManualBinding(final Binding manualBinding) {
         this.manualBinding = manualBinding;
     }
 
+    /**
+     * @return manually declared guice binding
+     */
     public Binding getManualBinding() {
         return manualBinding;
     }
 
+    /**
+     * @return installer recognized extension
+     */
     public FeatureInstaller getInstaller() {
         return installer;
     }
 
+    /**
+     * @param installer installer recognized extension
+     */
     public void setInstaller(final FeatureInstaller installer) {
         this.installer = installer;
         this.installedBy = installer.getClass();
         this.complete = true;
     }
 
+    /**
+     * @param optional optional extension
+     */
     public void setOptional(final boolean optional) {
         this.optional = optional;
     }

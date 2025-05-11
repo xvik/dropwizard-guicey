@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.jersey.hk2.GuiceBindingsModule;
 
 import jakarta.servlet.DispatcherType;
+
 import java.util.EnumSet;
 
 import static ru.vyarus.dropwizard.guice.GuiceyOptions.GuiceFilterRegistration;
@@ -38,6 +39,13 @@ public class Jersey2Module extends AbstractModule {
     private final Environment environment;
     private final ConfigurationContext context;
 
+    /**
+     * Create module.
+     *
+     * @param application application instance
+     * @param environment environment
+     * @param context     configuration context
+     */
     public Jersey2Module(final Application application, final Environment environment,
                          final ConfigurationContext context) {
         this.application = application;

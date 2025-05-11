@@ -20,6 +20,13 @@ public class InstallersResolvedEvent extends ConfigurationPhaseEvent {
     private final List<FeatureInstaller> installers;
     private final List<Class<? extends FeatureInstaller>> disabled;
 
+    /**
+     * Create event.
+     *
+     * @param context    event context
+     * @param installers installers
+     * @param disabled   disabled installers
+     */
     public InstallersResolvedEvent(final EventsContext context,
                                    final List<FeatureInstaller> installers,
                                    final List<Class<? extends FeatureInstaller>> disabled) {

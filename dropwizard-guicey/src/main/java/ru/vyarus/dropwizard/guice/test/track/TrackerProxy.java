@@ -21,6 +21,13 @@ public class TrackerProxy<T> implements MethodInterceptor {
     private final Tracker<T> tracker;
     private final int maxToString;
 
+    /**
+     * Create proxy.
+     *
+     * @param type    service type
+     * @param config  config
+     * @param metrics metrics
+     */
     public TrackerProxy(final Class<T> type, final TrackerConfig config, final MetricRegistry metrics) {
         this.maxToString = config.getMaxStringLength();
         this.tracker = new Tracker<>(type, config, metrics);

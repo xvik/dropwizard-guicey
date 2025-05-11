@@ -21,6 +21,11 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.Reporter.TAB;
 public class ExtensionsHelpRenderer implements ReportRenderer<Void> {
     private final List<FeatureInstaller> installers;
 
+    /**
+     * Create renderer.
+     *
+     * @param installers installers
+     */
     public ExtensionsHelpRenderer(final List<FeatureInstaller> installers) {
         this.installers = installers;
     }

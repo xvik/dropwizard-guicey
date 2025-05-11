@@ -7,6 +7,7 @@ import io.dropwizard.core.setup.Environment;
 import ru.vyarus.dropwizard.guice.module.installer.internal.AdminGuiceFilter;
 
 import jakarta.servlet.DispatcherType;
+
 import java.util.EnumSet;
 
 /**
@@ -30,6 +31,12 @@ public class GuiceWebModule extends ServletModule {
     private final Environment environment;
     private final EnumSet<DispatcherType> dispatcherTypes;
 
+    /**
+     * Create web module.
+     *
+     * @param environment     environment
+     * @param dispatcherTypes dispatcher types
+     */
     public GuiceWebModule(final Environment environment, final EnumSet<DispatcherType> dispatcherTypes) {
         this.environment = environment;
         this.dispatcherTypes = dispatcherTypes;

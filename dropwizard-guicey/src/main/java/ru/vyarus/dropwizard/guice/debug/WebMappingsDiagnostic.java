@@ -26,6 +26,11 @@ public class WebMappingsDiagnostic extends UniqueGuiceyLifecycleListener {
 
     private final MappingsConfig config;
 
+    /**
+     * Create diagnostic.
+     *
+     * @param config config
+     */
     public WebMappingsDiagnostic(final MappingsConfig config) {
         this.config = config;
     }

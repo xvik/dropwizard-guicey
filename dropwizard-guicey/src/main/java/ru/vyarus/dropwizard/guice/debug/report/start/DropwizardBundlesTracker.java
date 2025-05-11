@@ -35,21 +35,43 @@ import java.util.stream.Collectors;
  */
 @SuppressFBWarnings({"CT_CONSTRUCTOR_THROW", "EQ_DOESNT_OVERRIDE_EQUALS", "SE_BAD_FIELD"})
 public class DropwizardBundlesTracker extends ArrayList<ConfiguredBundle> {
+    /**
+     * Logger.
+     */
     private final Logger logger = LoggerFactory.getLogger(DropwizardBundlesTracker.class);
 
+    /**
+     * Stats.
+     */
     private final StatsInfo stats;
+    /**
+     * Startup info.
+     */
     private final StartupTimeInfo info;
-    // OverallTime stat would finish with lifecycle listener event slightly earlier than listener in startup
-    // diagnostic (because it will be registered later). Use custom timer for more accurate time measuring
+    /**
+     * OverallTime stat would finish with lifecycle listener event slightly earlier than listener in startup
+     * diagnostic (because it will be registered later). Use custom timer for more accurate time measuring.
+     */
     private final Stopwatch webTimer = Stopwatch.createUnstarted();
 
     // start timer since guice bundle startup - the earliest point we can track
+
+    /**
+     * Create bundles tracker.
+     *
+     * @param stats     stat objects
+     * @param info      startup time data
+     * @param bootstrap bootstrap instance
+     */
     public DropwizardBundlesTracker(final StatsInfo stats, final StartupTimeInfo info, final Bootstrap bootstrap) {
         this.stats = stats;
         this.info = info;
         injectTracker(bootstrap);
     }
 
+    /**
+     * @return web time tracker
+     */
     public Stopwatch getWebTimer() {
         return webTimer;
     }

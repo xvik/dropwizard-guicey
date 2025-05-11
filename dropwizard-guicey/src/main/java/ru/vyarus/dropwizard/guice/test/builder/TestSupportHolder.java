@@ -88,6 +88,9 @@ public final class TestSupportHolder {
         return SUPPORT.get().getClient();
     }
 
+    /**
+     * Reset thread-bound state.
+     */
     public static void reset() {
         final State state = SUPPORT.get();
         if (state != null) {

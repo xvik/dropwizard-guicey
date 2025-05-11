@@ -117,6 +117,11 @@ public final class TestSetupUtils {
     public static class ClosableWrapper implements ExtensionContext.Store.CloseableResource {
         private final AutoCloseable obj;
 
+        /**
+         * Create wrapper.
+         *
+         * @param obj closable
+         */
         public ClosableWrapper(final AutoCloseable obj) {
             this.obj = obj;
         }

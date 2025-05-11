@@ -24,38 +24,65 @@ public class ShutdownTimeInfo {
     private final List<Class> events = new ArrayList<>();
     private StatsInfo stats;
 
+    /**
+     * @return shutdown time
+     */
     public Duration getStopTime() {
         return stopTime;
     }
 
+    /**
+     * @return managed objects durations
+     */
     public Map<Class, Duration> getManagedTimes() {
         return managedTimes;
     }
 
+    /**
+     * @return types of managed objects
+     */
     public Map<Class, String> getManagedTypes() {
         return managedTypes;
     }
 
+    /**
+     * @return overall listeners time
+     */
     public Duration getListenersTime() {
         return listenersTime;
     }
 
+    /**
+     * @param listenersTime overall listeners time
+     */
     public void setListenersTime(final Duration listenersTime) {
         this.listenersTime = listenersTime;
     }
 
+    /**
+     * @param stopTime shutdown time
+     */
     public void setStopTime(final Duration stopTime) {
         this.stopTime = stopTime;
     }
 
+    /**
+     * @return executed guicey events
+     */
     public List<Class> getEvents() {
         return events;
     }
 
+    /**
+     * @return stats instance
+     */
     public StatsInfo getStats() {
         return stats;
     }
 
+    /**
+     * @param stats stats instance
+     */
     public void setStats(final StatsInfo stats) {
         this.stats = stats;
     }

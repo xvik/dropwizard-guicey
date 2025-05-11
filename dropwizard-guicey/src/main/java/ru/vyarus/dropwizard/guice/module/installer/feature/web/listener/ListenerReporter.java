@@ -13,6 +13,7 @@ import jakarta.servlet.ServletRequestListener;
 import jakarta.servlet.http.HttpSessionAttributeListener;
 import jakarta.servlet.http.HttpSessionIdListener;
 import jakarta.servlet.http.HttpSessionListener;
+
 import java.util.EventListener;
 import java.util.Map;
 
@@ -37,10 +38,19 @@ public class ListenerReporter extends Reporter {
 
     private final Multimap<String, String> prerender = HashMultimap.create();
 
+    /**
+     * Create reporter.
+     */
     public ListenerReporter() {
         super(WebListenerInstaller.class, "web listeners = ");
     }
 
+    /**
+     * Listener installed.
+     *
+     * @param type           listener type
+     * @param contextMarkers context markers
+     */
     @SuppressWarnings("unchecked")
     public void listener(final Class<? extends EventListener> type, final String contextMarkers) {
         final String line = String.format(TAB + "%-2s  %s", contextMarkers, RenderUtils.renderClassLine(type));

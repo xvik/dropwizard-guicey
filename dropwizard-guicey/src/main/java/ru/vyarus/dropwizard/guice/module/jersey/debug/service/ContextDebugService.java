@@ -10,6 +10,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 import jakarta.inject.Singleton;
+
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -37,6 +38,12 @@ public class ContextDebugService {
     private final Lock lock = new ReentrantLock();
     private List<Class<?>> managedTypes;
 
+    /**
+     * Create jersey debug service.
+     *
+     * @param holder  extensions holder
+     * @param options options
+     */
     @Inject
     public ContextDebugService(final Provider<ExtensionsHolder> holder, final Options options) {
         this.holder = holder;

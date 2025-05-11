@@ -34,6 +34,12 @@ public class BindingDeclaration {
     private final List<String> markers = new ArrayList<>();
     private String module;
 
+    /**
+     * Create binding declaration.
+     *
+     * @param type    binding type
+     * @param element binding element
+     */
     public BindingDeclaration(final DeclarationType type, final Object element) {
         Preconditions.checkState(type.getType().isAssignableFrom(element.getClass()),
                 "%s requires %s, but %s binding provided", type.name(),
@@ -42,78 +48,136 @@ public class BindingDeclaration {
         this.element = element;
     }
 
+    /**
+     * @return binding type
+     */
     public DeclarationType getType() {
         return type;
     }
 
+    /**
+     * @return binding element
+     */
     public Object getElement() {
         return element;
     }
 
+    /**
+     * @return binding key
+     */
     public Key getKey() {
         return key;
     }
 
+    /**
+     * @param key binding key
+     */
     public void setKey(final Key key) {
         this.key = key;
     }
 
+    /**
+     * @return target key for linked bindings or null
+     */
     public Key getTarget() {
         return target;
     }
 
+    /**
+     * @param target target key
+     */
     public void setTarget(final Key target) {
         this.target = target;
     }
 
+    /**
+     * @return provider key (render) or another provider identity, otherwise null
+     */
     public String getProvidedBy() {
         return providedBy;
     }
 
+    /**
+     * @param providedBy rendered provider key or another provider identity
+     */
     public void setProvidedBy(final String providedBy) {
         this.providedBy = providedBy;
     }
 
+    /**
+     * @return binding scope
+     */
     public Class<? extends Annotation> getScope() {
         return scope;
     }
 
+    /**
+     * @param scope binding scope
+     */
     public void setScope(final Class<? extends Annotation> scope) {
         this.scope = scope;
     }
 
+    /**
+     * @return binding declaration source
+     */
     public String getSource() {
         return source;
     }
 
+    /**
+     * @param source binding declaration source
+     */
     public void setSource(final String source) {
         this.source = source;
     }
 
+    /**
+     * @return binding declaration source line
+     */
     public int getSourceLine() {
         return sourceLine;
     }
 
+    /**
+     * @param sourceLine binding declaration source line
+     */
     public void setSourceLine(final int sourceLine) {
         this.sourceLine = sourceLine;
     }
 
+    /**
+     * @return additional binding data (type listener, provision listener or aop interceptors declaration bindings.
+     * etc.)
+     */
     public List<?> getSpecial() {
         return special;
     }
 
+    /**
+     * @param special special binding data
+     */
     public void setSpecial(final List<?> special) {
         this.special = special;
     }
 
+    /**
+     * @return binding markers (OVERRIDE, OVERRIDDEN, EXTENSION, REMOVED)
+     */
     public List<String> getMarkers() {
         return markers;
     }
 
+    /**
+     * @return module name
+     */
     public String getModule() {
         return module;
     }
 
+    /**
+     * @param module module name
+     */
     public void setModule(final String module) {
         this.module = module;
     }

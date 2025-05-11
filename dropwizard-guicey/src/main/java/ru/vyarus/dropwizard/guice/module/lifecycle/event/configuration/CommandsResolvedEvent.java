@@ -18,6 +18,12 @@ public class CommandsResolvedEvent extends ConfigurationPhaseEvent {
 
     private final List<Command> commands;
 
+    /**
+     * Create event.
+     *
+     * @param context   event context
+     * @param installed installed commands
+     */
     public CommandsResolvedEvent(final EventsContext context, final List<Command> installed) {
         super(GuiceyLifecycle.CommandsResolved, context);
         commands = installed;

@@ -14,11 +14,20 @@ import ru.vyarus.dropwizard.guice.module.context.info.DropwizardBundleItemInfo;
 public class DropwizardBundleItemInfoImpl extends BundleItemInfoImpl<ConfiguredBundle>
         implements DropwizardBundleItemInfo {
 
-    // disable only
+    /**
+     * Create disable-only bundle info (only disable marker).
+     *
+     * @param type bundle type
+     */
     public DropwizardBundleItemInfoImpl(final Class<? extends ConfiguredBundle> type) {
         super(ConfigItem.DropwizardBundle, type);
     }
 
+    /**
+     * Create bundle item info.
+     *
+     * @param bundle bundle instance
+     */
     public DropwizardBundleItemInfoImpl(final ConfiguredBundle bundle) {
         super(ConfigItem.DropwizardBundle, bundle);
     }

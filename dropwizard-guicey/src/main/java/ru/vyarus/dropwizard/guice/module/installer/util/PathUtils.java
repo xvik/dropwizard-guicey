@@ -15,6 +15,9 @@ import java.util.regex.Pattern;
  */
 public final class PathUtils {
 
+    /**
+     * Slash.
+     */
     public static final String SLASH = "/";
     private static final Pattern PATH_DIRTY_SLASHES = Pattern.compile("(?<!:)\\s*/\\s*(/+\\s*)?");
     private static final CharMatcher TRIM_SLASH = CharMatcher.is('/');

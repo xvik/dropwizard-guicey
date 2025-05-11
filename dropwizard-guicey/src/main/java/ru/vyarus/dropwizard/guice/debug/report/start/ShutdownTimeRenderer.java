@@ -15,6 +15,12 @@ import java.time.Duration;
  */
 public class ShutdownTimeRenderer {
 
+    /**
+     * Render shutdown report.
+     *
+     * @param info shutdown times
+     * @return rendered report
+     */
     public String render(final ShutdownTimeInfo info) {
         final StringBuilder res = new StringBuilder(200);
         res.append("\n\n").append(line(1, "Application shutdown", info.getStopTime()));

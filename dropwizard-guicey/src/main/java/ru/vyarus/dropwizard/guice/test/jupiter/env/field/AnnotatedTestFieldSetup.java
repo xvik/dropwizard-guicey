@@ -55,14 +55,35 @@ import java.util.List;
 public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implements
         TestEnvironmentSetup, TestExecutionListener {
 
-    // field custom data
+    /**
+     * Indicates user-provided value (field was pre-initialized by user).
+     */
     protected static final String FIELD_MANUAL = "manual_creation";
+    /**
+     * Indicates injected field value (or pre-initialized value presence).
+     */
     protected static final String FIELD_INJECTED = "value_injected";
 
+    /**
+     * True if guicey extension start application per test class (for all methods).
+     */
     protected boolean appPerClass;
+    /**
+     * Test class.
+     */
     protected Class<?> regTestClass;
+    /**
+     * Human-readable (if @DisplayName or spock used) class or method name.
+     */
     protected String setupContextName;
+    /**
+     * Resolved annotated fields.
+     */
     protected List<AnnotatedField<A, T>> fields;
+    /**
+     * Junit context, used for fields search. Required for reporting (because the report would be generated
+     * on the different phase).
+     */
     protected ExtensionContext setupContext;
 
     // inner state

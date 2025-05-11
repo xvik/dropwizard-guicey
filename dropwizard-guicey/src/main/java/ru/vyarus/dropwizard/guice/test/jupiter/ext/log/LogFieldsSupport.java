@@ -32,6 +32,9 @@ public class LogFieldsSupport extends AnnotatedTestFieldSetup<RecordLogs, Record
 
     private final RecordLogsHook hook = new RecordLogsHook();
 
+    /**
+     * Create support.
+     */
     public LogFieldsSupport() {
         super(RecordLogs.class, RecordedLogs.class, TEST_LOGS_FIELDS);
     }

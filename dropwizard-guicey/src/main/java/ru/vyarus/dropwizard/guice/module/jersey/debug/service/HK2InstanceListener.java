@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+
 import java.util.List;
 
 /**
@@ -23,6 +24,11 @@ public class HK2InstanceListener implements InstanceLifecycleListener {
 
     private final ContextDebugService contextDebugService;
 
+    /**
+     * Create instance listener.
+     *
+     * @param contextDebugService context debug service
+     */
     @Inject
     public HK2InstanceListener(final ContextDebugService contextDebugService) {
         this.contextDebugService = contextDebugService;

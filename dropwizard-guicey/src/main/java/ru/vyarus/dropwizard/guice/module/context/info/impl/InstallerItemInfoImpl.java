@@ -17,6 +17,11 @@ import java.util.Set;
 public class InstallerItemInfoImpl extends ClassItemInfoImpl implements InstallerItemInfo {
     private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
 
+    /**
+     * Create item.
+     *
+     * @param type installer type
+     */
     public InstallerItemInfoImpl(final Class<?> type) {
         super(ConfigItem.Installer, type);
     }

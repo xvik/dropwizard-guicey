@@ -43,6 +43,13 @@ public class GuiceyRunner {
     private final ConfigurationContext context;
     private Injector injector;
 
+    /**
+     * Create runner.
+     *
+     * @param context       configuration context
+     * @param configuration configuration
+     * @param environment   environment
+     */
     public GuiceyRunner(final ConfigurationContext context,
                         final Configuration configuration,
                         final Environment environment) {
@@ -88,15 +95,15 @@ public class GuiceyRunner {
         context.lifecycle().manualExtensionsValidated(context.getItems(ConfigItem.Extension), manual);
         // install pre-selected classpath scan extensions
         if (holder.getScanExtensions() != null) {
-             holder.getScanExtensions().forEach(cand -> {
-                 final Class<?> type = cand.getType();
-                 if (manual.contains(type)) {
-                     // avoid duplicate extension installation, but register it's appearance in auto scan scope
-                     context.getOrRegisterExtension(type, true);
-                 } else {
-                     ExtensionsSupport.registerExtension(context, type, cand.getInstaller(), true);
-                 }
-             });
+            holder.getScanExtensions().forEach(cand -> {
+                final Class<?> type = cand.getType();
+                if (manual.contains(type)) {
+                    // avoid duplicate extension installation, but register it's appearance in auto scan scope
+                    context.getOrRegisterExtension(type, true);
+                } else {
+                    ExtensionsSupport.registerExtension(context, type, cand.getInstaller(), true);
+                }
+            });
         }
         context.stat().stopTimer(ExtensionsRecognitionTime);
         context.stat().stopTimer(InstallersTime);

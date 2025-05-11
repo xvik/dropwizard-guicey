@@ -14,6 +14,11 @@ public class ApplicationShutdownListenerAdapter extends GuiceyLifecycleAdapter {
 
     private final ApplicationShutdownListener listener;
 
+    /**
+     * Create adapter.
+     *
+     * @param listener listener
+     */
     public ApplicationShutdownListenerAdapter(final ApplicationShutdownListener listener) {
         this.listener = listener;
     }

@@ -20,6 +20,11 @@ import ru.vyarus.dropwizard.guice.module.installer.internal.ExtensionsHolder;
 public class InstallerModule extends AbstractModule {
     private final ConfigurationContext context;
 
+    /**
+     * Create installer module.
+     *
+     * @param context configuration context
+     */
     public InstallerModule(final ConfigurationContext context) {
         this.context = context;
     }

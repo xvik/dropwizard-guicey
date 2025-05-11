@@ -24,16 +24,35 @@ public class PluginReporter extends Reporter {
     private final Multimap<String, String> namedPlugins = HashMultimap.create();
     private final Multimap<String, String> plugins = HashMultimap.create();
 
+    /**
+     * Create reporter.
+     */
     public PluginReporter() {
         super(PluginInstaller.class, "plugins =");
     }
 
+    /**
+     * Register named plugin.
+     *
+     * @param keyType   plugin extension type
+     * @param extType   plugin type
+     * @param key       annotation key
+     * @param extension extension type
+     * @return reporter itself
+     */
     public PluginReporter named(final Class keyType, final Class extType, final Object key, final Class extension) {
         namedPlugins.put(format(NAMED_KEY, keyType.getSimpleName(), extType.getSimpleName()),
                 format(NAMED_LINE, key, RenderUtils.renderClassLine(extension)));
         return this;
     }
 
+    /**
+     * Register simple plugin.
+     *
+     * @param extType   plugin type
+     * @param extension extension type
+     * @return reporter itself
+     */
     public PluginReporter simple(final Class extType, final Class extension) {
         plugins.put(format(KEY, extType.getSimpleName()), format(LINE, RenderUtils.renderClassLine(extension)));
         return this;

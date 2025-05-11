@@ -23,6 +23,12 @@ public class ConfigurationHooksProcessedEvent extends GuiceyLifecycleEvent {
 
     private final Set<GuiceyConfigurationHook> hooks;
 
+    /**
+     * Create event.
+     *
+     * @param context event context
+     * @param hooks   hooks
+     */
     public ConfigurationHooksProcessedEvent(final EventsContext context, final Set<GuiceyConfigurationHook> hooks) {
         super(GuiceyLifecycle.ConfigurationHooksProcessed, context);
         this.hooks = hooks;

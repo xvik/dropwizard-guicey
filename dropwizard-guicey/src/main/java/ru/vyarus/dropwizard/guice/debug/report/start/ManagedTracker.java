@@ -23,9 +23,22 @@ import java.util.List;
 @SuppressFBWarnings({"CT_CONSTRUCTOR_THROW", "EQ_DOESNT_OVERRIDE_EQUALS", "SE_BAD_FIELD"})
 public class ManagedTracker extends ArrayList<LifeCycle> {
 
+    /**
+     * Startup time.
+     */
     private final StartupTimeInfo start;
+    /**
+     * Shutdown time.
+     */
     private final ShutdownTimeInfo stop;
 
+    /**
+     * Create tracker.
+     *
+     * @param start     start info
+     * @param stop      stop info
+     * @param lifecycle lifecycle instance
+     */
     public ManagedTracker(final StartupTimeInfo start,
                           final ShutdownTimeInfo stop,
                           final LifecycleEnvironment lifecycle) {

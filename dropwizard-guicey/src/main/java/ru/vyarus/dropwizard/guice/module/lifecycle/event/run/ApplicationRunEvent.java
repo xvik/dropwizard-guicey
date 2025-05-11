@@ -26,6 +26,11 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
  */
 public class ApplicationRunEvent extends InjectorPhaseEvent {
 
+    /**
+     * Create event.
+     *
+     * @param context event context
+     */
     public ApplicationRunEvent(final EventsContext context) {
         super(GuiceyLifecycle.ApplicationRun, context);
     }

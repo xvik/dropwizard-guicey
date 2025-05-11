@@ -16,6 +16,12 @@ public abstract class JerseyPhaseEvent extends InjectorPhaseEvent {
 
     private final InjectionManager injectionManager;
 
+    /**
+     * Create event.
+     *
+     * @param type    event type
+     * @param context event context
+     */
     public JerseyPhaseEvent(final GuiceyLifecycle type,
                             final EventsContext context) {
         super(type, context);

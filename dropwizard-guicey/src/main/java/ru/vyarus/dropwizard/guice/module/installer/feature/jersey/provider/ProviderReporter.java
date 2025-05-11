@@ -20,10 +20,19 @@ public class ProviderReporter extends Reporter {
 
     private final Multimap<Class, String> prerender = HashMultimap.create();
 
+    /**
+     * Create reporter.
+     */
     public ProviderReporter() {
         super(JerseyProviderInstaller.class, "providers = ");
     }
 
+    /**
+     * @param provider    provider type
+     * @param isHkManaged true for hk managed bean
+     * @param isLazy      true for lazy bean
+     * @return reporter itself
+     */
     public ProviderReporter provider(final Class<?> provider, final boolean isHkManaged, final boolean isLazy) {
         // recognize all extension types and render lines accordingly
         for (Class ext : ProviderRenderUtil.detectProviderTypes(provider)) {

@@ -28,6 +28,9 @@ public final class StatsTracker {
     private final GuiceStatsTracker guiceStats = new GuiceStatsTracker();
     private final Map<DetailStat, Map<Class<?>, Stopwatch>> detailStats = Maps.newEnumMap(DetailStat.class);
 
+    /**
+     * Create tracker.
+     */
     public StatsTracker() {
         // start measuring overall time since guice bundle creation
         timer(OverallTime);
