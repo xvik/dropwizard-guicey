@@ -28,7 +28,7 @@ import java.util.Map;
  * Usage example:
  * <pre><code>
  *     SpiesHook hook = new SpiesHook();
- *     SpyProxy&lt;Service> proxy = hook.spy(Service.class)
+ *     SpyProxy&lt;Service&gt; proxy = hook.spy(Service.class)
  *     // actual spy object can be obtained only after guice application startup
  *     Service spy = proxy.getSpy()
  *     doReturn(12).when(spy).foo();

@@ -27,7 +27,7 @@ import java.util.Map;
  * Example usage:
  * <pre><code>
  *     TrackersHook hook = new TrackersHook()
- *     Tracker&lt;Service> tracker = hook.track(Service.class)
+ *     Tracker&lt;Service&gt; tracker = hook.track(Service.class)
  *                                          // optional configuration
  *                                          .add()
  *     // after service methods execution

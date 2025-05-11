@@ -1,4 +1,5 @@
 ### [7.2.0](http://xvik.github.io/dropwizard-guicey/7.2.0) (2025-05-11)
+* Update to dropwizard 4.0.13
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
 * Add methods to the main builder (and hooks) to simplify usage without guicey bundle:
     - .whenConfigurationReady(...) - delayed configuration (same as GuiceyBunle.run):  
