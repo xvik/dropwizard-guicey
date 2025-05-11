@@ -114,7 +114,7 @@
     - Add WebInstaller marker interface to identify web extensions (extensions started with jersey)
 
 NOTE on Gradle compatibility:
-- Due to update to junit 5.12, platform-launcher dependency must be added manually:
+- Due to update to junit 5.12, there might be problems with platform-launcher dependency. The fix:
   `testRuntimeOnly("org.junit.platform:junit-platform-launcher")`
   (https://dev.to/be-hase/important-notes-on-junit-5120-in-gradle-13fj)
 
