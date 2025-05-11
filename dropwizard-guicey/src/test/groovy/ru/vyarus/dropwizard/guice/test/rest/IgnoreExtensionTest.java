@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.rest;
 
-import jakarta.ws.rs.ProcessingException;
-import jakarta.ws.rs.WebApplicationException;
+import javax.ws.rs.ProcessingException;
+import javax.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo;

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Record log events for verification.
@@ -164,7 +165,7 @@ public class RecordLogsHook implements GuiceyConfigurationHook {
         public RecordedLogs start(final Level level) {
             final List<String> loggers = new ArrayList<>();
             if (!typedLoggers.isEmpty()) {
-                loggers.addAll(typedLoggers.stream().map(Class::getName).toList());
+                loggers.addAll(typedLoggers.stream().map(Class::getName).collect(Collectors.toList()));
             }
             loggers.addAll(stringLoggers);
             String id = name;

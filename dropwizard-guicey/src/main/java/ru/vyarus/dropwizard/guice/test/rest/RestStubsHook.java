@@ -4,7 +4,7 @@ import io.dropwizard.core.setup.Environment;
 import io.dropwizard.core.setup.ExceptionMapperBinder;
 import io.dropwizard.jersey.jackson.JacksonFeature;
 import io.dropwizard.jersey.validation.HibernateValidationBinder;
-import jakarta.servlet.DispatcherType;
+import javax.servlet.DispatcherType;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.GuiceyOptions;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
