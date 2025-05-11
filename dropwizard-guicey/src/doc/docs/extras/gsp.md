@@ -667,7 +667,7 @@ public class ErrorPage {
 ### SPA routing
 
 If you use Single Page Applications then you may face the need to recognize html5 client routing urls
-and redirect to index page. You can read more about it in [guicey SPA module](../guicey-spa).
+and redirect to index page. You can read more about it in [guicey SPA module](spa.md).
 
 As guicey SPA module can't be used directly with GSP, it's abilities is integrated directly and could 
 be activated with:

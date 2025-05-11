@@ -128,6 +128,7 @@ nav:
         - AOP: guide/diagnostic/aop-report.md
         - Web: guide/diagnostic/web-report.md
         - Jersey: guide/diagnostic/jersey-report.md
+        - Shared state: guide/diagnostic/shared-state-report.md
       - Test:
         - Base concepts: guide/test/overview.md
         - AssertJ: guide/test/assertj.md
