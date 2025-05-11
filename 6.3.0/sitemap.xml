@@ -486,11 +486,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://xvik.github.io/dropwizard-guicey/6.3.0/guide/test/junit5/reuse/</loc>
-         <lastmod>2025-05-11</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://xvik.github.io/dropwizard-guicey/6.3.0/guide/test/junit5/run/</loc>
          <lastmod>2025-05-11</lastmod>
          <changefreq>daily</changefreq>
