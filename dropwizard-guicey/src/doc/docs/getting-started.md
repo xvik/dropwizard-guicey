@@ -114,13 +114,25 @@ public class SampleApplication extends Application<Configuration> {
 the application package and subpackages. Extension classes are detected by "feature markers": for example, 
 resources has `@Path` annotation, tasks extends `Task` etc.
 
-
 !!! tip
     By default, auto configuration enabled for application package, but 
     you can declare manually any packages for classpath scan: 
     ```java
      .enableAutoConfig("com.mycompany.foo", "com.mycompany.bar")
     ```
+
+    If required, analysed classes could be [filtered](guide/scan.md#filter-classes).
+    For example, you can configure a spring-like approach of recognizing only annotated classes:
+    ```java
+    .autoConfigFilter(ClassFilters.annotated(Component.class, Service.class))
+    ```
+    This way, only classes annotated with `@Component` or `@Service` would be recognized.
+    
+    But the better way to use filters is to add additional skip annoatations:
+    ```java
+    .autoConfigFilter(ClassFilters.ignoreAnnotated(Skip.class))
+    ```
+    (so extensions, annoatated with `@Skip`, would be ignored by classpath scan)
 
 The application could be launched by running main class (assumes you will use an IDE run command):
 
@@ -294,7 +306,18 @@ Multiple modules could be registered at once:
 !!! note
     The above registration occurs in dropwizard initialization phase, when neither `Configuration`
     nor `Environment` objects are available. If you need either of them in a module, you may register a module in 
-    [guicey bundle's](guide/bundles.md#guicey-bundles) `run` method or use [marker interfaces](guide/guice/module-autowiring.md).
+    [guicey bundle's](guide/bundles.md#guicey-bundles) `run` method, use [marker interfaces](guide/guice/module-autowiring.md) or delayed bundle callback:
+
+    ```java
+    bootstrap.addBundle(GuiceBundle.builder()
+            ...
+            // same as GuiceyBundle.run (kind of shortcut)
+            .whenConfigurationReady(env -> {
+                env.modules(new ConfAwareModule(env.<AppConfig>configuration().getSomething()))
+            })
+            .modules(new SampleModule())
+            .build());
+    ```
         
 ## Manual mode
 

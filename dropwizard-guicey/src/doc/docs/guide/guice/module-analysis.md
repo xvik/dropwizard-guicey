@@ -141,6 +141,45 @@ removing only top (overriding) class will just to "before override" state.
 
 Removed chains are visible on [guice report](#removed-bindings).
 
+### Private modules
+
+Guicey will also search extensions in private modules (of course, only in exposed beans).
+
+```java
+public class PModule extends PrivateModule {
+    @Override
+    protected void configure() {
+        // ExtImpl is extension (recognition sign absent in interface) 
+        bind(IExt.class).to(ExtImpl.class);
+        // extension exposed by interface 
+        expose(IExt.class);
+    }
+}
+
+public interface IExt {... }
+public class Ext implements IExt, Managed { ... }
+```
+
+Guicey would detect that `ExtImpl` is an extension, and it is available (through exposed interface)
+and so register it as an extension.
+
+!!! important
+    Guicey rely on extension classes and so it would need direct extension access (to be able to call
+    `Injector.getInstance(ExtImpl.class)`). By default, it is not possible (exposed only interface),
+    but guicey would change private module: it would add an additional `expose` for `ExtImpl`.
+
+Also, as any guicey extension could be disabled, then `.disable(ExtImpl.class)`
+would remove binding inside private module (works only for top-level private modules).
+
+If you'll face any problems with private modules behavior, **please report it**.
+
+Private modules analysis could be disabled with:
+
+```java
+GuiceBundle.builder()
+    .option(GuiceyOptions.AnalyzePrivateGuiceModules, false)
+```
+
 ## Transitive modules
 
 During bindings analysis guicey can see binding module's hierarchy (module "A" installs module "B", which registers binding C).

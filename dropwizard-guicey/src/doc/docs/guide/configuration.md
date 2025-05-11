@@ -29,6 +29,9 @@ Guicey could be configured through:
 
 `#!java .enableAutoConfig()`
 :   (without packages) Enabling classpath scan on application package
+
+`#!java .autoConfigFilter(Predicate)`
+:   [Filter](scan.md#filter-classes) classes to scan
    
 `#!java .modules(Module... modules)`
 :   Guice modules registration
