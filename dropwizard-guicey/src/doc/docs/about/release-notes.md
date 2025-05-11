@@ -5,7 +5,8 @@ The release contains:
 * Many improvements simplifying usage (main bundle, guicey bundles, shared state).
 * New reports for measuring application startup performance.
 * Private guice modules support
-* A lot of test improvements (mostly for junit 5)
+* Many test improvements (stubs, mocks, spies, lightweight REST testing etc.)
+* Breaking shared state change (conceptual)
 
 ## Un-deprecated HK2 support
 
@@ -305,7 +306,8 @@ dropwizard assumes only runtime exceptions in initialization phase and any excep
 in run phase.
 
 But, it appears that often it is more useful to allow checked exceptions in init method to
-avoid clumsy exception handling (especially for quick prototyping).
+avoid clumsy exception handling (especially for quick prototyping) and so checked exceptions
+support was added. Runtime exceptions are rethrown as is.
 
 ### Register extensions at run phase
 
@@ -925,6 +927,16 @@ public class MyExt implements GuiceyEnvironmentSetup {
 }
 ```
 
+Also, `ExtensionContext` could be injected as test method parameter:
+
+```java
+@BeforeEach
+public void setUp(ExtensionContext context) {
+    ...
+}
+
+```
+
 #### Lifecycle listeners
 
 Added lifecycle listener interface, representing junit phases (before/after) and tested 
@@ -966,11 +978,13 @@ For field declarations (lambda-based), special individual shortcuts are availabl
 ```java
 @EnableSetup
 static TestEnvironmentSetup setup = ext -> ext
+        .onApplicationStarting(event -> ...)
         .onApplicationStart(event -> ...)
         .onBeforeAll(event -> ...)
         .onBeforeEach(event -> ...)
         .onAfterEach(event -> ...)
         .onAfterAll(event -> ...)
+        .onApplicationStopping(event -> ...)
         .onApplicationStop(event -> ...)
 ```
 
@@ -1027,8 +1041,12 @@ if annotated field type is different - error would be thrown.
 Returned object is also abstraction: `AnnotatedField` - it simplifies working with filed value,
 plus contains additional checks. 
 
+!!! note
+    This api is not generalized (target usage with junit only) because it uses
+    junit annotations search utility internally.
+
 Added `AnnotatedTestFieldSetup` base class which implements base fields workflow
-(including proper nested tests support and guice bindings override (if required)).
+(including proper nested tests support).
 
 All new field extensions (see below) are using this base class. Using them as 
 implementation examples, it should be pretty simple to add other field-based test
@@ -1085,6 +1103,11 @@ New extensions:
 * Guice bean calls tracker (method arguments and return value captor + time measure)
 * Logs test support
 * Lightweight REST tests support
+
+
+!!! note
+    The core logic for all extensions is implemented as guicey hook. These hooks are generic and 
+    could be used without junit (see [general docs](../guide/test/general/general.md)) 
 
 #### Stubs
 

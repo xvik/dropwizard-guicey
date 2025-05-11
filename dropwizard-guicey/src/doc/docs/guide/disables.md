@@ -190,8 +190,26 @@ import static ru.vyarus.dropwizard.guice.module.context.Disables.*
 
 Simply disable items by type.
 
+Disable extensions, installed by the exact installer:
+
+```java
+@EnableHook
+static GuiceyConfigurationHook hook = builder ->
+        builder.disable(installedBy(WebFilterInstaller.class));
+```
+
 The condition is java `Predicate`. Use `Predicate#and(Predicate)`, `Predicate#or(Predicate)`
 and `Predicate#negate()` to compose complex conditions from simple ones.
+
+There are disable shortcuts for exact items type (`Disables.module()`, `Disabled.extension()`, etc.) now raise predicate
+type to simplify chained usage:
+
+```java
+builder.disable(module().and(ModuleItemInfo mod -> ! mod.isOverriding()));
+```
+
+There are special shortcuts for web and jersey extensions (jersey extension is also a web extension):
+`Disables.jerseyExtension()` and `Disables.webExtension()` (servlets, filters and jersey).
 
 Most common predicates could be build with `ru.vyarus.dropwizard.guice.module.context.Disables`
 utility (examples above).
