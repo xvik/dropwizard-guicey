@@ -17,5 +17,7 @@ include 'core-getting-started',
         'integration-guice-validator',
         'integration-dropwizard-jobs',
         'maven-bom',
-        'maven-simple',
-        'openapi-client-server'
+        'maven-simple'
+
+        // disabled because it fails to use javax api
+//        'openapi-client-server'

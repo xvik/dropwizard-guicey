@@ -28,9 +28,10 @@ openApiGenerate {
     invokerPackage = "com.petstore"
     modelPackage = "com.petstore.api.model"
     configOptions = [
-            library: "jersey3",
+            library: "jersey2",
             dateLibrary: "java8",
             openApiNullable: "false",
+            useJakartaEe: "false",
             hideGenerationTimestamp: "true"
     ]
 }
@@ -46,9 +47,10 @@ tasks.register('openApiGenerateServer', GenerateTask) {
     invokerPackage = "com.petstore.server"
     modelPackage = "com.petstore.server.api.model"
     configOptions = [
-            library    : "jersey3",
+            library    : "jersey2",
             dateLibrary: "java8",
             openApiNullable: "false",
+            useJakartaEe: "false",
             hideGenerationTimestamp: "true"
     ]
 }
