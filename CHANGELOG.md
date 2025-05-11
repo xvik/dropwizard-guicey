@@ -1,4 +1,9 @@
 * Update to dropwizard 5 (requires java 17)
+* [admin-rest]
+    - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
+
+### 7.2.0 (2025-05-11)
+* Update to dropwizard 4.0.13
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
 * Add methods to the main builder (and hooks) to simplify usage without guicey bundle:
     - .whenConfigurationReady(...) - delayed configuration (same as GuiceyBunle.run):  
@@ -107,8 +112,6 @@
 * Internal:
     - Add BeforeInit guicey event (the first point with available Bootstrap)
     - Add WebInstaller marker interface to identify web extensions (extensions started with jersey)
-* [admin-rest]
-    - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
 
 NOTE on Gradle compatibility:
 - Due to update to junit 5.12, platform-launcher dependency must be added manually:
