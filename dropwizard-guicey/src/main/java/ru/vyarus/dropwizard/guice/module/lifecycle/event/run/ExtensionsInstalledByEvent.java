@@ -29,6 +29,13 @@ public class ExtensionsInstalledByEvent extends InjectorPhaseEvent {
     private final Class<? extends FeatureInstaller> installer;
     private final List<Class<?>> installed;
 
+    /**
+     * Create event.
+     *
+     * @param context   event context
+     * @param installer installer type
+     * @param installed installed extensions
+     */
     public ExtensionsInstalledByEvent(final EventsContext context,
                                       final Class<? extends FeatureInstaller> installer,
                                       final List<Class<?>> installed) {

@@ -8,5 +8,36 @@ package ru.vyarus.dropwizard.guice.test.jupiter.env.listen.lambda;
  * @since 20.02.2025
  */
 public enum ListenerEvent {
-    Starting, Started, Stopping, Stopped, BeforeAll, AfterAll, BeforeEach, AfterEach
+    /**
+     * Application starting.
+     */
+    Starting,
+    /**
+     * Application started.
+     */
+    Started,
+    /**
+     * Application stopping.
+     */
+    Stopping,
+    /**
+     * Application stopped.
+     */
+    Stopped,
+    /**
+     * Before all test methods.
+     */
+    BeforeAll,
+    /**
+     * After all test methods.
+     */
+    AfterAll,
+    /**
+     * Before each test method.
+     */
+    BeforeEach,
+    /**
+     * After each test method.
+     */
+    AfterEach
 }

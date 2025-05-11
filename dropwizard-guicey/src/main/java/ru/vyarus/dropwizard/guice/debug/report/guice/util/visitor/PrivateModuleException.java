@@ -10,12 +10,23 @@ import com.google.inject.spi.PrivateElements;
  */
 public class PrivateModuleException extends RuntimeException {
 
+    /**
+     * Private elements.
+     */
     private final PrivateElements elements;
 
+    /**
+     * Create exception.
+     *
+     * @param elements private elements
+     */
     public PrivateModuleException(final PrivateElements elements) {
         this.elements = elements;
     }
 
+    /**
+     * @return private elements
+     */
     public PrivateElements getElements() {
         return elements;
     }

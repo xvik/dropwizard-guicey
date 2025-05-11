@@ -17,6 +17,11 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
  */
 public class InitializedEvent extends ConfigurationPhaseEvent {
 
+    /**
+     * Create event.
+     *
+     * @param context event context
+     */
     public InitializedEvent(final EventsContext context) {
         super(GuiceyLifecycle.Initialized, context);
     }

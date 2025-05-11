@@ -19,6 +19,11 @@ public class HK2DebugFeature implements Feature {
 
     private final HK2InstanceListener listener;
 
+    /**
+     * Create debug feature.
+     *
+     * @param listener instance listener
+     */
     @Inject
     public HK2DebugFeature(final HK2InstanceListener listener) {
         this.listener = listener;

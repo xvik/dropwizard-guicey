@@ -13,6 +13,11 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStart
 public class ApplicationStartupListenerAdapter extends GuiceyLifecycleAdapter {
     private final ApplicationStartupListener listener;
 
+    /**
+     * Create adapter.
+     *
+     * @param listener listener
+     */
     public ApplicationStartupListenerAdapter(final ApplicationStartupListener listener) {
         this.listener = listener;
     }

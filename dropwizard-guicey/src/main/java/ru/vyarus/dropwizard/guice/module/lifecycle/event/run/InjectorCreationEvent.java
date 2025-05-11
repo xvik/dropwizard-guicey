@@ -23,6 +23,15 @@ public class InjectorCreationEvent extends RunPhaseEvent {
     private final List<Module> disabled;
     private final List<Module> ignored;
 
+    /**
+     * Create event.
+     *
+     * @param context    event context
+     * @param modules    modules
+     * @param overriding overriding modules
+     * @param disabled   disabled modules
+     * @param ignored    ignored modules (duplicates)
+     */
     public InjectorCreationEvent(final EventsContext context,
                                  final List<Module> modules,
                                  final List<Module> overriding,

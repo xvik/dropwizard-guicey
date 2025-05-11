@@ -24,6 +24,11 @@ public class StatsRenderer implements ReportRenderer<Boolean> {
 
     private final GuiceyConfigurationInfo info;
 
+    /**
+     * Create renderer.
+     *
+     * @param info guicey info
+     */
     public StatsRenderer(final GuiceyConfigurationInfo info) {
         this.info = info;
     }

@@ -19,6 +19,12 @@ import java.util.Map;
 @SuppressWarnings("MultipleStringLiterals")
 public class StartupTimeRenderer {
 
+    /**
+     * Render startup time report.
+     *
+     * @param info startup info
+     * @return rendered report
+     */
     public String render(final StartupTimeInfo info) {
         final StringBuilder res = new StringBuilder(200);
         res.append("\n\n").append(line(1, "JVM time before", Duration.ofMillis(info.getJvmStart())))

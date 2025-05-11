@@ -34,6 +34,11 @@ public class RecordedLogs extends LogsSelector {
 
     private final Recorder recorder;
 
+    /**
+     * Create recorded logs accessor.
+     *
+     * @param recorder recorder
+     */
     public RecordedLogs(final Recorder recorder) {
         super(recorder.getRecords());
         this.recorder = recorder;

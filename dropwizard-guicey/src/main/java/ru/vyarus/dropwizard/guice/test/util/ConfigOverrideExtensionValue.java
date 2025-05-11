@@ -28,6 +28,13 @@ public class ConfigOverrideExtensionValue extends ConfigOverride implements Conf
     private String originalValue;
     private String value;
 
+    /**
+     * Create a config override value.
+     *
+     * @param namespace  namespace
+     * @param storageKey storage key
+     * @param configPath config yaml path
+     */
     public ConfigOverrideExtensionValue(final ExtensionContext.Namespace namespace,
                                         final String storageKey,
                                         final String configPath) {

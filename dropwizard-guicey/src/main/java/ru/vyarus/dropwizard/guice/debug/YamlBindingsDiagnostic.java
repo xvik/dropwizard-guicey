@@ -27,12 +27,20 @@ public class YamlBindingsDiagnostic extends UniqueGuiceyLifecycleListener {
 
     private final BindingsConfig config;
 
+    /**
+     * Create diagnostic.
+     */
     public YamlBindingsDiagnostic() {
         this(new BindingsConfig()
                 .showConfigurationTree()
                 .showNullValues());
     }
 
+    /**
+     * Create diagnostic.
+     *
+     * @param config configuration
+     */
     public YamlBindingsDiagnostic(final BindingsConfig config) {
         this.config = config;
     }

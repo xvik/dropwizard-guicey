@@ -42,6 +42,12 @@ public class ConfigBindingModule extends AbstractModule {
     private final Configuration configuration;
     private final ConfigurationTree tree;
 
+    /**
+     * Create configuration bindings module.
+     *
+     * @param configuration configuration instance.
+     * @param tree          parsed configuration
+     */
     public ConfigBindingModule(final Configuration configuration, final ConfigurationTree tree) {
         this.configuration = configuration;
         this.tree = tree;

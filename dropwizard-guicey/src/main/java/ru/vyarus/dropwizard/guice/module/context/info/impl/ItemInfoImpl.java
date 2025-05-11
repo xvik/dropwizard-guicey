@@ -17,7 +17,9 @@ import java.util.Set;
  * @since 06.07.2016
  */
 public class ItemInfoImpl implements ItemInfo {
-    // indicates complete initialization (useful for extensions - installer might be not set)
+    /**
+     * Indicates complete initialization (useful for extensions - installer might be not set).
+     */
     protected boolean complete = true;
 
     private final ItemId id;
@@ -28,6 +30,12 @@ public class ItemInfoImpl implements ItemInfo {
     // registrations per scope (actual + ignored)
     private final InstanceCounter counter = new InstanceCounter();
 
+    /**
+     * Create item.
+     *
+     * @param itemType item type
+     * @param id       item id
+     */
     public ItemInfoImpl(final ConfigItem itemType, final ItemId id) {
         this.itemType = itemType;
         this.id = id;
@@ -112,6 +120,11 @@ public class ItemInfoImpl implements ItemInfo {
         return complete;
     }
 
+    /**
+     * Record item registration.
+     *
+     * @param scope registration scope
+     */
     public void countRegistrationAttempt(final ItemId scope) {
         registrationAttempts++;
         if (registrationScope == null) {

@@ -17,6 +17,11 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
  */
 public class ApplicationShutdownEvent extends JerseyPhaseEvent {
 
+    /**
+     * Create event.
+     *
+     * @param context event context
+     */
     public ApplicationShutdownEvent(final EventsContext context) {
         super(GuiceyLifecycle.ApplicationShutdown, context);
     }

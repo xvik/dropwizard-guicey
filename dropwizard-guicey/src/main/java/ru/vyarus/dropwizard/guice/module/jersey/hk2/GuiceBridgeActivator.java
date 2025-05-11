@@ -21,6 +21,12 @@ public class GuiceBridgeActivator {
     private final InjectionManager injectionManager;
     private final Injector injector;
 
+    /**
+     * Create bridge activator.
+     *
+     * @param injectionManager hk injection manager
+     * @param injector         guice injector
+     */
     public GuiceBridgeActivator(final InjectionManager injectionManager, final Injector injector) {
         this.injectionManager = injectionManager;
         this.injector = injector;

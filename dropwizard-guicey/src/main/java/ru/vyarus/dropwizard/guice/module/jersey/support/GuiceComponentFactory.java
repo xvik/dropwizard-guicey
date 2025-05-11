@@ -16,6 +16,12 @@ public class GuiceComponentFactory<T> implements Supplier<T> {
     private final Injector injector;
     private final Class<T> type;
 
+    /**
+     * Create factory.
+     *
+     * @param injector injector
+     * @param type     provided service type
+     */
     public GuiceComponentFactory(final Injector injector, final Class<T> type) {
         this.injector = injector;
         this.type = type;

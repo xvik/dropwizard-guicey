@@ -32,7 +32,12 @@ public abstract class GuiceyLifecycleEvent {
     private final Options options;
     private final SharedConfigurationState sharedState;
 
-
+    /**
+     * Create event.
+     *
+     * @param type    event type
+     * @param context event context
+     */
     public GuiceyLifecycleEvent(final GuiceyLifecycle type,
                                 final EventsContext context) {
         Preconditions.checkState(type.getType().equals(getClass()),

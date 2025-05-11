@@ -27,6 +27,12 @@ public class JerseyExtensionsInstalledEvent extends JerseyPhaseEvent {
 
     private final List<Class<?>> extensions;
 
+    /**
+     * Create event.
+     *
+     * @param context    event context
+     * @param extensions installed extensions
+     */
     @SuppressWarnings("checkstyle:ParameterNumber")
     public JerseyExtensionsInstalledEvent(final EventsContext context,
                                           final List<Class<?>> extensions) {

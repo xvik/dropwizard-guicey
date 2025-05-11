@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.debug.report.guice;
 // CHECKSTYLE:OFF
+
 import com.google.inject.Module; // NOPMD
 // CHECKSTYLE:ON
 import com.google.inject.*;
@@ -37,6 +38,11 @@ public class GuiceAopMapRenderer implements ReportRenderer<GuiceAopConfig> {
     private final Injector injector;
     private final List<Module> modules;
 
+    /**
+     * Create renderer.
+     *
+     * @param injector injector
+     */
     public GuiceAopMapRenderer(final Injector injector) {
         this.injector = injector;
         final GuiceyConfigurationInfo info = injector.getInstance(GuiceyConfigurationInfo.class);

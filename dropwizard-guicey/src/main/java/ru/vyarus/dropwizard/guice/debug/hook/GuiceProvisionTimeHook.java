@@ -32,6 +32,9 @@ import java.time.Duration;
  */
 public class GuiceProvisionTimeHook implements GuiceyConfigurationHook {
 
+    /**
+     * System property hook alias name.
+     */
     public static final String ALIAS = "provision-time";
     private final GuiceProvisionDiagnostic diagnostic = new GuiceProvisionDiagnostic(true);
 

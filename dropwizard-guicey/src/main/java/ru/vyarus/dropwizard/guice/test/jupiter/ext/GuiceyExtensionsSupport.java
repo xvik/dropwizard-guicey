@@ -99,9 +99,20 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     // required for proper initialization under parallel tests
     private static final Object SYNC = new Object();
 
+    /**
+     * Extensions registration tracker.
+     */
     protected final TestExtensionsTracker tracker;
+    /**
+     * Event listeners support.
+     */
     protected final ListenersSupport listeners;
 
+    /**
+     * Create extensions support.
+     *
+     * @param tracker tracker
+     */
     public GuiceyExtensionsSupport(final TestExtensionsTracker tracker) {
         this.tracker = tracker;
         this.listeners = new ListenersSupport(tracker);
@@ -306,11 +317,19 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         return lookupInjector(extensionContext);
     }
 
+    /**
+     * @param context junit context
+     * @return extension-specific store
+     */
     protected static ExtensionContext.Store getExtensionStore(final ExtensionContext context) {
         // Store is extension specific, but nested tests will see it too (because key is extension class)
         return context.getStore(ExtensionContext.Namespace.create(GuiceyExtensionsSupport.class));
     }
 
+    /**
+     * @param context junit context
+     * @return extension-specific store for current test
+     */
     private ExtensionContext.Store getLocalExtensionStore(final ExtensionContext context) {
         // test scoped extension scope (required to differentiate nested classes or parameterized executions)
         return context.getStore(ExtensionContext.Namespace

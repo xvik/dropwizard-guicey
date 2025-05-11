@@ -73,6 +73,11 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
     private final List<Class<Module>> modulesDisabled;
     private final boolean analysisEnabled;
 
+    /**
+     * Create bindings renderer.
+     *
+     * @param injector injector
+     */
     public GuiceBindingsRenderer(final Injector injector) {
         this.injector = injector;
         final GuiceyConfigurationInfo info = injector.getInstance(GuiceyConfigurationInfo.class);
@@ -236,7 +241,7 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
 
     private List<ModuleDeclaration> filter(final List<ModuleDeclaration> modules, final GuiceConfig config) {
         modules.removeIf(it -> config.getIgnoreModules().contains(it.getType())
-                || (!it.isJITBindings() && filter(it.getType().getName(), config.getIgnorePackages())));
+                || (!it.isJitModule() && filter(it.getType().getName(), config.getIgnorePackages())));
         for (ModuleDeclaration mod : modules) {
             if (modulesDisabled.contains(mod.getType())) {
                 // ignore removed module's subtree

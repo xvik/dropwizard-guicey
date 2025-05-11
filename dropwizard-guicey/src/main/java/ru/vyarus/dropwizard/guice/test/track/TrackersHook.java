@@ -105,6 +105,11 @@ public class TrackersHook implements GuiceyConfigurationHook {
         private final Class<T> type;
         private final TrackerConfig config = new TrackerConfig();
 
+        /**
+         * Create builder.
+         *
+         * @param type service type
+         */
         public Builder(final Class<T> type) {
             this.type = type;
         }

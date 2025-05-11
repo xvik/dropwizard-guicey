@@ -21,6 +21,14 @@ public class StoredReusableApp implements ExtensionContext.Store.CloseableResour
     private final DropwizardTestSupport<?> support;
     private final ClientSupport client;
 
+    /**
+     * Create stored app.
+     *
+     * @param declaration declaration test class
+     * @param source      declaration source description
+     * @param support     dropwizard test support
+     * @param client      client
+     */
     public StoredReusableApp(final Class<?> declaration,
                              final String source,
                              final DropwizardTestSupport<?> support,

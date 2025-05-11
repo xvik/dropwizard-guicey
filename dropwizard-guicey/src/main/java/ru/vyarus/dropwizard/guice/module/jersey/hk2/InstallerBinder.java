@@ -29,6 +29,13 @@ public class InstallerBinder extends AbstractBinder {
     private final StatsTracker tracker;
     private final LifecycleSupport lifecycle;
 
+    /**
+     * Create binder.
+     *
+     * @param injector  injector
+     * @param tracker   tracker
+     * @param lifecycle listeners support
+     */
     public InstallerBinder(final Injector injector, final StatsTracker tracker,
                            final LifecycleSupport lifecycle) {
         this.injector = injector;

@@ -30,6 +30,12 @@ public abstract class InjectorPhaseEvent extends RunPhaseEvent {
     private final Injector injector;
     private final ReportRenderer reportRenderer = new ReportRenderer();
 
+    /**
+     * Create event.
+     *
+     * @param type    event type
+     * @param context event context
+     */
     public InjectorPhaseEvent(final GuiceyLifecycle type,
                               final EventsContext context) {
         super(type, context);

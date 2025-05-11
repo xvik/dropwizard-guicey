@@ -20,6 +20,12 @@ public class ClasspathExtensionsResolvedEvent extends ConfigurationPhaseEvent {
 
     private final List<Class<?>> extensions;
 
+    /**
+     * Create event.
+     *
+     * @param context    event context
+     * @param extensions extensions
+     */
     public ClasspathExtensionsResolvedEvent(final EventsContext context,
                                             final List<Class<?>> extensions) {
         super(GuiceyLifecycle.ClasspathExtensionsResolved, context);

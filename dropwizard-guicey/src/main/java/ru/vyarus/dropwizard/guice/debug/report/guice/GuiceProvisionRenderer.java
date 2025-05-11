@@ -32,6 +32,12 @@ public class GuiceProvisionRenderer {
     private static final GuiceBindingVisitor BINDING_VISITOR = new GuiceBindingVisitor();
     private static final int MAX_PROVISIONS = 5;
 
+    /**
+     * Render provisions report.
+     *
+     * @param provisions collected provisions data
+     * @return rendered report
+     */
     public String render(final ListMultimap<Binding<?>, Duration> provisions) {
         final List<Provision> parsed = process(provisions);
         final StringBuilder res = new StringBuilder(1000);

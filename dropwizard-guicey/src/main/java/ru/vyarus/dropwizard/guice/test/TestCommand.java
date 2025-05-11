@@ -30,14 +30,32 @@ public class TestCommand<C extends Configuration> extends EnvironmentCommand<C> 
     private final List<ConfigModifier<C>> modifiers;
     private ContainerLifeCycle container;
 
+    /**
+     * Create command.
+     *
+     * @param application application instance
+     */
     public TestCommand(final Application<C> application) {
         this(application, true);
     }
 
+    /**
+     * Create command.
+     *
+     * @param application     application instance
+     * @param simulateManaged true to simulate managed lifecycle
+     */
     public TestCommand(final Application<C> application, final boolean simulateManaged) {
         this(application, simulateManaged, null);
     }
 
+    /**
+     * Create command.
+     *
+     * @param application     application instance
+     * @param simulateManaged true to simulate managed lifecycle
+     * @param modifiers       configuration modifiers
+     */
     public TestCommand(final Application<C> application, final boolean simulateManaged,
                        final List<ConfigModifier<C>> modifiers) {
         super(application, "guicey-test", "Specific command to run guice context without jetty server");
@@ -72,6 +90,9 @@ public class TestCommand<C extends Configuration> extends EnvironmentCommand<C> 
         }
     }
 
+    /**
+     * Stop lifecycle.
+     */
     public void stop() {
         if (container != null) {
             try {

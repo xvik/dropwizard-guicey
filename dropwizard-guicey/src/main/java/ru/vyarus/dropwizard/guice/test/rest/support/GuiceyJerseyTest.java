@@ -49,7 +49,12 @@ public class GuiceyJerseyTest extends JerseyTest {
     private final boolean logRequests;
     private URI rootUri;
 
-    // NOTE Environment can't be used in constructor directly due to configureDeployment() override
+    /**
+     * Create jersey test.
+     * NOTE Environment can't be used in constructor directly due to configureDeployment() override
+     *
+     * @param logRequests true to log requests and responses
+     */
     protected GuiceyJerseyTest(final boolean logRequests) {
         this.logRequests = logRequests;
 
@@ -58,15 +63,21 @@ public class GuiceyJerseyTest extends JerseyTest {
         System.setProperty("sun.net.http.allowRestrictedHeaders", "true");
     }
 
+    /**
+     * @param environment environment
+     * @param policy      container policy
+     * @param logRequests log requests and responses
+     * @return jersey test instance
+     */
     @SuppressFBWarnings("EI_EXPOSE_STATIC_REP2")
     public static GuiceyJerseyTest create(final Environment environment,
                                           final TestContainerPolicy policy,
-                                          final boolean debug) {
+                                          final boolean logRequests) {
         synchronized (GuiceyJerseyTest.class) {
             // have to use static variable because environment requested from super constructor!
             GuiceyJerseyTest.environment = environment;
             GuiceyJerseyTest.policy = policy;
-            return new GuiceyJerseyTest(debug);
+            return new GuiceyJerseyTest(logRequests);
         }
     }
 

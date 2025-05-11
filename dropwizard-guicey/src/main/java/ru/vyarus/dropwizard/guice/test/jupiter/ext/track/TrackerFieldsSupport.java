@@ -36,6 +36,9 @@ public class TrackerFieldsSupport extends AnnotatedTestFieldSetup<TrackBean, Tra
 
     private final TrackersHook hook = new TrackersHook();
 
+    /**
+     * Create support.
+     */
     public TrackerFieldsSupport() {
         super(TrackBean.class, Tracker.class, TEST_TRACKER_FIELDS);
     }

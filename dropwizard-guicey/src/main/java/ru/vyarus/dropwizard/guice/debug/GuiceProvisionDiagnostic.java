@@ -56,6 +56,11 @@ public class GuiceProvisionDiagnostic implements GuiceyBundle {
 
     private final boolean printStartupReport;
 
+    /**
+     * Create report.
+     *
+     * @param printStartupReport true to print report after application startup
+     */
     public GuiceProvisionDiagnostic(final boolean printStartupReport) {
         this.printStartupReport = printStartupReport;
     }
@@ -99,6 +104,11 @@ public class GuiceProvisionDiagnostic implements GuiceyBundle {
 
         private final Multimap<Binding<?>, Duration> provisions;
 
+        /**
+         * Create module.
+         *
+         * @param provisions provisions collector
+         */
         public ProvisionListenerModule(final Multimap<Binding<?>, Duration> provisions) {
             this.provisions = provisions;
         }

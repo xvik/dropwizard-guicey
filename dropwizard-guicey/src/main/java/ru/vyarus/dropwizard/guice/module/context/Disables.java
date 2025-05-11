@@ -52,6 +52,10 @@ public final class Disables {
         return input -> Arrays.asList(types).contains(input.getRegistrationScope().getType());
     }
 
+    /**
+     * @param scopes registration scope
+     * @return predicate for items registered in scope
+     */
     public static Predicate<ItemInfo> registeredBy(final ItemId... scopes) {
         // in time of disable predicate run registration scope == registered by
         return input -> Arrays.asList(scopes).contains(input.getRegistrationScope());

@@ -27,10 +27,21 @@ public class SessionListenersSupport implements Managed {
     private final boolean failWithoutSession;
     private final Multimap<MutableServletContextHandler, EventListener> listeners = LinkedListMultimap.create();
 
+    /**
+     * Create support.
+     *
+     * @param failWithoutSession true to fail without session handler
+     */
     public SessionListenersSupport(final boolean failWithoutSession) {
         this.failWithoutSession = failWithoutSession;
     }
 
+    /**
+     * Add listener for delayed registration.
+     *
+     * @param environment servlet environment
+     * @param listener    listener
+     */
     public void add(final MutableServletContextHandler environment, final EventListener listener) {
         listeners.put(environment, listener);
     }

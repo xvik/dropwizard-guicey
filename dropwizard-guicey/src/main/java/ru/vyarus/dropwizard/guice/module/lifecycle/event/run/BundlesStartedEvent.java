@@ -19,6 +19,12 @@ public class BundlesStartedEvent extends RunPhaseEvent {
 
     private final List<GuiceyBundle> bundles;
 
+    /**
+     * Create event.
+     *
+     * @param context event context
+     * @param bundles bundles
+     */
     public BundlesStartedEvent(final EventsContext context,
                                final List<GuiceyBundle> bundles) {
         super(GuiceyLifecycle.BundlesStarted, context);

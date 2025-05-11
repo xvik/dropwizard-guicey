@@ -60,6 +60,13 @@ public class Tracker<T> {
     private Object innerMock;
     private MockStrongReference<Object> reference;
 
+    /**
+     * Create tracker.
+     *
+     * @param type    service type
+     * @param config  config
+     * @param metrics metrics
+     */
     public Tracker(final Class<T> type,
                    final TrackerConfig config,
                    final MetricRegistry metrics) {

@@ -18,6 +18,12 @@ public class LazyGuiceFactory<T> implements Supplier<T> {
     private final Injector injector;
     private final Class<Supplier<T>> type;
 
+    /**
+     * Create factory.
+     *
+     * @param injector injector
+     * @param type     original factory
+     */
     public LazyGuiceFactory(final Injector injector, final Class<Supplier<T>> type) {
         this.injector = injector;
         this.type = type;

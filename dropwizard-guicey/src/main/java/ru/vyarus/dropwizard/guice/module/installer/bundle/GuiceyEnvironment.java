@@ -43,6 +43,11 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
 
     private final ConfigurationContext context;
 
+    /**
+     * Create environment.
+     *
+     * @param context configuration context
+     */
     public GuiceyEnvironment(final ConfigurationContext context) {
         this.context = context;
     }
@@ -234,7 +239,7 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
      * always be wrapped with bundles to improve application readability.
      *
      * @param listener listener to call after injector creation
-     * @param <C> configuration type
+     * @param <C>      configuration type
      * @return builder instance for chained calls
      */
     public <C extends Configuration> GuiceyEnvironment onGuiceyStartup(final GuiceyStartupListener<C> listener) {
@@ -325,8 +330,8 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
      * @return builder instance for chained calls
      */
     public GuiceyEnvironment listenJersey(final ApplicationEventListener listener) {
-       environment().jersey().register(listener);
-       return this;
+        environment().jersey().register(listener);
+        return this;
     }
 
     // ------------------------------------------------------------------ COMMON METHODS

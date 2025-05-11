@@ -12,6 +12,9 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
  */
 public class StartupTimeHook implements GuiceyConfigurationHook {
 
+    /**
+     * Hook alias for system property.
+     */
     public static final String ALIAS = "startup-time";
 
     @Override

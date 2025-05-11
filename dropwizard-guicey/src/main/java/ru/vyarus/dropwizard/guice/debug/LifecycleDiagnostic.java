@@ -64,6 +64,11 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
     // counting time from listener creation (~same as bundle registration and app initial configuration)
     private final StopWatch timer = StopWatch.createStarted();
 
+    /**
+     * Create lifecycle diagnostic.
+     *
+     * @param showDetails true to show all details (verbose)
+     */
     public LifecycleDiagnostic(final boolean showDetails) {
         this.showDetails = showDetails;
     }
@@ -249,9 +254,9 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
                 .append('\t').append(message).append(" = \n");
         for (Object item : items) {
             builder.append("\t\t").append(item instanceof String ? item
-                    // it is the only way to show something meaningful for proxy
-                    : (item instanceof Proxy ? item.toString()
-                    : RenderUtils.renderClassLine(item instanceof Class ? (Class) item : item.getClass())))
+                            // it is the only way to show something meaningful for proxy
+                            : (item instanceof Proxy ? item.toString()
+                            : RenderUtils.renderClassLine(item instanceof Class ? (Class) item : item.getClass())))
                     .append(NL);
         }
         System.out.println(builder.toString());

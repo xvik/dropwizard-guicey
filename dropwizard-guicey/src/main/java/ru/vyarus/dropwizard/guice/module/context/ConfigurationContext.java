@@ -162,6 +162,9 @@ public final class ConfigurationContext {
     private final LifecycleSupport lifecycleTracker = new LifecycleSupport(tracker, readOnlyOptions,
             sharedState, tracker::verifyTimersDone);
 
+    /**
+     * Create a context.
+     */
     public ConfigurationContext() {
         // always available
         sharedState.put(Options.class, readOnlyOptions);

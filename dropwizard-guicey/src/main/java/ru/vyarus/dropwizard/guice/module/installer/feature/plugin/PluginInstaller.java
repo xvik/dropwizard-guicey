@@ -49,6 +49,12 @@ public class PluginInstaller implements FeatureInstaller, BindingInstaller {
         registerPlugin(binder, type);
     }
 
+    /**
+     * Plugin registration.
+     *
+     * @param binder binder
+     * @param type   plugin type
+     */
     @SuppressWarnings("unchecked")
     public void registerPlugin(final Binder binder, final Class<?> type) {
         // multibindings registration (common for both registration types)

@@ -29,15 +29,44 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder<C, T>> {
+    /**
+     * Application class.
+     */
     protected final Class<? extends Application<C>> app;
+    /**
+     * Configuration file path.
+     */
     protected String configPath;
+    /**
+     * Configuration source provider.
+     */
     protected ConfigurationSourceProvider configSourceProvider;
+    /**
+     * Configuration overrides.
+     */
     protected final Map<String, Supplier<String>> configOverrides = new HashMap<>();
+    /**
+     * Configuration modifiers.
+     */
     protected final List<ConfigModifier<C>> modifiers = new ArrayList<>();
+    /**
+     * Configuration instance (instead of file).
+     */
     protected C configObject;
+    /**
+     * Configuration overrides property prefix.
+     */
     protected String propertyPrefix;
+    /**
+     * Rest context mapping.
+     */
     protected String restMapping;
 
+    /**
+     * Create builder.
+     *
+     * @param app application class
+     */
     public BaseBuilder(final Class<? extends Application<C>> app) {
         this.app = app;
     }
@@ -210,6 +239,12 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
         return self();
     }
 
+    /**
+     * Collect configuration overrides objects.
+     *
+     * @param prefix custom configuration overrides prefix
+     * @return configuration overrides
+     */
     protected ConfigOverride[] prepareOverrides(final String prefix) {
         final ConfigOverride[] override = new ConfigOverride[configOverrides.size() + (restMapping == null ? 0 : 1)];
         int i = 0;

@@ -21,6 +21,11 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.internal.EventsContext;
  */
 public class ApplicationStartedEvent extends JerseyPhaseEvent {
 
+    /**
+     * Create event.
+     *
+     * @param context event context
+     */
     public ApplicationStartedEvent(final EventsContext context) {
         super(GuiceyLifecycle.ApplicationStarted, context);
     }

@@ -49,6 +49,15 @@ public class GuiceyConfigurationInfo {
     private final ExtensionsHolder holder;
     private final ConfigurationTree configurationTree;
 
+    /**
+     * Create configuration info.
+     *
+     * @param context           configuration context
+     * @param stats             stat trackers
+     * @param options           options
+     * @param holder            extensions holder
+     * @param configurationTree parsed configuration
+     */
     @Inject
     public GuiceyConfigurationInfo(final ConfigurationInfo context, final StatsInfo stats,
                                    final OptionsInfo options, final ExtensionsHolder holder,

@@ -37,6 +37,9 @@ public class MockFieldsSupport extends AnnotatedTestFieldSetup<MockBean, Object>
 
     private final MocksHook hook = new MocksHook();
 
+    /**
+     * Create support.
+     */
     public MockFieldsSupport() {
         super(MockBean.class, Object.class, TEST_MOCK_FIELDS);
     }

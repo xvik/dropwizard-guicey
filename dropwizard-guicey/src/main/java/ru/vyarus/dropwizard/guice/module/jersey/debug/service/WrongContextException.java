@@ -8,6 +8,12 @@ package ru.vyarus.dropwizard.guice.module.jersey.debug.service;
  */
 public class WrongContextException extends RuntimeException {
 
+    /**
+     * Create exception.
+     *
+     * @param message message (with optional string format arguments)
+     * @param args    message arguments
+     */
     public WrongContextException(final String message, final Object... args) {
         super(String.format(message, args));
     }

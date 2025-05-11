@@ -16,6 +16,11 @@ public final class OptionHolder<T> {
     private boolean set;
     private T value;
 
+    /**
+     * Create holder.
+     *
+     * @param option option
+     */
     public OptionHolder(final Option<T> option) {
         this.option = option;
         value = option.getDefaultValue();

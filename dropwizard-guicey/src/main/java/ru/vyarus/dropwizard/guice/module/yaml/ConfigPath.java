@@ -47,6 +47,21 @@ public class ConfigPath {
     private final boolean objectDeclaration;
     private final Annotation qualifier;
 
+    /**
+     * Create a parsed configuration path.
+     *
+     * @param root                 root path
+     * @param declarationClass     configuration field declaration class
+     * @param declaredType         field type
+     * @param valueType            actual value type
+     * @param declaredTypeGenerics declared generics
+     * @param valueTypeGenerics    value generics
+     * @param path                 full property path
+     * @param value                value object
+     * @param customType           object type (not primitive, enum or array)
+     * @param objectDeclaration    raw Object declared
+     * @param qualifier            field qualifier annotation (to use)
+     */
     @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList"})
     public ConfigPath(
             final ConfigPath root,

@@ -46,6 +46,11 @@ public final class ConfigurationInfo {
 
     private final List<Class<? extends GuiceyConfigurationHook>> hooks;
 
+    /**
+     * Create configuration info.
+     *
+     * @param context configuration context
+     */
     public ConfigurationInfo(final ConfigurationContext context) {
         hooks = context.getExecutedHookTypes();
         // convert all objects into types (more suitable for analysis)

@@ -29,7 +29,13 @@ public class MethodSummary implements Comparable<MethodSummary> {
     private int errors;
     private final Snapshot snapshot;
 
-
+    /**
+     * Create summary.
+     *
+     * @param service service type
+     * @param method  method
+     * @param timer   method metrics
+     */
     public MethodSummary(final Class<?> service, final Method method, final Timer timer) {
         this.service = service;
         this.method = method;

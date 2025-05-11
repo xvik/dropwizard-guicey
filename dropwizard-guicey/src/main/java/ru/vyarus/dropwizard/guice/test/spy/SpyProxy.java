@@ -27,6 +27,11 @@ public class SpyProxy<T> implements MethodInterceptor, Provider<T> {
     private Provider<T> instanceProvider;
     private volatile T spy;
 
+    /**
+     * Create proxy.
+     *
+     * @param type bean type
+     */
     public SpyProxy(final Class<T> type) {
         this.type = type;
     }

@@ -32,6 +32,14 @@ public final class StringConverter {
     private StringConverter() {
     }
 
+    /**
+     * Convert string to type.
+     *
+     * @param target target type
+     * @param value  value to convert
+     * @param <V>    targe type
+     * @return converted value
+     */
     @SuppressWarnings("unchecked")
     public static <V> V convert(final Class<V> target, final String value) {
         final Object res;
@@ -49,7 +57,7 @@ public final class StringConverter {
     private static <V> V[] handleArray(final Class<V> type, final String value) {
         try {
             return StreamSupport.stream(
-                    Splitter.on(',').trimResults().omitEmptyStrings().split(value).spliterator(), false)
+                            Splitter.on(',').trimResults().omitEmptyStrings().split(value).spliterator(), false)
                     .map(val -> convertSimple(type, val)).toArray(num -> (V[]) Array.newInstance(type, num));
         } catch (Exception ex) {
             throw new IllegalStateException("Failed to parse array " + type.getSimpleName()

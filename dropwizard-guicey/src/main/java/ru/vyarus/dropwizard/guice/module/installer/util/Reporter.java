@@ -14,7 +14,13 @@ import ru.vyarus.dropwizard.guice.module.installer.FeatureInstaller;
  */
 @SuppressWarnings("PMD.AvoidStringBufferField")
 public class Reporter {
+    /**
+     * Newline.
+     */
     public static final String NEWLINE = String.format("%n");
+    /**
+     * Tab.
+     */
     public static final String TAB = "    ";
 
     // marker to be able switch off reports easily
@@ -25,6 +31,12 @@ public class Reporter {
     private int counter;
     private boolean wasEmptyLine;
 
+    /**
+     * Create reporter.
+     *
+     * @param type  installer type
+     * @param title title
+     */
     public Reporter(final Class<? extends FeatureInstaller> type, final String title) {
         this.logger = LoggerFactory.getLogger(type);
         this.message = new StringBuilder();

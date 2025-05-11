@@ -8,6 +8,7 @@ import ru.vyarus.dropwizard.guice.module.installer.util.JerseyBinding;
 
 import jakarta.annotation.Priority;
 import jakarta.ws.rs.Priorities;
+
 import java.util.Comparator;
 import java.util.List;
 
@@ -25,6 +26,12 @@ public class JerseyConfigRenderer implements ReportRenderer<JerseyConfig> {
     private final InjectionManager manager;
     private final boolean guiceFirstMode;
 
+    /**
+     * Create renderer.
+     *
+     * @param manager        injection manager
+     * @param guiceFirstMode true for guice-priority mode (default)
+     */
     public JerseyConfigRenderer(final InjectionManager manager, final boolean guiceFirstMode) {
         this.manager = manager;
         this.guiceFirstMode = guiceFirstMode;
