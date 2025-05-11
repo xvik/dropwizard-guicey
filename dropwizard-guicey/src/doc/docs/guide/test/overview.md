@@ -65,7 +65,7 @@ Example hook:
 ```java
 public class MyHook implements GuiceyConfigurationHook {
     
-    public void configure(GuiceBundle.Builder builder) {
+    public void configure(GuiceBundle.Builder builder) throws Exception {
         builder
             .disableModules(FeatureXModule.class)
             .disable(inPackage("com.foo.feature"))
@@ -150,7 +150,7 @@ It could be overridden with a hook:
 
 ```java
 public class MyHook implements GuiceyConfigurationHook {
-    public void configure(GuiceBundle.Builder builder) {
+    public void configure(GuiceBundle.Builder builder) throws Exception {
         builder
             // the main module is still registered in application:
             // .modules(new MyModule())        

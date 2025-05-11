@@ -193,7 +193,13 @@ or [disable modules analysis](guide/guice/module-analysis.md#disabling-analysis)
     Guice bindings override (`Modules.override()`), available through guicey api [modulesOverride()](guide/guice/override.md),
     will also cause synthetic module (because overrides are applied before calling injector factory).
     But this supposed to be used for tests only (just to mention).
-    
+
+!!! tip
+    If you have problems with startup time, guicey provides special reports for investigations:
+
+    * [startup repport](guide/diagnostic/startup-report.md)
+    * [guice provision report](guide/diagnostic/guice-provision-report.md)
+
 ## AOP
 
 Not guicey-related, but still, as it's not always obvious how AOP is applied on beans

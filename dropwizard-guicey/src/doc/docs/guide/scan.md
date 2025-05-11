@@ -30,6 +30,78 @@ GuiceBundle.builder()
 
 (equivalent to `.enableAutoConfig(getClass().getPackage().getName())`
 
+### Filter classes
+
+By default, classpath scanner checks all available classes, and the only way to avoid extension 
+recognition is `@InvisibleForScanner` annotation.
+
+Now custom conditions could be specified:
+
+```java
+GuiceBundle.builder()
+    .autoConfigFilter(ignoreAnnotated(Skip.class))
+```
+
+In this example, classes annotated with `@Skip` would not be recognized.
+
+!!! note
+    Assumed static import for `ClassFilters` utility, containing the most common cases.
+    If required, raw predicate could be used:
+    ```java
+    .autoConfigFilter(cls -> !cls.isAnnotationPresent(Skip.class))
+    ```
+
+It is also possible now to implement spring-like approach when only annotated classes 
+are recognized:
+
+```java
+GuiceBundle.builder()
+    .autoConfigFilter(annotated(Component.class, Service.class))
+```
+
+Here only extensions annotated with `@Component` or `@Service` would be recognized.
+
+!!! note
+    This filter affects only extension search: installers and commands search does not use filters
+    (because it would be confusing and error-prone).
+
+!!! tip
+    Multiple filters could be specified:
+    ```java
+    GuiceBundle.builder()
+        .autoConfigFilter(annotated(Component.class, Service.class))
+        .autoConfigFilter(ignoreAnnotated(Skip.class))
+    ```
+
+Auto config filter also affects extensions recognition from guice bindings and so
+could be used for ignoring extensions from bindings.
+
+It is also possible now to exclude some sub-packages from classpath scan:
+
+```java
+GuiceBundle.builder()
+    .enableAutoConfig("com.company.app")
+    .autoConfigFilter(ignorePackages("com.company.app.internal"))
+```
+
+### Private classes
+
+By default, guicey does not search extensions in protected and package-private classes:
+
+```java
+public class Something {
+    static class Ext1 implements Managed {}
+    protected static class Ext2 implements Managed {}
+}
+```
+
+But such extensions could be enabled with:
+
+```java
+GuiceBundle.builder()
+    .option(GuiceyOptions.ScanProtectedClasses, true)
+```
+
 ## How it works
 
 When auto scan enabled:

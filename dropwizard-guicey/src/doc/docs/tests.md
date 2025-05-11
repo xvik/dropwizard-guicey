@@ -139,6 +139,10 @@ public class MyTest {
 }
 ```
 
+!!! tip
+    There is also a special [lightweight REST](guide/test/junit5/rest.md) tests support to 
+    avoid starting entire web server. 
+
 ## Spock
 
 All examples above was for junit 5, but you can also use groovy-based [Spock framework 2](http://spockframework.org/). 

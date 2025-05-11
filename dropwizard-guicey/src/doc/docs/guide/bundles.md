@@ -26,6 +26,15 @@ public interface GuiceyBundle {
 }
 ```
 
+!!! note
+    Dropwizard bundles `initialize` method does not throw exceptions: assumed 
+    only runtime exceptions (which are not handled by dropwizard).
+
+    Initially, guicey bundle init method also did not allow checked exceptions.
+    But, it appears that often it is more useful to allow checked exceptions in init method to
+    avoid clumsy exception handling (especially for quick prototyping) and so checked exceptions
+    support was added. Runtime exceptions are rethrown as is.
+
 Guicey Bundles are an extension to dropwizard bundles (without restrictions), 
 so it is extremely simple to switch from dropwizard bundles.
 

@@ -22,8 +22,12 @@ In this case you may require to explicitly register hk2-guice bride so hk2 could
 see guice beans directly. 
 
 !!! danger
-    Since jersey 2.26 it is possible to get rid of HK2 completely. Next guicey version
-    will ONLY use guice and all current HK2-related features will be removed.   
+    Since jersey 2.26 it is possible to get rid of HK2 completely. Unfortunately, such 
+    update requires a lot of work. Someday guicey will ONLY use guice and all current 
+    HK2-related features will be removed.  
+    For now, all HK2-related features are softly deprecated: no deprecation annotations,
+    just mention in javadoc.
+
 
 ## Lifecycle
 
@@ -39,11 +43,13 @@ and **start injector on run phase**.
     If we create injector in initialization phase then we will not have access to `Configuration` and `Environment`
     in guice modules, but configuration could be required, especially for 3rd party modules, which
     does not support lazy configuration.   
-    
-The only exception for configuration under initialization phase is 
-guice modules, which can be registered in run phase (simply because modules too often
-require configuration values for construction). As a consequence, extensions recognized 
-from guice bindings are registered in run phase too.
+
+It is preferred to register everything under the initialization phase, but not possible in many cases.     
+We still need to register guice modules, requiring configuration values for construction under run phase. 
+
+In some cases, extension registration may depend on configuration value, and so 
+it is also allowed to register extensions in run phase (besides, extensions could be 
+recognized from guice bindings, registered at run phase).
 
 This separation of initialization and run phases makes configuration more predictable
 (especially important when bundles depend on initialization order).      

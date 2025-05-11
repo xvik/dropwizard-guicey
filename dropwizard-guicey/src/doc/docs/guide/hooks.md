@@ -5,7 +5,7 @@ Guicey provides special mechanism for external configuration:
 ```java
 public class MyHook implements GuiceyConfigurationHook {
     @Override
-    public void configure(GuiceBundle.Builder builder) {
+    public void configure(GuiceBundle.Builder builder) throws Exception {
         builder.bundles(new AdditinoalBundle());    
     }       
 }
