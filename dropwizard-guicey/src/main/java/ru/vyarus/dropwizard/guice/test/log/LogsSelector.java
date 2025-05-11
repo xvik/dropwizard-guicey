@@ -20,8 +20,16 @@ import java.util.stream.Collectors;
  */
 public class LogsSelector {
 
+    /**
+     * Events.
+     */
     protected final List<ILoggingEvent> list;
 
+    /**
+     * Create collector.
+     *
+     * @param list events list
+     */
     public LogsSelector(final List<ILoggingEvent> list) {
         this.list = list;
     }

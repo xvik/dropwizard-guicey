@@ -45,7 +45,9 @@ public class RestStubFieldsSupport extends AnnotatedTestFieldSetup<StubRest, Res
     private static final String TEST_RESOURCES_FIELD = "TEST_RESOURCES";
     private RestStubsHook restStubs;
 
-
+    /**
+     * Create support.
+     */
     public RestStubFieldsSupport() {
         super(StubRest.class, RestClient.class, TEST_RESOURCES_FIELD);
     }

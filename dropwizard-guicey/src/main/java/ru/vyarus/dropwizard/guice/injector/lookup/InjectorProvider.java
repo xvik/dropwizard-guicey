@@ -19,6 +19,11 @@ public class InjectorProvider implements Provider<Injector> {
     private final Application application;
     private Injector injector;
 
+    /**
+     * Create provider.
+     *
+     * @param application application instance
+     */
     public InjectorProvider(final Application application) {
         this.application = application;
     }

@@ -30,6 +30,13 @@ public class AnnotatedField<A extends Annotation, T> {
     // required to track value change (last value set or get)
     private T cachedValue;
 
+    /**
+     * Create annotated field for exact field and annotation.
+     *
+     * @param annotation field annotation
+     * @param field      annotated field
+     * @param testClass  test class where field was searcher
+     */
     public AnnotatedField(final A annotation,
                           final Field field,
                           final Class<?> testClass) {
@@ -283,6 +290,13 @@ public class AnnotatedField<A extends Annotation, T> {
         return TestFieldUtils.toString(field);
     }
 
+    /**
+     * Validates that field value not changed (it is the same value as was injected).
+     *
+     * @param instance test instance
+     * @return value
+     * @throws java.lang.IllegalStateException if field value differs from the injected value
+     */
     @SuppressWarnings("PMD.CompareObjectsWithEquals")
     public T checkValueNotChanged(final TestInstances instance) {
         final T currentValue = cachedValue;

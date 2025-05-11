@@ -18,11 +18,22 @@ public abstract class BundleItemInfoImpl<T> extends InstanceItemInfoImpl<T> impl
 
     private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
 
-    // disable only
+    /**
+     * Create disable-only item (only indicates disabling).
+     *
+     * @param type bundle type
+     * @param item bundle class
+     */
     public BundleItemInfoImpl(final ConfigItem type, final Class<?> item) {
         super(type, item);
     }
 
+    /**
+     * Create bundle item.
+     *
+     * @param type     bundle type
+     * @param instance bundle instance
+     */
     public BundleItemInfoImpl(final ConfigItem type, final T instance) {
         super(type, instance);
     }

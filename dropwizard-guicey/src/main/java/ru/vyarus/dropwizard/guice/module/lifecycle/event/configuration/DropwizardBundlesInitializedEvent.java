@@ -23,6 +23,14 @@ public class DropwizardBundlesInitializedEvent extends ConfigurationPhaseEvent {
     private final List<ConfiguredBundle> disabled;
     private final List<ConfiguredBundle> ignored;
 
+    /**
+     * Create event.
+     *
+     * @param context  event context
+     * @param bundles  actual bundles
+     * @param disabled disabled bundles
+     * @param ignored  ignored bundles (duplicates)
+     */
     public DropwizardBundlesInitializedEvent(final EventsContext context,
                                              final List<ConfiguredBundle> bundles,
                                              final List<ConfiguredBundle> disabled,

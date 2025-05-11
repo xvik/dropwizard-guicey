@@ -46,6 +46,12 @@ public class GuiceBindingsModule extends AbstractModule {
     private final Provider<Injector> provider;
     private final boolean guiceServletSupport;
 
+    /**
+     * Create bindings module.
+     *
+     * @param provider            injector provider.
+     * @param guiceServletSupport true if guice servlets enabled
+     */
     public GuiceBindingsModule(final Provider<Injector> provider, final boolean guiceServletSupport) {
         this.provider = provider;
         this.guiceServletSupport = guiceServletSupport;

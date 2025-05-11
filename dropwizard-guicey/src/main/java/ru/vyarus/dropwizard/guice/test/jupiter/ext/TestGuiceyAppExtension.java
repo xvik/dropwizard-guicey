@@ -67,6 +67,9 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
 
     private Config config;
 
+    /**
+     * Create extension.
+     */
     public TestGuiceyAppExtension() {
         // extension created automatically by @TestGuiceyApp annotation
         super(new TestExtensionsTracker());
@@ -187,6 +190,11 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
      */
     public static class Builder<C extends Configuration> extends ExtensionBuilder<C, Builder<C>, Config> {
 
+        /**
+         * Create builder.
+         *
+         * @param app application type
+         */
         public Builder(final Class<? extends Application<C>> app) {
             super(new Config());
             this.cfg.app = Preconditions.checkNotNull(app, "Application class must be provided");

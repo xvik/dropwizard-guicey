@@ -43,6 +43,9 @@ public class BindingsOverrideInjectorFactory implements InjectorFactory {
 
     private final Logger logger = LoggerFactory.getLogger(BindingsOverrideInjectorFactory.class);
 
+    /**
+     * Create a factory.
+     */
     public BindingsOverrideInjectorFactory() {
         // assumed that factory registered as instance before test run and so thread will always use clear state
         OVERRIDING_MODULES.remove();

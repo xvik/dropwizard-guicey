@@ -37,6 +37,12 @@ public class ContextDebugService {
     private final Lock lock = new ReentrantLock();
     private List<Class<?>> managedTypes;
 
+    /**
+     * Create jersey debug service.
+     *
+     * @param holder  extensions holder
+     * @param options options
+     */
     @Inject
     public ContextDebugService(final Provider<ExtensionsHolder> holder, final Options options) {
         this.holder = holder;

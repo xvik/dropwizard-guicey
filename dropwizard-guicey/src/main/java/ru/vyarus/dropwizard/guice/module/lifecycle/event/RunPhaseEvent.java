@@ -21,6 +21,12 @@ public abstract class RunPhaseEvent extends ConfigurationPhaseEvent {
     private final ConfigurationTree configurationTree;
     private final Environment environment;
 
+    /**
+     * Create event.
+     *
+     * @param type    event type
+     * @param context event context
+     */
     public RunPhaseEvent(final GuiceyLifecycle type,
                          final EventsContext context) {
         super(type, context);

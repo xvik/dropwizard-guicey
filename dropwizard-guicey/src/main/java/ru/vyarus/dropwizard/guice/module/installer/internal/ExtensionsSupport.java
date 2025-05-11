@@ -52,6 +52,15 @@ public final class ExtensionsSupport {
         return registerExtension(context, type, installer, fromScan);
     }
 
+    /**
+     * Register extension.
+     *
+     * @param context   configuration context
+     * @param type      extension type
+     * @param installer installer recognized extension (could be null)
+     * @param fromScan  from classpath scan
+     * @return true if extension recognized
+     */
     public static boolean registerExtension(final ConfigurationContext context,
                                             final Class<?> type,
                                             final FeatureInstaller installer,
@@ -168,7 +177,7 @@ public final class ExtensionsSupport {
      * Search for matching installer. Extension may match multiple installer, but only one will be actually
      * used (note that installers are ordered).
      *
-     * @param type   extension type
+     * @param type       extension type
      * @param installers installers
      * @return matching installer or null if no matching installer found
      */

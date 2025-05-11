@@ -72,6 +72,9 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
 
     private Config config;
 
+    /**
+     * Create extension.
+     */
     public TestDropwizardAppExtension() {
         // extension created automatically by @TestGuiceyApp annotation
         super(new TestExtensionsTracker());
@@ -201,6 +204,11 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
      */
     public static class Builder<C extends Configuration> extends ExtensionBuilder<C, Builder<C>, Config> {
 
+        /**
+         * Create builder.
+         *
+         * @param app application class
+         */
         public Builder(final Class<? extends Application<C>> app) {
             super(new Config());
             this.cfg.app = Preconditions.checkNotNull(app, "Application class must be provided");

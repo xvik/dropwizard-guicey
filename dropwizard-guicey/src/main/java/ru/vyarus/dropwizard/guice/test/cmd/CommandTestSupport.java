@@ -77,11 +77,29 @@ import java.util.function.Consumer;
 @SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields",
         "checkstyle:ClassFanOutComplexity", "checkstyle:ClassDataAbstractionCoupling"})
 public class CommandTestSupport<C extends Configuration> {
+    /**
+     * Application class.
+     */
     protected final Class<? extends Application<C>> applicationClass;
+    /**
+     * Configuration file path.
+     */
     protected final String configPath;
+    /**
+     * Configuration source provider.
+     */
     protected final ConfigurationSourceProvider configSourceProvider;
+    /**
+     * Configuration overrides.
+     */
     protected final Set<ConfigOverride> configOverrides;
+    /**
+     * Configuration modifiers.
+     */
     protected final List<ConfigModifier<C>> modifiers = new ArrayList<>();
+    /**
+     * Configuration overrides prefix.
+     */
     protected final String customPropertyPrefix;
 
     /**
@@ -90,10 +108,25 @@ public class CommandTestSupport<C extends Configuration> {
      * Needed because state of {@link #configuration} changes during lifecycle.
      */
     protected final boolean explicitConfig;
+    /**
+     * Configuration instance (used instead of file).
+     */
     protected C configuration;
+    /**
+     * Environment instance.
+     */
     protected Environment environment;
+    /**
+     * Injector instance.
+     */
     protected Injector injector;
+    /**
+     * Application instance.
+     */
     protected Application<C> application;
+    /**
+     * Bootstrap instance.
+     */
     protected Bootstrap<C> bootstrap;
 
     private final PrintStream originalOut = System.out;
@@ -107,6 +140,12 @@ public class CommandTestSupport<C extends Configuration> {
     private final SystemInMock stdIn = new SystemInMock();
     private Cli cli;
 
+    /**
+     * Create a support object.
+     *
+     * @param applicationClass application class
+     * @param configuration    configuration instance
+     */
     public CommandTestSupport(final Class<? extends Application<C>> applicationClass, final C configuration) {
         this.applicationClass = applicationClass;
         this.configPath = "";
@@ -117,6 +156,15 @@ public class CommandTestSupport<C extends Configuration> {
         this.explicitConfig = true;
     }
 
+    /**
+     * Create a support object.
+     *
+     * @param applicationClass     application class
+     * @param configPath           configuration file path
+     * @param configSourceProvider configuration source provider
+     * @param customPropertyPrefix config overrides prefix
+     * @param configOverrides      config overrides
+     */
     public CommandTestSupport(final Class<? extends Application<C>> applicationClass,
                               final @Nullable String configPath,
                               final @Nullable ConfigurationSourceProvider configSourceProvider,
@@ -231,6 +279,12 @@ public class CommandTestSupport<C extends Configuration> {
                 run, app, bootstrap, configuration, environment, injector);
     }
 
+    /**
+     * Prepare command execution.
+     *
+     * @param preventServerStart true to avoid server start
+     * @throws Exception on error
+     */
     protected void before(final boolean preventServerStart) throws Exception {
         applyConfigOverrides();
 
@@ -247,6 +301,9 @@ public class CommandTestSupport<C extends Configuration> {
         cli = new Cli(new DummyJarLocation(), bootstrap, System.out, System.err);
     }
 
+    /**
+     * Reset system state after execution.
+     */
     protected void reset() {
         resetConfigOverrides();
         // Don't leak logging appenders into other test cases

@@ -31,6 +31,11 @@ public final class OptionsInfo {
 
     private final OptionsSupport options;
 
+    /**
+     * Create info.
+     *
+     * @param support options support
+     */
     public OptionsInfo(final OptionsSupport support) {
         this.options = support;
     }

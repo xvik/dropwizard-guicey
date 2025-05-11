@@ -22,6 +22,13 @@ public class Recorder {
     private final List<String> loggers;
     private final Level level;
 
+    /**
+     * Create recorder.
+     *
+     * @param name    name
+     * @param level   base level
+     * @param loggers target loggers
+     */
     public Recorder(final String name, final org.slf4j.event.Level level, final List<String> loggers) {
         this.loggers = loggers;
         this.level = Level.toLevel(level.toString());

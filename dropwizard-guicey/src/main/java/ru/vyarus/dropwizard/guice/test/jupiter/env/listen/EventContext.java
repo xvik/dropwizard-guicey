@@ -20,6 +20,12 @@ public class EventContext {
     private final ExtensionContext context;
     private final boolean debug;
 
+    /**
+     * Create event context.
+     *
+     * @param context extension context
+     * @param debug   true if debug enabled in extension
+     */
     public EventContext(final ExtensionContext context, final boolean debug) {
         this.context = context;
         this.debug = debug;

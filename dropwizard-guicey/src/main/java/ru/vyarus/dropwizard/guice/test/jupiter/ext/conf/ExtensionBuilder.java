@@ -32,8 +32,17 @@ import java.util.function.Supplier;
 public abstract class ExtensionBuilder<K extends Configuration,
         T extends ExtensionBuilder<K, T, C>,
         C extends ExtensionConfig> {
+
+    /**
+     * Configuration instance.
+     */
     protected final C cfg;
 
+    /**
+     * Create builder.
+     *
+     * @param cfg configuration instance
+     */
     public ExtensionBuilder(final C cfg) {
         this.cfg = cfg;
     }
@@ -116,7 +125,7 @@ public abstract class ExtensionBuilder<K extends Configuration,
      * Note that overrides order is not predictable so don't specify multiple values for the same property
      * (see {@link io.dropwizard.testing.DropwizardTestSupport} holds overrides in {@link java.util.Set}).
      *
-     * @param key property name
+     * @param key   property name
      * @param value property value
      * @return builder instance for chained calls
      */

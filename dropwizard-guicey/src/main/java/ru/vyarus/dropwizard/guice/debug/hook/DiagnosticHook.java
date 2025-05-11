@@ -12,6 +12,9 @@ import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
  */
 public class DiagnosticHook implements GuiceyConfigurationHook {
 
+    /**
+     * Hook system property alias.
+     */
     public static final String ALIAS = "diagnostic";
 
     @Override

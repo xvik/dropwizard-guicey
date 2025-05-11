@@ -52,10 +52,22 @@ public class ConfigurationTree {
     // unique custom types from paths (could be bound by type - no duplicates)
     private final List<ConfigPath> uniqueTypePaths;
 
+    /**
+     * Create a configuration tree.
+     *
+     * @param rootTypes root properties
+     */
     public ConfigurationTree(final List<Class> rootTypes) {
         this(rootTypes, Collections.emptyList(), Collections.emptyList());
     }
 
+    /**
+     * Create a configuration tree.
+     *
+     * @param rootTypes       root properties
+     * @param paths           configuration paths
+     * @param uniqueTypePaths unique object paths
+     */
     public ConfigurationTree(final List<Class> rootTypes,
                              final List<ConfigPath> paths,
                              final List<ConfigPath> uniqueTypePaths) {

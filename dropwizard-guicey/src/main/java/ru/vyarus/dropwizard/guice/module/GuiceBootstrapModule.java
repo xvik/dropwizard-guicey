@@ -42,6 +42,11 @@ public class GuiceBootstrapModule<T extends Configuration> extends DropwizardAwa
 
     private final ConfigurationContext context;
 
+    /**
+     * Create bootstrap module.
+     *
+     * @param context configuration context
+     */
     public GuiceBootstrapModule(final ConfigurationContext context) {
         this.context = context;
     }

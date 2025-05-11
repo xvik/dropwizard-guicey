@@ -19,10 +19,21 @@ public class ClassNameAbbreviator {
 
     private final int targetLength;
 
+    /**
+     * Create abbreviator.
+     *
+     * @param targetLength maximum length
+     */
     public ClassNameAbbreviator(final int targetLength) {
         this.targetLength = targetLength;
     }
 
+    /**
+     * Shorten package names to match max length.
+     *
+     * @param fqClassName class name
+     * @return abbreviated name
+     */
     public String abbreviate(final String fqClassName) {
         if (fqClassName == null) {
             throw new IllegalArgumentException("Class name may not be null");

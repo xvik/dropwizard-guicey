@@ -24,6 +24,12 @@ public class RunResult<C extends Configuration> {
     private final DropwizardTestSupport<C> support;
     private final Injector injector;
 
+    /**
+     * Create result.
+     *
+     * @param support  dropwizard test support
+     * @param injector injector
+     */
     public RunResult(final DropwizardTestSupport<C> support, final Injector injector) {
         this.support = support;
         this.injector = injector;

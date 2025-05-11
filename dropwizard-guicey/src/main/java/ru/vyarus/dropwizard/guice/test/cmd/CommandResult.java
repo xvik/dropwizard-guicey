@@ -34,6 +34,20 @@ public class CommandResult<C extends Configuration> {
     private final Environment environment;
     private final Injector injector;
 
+    /**
+     * Command result.
+     *
+     * @param success       success indicator
+     * @param exception     exception instance
+     * @param output        console output
+     * @param errorOutput   console error output
+     * @param command       command instance
+     * @param app           application instance
+     * @param bootstrap     bootstrap instance
+     * @param configuration configuration instance
+     * @param environment   environment instance
+     * @param injector      injector instance
+     */
     @SuppressWarnings({"PMD.ExcessiveParameterList", "checkstyle:ParameterNumber"})
     public CommandResult(final boolean success,
                          final @Nullable Throwable exception,

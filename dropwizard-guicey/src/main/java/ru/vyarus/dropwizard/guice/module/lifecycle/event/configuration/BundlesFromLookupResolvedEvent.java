@@ -20,6 +20,12 @@ public class BundlesFromLookupResolvedEvent extends ConfigurationPhaseEvent {
 
     private final List<GuiceyBundle> bundles;
 
+    /**
+     * Create event.
+     *
+     * @param context event context
+     * @param bundles guicey bundles
+     */
     public BundlesFromLookupResolvedEvent(final EventsContext context,
                                           final List<GuiceyBundle> bundles) {
         super(GuiceyLifecycle.BundlesFromLookupResolved, context);

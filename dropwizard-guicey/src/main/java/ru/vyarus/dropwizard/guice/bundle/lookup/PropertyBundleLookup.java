@@ -24,6 +24,9 @@ import java.util.List;
  */
 public class PropertyBundleLookup implements GuiceyBundleLookup {
 
+    /**
+     * Bundles system property.
+     */
     public static final String BUNDLES_PROPERTY = "guicey.bundles";
 
     @Override

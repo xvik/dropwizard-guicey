@@ -20,6 +20,11 @@ public final class StatsInfo {
     // have to keep full object, because stats also computed after info object creation
     private final StatsTracker tracker;
 
+    /**
+     * Create info.
+     *
+     * @param tracker tracker
+     */
     public StatsInfo(final StatsTracker tracker) {
         this.tracker = tracker;
     }

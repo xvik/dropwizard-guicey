@@ -31,6 +31,11 @@ public class GuiceInstanceListener implements ProvisionListener {
         }
     }
 
+    /**
+     * Inject debug service.
+     *
+     * @param contextDebugService debug service
+     */
     @Inject
     public void setContextDebugService(final ContextDebugService contextDebugService) {
         this.contextDebugService = contextDebugService;

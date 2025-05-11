@@ -21,6 +21,11 @@ public class GuiceAopDiagnostic extends GuiceyLifecycleAdapter {
     private final Logger logger = LoggerFactory.getLogger(GuiceAopDiagnostic.class);
     private final GuiceAopConfig config;
 
+    /**
+     * Create AOP diagnostic report.
+     *
+     * @param config report config
+     */
     public GuiceAopDiagnostic(final GuiceAopConfig config) {
         this.config = config;
     }

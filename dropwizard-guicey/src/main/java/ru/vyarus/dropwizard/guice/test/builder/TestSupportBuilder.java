@@ -42,6 +42,11 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
     private final List<TestListener<C>> listeners = new ArrayList<>();
     private TestClientFactory factory = new DefaultTestClientFactory();
 
+    /**
+     * Create builder.
+     *
+     * @param app application type
+     */
     public TestSupportBuilder(final Class<? extends Application<C>> app) {
         super(app);
     }

@@ -19,6 +19,14 @@ public final class TrackerReportBuilder {
     private TrackerReportBuilder() {
     }
 
+    /**
+     * Render hooks and setup objects report.
+     *
+     * @param configPrefix configuration override prefix
+     * @param setups       setup objects sources
+     * @param hooks        hooks sources
+     * @return rendered report
+     */
     public static String buildSetupReport(final String configPrefix,
                                           final List<String> setups,
                                           final List<String> hooks) {
@@ -37,6 +45,14 @@ public final class TrackerReportBuilder {
         return res.toString();
     }
 
+    /**
+     * Render performance report.
+     *
+     * @param tracks  performance tracks
+     * @param context junit context
+     * @param phase   current phase
+     * @return rendered report
+     */
     public static String buildPerformanceReport(final List<PerformanceTrack> tracks,
                                                 final ExtensionContext context,
                                                 final GuiceyTestTime phase) {
@@ -77,6 +93,13 @@ public final class TrackerReportBuilder {
         return title + "\n" + res;
     }
 
+    /**
+     * Render configuration modifications report.
+     *
+     * @param configPrefix config override prefix
+     * @param modifiers    modifiers
+     * @return rendered report
+     */
     public static String buildConfigsReport(final String configPrefix, final List<String> modifiers) {
         final StringBuilder res = new StringBuilder(100);
         for (Map.Entry<Object, Object> entry : System.getProperties().entrySet()) {

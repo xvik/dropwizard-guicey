@@ -25,6 +25,15 @@ public class ModulesAnalyzedEvent extends RunPhaseEvent {
     private final List<Class<? extends Module>> transitiveModulesRemoved;
     private final List<Binding> bindingsRemoved;
 
+    /**
+     * Create event.
+     *
+     * @param context                  event context
+     * @param analyzedModules          modules
+     * @param extensions               resolved extensions
+     * @param transitiveModulesRemoved removed modules
+     * @param bindingsRemoved          removed bindings
+     */
     @SuppressWarnings("checkstyle:ParameterNumber")
     public ModulesAnalyzedEvent(final EventsContext context,
                                 final List<Module> analyzedModules,

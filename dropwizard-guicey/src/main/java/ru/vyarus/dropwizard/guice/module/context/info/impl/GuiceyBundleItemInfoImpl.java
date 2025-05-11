@@ -15,11 +15,20 @@ public class GuiceyBundleItemInfoImpl extends BundleItemInfoImpl<GuiceyBundle> i
 
     private int initOrder;
 
-    // disable only
+    /**
+     * Create disable-only bundle item (only disabled).
+     *
+     * @param type bundle type
+     */
     public GuiceyBundleItemInfoImpl(final Class<? extends GuiceyBundle> type) {
         super(ConfigItem.Bundle, type);
     }
 
+    /**
+     * Create bundle info.
+     *
+     * @param bundle guicey bundle
+     */
     public GuiceyBundleItemInfoImpl(final GuiceyBundle bundle) {
         super(ConfigItem.Bundle, bundle);
     }
@@ -46,6 +55,9 @@ public class GuiceyBundleItemInfoImpl extends BundleItemInfoImpl<GuiceyBundle> i
         return initOrder;
     }
 
+    /**
+     * @param initOrder initialization order
+     */
     public void setInitOrder(final int initOrder) {
         this.initOrder = initOrder;
     }

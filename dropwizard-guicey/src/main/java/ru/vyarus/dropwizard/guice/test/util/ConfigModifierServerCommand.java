@@ -19,6 +19,12 @@ public class ConfigModifierServerCommand<C extends Configuration> extends Server
 
     private final List<ConfigModifier<C>> modifiers;
 
+    /**
+     * Create a command.
+     *
+     * @param application application instance
+     * @param modifiers   modifiers
+     */
     public ConfigModifierServerCommand(final Application<C> application, final List<ConfigModifier<C>> modifiers) {
         super(application);
         this.modifiers = modifiers;

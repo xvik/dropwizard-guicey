@@ -57,6 +57,14 @@ public class GuiceFeature implements Feature, Provider<InjectionManager> {
     private final boolean enableBridge;
     private InjectionManager injectionManager;
 
+    /**
+     * Create feature.
+     *
+     * @param provider     injector provider
+     * @param tracker      tracker
+     * @param lifecycle    listeners support
+     * @param enableBridge true to enable hk guice bridge
+     */
     public GuiceFeature(final Provider<Injector> provider, final StatsTracker tracker,
                         final LifecycleSupport lifecycle, final boolean enableBridge) {
         this.provider = provider;

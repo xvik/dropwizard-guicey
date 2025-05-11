@@ -71,6 +71,11 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
 
     private final GuiceyConfigurationInfo service;
 
+    /**
+     * Create configuration tree renderer.
+     *
+     * @param service configuration info service
+     */
     public ContextTreeRenderer(final GuiceyConfigurationInfo service) {
         this.service = service;
     }

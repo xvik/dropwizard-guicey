@@ -32,12 +32,27 @@ import java.util.function.Function;
  */
 public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSupport<C> {
 
+    /**
+     * Create test support.
+     *
+     * @param applicationClass application class
+     * @param configPath       configuration file path
+     * @param configOverrides  configuration overrides
+     */
     public GuiceyTestSupport(final Class<? extends Application<C>> applicationClass,
                              final @Nullable String configPath,
                              final ConfigOverride... configOverrides) {
         this(applicationClass, configPath, (String) null, configOverrides);
     }
 
+    /**
+     * Create test support.
+     *
+     * @param applicationClass     application class
+     * @param configPath           configuration file path
+     * @param configSourceProvider configuration source provider (optional)
+     * @param configOverrides      configuration overrides
+     */
     public GuiceyTestSupport(final Class<? extends Application<C>> applicationClass,
                              final @Nullable String configPath,
                              final @Nullable ConfigurationSourceProvider configSourceProvider,
@@ -45,6 +60,15 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
         this(applicationClass, configPath, configSourceProvider, null, configOverrides);
     }
 
+    /**
+     * Create test support.
+     *
+     * @param applicationClass     application class
+     * @param configPath           configuration file path
+     * @param configSourceProvider configuration source provider
+     * @param customPropertyPrefix configuration overrides prefix
+     * @param configOverrides      configuration overrides
+     */
     public GuiceyTestSupport(final Class<? extends Application<C>> applicationClass,
                              final @Nullable String configPath,
                              final @Nullable ConfigurationSourceProvider configSourceProvider,
@@ -54,6 +78,14 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
                 new CmdProvider<>(), configOverrides);
     }
 
+    /**
+     * Create test support.
+     *
+     * @param applicationClass     application class
+     * @param configPath           configuration file path
+     * @param customPropertyPrefix configuration overrides prefix
+     * @param configOverrides      configuration overrides
+     */
     public GuiceyTestSupport(final Class<? extends Application<C>> applicationClass,
                              final @Nullable String configPath,
                              final @Nullable String customPropertyPrefix,
@@ -61,6 +93,12 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
         super(applicationClass, configPath, customPropertyPrefix, new CmdProvider<>(), configOverrides);
     }
 
+    /**
+     * Create test support.
+     *
+     * @param applicationClass application class
+     * @param configuration    manual configuration instance
+     */
     public GuiceyTestSupport(final Class<? extends Application<C>> applicationClass,
                              final C configuration) {
         super(applicationClass, configuration, new CmdProvider<>());

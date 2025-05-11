@@ -14,6 +14,12 @@ public abstract class ConfigurationPhaseEvent extends GuiceyLifecycleEvent {
 
     private final Bootstrap bootstrap;
 
+    /**
+     * Create event.
+     *
+     * @param type    event type
+     * @param context event context
+     */
     public ConfigurationPhaseEvent(final GuiceyLifecycle type,
                                    final EventsContext context) {
         super(type, context);

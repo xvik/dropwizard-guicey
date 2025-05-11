@@ -116,6 +116,9 @@ public class ConfigurationDiagnostic extends GuiceyLifecycleAdapter {
         return reportTitle.hashCode();
     }
 
+    /**
+     * @return diagnostic report configuration builder
+     */
     public static Builder builder() {
         return new Builder("Diagnostic report");
     }
@@ -150,6 +153,11 @@ public class ConfigurationDiagnostic extends GuiceyLifecycleAdapter {
         private DiagnosticConfig config;
         private ContextTreeConfig treeConfig;
 
+        /**
+         * Create a report builder.
+         *
+         * @param reportTitle report title
+         */
         public Builder(final String reportTitle) {
             this.reportTitle = reportTitle;
         }

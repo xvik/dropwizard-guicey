@@ -27,6 +27,11 @@ public class CommandRunBuilder<C extends Configuration> extends BaseBuilder<C, C
     private String[] inputs;
     private final List<CommandListener<C>> listeners = new ArrayList<>();
 
+    /**
+     * Create builder.
+     *
+     * @param app application class
+     */
     public CommandRunBuilder(final Class<? extends Application<C>> app) {
         super(app);
     }

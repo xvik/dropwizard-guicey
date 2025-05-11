@@ -124,6 +124,7 @@ public class StubsHook implements GuiceyConfigurationHook {
     /**
      * @param type bean type
      * @param <T>  bean type
+     * @param <P>  stub implementation type
      * @return stub instance registered for bean type
      * @throws java.lang.IllegalStateException if stub for type is not registered
      */

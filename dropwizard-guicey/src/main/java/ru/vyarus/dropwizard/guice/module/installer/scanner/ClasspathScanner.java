@@ -41,11 +41,23 @@ public class ClasspathScanner {
     private final boolean acceptProtectedClasses;
     private List<Class> scanned;
 
+    /**
+     * Create a scanner.
+     *
+     * @param packages packages to scan
+     */
     public ClasspathScanner(final Set<String> packages) {
         // for backwards compatibility allow using without tracker
         this(packages, false, null);
     }
 
+    /**
+     * Create a scanner.
+     *
+     * @param packages               packages to scan
+     * @param acceptProtectedClasses look protected classes
+     * @param tracker                tracker instance
+     */
     public ClasspathScanner(final Set<String> packages,
                             final boolean acceptProtectedClasses,
                             final StatsTracker tracker) {

@@ -74,6 +74,11 @@ public class RestClient {
     private final List<String> defaultAccepts = new ArrayList<>();
     private List<Integer> defaultStatus = DEFAULT_OK;
 
+    /**
+     * Create client.
+     *
+     * @param jerseyTest jersey test instance
+     */
     public RestClient(final GuiceyJerseyTest jerseyTest) {
         this.jerseyTest = jerseyTest;
     }

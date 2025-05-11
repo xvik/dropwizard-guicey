@@ -38,6 +38,13 @@ public class Jersey2Module extends AbstractModule {
     private final Environment environment;
     private final ConfigurationContext context;
 
+    /**
+     * Create module.
+     *
+     * @param application application instance
+     * @param environment environment
+     * @param context     configuration context
+     */
     public Jersey2Module(final Application application, final Environment environment,
                          final ConfigurationContext context) {
         this.application = application;

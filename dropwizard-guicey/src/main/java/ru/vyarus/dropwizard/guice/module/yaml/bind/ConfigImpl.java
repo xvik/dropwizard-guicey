@@ -20,8 +20,16 @@ public class ConfigImpl implements Config, Serializable {
 
     private static final long serialVersionUID = 0;
 
+    /**
+     * Value.
+     */
     private final String val;
 
+    /**
+     * Create configuration qualifier.
+     *
+     * @param val qualifier value
+     */
     public ConfigImpl(final String val) {
         this.val = checkNotNull(val, "name");
     }

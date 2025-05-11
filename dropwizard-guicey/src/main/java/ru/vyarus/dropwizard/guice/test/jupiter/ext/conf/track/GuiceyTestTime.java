@@ -10,9 +10,21 @@ package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track;
  * @since 04.02.2025
  */
 public enum GuiceyTestTime {
+    /**
+     * Before all time.
+     */
     BeforeAll("Before all"),
+    /**
+     * Before each time.
+     */
     BeforeEach("Before each"),
+    /**
+     * After each time.
+     */
     AfterEach("After each"),
+    /**
+     * After all time.
+     */
     AfterAll("After all"),
 
     /**
@@ -59,6 +71,9 @@ public enum GuiceyTestTime {
         this.name = name;
     }
 
+    /**
+     * @return display name
+     */
     public String getDisplayName() {
         return name;
     }

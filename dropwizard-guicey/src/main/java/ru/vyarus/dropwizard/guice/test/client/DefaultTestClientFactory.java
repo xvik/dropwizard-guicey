@@ -76,6 +76,10 @@ public class DefaultTestClientFactory implements TestClientFactory {
      */
     @SuppressWarnings("PMD.SystemPrintln")
     public static class ConsoleLogger extends Logger {
+
+        /**
+         * Create a console logger.
+         */
         public ConsoleLogger() {
             super(ClientSupport.class.getName(), null);
         }

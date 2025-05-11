@@ -27,6 +27,9 @@ public abstract class AbstractJerseyInstaller<T> extends InstallerOptionsSupport
         FeatureInstaller,
         JerseyInstaller<T> {
 
+    /**
+     * Shared logger.
+     */
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**

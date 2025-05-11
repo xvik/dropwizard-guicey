@@ -46,6 +46,22 @@ public class MethodTrack implements Comparable<MethodTrack> {
     // overall timer metric for all method executions (instance available in all tracks for convenience)
     private final Timer timer;
 
+    /**
+     * Create track.
+     *
+     * @param service       service type
+     * @param method        method
+     * @param instanceHash  service instance hash
+     * @param started       start time
+     * @param duration      duration
+     * @param rawArguments  raw arguments
+     * @param arguments     string arguments
+     * @param rawResult     raw result
+     * @param result        string result
+     * @param throwable     exception
+     * @param stringMarkers string arguments markers
+     * @param timer         metrics
+     */
     @SuppressWarnings({"ParameterNumber", "PMD.ExcessiveParameterList", "PMD.ConstructorCallsOverridableMethod"})
     public MethodTrack(final Class<?> service,
                        final Method method,

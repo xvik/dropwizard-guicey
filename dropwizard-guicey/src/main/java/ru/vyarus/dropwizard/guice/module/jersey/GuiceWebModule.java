@@ -30,6 +30,12 @@ public class GuiceWebModule extends ServletModule {
     private final Environment environment;
     private final EnumSet<DispatcherType> dispatcherTypes;
 
+    /**
+     * Create web module.
+     *
+     * @param environment     environment
+     * @param dispatcherTypes dispatcher types
+     */
     public GuiceWebModule(final Environment environment, final EnumSet<DispatcherType> dispatcherTypes) {
         this.environment = environment;
         this.dispatcherTypes = dispatcherTypes;

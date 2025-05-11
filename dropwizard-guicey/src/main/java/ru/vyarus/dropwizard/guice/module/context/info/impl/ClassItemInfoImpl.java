@@ -12,6 +12,12 @@ import ru.vyarus.dropwizard.guice.module.context.info.ItemId;
  */
 public abstract class ClassItemInfoImpl extends ItemInfoImpl implements ClassItemInfo {
 
+    /**
+     * Create item info.
+     *
+     * @param itemType item type
+     * @param type     item class
+     */
     public ClassItemInfoImpl(final ConfigItem itemType, final Class<?> type) {
         super(itemType, ItemId.from(type));
     }

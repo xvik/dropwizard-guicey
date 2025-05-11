@@ -21,12 +21,21 @@ public class ModuleItemInfoImpl extends InstanceItemInfoImpl<Module> implements 
     private final Set<ItemId> disabledBy = Sets.newLinkedHashSet();
     private final boolean overriding;
 
-    // disable only item
+    /**
+     * Create disabled-only item (without an actual item).
+     *
+     * @param type item type
+     */
     public ModuleItemInfoImpl(final Class<? extends Module> type) {
         super(ConfigItem.Module, type);
         this.overriding = false;
     }
 
+    /**
+     * Create item.
+     *
+     * @param module module instance
+     */
     public ModuleItemInfoImpl(final Module module) {
         super(ConfigItem.Module, module);
         this.overriding = override.get() != null;

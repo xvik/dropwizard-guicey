@@ -23,6 +23,12 @@ public class ConfigOverrideValue extends ConfigOverride implements ConfigurableP
     private String prefix;
     private String originalValue;
 
+    /**
+     * Create a config override value.
+     *
+     * @param key   config yaml path
+     * @param value value
+     */
     public ConfigOverrideValue(final String key, final Supplier<String> value) {
         this.key = Preconditions.checkNotNull(key, "Property name required");
         this.value = Preconditions.checkNotNull(value, "Value supplier required");

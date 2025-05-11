@@ -96,6 +96,9 @@ public class SharedConfigurationState {
     private final Multimap<String, Consumer> listeners = LinkedHashMultimap.create();
     private Application application;
 
+    /**
+     * Create state.
+     */
     public SharedConfigurationState() {
         // make shared state accessible during startup in all places
         STARTUP_INSTANCE.set(this);

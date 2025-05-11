@@ -21,42 +21,65 @@ public class ModuleDeclaration {
     private final List<String> markers = new ArrayList<>();
     private boolean privateModule;
 
+    /**
+     * @return module type
+     */
     public Class getType() {
         return type;
     }
 
+    /**
+     * @param type module type
+     */
     public void setType(final Class type) {
         this.type = type;
     }
 
+    /**
+     * @return parent module or null
+     */
     public String getParent() {
         return parent;
     }
 
+    /**
+     * @param parent parent module
+     */
     public void setParent(final String parent) {
         this.parent = parent;
     }
 
+    /**
+     * @return children modules
+     */
     public List<ModuleDeclaration> getChildren() {
         return children;
     }
 
+    /**
+     * @return declared bindings
+     */
     public List<BindingDeclaration> getDeclarations() {
         return declarations;
     }
 
+    /**
+     * @return module markers
+     */
     public List<String> getMarkers() {
         return markers;
     }
 
-    public boolean isJITBindings() {
-        return Module.class.equals(type);
-    }
-
+    /**
+     * @return true for private module
+     */
     public boolean isPrivateModule() {
         return privateModule;
     }
 
+    /**
+     * @param privateModule true for private module
+     */
     public void setPrivateModule(final boolean privateModule) {
         this.privateModule = privateModule;
     }

@@ -20,6 +20,13 @@ public class ExtensionsResolvedEvent extends RunPhaseEvent {
     private final List<Class<?>> extensions;
     private final List<Class<?>> disabled;
 
+    /**
+     * Create event.
+     *
+     * @param context    event context
+     * @param extensions actual extensions
+     * @param disabled   disabled extensions
+     */
     public ExtensionsResolvedEvent(final EventsContext context,
                                    final List<Class<?>> extensions,
                                    final List<Class<?>> disabled) {

@@ -21,6 +21,12 @@ public class JerseyComponentProvider<T> implements Provider<T> {
     private final Provider<Injector> injector;
     private final Class<T> type;
 
+    /**
+     * Create provider.
+     *
+     * @param injector injector provider
+     * @param type     provided service type
+     */
     public JerseyComponentProvider(final Provider<Injector> injector, final Class<T> type) {
         this.injector = injector;
         this.type = type;

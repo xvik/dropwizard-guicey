@@ -27,6 +27,13 @@ public class TestExtension extends ExtensionBuilder<Configuration, TestExtension
     private final ListenersSupport listeners;
     private TestExecutionListenerLambdaAdapter listenerAdapter;
 
+    /**
+     * Create extension.
+     *
+     * @param cfg       config
+     * @param context   junit context
+     * @param listeners listeners support
+     */
     public TestExtension(final ExtensionConfig cfg,
                          final ExtensionContext context,
                          final ListenersSupport listeners) {

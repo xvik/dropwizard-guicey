@@ -33,12 +33,12 @@ public class WrongConfigUsageTest extends AbstractPlatformTest {
         Assertions.assertThat(out).contains("Possible mistakes (unqualified JIT bindings):\n" +
                 "\n" +
                 "\t\t @Inject Sub:\n" +
-                "\t\t\t  instance             [@Singleton]     @Config(\"val2\") Sub                                                                   : 111 ms \t\t ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:129)\n" +
-                "\t\t\t  instance             [@Singleton]     @Marker Sub                                                                           : 111 ms \t\t ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindCustomQualifiers(ConfigBindingModule.java:87)\n" +
+                "\t\t\t  instance             [@Singleton]     @Config(\"val2\") Sub                                                                   : 111 ms \t\t ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindValuePaths(ConfigBindingModule.java:135)\n" +
+                "\t\t\t  instance             [@Singleton]     @Marker Sub                                                                           : 111 ms \t\t ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindCustomQualifiers(ConfigBindingModule.java:93)\n" +
                 "\t\t\t> JIT                  [@Prototype]     Sub                                                                                   : 111 ms \t\t \n" +
                 "\n" +
                 "\t\t @Inject Uniq:\n" +
-                "\t\t\t  instance             [@Singleton]     @Config Uniq                                                                          : 111 ms \t\t ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:117)\n" +
+                "\t\t\t  instance             [@Singleton]     @Config Uniq                                                                          : 111 ms \t\t ru.vyarus.dropwizard.guice.module.yaml.bind.ConfigBindingModule.bindUniqueSubConfigurations(ConfigBindingModule.java:123)\n" +
                 "\t\t\t> JIT                  [@Prototype]     Uniq                                                                                  : 111 ms");
     }
 

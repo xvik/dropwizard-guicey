@@ -25,6 +25,12 @@ public class JerseyConfigRenderer implements ReportRenderer<JerseyConfig> {
     private final InjectionManager manager;
     private final boolean guiceFirstMode;
 
+    /**
+     * Create renderer.
+     *
+     * @param manager        injection manager
+     * @param guiceFirstMode true for guice-priority mode (default)
+     */
     public JerseyConfigRenderer(final InjectionManager manager, final boolean guiceFirstMode) {
         this.manager = manager;
         this.guiceFirstMode = guiceFirstMode;
