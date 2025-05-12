@@ -6,12 +6,6 @@ import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyEnvironment;
 import ru.vyarus.dropwizard.guice.module.support.DropwizardAwareModule;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestDropwizardAppExtension;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.RegistrationTrackUtils;
-import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track.TestExtensionsTracker;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,13 +27,6 @@ public final class StackUtils {
             DropwizardAwareModule.class,
             Optional.class
     );
-    private static final List<Class<?>> EXT_INFRA = ImmutableList.of(
-            ExtensionBuilder.class,
-            TestExtensionsTracker.class,
-            ExtensionConfig.class,
-            RegistrationTrackUtils.class,
-            TestGuiceyAppExtension.class,
-            TestDropwizardAppExtension.class);
 
     private StackUtils() {
     }
@@ -68,15 +55,6 @@ public final class StackUtils {
         final StackWalker.StackFrame frame = getCaller(skip).orElse(null);
         return "at " + (frame != null ? RenderUtils.renderPackage(frame.getDeclaringClass())
                 + ".(" + frame.getFileName() + ":" + frame.getLineNumber() + ")" : "unknown source");
-    }
-
-    /**
-     * Pre-configured to skip guicey test extension classes.
-     *
-     * @return calling source
-     */
-    public static String getTestExtensionSource() {
-        return getCallerSource(EXT_INFRA);
     }
 
     /**
