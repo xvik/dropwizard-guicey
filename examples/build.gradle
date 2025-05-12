@@ -11,7 +11,7 @@ wrapper {
 description = 'Dropwizard guicey examples'
 
 ext {
-    guiceyBom = '8.0.0-rc.4-SNAPSHOT'
+    guiceyBom = '8.0.0-rc.5-SNAPSHOT'
     dwVersion = '5.0.0-rc.2'
 }
 
