@@ -2,6 +2,9 @@
 * [admin-rest]
     - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs 
 
+### [7.2.1](http://xvik.github.io/dropwizard-guicey/7.2.1) (2025-05-12)
+* Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)
+
 ### [7.2.0](http://xvik.github.io/dropwizard-guicey/7.2.0) (2025-05-11)
 * Update to dropwizard 4.0.13
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
