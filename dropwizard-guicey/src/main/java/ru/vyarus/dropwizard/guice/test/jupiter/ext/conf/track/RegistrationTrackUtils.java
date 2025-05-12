@@ -1,8 +1,13 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.track;
 
+import com.google.common.collect.ImmutableList;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.StackUtils;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.field.AnnotatedField;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestDropwizardAppExtension;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.TestGuiceyAppExtension;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionConfig;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +21,14 @@ import java.util.function.Function;
  */
 @SuppressWarnings("PMD.UseVarargs")
 public final class RegistrationTrackUtils {
+
+    private static final List<Class<?>> EXT_INFRA = ImmutableList.of(
+            ExtensionBuilder.class,
+            TestExtensionsTracker.class,
+            ExtensionConfig.class,
+            RegistrationTrackUtils.class,
+            TestGuiceyAppExtension.class,
+            TestDropwizardAppExtension.class);
 
     private RegistrationTrackUtils() {
     }
@@ -75,7 +88,7 @@ public final class RegistrationTrackUtils {
     }
 
     private static String buildSourceLocation(final String prefix) {
-        final String source = StackUtils.getTestExtensionSource();
+        final String source = StackUtils.getCallerSource(EXT_INFRA);
         return formatSourceLocation(prefix, source);
     }
 
