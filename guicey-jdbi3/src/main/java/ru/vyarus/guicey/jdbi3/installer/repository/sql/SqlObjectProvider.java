@@ -32,6 +32,11 @@ public class SqlObjectProvider<T> implements Provider<T> {
 
     private volatile T res;
 
+    /**
+     * Dao proxy provider.
+     *
+     * @param extensionType dao class
+     */
     public SqlObjectProvider(final Class<T> extensionType) {
         this.extensionType = extensionType;
     }

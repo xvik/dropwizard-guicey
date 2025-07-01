@@ -17,6 +17,11 @@ public class SimpleAnnotationProcessor<T extends Annotation> implements MethodPo
 
     private final MethodsCollector collector;
 
+    /**
+     * Create annotation processor.
+     *
+     * @param collector annotated methods collector
+     */
     public SimpleAnnotationProcessor(final MethodsCollector collector) {
         this.collector = collector;
     }

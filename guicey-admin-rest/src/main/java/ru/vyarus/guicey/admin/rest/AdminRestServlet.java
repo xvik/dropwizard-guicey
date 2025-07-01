@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 /**
@@ -23,6 +24,9 @@ public class AdminRestServlet extends HttpServlet {
      */
     public static final String ADMIN_PROPERTY = AdminRestServlet.class.getName();
 
+    /**
+     * Servlet context.
+     */
     private final Servlet restServlet;
 
     /**

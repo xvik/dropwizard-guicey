@@ -15,6 +15,11 @@ public class MappedViewPath {
     private final String mapping;
     private final String prefix;
 
+    /**
+     * @param path    rest path
+     * @param mapping sub path
+     * @param prefix  rest prefix
+     */
     public MappedViewPath(final ViewPath path, final String mapping, final String prefix) {
         this.path = path;
         this.mapping = mapping;

@@ -133,7 +133,11 @@ public class DirectTemplateExceptionMapper implements ExtendedExceptionMapper<No
                 .build();
     }
 
-    // copied from io.dropwizard.views.common.ViewMessageBodyWriter
+    /**
+     * Copied from io.dropwizard.views.common.ViewMessageBodyWriter.
+     *
+     * @return detected locale
+     */
     @SuppressWarnings("PMD.PreserveStackTrace")
     protected Locale detectLocale() {
         final List<Locale> languages;

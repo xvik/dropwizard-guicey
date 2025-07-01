@@ -40,6 +40,11 @@ public class TransactionalInterceptor implements MethodInterceptor {
     @Inject
     private Injector injector;
 
+    /**
+     * Create a transactional interceptor.
+     *
+     * @param txAnnotations transactional annotations
+     */
     public TransactionalInterceptor(final List<Class<? extends Annotation>> txAnnotations) {
         findConfigurableAnnotations(txAnnotations);
     }

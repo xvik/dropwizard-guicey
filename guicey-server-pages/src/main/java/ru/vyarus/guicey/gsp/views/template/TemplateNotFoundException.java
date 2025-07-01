@@ -8,6 +8,11 @@ package ru.vyarus.guicey.gsp.views.template;
  */
 public class TemplateNotFoundException extends RuntimeException {
 
+    /**
+     * Create a not found exception.
+     *
+     * @param message message
+     */
     public TemplateNotFoundException(final String message) {
         super(message);
     }

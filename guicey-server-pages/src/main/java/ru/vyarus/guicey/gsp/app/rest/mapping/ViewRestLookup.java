@@ -17,6 +17,11 @@ public class ViewRestLookup {
 
     private final Map<String, String> prefixes;
 
+    /**
+     * Create a view lookup.
+     *
+     * @param prefixes configured prefixes
+     */
     public ViewRestLookup(final Map<String, String> prefixes) {
         // assume immutable map, properly built: keys sorted from longest to smaller (root locations last),
         this.prefixes = prefixes;

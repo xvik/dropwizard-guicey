@@ -38,6 +38,13 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     private final List<AnnotatedField<InjectClient, ClientSupport>> clientFields;
     private Injector injector;
 
+    /**
+     * Create an interceptor.
+     *
+     * @param spec    spock spec
+     * @param support environment support object
+     * @param hooks   hooks
+     */
     public GuiceyInterceptor(final SpecInfo spec, final EnvironmentSupport support,
                              final List<GuiceyConfigurationHook> hooks) {
         this.support = support;
@@ -136,10 +143,18 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
         private DropwizardTestSupport support;
         private ClientSupport client;
 
+        /**
+         * Create environment support.
+         *
+         * @param test test class
+         */
         public AbstractEnvironmentSupport(final Class<?> test) {
             this.test = test;
         }
 
+        /**
+         * @return created support object instance
+         */
         protected abstract DropwizardTestSupport build();
 
         @Override

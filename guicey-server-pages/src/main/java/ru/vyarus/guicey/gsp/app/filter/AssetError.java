@@ -17,6 +17,12 @@ import jakarta.ws.rs.WebApplicationException;
  */
 public class AssetError extends WebApplicationException implements TracelessException {
 
+    /**
+     * Create an assets error.
+     *
+     * @param request request instance
+     * @param status  status code
+     */
     public AssetError(final HttpServletRequest request, final int status) {
         super("Error serving asset " + request.getRequestURI() + ": " + status, status);
     }

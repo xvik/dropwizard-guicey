@@ -41,13 +41,26 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.PathUtils.SLASH;
  */
 public class AssetLookup implements Serializable {
 
-    // primary location is important because assets servlet by default will compute path relative to it
+    /**
+     * Primary location is important because assets servlet by default will compute path relative to it.
+     */
     private final String primaryLocation;
-    // mapping of url to classpath package (implicitly sorted by keys)
+    /**
+     * Mapping of url to classpath package (implicitly sorted by keys).
+     */
     private final Multimap<String, String> locations;
-    // mapping of package to class loader (implicitly sorted by keys)
+    /**
+     * Mapping of package to class loader (implicitly sorted by keys).
+     */
     private final Multimap<String, ClassLoader> loaders;
 
+    /**
+     * Create an assets lookup object.
+     *
+     * @param primaryLocation primary location
+     * @param locations       other locations
+     * @param loaders         asset loaders
+     */
     public AssetLookup(final String primaryLocation,
                        final Multimap<String, String> locations,
                        final Multimap<String, ClassLoader> loaders) {
@@ -291,6 +304,13 @@ public class AssetLookup implements Serializable {
         private final ClassLoader loader;
         private final URL url;
 
+        /**
+         * Create an asset location.
+         *
+         * @param path   local path
+         * @param loader asset loader
+         * @param url    target url
+         */
         public AssetLocation(final String path, final ClassLoader loader, final URL url) {
             // important to indicate absolute path
             this.path = PathUtils.leadingSlash(path);

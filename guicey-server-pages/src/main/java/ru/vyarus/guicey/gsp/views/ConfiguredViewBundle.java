@@ -22,6 +22,11 @@ public class ConfiguredViewBundle extends ViewBundle<Configuration> {
     private final Logger logger = LoggerFactory.getLogger(ConfiguredViewBundle.class);
     private final ServerPagesGlobalState globalConfig;
 
+    /**
+     * Create a view bundle.
+     *
+     * @param globalConfig configuration
+     */
     public ConfiguredViewBundle(final ServerPagesGlobalState globalConfig) {
         super(globalConfig.getRenderers());
         this.globalConfig = globalConfig;

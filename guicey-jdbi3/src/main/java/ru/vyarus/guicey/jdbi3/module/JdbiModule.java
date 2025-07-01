@@ -38,6 +38,12 @@ public class JdbiModule extends AbstractModule {
     private final Jdbi jdbi;
     private final List<Class<? extends Annotation>> txAnnotations;
 
+    /**
+     * Create jdbi module.
+     *
+     * @param jdbi          jdbi instance
+     * @param txAnnotations transaction annotations
+     */
     public JdbiModule(final Jdbi jdbi, final List<Class<? extends Annotation>> txAnnotations) {
         Preconditions.checkState(!txAnnotations.isEmpty(),
                 "Provide at least one transactional annotation");

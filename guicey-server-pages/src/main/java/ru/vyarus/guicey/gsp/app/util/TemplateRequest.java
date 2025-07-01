@@ -17,6 +17,14 @@ public class TemplateRequest extends HttpServletRequestWrapper {
     private final String context;
     private final String mapping;
 
+    /**
+     * Create template request.
+     *
+     * @param request request object
+     * @param path    path
+     * @param context context
+     * @param mapping servlet mapping path
+     */
     public TemplateRequest(
             final HttpServletRequest request,
             final String path,

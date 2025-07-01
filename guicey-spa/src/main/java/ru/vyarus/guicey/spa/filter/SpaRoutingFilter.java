@@ -8,6 +8,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.regex.Pattern;
 
@@ -29,6 +30,12 @@ public class SpaRoutingFilter implements Filter {
     private final String target;
     private final Pattern noRedirect;
 
+    /**
+     * Create SPA filter.
+     *
+     * @param target          application root
+     * @param noRedirectRegex non-SPA routes detection regex
+     */
     public SpaRoutingFilter(final String target, final String noRedirectRegex) {
         this.target = target;
         noRedirect = Pattern.compile(noRedirectRegex);

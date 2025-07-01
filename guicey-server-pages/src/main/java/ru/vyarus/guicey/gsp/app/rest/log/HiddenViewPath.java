@@ -12,6 +12,14 @@ import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 public class HiddenViewPath extends MappedViewPath {
     private final String overridingMapping;
 
+    /**
+     * Create a hidden view path.
+     *
+     * @param path              rest path
+     * @param mapping           sub path
+     * @param prefix            rest prefix
+     * @param overridingMapping mapping, overriding this path
+     */
     public HiddenViewPath(final ViewPath path,
                           final String mapping,
                           final String prefix,
@@ -21,7 +29,7 @@ public class HiddenViewPath extends MappedViewPath {
     }
 
     /**
-     * Returned url never starts with slash, but alwasys ends with slash.
+     * Returned url never starts with slash, but always ends with slash.
      *
      * @return hiding mapping (sub url)
      */

@@ -49,13 +49,29 @@ public class TemplateRedirect {
     private final AssetLookup assets;
     private final ErrorRedirect errorRedirect;
 
-    // full rest path (applicationContextPath + rootPath)
+    /**
+     * Full rest path (applicationContextPath + rootPath).
+      */
     private String rootPath;
-    // server.applicationContextPath
+    /**
+     * "server.applicationContextPath".
+     */
     private String restContextPath;
-    // server.rootPath
+    /**
+     * "server.rootPath".
+     */
     private String restServletMapping;
 
+    /**
+     * Create template redirect.
+     *
+     * @param restServlet   rest servlet
+     * @param app           application name
+     * @param mapping       application mapping
+     * @param views         views lookup
+     * @param assets        assets lookup
+     * @param errorRedirect error redirector
+     */
     public TemplateRedirect(final Servlet restServlet,
                             final String app,
                             final String mapping,

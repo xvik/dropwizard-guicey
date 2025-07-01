@@ -23,6 +23,7 @@ import ru.vyarus.java.generics.resolver.GenericsResolver;
 
 import jakarta.inject.Provider;
 import jakarta.inject.Singleton;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashSet;
@@ -158,6 +159,11 @@ public class RepositoryInstaller implements FeatureInstaller, BindingInstaller {
 
         private final Provider<Object> jdbiProxy;
 
+        /**
+         * Create jdbi proxy interceptor.
+         *
+         * @param jdbiProxy jdbi proxy provider
+         */
         public JdbiProxyRedirect(final Provider<Object> jdbiProxy) {
             this.jdbiProxy = jdbiProxy;
         }

@@ -19,6 +19,11 @@ public class ServerPagesAppExtensionBundle implements GuiceyBundle {
 
     private final ExtendedConfiguration ext;
 
+    /**
+     * Create an application extension bundle.
+     *
+     * @param name application name
+     */
     protected ServerPagesAppExtensionBundle(final String name) {
         this.ext = new ExtendedConfiguration(name);
     }
@@ -26,9 +31,9 @@ public class ServerPagesAppExtensionBundle implements GuiceyBundle {
     @Override
     public void run(final GuiceyEnvironment environment) throws Exception {
         environment.sharedStateOrFail(ServerPagesGlobalState.class,
-                "Either server pages support bundle was not installed (use %s.builder() to create bundle) "
-                        + " or it was installed after '%s' application extension bundle",
-                ServerPagesBundle.class.getSimpleName(), this.ext.getName())
+                        "Either server pages support bundle was not installed (use %s.builder() to create bundle) "
+                                + " or it was installed after '%s' application extension bundle",
+                        ServerPagesBundle.class.getSimpleName(), this.ext.getName())
                 // delayed callback will be called just before gsp application initialization
                 // (after guicey initialization complete, but before jersey init)
                 .extendApp(ext);
@@ -42,6 +47,12 @@ public class ServerPagesAppExtensionBundle implements GuiceyBundle {
         private final ServerPagesAppExtensionBundle bundle;
         private final ClassLoader loader;
 
+        /**
+         * Create builder.
+         *
+         * @param name   application name
+         * @param loader assets loader
+         */
         public AppExtensionBuilder(final String name, final ClassLoader loader) {
             this.bundle = new ServerPagesAppExtensionBundle(name);
             // if loader is null, default loader would be set automatically by AssetSources
