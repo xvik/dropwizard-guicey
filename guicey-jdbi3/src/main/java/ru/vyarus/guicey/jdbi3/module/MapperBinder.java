@@ -17,6 +17,12 @@ import java.util.Set;
  */
 public class MapperBinder {
 
+    /**
+     * Create mapper binder.
+     *
+     * @param dbi     jdbi instance
+     * @param mappers row mappers
+     */
     @Inject
     public MapperBinder(final Jdbi dbi, final Set<RowMapper> mappers) {
         mappers.forEach(dbi::registerRowMapper);

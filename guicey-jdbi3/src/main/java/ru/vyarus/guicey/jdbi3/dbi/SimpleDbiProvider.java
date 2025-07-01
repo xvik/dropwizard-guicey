@@ -17,6 +17,11 @@ public class SimpleDbiProvider<C extends Configuration> implements ConfigAwarePr
 
     private final ConfigAwareProvider<PooledDataSourceFactory, C> database;
 
+    /**
+     * Create configuration-aware jdbi provider.
+     *
+     * @param database configuration provider
+     */
     public SimpleDbiProvider(final ConfigAwareProvider<PooledDataSourceFactory, C> database) {
         this.database = database;
     }

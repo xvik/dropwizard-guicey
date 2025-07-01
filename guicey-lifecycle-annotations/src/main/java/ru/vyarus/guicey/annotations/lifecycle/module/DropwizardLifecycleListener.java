@@ -19,6 +19,11 @@ public class DropwizardLifecycleListener implements ServerLifecycleListener, Man
 
     private final MethodsCollector collector;
 
+    /**
+     * Create lifecycle listener.
+     *
+     * @param collector lifecycle methods registry
+     */
     public DropwizardLifecycleListener(final MethodsCollector collector) {
         this.collector = collector;
     }

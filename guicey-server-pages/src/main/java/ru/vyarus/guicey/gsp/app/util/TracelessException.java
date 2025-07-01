@@ -5,11 +5,14 @@ package ru.vyarus.guicey.gsp.app.util;
  * in user code) and used only to wrap return status code.
  *
  * @author Vyacheslav Rusakov
- * @since 29.01.2019
  * @see ru.vyarus.guicey.gsp.app.filter.AssetError
  * @see ru.vyarus.guicey.gsp.app.rest.support.TemplateRestCodeError
+ * @since 29.01.2019
  */
 public interface TracelessException {
 
+    /**
+     * @return status code
+     */
     int getStatus();
 }

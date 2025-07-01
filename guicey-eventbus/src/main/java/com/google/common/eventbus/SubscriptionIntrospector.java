@@ -22,14 +22,26 @@ public class SubscriptionIntrospector {
     private final EventBus eventbus;
     private Map<Class, Set<Subscriber>> subscribers;
 
+    /**
+     * Create an introspector.
+     *
+     * @param eventbus event bus instance
+     */
     public SubscriptionIntrospector(final EventBus eventbus) {
         this.eventbus = eventbus;
     }
 
+    /**
+     * @return event classes
+     */
     public Set<Class> getListenedEvents() {
         return extractSubscribers().keySet();
     }
 
+    /**
+     * @param event event class
+     * @return event subscribers
+     */
     public Set<Object> getSubscribers(final Class event) {
         final Set<Object> res = new HashSet<>();
         final Set<Subscriber> subscribers = extractSubscribers().get(event);
@@ -41,6 +53,11 @@ public class SubscriptionIntrospector {
         return res;
     }
 
+    /**
+     * @param event event class
+     * @return subscriber classes
+     * @see #getSubscribers(Class) for instances
+     */
     public Set<Class> getSubscriberTypes(final Class event) {
         final Set<Class> res = new HashSet<>();
         for (Object obj : getSubscribers(event)) {

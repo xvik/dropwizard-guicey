@@ -25,10 +25,18 @@ public class EventSubscribersReporter {
 
     private final EventSubscribersInfo info;
 
+    /**
+     * Create event bus subscribers reporter.
+     *
+     * @param info subscribers info
+     */
     public EventSubscribersReporter(final EventSubscribersInfo info) {
         this.info = info;
     }
 
+    /**
+     * @return rendered events and subscribers report
+     */
     public String renderReport() {
         final Set<Class> events = info.getListenedEvents();
         if (events.isEmpty()) {

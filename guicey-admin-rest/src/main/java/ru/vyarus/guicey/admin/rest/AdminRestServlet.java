@@ -23,6 +23,9 @@ public class AdminRestServlet extends HttpServlet {
      */
     public static final String ADMIN_PROPERTY = AdminRestServlet.class.getName();
 
+    /**
+     * Servlet context.
+     */
     private final Servlet restServlet;
 
     /**

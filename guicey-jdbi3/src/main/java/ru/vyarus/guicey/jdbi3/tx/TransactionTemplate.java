@@ -31,6 +31,11 @@ public class TransactionTemplate {
 
     private final UnitManager manager;
 
+    /**
+     * Create transactional template.
+     *
+     * @param manager unit manager
+     */
     @Inject
     public TransactionTemplate(final UnitManager manager) {
         this.manager = manager;

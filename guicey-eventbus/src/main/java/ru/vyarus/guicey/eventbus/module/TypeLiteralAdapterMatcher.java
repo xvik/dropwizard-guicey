@@ -12,6 +12,11 @@ import com.google.inject.matcher.Matcher;
 public class TypeLiteralAdapterMatcher implements Matcher<TypeLiteral<?>> {
     private final Matcher<? super Class<?>> classMatcher;
 
+    /**
+     * Create a type literal matcher.
+     *
+     * @param classMatcher class matcher
+     */
     public TypeLiteralAdapterMatcher(final Matcher<? super Class<?>> classMatcher) {
         this.classMatcher = classMatcher;
     }

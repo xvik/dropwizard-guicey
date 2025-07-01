@@ -26,6 +26,12 @@ public class EventBusModule extends AbstractModule {
     private final EventBus eventbus;
     private final Matcher<? super TypeLiteral<?>> typeMatcher;
 
+    /**
+     * Create event bus module.
+     *
+     * @param eventbus    event bus instance
+     * @param typeMatcher matcher for classes to search listener methods in
+     */
     public EventBusModule(final EventBus eventbus,
                           final Matcher<? super TypeLiteral<?>> typeMatcher) {
         this.eventbus = eventbus;

@@ -36,6 +36,9 @@ public class ErrorRedirect {
      * ({@link ru.vyarus.guicey.gsp.app.ServerPagesAppBundle.AppBuilder#errorPage(String)}).
      */
     public static final int DEFAULT_ERROR_PAGE = -1;
+    /**
+     * Code 400.
+     */
     public static final int CODE_400 = 400;
 
     private static final ThreadLocal<ErrorContext> CONTEXT_ERROR = new ThreadLocal<>();
@@ -44,6 +47,13 @@ public class ErrorRedirect {
     private final Map<Integer, String> errorPages;
     private final SpaSupport spa;
 
+    /**
+     * Create error redirect.
+     *
+     * @param appMapping application mapping path
+     * @param pages      error pages
+     * @param spa        SPA support
+     */
     public ErrorRedirect(final String appMapping,
                          final Map<Integer, String> pages,
                          final SpaSupport spa) {
@@ -200,11 +210,11 @@ public class ErrorRedirect {
         /**
          * Exception instance (error leading to error page).
          */
-        protected WebApplicationException exception;
+        protected final WebApplicationException exception;
         /**
          * Original request uri (stored because during error page rendering it will be unreachable).
          */
-        protected String originalUrl;
+        protected final String originalUrl;
         /**
          * Processing marker used to prevent multiple error handling.
          */

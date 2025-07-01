@@ -44,45 +44,95 @@ import java.util.*;
  * @since 11.01.2019
  */
 @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity",
-        "PMD.ExcessiveImports", "PMD.TooManyFields"})
+        "PMD.TooManyFields", "PMD.CouplingBetweenObjects"})
 public class ServerPagesApp {
 
 
     // USER CONFIGURATION
 
-    // application name
+    /**
+     * Application name.
+     */
     protected String name;
+    /**
+     * True for the main context, false for admin.
+     */
     protected boolean mainContext;
-    // root assets location
+    /**
+     * Root assets location.
+     */
     protected String mainAssetsPath;
-    // application mapping url
+    /**
+     * Application mapping url.
+     */
     protected String uriPath;
+    /**
+     * Index file name.
+     */
     protected String indexFile = "";
-    // regexp for file requests detection (to recognize asset or direct template render)
+    /**
+     * Regexp for file requests detection (to recognize asset or direct template render).
+     */
     protected String fileRequestPattern = ServerPagesBundle.FILE_REQUEST_PATTERN;
-    // required template renderer names
+    /**
+     * Required template renderer names.
+     */
     protected List<String> requiredRenderers;
+    /**
+     * True if SPA support required.
+     */
     protected boolean spaSupport;
+    /**
+     * Assets detection pattern (to prevent redirection to the index page).
+     */
     protected String spaNoRedirectRegex = SpaBundle.DEFAULT_PATTERN;
-    // delayed modifiers registration
+    /**
+     * Delayed modifiers registration.
+     */
     protected final Map<String, ViewRendererConfigurationModifier> viewsConfigModifiers = new HashMap<>();
-    // resources location registrations
+    /**
+     * Assets location registrations.
+     */
     protected final AssetSources assetLocations = new AssetSources();
-    // view rest prefixes mappings
+    /**
+     * View rest prefixes mappings.
+     */
     protected final ViewRestSources viewPrefixes = new ViewRestSources();
+    /**
+     * Error pages.
+     */
     protected final Map<Integer, String> errorPages = new TreeMap<>();
 
 
     // STARTUP CONFIGURATION
 
-    // context mapping + uriPath
+    /**
+     * Context mapping + uriPath.
+     */
     protected String fullUriPath;
+    /**
+     * Template redirector.
+     */
     protected TemplateRedirect templateRedirect;
-    // all locations, including all extensions
+    /**
+     * All locations, including all extensions.
+     */
     protected AssetLookup assets;
+    /**
+     * Views lookup.
+     */
     protected ViewRestLookup views;
+    /**
+     * View paths.
+     */
     protected List<MappedViewPath> viewPaths;
+    /**
+     * Hidden view paths.
+     */
     protected List<HiddenViewPath> hiddenViewPaths;
+    /**
+     * Application started.
+     */
     private boolean started;
     private final Logger logger = LoggerFactory.getLogger(ServerPagesApp.class);
 
@@ -138,6 +188,10 @@ public class ServerPagesApp {
         started = true;
     }
 
+    /**
+     * @param config configuration
+     * @return gsp applications info
+     */
     public GspApp getInfo(final ServerPagesGlobalState config) {
         final GspApp res = new GspApp();
         res.setName(name);
@@ -240,8 +294,8 @@ public class ServerPagesApp {
      */
     private void installAssetsServlet(final ServletEnvironment context) {
         final Set<String> clash = context.addServlet(name,
-                // note: if index file is template, it will be handled by filter
-                new AssetResolutionServlet(assets, uriPath, indexFile, StandardCharsets.UTF_8))
+                        // note: if index file is template, it will be handled by filter
+                        new AssetResolutionServlet(assets, uriPath, indexFile, StandardCharsets.UTF_8))
                 .addMapping(uriPath + '*');
 
         if (clash != null && !clash.isEmpty()) {
@@ -258,19 +312,20 @@ public class ServerPagesApp {
      * @param context          main or admin context
      * @param templateRedirect template redirection support
      */
+    @SuppressWarnings("PMD.LooseCoupling")
     private void installTemplatesSupportFilter(final ServletEnvironment context,
                                                final TemplateRedirect templateRedirect,
                                                final SpaSupport spa,
                                                final List<ViewRenderer> renderers) {
         final EnumSet<DispatcherType> types = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD);
         context.addFilter(name + "Templates",
-                new ServerPagesFilter(
-                        fullUriPath,
-                        fileRequestPattern,
-                        indexFile,
-                        templateRedirect,
-                        spa,
-                        renderers))
+                        new ServerPagesFilter(
+                                fullUriPath,
+                                fileRequestPattern,
+                                indexFile,
+                                templateRedirect,
+                                spa,
+                                renderers))
                 .addMappingForServletNames(types, false, name);
     }
 

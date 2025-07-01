@@ -31,6 +31,14 @@ public class SpaSupport {
     private final String target;
     private final Pattern noRedirect;
 
+    /**
+     * Create support.
+     *
+     * @param enabled         true if support is required
+     * @param rootMapping     root mapping
+     * @param target          root uri
+     * @param noRedirectRegex assets regexp (to avoid redirection to the index page)
+     */
     public SpaSupport(final boolean enabled,
                       final String rootMapping,
                       final String target,

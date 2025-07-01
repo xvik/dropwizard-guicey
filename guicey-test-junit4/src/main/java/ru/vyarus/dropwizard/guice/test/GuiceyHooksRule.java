@@ -48,6 +48,11 @@ public class GuiceyHooksRule extends ExternalResource {
 
     private final List<GuiceyConfigurationHook> hooks;
 
+    /**
+     * Create hook rule.
+     *
+     * @param hooks hooks
+     */
     public GuiceyHooksRule(final GuiceyConfigurationHook... hooks) {
         this.hooks = Arrays.asList(hooks);
     }

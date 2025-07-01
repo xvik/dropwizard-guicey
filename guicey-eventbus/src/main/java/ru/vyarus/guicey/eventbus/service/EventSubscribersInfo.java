@@ -18,6 +18,11 @@ import java.util.Set;
 public class EventSubscribersInfo {
     private final SubscriptionIntrospector introspector;
 
+    /**
+     * Create event bus subscribers info.
+     *
+     * @param eventbus event bus instance
+     */
     @Inject
     public EventSubscribersInfo(final EventBus eventbus) {
         this.introspector = new SubscriptionIntrospector(eventbus);

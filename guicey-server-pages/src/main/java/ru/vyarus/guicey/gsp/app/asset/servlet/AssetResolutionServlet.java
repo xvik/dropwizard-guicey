@@ -20,8 +20,19 @@ public class AssetResolutionServlet extends AssetServlet {
 
     private final transient Logger logger = LoggerFactory.getLogger(AssetResolutionServlet.class);
 
+    /**
+     * Assets lookup.
+     */
     private final AssetLookup assets;
 
+    /**
+     * Create an asset resolution servlet.
+     *
+     * @param assets         asset lookup
+     * @param uriPath        path
+     * @param indexFile      index file
+     * @param defaultCharset default charset
+     */
     public AssetResolutionServlet(final AssetLookup assets,
                                   final String uriPath,
                                   @Nullable final String indexFile,

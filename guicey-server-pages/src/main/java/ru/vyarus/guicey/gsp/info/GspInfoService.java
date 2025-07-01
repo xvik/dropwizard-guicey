@@ -25,6 +25,11 @@ public class GspInfoService {
 
     private final ServerPagesGlobalState config;
 
+    /**
+     * Create a gsp info service.
+     *
+     * @param config configuration
+     */
     public GspInfoService(final ServerPagesGlobalState config) {
         this.config = config;
     }

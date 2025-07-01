@@ -19,6 +19,11 @@ public class GuiceyConfigurationHookInterceptor extends AbstractMethodIntercepto
 
     private final List<GuiceyConfigurationHook> hooks;
 
+    /**
+     * Create hooks interceptor.
+     *
+     * @param hooks hooks
+     */
     public GuiceyConfigurationHookInterceptor(final List<GuiceyConfigurationHook> hooks) {
         this.hooks = hooks;
     }

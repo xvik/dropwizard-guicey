@@ -17,6 +17,12 @@ public class MethodInstance {
     private final Object instance;
     private final Method method;
 
+    /**
+     * Create a method instance hodler.
+     *
+     * @param instance object instance
+     * @param method   target method
+     */
     public MethodInstance(final Object instance, final Method method) {
         this.instance = instance;
         this.method = method;

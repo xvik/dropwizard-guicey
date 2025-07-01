@@ -147,6 +147,11 @@ public class ServerPagesBundle extends UniqueGuiceyBundle {
 
     private final ServerPagesGlobalState config;
 
+    /**
+     * Create bundle.
+     *
+     * @param config configuration
+     */
     public ServerPagesBundle(final ServerPagesGlobalState config) {
         this.config = config;
     }
@@ -408,7 +413,7 @@ public class ServerPagesBundle extends UniqueGuiceyBundle {
                 .append(Reporter.NEWLINE).append(Reporter.NEWLINE);
         for (ViewRenderer renderer : config.getRenderers()) {
             res.append(Reporter.TAB).append(String.format(
-                    "%-15s (%s)", renderer.getConfigurationKey(), renderer.getClass().getName()))
+                            "%-15s (%s)", renderer.getConfigurationKey(), renderer.getClass().getName()))
                     .append(Reporter.NEWLINE);
         }
         LOGGER.info(res.toString());

@@ -33,25 +33,71 @@ import java.net.URL;
 public class TemplateContext {
     private final Logger logger = LoggerFactory.getLogger(TemplateContext.class);
 
+    /**
+     * Application name.
+     */
     private final String appName;
+    /**
+     * Root url.
+     */
     private final String rootUrl;
-    // as rest may be mapped to sub url it is very important to know current sub url because without it it would
-    // be impossible to properly resolve template (because we have only part of path and cant match extended asset
-    // locations). For root matching, context will be empty
+    /**
+     * Rest may be mapped to sub url: it is very important to know the current sub url because, without it, it would
+     * be impossible to properly resolve template (because we have only part of path and cant match extended asset
+     * locations). For root matching, context will be empty
+     */
     private final String restSubContext;
-    // its important to know current assumed rest prefix to properly compute path in direct template resource
-    // because resource itself may be registered on any level (due to sub mappings or different application)
+    /**
+     * It's important to know the current assumed rest prefix to properly compute path in direct template resource
+     * because resource itself may be registered on any level (due to sub mappings or different application).
+     */
     private final String restPrefix;
-    // called path looks like direct template call
+    /**
+     * Called when path looks like direct template call.
+     */
     private final ViewRenderer directTemplateRenderer;
+    /**
+     * Asset lookup.
+     */
     private final AssetLookup assets;
+    /**
+     * Error redirector.
+     */
     private final ErrorRedirect errorRedirect;
+    /**
+     * Context requirest.
+     */
     private final HttpServletRequest request;
+    /**
+     * Context response.
+     */
     private final HttpServletResponse response;
+    /**
+     * Resource class.
+     */
     private Class resourceClass;
+    /**
+     * Template, declared in annotation.
+     */
     private String annotationTemplate;
+    /**
+     * Disable auto errors handling.
+     */
     private boolean manualErrorHandling;
 
+    /**
+     * Create template context.
+     *
+     * @param appName                application name
+     * @param rootUrl                root url
+     * @param restSubContext         rest sub context
+     * @param restPrefix             rest prefix
+     * @param directTemplateRenderer template renderer
+     * @param assets                 assets lookup
+     * @param errorRedirect          error redirect
+     * @param request                request object
+     * @param response               response object
+     */
     @SuppressWarnings("checkstyle:ParameterNumber")
     public TemplateContext(final String appName,
                            final String rootUrl,

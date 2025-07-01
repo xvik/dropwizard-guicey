@@ -103,7 +103,7 @@ public class RepositoryInstaller implements FeatureInstaller, BindingInstaller {
         return Collections.singletonList("@" + JdbiRepository.class + " on class");
     }
 
-    @SuppressWarnings({"unchecked", "checkstyle:Indentation"})
+    @SuppressWarnings({"unchecked", "checkstyle:Indentation", "PMD.UseDiamondOperator"})
     private void generateRepository(final Binder binder, final Class<?> type) {
         // avoid duplicate bindings from classpath scan and binding
         if (bound.contains(type)) {
@@ -158,6 +158,11 @@ public class RepositoryInstaller implements FeatureInstaller, BindingInstaller {
 
         private final Provider<Object> jdbiProxy;
 
+        /**
+         * Create jdbi proxy interceptor.
+         *
+         * @param jdbiProxy jdbi proxy provider
+         */
         public JdbiProxyRedirect(final Provider<Object> jdbiProxy) {
             this.jdbiProxy = jdbiProxy;
         }

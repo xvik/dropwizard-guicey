@@ -29,6 +29,12 @@ public class SpaRoutingFilter implements Filter {
     private final String target;
     private final Pattern noRedirect;
 
+    /**
+     * Create SPA filter.
+     *
+     * @param target          application root
+     * @param noRedirectRegex non-SPA routes detection regex
+     */
     public SpaRoutingFilter(final String target, final String noRedirectRegex) {
         this.target = target;
         noRedirect = Pattern.compile(noRedirectRegex);

@@ -36,14 +36,28 @@ public class ErrorTemplateView extends TemplateView {
     private final WebApplicationException error;
     private final String erroredUrl;
 
+    /**
+     * Create an error view.
+     */
     public ErrorTemplateView() {
         this(null);
     }
 
+    /**
+     * Create an error view.
+     *
+     * @param templatePath template path
+     */
     public ErrorTemplateView(@Nullable final String templatePath) {
         this(templatePath, null);
     }
 
+    /**
+     * Create an error view.
+     *
+     * @param templatePath template path
+     * @param charset      charset
+     */
     public ErrorTemplateView(@Nullable final String templatePath, @Nullable final Charset charset) {
         super(templatePath, charset);
         this.error = ErrorRedirect.getContextError();
