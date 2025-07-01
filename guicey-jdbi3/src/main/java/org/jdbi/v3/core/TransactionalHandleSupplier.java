@@ -22,6 +22,12 @@ public class TransactionalHandleSupplier implements HandleSupplier {
     private final Jdbi jdbi;
     private final Provider<Handle> handleProvider;
 
+    /**
+     * Create a transactional handle supplier.
+     *
+     * @param jdbi           jdbi instance
+     * @param handleProvider handle provider
+     */
     @Inject
     public TransactionalHandleSupplier(final Jdbi jdbi, final Provider<Handle> handleProvider) {
         this.jdbi = jdbi;

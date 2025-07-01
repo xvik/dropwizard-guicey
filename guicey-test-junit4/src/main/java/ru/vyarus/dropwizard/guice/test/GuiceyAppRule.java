@@ -46,6 +46,13 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
     private Environment environment;
     private TestCommand<C> command;
 
+    /**
+     * Create app rule.
+     *
+     * @param applicationClass application class
+     * @param configPath       configuration path
+     * @param configOverrides  configuration overrides
+     */
     public GuiceyAppRule(final Class<? extends Application<C>> applicationClass,
                          @Nullable final String configPath,
                          final ConfigOverride... configOverrides) {
@@ -54,27 +61,48 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
         this.configOverrides = Arrays.asList(configOverrides);
     }
 
+    /**
+     * @return configuration object
+     */
     public C getConfiguration() {
         return configuration;
     }
 
+    /**
+     * @param <A> application type
+     * @return application instance
+     */
     @SuppressWarnings("unchecked")
     public <A extends Application<C>> A getApplication() {
         return (A) application;
     }
 
+    /**
+     * @return environment object
+     */
     public Environment getEnvironment() {
         return environment;
     }
 
+    /**
+     * @return guice injector
+     */
     public Injector getInjector() {
         return InjectorLookup.getInjector(application).get();
     }
 
+    /**
+     * @param type bean type
+     * @param <T>  bean type
+     * @return bean instance
+     */
     public <T> T getBean(final Class<T> type) {
         return getInjector().getInstance(type);
     }
 
+    /**
+     * @return new application instance
+     */
     protected Application<C> newApplication() {
         try {
             return InstanceUtils.create(applicationClass);

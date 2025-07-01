@@ -11,6 +11,7 @@ import ru.vyarus.guicey.spa.filter.SpaUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.WebApplicationException;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,9 @@ public class ErrorRedirect {
      * ({@link ru.vyarus.guicey.gsp.app.ServerPagesAppBundle.AppBuilder#errorPage(String)}).
      */
     public static final int DEFAULT_ERROR_PAGE = -1;
+    /**
+     * Code 400.
+     */
     public static final int CODE_400 = 400;
 
     private static final ThreadLocal<ErrorContext> CONTEXT_ERROR = new ThreadLocal<>();
@@ -44,6 +48,13 @@ public class ErrorRedirect {
     private final Map<Integer, String> errorPages;
     private final SpaSupport spa;
 
+    /**
+     * Create error redirect.
+     *
+     * @param appMapping application mapping path
+     * @param pages      error pages
+     * @param spa        SPA support
+     */
     public ErrorRedirect(final String appMapping,
                          final Map<Integer, String> pages,
                          final SpaSupport spa) {

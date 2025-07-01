@@ -26,6 +26,9 @@ import jakarta.ws.rs.ext.Provider;
 @Provider
 @Singleton
 public class TemplateExceptionListener implements ApplicationEventListener {
+    /**
+     * Quote.
+     */
     public static final String QUOTE = "'";
     // use single instance
     private final RequestListener listener = new RequestListener();

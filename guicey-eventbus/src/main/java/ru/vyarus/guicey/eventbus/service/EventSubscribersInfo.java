@@ -5,6 +5,7 @@ import com.google.common.eventbus.SubscriptionIntrospector;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+
 import java.util.Set;
 
 /**
@@ -18,6 +19,11 @@ import java.util.Set;
 public class EventSubscribersInfo {
     private final SubscriptionIntrospector introspector;
 
+    /**
+     * Create event bus subscribers info.
+     *
+     * @param eventbus event bus instance
+     */
     @Inject
     public EventSubscribersInfo(final EventBus eventbus) {
         this.introspector = new SubscriptionIntrospector(eventbus);

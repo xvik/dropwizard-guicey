@@ -28,6 +28,11 @@ public class LogbackAccessRequestLogAwareCustomHandler extends Handler.Wrapper {
 
     private final boolean identifyAdminContext;
 
+    /**
+     * Creates custom logback handler.
+     *
+     * @param identifyAdminContext true to identify admin context logs
+     */
     public LogbackAccessRequestLogAwareCustomHandler(final boolean identifyAdminContext) {
         this.identifyAdminContext = identifyAdminContext;
     }
@@ -44,7 +49,7 @@ public class LogbackAccessRequestLogAwareCustomHandler extends Handler.Wrapper {
                 // indicate admin context call in log
                 servletContextRequest = (ServletContextRequest) servletContextRequest
                         .wrap(request, HttpURI.build(request.getHttpURI())
-                        .uri(request.getHttpURI() + " (ADMIN REST)"));
+                                .uri(request.getHttpURI() + " (ADMIN REST)"));
             }
             if (servletContextRequest != null) {
                 final Request unwrapped = Request.unWrap(request);

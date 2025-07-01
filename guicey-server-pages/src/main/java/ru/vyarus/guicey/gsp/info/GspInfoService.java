@@ -9,6 +9,7 @@ import ru.vyarus.guicey.gsp.app.ServerPagesApp;
 import ru.vyarus.guicey.gsp.info.model.GspApp;
 
 import jakarta.inject.Singleton;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,11 @@ public class GspInfoService {
 
     private final ServerPagesGlobalState config;
 
+    /**
+     * Create a gsp info service.
+     *
+     * @param config configuration
+     */
     public GspInfoService(final ServerPagesGlobalState config) {
         this.config = config;
     }

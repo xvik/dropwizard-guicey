@@ -18,6 +18,12 @@ import jakarta.ws.rs.container.ContainerRequestContext;
  */
 public class TemplateRestCodeError extends WebApplicationException implements TracelessException {
 
+    /**
+     * Create a rest error.
+     *
+     * @param requestContext request context
+     * @param status         response status
+     */
     public TemplateRestCodeError(final ContainerRequestContext requestContext, final int status) {
         super("Error processing template rest call " + requestContext.getUriInfo().getPath() + ": " + status, status);
     }

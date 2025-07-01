@@ -63,6 +63,16 @@ public class ServerPagesFilter implements Filter {
     private final SpaSupport spa;
     private final Iterable<ViewRenderer> renderers;
 
+    /**
+     * Create filter.
+     *
+     * @param uriPath     mapping uri
+     * @param filePattern assets pattern
+     * @param index       index page
+     * @param redirect    redirector
+     * @param spa         SPA support
+     * @param renderers   view renderers
+     */
     public ServerPagesFilter(final String uriPath,
                              final String filePattern,
                              final String index,

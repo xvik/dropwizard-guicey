@@ -18,10 +18,18 @@ public class ExtendedConfiguration {
     private final ViewRestSources views = new ViewRestSources();
     private DelayedConfigurationCallback delayedConfigCallback;
 
+    /**
+     * Create configuration.
+     *
+     * @param name application name
+     */
     public ExtendedConfiguration(final String name) {
         this.name = name;
     }
 
+    /**
+     * @param callback delayed configuration callback
+     */
     public void setDelayedCallback(final DelayedConfigurationCallback callback) {
         Preconditions.checkArgument(this.delayedConfigCallback == null,
                 "Only one delayed configuration could be registered");

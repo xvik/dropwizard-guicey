@@ -41,6 +41,9 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.PathUtils.SLASH;
 @SuppressWarnings("PMD.ImmutableField")
 public class SpaBundle implements GuiceyBundle {
 
+    /**
+     * Default asset pattern.
+     */
     public static final String DEFAULT_PATTERN =
             "\\.(html|css|js|png|jpg|jpeg|gif|ico|xml|rss|txt|eot|svg|ttf|woff|woff2|cur)"
                     + "(\\?((r|v|rel|rev)=[\\-\\.\\w]*)?)?$";
@@ -67,7 +70,7 @@ public class SpaBundle implements GuiceyBundle {
         final ServletEnvironment context = mainContext ? env.servlets() : env.admin();
 
         final Set<String> clash = context.addServlet(assetName,
-                new AssetServlet(resourcePath, uriPath, indexFile, StandardCharsets.UTF_8))
+                        new AssetServlet(resourcePath, uriPath, indexFile, StandardCharsets.UTF_8))
                 .addMapping(uriPath + '*');
 
         if (clash != null && !clash.isEmpty()) {
@@ -116,6 +119,14 @@ public class SpaBundle implements GuiceyBundle {
     public static class Builder {
         private final SpaBundle bundle = new SpaBundle();
 
+        /**
+         * Create builder.
+         *
+         * @param mainContext true for main context, false for admin
+         * @param name        application name
+         * @param path        resources path
+         * @param uri         mapping url
+         */
         @SuppressWarnings("PMD.UseStringBufferForStringAppends")
         public Builder(final boolean mainContext,
                        final String name,

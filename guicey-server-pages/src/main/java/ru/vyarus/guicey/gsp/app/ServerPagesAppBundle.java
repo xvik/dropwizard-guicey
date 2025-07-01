@@ -40,6 +40,11 @@ public class ServerPagesAppBundle implements GuiceyBundle {
     private final ServerPagesApp app;
     private ServerPagesGlobalState config;
 
+    /**
+     * Create an application bundle.
+     *
+     * @param app application
+     */
     public ServerPagesAppBundle(final ServerPagesApp app) {
         this.app = app;
     }
@@ -83,6 +88,15 @@ public class ServerPagesAppBundle implements GuiceyBundle {
         private final ServerPagesApp app;
         private final ClassLoader loader;
 
+        /**
+         * Create builder.
+         *
+         * @param mainContext main context
+         * @param name        application name
+         * @param path        path to application resources
+         * @param uri         mapped uri
+         * @param loader      resources loader
+         */
         public AppBuilder(final boolean mainContext,
                           final String name,
                           final String path,

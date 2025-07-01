@@ -10,6 +10,7 @@ import ru.vyarus.guicey.annotations.lifecycle.module.collector.SimpleAnnotationP
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+
 import java.lang.annotation.Annotation;
 
 /**
@@ -25,6 +26,11 @@ public class LifecycleAnnotationsModule extends AbstractModule {
     private final Matcher<? super TypeLiteral<?>> typeMatcher;
     private final MethodsCollector collector = new MethodsCollector();
 
+    /**
+     * Create lifecycle annotations module.
+     *
+     * @param typeMatcher target types matcher
+     */
     public LifecycleAnnotationsModule(final Matcher<? super TypeLiteral<?>> typeMatcher) {
         this.typeMatcher = typeMatcher;
     }

@@ -32,6 +32,11 @@ public class UnitManager implements Provider<Handle> {
     private final Jdbi jdbi;
     private final ThreadLocal<Handle> unit = new ThreadLocal<>();
 
+    /**
+     * Create a unit manager.
+     *
+     * @param jdbi jdbi instance
+     */
     @Inject
     public UnitManager(final Jdbi jdbi) {
         this.jdbi = jdbi;

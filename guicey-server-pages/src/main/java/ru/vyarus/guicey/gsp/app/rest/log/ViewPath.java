@@ -20,6 +20,14 @@ public class ViewPath implements Comparable<ViewPath> {
     private final Class<?> resourceType;
     private final String url;
 
+    /**
+     * Create a view path.
+     *
+     * @param method       method
+     * @param resource     resource
+     * @param resourceType resource class
+     * @param url          url
+     */
     public ViewPath(final ResourceMethod method,
                     final Resource resource,
                     final Class<?> resourceType,

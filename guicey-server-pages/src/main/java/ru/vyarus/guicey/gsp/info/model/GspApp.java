@@ -56,6 +56,9 @@ public class GspApp {
         return name;
     }
 
+    /**
+     * @param name application name
+     */
     public void setName(final String name) {
         this.name = name;
     }
@@ -67,6 +70,9 @@ public class GspApp {
         return mainContext;
     }
 
+    /**
+     * @param mainContext true to identify main context, false for admin context
+     */
     public void setMainContext(final boolean mainContext) {
         this.mainContext = mainContext;
     }
@@ -78,6 +84,9 @@ public class GspApp {
         return mappingUrl;
     }
 
+    /**
+     * @param mappingUrl application mapping url
+     */
     public void setMappingUrl(final String mappingUrl) {
         this.mappingUrl = mappingUrl;
     }
@@ -89,6 +98,9 @@ public class GspApp {
         return rootUrl;
     }
 
+    /**
+     * @param rootUrl application mapping url prefixed with context
+     */
     public void setRootUrl(final String rootUrl) {
         this.rootUrl = rootUrl;
     }
@@ -100,6 +112,9 @@ public class GspApp {
         return requiredRenderers;
     }
 
+    /**
+     * @param requiredRenderers list of required renderers
+     */
     public void setRequiredRenderers(final List<String> requiredRenderers) {
         this.requiredRenderers = requiredRenderers;
     }
@@ -113,6 +128,9 @@ public class GspApp {
         return mainAssetsLocation;
     }
 
+    /**
+     * @param mainAssetsLocation main assets location
+     */
     public void setMainAssetsLocation(final String mainAssetsLocation) {
         this.mainAssetsLocation = mainAssetsLocation;
     }
@@ -131,6 +149,9 @@ public class GspApp {
         return assets;
     }
 
+    /**
+     * @param assets application asset mappings
+     */
     public void setAssets(final Multimap<String, String> assets) {
         this.assets = assets;
     }
@@ -147,6 +168,9 @@ public class GspApp {
         return views;
     }
 
+    /**
+     * @param views all application view mappings
+     */
     public void setViews(final Map<String, String> views) {
         this.views = views;
     }
@@ -165,6 +189,9 @@ public class GspApp {
         return assetExtensions;
     }
 
+    /**
+     * @param assetExtensions additional assets locations
+     */
     public void setAssetExtensions(final Multimap<String, String> assetExtensions) {
         this.assetExtensions = assetExtensions;
     }
@@ -176,6 +203,9 @@ public class GspApp {
         return viewExtensions;
     }
 
+    /**
+     * @param viewExtensions extension view rest mappings
+     */
     public void setViewExtensions(final Map<String, String> viewExtensions) {
         this.viewExtensions = viewExtensions;
     }
@@ -189,6 +219,9 @@ public class GspApp {
         return restRootUrl;
     }
 
+    /**
+     * @param restRootUrl rest context mapping url
+     */
     public void setRestRootUrl(final String restRootUrl) {
         this.restRootUrl = restRootUrl;
     }
@@ -200,6 +233,9 @@ public class GspApp {
         return indexFile;
     }
 
+    /**
+     * @param indexFile index file
+     */
     public void setIndexFile(final String indexFile) {
         this.indexFile = indexFile;
     }
@@ -211,6 +247,9 @@ public class GspApp {
         return filesRegex;
     }
 
+    /**
+     * @param filesRegex asset detection regexp
+     */
     public void setFilesRegex(final String filesRegex) {
         this.filesRegex = filesRegex;
     }
@@ -222,6 +261,9 @@ public class GspApp {
         return hasDefaultFilesRegex;
     }
 
+    /**
+     * @param hasDefaultFilesRegex true when default assets detection regexp used
+     */
     public void setHasDefaultFilesRegex(final boolean hasDefaultFilesRegex) {
         this.hasDefaultFilesRegex = hasDefaultFilesRegex;
     }
@@ -234,6 +276,9 @@ public class GspApp {
         return spa;
     }
 
+    /**
+     * @param spa true to identify SPA application
+     */
     public void setSpa(final boolean spa) {
         this.spa = spa;
     }
@@ -245,17 +290,23 @@ public class GspApp {
         return spaRegex;
     }
 
+    /**
+     * @param spaRegex non spa route path recognition regexp
+     */
     public void setSpaRegex(final String spaRegex) {
         this.spaRegex = spaRegex;
     }
 
     /**
-     * @return true when defaul regexp used, false otherwise
+     * @return true when default regexp used, false otherwise
      */
     public boolean isHasDefaultSpaRegex() {
         return hasDefaultSpaRegex;
     }
 
+    /**
+     * @param hasDefaultSpaRegex true when default regexp used
+     */
     public void setHasDefaultSpaRegex(final boolean hasDefaultSpaRegex) {
         this.hasDefaultSpaRegex = hasDefaultSpaRegex;
     }
@@ -269,6 +320,9 @@ public class GspApp {
         return errorPages;
     }
 
+    /**
+     * @param errorPages error pages
+     */
     public void setErrorPages(final Map<Integer, String> errorPages) {
         this.errorPages = errorPages;
     }
@@ -287,6 +341,9 @@ public class GspApp {
         return viewPaths;
     }
 
+    /**
+     * @param viewPaths mapped view rest methods
+     */
     public void setViewPaths(final List<MappedViewPath> viewPaths) {
         this.viewPaths = viewPaths;
     }
@@ -301,6 +358,9 @@ public class GspApp {
         return hiddenViewPaths;
     }
 
+    /**
+     * @param hiddenViewPaths hidden view path
+     */
     public void setHiddenViewPaths(final List<HiddenViewPath> hiddenViewPaths) {
         this.hiddenViewPaths = hiddenViewPaths;
     }

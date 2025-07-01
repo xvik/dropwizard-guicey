@@ -27,6 +27,13 @@ public class MethodsCollector {
     // second it used to detect late registrations for immediate execution
     private final List<Class<? extends Annotation>> processed = new ArrayList<>();
 
+    /**
+     * Register lifecycle method.
+     *
+     * @param annotation lifecycle annotation
+     * @param instance   object instance
+     * @param method     annotated method
+     */
     public void register(final Class<? extends Annotation> annotation,
                          final Object instance,
                          final Method method) {
