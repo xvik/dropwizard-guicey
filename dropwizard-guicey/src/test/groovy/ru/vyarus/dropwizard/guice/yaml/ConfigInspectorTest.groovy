@@ -92,7 +92,6 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.gzip.minimumEntitySize (DataSize) = 256 bytes
 [Configuration] server.gzip.syncFlush (Boolean) = false
 [Configuration] server.idleThreadTimeout (Duration) = 1 minute
-[Configuration] server.maxQueuedRequests (Integer) = 1024
 [Configuration] server.maxThreads (Integer) = 1024
 [Configuration] server.metricPrefix (String) = null
 [Configuration] server.minThreads (Integer) = 8
@@ -110,7 +109,7 @@ class ConfigInspectorTest extends Specification {
 [Configuration] server.user (String) = null"""
         res.rootTypes == [Configuration]
         res.uniqueTypePaths.size() == 8
-        res.paths.size() == 61
+        res.paths.size() == 60
         check(res, "server", DefaultServerFactory)
         check(res, "server.maxThreads", Integer, 1024)
         check(res, "server.idleThreadTimeout", Duration, Duration.minutes(1))
@@ -126,7 +125,7 @@ class ConfigInspectorTest extends Specification {
 [SimpleConfig] prim (Integer) = 0"""
         res.rootTypes == [SimpleConfig, Configuration]
         res.uniqueTypePaths.size() == 8
-        res.paths.size() == 64
+        res.paths.size() == 63
         check(res, "foo", String)
         check(res, "bar", Boolean)
         check(res, "prim", Integer)
@@ -138,7 +137,7 @@ class ConfigInspectorTest extends Specification {
         printConfig(res) == "[ObjectPropertyConfig] sub (Object) = null"
         res.rootTypes == [ObjectPropertyConfig, Configuration]
         res.uniqueTypePaths.size() == 8
-        res.paths.size() == 62
+        res.paths.size() == 61
         check(res, "sub", Object)
         elt.isObjectDeclaration()
         elt.declaredType == Object
@@ -171,7 +170,7 @@ class ConfigInspectorTest extends Specification {
         res.uniqueTypePaths.size() == 9
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.SubConfig } != null
         res.uniqueTypePaths.find { it.valueType == ComplexConfig.Parametrized } == null
-        res.paths.size() == 67
+        res.paths.size() == 66
         check(res, "sub", ComplexConfig.SubConfig)
         check(res, "sub.sub", String)
         check(res, "sub.two", ComplexConfig.Parametrized, null, String)

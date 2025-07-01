@@ -107,7 +107,6 @@ class BindingsReportTest extends Specification {
             @Config("server.gzip.minimumEntitySize") DataSize = 256 bytes
             @Config("server.gzip.syncFlush") Boolean = false
             @Config("server.idleThreadTimeout") Duration = 1 minute
-            @Config("server.maxQueuedRequests") Integer = 1024
             @Config("server.maxThreads") Integer = 1024
             @Config("server.minThreads") Integer = 8
             @Config("server.registerDefaultExceptionMappers") Boolean = true
@@ -177,7 +176,6 @@ class BindingsReportTest extends Specification {
         ├── gid: Integer = null
         ├── group: String = null
         ├── idleThreadTimeout: Duration = 1 minute
-        ├── maxQueuedRequests: Integer = 1024
         ├── maxThreads: Integer = 1024
         ├── metricPrefix: String = null
         ├── minThreads: Integer = 8
@@ -295,7 +293,6 @@ class BindingsReportTest extends Specification {
             @Config("server.gzip.minimumEntitySize") DataSize = 256 bytes
             @Config("server.gzip.syncFlush") Boolean = false
             @Config("server.idleThreadTimeout") Duration = 1 minute
-            @Config("server.maxQueuedRequests") Integer = 1024
             @Config("server.maxThreads") Integer = 1024
             @Config("server.metricPrefix") String = null
             @Config("server.minThreads") Integer = 8
@@ -407,7 +404,6 @@ class BindingsReportTest extends Specification {
         ├── enableThreadNameFilter: Boolean = true
         ├── enableVirtualThreads: Boolean = false
         ├── idleThreadTimeout: Duration = 1 minute
-        ├── maxQueuedRequests: Integer = 1024
         ├── maxThreads: Integer = 1024
         ├── minThreads: Integer = 8
         ├── registerDefaultExceptionMappers: Boolean = true
