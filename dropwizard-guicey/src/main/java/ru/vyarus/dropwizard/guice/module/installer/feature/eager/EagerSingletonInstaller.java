@@ -58,7 +58,7 @@ public class EagerSingletonInstaller implements FeatureInstaller, BindingInstall
         // in production, all services will work as eager singletons, for report (TOOL stage) consider also valid
         Preconditions.checkArgument(scope.equals(EagerSingleton.class)
                         || (!binder.currentStage().equals(Stage.DEVELOPMENT)
-                        && (scope.equals(Singleton.class) || scope.equals(jakarta.inject.Singleton.class))),
+                        && (scope.equals(Singleton.class) || "jakarta.inject.Singleton".equals(scope.getName()))),
                 // intentionally no "at" before stacktrtace because idea may hide error in some cases
                 "Eager bean, declared manually is not marked .asEagerSingleton(): %s (%s)",
                 type.getName(), BindingUtils.getDeclarationSource(binding));

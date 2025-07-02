@@ -160,12 +160,21 @@ public final class BindingUtils {
      * @param countGuiceSpecific true to count guice-specific annotations (with {@link ScopeAnnotation})
      * @return detected annotation or null
      */
+    @SuppressWarnings("unchecked")
     public static Class<? extends Annotation> findScopingAnnotation(final Class<?> type,
                                                                     final boolean countGuiceSpecific) {
         Class<? extends Annotation> res = null;
+        Class<? extends Annotation> jakartaScope = null;
+        try {
+            jakartaScope = (Class<? extends Annotation>) Class.forName("jakarta.inject.Scope");
+        } catch (Exception ignored) {
+            // no jakarta annotations in classpath
+        }
+
         for (Annotation ann : type.getAnnotations()) {
             final Class<? extends Annotation> annType = ann.annotationType();
-            if (annType.isAnnotationPresent(Scope.class) || annType.isAnnotationPresent(jakarta.inject.Scope.class)) {
+            if (annType.isAnnotationPresent(Scope.class)
+                    || (jakartaScope != null && annType.isAnnotationPresent(jakartaScope))) {
                 res = annType;
                 break;
             }
