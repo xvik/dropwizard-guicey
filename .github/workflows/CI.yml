@@ -37,25 +37,30 @@ jobs:
         run: ./gradlew check --no-daemon
 
       - name: Build coverage report
-        if: github.ref == 'refs/heads/dw3' && github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/dw-3' && github.event_name != 'pull_request'
         run: ./gradlew jacocoTestReport --no-daemon
 
       - uses: codecov/codecov-action@v4
-        if: github.ref == 'refs/heads/dw3' && github.event_name != 'pull_request'
+        if: github.ref == 'refs/heads/dw-3' && github.event_name != 'pull_request'
         with:
           files: build/reports/jacoco/test/jacocoTestReport.xml
           flags: LINUX
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
-#  publish snapshot after successful tests
+      - name: Extract Project version
+        id: project
+        run: echo "version=$(./gradlew properties --no-daemon --console=plain -q | grep "^version:" | awk '{printf $2}')" >> $GITHUB_OUTPUT
+
+
+  #  publish snapshot after successful tests (only for snapshots)
   publish:
-    if: github.ref == 'refs/heads/dw3' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/dw-3' && github.event_name != 'pull_request' && endsWith(steps.project.outputs.version, '-SNAPSHOT')
     needs: build
     uses: ./.github/workflows/publish-snapshot.yml
 
-# run examples with published snapshot
+# run examples with published snapshot (only for snapshots)
   examples:
-    if: github.ref == 'refs/heads/dw3' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/dw-3' && github.event_name != 'pull_request' && endsWith(steps.project.outputs.version, '-SNAPSHOT')
     needs: publish
     uses: ./.github/workflows/examples-CI.yml
