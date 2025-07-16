@@ -55,12 +55,12 @@ jobs:
 
   #  publish snapshot after successful tests (only for snapshots)
   publish:
-    if: ${{ github.ref == 'refs/heads/dw-3' && github.event_name != 'pull_request' && endsWith(steps.project.outputs.version, '-SNAPSHOT') }}
+    if: ${{ github.ref == 'refs/heads/dw-3' && github.event_name != 'pull_request' && endsWith(needs.build.outputs.version, '-SNAPSHOT') }}
     needs: build
     uses: ./.github/workflows/publish-snapshot.yml
 
 # run examples with published snapshot (only for snapshots)
   examples:
-    if: ${{ github.ref == 'refs/heads/dw-3' && github.event_name != 'pull_request' && endsWith(steps.project.outputs.version, '-SNAPSHOT') }}
-    needs: publish
+    if: ${{ github.ref == 'refs/heads/dw-3' && github.event_name != 'pull_request' && endsWith(needs.build.outputs.version, '-SNAPSHOT') }}
+    needs: [build, publish]
     uses: ./.github/workflows/examples-CI.yml
