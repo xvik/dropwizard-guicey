@@ -11,7 +11,7 @@ wrapper {
 description = 'Dropwizard guicey examples'
 
 ext {
-    guiceyBom = '6.3.0'
+    guiceyBom = '6.3.2-SNAPSHOT'
     dwVersion = '3.0.13'
 }
 
@@ -27,7 +27,18 @@ subprojects {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
 
-    repositories { mavenLocal(); mavenCentral()}
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            name = 'Central Portal Snapshots'
+            url = 'https://central.sonatype.com/repository/maven-snapshots/'
+            mavenContent {
+                snapshotsOnly()
+                includeGroupAndSubgroups('ru.vyarus')
+            }
+        }
+    }
     dependencies {
         implementation platform("ru.vyarus.guicey:guicey-bom:$guiceyBom")
 
