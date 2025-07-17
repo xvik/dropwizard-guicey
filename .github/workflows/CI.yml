@@ -9,8 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Java ${{ matrix.java }}
     strategy:
+      # don't cancel remaining matrix steps on failure
+      fail-fast: false
       matrix:
         java: [17, 21]
+    outputs:
+      version: ${{ steps.project.outputs.version }}
 
     steps:
       - uses: actions/checkout@v4
@@ -46,14 +50,26 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
 
-#  publish snapshot after successful tests
+      - name: Extract Project version
+        id: 'project'
+        run: |
+          ver=$(./gradlew :properties --property version --no-daemon --console=plain -q | grep "^version:" | awk '{printf $2}')
+          echo "Project version: $ver"
+          echo "version=$ver" >> $GITHUB_OUTPUT
+
+
+  #  publish snapshot after successful tests (only for snapshots)
   publish:
-    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    if: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && endsWith(needs.build.outputs.version, '-SNAPSHOT') }}
     needs: build
     uses: ./.github/workflows/publish-snapshot.yml
+    # workflow can't see secrets directly
+    secrets:
+      sonatype_user: ${{ secrets.SONATYPE_USERNAME }}
+      sonatype_password: ${{ secrets.SONATYPE_PASSWORD }}
 
-# run examples with published snapshot
+# run examples with published snapshot (only for snapshots)
   examples:
-    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
-    needs: publish
+    if: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && endsWith(needs.build.outputs.version, '-SNAPSHOT') }}
+    needs: [build, publish]
     uses: ./.github/workflows/examples-CI.yml

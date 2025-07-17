@@ -10,9 +10,6 @@ jobs:
       run:
         working-directory: examples
     name: Java ${{ matrix.java }}
-    env:
-      USERNAME: ${{ github.actor }}
-      TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
         java: [17, 21]

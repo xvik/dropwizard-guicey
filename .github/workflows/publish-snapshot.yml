@@ -2,14 +2,15 @@ name: Publish snapshot
 
 on:
   workflow_call:
-
+    secrets:
+      sonatype_user:
+        required: true
+      sonatype_password:
+        required: true
 jobs:
   publish:
     name: Publish snapshot
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - uses: actions/checkout@v4
@@ -26,10 +27,10 @@ jobs:
       - name: Build without tests
         run: |
           chmod +x gradlew
-          ./gradlew build -x test -x check --no-daemon
+          ./gradlew build -x check --no-daemon
 
       - name: Publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SNAPSHOT: true
-        run: ./gradlew publishAllPublicationsToGitHubRepository --no-daemon
+          ORG_GRADLE_PROJECT_sonatypeUser: ${{ secrets.sonatype_user }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.sonatype_password }}
+        run: ./gradlew publishToSonatype

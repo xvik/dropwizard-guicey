@@ -12,7 +12,7 @@ description = 'Dropwizard guicey examples'
 
 ext {
     guiceyBom = '8.0.0-rc.5-SNAPSHOT'
-    dwVersion = '5.0.0-rc.2'
+    dwVersion = '5.0.0-rc.3'
 }
 
 subprojects {
@@ -27,13 +27,15 @@ subprojects {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
 
-    repositories { mavenCentral(); mavenLocal();
-        // for github package (used on CI)
+    repositories {
+        mavenLocal()
+        mavenCentral()
         maven {
-            url  = 'https://maven.pkg.github.com/xvik/dropwizard-guicey'
-            credentials {
-                username = findProperty('gpr.user') ?: System.getenv("USERNAME")
-                password = findProperty('gpr.key') ?: System.getenv("TOKEN")
+            name = 'Central Portal Snapshots'
+            url = 'https://central.sonatype.com/repository/maven-snapshots/'
+            mavenContent {
+                snapshotsOnly()
+                includeGroupAndSubgroups('ru.vyarus')
             }
         }
     }
