@@ -2,7 +2,11 @@ name: Publish snapshot
 
 on:
   workflow_call:
-
+    secrets:
+      sonatype_user:
+        required: true
+      sonatype_password:
+        required: true
 jobs:
   publish:
     name: Publish snapshot
@@ -30,6 +34,6 @@ jobs:
 
       - name: Publish
         env:
-          ORG_GRADLE_PROJECT_sonatypeUser: ${{ secrets.SONATYPE_USERNAME }}
-          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.SONATYPE_PASSWORD }}
+          ORG_GRADLE_PROJECT_sonatypeUser: ${{ secrets.sonatype_user }}
+          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.sonatype_password }}
         run: ./gradlew publishToSonatype

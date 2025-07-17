@@ -62,6 +62,10 @@ jobs:
     if: ${{ github.ref == 'refs/heads/dw-3' && github.event_name != 'pull_request' && endsWith(needs.build.outputs.version, '-SNAPSHOT') }}
     needs: build
     uses: ./.github/workflows/publish-snapshot.yml
+    # workflow can't see secrets directly
+    secrets:
+      sonatype_user: ${{ secrets.SONATYPE_USERNAME }}
+      sonatype_password: ${{ secrets.SONATYPE_PASSWORD }}
 
 # run examples with published snapshot (only for snapshots)
   examples:
