@@ -137,86 +137,66 @@ Spock-junit5 | `ru.vyarus:spock-junit5`
 ### Snapshots
 
 <details>
-      <summary>Snapshots may be used through JitPack</summary>
+      <summary>Snapshots published into Maven Central</summary>
 
-Add [JitPack](https://jitpack.io/#ru.vyarus/dropwizard-guicey) repository:
+Add maven snapshots repository:
 
 ```groovy
-repositories { maven { url 'https://jitpack.io' } }
+repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            name = 'Central Portal Snapshots'
+            url = 'https://central.sonatype.com/repository/maven-snapshots/'
+            mavenContent {
+                snapshotsOnly()
+                includeGroupAndSubgroups('ru.vyarus')
+            }
+        }
+    }
 ```
 
-For spring dependencies plugin (when guicey pom used as BOM):
+Use snapshot version:
 
 ```groovy
-dependencyManagement {
-    resolutionStrategy {
-        cacheChangingModulesFor 0, 'seconds'
-    }
-    imports {
-        mavenBom "ru.vyarus:dropwizard-guicey:master-SNAPSHOT"
-    }
+dependencies {
+    implementation 'ru.vyarus:dropwizard-guicey:6.3.2-SNAPSHOT'
 }
-``` 
+```
 
-For direct guicey dependency:
+To avoid caching you may use:
 
 ```groovy
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
-
-dependencies {
-    implementation 'ru.vyarus:dropwizard-guicey:master-SNAPSHOT'
-}
 ```
-
-Note that in both cases `resolutionStrategy` setting required for correct updating snapshot with recent commits
-(without it you will not always have up-to-date snapshot)
-
-OR you can depend on exact commit:
-
-* Go to [JitPack project page](https://jitpack.io/#ru.vyarus/dropwizard-guicey)
-* Select `Commits` section and click `Get it` on commit you want to use and 
- use commit hash as version: `ru.vyarus:dropwizard-guicey:56537f7d23`
-
 
 Maven:
 
 ```xml
 <repositories>
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
+        <name>Central Portal Snapshots</name>
+        <id>central-portal-snapshots</id>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
     </repository>
-</repositories>  
-
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>ru.vyarus</groupId>
-            <artifactId>dropwizard-guicey</artifactId>
-            <version>master-SNAPSHOT</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-
-<dependencies>
-    <dependency>
-        <groupId>ru.vyarus</groupId>
-        <artifactId>dropwizard-guicey</artifactId>
-    </dependency>
-</dependencies>
+</repositories>
 ```     
 
-Or simply change version if used as direct dependency (repository must be also added):
+Use shapshot version:
 
 ```xml
 <dependency>
     <groupId>ru.vyarus</groupId>
     <artifactId>dropwizard-guicey</artifactId>
-    <version>master-SNAPSHOT</version>
+    <version>6.3.2-SNAPSHOT</version>
 </dependency>
 ```
 
