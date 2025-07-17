@@ -13,7 +13,7 @@ Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | 
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 4.0.13 [guice](https://github.com/google/guice) 7.0.0 integration.
+[Dropwizard](http://dropwizard.io/) 4.0.14 [guice](https://github.com/google/guice) 7.0.0 integration.
 
 Features:
 
@@ -61,20 +61,20 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>7.2.1</version>
+  <version>7.2.2</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:7.2.1'
+implementation 'ru.vyarus:dropwizard-guicey:7.2.2'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-4.0| [7.2.1](http://xvik.github.io/dropwizard-guicey/7.2.1)
-3.0| [6.3.1](http://xvik.github.io/dropwizard-guicey/6.3.1)
+4.0| [7.2.2](http://xvik.github.io/dropwizard-guicey/7.2.2)
+3.0| [6.3.2](http://xvik.github.io/dropwizard-guicey/6.3.2)
 2.1| [5.10.2](http://xvik.github.io/dropwizard-guicey/5.10.2)
 2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
@@ -97,9 +97,9 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus.guicey:guicey-bom:7.2.1')
+    implementation platform('ru.vyarus.guicey:guicey-bom:7.2.2')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-dependencies:4.0.13')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:4.0.14')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
@@ -120,7 +120,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>7.2.1</version>
+            <version>7.2.2</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -128,7 +128,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>4.0.13</version>
+            <version>4.0.14</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 
@@ -157,86 +157,66 @@ Spock-junit5 | `ru.vyarus:spock-junit5`
 ### Snapshots
 
 <details>
-      <summary>Snapshots may be used through JitPack</summary>
+      <summary>Snapshots published into Maven Central</summary>
 
-Add [JitPack](https://jitpack.io/#ru.vyarus/dropwizard-guicey) repository:
+Add maven snapshots repository:
 
 ```groovy
-repositories { maven { url 'https://jitpack.io' } }
+repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            name = 'Central Portal Snapshots'
+            url = 'https://central.sonatype.com/repository/maven-snapshots/'
+            mavenContent {
+                snapshotsOnly()
+                includeGroupAndSubgroups('ru.vyarus')
+            }
+        }
+    }
 ```
 
-For spring dependencies plugin (when guicey pom used as BOM):
+Use snapshot version:
 
 ```groovy
-dependencyManagement {
-    resolutionStrategy {
-        cacheChangingModulesFor 0, 'seconds'
-    }
-    imports {
-        mavenBom "ru.vyarus:dropwizard-guicey:master-SNAPSHOT"
-    }
+dependencies {
+    implementation 'ru.vyarus:dropwizard-guicey:7.2.2-SNAPSHOT'
 }
-``` 
+```
 
-For direct guicey dependency:
+To avoid caching you may use:
 
 ```groovy
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
-
-dependencies {
-    implementation 'ru.vyarus:dropwizard-guicey:master-SNAPSHOT'
-}
 ```
-
-Note that in both cases `resolutionStrategy` setting required for correct updating snapshot with recent commits
-(without it you will not always have up-to-date snapshot)
-
-OR you can depend on exact commit:
-
-* Go to [JitPack project page](https://jitpack.io/#ru.vyarus/dropwizard-guicey)
-* Select `Commits` section and click `Get it` on commit you want to use and 
- use commit hash as version: `ru.vyarus:dropwizard-guicey:56537f7d23`
-
 
 Maven:
 
 ```xml
 <repositories>
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
+        <name>Central Portal Snapshots</name>
+        <id>central-portal-snapshots</id>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
     </repository>
-</repositories>  
-
-<dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>ru.vyarus</groupId>
-            <artifactId>dropwizard-guicey</artifactId>
-            <version>master-SNAPSHOT</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
-
-<dependencies>
-    <dependency>
-        <groupId>ru.vyarus</groupId>
-        <artifactId>dropwizard-guicey</artifactId>
-    </dependency>
-</dependencies>
+</repositories>
 ```     
 
-Or simply change version if used as direct dependency (repository must be also added):
+Use shapshot version:
 
 ```xml
 <dependency>
     <groupId>ru.vyarus</groupId>
     <artifactId>dropwizard-guicey</artifactId>
-    <version>master-SNAPSHOT</version>
+    <version>7.2.2-SNAPSHOT</version>
 </dependency>
 ```
 
