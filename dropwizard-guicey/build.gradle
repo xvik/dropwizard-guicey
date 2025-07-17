@@ -51,14 +51,14 @@ maven.removeDependencyManagement()
 
 mkdocs {
     publish {
-        docPath = '8.0.0-rc.2'
+        docPath = '8.0.0-rc.5'
         rootRedirect = false
 //        rootRedirectTo = 'latest'
 //        versionAliases = ['latest']
         hideOldBugfixVersions = true
     }
     extras = [
-            'version': '8.0.0-rc.2',
+            'version': '8.0.0-rc.5',
             'dropwizard': rootProject.dropwizard,
             'guice': rootProject.guice
     ]
