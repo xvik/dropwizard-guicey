@@ -104,7 +104,7 @@ allprojects {
     javaLib.withoutGradleMetadata()
 
     // skip signing for jitpack (snapshots)
-    tasks.withType(Sign) { onlyIf { !System.getenv('JITPACK') } }
+    tasks.withType(Sign) { onlyIf { !System.getenv('JITPACK') && !version.endsWith('-SNAPSHOT') } }
 }
 
 // all sub-modules are normal java modules, using root BOM (like maven)
@@ -197,6 +197,8 @@ check.dependsOn subprojects.check
 nexusPublishing {
     repositories {
         sonatype {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
             username = findProperty('sonatypeUser')
             password = findProperty('sonatypePassword')
         }
