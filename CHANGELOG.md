@@ -1,3 +1,5 @@
+* Update to dropwizard 4.0.14
+
 ### 7.2.1 (2025-05-12)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)
 
