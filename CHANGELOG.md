@@ -1,4 +1,5 @@
 * Fix jakarta.inject annotations requirement (NoClassDefFoundError) (#430)
+* Update to dropwizard 3.0.14
 
 ### 6.3.1 (2025-05-12)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)

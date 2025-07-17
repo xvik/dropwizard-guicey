@@ -12,7 +12,7 @@ description = 'Dropwizard guicey examples'
 
 ext {
     guiceyBom = '6.3.2-SNAPSHOT'
-    dwVersion = '3.0.13'
+    dwVersion = '3.0.14'
 }
 
 subprojects {
