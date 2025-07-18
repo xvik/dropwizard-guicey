@@ -1,4 +1,4 @@
-### [6.3.2](http://xvik.github.io/dropwizard-guicey/6.3.2) (2025-07-17)
+### [6.3.2](http://xvik.github.io/dropwizard-guicey/6.3.2) (2025-07-18)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)
 * Update to dropwizard 3.0.14
 

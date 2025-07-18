@@ -1,4 +1,4 @@
-### 6.3.2 (2025-07-17)
+### 6.3.2 (2025-07-18)
 * Fix jakarta.inject annotations requirement (NoClassDefFoundError) (#430)
 * Update to dropwizard 3.0.14
 
