@@ -73,3 +73,5 @@ jobs:
     if: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && endsWith(needs.build.outputs.version, '-SNAPSHOT') }}
     needs: [build, publish]
     uses: ./.github/workflows/examples-CI.yml
+    with:
+      version: ${{ needs.build.outputs.version }}

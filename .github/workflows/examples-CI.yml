@@ -2,6 +2,10 @@ name: Examples CI
 
 on:
   workflow_call:
+    inputs:
+      version:
+        required: false
+        type: string
 
 jobs:
   build:
@@ -27,6 +31,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build and Check
+        env:
+          ORG_GRADLE_PROJECT_guiceyBom: ${{ inputs.version }}
         run: |
           chmod +x gradlew
           ./gradlew build --no-daemon
