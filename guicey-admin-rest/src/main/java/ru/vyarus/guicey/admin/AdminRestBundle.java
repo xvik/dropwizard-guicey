@@ -34,7 +34,6 @@ public class AdminRestBundle extends UniqueGuiceyBundle {
     private final Logger logger = LoggerFactory.getLogger(AdminRestBundle.class);
 
     private final String path;
-    private boolean identifyAdminContext;
 
     /**
      * Admin rest will be mapped on the same path as main rest if rest mapping is different from '/*'.
@@ -54,28 +53,6 @@ public class AdminRestBundle extends UniqueGuiceyBundle {
         this.path = path;
     }
 
-    /**
-     * Shortcut for {@code identifyAdminPathsInRequestLogs(true)}.
-     *
-     * @return bundle instance
-     */
-    public AdminRestBundle identifyAdminContextInRequestLogs() {
-        return identifyAdminContextInRequestLogs(true);
-    }
-
-    /**
-     * As admin rest just redirects to main context rest, then all admin rest calls would be logged. It might
-     * be hard to identify admin calls in such logs (if rest contexts are the same and resources used from both
-     * contexts). When enabled, " (ADMIN REST)" string is appended for loggable request uri.
-     *
-     * @param identifyAdminPathsInRequestLogs true to identify admin calls in request logs
-     * @return bundle instance
-     */
-    public AdminRestBundle identifyAdminContextInRequestLogs(final boolean identifyAdminPathsInRequestLogs) {
-        this.identifyAdminContext = identifyAdminPathsInRequestLogs;
-        return this;
-    }
-
     @Override
     public void run(final GuiceyEnvironment environment) throws Exception {
         environment.manage(new ServletRegistration(environment.environment()));
@@ -91,7 +68,7 @@ public class AdminRestBundle extends UniqueGuiceyBundle {
         // In admin context LogbackAccessRequestLogAwareHandler not registered, but our admin servlet calls
         // the main context, which will trigger LogbackAccessRequestLog, but without a proper handler it would fail
         environment.getAdminContext()
-                .insertHandler(new LogbackAccessRequestLogAwareCustomHandler(identifyAdminContext));
+                .insertHandler(new LogbackAccessRequestLogAwareCustomHandler());
         logger.info("Admin REST registered on path: {}", path);
     }
 

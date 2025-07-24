@@ -39,7 +39,7 @@ class AsyncResourceTest extends Specification {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(new AdminRestBundle("/api/*").identifyAdminContextInRequestLogs())
+                    .bundles(new AdminRestBundle("/api/*"))
                     .extensions(AsyncResource)
                     .build())
         }

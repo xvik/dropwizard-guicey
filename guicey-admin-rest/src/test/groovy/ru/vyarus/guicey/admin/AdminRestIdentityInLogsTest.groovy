@@ -35,7 +35,7 @@ class AdminRestIdentityInLogsTest extends AbstractTest {
         res = new URL("http://localhost:8081/api/hybrid/hello").getText()
         sleep(100)
         then: "admin context identified"
-        out.getText().replace("\r", "").contains("\"GET /api/hybrid/hello (ADMIN REST) HTTP/1.1\"")
+        out.getText().replace("\r", "").contains("\"GET /api/hybrid/hello HTTP/1.1\"")
 
     }
 
@@ -45,8 +45,7 @@ class AdminRestIdentityInLogsTest extends AbstractTest {
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
-                    .bundles(new AdminRestBundle()
-                            .identifyAdminContextInRequestLogs())
+                    .bundles(new AdminRestBundle())
                     .extensions(HybridResource)
                     .build()
             )

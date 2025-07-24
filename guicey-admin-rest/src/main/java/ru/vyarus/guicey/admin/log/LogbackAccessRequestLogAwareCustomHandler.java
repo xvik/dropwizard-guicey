@@ -1,7 +1,6 @@
 package ru.vyarus.guicey.admin.log;
 
 import org.eclipse.jetty.ee10.servlet.ServletContextRequest;
-import org.eclipse.jetty.http.HttpURI;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Response;
@@ -26,17 +25,6 @@ import ru.vyarus.guicey.admin.rest.AdminRestServlet;
  */
 public class LogbackAccessRequestLogAwareCustomHandler extends Handler.Wrapper {
 
-    private final boolean identifyAdminContext;
-
-    /**
-     * Creates custom logback handler.
-     *
-     * @param identifyAdminContext true to identify admin context logs
-     */
-    public LogbackAccessRequestLogAwareCustomHandler(final boolean identifyAdminContext) {
-        this.identifyAdminContext = identifyAdminContext;
-    }
-
     @Override
     public boolean handle(final Request request,
                           final Response response,
@@ -44,13 +32,7 @@ public class LogbackAccessRequestLogAwareCustomHandler extends Handler.Wrapper {
         final boolean handled = super.handle(request, response, callback);
         // apply ONLY for rest simulation (for other cases simply not required, because requests not logged)
         if (handled && request.getAttribute(AdminRestServlet.ADMIN_PROPERTY) != null) {
-            ServletContextRequest servletContextRequest = Request.as(request, ServletContextRequest.class);
-            if (identifyAdminContext) {
-                // indicate admin context call in log
-                servletContextRequest = (ServletContextRequest) servletContextRequest
-                        .wrap(request, HttpURI.build(request.getHttpURI())
-                                .uri(request.getHttpURI() + " (ADMIN REST)"));
-            }
+            final ServletContextRequest servletContextRequest = Request.as(request, ServletContextRequest.class);
             if (servletContextRequest != null) {
                 final Request unwrapped = Request.unWrap(request);
                 if (!(unwrapped instanceof HttpChannelState.ChannelRequest channelRequest)) {

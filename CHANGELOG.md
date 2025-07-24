@@ -1,6 +1,4 @@
 * Update to dropwizard 5 (requires java 17)
-* [admin-rest]
-    - Add identifyAdminContextInRequestLogs bundle option to highlight admin requests in logs
 
 ### 7.2.1 (2025-05-12)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)
