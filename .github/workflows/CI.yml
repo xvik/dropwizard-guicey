@@ -25,7 +25,7 @@ jobs:
           java-version: ${{ matrix.java }}
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build
         run: |
@@ -41,7 +41,7 @@ jobs:
         if: github.ref == 'refs/heads/dw-4' && github.event_name != 'pull_request'
         run: ./gradlew jacocoTestReport --no-daemon
 
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         if: github.ref == 'refs/heads/dw-4' && github.event_name != 'pull_request'
         with:
           files: build/reports/jacoco/test/jacocoTestReport.xml
