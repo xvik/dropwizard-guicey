@@ -38,7 +38,7 @@ import java.util.function.Supplier;
  * @author Vyacheslav Rusakov
  * @since 13.06.2019
  */
-@SuppressWarnings({"PMD.TooManyMethods", "ClassFanOutComplexity"})
+@SuppressWarnings({"PMD.TooManyMethods", "ClassFanOutComplexity", "PMD.CouplingBetweenObjects"})
 public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnvironment> {
 
     private final ConfigurationContext context;
@@ -243,7 +243,7 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
      * @return builder instance for chained calls
      */
     public <C extends Configuration> GuiceyEnvironment onGuiceyStartup(final GuiceyStartupListener<C> listener) {
-        return listen(new GuiceyStartupListenerAdapter<C>(listener));
+        return listen(new GuiceyStartupListenerAdapter<>(listener));
     }
 
     /**

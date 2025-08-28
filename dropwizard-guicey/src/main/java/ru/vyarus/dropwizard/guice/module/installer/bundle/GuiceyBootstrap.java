@@ -36,7 +36,6 @@ import java.util.function.Supplier;
  * @author Vyacheslav Rusakov
  * @since 01.08.2015
  */
-@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public class GuiceyBootstrap implements GuiceyCommonRegistration<GuiceyBootstrap> {
 
     private final ConfigurationContext context;

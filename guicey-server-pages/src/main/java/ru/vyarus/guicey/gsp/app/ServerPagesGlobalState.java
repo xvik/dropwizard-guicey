@@ -43,7 +43,6 @@ public class ServerPagesGlobalState {
     @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private Map<String, Map<String, String>> viewsConfig;
 
-    @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
     private boolean locked;
 
     /**

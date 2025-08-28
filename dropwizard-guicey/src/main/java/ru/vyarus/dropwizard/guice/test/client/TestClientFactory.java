@@ -12,6 +12,7 @@ import org.glassfish.jersey.client.JerseyClient;
  * @author Vyacheslav Rusakov
  * @since 15.11.2023
  */
+@FunctionalInterface
 public interface TestClientFactory {
 
     /**

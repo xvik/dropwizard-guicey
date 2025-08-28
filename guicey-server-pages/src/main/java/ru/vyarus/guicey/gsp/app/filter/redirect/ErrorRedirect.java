@@ -211,11 +211,11 @@ public class ErrorRedirect {
         /**
          * Exception instance (error leading to error page).
          */
-        protected WebApplicationException exception;
+        protected final WebApplicationException exception;
         /**
          * Original request uri (stored because during error page rendering it will be unreachable).
          */
-        protected String originalUrl;
+        protected final String originalUrl;
         /**
          * Processing marker used to prevent multiple error handling.
          */

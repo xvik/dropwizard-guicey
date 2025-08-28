@@ -99,8 +99,8 @@ public enum InstallersOptions implements Option {
      */
     JerseyExtensionsRecognizedByType(Boolean.class, true);
 
-    private Class<?> type;
-    private Object value;
+    private final Class<?> type;
+    private final Object value;
 
     <T> InstallersOptions(final Class<T> type, final T value) {
         this.type = type;

@@ -138,6 +138,7 @@ public class GuiceyInterceptor extends AbstractMethodInterceptor {
     public abstract static class AbstractEnvironmentSupport implements EnvironmentSupport {
         private final Logger logger = LoggerFactory.getLogger(AbstractEnvironmentSupport.class);
 
+        @SuppressWarnings("PMD.UnusedPrivateField")
         private final Class<?> test;
         private DropwizardTestSupport support;
         private ClientSupport client;

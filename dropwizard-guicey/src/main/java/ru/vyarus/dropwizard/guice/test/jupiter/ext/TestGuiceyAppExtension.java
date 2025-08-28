@@ -290,7 +290,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
     /**
      * Unified configuration.
      */
-    @SuppressWarnings({"checkstyle:VisibilityModifier", "PMD.DefaultPackage"})
+    @SuppressWarnings("checkstyle:VisibilityModifier")
     private static class Config extends ExtensionConfig {
         Class<? extends Application> app;
         String configPath = "";

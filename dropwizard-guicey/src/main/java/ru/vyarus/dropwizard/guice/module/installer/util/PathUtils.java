@@ -140,7 +140,7 @@ public final class PathUtils {
      * @return class location path
      */
     public static String packagePath(final Class cls) {
-        return trailingSlash(cls.getPackage().getName().replace(".", PathUtils.SLASH));
+        return trailingSlash(cls.getPackage().getName().replace(".", SLASH));
     }
 
     /**

@@ -64,7 +64,7 @@ import java.util.Set;
  * @since 17.04.2018
  */
 @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity",
-        "PMD.ExcessiveImports", "PMD.TooManyMethods"})
+        "PMD.ExcessiveImports", "PMD.TooManyMethods", "PMD.CouplingBetweenObjects"})
 public final class LifecycleSupport {
     private final Logger logger = LoggerFactory.getLogger(LifecycleSupport.class);
 

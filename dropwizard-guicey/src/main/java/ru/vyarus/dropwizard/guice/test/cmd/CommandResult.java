@@ -48,7 +48,7 @@ public class CommandResult<C extends Configuration> {
      * @param environment   environment instance
      * @param injector      injector instance
      */
-    @SuppressWarnings({"PMD.ExcessiveParameterList", "checkstyle:ParameterNumber"})
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public CommandResult(final boolean success,
                          final @Nullable Throwable exception,
                          final String output,

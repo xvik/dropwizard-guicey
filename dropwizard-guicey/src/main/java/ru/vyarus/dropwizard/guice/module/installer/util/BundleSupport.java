@@ -153,7 +153,6 @@ public final class BundleSupport {
         return bundles;
     }
 
-    @SuppressWarnings("PMD.PrematureDeclaration")
     private static void initBundle(final List<Class<? extends GuiceyBundle>> path,
                                    final List<GuiceyBundle> initOrder,
                                    final GuiceyBundle bundle,

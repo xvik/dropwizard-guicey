@@ -145,7 +145,6 @@ public class GuiceyInitializer {
      * Performs classpath scan to search for extensions. No registration performed because manual extensions could
      * be added in run phase (and it is important to register manual extension first).
      */
-    @SuppressWarnings("PMD.PrematureDeclaration")
     public void scanExtensions() {
         final StatTimer itimer = context.stat().timer(InstallersTime);
         final StatTimer timer = context.stat().timer(ExtensionsRecognitionTime);

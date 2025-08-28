@@ -38,7 +38,6 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.PathUtils.SLASH;
  * @author Vyacheslav Rusakov
  * @since 02.04.2017
  */
-@SuppressWarnings("PMD.ImmutableField")
 public class SpaBundle implements GuiceyBundle {
 
     /**
@@ -65,6 +64,7 @@ public class SpaBundle implements GuiceyBundle {
     }
 
     @Override
+    @SuppressWarnings("PMD.LooseCoupling")
     public void run(final GuiceyEnvironment environment) {
         final Environment env = environment.environment();
         final ServletEnvironment context = mainContext ? env.servlets() : env.admin();
@@ -127,7 +127,6 @@ public class SpaBundle implements GuiceyBundle {
          * @param path        resources path
          * @param uri         mapping url
          */
-        @SuppressWarnings("PMD.UseStringBufferForStringAppends")
         public Builder(final boolean mainContext,
                        final String name,
                        final String path,

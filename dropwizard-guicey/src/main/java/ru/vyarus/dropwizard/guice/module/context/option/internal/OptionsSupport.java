@@ -77,7 +77,7 @@ public final class OptionsSupport<T extends Enum<? extends Option> & Option> {
     private OptionHolder getOrCreateHolder(final T option) {
         OptionHolder holder = options.get(option);
         if (holder == null) {
-            holder = new OptionHolder(option);
+            holder = new OptionHolder<>(option);
             options.put(option, holder);
         }
         return holder;

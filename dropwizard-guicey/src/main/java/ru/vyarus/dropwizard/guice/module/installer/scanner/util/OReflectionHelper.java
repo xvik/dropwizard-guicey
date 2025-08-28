@@ -22,7 +22,7 @@ import java.util.jar.JarFile;
  *
  * @author Antony Stubbs
  */
-@SuppressWarnings({"PMD", "all"})
+@SuppressWarnings("all")
 public final class OReflectionHelper {
     private static final String CLASS_EXTENSION = ".class";
 

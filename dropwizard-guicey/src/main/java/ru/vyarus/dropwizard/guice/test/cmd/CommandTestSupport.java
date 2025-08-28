@@ -74,9 +74,14 @@ import java.util.function.Consumer;
  * @author Vyacheslav Rusakov
  * @since 20.11.2023
  */
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields",
-        "checkstyle:ClassFanOutComplexity", "checkstyle:ClassDataAbstractionCoupling"})
+@SuppressWarnings({"PMD.ExcessiveImports", "checkstyle:ClassFanOutComplexity",
+        "checkstyle:ClassDataAbstractionCoupling"})
 public class CommandTestSupport<C extends Configuration> {
+
+    private static final PrintStream SYS_OUT = System.out;
+    private static final PrintStream SYS_ERR = System.err;
+    private static final InputStream SYS_IN = System.in;
+
     /**
      * Application class.
      */
@@ -129,12 +134,8 @@ public class CommandTestSupport<C extends Configuration> {
      */
     protected Bootstrap<C> bootstrap;
 
-    private final PrintStream originalOut = System.out;
-    private final PrintStream originalErr = System.err;
-    private final InputStream originalIn = System.in;
-
     // print all output to real console (to track execution and visually see hangs)
-    private final EchoStream stdOut = new EchoStream(originalOut);
+    private final EchoStream stdOut = new EchoStream(SYS_OUT);
     // err stream is merged in output and collected separately, just in case
     private final EchoStream stdErr = new EchoStream(stdOut);
     private final SystemInMock stdIn = new SystemInMock();
@@ -243,10 +244,10 @@ public class CommandTestSupport<C extends Configuration> {
 
         final String[] params = insertConfigFile(args);
         // visually separate command output to simplify test output reading
-        originalOut.println("\n\n" + applicationClass.getSimpleName() + " COMMAND: "
+        SYS_OUT.println("\n\n" + applicationClass.getSimpleName() + " COMMAND: "
                 + String.join(" ", params) + (input == null ? ""
                 : (" (with " + input.length + " inputs)")));
-        originalOut.println("-------------------------------------------------------------------------------------\n");
+        SYS_OUT.println("-------------------------------------------------------------------------------------\n");
 
         Throwable err = null;
         try {
@@ -314,9 +315,9 @@ public class CommandTestSupport<C extends Configuration> {
         }
         application = null;
 
-        System.setOut(originalOut);
-        System.setErr(originalErr);
-        System.setIn(originalIn);
+        System.setOut(SYS_OUT);
+        System.setErr(SYS_ERR);
+        System.setIn(SYS_IN);
     }
 
     private void applyConfigOverrides() {

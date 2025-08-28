@@ -34,13 +34,13 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ModulesAnalyzedEven
  * @author Vyacheslav Rusakov
  * @since 18.04.2018
  */
-@SuppressWarnings({"checkstyle:ClassFanOutComplexity", "PMD.TooManyMethods"})
+@SuppressWarnings({"checkstyle:ClassFanOutComplexity", "PMD.TooManyMethods", "PMD.CouplingBetweenObjects"})
 public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
 
     @Override
     @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MissingSwitchDefault",
             "checkstyle:JavaNCSS",
-            "PMD.NcssCount", "PMD.CyclomaticComplexity", "PMD.SwitchStmtsShouldHaveDefault"})
+            "PMD.NcssCount", "PMD.CyclomaticComplexity"})
     public void onEvent(final GuiceyLifecycleEvent event) {
         switch (event.getType()) {
             case ConfigurationHooksProcessed:

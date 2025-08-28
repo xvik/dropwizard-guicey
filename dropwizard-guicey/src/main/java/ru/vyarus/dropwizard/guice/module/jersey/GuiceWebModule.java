@@ -20,6 +20,7 @@ import java.util.EnumSet;
  * @author Vyacheslav Rusakov
  * @since 21.08.2016
  */
+@SuppressWarnings("PMD.LooseCoupling")
 public class GuiceWebModule extends ServletModule {
 
     /**

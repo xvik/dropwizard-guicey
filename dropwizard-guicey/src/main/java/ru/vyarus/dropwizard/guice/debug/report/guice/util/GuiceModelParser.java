@@ -9,7 +9,6 @@ import com.google.inject.spi.ConstructorBinding;
 import com.google.inject.spi.Element;
 import com.google.inject.spi.ElementSource;
 import com.google.inject.spi.PrivateElements;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.debug.report.guice.model.BindingDeclaration;
@@ -176,7 +175,6 @@ public final class GuiceModelParser {
         }
     }
 
-    @SuppressFBWarnings("NP_NULL_PARAM_DEREF")
     private static ModuleDeclaration initModules(final Map<String, ModuleDeclaration> index,
                                                  final List<String> path) {
         ModuleDeclaration res = null;

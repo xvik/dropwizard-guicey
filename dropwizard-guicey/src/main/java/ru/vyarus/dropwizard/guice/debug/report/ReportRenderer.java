@@ -7,6 +7,7 @@ package ru.vyarus.dropwizard.guice.debug.report;
  * @author Vyacheslav Rusakov
  * @since 01.08.2016
  */
+@FunctionalInterface
 public interface ReportRenderer<T> {
 
     /**

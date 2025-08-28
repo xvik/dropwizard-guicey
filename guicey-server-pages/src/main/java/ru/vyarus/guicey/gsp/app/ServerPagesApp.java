@@ -45,7 +45,7 @@ import java.util.*;
  * @since 11.01.2019
  */
 @SuppressWarnings({"checkstyle:ClassDataAbstractionCoupling", "checkstyle:ClassFanOutComplexity",
-        "PMD.ExcessiveImports", "PMD.TooManyFields"})
+        "PMD.TooManyFields", "PMD.CouplingBetweenObjects"})
 public class ServerPagesApp {
 
 
@@ -313,6 +313,7 @@ public class ServerPagesApp {
      * @param context          main or admin context
      * @param templateRedirect template redirection support
      */
+    @SuppressWarnings("PMD.LooseCoupling")
     private void installTemplatesSupportFilter(final ServletEnvironment context,
                                                final TemplateRedirect templateRedirect,
                                                final SpaSupport spa,

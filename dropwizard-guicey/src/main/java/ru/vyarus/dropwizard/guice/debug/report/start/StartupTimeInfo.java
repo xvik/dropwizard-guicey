@@ -21,7 +21,6 @@ import java.util.Map;
  * @author Vyacheslav Rusakov
  * @since 07.03.2025
  */
-@SuppressWarnings("PMD.TooManyFields")
 public class StartupTimeInfo {
 
     // jvm time before application start

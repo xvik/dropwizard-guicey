@@ -73,7 +73,6 @@ public class SpyProxy<T> implements MethodInterceptor, Provider<T> {
     /**
      * @return spy instance
      */
-    @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
     public synchronized T getSpy() {
         if (spy == null) {
             // lazy spy init
@@ -98,7 +97,7 @@ public class SpyProxy<T> implements MethodInterceptor, Provider<T> {
     }
 
     @Override
-    @SuppressWarnings({"PMD.AvoidSynchronizedAtMethodLevel", "PMD.CompareObjectsWithEquals"})
+    @SuppressWarnings("PMD.CompareObjectsWithEquals")
     public synchronized Object invoke(final MethodInvocation methodInvocation) throws Throwable {
         // WARNING: for proper execution, this requires this AOP handler to be top most!
         // (otherwise, some interceptors would be called multiple times)

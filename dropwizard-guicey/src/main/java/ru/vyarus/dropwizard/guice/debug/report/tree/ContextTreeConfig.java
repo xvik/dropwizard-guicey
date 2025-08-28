@@ -4,6 +4,7 @@ import ru.vyarus.dropwizard.guice.module.context.ConfigItem;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ import java.util.Set;
  */
 public final class ContextTreeConfig {
 
-    private final Set<ConfigItem> items = new HashSet<>();
+    private final Set<ConfigItem> items = EnumSet.noneOf(ConfigItem.class);
     private final Set<Class<?>> scopes = new HashSet<>();
     private boolean disables;
     private boolean notUsedInstallers;

@@ -126,7 +126,6 @@ public final class ConfigurationHooksSupport {
      * @param stat    stats tracker
      * @return used hooks
      */
-    @SuppressWarnings("PMD.PrematureDeclaration")
     public static Set<GuiceyConfigurationHook> run(final GuiceBundle.Builder builder, final StatsTracker stat) {
         final Set<GuiceyConfigurationHook> hooks = HOOKS.get();
         if (hooks != null) {

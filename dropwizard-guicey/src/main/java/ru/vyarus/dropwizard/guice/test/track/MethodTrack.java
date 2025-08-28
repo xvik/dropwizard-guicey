@@ -229,7 +229,6 @@ public class MethodTrack implements Comparable<MethodTrack> {
     /**
      * @return string representation of method call (with arguments and return value)
      */
-    @SuppressWarnings("PMD.ConsecutiveLiteralAppends")
     public String toStringTrack() {
         // put all strings in quotes to make obvious not trimmed or empty strings
         final StringBuilder res = new StringBuilder(method.getName())

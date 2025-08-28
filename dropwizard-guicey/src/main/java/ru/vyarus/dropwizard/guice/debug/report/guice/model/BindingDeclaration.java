@@ -183,7 +183,6 @@ public class BindingDeclaration {
     }
 
     @Override
-    @SuppressWarnings("PMD.UseStringBufferForStringAppends")
     public String toString() {
         String res = type.name().toLowerCase() + " " + GuiceModelUtils.renderKey(key);
         if (module != null) {
