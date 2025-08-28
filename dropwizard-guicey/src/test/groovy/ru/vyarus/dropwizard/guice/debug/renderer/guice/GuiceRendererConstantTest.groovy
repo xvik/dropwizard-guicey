@@ -47,14 +47,14 @@ class GuiceRendererConstantTest extends Specification {
     1 MODULES with 2 bindings
     │
     └── ConstantModule               (r.v.d.g.d.r.g.support)
-        ├── <typeconverter>                       ConstantModule\$2                                at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.ConstantModule.configure(ConstantModule.java:17)
+        ├── <typeconverter>                       ConstantModule\$1                                at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.ConstantModule.configure(ConstantModule.java:17)
         ├── instance             [@Singleton]     @Named("smth") Integer                          at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.ConstantModule.configure(ConstantModule.java:28)
         └── instance             [@Singleton]     @Named("string") String                         at ru.vyarus.dropwizard.guice.debug.renderer.guice.support.ConstantModule.configure(ConstantModule.java:29)
 
 
     2 UNDECLARED bindings
     ├── @Named("string") Integer (converted by com.google.inject.internal.TypeConverterBindingProcessor\$5) (java.lang)
-    └── @Named("string") Sample (converted by ru.vyarus.dropwizard.guice.debug.renderer.guice.support.ConstantModule\$2) (r.v.d.g.d.r.g.s.ConstantModule)
+    └── @Named("string") Sample (converted by ru.vyarus.dropwizard.guice.debug.renderer.guice.support.ConstantModule\$1) (r.v.d.g.d.r.g.s.ConstantModule)
 
 
     BINDING CHAINS
