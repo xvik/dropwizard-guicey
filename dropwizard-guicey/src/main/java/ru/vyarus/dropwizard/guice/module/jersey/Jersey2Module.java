@@ -32,6 +32,7 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Jers
  * @see ru.vyarus.dropwizard.guice.module.jersey.GuiceFeature for integration details
  * @since 31.08.2014
  */
+@SuppressWarnings("PMD.LooseCoupling")
 public class Jersey2Module extends AbstractModule {
 
     private final Application application;

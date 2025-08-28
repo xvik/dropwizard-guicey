@@ -62,21 +62,21 @@ public final class ConfigTreeBuilder {
     /**
      * Packages to stop types introspection on (for sure non custom pojo types).
      */
-    private static final ImmutableSet<String> INTROSPECTION_STOP_PACKAGES = ImmutableSet.of(
+    private static final Set<String> INTROSPECTION_STOP_PACKAGES = ImmutableSet.of(
             "java.", "groovy.", "com.google.common.collect", "sun."
     );
 
     /**
      * Classes indicating final values (to stop introspection on).
      */
-    private static final ImmutableSet<Class> INTROSPECTION_STOP_TYPES = ImmutableSet.of(
+    private static final Set<Class> INTROSPECTION_STOP_TYPES = ImmutableSet.of(
             Iterable.class, Optional.class, Duration.class, DataSize.class
     );
 
     /**
      * Lower bounds for value types declarations (to use instead of actual implementation for constant declaration).
      */
-    private static final ImmutableSet<Class> COMMON_VALUE_TYPES = ImmutableSet.of(
+    private static final Set<Class> COMMON_VALUE_TYPES = ImmutableSet.of(
             List.class, Set.class, Map.class, Multimap.class
     );
 
@@ -170,7 +170,7 @@ public final class ConfigTreeBuilder {
      * @param object  analyzed part instance (may be null)
      * @return all configuration paths values
      */
-    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "PMD.AvoidLiteralsInIfCondition"})
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
     private static List<ConfigPath> resolvePaths(final SerializationConfig config,
                                                  final ConfigPath root,
                                                  final List<ConfigPath> content,

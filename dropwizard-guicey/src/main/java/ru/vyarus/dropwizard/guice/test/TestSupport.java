@@ -35,6 +35,7 @@ import java.time.Duration;
  * @author Vyacheslav Rusakov
  * @since 09.02.2022
  */
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public final class TestSupport {
 
     private TestSupport() {
@@ -242,7 +243,7 @@ public final class TestSupport {
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
     public static <C extends Configuration> RunResult<C> run(final DropwizardTestSupport<C> support) throws Exception {
-        return run(support, injector -> new RunResult<>(TestSupport.getContext(), injector));
+        return run(support, injector -> new RunResult<>(getContext(), injector));
     }
 
     /**

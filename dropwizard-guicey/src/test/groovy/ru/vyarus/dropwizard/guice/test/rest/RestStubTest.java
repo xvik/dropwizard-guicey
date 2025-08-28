@@ -34,7 +34,7 @@ public class RestStubTest {
                 .runCore(injector -> {
                     GuiceyConfigurationInfo info = injector.getInstance(GuiceyConfigurationInfo.class);
 
-                    Assertions.assertEquals(new HashSet(Arrays.asList(
+                    Assertions.assertEquals(new HashSet<>(Arrays.asList(
                                     Resource1.class,
                                     Resource2.class,
                                     ErrorResource.class,
@@ -42,7 +42,7 @@ public class RestStubTest {
                                     RestFilter2.class,
                                     ManagedBean.class,
                                     RestExceptionMapper.class)),
-                            new HashSet(info.getExtensions()));
+                            new HashSet<>(info.getExtensions()));
 
                     // web extension auto disabled
                     Assertions.assertTrue(info.getExtensionsDisabled().contains(WebFilter.class));

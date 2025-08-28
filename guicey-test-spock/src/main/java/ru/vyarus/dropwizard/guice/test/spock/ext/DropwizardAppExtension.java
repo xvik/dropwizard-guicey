@@ -20,7 +20,7 @@ public class DropwizardAppExtension extends AbstractAppExtension<UseDropwizardAp
     private static final String STAR = "*";
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "PMD.UseDiamondOperator"})
     protected GuiceyInterceptor.EnvironmentSupport buildSupport(final UseDropwizardApp annotation,
                                                                 final Class<?> test) {
         return new GuiceyInterceptor.AbstractEnvironmentSupport(test) {
@@ -31,7 +31,7 @@ public class DropwizardAppExtension extends AbstractAppExtension<UseDropwizardAp
                         buildConfigOverrides(annotation));
 
                 if (annotation.randomPorts()) {
-                    support.addListener(new RandomPortsListener());
+                    support.addListener(new RandomPortsListener<>());
                 }
 
                 return support;

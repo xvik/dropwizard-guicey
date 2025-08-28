@@ -37,19 +37,19 @@ public class IgnoreExtensionTest {
                 .runCore(injector -> {
                     GuiceyConfigurationInfo info = injector.getInstance(GuiceyConfigurationInfo.class);
 
-                    Assertions.assertEquals(new HashSet(Arrays.asList(
+                    Assertions.assertEquals(new HashSet<>(Arrays.asList(
                                     Resource1.class,
                                     ErrorResource.class,
                                     RestFilter1.class,
                                     ManagedBean.class)),
-                            new HashSet(info.getExtensions()));
+                            new HashSet<>(info.getExtensions()));
 
-                    Assertions.assertEquals(new HashSet(Arrays.asList(
+                    Assertions.assertEquals(new HashSet<>(Arrays.asList(
                                     Resource2.class,
                                     RestFilter2.class,
                                     RestExceptionMapper.class,
                                     WebFilter.class)),
-                            new HashSet(info.getExtensionsDisabled()));
+                            new HashSet<>(info.getExtensionsDisabled()));
 
                     // exception mapper not set
                     ProcessingException ex = Assertions.assertThrows(ProcessingException.class,
@@ -72,19 +72,19 @@ public class IgnoreExtensionTest {
                 .runCore(injector -> {
                     GuiceyConfigurationInfo info = injector.getInstance(GuiceyConfigurationInfo.class);
 
-                    Assertions.assertEquals(new HashSet(Arrays.asList(
+                    Assertions.assertEquals(new HashSet<>(Arrays.asList(
                                     Resource1.class,
                                     Resource2.class,
                                     ErrorResource.class,
                                     ManagedBean.class)),
-                            new HashSet(info.getExtensions()));
+                            new HashSet<>(info.getExtensions()));
 
-                    Assertions.assertEquals(new HashSet(Arrays.asList(
+                    Assertions.assertEquals(new HashSet<>(Arrays.asList(
                                     RestFilter1.class,
                                     RestFilter2.class,
                                     RestExceptionMapper.class,
                                     WebFilter.class)),
-                            new HashSet(info.getExtensionsDisabled()));
+                            new HashSet<>(info.getExtensionsDisabled()));
 
                     // exception mapper not set
                     ProcessingException ex = Assertions.assertThrows(ProcessingException.class,
@@ -107,19 +107,19 @@ public class IgnoreExtensionTest {
                 .runCore(injector -> {
                     GuiceyConfigurationInfo info = injector.getInstance(GuiceyConfigurationInfo.class);
 
-                    Assertions.assertEquals(new HashSet(Arrays.asList(
+                    Assertions.assertEquals(new HashSet<>(Arrays.asList(
                                     Resource1.class,
                                     ErrorResource.class,
                                     RestFilter1.class,
                                     ManagedBean.class)),
-                            new HashSet(info.getExtensions()));
+                            new HashSet<>(info.getExtensions()));
 
-                    Assertions.assertEquals(new HashSet(Arrays.asList(
+                    Assertions.assertEquals(new HashSet<>(Arrays.asList(
                                     Resource2.class,
                                     RestFilter2.class,
                                     RestExceptionMapper.class,
                                     WebFilter.class)),
-                            new HashSet(info.getExtensionsDisabled()));
+                            new HashSet<>(info.getExtensionsDisabled()));
 
                     // exception mapper not set
                     ProcessingException ex = Assertions.assertThrows(ProcessingException.class,

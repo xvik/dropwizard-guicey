@@ -19,6 +19,7 @@ import java.util.Map;
  *  String, ViewRendererConfigurationModifier)
  * @since 06.12.2018
  */
+@FunctionalInterface
 public interface ViewRendererConfigurationModifier {
 
     /**

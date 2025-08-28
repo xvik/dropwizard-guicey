@@ -112,7 +112,7 @@ public final class ConfigurationInfo {
      * @param filter predicate to filter definitions
      * @return registered item ids in registration order, filtered with provided filter or empty list
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "PMD.UseDiamondOperator"})
     public List<ItemId<Object>> getItems(final Predicate<? extends ItemInfo> filter) {
         final List<ItemId<Object>> items = new ArrayList(itemsHolder.values());
         return filter(items, filter);
@@ -185,7 +185,7 @@ public final class ConfigurationInfo {
         final ItemId id = ItemId.from(type);
         // it may be request for class item or for all instance items (of provided class)
         if (instanceTypes.containsKey(id.getType())) {
-            return new ArrayList<T>((Collection<T>) instanceTypes.get(id.getType()));
+            return new ArrayList<>((Collection<T>) instanceTypes.get(id.getType()));
         }
         // if item is only disabled without actual registration
         final T res = (T) classTypes.get(id);

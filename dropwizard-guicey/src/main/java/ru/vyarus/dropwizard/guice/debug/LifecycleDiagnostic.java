@@ -49,7 +49,7 @@ import java.util.stream.Collectors;
  * @author Vyacheslav Rusakov
  * @since 17.04.2018
  */
-@SuppressWarnings({"checkstyle:ClassFanOutComplexity", "PMD.TooManyMethods", "PMD.ExcessiveImports"})
+@SuppressWarnings({"checkstyle:ClassFanOutComplexity", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
 public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
 
     private static final String BUNDLES = "bundles";
@@ -170,7 +170,7 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
                 for (Binding binding : event.getBindingsRemoved()) {
                     final List<String> modules = BindingUtils.getModules(binding).stream()
                             .sorted(Collections.reverseOrder())
-                            .map(it -> it.substring(it.lastIndexOf(".") + 1))
+                            .map(it -> it.substring(it.lastIndexOf('.') + 1))
                             .collect(Collectors.toList());
                     bindings.add(String.join("/", modules) + " | " + RenderUtils
                             .renderClassLine(binding.getKey().getTypeLiteral().getRawType()));
@@ -293,7 +293,7 @@ public class LifecycleDiagnostic extends UniqueGuiceyLifecycleListener {
      */
     private final class JerseyEventListener implements ApplicationEventListener {
         @Override
-        @SuppressWarnings({"checkstyle:MissingSwitchDefault", "PMD.SwitchStmtsShouldHaveDefault"})
+        @SuppressWarnings({"checkstyle:MissingSwitchDefault", "PMD.NonExhaustiveSwitch"})
         @SuppressFBWarnings("SF_SWITCH_NO_DEFAULT")
         public void onEvent(final ApplicationEvent event) {
             switch (event.getType()) {

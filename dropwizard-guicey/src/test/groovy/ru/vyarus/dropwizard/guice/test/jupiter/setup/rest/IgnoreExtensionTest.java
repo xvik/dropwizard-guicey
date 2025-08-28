@@ -41,19 +41,19 @@ public class IgnoreExtensionTest {
         Assertions.assertNotNull(rest);
 
         // extensions enabled
-        Assertions.assertEquals(new HashSet(Arrays.asList(
+        Assertions.assertEquals(new HashSet<>(Arrays.asList(
                         Resource1.class,
                         ErrorResource.class,
                         RestFilter1.class,
                         ManagedBean.class)),
-                new HashSet(info.getExtensions()));
+                new HashSet<>(info.getExtensions()));
 
-        Assertions.assertEquals(new HashSet(Arrays.asList(
+        Assertions.assertEquals(new HashSet<>(Arrays.asList(
                         Resource2.class,
                         RestFilter2.class,
                         RestExceptionMapper.class,
                         WebFilter.class)),
-                new HashSet(info.getExtensionsDisabled()));
+                new HashSet<>(info.getExtensionsDisabled()));
     }
 
     @Test

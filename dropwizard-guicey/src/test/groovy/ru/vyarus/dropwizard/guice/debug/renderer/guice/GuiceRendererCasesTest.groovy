@@ -100,7 +100,7 @@ class GuiceRendererCasesTest extends Specification {
         │   └── instance             [@Singleton]     ExtensionsHolder                                at ru.vyarus.dropwizard.guice.module.installer.InstallerModule.configure(InstallerModule.java:35)
         │
         └── Jersey2Module                (r.v.d.g.m.jersey)
-            ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:66)
+            ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:67)
             ├── GuiceWebModule               (r.v.d.g.m.jersey)         *WEB
             │
             └── GuiceBindingsModule          (r.v.d.g.m.jersey.hk2)
@@ -162,7 +162,7 @@ class GuiceRendererCasesTest extends Specification {
         │   └── instance             [@Singleton]     ExtensionsHolder                                at ru.vyarus.dropwizard.guice.module.installer.InstallerModule.configure(InstallerModule.java:35)
         │
         ├── Jersey2Module                (r.v.d.g.m.jersey)
-        │   ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:66)
+        │   ├── providerinstance     [@Prototype]     InjectionManager                                at ru.vyarus.dropwizard.guice.module.jersey.Jersey2Module.configure(Jersey2Module.java:67)
         │   │
         │   ├── GuiceWebModule               (r.v.d.g.m.jersey)         *WEB
         │   │   │

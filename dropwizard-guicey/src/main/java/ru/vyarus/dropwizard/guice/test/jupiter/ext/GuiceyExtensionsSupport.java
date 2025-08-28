@@ -187,7 +187,6 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
     }
 
     @Override
-    @SuppressWarnings("PMD.PrematureDeclaration")
     public void afterAll(final ExtensionContext context) throws Exception {
         final Stopwatch timer = Stopwatch.createStarted();
         tracker.lifecyclePhase(context, GuiceyTestTime.AfterAll);

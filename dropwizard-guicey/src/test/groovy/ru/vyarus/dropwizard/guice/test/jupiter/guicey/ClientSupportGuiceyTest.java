@@ -19,7 +19,7 @@ public class ClientSupportGuiceyTest {
 
     // use dropwizard extension to start separate server
     // NOTE guicey will start DIFFERENT application
-    static DropwizardAppExtension app = new DropwizardAppExtension(AutoScanApplication.class);
+    static DropwizardAppExtension app = new DropwizardAppExtension<>(AutoScanApplication.class);
 
     @Test
     void testLimitedClient(ClientSupport client) {

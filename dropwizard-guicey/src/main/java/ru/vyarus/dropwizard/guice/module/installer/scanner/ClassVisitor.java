@@ -6,6 +6,7 @@ package ru.vyarus.dropwizard.guice.module.installer.scanner;
  * @author Vyacheslav Rusakov
  * @since 01.09.2014
  */
+@FunctionalInterface
 public interface ClassVisitor {
 
     /**

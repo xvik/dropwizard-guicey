@@ -109,7 +109,6 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
         }
     }
 
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private Multimap<String, FilterReference> renderContextFilters(final MappingsConfig config,
                                                                    final MutableServletContextHandler handler,
                                                                    final TreeNode root) throws Exception {
@@ -137,7 +136,6 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
         return servletFilters;
     }
 
-    @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
     private void renderServlet(final ServletMapping mapping,
                                final ServletHolder holder,
                                final Multimap<String, FilterReference> servletFilters,

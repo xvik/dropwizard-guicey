@@ -140,7 +140,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "PMD.UseDiamondOperator"})
     protected DropwizardTestSupport<?> prepareTestSupport(final String configPrefix,
                                                           final ExtensionContext context,
                                                           final List<TestEnvironmentSetup> setups) {
@@ -170,7 +170,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
         tracker.performanceTrack(GuiceyTestTime.DropwizardTestSupport, timer.elapsed());
 
         if (config.randomPorts) {
-            support.addListener(new RandomPortsListener());
+            support.addListener(new RandomPortsListener<>());
         }
         return support;
     }
@@ -318,7 +318,7 @@ public class TestDropwizardAppExtension extends GuiceyExtensionsSupport {
     /**
      * Unified configuration.
      */
-    @SuppressWarnings({"checkstyle:VisibilityModifier", "PMD.DefaultPackage"})
+    @SuppressWarnings("checkstyle:VisibilityModifier")
     private static class Config extends ExtensionConfig {
         Class<? extends Application> app;
         String configPath = "";

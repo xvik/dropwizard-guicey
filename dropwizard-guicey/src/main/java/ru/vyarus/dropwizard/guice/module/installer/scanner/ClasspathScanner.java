@@ -11,7 +11,6 @@ import ru.vyarus.dropwizard.guice.module.context.stat.StatsTracker;
 import ru.vyarus.dropwizard.guice.module.installer.scanner.util.OReflectionHelper;
 
 import java.lang.reflect.Modifier;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -96,12 +95,7 @@ public class ClasspathScanner {
      */
     private Set<String> validate(final Set<String> packages) {
         final List<String> pkg = Lists.newArrayList(packages);
-        Collections.sort(pkg, new Comparator<String>() {
-            @Override
-            public int compare(final String o1, final String o2) {
-                return Integer.compare(o1.length(), o2.length());
-            }
-        });
+        pkg.sort(Comparator.comparingInt(String::length));
         for (int i = 0; i < pkg.size(); i++) {
             final String path = pkg.get(i);
             for (int j = i + 1; j < pkg.size(); j++) {
@@ -115,7 +109,6 @@ public class ClasspathScanner {
         return packages;
     }
 
-    @SuppressWarnings("PMD.PrematureDeclaration")
     private void performScan() {
         final StatTimer timer = tracker == null ? null : tracker.timer(ScanTime);
         int count = 0;

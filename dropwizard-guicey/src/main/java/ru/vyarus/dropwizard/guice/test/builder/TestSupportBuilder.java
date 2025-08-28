@@ -274,7 +274,6 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
         return support;
     }
 
-    @SuppressWarnings("PMD.AvoidRethrowingException")
     private <T> T run(final DropwizardTestSupport<C> support,
                       final @Nullable TestSupport.RunCallback<T> callback) throws Exception {
         return runWithListeners(support, callback);

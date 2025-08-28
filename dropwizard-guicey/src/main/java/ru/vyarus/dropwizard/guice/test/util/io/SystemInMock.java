@@ -29,6 +29,7 @@ public class SystemInMock extends InputStream {
     /**
      * Create system in substitutor.
      */
+    @SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
     public SystemInMock() {
         provideText();
     }

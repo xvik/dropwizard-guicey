@@ -66,7 +66,7 @@ import java.util.function.Supplier;
  * @author Vyacheslav Rusakov
  * @since 26.09.2019
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "PMD.CouplingBetweenObjects"})
 public class SharedConfigurationState {
     /**
      * Attribute name used to store application instance in application context attributes.

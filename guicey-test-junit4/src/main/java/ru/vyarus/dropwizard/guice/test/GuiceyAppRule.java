@@ -134,7 +134,7 @@ public class GuiceyAppRule<C extends Configuration> extends ExternalResource {
         try {
             application = newApplication();
 
-            final Bootstrap<C> bootstrap = new Bootstrap<C>(application) {
+            final Bootstrap<C> bootstrap = new Bootstrap<>(application) {
                 @Override
                 public void run(final C configuration, final Environment environment) throws Exception {
                     GuiceyAppRule.this.configuration = configuration;

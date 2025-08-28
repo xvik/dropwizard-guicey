@@ -65,7 +65,7 @@ public final class StringConverter {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "PMD.LooseCoupling", "PMD.UnnecessaryCast"})
     private static EnumSet handleEnumSet(final String value) {
         try {
             return EnumSet.copyOf((List<Enum>) Arrays.asList(handleArray(Enum.class, value)));
@@ -74,8 +74,7 @@ public final class StringConverter {
         }
     }
 
-    @SuppressWarnings({"unchecked", "checkstyle:CyclomaticComplexity",
-            "PMD.NcssCount", "PMD.CyclomaticComplexity"})
+    @SuppressWarnings({"unchecked", "checkstyle:CyclomaticComplexity", "PMD.CyclomaticComplexity"})
     private static <V> V convertSimple(final Class<V> type, final String value) {
         Object res = null;
         try {
@@ -114,7 +113,7 @@ public final class StringConverter {
      * @param value full enum definition
      * @return parsed enum
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "PMD.ExceptionAsFlowControl"})
     private static Enum parseEnum(final String value) {
         final int idx = value.lastIndexOf('.');
         try {

@@ -17,6 +17,7 @@ import java.util.List;
  * @see LegacyModeDuplicatesDetector with legacy guicey behaviour implementation (always one instance per class)
  * @since 03.07.2019
  */
+@FunctionalInterface
 public interface DuplicateConfigDetector {
 
     /**

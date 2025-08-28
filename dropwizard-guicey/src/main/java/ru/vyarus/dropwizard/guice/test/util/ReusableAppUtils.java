@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.util;
 
 import com.google.common.base.Preconditions;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.platform.commons.util.ReflectionUtils;
@@ -34,7 +33,6 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 19.12.2022
  */
-@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 public final class ReusableAppUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReusableAppUtils.class);
 
@@ -78,7 +76,6 @@ public final class ReusableAppUtils {
      * @throws java.lang.NullPointerException  if field not found
      * @throws java.lang.IllegalStateException if declaration is not correct
      */
-    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH")
     public static Field findExtensionField(final Class<?> test, final GuiceyExtensionsSupport ext) {
         final List<Field> fields = ReflectionUtils.findFields(test,
                 field -> Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(RegisterExtension.class),

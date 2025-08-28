@@ -56,6 +56,7 @@ public class TestCommand<C extends Configuration> extends EnvironmentCommand<C> 
      * @param simulateManaged true to simulate managed lifecycle
      * @param modifiers       configuration modifiers
      */
+    @SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
     public TestCommand(final Application<C> application, final boolean simulateManaged,
                        final List<ConfigModifier<C>> modifiers) {
         super(application, "guicey-test", "Specific command to run guice context without jetty server");

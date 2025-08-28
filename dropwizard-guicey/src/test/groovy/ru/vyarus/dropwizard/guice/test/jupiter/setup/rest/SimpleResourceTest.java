@@ -48,7 +48,7 @@ public class SimpleResourceTest {
         Assertions.assertNotNull(rest);
 
         // extensions enabled
-        Assertions.assertEquals(new HashSet(Arrays.asList(
+        Assertions.assertEquals(new HashSet<>(Arrays.asList(
                         Resource1.class,
                         Resource2.class,
                         ErrorResource.class,
@@ -56,7 +56,7 @@ public class SimpleResourceTest {
                         RestFilter2.class,
                         ManagedBean.class,
                         RestExceptionMapper.class)),
-                new HashSet(info.getExtensions()));
+                new HashSet<>(info.getExtensions()));
 
         // web extension auto disabled
         Assertions.assertTrue(info.getExtensionsDisabled().contains(WebFilter.class));

@@ -11,6 +11,7 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 15.01.2016
  */
+@FunctionalInterface
 public interface GuiceyBundleLookup {
 
     /**

@@ -14,7 +14,7 @@ public class ConstantModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        convertToTypes(new AbstractMatcher<TypeLiteral<?>>() {
+        convertToTypes(new AbstractMatcher<>() {
             @Override
             public boolean matches(TypeLiteral<?> typeLiteral) {
                 return typeLiteral.getType().equals(Sample.class);

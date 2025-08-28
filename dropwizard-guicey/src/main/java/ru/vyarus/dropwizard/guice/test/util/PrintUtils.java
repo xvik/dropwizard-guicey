@@ -109,7 +109,6 @@ public final class PrintUtils {
      * @param nanos time in nanoseconds
      * @return string representation
      */
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     public static String ms(final long nanos) {
         final long millis = Math.round((double) nanos / 1_000_000);
         final String res;
@@ -183,7 +182,6 @@ public final class PrintUtils {
         return "\n\\\\\\------------------------------------------------------------" + inst;
     }
 
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     private static String toStringCollection(final Collection<?> list, final int maxLength) {
         final StringBuilder builder = new StringBuilder("(").append(list.size()).append(")[");
         if (!list.isEmpty()) {
@@ -211,6 +209,7 @@ public final class PrintUtils {
     }
 
 
+    @SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
     private static String toStringUnit(final TimeUnit unit) {
         final String res;
         switch (unit) {

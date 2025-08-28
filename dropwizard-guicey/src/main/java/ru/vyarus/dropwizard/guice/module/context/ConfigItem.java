@@ -43,7 +43,7 @@ public enum ConfigItem {
      */
     Command(false);
 
-    private boolean instanceConfig;
+    private final boolean instanceConfig;
 
     ConfigItem(final boolean instanceConfig) {
         this.instanceConfig = instanceConfig;
@@ -63,7 +63,7 @@ public enum ConfigItem {
      * @param <T>  type of required info container
      * @return info container instance
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "PMD.ExhaustiveSwitchHasDefault"})
     public <T extends ItemInfoImpl> T newContainer(final Object item) {
         final ItemInfo res;
         switch (this) {

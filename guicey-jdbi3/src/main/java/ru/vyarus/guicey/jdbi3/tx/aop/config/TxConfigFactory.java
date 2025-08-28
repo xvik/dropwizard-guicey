@@ -18,6 +18,7 @@ import java.lang.annotation.Annotation;
  * @see ru.vyarus.guicey.jdbi3.tx.aop.TransactionalInterceptor
  * @since 18.09.2018
  */
+@FunctionalInterface
 public interface TxConfigFactory<T extends Annotation> {
 
     /**

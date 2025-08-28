@@ -38,7 +38,6 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.PathUtils.SLASH;
  * @author Vyacheslav Rusakov
  * @since 02.04.2017
  */
-@SuppressWarnings("PMD.ImmutableField")
 public class SpaBundle implements GuiceyBundle {
 
     /**
@@ -65,12 +64,13 @@ public class SpaBundle implements GuiceyBundle {
     }
 
     @Override
+    @SuppressWarnings("PMD.LooseCoupling")
     public void run(final GuiceyEnvironment environment) {
         final Environment env = environment.environment();
         final ServletEnvironment context = mainContext ? env.servlets() : env.admin();
 
         final Set<String> clash = context.addServlet(assetName,
-                new AssetServlet(resourcePath, uriPath, indexFile, StandardCharsets.UTF_8))
+                        new AssetServlet(resourcePath, uriPath, indexFile, StandardCharsets.UTF_8))
                 .addMapping(uriPath + '*');
 
         if (clash != null && !clash.isEmpty()) {

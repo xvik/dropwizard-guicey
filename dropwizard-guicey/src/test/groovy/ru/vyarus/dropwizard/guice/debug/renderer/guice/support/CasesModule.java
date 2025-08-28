@@ -16,7 +16,7 @@ import ru.vyarus.dropwizard.guice.debug.renderer.guice.support.exts.*;
 public class CasesModule extends AbstractModule {
     @Override
     protected void configure() {
-        bindListener(new AbstractMatcher<TypeLiteral<?>>() {
+        bindListener(new AbstractMatcher<>() {
             @Override
             public boolean matches(TypeLiteral<?> typeLiteral) {
                 return false;

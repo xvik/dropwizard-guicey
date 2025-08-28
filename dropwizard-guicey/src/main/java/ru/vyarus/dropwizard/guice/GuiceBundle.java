@@ -124,8 +124,8 @@ import static ru.vyarus.dropwizard.guice.module.installer.InstallersOptions.Jers
  * @see ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo for configuratio diagnostic
  * @since 31.08.2014
  */
-@SuppressWarnings({"PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.TooManyMethods",
-        "PMD.ExcessivePublicCount", "PMD.GodClass"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods",
+        "PMD.ExcessivePublicCount", "PMD.GodClass", "PMD.CouplingBetweenObjects"})
 public final class GuiceBundle implements ConfiguredBundle<Configuration> {
 
     private final ConfigurationContext context = new ConfigurationContext();
@@ -1209,7 +1209,7 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
          * @return builder instance for chained calls
          */
         public <C extends Configuration> Builder onGuiceyStartup(final GuiceyStartupListener<C> listener) {
-            return listen(new GuiceyStartupListenerAdapter<C>(listener));
+            return listen(new GuiceyStartupListenerAdapter<>(listener));
         }
 
         /**

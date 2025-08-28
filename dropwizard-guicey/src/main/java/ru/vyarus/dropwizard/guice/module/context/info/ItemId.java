@@ -80,7 +80,7 @@ public final class ItemId<T> {
     public static <T> ItemId<T> from(final Object instance) {
         return instance instanceof Class
                 ? from((Class) instance)
-                : new ItemId<T>(instance.getClass(), identity(instance));
+                : new ItemId<>(instance.getClass(), identity(instance));
     }
 
     /**
@@ -91,7 +91,7 @@ public final class ItemId<T> {
      * @return type key
      */
     public static <T> ItemId<T> from(final Class<?> type) {
-        return new ItemId<T>(type, null);
+        return new ItemId<>(type, null);
     }
 
     /**

@@ -89,6 +89,7 @@ public class GuiceyJerseyTest extends JerseyTest {
     }
 
     @Override
+    @SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
     public TestContainerFactory getTestContainerFactory() {
         final TestContainerFactory res;
         switch (policy) {

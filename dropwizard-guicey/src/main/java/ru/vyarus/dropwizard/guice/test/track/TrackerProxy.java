@@ -41,7 +41,6 @@ public class TrackerProxy<T> implements MethodInterceptor {
     }
 
     @Override
-    @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
     public synchronized Object invoke(final MethodInvocation methodInvocation) throws Throwable {
         final long start = System.currentTimeMillis();
         final Stopwatch timer = Stopwatch.createStarted();

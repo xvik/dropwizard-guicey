@@ -10,6 +10,7 @@ import com.google.inject.Stage;
  * @author Nicholas Pace
  * @since Dec 26, 2014
  */
+@FunctionalInterface
 public interface InjectorFactory {
 
     /**

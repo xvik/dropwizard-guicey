@@ -172,9 +172,10 @@ public final class JdbiBundle extends UniqueGuiceyBundle {
      */
     public static <C extends Configuration> JdbiBundle forDatabase(
             final ConfigAwareProvider<PooledDataSourceFactory, C> db) {
-        return forDbi(new SimpleDbiProvider<C>(db));
+        return forDbi(new SimpleDbiProvider<>(db));
     }
 
+    @SuppressWarnings("PMD.UseDiamondOperator")
     private void performEagerInitialization(final Injector injector) {
         final Set<SqlObjectProvider> proxies = injector.getInstance(
                 Key.get(new TypeLiteral<Set<SqlObjectProvider>>() { }, Names.named("jdbi3.proxies")));

@@ -10,14 +10,17 @@ import java.lang.reflect.Method;
  * @author Vyacheslav Rusakov
  * @since 17.09.2018
  */
-public class NoSyntheticMatcher implements Matcher<Method> {
+public final class NoSyntheticMatcher implements Matcher<Method> {
 
     private static final NoSyntheticMatcher NO_SYNTHETIC_MATCHER = new NoSyntheticMatcher();
+
+    private NoSyntheticMatcher() {
+    }
 
     /**
      * @return method matcher for filtering synthetic methods
      */
-    public static final NoSyntheticMatcher instance() {
+    public static NoSyntheticMatcher instance() {
         return NO_SYNTHETIC_MATCHER;
     }
 

@@ -51,7 +51,7 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 10.02.2025
  */
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.GodClass"})
 public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implements
         TestEnvironmentSetup, TestExecutionListener {
 
@@ -355,7 +355,7 @@ public abstract class AnnotatedTestFieldSetup<A extends Annotation, T> implement
      * @param fields        annotated fields
      * @param testInstances tests instances (might be several for nested tests)
      */
-    @SuppressWarnings({"CyclomaticComplexity", "PMD.SimplifiedTernary"})
+    @SuppressWarnings({"CyclomaticComplexity", "PMD.SimplifiedTernary", "PMD.CompareObjectsWithEquals"})
     protected void injectValues(final EventContext context,
                                 final List<AnnotatedField<A, T>> fields,
                                 final TestInstances testInstances) {

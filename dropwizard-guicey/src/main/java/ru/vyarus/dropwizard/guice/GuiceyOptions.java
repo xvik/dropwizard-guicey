@@ -183,8 +183,8 @@ public enum GuiceyOptions implements Option {
      */
     UseHkBridge(Boolean.class, false);
 
-    private Class<?> type;
-    private Object value;
+    private final Class<?> type;
+    private final Object value;
 
     <T> GuiceyOptions(final Class<T> type, final T value) {
         this.type = type;

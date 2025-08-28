@@ -110,7 +110,6 @@ public final class GuiceModelUtils {
      * @param key guice binding key
      * @return string representation for key or "-" if key is null
      */
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     public static String renderKey(final Key key) {
         if (key == null) {
             return "-";

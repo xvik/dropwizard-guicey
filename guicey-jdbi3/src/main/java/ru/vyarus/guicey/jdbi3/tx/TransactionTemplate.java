@@ -48,7 +48,6 @@ public class TransactionTemplate {
      * @param <T>    return type
      * @return action result
      */
-    @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
     public <T> T inTransaction(final TxAction<T> action) {
         return inTransaction(new TxConfig(), action);
     }

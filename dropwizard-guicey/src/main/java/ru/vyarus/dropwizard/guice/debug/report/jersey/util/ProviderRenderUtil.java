@@ -34,7 +34,6 @@ import java.util.function.Supplier;
  * @author Vyacheslav Rusakov
  * @since 26.10.2019
  */
-@SuppressWarnings("PMD.CouplingBetweenObjects")
 public final class ProviderRenderUtil {
     private static final String SIMPLE_FORMAT = "%s";
     private static final String SINGLE_GENERIC_FORMAT = "%-30s %s";
@@ -148,7 +147,7 @@ public final class ProviderRenderUtil {
                 .renderClassLine(provider, collectMarkers(Object.class, provider, isHkManaged, isLazy)));
     }
 
-    @SuppressWarnings({"checkstyle:NPathComplexity", "PMD.NPathComplexity"})
+    @SuppressWarnings("checkstyle:NPathComplexity")
     private static List<String> collectMarkers(final Class<?> ext,
                                                final Class<?> provider,
                                                final boolean isHkManaged,
@@ -170,7 +169,6 @@ public final class ProviderRenderUtil {
         return markers;
     }
 
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     private static String renderLine(final Class ext,
                                      final Class provider,
                                      final ExtDescriptor desc,
@@ -255,9 +253,9 @@ public final class ProviderRenderUtil {
      */
     @SuppressWarnings("checkstyle:VisibilityModifier")
     private static class ExtDescriptor {
-        public String name;
-        public String format;
-        public int generics;
+        public final String name;
+        public final String format;
+        public final int generics;
 
         ExtDescriptor(final String name, final String format, final int generics) {
             this.name = name;

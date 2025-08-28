@@ -29,7 +29,7 @@ public class GuiceScopingVisitor
      * @param binding binding to analyze
      * @return resolved scope (or proposed prototype scope when scope not detected)
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "PMD.UnnecessaryCast"})
     public Class<? extends Annotation> performDetection(final Binding binding) {
         return finalizeScopeDetection((Class<? extends Annotation>) binding.acceptScopingVisitor(this), binding);
     }
