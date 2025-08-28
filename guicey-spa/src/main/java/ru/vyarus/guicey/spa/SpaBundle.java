@@ -38,9 +38,11 @@ import static ru.vyarus.dropwizard.guice.module.installer.util.PathUtils.SLASH;
  * @author Vyacheslav Rusakov
  * @since 02.04.2017
  */
-@SuppressWarnings("PMD.ImmutableField")
 public class SpaBundle implements GuiceyBundle {
 
+    /**
+     * Default asset pattern.
+     */
     public static final String DEFAULT_PATTERN =
             "\\.(html|css|js|png|jpg|jpeg|gif|ico|xml|rss|txt|eot|svg|ttf|woff|woff2|cur)"
                     + "(\\?((r|v|rel|rev)=[\\-\\.\\w]*)?)?$";
@@ -62,12 +64,13 @@ public class SpaBundle implements GuiceyBundle {
     }
 
     @Override
+    @SuppressWarnings("PMD.LooseCoupling")
     public void run(final GuiceyEnvironment environment) {
         final Environment env = environment.environment();
         final ServletEnvironment context = mainContext ? env.servlets() : env.admin();
 
         final Set<String> clash = context.addServlet(assetName,
-                new AssetServlet(resourcePath, uriPath, indexFile, StandardCharsets.UTF_8))
+                        new AssetServlet(resourcePath, uriPath, indexFile, StandardCharsets.UTF_8))
                 .addMapping(uriPath + '*');
 
         if (clash != null && !clash.isEmpty()) {
@@ -116,7 +119,14 @@ public class SpaBundle implements GuiceyBundle {
     public static class Builder {
         private final SpaBundle bundle = new SpaBundle();
 
-        @SuppressWarnings("PMD.UseStringBufferForStringAppends")
+        /**
+         * Create builder.
+         *
+         * @param mainContext true for main context, false for admin
+         * @param name        application name
+         * @param path        resources path
+         * @param uri         mapping url
+         */
         public Builder(final boolean mainContext,
                        final String name,
                        final String path,

@@ -3,7 +3,6 @@ package ru.vyarus.guicey.gsp.views.template;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.views.common.ViewRenderer;
 import org.glassfish.jersey.server.internal.process.MappableException;
 import org.slf4j.Logger;
@@ -220,7 +219,6 @@ public class TemplateContext {
      * @throws NullPointerException      if template path not set
      * @throws TemplateNotFoundException if template not found
      */
-    @SuppressFBWarnings("NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE")
     public String lookupTemplatePath(@Nullable final String template) {
         String path = Strings.emptyToNull(template);
         if (path == null) {

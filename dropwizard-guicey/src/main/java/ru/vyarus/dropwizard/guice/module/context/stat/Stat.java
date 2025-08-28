@@ -158,7 +158,7 @@ public enum Stat {
      */
     JerseyInstallerTime(true);
 
-    private boolean timer;
+    private final boolean timer;
 
     Stat(final boolean timer) {
         this.timer = timer;

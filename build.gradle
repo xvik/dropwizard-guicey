@@ -1,7 +1,8 @@
 plugins {
     id 'ru.vyarus.github-info' version '2.0.0' apply false
-    id 'ru.vyarus.quality' version '5.0.0' apply false
-    id 'org.cyclonedx.bom' version '2.3.0' apply false
+    id 'ru.vyarus.quality' version '6.0.0' apply false
+    id 'com.github.spotbugs' version '6.2.5' apply false
+    id 'org.cyclonedx.bom' version '2.3.1' apply false
     id 'ru.vyarus.mkdocs' version '4.0.1' apply false
 
     id 'jacoco'
@@ -146,7 +147,7 @@ subprojects {
     test {
         testLogging {
             events 'skipped', 'failed'
-            exceptionFormat 'full'
+            exceptionFormat = 'full'
         }
         maxHeapSize = '512m'
     }
@@ -219,4 +220,3 @@ afterReleaseBuild {
         logger.warn "RELEASED $project.group:$project.name:$project.version"
     }
 }
-

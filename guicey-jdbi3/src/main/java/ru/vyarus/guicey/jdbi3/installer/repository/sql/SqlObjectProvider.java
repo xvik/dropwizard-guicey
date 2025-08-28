@@ -30,7 +30,6 @@ public class SqlObjectProvider<T> implements Provider<T> {
 
     private final Class<T> extensionType;
 
-    @SuppressWarnings("PMD.AvoidUsingVolatile")
     private volatile T res;
 
     public SqlObjectProvider(final Class<T> extensionType) {

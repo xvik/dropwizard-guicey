@@ -8,7 +8,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.inject.Module;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.ConfiguredBundle;
 import io.dropwizard.core.cli.Command;
@@ -85,8 +84,8 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.DropwizardBund
  * @since 06.07.2016
  */
 @SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "checkstyle:ClassFanOutComplexity",
-        "PMD.ExcessiveImports", "PMD.ExcessivePublicCount", "PMD.NcssCount", "PMD.CyclomaticComplexity",
-        "PMD.TooManyFields", "PMD.ClassDataAbstractionCoupling", "checkstyle:ClassDataAbstractionCoupling"})
+        "PMD.ExcessiveImports", "PMD.ExcessivePublicCount", "PMD.CyclomaticComplexity",
+        "checkstyle:ClassDataAbstractionCoupling", "PMD.CouplingBetweenObjects"})
 public final class ConfigurationContext {
     private final Logger logger = LoggerFactory.getLogger(ConfigurationContext.class);
 
@@ -154,7 +153,7 @@ public final class ConfigurationContext {
     /**
      * Used to set and get options within guicey.
      */
-    private final OptionsSupport optionsSupport = new OptionsSupport();
+    private final OptionsSupport optionsSupport = new OptionsSupport<>();
     private final Options readOnlyOptions = new Options(optionsSupport);
     /**
      * Guicey lifecycle listeners support.
@@ -300,7 +299,6 @@ public final class ConfigurationContext {
      * @param bundles bundles to register
      * @return list of actually registered bundles (without duplicates)
      */
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     public List<GuiceyBundle> registerBundles(final GuiceyBundle... bundles) {
         final List<GuiceyBundle> res = new ArrayList<>();
         for (GuiceyBundle bundle : bundles) {
@@ -391,7 +389,6 @@ public final class ConfigurationContext {
      *
      * @param bundles dropwizard bundles
      */
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     public void registerDropwizardBundles(final ConfiguredBundle... bundles) {
         for (ConfiguredBundle bundle : bundles) {
             final DropwizardBundleItemInfo info = register(ConfigItem.DropwizardBundle, bundle);
@@ -1068,7 +1065,6 @@ public final class ConfigurationContext {
      * @param item item instance
      * @return correct item to use for registration
      */
-    @SuppressFBWarnings("NP_NULL_PARAM_DEREF")
     private Object detectDuplicate(final ConfigItem type, final Object item) {
         Object original = null;
         if (type.isInstanceConfig()) {
@@ -1231,7 +1227,7 @@ public final class ConfigurationContext {
         // register decorated dropwizard bundle to track transitive bundles
         // or bundle directly if tracking disabled
         bootstrap.addBundle(option(GuiceyOptions.TrackDropwizardBundles)
-                ? new DropwizardBundleTracker(bundle, this) : bundle);
+                ? new DropwizardBundleTracker<>(bundle, this) : bundle);
     }
 
     /**

@@ -56,7 +56,7 @@ import static ru.vyarus.dropwizard.guice.module.context.stat.Stat.ModulesProcess
  * @author Vyacheslav Rusakov
  * @since 25.04.2018
  */
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.GodClass", "ClassFanOutComplexity"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.GodClass", "ClassFanOutComplexity", "PMD.CouplingBetweenObjects"})
 public final class ModulesSupport {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModulesSupport.class);
@@ -160,7 +160,6 @@ public final class ModulesSupport {
         return modules;
     }
 
-    @SuppressWarnings("PMD.NcssCount")
     private static void analyzeAndFilterBindings(final ConfigurationContext context,
                                                  final List<Module> analyzedModules,
                                                  final List<Element> elements) {

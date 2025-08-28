@@ -60,6 +60,7 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
     private final ShutdownTimeInfo stop = new ShutdownTimeInfo();
 
     // for tracking dw phases in bundles tracker
+    @SuppressWarnings("PMD.LooseCoupling")
     private DropwizardBundlesTracker bundlesTracker;
 
     @Override
@@ -123,12 +124,10 @@ public class StartupTimeDiagnostic extends UniqueGuiceyLifecycleListener {
         private final Stopwatch startTime;
         private final Stopwatch stopTime;
         private final List<Class<?>> startupEvents;
-        private final ApplicationRunEvent event;
         private Duration startListenersTime;
         private final StatsInfo stats;
 
         JettyListener(final ApplicationRunEvent event) {
-            this.event = event;
             startTime = Stopwatch.createUnstarted();
             stopTime = Stopwatch.createUnstarted();
             startupEvents = new ArrayList<>();

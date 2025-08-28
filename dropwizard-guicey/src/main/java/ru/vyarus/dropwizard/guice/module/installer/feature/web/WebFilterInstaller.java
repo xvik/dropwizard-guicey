@@ -89,6 +89,7 @@ public class WebFilterInstaller implements FeatureInstaller,
         reporter.report();
     }
 
+    @SuppressWarnings("PMD.LooseCoupling")
     private void configure(final ServletEnvironment environment, final Filter filter,
                            final String name, final WebFilter annotation) {
         final FilterRegistration.Dynamic mapping = environment.addFilter(name, filter);

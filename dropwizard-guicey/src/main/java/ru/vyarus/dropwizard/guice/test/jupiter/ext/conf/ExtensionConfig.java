@@ -28,7 +28,7 @@ import java.util.List;
  * @author Vyacheslav Rusakov
  * @since 12.05.2022
  */
-@SuppressWarnings({"checkstyle:VisibilityModifier", "PMD.DefaultPackage", "PMD.AvoidFieldNameMatchingMethodName"})
+@SuppressWarnings({"checkstyle:VisibilityModifier", "PMD.AvoidFieldNameMatchingMethodName"})
 public abstract class ExtensionConfig {
 
     /**

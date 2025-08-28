@@ -127,11 +127,10 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param scopes active scopes
      * @param root   root render tree node
      */
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void renderGuiceBindings(final ContextTreeConfig config,
                                      final Set<ItemId> scopes,
                                      final TreeNode root) {
-        if (config.getHiddenScopes().contains(ConfigScope.Module.getType())
+        if (config.getHiddenScopes().contains(Module.getType())
                 || config.getHiddenItems().contains(ConfigItem.Module)) {
             return;
         }
@@ -237,6 +236,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @param markers markers (may be null)
      */
     @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
+    @SuppressWarnings("PMD.LiteralsFirstInComparisons")
     private void renderLeaf(final TreeNode root, final String name,
                             final ItemId<?> item, final int pos, final List<String> markers) {
         final boolean ignored = markers != null

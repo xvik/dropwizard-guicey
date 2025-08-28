@@ -27,7 +27,7 @@ public class TrackerStats {
      *
      * @param trackers trackers
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "PMD.UnnecessaryCast"})
     public TrackerStats(final Tracker... trackers) {
         this((List<MethodTrack>) Arrays.stream(trackers)
                 .map(Tracker::getTracks)

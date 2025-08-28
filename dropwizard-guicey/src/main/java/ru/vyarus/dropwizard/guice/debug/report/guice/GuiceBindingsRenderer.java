@@ -289,7 +289,6 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
     }
 
     @SuppressFBWarnings("RV_RETURN_VALUE_IGNORED_INFERRED")
-    @SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops", "PMD.ConsecutiveLiteralAppends"})
     private void render(final TreeNode root, final ModuleDeclaration mod) {
         final TreeNode next = root.child(RenderUtils.renderClassLine(mod.getType(), mod.getMarkers()));
 

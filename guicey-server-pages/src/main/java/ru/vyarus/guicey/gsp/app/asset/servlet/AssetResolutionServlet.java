@@ -34,7 +34,6 @@ public class AssetResolutionServlet extends AssetServlet {
     }
 
     @Override
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     protected URL getResourceURL(final String absolutePath) {
         // do lookup even if directory requested: assets servlet will detect it and ask for index file
         final URL res = assets.lookupUrl(absolutePath);

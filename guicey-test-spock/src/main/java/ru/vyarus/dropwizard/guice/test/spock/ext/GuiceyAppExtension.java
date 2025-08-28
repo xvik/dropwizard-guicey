@@ -57,7 +57,7 @@ public class GuiceyAppExtension extends AbstractAppExtension<UseGuiceyApp> {
                 final Class<? extends Application> app,
                 final String configPath,
                 final ConfigOverride... overrides) {
-            return new DropwizardTestSupport<C>((Class<? extends Application<C>>) app,
+            return new DropwizardTestSupport<>((Class<? extends Application<C>>) app,
                     configPath,
                     (String) null,
                     application -> {

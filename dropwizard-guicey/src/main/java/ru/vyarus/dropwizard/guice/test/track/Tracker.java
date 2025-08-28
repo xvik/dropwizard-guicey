@@ -183,7 +183,7 @@ public class Tracker<T> {
         metrics = new MetricRegistry();
     }
 
-    @SuppressWarnings({"ParameterNumber", "PMD.ExcessiveParameterList", "PMD.UseVarargs", "PMD.SystemPrintln"})
+    @SuppressWarnings({"ParameterNumber", "PMD.UseVarargs", "PMD.SystemPrintln"})
     void add(final Method method,
              final String instanceHash,
              final long started,

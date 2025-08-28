@@ -115,7 +115,7 @@ public class GuiceyRunner {
     public void prepareModules() {
         final StatTimer timer = context.stat().timer(ModulesProcessingTime);
         // dropwizard specific bindings and jersey integration
-        context.registerModules(new GuiceBootstrapModule(context));
+        context.registerModules(new GuiceBootstrapModule<>(context));
         ModulesSupport.configureModules(context);
         timer.stop();
     }

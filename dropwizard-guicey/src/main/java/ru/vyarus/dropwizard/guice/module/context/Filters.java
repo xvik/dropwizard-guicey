@@ -231,14 +231,14 @@ public final class Filters {
      * @return guicey bundles predicate
      */
     public static Predicate<GuiceyBundleItemInfo> guiceyBundles() {
-        return Filters.type(ConfigItem.Bundle);
+        return type(ConfigItem.Bundle);
     }
 
     /**
      * @return dropwizard bundles predicate
      */
     public static Predicate<GuiceyBundleItemInfo> dropwizardBundles() {
-        return Filters.type(ConfigItem.DropwizardBundle);
+        return type(ConfigItem.DropwizardBundle);
     }
 
     // --------------------------------------------------------------------------- EXTENSIONS
