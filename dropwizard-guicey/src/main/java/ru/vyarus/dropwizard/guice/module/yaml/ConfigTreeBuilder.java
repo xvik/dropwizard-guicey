@@ -85,7 +85,7 @@ public final class ConfigTreeBuilder {
      * when dropwizard BOM used, jakarta.inject-api 1 used instead of 2 and so jakarta annotations not available.
      * Using string representation for checks to support such "not quite normal" cases.
      */
-    private static final ImmutableSet<String> QUALIFIER_ANNOTATIONS = ImmutableSet.of(
+    private static final Set<String> QUALIFIER_ANNOTATIONS = ImmutableSet.of(
             BindingAnnotation.class.getName(), Qualifier.class.getName(), "jakarta.inject.Qualifier"
     );
 
