@@ -1,4 +1,10 @@
 * Update to dropwizard 5 (requires java 17)
+* Customizable DefaultTestClientFactory: it is now possible to use default implementation
+  with customizations (override `configure` method)
+    - Add ApacheTestClientFactory: useful to support PATCH methods on jdk > 16
+    - Add `useApacheClient` (shortcut) configuration into `@TestGuiceyApp` and `@TestDropwizardApp`
+        to simplify usage of ApacheTestClientFactory with annotations
+    - Add `useApacheClient()` (shortcut) method into extension and generic builders 
 
 ### 7.2.1 (2025-05-12)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)

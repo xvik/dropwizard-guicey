@@ -10,6 +10,7 @@ import io.dropwizard.testing.DropwizardTestSupport;
 import jakarta.annotation.Nullable;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
 import ru.vyarus.dropwizard.guice.test.TestSupport;
+import ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideUtils;
@@ -87,6 +88,18 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
     }
 
     /**
+     * Shortcut for {@link #clientFactory(ru.vyarus.dropwizard.guice.test.client.TestClientFactory)} to configure
+     * {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory}. The default
+     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} supports only HTTP 1.1 methods and have
+     * problem with PATCH method usage on jdk > 16.
+     *
+     * @return builder instance for chained calls
+     */
+    public TestSupportBuilder<C> useApacheClient() {
+        return clientFactory(new ApacheTestClientFactory());
+    }
+
+    /**
      * Listener used ONLY when builder run methods used! Listener may be used to perform additional initialization
      * or cleanup before/after application execution.
      *
@@ -104,7 +117,9 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
      * creation. Prefer direct run ({@link #runCore()}) method usage (used support object could be easily obtained
      * with {@link ru.vyarus.dropwizard.guice.test.TestSupport#getContext()} in any place).
      * <p>
-     * IMPORTANT: listeners could not be used (because they are implemented as a custom run callback)
+     * IMPORTANT: listeners could not be used (because they are implemented as a custom run callback).
+     * Custom {@link ru.vyarus.dropwizard.guice.test.client.TestClientFactory} would also be lost! Use direct run
+     * methods to not lose them.
      *
      * @return guicey test support implementation
      */
@@ -121,7 +136,9 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
      * creation. Prefer direct run ({@link #runWeb()}) method usage (used support object could be easily obtained
      * with {@link ru.vyarus.dropwizard.guice.test.TestSupport#getContext()} in any place).
      * <p>
-     * IMPORTANT: listeners could not be used (because they are implemented as a custom run callback)
+     * IMPORTANT: listeners could not be used (because they are implemented as a custom run callback).
+     * Custom {@link ru.vyarus.dropwizard.guice.test.client.TestClientFactory} would also be lost! Use direct run
+     * methods to not lose them.
      *
      * @return dropwizard test support implementation
      */
