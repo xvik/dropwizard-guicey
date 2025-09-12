@@ -4,7 +4,9 @@
     - Add ApacheTestClientFactory: useful to support PATCH methods on jdk > 16
     - Add `useApacheClient` (shortcut) configuration into `@TestGuiceyApp` and `@TestDropwizardApp`
         to simplify usage of ApacheTestClientFactory with annotations
-    - Add `useApacheClient()` (shortcut) method into extension and generic builders 
+    - Add `useApacheClient()` (shortcut) method into extension and generic builders
+* @StubRest RestClient:
+    - Add patch method shortcuts
 
 ### 7.2.1 (2025-05-12)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)
