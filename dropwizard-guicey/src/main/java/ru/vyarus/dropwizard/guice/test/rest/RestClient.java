@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.rest;
 
 import javax.annotation.Nullable;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -64,6 +65,7 @@ import static java.util.Objects.requireNonNull;
  * @author Vyacheslav Rusakov
  * @since 20.02.2025
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public class RestClient {
 
     private static final List<Integer> DEFAULT_OK = Arrays.asList(HttpStatus.OK_200, HttpStatus.NO_CONTENT_204);
@@ -323,6 +325,54 @@ public class RestClient {
             return request(path).put(body, result);
         } else {
             checkVoidResponse(() -> request(path).put(body));
+            return null;
+        }
+    }
+
+    /**
+     * Simple PATCH call shortcut. Provided path should include only the target rest path.
+     * Body object assumed to be a json entity (would be serialized as json). For file sending use method with generic
+     * entity {@link #put(String, jakarta.ws.rs.client.Entity, Class)}.
+     * <p>
+     * To provide additional headers and query params see {@link #defaultHeader(String, String)}
+     * ({@link #defaultAccept(String...)}) and {@link #defaultQueryParam(String, String)}.
+     * For void responses (result class null) checks response status correctness (see {@link #defaultOk(Integer...)}).
+     * <p>
+     * For response headers validation, use raw {@code Response res = request("/path/").put(Entity.json(body))}.
+     * <p>
+     * IMPORTANT: default jersey client would not support PATCH calls on jdk > 16 because it uses
+     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} which supports only HTTP 1.1. Use apache
+     * client to workaround this problem on jdk > 16 (see useApacheClient extension option)
+     *
+     * @param path   target path, relative to rest root
+     * @param body   put body object (serialized as json)
+     * @param result result type (when null, accepts any 200 or 204 responses)
+     * @param <T>    result type
+     * @return mapped result object or null (if class not declared)
+     */
+    public <T> T patch(final String path, final @Nullable Object body, final @Nullable Class<T> result) {
+        return patch(path, Entity.json(body), result);
+    }
+
+    /**
+     * Same as {@link #patch(String, Object, Class)}, but accepts generic entity. Useful for sending multipart
+     * requests.
+     * <p>
+     * IMPORTANT: default jersey client would not support PATCH calls on jdk > 16 because it uses
+     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} which supports only HTTP 1.1. Use apache
+     * client to workaround this problem on jdk > 16 (see useApacheClient extension option)
+     *
+     * @param path   target path, relative to rest root
+     * @param body   post body object (serialized as json)
+     * @param result result type (when null, accepts any 200 or 204 responses)
+     * @param <T>    result type
+     * @return mapped result object or null (if class not declared)
+     */
+    public <T> T patch(final String path, final Entity<?> body, final @Nullable Class<T> result) {
+        if (result != null) {
+            return request(path).method(HttpMethod.PATCH, body, result);
+        } else {
+            checkVoidResponse(() -> request(path).method(HttpMethod.PATCH, body));
             return null;
         }
     }

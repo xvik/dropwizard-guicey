@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.test.rest.support;
 import com.google.common.base.Preconditions;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -34,6 +35,12 @@ public class Resource1 {
     @PUT
     @Path("/{foo}")
     public String put(@PathParam("foo") String foo) {
+        return foo;
+    }
+
+    @PATCH
+    @Path("/{foo}")
+    public String patch(@PathParam("foo") String foo) {
         return foo;
     }
 
