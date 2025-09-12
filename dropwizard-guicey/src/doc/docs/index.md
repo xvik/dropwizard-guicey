@@ -82,3 +82,4 @@ For example: [XML](https://repo1.maven.org/maven2/ru/vyarus/dropwizard-guicey/{{
 * [**Installers**](installers/resource.md) describes all guicey installers. Use it as a *extensions hand book*.
 * [**Modules**](guide/modules.md) external extension modules overview.
 * [**Examples**](examples/authentication.md) some usage examples. 
+* [Standalone sample application](https://github.com/xvik/dropwizard-app-todo)
