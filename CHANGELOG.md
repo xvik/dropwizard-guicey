@@ -3,8 +3,10 @@
   with customizations (override `configure` method)
     - Add ApacheTestClientFactory: useful to support PATCH methods on jdk > 16
     - Add `useApacheClient` (shortcut) configuration into `@TestGuiceyApp` and `@TestDropwizardApp`
-      to simplify usage of ApacheTestClientFactory with annotations
+        to simplify usage of ApacheTestClientFactory with annotations
     - Add `useApacheClient()` (shortcut) method into extension and generic builders
+* @StubRest RestClient:
+    - Add patch method shortcuts
 
 ### 7.2.2 (2025-07-18)
 * Update to dropwizard 4.0.14

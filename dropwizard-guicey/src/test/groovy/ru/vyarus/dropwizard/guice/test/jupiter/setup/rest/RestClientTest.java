@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.rest;
 
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.client.Entity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
@@ -12,7 +13,7 @@ import ru.vyarus.dropwizard.guice.test.rest.support.RestStubApp;
  * @author Vyacheslav Rusakov
  * @since 25.02.2025
  */
-@TestGuiceyApp(RestStubApp.class)
+@TestGuiceyApp(value = RestStubApp.class, useApacheClient = true)
 public class RestClientTest {
 
     @StubRest(disableDropwizardExceptionMappers = true)
@@ -38,6 +39,12 @@ public class RestClientTest {
         rest.post("/1/foo", null, null);
         res = rest.put("/1/foo", "something", String.class);
         Assertions.assertEquals("foo", res);
+
+        // patch body can't be null
+        rest.patch("/1/foo", Entity.text("sample"), null);
+        res = rest.patch("/1/foo", "something", String.class);
+        Assertions.assertEquals("foo", res);
+
         rest.delete("/1/bar", null);
     }
 
