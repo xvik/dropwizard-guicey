@@ -7,6 +7,7 @@
 **DOCUMENTATION**: http://xvik.github.io/dropwizard-guicey/
 
 * [Examples](https://github.com/xvik/dropwizard-guicey/tree/master/examples)
+* [Standalone sample app](https://github.com/xvik/dropwizard-app-todo)
 * [Extensions and integrations](https://github.com/xvik/dropwizard-guicey/)
 
 Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | [gitter chat](https://gitter.im/xvik/dropwizard-guicey) 
@@ -152,6 +153,9 @@ Guice BOM | `com.google.inject:guice-bom`
 HK2 bridge | `org.glassfish.hk2:guice-bridge`
 Spock-junit5 | `ru.vyarus:spock-junit5`
 
+#### Sample project
+
+You can also use [sample gradle project](https://github.com/xvik/dropwizard-app-todo) for a new project bootstrap  
 
 ### Snapshots
 

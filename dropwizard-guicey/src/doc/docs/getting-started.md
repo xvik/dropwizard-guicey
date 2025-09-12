@@ -79,6 +79,10 @@ Maven:
 </dependencies>
 ```
 
+### Sample application
+
+There is also a [sample gradle application](https://github.com/xvik/dropwizard-app-todo) which could be used for a new project bootstrap.
+
 ## Usage
 
 !!! note ""
