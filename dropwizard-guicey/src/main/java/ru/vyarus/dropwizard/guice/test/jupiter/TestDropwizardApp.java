@@ -230,8 +230,22 @@ public @interface TestDropwizardApp {
     /**
      * Custom client factory for {@link ru.vyarus.dropwizard.guice.test.ClientSupport} object. Custom factory
      * may be required in case when custom client configuration is required for test.
+     * <p>
+     * Note: value is ignored when {@link #useApacheClient()} set to true
      *
      * @return client factory class
      */
     Class<? extends TestClientFactory> clientFactory() default DefaultTestClientFactory.class;
+
+    /**
+     * Shortcut for {@link #clientFactory()} to configure
+     * {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory}. The default
+     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} supports only HTTP 1.1 methods and have
+     * problem with PATCH method usage on jdk > 16.
+     * <p>
+     * Note: {@link #clientFactory()} value is ignored when set to true,
+     *
+     * @return true to use apache connection provider in jersey client
+     */
+    boolean useApacheClient() default false;
 }

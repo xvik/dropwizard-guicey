@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.test.client;
 
 import io.dropwizard.jersey.jackson.JacksonFeature;
 import io.dropwizard.testing.DropwizardTestSupport;
+import jakarta.ws.rs.core.Feature;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.glassfish.jersey.client.JerseyClient;
@@ -19,8 +20,16 @@ import java.util.logging.Logger;
  * <p>
  * By default, log all requests and responses into system out (console). This could be disabled with
  * {@link #disableConsoleLog()} method (system property).
+ * <p>
+ * NOTE: default {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} does not support PATCH method on
+ * jdk > 16 (requires additional --add-opens). To workaround it, use apache or connection provider.
+ * <p>
+ * If client customization is required, extend this class and override
+ * {@link #configure(org.glassfish.jersey.client.JerseyClientBuilder,
+ * io.dropwizard.testing.DropwizardTestSupport)} method.
  *
  * @author Vyacheslav Rusakov
+ * @see ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory
  * @since 15.11.2023
  */
 public class DefaultTestClientFactory implements TestClientFactory {
@@ -50,16 +59,36 @@ public class DefaultTestClientFactory implements TestClientFactory {
         final JerseyClientBuilder builder = new JerseyClientBuilder()
                 .register(new JacksonFeature(support.getEnvironment().getObjectMapper()))
                 // log everything to simplify debug
-                .register(LoggingFeature.builder()
-                        .withLogger(System.getProperty(USE_LOGGER) != null
-                                // use console log by default
-                                ? Logger.getLogger(ClientSupport.class.getName()) : new ConsoleLogger())
-                        .verbosity(LoggingFeature.Verbosity.PAYLOAD_TEXT)
-                        .level(Level.INFO)
-                        .build())
+                .register(createLogger())
                 .property(ClientProperties.CONNECT_TIMEOUT, 1000)
                 .property(ClientProperties.READ_TIMEOUT, 5000)
                 .property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true);
+        applyMultiPartSupport(builder);
+        configure(builder, support);
+        return builder.build();
+    }
+
+    /**
+     * Configure logging feature.
+     *
+     * @return logging feature
+     */
+    protected Feature createLogger() {
+        return LoggingFeature.builder()
+                .withLogger(System.getProperty(USE_LOGGER) != null
+                        // use console log by default
+                        ? Logger.getLogger(ClientSupport.class.getName()) : new ConsoleLogger())
+                .verbosity(LoggingFeature.Verbosity.PAYLOAD_TEXT)
+                .level(Level.INFO)
+                .build();
+    }
+
+    /**
+     * Apply multipart support, if multipart feature is present in classpath.
+     *
+     * @param builder client builder
+     */
+    protected void applyMultiPartSupport(final JerseyClientBuilder builder) {
         try {
             // when dropwizard-forms used automatically register multipart feature
             final Class<?> cls = Class.forName("org.glassfish.jersey.media.multipart.MultiPartFeature");
@@ -67,7 +96,16 @@ public class DefaultTestClientFactory implements TestClientFactory {
         } catch (Exception ignored) {
             // do nothing - no multipart feature available
         }
-        return builder.build();
+    }
+
+    /**
+     * Provides ability to customize default client in extending class.
+     *
+     * @param builder client builder (pre-configured)
+     * @param support dropwizard support instance (for accessing environment and configuration)
+     */
+    protected void configure(final JerseyClientBuilder builder, final DropwizardTestSupport<?> support) {
+        // empty
     }
 
     /**

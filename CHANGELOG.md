@@ -1,4 +1,10 @@
 * Update to dropwizard 3.0.16
+* Customizable DefaultTestClientFactory: it is now possible to use default implementation
+  with customizations (override `configure` method)
+    - Add ApacheTestClientFactory: useful to support PATCH methods on jdk > 16
+    - Add `useApacheClient` (shortcut) configuration into `@TestGuiceyApp` and `@TestDropwizardApp`
+      to simplify usage of ApacheTestClientFactory with annotations
+    - Add `useApacheClient()` (shortcut) method into extension and generic builders
 
 ### 6.3.2 (2025-07-18)
 * Fix jakarta.inject annotations requirement (NoClassDefFoundError) (#430)

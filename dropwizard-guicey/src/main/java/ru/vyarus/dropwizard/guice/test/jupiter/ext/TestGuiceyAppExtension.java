@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.platform.commons.support.AnnotationSupport;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
 import ru.vyarus.dropwizard.guice.test.GuiceyTestSupport;
+import ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.env.TestEnvironmentSetup;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.conf.ExtensionBuilder;
@@ -333,7 +334,11 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             res.tracker.debug = ann.debug();
             res.reuseApp = ann.reuseApplication();
             res.defaultExtensionsEnabled = ann.useDefaultExtensions();
-            res.clientFactory(ann.clientFactory());
+            if (ann.useApacheClient()) {
+                res.clientFactory(ApacheTestClientFactory.class);
+            } else {
+                res.clientFactory(ann.clientFactory());
+            }
             res.managedLifecycle = ann.managedLifecycle();
             return res;
         }
