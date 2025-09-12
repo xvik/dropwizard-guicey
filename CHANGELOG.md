@@ -1,4 +1,10 @@
 * Update to dropwizard 4.0.16
+* Customizable DefaultTestClientFactory: it is now possible to use default implementation
+  with customizations (override `configure` method)
+    - Add ApacheTestClientFactory: useful to support PATCH methods on jdk > 16
+    - Add `useApacheClient` (shortcut) configuration into `@TestGuiceyApp` and `@TestDropwizardApp`
+      to simplify usage of ApacheTestClientFactory with annotations
+    - Add `useApacheClient()` (shortcut) method into extension and generic builders
 
 ### 7.2.2 (2025-07-18)
 * Update to dropwizard 4.0.14
@@ -118,7 +124,7 @@
     - Add WebInstaller marker interface to identify web extensions (extensions started with jersey)
 
 NOTE on Gradle compatibility:
-- Due to update to junit 5.12, platform-launcher dependency must be added manually:
+- Due to update to junit 5.12, there might be problems with platform-launcher dependency. The fix:
   `testRuntimeOnly("org.junit.platform:junit-platform-launcher")`
   (https://dev.to/be-hase/important-notes-on-junit-5120-in-gradle-13fj)
 

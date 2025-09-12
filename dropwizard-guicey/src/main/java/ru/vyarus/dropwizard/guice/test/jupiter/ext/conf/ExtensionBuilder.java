@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.function.ThrowingConsumer;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 import ru.vyarus.dropwizard.guice.test.util.ConfigModifier;
 import ru.vyarus.dropwizard.guice.test.util.ConfigOverrideExtensionValue;
@@ -368,6 +369,18 @@ public abstract class ExtensionBuilder<K extends Configuration,
     public T clientFactory(final TestClientFactory factory) {
         cfg.clientFactory = factory;
         return self();
+    }
+
+    /**
+     * Shortcut for {@link #clientFactory(ru.vyarus.dropwizard.guice.test.client.TestClientFactory)} to configure
+     * {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory}. The default
+     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} supports only HTTP 1.1 methods and have
+     * problem with PATCH method usage on jdk > 16.
+     *
+     * @return builder instance for chained calls
+     */
+    public T useApacheClient() {
+        return clientFactory(new ApacheTestClientFactory());
     }
 
     @SuppressWarnings("unchecked")
