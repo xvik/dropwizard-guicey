@@ -7,6 +7,9 @@
     - Add `useApacheClient()` (shortcut) method into extension and generic builders
 * @StubRest RestClient:
     - Add patch method shortcuts
+* Shared state:
+    - State objects, implementing AutoClosable, now would be closed on application shutdown
+    - Add SharedConfigurationState.lookupOrCreate method to simplify static state usage
 
 ### 7.2.1 (2025-05-12)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)
