@@ -13,6 +13,8 @@ import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.lifecycle.Managed;
 import javax.inject.Provider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.context.option.Options;
 import ru.vyarus.dropwizard.guice.module.installer.util.StackUtils;
 import ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree;
@@ -70,7 +72,7 @@ import java.util.function.Supplier;
  * @author Vyacheslav Rusakov
  * @since 26.09.2019
  */
-@SuppressWarnings({"rawtypes", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"rawtypes", "PMD.CouplingBetweenObjects", "PMD.GodClass", "PMD.TooManyMethods"})
 public class SharedConfigurationState {
     /**
      * Attribute name used to store application instance in application context attributes.
@@ -85,6 +87,8 @@ public class SharedConfigurationState {
      * neither Application nor Environment objects are accessible (e.g., BindingInstaller, BundlesLookup).
      */
     private static final ThreadLocal<SharedConfigurationState> STARTUP_INSTANCE = new ThreadLocal<>();
+
+    private final Logger logger = LoggerFactory.getLogger(SharedConfigurationState.class);
 
     // string used as key to workaround potential problems with different class loaders
     private final Map<String, Object> state = new LinkedHashMap<>();
@@ -317,11 +321,13 @@ public class SharedConfigurationState {
     @VisibleForTesting
     public void shutdown() {
         getKeys().forEach(key -> {
-            Object res = get(key);
+            final Object res = get(key);
             if (res instanceof AutoCloseable) {
                 try {
                     ((AutoCloseable) res).close();
-                } catch (Exception e) {}
+                } catch (Exception ex) {
+                    logger.warn("Problem closing object '" + key + "' in shared state", ex);
+                }
             }
         });
         if (application != null) {
@@ -453,14 +459,14 @@ public class SharedConfigurationState {
      *
      * @param application application instance
      * @param key         shared object key
-     * @param defSupplier   default value supplier (used when state is not exists to initialize it)
+     * @param defSupplier default value supplier (used when state is not exists to initialize it)
      * @param <V>         shared object type
      * @return value (never null)
      * @throws IllegalStateException if value not available
      */
     public static <V> V lookupOrCreate(final Application application,
-                                     final Class<V> key,
-                                     final Supplier<V> defSupplier) {
+                                       final Class<V> key,
+                                       final Supplier<V> defSupplier) {
         return getOrFail(application, "State is not available yet").get(key, defSupplier);
     }
 
@@ -469,14 +475,14 @@ public class SharedConfigurationState {
      *
      * @param environment environment instance
      * @param key         shared object key
-     * @param defSupplier   default value supplier (used when state is not exists to initialize it)
+     * @param defSupplier default value supplier (used when state is not exists to initialize it)
      * @param <V>         shared object type
      * @return value (never null)
      * @throws IllegalStateException if value not available
      */
     public static <V> V lookupOrCreate(final Environment environment,
-                                     final Class<V> key,
-                                     final Supplier<V> defSupplier) {
+                                       final Class<V> key,
+                                       final Supplier<V> defSupplier) {
         return getOrFail(environment, "State is not available yet").get(key, defSupplier);
     }
 
