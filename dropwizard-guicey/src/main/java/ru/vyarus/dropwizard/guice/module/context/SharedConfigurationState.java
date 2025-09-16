@@ -55,6 +55,10 @@ import java.util.function.Supplier;
  * Shared value could be set only once (to prevent complex situations with state substitutions). It is advised
  * to initialize shared value only in initialization phase (to avoid potential static access errors).
  * <p>
+ * If stored state object implements {@link AutoCloseable} it will be automatically closed on application shutdown
+ * (which is closed in most cases under tests). This is mostly useful to guarantee resource cleanup after the test
+ * (when it can't be managed directly).
+ * <p>
  * Objects available in shared state by default: {@link io.dropwizard.core.setup.Bootstrap},
  * {@link io.dropwizard.core.Configuration}, {@link Environment},
  * {@link ru.vyarus.dropwizard.guice.module.yaml.ConfigurationTree}, {@link com.google.inject.Injector},
@@ -312,7 +316,17 @@ public class SharedConfigurationState {
      */
     @VisibleForTesting
     public void shutdown() {
-        STATE.remove(application);
+        getKeys().forEach(key -> {
+            Object res = get(key);
+            if (res instanceof AutoCloseable) {
+                try {
+                    ((AutoCloseable) res).close();
+                } catch (Exception e) {}
+            }
+        });
+        if (application != null) {
+            STATE.remove(application);
+        }
     }
 
     @Override
@@ -435,6 +449,38 @@ public class SharedConfigurationState {
     }
 
     /**
+     * Shortcut for {@link #lookup(Application, Class)} to get ot initialize shared state value.
+     *
+     * @param application application instance
+     * @param key         shared object key
+     * @param defSupplier   default value supplier (used when state is not exists to initialize it)
+     * @param <V>         shared object type
+     * @return value (never null)
+     * @throws IllegalStateException if value not available
+     */
+    public static <V> V lookupOrCreate(final Application application,
+                                     final Class<V> key,
+                                     final Supplier<V> defSupplier) {
+        return getOrFail(application, "State is not available yet").get(key, defSupplier);
+    }
+
+    /**
+     * Shortcut for {@link #lookup(Environment, Class)}  to get ot initialize shared state value.
+     *
+     * @param environment environment instance
+     * @param key         shared object key
+     * @param defSupplier   default value supplier (used when state is not exists to initialize it)
+     * @param <V>         shared object type
+     * @return value (never null)
+     * @throws IllegalStateException if value not available
+     */
+    public static <V> V lookupOrCreate(final Environment environment,
+                                     final Class<V> key,
+                                     final Supplier<V> defSupplier) {
+        return getOrFail(environment, "State is not available yet").get(key, defSupplier);
+    }
+
+    /**
      * Static lookup for entire application registry.
      *
      * @param application application instance
@@ -501,6 +547,7 @@ public class SharedConfigurationState {
      */
     @VisibleForTesting
     public static void clear() {
+        STATE.values().forEach(SharedConfigurationState::shutdown);
         STATE.clear();
     }
 
