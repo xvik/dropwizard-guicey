@@ -7,6 +7,9 @@
     - Add `useApacheClient()` (shortcut) method into extension and generic builders
 * @StubRest RestClient:
     - Add patch method shortcuts
+* Shared state:
+    - State objects, implementing AutoClosable, now would be closed on application shutdown
+    - Add SharedConfigurationState.lookupOrCreate method to simplify static state usage
 
 ### 6.3.2 (2025-07-18)
 * Fix jakarta.inject annotations requirement (NoClassDefFoundError) (#430)

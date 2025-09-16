@@ -74,10 +74,14 @@ class SharedStateTest extends Specification {
         SharedConfigurationState.lookup(app, App).get() == app
         SharedConfigurationState.lookupOrFail(app, App, "2") == app
 
+        and: "access or create work"
+        SharedConfigurationState.lookupOrCreate(app, CustomState, () -> new CustomState())
+        SharedConfigurationState.lookupOrFail(app, CustomState, "err")
+
         when: "to string state"
         res = state.toString()
         then: "ok"
-        res == "Shared state with 1 objects: $App.name"
+        res == "Shared state with 2 objects: $CustomState.name, $App.name"
 
     }
 
@@ -158,10 +162,43 @@ class SharedStateTest extends Specification {
         SharedConfigurationState.lookup(environment, App).get() == app
         SharedConfigurationState.lookupOrFail(environment, App, "2") == app
 
+        and: "access and create"
+        SharedConfigurationState.lookupOrCreate(environment, CustomState, () -> new CustomState())
+        SharedConfigurationState.lookupOrFail(environment, CustomState, "err")
+
         when: "to string state"
         res = state.toString()
         then: "ok"
-        res == "Shared state with 1 objects: $App.name"
+        res == "Shared state with 2 objects: $CustomState.name, $App.name"
+    }
+
+    def "Check auto closable support on shutdown"() {
+
+        setup: "prepare state"
+        SharedConfigurationState state = new SharedConfigurationState()
+
+        when: "register closable object"
+        CustomState val = new CustomState()
+        state.put(CustomState, val)
+        state.shutdown()
+
+        then: "cleanup called"
+        val.called
+    }
+
+    def "Check auto closable support on clean"() {
+
+        setup: "prepare state"
+        SharedConfigurationState state = new SharedConfigurationState()
+        state.assignTo(new App())
+
+        when: "register closable object"
+        CustomState val = new CustomState()
+        state.put(CustomState, val)
+        SharedConfigurationState.clear()
+
+        then: "cleanup called"
+        val.called
     }
 
     static class App extends Application<Configuration> {
@@ -172,6 +209,16 @@ class SharedStateTest extends Specification {
 
         @Override
         void run(Configuration configuration, Environment environment) throws Exception {
+        }
+    }
+
+    static class CustomState implements AutoCloseable {
+
+        boolean called
+
+        @Override
+        void close() throws Exception {
+            called = true
         }
     }
 }
