@@ -1,10 +1,9 @@
 package ru.vyarus.dropwizard.guice.examples.auth;
 
 import io.dropwizard.auth.Authorizer;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import javax.inject.Singleton;
 import javax.ws.rs.container.ContainerRequestContext;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Checks if authorized user has required role ({@link javax.annotation.security.RolesAllowed} annotation support).
