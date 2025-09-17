@@ -160,7 +160,7 @@ You can also use [sample gradle project](https://github.com/xvik/dropwizard-app-
 
 ### Snapshots
 
-![Maven metadata URL](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fru%2Fvyarus%2Fdropwizard-guicey%2Fmaven-metadata.xml)
+[![Maven metadata URL](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fru%2Fvyarus%2Fdropwizard-guicey%2Fmaven-metadata.xml)](https://central.sonatype.com/repository/maven-snapshots/ru/vyarus/dropwizard-guicey/maven-metadata.xml)
 
 <details>
       <summary>Snapshots published into Maven Central</summary>
