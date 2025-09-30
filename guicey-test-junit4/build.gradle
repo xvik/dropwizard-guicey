@@ -5,7 +5,7 @@ dependencies {
         exclude group: 'junit', module: 'junit-dep'
     }
 
-    implementation 'io.dropwizard.modules:dropwizard-testing-junit4:5.0.0-rc.5'
+    implementation 'io.dropwizard.modules:dropwizard-testing-junit4:5.0.0'
     implementation 'junit:junit'
 
     testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
