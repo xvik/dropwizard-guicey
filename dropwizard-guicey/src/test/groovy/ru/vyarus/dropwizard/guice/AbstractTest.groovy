@@ -31,8 +31,9 @@ abstract class AbstractTest extends Specification {
 
     static {
         BootstrapLogging.bootstrap(Level.DEBUG); // bootstrap set threshold filter!
-        LoggingUtil.getLoggerContext().getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME).setLevel(Level.WARN);
-        LoggingUtil.getLoggerContext().getLogger("ru.vyarus.dropwizard.guice").setLevel(Level.INFO);
+        LoggingUtil.getLoggerContext().getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME).setLevel(Level.WARN)
+        LoggingUtil.getLoggerContext().getLogger("ru.vyarus.dropwizard.guice").setLevel(Level.INFO)
+        Locale.setDefault(Locale.ENGLISH)
     }
 
     // common guicey extra extensions used for all tests
