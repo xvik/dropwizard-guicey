@@ -11,6 +11,10 @@ import java.util.concurrent.TimeUnit
  */
 class PrintUtilsTest extends Specification {
 
+    void setup() {
+        Locale.setDefault(Locale.ENGLISH)
+    }
+
     def "Check toStringValue"() {
 
         expect:
