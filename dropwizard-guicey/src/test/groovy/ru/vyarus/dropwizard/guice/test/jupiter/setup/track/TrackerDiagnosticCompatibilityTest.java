@@ -34,8 +34,9 @@ public class TrackerDiagnosticCompatibilityTest extends AbstractTrackerTest {
                 // stats report (debug)
                 .contains("Trackers stats (sorted by median) for TrackerDiagnosticCompatibilityTest$Test1#testTracker():\n" +
                         "\n" +
-                        "\t[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]     \n" +
-                        "\tGuiceyConfigurationInfo                  getNormalModuleIds()                               1          0          11.11 ms   11.11 ms   11.11 ms   11.11 ms   11.11 ms  ");
+                        "\t[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]")
+
+                .contains("GuiceyConfigurationInfo                  getNormalModuleIds()                               1          0          11.11 ms   11.11 ms   11.11 ms   11.11 ms   11.11 ms  ");
     }
 
 
