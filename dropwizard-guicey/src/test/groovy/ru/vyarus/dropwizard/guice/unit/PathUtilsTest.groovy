@@ -21,7 +21,7 @@ class PathUtilsTest extends Specification {
         '/foo/'      | '/sample.txt' | '/foo/sample.txt'
         '  /foo/  '  | '/sample.txt' | '/foo/sample.txt'
         '/foo\\bar/' | '/sample.txt' | '/foo/bar/sample.txt'
-        'http://foo' | 'bar' | 'http://foo/bar'
+        'http://foo' | 'bar'         | 'http://foo/bar'
     }
 
     def "Check path"() {
@@ -204,5 +204,26 @@ class PathUtilsTest extends Specification {
         '  /foo/  ' | 'foo/'
         '/foo\\bar' | 'foo/bar'
         '/foo/bar'  | 'foo/bar'
+    }
+
+    def "Check absolute path normalization"() {
+
+        expect:
+        PathUtils.normalizeAbsolutePath(path) == res
+
+        where:
+        path                            | res
+        '/'                             | '/'
+        ''                              | '/'
+        '/foo'                          | '/foo'
+        '  /foo/  '                     | '/foo'
+        '/foo\\bar'                     | '/foo/bar'
+        '/foo/bar'                      | '/foo/bar'
+        '/foo/bar?some=1'               | '/foo/bar?some=1'
+        '/foo/bar#!some=1'              | '/foo/bar#!some=1'
+        'http://localhost.com/foo/bar/' | 'http://localhost.com/foo/bar'
+        'HTTP://localhost.com/foo/bar/' | 'HTTP://localhost.com/foo/bar'
+        'http://localhost.com'          | 'http://localhost.com'
+        'http://localhost.com:8080'     | 'http://localhost.com:8080'
     }
 }
