@@ -10,6 +10,14 @@
 * Shared state:
     - State objects, implementing AutoClosable, now would be closed on application shutdown
     - Add SharedConfigurationState.lookupOrCreate method to simplify static state usage
+* Add a utility to simplify building application urls: AppUrlBuilder
+    - Automatically resolve context server port and mapped paths (previously only available in 
+      tests with ClientSupport class)
+    - Could build rest url directly from rest classes and methods
+    - Special api for building from direct rest method calls (method arguments 
+      automatically mapped into url path and query params in this case)
+    - General utility for resource methods analysis: ResourceAnalyzer (could be used in 
+      various api, based on resource (stub) call)
 
 ### 7.2.1 (2025-05-12)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)

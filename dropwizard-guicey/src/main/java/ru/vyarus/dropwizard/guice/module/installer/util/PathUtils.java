@@ -167,6 +167,27 @@ public final class PathUtils {
     }
 
     /**
+     * Normalize path by removing duplicate slashes and replacing backslashes. Non-http paths will always start
+     * with "/". Trailing slash is removed. Special cases are "/" and "" which will be returned as "/".
+     * <p>
+     * For example, "some/path" normalized to "/some/path" and "http://localhost/some/path" preserved as is
+     * "http://localhost/some/path".
+     * <p>
+     * Method mainly assumed to be used to format rest paths. With the slash at the beginning and no slash at the end
+     * makes them easy to concatenate.
+     *
+     * @param path path to normalize
+     * @return normalized path
+     */
+    public static String normalizeAbsolutePath(final String path) {
+        String res = trimSlashes(normalize(path));
+        if (!res.toLowerCase().startsWith("http")) {
+            res = "/" + res;
+        }
+        return res;
+    }
+
+    /**
      * Normalization for classpath resource path. Rules:
      * <ul>
      *     <li>Path use '/' as separator</li>
