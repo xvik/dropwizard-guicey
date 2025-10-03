@@ -6,6 +6,7 @@ plugins {
 dependencies {
     provided 'org.junit.jupiter:junit-jupiter-api'
     provided 'io.dropwizard:dropwizard-testing'
+    provided 'org.glassfish.jersey.media:jersey-media-multipart'
     provided ('org.glassfish.hk2:guice-bridge') {
         exclude group: 'com.google.inject', module: 'guice'
     }
