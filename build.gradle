@@ -140,6 +140,10 @@ subprojects {
         sourceCompatibility = 11
     }
 
+    quality {
+        spotbugsQuiet = true
+    }
+
     dependencies {
         implementation platform(project(':'))
     }
