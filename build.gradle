@@ -120,6 +120,10 @@ subprojects {
         sourceCompatibility = JavaVersion.VERSION_17
     }
 
+    quality {
+        spotbugsQuiet = true
+    }
+
     dependencies {
         implementation platform(project(':'))
     }
