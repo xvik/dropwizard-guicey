@@ -13,8 +13,8 @@ import java.io.InputStream;
 public class SuperclassDeclarationResource extends DirectResource {
 
     @Override
-    public Response get(String sm, String q, String hh, String cc) {
-        return super.get(sm, q, hh, cc);
+    public Response get(String sm, String q, String hh, String cc, String mm) {
+        return super.get(sm, q, hh, cc, mm);
     }
 
     @Override

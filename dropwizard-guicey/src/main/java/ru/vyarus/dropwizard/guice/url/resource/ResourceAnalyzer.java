@@ -2,16 +2,22 @@ package ru.vyarus.dropwizard.guice.url.resource;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.HttpMethod;
+import jakarta.ws.rs.MatrixParam;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.PathSegment;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.url.model.MethodCall;
 import ru.vyarus.dropwizard.guice.url.model.ResourceMethodInfo;
@@ -25,6 +31,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +44,7 @@ import java.util.stream.Collectors;
  * @author Vyacheslav Rusakov
  * @since 25.09.2025
  */
-@SuppressWarnings("PMD.GodClass")
+@SuppressWarnings({"PMD.GodClass", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
 public final class ResourceAnalyzer {
 
     private ResourceAnalyzer() {
@@ -85,6 +92,15 @@ public final class ResourceAnalyzer {
         return PathUtils.normalizeAbsolutePath(findAnnotatedMethod(method).getAnnotation(Path.class).value());
     }
 
+    /**
+     * Search for resource method {@code @Path} annotation. If multiple methods selected, will select method
+     * without arguments. If there is no matching no-args method found throws exception (about multiple methods found).
+     *
+     * @param resource resource class
+     * @param method   method name
+     * @return resource method {@code @Path} annotation value
+     * @throws java.lang.IllegalStateException if method with annotations not found
+     */
     public static String getMethodPath(final Class<?> resource, final String method) {
         final Method target = findMethod(resource, method);
         return getMethodPath(target);
@@ -308,12 +324,10 @@ public final class ResourceAnalyzer {
         // full path starting from the first resource (including all methods and sub resources)
         final List<String> resourcePath = new ArrayList<>();
         final List<Class<?>> subResources = new ArrayList<>();
-        final List<Method> locators = new ArrayList<>();
         for (ResourceMethodInfo info : infos) {
             subResources.add(info.getResource());
             // only method path counted!
             resourcePath.add(info.getPath());
-            locators.add(info.getMethod());
         }
 
         // consider sub resources as part of the method call (method call relative to the root resource)
@@ -326,8 +340,7 @@ public final class ResourceAnalyzer {
                 last.getHttpMethod(),
                 // sub resource classes, excluding root resource
                 subResources.subList(1, subResources.size()),
-                // sub resource locator methods (excluding actual rest method)
-                locators.subList(0, locators.size() - 1));
+                infos);
 
         // apply data from left to right (right data should override left)
         infos.forEach(res::apply);
@@ -349,8 +362,7 @@ public final class ResourceAnalyzer {
         final Method annotated = findAnnotatedMethod(call.getMethod());
         final String path = getMethodPath(annotated);
         // sub-resource locator may lack http method annotation
-        final String httpMethod = call.getSubCall() == null ? findHttpMethod(annotated)
-                : getHttpMethod(annotated).orElse(null);
+        final String httpMethod = getHttpMethod(annotated).orElse(null);
         final ResourceMethodInfo info = new ResourceMethodInfo(
                 MoreObjects.firstNonNull(annotatedResource, call.getResource()),
                 annotatedResource == null ? "/" : getResourcePath(annotatedResource),
@@ -359,9 +371,14 @@ public final class ResourceAnalyzer {
         detectMediaTypes(info, info.getResource(), annotated);
 
         // analyze parameters
+        final Multimap<String, Object> multipart = ArrayListMultimap.create();
         for (int i = 0; i < call.getArgs().length; i++) {
             final Object arg = call.getArgs()[i];
-            handle(annotated.getParameterAnnotations()[i], arg, info);
+            handle(annotated.getParameterAnnotations()[i], arg, info, multipart);
+        }
+        if (!multipart.isEmpty()) {
+            // multipart params often doubled (stream with metadata) so need to process all at once
+            MultipartParamsSupport.processFormParams(info.getFormParams(), multipart);
         }
         return info;
     }
@@ -408,18 +425,30 @@ public final class ResourceAnalyzer {
         }
     }
 
-    private static void handle(final Annotation[] annotations, final Object value, final ResourceMethodInfo info) {
+    @SuppressWarnings({"unchecked", "PMD.NcssCount", "PMD.CognitiveComplexity", "PMD.CyclomaticComplexity",
+            "checkstyle:CyclomaticComplexity"})
+    private static void handle(final Annotation[] annotations, final Object value, final ResourceMethodInfo info,
+                               final Multimap<String, Object> multipart) {
         if (value != null) {
             for (Annotation ann : annotations) {
-                if (ann.annotationType().equals(PathParam.class)) {
+                if (ann.annotationType().equals(Context.class)) {
+                    // avoid handling special parameters
+                    return;
+                } else if (ann.annotationType().equals(PathParam.class)) {
                     final PathParam param = (PathParam) ann;
-                    info.getPathParams().put(param.value(), value);
+                    // path segments could be used for matrix params declaration in the middle
+                    if (!(value instanceof PathSegment)) {
+                        info.getPathParams().put(param.value(), value);
+                    }
                 } else if (ann.annotationType().equals(QueryParam.class)) {
                     final QueryParam param = (QueryParam) ann;
                     info.getQueryParams().put(param.value(), value);
                 } else if (ann.annotationType().equals(HeaderParam.class)) {
                     final HeaderParam param = (HeaderParam) ann;
                     info.getHeaderParams().put(param.value(), value);
+                } else if (ann.annotationType().equals(MatrixParam.class)) {
+                    final MatrixParam param = (MatrixParam) ann;
+                    info.getMatrixParams().put(param.value(), value);
                 } else if (ann.annotationType().equals(FormParam.class)) {
                     final FormParam param = (FormParam) ann;
                     info.getFormParams().put(param.value(), value);
@@ -427,15 +456,33 @@ public final class ResourceAnalyzer {
                     final CookieParam param = (CookieParam) ann;
                     info.getCookieParams().put(param.value(), String.valueOf(value));
                 } else if ("FormDataParam".equals(ann.annotationType().getSimpleName())) {
-                    MultipartParamsSupport.addFormParam(info.getFormParams(), ann, value);
+                    // collected for delayed processing
+                    final String paramName = MultipartParamsSupport.getParamName(ann);
+                    if (value instanceof Collection) {
+                        ((Collection<?>) value).forEach(o -> multipart.put(paramName, o));
+                    } else {
+                        multipart.put(paramName, value);
+                    }
+                } else if ("org.glassfish.jersey.media.multipart.FormDataMultiPart".equals(
+                        value.getClass().getName())) {
+                    // case: method parameter accept entire multipart (without direct fields mapping)
+                    MultipartParamsSupport.configureFromMultipart(multipart, value);
                 } else if (ann.annotationType().equals(BeanParam.class)) {
-                    handleBean(value, info);
+                    handleBean(value, info, multipart);
                 }
+            }
+            // this could be urlencoded parameters
+            if (value instanceof MultivaluedMap) {
+                final MultivaluedMap<Object, Object> map = (MultivaluedMap<Object, Object>) value;
+                map.forEach((o, objects) ->
+                        info.getFormParams().put(String.valueOf(o), objects.size() == 1 ? objects.get(0) : objects)
+                );
             }
         }
     }
 
-    private static void handleBean(final Object bean, final ResourceMethodInfo info) {
+    private static void handleBean(final Object bean, final ResourceMethodInfo info,
+                                   final Multimap<String, Object> multipart) {
         final Field[] fields = bean.getClass().getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -446,7 +493,7 @@ public final class ResourceAnalyzer {
                 throw new IllegalStateException("Failed to introspect @BeanParam", e);
             }
             if (value != null) {
-                handle(field.getAnnotations(), value, info);
+                handle(field.getAnnotations(), value, info, multipart);
             }
         }
     }

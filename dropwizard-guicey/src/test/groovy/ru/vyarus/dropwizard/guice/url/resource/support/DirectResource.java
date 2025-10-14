@@ -6,6 +6,7 @@ import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.MatrixParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -32,7 +33,8 @@ public class DirectResource {
     public Response get(@PathParam("sm") String sm,
                         @QueryParam("q") String q,
                         @HeaderParam("HH") String hh,
-                        @CookieParam("cc") String cc) {
+                        @CookieParam("cc") String cc,
+                        @MatrixParam("mm") String mm) {
         return Response.ok().build();
     }
 

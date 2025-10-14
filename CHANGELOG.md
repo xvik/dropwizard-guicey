@@ -5,8 +5,6 @@
     - Add `useApacheClient` (shortcut) configuration into `@TestGuiceyApp` and `@TestDropwizardApp`
         to simplify usage of ApacheTestClientFactory with annotations
     - Add `useApacheClient()` (shortcut) method into extension and generic builders
-* @StubRest RestClient:
-    - Add patch method shortcuts
 * Shared state:
     - State objects, implementing AutoClosable, now would be closed on application shutdown
     - Add SharedConfigurationState.lookupOrCreate method to simplify static state usage
@@ -18,6 +16,31 @@
       automatically mapped into url path and query params in this case)
     - General utility for resource methods analysis: ResourceAnalyzer (could be used in 
       various api, based on resource (stub) call)
+* Unify ClientSupport and StubRest client APIs
+    - New api is a wrapper above jersey client api to simplify test-specific configuration and validation
+      (jersey api is still available). The request builder unifies all possible configurations in one place.  
+    - New common base class TestClient (and TestRestClient for rest clients, adding rest-specific methods)
+    - ClientSupport is a TestClient, but also could provide 3 special clients: appClient(), adminClient(), restClient()
+      (restClient() is the same as StubRest client)
+    - New sub clients could be created by applying additional path segments:
+        client.subClient("/sub/path/)
+    - External api client could be created with support.customClient("som external url")
+    - New client rest api based on real method calls: restClient(RestClass.class).method(mock -> mock.restMethod(args)).invoke()
+      (target path and method type resolved from annotations, arguments used for request configuration)
+    - Helper api for testing multipart requests: restClient(..).multipartMethod(..)
+      (simplifies multipart method arguments creation)
+    - Defaults mechanism: it is possible to declare default headers, cookies, etc.
+      on the client to be applied for all requests (evolution of StubRest client ideas)
+    - Add PATCH method shortcuts 
+    - Add builder-style response assertions like: client.do_request.assertHeader("Name", val)
+      This allows checking response headers, cookies, status code, etc. in a chained calls style without additional variables
+    - Add connector switching api to ClientSupport: apacheClient(), urlconnectorClient()
+      This allows using different connectors within one test 
+      (note that apache connector is required for PATCH calls and urlconnector better handles multipart requests)
+    - (BREAKING) previous target(String... path) methods replaced with string format: target(String, Object...args)
+    - (BREAKING) deprecated targetMain(): replaced with targetApp()
+    - (BREAKING) StubRest default status declaration removed as not useful
+      (required status could be declared now with the new request builder)
 
 ### 7.2.1 (2025-05-12)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)

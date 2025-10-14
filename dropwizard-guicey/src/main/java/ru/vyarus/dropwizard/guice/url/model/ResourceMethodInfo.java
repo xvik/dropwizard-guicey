@@ -28,7 +28,8 @@ public class ResourceMethodInfo {
     private final String resourcePath;
 
     private final List<Class<?>> subResources;
-    private final List<Method> subResourceLocators;
+    // in case of sub resources each method call analyzed separately
+    private final List<ResourceMethodInfo> steps;
 
     // method with annotations!
     private final Method method;
@@ -43,7 +44,17 @@ public class ResourceMethodInfo {
     private final Map<String, Object> headerParams = new HashMap<>();
     private final Map<String, String> cookieParams = new HashMap<>();
     private final Map<String, Object> formParams = new HashMap<>();
+    private final Map<String, Object> matrixParams = new HashMap<>();
 
+    /**
+     * Create a resource method info object.
+     *
+     * @param resource     resource class
+     * @param resourcePath resource path
+     * @param method       analyzed method
+     * @param path         method path
+     * @param httpMethod   http method
+     */
     public ResourceMethodInfo(final Class<?> resource,
                               final String resourcePath,
                               final Method method,
@@ -52,20 +63,31 @@ public class ResourceMethodInfo {
         this(resource, resourcePath, method, path, httpMethod, null, null);
     }
 
+    /**
+     * Create a resource method info object for the call chain (including sub resource locators).
+     *
+     * @param resource     resource class
+     * @param resourcePath resource path
+     * @param method       analyzed method
+     * @param path         method path
+     * @param httpMethod   http method
+     * @param subResources sub resource classes
+     * @param steps        separate analysis for each method call in the chain
+     */
     public ResourceMethodInfo(final Class<?> resource,
                               final String resourcePath,
                               final Method method,
                               final String path,
                               final @Nullable String httpMethod,
                               final @Nullable List<Class<?>> subResources,
-                              final @Nullable List<Method> subResourceLocators) {
+                              final @Nullable List<ResourceMethodInfo> steps) {
         this.resource = resource;
         this.resourcePath = resourcePath;
         this.method = method;
         this.path = path;
         this.httpMethod = httpMethod;
         this.subResources = subResources == null ? Collections.emptyList() : subResources;
-        this.subResourceLocators = subResourceLocators == null ? Collections.emptyList() : subResourceLocators;
+        this.steps = steps == null ? Collections.emptyList() : steps;
     }
 
     /**
@@ -86,10 +108,14 @@ public class ResourceMethodInfo {
     }
 
     /**
-     * @return sub resource locator methods, appeared in method call
+     * When sub resources used there would be multiple method calls {@code resource.subResource().method()}.
+     * In this case, each method call analyzed separately and, in some cases, non-aggregated data might be important
+     * (e.g. the only way to properly handle matrix params).
+     *
+     * @return separate methods analysis results for sub resource lookups or empty for single method call
      */
-    public List<Method> getSubResourceLocators() {
-        return subResourceLocators;
+    public List<ResourceMethodInfo> getSteps() {
+        return steps;
     }
 
     /**
@@ -161,6 +187,13 @@ public class ResourceMethodInfo {
     }
 
     /**
+     * @return map of not null arguments, passed for {@link jakarta.ws.rs.MatrixParam}.
+     */
+    public Map<String, Object> getMatrixParams() {
+        return matrixParams;
+    }
+
+    /**
      * @return method path, resolved from {@link jakarta.ws.rs.Path} annotation
      */
     public String getPath() {
@@ -182,6 +215,11 @@ public class ResourceMethodInfo {
         return PathUtils.path(resourcePath, path);
     }
 
+    /**
+     * Apply other method info to this one.
+     *
+     * @param other other data
+     */
     public void apply(final ResourceMethodInfo other) {
         // assuming processing method chain from left to right and so more specific consume or produce annotations
         // must override
@@ -196,6 +234,7 @@ public class ResourceMethodInfo {
 
         this.pathParams.putAll(other.pathParams);
         this.queryParams.putAll(other.queryParams);
+        this.matrixParams.putAll(other.matrixParams);
         this.headerParams.putAll(other.headerParams);
         this.cookieParams.putAll(other.cookieParams);
         this.formParams.putAll(other.formParams);

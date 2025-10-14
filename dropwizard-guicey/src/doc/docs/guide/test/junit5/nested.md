@@ -104,7 +104,7 @@ public class ClientSupportDwTest {
         // test to apply for multiple environments
         @Test
         default void callClient(ClientSupport client) {
-            Assertions.assertEquals("main", client.targetMain("servlet")
+            Assertions.assertEquals("main", client.targetApp("servlet")
                     .request().buildGet().invoke().readEntity(String.class));
         }
     }
@@ -115,7 +115,7 @@ public class ClientSupportDwTest {
 
         @Test
         void testClient(ClientSupport client) {
-            Assertions.assertEquals("http://localhost:8080/", client.basePathMain());
+            Assertions.assertEquals("http://localhost:8080/", client.basePathApp());
         }
     }
 
@@ -128,7 +128,7 @@ public class ClientSupportDwTest {
 
         @Test
         void testClient(ClientSupport client) {
-            Assertions.assertEquals("http://localhost:8080/app/", client.basePathMain());
+            Assertions.assertEquals("http://localhost:8080/app/", client.basePathApp());
         }
     }
 }

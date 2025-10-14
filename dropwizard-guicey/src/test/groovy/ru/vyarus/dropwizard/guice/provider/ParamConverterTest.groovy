@@ -16,7 +16,7 @@ class ParamConverterTest extends AbstractTest {
     def "check param converter registration"(ClientSupport client) {
 
         when: "calling resource with custom param"
-        def res = client.targetMain("/param/valllue").request().get()
+        def res = client.targetApp("/param/valllue").request().get()
         then: "ok"
         res.readEntity(Foo).value == 'valllue'
     }

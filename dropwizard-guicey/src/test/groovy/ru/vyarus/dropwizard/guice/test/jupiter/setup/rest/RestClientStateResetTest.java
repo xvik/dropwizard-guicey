@@ -34,7 +34,6 @@ public class RestClientStateResetTest extends AbstractPlatformTest {
         @Test
         @Order(1)
         void test() {
-            rest.defaultOk(120);
             rest.defaultHeader("Foo", "bar");
             rest.defaultAccept("dsfdsfd");
             rest.defaultQueryParam("foo", "bar");
@@ -46,7 +45,6 @@ public class RestClientStateResetTest extends AbstractPlatformTest {
             Assertions.assertFalse(rest.hasDefaultAccepts());
             Assertions.assertFalse(rest.hasDefaultHeaders());
             Assertions.assertFalse(rest.hasDefaultQueryParams());
-            Assertions.assertFalse(rest.isDefaultStatusChanged());
         }
     }
 
@@ -61,7 +59,6 @@ public class RestClientStateResetTest extends AbstractPlatformTest {
         @Test
         @Order(1)
         void test() {
-            rest.defaultOk(120);
             rest.defaultHeader("Foo", "bar");
             rest.defaultAccept("dsfdsfd");
             rest.defaultQueryParam("foo", "bar");
@@ -73,7 +70,6 @@ public class RestClientStateResetTest extends AbstractPlatformTest {
             Assertions.assertTrue(rest.hasDefaultAccepts());
             Assertions.assertTrue(rest.hasDefaultHeaders());
             Assertions.assertTrue(rest.hasDefaultQueryParams());
-            Assertions.assertTrue(rest.isDefaultStatusChanged());
         }
     }
 

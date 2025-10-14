@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.url;
 
 import org.jspecify.annotations.Nullable;
+import ru.vyarus.dropwizard.guice.test.client.builder.call.RestCallAnalyzer;
 import ru.vyarus.dropwizard.guice.url.model.ResourceMethodInfo;
 import ru.vyarus.dropwizard.guice.url.resource.ResourceAnalyzer;
 import ru.vyarus.dropwizard.guice.url.resource.ResourceParamsBuilder;
@@ -38,6 +39,7 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
      *
      * @param basePath optional base path
      * @param resource target resource
+     * @param subResource true if it is a sub resource (important because {@code @Path} annotation must be ignored)
      */
     public RestPathBuilder(final @Nullable String basePath, final Class<T> resource, final boolean subResource) {
         super(basePath);
@@ -73,6 +75,25 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
     }
 
     /**
+     * Append a sub-resource path to the current resource path. Sub resource path is resolved through the called
+     * locator method.
+     * <p>
+     * Note: multiple locator methods could be called at once!
+     *
+     * @param caller      locator method(s) caller
+     * @param subResource sub-resource type
+     * @param <K>         sub-resource type
+     * @return builder for sub-resource
+     */
+    public <K> RestPathBuilder<K> subResource(final Caller<T> caller, final Class<K> subResource) {
+        final String path = RestCallAnalyzer.getSubResourcePath(resource, caller);
+        builder.path(path);
+        final RestPathBuilder<K> sub = new RestPathBuilder<>(builder.toString(), subResource, true);
+        sub.pathParams.putAll(pathParams);
+        return sub;
+    }
+
+    /**
      * Append provided path to resource path (useful when direct resource method can't be used for construction).
      * <p>
      * Query parameters could be specified directly.
@@ -88,30 +109,24 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
     }
 
     /**
-     * Append resource method path (path from {@link jakarta.ws.rs.Path} method annotation).  If multiple methods
+     * Append resource method path (path from {@link jakarta.ws.rs.Path} method annotation).
+     * <p>
+     * When parameters are not provided - search for any method with name. If multiple methods
      * with the same name would be found - method with no parameters would be selected, otherwise exception thrown.
-     * This is required to properly supplement method with parameters search {@link #method(String, Class[])}
-     * (otherwise would be impossible to select no-params method).
-     *
-     * @param methodName resource method name (case-sensitive)
-     * @return parameters builder to specify path and query parameters
-     * @throws java.lang.IllegalStateException if no unique method found for provided name
-     * @see #method(ru.vyarus.dropwizard.guice.url.util.Caller)
-     */
-    public ResourceParamsBuilder method(final String methodName) {
-        builder.path(ResourceAnalyzer.getMethodPath(resource, methodName));
-        return this;
-    }
-
-    /**
-     * Shortcut for resource method lookup (same as {@code class.getMethod(name, args)}.
      *
      * @param methodName method name
      * @param parameters method argument types
      * @return parameters builder to specify path and query parameters
+     * @throws java.lang.IllegalStateException if no unique method found for provided name
+     * @see #method(ru.vyarus.dropwizard.guice.url.util.Caller)
      */
     public ResourceParamsBuilder method(final String methodName, final Class<?>... parameters) {
-        return method(ResourceAnalyzer.findMethod(resource, methodName, parameters));
+        if (parameters.length == 0) {
+            builder.path(ResourceAnalyzer.getMethodPath(resource, methodName));
+            return this;
+        } else {
+            return method(ResourceAnalyzer.findMethod(resource, methodName, parameters));
+        }
     }
 
     /**
@@ -134,14 +149,15 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
      * Might also include sub resource call, if sub resource locator method returns resource instance:
      * {@code resource.sub(args).method(args)}
      *
-     * @param methodCall consumer with exactly one resource method execution
+     * @param caller consumer with exactly one resource method execution
      * @return parameters builder to specify path and query parameters
      */
-    public ResourceParamsBuilder method(final Caller<T> methodCall) {
-        final ResourceMethodInfo info = ResourceAnalyzer.analyzeMethodCall(resource, methodCall);
+    public ResourceParamsBuilder method(final Caller<T> caller) {
+        final ResourceMethodInfo info = ResourceAnalyzer.analyzeMethodCall(resource, caller);
         builder.path(info.getPath());
         pathParams.putAll(info.getPathParams());
         info.getQueryParams().forEach(builder::queryParam);
+        info.getMatrixParams().forEach(builder::matrixParam);
         return this;
     }
 }

@@ -18,7 +18,7 @@ Example usage:
 client.targetRest("some").request().buildGet().invoke()
 
 // GET {main context path}/servlet
-client.targetMain("servlet").request().buildGet().invoke()
+client.targetApp("servlet").request().buildGet().invoke()
 
 // GET {admin context path}/adminServlet
 client.targetAdmin("adminServlet").request().buildGet().invoke()
@@ -50,7 +50,7 @@ Also, if you want to use other client, client object can simply provide required
 client.getPort()        // app port (8080)
 client.getAdminPort()   // app admin port (8081)
 client.basePathRoot()   // root server path (http://localhost:8080/)
-client.basePathMain()   // main context path (http://localhost:8080/)
+client.basePathApp()   // main context path (http://localhost:8080/)
 client.basePathAdmin()  // admin context path (http://localhost:8081/)
 client.basePathRest()   // rest context path (http://localhost:8080/)
 ```

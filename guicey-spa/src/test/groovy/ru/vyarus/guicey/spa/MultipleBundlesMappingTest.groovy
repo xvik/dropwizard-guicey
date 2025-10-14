@@ -53,32 +53,32 @@ class MultipleBundlesMappingTest extends AbstractTest {
 
     def "Check cache header"() {
         when: "calling index"
-        def res = client.targetMain('/1').request(MediaType.TEXT_HTML).get()
+        def res = client.targetApp('/1').request(MediaType.TEXT_HTML).get()
         then: "cache disabled"
         res.getHeaderString(HttpHeaders.CACHE_CONTROL) == 'must-revalidate,no-cache,no-store'
 
         when: "calling index 1"
-        res = client.targetMain('/2').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/2').request(MediaType.TEXT_HTML).get()
         then: "cache disabled"
         res.getHeaderString(HttpHeaders.CACHE_CONTROL) == 'must-revalidate,no-cache,no-store'
 
         when: "force redirect"
-        res = client.targetMain('/1/some').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/1/some').request(MediaType.TEXT_HTML).get()
         then: "cache disabled"
         res.getHeaderString(HttpHeaders.CACHE_CONTROL) == 'must-revalidate,no-cache,no-store'
 
         when: "force redirect 2"
-        res = client.targetMain('/2/some').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/2/some').request(MediaType.TEXT_HTML).get()
         then: "cache disabled"
         res.getHeaderString(HttpHeaders.CACHE_CONTROL) == 'must-revalidate,no-cache,no-store'
 
         when: "direct index page"
-        res = client.targetMain('/1/index.html').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/1/index.html').request(MediaType.TEXT_HTML).get()
         then: "cache enabled"
         res.getHeaderString(HttpHeaders.CACHE_CONTROL) == null
 
         when: "direct index page 2"
-        res = client.targetMain('/2/index.html').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/2/index.html').request(MediaType.TEXT_HTML).get()
         then: "cache enabled"
         res.getHeaderString(HttpHeaders.CACHE_CONTROL) == null
     }

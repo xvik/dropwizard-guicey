@@ -6,6 +6,7 @@ import org.glassfish.jersey.uri.internal.JerseyUriBuilder;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,13 @@ import java.util.Map;
  * methods).
  */
 public abstract class ResourceParamsBuilder {
+    /**
+     * Path builder.
+     */
     protected final JerseyUriBuilder builder = new JerseyUriBuilder();
+    /**
+     * Path parameters map.
+     */
     protected final Map<String, Object> pathParams = new HashMap<>();
 
     /**
@@ -59,6 +66,21 @@ public abstract class ResourceParamsBuilder {
     }
 
     /**
+     * Apply matrix parameter.
+     * <p>
+     * Note: jersey api supports multiple matrix parameters with the same name (in this case multiple parameters
+     * added).
+     *
+     * @param name   parameter name
+     * @param values one or more parameter values (array for multiple values)
+     * @return builder instance for chained calls
+     */
+    public ResourceParamsBuilder matrixParam(final String name, final Object... values) {
+        builder.matrixParam(name, values);
+        return this;
+    }
+
+    /**
      * @return path with preserved path parameters placeholders
      */
     public String buildTemplate() {
@@ -70,9 +92,30 @@ public abstract class ResourceParamsBuilder {
      */
     public String build() {
         return pathParams.isEmpty() ? builder.toString()
-                : builder.resolveTemplates(pathParams).toString();
+                : builder.resolveTemplatesFromEncoded(pathParams).toString();
     }
 
+    /**
+     * Useful for resource redirects: ({@code Response.sendRedirect(builder...buildUri()).build()}).
+     *
+     * @return uri from configured path (with resolved variables)
+     */
+    public URI buildUri() {
+        final String res = build();
+        try {
+            return new URI(res);
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to build URI from: " + res, e);
+        }
+    }
+
+    /**
+     * Apply path containing query parameters. Manual parsing is required because otherwise query paramteres
+     * would be incorrectly encoded.
+     *
+     * @param path path (possibly with query parameters) with possible string format placeholders (%s)
+     * @param args optional path parameters placeholders (String.format() arguments)
+     */
     protected void applyPath(final String path, final Object... args) {
         // manually parse query params because otherwise ? would be encoded
         final int idx = path.indexOf('?');
