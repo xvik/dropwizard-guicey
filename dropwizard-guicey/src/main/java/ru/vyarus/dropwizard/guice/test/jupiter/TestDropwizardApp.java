@@ -244,6 +244,9 @@ public @interface TestDropwizardApp {
      * problem with PATCH method usage on jdk > 16.
      * <p>
      * Note: {@link #clientFactory()} value is ignored when set to true,
+     * <p>
+     * Apache client is not set by default because of its problems with multipart: see
+     * <a href="https://github.com/eclipse-ee4j/jersey/issues/5528#issuecomment-1934766714">jersey issue</a>.
      *
      * @return true to use apache connection provider in jersey client
      */

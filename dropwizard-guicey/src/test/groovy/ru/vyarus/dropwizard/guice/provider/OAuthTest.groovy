@@ -17,7 +17,7 @@ class OAuthTest extends AbstractTest {
     def "Check oath"(ClientSupport client) {
 
         when: "calling resource with auth"
-        def res = client.targetMain("prototype/").request()
+        def res = client.targetApp("prototype/").request()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer valid").get()
 
         then: "user authorized"
@@ -25,7 +25,7 @@ class OAuthTest extends AbstractTest {
 
         when: "calling resource with invalid auth"
         res.close()
-        res = client.targetMain("prototype/").request()
+        res = client.targetApp("prototype/").request()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer invalid").get()
 
         then: "user not authorized"

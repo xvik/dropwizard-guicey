@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.MatrixParam;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
@@ -24,6 +25,8 @@ import ru.vyarus.dropwizard.guice.test.jupiter.param.Jit;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * @author Vyacheslav Rusakov
  * @since 30.09.2025
@@ -33,23 +36,23 @@ public class AppUrlBuilderTest {
     interface ClientCallTest {
         @Test
         default void callClient(ClientSupport client, @Jit AppUrlBuilder builder) {
-            Assertions.assertEquals("main", client.target(builder.app("servlet"))
+            assertEquals("main", client.target(builder.app("servlet"))
                     .request().buildGet().invoke().readEntity(String.class));
 
-            Assertions.assertEquals("admin", client.target(builder.admin("servlet"))
+            assertEquals("admin", client.target(builder.admin("servlet"))
                     .request().buildGet().invoke().readEntity(String.class));
 
-            Assertions.assertEquals("ok", client.target(builder.rest("sample")).request().buildGet().invoke(String.class));
-            Assertions.assertEquals("ok", client.target(builder.rest("sub1/ok")).request().buildGet().invoke(String.class));
-            Assertions.assertEquals("ok", client.target(builder.rest("sub2/gg/ok")).request().buildGet().invoke(String.class));
+            assertEquals("ok", client.target(builder.rest("sample")).request().buildGet().invoke(String.class));
+            assertEquals("ok", client.target(builder.rest("sub1/ok")).request().buildGet().invoke(String.class));
+            assertEquals("ok", client.target(builder.rest("sub2/gg/ok")).request().buildGet().invoke(String.class));
 
-            Assertions.assertEquals("ok", client.target(builder.rest(Resource.class)
-                    .method(Resource::sample).build())
+            assertEquals("ok", client.target(builder.rest(Resource.class)
+                            .method(Resource::sample).build())
                     .request().buildGet().invoke(String.class));
-            Assertions.assertEquals("ok", client.target(builder.rest(Resource.class)
+            assertEquals("ok", client.target(builder.rest(Resource.class)
                             .method(instance -> instance.sub().sample()).build())
                     .request().buildGet().invoke(String.class));
-            Assertions.assertEquals("ok", client.target(builder.rest(Resource.class)
+            assertEquals("ok", client.target(builder.rest(Resource.class)
                             .method(instance -> instance.sub("gg").sample()).build())
                     .request().buildGet().invoke(String.class));
         }
@@ -61,42 +64,49 @@ public class AppUrlBuilderTest {
 
         @Test
         void testClient(@Jit AppUrlBuilder builder) {
-            Assertions.assertEquals("http://localhost:8080/", builder.root("/"));
-            Assertions.assertEquals("http://localhost:8080/", builder.app("/"));
-            Assertions.assertEquals("http://localhost:8081/", builder.admin("/"));
-            Assertions.assertEquals("http://localhost:8080/", builder.rest("/"));
-            Assertions.assertEquals("http://localhost:8080/sample", builder.rest(Resource.class).method(Resource::sample).build());
-            Assertions.assertEquals("http://localhost:8080/sample", builder.rest(Resource.class).method("sample").build());
-            Assertions.assertEquals("http://localhost:8080/sample/nm", builder.rest(Resource.class).method("sample", String.class).pathParam("name", "nm").build());
-            Assertions.assertEquals("http://localhost:8080/sample/{name}", builder.rest(Resource.class).method("sample", String.class).buildTemplate());
-            Assertions.assertEquals("http://localhost:8080/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).build());
-            Assertions.assertEquals("http://localhost:8080/sample/q?q=1", builder.rest(Resource.class).method("sample", Integer.class).queryParam("q", 1).build());
-            Assertions.assertEquals("http://localhost:8080/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).method("sample", Integer.class)
+            assertEquals("http://localhost:8080/", builder.root("/"));
+            assertEquals("http://localhost:8080/", builder.app("/"));
+            assertEquals("http://localhost:8081/", builder.admin("/"));
+            assertEquals("http://localhost:8080/", builder.rest("/"));
+            assertEquals("http://localhost:8080/sample", builder.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("http://localhost:8080/sample", builder.rest(uriBuilder -> uriBuilder.path("/"), Resource.class).method(Resource::sample).build());
+            assertEquals("http://localhost:8080/sample", builder.rest(Resource.class).method("sample").build());
+            assertEquals("http://localhost:8080/sample/nm", builder.rest(Resource.class).method("sample", String.class).pathParam("name", "nm").build());
+            assertEquals("http://localhost:8080/sample/{name}", builder.rest(Resource.class).method("sample", String.class).buildTemplate());
+            assertEquals("http://localhost:8080/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).build());
+            assertEquals("http://localhost:8080/sample/q?q=1", builder.rest(Resource.class).method("sample", Integer.class).queryParam("q", 1).build());
+            assertEquals("http://localhost:8080/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).method("sample", Integer.class)
                     .queryParam("q", 1).queryParam("p", 2, 3).build());
+            assertEquals("http://localhost:8080/matrix/m;m=1;p=2;p=3", builder.rest(Resource.class).method("matrix")
+                    .matrixParam("m", 1).matrixParam("p", 2, 3).build());
 
-            Assertions.assertEquals("http://localhost:8080/sample/q?q=1", builder.rest(Resource.class).path("sample/q?q=%s",1).build());
-            Assertions.assertEquals("http://localhost:8080/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).path("sample/q?q=%s&p=%s&p=%s",1, 2, 3).build());
+            assertEquals("http://localhost:8080/sample/q?q=1", builder.rest(Resource.class).path("sample/q?q=%s", 1).build());
+            assertEquals("http://localhost:8080/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).path("sample/q?q=%s&p=%s&p=%s", 1, 2, 3).build());
 
-            Assertions.assertEquals("http://localhost:8080/sub1/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:8080/sub1/ok", builder.rest(Resource.class)
                     .subResource("sub1", SubResource.class).method(SubResource::sample).build());
-            Assertions.assertEquals("http://localhost:8080/sub1/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:8080/sub1/ok", builder.rest(Resource.class)
+                    .subResource(Resource::sub, SubResource.class).method(SubResource::sample).build());
+            assertEquals("http://localhost:8080/sub1/ok", builder.rest(Resource.class)
                     .method(instance -> instance.sub().sample()).build());
-            Assertions.assertEquals("http://localhost:8080/sub2/gg/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:8080/sub2/gg/ok", builder.rest(Resource.class)
                     .method(instance -> instance.sub("gg").sample()).build());
 
+            assertEquals("http://localhost:8080/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).buildUri().toString());
+
             AppUrlBuilder hosted = builder.forHost("https://some.com");
-            Assertions.assertEquals("https://some.com:8080/", hosted.root("/"));
-            Assertions.assertEquals("https://some.com:8080/", hosted.app("/"));
-            Assertions.assertEquals("https://some.com:8081/", hosted.admin("/"));
-            Assertions.assertEquals("https://some.com:8080/", hosted.rest("/"));
-            Assertions.assertEquals("https://some.com:8080/sample", hosted.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("https://some.com:8080/", hosted.root("/"));
+            assertEquals("https://some.com:8080/", hosted.app("/"));
+            assertEquals("https://some.com:8081/", hosted.admin("/"));
+            assertEquals("https://some.com:8080/", hosted.rest("/"));
+            assertEquals("https://some.com:8080/sample", hosted.rest(Resource.class).method(Resource::sample).build());
 
             AppUrlBuilder proxied = builder.forProxy("https://some.com/app");
-            Assertions.assertEquals("https://some.com/app/", proxied.root("/"));
-            Assertions.assertEquals("https://some.com/app/", proxied.app("/"));
-            Assertions.assertEquals("https://some.com/app/", proxied.admin("/"));
-            Assertions.assertEquals("https://some.com/app/", proxied.rest("/"));
-            Assertions.assertEquals("https://some.com/app/sample", proxied.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("https://some.com/app/", proxied.root("/"));
+            assertEquals("https://some.com/app/", proxied.app("/"));
+            assertEquals("https://some.com/app/", proxied.admin("/"));
+            assertEquals("https://some.com/app/", proxied.rest("/"));
+            assertEquals("https://some.com/app/sample", proxied.rest(Resource.class).method(Resource::sample).build());
         }
     }
 
@@ -109,42 +119,49 @@ public class AppUrlBuilderTest {
             Assertions.assertNotEquals(8080, builder.getAppPort());
             Assertions.assertNotEquals(8081, builder.getAdminPort());
 
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/", builder.root("/"));
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/", builder.app("/"));
-            Assertions.assertEquals("http://localhost:" + builder.getAdminPort() + "/", builder.admin("/"));
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/", builder.rest("/"));
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/sample", builder.rest(Resource.class).method(Resource::sample).build());
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/sample", builder.rest(Resource.class).method("sample").build());
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/sample/nm", builder.rest(Resource.class).method("sample", String.class).pathParam("name", "nm").build());
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/sample/{name}", builder.rest(Resource.class).method("sample", String.class).buildTemplate());
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() +"/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).build());
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/sample/q?q=1", builder.rest(Resource.class).method("sample", Integer.class).queryParam("q", 1).build());
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).method("sample", Integer.class)
+            assertEquals("http://localhost:" + builder.getAppPort() + "/", builder.root("/"));
+            assertEquals("http://localhost:" + builder.getAppPort() + "/", builder.app("/"));
+            assertEquals("http://localhost:" + builder.getAdminPort() + "/", builder.admin("/"));
+            assertEquals("http://localhost:" + builder.getAppPort() + "/", builder.rest("/"));
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample", builder.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample", builder.rest(uriBuilder -> uriBuilder.path("/") ,Resource.class).method(Resource::sample).build());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample", builder.rest(Resource.class).method("sample").build());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample/nm", builder.rest(Resource.class).method("sample", String.class).pathParam("name", "nm").build());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample/{name}", builder.rest(Resource.class).method("sample", String.class).buildTemplate());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).build());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample/q?q=1", builder.rest(Resource.class).method("sample", Integer.class).queryParam("q", 1).build());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).method("sample", Integer.class)
                     .queryParam("q", 1).queryParam("p", 2, 3).build());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/matrix/m;m=1;p=2;p=3", builder.rest(Resource.class).method("matrix")
+                    .matrixParam("m", 1).matrixParam("p", 2, 3).build());
 
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() +"/sample/q?q=1", builder.rest(Resource.class).path("sample/q?q=%s", 1).build());
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() +"/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).path("sample/q?q=%s&p=%s&p=%s",1, 2, 3).build());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample/q?q=1", builder.rest(Resource.class).path("sample/q?q=%s", 1).build());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).path("sample/q?q=%s&p=%s&p=%s", 1, 2, 3).build());
 
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/sub1/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sub1/ok", builder.rest(Resource.class)
                     .subResource("sub1", SubResource.class).method(SubResource::sample).build());
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/sub1/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sub1/ok", builder.rest(Resource.class)
+                    .subResource(Resource::sub, SubResource.class).method(SubResource::sample).build());
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sub1/ok", builder.rest(Resource.class)
                     .method(instance -> instance.sub().sample()).build());
-            Assertions.assertEquals("http://localhost:" + builder.getAppPort() + "/sub2/gg/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sub2/gg/ok", builder.rest(Resource.class)
                     .method(instance -> instance.sub("gg").sample()).build());
 
+            assertEquals("http://localhost:" + builder.getAppPort() + "/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).buildUri().toString());
+
             AppUrlBuilder hosted = builder.forHost("https://some.com");
-            Assertions.assertEquals("https://some.com:" + builder.getAppPort() + "/", hosted.root("/"));
-            Assertions.assertEquals("https://some.com:" + builder.getAppPort() + "/", hosted.app("/"));
-            Assertions.assertEquals("https://some.com:" + builder.getAdminPort() + "/", hosted.admin("/"));
-            Assertions.assertEquals("https://some.com:" + builder.getAppPort() + "/", hosted.rest("/"));
-            Assertions.assertEquals("https://some.com:" + + builder.getAppPort() + "/sample", hosted.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("https://some.com:" + builder.getAppPort() + "/", hosted.root("/"));
+            assertEquals("https://some.com:" + builder.getAppPort() + "/", hosted.app("/"));
+            assertEquals("https://some.com:" + builder.getAdminPort() + "/", hosted.admin("/"));
+            assertEquals("https://some.com:" + builder.getAppPort() + "/", hosted.rest("/"));
+            assertEquals("https://some.com:" + +builder.getAppPort() + "/sample", hosted.rest(Resource.class).method(Resource::sample).build());
 
             AppUrlBuilder proxied = builder.forProxy("https://some.com/app");
-            Assertions.assertEquals("https://some.com/app/", proxied.root("/"));
-            Assertions.assertEquals("https://some.com/app/", proxied.app("/"));
-            Assertions.assertEquals("https://some.com/app/", proxied.admin("/"));
-            Assertions.assertEquals("https://some.com/app/", proxied.rest("/"));
-            Assertions.assertEquals("https://some.com/app/sample", proxied.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("https://some.com/app/", proxied.root("/"));
+            assertEquals("https://some.com/app/", proxied.app("/"));
+            assertEquals("https://some.com/app/", proxied.admin("/"));
+            assertEquals("https://some.com/app/", proxied.rest("/"));
+            assertEquals("https://some.com/app/sample", proxied.rest(Resource.class).method(Resource::sample).build());
         }
     }
 
@@ -158,42 +175,50 @@ public class AppUrlBuilderTest {
 
         @Test
         void testClient(@Jit AppUrlBuilder builder) {
-            Assertions.assertEquals("http://localhost:8080/", builder.root("/"));
-            Assertions.assertEquals("http://localhost:8080/app/", builder.app("/"));
-            Assertions.assertEquals("http://localhost:8081/admin/", builder.admin("/"));
-            Assertions.assertEquals("http://localhost:8080/app/api/", builder.rest("/"));
-            Assertions.assertEquals("http://localhost:8080/app/api/sample", builder.rest(Resource.class).method(Resource::sample).build());
-            Assertions.assertEquals("http://localhost:8080/app/api/sample", builder.rest(Resource.class).method("sample").build());
-            Assertions.assertEquals("http://localhost:8080/app/api/sample/nm", builder.rest(Resource.class).method("sample", String.class).pathParam("name", "nm").build());
-            Assertions.assertEquals("http://localhost:8080/app/api/sample/{name}", builder.rest(Resource.class).method("sample", String.class).buildTemplate());
-            Assertions.assertEquals("http://localhost:8080/app/api/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).build());
-            Assertions.assertEquals("http://localhost:8080/app/api/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).method("sample", Integer.class)
+            assertEquals("http://localhost:8080/", builder.root("/"));
+            assertEquals("http://localhost:8080/app/", builder.app("/"));
+            assertEquals("http://localhost:8081/admin/", builder.admin("/"));
+            assertEquals("http://localhost:8080/app/api/", builder.rest("/"));
+            assertEquals("http://localhost:8080/app/api/sample", builder.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("http://localhost:8080/app/api/sample", builder.rest(uriBuilder -> uriBuilder.path("/"), Resource.class).method(Resource::sample).build());
+            assertEquals("http://localhost:8080/app/api/sample", builder.rest(Resource.class).method("sample").build());
+            assertEquals("http://localhost:8080/app/api/sample/nm", builder.rest(Resource.class).method("sample", String.class).pathParam("name", "nm").build());
+            assertEquals("http://localhost:8080/app/api/sample/{name}", builder.rest(Resource.class).method("sample", String.class).buildTemplate());
+            assertEquals("http://localhost:8080/app/api/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).build());
+            assertEquals("http://localhost:8080/app/api/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).method("sample", Integer.class)
                     .queryParam("q", 1).queryParam("p", 2, 3).build());
+            assertEquals("http://localhost:8080/app/api/matrix/m;m=12", builder.rest(Resource.class).method(res -> res.matrix(12)).build());
+            assertEquals("http://localhost:8080/app/api/matrix/m;m=1;p=2;p=3", builder.rest(Resource.class).method("matrix")
+                    .matrixParam("m", 1).matrixParam("p", 2, 3).build());
 
 
-            Assertions.assertEquals("http://localhost:8080/app/api/sample/q?q=1", builder.rest(Resource.class).path("sample/q?q=%s", 1).build());
-            Assertions.assertEquals("http://localhost:8080/app/api/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).path("sample/q?q=%s&p=%s&p=%s",1, 2, 3).build());
+            assertEquals("http://localhost:8080/app/api/sample/q?q=1", builder.rest(Resource.class).path("sample/q?q=%s", 1).build());
+            assertEquals("http://localhost:8080/app/api/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).path("sample/q?q=%s&p=%s&p=%s", 1, 2, 3).build());
 
-            Assertions.assertEquals("http://localhost:8080/app/api/sub1/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:8080/app/api/sub1/ok", builder.rest(Resource.class)
                     .subResource("sub1", SubResource.class).method(SubResource::sample).build());
-            Assertions.assertEquals("http://localhost:8080/app/api/sub1/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:8080/app/api/sub1/ok", builder.rest(Resource.class)
+                    .subResource(Resource::sub, SubResource.class).method(SubResource::sample).build());
+            assertEquals("http://localhost:8080/app/api/sub1/ok", builder.rest(Resource.class)
                     .method(instance -> instance.sub().sample()).build());
-            Assertions.assertEquals("http://localhost:8080/app/api/sub2/gg/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:8080/app/api/sub2/gg/ok", builder.rest(Resource.class)
                     .method(instance -> instance.sub("gg").sample()).build());
 
+            assertEquals("http://localhost:8080/app/api/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).buildUri().toString());
+
             AppUrlBuilder hosted = builder.forHost("https://some.com");
-            Assertions.assertEquals("https://some.com:8080/", hosted.root("/"));
-            Assertions.assertEquals("https://some.com:8080/app/", hosted.app("/"));
-            Assertions.assertEquals("https://some.com:8081/admin/", hosted.admin("/"));
-            Assertions.assertEquals("https://some.com:8080/app/api/", hosted.rest("/"));
-            Assertions.assertEquals("https://some.com:8080/app/api/sample", hosted.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("https://some.com:8080/", hosted.root("/"));
+            assertEquals("https://some.com:8080/app/", hosted.app("/"));
+            assertEquals("https://some.com:8081/admin/", hosted.admin("/"));
+            assertEquals("https://some.com:8080/app/api/", hosted.rest("/"));
+            assertEquals("https://some.com:8080/app/api/sample", hosted.rest(Resource.class).method(Resource::sample).build());
 
             AppUrlBuilder proxied = builder.forProxy("https://some.com/v1");
-            Assertions.assertEquals("https://some.com/v1/", proxied.root("/"));
-            Assertions.assertEquals("https://some.com/v1/app/", proxied.app("/"));
-            Assertions.assertEquals("https://some.com/v1/admin/", proxied.admin("/"));
-            Assertions.assertEquals("https://some.com/v1/app/api/", proxied.rest("/"));
-            Assertions.assertEquals("https://some.com/v1/app/api/sample", proxied.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("https://some.com/v1/", proxied.root("/"));
+            assertEquals("https://some.com/v1/app/", proxied.app("/"));
+            assertEquals("https://some.com/v1/admin/", proxied.admin("/"));
+            assertEquals("https://some.com/v1/app/api/", proxied.rest("/"));
+            assertEquals("https://some.com/v1/app/api/sample", proxied.rest(Resource.class).method(Resource::sample).build());
         }
     }
 
@@ -203,42 +228,49 @@ public class AppUrlBuilderTest {
 
         @Test
         void testClient(@Jit AppUrlBuilder builder) {
-            Assertions.assertEquals("http://localhost:8080/", builder.root("/"));
-            Assertions.assertEquals("http://localhost:8080/", builder.app("/"));
-            Assertions.assertEquals("http://localhost:8080/admin/", builder.admin("/"));
-            Assertions.assertEquals("http://localhost:8080/rest/", builder.rest("/"));
-            Assertions.assertEquals("http://localhost:8080/rest/sample", builder.rest(Resource.class).method(Resource::sample).build());
-            Assertions.assertEquals("http://localhost:8080/rest/sample", builder.rest(Resource.class).method("sample").build());
-            Assertions.assertEquals("http://localhost:8080/rest/sample/nm", builder.rest(Resource.class).method("sample", String.class).pathParam("name", "nm").build());
-            Assertions.assertEquals("http://localhost:8080/rest/sample/{name}", builder.rest(Resource.class).method("sample", String.class).buildTemplate());
-            Assertions.assertEquals("http://localhost:8080/rest/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).build());
-            Assertions.assertEquals("http://localhost:8080/rest/sample/q?q=1", builder.rest(Resource.class).method("sample", Integer.class).queryParam("q", 1).build());
-            Assertions.assertEquals("http://localhost:8080/rest/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).method("sample", Integer.class)
+            assertEquals("http://localhost:8080/", builder.root("/"));
+            assertEquals("http://localhost:8080/", builder.app("/"));
+            assertEquals("http://localhost:8080/admin/", builder.admin("/"));
+            assertEquals("http://localhost:8080/rest/", builder.rest("/"));
+            assertEquals("http://localhost:8080/rest/sample", builder.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("http://localhost:8080/rest/sample", builder.rest(uriBuilder -> uriBuilder.path("/"), Resource.class).method(Resource::sample).build());
+            assertEquals("http://localhost:8080/rest/sample", builder.rest(Resource.class).method("sample").build());
+            assertEquals("http://localhost:8080/rest/sample/nm", builder.rest(Resource.class).method("sample", String.class).pathParam("name", "nm").build());
+            assertEquals("http://localhost:8080/rest/sample/{name}", builder.rest(Resource.class).method("sample", String.class).buildTemplate());
+            assertEquals("http://localhost:8080/rest/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).build());
+            assertEquals("http://localhost:8080/rest/sample/q?q=1", builder.rest(Resource.class).method("sample", Integer.class).queryParam("q", 1).build());
+            assertEquals("http://localhost:8080/rest/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).method("sample", Integer.class)
                     .queryParam("q", 1).queryParam("p", 2, 3).build());
+            assertEquals("http://localhost:8080/rest/matrix/m;m=1;p=2;p=3", builder.rest(Resource.class).method("matrix")
+                    .matrixParam("m", 1).matrixParam("p", 2, 3).build());
 
-            Assertions.assertEquals("http://localhost:8080/rest/sample/q?q=1", builder.rest(Resource.class).path("sample/q?q=%s", 1).build());
-            Assertions.assertEquals("http://localhost:8080/rest/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).path("sample/q?q=%s&p=%s&p=%s",1, 2, 3).build());
+            assertEquals("http://localhost:8080/rest/sample/q?q=1", builder.rest(Resource.class).path("sample/q?q=%s", 1).build());
+            assertEquals("http://localhost:8080/rest/sample/q?q=1&p=2&p=3", builder.rest(Resource.class).path("sample/q?q=%s&p=%s&p=%s", 1, 2, 3).build());
 
-            Assertions.assertEquals("http://localhost:8080/rest/sub1/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:8080/rest/sample/q?q=12", builder.rest(Resource.class).method(res -> res.sample(12)).buildUri().toString());
+
+            assertEquals("http://localhost:8080/rest/sub1/ok", builder.rest(Resource.class)
                     .subResource("sub1", SubResource.class).method(SubResource::sample).build());
-            Assertions.assertEquals("http://localhost:8080/rest/sub1/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:8080/rest/sub1/ok", builder.rest(Resource.class)
+                    .subResource(Resource::sub, SubResource.class).method(SubResource::sample).build());
+            assertEquals("http://localhost:8080/rest/sub1/ok", builder.rest(Resource.class)
                     .method(instance -> instance.sub().sample()).build());
-            Assertions.assertEquals("http://localhost:8080/rest/sub2/gg/ok", builder.rest(Resource.class)
+            assertEquals("http://localhost:8080/rest/sub2/gg/ok", builder.rest(Resource.class)
                     .method(instance -> instance.sub("gg").sample()).build());
 
             AppUrlBuilder hosted = builder.forHost("https://some.com");
-            Assertions.assertEquals("https://some.com:8080/", hosted.root("/"));
-            Assertions.assertEquals("https://some.com:8080/", hosted.app("/"));
-            Assertions.assertEquals("https://some.com:8080/admin/", hosted.admin("/"));
-            Assertions.assertEquals("https://some.com:8080/rest/", hosted.rest("/"));
-            Assertions.assertEquals("https://some.com:8080/rest/sample", hosted.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("https://some.com:8080/", hosted.root("/"));
+            assertEquals("https://some.com:8080/", hosted.app("/"));
+            assertEquals("https://some.com:8080/admin/", hosted.admin("/"));
+            assertEquals("https://some.com:8080/rest/", hosted.rest("/"));
+            assertEquals("https://some.com:8080/rest/sample", hosted.rest(Resource.class).method(Resource::sample).build());
 
             AppUrlBuilder proxied = builder.forProxy("https://some.com/v1");
-            Assertions.assertEquals("https://some.com/v1/", proxied.root("/"));
-            Assertions.assertEquals("https://some.com/v1/", proxied.app("/"));
-            Assertions.assertEquals("https://some.com/v1/admin/", proxied.admin("/"));
-            Assertions.assertEquals("https://some.com/v1/rest/", proxied.rest("/"));
-            Assertions.assertEquals("https://some.com/v1/rest/sample", proxied.rest(Resource.class).method(Resource::sample).build());
+            assertEquals("https://some.com/v1/", proxied.root("/"));
+            assertEquals("https://some.com/v1/", proxied.app("/"));
+            assertEquals("https://some.com/v1/admin/", proxied.admin("/"));
+            assertEquals("https://some.com/v1/rest/", proxied.rest("/"));
+            assertEquals("https://some.com/v1/rest/sample", proxied.rest(Resource.class).method(Resource::sample).build());
         }
     }
 
@@ -278,6 +310,12 @@ public class AppUrlBuilderTest {
         @GET
         @Path("/sample/q")
         public String sample(@QueryParam("q") Integer q) {
+            return "ok";
+        }
+
+        @GET
+        @Path("/matrix/m")
+        public String matrix(@MatrixParam("m") Integer q) {
             return "ok";
         }
 

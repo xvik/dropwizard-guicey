@@ -4,19 +4,19 @@ import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import ru.vyarus.dropwizard.guice.GuiceBundle;
-import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
-import ru.vyarus.dropwizard.guice.test.ClientSupport;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import ru.vyarus.dropwizard.guice.GuiceBundle;
+import ru.vyarus.dropwizard.guice.test.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -29,14 +29,17 @@ public class ClientSupportDwTest {
     interface ClientCallTest {
         @Test
         default void callClient(ClientSupport client) {
+            Assertions.assertEquals("main", client.targetApp("servlet")
+                    .request().buildGet().invoke().readEntity(String.class));
             Assertions.assertEquals("main", client.targetMain("servlet")
                     .request().buildGet().invoke().readEntity(String.class));
+            Assertions.assertEquals("main", client.appClient().get("servlet", String.class));
 
             Assertions.assertEquals("admin", client.targetAdmin("servlet")
                     .request().buildGet().invoke().readEntity(String.class));
+            Assertions.assertEquals("admin", client.adminClient().get("servlet", String.class));
 
-            Assertions.assertEquals("ok", client.targetRest("sample")
-                    .request().buildGet().invoke().readEntity(String.class));
+            Assertions.assertEquals("ok", client.restClient().get("sample", String.class));
         }
     }
 
@@ -47,12 +50,16 @@ public class ClientSupportDwTest {
         @Test
         void testClient(ClientSupport client) {
             Assertions.assertEquals("http://localhost:8080/", client.basePathRoot());
-            Assertions.assertEquals("http://localhost:8080/", client.basePathMain());
+            Assertions.assertEquals("http://localhost:8080/", client.basePathApp());
             Assertions.assertEquals("http://localhost:8081/", client.basePathAdmin());
             Assertions.assertEquals("http://localhost:8080/", client.basePathRest());
 
-            Assertions.assertEquals("main", client.target("http://localhost:8080", "servlet")
+            Assertions.assertEquals("main", client.target("http://localhost:8080/servlet")
                     .request().buildGet().invoke().readEntity(String.class));
+            Assertions.assertEquals("main", client.customClient("http://localhost:8080/")
+                            .get("servlet", String.class));
+            Assertions.assertEquals("main", client.customRestClient("http://localhost:8080/")
+                    .get("servlet", String.class));
 
             Assertions.assertEquals("main", client.getClient().target("http://localhost:8080/servlet")
                     .request().buildGet().invoke().readEntity(String.class));
@@ -69,7 +76,7 @@ public class ClientSupportDwTest {
             Assertions.assertNotEquals(8081, client.getAdminPort());
 
             Assertions.assertEquals("http://localhost:" + client.getPort() + "/", client.basePathRoot());
-            Assertions.assertEquals("http://localhost:" + client.getPort() + "/", client.basePathMain());
+            Assertions.assertEquals("http://localhost:" + client.getPort() + "/", client.basePathApp());
             Assertions.assertEquals("http://localhost:" + client.getAdminPort() + "/", client.basePathAdmin());
             Assertions.assertEquals("http://localhost:" + client.getPort() + "/", client.basePathRest());
         }
@@ -86,6 +93,7 @@ public class ClientSupportDwTest {
         @Test
         void testClient(ClientSupport client) {
             Assertions.assertEquals("http://localhost:8080/", client.basePathRoot());
+            Assertions.assertEquals("http://localhost:8080/app/", client.basePathApp());
             Assertions.assertEquals("http://localhost:8080/app/", client.basePathMain());
             Assertions.assertEquals("http://localhost:8081/admin/", client.basePathAdmin());
             Assertions.assertEquals("http://localhost:8080/app/api/", client.basePathRest());
@@ -99,7 +107,7 @@ public class ClientSupportDwTest {
         @Test
         void testClient(ClientSupport client) {
             Assertions.assertEquals("http://localhost:8080/", client.basePathRoot());
-            Assertions.assertEquals("http://localhost:8080/", client.basePathMain());
+            Assertions.assertEquals("http://localhost:8080/", client.basePathApp());
             Assertions.assertEquals("http://localhost:8080/admin/", client.basePathAdmin());
             Assertions.assertEquals("http://localhost:8080/rest/", client.basePathRest());
         }

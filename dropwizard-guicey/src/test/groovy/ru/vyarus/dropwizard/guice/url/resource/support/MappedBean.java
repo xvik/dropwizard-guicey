@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.url.resource.support;
 
 import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.MatrixParam;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
 
@@ -18,6 +19,8 @@ public class MappedBean {
     private String hh;
     @CookieParam("cc")
     private String cc;
+    @MatrixParam("mm")
+    private String mm;
 
     public String getSm() {
         return sm;
@@ -49,5 +52,13 @@ public class MappedBean {
 
     public void setCc(String cc) {
         this.cc = cc;
+    }
+
+    public String getMm() {
+        return mm;
+    }
+
+    public void setMm(String mm) {
+        this.mm = mm;
     }
 }

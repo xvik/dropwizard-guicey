@@ -126,7 +126,7 @@ class WebModuleTest {
     public void checkWebBindings(ClientSupport client) {
 
         Assertions.assertEquals("Sample filter and service called", 
-            client.targetMain("servlet").request().buildGet().invoke().readEntity(String.class));
+            client.targetApp("servlet").request().buildGet().invoke().readEntity(String.class));
         
         Assertions.assertTrur(service.isCalled());
 ```

@@ -2,9 +2,11 @@ package ru.vyarus.dropwizard.guice.url;
 
 import io.dropwizard.core.setup.Environment;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.UriBuilder;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.url.util.AppPathUtils;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -65,6 +67,13 @@ public class AppUrlBuilder {
         this(environment, "http://localhost", false);
     }
 
+    /**
+     * Create an app url builder.
+     *
+     * @param environment environment object
+     * @param host        required host
+     * @param proxied     true if server is proxied (port already declared in host)
+     */
     protected AppUrlBuilder(final Supplier<Environment> environment, final String host, final boolean proxied) {
         this.environment = environment;
         this.host = host;
@@ -160,6 +169,21 @@ public class AppUrlBuilder {
      */
     public <K> RestPathBuilder<K> rest(final Class<K> resource) {
         return new RestPathBuilder<>(baseRest(), resource, false);
+    }
+
+    /**
+     * Manual rest path building. Useful for complex cases with matrix params in the middle.
+     *
+     * @param path     path builder
+     * @param resource target resource class
+     * @param <K>      resource type
+     * @return resource path builder
+     */
+    public <K> RestPathBuilder<K> rest(final Consumer<UriBuilder> path, final Class<K> resource) {
+        final UriBuilder builder = UriBuilder.newInstance();
+        path.accept(builder);
+        // resource Path annotation is ignored
+        return new RestPathBuilder<>(rest(builder.toString()), resource, true);
     }
 
     /**

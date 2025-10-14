@@ -33,10 +33,10 @@ public class ClientSupportShortcutsTest {
             ResModel res = client.get("sample/get", ResModel.class);
             Assertions.assertThat(res.getFoo()).isEqualTo("get");
 
-            client.get("sample/get2", null);
+            client.get("sample/get2");
 
-            Assertions.assertThatThrownBy(() -> client.get("sample/getErr", null))
-                    .hasMessageContaining("Invalid response: 500");
+            Assertions.assertThatThrownBy(() -> client.get("sample/getErr"))
+                    .hasMessageContaining("HTTP 500 Server Error");
             Assertions.assertThatThrownBy(() -> client.get("sample/getErr2", ResModel.class))
                     .hasMessageContaining("HTTP 500 Server Error");
 
@@ -48,10 +48,10 @@ public class ClientSupportShortcutsTest {
             res = client.post("sample/post2", new InModel("tes"), ResModel.class);
             Assertions.assertThat(res.getFoo()).isEqualTo("tes");
 
-            client.post("sample/post3", null, null);
+            client.post("sample/post3", null);
 
-            Assertions.assertThatThrownBy(() -> client.post("sample/postErr", null, null))
-                    .hasMessageContaining("Invalid response: 500");
+            Assertions.assertThatThrownBy(() -> client.post("sample/postErr", null))
+                    .hasMessageContaining("HTTP 500 Server Error");
             Assertions.assertThatThrownBy(() -> client.post("sample/postErr2", null, ResModel.class))
                     .hasMessageContaining("HTTP 500 Server Error");
 
@@ -64,10 +64,10 @@ public class ClientSupportShortcutsTest {
             res = client.put("sample/put2", new InModel("tes"), ResModel.class);
             Assertions.assertThat(res.getFoo()).isEqualTo("tes");
 
-            client.put("sample/put3", new InModel("tt"), null);
+            client.put("sample/put3", new InModel("tt"));
 
-            Assertions.assertThatThrownBy(() -> client.put("sample/putErr", new InModel("tt"), null))
-                    .hasMessageContaining("Invalid response: 500");
+            Assertions.assertThatThrownBy(() -> client.put("sample/putErr", new InModel("tt")))
+                    .hasMessageContaining("HTTP 500 Server Error");
             Assertions.assertThatThrownBy(() -> client.put("sample/putErr2", new InModel("tt"), ResModel.class))
                     .hasMessageContaining("HTTP 500 Server Error");
 
@@ -77,10 +77,10 @@ public class ClientSupportShortcutsTest {
             res = client.delete("sample/del", ResModel.class);
             Assertions.assertThat(res.getFoo()).isEqualTo("delete");
 
-            client.delete("sample/del2", null);
+            client.delete("sample/del2");
 
-            Assertions.assertThatThrownBy(() -> client.delete("sample/delErr", null))
-                    .hasMessageContaining("Invalid response: 500");
+            Assertions.assertThatThrownBy(() -> client.delete("sample/delErr"))
+                    .hasMessageContaining("HTTP 500 Server Error");
             Assertions.assertThatThrownBy(() -> client.delete("sample/delErr2", ResModel.class))
                     .hasMessageContaining("HTTP 500 Server Error");
 
@@ -109,7 +109,7 @@ public class ClientSupportShortcutsTest {
             out = TestSupport.captureOutput(() -> {
                 TestSupport.runWebApp(App.class, injector -> {
                     ClientSupport client = TestSupport.getContextClient();
-                    client.get("sample/get", null);
+                    client.get("sample/get", Void.class);
 
                     return null;
                 });
@@ -126,7 +126,7 @@ public class ClientSupportShortcutsTest {
         out = TestSupport.captureOutput(() -> {
             TestSupport.runWebApp(App.class, injector -> {
                 ClientSupport client = TestSupport.getContextClient();
-                client.get("sample/get", null);
+                client.get("sample/get", Void.class);
 
                 return null;
             });

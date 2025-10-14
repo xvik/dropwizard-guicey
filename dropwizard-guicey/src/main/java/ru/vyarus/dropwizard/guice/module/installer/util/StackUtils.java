@@ -35,11 +35,14 @@ public final class StackUtils {
      * @param skip classes to skip in stack
      * @return caller stack frame
      */
+    @SuppressWarnings("checkstyle:BooleanExpressionComplexity")
     public static Optional<StackWalker.StackFrame> getCaller(final List<Class<?>> skip) {
         return WALKER.walk(stream ->
                 stream.dropWhile(frame -> {
                     final Class<?> type = frame.getDeclaringClass();
                     return type.equals(StackUtils.class)
+                            || type.getPackageName().startsWith("java.")
+                            || type.getPackageName().startsWith("jakarta.")
                             || type.getPackage().getName().startsWith("org.codehaus.groovy.vmplugin")
                             || skip.contains(type)
                             || skip.contains(type.getEnclosingClass());

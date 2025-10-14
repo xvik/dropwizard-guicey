@@ -26,12 +26,12 @@ class NonErrorInterceptionTest extends Specification {
     def "Check non error forwarding"(ClientSupport client) {
 
         when: "calling for non 200 response"
-        def res = client.targetMain('/res').request(MediaType.TEXT_HTML).get()
+        def res = client.targetApp('/res').request(MediaType.TEXT_HTML).get()
         then: "redirect"
         res.status == 304
 
         when: "direct rest non 200 return"
-        res = client.targetMain('/res/2').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/res/2').request(MediaType.TEXT_HTML).get()
         then: "redirect"
         res.status == 304
     }

@@ -18,6 +18,13 @@ public class MethodCall {
     private final Object[] args;
     private MethodCall subCall;
 
+    /**
+     * Create a method call info.
+     *
+     * @param resource resource type
+     * @param method   called method
+     * @param args     call arguments
+     */
     public MethodCall(final Class<?> resource, final Method method, final Object... args) {
         this.resource = resource;
         this.method = method;
@@ -54,6 +61,11 @@ public class MethodCall {
         return subCall;
     }
 
+    /**
+     * Set sub method call (call chain case).
+     *
+     * @param subCall sub method call
+     */
     public void setSubCall(final MethodCall subCall) {
         this.subCall = subCall;
     }

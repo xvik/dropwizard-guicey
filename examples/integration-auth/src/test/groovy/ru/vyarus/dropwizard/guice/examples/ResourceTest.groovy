@@ -17,26 +17,26 @@ class ResourceTest extends Specification {
     def "Check auth"(ClientSupport client) {
 
         when: "calling resource without auth"
-        def res = client.targetMain('/adm').request().get()
+        def res = client.targetApp('/adm').request().get()
         then: "user not authorized"
         res.status == 401
 
 
         when: "calling resource without auth"
-        res = client.targetMain('/auth').request().get()
+        res = client.targetApp('/auth').request().get()
         then: "user authorized"
         res.status == 401
 
 
         when: "calling resource with incorrect auth"
-        res = client.targetMain('/adm').request()
+        res = client.targetApp('/adm').request()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer invalid").get()
         then: "user not authorized"
         res.status == 401
 
 
         when: "calling resource with proper auth and role"
-        res = client.targetMain('/adm').request()
+        res = client.targetApp('/adm').request()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer valid").get()
         then: "user authorized"
         res.status == 200
@@ -44,7 +44,7 @@ class ResourceTest extends Specification {
 
 
         when: "calling resource required auth"
-        res = client.targetMain('/auth').request()
+        res = client.targetApp('/auth').request()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer valid").get()
         then: "user authorized"
         res.status == 200
@@ -52,7 +52,7 @@ class ResourceTest extends Specification {
 
 
         when: "calling resource using user without proper role"
-        res = client.targetMain('/deny').request()
+        res = client.targetApp('/deny').request()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer valid").get()
         then: "user not authorized"
         res.status == 403
