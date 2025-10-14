@@ -41,22 +41,22 @@ class SpaRoutingTest extends AbstractTest {
     def "Check no cache header"(ClientSupport client) {
 
         when: "calling index"
-        def res = client.targetMain('/').request(MediaType.TEXT_HTML).get()
+        def res = client.targetApp('/').request(MediaType.TEXT_HTML).get()
         then: "cache disabled"
         res.getHeaderString(HttpHeaders.CACHE_CONTROL) == 'must-revalidate,no-cache,no-store'
 
         when: "force redirect"
-        res = client.targetMain('/some').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/some').request(MediaType.TEXT_HTML).get()
         then: "cache disabled"
         res.getHeaderString(HttpHeaders.CACHE_CONTROL) == 'must-revalidate,no-cache,no-store'
 
         when: "direct index page"
-        res = client.targetMain('/index.html').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/index.html').request(MediaType.TEXT_HTML).get()
         then: "cache enabled"
         res.getHeaderString(HttpHeaders.CACHE_CONTROL) == null
 
         when: "resource"
-        res = client.targetMain('/css/style.css').request().get()
+        res = client.targetApp('/css/style.css').request().get()
         then: "cache enabled"
         res.getHeaderString(HttpHeaders.CACHE_CONTROL) == null
     }
@@ -64,23 +64,23 @@ class SpaRoutingTest extends AbstractTest {
     def "Chck different mime type"() {
 
         when: "calling with html type"
-        def res = client.targetMain('/some').request(MediaType.TEXT_HTML).get()
+        def res = client.targetApp('/some').request(MediaType.TEXT_HTML).get()
         then: "redirect"
         res.status == 200
 
         when: "calling with text type"
-        res = client.targetMain('/some').request(MediaType.TEXT_PLAIN).get()
+        res = client.targetApp('/some').request(MediaType.TEXT_PLAIN).get()
         then: "no redirect"
         res.status == 404
 
         when: "calling with unknown content type"
-        res = client.targetMain('/some').request("abrakadabra").get()
+        res = client.targetApp('/some').request("abrakadabra").get()
         then: "no redirect"
         res.status == 404
 
-        when: "calling with empty type"
-        res = client.targetMain('/some').request(" ").get()
-        then: "no redirect"
+        when: "calling with empty type not allowed"
+        res = client.targetApp('/some').request(" ").get()
+        then: "empty response type "
         res.status == 404
 
     }
@@ -88,7 +88,7 @@ class SpaRoutingTest extends AbstractTest {
     def "Check non 404 error"() {
 
         when: "calling for cached content"
-        def res = client.targetMain('/index.html').request(MediaType.TEXT_HTML)
+        def res = client.targetApp('/index.html').request(MediaType.TEXT_HTML)
                 .header('If-Modified-Since', 'Wed, 21 Oct 2215 07:28:00 GMT').get()
         then: "cached"
         res.status == 304

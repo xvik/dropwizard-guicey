@@ -27,6 +27,6 @@ public class ClientSupportGuiceyTest {
                 .request().buildGet().invoke().getStatus());
 
         // web methods obviously doesnt work
-        Assertions.assertThrows(NullPointerException.class, client::basePathMain);
+        Assertions.assertThrows(NullPointerException.class, client::basePathApp);
     }
 }

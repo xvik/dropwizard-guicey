@@ -14,12 +14,12 @@ class RouteTest extends Specification {
     def "Check route url leads to html page"(ClientSupport client) {
 
         when: "loading index page"
-        def index = client.targetMain('app/').request().get(String)
+        def index = client.targetApp('app/').request().get(String)
         then: "index loaded"
         index.contains("<html lang=\"en\">")
 
         when: "loading route"
-        def route = client.targetMain('app/foo').request().accept('text/html').get(String)
+        def route = client.targetApp('app/foo').request().accept('text/html').get(String)
         then: "index loaded"
         route == index
     }
@@ -27,12 +27,12 @@ class RouteTest extends Specification {
     def "Check app2 routing"(ClientSupport client) {
 
         when: "loading index page"
-        def index = client.targetMain('app2/').request().get(String)
+        def index = client.targetApp('app2/').request().get(String)
         then: "index loaded"
         index.contains("<html lang=\"en\">")
 
         when: "loading route"
-        def route = client.targetMain('app2/foo').request().accept('text/html').get(String)
+        def route = client.targetApp('app2/foo').request().accept('text/html').get(String)
         then: "index loaded"
         route == index
     }
@@ -40,12 +40,12 @@ class RouteTest extends Specification {
     def "Check app3 routing"(ClientSupport client) {
 
         when: "loading index page"
-        def index = client.targetMain('app3/').request().get(String)
+        def index = client.targetApp('app3/').request().get(String)
         then: "index loaded"
         index.contains("<html lang=\"en\">")
 
         when: "loading route"
-        def route = client.targetMain('app3/foo').request().accept('text/html').get(String)
+        def route = client.targetApp('app3/foo').request().accept('text/html').get(String)
         then: "index loaded"
         route == index
     }

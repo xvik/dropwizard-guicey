@@ -24,67 +24,67 @@ class MimeTypeRecognitionTest extends Specification {
     def "Check error mapping"(ClientSupport client) {
 
         when: "accessing not existing asset"
-        def res = client.targetMain('/notexisting.html').request(MediaType.TEXT_HTML).get()
+        def res = client.targetApp('/notexisting.html').request(MediaType.TEXT_HTML).get()
         then: "error page"
         res.readEntity(String) == "custom error page"
 
         when: "accessing not existing asset with text result"
-        res = client.targetMain('/notexisting.html').request(MediaType.TEXT_PLAIN).get()
+        res = client.targetApp('/notexisting.html').request(MediaType.TEXT_PLAIN).get()
         then: "no error page"
         res.status == 404
 
 
         when: "accessing not existing template"
-        res = client.targetMain('/notexisting.ftl').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/notexisting.ftl').request(MediaType.TEXT_HTML).get()
         then: "error page"
         res.readEntity(String) == "custom error page"
 
         when: "accessing not existing template with text result"
-        res = client.targetMain('/notexisting.ftl').request(MediaType.TEXT_PLAIN).get()
+        res = client.targetApp('/notexisting.ftl').request(MediaType.TEXT_PLAIN).get()
         then: "no error page"
         res.status == 404
 
 
         when: "accessing not existing path"
-        res = client.targetMain('/notexisting/').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/notexisting/').request(MediaType.TEXT_HTML).get()
         then: "error page"
         res.readEntity(String) == "custom error page"
 
         when: "accessing not existing path with text result"
-        res = client.targetMain('/notexisting/').request(MediaType.TEXT_PLAIN).get()
+        res = client.targetApp('/notexisting/').request(MediaType.TEXT_PLAIN).get()
         then: "no error page"
         res.status == 404
 
 
         when: "error processing template"
-        res = client.targetMain('/sample/error').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/sample/error').request(MediaType.TEXT_HTML).get()
         then: "error page"
         res.readEntity(String) == "custom error page"
 
         when: "error processing template with text result"
-        res = client.targetMain('/sample/error').request(MediaType.TEXT_PLAIN).get()
+        res = client.targetApp('/sample/error').request(MediaType.TEXT_PLAIN).get()
         then: "no error page"
         res.status == 500
 
 
         when: "error processing template"
-        res = client.targetMain('/sample/error2').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/sample/error2').request(MediaType.TEXT_HTML).get()
         then: "error page"
         res.readEntity(String) == "custom error page"
 
         when: "error processing template with text result"
-        res = client.targetMain('/sample/error2').request(MediaType.TEXT_PLAIN).get()
+        res = client.targetApp('/sample/error2').request(MediaType.TEXT_PLAIN).get()
         then: "no error page"
         res.status == 500
 
 
         when: "direct 404 rest response"
-        res = client.targetMain('/sample/notfound').request(MediaType.TEXT_HTML).get()
+        res = client.targetApp('/sample/notfound').request(MediaType.TEXT_HTML).get()
         then: "error page"
         res.readEntity(String) == "custom error page"
 
         when: "direct 404 rest response with text result"
-        res = client.targetMain('/sample/notfound').request(MediaType.TEXT_PLAIN).get()
+        res = client.targetApp('/sample/notfound').request(MediaType.TEXT_PLAIN).get()
         then: "error page"
         res.status == 404
     }

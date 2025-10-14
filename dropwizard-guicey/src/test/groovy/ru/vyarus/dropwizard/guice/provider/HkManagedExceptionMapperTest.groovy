@@ -15,7 +15,7 @@ class HkManagedExceptionMapperTest extends AbstractTest {
     def "Check exception mapper registration through hk2"(ClientSupport client) {
 
         when: "calling resource which trigger io exception"
-        def res = client.targetMain("/ex/").request().get()
+        def res = client.targetApp("/ex/").request().get()
         then:
         res.status == 400
         res.readEntity(String) == 'ERROR: IO exception!'

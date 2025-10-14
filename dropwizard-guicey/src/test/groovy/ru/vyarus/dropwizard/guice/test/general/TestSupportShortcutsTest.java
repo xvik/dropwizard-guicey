@@ -36,6 +36,7 @@ public class TestSupportShortcutsTest {
         Assertions.assertNotNull(res.getSupport());
         Assertions.assertNotNull(res.getConfiguration());
         Assertions.assertNotNull(res.getApplication());
+        Assertions.assertNotNull(res.getEnvironment());
         Assertions.assertNotNull(res.getInjector());
         Assertions.assertNotNull(res.getBean(DummyService.class));
         Assertions.assertFalse(res.isWebRun());
@@ -72,6 +73,7 @@ public class TestSupportShortcutsTest {
         Assertions.assertNotNull(res.getSupport());
         Assertions.assertNotNull(res.getConfiguration());
         Assertions.assertNotNull(res.getApplication());
+        Assertions.assertNotNull(res.getEnvironment());
         Assertions.assertNotNull(res.getInjector());
         Assertions.assertNotNull(res.getBean(DummyService.class));
         Assertions.assertTrue(res.isWebRun());

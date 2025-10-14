@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.test.rest.support;
 
-import com.google.common.base.Preconditions;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.core.setup.Environment;
 import org.glassfish.jersey.client.ClientConfig;
@@ -15,6 +14,7 @@ import org.glassfish.jersey.test.TestProperties;
 import org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
+import ru.vyarus.dropwizard.guice.test.client.util.MultipartCheck;
 import ru.vyarus.dropwizard.guice.test.rest.TestContainerPolicy;
 
 import java.net.URI;
@@ -47,7 +47,6 @@ public class GuiceyJerseyTest extends JerseyTest {
     private static Environment environment;
     private static TestContainerPolicy policy;
     private final boolean logRequests;
-    private URI rootUri;
 
     /**
      * Create jersey test.
@@ -79,13 +78,6 @@ public class GuiceyJerseyTest extends JerseyTest {
             GuiceyJerseyTest.policy = policy;
             return new GuiceyJerseyTest(logRequests);
         }
-    }
-
-    /**
-     * @return rest root url
-     */
-    public URI getRootUri() {
-        return Preconditions.checkNotNull(rootUri);
     }
 
     @Override
@@ -122,9 +114,7 @@ public class GuiceyJerseyTest extends JerseyTest {
     protected URI getBaseUri() {
         // can't be in constructor - too late
         forceSet(TestProperties.CONTAINER_PORT, "0");
-        final URI res = super.getBaseUri();
-        rootUri = res;
-        return res;
+        return super.getBaseUri();
     }
 
     @Override
@@ -152,12 +142,7 @@ public class GuiceyJerseyTest extends JerseyTest {
         // https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/client.html#d0e5292
         clientConfig.property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true);
 
-        try {
-            // when dropwizard-forms used automatically register multipart feature
-            final Class<?> cls = Class.forName("org.glassfish.jersey.media.multipart.MultiPartFeature");
-            clientConfig.register(cls);
-        } catch (Exception ignored) {
-            // do nothing - no multipart feature available
-        }
+        // when dropwizard-forms used, automatically register multipart feature
+        MultipartCheck.getMultipartFeatureClass().ifPresent(clientConfig::register);
     }
 }

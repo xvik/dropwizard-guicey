@@ -9,6 +9,7 @@ import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 import org.glassfish.jersey.logging.LoggingFeature;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
+import ru.vyarus.dropwizard.guice.test.client.util.MultipartCheck;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,7 +64,8 @@ public class DefaultTestClientFactory implements TestClientFactory {
                 .property(ClientProperties.CONNECT_TIMEOUT, 1000)
                 .property(ClientProperties.READ_TIMEOUT, 5000)
                 .property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true);
-        applyMultiPartSupport(builder);
+        // apply multipart support, if multipart jar is present in the classpath.
+        MultipartCheck.getMultipartFeatureClass().ifPresent(builder::register);
         configure(builder, support);
         return builder.build();
     }
@@ -78,28 +80,13 @@ public class DefaultTestClientFactory implements TestClientFactory {
                 .withLogger(System.getProperty(USE_LOGGER) != null
                         // use console log by default
                         ? Logger.getLogger(ClientSupport.class.getName()) : new ConsoleLogger())
-                .verbosity(LoggingFeature.Verbosity.PAYLOAD_TEXT)
+                .verbosity(LoggingFeature.Verbosity.PAYLOAD_ANY)
                 .level(Level.INFO)
                 .build();
     }
 
     /**
-     * Apply multipart support, if multipart feature is present in classpath.
-     *
-     * @param builder client builder
-     */
-    protected void applyMultiPartSupport(final JerseyClientBuilder builder) {
-        try {
-            // when dropwizard-forms used automatically register multipart feature
-            final Class<?> cls = Class.forName("org.glassfish.jersey.media.multipart.MultiPartFeature");
-            builder.register(cls);
-        } catch (Exception ignored) {
-            // do nothing - no multipart feature available
-        }
-    }
-
-    /**
-     * Provides ability to customize default client in extending class.
+     * Provides the ability to customize default client in extending class.
      *
      * @param builder client builder (pre-configured)
      * @param support dropwizard support instance (for accessing environment and configuration)

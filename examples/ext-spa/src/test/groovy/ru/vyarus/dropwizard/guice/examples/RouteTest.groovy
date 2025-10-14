@@ -14,12 +14,12 @@ class RouteTest extends Specification {
     def "Check route url leads to html page"(ClientSupport client) {
 
         when: "loading index page"
-        def index = client.targetMain('app/').request().get(String)
+        def index = client.targetApp('app/').request().get(String)
         then: "index loaded"
         index.contains("<html lang=\"en\">")
 
         when: "loading route"
-        def route = client.targetMain('app/foo').request().accept('text/html').get(String)
+        def route = client.targetApp('app/foo').request().accept('text/html').get(String)
         then: "index loaded"
         route == index
     }

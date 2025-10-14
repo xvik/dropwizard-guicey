@@ -2,6 +2,7 @@ package ru.vyarus.dropwizard.guice.test.rest.support;
 
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -33,6 +34,12 @@ public class ErrorResource {
     @PUT
     @Path("/{foo}")
     public String put(@PathParam("foo") String foo) {
+        throw new IllegalStateException("error");
+    }
+
+    @PATCH
+    @Path("/{foo}")
+    public String patch(@PathParam("foo") String foo) {
         throw new IllegalStateException("error");
     }
 

@@ -1,13 +1,16 @@
 package ru.vyarus.dropwizard.guice.url.resource;
 
 import jakarta.ws.rs.core.MediaType;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.url.model.ResourceMethodInfo;
 import ru.vyarus.dropwizard.guice.url.resource.support.DirectResource;
 import ru.vyarus.dropwizard.guice.url.resource.support.InterfaceResource;
 import ru.vyarus.dropwizard.guice.url.resource.support.MappedBean;
+import ru.vyarus.dropwizard.guice.url.resource.support.NoPathResource;
 import ru.vyarus.dropwizard.guice.url.resource.support.ResourceDeclaration;
 import ru.vyarus.dropwizard.guice.url.resource.support.SuperclassDeclarationResource;
 import ru.vyarus.dropwizard.guice.url.resource.support.sub.RootResource;
@@ -53,6 +56,10 @@ public class ResourceAnalyzerTest {
                 .isEqualTo(DirectResource.class);
         assertThat(ResourceAnalyzer.findAnnotatedResource(InterfaceResource.class))
                 .isEqualTo(ResourceDeclaration.class);
+
+        assertThatThrownBy(() -> ResourceAnalyzer.findAnnotatedResource(NoPathResource.class))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("@Path annotation was not found on resource NoPathResource or any of it's super classes and interfaces");
     }
 
     @Test
@@ -69,14 +76,14 @@ public class ResourceAnalyzerTest {
     void testMethodCallAnalysis() throws Exception {
         // WHEN analyze get
         ResourceMethodInfo info = ResourceAnalyzer
-                .analyzeMethodCall(DirectResource.class, res -> res.get("1", "2", "3", "4"));
+                .analyzeMethodCall(DirectResource.class, res -> res.get("1", "2", "3", "4", "5"));
 
         assertThat(info.getResource()).isEqualTo(DirectResource.class);
         assertThat(info.getResourcePath()).isEqualTo("/direct");
         assertThat(info.getMethod())
-                .isEqualTo(DirectResource.class.getMethod("get", String.class, String.class, String.class, String.class));
+                .isEqualTo(DirectResource.class.getMethod("get", String.class, String.class, String.class, String.class, String.class));
         assertThat(info.getSubResources()).isEmpty();
-        assertThat(info.getSubResourceLocators()).isEmpty();
+        assertThat(info.getSteps()).isEmpty();
 
         assertThat(info.getPath()).isEqualTo("/{sm}");
         assertThat(info.getFullPath()).isEqualTo("/direct/{sm}");
@@ -88,15 +95,17 @@ public class ResourceAnalyzerTest {
         assertThat(info.getQueryParams()).isNotEmpty().containsEntry("q", "2");
         assertThat(info.getHeaderParams()).isNotEmpty().containsEntry("HH", "3");
         assertThat(info.getCookieParams()).isNotEmpty().containsEntry("cc", "4");
-        assertThat(info.toString()).isEqualTo("DirectResource.Response get(String, String, String, String) (/direct/{sm})");
+        assertThat(info.getMatrixParams()).isNotEmpty().containsEntry("mm", "5");
+        assertThat(info.toString()).isEqualTo("DirectResource.Response get(String, String, String, String, String) (/direct/{sm})");
 
 
         // WHEN null values provided
-        info = ResourceAnalyzer.analyzeMethodCall(DirectResource.class, res -> res.get(null, null, null, null));
+        info = ResourceAnalyzer.analyzeMethodCall(DirectResource.class, res -> res.get(null, null, null, null, null));
         assertThat(info.getPathParams()).isEmpty();
         assertThat(info.getQueryParams()).isEmpty();
         assertThat(info.getHeaderParams()).isEmpty();
         assertThat(info.getCookieParams()).isEmpty();
+        assertThat(info.getMatrixParams()).isEmpty();
     }
 
     @Test
@@ -112,11 +121,8 @@ public class ResourceAnalyzerTest {
         assertThat(info.getSubResources())
                 .hasSize(2)
                 .contains(SubResource1.class, SubResource2.class);
-        assertThat(info.getSubResourceLocators())
-                .hasSize(2)
-                .contains(
-                        RootResource.class.getMethod("sub1"),
-                        SubResource1.class.getMethod("sub2", String.class));
+        assertThat(info.getSteps()).hasSize(3);
+
 
         assertThat(info.getPath()).isEqualTo("/sub1/sub2/{name}/{sm}");
         assertThat(info.getFullPath()).isEqualTo("/root/sub1/sub2/{name}/{sm}");
@@ -140,6 +146,7 @@ public class ResourceAnalyzerTest {
         bean.setQ("2");
         bean.setHh("3");
         bean.setCc("4");
+        bean.setMm("5");
 
         ResourceMethodInfo info = ResourceAnalyzer
                 .analyzeMethodCall(DirectResource.class, res -> res.get(bean));
@@ -148,6 +155,7 @@ public class ResourceAnalyzerTest {
         assertThat(info.getQueryParams()).isNotEmpty().containsEntry("q", "2");
         assertThat(info.getHeaderParams()).isNotEmpty().containsEntry("HH", "3");
         assertThat(info.getCookieParams()).isNotEmpty().containsEntry("cc", "4");
+        assertThat(info.getMatrixParams()).isNotEmpty().containsEntry("mm", "5");
     }
 
     @Test
@@ -181,6 +189,21 @@ public class ResourceAnalyzerTest {
         ResourceMethodInfo info = ResourceAnalyzer
                 .analyzeMethodCall(DirectResource.class, res -> res
                         .multipart2("1", file, new FormDataContentDisposition("form-data; name=\"file\"; filename=\"filename.jpg\"")));
+
+        assertThat(info.getFormParams()).isNotEmpty()
+                .containsEntry("p1", "1")
+                .extracting(map -> map.get("file"))
+                .isInstanceOf(StreamDataBodyPart.class)
+                .asInstanceOf(InstanceOfAssertFactories.type(StreamDataBodyPart.class))
+                .extracting(StreamDataBodyPart::getStreamEntity, StreamDataBodyPart::getFilename)
+                .containsExactly(file, "filename.jpg");
+        assertThat(info.getConsumes()).isNotEmpty()
+                .contains(MediaType.MULTIPART_FORM_DATA);
+
+
+        info = ResourceAnalyzer
+                .analyzeMethodCall(DirectResource.class, res -> res
+                        .multipart2("1", file, null)); //no file name
 
         assertThat(info.getFormParams()).isNotEmpty()
                 .containsEntry("p1", "1")
@@ -224,7 +247,7 @@ public class ResourceAnalyzerTest {
 
         assertThatThrownBy(() -> ResourceAnalyzer.findMethod(DirectResource.class, "get"))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessage("Method with name 'get' is not unique in class 'DirectResource': Response get(MappedBean), Response get(String, String, String, String)");
+                .hasMessage("Method with name 'get' is not unique in class 'DirectResource': Response get(MappedBean), Response get(String, String, String, String, String)");
 
         assertThatThrownBy(() -> ResourceAnalyzer.findHttpMethod(RootResource.class.getMethod("sub1")))
                 .isInstanceOf(IllegalStateException.class)

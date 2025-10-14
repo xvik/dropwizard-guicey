@@ -1,46 +1,85 @@
 package ru.vyarus.dropwizard.guice.test;
 
 import com.google.common.base.Preconditions;
-import io.dropwizard.core.setup.Environment;
 import io.dropwizard.testing.DropwizardTestSupport;
-import jakarta.annotation.Nullable;
-import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.Response;
-import org.eclipse.jetty.http.HttpStatus;
+import jakarta.ws.rs.core.UriBuilder;
 import org.glassfish.jersey.client.JerseyClient;
-import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
+import org.jspecify.annotations.Nullable;
+import ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
+import ru.vyarus.dropwizard.guice.test.client.ResourceClient;
+import ru.vyarus.dropwizard.guice.test.client.TestClient;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
-
-import java.util.Arrays;
-import java.util.function.Supplier;
+import ru.vyarus.dropwizard.guice.test.client.TestRestClient;
+import ru.vyarus.dropwizard.guice.test.client.builder.TestRequestConfig;
+import ru.vyarus.dropwizard.guice.url.AppUrlBuilder;
 
 /**
  * {@link JerseyClient} support for direct web tests (complete dropwizard startup).
  * <p>
  * Client support maintains single {@link JerseyClient} instance. It may be used for calling any urls (not just
  * application). Class provides many utility methods for automatic construction of base context paths, so
- * tests could be completely independent from actual configuration.
+ * tests could be completely independent of actual configuration.
  * <p>
  * Client customization is possible through custom
  * {@link ru.vyarus.dropwizard.guice.test.client.TestClientFactory} implementation.
  * <p>
- * See {@link #get(String, Class)}, {@link #post(String, Object, Class)} and other simple methods as client api
- * usage example (or use them directly if appropriate).
+ * Dropwizard configurations for rest, app and admin contexts:
+ * <ul>
+ *     <li>{@code server.applicationContextPath} - app context path ("/" by default, "/application" for simple
+ *     server)</li>
+ *     <li>{@code server.adminContextPath} - admin context path ("/" by default, "/admin" for simple server)</li>
+ *     <li>{@code server.rootPath} - rest context path ("/" by default)</li>
+ * </ul>
+ * The rest prefix is {@code server.applicationContextPath} + {@code server.rootPath}.
+ * <p>
+ * The class provides access for 4 clients (with the same api
+ * {@link ru.vyarus.dropwizard.guice.test.client.TestClient}):
+ * <ul>
+ *     <li>{@link ru.vyarus.dropwizard.guice.test.ClientSupport} itself is a client for application root</li>
+ *     <li>{@link #restClient()} specialized rest client (mapped rest path counted)</li>
+ *     <li>{@link #appClient()} client for the app context (context mapping path counted)</li>
+ *     <li>{@link #adminClient()} client for the admin context (context mapping path and port counted)</li>
+ * </ul>
+ * The main idea of clients is the ability to create a client for any base path to shorten urls in tests.
+ * Also, each client could declare its own defaults, applied to all requests (for example, useful for authorization).
+ * <p>
+ * There is also a specialized {@link #customClient(String, Object...)} for custom clients for creating remote api
+ * clients (with the same client api):
+ * {@code support.customClient("http://localhost:8080/some/path").get("/some/resource")}.
+ * <p>
+ * There is a special class-based client constructor {@link #restClient(Class)} for resources. This makes tests
+ * type-safe as the target resource path is obtained directly from the class annotation. Also, such clients
+ * could use resource class method calls for request configuration
+ * ({@link ru.vyarus.dropwizard.guice.test.client.ResourceClient#method(ru.vyarus.dropwizard.guice.url.util.Caller)}).
+ * <p>
+ * Note: defaults, declared on root {@link ru.vyarus.dropwizard.guice.test.ClientSupport} class would be inherited
+ * by sub clients (excluding external clients).
+ * <p>
+ * The root client is not much useful, so the assumed usage is to get the required client and use it for actual calls.
+ * <p>
+ * Class also provides base urls and related jersey targets (pure jersey api):
+ * <ul>
+ *     <li>{@link #basePathRoot()} and {@link #target(String, Object...)}</li>
+ *     <li>{@link #basePathRest()} and {@link #targetRest(String, Object...)}</li>
+ *     <li>{@link #basePathApp()} and {@link #targetApp(String, Object...)}</li>
+ *     <li>{@link #basePathAdmin()} and {@link #targetAdmin(String, Object...)}</li>
+ * </ul>
  *
  * @author Vyacheslav Rusakov
+ * @see ru.vyarus.dropwizard.guice.test.client.TestClient
  * @since 04.05.2020
  */
-public class ClientSupport implements AutoCloseable {
-    private static final String HTTP_LOCALHOST = "http://localhost:";
+public class ClientSupport extends TestClient<ClientSupport> implements AutoCloseable {
 
     private final DropwizardTestSupport<?> support;
+    private final AppUrlBuilder urlBuilder;
     private final TestClientFactory factory;
     private JerseyClient client;
 
     /**
-     * Create client.
+     * Create a client.
      *
      * @param support dropwizard test support
      */
@@ -56,7 +95,22 @@ public class ClientSupport implements AutoCloseable {
      */
     public ClientSupport(final DropwizardTestSupport<?> support,
                          final @Nullable TestClientFactory factory) {
+        this(support, factory, null);
+    }
+
+    /**
+     * Create client with custom factory.
+     *
+     * @param support dropwizard test support
+     * @param factory custom client factory
+     * @param defaults defaults for all clients (could be overridden by the client-specific defaults)
+     */
+    public ClientSupport(final DropwizardTestSupport<?> support,
+                         final @Nullable TestClientFactory factory,
+                         final @Nullable TestRequestConfig defaults) {
+        super(defaults);
         this.support = support;
+        this.urlBuilder = new AppUrlBuilder(support::getEnvironment);
         this.factory = factory == null ? new DefaultTestClientFactory() : factory;
     }
 
@@ -75,8 +129,44 @@ public class ClientSupport implements AutoCloseable {
     }
 
     /**
-     * @return main context port
-     * @throws NullPointerException for guicey test
+     * Shortcut to be able to quickly build an apache-connector-based client. The default urlconnector-based
+     * client is better for multipart calls (apache client
+     * <a href="https://github.com/eclipse-ee4j/jersey/issues/5528#issuecomment-1934766714">has problems</a>).
+     * But the apache client is better for PATCH calls because the default urlconnector will complain on java > 16.
+     * <p>
+     * With this shortcut it would be possible to use both clients in one test.
+     * <p>
+     * Applied defaults are inherited.
+     *
+     * @return client based on apache connector
+     */
+    public ClientSupport apacheClient() {
+        return factory instanceof ApacheTestClientFactory ? this
+                : new ClientSupport(support, new ApacheTestClientFactory(), defaults);
+    }
+
+    /**
+     * Shortcut to be able to quickly build an apache-connector-based client. The default urlconnector-based
+     * client is better for multipart calls (apache client
+     * <a href="https://github.com/eclipse-ee4j/jersey/issues/5528#issuecomment-1934766714">has problems</a>).
+     * But the apache client is better for PATCH calls because the default urlconnector will complain on java > 16.
+     * <p>
+     * With this shortcut it would be possible to use both clients in one test.
+     * <p>
+     * Applied defaults are inherited.
+     *
+     * @return client based on apache connector
+     */
+    public ClientSupport urlconnectorClient() {
+        return factory instanceof DefaultTestClientFactory ? this
+                : new ClientSupport(support, new DefaultTestClientFactory(), defaults);
+    }
+
+    // -------------------------------------------------------------------------- SERVER PATHS
+
+    /**
+     * @return app context port
+     * @throws NullPointerException for guicey test (when web not started)
      */
     public int getPort() {
         return support.getLocalPort();
@@ -84,244 +174,302 @@ public class ClientSupport implements AutoCloseable {
 
     /**
      * @return admin context port
-     * @throws NullPointerException for guicey test
+     * @throws NullPointerException for guicey test (when web not started)
      */
     public int getAdminPort() {
         return support.getAdminPort();
     }
 
     /**
+     * Root application path is, usually, not very interesting so consider using
+     * {@link #basePathApp()}, {@link #basePathRest()} or {@link #basePathAdmin()} instead.
+     *
      * @return root application path (localhost + port)
+     * @throws NullPointerException for guicey test (when web not started)
      */
     public String basePathRoot() {
-        return PathUtils.trailingSlash(PathUtils.path(HTTP_LOCALHOST + getPort()));
+        return urlBuilder.root("/");
     }
 
     /**
-     * For example, with default configuration it would be "http://localhost:8080/". If "server.applicationContextPath"
-     * would be changed to "/someth" then method will return "http://localhost:8080/someth/".
-     * <p>
-     * Returned path will always end with slash.
-     *
-     * @return base path for application main context
-     * @throws NullPointerException for guicey test
+     * @return base path for application context
+     * @deprecated use {@link #basePathApp()}
      */
+    @Deprecated
     public String basePathMain() {
-        final String contextMapping = support.getEnvironment().getApplicationContext().getContextPath();
-        return PathUtils.trailingSlash(
-                PathUtils.path(basePathRoot(), contextMapping));
+        return basePathApp();
     }
 
     /**
-     * For example, with the default configuration it would be "http://localhost:8081/". For "simple" server it would
-     * be "http://localhost:8080/adminPath/".
+     * For example, with the default configuration it would be "http://localhost:8080/". If
+     * "server.applicationContextPath" is changed to "/someth", then the method will return
+     * "http://localhost:8080/someth/".
      * <p>
-     * Returned path will always end with slash.
+     * Returned path will always end with a slash.
+     *
+     * @return base path for app context
+     * @throws NullPointerException for guicey test (when web not started)
+     * @see #targetApp(String, Object...)
+     * @see #appClient()
+     */
+    public String basePathApp() {
+        return urlBuilder.app("/");
+    }
+
+    /**
+     * For example, with the default configuration it would be "http://localhost:8081/". For the "simple" server, it
+     * would be "http://localhost:8080/adminPath/". If "server.adminContextPath" is changed to "/adm", then the method
+     * will return "http://localhost:8081/adm/" for the default server and "http://localhost:8080/adm/" for "simple"
+     * server.
+     * <p>
+     * Returned path will always end with a slash.
      *
      * @return base path for admin context
-     * @throws NullPointerException for guicey test
+     * @throws NullPointerException for guicey test (when web not started)
+     * @see #targetAdmin(String, Object...)
+     * @see #adminClient()
      */
     public String basePathAdmin() {
-        final String contextMapping = support.getEnvironment().getAdminContext().getContextPath();
-        return PathUtils.trailingSlash(
-                PathUtils.path(HTTP_LOCALHOST + getAdminPort(), contextMapping));
+        return urlBuilder.admin("/");
     }
 
     /**
      * For example, with the default configuration it would be "http://localhost:8080/". If "server.rootPath"
-     * would be changed to "/someth" then method will return "http://localhost:8080/someth/".
-     * If main context mapping changed from root, then returned path will count it too
+     * is changed to "/api", then the method will return "http://localhost:8080/api/".
+     * If the app context mapping changed from root, then the returned path will count it too
      * (e.g. "http://localhost:8080/root/rest/", when "server.applicationContextPath" is "/root").
      * <p>
-     * Returned path will always end with slash.
+     * Returned path will always end with a slash.
      *
      * @return base path for rest
-     * @throws NullPointerException for guicey test
+     * @throws NullPointerException for guicey test (when web not started)
+     * @see #targetRest(String, Object...)
+     * @see #restClient()
+     * @see #restClient(Class)
      */
     public String basePathRest() {
-        final Environment env = support.getEnvironment();
-        final String contextPath = env.getJerseyServletContainer()
-                .getServletConfig().getServletContext().getContextPath();
-        // server.rootPath
-        final String restMapping = PathUtils.trailingSlash(PathUtils.trimStars(env.jersey().getUrlPattern()));
-        return PathUtils.trailingSlash(
-                PathUtils.path(basePathRoot(), contextPath, restMapping));
+        return urlBuilder.rest("/");
     }
 
+    // ----------------------------------------------------------------------- PURE JERSEY API
+
     /**
-     * Unbounded (universal) {@link WebTarget} construction shortcut. First url part must contain host (port) target.
-     * When multiple parameters provided, they are connected with "/", avoiding duplicate slash appearances
-     * so, for example, "app, path", "app/, /path" or any other variation would always lead to correct "app/path").
-     * Essentially this is the same as using {@link WebTarget#path(String)} multiple times (after initial target
-     * creation).
+     * Create a jersey {@link WebTarget} for a path, relative to application root (e.g.
+     * "http://localhost:8080/" + provided path)".
      * <p>
-     * Example: {@code .target("http://localhotst:8080/smth/").request().buildGet().invoke()}
+     * It could be also used to request any external api, for example:
+     * {@code target("http://somewhere.com/api/smth/").request().buildGet().invoke()}.
      * <p>
-     * NOTE: safe to use with guicey-only tests (when web part not started) to call any external url.
+     * String format could be used to format the path:
+     * {@code .target("/smth/%s/other", 12).request().buildGet().invoke()}
+     * <p>
+     * NOTE: could be used with guicey-only tests (when web part not started) to call any external url.
+     * <p>
+     * IMPORTANT: it would not apply configured defaults (like {@link #defaultHeader(String, Object)}).
+     * Use builders ({@link #build(String, String, Object, Object...)}) or shortcuts
+     * {@link #get(String, Class, Object...)} to cal with defaults.
      *
-     * @param paths one or more path parts (joined with '/')
+     * @param path target path, relative to client root or absolute external path (could contain String.format()
+     *             placeholders: %s)
+     * @param args variables for path placeholders (String.format() arguments)
      * @return jersey web target object
+     * @see #basePathRoot()
+     * @see #customClient(String, Object...)  for external api client
      */
-    public WebTarget target(final String... paths) {
-        Preconditions.checkState(paths.length != 0,
-                "Target required (e.g. http://localhost:8080/)");
-        return getClient().target(PathUtils.path(paths));
+    @Override
+    public WebTarget target(final String path, final Object... args) {
+        if (isHttp(path)) {
+            return getClient().target(String.format(path, args));
+        }
+        return super.target(path, args);
     }
 
     /**
-     * Shortcut for {@link WebTarget} creation for main context path. Method abstracts you from actual configuration
-     * so you can just call servlets by their registration uri.
-     * <p>
-     * Without parameters it will target main context root: {@code .targetMain().request().buildGet().invoke()} would
-     * call "http://localhost:8080/".
-     * <p>
-     * Additional paths may be provided to construct urls:
-     * {@code .targetMain("something").request().buildGet().invoke()} would call "http://localhost:8080/something"
-     * and {@code .targetMain("foo", "bar").request().buildGet().invoke()} would call "http://localhost:8080/foo/bar".
-     * Last example is equivalent to jersey api (kind of shortcut):
-     * {@code .targetMain().path("foo").path("bar").request().buildGet().invoke()}.
+     * Shortcut for {@link WebTarget} creation for the application context path.
      *
-     * @param paths zero, one or more path parts (joined with '/') and appended to base path
-     * @return jersey web target object for main context
-     * @throws NullPointerException for guicey test
-     * @see #basePathMain() for base use construction details
+     * @param path target path, relative to the admin context (could contain String.format() placeholders: %s)
+     * @param args variables for path placeholders (String.format() arguments)
+     * @return jersey web target object for the admin context
+     * @deprecated use {@link #targetApp(String, Object...)} instead
      */
-    public WebTarget targetMain(final String... paths) {
-        return target(merge(basePathMain(), paths));
+    @Deprecated
+    public WebTarget targetMain(final String path, final Object... args) {
+        return targetApp(path, args);
     }
 
     /**
-     * Shortcut for {@link WebTarget} creation for admin context path. Method abstracts you from actual configuration
-     * so you can just call servlets by their registration uri.
+     * Shortcut for {@link WebTarget} creation for the app context path.
      * <p>
-     * Without parameters it will target admin context root: {@code .targetAdmin().request().buildGet().invoke()} would
-     * call "http://localhost:8081/". For simple server it would be "http://localhost:8080/admin/".
+     * Example: {@code .targetApp("/path").request().buildGet().invoke()} would call "http://localhost:8080/path"
+     * (or, if root context mapping changed with {@code server.applicationContextPath = "root"},
+     * "http://localhost:8080/root/path").
      * <p>
-     * Additional paths may be provided to construct urls:
-     * {@code .targetAdmin("something").request().buildGet().invoke()} would call "http://localhost:8081/something"
-     * and {@code .targetAdmin("foo", "bar").request().buildGet().invoke()} would call "http://localhost:8081/foo/bar".
-     * Last example is equivalent to jersey api (kind of shortcut):
-     * {@code .targetAdmin().path("foo").path("bar").request().buildGet().invoke()}.
+     * String format could be used to format the path:
+     * {@code .targetApp("/smth/%s/other", 12).request().buildGet().invoke()}
+     * <p>
+     * IMPORTANT: it would not apply configured defaults (like {@link #defaultHeader(String, Object)}).
+     * Use app client {@link #appClient()} to call with defaults.
      *
-     * @param paths zero, one or more path parts (joined with '/') and appended to base path
-     * @return jersey web target object for admin context
-     * @throws NullPointerException for guicey test
+     * @param path target path, relative to the app context (could contain String.format() placeholders: %s)
+     * @param args variables for path placeholders (String.format() arguments)
+     * @return jersey web target object for the app context
+     * @throws NullPointerException for guicey test (when web not started)
+     * @see #basePathApp() for base use construction details
+     * @see #appClient()
+     */
+    public WebTarget targetApp(final String path, final Object... args) {
+        return target(urlBuilder.app(path, args));
+    }
+
+    /**
+     * Shortcut for {@link WebTarget} creation for the admin context path.
+     * <p>
+     * Example: {@code .targetAdmin("/path").request().buildGet().invoke()} would call "http://localhost:8081/path"
+     * (or, if admin context mapping changed with {@code server.adminContextPath = "admin"},
+     * "http://localhost:8081/admin/path").
+     * <p>
+     * String format could be used to format the path:
+     * {@code .targetAdmin("/smth/%s/other", 12).request().buildGet().invoke()}
+     * <p>
+     * IMPORTANT: it would not apply configured defaults (like {@link #defaultHeader(String, Object)}).
+     * Use admin client {@link #adminClient()} to call with defaults.
+     *
+     * @param path target path, relative to the admin context (could contain String.format() placeholders: %s)
+     * @param args variables for path placeholders (String.format() arguments)
+     * @return jersey web target object for the admin context
+     * @throws NullPointerException for guicey test (when web not started)
      * @see #basePathAdmin() for base use construction details
+     * @see #adminClient()
      */
-    public WebTarget targetAdmin(final String... paths) {
-        return target(merge(basePathAdmin(), paths));
+    public WebTarget targetAdmin(final String path, final Object... args) {
+        return target(urlBuilder.admin(path, args));
     }
 
     /**
-     * Shortcut for {@link WebTarget} creation for rest context path. Method abstracts you from actual configuration
-     * so you can just call rest resources by their registration uri.
+     * Shortcut for {@link WebTarget} creation for the rest context path.
      * <p>
-     * Without parameters it will target rest context root: {@code .targetRest().request().buildGet().invoke()} would
-     * call "http://localhost:8080/".
+     * Example: {@code .targetRest("/path").request().buildGet().invoke()} would call "http://localhost:8080/path"
+     * (or, if rest context mapping changed with {@code server.rootPath = "api"},
+     * "http://localhost:8081/api/path").
      * <p>
-     * Additional paths may be provided to construct urls:
-     * {@code .targetRest("something").request().buildGet().invoke()} would call "http://localhost:8080/something"
-     * and {@code .targetRest("foo", "bar").request().buildGet().invoke()} would call "http://localhost:8080/foo/bar".
-     * Last example is equivalent to jersey api (kind of shortcut):
-     * {@code .targetRest().path("foo").path("bar").request().buildGet().invoke()}.
+     * String format could be used to format the path:
+     * {@code .targetRest("/smth/%s/other", 12).request().buildGet().invoke()}
+     * <p>
+     * IMPORTANT: it would not apply configured defaults (like {@link #defaultHeader(String, Object)}).
+     * Use rest client {@link #restClient()} (or specialized {@link #restClient(Class)}) to call with defaults.
      *
-     * @param paths zero, one or more path parts (joined with '/') and appended to base path
+     * @param path target path, relative to the rest context (could contain String.format() placeholders: %s)
+     * @param args variables for path placeholders (String.format() arguments)
      * @return jersey web target object for rest context
-     * @throws NullPointerException for guicey test
+     * @throws NullPointerException for guicey test (when web not started)
      * @see #basePathRest() for base use construction details
+     * @see #restClient()
      */
-    public WebTarget targetRest(final String... paths) {
-        return target(merge(basePathRest(), paths));
+    public WebTarget targetRest(final String path, final Object... args) {
+        return target(urlBuilder.rest(path, args));
+    }
+
+    // ------------------------------------------------------------------------------ CLIENTS
+
+    /**
+     * Construct a rest client. Client would be configured with the current rest path root
+     * (@link {@link #basePathRest()}), so requests would need to use only relative paths.
+     * <p>
+     * Typed rest client could be obtained from this generic client: {@code restClient().subClient(Resource.class)};
+     * <p>
+     * Inherits current defaults (like {@link #defaultHeader(String, Object)}.
+     *
+     * @return rest client
+     */
+    public TestRestClient<?> restClient() {
+        // client INHERITS support defaults
+        return new TestRestClient<>(() -> getClient().target(basePathRest()), defaults);
     }
 
     /**
-     * Simple GET call shortcut for server root. The path must include all required contexts: main context path and
-     * rest mapping (if it's a rest call). For example, if rest mapped to "rest/*" path then path parameter must
-     * include it like: "rest/my/api/smth".
+     * Construct a specialized rest client for the given resource class. Client would be configured with the current
+     * rest path root (@link {@link #basePathRest()}) together with the resource class path (obtained from annotation),
+     * so requests would need to use paths, relative to resource.
      * <p>
-     * This method is very basic and could be used in the simplest cases. For other cases, it could be used as
-     * an example of api usage.
+     * Also, such client provide methods to configure requests direct from resource methods
+     * {@link ResourceClient#method(ru.vyarus.dropwizard.guice.url.util.Caller)}.
+     * <p>
+     * Inherits current defaults (like {@link #defaultHeader(String, Object)}.
      *
-     * @param rootPath target path, relative to server root (everything after port)
-     * @param result   result type (when null, accepts any 200 or 204 responses)
-     * @param <T>      result type
-     * @return mapped result object or null (if class not declared)
+     * @param resource resource class to configure target url from
+     * @param <K>      resource type
+     * @return rest client for the given resource class
      */
-    public <T> T get(final String rootPath, final @Nullable Class<T> result) {
-        if (result != null) {
-            return target(basePathRoot(), rootPath).request().get(result);
-        } else {
-            checkVoidResponse(() -> target(basePathRoot(), rootPath).request().get());
-            return null;
-        }
+    public <K> ResourceClient<K> restClient(final Class<K> resource) {
+        final String target = UriBuilder.newInstance().path(resource).toTemplate();
+        // client INHERITS support defaults
+        return new ResourceClient<>(() -> getClient().target(basePathRest()).path(target), defaults, resource);
     }
 
     /**
-     * Simple POST call shortcut for server root. The path must include all required contexts: main context path and
-     * rest mapping (if it's a rest call). For example, if rest mapped to "rest/*" path then path parameter must
-     * include it like: "rest/my/api/smth".
+     * Construct a client for the app context. Client would be configured with the current app context path root
+     * (@link {@link #basePathApp()}), so requests would need to use only relative paths.
      * <p>
-     * This method is very basic and could be used in the simplest cases. For other cases, it could be used as
-     * an example of api usage.
+     * Note: by default, root client {@link ru.vyarus.dropwizard.guice.test.ClientSupport} itself and
+     * app context client would be the same, because usually app context is "/". But, you can still prefer
+     * app client to shield from potential app context path changes.
+     * <p>
+     * Inherits current defaults (like {@link #defaultHeader(String, Object)}.
      *
-     * @param rootPath target path, relative to server root (everything after port)
-     * @param body     post body object (serialized as json)
-     * @param result   result type (when null, accepts any 200 or 204 responses)
-     * @param <T>      result type
-     * @return mapped result object or null (if class not declared)
+     * @return app client
      */
-    public <T> T post(final String rootPath, final @Nullable Object body, final @Nullable Class<T> result) {
-        if (result != null) {
-            return target(basePathRoot(), rootPath).request().post(Entity.json(body), result);
-        } else {
-            checkVoidResponse(() -> target(basePathRoot(), rootPath).request().post(Entity.json(body)));
-            return null;
-        }
+    public TestClient<?> appClient() {
+        // client INHERITS support defaults
+        return new TestClient<>(() -> getClient().target(basePathApp()), defaults);
     }
 
     /**
-     * Simple PUT call shortcut for server root. The path must include all required contexts: main context path and
-     * rest mapping (if it's a rest call). For example, if rest mapped to "rest/*" path then path parameter must
-     * include it like: "rest/my/api/smth".
+     * Construct a client for the admin context. Client would be configured with the current admin context path root
+     * (@link {@link #basePathAdmin()}), so requests would need to use only relative paths.
      * <p>
-     * This method is very basic and could be used in the simplest cases. For other cases, it could be used as
-     * an example of api usage.
+     * Inherits current defaults (like {@link #defaultHeader(String, Object)}.
      *
-     * @param rootPath target path, relative to server root (everything after port)
-     * @param body     post body object (serialized as json)
-     * @param result   result type (when null, accepts any 200 or 204 responses)
-     * @param <T>      result type
-     * @return mapped result object or null (if class not declared)
+     * @return admin client
      */
-    public <T> T put(final String rootPath, final Object body, final @Nullable Class<T> result) {
-        if (result != null) {
-            return target(basePathRoot(), rootPath).request().put(Entity.json(body), result);
-        } else {
-            checkVoidResponse(() -> target(basePathRoot(), rootPath).request().put(Entity.json(body)));
-            return null;
-        }
+    public TestClient<?> adminClient() {
+        // client INHERITS support defaults
+        return new TestClient<>(() -> getClient().target(basePathAdmin()), defaults);
     }
 
     /**
-     * Simple DELETE call shortcut for server root. The path must include all required contexts: main context path and
-     * rest mapping (if it's a rest call). For example, if rest mapped to "rest/*" path then path parameter must
-     * include it like: "rest/my/api/smth".
+     * Construct a client for external url.
      * <p>
-     * This method is very basic and could be used in the simplest cases. For other cases, it could be used as
-     * an example of api usage.
+     * Example of variables usage: {@code customClient("http://localhost:8080/%s/other", 12)}.
+     * <p>
+     * Will not inherit current defaults.
      *
-     * @param rootPath target path, relative to server root (everything after port)
-     * @param result   result type (when null, accepts any 200 or 204 responses)
-     * @param <T>      result type
-     * @return mapped result object or null (if class not declared)
+     * @param url  external url, started with "http(s)" (could contain String.format() placeholders: %s)
+     * @param args variables for path placeholders (String.format() arguments)
+     * @return client for the given external url
      */
-    public <T> T delete(final String rootPath, final @Nullable Class<T> result) {
-        if (result != null) {
-            return target(basePathRoot(), rootPath).request().delete(result);
-        } else {
-            checkVoidResponse(() -> target(basePathRoot(), rootPath).request().delete());
-            return null;
-        }
+    public TestClient<?> customClient(final String url, final Object... args) {
+        checkHttp(url);
+        // custom external client - no defaults inherited
+        return new TestClient<>(() -> getClient().target(String.format(url, args)), null);
+    }
+
+    /**
+     * Construct a rest client for external url. If you have a resource class for external api, then construct
+     * client with base url first and then apply resource class:
+     * {@code customRestClient("http://localhost:8080/api/").subClient(ResourceClass.class)}.
+     * <p>
+     * Example of variables usage: {@code customRestClient("http://localhost:8080/api/%s/other", 12)}
+     * <p>
+     * Will not inherit current defaults.
+     *
+     * @param url  external url, started with "http(s)" (could contain String.format() placeholders: %s)
+     * @param args variables for path placeholders (String.format() arguments)
+     * @return rest client for the given external url
+     */
+    public TestRestClient<?> customRestClient(final String url, final Object... args) {
+        checkHttp(url);
+        // custom external client - no defaults inherited
+        return new TestRestClient<>(() -> getClient().target(String.format(url, args)), null);
     }
 
     @Override
@@ -334,31 +482,17 @@ public class ClientSupport implements AutoCloseable {
         }
     }
 
-    /**
-     * Validates response to be 200 or 204 (no content). If not, throw exception with response body.
-     * <p>
-     * Method is public to allow using it in custom calls.
-     *
-     * @param call supplier providing response
-     */
-    public void checkVoidResponse(final Supplier<Response> call) {
-        try (Response res = call.get()) {
-            if (!Arrays.asList(HttpStatus.OK_200, HttpStatus.NO_CONTENT_204).contains(res.getStatus())) {
-                throw new IllegalStateException("Invalid response: " + res.getStatus() + "\n"
-                        + res.readEntity(String.class));
-            }
-        }
+    @Override
+    protected WebTarget getRoot() {
+        return getClient().target(basePathRoot());
     }
 
-    private String[] merge(final String base, final String... addition) {
-        final String[] res;
-        if (addition.length == 0) {
-            res = new String[]{base};
-        } else {
-            res = new String[addition.length + 1];
-            res[0] = base;
-            System.arraycopy(addition, 0, res, 1, addition.length);
-        }
-        return res;
+    private boolean isHttp(final String path) {
+        return path.toLowerCase().startsWith("http");
+    }
+
+    private void checkHttp(final String host) {
+        Preconditions.checkState(isHttp(host),
+                "Host must include target server protocol and the host name (like http://myhost.com)");
     }
 }
