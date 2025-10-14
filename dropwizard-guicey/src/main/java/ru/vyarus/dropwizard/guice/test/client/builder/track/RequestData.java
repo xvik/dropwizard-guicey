@@ -1,6 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.track;
 
 import com.google.common.collect.ImmutableList;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.Cookie;
@@ -483,8 +484,9 @@ public class RequestData {
         return StackUtils.getCallerSource(INFRA);
     }
 
+    @SuppressFBWarnings("VA_FORMAT_STRING_USES_NEWLINE")
     private void trace(final String title, final String value, final String source) {
-        log.append(String.format("\t%-40s  %s%n\t\t%s%n%n", title, source == null ? "" : source,
+        log.append(String.format("\t%-40s  %s\n\t\t%s\n\n", title, source == null ? "" : source,
                 value.startsWith(DBL_TAB) ? value.substring(2) : value));
     }
 

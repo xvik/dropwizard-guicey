@@ -250,7 +250,8 @@ public class ClientResponseTest {
         // WHEN jersey file download (temp)
         File res = rest.method(FileResource::download).as(File.class);
         System.out.println(res.getAbsolutePath());
-        assertThat(res.getAbsolutePath()).startsWith("/tmp");
+        String tmp = System.getProperty("java.io.tmpdir");
+        assertThat(res.getAbsolutePath()).startsWith(tmp);
         assertThat(res.getName()).isNotEqualTo("logback.xml");
 
         // WHEN file download api
