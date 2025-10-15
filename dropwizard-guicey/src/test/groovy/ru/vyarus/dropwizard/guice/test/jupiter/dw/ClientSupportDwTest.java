@@ -56,10 +56,8 @@ public class ClientSupportDwTest {
 
             Assertions.assertEquals("main", client.target("http://localhost:8080/servlet")
                     .request().buildGet().invoke().readEntity(String.class));
-            Assertions.assertEquals("main", client.customClient("http://localhost:8080/")
+            Assertions.assertEquals("main", client.externalClient("http://localhost:8080/")
                             .get("servlet", String.class));
-            Assertions.assertEquals("main", client.customRestClient("http://localhost:8080/")
-                    .get("servlet", String.class));
 
             Assertions.assertEquals("main", client.getClient().target("http://localhost:8080/servlet")
                     .request().buildGet().invoke().readEntity(String.class));

@@ -19,12 +19,12 @@
 * Unify ClientSupport and StubRest client APIs
     - New api is a wrapper above jersey client api to simplify test-specific configuration and validation
       (jersey api is still available). The request builder unifies all possible configurations in one place.  
-    - New common base class TestClient (and TestRestClient for rest clients, adding rest-specific methods)
+    - New common base client class TestClient
     - ClientSupport is a TestClient, but also could provide 3 special clients: appClient(), adminClient(), restClient()
       (restClient() is the same as StubRest client)
     - New sub clients could be created by applying additional path segments:
         client.subClient("/sub/path/)
-    - External api client could be created with support.customClient("som external url")
+    - External api client could be created with support.externalClient("som external url")
     - New client rest api based on real method calls: restClient(RestClass.class).method(mock -> mock.restMethod(args)).invoke()
       (target path and method type resolved from annotations, arguments used for request configuration)
     - Helper api for testing multipart requests: restClient(..).multipartMethod(..)
