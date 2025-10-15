@@ -33,7 +33,7 @@ import java.util.function.Supplier;
  * @author Vyacheslav Rusakov
  * @since 18.09.2025
  */
-public class ResourceClient<T> extends TestRestClient<TestRestClient<?>> {
+public class ResourceClient<T> extends TestClient<TestClient<?>> {
 
     private final Class<T> resource;
 
@@ -55,13 +55,9 @@ public class ResourceClient<T> extends TestRestClient<TestRestClient<?>> {
      * The same as {@link #method(ru.vyarus.dropwizard.guice.url.util.Caller, Object)}, but provides a helper
      * utility to easily stub multipart parameters (so these values could be used for request configuration).
      * <p>
-     * For the most common case {@code post(@FormDataParam("file") InputStream stream,
-     *
-     * @param consumer consumer calling resource method
-     * @param caller   multipart method caller
-     * @return pre-configured request builder instance
-     * @return builder instance for chained calls
-     * @FormDataParam("file") FormDataContentDisposition fileDetail)}:
+     * For the most common case
+     * {@code post(@FormDataParam("file") InputStream stream,  @FormDataParam("file")
+     * FormDataContentDisposition fileDetail)}:
      * <pre>{@code multipartMethod((instance, multipart) -> instance
      *             .post(multipart.fromClasspath("/some.txt"),
      *                   multipart.disposition("file", "some.txt"))}</pre>.
@@ -221,7 +217,7 @@ public class ResourceClient<T> extends TestRestClient<TestRestClient<?>> {
     }
 
     @Override
-    public <R> ResourceClient<R> subClient(final Class<R> resource) {
+    public <R> ResourceClient<R> restClient(final Class<R> resource) {
         // to minimize silly mistakes
         throw new UnsupportedOperationException("In context of resource, sub-resource client should be obtained "
                 + "with subResourceClient() method which ignores sub-resource @Path annotation (not used in "
