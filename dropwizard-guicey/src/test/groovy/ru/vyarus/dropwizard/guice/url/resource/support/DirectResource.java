@@ -40,6 +40,11 @@ public class DirectResource {
     }
 
     @GET
+    public String nopath() {
+        return "nopath";
+    }
+
+    @GET
     @Path("/{sm}/2")
     public Response get(@BeanParam MappedBean bean) {
         return Response.ok().build();

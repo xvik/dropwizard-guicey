@@ -32,6 +32,9 @@ public interface ResourceDeclaration {
                         @HeaderParam("HH") String hh,
                         @CookieParam("cc") String cc);
 
+    @GET
+    String nopath();
+
     @Path("/{sm}/2")
     Response get(MappedBean bean);
 

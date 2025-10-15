@@ -89,6 +89,11 @@ public final class ResourceAnalyzer {
      * @throws java.lang.IllegalStateException if annotation not found
      */
     public static String getMethodPath(final Method method) {
+        final Path path = method.getAnnotation(Path.class);
+        if (path == null) {
+            // method might miss path annotation if the path is the same as resource path
+            return "/";
+        }
         return PathUtils.normalizeAbsolutePath(findAnnotatedMethod(method).getAnnotation(Path.class).value());
     }
 
@@ -192,8 +197,8 @@ public final class ResourceAnalyzer {
      */
     public static Method findAnnotatedMethod(final Method method) {
         Method res = null;
-        // searching for annotated method
-        if (method.getAnnotation(Path.class) == null) {
+        // searching for annotated method (could be Path or method annotation)
+        if (!isJerseyAnnotated(method)) {
             // try to search in superclasses and interfaces (for declaring class!)
             for (Class<?> type : GenericsResolver.resolve(method.getDeclaringClass())
                     .getGenericsInfo().getComposingTypes()) {
@@ -201,9 +206,9 @@ public final class ResourceAnalyzer {
                     // searching same method, but annotated
                     if (cand.getName().equals(method.getName())
                             && cand.getParameterTypes().length == method.getParameterTypes().length
-                            && cand.getAnnotation(Path.class) != null
                             // not count possible type differences
-                            && Arrays.equals(cand.getParameterTypes(), method.getParameterTypes())) {
+                            && Arrays.equals(cand.getParameterTypes(), method.getParameterTypes())
+                            && isJerseyAnnotated(cand)) {
                         res = cand;
                         break;
                     }
@@ -218,6 +223,21 @@ public final class ResourceAnalyzer {
             res = method;
         }
         return res;
+    }
+
+    /**
+     * Check if provided method is annotated with jersey annotations. Http methods must have http method
+     * annotation (like {@link jakarta.ws.rs.GET}), but may lack {@link jakarta.ws.rs.Path} annotation.
+     * Sub-resource lookup method must have {@link Path annotation}. So target method must be checked to contain
+     * one of possible annotations.
+     * <p>
+     * Note that it is impossible to have Path and http method annotation on different methods (jersey requirement).
+     *
+     * @param method method to check
+     * @return true if method contains jersey annotations
+     */
+    public static boolean isJerseyAnnotated(final Method method) {
+        return method.getAnnotation(Path.class) != null || getHttpMethod(method).isPresent();
     }
 
     /**
