@@ -46,6 +46,10 @@ public class ResourceAnalyzerTest {
 
         assertThat(ResourceAnalyzer.getMethodPath(DirectResource.class.getMethod("get", MappedBean.class)))
                 .isEqualTo("/{sm}/2");
+
+        // NO @Path on method
+        assertThat(ResourceAnalyzer.getMethodPath(DirectResource.class, "nopath")).isEqualTo("/");
+        assertThat(ResourceAnalyzer.getMethodPath(InterfaceResource.class, "nopath")).isEqualTo("/");
     }
 
     @Test
@@ -106,6 +110,12 @@ public class ResourceAnalyzerTest {
         assertThat(info.getHeaderParams()).isEmpty();
         assertThat(info.getCookieParams()).isEmpty();
         assertThat(info.getMatrixParams()).isEmpty();
+
+        // WHEN method without path annotation
+        info = ResourceAnalyzer
+                .analyzeMethodCall(DirectResource.class, DirectResource::nopath);
+        assertThat(info.getHttpMethod()).isEqualTo("GET");
+        assertThat(info.getPath()).isEqualTo("/");
     }
 
     @Test
