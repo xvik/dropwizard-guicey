@@ -50,6 +50,18 @@ public class RestClientTest {
     }
 
     @Test
+    void testBodyAsArgument(ClientSupport client) {
+        final ResourceClient<Resource> rest = client.restClient(Resource.class);
+
+        // WHEN body as argument
+        final Resource.ModelType body = new Resource.ModelType("test");
+        assertThat(rest.method(instance -> instance.post2(body)).asString()).isEqualTo("test");
+
+        // WHEN annotated body
+        assertThat(rest.method(instance -> instance.post3(body)).asString()).isEqualTo("test");
+    }
+
+    @Test
     void testSubResources(ClientSupport client) {
         final ResourceClient<Resource> rest = client.restClient(Resource.class);
         assertThat(rest.method(instance -> instance.sub().get()).asString()).isEqualTo("ok");

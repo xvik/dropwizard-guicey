@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.client.support;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
@@ -85,5 +86,36 @@ public class Resource {
     @Path("/sub")
     public SubResource sub() {
         return new SubResource();
+    }
+
+    @Path("/entity")
+    @POST
+    public String post2(ModelType model) {
+        return model.getName();
+    }
+
+    @Path("/entity2")
+    @POST
+    public String post3(@NotNull ModelType model) {
+        return model.getName();
+    }
+
+    public static class ModelType {
+        private String name;
+
+        public ModelType() {
+        }
+
+        public ModelType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }
