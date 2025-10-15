@@ -272,7 +272,9 @@ public class ResourceAnalyzerTest {
 
         assertThatThrownBy(() -> ResourceAnalyzer.findMethod(DirectResource.class, "get"))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessage("Method with name 'get' is not unique in class 'DirectResource': Response get(MappedBean), Response get(String, String, String, String, String)");
+                .hasMessageStartingWith("Method with name 'get' is not unique in class 'DirectResource'")
+                .hasMessageContaining("Response get(MappedBean)")
+                .hasMessageContaining("Response get(String, String, String, String, String)");
 
         assertThatThrownBy(() -> ResourceAnalyzer.findHttpMethod(RootResource.class.getMethod("sub1")))
                 .isInstanceOf(IllegalStateException.class)
