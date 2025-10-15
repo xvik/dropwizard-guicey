@@ -1,5 +1,6 @@
 package ru.vyarus.dropwizard.guice.url.resource.support;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.CookieParam;
@@ -65,5 +66,34 @@ public class DirectResource {
     public void multipart2(@FormDataParam("p1") String p1,
                            @FormDataParam("file") InputStream file,
                            @FormDataParam("file") FormDataContentDisposition fileDisposition) {
+    }
+
+    @Path("/entity")
+    @POST
+    public void post2(ModelType model) {
+    }
+
+    @Path("/entity2")
+    @POST
+    public void post3(@NotNull ModelType model) {
+    }
+
+    public static class ModelType {
+        private String name;
+
+        public ModelType() {
+        }
+
+        public ModelType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }

@@ -37,6 +37,7 @@
     - Add connector switching api to ClientSupport: apacheClient(), urlconnectorClient()
       This allows using different connectors within one test 
       (note that apache connector is required for PATCH calls and urlconnector better handles multipart requests)
+    - Client logging now logs multipart requests (now PAYLOAD_ANY, before it was PAYLOAD_TEXT)
     - (BREAKING) previous target(String... path) methods replaced with string format: target(String, Object...args)
     - (BREAKING) deprecated targetMain(): replaced with targetApp()
     - (BREAKING) StubRest default status declaration removed as not useful

@@ -3,6 +3,7 @@ package ru.vyarus.dropwizard.guice.test.client.builder.call;
 import com.google.common.base.Preconditions;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.ResourceClient;
@@ -46,6 +47,11 @@ public final class RestCallAnalyzer {
                                                          final @Nullable Object body) {
         final ResourceMethodInfo info = ResourceAnalyzer.analyzeMethodCall(client.getResourceType(), method);
         Object actualBody = body;
+        if (actualBody == null && info.getEntity() != null) {
+            // use provided argument without annotations as body
+            // NOTE: both entity and form params are impossible
+            actualBody = Entity.json(info.getEntity());
+        }
         if (actualBody == null && !info.getFormParams().isEmpty()) {
             // build form entity
             final FormBuilder params = client.buildForm(info.getPath())
