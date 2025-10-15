@@ -426,9 +426,10 @@ public final class ResourceAnalyzer {
     }
 
     @SuppressWarnings({"unchecked", "PMD.NcssCount", "PMD.CognitiveComplexity", "PMD.CyclomaticComplexity",
-            "checkstyle:CyclomaticComplexity"})
+            "checkstyle:CyclomaticComplexity", "checkstyle:JavaNCSS", "checkstyle:ExecutableStatementCount"})
     private static void handle(final Annotation[] annotations, final Object value, final ResourceMethodInfo info,
                                final Multimap<String, Object> multipart) {
+        boolean recognized = false;
         if (value != null) {
             for (Annotation ann : annotations) {
                 if (ann.annotationType().equals(Context.class)) {
@@ -440,21 +441,27 @@ public final class ResourceAnalyzer {
                     if (!(value instanceof PathSegment)) {
                         info.getPathParams().put(param.value(), value);
                     }
+                    recognized = true;
                 } else if (ann.annotationType().equals(QueryParam.class)) {
                     final QueryParam param = (QueryParam) ann;
                     info.getQueryParams().put(param.value(), value);
+                    recognized = true;
                 } else if (ann.annotationType().equals(HeaderParam.class)) {
                     final HeaderParam param = (HeaderParam) ann;
                     info.getHeaderParams().put(param.value(), value);
+                    recognized = true;
                 } else if (ann.annotationType().equals(MatrixParam.class)) {
                     final MatrixParam param = (MatrixParam) ann;
                     info.getMatrixParams().put(param.value(), value);
+                    recognized = true;
                 } else if (ann.annotationType().equals(FormParam.class)) {
                     final FormParam param = (FormParam) ann;
                     info.getFormParams().put(param.value(), value);
+                    recognized = true;
                 } else if (ann.annotationType().equals(CookieParam.class)) {
                     final CookieParam param = (CookieParam) ann;
                     info.getCookieParams().put(param.value(), String.valueOf(value));
+                    recognized = true;
                 } else if ("FormDataParam".equals(ann.annotationType().getSimpleName())) {
                     // collected for delayed processing
                     final String paramName = MultipartParamsSupport.getParamName(ann);
@@ -463,12 +470,15 @@ public final class ResourceAnalyzer {
                     } else {
                         multipart.put(paramName, value);
                     }
+                    recognized = true;
                 } else if ("org.glassfish.jersey.media.multipart.FormDataMultiPart".equals(
                         value.getClass().getName())) {
                     // case: method parameter accept entire multipart (without direct fields mapping)
                     MultipartParamsSupport.configureFromMultipart(multipart, value);
+                    recognized = true;
                 } else if (ann.annotationType().equals(BeanParam.class)) {
                     handleBean(value, info, multipart);
+                    recognized = true;
                 }
             }
             // this could be urlencoded parameters
@@ -477,6 +487,14 @@ public final class ResourceAnalyzer {
                 map.forEach((o, objects) ->
                         info.getFormParams().put(String.valueOf(o), objects.size() == 1 ? objects.get(0) : objects)
                 );
+                recognized = true;
+            }
+            if (!recognized) {
+                // assume it is a method body (e.g. POST entity).
+                // The logic: if used provided not null value then it should be used in request
+                Preconditions.checkState(info.getEntity() == null, "Multiple entity arguments detected: \n\t%s\n\t%s",
+                        info.getEntity(), value);
+                info.setEntity(value);
             }
         }
     }

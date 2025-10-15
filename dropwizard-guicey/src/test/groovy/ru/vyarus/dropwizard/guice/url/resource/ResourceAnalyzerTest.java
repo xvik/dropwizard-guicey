@@ -138,6 +138,21 @@ public class ResourceAnalyzerTest {
         assertThat(info.getCookieParams()).isEmpty();
     }
 
+    @Test
+    void testRawEntityRecognition() {
+        // WHEN analyze simple post with entity
+        final DirectResource.ModelType entity = new DirectResource.ModelType("test");
+        ResourceMethodInfo info = ResourceAnalyzer
+                .analyzeMethodCall(DirectResource.class, res -> res.post2(entity));
+
+        assertThat(info.getEntity()).isEqualTo(entity);
+
+        // WHEN analyze simple post with annotated
+        info = ResourceAnalyzer
+                .analyzeMethodCall(DirectResource.class, res -> res.post3(entity));
+
+        assertThat(info.getEntity()).isEqualTo(entity);
+    }
 
     @Test
     void testBeanParamMapping() {

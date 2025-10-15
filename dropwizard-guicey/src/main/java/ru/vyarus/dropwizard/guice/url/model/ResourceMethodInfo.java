@@ -46,6 +46,8 @@ public class ResourceMethodInfo {
     private final Map<String, Object> formParams = new HashMap<>();
     private final Map<String, Object> matrixParams = new HashMap<>();
 
+    private Object entity;
+
     /**
      * Create a resource method info object.
      *
@@ -206,6 +208,22 @@ public class ResourceMethodInfo {
      */
     public String getHttpMethod() {
         return httpMethod;
+    }
+
+    /**
+     * @return entity object
+     */
+    public Object getEntity() {
+        return entity;
+    }
+
+    /**
+     * Provided argument without known jersey annotations (assumed to be request body).
+     *
+     * @param entity entity object
+     */
+    public void setEntity(final Object entity) {
+        this.entity = entity;
     }
 
     /**
