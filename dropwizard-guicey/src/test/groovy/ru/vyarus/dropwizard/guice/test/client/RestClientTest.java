@@ -78,7 +78,7 @@ public class RestClientTest {
                 .subResourceClient("sub2", SubSubResource.class)
                 .method(SubSubResource::get).asString()).isEqualTo("ko");
 
-        assertThatThrownBy(() -> rest.subClient(SubResource.class))
+        assertThatThrownBy(() -> rest.restClient(SubResource.class))
                 .isInstanceOf(UnsupportedOperationException.class)
                 .hasMessageContaining("In context of resource, sub-resource client should be obtained with " +
                         "subResourceClient() method which ignores sub-resource @Path annotation (not used in sub-resource path building)");
@@ -105,10 +105,10 @@ public class RestClientTest {
 
     @Test
     void testBasicRestClient(ClientSupport client) {
-        final TestRestClient<?> rest = client.restClient();
-        assertThat(rest.toString()).isEqualTo("Rest client for: http://localhost:8080/");
+        final TestClient<?> rest = client.restClient();
+        assertThat(rest.toString()).isEqualTo("Client for: http://localhost:8080/");
 
-        assertThat(rest.subClient(Resource.class).method(Resource::get).asString()).isEqualTo("[1,2,3]");
+        assertThat(rest.restClient(Resource.class).method(Resource::get).asString()).isEqualTo("[1,2,3]");
 
         assertThat(rest.subClient("matrix/sub;p1=1").asRestClient(SubMatrix.class)
                 .method(instance -> instance.get("2")).asString())
@@ -127,7 +127,7 @@ public class RestClientTest {
 
     @Test
     void testShortcuts(ClientSupport client) {
-        final TestRestClient<?> rest = client.restClient().subClient("/root");
+        final TestClient<?> rest = client.restClient().subClient("/root");
 
         rest.get("/%s", "get");
         assertThat(rest.get("/%s", List.class, "get")).isEqualTo(Arrays.asList(1, 2, 3));

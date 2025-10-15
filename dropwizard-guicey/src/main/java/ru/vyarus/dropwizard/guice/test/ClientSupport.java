@@ -11,7 +11,6 @@ import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.ResourceClient;
 import ru.vyarus.dropwizard.guice.test.client.TestClient;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
-import ru.vyarus.dropwizard.guice.test.client.TestRestClient;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestRequestConfig;
 import ru.vyarus.dropwizard.guice.url.AppUrlBuilder;
 
@@ -45,9 +44,9 @@ import ru.vyarus.dropwizard.guice.url.AppUrlBuilder;
  * The main idea of clients is the ability to create a client for any base path to shorten urls in tests.
  * Also, each client could declare its own defaults, applied to all requests (for example, useful for authorization).
  * <p>
- * There is also a specialized {@link #customClient(String, Object...)} for custom clients for creating remote api
+ * There is also a specialized {@link #externalClient(String, Object...)} for custom clients for creating remote api
  * clients (with the same client api):
- * {@code support.customClient("http://localhost:8080/some/path").get("/some/resource")}.
+ * {@code support.externalClient("http://localhost:8080/some/path").get("/some/resource")}.
  * <p>
  * There is a special class-based client constructor {@link #restClient(Class)} for resources. This makes tests
  * type-safe as the target resource path is obtained directly from the class annotation. Also, such clients
@@ -274,7 +273,7 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      * @param args variables for path placeholders (String.format() arguments)
      * @return jersey web target object
      * @see #basePathRoot()
-     * @see #customClient(String, Object...)  for external api client
+     * @see #externalClient(String, Object...)  for external api client
      */
     @Override
     public WebTarget target(final String path, final Object... args) {
@@ -381,9 +380,9 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      *
      * @return rest client
      */
-    public TestRestClient<?> restClient() {
+    public TestClient<?> restClient() {
         // client INHERITS support defaults
-        return new TestRestClient<>(() -> getClient().target(basePathRest()), defaults);
+        return new TestClient<>(() -> getClient().target(basePathRest()), defaults);
     }
 
     /**
@@ -400,6 +399,7 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      * @param <K>      resource type
      * @return rest client for the given resource class
      */
+    @Override
     public <K> ResourceClient<K> restClient(final Class<K> resource) {
         final String target = UriBuilder.newInstance().path(resource).toTemplate();
         // client INHERITS support defaults
@@ -439,7 +439,7 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
     /**
      * Construct a client for external url.
      * <p>
-     * Example of variables usage: {@code customClient("http://localhost:8080/%s/other", 12)}.
+     * Example of variables usage: {@code externalClient("http://localhost:8080/%s/other", 12)}.
      * <p>
      * Will not inherit current defaults.
      *
@@ -447,29 +447,10 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      * @param args variables for path placeholders (String.format() arguments)
      * @return client for the given external url
      */
-    public TestClient<?> customClient(final String url, final Object... args) {
+    public TestClient<?> externalClient(final String url, final Object... args) {
         checkHttp(url);
         // custom external client - no defaults inherited
         return new TestClient<>(() -> getClient().target(String.format(url, args)), null);
-    }
-
-    /**
-     * Construct a rest client for external url. If you have a resource class for external api, then construct
-     * client with base url first and then apply resource class:
-     * {@code customRestClient("http://localhost:8080/api/").subClient(ResourceClass.class)}.
-     * <p>
-     * Example of variables usage: {@code customRestClient("http://localhost:8080/api/%s/other", 12)}
-     * <p>
-     * Will not inherit current defaults.
-     *
-     * @param url  external url, started with "http(s)" (could contain String.format() placeholders: %s)
-     * @param args variables for path placeholders (String.format() arguments)
-     * @return rest client for the given external url
-     */
-    public TestRestClient<?> customRestClient(final String url, final Object... args) {
-        checkHttp(url);
-        // custom external client - no defaults inherited
-        return new TestRestClient<>(() -> getClient().target(String.format(url, args)), null);
     }
 
     @Override

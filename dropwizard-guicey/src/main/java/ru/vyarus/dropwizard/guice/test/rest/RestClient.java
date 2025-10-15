@@ -3,7 +3,7 @@ package ru.vyarus.dropwizard.guice.test.rest;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import org.glassfish.jersey.test.JerseyTest;
-import ru.vyarus.dropwizard.guice.test.client.TestRestClient;
+import ru.vyarus.dropwizard.guice.test.client.TestClient;
 import ru.vyarus.dropwizard.guice.test.rest.support.GuiceyJerseyTest;
 
 import static java.util.Objects.requireNonNull;
@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  * @author Vyacheslav Rusakov
  * @since 20.02.2025
  */
-public class RestClient extends TestRestClient<RestClient> {
+public class RestClient extends TestClient<RestClient> {
 
     private final GuiceyJerseyTest jerseyTest;
     /**
@@ -38,6 +38,7 @@ public class RestClient extends TestRestClient<RestClient> {
      * @param jerseyTest jersey test instance
      */
     public RestClient(final GuiceyJerseyTest jerseyTest) {
+        super(null);
         this.jerseyTest = jerseyTest;
     }
 

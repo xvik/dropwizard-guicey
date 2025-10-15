@@ -12,6 +12,7 @@ import ru.vyarus.dropwizard.guice.test.client.builder.FormBuilder;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestClientDefaults;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestClientRequestBuilder;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestRequestConfig;
+import ru.vyarus.dropwizard.guice.url.util.RestPathUtils;
 
 import java.net.URI;
 import java.util.function.Consumer;
@@ -120,8 +121,7 @@ import java.util.function.Supplier;
  * </code></pre>
  * <p>
  * {@link TestClient} is a general client class, but there are special client classes for rest (extending it):
- * {@link ru.vyarus.dropwizard.guice.test.client.TestRestClient} and
- * {@link ru.vyarus.dropwizard.guice.test.client.ResourceClient} (they could be obtained from the root
+ * {@link ru.vyarus.dropwizard.guice.test.client.ResourceClient} (could be obtained from the root) and
  * {@link ru.vyarus.dropwizard.guice.test.ClientSupport object (which is also a test client)})
  *
  * @param <T> actual client type
@@ -219,12 +219,12 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * @param args variables for path placeholders (String.format() arguments)
      * @return new client with a different root path
      */
-    public T subClient(final String path, final Object... args) {
+    public TestClient<?> subClient(final String path, final Object... args) {
         Preconditions.checkState(!path.toLowerCase().startsWith("http"),
                 "Only sub urls relative to current client url could be used. For completely custom external "
-                        + "client creation use ClientSupport.customClient()");
+                        + "client creation use ClientSupport.externalClient()");
         // client INHERITS current defaults
-        return createClient(String.format(path, args));
+        return new TestClient<>(() -> target(String.format(path, args)), defaults);
     }
 
     /**
@@ -240,10 +240,10 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * @param consumer uri builder configurator
      * @return client with a constructed path (relative to the current client path)
      */
-    public T subClient(final Consumer<UriBuilder> consumer) {
+    public TestClient<?> subClient(final Consumer<UriBuilder> consumer) {
         final UriBuilder uriBuilder = UriBuilder.newInstance();
         consumer.accept(uriBuilder);
-        return createClient(uriBuilder.toString());
+        return new TestClient<>(() -> target(uriBuilder.toString()), defaults);
     }
 
     /**
@@ -261,6 +261,56 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
     }
 
     /**
+     * Create a new sub-client for a specified resource class (appends a resource path, obtained from
+     * {@link jakarta.ws.rs.Path} annotation, to the current client path). Method is useful when generic
+     * rest path must be "typed" with a resource type (to be able to call resource methods directly).
+     * <p>
+     * In case of sub-resources, use {@link #subResourceClient(String, Class, Object...)} to properly specify
+     * sub-resource mapping path (from lookup method):
+     * {@code ResourceClient rest = client.subResourceClient("path", SubResource.class)}.
+     * IMPORTANT: this is NOT THE SAME: {@code client.subClient("path").restClient(SubResource.class)} because
+     * "restClient()" call would append path from resource, which is ignored for sub resources!.
+     * <p>
+     * Defaults could be used to declare path parameter values:
+     * {@code ResourceClient rest = client.restClient(Resource.class).defaultPathParam("param", "value")} where
+     * a resource class path is like "/some/{param}/path". With the default path param, there would be no need to
+     * declare it for each request call.
+     * <p>
+     * All defaults, configured for the current client, will be inherited in a sub-client. If this is not required,
+     * just clean defaults after creation: {@code client.subClient(ResClass.class).reset()}.
+     *
+     * @param resource resource class one to build a path for
+     * @return resource client (with a resource path, relative to the current client path)
+     * @param <R> resource type
+     */
+    public <R> ResourceClient<R> restClient(final Class<R> resource) {
+        final String target = RestPathUtils.getResourcePath(resource);
+        // last class used for a resource type to get methods on
+        return new ResourceClient<>(() -> target(target), defaults, resource);
+    }
+
+    /**
+     * Create a sub client for the sub-resource.
+     * <p>
+     * IMPORTANT: Path, declared on sub-resource class is ignored! Only lookup method path is counted.
+     * For example, {@code @Path("/sub") SubResource something() {...}} means all sub resource methods would be
+     * available on "/sub/*".
+     *
+     * @param path        sub-resource mapping path (from sub-resource method; could contain String.format()
+     *                    placeholders: %s)
+     * @param args variables for path placeholders (String.format() arguments)
+     * @param subResource sub-resource
+     * @param <R>         sub-resource type
+     * @return sub-resource client
+     */
+    public <R> ResourceClient<R> subResourceClient(final String path, final Class<R> subResource,
+                                                   final Object... args) {
+        final String target = String.format(path, args);
+        // last class used for a resource type to get methods on
+        return new ResourceClient<>(() -> target(target), defaults, subResource);
+    }
+
+    /**
      * Cast current path as provided resource (full!) path. Use-case: resources were mapped on non-standard path
      * (admin context resources or internal resource mappings).
      * <p>
@@ -268,10 +318,10 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * already a resource path.
      *
      * @param resource resource type
-     * @param <T>      resource type
+     * @param <R>      resource type
      * @return rest client for provided resource
      */
-    public <T> ResourceClient<T> asRestClient(final Class<T> resource) {
+    public <R> ResourceClient<R> asRestClient(final Class<R> resource) {
         return new ResourceClient<>(() -> target("/"), defaults, resource);
     }
 
@@ -910,12 +960,14 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * <p>
      * See {@link ru.vyarus.dropwizard.guice.test.client.builder.FormBuilder#param(String, Object)} for more details
      * about parameter values conversion.
+     * <p>
+     * Use null path to build entity: {@code buildForm(null).param().buildEntity()}.
      *
      * @param path target path, relative to rest root (could contain String.format() placeholders: %s)
      * @param args variables for path placeholders (String.format() arguments)
      * @return form builder
      */
-    public FormBuilder buildForm(final String path, final Object... args) {
+    public FormBuilder buildForm(final @Nullable String path, final Object... args) {
         return new FormBuilder(target(path, args), defaults);
     }
 
@@ -964,17 +1016,5 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
     private <R> R handleShortcut(final TestClientRequestBuilder request, final @Nullable GenericType<R> result) {
         // immediate result mapping with bypassing exceptions in rest stubs mode (if not exception mapper registered)
         return request.as(result);
-    }
-
-    /**
-     * Create a client instance. It is assumed that all underlying classes would override this method to produce
-     * sub clients of the same type.
-     *
-     * @param target target path
-     * @return client insatnce
-     */
-    @SuppressWarnings("unchecked")
-    protected T createClient(final String target) {
-        return (T) new TestClient<>(() -> target(target), defaults);
     }
 }

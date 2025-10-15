@@ -21,7 +21,7 @@ public class MethodMatchTest {
 
     @Test
     void testMethodSearch() {
-        final ResourceClient<Resource1> res1 = rest.subClient(Resource1.class);
+        final ResourceClient<Resource1> res1 = rest.restClient(Resource1.class);
 
         String res = res1.method(mock -> mock.get("test", null))
 //                .pathParam("foo", "test")

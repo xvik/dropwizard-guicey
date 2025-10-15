@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import ru.vyarus.dropwizard.guice.module.installer.util.StackUtils;
 import ru.vyarus.dropwizard.guice.test.client.ResourceClient;
 import ru.vyarus.dropwizard.guice.test.client.TestClient;
-import ru.vyarus.dropwizard.guice.test.client.TestRestClient;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestClientDefaults;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestClientRequestBuilder;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestRequestConfig;
@@ -24,7 +23,6 @@ public final class RequestModifierSource {
             TestClientRequestBuilder.class,
             TestClientDefaults.class,
             TestClient.class,
-            TestRestClient.class,
             ResourceClient.class,
             RequestModifierSource.class
     );
