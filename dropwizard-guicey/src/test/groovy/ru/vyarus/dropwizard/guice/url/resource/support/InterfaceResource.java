@@ -21,6 +21,11 @@ public class InterfaceResource implements ResourceDeclaration {
     }
 
     @Override
+    public String nopath() {
+        return "nopath";
+    }
+
+    @Override
     public Response get(MappedBean bean) {
         return Response.ok().build();
     }
