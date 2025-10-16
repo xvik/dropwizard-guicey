@@ -14,6 +14,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.Installer
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ManualExtensionsValidatedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShutdownEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartingEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
@@ -99,6 +100,9 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
                 break;
             case ApplicationRun:
                 applicationRun((ApplicationRunEvent) event);
+                break;
+            case ApplicationStarting:
+                applicationStarting((ApplicationStartingEvent) event);
                 break;
             case JerseyConfiguration:
                 jerseyConfiguration((JerseyConfigurationEvent) event);
@@ -332,6 +336,20 @@ public class GuiceyLifecycleAdapter implements GuiceyLifecycleListener {
      * @see GuiceyLifecycle#ApplicationRun
      */
     protected void applicationRun(final ApplicationRunEvent event) {
+        // empty
+    }
+
+    /**
+     * Called after complete application configuration ({@link io.dropwizard.core.Application#run(
+     * io.dropwizard.core.Configuration, io.dropwizard.core.setup.Environment)} called), but before lifecycle
+     * startup (before managed objects run). Actually the same as jetty lifecycle started event
+     * ({@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStarting(
+     * org.eclipse.jetty.util.component.LifeCycle)}.
+     *
+     * @param event event object
+     * @see GuiceyLifecycle#ApplicationStarting
+     */
+    protected void applicationStarting(final ApplicationStartingEvent event) {
         // empty
     }
 

@@ -96,6 +96,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\tGuicey time                        : 111 ms \n" +
                 "\t\t\t\t\tInstallers time                    : 111 ms \n" +
                 "\t\t\t\t\tListeners time                     : 111 ms \n" +
+                "\t\t\t\t\t\tApplicationStartingEvent           : 111 ms \n" +
                 "\t\t\t\t\t\tApplicationStartedEvent            : 111 ms");
 
         Assertions.assertThat(out).contains("Application shutdown time: \n" +
@@ -177,6 +178,7 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tGuicey time                        : 111 ms \n" +
                 "\t\t\t\t\t\tInstallers time                    : 111 ms \n" +
                 "\t\t\t\t\t\tListeners time                     : 111 ms \n" +
+                "\t\t\t\t\t\t\tApplicationStartingEvent           : 111 ms \n" +
                 "\t\t\t\t\t\t\tJerseyConfigurationEvent           : 111 ms \n" +
                 "\t\t\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms \n" +
                 "\t\t\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms \n" +
@@ -244,8 +246,6 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tExtensions installation            : 111 ms \n" +
                 "\t\t\t\tInjector creation                  : 111 ms \n");
 
-
-        // NOTE: jersey events here because rest stub runs at rnu phase
         Assertions.assertThat(out).contains("\t\t\t\tListeners time                     : 111 ms \n" +
                 "\t\t\t\t\tBeforeRunEvent                     : 111 ms \n" +
                 "\t\t\t\t\tBundlesStartedEvent                : 111 ms \n" +
@@ -255,9 +255,6 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\t\tExtensionsInstalledByEvent         : 111 ms \n" +
                 "\t\t\t\t\tExtensionsInstalledEvent           : 111 ms \n" +
                 "\t\t\t\t\tApplicationRunEvent                : 111 ms \n" +
-                "\t\t\t\t\tJerseyConfigurationEvent           : 111 ms \n" +
-                "\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms \n" +
-                "\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms \n" +
                 "\n" +
                 "\t\tWeb server startup                 : 111 ms \n" +
                 "\t\t\tLifecycle simulation time          : 111 ms \n" +
@@ -267,6 +264,10 @@ public class StartupDiagnosticTest extends AbstractPlatformTest {
                 "\t\t\t\tGuicey time                        : 111 ms \n" +
                 "\t\t\t\t\tInstallers time                    : 111 ms \n" +
                 "\t\t\t\t\tListeners time                     : 111 ms \n" +
+                "\t\t\t\t\t\tApplicationStartingEvent           : 111 ms \n" +
+                "\t\t\t\t\t\tJerseyConfigurationEvent           : 111 ms \n" +
+                "\t\t\t\t\t\tJerseyExtensionsInstalledByEvent   : 111 ms \n" +
+                "\t\t\t\t\t\tJerseyExtensionsInstalledEvent     : 111 ms \n" +
                 "\t\t\t\t\t\tApplicationStartedEvent            : 111 ms");
 
         Assertions.assertThat(out).contains("Application shutdown time: \n" +
