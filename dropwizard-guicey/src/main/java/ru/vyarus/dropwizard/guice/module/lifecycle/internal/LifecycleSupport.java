@@ -38,6 +38,7 @@ import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.Installer
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.configuration.ManualExtensionsValidatedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationShutdownEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartedEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartingEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStoppedEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyConfigurationEvent;
 import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.JerseyExtensionsInstalledByEvent;
@@ -225,6 +226,7 @@ public final class LifecycleSupport {
      * @param configurationTree parsed configuration
      * @param environment       environment
      */
+    @SuppressWarnings("checkstyle:AnonInnerLength")
     public void runPhase(final Configuration configuration,
                          final ConfigurationTree configurationTree,
                          final Environment environment) {
@@ -234,6 +236,11 @@ public final class LifecycleSupport {
         broadcast(new BeforeRunEvent(context));
         // fire after complete initialization (final meta-event)
         environment.lifecycle().addEventListener(new LifeCycle.Listener() {
+            @Override
+            public void lifeCycleStarting(LifeCycle event) {
+                applicationStarting();
+            }
+
             @Override
             public void lifeCycleStarted(final LifeCycle event) {
                 applicationStarted();
@@ -352,6 +359,13 @@ public final class LifecycleSupport {
      */
     public void applicationRun() {
         broadcast(new ApplicationRunEvent(context));
+    }
+
+    /**
+     * Application starting (application run method is called but neither managed nor jersey context not started).
+     */
+    private void applicationStarting() {
+        broadcast(new ApplicationStartingEvent(context));
     }
 
     /**

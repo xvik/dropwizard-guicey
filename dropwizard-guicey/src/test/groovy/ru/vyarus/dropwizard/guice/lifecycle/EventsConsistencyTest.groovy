@@ -288,6 +288,11 @@ class EventsConsistencyTest extends AbstractTest {
         }
 
         @Override
+        protected void applicationStarting(ApplicationStartingEvent event) {
+            injectorChecks(event)
+        }
+
+        @Override
         protected void applicationStarted(ApplicationStartedEvent event) {
             jerseyCheck(event)
             assert event.jettyStarted
