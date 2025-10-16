@@ -42,6 +42,8 @@
     - (BREAKING) deprecated targetMain(): replaced with targetApp()
     - (BREAKING) StubRest default status declaration removed as not useful
       (required status could be declared now with the new request builder)
+* Add guicey event ApplicationStartingEvent thrown just before managed and web services startup
+* Fix stubs rest too early startup, causing problems with jersey registrations in application run method
 
 ### 7.2.1 (2025-05-12)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)

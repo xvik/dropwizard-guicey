@@ -12,7 +12,7 @@ import ru.vyarus.dropwizard.guice.module.context.Disables;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller;
 import ru.vyarus.dropwizard.guice.module.lifecycle.GuiceyLifecycle;
-import ru.vyarus.dropwizard.guice.module.lifecycle.event.run.ApplicationRunEvent;
+import ru.vyarus.dropwizard.guice.module.lifecycle.event.jersey.ApplicationStartingEvent;
 import ru.vyarus.dropwizard.guice.test.rest.support.GuiceyJerseyTest;
 
 import java.util.Collections;
@@ -104,11 +104,12 @@ public class RestStubsHook implements GuiceyConfigurationHook {
                 // to indicate)
                 .disable(Disables.webExtension().and(Disables.jerseyExtension().negate()))
 
-                // started with listeners to run before application startup event, which is widely used for
-                // reporting
+                // started just before lifecycle startup (even if managed beans processing will be disabled,
+                // lifecycle events will work). Important to run before ApplicationStarted even which is often
+                // used by reporters
                 .listen(event -> {
-                    if (event.getType().equals(GuiceyLifecycle.ApplicationRun)) {
-                        final ApplicationRunEvent evt = (ApplicationRunEvent) event;
+                    if (event.getType().equals(GuiceyLifecycle.ApplicationStarting)) {
+                        final ApplicationStartingEvent evt = (ApplicationStartingEvent) event;
 
                         // manual registration required to reproduce production environment
                         registerDropwizardExtensions(evt.getEnvironment(),

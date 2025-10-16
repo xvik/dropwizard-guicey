@@ -154,11 +154,28 @@ public enum GuiceyLifecycle {
      * This point is before
      * {@link io.dropwizard.core.Application#run(
      * io.dropwizard.core.Configuration, io.dropwizard.core.setup.Environment)}. Ideal point for jersey and jetty
-     * listeners installation (with shortcut event methods).
+     * listeners installation (with shortcut event methods). To run after application run use
+     * {@link #ApplicationStarting}.
      */
     ApplicationRun(ApplicationRunEvent.class),
 
     // -- Application.run()
+
+    /**
+     * Called after complete application configuration ({@link io.dropwizard.core.Application#run(
+     * io.dropwizard.core.Configuration, io.dropwizard.core.setup.Environment)} called), but before lifecycle
+     * startup (before managed objects run). Actually the same as jetty lifecycle started event
+     * ({@link org.eclipse.jetty.util.component.LifeCycle.Listener#lifeCycleStarting(
+     * org.eclipse.jetty.util.component.LifeCycle)}.
+     * <p>
+     * May be used as for additional services startup (after all initializations), executed before "started" point,
+     * often used for reporting. As an example, sub rest use this event to run jersey context after initialization.
+     * This event also will be fired in guicey tests ({@link ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp}
+     * which does not start the web part).
+     * <p>
+     * NOTE: jersey context is not started yet!
+     */
+    ApplicationStarting(ApplicationStartingEvent.class),
 
     /**
      * Jersey context starting. At this point jersey is starting and jetty is only initializing. Since that point
