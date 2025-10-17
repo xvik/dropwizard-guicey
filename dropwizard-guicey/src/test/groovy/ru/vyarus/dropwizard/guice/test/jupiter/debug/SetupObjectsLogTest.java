@@ -31,6 +31,8 @@ public class SetupObjectsLogTest extends AbstractPlatformTest {
                 "\t\t<lambda>                       \t@EnableSetup Base#base2                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base2\n" +
                 "\t\t<lambda>                       \t@EnableSetup Test1#ext1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Test1#ext1\n" +
                 "\t\tExt3                           \t@EnableSetup Test1#ext2                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Test1#ext2\n" +
+                "\t\tWebClientFieldsSupport         \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
+                "\t\tWebResourceClientFieldsSupport \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tLogFieldsSupport               \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tRestStubFieldsSupport          \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tStubFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
@@ -45,14 +47,16 @@ public class SetupObjectsLogTest extends AbstractPlatformTest {
         assertThat(output).contains("Guicey test extensions (Test2.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
-                "\t\tExt1                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:102)\n" +
-                "\t\tExt2                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:102)\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:103)\n" +
-                "\t\tExt3                           \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:103)\n" +
+                "\t\tExt1                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:106)\n" +
+                "\t\tExt2                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:106)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:107)\n" +
+                "\t\tExt3                           \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:107)\n" +
                 "\t\t<lambda>                       \t@EnableSetup Base#base1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base1\n" +
                 "\t\t<lambda>                       \t@EnableSetup Base#base2                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base2\n" +
                 "\t\t<lambda>                       \t@EnableSetup Test2#ext1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Test2#ext1\n" +
                 "\t\t<lambda>                       \t@EnableSetup Test2#ext2                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Test2#ext2\n" +
+                "\t\tWebClientFieldsSupport         \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
+                "\t\tWebResourceClientFieldsSupport \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tLogFieldsSupport               \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tRestStubFieldsSupport          \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tStubFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +

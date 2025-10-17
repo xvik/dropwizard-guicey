@@ -28,6 +28,8 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                         "\n" +
                         "\tSetup objects = \n" +
                 "\t\t<lambda>                       \t@EnableSetup Test1#setup                           at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#setup\n" +
+                "\t\tWebClientFieldsSupport         \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
+                "\t\tWebResourceClientFieldsSupport \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tLogFieldsSupport               \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tRestStubFieldsSupport          \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tStubFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
@@ -40,10 +42,10 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                 "\t\t<lambda>                       \t@EnableHook Base#base2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base2\n" +
                 "\t\tExt1                           \t@TestGuiceyApp(hooks)\n" +
                 "\t\tExt2                           \t@TestGuiceyApp(hooks)\n" +
-                "\t\tExt3                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:136)\n" +
-                "\t\tExt4                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:136)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:137)\n" +
-                "\t\tExt5                           \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:137)\n" +
+                "\t\tExt3                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:140)\n" +
+                "\t\tExt4                           \t@EnableSetup Test1#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:140)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:141)\n" +
+                "\t\tExt5                           \t@EnableSetup Test1#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:141)\n" +
                 "\t\t<lambda>                       \t@EnableHook Test1#ext1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#ext1\n" +
                 "\t\t<lambda>                       \t@EnableHook Test1#ext2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#ext2");
 
@@ -68,6 +70,8 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                         "\n" +
                         "\tSetup objects = \n" +
                 "\t\t<lambda>                       \t@EnableSetup Test2#setup                           at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#setup\n" +
+                "\t\tWebClientFieldsSupport         \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
+                "\t\tWebResourceClientFieldsSupport \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tLogFieldsSupport               \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tRestStubFieldsSupport          \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tStubFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
@@ -78,14 +82,14 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                 "\tTest hooks = \n" +
                 "\t\t<lambda>                       \t@EnableHook Base#base1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base1\n" +
                 "\t\t<lambda>                       \t@EnableHook Base#base2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base2\n" +
-                "\t\tExt1                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:154)\n" +
-                "\t\tExt2                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:154)\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:155)\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:155)\n" +
-                "\t\tExt3                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:161)\n" +
-                "\t\tExt4                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:161)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:162)\n" +
-                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:162)\n" +
+                "\t\tExt1                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:158)\n" +
+                "\t\tExt2                           \t@RegisterExtension.hooks(class)                    at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:158)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:159)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.hooks(obj)                      at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:159)\n" +
+                "\t\tExt3                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:165)\n" +
+                "\t\tExt4                           \t@EnableSetup Test2#setup.hooks(class)              at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:165)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:166)\n" +
+                "\t\t<lambda>                       \t@EnableSetup Test2#setup.hooks(obj)                at r.v.d.g.t.j.d.HookObjectsLogTest.(HookObjectsLogTest.java:166)\n" +
                 "\t\t<lambda>                       \t@EnableHook Test2#ext1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#ext1\n" +
                 "\t\tExt5                           \t@EnableHook Test2#ext2                             at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#ext2\n");
 
