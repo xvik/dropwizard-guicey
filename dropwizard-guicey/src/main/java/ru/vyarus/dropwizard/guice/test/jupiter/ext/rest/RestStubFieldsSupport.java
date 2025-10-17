@@ -18,6 +18,7 @@ import ru.vyarus.dropwizard.guice.test.rest.support.ExtensionsSelector;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest} field support implementation.
@@ -43,6 +44,7 @@ public class RestStubFieldsSupport extends AnnotatedTestFieldSetup<StubRest, Res
         implements GuiceyConfigurationHook {
 
     private static final String TEST_RESOURCES_FIELD = "TEST_RESOURCES";
+    private static final String STUB_REST_CLIENT_KEY = "STUB_REST_CLIENT_KEY";
     private RestStubsHook restStubs;
 
     /**
@@ -50,6 +52,21 @@ public class RestStubFieldsSupport extends AnnotatedTestFieldSetup<StubRest, Res
      */
     public RestStubFieldsSupport() {
         super(StubRest.class, RestClient.class, TEST_RESOURCES_FIELD);
+    }
+
+    /**
+     * Static lookup for registered stubs rest client. Might be used by other extensions to get access to
+     * rest client.
+     * <p>
+     * Note: stubs rest client is registered AFTER application startup.
+     *
+     * @param context junit context
+     * @return rest client or null if not registered or requested too early
+     */
+    public static Optional<RestClient> lookupRestClient(final ExtensionContext context) {
+        return Optional.ofNullable((RestClient) context
+                .getStore(ExtensionContext.Namespace.create(RestStubFieldsSupport.class))
+                .get(STUB_REST_CLIENT_KEY));
     }
 
     @Override
@@ -85,7 +102,8 @@ public class RestStubFieldsSupport extends AnnotatedTestFieldSetup<StubRest, Res
     @Override
     protected void beforeValueInjection(final EventContext context,
                                         final AnnotatedField<StubRest, RestClient> field) {
-        // not used
+        context.getJunitContext().getStore(ExtensionContext.Namespace.create(RestStubFieldsSupport.class))
+                .put(STUB_REST_CLIENT_KEY, restStubs.getRestClient());
     }
 
     @Override
