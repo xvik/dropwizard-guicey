@@ -1,4 +1,5 @@
 * Update to dropwizard 4.0.16
+* * Use guice version without bundled asm ('classes' classifier)
 * Customizable DefaultTestClientFactory: it is now possible to use default implementation
   with customizations (override `configure` method)
     - Add ApacheTestClientFactory: useful to support PATCH methods on jdk > 16
