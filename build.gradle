@@ -1,7 +1,7 @@
 plugins {
     id 'ru.vyarus.github-info' version '2.0.0' apply false
     id 'ru.vyarus.quality' version '6.0.1' apply false
-    id 'com.github.spotbugs' version '6.4.2' apply false
+    id 'com.github.spotbugs' version '6.4.3' apply false
 //    id 'org.cyclonedx.bom' version '2.3.1' apply false
     id 'ru.vyarus.mkdocs' version '4.0.1' apply false
 
