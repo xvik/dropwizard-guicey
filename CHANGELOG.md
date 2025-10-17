@@ -43,6 +43,9 @@
     - (BREAKING) deprecated targetMain(): replaced with targetApp()
     - (BREAKING) StubRest default status declaration removed as not useful
       (required status could be declared now with the new request builder)
+* Add test web client field injection:
+    - @WebClient for ClientSupport, @WebClient(APP), @WebClient(ADMIN), @WebClient(REST) for specific clients
+    - @WebResourceClient for resource client direct mapping (works for integration and stub rest tests)
 * Add guicey event ApplicationStartingEvent thrown just before managed and web services startup
 * Fix stubs rest too early startup, causing problems with jersey registrations in application run method
 
