@@ -95,7 +95,7 @@ public class ClientSupportShortcutsTest {
         String out = TestSupport.captureOutput(() -> {
             TestSupport.runWebApp(App.class, injector -> {
                 ClientSupport client = TestSupport.getContextClient();
-                client.get("sample/get", null);
+                client.get("sample/get", Void.class);
 
                 return null;
             });
