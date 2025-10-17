@@ -12,9 +12,13 @@ dependencies {
     }
 
     api ('com.google.inject:guice') {
+        artifact {
+            classifier = 'classes'
+        }
         // use dropwizard guava version
         exclude group: 'com.google.guava', module: 'guava'
     }
+    api 'org.ow2.asm:asm'
     api ('com.google.inject.extensions:guice-servlet') {
         exclude group: 'com.google.inject', module: 'guice'
     }
