@@ -21,6 +21,9 @@ import java.util.List;
 public class WebResourceClientFieldsSupport extends AnnotatedTestFieldSetup<WebResourceClient, ResourceClient> {
     private static final String TEST_REST_CLIENT_FIELDS = "TEST_REST_CLIENT_FIELDS";
 
+    /**
+     * Create resource client fields support.
+     */
     public WebResourceClientFieldsSupport() {
         super(WebResourceClient.class, ResourceClient.class, TEST_REST_CLIENT_FIELDS);
     }
