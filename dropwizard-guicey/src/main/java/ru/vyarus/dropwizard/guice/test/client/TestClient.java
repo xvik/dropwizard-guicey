@@ -954,8 +954,8 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * Form build would automatically serialiaze java.util and java.time dates into String. To modify date
      * formats use {@link #defaultFormDateFormatter(java.text.DateFormat)} and
      * {@link #defaultFormDateTimeFormatter(java.time.format.DateTimeFormatter)} (or in builder directly:
-     * {@link ru.vyarus.dropwizard.guice.test.client.builder.FormBuilder#formDateFormatter(java.text.DateFormat)},
-     * {@link ru.vyarus.dropwizard.guice.test.client.builder.FormBuilder#formDateTimeFormatter(
+     * {@link ru.vyarus.dropwizard.guice.test.client.builder.FormBuilder#dateFormatter(java.text.DateFormat)},
+     * {@link ru.vyarus.dropwizard.guice.test.client.builder.FormBuilder#dateTimeFormatter(
      * java.time.format.DateTimeFormatter)}).
      * <p>
      * See {@link ru.vyarus.dropwizard.guice.test.client.builder.FormBuilder#param(String, Object)} for more details
