@@ -22,7 +22,9 @@ public class WebClientFieldsSupport extends AnnotatedTestFieldSetup<WebClient, T
 
     private static final String TEST_CLIENT_FIELDS = "TEST_CLIENT_FIELDS";
 
-
+    /**
+     * Create client fields support.
+     */
     public WebClientFieldsSupport() {
         super(WebClient.class, TestClient.class, TEST_CLIENT_FIELDS);
     }
