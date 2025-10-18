@@ -9,7 +9,7 @@ import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.builder.track.RequestTracker;
 import ru.vyarus.dropwizard.guice.test.client.builder.util.RequestModifierSource;
 import ru.vyarus.dropwizard.guice.test.client.builder.util.TestRequestConfigPrinter;
-import ru.vyarus.dropwizard.guice.test.client.builder.util.conf.JerseyClientConfigurer;
+import ru.vyarus.dropwizard.guice.test.client.builder.util.conf.JerseyRequestConfigurer;
 import ru.vyarus.dropwizard.guice.test.client.util.SourceAwareValue;
 
 import java.text.DateFormat;
@@ -869,10 +869,10 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
             target = target.resolveTemplatesFromEncoded(getConfiguredPathParamsMap());
         }
         if (!queryParams.isEmpty()) {
-            target = JerseyClientConfigurer.applyQueryParams(target, queryParams);
+            target = JerseyRequestConfigurer.applyQueryParams(target, queryParams);
         }
         if (!matrixParams.isEmpty()) {
-            target = JerseyClientConfigurer.applyMatrixParams(target, matrixParams);
+            target = JerseyRequestConfigurer.applyMatrixParams(target, matrixParams);
         }
         if (!properties.isEmpty()) {
             for (Map.Entry<String, ? extends Supplier<Object>> entry : properties.entrySet()) {
@@ -880,7 +880,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
             }
         }
         if (!extensions.isEmpty()) {
-            JerseyClientConfigurer.applyExtensions(target, extensions);
+            JerseyRequestConfigurer.applyExtensions(target, extensions);
         }
 
         return target;
