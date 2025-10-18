@@ -100,19 +100,19 @@ public class TestRequestConfigTest {
                 		(encodeSlashInPath=false encoded=true)
                 		p1=2
                 
-                	Query param                               at r.v.d.g.t.c.b.u.conf.(JerseyClientConfigurer.java:80)
+                	Query param                               at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:82)
                 		q1=1
                 
-                	Matrix param                              at r.v.d.g.t.c.b.u.conf.(JerseyClientConfigurer.java:80)
+                	Matrix param                              at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:82)
                 		m1=1
                 
                 	Property                                  at r.v.d.g.t.c.builder.(TestRequestConfig.java:879)
                 		prop=true
                 
-                	Register                                  at r.v.d.g.t.c.b.u.conf.(JerseyClientConfigurer.java:57)
+                	Register                                  at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:59)
                 		Integer                      (java.lang)               \s
                 
-                	Register                                  at r.v.d.g.t.c.b.u.conf.(JerseyClientConfigurer.java:59)
+                	Register                                  at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:61)
                 		Object                       (java.lang)               \s
                 
                 	Path                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:32)

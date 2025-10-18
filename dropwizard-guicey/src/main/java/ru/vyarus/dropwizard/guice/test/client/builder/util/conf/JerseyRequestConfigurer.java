@@ -9,12 +9,14 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 /**
+ * Helper utilities to apply jersey request configuration.
+ *
  * @author Vyacheslav Rusakov
  * @since 22.09.2025
  */
-public final class JerseyClientConfigurer {
+public final class JerseyRequestConfigurer {
 
-    private JerseyClientConfigurer() {
+    private JerseyRequestConfigurer() {
     }
 
     /**
