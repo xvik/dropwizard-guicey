@@ -174,6 +174,13 @@ public class GuiceyRunner {
     }
 
     /**
+     * Inject application fields (to use in run method).
+     */
+    public void injectApplication() {
+        injector.injectMembers(context.getBootstrap().getApplication());
+    }
+
+    /**
      * Inject fields in registered commands. This step is actually required only if currently executed dropwizard
      * command require such injections.
      */

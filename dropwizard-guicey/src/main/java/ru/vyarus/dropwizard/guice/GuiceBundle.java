@@ -172,6 +172,8 @@ public final class GuiceBundle implements ConfiguredBundle<Configuration> {
                 runner.analyzeAndRepackageBindings());
         // install extensions by instance
         runner.installExtensions();
+        // injected services could be used in run application method
+        runner.injectApplication();
         // inject command fields
         runner.injectCommands();
 
