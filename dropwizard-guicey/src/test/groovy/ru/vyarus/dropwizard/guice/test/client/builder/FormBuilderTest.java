@@ -183,7 +183,7 @@ public class FormBuilderTest {
     void testDateFormatters() throws Exception {
         // WHEN direct pattern
         FormBuilder builder = new FormBuilder(new TargetMock(), null)
-                .formDateFormat("yyyy");
+                .dateFormat("yyyy");
 
         builder.param("util", new SimpleDateFormat("dd/MM/yyyy").parse("12/12/2012"))
                 .param("time", DateTimeFormatter.ofPattern("dd/MM/yyyy").parse("11/11/2011"));
@@ -194,8 +194,8 @@ public class FormBuilderTest {
 
         // WHEN direct separate objects
         builder = new FormBuilder(new TargetMock(), null)
-                .formDateFormatter(new SimpleDateFormat("yyyy"))
-                .formDateTimeFormatter(DateTimeFormatter.ofPattern("yyyy"));
+                .dateFormatter(new SimpleDateFormat("yyyy"))
+                .dateTimeFormatter(DateTimeFormatter.ofPattern("yyyy"));
 
         builder.param("util", new SimpleDateFormat("dd/MM/yyyy").parse("12/12/2012"))
                 .param("time", DateTimeFormatter.ofPattern("dd/MM/yyyy").parse("11/11/2011"));

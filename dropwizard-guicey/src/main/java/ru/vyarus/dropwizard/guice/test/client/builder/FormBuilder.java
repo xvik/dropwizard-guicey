@@ -98,9 +98,9 @@ public class FormBuilder {
      *
      * @param formatter date formatter
      * @return builder instance for chained calls
-     * @see #formDateFormat(String) for short declaration
+     * @see #dateFormat(String) for short declaration
      */
-    public FormBuilder formDateFormatter(final DateFormat formatter) {
+    public FormBuilder dateFormatter(final DateFormat formatter) {
         this.config.formDateFormatter(formatter);
         return this;
     }
@@ -110,9 +110,9 @@ public class FormBuilder {
      *
      * @param formatter date formatter
      * @return builder instance for chained calls
-     * @see #formDateFormat(String) for short declaration
+     * @see #dateFormat(String) for short declaration
      */
-    public FormBuilder formDateTimeFormatter(final DateTimeFormatter formatter) {
+    public FormBuilder dateTimeFormatter(final DateTimeFormatter formatter) {
         this.config.formDateTimeFormatter(formatter);
         return this;
     }
@@ -122,11 +122,11 @@ public class FormBuilder {
      *
      * @param format format
      * @return builder instance for chained calls
-     * @see #formDateFormatter(java.text.DateFormat)
-     * @see #formDateTimeFormatter(java.time.format.DateTimeFormatter)
+     * @see #dateFormatter(java.text.DateFormat)
+     * @see #dateTimeFormatter(java.time.format.DateTimeFormatter)
      */
     @SuppressWarnings("PMD.SimpleDateFormatNeedsLocale")
-    public FormBuilder formDateFormat(final String format) {
+    public FormBuilder dateFormat(final String format) {
         this.config.formDateFormatter(new SimpleDateFormat(format));
         this.config.formDateTimeFormatter(DateTimeFormatter.ofPattern(format));
         return this;
@@ -153,8 +153,8 @@ public class FormBuilder {
      * {@link ru.vyarus.dropwizard.guice.test.client.TestClient#defaultFormDateFormatter(java.text.DateFormat)} and
      * {@link ru.vyarus.dropwizard.guice.test.client.TestClient#defaultFormDateTimeFormatter(
      * java.time.format.DateTimeFormatter)}.
-     * Or for request with: {@link #formDateFormatter(java.text.DateFormat)} and
-     * {@link #formDateTimeFormatter(java.time.format.DateTimeFormatter)}.
+     * Or for request with: {@link #dateFormatter(java.text.DateFormat)} and
+     * {@link #dateTimeFormatter(java.time.format.DateTimeFormatter)}.
      * <p>
      * Multiple calls override previously declared parameter.
      *
