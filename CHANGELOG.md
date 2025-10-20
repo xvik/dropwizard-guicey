@@ -4,9 +4,9 @@
 * Customizable DefaultTestClientFactory: it is now possible to use default implementation
   with customizations (override `configure` method)
     - Add ApacheTestClientFactory: useful to support PATCH methods on jdk > 16
-    - Add `useApacheClient` (shortcut) configuration into `@TestGuiceyApp` and `@TestDropwizardApp`
+    - Add `apacheClient` (shortcut) configuration into `@TestGuiceyApp` and `@TestDropwizardApp`
         to simplify usage of ApacheTestClientFactory with annotations
-    - Add `useApacheClient()` (shortcut) method into extension and generic builders
+    - Add `apacheClient()` (shortcut) method into extension and generic builders
 * Shared state:
     - State objects, implementing AutoClosable, now would be closed on application shutdown
     - Add SharedConfigurationState.lookupOrCreate method to simplify static state usage

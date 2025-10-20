@@ -17,7 +17,7 @@ public class ManualRegApacheClientDwTest {
     @RegisterExtension
     static TestDropwizardAppExtension app = TestDropwizardAppExtension.forApp(AutoScanApplication.class)
             .randomPorts()
-            .useApacheClient()
+            .apacheClient()
             .create();
 
     @Test

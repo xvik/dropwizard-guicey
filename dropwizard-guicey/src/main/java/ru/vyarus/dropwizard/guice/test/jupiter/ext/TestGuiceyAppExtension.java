@@ -334,7 +334,7 @@ public class TestGuiceyAppExtension extends GuiceyExtensionsSupport {
             res.tracker.debug = ann.debug();
             res.reuseApp = ann.reuseApplication();
             res.defaultExtensionsEnabled = ann.useDefaultExtensions();
-            if (ann.useApacheClient()) {
+            if (ann.apacheClient()) {
                 res.clientFactory(ApacheTestClientFactory.class);
             } else {
                 res.clientFactory(ann.clientFactory());

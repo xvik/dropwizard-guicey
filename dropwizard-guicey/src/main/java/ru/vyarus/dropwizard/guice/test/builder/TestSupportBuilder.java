@@ -95,7 +95,7 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
      *
      * @return builder instance for chained calls
      */
-    public TestSupportBuilder<C> useApacheClient() {
+    public TestSupportBuilder<C> apacheClient() {
         return clientFactory(new ApacheTestClientFactory());
     }
 
