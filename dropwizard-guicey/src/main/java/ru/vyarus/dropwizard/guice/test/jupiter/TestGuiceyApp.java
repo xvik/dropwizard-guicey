@@ -205,7 +205,7 @@ public @interface TestGuiceyApp {
      * <p>
      * Core test does not start dropwizard web services, but client still could be used to call external services.
      * <p>
-     * Note: value is ignored when {@link #useApacheClient()} set to true
+     * Note: value is ignored when {@link #apacheClient()} set to true
      *
      * @return client factory class
      */
@@ -224,7 +224,7 @@ public @interface TestGuiceyApp {
      *
      * @return true to use apache connection provider in jersey client
      */
-    boolean useApacheClient() default false;
+    boolean apacheClient() default false;
 
     /**
      * By default, guicey simulates {@link io.dropwizard.lifecycle.Managed} objects lifecycle.

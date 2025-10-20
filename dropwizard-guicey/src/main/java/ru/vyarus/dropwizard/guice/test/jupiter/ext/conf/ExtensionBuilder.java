@@ -382,7 +382,7 @@ public abstract class ExtensionBuilder<K extends Configuration,
      *
      * @return builder instance for chained calls
      */
-    public T useApacheClient() {
+    public T apacheClient() {
         return clientFactory(new ApacheTestClientFactory());
     }
 

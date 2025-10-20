@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestGuiceyApp;
  * @author Vyacheslav Rusakov
  * @since 12.09.2025
  */
-@TestGuiceyApp(value = AutoScanApplication.class, useApacheClient = true)
+@TestGuiceyApp(value = AutoScanApplication.class, apacheClient = true)
 public class ApacheClientFactoryGuiceyTest {
 
     @Test

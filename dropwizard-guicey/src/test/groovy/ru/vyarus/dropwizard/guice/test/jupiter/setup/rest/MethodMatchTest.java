@@ -13,7 +13,7 @@ import ru.vyarus.dropwizard.guice.test.rest.support.RestStubApp;
  * @author Vyacheslav Rusakov
  * @since 18.09.2025
  */
-@TestGuiceyApp(value = RestStubApp.class, useApacheClient = true)
+@TestGuiceyApp(value = RestStubApp.class, apacheClient = true)
 public class MethodMatchTest {
 
     @StubRest(disableDropwizardExceptionMappers = true)
