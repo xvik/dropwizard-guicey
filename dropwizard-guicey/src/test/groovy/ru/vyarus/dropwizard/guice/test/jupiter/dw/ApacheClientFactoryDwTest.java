@@ -11,7 +11,7 @@ import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
  * @author Vyacheslav Rusakov
  * @since 12.09.2025
  */
-@TestDropwizardApp(value = AutoScanApplication.class, useApacheClient = true)
+@TestDropwizardApp(value = AutoScanApplication.class, apacheClient = true)
 public class ApacheClientFactoryDwTest {
 
     @Test

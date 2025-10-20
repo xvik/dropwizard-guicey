@@ -607,7 +607,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * {@link org.glassfish.jersey.apache5.connector.Apache5ConnectorProvider} could be used.
      * Guicey provides custom {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory} for using
      * apache client, which could be enabled with shortcut in test extensions (for example,
-     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp#useApacheClient()}).
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp#apacheClient()}).
      * <ul>
      *    <li>Exception thrown if the result is not successful (not 2xx)</li>
      *    <li>For {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest} resource exception
@@ -643,7 +643,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * {@link org.glassfish.jersey.apache5.connector.Apache5ConnectorProvider} could be used.
      * Guicey provides custom {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory} for using
      * apache client, which could be enabled with shortcut in test extensions (for example,
-     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp#useApacheClient()}).
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp#apacheClient()}).
      * <ul>
      *    <li>Exception thrown if the result is not successful (not 2xx)</li>
      *    <li>For {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest} resource exception
@@ -682,7 +682,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * {@link org.glassfish.jersey.apache5.connector.Apache5ConnectorProvider} could be used.
      * Guicey provides custom {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory} for using
      * apache client, which could be enabled with shortcut in test extensions (for example,
-     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp#useApacheClient()}).
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp#apacheClient()}).
      * <ul>
      *    <li>Exception thrown if the result is not successful (not 2xx)</li>
      *    <li>For {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.StubRest} resource exception
@@ -891,7 +891,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * {@link org.glassfish.jersey.apache5.connector.Apache5ConnectorProvider} could be used.
      * Guicey provides custom {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory} for using
      * apache client, which could be enabled with shortcut in test extensions (for example,
-     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp#useApacheClient()}).
+     * {@link ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp#apacheClient()}).
      *
      * @param path   target path, relative to rest root (could contain String.format() placeholders: %s)
      * @param entity request body (everything except {@link Entity} converted to JSON)

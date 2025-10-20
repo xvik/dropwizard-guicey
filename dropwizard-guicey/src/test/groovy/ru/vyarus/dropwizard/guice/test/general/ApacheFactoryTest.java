@@ -15,7 +15,7 @@ public class ApacheFactoryTest {
     @Test
     void testApacheFactoryShortcut() throws Exception{
         Class<?> cls = TestSupport.build(AutoScanApplication.class)
-                .useApacheClient()
+                .apacheClient()
                 .runCore(injector -> TestSupport
                         .getContextClient().getClient().getConfiguration().getConnectorProvider().getClass());
         Assertions.assertEquals(Apache5ConnectorProvider.class, cls);

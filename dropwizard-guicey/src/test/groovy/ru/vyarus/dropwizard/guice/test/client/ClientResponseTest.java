@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * @author Vyacheslav Rusakov
  * @since 08.10.2025
  */
-@TestDropwizardApp(value = ClientApp.class, useApacheClient = true)
+@TestDropwizardApp(value = ClientApp.class, apacheClient = true)
 public class ClientResponseTest {
 
     @TempDir

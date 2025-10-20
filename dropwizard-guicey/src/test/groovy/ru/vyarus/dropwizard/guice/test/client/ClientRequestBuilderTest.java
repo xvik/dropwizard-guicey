@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Vyacheslav Rusakov
  * @since 08.10.2025
  */
-@TestDropwizardApp(value = ClientApp.class, useApacheClient = true)
+@TestDropwizardApp(value = ClientApp.class, apacheClient = true)
 public class ClientRequestBuilderTest {
 
     @Test

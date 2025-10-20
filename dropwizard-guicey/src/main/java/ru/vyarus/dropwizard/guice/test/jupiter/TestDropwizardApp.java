@@ -231,7 +231,7 @@ public @interface TestDropwizardApp {
      * Custom client factory for {@link ru.vyarus.dropwizard.guice.test.ClientSupport} object. Custom factory
      * may be required in case when custom client configuration is required for test.
      * <p>
-     * Note: value is ignored when {@link #useApacheClient()} set to true
+     * Note: value is ignored when {@link #apacheClient()} set to true
      *
      * @return client factory class
      */
@@ -250,5 +250,5 @@ public @interface TestDropwizardApp {
      *
      * @return true to use apache connection provider in jersey client
      */
-    boolean useApacheClient() default false;
+    boolean apacheClient() default false;
 }

@@ -16,7 +16,7 @@ public class ManualRegApacheClientGuiceyTest {
 
     @RegisterExtension
     static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(AutoScanApplication.class)
-            .useApacheClient()
+            .apacheClient()
             .create();
 
     @Test

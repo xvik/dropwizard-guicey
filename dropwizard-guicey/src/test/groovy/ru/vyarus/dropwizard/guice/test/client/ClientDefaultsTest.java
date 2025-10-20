@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Vyacheslav Rusakov
  * @since 07.10.2025
  */
-@TestGuiceyApp(value = ClientApp.class, useApacheClient = true)
+@TestGuiceyApp(value = ClientApp.class, apacheClient = true)
 public class ClientDefaultsTest {
 
     final Function<WebTarget, WebTarget> pathFunc = target -> target.path("foo");
