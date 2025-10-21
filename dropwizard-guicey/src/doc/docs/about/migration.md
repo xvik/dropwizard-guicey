@@ -1,5 +1,11 @@
 # Migration guide
 
+## Dropwizard 5.0
+
+* [dropwizard upgrade instructions](https://www.dropwizard.io/en/stable/manual/upgrade-notes/upgrade-notes-5_0_x.html)
+
+Java 17 required.
+
 ## Dropwizard 4.0
 
 Migration to jakarta namespace (`jakarta.inject`, `jakarta.servlet`, `jakarta.persistence` instead of `javax.*`).

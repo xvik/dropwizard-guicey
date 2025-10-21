@@ -23,10 +23,10 @@
       (jersey api is still available). The request builder unifies all possible configurations in one place.  
     - New common base client class TestClient
     - ClientSupport is a TestClient, but also could provide 3 special clients: appClient(), adminClient(), restClient()
-      (restClient() is the same as StubRest client)
+      (restClient() is the same as rest stubs RestClient)
     - New sub clients could be created by applying additional path segments:
         client.subClient("/sub/path/)
-    - External api client could be created with support.externalClient("som external url")
+    - External api client could be created with support.externalClient("http://external.com/")
     - New client rest api based on real method calls: restClient(RestClass.class).method(mock -> mock.restMethod(args)).invoke()
       (target path and method type resolved from annotations, arguments used for request configuration)
     - Helper api for testing multipart requests: restClient(..).multipartMethod(..)
@@ -45,7 +45,7 @@
     - (BREAKING) StubRest default status declaration removed as not useful
       (required status could be declared now with the new request builder)
 * Add test web client field injection:
-    - @WebClient for ClientSupport, @WebClient(APP), @WebClient(ADMIN), @WebClient(REST) for specific clients
+    - @WebClient for ClientSupport, @WebClient(App), @WebClient(Admin), @WebClient(Rest) for specific clients
     - @WebResourceClient for resource client direct mapping (works for integration and stub rest tests)
 * Add guicey event ApplicationStartingEvent thrown just before managed and web services startup
 * Fix stubs rest too early startup, causing problems with jersey registrations in application run method
