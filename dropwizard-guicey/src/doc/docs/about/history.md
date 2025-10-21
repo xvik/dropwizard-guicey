@@ -1,3 +1,56 @@
+* Update to dropwizard 3.0.16
+* Use guice version without bundled asm ('classes' classifier)
+* Support field injections in application (to use injected services in run method)
+* Customizable DefaultTestClientFactory: it is now possible to use default implementation
+  with customizations (override `configure` method)
+    - Add ApacheTestClientFactory: useful to support PATCH methods on jdk > 16
+    - Add `apacheClient` (shortcut) configuration into `@TestGuiceyApp` and `@TestDropwizardApp`
+      to simplify usage of ApacheTestClientFactory with annotations
+    - Add `apacheClient()` (shortcut) method into extension and generic builders
+* Shared state:
+    - State objects, implementing AutoClosable, now would be closed on application shutdown
+    - Add SharedConfigurationState.lookupOrCreate method to simplify static state usage
+* Add a utility to simplify building application urls: AppUrlBuilder
+    - Automatically resolve context server port and mapped paths (previously only available in
+      tests with ClientSupport class)
+    - Could build rest url directly from rest classes and methods
+    - Special api for building from direct rest method calls (method arguments
+      automatically mapped into url path and query params in this case)
+    - General utility for resource methods analysis: ResourceAnalyzer (could be used in
+      various api, based on resource (stub) call)
+* Unify ClientSupport and StubRest client APIs
+    - New api is a wrapper above jersey client api to simplify test-specific configuration and validation
+      (jersey api is still available). The request builder unifies all possible configurations in one place.
+    - New common base client class TestClient
+    - ClientSupport is a TestClient, but also could provide 3 special clients: appClient(), adminClient(), restClient()
+      (restClient() is the same as rest stubs RestClient)
+    - New sub clients could be created by applying additional path segments:
+      client.subClient("/sub/path/)
+    - External api client could be created with support.externalClient("http://external.com/")
+    - New client rest api based on real method calls: restClient(RestClass.class).method(mock -> mock.restMethod(args)).invoke()
+      (target path and method type resolved from annotations, arguments used for request configuration)
+    - Helper api for testing multipart requests: restClient(..).multipartMethod(..)
+      (simplifies multipart method arguments creation)
+    - Defaults mechanism: it is possible to declare default headers, cookies, etc.
+      on the client to be applied for all requests (evolution of StubRest client ideas)
+    - Add PATCH method shortcuts
+    - Add builder-style response assertions like: client.do_request.assertHeader("Name", val)
+      This allows checking response headers, cookies, status code, etc. in a chained calls style without additional variables
+    - Add connector switching api to ClientSupport: apacheClient(), urlconnectorClient()
+      This allows using different connectors within one test
+      (note that apache connector is required for PATCH calls and urlconnector better handles multipart requests)
+    - Client logging now logs multipart requests (now PAYLOAD_ANY, before it was PAYLOAD_TEXT)
+    - (BREAKING) previous target(String... path) methods replaced with string format: target(String, Object...args)
+    - (BREAKING) deprecated targetMain(): replaced with targetApp()
+    - (BREAKING) StubRest default status declaration removed as not useful
+      (required status could be declared now with the new request builder)
+* Add test web client field injection:
+    - @WebClient for ClientSupport, @WebClient(App), @WebClient(Admin), @WebClient(Rest) for specific clients
+    - @WebResourceClient for resource client direct mapping (works for integration and stub rest tests)
+* Add guicey event ApplicationStartingEvent thrown just before managed and web services startup
+* Fix stubs rest too early startup, causing problems with jersey registrations in application run method
+
+
 ### [6.3.2](http://xvik.github.io/dropwizard-guicey/6.3.2) (2025-07-18)
 * Fix jakarta.inject annotations requirement (NoClassDefFoundError) (#430)
 * Update to dropwizard 3.0.14

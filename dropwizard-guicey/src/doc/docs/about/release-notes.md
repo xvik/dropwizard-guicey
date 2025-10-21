@@ -1,25 +1,31 @@
 # 6.4.0 Release Notes
 
-* Guice without bundled ASM
-* Application fields injection
-* Apache test client
-* Unify ClientSupport and stubs rest
-* Test client fields support
-* Application urls builder
-* Fix stubs rest early initialization
-* Auto close object stored in shared state
+* Dropwizard 3.0.16
+* [Guice without bundled ASM](#guice-without-bundled-asm)
+* [Application fields injection](#application-fields-injection)
+* [Auto close object stored in the shared state](#auto-close-object-stored-in-the-shared-state)
+  
+
+* Tests support: 
+  - [Apache test client](#apache-test-client)
+  - [Unify ClientSupport and stubs rest](#unify-clientsupport-and-stubs-rest)
+  - [Test client fields support](#test-client-fields-support)
+  - [Application urls builder](#application-urls-builder)
+  - [Fix stubs rest early initialization](#fix-stubs-rest-early-initialization) 
+
+[Migration guide](#migration-guide)
 
 ## Guice without bundled ASM
 
-Guicey now uses guice with a [classes](https://repo1.maven.org/maven2/com/google/inject/guice/7.0.0/) classifier without bundled ASM.
+Guicey now use guice with a [classes](https://repo1.maven.org/maven2/com/google/inject/guice/7.0.0/) classifier without bundled ASM.
 ASM is provided as a direct dependency.
 
-Required to support recent java versions (>22).
+Required to support recent java versions (>22). 
 
 ## Application fields injection
 
-It is not possible to use injections in the application class.
-Useful for running accessing services in the application run method:
+It is now possible to use injections in the application class. 
+Useful for accessing services in the application run method:
 
 ```java
 public class App extends Application<Configuration> {
@@ -40,12 +46,12 @@ public class App extends Application<Configuration> {
 ## Apache test client
 
 `DefaultTestClientFactory` class was reworked to support extensibility.
-`ApacheTestClientFactory` added (extending default factory) to use apache client (`Apache5ConnectorProvider`)
+`ApacheTestClientFactory` added (extending default factory) to use apache client (`Apache5ConnectorProvider`) 
 instead of urlconnection (`HttpUrlConnectorProvider`).
 
 !!! important "Why apache client is not set as default"
-Apache client has [problems with multipart requests](https://github.com/eclipse-ee4j/jersey/issues/5528#issuecomment-1934766714)
-(not a bug, but technical limitation).
+    Apache client has [problems with multipart requests](https://github.com/eclipse-ee4j/jersey/issues/5528#issuecomment-1934766714)
+    (not a bug, but technical limitation).
 
     Urlconnection client has problems with PATCH requests on java > 16 
     (requires additional --add-opens).
@@ -71,13 +77,13 @@ public void testSomething(ClientSupport client) {
 
 ## Unify ClientSupport and stubs rest
 
-Guicey provides default (universal) test client `ClientSupport` (used for integration tests) and
+Guicey provides default (universal) test client `ClientSupport` (used for integration tests) and 
 stubs rest (`@StubRest`) `RestClient` (used for lightweight rest tests).
 
 Now base client methods are unified by the `TestClient` class (extended by both):
 this means both clients provide exactly the same request-related methods.
 
-Also, as `ClientSupport` represents an application root client, which is not
+Also, as `ClientSupport` represents an application root client, which is not 
 very useful in tests, it now provides 3 additinoal clients:
 
 * `.appClient()` - application context client (could not be the same as application root)
@@ -97,14 +103,14 @@ public void testSomething(ClientSupport client) {
 
 ### Client API changes
 
-The main change is `ClientSupport.target()` methods. Which were previously
-supporting sequence of strings: `target(String... pathParts)`, but now
+The main change is in `ClientSupport.target()` methods, which were previously 
+supporting a sequence of strings: `target(String... pathParts)`, but now
 `String.format()` is used: `target(String format, Object... args)`.
 
 !!!! note "Why String.format?"
-Sequence of paths appears to be a bad idea. Compare:
-`target("a", "12", "c")` and `target("a/%s/c", 12)`.
-The latter is more readable and more flexible.
+    Sequence of paths appears to be a bad idea. Compare: 
+    `target("a", "12", "c")` and `target("a/%s/c", 12)`.
+    The latter is more readable and more flexible.
 
 Moreover, all shortcut methods now support `String.format()` syntax too:
 `get("/users/%s", 123)` and `post("/users/%s", new User(), 123)`
@@ -116,17 +122,17 @@ There is now not only `Class`-based shortcuts, but also a `GenericType`-based:
     List<User> list = client.get("/users", new GenericType<>() {});
 ```
 
-As an addition to existing method shortcuts (`get()`, `post()`, etc),
+As an addition to existing method shortcuts (`get()`, `post()`, etc), 
 there is a new `patch()` shortcut: `client.patch("/users/%s", new User(), 123)`
 
 !!! WARNING "Breaking changes"
-* Due to `String.format()`-based syntax, old calls like `target("a", "12", "c")` will work incorrectly now.
-* It was possible to use target method without arguments to get root path: `target()`,
-but now it is not possible. Use `target("/")` instead.
-* Old calls like `client.get("/some/path", null)` used for void calls will also not work
-(jvm will not know when method to choose: Class or GenericType). Instead, there is a special void shortcut now:
-`client.get("/some/path")` (but `client.get("/some/path", Void.class)` will also work).
-* `basePathMain()` and `targetMain()` methods now deprecated: use `basePathApp()` and `targetApp()` instead.
+    * Due to `String.format()`-based syntax, old calls like `target("a", "12", "c")` will work incorrectly now.
+    * It was possible to use target method without arguments to get root path: `target()`,
+      but now it is not possible. Use `target("/")` instead.
+    * Old calls like `client.get("/some/path", null)` used for void calls will also not work 
+      (jvm will not know what method to choose: Class or GenericType). Instead, there is a special void shortcut now:
+      `client.get("/some/path")` (but `client.get("/some/path", Void.class)` will also work).
+    * `basePathMain()` and `targetMain()` methods now deprecated: use `basePathApp()` and `targetApp()` instead.
 
 ### Default logger change
 
@@ -162,14 +168,14 @@ public void testSomething(ClientSupport client) {
 
 There is a concept of sub clients. It is used to create a client for a specific sub-url.
 For example, suppose all called methods in test have some base path: `/{somehting}/path/to/resource`.
-Instead of putting it into eachrequest:
+Instead of putting it into each request:
 
 ```java
 public void testSomething(ClientSupport client) {
     TestClient rest = client.restClient();
     
     rest.get("/%s/path/to/resource/%s", User.class, "path", 12);
-    rest.post("/%s/path/to/resource/%12", new User(...), "path", 12);
+    rest.post("/%s/path/to/resource/%s", new User(...), "path", 12);
 }
 ```
 
@@ -181,24 +187,24 @@ public void testSomething(ClientSupport client) {
             .defaultPathParam("something", "path");
     
     rest.get("/%s", User.class, "path", 12);
-    rest.post("/%12", new User(...), "path", 12);
+    rest.post("/%s", new User(...), "path", 12);
 }
 ```
 
 !!! note
-Sub clients inherit defaults of parent client.
-
+    Sub clients inherit defaults of parent client.
+    
     ```java
     client.defaultQueryParam("q", "v");
     TestClient rest = client.subClient("/path/to/resource");
 
     // inherited query parameter q=v will be applied to all requests    
-    rest.get("/%s", User.class, "path", 12);
+    rest.get("/%s", User.class, 12);
     ```
 
 Defaults could be cleared at any time with `client.reset()`.
 
-There is a special sub client creation method with jersey `UriBuilder`, required
+There is a special sub client creation method using jersey `UriBuilder`, required
 to properly support matrix parameters in the middle of the path:
 
 ```java
@@ -222,7 +228,7 @@ client.buildGet("/path")
     .as(User.class)
 ```
 
-There are even request specific extensions and properties supported:
+Request specific extensions and properties are also supported:
 
 ```java
 client.buildGet("/path")
@@ -232,7 +238,7 @@ client.buildGet("/path")
     .asVoid();
 ```
 
-All builder methods start with a "build" prefix.
+All builder methods start with a "build" prefix (`buildGet()`, `buildPost()` or generic `build()`).
 
 Builder provides direct value mappings:
 
@@ -243,11 +249,11 @@ Builder provides direct value mappings:
 
 And methods, returning raw (wrapped) response:
 
-* `.invoce()` - response without status checks
+* `.invoke()` - response without status checks
 * `.expectSuccess()` - fail if not success
 * `.expectSuccess(201, 204)` - fail if not success or not expected status
 * `.expectRedirect()` - fail if not redirect (method also disabled redirects following)
-* `.expectRedirect(301)` - fail if not redirect or not expected status
+* `.expectRedirect(301)` - fail if not redirect or not expected status 
 * `.expectFailure()` - fail if success
 * `.expectFailure(400)` - fail success or not expected status
 
@@ -256,9 +262,9 @@ Response wrapper would be described below.
 ### Debugging
 
 Considering the client defaults inheritance (potential decentralized request configuration)
-it might be unobvious what was applied to a request.
+it might be unobvious what was applied to the request.
 
-Request builder provides a `debug()` options, which will print all applied defaults
+Request builder provides a `debug()` option, which will print all applied defaults 
 and direct builder configurations to the console:
 
 ```java
@@ -305,13 +311,15 @@ Jersey request configuration:
 		[application/json]
 ```
 
-It shows  two blocks:
+It shows two blocks:
 
 * How request builder was configured (including defaults source)
 * How jersey request was configured
 
 The latter is obtained by wrapping jersey `WebTarget` and `Invocation.Builder`
 objects to intercept all calls.
+
+Debug could be enabled for all requests: `client.defaultDebug(true)`.
 
 ### Request assertions
 
@@ -325,7 +333,11 @@ client.buildGet("/some/path")
     .as(SomeEntity.class);
 ```
 
-Debug could be enabled for all requests: `client.defaultDebug(true)`.
+or
+
+```java
+.assertRequest(tracker -> assertThat(tracker.getQueryParams().get("q")).isEqualTo("1"))
+```
 
 ### Form builder
 
@@ -370,9 +382,10 @@ client.buildForm("/some/path")
         .asVoid();
 ```
 
-(java.util and java.time date formatters could be set separately)
+(java.util and java.time date formatters could be set separately with `dateFormatter()` or `dateTimeFormatter()` methods)
 
-Or the default format could be changed globally: `client.defaultFormDateFormat("dd/MM/yyyy")`.`
+The default format could be changed globally: `client.defaultFormDateFormat("dd/MM/yyyy")` 
+(or `defaultFormDateFormatter()` with `defaultFormDateTimeFormatter()`). 
 
 ### Response assertions
 
@@ -380,7 +393,7 @@ As mentioned above, request builder method like `.invoke()` or `.expectSuccess()
 a special response wrapper object. It provides a lot of useful assertions to simplify
 response data testing (avoid boilerplate code).
 
-For example, check a response header and cookie and obtain value
+For example, check a response header, cookie and obtain value
 
 ```java
 User user = rest.buildGet("/users/123")
@@ -390,11 +403,16 @@ User user = rest.buildGet("/users/123")
         .as(User.class);
 ```
 
+Here assertion error will be thrown if header or cookie was not provided or condition does not match. 
+
 Redirection correctness could be checked as:
 
 ```java
 @Path("/resources")
 public class Resource {
+    
+    @Inject
+    AppUrlBuilder urlBuilder;
     
     @Path("/list")
     @GET
@@ -414,6 +432,7 @@ public class Resource {
 
 ```java
 rest.method(Resource::redirect)
+        // throw error if not 3xx; also, this disables redirects following
         .expectRedirect()
         .assertHeader("Location", s -> s.endsWith("/resources/list"));
 ```
@@ -430,7 +449,7 @@ rest.method(Resource::redirect)
 Response object could be converted without additional variables:
 
 ```java
-String value = rest.method(SuccFailRedirectResource::redirect)
+String value = rest.method(Resource::redirect)
         .expectSuccess()
         .as(res -> res.readEntity(SomeClass.class).getProperty());
 ```
@@ -441,14 +460,14 @@ As before, it is possible to use `client.target("/path")` to build raw jersey ta
 (with the correct base path). But without applied defaults.
 
 Direct `Invocation.Builder` could be built with `client.request("/path")`.
-Here all defaults are applied.
+Here all defaults would be applied.
 
 Builders does not hide native jersey API:
 
 * `WebTarget` - could be modified directly with `request.configurePath(target -> target.path("foo"))`
 * `Invocation.Builder` - with `request.configureRequest(req -> req.header("foo", "bar"))`
 
-Such modifiers could be applied as defaults:
+Such modifiers could be applied as client defaults:
 
 * `client.defaultPathConfiguration(...)`
 * `client.defaultRequestConfiguration(...)`
@@ -459,7 +478,7 @@ Response wrapper also provides direct access to jersey `Response` object:
 ### Resource clients
 
 There is a special type of type-safe clients based on the simple idea:
-resource class declaration already provides all required metadata to configure test request:
+resource class declaration already provides all required metadata to configure a test request:
 
 ```java
 @Path("/users")
@@ -476,6 +495,7 @@ tell that it's a GET request on path `/users/{id}` with required path parameter.
 
 ```java
 public void testSomething(ClientSupport client) {
+    // essentially, it's a sub client build with the resource path (from @Path annotation)
     ResourceClient<UserResource> rest = client.restClient(UserResource.class);
     
     User user = rest.method(r -> r.get(123)).as(User.class);
@@ -485,7 +505,7 @@ public void testSomething(ClientSupport client) {
 By using a mock object call (`r -> r.get(123)`) we specify a source of metadata and the required values
 for request. Using it, a request builder is configured automatically.
 
-It is not required to use all parameters (reverse mapping is not always possible):
+It is not required to use all parameters (reverse mapping is not always possible): 
 use null for not important arguments. All additional configurations could be done manually:
 
 ```java
@@ -512,6 +532,10 @@ public void get(@PathParam("id") Integer id, @Context HttpServletRequest request
 
 rest.method(r -> r.get(123, null));
 ```
+
+!!! note
+    `ResourceClient` extends `TestClient`, so all usual method shortucts are also available for resource client
+    (real method calls usage is not mandatory).
 
 #### Multipart forms
 
@@ -554,7 +578,7 @@ Or
         .asVoid();
 ```
 
-And in case of generic multipart object argument:
+In case of generic multipart object argument:
 
 ```java
     @Path("/multipartGeneric")
@@ -575,12 +599,12 @@ rest.multipartMethod((r, multipart) ->
 ```
 
 !!! note
-Multipart methods require the urlencoded client (default) and, most likely,
-will fail with the apache client.
+    Multipart methods require the urlencoded client (default) and, most likely, 
+    will fail with the apache client.
 
 #### Sub resources
 
-Sub resource could be declared with an instance:
+When a sub resource is declared with an instance:
 
 ```java
 public class Resource {
@@ -591,13 +615,13 @@ public class Resource {
 }
 ```
 
-Then sub resource could be easily called directly:
+it could be easily called directly:
 
 ```java
 User user = rest.method(r -> r.sub().get(123)).as(User.class);
 ```
 
-When sub resource method is using class:
+When a sub resource method is using class:
 
 ```java
 public class Resource {
@@ -608,28 +632,28 @@ public class Resource {
 }
 ```
 
-Then you'll have to build a sub-client first:
+you'll have to build a sub-client first: 
 
 ```java
 ResourceClient<SubResource> subRest = rest.subResource(Resource::sub, SubResource.class);
 ```
 
 !!! important
-Jersey ignores sub-resource `@Path` annotation.
+    Jersey ignores sub-resource `@Path` annotation, so special method for sub resource clients is required.
 
 #### Resource typification
 
-It is not always possible to use resource class to buld a sub client
+It is not always possible to use resource class to buld a sub client 
 (with `.restClient(Resource.class)`).
 
-In such cases you can build a resource path manually and then "cast" client to resource type:
+In such cases you can build a resource path manually and then "cast" client to the resource type:
 
 ```java
 ResourceClient<MyResource> rest = client.subClient("/resource/path")
             .asResourceClient(MyResource.class);
 ```
 
-or just buid path manually:
+or just buid path manually: 
 
 ```java
 ResourceClient<MyResource> rest = client.subClient(
@@ -653,7 +677,7 @@ Now it is possible to inject it as a field:
 ClientSupport client;
 ```
 
-It is also possible to inject its sub client:
+It is also possible to inject its sub clients:
 
 ```java
 @WebClient(WebClientType.App)
@@ -665,7 +689,7 @@ TestClient admin;
 @WebClient(WebClientType.Rest)
 TestClient rest;
 ```
-
+ 
 Additionally, `ResourceClient` could be injected directly:
 
 ```java
@@ -674,8 +698,8 @@ ResourceClient<MyResource> rest;
 ```
 
 !!! important
-Resource client injection works both with integration tests (real client)
-and stub rest:
+    Resource client injection works both with integration tests (real client)
+    and stub rest (lightweight tests):
 
     ```java
     @TestGuiceyApp(MyApp.class)
@@ -689,15 +713,18 @@ and stub rest:
     ```
 
     Note that resource client could be directly obtained form `RestClient`: 
-    `client.restClient(MyResource.class)`
+    `client.restClient(MyResource.class)` (same as in `ClientSupport`).
 
+!!! important
+    Clients assigned with a field would reset client defaults automatically (call `client.reset()`) after 
+    each test method. This could be disabled with `@WebClient(autoReset = false)`.
 
 ## Application urls builder
 
-Mechanism, used in resource clients, could be also used to build application urls.
+Mechanism, used in resource clients, could be also used to build application urls in a type-safe manner.
 
 A new class `AppUrlBuilder` added to support this. It is not bound by default
-in guice context, but could be injected (as jit binding):
+in the guice context, but could be injected (as jit binding):
 
 ```java
 @Inject AppUrlBuilder builder;
@@ -707,9 +734,9 @@ Or it could be created manually: `new AppUrlBuilder(environment)`
 
 There are 3 scenarios:
 
-* Localhost urls: the default mode when all urls contains localhost and applciation port.
-* Custom host: `builder.forHost("myhost.com")` when custom host used instead of localhost and application port
-  is applied automatically
+* Localhost urls: the default mode when all urls contain "localhost" and application port.
+* Custom host: `builder.forHost("myhost.com")` when custom host used instead of localhost and application port 
+   is applied automatically
 * Proxy mode: `builder.forProxy("https://myhost.com")` when application is behind some proxy
   (like apache or nginx) hiding its real port.
 
@@ -738,7 +765,7 @@ builder.forHost("https://some.com").admin("/something")
 builder.forProxy("https://some.com").admin("/something")
 ```
 
-Application server configurtion detection logic was only implemented inside `ClientSupport`,
+Before, application server configuration detection logic was only implemented inside `ClientSupport`,
 now it was ported to `AppUrlBuilder`, which you can use to obtain:
 
 ```java
@@ -757,7 +784,7 @@ builder.getRestContextPath();
 ## Fix stubs rest early initialization
 
 `@StubRest` rest context was starting too early, causing closed configuration error
-when `Application#run` method tried to configure it.
+when `Application#run` method tried to configure it (`environment.jersey().register(Something.class)`).
 
 Now it is started after the application run.
 
@@ -765,3 +792,78 @@ Now it is started after the application run.
 
 `SharedConfigurationState` values, implementing `AutoCloseable` could be closed
 automatically now after application shutdown.
+
+## Migration guide
+
+All breaking changes affect only test code (ClientSupport and RestClient).
+
+### Target methods
+
+Before:
+
+```java
+public void testSomething(ClientSupport client) {
+    // use String... method
+    client.targetMain("/path/", 12, "part");
+}
+```
+
+Now:
+
+```java
+// use String.format syntax
+client.targetApp("/path/%s/part", 12);
+```
+
+Deprecations:
+
+* `targetMain` - use `targetApp` instead
+* `basePathMain` - use `basePathApp` instead
+
+### Shortcuts
+
+Before, to receive a void response, you had to use:
+
+```java
+client.post("/post", entity, null);
+```
+
+Now, because there are two variations of each shortcut method (with Class and GenericType),
+java would not know which one to use:
+
+```java
+// either use new shortcut
+client.post("/post", entity);
+// or use Void.class directly
+client.post("/post", entity, Void.class);
+```
+
+### Default status
+
+Before, RestClient (stubs rest) provide a default status method `client.defaultOk`
+to specify what statuses to treat as success:
+
+```java
+
+@StubRest
+RestClient client;
+
+public void testSomething() {
+    rest.defaultOk(201);
+    
+    // error on 200 response (only 201 required)
+    rest.post("/some/path", entity, null);
+}
+
+```
+
+The same could be achieved now with a new builder:
+
+```java
+rest.buildPost("/some/path", entity)
+        .expectSuccess(201);
+```
+
+Note that, by default, a jersey client assumes response as success if its status is 2xx
+(by status family). This approach is more logical. Limitation to only some 2xx statuses
+is rarely needed.
