@@ -132,7 +132,7 @@ public class GuiceyJerseyTest extends JerseyTest {
         if (logRequests) {
             clientConfig.register(LoggingFeature.builder()
                     .withLogger(new DefaultTestClientFactory.ConsoleLogger())
-                    .verbosity(LoggingFeature.Verbosity.PAYLOAD_TEXT)
+                    .verbosity(LoggingFeature.Verbosity.PAYLOAD_ANY)
                     .level(Level.INFO)
                     .build());
         }
