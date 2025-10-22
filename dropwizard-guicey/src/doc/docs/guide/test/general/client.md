@@ -118,6 +118,8 @@ public void testSomething(ClientSupport client) {
 }
 ```
 
+Defaults could be cleared at any time with `client.reset()`.
+
 ## Sub clients
 
 There is a concept of sub clients. It is used to create a client for a specific sub-url.
@@ -133,7 +135,7 @@ public void testSomething(ClientSupport client) {
 }
 ```
 
-A sub client can be created:
+A sub client could be created:
 
 ```java
 public void testSomething(ClientSupport client) {
@@ -156,8 +158,6 @@ public void testSomething(ClientSupport client) {
     rest.get("/%s", User.class, 12);
     ```
 
-Defaults could be cleared at any time with `client.reset()`.
-
 There is a special sub client creation method using jersey `UriBuilder`, required
 to properly support matrix parameters in the middle of the path:
 
@@ -165,7 +165,7 @@ to properly support matrix parameters in the middle of the path:
 TestClient sub = client.subClient(builder -> builder.path("/some/path").matrixParam("p", 1));
 
 // /some/path;p=1/users/12
-sub.get("/%s", User.class, 12);
+sub.get("/users/%s", User.class, 12);
 ```
 
 ## Builder API
@@ -213,7 +213,7 @@ And methods, returning raw (wrapped) response:
 
 ## Debug
 
-Considering the client defaults inheritance (potential decentralized request configuration)
+Considering the client defaults inheritance (potential decentralized request configuration),
 it might be unobvious what was applied to the request.
 
 Request builder provides a `debug()` option, which will print all applied defaults
@@ -309,6 +309,19 @@ User user = rest.buildGet("/users/123")
 
 Here assertion error will be thrown if header or cookie was not provided or condition does not match.
 
+Even if you need to obtain a header or cookie value from response, you can use assetions to verify
+header/cookie presence:
+
+```java
+Response response = rest.buildGet("/users/123")
+        .expectSuccess()
+        .assertHeader("Token" , s -> s.startsWith("My-Header;"))
+        .asResponse();
+
+// here you could be sure the header exists        
+String token = response.getHeaderString("Token");
+```
+
 Redirection correctness could be checked as:
 
 ```java
@@ -377,6 +390,21 @@ client.buildForm("/some/path")
         .buildPost()
         .asVoid();
 ```
+
+!!! tip
+    Compare with raw jersey api usage:
+
+    ```java
+    FormDataMultiPart multiPart = new FormDataMultiPart();
+    multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
+
+    FileDataBodyPart fileDataBodyPart = new FileDataBodyPart("file",
+            file.toFile(),
+            MediaType.APPLICATION_OCTET_STREAM_TYPE);
+    multiPart.bodyPart(fileDataBodyPart);
+
+    rest.post(path, Entity.entity(multiPart, multiPart.getMediaType()), Something.class);
+    ```
 
 Also, it could be used to simply create a request entity and use it directly:
 
@@ -482,7 +510,7 @@ rest.method(r -> r.get(123, null));
 ```
 
 !!! note
-    `ResourceClient` extends `TestClient`, so all usual method shortucts are also available for resource client
+    `ResourceClient` extends `TestClient`, so all usual method shortcuts are also available for resource client
     (real method calls usage is not mandatory).
 
 ### Multipart forms
@@ -601,7 +629,7 @@ ResourceClient<MyResource> rest = client.subClient("/resource/path")
             .asResourceClient(MyResource.class);
 ```
 
-or just buid path manually:
+or just build path manually:
 
 ```java
 ResourceClient<MyResource> rest = client.subClient(
@@ -613,7 +641,7 @@ ResourceClient<MyResource> rest = client.subClient(
 ## Apache client
 
 By default, the client is based on "url connector", which has a limitation for PATCH
-requests: on java > 16 PATCH requests will not work without additinal `--add-opens`.
+requests: on java > 16 PATCH requests will not work without additional `--add-opens`.
 For such requests it is easier to use an apache connector.
 
 It is not possible to use apache connector by default because it

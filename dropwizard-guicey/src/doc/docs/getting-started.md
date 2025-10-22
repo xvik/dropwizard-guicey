@@ -147,6 +147,27 @@ SampleApplication server
 !!! note
     a config.yml is not passed as a parameter because we don't need additional configuration yet
 
+### Application run
+
+Guice injector is created before `Application#run` method, so you could already
+use injector inside it.
+
+To simplify usage, you can apply injections directly into application class:
+
+```java
+public class App extends Application<Configuration> {
+    
+    @Inject MyService service; 
+    
+    ...
+    
+    @Override
+    public void run(Configuration configuration, Environment environment) throws Exception {
+        service.doSomething();
+    } 
+}
+```
+
 ### Adding a Resource
 
 Create a custom rest resource class:

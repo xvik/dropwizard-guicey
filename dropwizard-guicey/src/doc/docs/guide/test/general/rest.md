@@ -224,57 +224,32 @@ If you need to force any container type use:
 
 ## Rest client
 
-`RestClient` is almost the same as [ClientSupport](client.md), available for guicey extensions.
-It is just limited only for rest (and so simpler to use).
+`RestClient` is the same as [ClientSupport#restClient()](client.md), available for guicey extensions.
+It extends the same `TestClient` class and so provides the same abilities:
+
+* [Defaults](client.md#defaults)
+* [Shortcut methods](client.md#simple-shortcuts)
+* [Builder API](client.md#builder-api)
+* [Response assertions](client.md#response-assertions)
+* [Static resource client](client.md#resource-clients)
+* [Forms builder](client.md#form-builder)
 
 !!! note
     Just in case: `ClientSupport` would not work with rest stubs (because web container is actually 
     not started and so `ClientSupport` can't recognize a correct rest mapping path). Of course,
     it could be used with a full URLs.
 
-Client provides base methods with response mapping:
-
-```java
-RestClient rest = restHook.getRestClient();
-```
-
-* `rest.get(path, Class)`
-* `rest.post(path, Object/Entity, Class)`
-* `rest.put(path, Object/Entity, Class)`
-* `rest.delete(path, Class)`
-
-To not overload default methods with parameters, additional data could be set with defaults:
-
-* `rest.defaultHeader(String, String)`
-* `rest.defaultQueryParam(String, String)`
-* `rest.defaultAccept(String...)`
-* `rest.defaultOk(Integer...)`
-
-`defaultOk` used for void responses (response class == null) to check correct response
-status (default 200 (OK) and 204 (NO_CONTENT)).
-
-So if we need to perform a post request with query param and custom header:
-
-```java
-rest.defaultHeader("Secret", "unreadable")
-    .defaultQueryParam("foo", "bar");
-OtherModel res = rest.post("/somehere", new SomeModel(), OtherModel.class);
-```
-
 !!! note
-    Multipart support is enabled automatically when dropwizard-forms available in classpath
+    Multipart support is enabled automatically when dropwizard-forms available in classpath.
+    Creating multipart request with [form bulder](client.md#form-builder):
 
     ```java
-    FormDataMultiPart multiPart = new FormDataMultiPart();
-    multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
-
-    FileDataBodyPart fileDataBodyPart = new FileDataBodyPart("file",
-            file.toFile(),
-            MediaType.APPLICATION_OCTET_STREAM_TYPE);
-    multiPart.bodyPart(fileDataBodyPart);
-
-    rest.post(path, Entity.entity(multiPart, multiPart.getMediaType()), Something.class);
-    ```
+    client.buildForm("/some/path")
+        .param("foo", "bar")     
+        .param("file", new File("src/test/resources/test.txt"))
+        .buildPost()
+        .asVoid();
+    ``` 
 
 To clear defaults:
 
@@ -287,13 +262,3 @@ Might be a part of call chain:
 ```java
 rest.reset().post(...) 
 ```
-
-When test needs to verify cookies, response headers, etc. use `.request(path)`:
-
-```java
-Response response = rest.request(path).get() // .post(), .put(), .delete();
-```
-
-All defaults are also applied in this case.
-
-To avoid applying configured defaults, raw `rest.target(path)...` could be used.

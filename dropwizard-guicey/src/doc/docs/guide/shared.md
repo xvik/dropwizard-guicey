@@ -89,6 +89,11 @@ Other restrictions:
 * State value can be **set just once**! This is simply to avoid hard to track problems with overridden state.
 * State value can't be null! Again, to avoid problems with NPE errors.
 
+## Auto-closable values
+
+If stored value implements `AutoClosable` - it would be closed
+automcaticlly on application shutdown.
+
 ## State usage technics
 
 ### Parent-child
