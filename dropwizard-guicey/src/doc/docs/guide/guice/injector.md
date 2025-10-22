@@ -64,6 +64,25 @@ Inside guice context you can simply inject Injector instance:
 @Inject Injector injector;
 ```    
 
+### Application injections
+
+To simplify guice beans access in `Application#run` method, you can use
+injections directly in application class:
+
+```java
+public class App extends Application<Configuration> {
+    
+    @Inject MyService service; 
+    
+    ...
+    
+    @Override
+    public void run(Configuration configuration, Environment environment) throws Exception {
+        service.doSomething();
+    } 
+}
+```
+
 ## Injector stage
 
 By default injector is created at `PRODICTION` stage, which means that all registered
