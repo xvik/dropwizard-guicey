@@ -173,6 +173,7 @@ nav:
         - Spock 1: guide/test/spock.md
         - Junit 4: guide/test/junit4.md
         - OpenAPI fake server: guide/test/openapi-server.md
+      - App URL builder: guide/url-builder.md
       - Lifecycle: guide/lifecycle.md
       - Classpath scan: guide/scan.md
       - Installers: guide/installers.md
