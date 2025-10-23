@@ -42,10 +42,10 @@ import java.util.stream.Collectors;
  * request configuration api (when only applied changes must be verified).
  * <p>
  * {@link Runnable} could be used to execute something just before request execution (when all data collected):
- * <pre><code>
+ * <pre>{@code
  *      RequestTracker tracker = new RequestTracker()'
- *      WebTarget target = tracker.track(originalTarget, ()-> System.out.println(tracker.getLog()));
- * </code></pre>
+ *      WebTarget target = tracker.track(originalTarget, ()-> System.out.println(tracker.getLog()));}
+ * </pre>
  * <p>
  * Tracker could be resolved from tarcked {@link jakarta.ws.rs.client.WebTarget} and
  * {@link jakarta.ws.rs.client.Invocation.Builder} objects with

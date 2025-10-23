@@ -215,7 +215,7 @@ public @interface TestGuiceyApp {
      * Shortcut for {@link #clientFactory()} to configure
      * {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory}. The default
      * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} supports only HTTP 1.1 methods and have
-     * problem with PATCH method usage on jdk > 16.
+     * problem with PATCH method usage on jdk &gt; 16.
      * <p>
      * Note: {@link #clientFactory()} value is ignored when set to true,
      * <p>

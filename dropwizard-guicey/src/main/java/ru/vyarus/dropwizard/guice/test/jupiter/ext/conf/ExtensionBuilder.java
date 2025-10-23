@@ -375,7 +375,7 @@ public abstract class ExtensionBuilder<K extends Configuration,
      * Shortcut for {@link #clientFactory(ru.vyarus.dropwizard.guice.test.client.TestClientFactory)} to configure
      * {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory}. The default
      * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} supports only HTTP 1.1 methods and have
-     * problem with PATCH method usage on jdk > 16.
+     * problem with PATCH method usage on jdk &gt; 16.
      * <p>
      * Apache client is not set by default because of its problems with multipart: see
      * <a href="https://github.com/eclipse-ee4j/jersey/issues/5528#issuecomment-1934766714">jersey issue</a>.

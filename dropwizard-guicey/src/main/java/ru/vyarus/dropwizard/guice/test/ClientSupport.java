@@ -131,7 +131,7 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      * Shortcut to be able to quickly build an apache-connector-based client. The default urlconnector-based
      * client is better for multipart calls (apache client
      * <a href="https://github.com/eclipse-ee4j/jersey/issues/5528#issuecomment-1934766714">has problems</a>).
-     * But the apache client is better for PATCH calls because the default urlconnector will complain on java > 16.
+     * But the apache client is better for PATCH calls because the default urlconnector will complain on java &gt; 16.
      * <p>
      * With this shortcut it would be possible to use both clients in one test.
      * <p>
@@ -148,7 +148,7 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      * Shortcut to be able to quickly build an apache-connector-based client. The default urlconnector-based
      * client is better for multipart calls (apache client
      * <a href="https://github.com/eclipse-ee4j/jersey/issues/5528#issuecomment-1934766714">has problems</a>).
-     * But the apache client is better for PATCH calls because the default urlconnector will complain on java > 16.
+     * But the apache client is better for PATCH calls because the default urlconnector will complain on java &gt; 16.
      * <p>
      * With this shortcut it would be possible to use both clients in one test.
      * <p>

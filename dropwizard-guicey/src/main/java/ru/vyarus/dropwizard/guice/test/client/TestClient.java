@@ -602,7 +602,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <p>
      * WARNING: in integration tests (real http call, not stub) the jersey client would use
-     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} which have problems with PATCH calls on JDK > 16
+     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} which have problems with PATCH calls on JDK &gt; 16
      * (requires additional --add-opens). To workaround this
      * {@link org.glassfish.jersey.apache5.connector.Apache5ConnectorProvider} could be used.
      * Guicey provides custom {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory} for using
@@ -638,7 +638,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <p>
      * WARNING: in integration tests (real http call, not stub) the jersey client would use
-     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} which have problems with PATCH calls on JDK > 16
+     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} which have problems with PATCH calls on JDK &gt; 16
      * (requires additional --add-opens). To workaround this
      * {@link org.glassfish.jersey.apache5.connector.Apache5ConnectorProvider} could be used.
      * Guicey provides custom {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory} for using
@@ -677,7 +677,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <p>
      * WARNING: in integration tests (real http call, not stub) the jersey client would use
-     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} which have problems with PATCH calls on JDK > 16
+     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} which have problems with PATCH calls on JDK &gt; 16
      * (requires additional --add-opens). To workaround this
      * {@link org.glassfish.jersey.apache5.connector.Apache5ConnectorProvider} could be used.
      * Guicey provides custom {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory} for using
@@ -886,7 +886,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * Defaults like {@link #defaultHeader(String, Object)} are applied.
      * <p>
      * WARNING: in integration tests (real http call, not stub) the jersey client would use
-     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} which have problems with PATCH calls on JDK > 16
+     * {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} which have problems with PATCH calls on JDK &gt; 16
      * (requires additional --add-opens). To workaround this
      * {@link org.glassfish.jersey.apache5.connector.Apache5ConnectorProvider} could be used.
      * Guicey provides custom {@link ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory} for using
