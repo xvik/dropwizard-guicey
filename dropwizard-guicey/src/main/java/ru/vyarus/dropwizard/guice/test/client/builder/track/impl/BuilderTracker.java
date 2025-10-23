@@ -138,7 +138,7 @@ public class BuilderTracker implements Invocation.Builder, TrackableData {
 
     @Override
     public Invocation.Builder cookie(final String name, final String value) {
-        cookie(new NewCookie.Builder(name).value(value).build());
+        cookie(new NewCookie(name, value));
         target.cookie(name, value);
         return this;
     }

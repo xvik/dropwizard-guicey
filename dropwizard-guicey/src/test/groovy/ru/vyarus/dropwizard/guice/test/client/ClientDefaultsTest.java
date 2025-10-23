@@ -38,9 +38,9 @@ public class ClientDefaultsTest {
     @Test
     void testDefaults(ClientSupport support) {
         support.defaultHeader("A", "a")
-                .defaultHeader(HttpHeader.ACCESS_CONTROL_MAX_AGE, "12")
+                .defaultHeader(HttpHeader.ALT_SVC, "12")
                 .defaultHeader("B", () -> 11)
-                .defaultHeader(HttpHeader.ACCESS_CONTROL_EXPOSE_HEADERS, () -> 13)
+                .defaultHeader(HttpHeader.C_AUTHORITY, () -> 13)
                 .defaultQueryParam("q", 1)
                 .defaultQueryParam("q2", () -> 2)
                 .defaultMatrixParam("m", 1)
@@ -55,8 +55,8 @@ public class ClientDefaultsTest {
                 .defaultFormDateFormatter(formatter)
                 .defaultFormDateTimeFormatter(DateTimeFormatter.ISO_DATE)
                 .defaultCookie("c1", "1")
-                .defaultCookie(new NewCookie.Builder("c2").value("11").build())
-                .defaultCookie("c3", () -> new NewCookie.Builder("c3").value("12").build())
+                .defaultCookie(new NewCookie("c2", "11"))
+                .defaultCookie("c3", () -> new NewCookie("c3", "12"))
                 .defaultAccept("application/json")
                 .defaultLanguage("en")
                 .defaultEncoding("gzip")
@@ -70,8 +70,8 @@ public class ClientDefaultsTest {
         assertThat(defaults.getConfiguredHeadersMap()).hasSize(4)
                 .containsEntry("A", "a")
                 .containsEntry("B", 11)
-                .containsEntry(HttpHeader.ACCESS_CONTROL_MAX_AGE.asString(), "12")
-                .containsEntry(HttpHeader.ACCESS_CONTROL_EXPOSE_HEADERS.asString(), 13);
+                .containsEntry(HttpHeader.ALT_SVC.asString(), "12")
+                .containsEntry(HttpHeader.C_AUTHORITY.asString(), 13);
 
         assertThat(defaults.getConfiguredQueryParamsMap()).hasSize(2)
                 .containsEntry("q", 1)
@@ -98,9 +98,9 @@ public class ClientDefaultsTest {
         assertThat(defaults.getConfiguredFormDateTimeFormatter()).isEqualTo(DateTimeFormatter.ISO_DATE);
 
         assertThat(defaults.getConfiguredCookiesMap()).hasSize(3)
-                .containsEntry("c1", new NewCookie.Builder("c1").value("1").build())
-                .containsEntry("c2", new NewCookie.Builder("c2").value("11").build())
-                .containsEntry("c3", new NewCookie.Builder("c3").value("12").build());
+                .containsEntry("c1", new NewCookie("c1", "1"))
+                .containsEntry("c2", new NewCookie("c2", "11"))
+                .containsEntry("c3", new NewCookie("c3", "12"));
 
         assertThat(defaults.getConfiguredAccepts()).hasSize(1).containsOnly("application/json");
         assertThat(defaults.getConfiguredLanguages()).hasSize(1).containsOnly("en");

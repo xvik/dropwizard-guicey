@@ -393,8 +393,6 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     /**
      * Configure request cookie ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(jakarta.ws.rs.core.Cookie)}.
      * <p>
-     * Use cookie builder: {@code new NewCookie.Builder(name).value(value).build()}.
-     * <p>
      * Multiple calls override previous value.
      *
      * @param cookie cookie value

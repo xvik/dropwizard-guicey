@@ -60,6 +60,7 @@ public final class JerseyExceptionHandling {
      * @param response response
      * @return specialized exception (according to response status)
      */
+    @SuppressWarnings({"PMD.NcssCount", "PMD.CyclomaticComplexity"})
     public static ProcessingException convertToException(final Response response) {
         final int statusCode = response.getStatus();
 
@@ -75,21 +76,38 @@ public final class JerseyExceptionHandling {
                 final Response.Status.Family statusFamily = response.getStatusInfo().getFamily();
                 webAppException = createExceptionForFamily(response, statusFamily);
             } else {
-                webAppException = switch (status) {
-                    case BAD_REQUEST -> new BadRequestException(response);
-                    case UNAUTHORIZED -> new NotAuthorizedException(response);
-                    case FORBIDDEN -> new ForbiddenException(response);
-                    case NOT_FOUND -> new NotFoundException(response);
-                    case METHOD_NOT_ALLOWED -> new NotAllowedException(response);
-                    case NOT_ACCEPTABLE -> new NotAcceptableException(response);
-                    case UNSUPPORTED_MEDIA_TYPE -> new NotSupportedException(response);
-                    case INTERNAL_SERVER_ERROR -> new InternalServerErrorException(response);
-                    case SERVICE_UNAVAILABLE -> new ServiceUnavailableException(response);
-                    default -> {
+                switch (status) {
+                    case BAD_REQUEST:
+                        webAppException = new BadRequestException(response);
+                        break;
+                    case UNAUTHORIZED:
+                        webAppException = new NotAuthorizedException(response);
+                        break;
+                    case FORBIDDEN:
+                        webAppException = new ForbiddenException(response);
+                        break;
+                    case NOT_FOUND:
+                        webAppException = new NotFoundException(response);
+                        break;
+                    case METHOD_NOT_ALLOWED:
+                        webAppException = new NotAllowedException(response);
+                        break;
+                    case NOT_ACCEPTABLE:
+                        webAppException = new NotAcceptableException(response);
+                        break;
+                    case UNSUPPORTED_MEDIA_TYPE:
+                        webAppException = new NotSupportedException(response);
+                        break;
+                    case INTERNAL_SERVER_ERROR:
+                        webAppException = new InternalServerErrorException(response);
+                        break;
+                    case SERVICE_UNAVAILABLE:
+                        webAppException = new ServiceUnavailableException(response);
+                        break;
+                    default:
                         final Response.Status.Family statusFamily = response.getStatusInfo().getFamily();
-                        yield createExceptionForFamily(response, statusFamily);
-                    }
-                };
+                        webAppException = createExceptionForFamily(response, statusFamily);
+                }
             }
 
             return new ResponseProcessingException(response, webAppException);
@@ -99,13 +117,18 @@ public final class JerseyExceptionHandling {
         }
     }
 
+    @SuppressWarnings("checkstyle:ReturnCount")
     private static WebApplicationException createExceptionForFamily(final Response response,
                                                                     final Response.Status.Family statusFamily) {
-        return switch (statusFamily) {
-            case REDIRECTION -> new RedirectionException(response);
-            case CLIENT_ERROR -> new ClientErrorException(response);
-            case SERVER_ERROR -> new ServerErrorException(response);
-            default -> new WebApplicationException(response);
-        };
+        switch (statusFamily) {
+            case REDIRECTION:
+                return new RedirectionException(response);
+            case CLIENT_ERROR:
+                return new ClientErrorException(response);
+            case SERVER_ERROR:
+                return new ServerErrorException(response);
+            default:
+                return new WebApplicationException(response);
+        }
     }
 }

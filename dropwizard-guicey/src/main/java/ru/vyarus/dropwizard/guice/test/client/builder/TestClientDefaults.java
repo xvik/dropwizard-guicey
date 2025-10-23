@@ -339,14 +339,12 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
      * @see jakarta.ws.rs.core.NewCookie
      */
     public T defaultCookie(final String name, final String value) {
-        return defaultCookie(name, () -> new NewCookie.Builder(name).value(value).build());
+        return defaultCookie(name, () -> new NewCookie(name, value));
     }
 
     /**
      * Configure default cookie for all requests
      * ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(jakarta.ws.rs.core.Cookie)}.
-     * <p>
-     * Use cookie builder: {@code new NewCookie.Builder(name).value(value).build()}.
      * <p>
      * Multiple calls override previous value.
      *
@@ -361,8 +359,6 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
     /**
      * Configure default cookie for all requests
      * ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(jakarta.ws.rs.core.Cookie)}.
-     * <p>
-     * Use cookie builder: {@code new NewCookie.Builder(name).value(value).build()}.
      * <p>
      * Multiple calls override previous value.
      *

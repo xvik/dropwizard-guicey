@@ -85,7 +85,7 @@ public class FormResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String multipart2(
             @NotNull @FormDataParam("file") FormDataBodyPart file) {
-        return file.getFileName().get();
+        return file.getContentDisposition().getFileName();
     }
 
     @Path("/multipartMulti")
@@ -93,7 +93,7 @@ public class FormResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String multipartMulti(
             @NotNull @FormDataParam("file") List<FormDataBodyPart> file) {
-        return file.get(0).getFileName().get();
+        return file.get(0).getContentDisposition().getFileName();
     }
 
     @Path("/multipartMulti2")
@@ -109,6 +109,6 @@ public class FormResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String multipartGeneric(@NotNull FormDataMultiPart multiPart) {
         Map<String, List<FormDataBodyPart>> fieldsMap = multiPart.getFields();
-        return fieldsMap.get("file").get(0).getFileName().get();
+        return fieldsMap.get("file").get(0).getContentDisposition().getFileName();
     }
 }

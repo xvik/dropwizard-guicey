@@ -5,7 +5,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.jetty.http.HttpHeader;
 
 /**
  * @author Vyacheslav Rusakov
@@ -19,7 +18,7 @@ public class FileResource {
     @Path("/download")
     public Response download() {
          return Response.ok(getClass().getResourceAsStream("/logback.xml"))
-                 .header(HttpHeader.CONTENT_DISPOSITION.toString(), "attachment; filename=logback.xml")
+                 .header("Content-Disposition", "attachment; filename=logback.xml")
                  .build();
     }
 }

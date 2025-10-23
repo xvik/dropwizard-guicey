@@ -57,15 +57,22 @@ public class WebClientFieldsSupport extends AnnotatedTestFieldSetup<WebClient, T
     }
 
     @Override
+    @SuppressWarnings({"checkstyle:ReturnCount", "PMD.ExhaustiveSwitchHasDefault"})
     protected TestClient injectFieldValue(final EventContext context,
                                           final AnnotatedField<WebClient, TestClient> field) {
         final ClientSupport support = context.getClient();
-        return switch (field.getAnnotation().value()) {
-            case Support -> support;
-            case App -> support.appClient();
-            case Admin -> support.adminClient();
-            case Rest -> support.restClient();
-        };
+        switch (field.getAnnotation().value()) {
+            case Support:
+                return support;
+            case App:
+                return support.appClient();
+            case Admin:
+                return support.adminClient();
+            case Rest:
+                return support.restClient();
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     @Override
