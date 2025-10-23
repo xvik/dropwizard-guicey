@@ -5,7 +5,6 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedHashMap;
@@ -78,87 +77,84 @@ public class TrackMockTest {
                 .containsExactly(Ext3.class, Ext3.class, ImmutableMap.of(Contr1.class, -1, Contr2.class, -1));
         assertThat(tracker.getUrl()).isNull();
 
-        assertThat(tracker.getLog()).isEqualTo("""
-                
-                	Path                                      at r.v.d.g.t.c.b.track.(TrackMockTest.java:32)
-                		some/{name}
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:33)
-                		(encodeSlashInPath=false encoded=false)
-                		name=nm
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:34)
-                		(encodeSlashInPath=true encoded=false)
-                		name2=vv//vv
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:35)
-                		(encodeSlashInPath=false encoded=true)
-                		name3=3
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:36)
-                		(encodeSlashInPath=false encoded=false)
-                		name4=4
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:37)
-                		(encodeSlashInPath=true encoded=false)
-                		name5=5
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:38)
-                		(encodeSlashInPath=false encoded=true)
-                		name6=6
-                
-                	Matrix param                              at r.v.d.g.t.c.b.track.(TrackMockTest.java:39)
-                		mx=1
-                
-                	Matrix param                              at r.v.d.g.t.c.b.track.(TrackMockTest.java:40)
-                		mx2=[1, 2]
-                
-                	Query param                               at r.v.d.g.t.c.b.track.(TrackMockTest.java:41)
-                		qq=qq
-                
-                	Query param                               at r.v.d.g.t.c.b.track.(TrackMockTest.java:42)
-                		qq2=[1, 2]
-                
-                	Property                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:43)
-                		foo=bar
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:44)
-                		Ext1                         (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:45)
-                		Ext2                         (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                			priority=10
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:46)
-                		Ext3                         (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                			 contracts=
-                				Contr1                       (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                				Contr2                       (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:47)
-                		Ext4                         (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                			contracts=
-                				Contr1                       (r.v.d.g.t.c.b.t.TrackMockTest) =11
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:48)
-                		Ext5                         (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:49)
-                		Ext6                         (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                			priority=10
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:50)
-                		Ext7                         (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                			 contracts=
-                				Contr1                       (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                				Contr2                       (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:51)
-                		Ext8                         (r.v.d.g.t.c.b.t.TrackMockTest)\s
-                			contracts=
-                				Contr1                       (r.v.d.g.t.c.b.t.TrackMockTest) =11
-                
-                """);
+        assertThat(tracker.getLog()).isEqualTo("\n" +
+                "\tPath                                      at r.v.d.g.t.c.b.track.(TrackMockTest.java:31)\n" +
+                "\t\tsome/{name}\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:32)\n" +
+                "\t\t(encodeSlashInPath=false encoded=false)\n" +
+                "\t\tname=nm\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:33)\n" +
+                "\t\t(encodeSlashInPath=true encoded=false)\n" +
+                "\t\tname2=vv//vv\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:34)\n" +
+                "\t\t(encodeSlashInPath=false encoded=true)\n" +
+                "\t\tname3=3\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:35)\n" +
+                "\t\t(encodeSlashInPath=false encoded=false)\n" +
+                "\t\tname4=4\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:36)\n" +
+                "\t\t(encodeSlashInPath=true encoded=false)\n" +
+                "\t\tname5=5\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackMockTest.java:37)\n" +
+                "\t\t(encodeSlashInPath=false encoded=true)\n" +
+                "\t\tname6=6\n" +
+                "\n" +
+                "\tMatrix param                              at r.v.d.g.t.c.b.track.(TrackMockTest.java:38)\n" +
+                "\t\tmx=1\n" +
+                "\n" +
+                "\tMatrix param                              at r.v.d.g.t.c.b.track.(TrackMockTest.java:39)\n" +
+                "\t\tmx2=[1, 2]\n" +
+                "\n" +
+                "\tQuery param                               at r.v.d.g.t.c.b.track.(TrackMockTest.java:40)\n" +
+                "\t\tqq=qq\n" +
+                "\n" +
+                "\tQuery param                               at r.v.d.g.t.c.b.track.(TrackMockTest.java:41)\n" +
+                "\t\tqq2=[1, 2]\n" +
+                "\n" +
+                "\tProperty                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:42)\n" +
+                "\t\tfoo=bar\n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:43)\n" +
+                "\t\tExt1                         (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:44)\n" +
+                "\t\tExt2                         (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\t\t\tpriority=10\n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:45)\n" +
+                "\t\tExt3                         (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\t\t\t contracts=\n" +
+                "\t\t\t\tContr1                       (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\t\t\t\tContr2                       (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:46)\n" +
+                "\t\tExt4                         (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\t\t\tcontracts=\n" +
+                "\t\t\t\tContr1                       (r.v.d.g.t.c.b.t.TrackMockTest) =11\n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:47)\n" +
+                "\t\tExt5                         (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:48)\n" +
+                "\t\tExt6                         (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\t\t\tpriority=10\n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:49)\n" +
+                "\t\tExt7                         (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\t\t\t contracts=\n" +
+                "\t\t\t\tContr1                       (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\t\t\t\tContr2                       (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:50)\n" +
+                "\t\tExt8                         (r.v.d.g.t.c.b.t.TrackMockTest) \n" +
+                "\t\t\tcontracts=\n" +
+                "\t\t\t\tContr1                       (r.v.d.g.t.c.b.t.TrackMockTest) =11\n\n");
 
 
         assertThat(target.getUriBuilder()).isNotNull();
@@ -188,7 +184,7 @@ public class TrackMockTest {
                 .acceptLanguage(Locale.CANADA)
                 .acceptEncoding("gzip")
                 .cookie("c1", "1")
-                .cookie(new NewCookie.Builder("c2").value("2").build())
+                .cookie(new NewCookie("c2", "2"))
                 .cacheControl(RuntimeDelegate.getInstance().createHeaderDelegate(CacheControl.class)
                         .fromString("max-age=604800, must-revalidate"))
                 .header("h1", "1")
@@ -203,54 +199,51 @@ public class TrackMockTest {
         assertThat(tracker.getEncodingHeader()).hasSize(1)
                 .containsOnly("gzip");
         assertThat(tracker.getCookies()).hasSize(2)
-                .containsEntry("c1", new NewCookie.Builder("c1").value("1").build())
-                .containsEntry("c2", new NewCookie.Builder("c2").value("2").build());
+                .containsEntry("c1", new NewCookie("c1", "1"))
+                .containsEntry("c2", new NewCookie("c2", "2"));
         assertThat(tracker.getCacheHeader()).isEqualTo("must-revalidate, max-age=604800");
         assertThat(tracker.getHeaders()).hasSize(3)
                 .containsEntry("h1", "1")
                 .containsEntry("h2", "2")
                 .containsEntry("h3", "3");
 
-        assertThat(tracker.getLog()).isEqualTo("""
-                
-                	Path                                      at r.v.d.g.t.c.b.track.(TrackMockTest.java:182)
-                		some/nm
-                
-                	Property                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:184)
-                		foo=bar
-                
-                	Accept                                    at r.v.d.g.t.c.b.track.(TrackMockTest.java:185)
-                		[text/plain]
-                
-                	Accept                                    at r.v.d.g.t.c.b.track.(TrackMockTest.java:186)
-                		[application/json]
-                
-                	Accept Language                           at r.v.d.g.t.c.b.track.(TrackMockTest.java:187)
-                		[EN]
-                
-                	Accept Language                           at r.v.d.g.t.c.b.track.(TrackMockTest.java:188)
-                		[en_CA]
-                
-                	Accept Encoding                           at r.v.d.g.t.c.b.track.(TrackMockTest.java:189)
-                		[gzip]
-                
-                	Cookie                                    at r.v.d.g.t.c.b.track.(TrackMockTest.java:190)
-                		$Version=1;c1=1
-                
-                	Cookie                                    at r.v.d.g.t.c.b.track.(TrackMockTest.java:191)
-                		$Version=1;c2=2
-                
-                	Cache                                     at r.v.d.g.t.c.b.track.(TrackMockTest.java:192)
-                		must-revalidate, max-age=604800
-                
-                	Header                                    at r.v.d.g.t.c.b.track.(TrackMockTest.java:194)
-                		h1=1
-                
-                	Headers                                   at r.v.d.g.t.c.b.track.(TrackMockTest.java:195)
-                		h2=[2]
-                		h3=[3]
-                
-                """);
+        assertThat(tracker.getLog()).isEqualTo("\n" +
+                "\tPath                                      at r.v.d.g.t.c.b.track.(TrackMockTest.java:178)\n" +
+                "\t\tsome/nm\n" +
+                "\n" +
+                "\tProperty                                  at r.v.d.g.t.c.b.track.(TrackMockTest.java:180)\n" +
+                "\t\tfoo=bar\n" +
+                "\n" +
+                "\tAccept                                    at r.v.d.g.t.c.b.track.(TrackMockTest.java:181)\n" +
+                "\t\t[text/plain]\n" +
+                "\n" +
+                "\tAccept                                    at r.v.d.g.t.c.b.track.(TrackMockTest.java:182)\n" +
+                "\t\t[application/json]\n" +
+                "\n" +
+                "\tAccept Language                           at r.v.d.g.t.c.b.track.(TrackMockTest.java:183)\n" +
+                "\t\t[EN]\n" +
+                "\n" +
+                "\tAccept Language                           at r.v.d.g.t.c.b.track.(TrackMockTest.java:184)\n" +
+                "\t\t[en_CA]\n" +
+                "\n" +
+                "\tAccept Encoding                           at r.v.d.g.t.c.b.track.(TrackMockTest.java:185)\n" +
+                "\t\t[gzip]\n" +
+                "\n" +
+                "\tCookie                                    at r.v.d.g.t.c.b.track.(TrackMockTest.java:186)\n" +
+                "\t\t$Version=1;c1=1\n" +
+                "\n" +
+                "\tCookie                                    at r.v.d.g.t.c.b.track.(TrackMockTest.java:187)\n" +
+                "\t\t$Version=1;c2=2\n" +
+                "\n" +
+                "\tCache                                     at r.v.d.g.t.c.b.track.(TrackMockTest.java:188)\n" +
+                "\t\tmust-revalidate, max-age=604800\n" +
+                "\n" +
+                "\tHeader                                    at r.v.d.g.t.c.b.track.(TrackMockTest.java:190)\n" +
+                "\t\th1=1\n" +
+                "\n" +
+                "\tHeaders                                   at r.v.d.g.t.c.b.track.(TrackMockTest.java:191)\n" +
+                "\t\th2=[2]\n" +
+                "\t\th3=[3]\n\n");
 
         builder.build("GET");
         verifyMethod(tracker, "GET", null, null);

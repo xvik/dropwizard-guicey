@@ -94,7 +94,7 @@ public class FormBeanResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String multipart2(@NotNull @BeanParam MultipartBean2 bean) {
-        return bean.file.getFileName().get();
+        return bean.file.getContentDisposition().getFileName();
     }
 
     public static class MultipartBean2 {
@@ -113,7 +113,7 @@ public class FormBeanResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String multipartMulti(@NotNull @BeanParam MultipartMultiBean bean) {
-        return bean.file.get(0).getFileName().get();
+        return bean.file.get(0).getContentDisposition().getFileName();
     }
 
     public static class MultipartMultiBean {

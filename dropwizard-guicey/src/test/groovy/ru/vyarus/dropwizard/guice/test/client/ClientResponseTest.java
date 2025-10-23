@@ -276,6 +276,6 @@ public class ClientResponseTest {
         // WHEN incorrect header
         assertThatThrownBy(() -> MultipartSupport.readFilename("incorrect header"))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("Failed to parse " + HttpHeader.CONTENT_DISPOSITION + " header");
+                .hasMessageContaining("Failed to parse Content-Disposition header");
     }
 }

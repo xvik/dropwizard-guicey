@@ -1,7 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.client.util;
 
 import jakarta.ws.rs.core.Response;
-import org.eclipse.jetty.http.HttpHeader;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.builder.util.conf.MultipartSupport;
 
@@ -34,7 +33,7 @@ public final class FileDownloadUtil {
      * @return downloaded ile
      */
     public static Path download(final Response response, final Path dir) {
-        final String disposition = response.getHeaderString(HttpHeader.CONTENT_DISPOSITION.toString());
+        final String disposition = response.getHeaderString("Content-Disposition");
         String filename = "download_" + System.currentTimeMillis();
         if (disposition != null) {
             final String name = readFilename(response);
@@ -99,7 +98,7 @@ public final class FileDownloadUtil {
      */
     @Nullable
     public static String parseFileName(final Response response) {
-        final String header = response.getHeaderString(HttpHeader.CONTENT_DISPOSITION.toString());
+        final String header = response.getHeaderString("Content-Disposition");
         if (header != null) {
             return parseFileName(header);
         }

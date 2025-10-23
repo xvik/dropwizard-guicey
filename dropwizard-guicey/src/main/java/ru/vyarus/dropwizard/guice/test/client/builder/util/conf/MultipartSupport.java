@@ -2,7 +2,6 @@ package ru.vyarus.dropwizard.guice.test.client.builder.util.conf;
 
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.jetty.http.HttpHeader;
 import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -27,6 +26,14 @@ import java.util.Map;
 public final class MultipartSupport {
 
     private MultipartSupport() {
+    }
+
+    /**
+     * @param value value to check
+     * @return true if value is a multipart value
+     */
+    public static boolean isMultipartValue(final Object value) {
+        return value instanceof BodyPart || value instanceof File || value instanceof InputStream;
     }
 
     /**
@@ -63,7 +70,7 @@ public final class MultipartSupport {
      */
     @Nullable
     public static String readFilename(final Response response) {
-        final String header = response.getHeaderString(HttpHeader.CONTENT_DISPOSITION.toString());
+        final String header = response.getHeaderString("Content-Disposition");
         if (header != null) {
             return readFilename(header);
         }
@@ -79,7 +86,7 @@ public final class MultipartSupport {
             final ContentDisposition contentDisposition = new ContentDisposition(header);
             return contentDisposition.getFileName(true);
         } catch (ParseException e) {
-            throw new IllegalStateException("Failed to parse " + HttpHeader.CONTENT_DISPOSITION + " header", e);
+            throw new IllegalStateException("Failed to parse Content-Disposition header", e);
         }
     }
 

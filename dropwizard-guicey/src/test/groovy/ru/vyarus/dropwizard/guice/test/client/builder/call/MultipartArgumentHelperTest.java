@@ -1,6 +1,5 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.call;
 
-import org.assertj.core.api.Assertions;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
@@ -61,20 +60,20 @@ public class MultipartArgumentHelperTest {
                 .extracting(FormDataBodyPart::getName, FormDataBodyPart::getValue)
                 .containsExactly("foo", "bar");
         assertThat(helper.filePart("foo", new File("src/test/resources/logback.xml")))
-                .extracting(FormDataBodyPart::getName, fileDataBodyPart -> fileDataBodyPart.getFileName().get())
+                .extracting(FormDataBodyPart::getName, fileDataBodyPart -> fileDataBodyPart.getFileEntity().getName())
                 .containsExactly("foo", "logback.xml");
         assertThat(helper.filePart("foo", "src/test/resources/logback.xml"))
-                .extracting(FormDataBodyPart::getName, fileDataBodyPart -> fileDataBodyPart.getFileName().get())
+                .extracting(FormDataBodyPart::getName, fileDataBodyPart -> fileDataBodyPart.getFileEntity().getName())
                 .containsExactly("foo", "logback.xml");
 
         assertThat(helper.streamPart("foo", getClass().getResourceAsStream("/logback.xml")))
-                .extracting(StreamDataBodyPart::getName, streamDataBodyPart -> streamDataBodyPart.getFileName().isPresent())
+                .extracting(StreamDataBodyPart::getName, streamDataBodyPart -> streamDataBodyPart.getFilename() != null)
                 .containsExactly("foo", false);
         assertThat(helper.streamPart("foo", getClass().getResourceAsStream("/logback.xml"), "logback.xml"))
-                .extracting(StreamDataBodyPart::getName, streamDataBodyPart -> streamDataBodyPart.getFileName().get())
+                .extracting(StreamDataBodyPart::getName, streamDataBodyPart -> streamDataBodyPart.getFilename())
                 .containsExactly("foo", "logback.xml");
         assertThat(helper.streamPart("foo", "/logback.xml"))
-                .extracting(StreamDataBodyPart::getName, streamDataBodyPart -> streamDataBodyPart.getFileName().get())
+                .extracting(StreamDataBodyPart::getName, streamDataBodyPart -> streamDataBodyPart.getFilename())
                 .containsExactly("foo", "logback.xml");
     }
 

@@ -353,15 +353,11 @@ public class TestClientRequestBuilder {
      * @return builder instance for chained calls
      */
     public TestClientRequestBuilder cookie(final String name, final String value) {
-        return cookie(new NewCookie.Builder(name)
-                .value(value)
-                .build());
+        return cookie(new NewCookie(name, value));
     }
 
     /**
      * Configure request cookie ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(jakarta.ws.rs.core.Cookie)}.
-     * <p>
-     * Use cookie builder: {@code new NewCookie.Builder(name).value(value).build()}.
      * <p>
      * Multiple calls override previous value.
      *

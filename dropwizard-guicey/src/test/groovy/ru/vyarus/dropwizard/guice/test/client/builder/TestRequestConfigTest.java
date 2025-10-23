@@ -25,9 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class TestRequestConfigTest {
 
-    final NewCookie cookie = new NewCookie.Builder("Test")
-            .value("tst")
-            .build();
+    final NewCookie cookie = new NewCookie("Test", "tst");
 
     final Function<WebTarget, WebTarget> pathFunc = target -> target.path("foo");
     final Consumer<Invocation.Builder> reqFunc = req -> req.header("foo", "bar");
@@ -94,52 +92,49 @@ public class TestRequestConfigTest {
                 .containsEntry("foo", "bar");
         assertThat(tracker.getCookies()).hasSize(1).containsEntry("Test", cookie);
 
-        assertThat(tracker.getLog()).isEqualTo("""
-                
-                	Resolve template                          at r.v.d.g.t.c.builder.(TestRequestConfig.java:869)
-                		(encodeSlashInPath=false encoded=true)
-                		p1=2
-                
-                	Query param                               at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:82)
-                		q1=1
-                
-                	Matrix param                              at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:82)
-                		m1=1
-                
-                	Property                                  at r.v.d.g.t.c.builder.(TestRequestConfig.java:879)
-                		prop=true
-                
-                	Register                                  at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:59)
-                		Integer                      (java.lang)               \s
-                
-                	Register                                  at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:61)
-                		Object                       (java.lang)               \s
-                
-                	Path                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:32)
-                		foo
-                
-                	Accept                                    at r.v.d.g.t.c.builder.(TestRequestConfig.java:899)
-                		[text/plain]
-                
-                	Accept Language                           at r.v.d.g.t.c.builder.(TestRequestConfig.java:902)
-                		[EN]
-                
-                	Accept Encoding                           at r.v.d.g.t.c.builder.(TestRequestConfig.java:905)
-                		[gzip]
-                
-                	Header                                    at r.v.d.g.t.c.builder.(TestRequestConfig.java:908)
-                		Header=value
-                
-                	Cookie                                    at r.v.d.g.t.c.builder.(TestRequestConfig.java:911)
-                		$Version=1;Test=tst
-                
-                	Cache                                     at r.v.d.g.t.c.builder.(TestRequestConfig.java:914)
-                		must-revalidate, max-age=604800
-                
-                	Header                                    at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:33)
-                		foo=bar
-                
-                """);
+        assertThat(tracker.getLog()).isEqualTo("\n" +
+                "\tResolve template                          at r.v.d.g.t.c.builder.(TestRequestConfig.java:867)\n" +
+                "\t\t(encodeSlashInPath=false encoded=true)\n" +
+                "\t\tp1=2\n" +
+                "\n" +
+                "\tQuery param                               at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:82)\n" +
+                "\t\tq1=1\n" +
+                "\n" +
+                "\tMatrix param                              at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:82)\n" +
+                "\t\tm1=1\n" +
+                "\n" +
+                "\tProperty                                  at r.v.d.g.t.c.builder.(TestRequestConfig.java:877)\n" +
+                "\t\tprop=true\n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:59)\n" +
+                "\t\tInteger                      (java.lang)                \n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.u.conf.(JerseyRequestConfigurer.java:61)\n" +
+                "\t\tObject                       (java.lang)                \n" +
+                "\n" +
+                "\tPath                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:30)\n" +
+                "\t\tfoo\n" +
+                "\n" +
+                "\tAccept                                    at r.v.d.g.t.c.builder.(TestRequestConfig.java:897)\n" +
+                "\t\t[text/plain]\n" +
+                "\n" +
+                "\tAccept Language                           at r.v.d.g.t.c.builder.(TestRequestConfig.java:900)\n" +
+                "\t\t[EN]\n" +
+                "\n" +
+                "\tAccept Encoding                           at r.v.d.g.t.c.builder.(TestRequestConfig.java:903)\n" +
+                "\t\t[gzip]\n" +
+                "\n" +
+                "\tHeader                                    at r.v.d.g.t.c.builder.(TestRequestConfig.java:906)\n" +
+                "\t\tHeader=value\n" +
+                "\n" +
+                "\tCookie                                    at r.v.d.g.t.c.builder.(TestRequestConfig.java:909)\n" +
+                "\t\t$Version=1;Test=tst\n" +
+                "\n" +
+                "\tCache                                     at r.v.d.g.t.c.builder.(TestRequestConfig.java:912)\n" +
+                "\t\tmust-revalidate, max-age=604800\n" +
+                "\n" +
+                "\tHeader                                    at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:31)\n" +
+                "\t\tfoo=bar\n\n");
     }
 
     @Test
@@ -227,7 +222,7 @@ public class TestRequestConfigTest {
 
 
         assertThat(config.getConfiguredFormDateTimeFormatterSource().toString())
-                .isEqualTo("Value from at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:222)");
+                .isEqualTo("Value from at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:217)");
 
         // debug is not a part of defaults (but also copied)
         config.clear().debug(true);
@@ -251,10 +246,8 @@ public class TestRequestConfigTest {
 
     private void assertEmptyConfig(TestRequestConfig config) {
         assertThat(config.hasConfiguration()).isFalse();
-        assertThat(config.printConfiguration()).isEqualTo("""
-                
-                	No configurations
-                """);
+        assertThat(config.printConfiguration()).isEqualTo("\n" +
+                "\tNo configurations\n");
 
         assertThat(config.getConfiguredPathModifiers()).isEmpty();
         assertThat(config.getConfiguredRequestModifiers()).isEmpty();
@@ -295,54 +288,52 @@ public class TestRequestConfigTest {
     private void assertFullConfig(TestRequestConfig config) {
         config.printConfiguration();
         assertThat(config.hasConfiguration()).isTrue();
-        assertThat(config.printConfiguration()).isEqualTo("""
-                
-                	Path params:
-                		p1=2                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:58)
-                
-                	Query params:
-                		q1=1                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:57)
-                
-                	Matrix params:
-                		m1=1                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:59)
-                
-                	Headers:
-                		Header=value                              at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:60)
-                
-                	Cookies:
-                		Test=tst;Version=1                        at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:61)
-                
-                	Properties:
-                		prop=true                                 at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:50)
-                
-                	Extensions:
-                		Integer                                   at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:51)
-                		Object                                    at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:52)
-                
-                	Accept:
-                		text/plain                                at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:53)
-                
-                	Language:
-                		EN                                        at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:54)
-                
-                	Encoding:
-                		gzip                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:55)
-                
-                	Path modifiers:
-                		<lambda>                                  at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:48)
-                
-                	Request modifiers:
-                		<lambda>                                  at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:49)
-                
-                	Cache:
-                		must-revalidate, max-age=604800           at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:56)
-                
-                	Custom Date (java.util) formatter:
-                		SimpleDateFormat                          at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:62)
-                
-                	Custom Date (java.time) formatter:
-                		DateTimeFormatter                         at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:63)
-                """);
+        assertThat(config.printConfiguration()).isEqualTo("\n" +
+                "\tPath params:\n" +
+                "\t\tp1=2                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:56)\n" +
+                "\n" +
+                "\tQuery params:\n" +
+                "\t\tq1=1                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:55)\n" +
+                "\n" +
+                "\tMatrix params:\n" +
+                "\t\tm1=1                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:57)\n" +
+                "\n" +
+                "\tHeaders:\n" +
+                "\t\tHeader=value                              at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:58)\n" +
+                "\n" +
+                "\tCookies:\n" +
+                "\t\tTest=tst;Version=1                        at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:59)\n" +
+                "\n" +
+                "\tProperties:\n" +
+                "\t\tprop=true                                 at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:48)\n" +
+                "\n" +
+                "\tExtensions:\n" +
+                "\t\tInteger                                   at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:49)\n" +
+                "\t\tObject                                    at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:50)\n" +
+                "\n" +
+                "\tAccept:\n" +
+                "\t\ttext/plain                                at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:51)\n" +
+                "\n" +
+                "\tLanguage:\n" +
+                "\t\tEN                                        at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:52)\n" +
+                "\n" +
+                "\tEncoding:\n" +
+                "\t\tgzip                                      at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:53)\n" +
+                "\n" +
+                "\tPath modifiers:\n" +
+                "\t\t<lambda>                                  at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:46)\n" +
+                "\n" +
+                "\tRequest modifiers:\n" +
+                "\t\t<lambda>                                  at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:47)\n" +
+                "\n" +
+                "\tCache:\n" +
+                "\t\tmust-revalidate, max-age=604800           at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:54)\n" +
+                "\n" +
+                "\tCustom Date (java.util) formatter:\n" +
+                "\t\tSimpleDateFormat                          at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:60)\n" +
+                "\n" +
+                "\tCustom Date (java.time) formatter:\n" +
+                "\t\tDateTimeFormatter                         at r.v.d.g.t.c.builder.(TestRequestConfigTest.java:61)\n");
 
         assertThat(config.getConfiguredPathModifiers()).hasSize(1).element(0).isEqualTo(pathFunc);
         assertThat(config.getConfiguredRequestModifiers()).hasSize(1).element(0).isEqualTo(reqFunc);

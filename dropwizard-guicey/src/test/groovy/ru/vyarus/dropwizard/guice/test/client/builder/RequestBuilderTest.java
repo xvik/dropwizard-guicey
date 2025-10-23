@@ -60,11 +60,11 @@ public class RequestBuilderTest {
                 .matrixParams(ImmutableMap.of("m2", 2, "m3", 3))
                 .pathParam("p1", 1)
                 .pathParams(ImmutableMap.of("p2", 2, "p3", 3))
-                .header(HttpHeader.ACCESS_CONTROL_MAX_AGE, "11")
+                .header(HttpHeader.ALT_SVC, "11")
                 .header("A", "a")
                 .headers(ImmutableMap.of("B", "b", "C", 12))
                 .cookie("c1", "1")
-                .cookie(new NewCookie.Builder("c2").value("11").build())
+                .cookie(new NewCookie("c2", "11"))
                 .cookies(ImmutableMap.of("c3", "3", "c4", "4"))
                 .property("prop1", "foo")
                 .properties(ImmutableMap.of("prop2", "bar", "prop3", "baz"))
@@ -101,15 +101,15 @@ public class RequestBuilderTest {
                 .containsEntry("A", "a")
                 .containsEntry("B", "b")
                 .containsEntry("C", 12)
-                .containsEntry(HttpHeader.ACCESS_CONTROL_MAX_AGE.asString(), "11")
+                .containsEntry(HttpHeader.ALT_SVC.asString(), "11")
                 .containsEntry(TracingLogger.HEADER_ACCEPT, "true")
                 .containsEntry(TracingLogger.HEADER_THRESHOLD, TracingLogger.Level.SUMMARY.name());
 
         assertThat(config.getConfiguredCookiesMap()).hasSize(4)
-                .containsEntry("c1", new NewCookie.Builder("c1").value("1").build())
-                .containsEntry("c2", new NewCookie.Builder("c2").value("11").build())
-                .containsEntry("c3", new NewCookie.Builder("c3").value("3").build())
-                .containsEntry("c4", new NewCookie.Builder("c4").value("4").build());
+                .containsEntry("c1", new NewCookie("c1", "1"))
+                .containsEntry("c2", new NewCookie("c2", "11"))
+                .containsEntry("c3", new NewCookie("c3", "3"))
+                .containsEntry("c4", new NewCookie("c4", "4"));
 
         assertThat(config.getConfiguredPropertiesMap()).hasSize(4)
                 .containsEntry("prop1", "foo")

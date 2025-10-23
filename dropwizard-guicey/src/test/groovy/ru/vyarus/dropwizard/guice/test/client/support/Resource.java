@@ -48,7 +48,7 @@ public class Resource {
                 .language(Locale.CANADA)
                 .header("HH", "3")
                 .header(HttpHeader.X_POWERED_BY.toString(), "4")
-                .cookie(new NewCookie.Builder("C").value("12").build())
+                .cookie(new NewCookie("C", "12"))
                 .cacheControl(RuntimeDelegate.getInstance().createHeaderDelegate(CacheControl.class)
                         .fromString("max-age=604800, must-revalidate"))
                 .build();

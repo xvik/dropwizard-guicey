@@ -3,8 +3,6 @@ package ru.vyarus.dropwizard.guice.test.client.builder.track;
 import com.google.common.collect.ImmutableMap;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.HttpMethod;
-import jakarta.ws.rs.NotAllowedException;
 import jakarta.ws.rs.OPTIONS;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -13,7 +11,6 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedHashMap;
@@ -92,87 +89,84 @@ public class TrackRealTest {
                 .containsExactly(Ext3.class, Ext3.class, ImmutableMap.of(Contr1.class, -1, Contr2.class, -1));
         assertThat(tracker.getUrl()).isNull();
 
-        assertThat(tracker.getLog()).isEqualTo("""
-                
-                	Path                                      at r.v.d.g.t.c.b.track.(TrackRealTest.java:46)
-                		root
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:47)
-                		(encodeSlashInPath=false encoded=false)
-                		name=nm
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:48)
-                		(encodeSlashInPath=true encoded=false)
-                		name2=vv//vv
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:49)
-                		(encodeSlashInPath=false encoded=true)
-                		name3=3
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:50)
-                		(encodeSlashInPath=false encoded=false)
-                		name4=4
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:51)
-                		(encodeSlashInPath=true encoded=false)
-                		name5=5
-                
-                	Resolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:52)
-                		(encodeSlashInPath=false encoded=true)
-                		name6=6
-                
-                	Matrix param                              at r.v.d.g.t.c.b.track.(TrackRealTest.java:53)
-                		mx=1
-                
-                	Matrix param                              at r.v.d.g.t.c.b.track.(TrackRealTest.java:54)
-                		mx2=[1, 2]
-                
-                	Query param                               at r.v.d.g.t.c.b.track.(TrackRealTest.java:55)
-                		qq=qq
-                
-                	Query param                               at r.v.d.g.t.c.b.track.(TrackRealTest.java:56)
-                		qq2=[1, 2]
-                
-                	Property                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:57)
-                		foo=bar
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:58)
-                		Ext1                         (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:59)
-                		Ext2                         (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                			priority=10
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:60)
-                		Ext3                         (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                			 contracts=
-                				Contr1                       (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                				Contr2                       (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:61)
-                		Ext4                         (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                			contracts=
-                				Contr1                       (r.v.d.g.t.c.b.t.TrackRealTest) =11
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:62)
-                		Ext5                         (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:63)
-                		Ext6                         (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                			priority=10
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:64)
-                		Ext7                         (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                			 contracts=
-                				Contr1                       (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                				Contr2                       (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                
-                	Register                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:65)
-                		Ext8                         (r.v.d.g.t.c.b.t.TrackRealTest)\s
-                			contracts=
-                				Contr1                       (r.v.d.g.t.c.b.t.TrackRealTest) =11
-                
-                """);
+        assertThat(tracker.getLog()).isEqualTo("\n" +
+                "\tPath                                      at r.v.d.g.t.c.b.track.(TrackRealTest.java:43)\n" +
+                "\t\troot\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:44)\n" +
+                "\t\t(encodeSlashInPath=false encoded=false)\n" +
+                "\t\tname=nm\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:45)\n" +
+                "\t\t(encodeSlashInPath=true encoded=false)\n" +
+                "\t\tname2=vv//vv\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:46)\n" +
+                "\t\t(encodeSlashInPath=false encoded=true)\n" +
+                "\t\tname3=3\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:47)\n" +
+                "\t\t(encodeSlashInPath=false encoded=false)\n" +
+                "\t\tname4=4\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:48)\n" +
+                "\t\t(encodeSlashInPath=true encoded=false)\n" +
+                "\t\tname5=5\n" +
+                "\n" +
+                "\tResolve template                          at r.v.d.g.t.c.b.track.(TrackRealTest.java:49)\n" +
+                "\t\t(encodeSlashInPath=false encoded=true)\n" +
+                "\t\tname6=6\n" +
+                "\n" +
+                "\tMatrix param                              at r.v.d.g.t.c.b.track.(TrackRealTest.java:50)\n" +
+                "\t\tmx=1\n" +
+                "\n" +
+                "\tMatrix param                              at r.v.d.g.t.c.b.track.(TrackRealTest.java:51)\n" +
+                "\t\tmx2=[1, 2]\n" +
+                "\n" +
+                "\tQuery param                               at r.v.d.g.t.c.b.track.(TrackRealTest.java:52)\n" +
+                "\t\tqq=qq\n" +
+                "\n" +
+                "\tQuery param                               at r.v.d.g.t.c.b.track.(TrackRealTest.java:53)\n" +
+                "\t\tqq2=[1, 2]\n" +
+                "\n" +
+                "\tProperty                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:54)\n" +
+                "\t\tfoo=bar\n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:55)\n" +
+                "\t\tExt1                         (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:56)\n" +
+                "\t\tExt2                         (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\t\t\tpriority=10\n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:57)\n" +
+                "\t\tExt3                         (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\t\t\t contracts=\n" +
+                "\t\t\t\tContr1                       (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\t\t\t\tContr2                       (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:58)\n" +
+                "\t\tExt4                         (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\t\t\tcontracts=\n" +
+                "\t\t\t\tContr1                       (r.v.d.g.t.c.b.t.TrackRealTest) =11\n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:59)\n" +
+                "\t\tExt5                         (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:60)\n" +
+                "\t\tExt6                         (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\t\t\tpriority=10\n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:61)\n" +
+                "\t\tExt7                         (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\t\t\t contracts=\n" +
+                "\t\t\t\tContr1                       (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\t\t\t\tContr2                       (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\n" +
+                "\tRegister                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:62)\n" +
+                "\t\tExt8                         (r.v.d.g.t.c.b.t.TrackRealTest) \n" +
+                "\t\t\tcontracts=\n" +
+                "\t\t\t\tContr1                       (r.v.d.g.t.c.b.t.TrackRealTest) =11\n\n");
 
 
         assertThat(target.getUriBuilder()).isNotNull();
@@ -202,7 +196,7 @@ public class TrackRealTest {
                 .acceptLanguage(Locale.CANADA)
                 .acceptEncoding("gzip")
                 .cookie("c1", "1")
-                .cookie(new NewCookie.Builder("c2").value("2").build())
+                .cookie(new NewCookie("c2", "2"))
                 .cacheControl(RuntimeDelegate.getInstance().createHeaderDelegate(CacheControl.class)
                         .fromString("max-age=604800, must-revalidate"))
                 .header("h1", "1")
@@ -217,51 +211,48 @@ public class TrackRealTest {
         assertThat(tracker.getEncodingHeader()).hasSize(1)
                 .containsOnly("gzip");
         assertThat(tracker.getCookies()).hasSize(2)
-                .containsEntry("c1", new NewCookie.Builder("c1").value("1").build())
-                .containsEntry("c2", new NewCookie.Builder("c2").value("2").build());
+                .containsEntry("c1", new NewCookie("c1", "1"))
+                .containsEntry("c2", new NewCookie("c2", "2"));
         assertThat(tracker.getCacheHeader()).isEqualTo("must-revalidate, max-age=604800");
         assertThat(tracker.getHeaders()).hasSize(3)
                 .containsEntry("h1", "1")
                 .containsEntry("h2", "2")
                 .containsEntry("h3", "3");
 
-        assertThat(tracker.getLog()).isEqualTo("""
-                
-                	Property                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:198)
-                		foo=bar
-                
-                	Accept                                    at r.v.d.g.t.c.b.track.(TrackRealTest.java:199)
-                		[text/plain]
-                
-                	Accept                                    at r.v.d.g.t.c.b.track.(TrackRealTest.java:200)
-                		[application/json]
-                
-                	Accept Language                           at r.v.d.g.t.c.b.track.(TrackRealTest.java:201)
-                		[EN]
-                
-                	Accept Language                           at r.v.d.g.t.c.b.track.(TrackRealTest.java:202)
-                		[en_CA]
-                
-                	Accept Encoding                           at r.v.d.g.t.c.b.track.(TrackRealTest.java:203)
-                		[gzip]
-                
-                	Cookie                                    at r.v.d.g.t.c.b.track.(TrackRealTest.java:204)
-                		$Version=1;c1=1
-                
-                	Cookie                                    at r.v.d.g.t.c.b.track.(TrackRealTest.java:205)
-                		$Version=1;c2=2
-                
-                	Cache                                     at r.v.d.g.t.c.b.track.(TrackRealTest.java:206)
-                		must-revalidate, max-age=604800
-                
-                	Header                                    at r.v.d.g.t.c.b.track.(TrackRealTest.java:208)
-                		h1=1
-                
-                	Headers                                   at r.v.d.g.t.c.b.track.(TrackRealTest.java:209)
-                		h2=[2]
-                		h3=[3]
-                
-                """);
+        assertThat(tracker.getLog()).isEqualTo("\n" +
+                "\tProperty                                  at r.v.d.g.t.c.b.track.(TrackRealTest.java:192)\n" +
+                "\t\tfoo=bar\n" +
+                "\n" +
+                "\tAccept                                    at r.v.d.g.t.c.b.track.(TrackRealTest.java:193)\n" +
+                "\t\t[text/plain]\n" +
+                "\n" +
+                "\tAccept                                    at r.v.d.g.t.c.b.track.(TrackRealTest.java:194)\n" +
+                "\t\t[application/json]\n" +
+                "\n" +
+                "\tAccept Language                           at r.v.d.g.t.c.b.track.(TrackRealTest.java:195)\n" +
+                "\t\t[EN]\n" +
+                "\n" +
+                "\tAccept Language                           at r.v.d.g.t.c.b.track.(TrackRealTest.java:196)\n" +
+                "\t\t[en_CA]\n" +
+                "\n" +
+                "\tAccept Encoding                           at r.v.d.g.t.c.b.track.(TrackRealTest.java:197)\n" +
+                "\t\t[gzip]\n" +
+                "\n" +
+                "\tCookie                                    at r.v.d.g.t.c.b.track.(TrackRealTest.java:198)\n" +
+                "\t\t$Version=1;c1=1\n" +
+                "\n" +
+                "\tCookie                                    at r.v.d.g.t.c.b.track.(TrackRealTest.java:199)\n" +
+                "\t\t$Version=1;c2=2\n" +
+                "\n" +
+                "\tCache                                     at r.v.d.g.t.c.b.track.(TrackRealTest.java:200)\n" +
+                "\t\tmust-revalidate, max-age=604800\n" +
+                "\n" +
+                "\tHeader                                    at r.v.d.g.t.c.b.track.(TrackRealTest.java:202)\n" +
+                "\t\th1=1\n" +
+                "\n" +
+                "\tHeaders                                   at r.v.d.g.t.c.b.track.(TrackRealTest.java:203)\n" +
+                "\t\th2=[2]\n" +
+                "\t\th3=[3]\n\n");
 
         builder.build("GET");
         verifyMethod(tracker, "GET", null);

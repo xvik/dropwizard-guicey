@@ -5,7 +5,6 @@ import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Form;
-import org.glassfish.jersey.innate.spi.MessageBodyWorkersSettable;
 import ru.vyarus.dropwizard.guice.test.client.builder.util.conf.FormParamsSupport;
 import ru.vyarus.dropwizard.guice.test.client.util.MultipartCheck;
 import ru.vyarus.dropwizard.guice.test.client.builder.util.conf.MultipartSupport;
@@ -333,6 +332,6 @@ public class FormBuilder {
                 || value instanceof InputStream
                 // includes BodyPart and other file mapping fields (not directly BodyPart to support case
                 // when multipart jar not declared)
-                || value instanceof MessageBodyWorkersSettable;
+                || (MultipartCheck.isEnabled() && MultipartSupport.isMultipartValue(value));
     }
 }

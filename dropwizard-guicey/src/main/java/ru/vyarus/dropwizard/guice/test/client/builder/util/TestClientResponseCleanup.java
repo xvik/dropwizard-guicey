@@ -34,8 +34,6 @@ public class TestClientResponseCleanup implements AutoCloseable {
         // should be unreachable because client is closed after test and so it would be impossible to call resource
         // after the application shutdown
         Preconditions.checkState(!closed, "Application already closed");
-        // just in case, cleanup references on each new addition (for cases when state shutdown never called)
-        responses.removeIf(Response::isClosed);
         responses.add(response);
     }
 

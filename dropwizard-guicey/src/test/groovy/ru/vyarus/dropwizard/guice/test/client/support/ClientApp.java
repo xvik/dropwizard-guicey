@@ -1,5 +1,8 @@
 package ru.vyarus.dropwizard.guice.test.client.support;
 
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.setup.Environment;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.support.DefaultTestApp;
 
@@ -22,5 +25,10 @@ public class ClientApp extends DefaultTestApp {
                         MatrixResource.class,
                         PrimitivesResource.class)
                 .build();
+    }
+
+    @Override
+    public void run(Configuration configuration, Environment environment) throws Exception {
+        environment.jersey().register(MultiPartFeature.class);
     }
 }

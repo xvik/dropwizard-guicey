@@ -96,7 +96,7 @@ public final class FormParamsSupport {
         } else if (param instanceof Collection<?>) {
             final StringBuilder b = new StringBuilder();
             ((Collection<?>) param).forEach(val -> {
-                if (!b.isEmpty()) {
+                if (b.length() > 0) {
                     b.append(',');
                 }
                 b.append(parameterToString(val));
