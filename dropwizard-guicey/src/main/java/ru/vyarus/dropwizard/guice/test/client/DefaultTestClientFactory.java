@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * {@link #disableConsoleLog()} method (system property).
  * <p>
  * NOTE: default {@link org.glassfish.jersey.client.HttpUrlConnectorProvider} does not support PATCH method on
- * jdk > 16 (requires additional --add-opens). To workaround it, use apache or connection provider.
+ * jdk &gt; 16 (requires additional --add-opens). To workaround it, use apache or connection provider.
  * <p>
  * If client customization is required, extend this class and override
  * {@link #configure(org.glassfish.jersey.client.JerseyClientBuilder,

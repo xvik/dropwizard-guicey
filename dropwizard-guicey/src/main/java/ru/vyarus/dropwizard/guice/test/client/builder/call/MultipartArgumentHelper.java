@@ -17,8 +17,10 @@ import java.nio.file.Files;
 /**
  * Helper utilities to build multipart objects for rest method analysis api.
  * <p>
- * For the most common case {@code post(@FormDataParam("file") InputStream stream,
- * @FormDataParam("file") FormDataContentDisposition fileDetail)}:
+ * For the most common case
+ * <pre>{@code post(@FormDataParam("file") InputStream stream, @FormDataParam("file")
+ * FormDataContentDisposition fileDetail)}
+ * </pre>:
  * <pre>{@code .post(multipart.fromClasspath("/some.txt"),
  *                   multipart.disposition("file", "some.txt"))}</pre>.
  * <p>
