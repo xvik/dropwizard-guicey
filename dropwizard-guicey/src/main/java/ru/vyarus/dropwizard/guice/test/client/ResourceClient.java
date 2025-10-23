@@ -1,7 +1,9 @@
 package ru.vyarus.dropwizard.guice.test.client;
 
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.UriBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.ext.RuntimeDelegate;
+
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestClientRequestBuilder;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestRequestConfig;
@@ -19,7 +21,7 @@ import java.util.function.Supplier;
  * <p>
  * For example: {@code client.method(mock -> mock.restMethod("queryParam").asVoid()))}
  * It would resolve target HTTP method, target path (from method annotation) and apply query parameter
- * (because of not null value provided for method parameter, annotated with {@link jakarta.ws.rs.QueryParam}).
+ * (because of not null value provided for method parameter, annotated with {@link javax.ws.rs.QueryParam}).
  * <p>
  * This simplifies test request building, making it almost refactoring-safely. Also, it makes simple navigation from
  * test to called resource method.
@@ -120,11 +122,11 @@ public class ResourceClient<T> extends TestClient<TestClient<?>> {
      * automatically from the resource method annotations. Arguments for annotated parameters could be used to
      * provide default values.
      * <ul>
-     *  <li>target path resolved from method {@link jakarta.ws.rs.Path}</li>
-     *  <li>target method resolved from method annotation (like {@link jakarta.ws.rs.GET})</li>
+     *  <li>target path resolved from method {@link javax.ws.rs.Path}</li>
+     *  <li>target method resolved from method annotation (like {@link javax.ws.rs.GET})</li>
      *  <li>analyze provided method arguments to get values for annotated parameters (like
-     *  {@link jakarta.ws.rs.QueryParam}, {@link jakarta.ws.rs.PathParam}, etc.)</li>
-     *  <li>build form body from not null {@link jakarta.ws.rs.FormParam} and
+     *  {@link javax.ws.rs.QueryParam}, {@link javax.ws.rs.PathParam}, etc.)</li>
+     *  <li>build form body from not null {@link javax.ws.rs.FormParam} and
      *  {@link org.glassfish.jersey.media.multipart.FormDataParam}</li>
      * </ul>
      * <p>
@@ -183,14 +185,14 @@ public class ResourceClient<T> extends TestClient<TestClient<?>> {
      * (it will also apply configuration by provided method parameter values).
      *
      * @param method method name to call (there must be only one such method)
-     * @param body   (optional) request body (everything except {@link jakarta.ws.rs.client.Entity} converted to JSON)
+     * @param body   (optional) request body (everything except {@link javax.ws.rs.client.Entity} converted to JSON)
      * @return request builder instance
      * @throws java.lang.IllegalStateException if jersey annotations aren't found on the method
      */
     public TestClientRequestBuilder method(final Method method, final @Nullable Object body) {
         ResourceAnalyzer.validateResourceMethod(resource, method);
         final Method annotated = ResourceAnalyzer.findAnnotatedMethod(method);
-        final UriBuilder builder = UriBuilder.newInstance();
+        final UriBuilder builder = RuntimeDelegate.getInstance().createUriBuilder();
         builder.path(annotated);
 
         final String httpMethod = ResourceAnalyzer.findHttpMethod(annotated);
@@ -207,7 +209,7 @@ public class ResourceClient<T> extends TestClient<TestClient<?>> {
      * found, throws exception (about multiple methods found).
      *
      * @param method method name to call (there must be only one such method)
-     * @param body   (optional) request body (everything except {@link jakarta.ws.rs.client.Entity} converted to JSON)
+     * @param body   (optional) request body (everything except {@link javax.ws.rs.client.Entity} converted to JSON)
      * @return request builder instance
      * @throws java.lang.IllegalStateException if unique method not found
      */

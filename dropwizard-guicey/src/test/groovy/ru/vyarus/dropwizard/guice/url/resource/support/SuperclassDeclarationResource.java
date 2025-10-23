@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.url.resource.support;
 
-import jakarta.ws.rs.core.Response;
+import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 

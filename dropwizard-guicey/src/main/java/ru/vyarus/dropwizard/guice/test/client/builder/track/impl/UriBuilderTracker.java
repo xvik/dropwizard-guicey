@@ -2,8 +2,8 @@ package ru.vyarus.dropwizard.guice.test.client.builder.track.impl;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import jakarta.ws.rs.core.UriBuilder;
-import jakarta.ws.rs.core.UriBuilderException;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriBuilderException;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.test.client.builder.track.RequestData;
 import ru.vyarus.dropwizard.guice.url.resource.ResourceAnalyzer;
@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.Map;
 
 /**
- * {@link jakarta.ws.rs.core.UriBuilder} tracker for
+ * {@link javax.ws.rs.core.UriBuilder} tracker for
  * {@link ru.vyarus.dropwizard.guice.test.client.builder.track.RequestTracker}.
  * <p>
  * Path modification like {@link #scheme(String)} or {@link #replacePath(String)} or

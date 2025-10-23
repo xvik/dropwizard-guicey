@@ -1,11 +1,11 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.track;
 
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.Cookie;
-import jakarta.ws.rs.ext.RuntimeDelegate;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.ext.RuntimeDelegate;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.builder.track.impl.TargetTracker;
 import ru.vyarus.dropwizard.guice.test.client.builder.track.impl.TrackableData;
@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
 
 /**
  * Tracks jersey client api configuration. Could be used to record all applied changes for
- * {@link jakarta.ws.rs.client.WebTarget} and {@link jakarta.ws.rs.client.Invocation.Builder}.
+ * {@link javax.ws.rs.client.WebTarget} and {@link javax.ws.rs.client.Invocation.Builder}.
  * <p>
  * Limitations: rx and async apis are not tracked. Also, invocation calls not handled, so for example, in case of
  * {@code buildGet().invoke(Some.class)}, requested mapping class would not be recorded because
- * {@link jakarta.ws.rs.client.Invocation} object is not tracked.
+ * {@link javax.ws.rs.client.Invocation} object is not tracked.
  * <p>
  * For example, to track real request configuration:
  * <pre><code>
@@ -47,10 +47,10 @@ import java.util.stream.Collectors;
  *      WebTarget target = tracker.track(originalTarget, ()-> System.out.println(tracker.getLog()));
  * </code></pre>
  * <p>
- * Tracker could be resolved from tarcked {@link jakarta.ws.rs.client.WebTarget} and
- * {@link jakarta.ws.rs.client.Invocation.Builder} objects with
- * {@link #lookupTracker(jakarta.ws.rs.client.WebTarget)} and
- * {@link #lookupTracker(jakarta.ws.rs.client.Invocation.Builder)}.
+ * Tracker could be resolved from tarcked {@link javax.ws.rs.client.WebTarget} and
+ * {@link javax.ws.rs.client.Invocation.Builder} objects with
+ * {@link #lookupTracker(javax.ws.rs.client.WebTarget)} and
+ * {@link #lookupTracker(javax.ws.rs.client.Invocation.Builder)}.
  *
  * @author Vyacheslav Rusakov
  * @since 04.10.2025
@@ -81,7 +81,7 @@ public class RequestTracker {
 
     /**
      * Record request changes without actual request execution. Useful for testing apis, modifying request.
-     * Use mocker {@link jakarta.ws.rs.client.WebTarget} inside
+     * Use mocker {@link javax.ws.rs.client.WebTarget} inside
      * ({@link ru.vyarus.dropwizard.guice.test.client.builder.track.impl.mock.TargetMock}) which does not implement
      * request processing methods (just accept configuration).
      *
@@ -93,7 +93,7 @@ public class RequestTracker {
 
     /**
      * Record request changes without actual request execution. Useful for testing apis, modifying request.
-     * Use mocker {@link jakarta.ws.rs.client.WebTarget} inside
+     * Use mocker {@link javax.ws.rs.client.WebTarget} inside
      * ({@link ru.vyarus.dropwizard.guice.test.client.builder.track.impl.mock.TargetMock}) which does not implement
      * request processing methods (just accept configuration).
      *
@@ -136,7 +136,7 @@ public class RequestTracker {
     // ------------------------------------------------------------------------ TRACKED DATA
 
     /**
-     * {@link jakarta.ws.rs.client.WebTarget#queryParam(String, Object...)}.
+     * {@link javax.ws.rs.client.WebTarget#queryParam(String, Object...)}.
      * <p>
      * Note: returned value may contain array if multiple values configured.
      *
@@ -150,7 +150,7 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.WebTarget#matrixParam(String, Object...)}.
+     * {@link javax.ws.rs.client.WebTarget#matrixParam(String, Object...)}.
      * <p>
      * Note: returned value may contain array if multiple values configured.
      *
@@ -164,7 +164,7 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.WebTarget#resolveTemplate(String, Object)} (and all other variations).
+     * {@link javax.ws.rs.client.WebTarget#resolveTemplate(String, Object)} (and all other variations).
      * <p>
      * See {@link RequestData#getPathParams()} for encoding info.
      *
@@ -177,7 +177,7 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.Invocation.Builder#header(String, Object)}.
+     * {@link javax.ws.rs.client.Invocation.Builder#header(String, Object)}.
      *
      * @return applied headers
      */
@@ -187,7 +187,7 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.Invocation.Builder#cookie(String, String)}.
+     * {@link javax.ws.rs.client.Invocation.Builder#cookie(String, String)}.
      *
      * @return applied cookies
      */
@@ -197,8 +197,8 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.WebTarget#property(String, Object)},
-     * {@link jakarta.ws.rs.client.Invocation.Builder#property(String, Object)}.
+     * {@link javax.ws.rs.client.WebTarget#property(String, Object)},
+     * {@link javax.ws.rs.client.Invocation.Builder#property(String, Object)}.
      *
      * @return applied properties
      */
@@ -208,7 +208,7 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.WebTarget#register(Class)}.
+     * {@link javax.ws.rs.client.WebTarget#register(Class)}.
      * <p>
      * Values in returned map could be a class or instance (if instance was used for configuration).
      * <p>
@@ -223,9 +223,9 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.WebTarget#path(String)}.
+     * {@link javax.ws.rs.client.WebTarget#path(String)}.
      * <p>
-     * NOTE: does not count {@link jakarta.ws.rs.client.WebTarget#getUriBuilder()} changes.
+     * NOTE: does not count {@link javax.ws.rs.client.WebTarget#getUriBuilder()} changes.
      *
      * @return applied paths
      */
@@ -234,8 +234,8 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.WebTarget#request(String...)},
-     * {@link jakarta.ws.rs.client.Invocation.Builder#accept(String...)}.
+     * {@link javax.ws.rs.client.WebTarget#request(String...)},
+     * {@link javax.ws.rs.client.Invocation.Builder#accept(String...)}.
      *
      * @return applied expected response types
      */
@@ -245,7 +245,7 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}.
+     * {@link javax.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}.
      *
      * @return applied expected languages
      */
@@ -255,7 +255,7 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.Invocation.Builder#acceptEncoding(String...)}.
+     * {@link javax.ws.rs.client.Invocation.Builder#acceptEncoding(String...)}.
      *
      * @return applied expected encodings
      */
@@ -265,7 +265,7 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.Invocation.Builder#cacheControl(jakarta.ws.rs.core.CacheControl)}.
+     * {@link javax.ws.rs.client.Invocation.Builder#cacheControl(javax.ws.rs.core.CacheControl)}.
      *
      * @return applied cache control object (cache header)
      * @see #getCacheHeader()
@@ -275,7 +275,7 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.Invocation.Builder#cacheControl(jakarta.ws.rs.core.CacheControl)}.
+     * {@link javax.ws.rs.client.Invocation.Builder#cacheControl(javax.ws.rs.core.CacheControl)}.
      *
      * @return applied cache header
      * @see #getCache()
@@ -287,8 +287,8 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.Invocation.Builder#method(String)} and shortcuts like
-     * {@link jakarta.ws.rs.client.Invocation.Builder#get()}.
+     * {@link javax.ws.rs.client.Invocation.Builder#method(String)} and shortcuts like
+     * {@link javax.ws.rs.client.Invocation.Builder#get()}.
      *
      * @return request HTTP method or null (if request method wasn't configred)
      */
@@ -298,8 +298,8 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.Invocation.Builder#method(String, jakarta.ws.rs.client.Entity)} and shortcuts like
-     * {@link jakarta.ws.rs.client.Invocation.Builder#post(jakarta.ws.rs.client.Entity)}.
+     * {@link javax.ws.rs.client.Invocation.Builder#method(String, javax.ws.rs.client.Entity)} and shortcuts like
+     * {@link javax.ws.rs.client.Invocation.Builder#post(javax.ws.rs.client.Entity)}.
      *
      * @return request entity or null
      */
@@ -309,7 +309,7 @@ public class RequestTracker {
     }
 
     /**
-     * Result mapping from apis like {@link jakarta.ws.rs.client.Invocation.Builder#get(Class)}.
+     * Result mapping from apis like {@link javax.ws.rs.client.Invocation.Builder#get(Class)}.
      *
      * @return result mapping type or null
      */
@@ -319,9 +319,9 @@ public class RequestTracker {
     }
 
     /**
-     * Result mapping from apis like {@link jakarta.ws.rs.client.Invocation.Builder#get(Class)}.
+     * Result mapping from apis like {@link javax.ws.rs.client.Invocation.Builder#get(Class)}.
      *
-     * @return result class (for {@link jakarta.ws.rs.core.GenericType} it would be just a root class without generics)
+     * @return result class (for {@link javax.ws.rs.core.GenericType} it would be just a root class without generics)
      */
     @Nullable
     public Class<?> getResultMappingClass() {
@@ -329,7 +329,7 @@ public class RequestTracker {
     }
 
     /**
-     * Result mapping from apis like {@link jakarta.ws.rs.client.Invocation.Builder#get(Class)}.
+     * Result mapping from apis like {@link javax.ws.rs.client.Invocation.Builder#get(Class)}.
      *
      * @return string representation of resulted type, including generics (like "List&lt;Something&gt;")
      */
@@ -340,9 +340,9 @@ public class RequestTracker {
     }
 
     /**
-     * {@link jakarta.ws.rs.client.WebTarget#getUri()}.
+     * {@link javax.ws.rs.client.WebTarget#getUri()}.
      * <p>
-     * Url is recorded only after invocation builder creation with {@link jakarta.ws.rs.client.WebTarget#request()}.
+     * Url is recorded only after invocation builder creation with {@link javax.ws.rs.client.WebTarget#request()}.
      *
      * @return the resulted url or null
      */

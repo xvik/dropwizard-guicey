@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.test.client.support;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.MatrixParam;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.core.PathSegment;
+import javax.ws.rs.GET;
+import javax.ws.rs.MatrixParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.PathSegment;
 import ru.vyarus.dropwizard.guice.test.client.support.sub.SubMatrix;
 
 /**

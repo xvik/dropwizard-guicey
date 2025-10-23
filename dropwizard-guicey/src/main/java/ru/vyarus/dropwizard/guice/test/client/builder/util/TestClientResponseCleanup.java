@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.util;
 
 import com.google.common.base.Preconditions;
-import jakarta.ws.rs.core.Response;
+import javax.ws.rs.core.Response;
 
 import java.util.ArrayList;
 import java.util.List;

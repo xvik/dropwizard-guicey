@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.dw;
 
 import io.dropwizard.core.server.DefaultServerFactory;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;

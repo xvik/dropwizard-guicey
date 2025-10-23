@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.track.impl;
 
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.Configuration;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.UriBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.builder.track.RequestData;
 import ru.vyarus.dropwizard.guice.test.client.builder.track.RequestTracker;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * {@link jakarta.ws.rs.client.WebTarget} object tracker. Used to intercept configuration calls and verify
+ * {@link javax.ws.rs.client.WebTarget} object tracker. Used to intercept configuration calls and verify
  * correctness in tests. Does not support direct async and rx apis.
  *
  * @author Vyacheslav Rusakov

@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.client;
 
-import jakarta.ws.rs.InternalServerErrorException;
-import jakarta.ws.rs.core.GenericType;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.core.GenericType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;

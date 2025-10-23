@@ -25,12 +25,12 @@ public final class RestPathUtils {
     /**
      * Build resource path from provided resource class.
      * <p>
-     * NOTE that this method should not be used for sub-resources, because their {@link jakarta.ws.rs.Path} annotation
+     * NOTE that this method should not be used for sub-resources, because their {@link javax.ws.rs.Path} annotation
      * is ignored (lookup method path used instead).
      *
      * @param resource resource class to build a path for
      * @return path for provided resource (or sub resource) with preserved path parameters placeholders
-     * @throws java.lang.IllegalStateException if {@link jakarta.ws.rs.Path} annotation not found in resource class
+     * @throws java.lang.IllegalStateException if {@link javax.ws.rs.Path} annotation not found in resource class
      *                                         hierarchy
      */
     public static String getResourcePath(final Class<?> resource) {
@@ -40,14 +40,14 @@ public final class RestPathUtils {
     /**
      * Build resource path from provided resource class.
      * <p>
-     * NOTE that this method should not be used for sub-resources, because their {@link jakarta.ws.rs.Path} annotation
+     * NOTE that this method should not be used for sub-resources, because their {@link javax.ws.rs.Path} annotation
      * is ignored (lookup method path used instead).
      *
      * @param basePath optional base path (could contain String.format() placeholders: %s)
      * @param args variables for path placeholders (String.format() arguments)
      * @param resource resource class to build a path for
      * @return path for provided resource (or sub resource) with preserved path parameters placeholders
-     * @throws java.lang.IllegalStateException if {@link jakarta.ws.rs.Path} annotation not found in resource class
+     * @throws java.lang.IllegalStateException if {@link javax.ws.rs.Path} annotation not found in resource class
      *                                         hierarchy
      */
     public static String getResourcePath(final @Nullable String basePath, final Class<?> resource,
@@ -61,7 +61,7 @@ public final class RestPathUtils {
      * @param resource resource class to build a path for
      * @param <T>      resource type
      * @return builder to specify path or query params
-     * @throws java.lang.IllegalStateException if {@link jakarta.ws.rs.Path} annotation not found in resource class
+     * @throws java.lang.IllegalStateException if {@link javax.ws.rs.Path} annotation not found in resource class
      *                                         hierarchy
      */
     public static <T> RestPathBuilder<T> buildPath(final Class<T> resource) {
@@ -76,7 +76,7 @@ public final class RestPathUtils {
      * @param resource resource class to build a path for
      * @param <T>      resource type
      * @return builder to specify path or query params
-     * @throws java.lang.IllegalStateException if {@link jakarta.ws.rs.Path} annotation not found in resource class
+     * @throws java.lang.IllegalStateException if {@link javax.ws.rs.Path} annotation not found in resource class
      *                                         hierarchy
      */
     public static <T> RestPathBuilder<T> buildPath(final @Nullable String basePath, final Class<T> resource,
@@ -86,7 +86,7 @@ public final class RestPathUtils {
 
     /**
      * Build resource path from provided sub-resource class.
-     * IMPORTANT: the difference with {@link #buildPath(String, Class, Object...)} is that {@link jakarta.ws.rs.Path}
+     * IMPORTANT: the difference with {@link #buildPath(String, Class, Object...)} is that {@link javax.ws.rs.Path}
      * annotation value is ignored for sub-resources (instead, the path from lookup method is used, which must be
      * specified manually).
      *

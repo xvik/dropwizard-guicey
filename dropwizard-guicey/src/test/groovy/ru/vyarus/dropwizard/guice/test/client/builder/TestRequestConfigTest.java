@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.test.client.builder;
 
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.NewCookie;
-import jakarta.ws.rs.ext.RuntimeDelegate;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.ext.RuntimeDelegate;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.test.client.builder.track.RequestTracker;
 import ru.vyarus.dropwizard.guice.test.client.builder.track.impl.mock.TargetMock;

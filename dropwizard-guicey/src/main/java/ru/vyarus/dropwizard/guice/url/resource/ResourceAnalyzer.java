@@ -4,20 +4,20 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import jakarta.ws.rs.BeanParam;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.CookieParam;
-import jakarta.ws.rs.FormParam;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.HttpMethod;
-import jakarta.ws.rs.MatrixParam;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MultivaluedMap;
-import jakarta.ws.rs.core.PathSegment;
+import javax.ws.rs.BeanParam;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.CookieParam;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.MatrixParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.PathSegment;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.url.model.MethodCall;
 import ru.vyarus.dropwizard.guice.url.model.ResourceMethodInfo;
@@ -85,7 +85,7 @@ public final class ResourceAnalyzer {
      * (simpler for concatenation).
      *
      * @param method resource method
-     * @return value of {@link jakarta.ws.rs.Path} annotation on metho
+     * @return value of {@link javax.ws.rs.Path} annotation on metho
      * @throws java.lang.IllegalStateException if annotation not found
      */
     public static String getMethodPath(final Method method) {
@@ -115,7 +115,7 @@ public final class ResourceAnalyzer {
      * Search for the actual resource annotations source (might be superclass of interface).
      *
      * @param resource resource class
-     * @return resource class or its superclass or interface where {@link jakarta.ws.rs.Path} annotation declared
+     * @return resource class or its superclass or interface where {@link javax.ws.rs.Path} annotation declared
      */
     public static Class<?> findAnnotatedResource(final Class<?> resource) {
         return getAnnotatedResource(resource).orElseThrow(() -> new IllegalStateException(String.format(
@@ -188,7 +188,7 @@ public final class ResourceAnalyzer {
     }
 
     /**
-     * Search method, annotated with {@link jakarta.ws.rs.Path}. Jersey supports declaring annotations in
+     * Search method, annotated with {@link javax.ws.rs.Path}. Jersey supports declaring annotations in
      * superclass or on interface, so the resource method may miss actual annotations.
      *
      * @param method method to search annotated for
@@ -227,7 +227,7 @@ public final class ResourceAnalyzer {
 
     /**
      * Check if provided method is annotated with jersey annotations. Http methods must have http method
-     * annotation (like {@link jakarta.ws.rs.GET}), but may lack {@link jakarta.ws.rs.Path} annotation.
+     * annotation (like {@link javax.ws.rs.GET}), but may lack {@link javax.ws.rs.Path} annotation.
      * Sub-resource lookup method must have {@link Path annotation}. So target method must be checked to contain
      * one of possible annotations.
      * <p>
@@ -241,8 +241,8 @@ public final class ResourceAnalyzer {
     }
 
     /**
-     * Resolve http method by searching for method annotations like {@link jakarta.ws.rs.GET} or
-     * {@link jakarta.ws.rs.POST}.
+     * Resolve http method by searching for method annotations like {@link javax.ws.rs.GET} or
+     * {@link javax.ws.rs.POST}.
      * <p>
      * WARNING: does not search the correct annotated method (see
      * {@link #findAnnotatedMethod(java.lang.reflect.Method)}) - assumed correct method was already found.
@@ -259,7 +259,7 @@ public final class ResourceAnalyzer {
     }
 
     /**
-     * Search http annotations on method (like {@link jakarta.ws.rs.GET}).
+     * Search http annotations on method (like {@link javax.ws.rs.GET}).
      *
      * @param method method to find annotation on
      * @return http method or null
@@ -293,7 +293,7 @@ public final class ResourceAnalyzer {
      * <p>
      * Sub method calls assumed to be a sub-resource calls like {@code resource.subResource(args).method(args)}.
      * For sub-resource calls, returned info will contain root resource as base resource, but resource method
-     * path will include all paths from locator methods (class-level {@link jakarta.ws.rs.Path} annotation is
+     * path will include all paths from locator methods (class-level {@link javax.ws.rs.Path} annotation is
      * ignored for sub-resources!).
      *
      * @param resource resource class
@@ -314,7 +314,7 @@ public final class ResourceAnalyzer {
      * <p>
      * Sub method calls assumed to be a sub-resource calls like {@code resource.subResource(args).method(args)}.
      * For sub-resource calls, returned info will contain root resource as base resource, but resource method
-     * path will include all paths from locator methods (class-level {@link jakarta.ws.rs.Path} annotation is
+     * path will include all paths from locator methods (class-level {@link javax.ws.rs.Path} annotation is
      * ignored for sub-resources!).
      * <p>
      * Method call could be intercepted with

@@ -1,8 +1,8 @@
 package ru.vyarus.dropwizard.guice.test.spy;
 
 import io.dropwizard.lifecycle.Managed;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

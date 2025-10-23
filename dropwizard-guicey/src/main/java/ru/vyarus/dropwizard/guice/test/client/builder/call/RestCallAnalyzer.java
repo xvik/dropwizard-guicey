@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.call;
 
 import com.google.common.base.Preconditions;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.MediaType;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.ResourceClient;
 import ru.vyarus.dropwizard.guice.test.client.builder.FormBuilder;
@@ -15,7 +15,7 @@ import ru.vyarus.dropwizard.guice.url.util.Caller;
 
 /**
  * Allows using direct call for a resource method to configure rest client endpoint: target url is configured from
- * method {@link jakarta.ws.rs.Path} annotation. Optionally, {@link PathParam} and {@link QueryParam} parameters could
+ * method {@link javax.ws.rs.Path} annotation. Optionally, {@link PathParam} and {@link QueryParam} parameters could
  * be configured by providing non-null values.
  * <p>
  * Limitation: this will work only with methods with DIRECTLY applied annotations: neither implemented interface method

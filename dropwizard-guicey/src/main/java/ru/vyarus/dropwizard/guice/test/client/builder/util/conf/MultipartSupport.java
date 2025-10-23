@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.util.conf;
 
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.Response;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.BodyPart;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;

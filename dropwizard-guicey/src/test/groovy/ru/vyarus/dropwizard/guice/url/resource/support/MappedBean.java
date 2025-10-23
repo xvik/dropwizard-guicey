@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.url.resource.support;
 
-import jakarta.ws.rs.CookieParam;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.MatrixParam;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.QueryParam;
+import javax.ws.rs.CookieParam;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.MatrixParam;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 
 /**
  * @author Vyacheslav Rusakov

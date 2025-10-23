@@ -1,12 +1,14 @@
 package ru.vyarus.dropwizard.guice.test.client;
 
 import com.google.common.base.Preconditions;
-import jakarta.ws.rs.HttpMethod;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.UriBuilder;
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.ext.RuntimeDelegate;
+
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.builder.FormBuilder;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestClientDefaults;
@@ -92,7 +94,7 @@ import java.util.function.Supplier;
  * <p>
  * The main idea behind chained assertions is redundant variables avoidance in test.
  * <p>
- * Note that builder method return {@link java.lang.AutoCloseable} object (same as {@link jakarta.ws.rs.core.Response})
+ * Note that builder method return {@link java.lang.AutoCloseable} object (same as {@link javax.ws.rs.core.Response})
  * because a response object must be closed (response is closed when response body is consumed).
  * Because of this your IDE could warn you that the result of, for example, {@link TestClientRequestBuilder#invoke()}
  * must be used with "try-with-resources" statement. In most cases, you can ignore this warning as guicey tracks all
@@ -241,7 +243,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * @return client with a constructed path (relative to the current client path)
      */
     public TestClient<?> subClient(final Consumer<UriBuilder> consumer) {
-        final UriBuilder uriBuilder = UriBuilder.newInstance();
+        final UriBuilder uriBuilder = RuntimeDelegate.getInstance().createUriBuilder();
         consumer.accept(uriBuilder);
         return new TestClient<>(() -> target(uriBuilder.toString()), defaults);
     }
@@ -255,14 +257,14 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * @return rest client for provided resource
      */
     public <K> ResourceClient<K> subClient(final Consumer<UriBuilder> consumer, final Class<K> resource) {
-        final UriBuilder uriBuilder = UriBuilder.newInstance();
+        final UriBuilder uriBuilder = RuntimeDelegate.getInstance().createUriBuilder();
         consumer.accept(uriBuilder);
         return new ResourceClient<>(() -> target(uriBuilder.toString()), defaults, resource);
     }
 
     /**
      * Create a new sub-client for a specified resource class (appends a resource path, obtained from
-     * {@link jakarta.ws.rs.Path} annotation, to the current client path). Method is useful when generic
+     * {@link javax.ws.rs.Path} annotation, to the current client path). Method is useful when generic
      * rest path must be "typed" with a resource type (to be able to call resource methods directly).
      * <p>
      * In case of sub-resources, use {@link #subResourceClient(String, Class, Object...)} to properly specify
@@ -413,7 +415,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
     /**
      * POST call shortcut. Almost the same as jersey {@code client.target(path).request().post(entity, Void.class))}:
      * <p>
-     * If body is already an {@link jakarta.ws.rs.client.Entity} - it will be used as is, other objects
+     * If body is already an {@link javax.ws.rs.client.Entity} - it will be used as is, other objects
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <p>
      * For forms (urlencoded and multipart) use {@link #buildForm(String, Object...)}:
@@ -443,7 +445,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
     /**
      * POST call shortcut. Almost the same as jersey {@code client.target(path).request().post(entity, Some.class))}:
      * <p>
-     * If body is already an {@link jakarta.ws.rs.client.Entity} - it will be used as is, other objects
+     * If body is already an {@link javax.ws.rs.client.Entity} - it will be used as is, other objects
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <p>
      * For forms (urlencoded and multipart) use {@link #buildForm(String, Object...)}:
@@ -477,7 +479,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * POST call shortcut. Almost the same as jersey
      * {@code client.target(path).request().post(entity, new GenericType<List<Some>>(){}))}:
      * <p>
-     * If body is already an {@link jakarta.ws.rs.client.Entity} - it will be used as is, other objects
+     * If body is already an {@link javax.ws.rs.client.Entity} - it will be used as is, other objects
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <p>
      * For forms (urlencoded and multipart) use {@link #buildForm(String, Object...)}:
@@ -510,7 +512,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
     /**
      * PUT call shortcut. Almost the same as jersey {@code client.target(path).request().put(entity, Void.class))}:
      * <p>
-     * If body is already an {@link jakarta.ws.rs.client.Entity} - it will be used as is, other objects
+     * If body is already an {@link javax.ws.rs.client.Entity} - it will be used as is, other objects
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <ul>
      *    <li>Exception thrown if the result is not successful (not 2xx)</li>
@@ -537,7 +539,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
     /**
      * PUT call shortcut. Almost the same as jersey {@code client.target(path).request().put(entity, Some.class))}:
      * <p>
-     * If body is already an {@link jakarta.ws.rs.client.Entity} - it will be used as is, other objects
+     * If body is already an {@link javax.ws.rs.client.Entity} - it will be used as is, other objects
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <ul>
      *    <li>Exception thrown if the result is not successful (not 2xx)</li>
@@ -567,7 +569,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * PUT call shortcut. Almost the same as jersey
      * {@code client.target(path).request().put(entity, new GenericType<List<Some>>(){}))}:
      * <p>
-     * If body is already an {@link jakarta.ws.rs.client.Entity} - it will be used as is, other objects
+     * If body is already an {@link javax.ws.rs.client.Entity} - it will be used as is, other objects
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <ul>
      *    <li>Exception thrown if the result is not successful (not 2xx)</li>
@@ -598,7 +600,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * PATCH call shortcut. Almost the same as jersey
      * {@code client.target(path).request().build("PATCH").invoke(Void.class))}:
      * <p>
-     * If body is already an {@link jakarta.ws.rs.client.Entity} - it will be used as is, other objects
+     * If body is already an {@link javax.ws.rs.client.Entity} - it will be used as is, other objects
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <p>
      * WARNING: in integration tests (real http call, not stub) the jersey client would use
@@ -634,7 +636,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * PATCH call shortcut. Almost the same as jersey
      * {@code client.target(path).request().build("PATCH").invoke(Some.class))}:
      * <p>
-     * If body is already an {@link jakarta.ws.rs.client.Entity} - it will be used as is, other objects
+     * If body is already an {@link javax.ws.rs.client.Entity} - it will be used as is, other objects
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <p>
      * WARNING: in integration tests (real http call, not stub) the jersey client would use
@@ -673,7 +675,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * PATCH call shortcut. Almost the same as jersey
      * {@code client.target(path).request().build("PATCH").invoke(new GenericType<List<Some>>(){}))}:
      * <p>
-     * If body is already an {@link jakarta.ws.rs.client.Entity} - it will be used as is, other objects
+     * If body is already an {@link javax.ws.rs.client.Entity} - it will be used as is, other objects
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <p>
      * WARNING: in integration tests (real http call, not stub) the jersey client would use
@@ -799,7 +801,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
     /**
      * Generic request builder.
      * <p>
-     * Body is not required. If body is an {@link jakarta.ws.rs.client.Entity} - it will be used as is, other objects
+     * Body is not required. If body is an {@link javax.ws.rs.client.Entity} - it will be used as is, other objects
      * would be converted to json entity ({@link Entity#json(Object)}).
      * <p>
      * Defaults like {@link #defaultHeader(String, Object)} are applied.
@@ -809,7 +811,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * @param body   optional request body (everything except {@link Entity} converted to JSON)
      * @param args   variables for path placeholders (String.format() arguments)
      * @return request builder
-     * @see jakarta.ws.rs.HttpMethod
+     * @see javax.ws.rs.HttpMethod
      */
     public TestClientRequestBuilder build(final String method, final String path, final @Nullable Object body,
                                           final Object... args) {

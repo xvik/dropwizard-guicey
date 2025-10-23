@@ -1,13 +1,13 @@
 package ru.vyarus.dropwizard.guice.test.client.builder;
 
 import com.google.common.collect.ImmutableMap;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.NewCookie;
-import jakarta.ws.rs.ext.RuntimeDelegate;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.ext.RuntimeDelegate;
 import org.eclipse.jetty.http.HttpHeader;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.message.internal.TracingLogger;

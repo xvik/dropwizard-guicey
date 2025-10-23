@@ -42,6 +42,7 @@ public final class StackUtils {
                     final Class<?> type = frame.getDeclaringClass();
                     return type.equals(StackUtils.class)
                             || type.getPackageName().startsWith("java.")
+                            || type.getPackageName().startsWith("javax.")
                             || type.getPackageName().startsWith("jakarta.")
                             || type.getPackage().getName().startsWith("org.codehaus.groovy.vmplugin")
                             || skip.contains(type)

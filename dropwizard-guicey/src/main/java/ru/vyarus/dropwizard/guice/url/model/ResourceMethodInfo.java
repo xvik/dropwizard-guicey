@@ -93,7 +93,7 @@ public class ResourceMethodInfo {
     }
 
     /**
-     * Note: for sub-resources it is not required to have root {@link jakarta.ws.rs.Path} annotation, for such
+     * Note: for sub-resources it is not required to have root {@link javax.ws.rs.Path} annotation, for such
      * classes here would be the root resource class.
      *
      * @return annotated resource class (where annotations declared)
@@ -121,7 +121,7 @@ public class ResourceMethodInfo {
     }
 
     /**
-     * @return resource path (without method), resolved from {@link jakarta.ws.rs.Path} annotation
+     * @return resource path (without method), resolved from {@link javax.ws.rs.Path} annotation
      */
     public String getResourcePath() {
         return resourcePath;
@@ -139,49 +139,49 @@ public class ResourceMethodInfo {
     }
 
     /**
-     * @return {@link jakarta.ws.rs.Consumes} annotation value from method or class
+     * @return {@link javax.ws.rs.Consumes} annotation value from method or class
      */
     public List<String> getConsumes() {
         return consumes;
     }
 
     /**
-     * @return {@link jakarta.ws.rs.Produces} annotation value from method or clas
+     * @return {@link javax.ws.rs.Produces} annotation value from method or clas
      */
     public List<String> getProduces() {
         return produces;
     }
 
     /**
-     * @return map of not null arguments, passed for {@link jakarta.ws.rs.PathParam}
+     * @return map of not null arguments, passed for {@link javax.ws.rs.PathParam}
      */
     public Map<String, Object> getPathParams() {
         return pathParams;
     }
 
     /**
-     * @return map of not null arguments, passed for {@link jakarta.ws.rs.QueryParam}
+     * @return map of not null arguments, passed for {@link javax.ws.rs.QueryParam}
      */
     public Map<String, Object> getQueryParams() {
         return queryParams;
     }
 
     /**
-     * @return map of not null arguments, passed for {@link jakarta.ws.rs.HeaderParam}
+     * @return map of not null arguments, passed for {@link javax.ws.rs.HeaderParam}
      */
     public Map<String, Object> getHeaderParams() {
         return headerParams;
     }
 
     /**
-     * @return map of not null arguments, passed for {@link jakarta.ws.rs.CookieParam}
+     * @return map of not null arguments, passed for {@link javax.ws.rs.CookieParam}
      */
     public Map<String, String> getCookieParams() {
         return cookieParams;
     }
 
     /**
-     * @return map of not null arguments, passed for {@link jakarta.ws.rs.FormParam} or
+     * @return map of not null arguments, passed for {@link javax.ws.rs.FormParam} or
      * {@link org.glassfish.jersey.media.multipart.FormDataParam}
      */
     public Map<String, Object> getFormParams() {
@@ -189,22 +189,22 @@ public class ResourceMethodInfo {
     }
 
     /**
-     * @return map of not null arguments, passed for {@link jakarta.ws.rs.MatrixParam}.
+     * @return map of not null arguments, passed for {@link javax.ws.rs.MatrixParam}.
      */
     public Map<String, Object> getMatrixParams() {
         return matrixParams;
     }
 
     /**
-     * @return method path, resolved from {@link jakarta.ws.rs.Path} annotation
+     * @return method path, resolved from {@link javax.ws.rs.Path} annotation
      */
     public String getPath() {
         return path;
     }
 
     /**
-     * @return http method, resolved from {@link jakarta.ws.rs.HttpMethod} annotation inside
-     * {@link jakarta.ws.rs.GET}, {@link jakarta.ws.rs.POST}, etc.
+     * @return http method, resolved from {@link javax.ws.rs.HttpMethod} annotation inside
+     * {@link javax.ws.rs.GET}, {@link javax.ws.rs.POST}, etc.
      */
     public String getHttpMethod() {
         return httpMethod;

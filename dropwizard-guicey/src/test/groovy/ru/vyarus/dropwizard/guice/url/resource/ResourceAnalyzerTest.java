@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.url.resource;
 
-import jakarta.ws.rs.core.MediaType;
+import javax.ws.rs.core.MediaType;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;

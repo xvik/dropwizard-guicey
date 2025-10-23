@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.jupiter.setup.spy;
 
 import io.dropwizard.lifecycle.Managed;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.vyarus.dropwizard.guice.GuiceBundle;

@@ -1,16 +1,17 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.track.impl.mock;
 
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.Configuration;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.UriBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.ext.RuntimeDelegate;
 
 import java.net.URI;
 import java.util.Map;
 
 /**
- * {@link jakarta.ws.rs.client.WebTarget} mock object. Used to track configuration correctness in
+ * {@link javax.ws.rs.client.WebTarget} mock object. Used to track configuration correctness in
  * {@link ru.vyarus.dropwizard.guice.test.client.builder.track.RequestTracker} without real target.
  *
  * @author Vyacheslav Rusakov
@@ -20,7 +21,7 @@ import java.util.Map;
 public class TargetMock implements WebTarget {
 
     // used to collect uri changes to be able to show the resulted url
-    private final UriBuilder uriBuilder = UriBuilder.newInstance();
+    private final UriBuilder uriBuilder = RuntimeDelegate.getInstance().createUriBuilder();
 
     @Override
     public URI getUri() {

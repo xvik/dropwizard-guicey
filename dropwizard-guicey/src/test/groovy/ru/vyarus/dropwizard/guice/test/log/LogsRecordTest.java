@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.log;
 
 import io.dropwizard.lifecycle.Managed;
-import jakarta.inject.Singleton;
+import javax.inject.Singleton;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

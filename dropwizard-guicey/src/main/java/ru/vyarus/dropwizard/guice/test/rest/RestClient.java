@@ -45,7 +45,7 @@ public class RestClient extends TestClient<RestClient> {
     /**
      * Returns the pre-configured {@link javax.ws.rs.client.Client} for this test.
      *
-     * @return the {@link JerseyTest} configured {@link jakarta.ws.rs.client.Client}
+     * @return the {@link JerseyTest} configured {@link javax.ws.rs.client.Client}
      */
     public Client client() {
         return getJerseyTest().client();

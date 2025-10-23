@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.test.client.builder;
 
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.Cookie;
-import jakarta.ws.rs.ext.RuntimeDelegate;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.ext.RuntimeDelegate;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.builder.track.RequestTracker;
 import ru.vyarus.dropwizard.guice.test.client.builder.util.RequestModifierSource;
@@ -39,8 +39,8 @@ import java.util.stream.Collectors;
  * Most properties provide {@link Supplier}-based configuration variant for lazy evaluation (applicable for defaults,
  * when actual value is resolved in time of request creation and not in time of default registration).
  * <p>
- * Also provides direct access for {@link jakarta.ws.rs.client.WebTarget} and
- * {@link jakarta.ws.rs.client.Invocation.Builder} objects with {@link #configurePath(java.util.function.Function)} and
+ * Also provides direct access for {@link javax.ws.rs.client.WebTarget} and
+ * {@link javax.ws.rs.client.Invocation.Builder} objects with {@link #configurePath(java.util.function.Function)} and
  * {@link #configureRequest(java.util.function.Consumer)} methods. Config itself is registered in these methods
  * to apply all collected data.
  * <p>
@@ -91,7 +91,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     }
 
     /**
-     * Provides direct access for jersey {@link jakarta.ws.rs.client.WebTarget} object configuration.
+     * Provides direct access for jersey {@link javax.ws.rs.client.WebTarget} object configuration.
      *
      * @param modifier function, applying request target configuration
      * @return builder instance for chained calls
@@ -102,7 +102,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     }
 
     /**
-     * Provides direct access for jersey {@link jakarta.ws.rs.client.Invocation.Builder} object configuration.
+     * Provides direct access for jersey {@link javax.ws.rs.client.Invocation.Builder} object configuration.
      *
      * @param modifier consumer, applying request configuration
      * @return builder instance for chained calls
@@ -145,7 +145,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     /**
      * Configure jersey client extension registration
      * ({@link org.glassfish.jersey.client.JerseyClient#register(Class)}).
-     * Could be useful, for example, to register custom {@link jakarta.ws.rs.ext.MessageBodyReader}.
+     * Could be useful, for example, to register custom {@link javax.ws.rs.ext.MessageBodyReader}.
      * <p>
      * Multiple registrations of the same class will be ignored (extensions tracked by type).
      *
@@ -161,7 +161,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     /**
      * Configure jersey client extension registration
      * ({@link org.glassfish.jersey.client.JerseyClient#register(Object)}).
-     * Could be useful, for example, to register custom {@link jakarta.ws.rs.ext.MessageBodyReader} (as instance).
+     * Could be useful, for example, to register custom {@link javax.ws.rs.ext.MessageBodyReader} (as instance).
      * <p>
      * When called with different instances of the same class: only the latest registration will be used
      * (extensions tracked by type).
@@ -194,13 +194,13 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     }
 
     /**
-     * Configure request Accept header ({@link jakarta.ws.rs.client.Invocation.Builder#accept(String...)}).
+     * Configure request Accept header ({@link javax.ws.rs.client.Invocation.Builder#accept(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
      * @param accept media types required for response
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.MediaType
+     * @see javax.ws.rs.core.MediaType
      */
     public TestRequestConfig accept(final String... accept) {
         this.acceptHeader = value(() -> accept);
@@ -209,7 +209,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
 
     /**
      * Configure request Accept-Language header
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -223,7 +223,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
 
     /**
      * Configure request Accept-Encoding header
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#acceptEncoding(String...)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#acceptEncoding(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -237,7 +237,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
 
     /**
      * Configure request Cache-Control header
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -251,7 +251,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
 
     /**
      * Configure request Cache-Control header
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -264,7 +264,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     }
 
     /**
-     * Configure request query parameter ({@link jakarta.ws.rs.client.WebTarget#queryParam(String, Object...)}).
+     * Configure request query parameter ({@link javax.ws.rs.client.WebTarget#queryParam(String, Object...)}).
      * <p>
      * Note: jersey api supports multiple query parameters with the same name (in this case multiple parameters
      * added). The same result could be achieved by passing list or array into this api.
@@ -282,7 +282,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
 
 
     /**
-     * Configure request query parameter ({@link jakarta.ws.rs.client.WebTarget#queryParam(String, Object...)}).
+     * Configure request query parameter ({@link javax.ws.rs.client.WebTarget#queryParam(String, Object...)}).
      * <p>
      * Note: jersey api supports multiple query parameters with the same name (in this case multiple parameters
      * added). The same result could be achieved by passing list or array into this api.
@@ -301,7 +301,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
 
     /**
      * Configure request path parameter
-     * ({@link jakarta.ws.rs.client.WebTarget#resolveTemplateFromEncoded(String, Object)}).
+     * ({@link javax.ws.rs.client.WebTarget#resolveTemplateFromEncoded(String, Object)}).
      * <p>
      * Note: parameter value assumed to be encoded to be able to specify matrix parameters (in the middle of the path):
      * {@code pathParam("var", "/path;var=1;val=2")}.
@@ -316,7 +316,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
 
     /**
      * Configure request path parameter
-     * ({@link jakarta.ws.rs.client.WebTarget#resolveTemplateFromEncoded(String, Object)}).
+     * ({@link javax.ws.rs.client.WebTarget#resolveTemplateFromEncoded(String, Object)}).
      *
      * @param name     parameter name
      * @param supplier parameter value supplier
@@ -328,7 +328,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     }
 
     /**
-     * Configure request matrix parameter ({@link jakarta.ws.rs.client.WebTarget#matrixParam(String, Object...)}).
+     * Configure request matrix parameter ({@link javax.ws.rs.client.WebTarget#matrixParam(String, Object...)}).
      * <p>
      * Note: jersey api supports multiple matrix parameters with the same name (in this case multiple parameters
      * added). The same result could be achieved by passing list or array into this api.
@@ -346,7 +346,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
 
 
     /**
-     * Configure request matrix parameter ({@link jakarta.ws.rs.client.WebTarget#matrixParam(String, Object...)}).
+     * Configure request matrix parameter ({@link javax.ws.rs.client.WebTarget#matrixParam(String, Object...)}).
      * <p>
      * Note: jersey api supports multiple matrix parameters with the same name (in this case multiple parameters
      * added). The same result could be achieved by passing list or array into this api.
@@ -364,7 +364,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     }
 
     /**
-     * Configure request header ({@link jakarta.ws.rs.client.Invocation.Builder#header(String, Object)}).
+     * Configure request header ({@link javax.ws.rs.client.Invocation.Builder#header(String, Object)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -377,7 +377,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     }
 
     /**
-     * Configure request header ({@link jakarta.ws.rs.client.Invocation.Builder#header(String, Object)}).
+     * Configure request header ({@link javax.ws.rs.client.Invocation.Builder#header(String, Object)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -391,27 +391,27 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     }
 
     /**
-     * Configure request cookie ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(jakarta.ws.rs.core.Cookie)}.
+     * Configure request cookie ({@link javax.ws.rs.client.Invocation.Builder#cookie(javax.ws.rs.core.Cookie)}.
      * <p>
      * Multiple calls override previous value.
      *
      * @param cookie cookie value
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.NewCookie
+     * @see javax.ws.rs.core.NewCookie
      */
     public TestRequestConfig cookie(final Cookie cookie) {
         return cookie(cookie.getName(), () -> cookie);
     }
 
     /**
-     * Configure request cookie ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(jakarta.ws.rs.core.Cookie)}.
+     * Configure request cookie ({@link javax.ws.rs.client.Invocation.Builder#cookie(javax.ws.rs.core.Cookie)}.
      * <p>
      * Multiple calls override previous value.
      *
      * @param name     name
      * @param supplier value suppler
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.NewCookie
+     * @see javax.ws.rs.core.NewCookie
      */
     public TestRequestConfig cookie(final String name, final Supplier<Cookie> supplier) {
         this.cookies.put(name, value(supplier));
@@ -454,8 +454,8 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     }
 
     /**
-     * Assert configuration applied to {@link jakarta.ws.rs.client.WebTarget} and
-     * {@link jakarta.ws.rs.client.Invocation.Builder}.
+     * Assert configuration applied to {@link javax.ws.rs.client.WebTarget} and
+     * {@link javax.ws.rs.client.Invocation.Builder}.
      * <p>
      * Option implicitly enables debug.
      * <p>
@@ -855,7 +855,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     /**
      * Applies target configuration. Used under {@link #configurePath(java.util.function.Function)}.
      * <p>
-     * Implicitly called by {@link #applyRequestConfiguration(jakarta.ws.rs.client.WebTarget)}.
+     * Implicitly called by {@link #applyRequestConfiguration(javax.ws.rs.client.WebTarget)}.
      *
      * @param webTarget target to configure
      * @return configured target
@@ -887,7 +887,7 @@ public class TestRequestConfig implements Function<WebTarget, WebTarget>, Consum
     /**
      * Applies builder configurations. Used under {@link #configureRequest(java.util.function.Consumer)}.
      * <p>
-     * Implicitly called by {@link #applyRequestConfiguration(jakarta.ws.rs.client.WebTarget)}.
+     * Implicitly called by {@link #applyRequestConfiguration(javax.ws.rs.client.WebTarget)}.
      *
      * @param request builder to configure.
      */

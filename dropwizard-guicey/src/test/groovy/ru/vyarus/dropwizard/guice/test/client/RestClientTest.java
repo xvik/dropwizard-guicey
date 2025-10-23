@@ -1,7 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.client;
 
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.client.support.ClientApp;

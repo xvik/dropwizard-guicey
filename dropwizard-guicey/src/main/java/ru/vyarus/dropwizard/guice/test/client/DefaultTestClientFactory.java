@@ -2,7 +2,7 @@ package ru.vyarus.dropwizard.guice.test.client;
 
 import io.dropwizard.jersey.jackson.JacksonFeature;
 import io.dropwizard.testing.DropwizardTestSupport;
-import jakarta.ws.rs.core.Feature;
+import javax.ws.rs.core.Feature;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.glassfish.jersey.client.JerseyClient;

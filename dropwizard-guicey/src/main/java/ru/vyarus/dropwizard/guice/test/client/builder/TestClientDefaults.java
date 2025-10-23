@@ -1,12 +1,12 @@
 package ru.vyarus.dropwizard.guice.test.client.builder;
 
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.Cookie;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.NewCookie;
-import jakarta.ws.rs.ext.RuntimeDelegate;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.ext.RuntimeDelegate;
 import org.eclipse.jetty.http.HttpHeader;
 import ru.vyarus.dropwizard.guice.test.client.TestClient;
 
@@ -49,7 +49,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#header(String, Object)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#header(String, Object)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -63,7 +63,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#header(String, Object)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#header(String, Object)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -77,7 +77,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#header(String, Object)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#header(String, Object)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -91,7 +91,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#header(String, Object)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#header(String, Object)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -106,7 +106,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default query parameter for all requests
-     * ({@link jakarta.ws.rs.client.WebTarget#queryParam(String, Object...)}).
+     * ({@link javax.ws.rs.client.WebTarget#queryParam(String, Object...)}).
      * <p>
      * Note: jersey api supports multiple query parameters with the same name (in this case multiple parameters
      * added). The same result could be achieved by passing list or array into this api.
@@ -124,7 +124,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default query parameter for all requests
-     * ({@link jakarta.ws.rs.client.WebTarget#queryParam(String, Object...)}).
+     * ({@link javax.ws.rs.client.WebTarget#queryParam(String, Object...)}).
      * <p>
      * Note: jersey api supports multiple query parameters with the same name (in this case multiple parameters
      * added). The same result could be achieved by passing list or array into this api.
@@ -143,7 +143,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default matrix parameter for all requests
-     * ({@link jakarta.ws.rs.client.WebTarget#matrixParam(String, Object...)}).
+     * ({@link javax.ws.rs.client.WebTarget#matrixParam(String, Object...)}).
      * <p>
      * Note: jersey api supports multiple matrix parameters with the same name (in this case multiple parameters
      * added). The same result could be achieved by passing list or array into this api.
@@ -161,7 +161,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default matrix parameter for all requests
-     * ({@link jakarta.ws.rs.client.WebTarget#matrixParam(String, Object...)}).
+     * ({@link javax.ws.rs.client.WebTarget#matrixParam(String, Object...)}).
      * <p>
      * Note: jersey api supports multiple matrix parameters with the same name (in this case multiple parameters
      * added). The same result could be achieved by passing list or array into this api.
@@ -180,7 +180,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default path parameter for all requests
-     * ({@link jakarta.ws.rs.client.WebTarget#resolveTemplateFromEncoded(String, Object)}).
+     * ({@link javax.ws.rs.client.WebTarget#resolveTemplateFromEncoded(String, Object)}).
      * <p>
      * Note: parameter value assumed to be encoded to be able to specify matrix parameters (in the middle of the path):
      * {@code pathParam("var", "/path;var=1;val=2")}.
@@ -195,7 +195,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default path parameter for all requests
-     * ({@link jakarta.ws.rs.client.WebTarget#resolveTemplateFromEncoded(String, Object)}).
+     * ({@link javax.ws.rs.client.WebTarget#resolveTemplateFromEncoded(String, Object)}).
      *
      * @param name     parameter name
      * @param supplier parameter value supplier
@@ -240,7 +240,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
     /**
      * Configure default jersey client extension for all requests
      * ({@link org.glassfish.jersey.client.JerseyClient#register(Class)}).
-     * Could be useful, for example, to register custom {@link jakarta.ws.rs.ext.MessageBodyReader}.
+     * Could be useful, for example, to register custom {@link javax.ws.rs.ext.MessageBodyReader}.
      * <p>
      * Multiple registrations of the same class will be ignored (extensions tracked by type).
      *
@@ -255,7 +255,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
     /**
      * Configure default jersey client extension for all requests
      * ({@link org.glassfish.jersey.client.JerseyClient#register(Object)}).
-     * Could be useful, for example, to register custom {@link jakarta.ws.rs.ext.MessageBodyReader} (as instance).
+     * Could be useful, for example, to register custom {@link javax.ws.rs.ext.MessageBodyReader} (as instance).
      * <p>
      * When called with different instances of the same class: only the latest registration will be used
      * (extensions tracked by type).
@@ -329,14 +329,14 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default cookie for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(jakarta.ws.rs.core.Cookie)}.
+     * ({@link javax.ws.rs.client.Invocation.Builder#cookie(javax.ws.rs.core.Cookie)}.
      * <p>
      * Multiple calls override previous value.
      *
      * @param name  cookie name
      * @param value cookie value
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.NewCookie
+     * @see javax.ws.rs.core.NewCookie
      */
     public T defaultCookie(final String name, final String value) {
         return defaultCookie(name, () -> new NewCookie(name, value));
@@ -344,13 +344,13 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default cookie for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(jakarta.ws.rs.core.Cookie)}.
+     * ({@link javax.ws.rs.client.Invocation.Builder#cookie(javax.ws.rs.core.Cookie)}.
      * <p>
      * Multiple calls override previous value.
      *
      * @param cookie cookie value
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.NewCookie
+     * @see javax.ws.rs.core.NewCookie
      */
     public T defaultCookie(final Cookie cookie) {
         return defaultCookie(cookie.getName(), () -> cookie);
@@ -358,14 +358,14 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default cookie for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(jakarta.ws.rs.core.Cookie)}.
+     * ({@link javax.ws.rs.client.Invocation.Builder#cookie(javax.ws.rs.core.Cookie)}.
      * <p>
      * Multiple calls override previous value.
      *
      * @param name     name
      * @param supplier value suppler
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.NewCookie
+     * @see javax.ws.rs.core.NewCookie
      */
     public T defaultCookie(final String name, final Supplier<Cookie> supplier) {
         defaults.cookie(name, supplier);
@@ -374,13 +374,13 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default Accept header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#accept(String...)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#accept(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
      * @param accept media types required for response
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.MediaType
+     * @see javax.ws.rs.core.MediaType
      */
     public T defaultAccept(final String... accept) {
         this.defaults.accept(accept);
@@ -389,13 +389,13 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default Accept header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#accept(String...)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#accept(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
      * @param accept media types required for response
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.MediaType
+     * @see javax.ws.rs.core.MediaType
      */
     public T defaultAccept(final MediaType... accept) {
         final String[] array = Arrays.stream(accept).map(mediaType ->
@@ -406,7 +406,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default Accept-Language header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -420,7 +420,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default Accept-Language header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -434,7 +434,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default Accept-Encoding header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#acceptEncoding(String...)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#acceptEncoding(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -448,7 +448,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default Cache-Control header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -462,7 +462,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
 
     /**
      * Configure default Cache-Control header for all requests
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -487,7 +487,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
     }
 
     /**
-     * Configure default request {@link jakarta.ws.rs.client.WebTarget} modifier for all requests.
+     * Configure default request {@link javax.ws.rs.client.WebTarget} modifier for all requests.
      *
      * @param modifier function, applying request target configuration
      * @return builder instance for chained calls
@@ -498,7 +498,7 @@ public abstract class TestClientDefaults<T extends TestClient<?>> {
     }
 
     /**
-     * Configure default request {@link jakarta.ws.rs.client.Invocation.Builder} modifier for all requests.
+     * Configure default request {@link javax.ws.rs.client.Invocation.Builder} modifier for all requests.
      *
      * @param modifier consumer, applying request configuration
      * @return builder instance for chained calls

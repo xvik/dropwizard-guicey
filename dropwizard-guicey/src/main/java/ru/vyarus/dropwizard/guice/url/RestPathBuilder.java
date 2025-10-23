@@ -34,7 +34,7 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
     /**
      * Create a builder.
      * <p>
-     * Note that jersey ignores {@link jakarta.ws.rs.Path} annotation for sub resources (only lookup method path
+     * Note that jersey ignores {@link javax.ws.rs.Path} annotation for sub resources (only lookup method path
      * is used)
      *
      * @param basePath optional base path
@@ -109,7 +109,7 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
     }
 
     /**
-     * Append resource method path (path from {@link jakarta.ws.rs.Path} method annotation).
+     * Append resource method path (path from {@link javax.ws.rs.Path} method annotation).
      * <p>
      * When parameters are not provided - search for any method with name. If multiple methods
      * with the same name would be found - method with no parameters would be selected, otherwise exception thrown.
@@ -130,7 +130,7 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
     }
 
     /**
-     * Append resource method path (path from {@link jakarta.ws.rs.Path} method annotation).
+     * Append resource method path (path from {@link javax.ws.rs.Path} method annotation).
      *
      * @param method resource method
      * @return parameters builder to specify path and query parameters
@@ -143,7 +143,7 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
     }
 
     /**
-     * Append resource method path (path from {@link jakarta.ws.rs.Path} method annotation).
+     * Append resource method path (path from {@link javax.ws.rs.Path} method annotation).
      * Also, use path and query providers, provided as method arguments. Note that only non-null parameters counted.
      * <p>
      * Might also include sub resource call, if sub resource locator method returns resource instance:

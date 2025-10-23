@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.client.util;
 
-import jakarta.ws.rs.core.Response;
+import javax.ws.rs.core.Response;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.builder.util.conf.MultipartSupport;
 

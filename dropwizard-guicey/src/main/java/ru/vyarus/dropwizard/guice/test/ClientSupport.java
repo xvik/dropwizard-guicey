@@ -2,8 +2,6 @@ package ru.vyarus.dropwizard.guice.test;
 
 import com.google.common.base.Preconditions;
 import io.dropwizard.testing.DropwizardTestSupport;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.UriBuilder;
 import org.glassfish.jersey.client.JerseyClient;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory;
@@ -13,6 +11,9 @@ import ru.vyarus.dropwizard.guice.test.client.TestClient;
 import ru.vyarus.dropwizard.guice.test.client.TestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestRequestConfig;
 import ru.vyarus.dropwizard.guice.url.AppUrlBuilder;
+
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.ext.RuntimeDelegate;
 
 /**
  * {@link JerseyClient} support for direct web tests (complete dropwizard startup).
@@ -401,7 +402,7 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      */
     @Override
     public <K> ResourceClient<K> restClient(final Class<K> resource) {
-        final String target = UriBuilder.newInstance().path(resource).toTemplate();
+        final String target = RuntimeDelegate.getInstance().createUriBuilder().path(resource).toTemplate();
         // client INHERITS support defaults
         return new ResourceClient<>(() -> getClient().target(basePathRest()).path(target), defaults, resource);
     }

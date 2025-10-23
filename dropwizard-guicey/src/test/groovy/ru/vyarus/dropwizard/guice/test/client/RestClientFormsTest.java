@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.client;
 
-import jakarta.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedHashMap;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.test.ClientSupport;
 import ru.vyarus.dropwizard.guice.test.client.support.ClientApp;

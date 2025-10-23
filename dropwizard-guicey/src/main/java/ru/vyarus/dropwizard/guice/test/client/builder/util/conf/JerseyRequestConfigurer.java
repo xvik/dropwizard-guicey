@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.util.conf;
 
-import jakarta.ws.rs.client.WebTarget;
+import javax.ws.rs.client.WebTarget;
 
 import java.util.ArrayList;
 import java.util.Arrays;

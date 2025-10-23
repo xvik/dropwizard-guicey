@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.util;
 
-import jakarta.ws.rs.core.CacheControl;
+import javax.ws.rs.core.CacheControl;
 import org.glassfish.jersey.message.internal.CacheControlProvider;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestRequestConfig;
 import ru.vyarus.dropwizard.guice.test.client.util.SourceAwareValue;

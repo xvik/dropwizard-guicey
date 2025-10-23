@@ -1,6 +1,6 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.track;
 
-import jakarta.ws.rs.core.GenericType;
+import javax.ws.rs.core.GenericType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

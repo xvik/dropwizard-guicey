@@ -1,10 +1,9 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.track;
 
 import com.google.common.collect.ImmutableMap;
-import jakarta.ws.rs.core.UriBuilder;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;

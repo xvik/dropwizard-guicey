@@ -1,27 +1,27 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.util;
 
-import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.ClientErrorException;
-import jakarta.ws.rs.ForbiddenException;
-import jakarta.ws.rs.InternalServerErrorException;
-import jakarta.ws.rs.NotAcceptableException;
-import jakarta.ws.rs.NotAllowedException;
-import jakarta.ws.rs.NotAuthorizedException;
-import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.NotSupportedException;
-import jakarta.ws.rs.ProcessingException;
-import jakarta.ws.rs.RedirectionException;
-import jakarta.ws.rs.ServerErrorException;
-import jakarta.ws.rs.ServiceUnavailableException;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.client.ResponseProcessingException;
-import jakarta.ws.rs.core.Response;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotAcceptableException;
+import javax.ws.rs.NotAllowedException;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.NotSupportedException;
+import javax.ws.rs.ProcessingException;
+import javax.ws.rs.RedirectionException;
+import javax.ws.rs.ServerErrorException;
+import javax.ws.rs.ServiceUnavailableException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.ResponseProcessingException;
+import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.internal.LocalizationMessages;
 
 /**
  * Jersey provides additional exception handling for shortcut executions with response type (like
  * {@code Invocation.Builder#method("GET", SomeClass.class)}). But it is impossible to re-use this logic
- * when {@link jakarta.ws.rs.core.Response} is obtained.
+ * when {@link javax.ws.rs.core.Response} is obtained.
  * <p>
  * This class contain a copy of exceptions logic from
  * {@link org.glassfish.jersey.client.JerseyInvocation#translate(

@@ -1,12 +1,12 @@
 package ru.vyarus.dropwizard.guice.test.client.builder;
 
 import com.google.common.base.Preconditions;
-import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.Cookie;
-import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.RuntimeDelegate;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.RuntimeDelegate;
 import org.eclipse.jetty.http.HttpHeader;
 import org.glassfish.jersey.message.internal.CacheControlProvider;
 import org.junit.jupiter.api.Assertions;
@@ -27,19 +27,19 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * Wrapper for jersey {@link jakarta.ws.rs.core.Response} with extra assertion shortcuts (jersey response object
+ * Wrapper for jersey {@link javax.ws.rs.core.Response} with extra assertion shortcuts (jersey response object
  * is general-purpose and this api assumed to be used for tests).
  * <p>
  * Provides the following method groups:
  * <ul>
  *     <li>"as*" methods convert the response body (shortcuts for
- *     {@link jakarta.ws.rs.core.Response#readEntity(Class)})</li>
+ *     {@link javax.ws.rs.core.Response#readEntity(Class)})</li>
  *     <li>"assert*" methods to simplify response assertions. All these methods use junit 5 assertions (methods with
  *     {@link java.util.function.Predicate} also use assertions internally).</li>
  *     <li>"with*" methods for manual operations with various objects (to not create additional variable in test)</li>
  * </ul>
  * <p>
- * {@link jakarta.ws.rs.core.Response} would close only if response body was read. To indicate the importance of
+ * {@link javax.ws.rs.core.Response} would close only if response body was read. To indicate the importance of
  * manual close, {@link java.lang.AutoCloseable} is implemented (same as in response) and so IDEA would
  * highlight usage without "try-with-resources". You could ignore it when the client is used with guicey test
  * extensions, as all responses would be closed just after the test application shutdown.
@@ -77,7 +77,7 @@ public class TestClientResponse implements AutoCloseable {
     }
 
     /**
-     * Shortcut method to avoid {@link jakarta.ws.rs.core.GenericType} usage for simple lists (same as
+     * Shortcut method to avoid {@link javax.ws.rs.core.GenericType} usage for simple lists (same as
      * {@code response.readEntity(new GenericType&lt;List&lt;EntityType&gt;&gt;(){})}).
      * <p>
      * Warning: there is no explicit check for the request success state because this method might be used to read
@@ -93,7 +93,7 @@ public class TestClientResponse implements AutoCloseable {
     }
 
     /**
-     * Read response body as declared type (same as {@link jakarta.ws.rs.core.Response#readEntity(Class)}).
+     * Read response body as declared type (same as {@link javax.ws.rs.core.Response#readEntity(Class)}).
      * For complex types use {@link #as(GenericType)}.
      * <p>
      * Warning: there is no explicit check for the request success state because this method might be used to read
@@ -200,7 +200,7 @@ public class TestClientResponse implements AutoCloseable {
     /**
      * Assert a mapped response with custom condition.
      * <p>
-     * For custom assertions use {@link #withResponse(jakarta.ws.rs.core.GenericType, java.util.function.Consumer)}.
+     * For custom assertions use {@link #withResponse(javax.ws.rs.core.GenericType, java.util.function.Consumer)}.
      *
      * @param entityType entity type
      * @param predicate  assertion condition
@@ -228,7 +228,7 @@ public class TestClientResponse implements AutoCloseable {
 
     /**
      * Assert response status to be one of the provided statuses. Note that often it's simpler to check for status
-     * family using {@link #assertStatus(jakarta.ws.rs.core.Response.Status.Family)}.
+     * family using {@link #assertStatus(javax.ws.rs.core.Response.Status.Family)}.
      * <p>
      * For custom assertions use {@link #withStatus(java.util.function.Consumer)}.
      *

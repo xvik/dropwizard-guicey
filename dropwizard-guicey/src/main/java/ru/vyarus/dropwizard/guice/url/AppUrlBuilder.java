@@ -1,8 +1,10 @@
 package ru.vyarus.dropwizard.guice.url;
 
 import io.dropwizard.core.setup.Environment;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.UriBuilder;
+import javax.inject.Inject;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.ext.RuntimeDelegate;
+
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.url.util.AppPathUtils;
 
@@ -48,7 +50,7 @@ public class AppUrlBuilder {
      * Default constructor for "localhost"-based urls. It would be possible to create specialized builders with
      * {@link #forHost(String)} or {@link #forProxy(String)} methods.
      * <p>
-     * Note: method annotated with {@link jakarta.inject.Inject} to be able to obtain builder directly from
+     * Note: method annotated with {@link javax.inject.Inject} to be able to obtain builder directly from
      * guice context.
      *
      * @param environment environment instance
@@ -143,7 +145,7 @@ public class AppUrlBuilder {
      * Build url relative to application rest mapping. Configured main context path
      * {@code server.applicationContextPath} and rest path {@code server.rootPath} would be prepended automatically.
      * <p>
-     * Resource path is applied from resource {@link jakarta.ws.rs.Path} annotation. Resource method path could
+     * Resource path is applied from resource {@link javax.ws.rs.Path} annotation. Resource method path could
      * be declared with a method call:
      * {@link ru.vyarus.dropwizard.guice.url.RestPathBuilder#method(ru.vyarus.dropwizard.guice.url.util.Caller)}
      * (in this case all non-null arguments mapped as query and path params would be applied automatically). If
@@ -180,7 +182,7 @@ public class AppUrlBuilder {
      * @return resource path builder
      */
     public <K> RestPathBuilder<K> rest(final Consumer<UriBuilder> path, final Class<K> resource) {
-        final UriBuilder builder = UriBuilder.newInstance();
+        final UriBuilder builder = RuntimeDelegate.getInstance().createUriBuilder();
         path.accept(builder);
         // resource Path annotation is ignored
         return new RestPathBuilder<>(rest(builder.toString()), resource, true);

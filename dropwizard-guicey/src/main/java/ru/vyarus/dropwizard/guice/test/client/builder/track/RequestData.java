@@ -2,12 +2,12 @@ package ru.vyarus.dropwizard.guice.test.client.builder.track;
 
 import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.Cookie;
-import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.MultivaluedMap;
-import jakarta.ws.rs.ext.RuntimeDelegate;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.ext.RuntimeDelegate;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.debug.util.RenderUtils;
 import ru.vyarus.dropwizard.guice.module.installer.util.StackUtils;
@@ -91,7 +91,7 @@ public class RequestData {
     // -------------------------------------------------------------- SETTERS
 
     /**
-     * Record path configuration {@link jakarta.ws.rs.client.WebTarget#path(String)}.
+     * Record path configuration {@link javax.ws.rs.client.WebTarget#path(String)}.
      *
      * @param path provided path
      */
@@ -102,7 +102,7 @@ public class RequestData {
     }
 
     /**
-     * Record path param {@link jakarta.ws.rs.client.WebTarget#resolveTemplate(String, Object)}
+     * Record path param {@link javax.ws.rs.client.WebTarget#resolveTemplate(String, Object)}
      * (and all other variations).
      *
      * @param name              param name
@@ -119,7 +119,7 @@ public class RequestData {
     }
 
     /**
-     * Record multiple path params {@link jakarta.ws.rs.client.WebTarget#resolveTemplates(java.util.Map)}
+     * Record multiple path params {@link javax.ws.rs.client.WebTarget#resolveTemplates(java.util.Map)}
      * (and all other variations).
      *
      * @param value             path parameters
@@ -136,7 +136,7 @@ public class RequestData {
     }
 
     /**
-     * Record matric param {@link jakarta.ws.rs.client.WebTarget#matrixParam(String, Object...)}.
+     * Record matric param {@link javax.ws.rs.client.WebTarget#matrixParam(String, Object...)}.
      *
      * @param name  param name
      * @param value param values
@@ -149,7 +149,7 @@ public class RequestData {
     }
 
     /**
-     * Record query param {@link jakarta.ws.rs.client.WebTarget#queryParam(String, Object...)}.
+     * Record query param {@link javax.ws.rs.client.WebTarget#queryParam(String, Object...)}.
      *
      * @param name  param name
      * @param value param values
@@ -162,8 +162,8 @@ public class RequestData {
     }
 
     /**
-     * Expected response type {@link jakarta.ws.rs.client.WebTarget#request(String...)},
-     * {@link jakarta.ws.rs.client.Invocation.Builder#accept(String...)}.
+     * Expected response type {@link javax.ws.rs.client.WebTarget#request(String...)},
+     * {@link javax.ws.rs.client.Invocation.Builder#accept(String...)}.
      *
      * @param value response types
      */
@@ -173,8 +173,8 @@ public class RequestData {
     }
 
     /**
-     * Record property {@link jakarta.ws.rs.client.WebTarget#property(String, Object)},
-     * {@link jakarta.ws.rs.client.Invocation.Builder#property(String, Object)}.
+     * Record property {@link javax.ws.rs.client.WebTarget#property(String, Object)},
+     * {@link javax.ws.rs.client.Invocation.Builder#property(String, Object)}.
      *
      * @param name  property name
      * @param value property value
@@ -186,7 +186,7 @@ public class RequestData {
     }
 
     /**
-     * Record extension (by class or instance) {@link jakarta.ws.rs.client.WebTarget#register(Class)}.
+     * Record extension (by class or instance) {@link javax.ws.rs.client.WebTarget#register(Class)}.
      *
      * @param value     extension class or instance
      * @param priority  priority
@@ -208,7 +208,7 @@ public class RequestData {
     }
 
     /**
-     * Record extension (by class or instance) {@link jakarta.ws.rs.client.WebTarget#register(Object, java.util.Map)}.
+     * Record extension (by class or instance) {@link javax.ws.rs.client.WebTarget#register(Object, java.util.Map)}.
      *
      * @param value     extension class or instance
      * @param contracts contracts with priority
@@ -222,8 +222,8 @@ public class RequestData {
     }
 
     /**
-     * Record http method {@link jakarta.ws.rs.client.Invocation.Builder#method(String)} and shortcuts like
-     * {@link jakarta.ws.rs.client.Invocation.Builder#get()}.
+     * Record http method {@link javax.ws.rs.client.Invocation.Builder#method(String)} and shortcuts like
+     * {@link javax.ws.rs.client.Invocation.Builder#get()}.
      *
      * @param method http method
      * @param entity entity
@@ -233,8 +233,8 @@ public class RequestData {
     }
 
     /**
-     * Record http method {@link jakarta.ws.rs.client.Invocation.Builder#method(String)} and shortcuts like
-     * {@link jakarta.ws.rs.client.Invocation.Builder#get(Class)}.
+     * Record http method {@link javax.ws.rs.client.Invocation.Builder#method(String)} and shortcuts like
+     * {@link javax.ws.rs.client.Invocation.Builder#get(Class)}.
      *
      * @param method       http method
      * @param entity       entity
@@ -246,8 +246,8 @@ public class RequestData {
     }
 
     /**
-     * Record http method {@link jakarta.ws.rs.client.Invocation.Builder#method(String)} and shortcuts like
-     * {@link jakarta.ws.rs.client.Invocation.Builder#get(jakarta.ws.rs.core.GenericType)}.
+     * Record http method {@link javax.ws.rs.client.Invocation.Builder#method(String)} and shortcuts like
+     * {@link javax.ws.rs.client.Invocation.Builder#get(javax.ws.rs.core.GenericType)}.
      *
      * @param method       http method
      * @param entity       entity
@@ -268,7 +268,7 @@ public class RequestData {
     }
 
     /**
-     * Register required language {@link jakarta.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}.
+     * Register required language {@link javax.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}.
      *
      * @param value required languages
      */
@@ -278,7 +278,7 @@ public class RequestData {
     }
 
     /**
-     * Register required encoding {@link jakarta.ws.rs.client.Invocation.Builder#acceptEncoding(String...)}.
+     * Register required encoding {@link javax.ws.rs.client.Invocation.Builder#acceptEncoding(String...)}.
      *
      * @param value required encodings
      */
@@ -288,7 +288,7 @@ public class RequestData {
     }
 
     /**
-     * Register cookie {@link jakarta.ws.rs.client.Invocation.Builder#cookie(String, String)}.
+     * Register cookie {@link javax.ws.rs.client.Invocation.Builder#cookie(String, String)}.
      *
      * @param value cookie
      */
@@ -301,7 +301,7 @@ public class RequestData {
 
     /**
      * Register cache control
-     * {@link jakarta.ws.rs.client.Invocation.Builder#cacheControl(jakarta.ws.rs.core.CacheControl)}.
+     * {@link javax.ws.rs.client.Invocation.Builder#cacheControl(javax.ws.rs.core.CacheControl)}.
      *
      * @param value cache control
      */
@@ -312,7 +312,7 @@ public class RequestData {
     }
 
     /**
-     * Register header {@link jakarta.ws.rs.client.Invocation.Builder#header(String, Object)}.
+     * Register header {@link javax.ws.rs.client.Invocation.Builder#header(String, Object)}.
      *
      * @param name  header name
      * @param value header value
@@ -325,7 +325,7 @@ public class RequestData {
 
     /**
      * Record multiple headers
-     * {@link jakarta.ws.rs.client.Invocation.Builder#headers(jakarta.ws.rs.core.MultivaluedMap)}.
+     * {@link javax.ws.rs.client.Invocation.Builder#headers(javax.ws.rs.core.MultivaluedMap)}.
      *
      * @param value headers
      */
@@ -337,7 +337,7 @@ public class RequestData {
     }
 
     /**
-     * Record target url. Called after {@link jakarta.ws.rs.client.WebTarget#request()}.
+     * Record target url. Called after {@link javax.ws.rs.client.WebTarget#request()}.
      *
      * @param url url
      */
@@ -453,7 +453,7 @@ public class RequestData {
     }
 
     /**
-     * Covers both {@link java.lang.Class} and {@link jakarta.ws.rs.core.GenericType} options (in case of class,
+     * Covers both {@link java.lang.Class} and {@link javax.ws.rs.core.GenericType} options (in case of class,
      * use generic type constructor).
      *
      * @return result mapping (if specified)

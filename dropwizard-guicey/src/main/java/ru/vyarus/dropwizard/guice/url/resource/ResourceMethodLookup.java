@@ -110,6 +110,7 @@ public final class ResourceMethodLookup {
 
             if (!thisMethod.getReturnType().equals(void.class)
                     && !thisMethod.getReturnType().getPackageName().startsWith("java.")
+                    && !thisMethod.getReturnType().getPackageName().startsWith("javax.")
                     && !thisMethod.getReturnType().getPackageName().startsWith("jakarta.")) {
                 return createLookupProxy(thisMethod.getReturnType(), call::setSubCall);
             }

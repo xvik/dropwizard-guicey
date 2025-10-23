@@ -1,10 +1,10 @@
 package ru.vyarus.dropwizard.guice.test.client.builder;
 
 import com.google.common.base.Preconditions;
-import jakarta.ws.rs.HttpMethod;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.Form;
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Form;
 import ru.vyarus.dropwizard.guice.test.client.builder.util.conf.FormParamsSupport;
 import ru.vyarus.dropwizard.guice.test.client.util.MultipartCheck;
 import ru.vyarus.dropwizard.guice.test.client.builder.util.conf.MultipartSupport;

@@ -1,16 +1,16 @@
 package ru.vyarus.dropwizard.guice.test.client.builder;
 
 import com.google.common.base.Preconditions;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.Cookie;
-import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.NewCookie;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.RuntimeDelegate;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.CacheControl;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.RuntimeDelegate;
 import org.eclipse.jetty.http.HttpHeader;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.message.internal.TracingLogger;
@@ -43,8 +43,8 @@ import java.util.function.Function;
  * In cases, when direct result mapping is not requested, a special response wrapper would be returned, supporting
  * assertions in a builder manner.
  * <p>
- * Builder does not hide jerse {@link jakarta.ws.rs.client.WebTarget} and
- * {@link jakarta.ws.rs.client.Invocation.Builder} objects: they could be configured manually with:
+ * Builder does not hide jerse {@link javax.ws.rs.client.WebTarget} and
+ * {@link javax.ws.rs.client.Invocation.Builder} objects: they could be configured manually with:
  * {@link #configurePath(Function)} and {@link #configureRequest(Consumer)}.
  *
  * @author Vyacheslav Rusakov
@@ -126,13 +126,13 @@ public class TestClientRequestBuilder {
 
     /**
      * Configure request Accept header (
-     * {@link jakarta.ws.rs.client.Invocation.Builder#accept(jakarta.ws.rs.core.MediaType...)}).
+     * {@link javax.ws.rs.client.Invocation.Builder#accept(javax.ws.rs.core.MediaType...)}).
      * <p>
      * Multiple calls override previous value.
      *
      * @param accept media types required for response
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.MediaType
+     * @see javax.ws.rs.core.MediaType
      */
     public TestClientRequestBuilder accept(final MediaType... accept) {
         final String[] res = Arrays.stream(accept).map(mediaType ->
@@ -142,13 +142,13 @@ public class TestClientRequestBuilder {
     }
 
     /**
-     * Configure request Accept header ({@link jakarta.ws.rs.client.Invocation.Builder#accept(String...)}).
+     * Configure request Accept header ({@link javax.ws.rs.client.Invocation.Builder#accept(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
      * @param accept media types required for response
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.MediaType
+     * @see javax.ws.rs.core.MediaType
      */
     public TestClientRequestBuilder accept(final String... accept) {
         this.config.accept(accept);
@@ -157,7 +157,7 @@ public class TestClientRequestBuilder {
 
     /**
      * Configure request Accept-Language header
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#acceptLanguage(java.util.Locale...)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#acceptLanguage(java.util.Locale...)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -172,7 +172,7 @@ public class TestClientRequestBuilder {
 
     /**
      * Configure request Accept-Language header
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#acceptLanguage(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -186,7 +186,7 @@ public class TestClientRequestBuilder {
 
     /**
      * Configure request Accept-Encoding header
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#acceptEncoding(String...)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#acceptEncoding(String...)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -199,7 +199,7 @@ public class TestClientRequestBuilder {
     }
 
     /**
-     * Configure request query parameter ({@link jakarta.ws.rs.client.WebTarget#queryParam(String, Object...)}).
+     * Configure request query parameter ({@link javax.ws.rs.client.WebTarget#queryParam(String, Object...)}).
      * <p>
      * Note: jersey api supports multiple query parameters with the same name (in this case multiple parameters
      * added). The same result could be achieved by passing list or array into this api.
@@ -235,7 +235,7 @@ public class TestClientRequestBuilder {
     }
 
     /**
-     * Configure request matrix parameter ({@link jakarta.ws.rs.client.WebTarget#matrixParam(String, Object...)}).
+     * Configure request matrix parameter ({@link javax.ws.rs.client.WebTarget#matrixParam(String, Object...)}).
      * <p>
      * Note: jersey api supports multiple matrix parameters with the same name (in this case multiple parameters
      * added). The same result could be achieved by passing list or array into this api.
@@ -272,7 +272,7 @@ public class TestClientRequestBuilder {
 
     /**
      * Configure request path parameter
-     * ({@link jakarta.ws.rs.client.WebTarget#resolveTemplateFromEncoded(String, Object)}).
+     * ({@link javax.ws.rs.client.WebTarget#resolveTemplateFromEncoded(String, Object)}).
      * <p>
      * Note: parameter value assumed to be encoded to be able to specify matrix parameters (in the middle of the path):
      * {@code pathParam("var", "/path;var=1;val=2")}.
@@ -302,7 +302,7 @@ public class TestClientRequestBuilder {
     }
 
     /**
-     * Configure request header ({@link jakarta.ws.rs.client.Invocation.Builder#header(String, Object)}).
+     * Configure request header ({@link javax.ws.rs.client.Invocation.Builder#header(String, Object)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -315,7 +315,7 @@ public class TestClientRequestBuilder {
     }
 
     /**
-     * Configure request header ({@link jakarta.ws.rs.client.Invocation.Builder#header(String, Object)}).
+     * Configure request header ({@link javax.ws.rs.client.Invocation.Builder#header(String, Object)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -344,7 +344,7 @@ public class TestClientRequestBuilder {
     }
 
     /**
-     * Configure request cookie ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(String, String)}.
+     * Configure request cookie ({@link javax.ws.rs.client.Invocation.Builder#cookie(String, String)}.
      * <p>
      * Multiple calls override previous value.
      *
@@ -357,13 +357,13 @@ public class TestClientRequestBuilder {
     }
 
     /**
-     * Configure request cookie ({@link jakarta.ws.rs.client.Invocation.Builder#cookie(jakarta.ws.rs.core.Cookie)}.
+     * Configure request cookie ({@link javax.ws.rs.client.Invocation.Builder#cookie(javax.ws.rs.core.Cookie)}.
      * <p>
      * Multiple calls override previous value.
      *
      * @param cookie cookie value
      * @return builder instance for chained calls
-     * @see jakarta.ws.rs.core.NewCookie
+     * @see javax.ws.rs.core.NewCookie
      */
     public TestClientRequestBuilder cookie(final Cookie cookie) {
         this.config.cookie(cookie);
@@ -417,7 +417,7 @@ public class TestClientRequestBuilder {
 
     /**
      * Jersey client extension registration ({@link org.glassfish.jersey.client.JerseyClient#register(Class)}).
-     * Could be useful, for example, to register custom {@link jakarta.ws.rs.ext.MessageBodyReader}.
+     * Could be useful, for example, to register custom {@link javax.ws.rs.ext.MessageBodyReader}.
      * <p>
      * Multiple registrations of the same class will be ignored (extensions tracked by type).
      *
@@ -431,7 +431,7 @@ public class TestClientRequestBuilder {
 
     /**
      * Jersey client extension registration ({@link org.glassfish.jersey.client.JerseyClient#register(Object)}).
-     * Could be useful, for example, to register custom {@link jakarta.ws.rs.ext.MessageBodyReader} (as instance).
+     * Could be useful, for example, to register custom {@link javax.ws.rs.ext.MessageBodyReader} (as instance).
      * <p>
      * When called with different instances of the same class: only the latest registration will be used
      * (extensions tracked by type).
@@ -446,7 +446,7 @@ public class TestClientRequestBuilder {
 
     /**
      * Configure request Cache-Control header
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -460,7 +460,7 @@ public class TestClientRequestBuilder {
 
     /**
      * Configure request Cache-Control header
-     * ({@link jakarta.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
+     * ({@link javax.ws.rs.client.Invocation.Builder#cacheControl(CacheControl)}).
      * <p>
      * Multiple calls override previous value.
      *
@@ -511,7 +511,7 @@ public class TestClientRequestBuilder {
     }
 
     /**
-     * Assert {@link jakarta.ws.rs.client.WebTarget} and {@link jakarta.ws.rs.client.Invocation.Builder}
+     * Assert {@link javax.ws.rs.client.WebTarget} and {@link javax.ws.rs.client.Invocation.Builder}
      * objects configurations. Could be used to verify request correctness.
      * <p>
      * Implicitly enables {@link #debug()}, so all applied configurations would be printed to console first and
@@ -601,7 +601,7 @@ public class TestClientRequestBuilder {
 
     /**
      * Invoke request without status validation (same as jersey
-     * {@link jakarta.ws.rs.client.Invocation.Builder#invoke()}).
+     * {@link javax.ws.rs.client.Invocation.Builder#invoke()}).
      * For automatic status validation see {@link #expectSuccess(Integer...)}, {@link #expectFailure(Integer...)}
      * and {@link #expectRedirect(Integer...)}.
      * <p>
