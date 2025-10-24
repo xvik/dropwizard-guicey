@@ -2,7 +2,7 @@ plugins {
     id 'ru.vyarus.github-info' version '2.0.0' apply false
     id 'ru.vyarus.quality' version '6.0.1' apply false
     id 'com.github.spotbugs' version '6.4.4' apply false
-//    id 'org.cyclonedx.bom' version '2.3.1' apply false
+    id 'org.cyclonedx.bom' version '3.0.1' apply false
     id 'ru.vyarus.mkdocs' version '4.0.1' apply false
 
     id 'jacoco'
@@ -137,7 +137,7 @@ subprojects {
     apply plugin: 'jacoco'
     apply plugin: 'ru.vyarus.quality'
     apply plugin: 'com.github.ben-manes.versions'
-//    apply plugin: 'org.cyclonedx.bom'
+    apply plugin: 'org.cyclonedx.bom'
 
     java {
         sourceCompatibility = 11
@@ -202,22 +202,19 @@ subprojects {
     }
 
     // SBOM
-//    cyclonedxBom {
-//        includeConfigs = ["runtimeClasspath"]
-//        destination = file("build/reports")
-//        outputName = "bom"
-//        outputFormat = "all"
-//    }
-//    publishing.publications.maven {
-//        artifact(file('build/reports/bom.json')) {
-//            classifier = 'cyclonedx'
-//            builtBy cyclonedxBom
-//        }
-//        artifact(file('build/reports/bom.xml')) {
-//            classifier = 'cyclonedx'
-//            builtBy cyclonedxBom
-//        }
-//    }
+    tasks.cyclonedxDirectBom {
+        includeConfigs = ["runtimeClasspath"]
+    }
+    publishing.publications.maven {
+        artifact(tasks.cyclonedxDirectBom.jsonOutput.get()) {
+            classifier = 'cyclonedx'
+            builtBy cyclonedxDirectBom
+        }
+        artifact(tasks.cyclonedxDirectBom.xmlOutput.get()) {
+            classifier = 'cyclonedx'
+            builtBy cyclonedxDirectBom
+        }
+    }
 }
 
 // dependency on all subprojects required for release validation
