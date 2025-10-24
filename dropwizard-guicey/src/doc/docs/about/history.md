@@ -1,3 +1,4 @@
+### [8.0.0](http://xvik.github.io/dropwizard-guicey/8.0.0) (2025-10-24)
 * Update to dropwizard 5 (requires java 17)
 * Use guice version without bundled asm ('classes' classifier)
 * Support field injections in application (to use injected services in run method)
