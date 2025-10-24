@@ -1,3 +1,4 @@
+### [6.4.0](http://xvik.github.io/dropwizard-guicey/6.4.0) (2025-10-24)
 * Update to dropwizard 3.0.16
 * Use guice version without bundled asm ('classes' classifier)
 * Support field injections in application (to use injected services in run method)
@@ -49,7 +50,6 @@
     - @WebResourceClient for resource client direct mapping (works for integration and stub rest tests)
 * Add guicey event ApplicationStartingEvent thrown just before managed and web services startup
 * Fix stubs rest too early startup, causing problems with jersey registrations in application run method
-
 
 ### [6.3.2](http://xvik.github.io/dropwizard-guicey/6.3.2) (2025-07-18)
 * Fix jakarta.inject annotations requirement (NoClassDefFoundError) (#430)

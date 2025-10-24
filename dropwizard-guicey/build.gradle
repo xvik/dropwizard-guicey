@@ -37,7 +37,7 @@ dependencies {
     testImplementation 'org.glassfish.jersey.ext:jersey-proxy-client'
     testImplementation 'org.junit.platform:junit-platform-testkit'
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.8'
-    testImplementation 'com.google.truth:truth:1.4.4'
+    testImplementation 'com.google.truth:truth:1.4.5'
     testImplementation 'org.objenesis:objenesis:3.4'
     // test rest stubs
     //testImplementation 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2'
