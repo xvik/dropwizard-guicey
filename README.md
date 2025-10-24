@@ -14,7 +14,7 @@ Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | 
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 4.0.14 [guice](https://github.com/google/guice) 7.0.0 integration.
+[Dropwizard](http://dropwizard.io/) 4.0.16 [guice](https://github.com/google/guice) 7.0.0 integration.
 
 Features:
 
@@ -45,12 +45,12 @@ Dropwizard | Guicey                                                       | Reas
 ----------|--------------------------------------------------------------|-------
 2.1.x| [5.x](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1) | Last java 8 compatible version (EOL [January 31 2024](https://github.com/dropwizard/dropwizard/discussions/7880))
 3.x | [6.x](https://github.com/xvik/dropwizard-guicey/tree/dw-3)   | [Changed core dropwizard packages](https://github.com/dropwizard/dropwizard/blob/release/3.0.x/docs/source/manual/upgrade-notes/upgrade-notes-3_0_x.rst) - old 3rd paty bundles would be incompatible
-4.x | 7.x                                                          | [Jakarta namespace migration](https://github.com/dropwizard/dropwizard/blob/release/4.0.x/docs/source/manual/upgrade-notes/upgrade-notes-4_0_x.rst) - 3rd party guice modules might be incompatible
+4.x | [7.x](https://github.com/xvik/dropwizard-guicey/tree/dw-4)   | [Jakarta namespace migration](https://github.com/dropwizard/dropwizard/blob/release/4.0.x/docs/source/manual/upgrade-notes/upgrade-notes-4_0_x.rst) - 3rd party guice modules might be incompatible
 
 All branches use the same project structure: core guicey merged with extension modules.
 It greatly simplifies releases and keeps actual examples in one branch.
 
-Upcoming guicey changes would be ported in all 3 branches.
+Upcoming guicey changes would be ported in all (not EOL) branches.
 
 ### Setup
 
@@ -62,20 +62,20 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>7.2.2</version>
+  <version>7.3.0</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:7.2.2'
+implementation 'ru.vyarus:dropwizard-guicey:7.3.0'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-4.0| [7.2.2](http://xvik.github.io/dropwizard-guicey/7.2.2)
-3.0| [6.3.2](http://xvik.github.io/dropwizard-guicey/6.3.2)
+4.0| [7.3.0](http://xvik.github.io/dropwizard-guicey/7.3.0)
+3.0| [6.4.0](http://xvik.github.io/dropwizard-guicey/6.4.0)
 2.1| [5.10.2](http://xvik.github.io/dropwizard-guicey/5.10.2)
 2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
@@ -98,9 +98,9 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus.guicey:guicey-bom:7.2.2')
+    implementation platform('ru.vyarus.guicey:guicey-bom:7.3.0')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-dependencies:4.0.14')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:4.0.16')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
@@ -121,7 +121,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>7.2.2</version>
+            <version>7.3.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -129,7 +129,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>4.0.14</version>
+            <version>4.0.16</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 
@@ -186,7 +186,7 @@ Use [snapshot version](https://central.sonatype.com/repository/maven-snapshots/r
 
 ```groovy
 dependencies {
-    implementation 'ru.vyarus:dropwizard-guicey:7.2.2-SNAPSHOT'
+    implementation 'ru.vyarus:dropwizard-guicey:7.3.1-SNAPSHOT'
 }
 ```
 
@@ -222,7 +222,7 @@ Use [shapshot version](https://central.sonatype.com/repository/maven-snapshots/r
 <dependency>
     <groupId>ru.vyarus</groupId>
     <artifactId>dropwizard-guicey</artifactId>
-    <version>7.2.2-SNAPSHOT</version>
+    <version>7.3.1-SNAPSHOT</version>
 </dependency>
 ```
 
