@@ -111,6 +111,42 @@ static TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(..)
     Application lifecycle will remain: events like `onApplicationStartup` would still be
     working (and all registered `LifeCycle` objects would work). Only managed objects ignored.
 
+### Inject test fields once
+
+By default, guicey would inject test field values before every test method, even if the same
+test instance used (`TestInstance.Lifecycle.PER_CLASS`). This should not be a problem
+in the majority of cases because guice injection takes very little time.
+Also, it is important for prototype beans, which will be refreshed for each test.
+
+But it is possible to inject fields just once:
+
+```java
+@TestGuiceyApp(value = App.class, injectOnce = true)
+// by default new test instance used for each method, so injectOnce option would be useless 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class PerClassInjectOnceGuiceyTest {
+    @Inject
+    Bean bean;
+    
+    @Test
+    public test1() {..}
+
+    @Test
+    public test2() {..}
+}
+```
+
+In this case, the same test instance used for both methods (`Lifecycle.PER_CLASS`)
+and `Bean bean` field would be injected just once (`injectOnce = true`)
+
+!!! tip
+    To check the actual fields injection time enable debug (`debug = true`) and
+    it will [print injection time](debug.md#startup-performance) before each test method:
+    ```
+    [Before each]                      : 2.05 ms
+        Guice fields injection             : 1.58 ms    
+    ```
+
 ## Testing web logic
 
 `@TestDropwizardApp` is useful for complete integration testing (when web part is required):

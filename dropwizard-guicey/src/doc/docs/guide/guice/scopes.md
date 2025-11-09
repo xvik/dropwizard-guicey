@@ -117,6 +117,62 @@ public class RequestBean {
     
     Such additional call is not required for pure guice-managed request scope objects.  
 
+Note that you **can't** use scope inside the scope (e.g. call one transferRequest action inside another).
+If you need to transfer scope to another sub-thread (3rd thread), make sure that
+the transferRequest action will be called after the current action closes.
+
+!!! hint
+    The current scope object is stored in thread locale (for http it's `GuiceFilter.localContext`).
+    Each time you call `ServletScopes.transferRequest` it gets this context from thread local.
+    This means all transferRequest actions, created in the current thread (or inside such action)
+    will use THE SAME context instance.
+
+    There is a simple `ReentrantLock` in context which prevents simultaneous context usage
+    from multiple threads (locks scope opening). So if you're going to spawn and wait for another thread, calling 
+    transferRequest actions inside current action, you'll get a dead lock.
+
+    Pay attention, that spawing a new thread, using request context from current scope is
+    completely normal as long as you don't wait for the result (lock will release as soon as 
+    your current context will close).
+
+If you need to spawn a new thread (requiring request scope) and wait for its result within `trasferRequest` scope, 
+you can prepare several transfer actions ahead of time (separate action for each thread):
+
+```java
+// action for the first thread
+final Callable<String> action1 = ServletScopes.transferRequest(...);
+// action for the sub-furst thread
+final Callable<String> action2 = ServletScopes.transferRequest(...);
+
+// note: both actions share the same context instance
+
+CompletableFuture.supplyAsync(() -> {
+     action1.call();
+      CompletableFuture.supplyAsync(() -> {
+             action2.call();
+       }).join();
+}).join()
+```
+
+or returning another scoped action from the first one (if the first thread result must be used in the third thread):
+
+```java
+final Callable<Callable<String>> action1 = ServletScopes.transferRequest(() -> {
+     // do something and then action for sub-thread
+     return ServletScopes.transferRequest(...);
+});
+
+// in this case the context instance will also be THE SAME
+
+CompletableFuture.supplyAsync(() -> {
+     final Callable<String> action2 = action1.call();
+      CompletableFuture.supplyAsync(() -> {
+             action2.call();
+       }).join();
+}).join()
+```
+
+
 ### Request scope simulation
 
 Sometimes, request scoped beans may need to be used somewhere without request (for example,
