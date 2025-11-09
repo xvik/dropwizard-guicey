@@ -3685,6 +3685,53 @@ Without it, <code>provider.get()</code>, called under different thread would be 
 which is not aware of this thread and so fail to provide its request scope object.</p>
 <p>Such additional call is not required for pure guice-managed request scope objects.  </p>
 </div>
+<p>Note that you <strong>can't</strong> use scope inside the scope (e.g. call one transferRequest action inside another).
+If you need to transfer scope to another sub-thread (3<sup>rd</sup> thread), make sure that
+the transferRequest action will be called after the current action closes.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>The current scope object is stored in thread locale (for http it's <code>GuiceFilter.localContext</code>).
+Each time you call <code>ServletScopes.transferRequest</code> it gets this context from thread local.
+This means all transferRequest actions, created in the current thread (or inside such action)
+will use THE SAME context instance.</p>
+<p>There is a simple <code>ReentrantLock</code> in context which prevents simultaneous context usage
+from multiple threads (locks scope opening). So if you're going to spawn and wait for another thread, calling 
+transferRequest actions inside current action, you'll get a dead lock.</p>
+<p>Pay attention, that spawing a new thread, using request context from current scope is
+completely normal as long as you don't wait for the result (lock will release as soon as 
+your current context will close).</p>
+</div>
+<p>If you need to spawn a new thread (requiring request scope) and wait for its result within <code>trasferRequest</code> scope, 
+you can prepare several transfer actions ahead of time (separate action for each thread):</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// action for the first thread</span>
+<span class="kd">final</span><span class="w"> </span><span class="n">Callable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">action1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ServletScopes</span><span class="p">.</span><span class="na">transferRequest</span><span class="p">(...);</span>
+<span class="c1">// action for the sub-furst thread</span>
+<span class="kd">final</span><span class="w"> </span><span class="n">Callable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">action2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ServletScopes</span><span class="p">.</span><span class="na">transferRequest</span><span class="p">(...);</span>
+
+<span class="c1">// note: both actions share the same context instance</span>
+
+<span class="n">CompletableFuture</span><span class="p">.</span><span class="na">supplyAsync</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="n">action1</span><span class="p">.</span><span class="na">call</span><span class="p">();</span>
+<span class="w">      </span><span class="n">CompletableFuture</span><span class="p">.</span><span class="na">supplyAsync</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">             </span><span class="n">action2</span><span class="p">.</span><span class="na">call</span><span class="p">();</span>
+<span class="w">       </span><span class="p">}).</span><span class="na">join</span><span class="p">();</span>
+<span class="p">}).</span><span class="na">join</span><span class="p">()</span>
+</code></pre></div>
+<p>or returning another scoped action from the first one (if the first thread result must be used in the third thread):</p>
+<div class="highlight"><pre><span></span><code><span class="kd">final</span><span class="w"> </span><span class="n">Callable</span><span class="o">&lt;</span><span class="n">Callable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">action1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ServletScopes</span><span class="p">.</span><span class="na">transferRequest</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="c1">// do something and then action for sub-thread</span>
+<span class="w">     </span><span class="k">return</span><span class="w"> </span><span class="n">ServletScopes</span><span class="p">.</span><span class="na">transferRequest</span><span class="p">(...);</span>
+<span class="p">});</span>
+
+<span class="c1">// in this case the context instance will also be THE SAME</span>
+
+<span class="n">CompletableFuture</span><span class="p">.</span><span class="na">supplyAsync</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="kd">final</span><span class="w"> </span><span class="n">Callable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">action2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">action1</span><span class="p">.</span><span class="na">call</span><span class="p">();</span>
+<span class="w">      </span><span class="n">CompletableFuture</span><span class="p">.</span><span class="na">supplyAsync</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">             </span><span class="n">action2</span><span class="p">.</span><span class="na">call</span><span class="p">();</span>
+<span class="w">       </span><span class="p">}).</span><span class="na">join</span><span class="p">();</span>
+<span class="p">}).</span><span class="na">join</span><span class="p">()</span>
+</code></pre></div>
 <h3 id="request-scope-simulation">Request scope simulation<a class="headerlink" href="#request-scope-simulation" title="Permanent link">&para;</a></h3>
 <p>Sometimes, request scoped beans may need to be used somewhere without request (for example,
 inside scheduled job). Of course, this is not correct situation, and the best way is to re-design
