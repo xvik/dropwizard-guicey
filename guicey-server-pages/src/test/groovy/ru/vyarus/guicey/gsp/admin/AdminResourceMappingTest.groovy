@@ -33,7 +33,6 @@ class AdminResourceMappingTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(SampleTemplateResource)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.adminApp("app", "/app", "/appp/")
                                     .indexPage("index.html")
                                     .build())

@@ -30,7 +30,6 @@ class WebjarsIntegrationTest extends Specification {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/")
                                     .attachWebjars()
                                     .build())

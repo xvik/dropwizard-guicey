@@ -43,12 +43,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * make template calls by their files to simplify static resources references (css ,js, images etc.). Also,
  * errors handling is unified (like in usual servlets, but individually for server pages application).
  * <p>
- * First of all global server pages support bundle must be installed ({@link #builder()}, preferably directly in the
- * application class). This will activates dropwizard-views support ({@link ViewBundle}). Do not register
- * {@link ViewBundle} manually!
+ * Each server pages application is registered as separate guicey bundle (using {@link #app(String, String, String)} or
+ * {@link #adminApp(String, String, String)}).
  * <p>
- * Each server pages application is also registered
- * as separate bundle (using {@link #app(String, String, String)} or {@link #adminApp(String, String, String)}).
+ * Do not register dropwizard {@link ViewBundle} manually! Customized views bundle would be installed automatically.
+ * If additional views configuration customization is required, then register
+ * ({@code #ServerPagetsBundle.builder().build()} guicey bundle BEFORE application bundles registration.
  * <p>
  * Views configuration could be mapped from yaml file in main bundle:
  * {@link ViewsBuilder#viewsConfiguration(ViewConfigurable)}. In order to fine tune configuration use
@@ -61,14 +61,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Renderers (pluggable template engines support) are loaded with service lookup mechanism (default for
  * dropwizard-views) but additional renderers could be registered with
  * {@link ViewsBuilder#addViewRenderers(ViewRenderer...)}. Most likely, server page apps will be bundled as 3rd party
- * bundles and so they can't be sure what template engines are installed in target application. Use
+ * bundles, and so they can't be sure what template engines are installed in target application. Use
  * {@link AppBuilder#requireRenderers(String...)} to declare required template engines for each application and
  * fail fast if no required templates engine. Without required engines declaration template files will be served like
  * static files when direct template requested and rendering will fail for rest-mapped template.
  * <p>
  * Each application could be "extended" using {@link ServerPagesBundle#extendApp(String)} bundle. This way
  * extra classpath location is mapped into application root. Pages from extended context could reference resources from
- * the main context (most likely common root template will be used). Also, extended mapping could override
+ * the main context (most likely, common root template will be used). Also, extended mapping could override
  * resources from the primary location (but note that in case of multiple extensions order is not granted).
  * Obvious case for extensions feature is dashboards, when extensions add extra pages to common dashboard
  * application, but all new pages still use common master template.
@@ -157,18 +157,15 @@ public class ServerPagesBundle extends UniqueGuiceyBundle {
     }
 
     /**
-     * Creates global server pages support bundle which must be registered in the application. Bundle
-     * installs standard dropwizard views bundle ({@link ViewBundle}). If views bundle is manually declared in
-     * application, it must be removed (to avoid duplicates). View bundle owning is required for proper configuration
-     * and to know all used template engines (renderers).
+     * Optional global views configuration bundle (installs the standard dropwizard views bundle ({@link ViewBundle})).
+     * The default bundle is registered automatically. Create a custom bundle only to customize views (e.g. add view
+     * renderers manually, apply configuration, get access to registered renderers list, etc.).
      * <p>
-     * After global support is registered, server pages applications may be declared with
-     * {@link #app(String, String, String)} and {@link #adminApp(String, String, String)}.
+     * This bundle must be registered before UI applications registration (otherwise, a default bundle, registered
+     * by the first registered application, would be used instead)!
      * <p>
-     * It is assumed that global bundles support is registered directly in the dropwizard application
-     * (and not transitively in some bundle) and server page applications themselves could be registered
-     * nearby (in dropwizard application) or in any bundle (for example, some dashboard bundle just registers
-     * dashboard application, assuming that global server pages support would be activated).
+     * Note that UI application registration might be hidden under some bundle (e.g. bundle adds some feature and
+     * the small admin ui app). Be sure to register a customized global bundle BEFORE such bundles.
      *
      * @return global views bundle builder
      */
@@ -181,8 +178,6 @@ public class ServerPagesBundle extends UniqueGuiceyBundle {
      * Application names must be unique (when you register multiple server pages applications).
      * <p>
      * Application could be extended with {@link ServerPagesBundle#extendApp(String)} in another bundle.
-     * <p>
-     * NOTE global server pages support bundle must be installed with {@link #builder()} in dropwizard application.
      *
      * @param name       application name (used as servlet name)
      * @param assetsPath path to application resources (classpath); may be in form of package (dot-separated)
@@ -233,8 +228,6 @@ public class ServerPagesBundle extends UniqueGuiceyBundle {
      * admin servlet {@link io.dropwizard.metrics.servlets.AdminServlet}.
      * <p>
      * Application could be extended with {@link ServerPagesBundle#extendApp(String)} in another bundle.
-     * <p>
-     * NOTE: global server pages support bundle must be installed with {@link #builder()} in dropwizard application.
      *
      * @param name       application name (used as servlet name)
      * @param assetsPath path to application resources (classpath)

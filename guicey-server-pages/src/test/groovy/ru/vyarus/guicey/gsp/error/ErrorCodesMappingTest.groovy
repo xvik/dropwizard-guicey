@@ -57,7 +57,6 @@ class ErrorCodesMappingTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(ErrorResource)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("err", "/err", "/")
                                     .errorPage(403, "error.ftl")
                                     .errorPage(405, "error2.ftl")

@@ -35,7 +35,6 @@ class RestPathAsErrorPageTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(ErrorPage)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/")
                                     .errorPage("/error/")
                                     .build())

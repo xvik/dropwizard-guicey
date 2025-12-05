@@ -116,7 +116,6 @@ class ApplicationInfoTest extends Specification {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "app", "/app")
                                     .errorPage(404, "err.tpl")
                                     .requireRenderers("freemarker")

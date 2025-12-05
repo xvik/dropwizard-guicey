@@ -43,7 +43,6 @@ class NonErrorInterceptionTest extends Specification {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(Resource)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/")
                                     .errorPage("error.html")
                                     .build())

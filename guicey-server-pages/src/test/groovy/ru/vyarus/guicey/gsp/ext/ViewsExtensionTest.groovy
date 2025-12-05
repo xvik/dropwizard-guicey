@@ -52,7 +52,6 @@ class ViewsExtensionTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(OverridableTemplateResource, SubTemplateResource)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/")
                                     .indexPage("index.html")
                                     .build(),

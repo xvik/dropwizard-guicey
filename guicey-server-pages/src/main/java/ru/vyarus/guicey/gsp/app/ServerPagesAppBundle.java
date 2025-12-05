@@ -51,6 +51,10 @@ public class ServerPagesAppBundle implements GuiceyBundle {
 
     @Override
     public void initialize(final GuiceyBootstrap bootstrap) {
+        // global bundle is unique, so only the first registered instance would actually work
+        // This removes the requirement for manual registration of the default bundle, but
+        // if user wants to customize it - it could be registered manually before app bundles
+        bootstrap.bundles(ServerPagesBundle.builder().build());
         this.config = bootstrap.sharedStateOrFail(ServerPagesGlobalState.class,
                 "Either server pages support bundle was not installed (use %s.builder() to create bundle) "
                         + " or it was installed after '%s' application bundle",

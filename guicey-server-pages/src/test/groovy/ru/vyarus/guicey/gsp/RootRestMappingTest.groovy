@@ -39,7 +39,6 @@ class RootRestMappingTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/app")
                                     .indexPage("template.ftl")
                                     .build())

@@ -34,7 +34,6 @@ class NonRootIndexTemplateTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/sub")
                                     .indexPage("template.ftl")
                                     .build())

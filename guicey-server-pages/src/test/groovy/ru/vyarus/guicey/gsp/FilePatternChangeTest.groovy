@@ -38,7 +38,6 @@ class FilePatternChangeTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/")
                             // everything is a file, except direct .html files call
                                     .filePattern("(?:^|/)([^/]+\\.(?:(?!html)|(?:css)|(?:ftl)))(?:\\?.+)?\$")

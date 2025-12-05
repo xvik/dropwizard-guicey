@@ -57,7 +57,6 @@ class ErrorRenderErrorPageTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(SampleTemplateResource)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/")
                                     .errorPage("/sample/error")
                                     .build())

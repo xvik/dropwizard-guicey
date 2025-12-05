@@ -45,7 +45,6 @@ class ExceptionMapperInterceptionTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(ErrRest, ExHandler)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("test.app", "/app", "/")
                                     .errorPage("error.ftl")
                                     .build())

@@ -50,7 +50,6 @@ class ExtensionForAppRegisteredInGuiceyTest extends AbstractTest {
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             // extension registered before application
                             ServerPagesBundle.extendApp("app")
                                     .attachAssets("/ext")

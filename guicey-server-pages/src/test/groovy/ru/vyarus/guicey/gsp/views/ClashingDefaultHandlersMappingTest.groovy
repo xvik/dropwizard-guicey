@@ -43,7 +43,6 @@ class ClashingDefaultHandlersMappingTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(BaseViewResource)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "app", "/app")
                                     .mapViews("/foo/")
                                     .mapViews("/bar", "/foo/bar/")

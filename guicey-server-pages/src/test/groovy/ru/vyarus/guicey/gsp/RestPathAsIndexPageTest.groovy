@@ -33,7 +33,6 @@ class RestPathAsIndexPageTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(RootPage)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/")
                                     .indexPage("/root/")
                                     .build())

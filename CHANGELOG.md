@@ -1,3 +1,7 @@
+* [GSP]
+    - Global views bundle registration is optional now (ServerPagesBundle.builder().build())
+      It should be registered only if additional configuration is required
+
 ### 8.0.0 (2025-10-24)
 * Update to dropwizard 5 (requires java 17)
 * Use guice version without bundled asm ('classes' classifier)

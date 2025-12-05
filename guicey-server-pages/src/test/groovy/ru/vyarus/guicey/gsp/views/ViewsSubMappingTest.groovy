@@ -66,7 +66,6 @@ class ViewsSubMappingTest extends AbstractTest {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(OverridableTemplateResource, SubTemplateResource)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/app")
                                     .mapViews("app")
                                     .mapViews("/sub/", "/sub/")

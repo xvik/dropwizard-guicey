@@ -96,7 +96,6 @@ class MimeTypeRecognitionTest extends Specification {
             bootstrap.addBundle(GuiceBundle.builder()
                     .extensions(SampleTemplateResource)
                     .bundles(
-                            ServerPagesBundle.builder().build(),
                             ServerPagesBundle.app("app", "/app", "/")
                                     .indexPage("index.html")
                                     .errorPage("error.html")

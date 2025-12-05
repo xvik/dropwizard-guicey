@@ -19,10 +19,8 @@ class NoViewsSupportTest extends Specification {
 
         when: "starting app"
         TestSupport.runWebApp(App)
-        then: "no views support detected"
-        def ex = thrown(IllegalStateException)
-        ex.message == 'Either server pages support bundle was not installed (use ServerPagesBundle.builder() to create bundle)  or it was installed after \'app\' application bundle'
-
+        then: "all ok - global bundle is optioal"
+        true
     }
 
     static class App extends Application<Configuration> {
@@ -34,7 +32,7 @@ class NoViewsSupportTest extends Specification {
             bootstrap.addBundle(GuiceBundle.builder()
                     .bundles(
                             // NO global setup
-                            ServerPagesBundle.app("app", "/app", "/").build())
+                            ServerPagesBundle.app("app", "/app", "/app").build())
                     .build())
         }
 
