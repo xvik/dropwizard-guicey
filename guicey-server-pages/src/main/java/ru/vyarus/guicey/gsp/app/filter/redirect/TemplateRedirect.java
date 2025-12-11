@@ -1,6 +1,10 @@
 package ru.vyarus.guicey.gsp.app.filter.redirect;
 
 import io.dropwizard.views.common.ViewRenderer;
+import jakarta.servlet.Servlet;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
@@ -9,11 +13,6 @@ import ru.vyarus.guicey.gsp.app.rest.mapping.ViewRestLookup;
 import ru.vyarus.guicey.gsp.app.rest.support.TemplateAnnotationFilter;
 import ru.vyarus.guicey.gsp.app.util.TemplateRequest;
 import ru.vyarus.guicey.gsp.views.template.TemplateContext;
-
-import jakarta.servlet.Servlet;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
@@ -156,5 +155,14 @@ public class TemplateRedirect {
      */
     public static TemplateContext templateContext() {
         return CONTEXT_TEMPLATE.get();
+    }
+
+    /**
+     * Add the ability to set custom context in tests.
+     *
+     * @param context custom template context
+     */
+    public static void setContext(final TemplateContext context) {
+        CONTEXT_TEMPLATE.set(context);
     }
 }

@@ -1,6 +1,11 @@
 * [GSP]
     - Global views bundle registration is optional now (ServerPagesBundle.builder().build())
       It should be registered only if additional configuration is required
+    - Test support:
+      * @InterceptViewModel junit extension to intercept raw model, used for HTML rendering
+      * ViewModelHook - generic hook for intercepting view models
+      * TestTemplateContext - simple dummy context to be able to call gsp views directly
+        (it is possible now to set custom context)
 
 ### 8.0.0 (2025-10-24)
 * Update to dropwizard 5 (requires java 17)

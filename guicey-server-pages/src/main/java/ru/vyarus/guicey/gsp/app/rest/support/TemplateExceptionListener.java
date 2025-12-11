@@ -14,7 +14,7 @@ import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.ext.Provider;
 
 /**
- * Application listener for template processing exceptions detection. Listener use request listener for template
+ * Application listener for template processing exceptions detection. Listener uses request listener for template
  * processing templates in order to detect exceptions.
  * <p>
  * This listener doesn't detect direct not OK status return (e.g. {@code Response.status(404).build()}), but

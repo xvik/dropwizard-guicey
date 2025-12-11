@@ -4,6 +4,7 @@ dependencies {
     implementation 'io.dropwizard:dropwizard-views'
     implementation project(':guicey-spa')
 
+    provided 'org.junit.jupiter:junit-jupiter-api'
     provided 'io.dropwizard:dropwizard-views-freemarker'
 
     testImplementation 'io.dropwizard:dropwizard-views-mustache'
