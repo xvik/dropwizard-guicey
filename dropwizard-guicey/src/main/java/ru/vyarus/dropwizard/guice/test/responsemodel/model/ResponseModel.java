@@ -1,19 +1,16 @@
-package ru.vyarus.guicey.gsp.views.test.ext;
+package ru.vyarus.dropwizard.guice.test.responsemodel.model;
 
 import java.lang.reflect.Method;
 
 /**
- * Intercepted view model class with context info (required to distinguish models when multiple view calls
- * is intercepted at once).
- * <p>
- * {@link #getPath()} would contain a real called path (before redirection to view resource),
- * {@link #getResourcePath()} would contain view resource path.
+ * Intercepted response model with context info (required to distinguish models when multiple calls intercepted at
+ * once). The actual model would be either entity returned from response method or entity supplied manually into
+ * {@link jakarta.ws.rs.core.Response} (responses without a model are not ignored).
  *
  * @author Vyacheslav Rusakov
  * @since 05.12.2025
  */
-public class ViewModel {
-    private String path;
+public class ResponseModel {
     private String httpMethod;
     private String resourcePath;
     private Class<?> resourceClass;
@@ -22,28 +19,14 @@ public class ViewModel {
     private int statusCode;
 
     /**
-     * @return called path (before redirection to resource) relative to server root
-     */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     * @param path original path
-     */
-    public void setPath(final String path) {
-        this.path = path;
-    }
-
-    /**
-     * @return view resource path relative to rest context
+     * @return resource path relative to the rest context
      */
     public String getResourcePath() {
         return resourcePath;
     }
 
     /**
-     * @param resourcePath view resource path
+     * @param resourcePath resource path
      */
     public void setResourcePath(final String resourcePath) {
         this.resourcePath = resourcePath;
@@ -64,28 +47,28 @@ public class ViewModel {
     }
 
     /**
-     * @return view resource class
+     * @return resource class
      */
     public Class<?> getResourceClass() {
         return resourceClass;
     }
 
     /**
-     * @param resourceClass view resource class
+     * @param resourceClass resource class
      */
     public void setResourceClass(final Class<?> resourceClass) {
         this.resourceClass = resourceClass;
     }
 
     /**
-     * @return view resource method
+     * @return resource method
      */
     public Method getResourceMethod() {
         return resourceMethod;
     }
 
     /**
-     * @param resourceMethod view resource method
+     * @param resourceMethod resource method
      */
     public void setResourceMethod(final Method resourceMethod) {
         this.resourceMethod = resourceMethod;
@@ -93,7 +76,8 @@ public class ViewModel {
 
     /**
      * @param <T> required type to simplify usage in tests
-     * @return view model
+     * @return response model (object returned by resource method or directly specified as Entity in
+     * {@link jakarta.ws.rs.core.Response})
      */
     @SuppressWarnings("unchecked")
     public <T> T getModel() {
@@ -101,15 +85,15 @@ public class ViewModel {
     }
 
     /**
-     * @param model view model
+     * @param model entity returned from resource method
      */
     public void setModel(final Object model) {
         this.model = model;
     }
 
     /**
-     * Note that code might be 200 here, but view rendering would fail later (model intercepted before view rendering).
-     * This code is preserved just to differentiate error views from normal pages (when error models interception is
+     * Note that code might be 200 here, but response processing will fail later (e.g. view rendering would fail later).
+     * This code is preserved just to differentiate error models from normal (when error models interception is
      * enabled).
      *
      * @return response status code
@@ -127,6 +111,7 @@ public class ViewModel {
 
     @Override
     public String toString() {
-        return httpMethod + " " + path + " (" + resourceClass.getSimpleName() + "#" + resourceMethod.getName() + ")";
+        return httpMethod + " " + statusCode + " " + resourcePath + " (" + resourceClass.getSimpleName()
+                + "#" + resourceMethod.getName() + ")";
     }
 }

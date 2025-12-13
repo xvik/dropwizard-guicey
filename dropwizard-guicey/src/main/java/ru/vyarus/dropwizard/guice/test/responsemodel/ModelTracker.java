@@ -1,33 +1,34 @@
-package ru.vyarus.guicey.gsp.views.test.ext;
+package ru.vyarus.dropwizard.guice.test.responsemodel;
 
-import ru.vyarus.guicey.gsp.views.test.ext.interceptor.ViewModelFilter;
+import ru.vyarus.dropwizard.guice.test.responsemodel.intercept.ResponseInterceptorFilter;
+import ru.vyarus.dropwizard.guice.test.responsemodel.model.ResponseModel;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Class provides access for intercepted view models. Collected models could be cleared with {@link #clear()}.
+ * Class provides access for intercepted response models. Collected models could be cleared with {@link #clear()}.
  *
  * @author Vyacheslav Rusakov
  * @since 05.12.2025
  */
-public class ViewModelTracker {
+public class ModelTracker {
 
-    private final ViewModelFilter filter;
+    private final ResponseInterceptorFilter filter;
 
     /**
      * Creates a tracker instance.
      *
      * @param filter rest filter instance
      */
-    public ViewModelTracker(final ViewModelFilter filter) {
+    public ModelTracker(final ResponseInterceptorFilter filter) {
         this.filter = filter;
     }
 
     /**
      * @return all intercepted view models
      */
-    public List<ViewModel> getViewModels() {
+    public List<ResponseModel> getViewModels() {
         return filter.getInterceptedModels();
     }
 
@@ -35,7 +36,7 @@ public class ViewModelTracker {
      * @param resource resource to filter models
      * @return all intercepted models for resource
      */
-    public List<ViewModel> getViewModels(final Class<?> resource) {
+    public List<ResponseModel> getViewModels(final Class<?> resource) {
         return filter.getInterceptedModels().stream()
                 .filter(model -> model.getResourceClass().equals(resource))
                 .collect(Collectors.toList());
@@ -44,15 +45,16 @@ public class ViewModelTracker {
     /**
      * @return last intercepted model
      */
-    public ViewModel getLastModel() {
-        return filter.getInterceptedModels().get(filter.getInterceptedModels().size() - 1);
+    public ResponseModel getLastModel() {
+        return filter.getInterceptedModels().isEmpty() ? null
+                : filter.getInterceptedModels().get(filter.getInterceptedModels().size() - 1);
     }
 
     /**
      * @param resource target resource
      * @return last intercepted model for resource
      */
-    public ViewModel getLastModel(final Class<?> resource) {
+    public ResponseModel getLastModel(final Class<?> resource) {
         return filter.getInterceptedModels().stream()
                 .filter(model -> model.getResourceClass().equals(resource))
                 // last element required

@@ -15,12 +15,12 @@ import ru.vyarus.dropwizard.guice.test.client.TestClient;
 import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.client.WebClient;
 import ru.vyarus.dropwizard.guice.test.jupiter.ext.client.WebClientType;
+import ru.vyarus.dropwizard.guice.test.jupiter.ext.responsemodel.InterceptModel;
+import ru.vyarus.dropwizard.guice.test.responsemodel.ModelTracker;
+import ru.vyarus.dropwizard.guice.test.responsemodel.model.ResponseModel;
 import ru.vyarus.guicey.gsp.ServerPagesBundle;
 import ru.vyarus.guicey.gsp.views.template.Template;
 import ru.vyarus.guicey.gsp.views.template.TemplateView;
-import ru.vyarus.guicey.gsp.views.test.ext.ViewModel;
-import ru.vyarus.guicey.gsp.views.test.ext.ViewModelTracker;
-import ru.vyarus.guicey.gsp.views.test.jupiter.InterceptViewModel;
 
 /**
  * @author Vyacheslav Rusakov
@@ -28,8 +28,8 @@ import ru.vyarus.guicey.gsp.views.test.jupiter.InterceptViewModel;
  */
 @TestDropwizardApp(value = FailedViewRenderTest.App.class, restMapping = "/rest/", debug = true)
 public class FailedViewRenderTest {
-    @InterceptViewModel
-    ViewModelTracker modelTracker;
+    @InterceptModel
+    ModelTracker modelTracker;
 
     @WebClient(WebClientType.App)
     TestClient<?> client;
@@ -39,13 +39,12 @@ public class FailedViewRenderTest {
 
         client.buildGet("sample").expectFailure(500);
 
-        final ViewModel trackedModel = modelTracker.getLastModel();
-        Assertions.assertEquals("/sample", trackedModel.getPath());
+        final ResponseModel trackedModel = modelTracker.getLastModel();
         Assertions.assertEquals("GET", trackedModel.getHttpMethod());
-        Assertions.assertEquals("views/app/sample", trackedModel.getResourcePath());
+        Assertions.assertEquals("/views/app/sample", trackedModel.getResourcePath());
         Assertions.assertEquals(SampleRest.class, trackedModel.getResourceClass());
         Assertions.assertEquals("get", trackedModel.getResourceMethod().getName());
-        Assertions.assertEquals("GET /sample (SampleRest#get)", trackedModel.toString());
+        Assertions.assertEquals("GET 200 /views/app/sample (SampleRest#get)", trackedModel.toString());
         Assertions.assertEquals(200, trackedModel.getStatusCode());
 
         final Model model = trackedModel.getModel();
