@@ -1,6 +1,8 @@
 * Test support:
     - @InterceptModel junit extension to intercept raw resource model, for example, used for HTML rendering
     - ModelInterceptorHook - generic hook for intercepting raw response model
+    - Fix rest client method references for resources without default constructors
+      (and fix most problems with rest method object result wrapping)
 * [GSP]
     - Global views bundle registration is optional now (ServerPagesBundle.builder().build())
       It should be registered only if additional configuration is required

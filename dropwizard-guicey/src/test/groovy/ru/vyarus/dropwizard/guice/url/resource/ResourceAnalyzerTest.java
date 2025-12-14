@@ -250,7 +250,7 @@ public class ResourceAnalyzerTest {
     void testErrors() {
         assertThatThrownBy(() -> ResourceAnalyzer.analyzeMethodCall(null, res -> {}))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Resource class is required");
+                .hasMessage("Proxied class is required");
 
         assertThatThrownBy(() -> ResourceAnalyzer.analyzeMethodCall(DirectResource.class, res -> {}))
                 .isInstanceOf(IllegalStateException.class)

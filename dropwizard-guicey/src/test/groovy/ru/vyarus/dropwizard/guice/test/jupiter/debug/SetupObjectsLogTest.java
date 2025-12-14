@@ -37,6 +37,7 @@ public class SetupObjectsLogTest extends AbstractPlatformTest {
                 "\t\tRestStubFieldsSupport          \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tStubFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tMockFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
+                "\t\tModelFieldsSupport             \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tSpyFieldsSupport               \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:453)\n" +
                 "\t\tTrackerFieldsSupport           \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:453)\n");
     }
@@ -47,10 +48,10 @@ public class SetupObjectsLogTest extends AbstractPlatformTest {
         assertThat(output).contains("Guicey test extensions (Test2.):\n" +
                         "\n" +
                         "\tSetup objects = \n" +
-                "\t\tExt1                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:106)\n" +
-                "\t\tExt2                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:106)\n" +
-                "\t\t<lambda>                       \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:107)\n" +
-                "\t\tExt3                           \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:107)\n" +
+                "\t\tExt1                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:108)\n" +
+                "\t\tExt2                           \t@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:108)\n" +
+                "\t\t<lambda>                       \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:109)\n" +
+                "\t\tExt3                           \t@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:109)\n" +
                 "\t\t<lambda>                       \t@EnableSetup Base#base1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base1\n" +
                 "\t\t<lambda>                       \t@EnableSetup Base#base2                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Base#base2\n" +
                 "\t\t<lambda>                       \t@EnableSetup Test2#ext1                            at r.v.d.g.t.j.d.SetupObjectsLogTest$Test2#ext1\n" +
@@ -61,6 +62,7 @@ public class SetupObjectsLogTest extends AbstractPlatformTest {
                 "\t\tRestStubFieldsSupport          \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tStubFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tMockFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
+                "\t\tModelFieldsSupport             \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
                 "\t\tSpyFieldsSupport               \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:453)\n" +
                 "\t\tTrackerFieldsSupport           \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:453)\n");
     }

@@ -2,11 +2,9 @@ package ru.vyarus.dropwizard.guice.url.resource;
 
 import com.google.common.base.Preconditions;
 import javassist.util.proxy.MethodHandler;
-import javassist.util.proxy.Proxy;
-import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 import org.jspecify.annotations.Nullable;
-import ru.vyarus.dropwizard.guice.module.installer.util.InstanceUtils;
+import ru.vyarus.dropwizard.guice.module.installer.util.ProxyUtils;
 import ru.vyarus.dropwizard.guice.url.model.MethodCall;
 import ru.vyarus.dropwizard.guice.url.util.Caller;
 
@@ -65,16 +63,9 @@ public final class ResourceMethodLookup {
      * @param <T>         resource type
      * @return proxy instance
      */
-    @SuppressWarnings("unchecked")
     private static <T> T createLookupProxy(final Class<T> resource, final Consumer<MethodCall> callHandler) {
-        Preconditions.checkArgument(resource != null, "Resource class is required");
-        final ProxyFactory factory = new ProxyFactory();
-        factory.setSuperclass(resource);
-        final T proxy = InstanceUtils.create((Class<T>) factory.createClass());
-
         final Handler handler = new Handler(resource, callHandler);
-        ((Proxy) proxy).setHandler(handler);
-        return proxy;
+        return ProxyUtils.createProxy(resource, handler);
     }
 
     /**
