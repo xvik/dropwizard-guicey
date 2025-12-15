@@ -38,8 +38,8 @@ import ru.vyarus.guicey.gsp.views.template.TemplateContext;
  * <p>
  * This approach is very limited: here we only simulate context presence so resource method could create
  * model instance, but, if target method requires http-related objects, this will not work.
- * Better use {@link ru.vyarus.guicey.gsp.views.test.jupiter.InterceptViewModel} extension
- * (or {@link ru.vyarus.guicey.gsp.views.test.ext.ViewModelHook} for generic cases).
+ * Better use {@link ru.vyarus.dropwizard.guice.test.jupiter.ext.responsemodel.InterceptModel} extension
+ * (or {@link ru.vyarus.dropwizard.guice.test.responsemodel.ModelInterceptorHook} for generic cases).
  *
  * @author Vyacheslav Rusakov
  * @since 04.12.2025
