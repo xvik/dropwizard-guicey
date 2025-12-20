@@ -121,7 +121,7 @@ public class TrackerFieldsSupport extends AnnotatedTestFieldSetup<TrackBean, Tra
                         + tracker.getStats().render());
             }
         }
-        if (ann.autoReset()) {
+        if (ann.autoReset() && value != null) {
             value.clear();
         }
     }

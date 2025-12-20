@@ -106,7 +106,7 @@ public class LogFieldsSupport extends AnnotatedTestFieldSetup<RecordLogs, Record
     @Override
     protected void afterTest(final EventContext context,
                              final AnnotatedField<RecordLogs, RecordedLogs> field, final RecordedLogs value) {
-        if (field.getAnnotation().autoReset()) {
+        if (field.getAnnotation().autoReset() && value != null) {
             value.clear();
         }
     }

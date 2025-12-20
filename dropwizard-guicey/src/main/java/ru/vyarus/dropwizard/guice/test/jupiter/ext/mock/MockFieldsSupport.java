@@ -111,7 +111,7 @@ public class MockFieldsSupport extends AnnotatedTestFieldSetup<MockBean, Object>
                     + TestSetupUtils.getContextTestName(context.getJunitContext()) + ":\n\n"
                     + Arrays.stream(res.split("\n")).map(s -> "\t" + s).collect(Collectors.joining("\n")));
         }
-        if (field.getAnnotation().autoReset()) {
+        if (field.getAnnotation().autoReset() && value != null) {
             Mockito.reset(value);
         }
     }
