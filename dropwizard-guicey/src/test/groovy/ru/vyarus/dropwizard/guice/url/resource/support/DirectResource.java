@@ -13,6 +13,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -81,6 +82,12 @@ public class DirectResource {
     @Path("/entity2")
     @POST
     public void post3(@NotNull ModelType model) {
+    }
+
+    @GET
+    @Path("/cookie/")
+    public Response cookie(@CookieParam("cc") Cookie cc) {
+        return Response.ok().build();
     }
 
     public static class ModelType {

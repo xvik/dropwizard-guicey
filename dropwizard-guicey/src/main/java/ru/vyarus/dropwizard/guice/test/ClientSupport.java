@@ -6,6 +6,7 @@ import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.UriBuilder;
 import org.glassfish.jersey.client.JerseyClient;
 import org.jspecify.annotations.Nullable;
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorProvider;
 import ru.vyarus.dropwizard.guice.test.client.ApacheTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.DefaultTestClientFactory;
 import ru.vyarus.dropwizard.guice.test.client.ResourceClient;
@@ -107,7 +108,7 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
     public ClientSupport(final DropwizardTestSupport<?> support,
                          final @Nullable TestClientFactory factory,
                          final @Nullable TestRequestConfig defaults) {
-        super(defaults);
+        super(new InjectorProvider(support::getApplication), defaults);
         this.support = support;
         this.urlBuilder = new AppUrlBuilder(support::getEnvironment);
         this.factory = factory == null ? new DefaultTestClientFactory() : factory;
@@ -382,7 +383,7 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      */
     public TestClient<?> restClient() {
         // client INHERITS support defaults
-        return new TestClient<>(() -> getClient().target(basePathRest()), defaults);
+        return new TestClient<>(injectorProvider, () -> getClient().target(basePathRest()), defaults);
     }
 
     /**
@@ -403,7 +404,8 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
     public <K> ResourceClient<K> restClient(final Class<K> resource) {
         final String target = UriBuilder.newInstance().path(resource).toTemplate();
         // client INHERITS support defaults
-        return new ResourceClient<>(() -> getClient().target(basePathRest()).path(target), defaults, resource);
+        return new ResourceClient<>(injectorProvider,
+                () -> getClient().target(basePathRest()).path(target), defaults, resource);
     }
 
     /**
@@ -420,7 +422,7 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      */
     public TestClient<?> appClient() {
         // client INHERITS support defaults
-        return new TestClient<>(() -> getClient().target(basePathApp()), defaults);
+        return new TestClient<>(injectorProvider, () -> getClient().target(basePathApp()), defaults);
     }
 
     /**
@@ -433,7 +435,7 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      */
     public TestClient<?> adminClient() {
         // client INHERITS support defaults
-        return new TestClient<>(() -> getClient().target(basePathAdmin()), defaults);
+        return new TestClient<>(injectorProvider, () -> getClient().target(basePathAdmin()), defaults);
     }
 
     /**
@@ -449,8 +451,8 @@ public class ClientSupport extends TestClient<ClientSupport> implements AutoClos
      */
     public TestClient<?> externalClient(final String url, final Object... args) {
         checkHttp(url);
-        // custom external client - no defaults inherited
-        return new TestClient<>(() -> getClient().target(String.format(url, args)), null);
+        // custom external client - no defaults inherited (on injector - registered converters useless)
+        return new TestClient<>(null, () -> getClient().target(String.format(url, args)), null);
     }
 
     @Override

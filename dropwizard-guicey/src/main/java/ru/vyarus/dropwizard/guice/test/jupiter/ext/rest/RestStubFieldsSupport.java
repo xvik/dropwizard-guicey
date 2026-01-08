@@ -83,7 +83,8 @@ public class RestStubFieldsSupport extends AnnotatedTestFieldSetup<StubRest, Res
         Preconditions.checkState(fields.size() == 1, "Multiple @" + StubRest.class.getSimpleName()
                 + " fields declared. To avoid confusion with the configuration, only one field is supported.");
 
-        restStubs = new RestStubsHook(getConfig(fields.get(0).getAnnotation()));
+        // client debug activated automatically with extension debug
+        restStubs = new RestStubsHook(getConfig(fields.get(0).getAnnotation(), extension.isDebug()));
 
         extension.hooks(restStubs, this);
     }
@@ -172,7 +173,7 @@ public class RestStubFieldsSupport extends AnnotatedTestFieldSetup<StubRest, Res
         }
     }
 
-    private StubRestConfig getConfig(final StubRest annotation) {
+    private StubRestConfig getConfig(final StubRest annotation, final boolean debug) {
         final StubRestConfig config = new StubRestConfig();
         Collections.addAll(config.getResources(), annotation.value());
         Collections.addAll(config.getDisableResources(), annotation.disableResources());
@@ -182,6 +183,7 @@ public class RestStubFieldsSupport extends AnnotatedTestFieldSetup<StubRest, Res
         Collections.addAll(config.getDisableJerseyExtensions(), annotation.disableJerseyExtensions());
         config.setLogRequests(annotation.logRequests());
         config.setContainer(annotation.container());
+        config.setDebug(debug);
         return config;
     }
 

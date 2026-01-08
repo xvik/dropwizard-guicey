@@ -2,7 +2,10 @@ package ru.vyarus.dropwizard.guice.url;
 
 import io.dropwizard.core.setup.Environment;
 import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 import jakarta.ws.rs.core.UriBuilder;
+import org.glassfish.jersey.internal.inject.InjectionManager;
+import ru.vyarus.dropwizard.guice.injector.lookup.GuiceBeanProvider;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.url.util.AppPathUtils;
 
@@ -41,6 +44,7 @@ import java.util.function.Supplier;
 public class AppUrlBuilder {
 
     private final Supplier<Environment> environment;
+    private final Provider<InjectionManager> injectorProvider;
     private final String host;
     private final boolean proxied;
 
@@ -78,6 +82,7 @@ public class AppUrlBuilder {
         this.environment = environment;
         this.host = host;
         this.proxied = proxied;
+        this.injectorProvider = GuiceBeanProvider.provide(InjectionManager.class).forEnv(environment);
     }
 
     /**
@@ -168,7 +173,7 @@ public class AppUrlBuilder {
      * @return resource path builder
      */
     public <K> RestPathBuilder<K> rest(final Class<K> resource) {
-        return new RestPathBuilder<>(baseRest(), resource, false);
+        return new RestPathBuilder<>(baseRest(), injectorProvider, resource, false);
     }
 
     /**
@@ -183,7 +188,7 @@ public class AppUrlBuilder {
         final UriBuilder builder = UriBuilder.newInstance();
         path.accept(builder);
         // resource Path annotation is ignored
-        return new RestPathBuilder<>(rest(builder.toString()), resource, true);
+        return new RestPathBuilder<>(rest(builder.toString()), injectorProvider, resource, true);
     }
 
     /**

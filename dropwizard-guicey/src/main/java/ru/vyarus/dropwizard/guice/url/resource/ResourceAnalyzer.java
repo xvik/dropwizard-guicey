@@ -4,34 +4,23 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import jakarta.ws.rs.BeanParam;
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.CookieParam;
-import jakarta.ws.rs.FormParam;
-import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.HttpMethod;
-import jakarta.ws.rs.MatrixParam;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.MultivaluedMap;
-import jakarta.ws.rs.core.PathSegment;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
 import ru.vyarus.dropwizard.guice.url.model.MethodCall;
 import ru.vyarus.dropwizard.guice.url.model.ResourceMethodInfo;
+import ru.vyarus.dropwizard.guice.url.resource.params.MethodParametersAnalyzer;
 import ru.vyarus.dropwizard.guice.url.util.Caller;
 import ru.vyarus.dropwizard.guice.url.util.MultipartParamsSupport;
 import ru.vyarus.java.generics.resolver.GenericsResolver;
 import ru.vyarus.java.generics.resolver.util.TypeToStringUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +33,7 @@ import java.util.stream.Collectors;
  * @author Vyacheslav Rusakov
  * @since 25.09.2025
  */
-@SuppressWarnings({"PMD.GodClass", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings("PMD.GodClass")
 public final class ResourceAnalyzer {
 
     private ResourceAnalyzer() {
@@ -389,13 +378,10 @@ public final class ResourceAnalyzer {
                 annotated, path, httpMethod);
 
         detectMediaTypes(info, info.getResource(), annotated);
-
-        // analyze parameters
+        
         final Multimap<String, Object> multipart = ArrayListMultimap.create();
-        for (int i = 0; i < call.getArgs().length; i++) {
-            final Object arg = call.getArgs()[i];
-            handle(annotated.getParameterAnnotations()[i], arg, info, multipart);
-        }
+        // analyze parameters
+        MethodParametersAnalyzer.analyze(call.getResource(), call.getMethod(), call.getArgs(), info, multipart);
         if (!multipart.isEmpty()) {
             // multipart params often doubled (stream with metadata) so need to process all at once
             MultipartParamsSupport.processFormParams(info.getFormParams(), multipart);
@@ -442,97 +428,6 @@ public final class ResourceAnalyzer {
             Collections.addAll(info.getProduces(), produces.value());
             // clear default
             info.getProduces().remove("*/*");
-        }
-    }
-
-    @SuppressWarnings({"unchecked", "PMD.NcssCount", "PMD.CognitiveComplexity", "PMD.CyclomaticComplexity",
-            "checkstyle:CyclomaticComplexity", "checkstyle:JavaNCSS", "checkstyle:ExecutableStatementCount"})
-    private static void handle(final Annotation[] annotations, final Object value, final ResourceMethodInfo info,
-                               final Multimap<String, Object> multipart) {
-        boolean recognized = false;
-        if (value != null) {
-            for (Annotation ann : annotations) {
-                if (ann.annotationType().equals(Context.class)) {
-                    // avoid handling special parameters
-                    return;
-                } else if (ann.annotationType().equals(PathParam.class)) {
-                    final PathParam param = (PathParam) ann;
-                    // path segments could be used for matrix params declaration in the middle
-                    if (!(value instanceof PathSegment)) {
-                        info.getPathParams().put(param.value(), value);
-                    }
-                    recognized = true;
-                } else if (ann.annotationType().equals(QueryParam.class)) {
-                    final QueryParam param = (QueryParam) ann;
-                    info.getQueryParams().put(param.value(), value);
-                    recognized = true;
-                } else if (ann.annotationType().equals(HeaderParam.class)) {
-                    final HeaderParam param = (HeaderParam) ann;
-                    info.getHeaderParams().put(param.value(), value);
-                    recognized = true;
-                } else if (ann.annotationType().equals(MatrixParam.class)) {
-                    final MatrixParam param = (MatrixParam) ann;
-                    info.getMatrixParams().put(param.value(), value);
-                    recognized = true;
-                } else if (ann.annotationType().equals(FormParam.class)) {
-                    final FormParam param = (FormParam) ann;
-                    info.getFormParams().put(param.value(), value);
-                    recognized = true;
-                } else if (ann.annotationType().equals(CookieParam.class)) {
-                    final CookieParam param = (CookieParam) ann;
-                    info.getCookieParams().put(param.value(), String.valueOf(value));
-                    recognized = true;
-                } else if ("FormDataParam".equals(ann.annotationType().getSimpleName())) {
-                    // collected for delayed processing
-                    final String paramName = MultipartParamsSupport.getParamName(ann);
-                    if (value instanceof Collection) {
-                        ((Collection<?>) value).forEach(o -> multipart.put(paramName, o));
-                    } else {
-                        multipart.put(paramName, value);
-                    }
-                    recognized = true;
-                } else if ("org.glassfish.jersey.media.multipart.FormDataMultiPart".equals(
-                        value.getClass().getName())) {
-                    // case: method parameter accept entire multipart (without direct fields mapping)
-                    MultipartParamsSupport.configureFromMultipart(multipart, value);
-                    recognized = true;
-                } else if (ann.annotationType().equals(BeanParam.class)) {
-                    handleBean(value, info, multipart);
-                    recognized = true;
-                }
-            }
-            // this could be urlencoded parameters
-            if (value instanceof MultivaluedMap) {
-                final MultivaluedMap<Object, Object> map = (MultivaluedMap<Object, Object>) value;
-                map.forEach((o, objects) ->
-                        info.getFormParams().put(String.valueOf(o), objects.size() == 1 ? objects.get(0) : objects)
-                );
-                recognized = true;
-            }
-            if (!recognized) {
-                // assume it is a method body (e.g. POST entity).
-                // The logic: if used provided not null value then it should be used in request
-                Preconditions.checkState(info.getEntity() == null, "Multiple entity arguments detected: \n\t%s\n\t%s",
-                        info.getEntity(), value);
-                info.setEntity(value);
-            }
-        }
-    }
-
-    private static void handleBean(final Object bean, final ResourceMethodInfo info,
-                                   final Multimap<String, Object> multipart) {
-        final Field[] fields = bean.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            final Object value;
-            try {
-                value = field.get(bean);
-            } catch (IllegalAccessException e) {
-                throw new IllegalStateException("Failed to introspect @BeanParam", e);
-            }
-            if (value != null) {
-                handle(field.getAnnotations(), value, info, multipart);
-            }
         }
     }
 }

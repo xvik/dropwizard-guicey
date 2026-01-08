@@ -375,16 +375,21 @@ public class TestClientRequestBuilder {
     }
 
     /**
-     * Configure multiple cookies at once.
+     * Configure multiple cookies at once. Value could be either string or {@link jakarta.ws.rs.core.Cookie} object.
      * <p>
      * Multiple calls append to previous configurations (cookies with the same name are overridden).
      *
      * @param cookies cookie map
      * @return builder instance for chained calls
      */
-    public TestClientRequestBuilder cookies(final Map<String, String> cookies) {
-        for (Map.Entry<String, String> entry : cookies.entrySet()) {
-            cookie(entry.getKey(), entry.getValue());
+    public TestClientRequestBuilder cookies(final Map<String, Object> cookies) {
+        for (Map.Entry<String, Object> entry : cookies.entrySet()) {
+            final Object value = entry.getValue();
+            if (value instanceof Cookie) {
+                cookie((Cookie) value);
+            } else {
+                cookie(entry.getKey(), String.valueOf(value));
+            }
         }
         return this;
     }

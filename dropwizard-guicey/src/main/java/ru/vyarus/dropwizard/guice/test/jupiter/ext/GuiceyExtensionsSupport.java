@@ -400,6 +400,8 @@ public abstract class GuiceyExtensionsSupport extends TestParametersSupport impl
         store.put(DW_SUPPORT, support);
         // for pure guicey tests client may seem redundant, but it can be used for calling other services
         final ClientSupport client = new ClientSupport(support, config.clientFactory);
+        // auto set debug state from extension
+        client.defaultDebug(config.tracker.debug);
         store.put(DW_CLIENT, client);
         // to be able to access the support object outside of extension context
         TestSupportHolder.setContext(support, client);

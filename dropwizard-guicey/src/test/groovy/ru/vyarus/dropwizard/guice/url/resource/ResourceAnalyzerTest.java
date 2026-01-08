@@ -1,13 +1,17 @@
 package ru.vyarus.dropwizard.guice.url.resource;
 
+import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MultivaluedHashMap;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 import org.junit.jupiter.api.Test;
+import ru.vyarus.dropwizard.guice.test.client.builder.call.MultipartArgumentHelper;
 import ru.vyarus.dropwizard.guice.url.model.ResourceMethodInfo;
 import ru.vyarus.dropwizard.guice.url.resource.support.DirectResource;
+import ru.vyarus.dropwizard.guice.url.resource.support.FormResource;
 import ru.vyarus.dropwizard.guice.url.resource.support.InterfaceResource;
 import ru.vyarus.dropwizard.guice.url.resource.support.MappedBean;
 import ru.vyarus.dropwizard.guice.url.resource.support.NoPathResource;
@@ -18,6 +22,9 @@ import ru.vyarus.dropwizard.guice.url.resource.support.sub.SubResource1;
 import ru.vyarus.dropwizard.guice.url.resource.support.sub.SubResource2;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -235,6 +242,94 @@ public class ResourceAnalyzerTest {
                 .containsEntry("file", file);
         assertThat(info.getConsumes()).isNotEmpty()
                 .contains(MediaType.MULTIPART_FORM_DATA);
+    }
+
+    @Test
+    void testDateInForm() {
+        ResourceMethodInfo info = ResourceAnalyzer
+                .analyzeMethodCall(FormResource.class, res -> res
+                        .post("1", new Date()));
+
+        assertThat(info.getFormParams()).isNotEmpty()
+                .containsEntry("name", "1");
+        assertThat(info.getFormParams().get("date")).isInstanceOf(Date.class);
+        assertThat(info.getConsumes()).isNotEmpty()
+                .contains(MediaType.APPLICATION_FORM_URLENCODED);
+    }
+
+    @Test
+    void testMapInForm() {
+        final MultivaluedHashMap<String, Object> map = new MultivaluedHashMap<>();
+        map.add("name", "1");
+        map.add("date", new Date());
+        ResourceMethodInfo info = ResourceAnalyzer
+                .analyzeMethodCall(FormResource.class, res -> res.post2(map));
+
+        assertThat(info.getFormParams()).isNotEmpty()
+                .containsEntry("name", "1");
+        assertThat(info.getFormParams().get("date")).isInstanceOf(Date.class);
+        assertThat(info.getConsumes()).isNotEmpty()
+                .contains(MediaType.APPLICATION_FORM_URLENCODED);
+    }
+
+    @Test
+    void testListInForm() {
+        ResourceMethodInfo info = ResourceAnalyzer
+                .analyzeMethodCall(FormResource.class, res -> res
+                        .postMulti(Arrays.asList("1", "2"), new Date()));
+
+        assertThat(info.getFormParams()).isNotEmpty()
+                .containsEntry("name", Arrays.asList("1", "2"));
+        assertThat(info.getFormParams().get("date")).isInstanceOf(Date.class);
+        assertThat(info.getConsumes()).isNotEmpty()
+                .contains(MediaType.APPLICATION_FORM_URLENCODED);
+    }
+
+    @Test
+    void testMultiDisposition() {
+        final MultipartArgumentHelper helper = new MultipartArgumentHelper();
+        ResourceMethodInfo info = ResourceAnalyzer
+                .analyzeMethodCall(FormResource.class, res -> res
+                        .multipartMulti2(Arrays.asList(
+                                        helper.disposition("file", "logback.xml"),
+                                        helper.disposition("file", "file.txt")),
+                                Arrays.asList(
+                                        helper.fromClasspath("/logback.xml"),
+                                        helper.fromClasspath("/file.txt")
+                                )));
+
+        assertThat(info.getFormParams()).isNotEmpty().hasSize(1);
+        assertThat(info.getFormParams().get("file")).isInstanceOf(List.class);
+        assertThat(info.getConsumes()).isNotEmpty()
+                .contains(MediaType.MULTIPART_FORM_DATA);
+    }
+
+    @Test
+    void testGenericMultipart() {
+        ResourceMethodInfo info = ResourceAnalyzer
+                .analyzeMethodCall(FormResource.class, res -> res
+                        .multipartGeneric(new MultipartArgumentHelper().multipart()
+                                .field("foo", "bar")
+                                .stream("file", "/logback.xml")
+                                .build()));
+
+        assertThat(info.getFormParams()).hasSize(2);
+        assertThat(info.getFormParams()).isNotEmpty()
+                .containsEntry("foo", "bar");
+        assertThat(info.getFormParams().get("file")).isInstanceOf(StreamDataBodyPart.class);
+        assertThat(info.getConsumes()).isNotEmpty()
+                .contains(MediaType.MULTIPART_FORM_DATA);
+    }
+
+    @Test
+    void testMappedCookie() {
+        final Cookie cookie = new Cookie.Builder("cc").value("tt").build();
+        ResourceMethodInfo info = ResourceAnalyzer
+                .analyzeMethodCall(DirectResource.class, res -> res
+                        .cookie(cookie));
+
+        assertThat(info.getCookieParams()).isNotEmpty()
+                .containsEntry("cc", cookie);
     }
 
     @Test

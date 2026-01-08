@@ -2,8 +2,9 @@ package ru.vyarus.dropwizard.guice.injector.lookup;
 
 import com.google.inject.Injector;
 import io.dropwizard.core.Application;
-
 import jakarta.inject.Provider;
+
+import java.util.function.Supplier;
 
 /**
  * Lazy injector provider. Used internally instead of direct injector reference when injector is not constructed yet.
@@ -16,7 +17,7 @@ import jakarta.inject.Provider;
  */
 public class InjectorProvider implements Provider<Injector> {
 
-    private final Application application;
+    private final Supplier<Application<?>> application;
     private Injector injector;
 
     /**
@@ -24,14 +25,23 @@ public class InjectorProvider implements Provider<Injector> {
      *
      * @param application application instance
      */
-    public InjectorProvider(final Application application) {
+    public InjectorProvider(final Application<?> application) {
+        this.application = () -> application;
+    }
+
+    /**
+     * Create provider.
+     *
+     * @param application application supplier
+     */
+    public InjectorProvider(final Supplier<Application<?>> application) {
         this.application = application;
     }
 
     @Override
     public Injector get() {
         if (injector == null) {
-            injector = InjectorLookup.getInjector(application).get();
+            injector = InjectorLookup.getInjector(application.get()).get();
         }
         return injector;
     }

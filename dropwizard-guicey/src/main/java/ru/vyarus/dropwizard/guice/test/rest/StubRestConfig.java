@@ -19,6 +19,7 @@ public class StubRestConfig {
     private final List<Class<?>> disableJerseyExtensions = new ArrayList<>();
     private boolean logRequests = true;
     private TestContainerPolicy container = TestContainerPolicy.DEFAULT;
+    private boolean debug;
 
     /**
      * By default, all resources would be available. Use this option to run a subset of resources.
@@ -139,5 +140,21 @@ public class StubRestConfig {
      */
     public void setContainer(final TestContainerPolicy container) {
         this.container = container;
+    }
+
+    /**
+     * @return true to enable client debug logs
+     */
+    public boolean isDebug() {
+        return debug;
+    }
+
+    /**
+     * Enable client debug logs.
+     *
+     * @param debug true to enable debug logs
+     */
+    public void setDebug(final boolean debug) {
+        this.debug = debug;
     }
 }

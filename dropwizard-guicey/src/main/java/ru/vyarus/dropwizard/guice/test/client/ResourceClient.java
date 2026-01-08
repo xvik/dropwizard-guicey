@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.client;
 
+import com.google.inject.Injector;
+import jakarta.inject.Provider;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.UriBuilder;
 import org.jspecify.annotations.Nullable;
@@ -40,14 +42,17 @@ public class ResourceClient<T> extends TestClient<TestClient<?>> {
     /**
      * Create a resource client.
      *
-     * @param root     root path
-     * @param defaults defaults
-     * @param resource resource type
+     * @param injectorProvider injector provider used for {@link jakarta.ws.rs.ext.ParamConverter} search for
+     *                         rest method call analysis arguments conversion
+     * @param root             root path
+     * @param defaults         defaults
+     * @param resource         resource type
      */
-    public ResourceClient(final @Nullable Supplier<WebTarget> root,
+    public ResourceClient(final @Nullable Provider<Injector> injectorProvider,
+                          final @Nullable Supplier<WebTarget> root,
                           final @Nullable TestRequestConfig defaults,
                           final Class<T> resource) {
-        super(root, defaults);
+        super(injectorProvider, root, defaults);
         this.resource = resource;
     }
 
@@ -141,7 +146,7 @@ public class ResourceClient<T> extends TestClient<TestClient<?>> {
      * @return pre-configured request builder instance
      */
     public TestClientRequestBuilder method(final Caller<T> caller, final @Nullable Object body) {
-        return RestCallAnalyzer.configure(this, caller, body);
+        return RestCallAnalyzer.configure(this, injectorProvider, caller, body, defaults.isDebugEnabled());
     }
 
     /**
@@ -236,7 +241,7 @@ public class ResourceClient<T> extends TestClient<TestClient<?>> {
     public <R> ResourceClient<R> subResourceClient(final Caller<T> caller, final Class<R> subResource) {
         final String path = RestCallAnalyzer.getSubResourcePath(getResourceType(), caller);
         // last class used for a resource type to get methods on
-        return new ResourceClient<>(() -> target(path), defaults, subResource);
+        return new ResourceClient<>(injectorProvider, () -> target(path), defaults, subResource);
     }
 
     /**

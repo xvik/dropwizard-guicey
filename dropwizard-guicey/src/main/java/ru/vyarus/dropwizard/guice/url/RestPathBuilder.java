@@ -1,10 +1,13 @@
 package ru.vyarus.dropwizard.guice.url;
 
+import jakarta.inject.Provider;
+import org.glassfish.jersey.internal.inject.InjectionManager;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.builder.call.RestCallAnalyzer;
 import ru.vyarus.dropwizard.guice.url.model.ResourceMethodInfo;
 import ru.vyarus.dropwizard.guice.url.resource.ResourceAnalyzer;
 import ru.vyarus.dropwizard.guice.url.resource.ResourceParamsBuilder;
+import ru.vyarus.dropwizard.guice.url.resource.params.ResourceParametersConverter;
 import ru.vyarus.dropwizard.guice.url.util.Caller;
 
 import java.lang.reflect.Method;
@@ -30,6 +33,7 @@ import java.lang.reflect.Method;
 public class RestPathBuilder<T> extends ResourceParamsBuilder {
 
     private final Class<T> resource;
+    private final Provider<InjectionManager> injectorProvider;
 
     /**
      * Create a builder.
@@ -37,13 +41,17 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
      * Note that jersey ignores {@link jakarta.ws.rs.Path} annotation for sub resources (only lookup method path
      * is used)
      *
-     * @param basePath optional base path
-     * @param resource target resource
-     * @param subResource true if it is a sub resource (important because {@code @Path} annotation must be ignored)
+     * @param basePath         optional base path
+     * @param injectorProvider optional injector provider to use registered {@link jakarta.ws.rs.ext.ParamConverter}
+     * @param resource         target resource
+     * @param subResource      true if it is a sub resource (important because {@code @Path} annotation must be ignored)
      */
-    public RestPathBuilder(final @Nullable String basePath, final Class<T> resource, final boolean subResource) {
+    public RestPathBuilder(final @Nullable String basePath,
+                           final @Nullable Provider<InjectionManager> injectorProvider,
+                           final Class<T> resource, final boolean subResource) {
         super(basePath);
         this.resource = resource;
+        this.injectorProvider = injectorProvider;
         // the same builder could be used for both resources and sub resources, so have to allow resources
         // without root @Path annotation here
         final String resourcePath = subResource ? null : ResourceAnalyzer.getResourcePath(resource);
@@ -69,7 +77,7 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
      */
     public <K> RestPathBuilder<K> subResource(final String path, final Class<K> subResource, final Object... args) {
         builder.path(String.format(path, args));
-        final RestPathBuilder<K> sub = new RestPathBuilder<>(builder.toString(), subResource, true);
+        final RestPathBuilder<K> sub = new RestPathBuilder<>(builder.toString(), injectorProvider, subResource, true);
         sub.pathParams.putAll(pathParams);
         return sub;
     }
@@ -88,7 +96,7 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
     public <K> RestPathBuilder<K> subResource(final Caller<T> caller, final Class<K> subResource) {
         final String path = RestCallAnalyzer.getSubResourcePath(resource, caller);
         builder.path(path);
-        final RestPathBuilder<K> sub = new RestPathBuilder<>(builder.toString(), subResource, true);
+        final RestPathBuilder<K> sub = new RestPathBuilder<>(builder.toString(), injectorProvider, subResource, true);
         sub.pathParams.putAll(pathParams);
         return sub;
     }
@@ -154,6 +162,10 @@ public class RestPathBuilder<T> extends ResourceParamsBuilder {
      */
     public ResourceParamsBuilder method(final Caller<T> caller) {
         final ResourceMethodInfo info = ResourceAnalyzer.analyzeMethodCall(resource, caller);
+        if (injectorProvider != null) {
+            // apply registered ParamConverters for parameters conversion toString
+            ResourceParametersConverter.convertParameters(info, injectorProvider.get());
+        }
         builder.path(info.getPath());
         pathParams.putAll(info.getPathParams());
         info.getQueryParams().forEach(builder::queryParam);

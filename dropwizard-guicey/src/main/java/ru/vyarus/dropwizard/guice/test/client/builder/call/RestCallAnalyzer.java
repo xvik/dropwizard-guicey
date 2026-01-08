@@ -1,16 +1,20 @@
 package ru.vyarus.dropwizard.guice.test.client.builder.call;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Injector;
+import jakarta.inject.Provider;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
+import org.glassfish.jersey.internal.inject.InjectionManager;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.test.client.ResourceClient;
 import ru.vyarus.dropwizard.guice.test.client.builder.FormBuilder;
 import ru.vyarus.dropwizard.guice.test.client.builder.TestClientRequestBuilder;
 import ru.vyarus.dropwizard.guice.url.model.ResourceMethodInfo;
 import ru.vyarus.dropwizard.guice.url.resource.ResourceAnalyzer;
+import ru.vyarus.dropwizard.guice.url.resource.params.ResourceParametersConverter;
 import ru.vyarus.dropwizard.guice.url.util.Caller;
 
 /**
@@ -37,15 +41,30 @@ public final class RestCallAnalyzer {
      * Limitation: this will work only with methods with DIRECTLY applied annotations: neither implemented interface
      * method (when annotations only on interface) nor overridden method would work.
      *
-     * @param client rest client instance
-     * @param method consumer with a required method call inside
-     * @param body   body object (could be null)
-     * @param <T>    resource type
+     * @param client           rest client instance
+     * @param injectorProvider injector provider used for {@link jakarta.ws.rs.ext.ParamConverter} search for
+     *                         rest method call analysis arguments conversion
+     * @param method           consumer with a required method call inside
+     * @param body             body object (could be null)
+     * @param debug            print analysis report to console
+     * @param <T>              resource type
      * @return pre-configured builder
      */
-    public static <T> TestClientRequestBuilder configure(final ResourceClient<T> client, final Caller<T> method,
-                                                         final @Nullable Object body) {
+    @SuppressWarnings("PMD.SystemPrintln")
+    public static <T> TestClientRequestBuilder configure(final ResourceClient<T> client,
+                                                         final @Nullable Provider<Injector> injectorProvider,
+                                                         final Caller<T> method,
+                                                         final @Nullable Object body,
+                                                         final boolean debug) {
         final ResourceMethodInfo info = ResourceAnalyzer.analyzeMethodCall(client.getResourceType(), method);
+        if (injectorProvider != null) {
+            // apply registered ParamConverters for toString conversion
+            ResourceParametersConverter.convertParameters(info,
+                    injectorProvider.get().getInstance(InjectionManager.class));
+        }
+        if (debug) {
+            System.out.println("Resource method analysis:\n" + info.getAnalysisReport());
+        }
         Object actualBody = body;
         if (actualBody == null && info.getEntity() != null) {
             // use provided argument without annotations as body

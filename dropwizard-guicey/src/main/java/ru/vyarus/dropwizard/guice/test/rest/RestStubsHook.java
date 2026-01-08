@@ -8,6 +8,7 @@ import jakarta.servlet.DispatcherType;
 import ru.vyarus.dropwizard.guice.GuiceBundle;
 import ru.vyarus.dropwizard.guice.GuiceyOptions;
 import ru.vyarus.dropwizard.guice.hook.GuiceyConfigurationHook;
+import ru.vyarus.dropwizard.guice.injector.lookup.InjectorLookup;
 import ru.vyarus.dropwizard.guice.module.context.Disables;
 import ru.vyarus.dropwizard.guice.module.context.info.ItemInfo;
 import ru.vyarus.dropwizard.guice.module.installer.feature.jersey.ResourceInstaller;
@@ -158,7 +159,9 @@ public class RestStubsHook implements GuiceyConfigurationHook {
         } catch (Exception e) {
             throw new IllegalStateException("Failed to start test jersey container", e);
         }
-        restClient = new RestClient(jerseyStub);
+        restClient = new RestClient(() -> InjectorLookup.getInjector(environment).get(), jerseyStub);
+        // enable client debug
+        restClient.defaultDebug(config.isDebug());
     }
 
     private void stop() {

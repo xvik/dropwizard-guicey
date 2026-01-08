@@ -1,7 +1,11 @@
 package ru.vyarus.dropwizard.guice.url.model;
 
+import com.google.common.base.Preconditions;
+import org.glassfish.jersey.model.Parameter;
 import org.jspecify.annotations.Nullable;
 import ru.vyarus.dropwizard.guice.module.installer.util.PathUtils;
+import ru.vyarus.dropwizard.guice.url.model.param.ParameterSource;
+import ru.vyarus.dropwizard.guice.url.resource.debug.CallAnalysisReportBuilder;
 import ru.vyarus.java.generics.resolver.util.TypeToStringUtils;
 
 import java.lang.reflect.Method;
@@ -17,11 +21,15 @@ import java.util.Map;
  * <p>
  * For sub resource call, {@link #subResources} would not be empty, {@link #resource} would point to the ROOT
  * resource and {@link #path} will be a method path, relative to resource root (include sub resource locator paths).
+ * <p>
+ * Jersey {@link org.glassfish.jersey.model.Parameter} are stored separately from value objects because they are
+ * required only for applying {@link jakarta.ws.rs.ext.ParamConverter} for values.
+ * Also, separation simplifies parameters processing (during converters application).
  *
  * @author Vyacheslav Rusakov
  * @since 25.09.2025
  */
-public class ResourceMethodInfo {
+public class ResourceMethodInfo extends ParametersSourceSupport {
 
     // resource class with annotations (but could be not for sub-resources)
     private final Class<?> resource;
@@ -42,7 +50,7 @@ public class ResourceMethodInfo {
     private final Map<String, Object> pathParams = new HashMap<>();
     private final Map<String, Object> queryParams = new HashMap<>();
     private final Map<String, Object> headerParams = new HashMap<>();
-    private final Map<String, String> cookieParams = new HashMap<>();
+    private final Map<String, Object> cookieParams = new HashMap<>();
     private final Map<String, Object> formParams = new HashMap<>();
     private final Map<String, Object> matrixParams = new HashMap<>();
 
@@ -176,7 +184,7 @@ public class ResourceMethodInfo {
     /**
      * @return map of not null arguments, passed for {@link jakarta.ws.rs.CookieParam}
      */
-    public Map<String, String> getCookieParams() {
+    public Map<String, Object> getCookieParams() {
         return cookieParams;
     }
 
@@ -234,6 +242,36 @@ public class ResourceMethodInfo {
     }
 
     /**
+     * Jersey {@link org.glassfish.jersey.model.Parameter} stored separately from values. This method returns actual
+     * value (in most cases already converted). Used during conversion.
+     *
+     * @param source parameter source
+     * @return associated value
+     */
+    public Object getParameterValue(final ParameterSource source) {
+        if (Parameter.Source.ENTITY.equals(source.getType())) {
+            return getEntity();
+        }
+        return getMapBySource(source.getType()).get(source.getName());
+    }
+
+    /**
+     * Override stored value by parameter source. Used during conversion.
+     *
+     * @param source parameter source
+     * @param value  new value
+     */
+    public void setParameterValue(final ParameterSource source, final Object value) {
+        Preconditions.checkArgument(!source.isSourceOnly(),
+                "Parameter %s value is handled internally and manual modifications are not allowed", source);
+        if (Parameter.Source.ENTITY.equals(source.getType())) {
+            setEntity(value);
+        } else {
+            getMapBySource(source.getType()).put(source.getName(), value);
+        }
+    }
+
+    /**
      * Apply other method info to this one.
      *
      * @param other other data
@@ -256,11 +294,35 @@ public class ResourceMethodInfo {
         this.headerParams.putAll(other.headerParams);
         this.cookieParams.putAll(other.cookieParams);
         this.formParams.putAll(other.formParams);
+        this.parameterSources.putAll(other.parameterSources);
     }
 
     @Override
     public String toString() {
         return resource.getSimpleName() + "." + TypeToStringUtils.toStringMethod(method, null)
                 + " (" + getFullPath() + ")";
+    }
+
+    /**
+     * Represent information extracted from analyzed method and provided arguments. Shows what arguments were used,
+     * how extracted and (sometimes) how converted.
+     *
+     * @return rendered analysis report
+     */
+    public String getAnalysisReport() {
+        return CallAnalysisReportBuilder.buildDebugReport(this);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> getMapBySource(final Parameter.Source source) {
+        return switch (source) {
+            case PATH -> getPathParams();
+            case QUERY -> getQueryParams();
+            case HEADER -> getHeaderParams();
+            case MATRIX -> getMatrixParams();
+            case COOKIE -> getCookieParams();
+            case FORM -> getFormParams();
+            default -> throw new IllegalArgumentException("Unsupported source type: " + source);
+        };
     }
 }

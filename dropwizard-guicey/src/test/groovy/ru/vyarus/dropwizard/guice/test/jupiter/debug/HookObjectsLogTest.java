@@ -28,15 +28,15 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                         "\n" +
                         "\tSetup objects = \n" +
                 "\t\t<lambda>                       \t@EnableSetup Test1#setup                           at r.v.d.g.t.j.d.HookObjectsLogTest$Test1#setup\n" +
-                "\t\tWebClientFieldsSupport         \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tWebResourceClientFieldsSupport \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tLogFieldsSupport               \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tRestStubFieldsSupport          \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tStubFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tMockFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tModelFieldsSupport             \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tSpyFieldsSupport               \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:453)\n" +
-                "\t\tTrackerFieldsSupport           \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:453)\n" +
+                "\t\tWebClientFieldsSupport         \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tWebResourceClientFieldsSupport \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tLogFieldsSupport               \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tRestStubFieldsSupport          \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tStubFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tMockFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tModelFieldsSupport             \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tSpyFieldsSupport               \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:455)\n" +
+                "\t\tTrackerFieldsSupport           \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:455)\n" +
                 "\n" +
                 "\tTest hooks = \n" +
                 "\t\t<lambda>                       \t@EnableHook Base#base1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base1\n" +
@@ -71,15 +71,15 @@ public class HookObjectsLogTest extends AbstractPlatformTest {
                         "\n" +
                         "\tSetup objects = \n" +
                 "\t\t<lambda>                       \t@EnableSetup Test2#setup                           at r.v.d.g.t.j.d.HookObjectsLogTest$Test2#setup\n" +
-                "\t\tWebClientFieldsSupport         \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tWebResourceClientFieldsSupport \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tLogFieldsSupport               \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tRestStubFieldsSupport          \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tStubFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tMockFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tModelFieldsSupport             \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:449)\n" +
-                "\t\tSpyFieldsSupport               \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:453)\n" +
-                "\t\tTrackerFieldsSupport           \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:453)\n" +
+                "\t\tWebClientFieldsSupport         \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tWebResourceClientFieldsSupport \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tLogFieldsSupport               \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tRestStubFieldsSupport          \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tStubFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tMockFieldsSupport              \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tModelFieldsSupport             \tlookup (service loader)                            at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:451)\n" +
+                "\t\tSpyFieldsSupport               \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:455)\n" +
+                "\t\tTrackerFieldsSupport           \tdefault extension                                  at r.v.d.g.t.j.ext.(GuiceyExtensionsSupport.java:455)\n" +
                 "\n" +
                 "\tTest hooks = \n" +
                 "\t\t<lambda>                       \t@EnableHook Base#base1                             at r.v.d.g.t.j.d.HookObjectsLogTest$Base#base1\n" +

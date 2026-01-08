@@ -81,7 +81,8 @@ public final class RestPathUtils {
      */
     public static <T> RestPathBuilder<T> buildPath(final @Nullable String basePath, final Class<T> resource,
                                                    final Object... args) {
-        return new RestPathBuilder<>(basePath != null ? String.format(basePath, args) : null, resource, false);
+        // no injector provider - no ParamConverter support
+        return new RestPathBuilder<>(basePath != null ? String.format(basePath, args) : null, null, resource, false);
     }
 
     /**
@@ -98,6 +99,7 @@ public final class RestPathUtils {
      */
     public static <T> RestPathBuilder<T> buildSubResourcePath(final @Nullable String basePath,
                                                               final Class<T> subResource, final Object... args) {
-        return new RestPathBuilder<>(basePath != null ? String.format(basePath, args) : null, subResource, true);
+        // no injector provider - no ParamConverter support
+        return new RestPathBuilder<>(basePath != null ? String.format(basePath, args) : null, null, subResource, true);
     }
 }

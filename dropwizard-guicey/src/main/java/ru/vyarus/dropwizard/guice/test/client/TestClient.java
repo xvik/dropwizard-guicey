@@ -1,6 +1,8 @@
 package ru.vyarus.dropwizard.guice.test.client;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Injector;
+import jakarta.inject.Provider;
 import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
@@ -131,7 +133,22 @@ import java.util.function.Supplier;
 @SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.TooManyMethods"})
 public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
 
+    /**
+     * Injector provider for registered {@link jakarta.ws.rs.ext.ParamConverter} search.
+     */
+    protected final Provider<Injector> injectorProvider;
     private final Supplier<WebTarget> root;
+
+    /**
+     * Create test client.
+     *
+     * @param root     base target supplier
+     * @param defaults defaults (inherited)
+     */
+    public TestClient(final @Nullable Supplier<WebTarget> root,
+                      final @Nullable TestRequestConfig defaults) {
+        this(null, root, defaults);
+    }
 
     /**
      * Construct a client without a base root path and defaults. This constructor could be used ONLY by
@@ -140,24 +157,32 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * {@link ru.vyarus.dropwizard.guice.test.rest.RestClient}) because it is not possible to provide
      * root target in constructor)
      *
-     * @param defaults default configurations
+     * @param injectorProvider injector provider used for {@link jakarta.ws.rs.ext.ParamConverter} search for
+     *                         rest method call analysis arguments conversion
+     * @param defaults         default configurations
      */
-    public TestClient(@Nullable final TestRequestConfig defaults) {
-        this(null, defaults);
+    protected TestClient(@Nullable final Provider<Injector> injectorProvider,
+                         @Nullable final TestRequestConfig defaults) {
+        this(injectorProvider, null, defaults);
     }
 
     /**
      * Construct a jersey client wrapper.
      *
-     * @param root     root target supplier
-     * @param defaults (optional) defaults
+     * @param injectorProvider injector provider used for {@link jakarta.ws.rs.ext.ParamConverter} search for
+     *                         rest method call analysis arguments conversion
+     * @param root             root target supplier
+     * @param defaults         (optional) defaults
      */
-    public TestClient(final @Nullable Supplier<WebTarget> root, final @Nullable TestRequestConfig defaults) {
+    public TestClient(final @Nullable Provider<Injector> injectorProvider,
+                      final @Nullable Supplier<WebTarget> root,
+                      final @Nullable TestRequestConfig defaults) {
         super(new TestRequestConfig(defaults));
         Preconditions.checkState(root != null || !getClass().equals(TestClient.class),
                 "Target supplier may not be null for direct TestClient object usage: it could be null only for "
                         + "classes, extending TestClient (because they override getRoot() method)");
         this.root = root;
+        this.injectorProvider = injectorProvider;
     }
 
     /**
@@ -224,7 +249,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
                 "Only sub urls relative to current client url could be used. For completely custom external "
                         + "client creation use ClientSupport.externalClient()");
         // client INHERITS current defaults
-        return new TestClient<>(() -> target(String.format(path, args)), defaults);
+        return new TestClient<>(injectorProvider, () -> target(String.format(path, args)), defaults);
     }
 
     /**
@@ -243,7 +268,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
     public TestClient<?> subClient(final Consumer<UriBuilder> consumer) {
         final UriBuilder uriBuilder = UriBuilder.newInstance();
         consumer.accept(uriBuilder);
-        return new TestClient<>(() -> target(uriBuilder.toString()), defaults);
+        return new TestClient<>(injectorProvider, () -> target(uriBuilder.toString()), defaults);
     }
 
     /**
@@ -257,7 +282,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
     public <K> ResourceClient<K> subClient(final Consumer<UriBuilder> consumer, final Class<K> resource) {
         final UriBuilder uriBuilder = UriBuilder.newInstance();
         consumer.accept(uriBuilder);
-        return new ResourceClient<>(() -> target(uriBuilder.toString()), defaults, resource);
+        return new ResourceClient<>(injectorProvider, () -> target(uriBuilder.toString()), defaults, resource);
     }
 
     /**
@@ -280,13 +305,13 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * just clean defaults after creation: {@code client.subClient(ResClass.class).reset()}.
      *
      * @param resource resource class one to build a path for
+     * @param <R>      resource type
      * @return resource client (with a resource path, relative to the current client path)
-     * @param <R> resource type
      */
     public <R> ResourceClient<R> restClient(final Class<R> resource) {
         final String target = RestPathUtils.getResourcePath(resource);
         // last class used for a resource type to get methods on
-        return new ResourceClient<>(() -> target(target), defaults, resource);
+        return new ResourceClient<>(injectorProvider, () -> target(target), defaults, resource);
     }
 
     /**
@@ -298,7 +323,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      *
      * @param path        sub-resource mapping path (from sub-resource method; could contain String.format()
      *                    placeholders: %s)
-     * @param args variables for path placeholders (String.format() arguments)
+     * @param args        variables for path placeholders (String.format() arguments)
      * @param subResource sub-resource
      * @param <R>         sub-resource type
      * @return sub-resource client
@@ -307,7 +332,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
                                                    final Object... args) {
         final String target = String.format(path, args);
         // last class used for a resource type to get methods on
-        return new ResourceClient<>(() -> target(target), defaults, subResource);
+        return new ResourceClient<>(injectorProvider, () -> target(target), defaults, subResource);
     }
 
     /**
@@ -322,7 +347,7 @@ public class TestClient<T extends TestClient<?>> extends TestClientDefaults<T> {
      * @return rest client for provided resource
      */
     public <R> ResourceClient<R> asRestClient(final Class<R> resource) {
-        return new ResourceClient<>(() -> target("/"), defaults, resource);
+        return new ResourceClient<>(injectorProvider, () -> target("/"), defaults, resource);
     }
 
     // ------------------------------------------------------------------------ REQUEST SHORTCUTS

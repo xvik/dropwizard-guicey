@@ -1,5 +1,7 @@
 package ru.vyarus.dropwizard.guice.test.rest;
 
+import com.google.inject.Injector;
+import jakarta.inject.Provider;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.WebTarget;
 import org.glassfish.jersey.test.JerseyTest;
@@ -32,13 +34,16 @@ import static java.util.Objects.requireNonNull;
 public class RestClient extends TestClient<RestClient> {
 
     private final GuiceyJerseyTest jerseyTest;
+
     /**
      * Create a client.
      *
-     * @param jerseyTest jersey test instance
+     * @param injectorProvider injector provider used for {@link jakarta.ws.rs.ext.ParamConverter} search for
+     *                         rest method call analysis arguments conversion
+     * @param jerseyTest       jersey test instance
      */
-    public RestClient(final GuiceyJerseyTest jerseyTest) {
-        super(null);
+    public RestClient(final Provider<Injector> injectorProvider, final GuiceyJerseyTest jerseyTest) {
+        super(injectorProvider, null);
         this.jerseyTest = jerseyTest;
     }
 

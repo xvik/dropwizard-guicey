@@ -3,6 +3,13 @@
     - ModelInterceptorHook - generic hook for intercepting raw response model
     - Fix rest client method references for resources without default constructors
       (and fix most problems with rest method object result wrapping)
+    - Fix cookie parameters recognition for Cookie objects
+    - Fix multipart parameters processing for some (list-based) cases
+    - Native jersey method arguments analysis used now; Parameter objects also stored in model (for conversion support)
+    - Rest client method call and rest url builder use registered ParamConverters for (to string) conversion
+    - Add debug report for resource method analysis (enabled with client debug)
+    - Extension debug (in annotation) enables client debug logs
+* Add GuiceBeanProvider utility provider as a shortcut for InjectorLookup
 * [GSP]
     - Global views bundle registration is optional now (ServerPagesBundle.builder().build())
       It should be registered only if additional configuration is required
