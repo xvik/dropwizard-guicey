@@ -40,7 +40,8 @@ class GuiceRendererSingletonDetectionTest extends Specification {
         expect:
         render(new GuiceConfig()
                 .hideGuiceBindings()
-                .hideGuiceyBindings()) == """
+                .hideGuiceyBindings())
+                .replace('IndyInterface.java:344', 'IndyInterface.java:321')== """
 
     1 MODULES with 12 bindings
     │

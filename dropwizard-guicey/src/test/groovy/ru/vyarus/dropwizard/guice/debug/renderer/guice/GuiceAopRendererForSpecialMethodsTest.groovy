@@ -40,7 +40,8 @@ class GuiceAopRendererForSpecialMethodsTest extends Specification {
     def "Check aop render"() {
 
         expect:
-        render(new GuiceAopConfig()) == """
+        render(new GuiceAopConfig())
+                .replace('IndyInterface.java:344', 'IndyInterface.java:321') == """
 
     1 AOP handlers declared
     └── GuiceAopRendererForSpecialMethodsTest\$App\$1/GuiceAopRendererForSpecialMethodsTest\$App\$1\$1    at org.codehaus.groovy.vmplugin.v8.IndyInterface.fromCache(IndyInterface.java:321)
