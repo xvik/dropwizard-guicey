@@ -609,8 +609,8 @@ public class TestClientRequestBuilder {
     }
 
     /**
-     * Invoke request without status validation (same as jersey
-     * {@link jakarta.ws.rs.client.Invocation.Builder#invoke()}).
+     * Invoke request without status validation (same as jersey {@link jakarta.ws.rs.client.Invocation.Builder
+     * #invoke()}).
      * For automatic status validation see {@link #expectSuccess(Integer...)}, {@link #expectFailure(Integer...)}
      * and {@link #expectRedirect(Integer...)}.
      * <p>
