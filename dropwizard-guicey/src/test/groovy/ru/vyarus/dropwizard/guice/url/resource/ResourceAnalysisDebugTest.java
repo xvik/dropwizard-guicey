@@ -5,6 +5,7 @@ import jakarta.ws.rs.core.MultivaluedHashMap;
 import org.assertj.core.api.Assertions;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.vyarus.dropwizard.guice.test.client.builder.call.MultipartArgumentHelper;
 import ru.vyarus.dropwizard.guice.url.model.ResourceMethodInfo;
@@ -16,6 +17,8 @@ import ru.vyarus.dropwizard.guice.url.resource.support.sub.RootResource;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static ru.vyarus.dropwizard.guice.url.resource.ResourceAnalyzer.analyzeMethodCall;
 
@@ -24,6 +27,12 @@ import static ru.vyarus.dropwizard.guice.url.resource.ResourceAnalyzer.analyzeMe
  * @since 20.12.2025
  */
 public class ResourceAnalysisDebugTest {
+
+    @BeforeAll
+    static void beforeAll() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        Locale.setDefault(Locale.ENGLISH);
+    }
 
     @Test
     void testDebugReport() {
@@ -154,7 +163,7 @@ public class ResourceAnalysisDebugTest {
                         	POST /form/post [consumes: application/x-www-form-urlencoded]
                         	FormResource.post(String, Date):
                         		 1      FORM 	 name = 1
-                        		 2      FORM 	 date = Wed Nov 12 00:00:00 NOVT 2025
+                        		 2      FORM 	 date = Wed Nov 12 00:00:00 UTC 2025
                         """);
     }
 
@@ -168,7 +177,7 @@ public class ResourceAnalysisDebugTest {
                 """
                         	POST /form/post2 [consumes: application/x-www-form-urlencoded]
                         	FormResource.post2(MultivaluedMap<String, Object>):
-                        		 1      FORM 	 date = Wed Nov 12 00:00:00 NOVT 2025
+                        		 1      FORM 	 date = Wed Nov 12 00:00:00 UTC 2025
                         		        FORM 	 name = 1
                         """);
     }
@@ -181,7 +190,7 @@ public class ResourceAnalysisDebugTest {
                         	POST /form/postMulti [consumes: application/x-www-form-urlencoded]
                         	FormResource.postMulti(List<String>, Date):
                         		 1      FORM 	 name = [1, 2]
-                        		 2      FORM 	 date = Wed Nov 12 00:00:00 NOVT 2025
+                        		 2      FORM 	 date = Wed Nov 12 00:00:00 UTC 2025
                         """);
     }
 
