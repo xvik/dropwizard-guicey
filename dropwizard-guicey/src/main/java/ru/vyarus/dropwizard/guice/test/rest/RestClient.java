@@ -1,10 +1,12 @@
 package ru.vyarus.dropwizard.guice.test.rest;
 
 import com.google.inject.Injector;
+import io.dropwizard.core.Application;
 import jakarta.inject.Provider;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.WebTarget;
 import org.glassfish.jersey.test.JerseyTest;
+import ru.vyarus.dropwizard.guice.module.context.SharedConfigurationState;
 import ru.vyarus.dropwizard.guice.test.client.TestClient;
 import ru.vyarus.dropwizard.guice.test.rest.support.GuiceyJerseyTest;
 
@@ -45,6 +47,19 @@ public class RestClient extends TestClient<RestClient> {
     public RestClient(final Provider<Injector> injectorProvider, final GuiceyJerseyTest jerseyTest) {
         super(injectorProvider, null);
         this.jerseyTest = jerseyTest;
+    }
+
+    /**
+     * Simple lookup method to be able to use rest client directly in extension-less tests (generic tests).
+     *
+     * @param application application instance
+     * @return rest client instance
+     */
+    public static RestClient lookup(final Application<?> application) {
+        return SharedConfigurationState
+                .getOrFail(application, "No shared state found for application")
+                .getOrFail(RestStubsHook.class, "No rest stubs hook found")
+                .getRestClient();
     }
 
     /**

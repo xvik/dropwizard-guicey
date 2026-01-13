@@ -119,7 +119,9 @@ public class RestStubsHook implements GuiceyConfigurationHook {
                         start(config, evt.getEnvironment());
                     }
                 })
-                .onApplicationShutdown(injector -> stop());
+                .onApplicationShutdown(injector -> stop())
+                // store in shared state to grant access for rest client and jersey test
+                .withSharedState(state -> state.put(RestStubsHook.class, this));
 
         disableResources(config, builder);
         disableJerseyExtensions(config, builder);
