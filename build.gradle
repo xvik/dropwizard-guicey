@@ -37,7 +37,7 @@ dependencies {
 
     constraints {
         // use classes version without bundled asm to be able to easily update asm version
-        api "com.google.inject:guice:classes:$guice"
+        api "com.google.inject:guice:$guice:classes"
         api "org.ow2.asm:asm:$asm"
         api "org.glassfish.hk2:guice-bridge:$hk2"
         api "ru.vyarus:spock-junit5:$spockJunit5"
