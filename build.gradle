@@ -36,8 +36,8 @@ dependencies {
     api platform("com.google.inject:guice-bom:$guice")
 
     constraints {
-        // use classes version without bundled asm to be able to easily update asm version
-        api "com.google.inject:guice:$guice:classes"
+        // guicey use guice without bundled asm ("classes" classifier) to be able to easily update asm version
+        // NOTE: guice-bom declares guice with classes classifier - no additional record required
         api "org.ow2.asm:asm:$asm"
         api "org.glassfish.hk2:guice-bridge:$hk2"
         api "ru.vyarus:spock-junit5:$spockJunit5"
