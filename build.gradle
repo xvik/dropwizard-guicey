@@ -22,7 +22,7 @@ description = 'Dropwizard guice integration'
 ext {
     dropwizard = '5.0.0'
     guice = '7.0.0'
-    asm = '9.9'
+    asm = '9.9.1'
     hk2 = '3.0.6'
     spockJunit5 = '1.2.0'
     guiceExtAnn = '2.0.1'
@@ -36,8 +36,8 @@ dependencies {
     api platform("com.google.inject:guice-bom:$guice")
 
     constraints {
-        // use classes version without bundled asm to be able to easily update asm version
-        api "com.google.inject:guice:classes:$guice"
+        // guicey use guice without bundled asm ("classes" classifier) to be able to easily update asm version
+        // NOTE: guice-bom declares guice with classes classifier - no additional record required
         api "org.ow2.asm:asm:$asm"
         api "org.glassfish.hk2:guice-bridge:$hk2"
         api "ru.vyarus:spock-junit5:$spockJunit5"
