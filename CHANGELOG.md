@@ -1,3 +1,6 @@
+### 8.0.1 (2026-01-18)
+* Fix broken guice dependency in BOM
+
 ### 8.0.0 (2025-10-24)
 * Update to dropwizard 5 (requires java 17)
 * Use guice version without bundled asm ('classes' classifier)
