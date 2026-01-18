@@ -14,8 +14,11 @@
     - Global views bundle registration is optional now (ServerPagesBundle.builder().build())
       It should be registered only if additional configuration is required
     - Test support:
-      * TestTemplateContext - simple dummy context to be able to call gsp views directly
-        (it is possible now to set custom context)
+        * TestTemplateContext - simple dummy context to be able to call gsp views directly
+          (it is possible now to set custom context)
+ 
+### 8.0.1 (2026-01-18)
+* Fix broken guice dependency in BOM
 
 ### 8.0.0 (2025-10-24)
 * Update to dropwizard 5 (requires java 17)
