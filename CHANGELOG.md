@@ -1,3 +1,6 @@
+### 6.4.1 (2026-01-18)
+* Fix broken guice dependency in BOM
+
 ### 6.4.0 (2025-10-24)
 * Update to dropwizard 3.0.16
 * Use guice version without bundled asm ('classes' classifier)
