@@ -1,6 +1,6 @@
 # 8.0.0 Release Notes
 
-* Dropwizard 5 (requires java 17)
+* Dropwizard 5 ([requires java 17](https://www.dropwizard.io/en/stable/manual/upgrade-notes/upgrade-notes-5_0_x.html))
 * [Guice without bundled ASM](#guice-without-bundled-asm)
 * [Application fields injection](#application-fields-injection)
 * [Auto close object stored in the shared state](#auto-close-object-stored-in-the-shared-state)
