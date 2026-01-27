@@ -20,7 +20,7 @@ wrapper {
 description = 'Dropwizard guice integration'
 
 ext {
-    dropwizard = '5.0.0'
+    dropwizard = '5.0.1'
     guice = '7.0.0'
     asm = '9.9.1'
     hk2 = '3.0.6'
