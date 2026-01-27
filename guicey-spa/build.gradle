@@ -4,5 +4,5 @@ dependencies {
     implementation 'io.dropwizard:dropwizard-assets'
 
     testImplementation 'uk.org.webcompere:system-stubs-jupiter:2.1.8'
-    testImplementation 'org.objenesis:objenesis:3.4'
+    testImplementation 'org.objenesis:objenesis:3.5'
 }    
