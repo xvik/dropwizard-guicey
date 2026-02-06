@@ -52,7 +52,7 @@ Upcoming guicey changes would be ported in all active branches.
 
 ### Setup
 
-[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus/dropwizard-guicey.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/ru.vyarus/dropwizard-guicey)
+[![Maven Central](https://img.shields.io/maven-central/v/ru.vyarus/dropwizard-guicey.svg?style=flat)](https://central.sonatype.com/artifact/ru.vyarus/dropwizard-guicey)
 
 Maven:
 
