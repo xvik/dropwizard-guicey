@@ -2,9 +2,10 @@ package ru.vyarus.guicey.jdbi3.inject;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Injector;
+import org.jdbi.v3.core.config.ConfigRegistry;
+import org.jdbi.v3.core.extension.AttachedExtensionHandler;
 import org.jdbi.v3.core.extension.ExtensionHandler;
 import org.jdbi.v3.core.extension.ExtensionHandlerFactory;
-import org.jdbi.v3.core.extension.HandleSupplier;
 
 import javax.inject.Inject;
 import java.lang.reflect.Method;
@@ -51,10 +52,8 @@ public class InjectionHandlerFactory implements ExtensionHandlerFactory {
         }
 
         @Override
-        public Object invoke(final HandleSupplier handleSupplier,
-                             final Object target,
-                             final Object... args) throws Exception {
-            return injector.getInstance(type);
+        public AttachedExtensionHandler attachTo(ConfigRegistry config, Object target) {
+            return (handleSupplier, args) -> injector.getInstance(type);
         }
     }
 }

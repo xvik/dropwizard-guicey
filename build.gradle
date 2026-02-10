@@ -20,11 +20,11 @@ wrapper {
 description = 'Dropwizard guice integration'
 
 ext {
-    dropwizard = '3.0.16'
+    dropwizard = '3.0.17'
     guice = '6.0.0'
     asm = '9.9.1'
     hk2 = '2.6.1'
-    spockJunit5 = '1.2.0'
+    spockJunit5 = '1.4.1'
     guiceExtAnn = '1.4.1'
     guiceValidator = '2.0.1'
 }
