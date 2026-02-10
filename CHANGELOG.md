@@ -1,3 +1,4 @@
+### 7.3.2 (2026-02-10)
 * Dropwizard 4.0.17 compatibility (for jdbi3 module)
 * Update spock-junit5 to 1.4.1
 
