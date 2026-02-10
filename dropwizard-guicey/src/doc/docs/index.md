@@ -50,14 +50,12 @@ All active (not EOL) dropwizard versions supported.
 Dropwizard | Guicey                                                       | Reason
 ----------|--------------------------------------------------------------|-------
 2.1.x| [5.x](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1) | Last java 8 compatible version (EOL [January 31 2024](https://github.com/dropwizard/dropwizard/discussions/7880))
-3.x | [6.x](https://github.com/xvik/dropwizard-guicey/tree/dw-3)   | [Changed core dropwizard packages](https://www.dropwizard.io/en/stable/manual/upgrade-notes/upgrade-notes-3_0_x.html) - old 3rd paty bundles would be incompatible
-4.x | [7.x](https://github.com/xvik/dropwizard-guicey/tree/dw-4)   | [Jakarta namespace migration](https://www.dropwizard.io/en/stable/manual/upgrade-notes/upgrade-notes-4_0_x.html) - 3rd party guice modules might be incompatible                                            | [Jakarta namespace migration](https://github.com/dropwizard/dropwizard/blob/release/4.0.x/docs/source/manual/upgrade-notes/upgrade-notes-4_0_x.rst) - 3rd party guice modules might be incompatible
+3.x | [6.x](https://github.com/xvik/dropwizard-guicey/tree/dw-3)   | [Changed core dropwizard packages](https://www.dropwizard.io/en/stable/manual/upgrade-notes/upgrade-notes-3_0_x.html) - old 3rd paty bundles would be incompatible (EOL [January 31 2026](https://github.com/dropwizard/dropwizard/discussions/10798))
+4.x | [7.x](https://github.com/xvik/dropwizard-guicey/tree/dw-4)   | [Jakarta namespace migration](https://www.dropwizard.io/en/stable/manual/upgrade-notes/upgrade-notes-4_0_x.html) - 3rd party guice modules might be incompatible (EOL [January 31 2026](https://github.com/dropwizard/dropwizard/discussions/10799))
 5.x | 8.x | [Java 17 required](https://www.dropwizard.io/en/stable/manual/upgrade-notes/upgrade-notes-5_0_x.html)  
 
 All branches use the same project structure: core guicey merged with extension modules.
 It greatly simplifies releases and keeps actual examples in one branch.
-
-Upcoming guicey changes would be ported in all 3 branches.
 
 ## SBOM
 

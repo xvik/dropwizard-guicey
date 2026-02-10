@@ -14,7 +14,7 @@ Support: [discussions](https://github.com/xvik/dropwizard-guicey/discussions) | 
 
 ### About 
 
-[Dropwizard](http://dropwizard.io/) 5.0.0 [guice](https://github.com/google/guice) 7.0.0 integration.
+[Dropwizard](http://dropwizard.io/) 5.0.1 [guice](https://github.com/google/guice) 7.0.0 integration.
 
 Features:
 
@@ -44,11 +44,9 @@ All active (not EOL) dropwizard versions supported.
 Dropwizard | Guicey                                                       | Reason
 ----------|--------------------------------------------------------------|-------
 2.1.x| [5.x](https://github.com/xvik/dropwizard-guicey/tree/dw-2.1) | Last java 8 compatible version (EOL [January 31 2024](https://github.com/dropwizard/dropwizard/discussions/7880))
-3.x | [6.x](https://github.com/xvik/dropwizard-guicey/tree/dw-3)   | [Changed core dropwizard packages](https://github.com/dropwizard/dropwizard/blob/release/3.0.x/docs/source/manual/upgrade-notes/upgrade-notes-3_0_x.rst) - old 3rd paty bundles would be incompatible; Java 11 required
-4.x | [7.x](https://github.com/xvik/dropwizard-guicey/tree/dw-4)   | [Jakarta namespace migration](https://github.com/dropwizard/dropwizard/blob/release/4.0.x/docs/source/manual/upgrade-notes/upgrade-notes-4_0_x.rst) - 3rd party guice modules might be incompatible
-5.x | 8.x | Java 17 required  
-
-Upcoming guicey changes would be ported in all active branches.
+3.x | [6.x](https://github.com/xvik/dropwizard-guicey/tree/dw-3)   | [Changed core dropwizard packages](https://github.com/dropwizard/dropwizard/blob/release/3.0.x/docs/source/manual/upgrade-notes/upgrade-notes-3_0_x.rst) - old 3rd paty bundles would be incompatible; Java 11 required (EOL [January 31 2026](https://github.com/dropwizard/dropwizard/discussions/10798))
+4.x | [7.x](https://github.com/xvik/dropwizard-guicey/tree/dw-4)   | [Jakarta namespace migration](https://github.com/dropwizard/dropwizard/blob/release/4.0.x/docs/source/manual/upgrade-notes/upgrade-notes-4_0_x.rst) - 3rd party guice modules might be incompatible (EOL [January 31 2026](https://github.com/dropwizard/dropwizard/discussions/10799))
+5.x | 8.x | Java 17 required
 
 ### Setup
 
@@ -60,21 +58,21 @@ Maven:
 <dependency>
   <groupId>ru.vyarus</groupId>
   <artifactId>dropwizard-guicey</artifactId>
-  <version>8.0.1</version>
+  <version>8.0.2</version>
 </dependency>
 ```
 
 Gradle:
 
 ```groovy
-implementation 'ru.vyarus:dropwizard-guicey:8.0.1'
+implementation 'ru.vyarus:dropwizard-guicey:8.0.2'
 ```
 
 Dropwizard | Guicey
 ----------|---------
-5.0| [8.0.1](http://xvik.github.io/dropwizard-guicey/8.0.1)
-4.0| [7.3.1](http://xvik.github.io/dropwizard-guicey/7.3.1)
-3.0| [6.4.1](http://xvik.github.io/dropwizard-guicey/6.4.1)
+5.0| [8.0.2](http://xvik.github.io/dropwizard-guicey/8.0.2)
+4.0| [7.3.2](http://xvik.github.io/dropwizard-guicey/7.3.2)
+3.0| [6.4.2](http://xvik.github.io/dropwizard-guicey/6.4.2)
 2.1| [5.10.2](http://xvik.github.io/dropwizard-guicey/5.10.2)
 2.0| [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0)
 1.3| [4.2.3](http://xvik.github.io/dropwizard-guicey/4.2.3)
@@ -93,9 +91,9 @@ Gradle:
 
 ```groovy
 dependencies {
-    implementation platform('ru.vyarus.guicey:guicey-bom:8.0.1')
+    implementation platform('ru.vyarus.guicey:guicey-bom:8.0.2')
     // uncomment to override dropwizard and its dependencies versions    
-    //implementation platform('io.dropwizard:dropwizard-dependencies:5.0.0')
+    //implementation platform('io.dropwizard:dropwizard-dependencies:5.0.1')
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
@@ -116,7 +114,7 @@ Maven:
         <dependency>
             <groupId>ru.vyarus.guicey</groupId>
             <artifactId>guicey-bom</artifactId>
-            <version>8.0.1</version>
+            <version>8.0.2</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> 
@@ -124,7 +122,7 @@ Maven:
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
-            <version>5.0.0</version>
+            <version>5.0.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency> -->                 
