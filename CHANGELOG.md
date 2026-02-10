@@ -1,3 +1,6 @@
+* Dropwizard 4.0.17 compatibility (for jdbi3 module)
+* Update spock-junit5 to 1.4.1
+
 ### 7.3.1 (2026-01-18)
 * Fix broken guice dependency in BOM
 
