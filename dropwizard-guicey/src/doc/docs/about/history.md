@@ -1,3 +1,7 @@
+### [8.0.2](http://xvik.github.io/dropwizard-guicey/8.0.2) (2026-02-10)
+* Dropwizard 5.0.1 compatibility (for jdbi3 module)
+* Update spock-junit5 to 1.4.1
+
 ### [8.0.1](http://xvik.github.io/dropwizard-guicey/8.0.1) (2026-01-18)
 * Fix broken guice dependency in BOM
 
