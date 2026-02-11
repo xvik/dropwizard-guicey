@@ -12,7 +12,7 @@ description = 'Dropwizard guicey examples'
 
 ext {
     guiceyBom = findProperty('guiceyBom') ?: '8.0.2'
-    dwVersion = '5.0.1'
+    dwVersion = findProperty('dropwizardVersion') ?: '5.0.1'
 }
 
 subprojects {

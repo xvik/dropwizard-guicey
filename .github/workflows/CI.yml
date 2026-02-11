@@ -15,6 +15,7 @@ jobs:
         java: [17, 21]
     outputs:
       version: ${{ steps.project.outputs.version }}
+      dropwizard: ${{ steps.project.outputs.dropwizard }}
     steps:
       - uses: actions/checkout@v6
 
@@ -55,6 +56,10 @@ jobs:
           ver=$(./gradlew :properties --property version --no-daemon --console=plain -q | grep "^version:" | awk '{printf $2}')
           echo "Project version: $ver"
           echo "version=$ver" >> $GITHUB_OUTPUT
+          
+          ver=$(./gradlew :properties --property dropwizard --no-daemon --console=plain -q | grep "^dropwizard:" | awk '{printf $2}')
+          echo "Dropwizard version: $ver"
+          echo "dropwizard=$ver" >> $GITHUB_OUTPUT
 
 
   #  publish snapshot after successful tests (only for snapshots)
@@ -74,3 +79,4 @@ jobs:
     uses: ./.github/workflows/examples-CI.yml
     with:
       version: ${{ needs.build.outputs.version }}
+      dropwizard: ${{ needs.build.outputs.dropwizard }}
