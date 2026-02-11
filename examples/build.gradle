@@ -11,8 +11,8 @@ wrapper {
 description = 'Dropwizard guicey examples'
 
 ext {
-    guiceyBom = findProperty('guiceyBom') ?: '7.2.2'
-    dwVersion = '4.0.14'
+    guiceyBom = findProperty('guiceyBom') ?: '7.3.2'
+    dwVersion = '4.0.17'
 }
 
 subprojects {
