@@ -28,7 +28,7 @@ class ConfigOverridePropertyRecoveryTest {
         value1.setPrefix("test")
         def value2 = new ConfigOverrideExtensionValue(ExtensionContext.Namespace.GLOBAL, "bar", "bar")
         value2.setPrefix("test")
-        value2.resolveValue(new ClassContext(null, null, new SpecInfo()))
+        value2.resolveValue(new ClassContext(null, null, new SpecInfo(), null))
 
         GuiceyTestSupport support = new GuiceyTestSupport(AutoScanApplication.class, null, "test",
                 value1, value2)
