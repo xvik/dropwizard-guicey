@@ -8,5 +8,5 @@ dependencies {
     implementation 'io.dropwizard.modules:dropwizard-testing-junit4:5.0.0'
     implementation 'junit:junit'
 
-    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+    testImplementation 'org.spockframework:spock-core:2.4-groovy-2.5'
 }
