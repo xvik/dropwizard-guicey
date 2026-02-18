@@ -8,5 +8,5 @@ dependencies {
     provided 'io.dropwizard:dropwizard-views-freemarker'
 
     testImplementation 'io.dropwizard:dropwizard-views-mustache'
-    testImplementation 'org.webjars.npm:jquery:3.4.1'
+    testImplementation 'org.webjars.npm:jquery:4.0.0'
 }
