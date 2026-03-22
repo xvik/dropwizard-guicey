@@ -176,7 +176,7 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
-    public <T> T runCore(final @Nullable TestSupport.RunCallback<T> action) throws Exception {
+    public <T> T runCore(@Nullable final TestSupport.RunCallback<T> action) throws Exception {
         return run(buildCoreInternal(), action);
     }
 
@@ -208,7 +208,7 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
-    public <T> T runCoreWithoutManaged(final @Nullable TestSupport.RunCallback<T> action) throws Exception {
+    public <T> T runCoreWithoutManaged(@Nullable final TestSupport.RunCallback<T> action) throws Exception {
         return run(buildCoreInternal().disableManagedLifecycle(), action);
     }
 
@@ -240,7 +240,7 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
      * @throws Exception any appeared exception (throws may easily be added directly to test method and, without
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
-    public <T> T runWeb(final @Nullable TestSupport.RunCallback<T> action) throws Exception {
+    public <T> T runWeb(@Nullable final TestSupport.RunCallback<T> action) throws Exception {
         return run(buildWebInternal(), action);
     }
 
@@ -292,12 +292,12 @@ public class TestSupportBuilder<C extends Configuration> extends BaseBuilder<C, 
     }
 
     private <T> T run(final DropwizardTestSupport<C> support,
-                      final @Nullable TestSupport.RunCallback<T> callback) throws Exception {
+                      @Nullable final TestSupport.RunCallback<T> callback) throws Exception {
         return runWithListeners(support, callback);
     }
 
     private <T> T runWithListeners(final DropwizardTestSupport<C> support,
-                                   final @Nullable TestSupport.RunCallback<T> callback) throws Exception {
+                                   @Nullable final TestSupport.RunCallback<T> callback) throws Exception {
         // setup (before run)
         for (TestListener<C> testListener : listeners) {
             testListener.setup(support);

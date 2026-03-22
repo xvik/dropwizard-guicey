@@ -125,7 +125,7 @@ public final class TestSupport {
      */
     public static <C extends Configuration> DropwizardTestSupport<C> webApp(
             final Class<? extends Application<C>> appClass,
-            final @Nullable String configPath,
+            @Nullable final String configPath,
             final String... overrides) {
         return build(appClass)
                 .config(configPath)
@@ -149,7 +149,7 @@ public final class TestSupport {
      */
     public static <C extends Configuration> GuiceyTestSupport<C> coreApp(
             final Class<? extends Application<C>> appClass,
-            final @Nullable String configPath,
+            @Nullable final String configPath,
             final String... overrides) {
         return build(appClass)
                 .config(configPath)
@@ -278,8 +278,8 @@ public final class TestSupport {
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
     public static <T> T run(final DropwizardTestSupport<?> support,
-                            final @Nullable TestClientFactory clientFactory,
-                            final @Nullable RunCallback<T> callback) throws Exception {
+                            @Nullable final TestClientFactory clientFactory,
+                            @Nullable final RunCallback<T> callback) throws Exception {
         try {
             TestSupportHolder.setContext(support, clientFactory);
             support.before();
@@ -317,7 +317,7 @@ public final class TestSupport {
      */
     public static <T, C extends Configuration> T runWebApp(
             final Class<? extends Application<C>> appClass,
-            final @Nullable RunCallback<T> callback) throws Exception {
+            @Nullable final RunCallback<T> callback) throws Exception {
         return runWebApp(appClass, null, callback);
     }
 
@@ -334,7 +334,7 @@ public final class TestSupport {
      */
     public static <C extends Configuration> RunResult<C> runWebApp(
             final Class<? extends Application<C>> appClass,
-            final @Nullable String configPath,
+            @Nullable final String configPath,
             final String... overrides) throws Exception {
         return run(webApp(appClass, configPath, overrides));
     }
@@ -354,8 +354,8 @@ public final class TestSupport {
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
     public static <T, C extends Configuration> T runWebApp(final Class<? extends Application<C>> appClass,
-                                                           final @Nullable String configPath,
-                                                           final @Nullable RunCallback<T> callback,
+                                                           @Nullable final String configPath,
+                                                           @Nullable final RunCallback<T> callback,
                                                            final String... overrides) throws Exception {
         return run(webApp(appClass, configPath, overrides), callback);
     }
@@ -387,7 +387,7 @@ public final class TestSupport {
      */
     public static <T, C extends Configuration> T runCoreApp(
             final Class<? extends Application<C>> appClass,
-            final @Nullable RunCallback<T> callback) throws Exception {
+            @Nullable final RunCallback<T> callback) throws Exception {
         return runCoreApp(appClass, null, callback);
     }
 
@@ -405,7 +405,7 @@ public final class TestSupport {
      */
     public static <C extends Configuration> RunResult<C> runCoreApp(
             final Class<? extends Application<C>> appClass,
-            final @Nullable String configPath,
+            @Nullable final String configPath,
             final String... overrides) throws Exception {
         return run(coreApp(appClass, configPath, overrides));
     }
@@ -425,8 +425,8 @@ public final class TestSupport {
      *                   extra exception wrapper, we get exact exceptions as they would be thrown in real application)
      */
     public static <T, C extends Configuration> T runCoreApp(final Class<? extends Application<C>> appClass,
-                                                            final @Nullable String configPath,
-                                                            final @Nullable RunCallback<T> callback,
+                                                            @Nullable final String configPath,
+                                                            @Nullable final RunCallback<T> callback,
                                                             final String... overrides) throws Exception {
         return run(coreApp(appClass, configPath, overrides), callback);
     }

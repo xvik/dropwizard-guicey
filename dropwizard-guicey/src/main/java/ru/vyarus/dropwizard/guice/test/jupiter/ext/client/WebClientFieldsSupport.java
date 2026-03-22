@@ -33,7 +33,7 @@ public class WebClientFieldsSupport extends AnnotatedTestFieldSetup<WebClient, T
     protected void fieldDetected(final ExtensionContext context,
                                  final AnnotatedField<WebClient, TestClient> field) {
         final WebClientType type = field.getAnnotation().value();
-        if (WebClientType.Support.equals(type) && !ClientSupport.class.equals(field.getType())) {
+        if (WebClientType.Support == type && !ClientSupport.class.equals(field.getType())) {
             throw new IllegalStateException("ClientSupport type must be used for the default @WebClient field: "
                     + field.toStringField());
         }

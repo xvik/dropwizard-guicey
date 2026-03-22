@@ -77,7 +77,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      * @param path configuration file path
      * @return builder instance for chained calls
      */
-    public T config(final @Nullable String path) {
+    public T config(@Nullable final String path) {
         this.configPath = path;
         return self();
     }
@@ -90,7 +90,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      * @param config pre-initialized configuration object
      * @return builder instance for chained calls
      */
-    public T config(final @Nullable C config) {
+    public T config(@Nullable final C config) {
         this.configObject = config;
         return self();
     }
@@ -101,7 +101,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      * @param provider configuration source provider
      * @return builder instance for chained calls
      */
-    public T configSourceProvider(final @Nullable ConfigurationSourceProvider provider) {
+    public T configSourceProvider(@Nullable final ConfigurationSourceProvider provider) {
         this.configSourceProvider = provider;
         return self();
     }
@@ -127,7 +127,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      * @return builder instance for chained calls
      * @see #configModifiers(ru.vyarus.dropwizard.guice.test.util.ConfigModifier[])
      */
-    public T configOverride(final @Nullable String override) {
+    public T configOverride(@Nullable final String override) {
         if (override != null) {
             final int idx = override.indexOf(':');
             Preconditions.checkState(idx > 0,
@@ -210,7 +210,7 @@ public abstract class BaseBuilder<C extends Configuration, T extends BaseBuilder
      * @param prefix configuration override properties prefix
      * @return builder instance for chained calls
      */
-    public T propertyPrefix(final @Nullable String prefix) {
+    public T propertyPrefix(@Nullable final String prefix) {
         this.propertyPrefix = prefix;
         return self();
     }

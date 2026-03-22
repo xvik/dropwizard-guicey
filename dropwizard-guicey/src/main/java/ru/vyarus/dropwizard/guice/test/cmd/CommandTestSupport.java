@@ -167,9 +167,9 @@ public class CommandTestSupport<C extends Configuration> {
      * @param configOverrides      config overrides
      */
     public CommandTestSupport(final Class<? extends Application<C>> applicationClass,
-                              final @Nullable String configPath,
-                              final @Nullable ConfigurationSourceProvider configSourceProvider,
-                              final @Nullable String customPropertyPrefix,
+                              @Nullable final String configPath,
+                              @Nullable final ConfigurationSourceProvider configSourceProvider,
+                              @Nullable final String customPropertyPrefix,
                               final ConfigOverride... configOverrides) {
         this.applicationClass = applicationClass;
         this.configPath = configPath;
@@ -237,7 +237,7 @@ public class CommandTestSupport<C extends Configuration> {
      * @param args  command run arguments
      * @return command execution result
      */
-    public CommandResult<C> run(final @Nullable String[] input, final String... args) {
+    public CommandResult<C> run(@Nullable final String[] input, final String... args) {
         if (input != null) {
             stdIn.provideText(input);
         }

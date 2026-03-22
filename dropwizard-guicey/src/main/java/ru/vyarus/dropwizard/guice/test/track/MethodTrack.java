@@ -25,6 +25,7 @@ import java.time.Duration;
  * @author Vyacheslav Rusakov
  * @since 11.02.2025
  */
+@SuppressWarnings("PMD.OverrideBothEqualsAndHashCodeOnComparable")
 @SuppressFBWarnings("EQ_COMPARETO_USE_OBJECT_EQUALS")
 public class MethodTrack implements Comparable<MethodTrack> {
 

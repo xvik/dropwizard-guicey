@@ -34,7 +34,7 @@ public final class TestSupportHolder {
      * @throws java.lang.IllegalStateException if any support object already bound in thread
      */
     public static void setContext(final DropwizardTestSupport<?> support,
-                                  final @Nullable TestClientFactory clientFactory) {
+                                  @Nullable final TestClientFactory clientFactory) {
         setContext(support, TestSupport.webClient(support, clientFactory));
         Preconditions.checkNotNull(support, "Support object can't be null");
         // No check for already bound because junit tests could be hierarchical
@@ -49,7 +49,7 @@ public final class TestSupportHolder {
      * @throws java.lang.IllegalStateException if any support object already bound in thread
      */
     public static void setContext(final DropwizardTestSupport<?> support,
-                                  final @Nullable ClientSupport client) {
+                                  @Nullable final ClientSupport client) {
         Preconditions.checkNotNull(support, "Support object can't be null");
         // No check for already bound because junit tests could be hierarchical
         final boolean manageClient = client == null;

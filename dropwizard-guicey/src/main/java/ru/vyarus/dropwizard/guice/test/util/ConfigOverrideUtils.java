@@ -179,7 +179,7 @@ public final class ConfigOverrideUtils {
      * @param restMapping rest mapping to configure
      * @return config override object
      */
-    public static ConfigOverride overrideRestMapping(final @Nullable String prefix, final String restMapping) {
+    public static ConfigOverride overrideRestMapping(@Nullable final String prefix, final String restMapping) {
         return ConfigOverride.config(prefix == null ? "dw." : prefix,
                 "server.rootPath", formatRestMapping(restMapping));
     }

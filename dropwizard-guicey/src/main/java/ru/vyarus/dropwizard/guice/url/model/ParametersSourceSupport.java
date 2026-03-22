@@ -164,7 +164,7 @@ public class ParametersSourceSupport {
      */
     public ParameterSource getEntityParamSource() {
         final List<ParameterSource> res = selectParameterSources(source -> source
-                .getType().equals(Parameter.Source.ENTITY));
+                .getType() == Parameter.Source.ENTITY);
         return res.isEmpty() ? null : res.get(0);
     }
 

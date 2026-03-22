@@ -57,7 +57,7 @@ public class EagerSingletonInstaller implements FeatureInstaller, BindingInstall
         final Class<? extends Annotation> scope = VISITOR.performDetection(binding);
         // in production, all services will work as eager singletons, for report (TOOL stage) consider also valid
         Preconditions.checkArgument(scope.equals(EagerSingleton.class)
-                        || (!binder.currentStage().equals(Stage.DEVELOPMENT)
+                        || (binder.currentStage() != Stage.DEVELOPMENT
                         && scope.equals(Singleton.class)),
                 // intentionally no "at" before stacktrtace because idea may hide error in some cases
                 "Eager bean, declared manually is not marked .asEagerSingleton(): %s (%s)",

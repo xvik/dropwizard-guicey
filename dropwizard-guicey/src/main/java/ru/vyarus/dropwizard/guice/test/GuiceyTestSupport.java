@@ -40,7 +40,7 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      * @param configOverrides  configuration overrides
      */
     public GuiceyTestSupport(final Class<? extends Application<C>> applicationClass,
-                             final @Nullable String configPath,
+                             @Nullable final String configPath,
                              final ConfigOverride... configOverrides) {
         this(applicationClass, configPath, (String) null, configOverrides);
     }
@@ -54,8 +54,8 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      * @param configOverrides      configuration overrides
      */
     public GuiceyTestSupport(final Class<? extends Application<C>> applicationClass,
-                             final @Nullable String configPath,
-                             final @Nullable ConfigurationSourceProvider configSourceProvider,
+                             @Nullable final String configPath,
+                             @Nullable final ConfigurationSourceProvider configSourceProvider,
                              final ConfigOverride... configOverrides) {
         this(applicationClass, configPath, configSourceProvider, null, configOverrides);
     }
@@ -70,9 +70,9 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      * @param configOverrides      configuration overrides
      */
     public GuiceyTestSupport(final Class<? extends Application<C>> applicationClass,
-                             final @Nullable String configPath,
-                             final @Nullable ConfigurationSourceProvider configSourceProvider,
-                             final @Nullable String customPropertyPrefix,
+                             @Nullable final String configPath,
+                             @Nullable final ConfigurationSourceProvider configSourceProvider,
+                             @Nullable final String customPropertyPrefix,
                              final ConfigOverride... configOverrides) {
         super(applicationClass, configPath, configSourceProvider, customPropertyPrefix,
                 new CmdProvider<>(), configOverrides);
@@ -87,8 +87,8 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      * @param configOverrides      configuration overrides
      */
     public GuiceyTestSupport(final Class<? extends Application<C>> applicationClass,
-                             final @Nullable String configPath,
-                             final @Nullable String customPropertyPrefix,
+                             @Nullable final String configPath,
+                             @Nullable final String customPropertyPrefix,
                              final ConfigOverride... configOverrides) {
         super(applicationClass, configPath, customPropertyPrefix, new CmdProvider<>(), configOverrides);
     }
@@ -150,7 +150,7 @@ public class GuiceyTestSupport<C extends Configuration> extends DropwizardTestSu
      * @return callback result
      * @throws Exception any appeared exception
      */
-    public <T> T run(final @Nullable TestSupport.RunCallback<T> callback) throws Exception {
+    public <T> T run(@Nullable final TestSupport.RunCallback<T> callback) throws Exception {
         return TestSupport.run(this, callback);
     }
 

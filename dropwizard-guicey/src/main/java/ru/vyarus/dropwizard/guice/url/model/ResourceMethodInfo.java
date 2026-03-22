@@ -249,7 +249,7 @@ public class ResourceMethodInfo extends ParametersSourceSupport {
      * @return associated value
      */
     public Object getParameterValue(final ParameterSource source) {
-        if (Parameter.Source.ENTITY.equals(source.getType())) {
+        if (Parameter.Source.ENTITY == source.getType()) {
             return getEntity();
         }
         return getMapBySource(source.getType()).get(source.getName());
@@ -264,7 +264,7 @@ public class ResourceMethodInfo extends ParametersSourceSupport {
     public void setParameterValue(final ParameterSource source, final Object value) {
         Preconditions.checkArgument(!source.isSourceOnly(),
                 "Parameter %s value is handled internally and manual modifications are not allowed", source);
-        if (Parameter.Source.ENTITY.equals(source.getType())) {
+        if (Parameter.Source.ENTITY == source.getType()) {
             setEntity(value);
         } else {
             getMapBySource(source.getType()).put(source.getName(), value);

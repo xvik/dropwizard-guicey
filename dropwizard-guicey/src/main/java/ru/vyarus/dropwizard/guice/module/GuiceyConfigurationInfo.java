@@ -471,8 +471,8 @@ public class GuiceyConfigurationInfo {
     public List<Class<Object>> getExtensionsRegisteredManually() {
         return typesOnly(context.getItems(ConfigItem.Extension,
                 Filters.<ExtensionItemInfo>enabled()
-                        .and(it -> it.getRegistrationScopeType().equals(ConfigScope.Application)
-                                || it.getRegistrationScopeType().equals(ConfigScope.GuiceyBundle))));
+                        .and(it -> it.getRegistrationScopeType() == ConfigScope.Application
+                                || it.getRegistrationScopeType() == ConfigScope.GuiceyBundle)));
     }
 
     /**

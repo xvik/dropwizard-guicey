@@ -44,7 +44,7 @@ public final class ResourceParametersConverter {
                 !source.isSourceOnly()
                         // avoid using converter for entity because it would always be to string instead of
                         // json serialization
-                        && !Parameter.Source.ENTITY.equals(source.getType()))) {
+                        && Parameter.Source.ENTITY != source.getType())) {
             final Parameter param = source.getParameter();
             final ParamConverter<?> converter = factory
                     .getConverter(param.getRawType(), param.getType(), param.getAnnotations());

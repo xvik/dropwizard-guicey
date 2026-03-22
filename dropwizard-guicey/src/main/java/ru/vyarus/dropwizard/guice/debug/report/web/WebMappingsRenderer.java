@@ -220,7 +220,7 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
                 continue;
             }
             final String line = renderGuiceWebElement(model, element);
-            if (model.getType().equals(WebElementType.FILTER)) {
+            if (model.getType() == WebElementType.FILTER) {
                 filters.add(line);
             } else {
                 servlets.add(line);
@@ -231,7 +231,7 @@ public class WebMappingsRenderer implements ReportRenderer<MappingsConfig> {
 
     private String renderGuiceWebElement(final WebElementModel model, final Element element) throws Exception {
         return String.format("%-15s %-20s %-7s %-30s %s",
-                model.getType().equals(WebElementType.FILTER) ? "guicefilter" : "guiceservlet",
+                model.getType() == WebElementType.FILTER ? "guicefilter" : "guiceservlet",
                 model.getPattern(),
                 model.getPatternType() == UriPatternType.REGEX ? "regex" : "",
                 (model.isInstance() ? "instance of " : "") + GuiceModelUtils.renderKey(model.getKey()),

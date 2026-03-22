@@ -48,17 +48,17 @@ public class CommandResult<C extends Configuration> {
      * @param environment   environment instance
      * @param injector      injector instance
      */
-    @SuppressWarnings("checkstyle:ParameterNumber")
+    @SuppressWarnings({"checkstyle:ParameterNumber", "PMD.ExcessiveParameterList"})
     public CommandResult(final boolean success,
-                         final @Nullable Throwable exception,
+                         @Nullable final Throwable exception,
                          final String output,
                          final String errorOutput,
-                         final @Nullable Command command,
+                         @Nullable final Command command,
                          final Application<C> app,
                          final Bootstrap<C> bootstrap,
-                         final @Nullable C configuration,
-                         final @Nullable Environment environment,
-                         final @Nullable Injector injector) {
+                         @Nullable final C configuration,
+                         @Nullable final Environment environment,
+                         @Nullable final Injector injector) {
         this.success = success;
         this.exception = exception;
         this.output = output;

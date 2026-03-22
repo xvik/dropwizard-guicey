@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
  * @author Vyacheslav Rusakov
  * @since 12.02.2025
  */
+@SuppressWarnings("PMD.OverrideBothEqualsAndHashCodeOnComparable")
 @SuppressFBWarnings("EQ_COMPARETO_USE_OBJECT_EQUALS")
 public class MethodSummary implements Comparable<MethodSummary> {
 

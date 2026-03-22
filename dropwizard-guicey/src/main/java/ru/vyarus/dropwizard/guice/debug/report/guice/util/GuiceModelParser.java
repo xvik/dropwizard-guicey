@@ -87,6 +87,7 @@ public final class GuiceModelParser {
      * @param element  element to analyze
      * @return parsed descriptor or null if element is not supported (or intentionally skipped)
      */
+    @SuppressWarnings("PMD.AvoidDeeplyNestedIfStmts")
     public static BindingDeclaration parseElement(final Injector injector, final Element element) {
         final BindingDeclaration dec = element.acceptVisitor(ELEMENT_VISITOR);
 

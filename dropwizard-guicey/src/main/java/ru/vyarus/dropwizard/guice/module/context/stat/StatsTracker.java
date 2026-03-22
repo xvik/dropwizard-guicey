@@ -94,7 +94,7 @@ public final class StatsTracker {
      */
     public void startJerseyTimer(final Stat name) {
         timer(GuiceyTime);
-        if (!JerseyTime.equals(name)) {
+        if (JerseyTime != name) {
             timer(JerseyTime);
         }
         timer(name);
@@ -107,7 +107,7 @@ public final class StatsTracker {
      */
     public void stopJerseyTimer(final Stat name) {
         timers.get(GuiceyTime).stop();
-        if (!JerseyTime.equals(name)) {
+        if (JerseyTime != name) {
             timers.get(JerseyTime).stop();
         }
         timers.get(name).stop();

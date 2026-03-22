@@ -354,7 +354,7 @@ public class GuiceBindingsRenderer implements ReportRenderer<GuiceConfig> {
             while (curr != null && (curr.getTarget() != null || curr.getProvidedBy() != null)) {
                 final Key link = curr.getTarget();
                 if (link != null) {
-                    final String tag = curr.getType().equals(DeclarationType.ConvertedConstant)
+                    final String tag = curr.getType() == DeclarationType.ConvertedConstant
                             ? "converted" : "linked";
                     line.append("  --[").append(tag).append("]-->  ").append(GuiceModelUtils.renderKey(link));
                 } else {

@@ -136,7 +136,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
         }
         final TreeNode bindings = new TreeNode("GUICE BINDINGS");
         for (final ItemId scope : scopes) {
-            if (recognize(scope).equals(Module)) {
+            if (recognize(scope) == Module) {
                 final TreeNode module = new TreeNode(RenderUtils.renderClassLine(scope.getType()));
                 // note that items may actually be bound by submodules, but they always show under the top module
                 // (only top module is visible in configuration)
@@ -355,7 +355,7 @@ public class ContextTreeRenderer implements ReportRenderer<ContextTreeConfig> {
      * @return true if item is bundle and its hidden by config, false otherwise
      */
     private boolean isHiddenBundle(final ContextTreeConfig config, final ItemInfo info) {
-        return ConfigItem.Bundle.equals(info.getItemType()) && !isScopeVisible(config, null, info.getId());
+        return ConfigItem.Bundle == info.getItemType() && !isScopeVisible(config, null, info.getId());
     }
 
     /**
