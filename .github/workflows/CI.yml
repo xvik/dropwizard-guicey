@@ -42,7 +42,7 @@ jobs:
         if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
         run: ./gradlew jacocoTestReport --no-daemon
 
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
         with:
           files: build/reports/jacoco/test/jacocoTestReport.xml
