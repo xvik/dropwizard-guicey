@@ -1,20 +1,20 @@
 # Spock 2
 
 !!! note ""
-    [Migration from spock 1](spock.md#migration-to-spock-2)
+    [Migration from Spock 1](spock.md#migration-to-spock-2)
 
-There are no special extensions for [Spock 2](http://spockframework.org) (like it was for spock 1),
-instead I did an extra [integration library](https://github.com/xvik/spock-junit5),
-so you can use existing [Junit 5 extensions](junit5/setup.md) with spock.
+There are no special extensions for [Spock 2](https://spockframework.org) (as there were for Spock 1),
+instead I created an extra [integration library](https://github.com/xvik/spock-junit5),
+so you can use existing [JUnit 5 extensions](junit5/setup.md) with Spock.
 
 !!! note
-    You are not limited to guicey junit 5 extensions, you can use ([almost](https://github.com/xvik/spock-junit5#what-is-supported)) any junit 5 extensions.
-    And you can use any other spock extensions together with junit extensions.
+    You are not limited to Guicey JUnit 5 extensions, you can use ([almost](https://github.com/xvik/spock-junit5#what-is-supported)) any JUnit 5 extensions.
+    And you can use any other Spock extensions together with JUnit extensions.
 
 
 ## Setup
 
-You will need the following dependencies (assuming BOM used for versions management):
+You will need the following dependencies (assuming the BOM is used for version management):
 
 ```groovy
 testImplementation 'ru.vyarus:spock-junit5'
@@ -24,7 +24,7 @@ testImplementation 'org.junit.jupiter:junit-jupiter-api'
 ```
 
 !!! note
-    In gradle you need to explicitly [activate junit 5 support](https://docs.gradle.org/current/userguide/java_testing.html#using_junit5) with
+    In Gradle you need to explicitly [activate JUnit 5 support](https://docs.gradle.org/current/userguide/java_testing.html#using_junit5) with
     ```groovy
     test {
         useJUnitPlatform()
@@ -34,11 +34,11 @@ testImplementation 'org.junit.jupiter:junit-jupiter-api'
 
 ## Usage
 
-See [junit 5 extensions docs](junit5/setup.md) for usage details (it's all used the same).
+See the [JUnit 5 extensions docs](junit5/setup.md) for usage details (they are all used the same way).
 
 !!! warning
-    Junit 5 extensions would not work with `@Shared` spock fields! You can still use
-    such fields directly, but don't expect junit 5 extensions to be able to work with such fields (they can't "see" it).
+    JUnit 5 extensions would not work with `@Shared` Spock fields! You can still use
+    such fields directly, but don't expect JUnit 5 extensions to be able to work with such fields (they can't "see" them).
 
 Here is a simple example:
 
@@ -64,21 +64,21 @@ class MyTest extends Specification {
 ```
 
 !!! tip
-    Note that [parameter injection](junit5/inject.md#parameter-injection) will also work in test and fixture (setup/cleanup) methods
+    Note that [parameter injection](junit5/inject.md#parameter-injection) will also work in test and fixture (setup/cleanup) methods.
 
-Overall, you get best of both worlds: same extensions as in junit 5 (and ability to use all other junit extensions)
-and spock expressiveness for writing tests.
+Overall, you get the best of both worlds: the same extensions as in JUnit 5 (and the ability to use all other JUnit extensions)
+and Spock expressiveness for writing tests.
 
 ## Testing commands
 
 !!! warning
-    Commands execution overrides System IO and so can't run in parallel with other tests!
+    Command execution overrides System I/O and so can't run in parallel with other tests!
 
     Use [`@Isolated`](https://spockframework.org/spock/docs/2.0/all_in_one.html#_isolated_execution) 
     on such tests to prevent parallel execution with other tests
 
 Command execution is usually a short-lived action, so it is not possible to
-write an extension for it. Command could be tested only with generic utility:
+write an extension for it. A command could be tested only with a generic utility:
 
 ```java
 def "Test command execution"() {
@@ -92,20 +92,20 @@ def "Test command execution"() {
 }
 ```
 
-Read more details in [junit 5 guide](junit5/command.md)
+Read more details in the [JUnit 5 guide](junit5/command.md)
 
 !!! note
-    The same utility could be used to test [application startup fails](junit5/startup.md)
+    The same utility could be used to test [application startup failures](junit5/startup.md)
 
 ## Special cases
 
-Junit 5 doc [describes](junit5/startup.md)  [system stubs](https://github.com/webcompere/system-stubs) library
-usage. It is completely valid for spock, I'll just show a few examples here on how to:
+The JUnit 5 docs [describe](junit5/startup.md) the [system stubs](https://github.com/webcompere/system-stubs) library
+usage. It is completely valid for Spock, I'll just show a few examples here on how to:
 
 * Modify (and reset) environment variables
 * Modify (and reset) system properties
 * Validate system output (e.g. testing logs)
-* Intercepting system exit
+* Intercept system exit
 
 ```groovy
 @ExtendWith(SystemStubsExtension)

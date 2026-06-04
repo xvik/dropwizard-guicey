@@ -1,9 +1,9 @@
 # AssertJ
 
 It is highly recommended to use [AssertJ](https://assertj.github.io/doc/) instead of JUnit assertions
-(dropwizard team use for testing dropwizard).
+(the Dropwizard team uses it for testing Dropwizard).
 
-AssertJ version is already managed by dropwizard BOM:
+AssertJ version is already managed by the Dropwizard BOM:
 
 ```groovy
 testImplementation 'org.assertj:assertj-core'
@@ -31,13 +31,13 @@ assertThat(frodo.getName()).startsWith("Fro")
     See [assertions guide](https://assertj.github.io/doc/#assertj-core-assertions-guide)
 
 !!! important 
-    In many cases, assertj assertion fail messages would be much more informative,
-    which speeds up tests development and regressions investigation.
+    In many cases, AssertJ assertion failure messages would be much more informative,
+    which speeds up test development and regression investigation.
 
 ## Text assertions
 
 AssertJ greatly simplifies large text comparisons (e.g. console output).
-In Junit, to check if output contains some part you'll have to do:
+In JUnit, to check if the output contains some part, you'll have to do:
 
 ```java
 Assertions.assertTrue(output.contains("some large string chunk here"))
@@ -45,13 +45,13 @@ Assertions.assertTrue(output.contains("some large string chunk here"))
 
 If assertion fails, you'll only:
 
-```
+```text
 org.opentest4j.AssertionFailedError: 
 Expected :true
 Actual   :false
 ```
 
-For AssertJ assertion:
+For an AssertJ assertion:
 
 ```java
 Assertions.assertThat(output).contains("some large string chunk here");
@@ -59,7 +59,7 @@ Assertions.assertThat(output).contains("some large string chunk here");
 
 You'll have all required info in the console:
 
-```
+```text
 java.lang.AssertionError: 
 Expecting actual:
   "
@@ -184,7 +184,7 @@ SoftAssertions.assertSoftly(softly -> {
 });
 ```
 
-```
+```text
 Multiple Failures (2 failures)
  -- failure 1 --
  Expecting:
@@ -238,15 +238,15 @@ Table table = connection.table("table_name").build();
     performed after table creation! So always create new table before assertions.
 
 
-To output it to console (useful for modifications on empty or small tables):
+To output it to the console (useful for modifications on empty or small tables):
 
 ```java
 Outputs.output(table).toConsole();
 ```
 
-Will print the entire table in console:
+This will print the entire table in the console:
 
-```
+```text
 [MEMBERS table]
 |-----------|---------|-----------|-----------|--------------|-----------|-----------|-----------|
 |           |         | *         |           |              |           |           |           |

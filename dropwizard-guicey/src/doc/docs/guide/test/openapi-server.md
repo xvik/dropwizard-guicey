@@ -1,4 +1,4 @@
-# Openapi fake server
+# OpenAPI fake server
 
 !!! note ""
     See [example source](https://github.com/xvik/dropwizard-guicey/tree/master/examples/openapi-client-server)
@@ -71,14 +71,14 @@ sourceSets.main.java.srcDir "${openApiGenerate.outputDir.get()}/src/main/java"
 sourceSets.main.java.srcDir "${openApiGenerateServer.outputDir.get()}/src/gen/java"
 ```
 
-`openApiGenerate` creates client in build/petstore/client
-`openApiGenerateServer` creates server stub in build/petstore/server
+`openApiGenerate` creates the client in build/petstore/client.
+`openApiGenerateServer` creates the server stub in build/petstore/server.
 
 ## Client
 
 Actual client interfaces are generated in:
 
-```
+```text
 /build/petstore/client/src/main/java/com/petstore/api
 ```
 
@@ -108,22 +108,22 @@ public class PetStoreApiModule extends DropwizardAwareModule<ExampleConfig> {
 }
 ```
 
-(target url is in configuration)
+(target URL is in the configuration)
 
 
 ## Server
 
 Generated server stub:
 
-```
+```text
 /build/petstore/server/src/main/java/com/petstore/server
 ```
 
-NOTE: server will also generate its own model, but this part will be attached directly (from `gen` folder).
+Note: the server will also generate its own model, but this part will be attached directly (from the `gen` folder).
 
 Now copy server files into the main sources (preserving package):
 
-```
+```text
 /build/petstore/server/src/main/java/com/petstore/server -->  /src/main/java/com/petstore/server
 ```
 
@@ -172,7 +172,7 @@ public class FakePetStoreServer {
 
 ## Bundle
 
-Use GuiceyBundle for activation:
+Use `GuiceyBundle` for activation:
 
 ```java
 public class PetStoreBundle implements GuiceyBundle {

@@ -1,15 +1,15 @@
 # Spock 1
 
-[Spock framework](http://spockframework.org) allows you to write much clearer tests (comparing to junit) thanks to 
+[Spock framework](https://spockframework.org) allows you to write much clearer tests (comparing to JUnit) thanks to
 groovy language.
 
 !!! warning
-    Since guicey 5.5 spock 1 support was extracted from guicey to [external module](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-test-spock).
+    Since Guicey 5.5 Spock 1 support was extracted from Guicey to [external module](https://github.com/xvik/dropwizard-guicey/tree/master/guicey-test-spock).
     Package remains the same to simplify migration (only additional dependency would be required)
-    
-    This was required because spock 1 does not work on JDK 16 and above.
 
-DEPRECATED because Implementation relies on deprecated junit 4 rules. Consider [migration to spock 2 (junit 5)](#migration-to-spock-2)
+    This was required because Spock 1 does not work on JDK 16 and above.
+
+DEPRECATED because Implementation relies on deprecated JUnit 4 rules. Consider [migration to Spock 2 (JUnit 5)](#migration-to-spock-2)
 
 ## Setup
 
@@ -19,9 +19,9 @@ You will need the following dependencies (assuming BOM used for versions managem
 testImplementation 'ru.vyarus.guicey:guicey-test-spock'
 ```
 
-### With Junit 5
+### With JUnit 5
 
-OR you can use it with junit 5 vintage engine:
+OR you can use it with JUnit 5 vintage engine:
 
 ```groovy
 testImplementation 'ru.vyarus.guicey:guicey-test-spock'
@@ -30,13 +30,13 @@ testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
 testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
 ```
 
-This way you can write both spock (groovy) and junit 5 (java or groovy) tests.
+This way you can write both Spock (groovy) and JUnit 5 (java or groovy) tests.
 
 ## Extensions
 
 Provided extensions:
 
-* `@UseGuiceyApp` - for lightweight tests (without starting web part, only guice context)
+* `@UseGuiceyApp` - for lightweight tests (without starting web part, only Guice context)
 * `@UseDropwizardApp` - for complete integration tests
 
 Both extensions allow using injections directly in specifications (like spock-guice).
@@ -46,7 +46,7 @@ common for all tests. But, it is deprecated in favor of native hooks support in 
 
 ## Testing core logic
 
-`@UseGuiceyApp` runs all guice logic without starting jetty (so resources, servlets and filters will not be available).
+`@UseGuiceyApp` runs all Guice logic without starting jetty (so resources, servlets and filters will not be available).
 `Managed` objects will still be handled correctly.
 
 ```groovy
@@ -125,14 +125,14 @@ more resides in root). When used with existing configuration file, this paramete
 
 ## Guice injections
 
-Any guice bean may be injected directly into test field:
+Any Guice bean may be injected directly into test field:
 
 ```groovy
 @Inject
 SomeBean bean
 ```
 
-This may be even bean not declared in guice modules (JIT injection will occur).
+This may be even bean not declared in Guice modules (JIT injection will occur).
 
 To better understand injection scopes look the following test:
 
@@ -183,7 +183,7 @@ class InjectionTest extends Specification {
 ```
 
 !!! note
-    Guice AOP will not work on test methods (because test instances not created by guice).
+    Guice AOP will not work on test methods (because test instances not created by Guice).
 
 ## Client
 
@@ -252,8 +252,8 @@ Raw client usage:
 client.target("http://somedomain:8080/dummy/").request().buildGet().invoke()
 ```
 
-!!! warning 
-    Client object could be injected with both dropwizard and guicey extensions, but in case of guicey extension,
+!!! warning
+    Client object could be injected with both Dropwizard and Guicey extensions, but in case of Guicey extension,
     only raw client could be used (because web part not started all other methods will throw NPE)
 
 ## Configuration
@@ -363,7 +363,7 @@ class SomeTest extends BaseTest {}
 !!! warning
     Only one `@UseGuiceyHooks` declaration may be used in test hierarchy:
     for example, you can't declare it in base class and then another one on extended class
-    - base for a group of tests. This is spock limitation (only one extension will actually work)
+    - base for a group of tests. This is Spock limitation (only one extension will actually work)
     but should not be an issue for most cases.
 
 ## Extension configuration unification
@@ -393,11 +393,11 @@ class Test1 extends AbstractTest {
 
 ## Dropwizard startup error
 
-`StartupErrorRule` may be used to intercept dropwizard `#!java System.exit(1)` call.
-But it will work different then for junit:
-`then` section is always called with exception (`CheckExitCalled`). 
-Also, `then` section may be used for assertion after exit calls and so there is 
-no need to add custom assertion callbacks (required by junit tests).
+`StartupErrorRule` may be used to intercept Dropwizard `#!java System.exit(1)` call.
+But it will work differently than for JUnit:
+`then` section is always called with exception (`CheckExitCalled`).
+Also, `then` section may be used for assertion after exit calls and so there is
+no need to add custom assertion callbacks (required by JUnit tests).
 
 ```groovy
 class ErrorTest extends Specification {
@@ -452,14 +452,14 @@ Setup order:
 
 ## Migration to Spock 2
 
-There is no special extensions for Spock 2, instead junit 5 integrations
+There is no special extensions for Spock 2, instead JUnit 5 integrations
 must be used with it, using [special library](https://github.com/xvik/spock-junit5)
 
-Current spock extensions are almost equivalent to junit5 extensions (in features and behaviour):
+Current Spock extensions are almost equivalent to JUnit 5 extensions (in features and behaviour):
 
 * Instead of `@UseGuiceyApp` use `@TestGuiceyApp`
 * Instead of `@UseDropwizardApp` use `@TestDropwizardApp`
-* Hooks can be specified with hooks declaration [in extensions](http://xvik.github.io/dropwizard-guicey/5.4.2/guide/test/junit5/#application-test-modification) or as [test fields](http://xvik.github.io/dropwizard-guicey/5.4.2/guide/test/junit5/#hook-fields)
+* Hooks can be specified with hook declarations [in extensions](https://xvik.github.io/dropwizard-guicey/5.4.2/guide/test/junit5/#application-test-modification) or as [test fields](https://xvik.github.io/dropwizard-guicey/5.4.2/guide/test/junit5/#hook-fields)
 * Instead of `StartupErrorRule` use [system-stubs](https://github.com/webcompere/system-stubs) - the successor of system rules
 
 ### Client
@@ -478,7 +478,7 @@ def "Check something"(ClientSupport client) {}
 
 ### Config overrides
 
-Junit extension does not require an annotation for each override, so
+The JUnit extension does not require an annotation for each override, so
 INSTEAD of:
 
 ```groovy
@@ -529,4 +529,4 @@ Note that config override may be registered with `Supplier`:
 
 !!! warning
     Don't use `@Shared` fields instead of static - it wouldn't work!
-    Also non-static field declaration is not supported by junit extension.
+    Also non-static field declaration is not supported by JUnit extension.
