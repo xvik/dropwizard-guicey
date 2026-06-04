@@ -1,14 +1,14 @@
 # Testing with spies
 
-[Mockito](https://site.mockito.org/) spies allows dynamic modification of real objects behavior
-(configured same as [mocks](mocks.md), but, by default, all methods work as in raw bean).
+[Mockito](https://site.mockito.org/) spies allow dynamic modification of real object behavior
+(configured the same as [mocks](mocks.md), but, by default, all methods work as in the raw bean).
 
-Guicey provides `SpiesHook` for overriding guice beans with mockito spies.
+Guicey provides `SpiesHook` for overriding Guice beans with Mockito spies.
 
 !!! important
-    Spy creation requires real bean instance and so guicey use AOP to intercept real bean
-    access and redirecting all calls through a dynamically created (on first access)
-    spy object. This means that spies would only work with guice-managed beans.
+    Spy creation requires a real bean instance and so Guicey uses AOP to intercept real bean
+    access and redirect all calls through a dynamically created (on first access)
+    spy object. This means that spies would only work with Guice-managed beans.
 
     If you need to spy for a manual instance - use [partial mocks](mocks.md#partial-mocks)
 
@@ -22,7 +22,7 @@ and [baeldung guides](https://www.baeldung.com/mockito-series).
 
 ## Setup
 
-Requires mockito dependency (version may be omitted if dropwizard BOM used):
+Requires mockito dependency (version may be omitted if Dropwizard BOM used):
 
 ```groovy
 testImplementation 'org.mockito:mockito-core'
@@ -67,14 +67,14 @@ TestSupport.build(App.class)
         })
 ```
 
-Here `doReturn` refer to `Mockito.doReturn` used with static import.
+Here `doReturn` refers to `Mockito.doReturn` used with a static import.
 
 !!! note
-    As real guice bean used under the hood, all AOP, applied to the original bean, will work.
+    As a real Guice bean is used under the hood, all AOP applied to the original bean will work.
 
 !!! tip
-    Calling guice proxy `injector.getInstance(Service.class).get(11)` and spy object
-    directly `spy.get(11)` is equivalent (because guice returns AOP proxy which redirects
+    Calling Guice proxy `injector.getInstance(Service.class).get(11)` and spy object
+    directly `spy.get(11)` is equivalent (because Guice returns AOP proxy which redirects
     call to the spy)
 
 See other examples in [mocks section](mocks.md#mocking-examples).
@@ -171,7 +171,7 @@ public static class Mng implements Managed {
 If you run multiple tests with the same application, then it makes sense to re-configure
 spies for each test and so the previous spy state must be reset.
 
-Use `hook.resetSpies()` to reset all registered mocks
+Use `hook.resetSpies()` to reset all registered spies
 
 ## Accessing spy
 

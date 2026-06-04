@@ -1,22 +1,22 @@
 # Testing with mocks
 
 [Mockito](https://site.mockito.org/) mocks are essentially an automatic [stubs](stubs.md):
-with the ability to dynamically declare method behavior (by default, all mock methods 
-return default value: often null). 
+with the ability to dynamically declare method behavior (by default, all mock methods
+return default value: often null).
 
-Guicey provides `MocksHook` for overriding guice beans with mockito mocks.
+Guicey provides `MocksHook` for overriding Guice beans with Mockito mocks.
 
 !!! warning
-    Stubs will not work for HK2 beans     
+    Mocks will not work for HK2 beans
 
-Mockito documentation is written in the `Mockito` class [javadoc](https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html).  
-Additional docs could be found in [mockito wiki](https://github.com/mockito/mockito/wiki/FAQ)  
+Mockito documentation is written in the `Mockito` class [javadoc](https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html).
+Additional docs could be found in [mockito wiki](https://github.com/mockito/mockito/wiki/FAQ)
 Also, see official [mockito refcard](https://dzone.com/refcardz/mockito)
 and [baeldung guides](https://www.baeldung.com/mockito-series).
 
 ## Setup
 
-Requires mockito dependency (version may be omitted if dropwizard BOM used):
+Requires the Mockito dependency (version may be omitted if the Dropwizard BOM is used):
 
 ```groovy
 testImplementation 'org.mockito:mockito-core'
@@ -65,13 +65,13 @@ TestsSupport.build(App.class)
         });
 ```
 
-Here `when` refer to `Mockito.when()` used with static import.
+Here `when` refers to `Mockito.when()` used with a static import.
 
-!!! important 
-    Guice AOP would not be applied to mocks (only guice-managed beans support AOP)
+!!! important
+    Guice AOP would not be applied to mocks (only Guice-managed beans support AOP)
 
 
-You can also provide a pre-created mock instance (this does not make much sence, but possible):
+You can also provide a pre-created mock instance (this does not make much sense, but is possible):
 
 ```java
 hook.mock(Service.class, mockInstance);
@@ -163,7 +163,7 @@ Assertions.assertEquals("value", service.foo());
 ```
 
 !!! note
-    The [spies](spies.md) section covers only spies, spying on real guice bean instance.
+    The [spies](spies.md) section covers only spies, spying on real Guice bean instance.
     Using spies for partial mocks is more related to pure mocking and so it's described here.
 
 ## Accessing mock
@@ -171,8 +171,8 @@ Assertions.assertEquals("value", service.foo());
 Mock instance (used to configure methods behavior) could be obtained:
 
 1. On registration (`Service mock = hook.mock(Service.class)`)
-2. From guice injector: `Service mock = injector.getInstance(Service.class)`
-   (as hook is registered by instance, guice AOP could not be applied for it and so it 
+2. From Guice injector: `Service mock = injector.getInstance(Service.class)`
+   (as hook is registered by instance, Guice AOP could not be applied for it and so it
    would always be a raw mock)
 3. From hook: `Service mock = hook.getMock(Service.class)`
 

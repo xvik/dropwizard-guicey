@@ -1,6 +1,6 @@
 # Testing performance (bean tracking)
 
-Tracker records guice bean methods execution:
+Tracker records Guice bean methods execution:
 
 1. Collect method call arguments and result for each call
 2. Log slow methods execution
@@ -18,7 +18,7 @@ Tracker records guice bean methods execution:
 ## Setup
 
 Not strictly required, but trackers provide type-safe search api using mockito, and so
-you'll need mockito dependency **only if** you wish to use this api (version may be omitted if dropwizard BOM used):
+you'll need mockito dependency **only if** you wish to use this api (version may be omitted if Dropwizard BOM used):
 
 ```groovy
 testImplementation 'org.mockito:mockito-core'
@@ -67,7 +67,7 @@ TestSupport.build(DefaultTestApp .class)
 
 In this example, trace was enabled (optional) and so each method call would be logged like this:
 
-```
+```text
 \\\---[Tracker<Service>] 0.41 ms      <@1b0e9707> .get(11) = "Hello 11"
 ```
 
@@ -88,7 +88,7 @@ returns a configuration builder. Final registration appears only after `.add()` 
 
 Tracing might be useful to see each tracked method call in console with parameters and execution time:
 
-```
+```text
 \\\---[Tracker<Service>] 0.41 ms      <@1b0e9707> .foo(1) = "1 call"
 \\\---[Tracker<Service>] 0.02 ms      <@1b0e9707> .foo(2) = "2 call"
 \\\---[Tracker<Service>] 0.12 ms      <@1b0e9707> .bar(1) = "1 bar"
@@ -111,8 +111,8 @@ hook.track(Service .class)
 
 By default, tracker would log methods, executed longer than 5 seconds:
 
-```
-WARN  [2025-05-09 08:30:38,458] ru.vyarus.dropwizard.guice.test.track.Tracker: 
+```text
+WARN  [2025-05-09 08:30:38,458] ru.vyarus.dropwizard.guice.test.track.Tracker:
 \\\---[Tracker<Service>] 7.07 ms      <@7634f2b> .foo() = "foo"
 ```
 
@@ -183,10 +183,10 @@ hook.track(Service .class)
 
 ### Max length
 
-Methods could consume or return large string, but using large stings for console 
+Methods could consume or return large strings, but using large strings for console
 output is not desired. All strings larger then configured size would be cut with "..." suffix:
 
-```
+```text
 \\\---[Tracker<Service>] 0.08 ms      <@66fb45e5> .baz("largelargelargelargelargelarge...")
 ```
 
@@ -266,9 +266,9 @@ Assertions.assertEquals(1, summary.getMetrics().getValues().length);
 Assertions.assertTrue(summary.getMetrics().getMin() < 1000);
 ```
 
-Tracker use dropwizard metrics, so stats provide common values like mean time, median time, 95 percentile, etc.
+Tracker use Dropwizard metrics, so stats provide common values like mean time, median time, 95 percentile, etc.
 
-There is a default statistics report implementation, which might be used for console reporting:
+There is a default statistics report implementation, which can be used for console reporting:
 
 ```java
 System.out.println(tracker.getStats().render());
@@ -285,10 +285,10 @@ With a high number of executions percentile and mean values would become more re
 
 Here is an example of tracking `GuiceyConfigurationInfo` with activated `.printAllGuiceBindings()` report:
 
-```
-	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]     
-	GuiceyConfigurationInfo                  getNormalModuleIds()                               1          0          1.076 ms   1.076 ms   1.076 ms   1.076 ms   1.076 ms  
-	GuiceyConfigurationInfo                  getModulesDisabled()                               1          0          0.038 ms   0.038 ms   0.038 ms   0.038 ms   0.038 ms  
+```text
+	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]
+	GuiceyConfigurationInfo                  getNormalModuleIds()                               1          0          1.076 ms   1.076 ms   1.076 ms   1.076 ms   1.076 ms
+	GuiceyConfigurationInfo                  getModulesDisabled()                               1          0          0.038 ms   0.038 ms   0.038 ms   0.038 ms   0.038 ms
 	GuiceyConfigurationInfo                  getOverridingModuleIds()                           1          0          0.034 ms   0.034 ms   0.034 ms   0.034 ms   0.034 ms  
 	GuiceyConfigurationInfo                  getExtensionsDisabled()                            1          0          0.020 ms   0.020 ms   0.020 ms   0.020 ms   0.020 ms  
 	GuiceyConfigurationInfo                  getOptions()                                       1          0          0.005 ms   0.005 ms   0.005 ms   0.005 ms   0.005 ms  
