@@ -1,14 +1,14 @@
 # Testing commands
 
-`CommandTestSupport` object is a commands test utility equivalent to `DropwizardTestSupport`.
-It uses dropwizard `Cli` for arguments recognition and command selection.
+`CommandTestSupport` is a command test utility equivalent to `DropwizardTestSupport`.
+It uses Dropwizard `Cli` for argument recognition and command selection.
 
-The main difference with `DropwizardTestSupport` is that command execution is
-a short-lived process and all assertions are possible only *after* the execution.
-That's why command runner would include in the result all possible dropwizard objects,
+The main difference from `DropwizardTestSupport` is that command execution is
+a short-lived process and all assertions are possible only *after* execution.
+That's why command runner would include in the result all possible Dropwizard objects,
 created during execution (because it would be impossible to reference them after execution).
 
-New builder (almost the same as application execution builder) simplify commands execution:
+A new builder (almost the same as the application execution builder) simplifies command execution:
 
 ```java
 CommandResult result = TestSupport.buildCommandRunner(App.class)
@@ -18,10 +18,10 @@ Assertions.assertTrue(result.isSuccessful());
 ```
 
 This runner could be used to run *any* command type (simple, configured, environment).
-The type of command would define what objects would be present ofter the command execution
+The type of command would define what objects would be present after command execution
 (for example, `Injector` would be available only for `EnvironmentCommand`).
 
-Run command arguments are the same as real command arguments (the same `Cli` used for commands parsing).
+Run command arguments are the same as real command arguments (the same `Cli` is used for command parsing).
 You can only omit configuration path and use builder instead:
 
 ```java
@@ -32,8 +32,8 @@ You can only omit configuration path and use builder instead:
 ```
 
 !!! important
-    Such run *never fails* with an exception: any appeared exception would be
-    stored inside the response:
+    Such a run *never fails* with an exception: any exception that appears would be
+    stored inside the result:
 
     ```java
     Assertions.assertFalse(result.isSuccessful());  
@@ -42,7 +42,7 @@ You can only omit configuration path and use builder instead:
 
 ### IO
 
-Runner use System.in/err/out replacement. All output is intercepted and could be
+The runner uses `System.in/err/out` replacement. All output is intercepted and could be
 asserted:
 
 ```java
@@ -65,12 +65,12 @@ CommandResult result = TestSupport.buildCommandRunner(App.class)
         .run("quiz")
 ```
 
-At least, the required number of answers must be provided (otherwise error would be thrown,
-indicating not enough inputs)
+At a minimum, the required number of answers must be provided (otherwise an error would be thrown,
+indicating that there are not enough inputs)
 
 !!! warning
     Due to IO overrides, command tests could not run in parallel.   
-    For junit 5, such tests could be annotated with [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization)
+    For JUnit 5, such tests could be annotated with [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization)
     (to prevent execution in parallel with other tests)
 
 ### Configuration

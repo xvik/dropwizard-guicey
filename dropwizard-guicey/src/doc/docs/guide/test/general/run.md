@@ -1,9 +1,9 @@
 # Testing application
 
-Application could be started in 2 ways:
+An application could be started in 2 ways:
 
-1. Core - create only guice injector (without starting web services) - ideal for business logic testing (pretty fast)
-2. Web - full application start to test web endpoints (and complete flows)
+1. Core - create only Guice injector (without starting web services) - ideal for business logic testing (pretty fast)
+2. Web - full application startup to test web endpoints (and complete flows)
 
 The second case is handled by [DropwizardTestSupport](https://www.dropwizard.io/en/release-4.0.x/manual/testing.html#non-junit)
 and the first one by `GuiceyTestSupport` object (extending `DropwizardTestSupport`).
@@ -37,7 +37,7 @@ Object serviceValue = TestSupport.build(App.class)
 ```
 
 !!! note
-    Builder methods are almost equal to [junit 5 extension builder](../junit5/run.md#alternative-declaration)
+    Builder methods are almost equal to the [JUnit 5 extension builder](../junit5/run.md#alternative-declaration).
 
 !!! important
     All run methods declared as `throws Exception`. This was done to bypass original
@@ -71,14 +71,14 @@ TestSupport.build(App.class)
 ```
 
 !!! note
-    Config override (`.configOverride()`) mechanism is provided by dropwizard: values are stored
-    as system properties and applied in time of configuration parsing. It might not work for some
+    Config override (`.configOverride()`) mechanism is provided by Dropwizard: values are stored
+    as system properties and applied at configuration parsing time. It might not work for some
     properties (like collections) and it can't be used with manual configuration (last example).
 
-    Config modifier (`.configModifiers()`) is a guicey concept: it could be used with either 
+    Config modifier (`.configModifiers()`) is a Guicey concept: it could be used with either
     configuration file or manual configuration object. It was added to simplify config modifications
     and overcome limitations of config override. The only downside: when configuration is parsed
-    from file, modifier called after logging configuration, so to modify logging only config overrides
+    from file, the modifier is called after logging configuration, so to modify logging only config overrides
     could be used.
 
 
@@ -109,7 +109,7 @@ TestSupport.build(App.class)
         .propertyPrefix("something")
 ```
 
-Junit 5 extensions use test class (and sometimes method) name to generate unique prefixes.
+JUnit 5 extensions use the test class (and sometimes method) name to generate unique prefixes.
 
 ## Lifecycle listeners
 
@@ -182,7 +182,7 @@ All these methods are builder shortcuts (suitable for simple cases).
 
 ## Asserting execution
 
-To assert configuration or any guicey bean it would be enough to use run without callback:
+To assert configuration or any Guicey bean, it is enough to use run without a callback:
 
 ```java
 RunResult<CfgType> result = TestSupport.build(App.class).runCore();
@@ -273,11 +273,11 @@ TestSupport.run(support, injector -> {
 Other helper methods for support object (executed while the support object is active):
 
 * `TestSupport.getInjector(support)` - obtain application injector
-* `TestSupport.getBean(support, Key/Class)` - get guice bean
+* `TestSupport.getBean(support, Key/Class)` - get Guice bean
 * `TestSupport.injectBeans(support, target)` - inject annotated object fields
 * `TestSupport.webClient(support)` - construct `ClientSupport` object
 
-Support object provides references for dropwizard objects:
+Support object provides references for Dropwizard objects:
 
 ```java
 support.getEnvironment();
@@ -285,7 +285,7 @@ support.getConfiguration();
 support.getApplication();
 ```
 
-Complete example using junit:
+Complete example using JUnit:
 
 ```java
 public class RawTest {

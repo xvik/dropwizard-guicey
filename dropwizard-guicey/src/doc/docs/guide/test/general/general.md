@@ -1,8 +1,8 @@
 # General test tools
 
-!!! note "Junit 5"
-    If you're going to use junit 5, go straight to [junit 5 section](../junit5/setup.md):
-    all required general tools usage scenarios are described there.
+!!! note "JUnit 5"
+    If you're going to use JUnit 5, go straight to the [JUnit 5 section](../junit5/setup.md):
+    all required general tool usage scenarios are described there.
 
 Test framework-agnostic tools. 
 Useful when:
@@ -14,8 +14,8 @@ Useful when:
 Test utils:
 
  - `TestSupport` - root utilities class, providing easy access to other helpers
- - `DropwizardTestSupport` - [dropwizard native support](https://www.dropwizard.io/en/release-4.0.x/manual/testing.html#non-junit) for full integration tests
- - `GuiceyTestSupport` - guice context-only integration tests (without starting web part)
+ - `DropwizardTestSupport` - [Dropwizard native support](https://www.dropwizard.io/en/release-4.0.x/manual/testing.html#non-junit) for full integration tests
+ - `GuiceyTestSupport` - Guice context-only integration tests (without starting web part)
  - `CommandTestSupport` - general commands tests 
  - `ClientSupport` - web client helper (useful for calling application urls)
 
@@ -30,4 +30,4 @@ Additional features implemented with hooks:
 - [SpiesHook](spies.md) - spies support
 - [RestStubsHook](rest.md) - lightweight REST testing
 - [RecordLogsHook](logs.md) - logs testing
-- [TrackersHook](tracks.md) - guice bean calls recording and performance testing
+- [TrackersHook](tracks.md) - Guice bean calls recording and performance testing

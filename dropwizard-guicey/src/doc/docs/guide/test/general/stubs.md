@@ -2,7 +2,7 @@
 
 Stubs are hand-made replacements of real application services ("manual" or "lazy" [mocks](mocks.md)).
 
-Guicey provides `StubsHook` for overriding guice beans with stub implementations.
+Guicey provides `StubsHook` for overriding Guice beans with stub implementations.
 
 !!! warning
     Stubs will not work for HK2 beans 
@@ -12,7 +12,7 @@ There are two main cases:
 1. Stub class extends existing service: `class ServiceStub extends Service`
 2. Stub implements service interface: `class ServiceStub implements IService`
 
-Stubs replace real application services (using guice [overriding modules](../overview.md#guice-bindings-override)),
+Stubs replace real application services (using Guice [overriding modules](../overview.md#guice-bindings-override)),
 so stub would be injected in all services instead of the real service.
 
 For example, suppose we have a service:
@@ -59,7 +59,7 @@ TestsSupport.build(App.class)
     In many cases, mockito [mocks](mocks.md) and [spies](spies.md) could be more useful,
     but stubs are simpler (easier to understand, especially comparing to spies).
 
-In the example above, stub instance is created by guice.
+In the example above, stub instance is created by Guice.
 Stub could also be registered by instance:
 
 ```java

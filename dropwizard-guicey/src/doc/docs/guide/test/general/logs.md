@@ -1,9 +1,9 @@
 # Testing logs
 
-Guicey provide `RecordLogsHook` for capturing logged messages.
+Guicey provides `RecordLogsHook` for capturing logged messages.
 
 !!! important
-    Works only with logback (default dropwizard logger).
+    Works only with logback (the default Dropwizard logger).
 
 For example, suppose some service logs some technical hint at some condition:
 
@@ -96,9 +96,9 @@ then it would change logger configuration to receive required messages.
     logging configuration. This is very useful in tests (to enable `DEBUG` or `TRACE` 
     messages for exact service (or package)): `hook.register().loggers(MyClass.class).start(Level.TRACE)`
 
-During application startup **dropwizard resets loggers two times** and hook would
-re-attach appenders to compensate it. You should be able to record all messages from application startup,
-except logs from dropwizard bundles, registered BEFORE `GuiceBundle`.
+During application startup **Dropwizard resets loggers twice** and the hook would
+re-attach appenders to compensate for it. You should be able to record all messages from application startup,
+except logs from Dropwizard bundles, registered BEFORE `GuiceBundle`.
 
 If required, actual recorder object is accessible with `RecordedLog#getRecorder()`:
 it provides `attach()` and `destroy()` methods (for attaching and detaching appender).
@@ -181,5 +181,5 @@ hook.destroy()
 ```
 
 !!! note
-    Dropwizard resets loggers during startup so manual detach should not be required
+    Dropwizard resets loggers during startup, so manual detachment should not be required
     (to avoid keeping stale appenders between tests).

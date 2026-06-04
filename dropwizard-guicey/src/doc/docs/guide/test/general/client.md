@@ -1,7 +1,7 @@
 # Testing web (HTTP client)
 
 `ClientSupport` is a [JerseyClient](https://eclipse-ee4j.github.io/jersey.github.io/documentation/2.29.1/client.html)
-aware of dropwizard configuration, so you can easily call admin/main/rest urls.
+aware of Dropwizard configuration, so you can easily call admin/main/REST URLs.
 
 Creation:
 
@@ -9,7 +9,7 @@ Creation:
 ClientSupport client = TestSupport.webClient(support);
 ```
 
-where support is `DropwizardTestSupport` or `GuiceyTestSupport` (in later case it could be used only as generic client for calling external urls).
+where support is `DropwizardTestSupport` or `GuiceyTestSupport` (in the latter case it could be used only as a generic client for calling external URLs).
 
 !!! note
     There are 4 base urls:
@@ -21,7 +21,7 @@ where support is `DropwizardTestSupport` or `GuiceyTestSupport` (in later case i
 
     By default, all of them are "/" (root), but could be changed. 
 
-`CientSupport` is a client for server root (everything after port). Usually,
+`ClientSupport` is a client for the server root (everything after the port). Usually,
 a more specific client is required (app/admin/rest):
 
 ```java
@@ -123,7 +123,7 @@ Defaults could be cleared at any time with `client.reset()`.
 ## Sub clients
 
 There is a concept of sub clients. It is used to create a client for a specific sub-url.
-For example, suppose all called methods in test have some base path: `/{somehting}/path/to/resource`.
+For example, suppose all called methods in a test have some base path: `/{something}/path/to/resource`.
 Instead of putting it into each request:
 
 ```java
@@ -226,7 +226,7 @@ client.buildGet("/path")
     .as(User.class)
 ```
 
-```
+```text
 Request configuration: 
 
 	Path params:
@@ -307,10 +307,10 @@ User user = rest.buildGet("/users/123")
         .as(User.class);
 ```
 
-Here assertion error will be thrown if header or cookie was not provided or condition does not match.
+Here an assertion error will be thrown if a header or cookie was not provided or the condition does not match.
 
-Even if you need to obtain a header or cookie value from response, you can use assetions to verify
-header/cookie presence:
+Even if you need to obtain a header or cookie value from the response, you can use assertions to verify
+header or cookie presence:
 
 ```java
 Response response = rest.buildGet("/users/123")
@@ -619,7 +619,7 @@ ResourceClient<SubResource> subRest = rest.subResource(Resource::sub, SubResourc
 
 ### Resource typification
 
-It is not always possible to use resource class to buld a sub client
+It is not always possible to use a resource class to build a sub client
 (with `.restClient(Resource.class)`).
 
 In such cases you can build a resource path manually and then "cast" client to the resource type:
@@ -706,11 +706,11 @@ Default implementation:
 2. Enables request and response logging to simplify writing (and debugging) tests.
 
 By default, all request and response messages are written directly into console to guarantee client
-actions visibility (logging might not be configured in tests).
+the visibility of client actions (logging might not be configured in tests).
 
 Example output:
 
-```
+```text
 
 [Client action]---------------------------------------------{
 1 * Sending client request on thread main
@@ -731,7 +731,7 @@ Example output:
 }----------------------------------------------------------
 ```
 
-Console output might be disabled with a system proprty:
+Console output might be disabled with a system property:
 
 ```java
 // shortcut sets DefaultTestClientFactory.USE_LOGGER property
