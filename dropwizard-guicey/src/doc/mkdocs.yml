@@ -15,7 +15,7 @@ plugins:
   - search
   - markdownextradata
 
-# Meterial theme
+# Material theme
 theme:
   name: 'material'
   palette:
