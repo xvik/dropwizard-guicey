@@ -82,11 +82,11 @@ public abstract class BaseTest {
 }
 ```
 
-The same will work for dropwizard extension (`@TestDropwizardApp` and `TestDropwizardAppExtension`).
+The same will work for the Dropwizard extension (`@TestDropwizardApp` and `TestDropwizardAppExtension`).
 
 !!! important
-    Application instance re-use is not enabled by default for backwards compatibility
-    (for cases when base class declaration already used).
+    Application instance reuse is not enabled by default for backwards compatibility
+    (for cases when the base class declaration is already used).
 
 There might be multiple base test classes declaring reusable applications:
 different global applications would be started for each declaration (allowing you
@@ -99,8 +99,8 @@ extending base class "inherit" the same declaration and so the same application 
 
 !!! tip
     Reusable applications may be used together with tests, not extending base class
-    and using guicey extensions. Such tests would simply start a new application instance.
-    Just be sure to avoid port clashes when using reusable dropwizard apps (by using `randomPorts` option).
+    and using Guicey extensions. Such tests would simply start a new application instance.
+    Just be sure to avoid port clashes when using reusable Dropwizard apps (by using the `randomPorts` option).
 
 `@EnableSetup` and `@EnableHook` fields are also supported for reusable applications.
 But declare all such fields on base class level (or below) because otherwise only fields

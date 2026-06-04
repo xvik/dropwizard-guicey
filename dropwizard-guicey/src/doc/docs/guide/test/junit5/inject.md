@@ -80,10 +80,10 @@ public void testSomthing(@Jit TestBean bean)
 ```
 
 !!! info
-    Additional annotation required because you may use other junit extensions providing their own
-    parameters, which guicey extension should not try to handle. That's why not annotated parameters
+    An additional annotation is required because you may use other JUnit extensions providing their own
+    parameters, which the Guicey extension should not try to handle. That's why unannotated parameters are
     verified with existing injector bindings.
-    
+
 Qualified and generified injections will also work:
 
 ```java
@@ -99,10 +99,10 @@ Also, there are special objects available as parameters:
 * `ObjectMapper`
 * `ClientSupport` application web client helper
 * `DropwizardTestSupport` test support object used internally
-* `ExtensionContext` junit extension context
+* `ExtensionContext` JUnit extension context
 
 !!! note
-    Parameter injection will work on test methods as well as lifecyle methods (beforeAll, afterEach etc.) 
+    Parameter injection will work on test methods as well as lifecycle methods (beforeAll, afterEach, etc.)
 
 Example:
 

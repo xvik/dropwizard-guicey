@@ -119,9 +119,9 @@ public class Test
 
 All recognized stub fields would be logged:
 
-```
+```text
 Applied stubs (@StubBean) on StubsSimpleTest:
 
-	StubsSimpleTest.stub2                    GUICE                  Service2 >> Service2Stub        
+	StubsSimpleTest.stub2                    GUICE                  Service2 >> Service2Stub
 	StubsSimpleTest.stub                     GUICE                  Service1 >> Service1Stub 
 ```

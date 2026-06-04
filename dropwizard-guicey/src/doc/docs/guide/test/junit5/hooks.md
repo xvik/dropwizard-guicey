@@ -89,7 +89,7 @@ static GuiceyConfigurationHook HOOK = builder -> builder.modules(new DebugModule
 ```
 
 !!! tip
-    Hook field could be used for guicey report activation in test:
+    A hook field could be used for Guicey report activation in a test:
     ```java
     @EnableHook
     static GuiceyConfigurationHook hook = GuiceBundle.Builder::printStartupTime;

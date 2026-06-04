@@ -20,7 +20,7 @@ public class testCommand() {
 ```
 
 This runner could be used to run *any* command type (simple, configured, environment).
-The type of command would define what objects would be present ofter the command execution
+The type of command would define what objects would be present after command execution
 (for example, `Injector` would be available only for `EnvironmentCommand`).
 
 Run command arguments are the same as real command arguments (the same `Cli` used for commands parsing).
@@ -79,8 +79,8 @@ At least, the required number of answers must be provided (otherwise error would
 indicating not enough inputs)
 
 !!! warning
-    Due to IO overrides, command tests could not run in parallel.   
-    For junit 5, such tests could be annotated with [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization)
+    Due to IO overrides, command tests could not run in parallel.
+    For JUnit 5, such tests could be annotated with [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization)
     (to prevent execution in parallel with other tests)
 
 ### Configuration

@@ -1,7 +1,7 @@
 # Testing logs
 
 !!! important
-    Works only with logback (default dropwizard logger).
+    Works only with Logback (the default Dropwizard logger).
 
 `@RecordLogs` extension could record log messages for one or multiple classes.
 
@@ -102,9 +102,9 @@ then it would change logger configuration to receive required messages.
     RecordedLogs logs;
     ```
 
-During application startup **dropwizard resets loggers two times** and hook would
-re-attach appenders to compensate it. You should be able to record all messages from application startup,
-except logs from dropwizard bundles, registered BEFORE `GuiceBundle`.
+During application startup **Dropwizard resets loggers twice** and the hook would
+re-attach appenders to compensate for it. You should be able to record all messages from application startup,
+except logs from Dropwizard bundles, registered BEFORE `GuiceBundle`.
 
 ## Querying
 
@@ -188,7 +188,7 @@ public class Test
 
 All recognized log recorder fields would be logged:
 
-```
+```text
 Applied log recorders (@RecordLogs) on Test
 
 	#logs                          DEBUG  Service

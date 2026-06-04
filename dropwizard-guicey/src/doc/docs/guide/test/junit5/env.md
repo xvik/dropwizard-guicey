@@ -39,5 +39,5 @@ public class MyTest {
 }
 ```
 
-Pay attention that there is no need for cleanup: system properties and environment variables would be re-set automatically!
+Pay attention that there is no need for cleanup: system properties and environment variables would be reset automatically!
 

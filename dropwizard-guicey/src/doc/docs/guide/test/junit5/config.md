@@ -114,7 +114,7 @@ public class MyModifier implements ConfigModifier<MyConfig> {
     Configuration modifiers also could be used together with configuration overrides.
 
 !!! warning "Limitation"
-    Configuration modifiers are called after dropwizard logging configuration,
+    Configuration modifiers are called after Dropwizard logging configuration,
     so logging is the only thing that can't be configured (use configuration overrides for logging)
 
 ## Deferred configuration
@@ -145,17 +145,17 @@ of static value.
 In more complex cases, you can use custom implementations of `ConfigOverride`. 
 
 !!! warning ""
-    Guicey have to accept only `ConfigOverride` objects implementing custom 
-    `ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix` interface. 
-    In order to support parallel tests guicey generates unique config prefix for each test
+    Guicey have to accept only `ConfigOverride` objects implementing custom
+    `ru.vyarus.dropwizard.guice.test.util.ConfigurablePrefix` interface.
+    In order to support parallel tests, Guicey generates a unique config prefix for each test
     (because all overrides eventually stored to system properties) and so it needs a way
     to set this prefix into custom `ConfigOverride` objects.
 
 ## Configuration from 3rd party extensions
 
-If you have junit extension (e.g. which starts db for test) and you need 
+If you have a JUnit extension (e.g. one that starts a DB for a test) and you need
 to apply configuration overrides from that extension, then you should simply
-store required values inside junit storage:
+store required values inside JUnit storage:
 
 ```java
 public class ConfigExtension implements BeforeAllCallback {
@@ -189,6 +189,6 @@ If you need to use different configuration key:
 ```
 
 !!! tip
-    You can use [setup objects](setup-object.md) instead of custom junit extensions for test environment setup
+    You can use [setup objects](setup-object.md) instead of custom JUnit extensions for test environment setup
 
 
