@@ -3,10 +3,10 @@
 Extensions (like [setup objects](setup-object.md)) often rely on afterEach/afterAll methods
 and so it is not possible to test extension completely using test extensions (like `@TestGuiceyApp`).
 
-Junit provides a TestKit which could run unit tests inside usual unit test. This way 
-full extension lifecycle could be tested.
+JUnit provides a TestKit which could run unit tests inside a usual unit test. This way
+the full extension lifecycle could be tested.
 
-Additional dependency required (version managed by dropwizard BOM):
+An additional dependency is required (version managed by the Dropwizard BOM):
 
 ```groovy
 testImplementation 'org.junit.platform:junit-platform-testkit'
@@ -55,7 +55,7 @@ if (th != null) {
 
 ## Testing console output
 
-Full console output could be tracked wither with [output captor utility](output.md) or 
+Full console output could be tracked either with the [output captor utility](output.md) or
 using `system-stubs-jupiter` library.
 
 For example:
@@ -103,5 +103,5 @@ Logger time:
 out.replaceAll("\\[\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d+]", "[2025-22-22 11:11:11]")
 ```
 
-And so on. You can see `AbstractPlatformTest` in guicey tests (dropwizard-guicey module) and
+And so on. You can see `AbstractPlatformTest` in Guicey tests (dropwizard-guicey module) and
 all related tests as examples.

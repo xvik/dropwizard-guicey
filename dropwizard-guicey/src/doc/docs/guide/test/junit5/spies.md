@@ -6,8 +6,8 @@
 Spies declared with a `@SpyBean` annotation.
 
 !!! important
-    Spy creation requires real bean instance and so guicey use AOP to intercept real bean
-    access and redirecting all calls through a dynamically created (on first access)
+    Spy creation requires a real bean instance, and so Guicey uses AOP to intercept a real bean
+    access and redirect all calls through a dynamically created (on first access)
     spy object. This means that spies would only work with guice-managed beans.
 
     If you need to spy for a manual instance - use [partial mocks](mocks.md#partial-mocks)
@@ -22,7 +22,7 @@ and [baeldung guides](https://www.baeldung.com/mockito-series).
 
 ## Setup
 
-Requires mockito dependency (version may be omitted if dropwizard BOM used):
+Requires a Mockito dependency (version may be omitted if the Dropwizard BOM is used):
 
 ```groovy
 testImplementation 'org.mockito:mockito-core'
@@ -195,8 +195,8 @@ public static class Mng implements Managed {
 
 ## Spies reset
 
-Spies are re-set automatically after each test method (and that's why it makes
-sense to declare mock behavior in test setup method - execured before each test method).
+Spies are reset automatically after each test method (and that's why it makes
+sense to declare mock behavior in the test setup method - executed before each test method).
 
 !!! note
     Spy could be reset manually at any time with `Mockito.reset(spy)`
@@ -212,7 +212,7 @@ Service spy;
 
 Same as for mocks, a usage report could be printed after each test `@SpyBean(printSummary = true)`
 
-```
+```text
 \\\------------------------------------------------------------/ test instance = 285bf5ac /
 @SpyBean stats on [After each] for SpySummaryTest$Test1#test():
 
@@ -234,9 +234,9 @@ public class Test
 
 All recognized spy fields would be logged:
 
-```
+```text
 Applied spies (@SpyBean) on SpySimpleTest:
 
-	#spy2                          Service2                     (r.v.d.g.t.j.s.s.SpySimpleTest) 
+	#spy2                          Service2                     (r.v.d.g.t.j.s.s.SpySimpleTest)
 	#spy1                          Service1                     (r.v.d.g.t.j.s.s.SpySimpleTest) 
 ```

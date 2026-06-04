@@ -19,10 +19,10 @@ public static class Test2 extends Base {
     static TestEnvironmentSetup ext2 = it -> null;
 ```
 
-```
+```text
 Guicey test extensions (Test2.):
 
-	Setup objects = 
+	Setup objects =
 		Ext1                           	@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:102)
 		Ext2                           	@RegisterExtension.setup(class)                    at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:102)
 		<lambda>                       	@RegisterExtension.setup(obj)                      at r.v.d.g.t.j.d.SetupObjectsLogTest.(SetupObjectsLogTest.java:103)
@@ -35,7 +35,7 @@ Guicey test extensions (Test2.):
 
 Also, applied configuration overrides and modifiers would be shown:
 
-```
+```text
 Configuration overrides (Test2.):
 	                  foo = 2
 	                  bar = 11
@@ -82,7 +82,7 @@ static TestEnvironmentSetup db = ext -> {
 
 And using system property:
 
-```
+```text
 -Dguicey.extensions.debug=true
 ```
 
@@ -94,7 +94,7 @@ TestSupport.debugExtensions()
 
 ## Startup performance
 
-To simplify slow tests (slowness) investigations, guicey measures and prints extensions time.
+To simplify slow test investigations, Guicey measures and prints extension time.
 
 For example, test with application started in beforeAll, with two test methods
 (same app for both tests):
@@ -109,7 +109,7 @@ public class PerformanceLogTest {
 }
 ```
 
-```
+```text
 \\\------------------------------------------------------------/ test instance = 1595d2b2 /
 Guicey time after [Before each] of PerformanceLogTest#test1(): 1204 ms
 
@@ -144,20 +144,20 @@ Guicey time after [After all] of PerformanceLogTest: 1207 ms ( + 2.15 ms)
 
 There are three reports:
 
-1. Before first test method (see guicey extension startup time)
-2. Before the second test method (see guicey time for the second method only)
+1. Before the first test method (see Guicey extension startup time)
+2. Before the second test method (see Guicey time for the second method only)
 3. After all (cleanup time)
 
 Only the first report shows all recorded times, next reports only mention time increase.
 For example, the second report mentions only `Guice fields injection             : 0.36 ms ( + 0.17 ms)`
-Meaning guicey perform fields injection just before the second test, spent 0.17 ms on it
+Meaning Guicey performs field injection just before the second test and spends 0.17 ms on it
 (overall injection time for two injections is 0.36 ms)
 
 
 ## Extensions
 
 It is recommended to use root extension debug option value in the [extensions](setup-object.md).
-Current field-bases extensions print recognized fields report when debug is enabled.
+Current field-based extensions print a recognized fields report when debug is enabled.
 
 
 ```java
