@@ -274,7 +274,7 @@ client.buildGet("/path")
     .as(User.class)
 ```
 
-```
+```text
 Request configuration: 
 
 	Path params:

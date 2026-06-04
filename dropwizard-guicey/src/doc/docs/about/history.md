@@ -1,11 +1,11 @@
-### [8.0.2](http://xvik.github.io/dropwizard-guicey/8.0.2) (2026-02-10)
+### [8.0.2](https://xvik.github.io/dropwizard-guicey/8.0.2) (2026-02-10)
 * Dropwizard 5.0.1 compatibility (for jdbi3 module)
 * Update spock-junit5 to 1.4.1
 
-### [8.0.1](http://xvik.github.io/dropwizard-guicey/8.0.1) (2026-01-18)
+### [8.0.1](https://xvik.github.io/dropwizard-guicey/8.0.1) (2026-01-18)
 * Fix broken guice dependency in BOM
 
-### [8.0.0](http://xvik.github.io/dropwizard-guicey/8.0.0) (2025-10-24)
+### [8.0.0](https://xvik.github.io/dropwizard-guicey/8.0.0) (2025-10-24)
 * Update to dropwizard 5 (requires java 17)
 * Use guice version without bundled asm ('classes' classifier)
 * Support field injections in application (to use injected services in run method)
@@ -16,7 +16,7 @@
       to simplify usage of ApacheTestClientFactory with annotations
     - Add `apacheClient()` (shortcut) method into extension and generic builders
 * Shared state:
-    - State objects, implementing AutoClosable, now would be closed on application shutdown
+    - State objects, implementing AutoCloseable, now would be closed on application shutdown
     - Add SharedConfigurationState.lookupOrCreate method to simplify static state usage
 * Add a utility to simplify building application urls: AppUrlBuilder
     - Automatically resolve context server port and mapped paths (previously only available in
@@ -58,10 +58,10 @@
 * Add guicey event ApplicationStartingEvent thrown just before managed and web services startup
 * Fix stubs rest too early startup, causing problems with jersey registrations in application run method
 
-### [7.2.1](http://xvik.github.io/dropwizard-guicey/7.2.1) (2025-05-12)
+### [7.2.1](https://xvik.github.io/dropwizard-guicey/7.2.1) (2025-05-12)
 * Fix NoClassDefFoundError on guicey startup due to junit classes leak into core (#428)
 
-### [7.2.0](http://xvik.github.io/dropwizard-guicey/7.2.0) (2025-05-11)
+### [7.2.0](https://xvik.github.io/dropwizard-guicey/7.2.0) (2025-05-11)
 * Update to dropwizard 4.0.13
 * Un-deprecate HK2 support (removed deprecation annotations, but soft deprecation message remain in javadoc)
 * Add methods to the main builder (and hooks) to simplify usage without guicey bundle:
@@ -172,20 +172,20 @@
     - Add BeforeInit guicey event (the first point with available Bootstrap)
     - Add WebInstaller marker interface to identify web extensions (extensions started with jersey)
 
-### [7.1.4](http://xvik.github.io/dropwizard-guicey/7.1.4) (2024-09-14)
+### [7.1.4](https://xvik.github.io/dropwizard-guicey/7.1.4) (2024-09-14)
 * Update to dropwizard 4.0.8
 
-### [7.1.3](http://xvik.github.io/dropwizard-guicey/7.1.3) (2024-03-31)
+### [7.1.3](https://xvik.github.io/dropwizard-guicey/7.1.3) (2024-03-31)
 * Update to dropwizard 4.0.7
 * Fix guicey ApplicationShutdownEvent typo (#387)
 
-### [7.1.2](http://xvik.github.io/dropwizard-guicey/7.1.2) (2024-02-17)
+### [7.1.2](https://xvik.github.io/dropwizard-guicey/7.1.2) (2024-02-17)
 * Update to dropwizard 4.0.6
 
-### [7.1.1](http://xvik.github.io/dropwizard-guicey/7.1.1) (2024-01-08)
+### [7.1.1](https://xvik.github.io/dropwizard-guicey/7.1.1) (2024-01-08)
 * Update to dropwizard 4.0.5
 
-### [7.1.0](http://xvik.github.io/dropwizard-guicey/7.1.0) (2023-11-28)
+### [7.1.0](https://xvik.github.io/dropwizard-guicey/7.1.0) (2023-11-28)
 * Update to dropwizard 4.0.4
 * Add qualifier annotations support for configuration properties binding:
   any configuration property (any level), annotated with qualifier annotation, would be
@@ -216,10 +216,10 @@
           and user input support.
         * Could be used to test application startup fail (without using system mocks)
 
-### [7.0.2](http://xvik.github.io/dropwizard-guicey/7.0.2) (2023-10-06)
+### [7.0.2](https://xvik.github.io/dropwizard-guicey/7.0.2) (2023-10-06)
 * Update to dropwizard 4.0.2
 
-### [7.0.1](http://xvik.github.io/dropwizard-guicey/7.0.1) (2023-07-05)
+### [7.0.1](https://xvik.github.io/dropwizard-guicey/7.0.1) (2023-07-05)
 * Update to dropwizard 4.0.1
 * [jdbi]
     - Fix jdbi 3.39 compatibility
@@ -227,15 +227,15 @@
 * [gsp]
     - Fix redirection to error page after direct template rendering fails
 
-### [7.0.0](http://xvik.github.io/dropwizard-guicey/7.0.0) (2023-05-14)
+### [7.0.0](https://xvik.github.io/dropwizard-guicey/7.0.0) (2023-05-14)
 * Update to dropwizard 4
     - (breaking) Use jakarta namespace instead of javax (servlet, validation)
 * Update to guice 7 (jakarta.inject namespace)
 
-### [6.1.0](http://xvik.github.io/dropwizard-guicey/6.1.0) (2023-05-14)
+### [6.1.0](https://xvik.github.io/dropwizard-guicey/6.1.0) (2023-05-14)
 * Update to guice 6.0
 
-### [6.0.0](http://xvik.github.io/dropwizard-guicey/6.0.0) (2023-04-02)
+### [6.0.0](https://xvik.github.io/dropwizard-guicey/6.0.0) (2023-04-02)
 * Update to dropwizard 3
     - (breaking) Drop java 8 support
 * Merged with guicey-ext modules repository:
@@ -243,11 +243,11 @@
     - dropwizard-guicey POM would not be a BOM anymore (everything moved to guicey-bom)
     - Exclusions not applied in BOM anymore, instead they applied directly in POM
 
-### [5.7.1](http://xvik.github.io/dropwizard-guicey/5.7.1) (2023-03-09)
+### [5.7.1](https://xvik.github.io/dropwizard-guicey/5.7.1) (2023-03-09)
 * Update to dropwizard 2.1.5
 * Revert changing reports log level: now INFO used instead of WARN (#276)
 
-### [5.7.0](http://xvik.github.io/dropwizard-guicey/5.7.0) (2022-12-29)
+### [5.7.0](https://xvik.github.io/dropwizard-guicey/5.7.0) (2022-12-29)
 * Update to dropwizard 2.1.4
 * Fix NoClassDefFoundError(AbstractCollectionJaxbProvider) appeared for some jersey provider registrations (#240)
 * Jersey extensions might omit `@Provider` on known extension types (ExceptionMapper, MessageBodyReader, etc.).
@@ -265,7 +265,7 @@
 * Add SBOM (json and xml with cyclonedx classifier)
 * Add .enableAutoConfig() no-args shortcut for enabling classpath scan in application package
 
-### [5.6.1](http://xvik.github.io/dropwizard-guicey/5.6.1) (2022-07-02)
+### [5.6.1](https://xvik.github.io/dropwizard-guicey/5.6.1) (2022-07-02)
 * Update dropwizard to 2.1.1 (fixes java 8 issue by allowing afterburner usage)
 * Fix classpath scan recognition of inner static classes inside jars (#231)
 * Junit 5 extensions:
@@ -276,7 +276,7 @@
         * Debug could be also enabled with system property -Dguicey.extensions.debug=true
           or with alias TestSupport.debugExtensions()
 
-### [5.6.0](http://xvik.github.io/dropwizard-guicey/5.6.0) (2022-06-07)
+### [5.6.0](https://xvik.github.io/dropwizard-guicey/5.6.0) (2022-06-07)
 * Update dropwizard to 2.1.0
 * Test support objects changes:
     - Add new interface TestEnvironmentSetup to simplify test environment setup
@@ -296,7 +296,7 @@
     - hooks(Class) method accepts multiple classes
     - configOverrides(String...) now aggregates multiple calls
 
-### [5.5.0](http://xvik.github.io/dropwizard-guicey/5.5.0) (2022-03-30)
+### [5.5.0](https://xvik.github.io/dropwizard-guicey/5.5.0) (2022-03-30)
 * Test framework-agnostic utilities:
     - Add GuiceyTestSupport to simplify guice-only manual application runs
       (by analogy to DropwizardTestSupport class)
@@ -316,15 +316,15 @@
     - groovy libraries removed (newer groovy 2.x was required for spock1 to run on java 11)
     - add spock-junit5 version
 
-### [5.4.2](http://xvik.github.io/dropwizard-guicey/5.4.2) (2022-01-26)
+### [5.4.2](https://xvik.github.io/dropwizard-guicey/5.4.2) (2022-01-26)
 * Update dropwizard to 2.0.28
 * Update guice to 5.1.0 (java 17 support)
 
-### [5.4.1](http://xvik.github.io/dropwizard-guicey/5.4.1) (2021-12-19)
+### [5.4.1](https://xvik.github.io/dropwizard-guicey/5.4.1) (2021-12-19)
 * Fix inner guice class usage in always executable code (#187, OSGi issue)
 * Update dropwizard to 2.0.27 (many dependency updates in the latest versions fixing java 17 support)
 
-### [5.4.0](http://xvik.github.io/dropwizard-guicey/5.4.0) (2021-10-21)
+### [5.4.0](https://xvik.github.io/dropwizard-guicey/5.4.0) (2021-10-21)
 * Use direct dependency versions in pom to simplify resolution (dependencyManagement section remains but for usage as BOM only)
 * Fix lambda modules support (modules declared with lambda expression) (#160)
 * Exclude "sun.*" objects from configuration analysis (#170, #180)
@@ -343,7 +343,7 @@
 * Unify shared state access methods in GuiceyBootstrap, GuiceyEnvironment and DropwizardAwareModule
   (removes implicit limitation that shared state must be initialized only in init phase)
 
-### [5.3.0](http://xvik.github.io/dropwizard-guicey/5.3.0) (2021-03-06)
+### [5.3.0](https://xvik.github.io/dropwizard-guicey/5.3.0) (2021-03-06)
 * Update to guice [5.0.1](https://github.com/google/guice/wiki/Guice501)
   (java15 support, removes cglib, fixes "illegal reflective access" warnings, update Guava to LATEST 30.1-jre)
 * Update to dropwizard 2.0.20
@@ -351,7 +351,7 @@
   before test and not in the constructor. The issue was causing early evaluation of lazy (deferred) overrides (#151)
 * Add custom ConfigOverride objects support for junit 5 extensions (registered with @RegisterExtension)  
 
-### [5.2.0](http://xvik.github.io/dropwizard-guicey/5.2.0) (2020-11-29)
+### [5.2.0](https://xvik.github.io/dropwizard-guicey/5.2.0) (2020-11-29)
 * Update to dropwizard 2.0.16
 * Remove direct usages of logback-classic classes to unlock logger switching (#127)
 * Fix stackoverflow on config introspection caused by EnumMap fields (#87) 
@@ -359,7 +359,7 @@
   Unifies raw dropwizard and guicey behaviour. Possibly breaking, see note below.
 * Add lifecycle event: ApplicationStoppedEvent (triggered on jersey lifecycle stop)   
 
-### [5.1.0](http://xvik.github.io/dropwizard-guicey/5.1.0) (2020-06-02)
+### [5.1.0](https://xvik.github.io/dropwizard-guicey/5.1.0) (2020-06-02)
 * Update guice to 4.2.3 ([java 14 support](https://github.com/google/guice/wiki/Guice423#changes-since-guice-422))
 * Update to dropwizard 2.0.10
 * Add junit 5 extensions (#74). Works much like existing spock extensions:
@@ -375,11 +375,11 @@
 * Fix parallel tests support: guice logs interception wasn't thread safe (#103)     
 * Fix invalid Automatic-Module-Name to 'ru.vyarus.dropwizard.guicey' (#106) 
 
-### [5.0.1](http://xvik.github.io/dropwizard-guicey/5.0.1) (2020-03-13)
+### [5.0.1](https://xvik.github.io/dropwizard-guicey/5.0.1) (2020-03-13)
 * Update to dropwizard 2.0.2 (address [CVE-2020-5245](https://github.com/advisories/GHSA-3mcp-9wr4-cjqf))
 * Fix yaml bindings report rendering with values containing string format parameters like %s (#77)
 
-### [5.0.0](http://xvik.github.io/dropwizard-guicey/5.0.0) (2019-12-15)
+### [5.0.0](https://xvik.github.io/dropwizard-guicey/5.0.0) (2019-12-15)
 * Update to dropwizard 2.0.0
     - (breaking in jersey 2.26)
         * Jersey 2.26 introduces an abstraction for injection layer in order to get rid of hk2 direct usage.
@@ -396,7 +396,7 @@
             - Jersey installers use `org.glassfish.jersey.internal.inject.AbstractBinder`
               instead of hk specific `org.glassfish.hk2.utilities.binding.AbstractBinder`
             - Mark all hk2-related methods and options as deprecated (to be removed in the next version)       
-        * Jersey 2.26 implements jax-rs 2.1 which forced it to change some of it's apis.
+        * Jersey 2.26 implements jax-rs 2.1 which forced it to change some of its APIs.
             - `org.glassfish.jersey.server.AsyncContext` binding used instead of 
                 `org.glassfish.jersey.server.internal.process.AsyncContext`                                  
     - (breaking dw 2.0) 
@@ -547,18 +547,18 @@
 * Add optional extensions support: optional extension automatically become disabled when no compatible installer found
     Could be registered with new method in main and guicey bundles: `.extensionsOptional`  
 
-### [4.2.2](http://xvik.github.io/dropwizard-guicey/4.2.2) (2018-11-26)
+### [4.2.2](https://xvik.github.io/dropwizard-guicey/4.2.2) (2018-11-26)
 * Update to guice 4.2.2 (java 11 compatible)
 * Update to dropwizard 1.3.7
 * Fix inner non static classes detection by classpath scan
 * Fix lifecycle debug messages decoration (unicode fix)
 
-### [4.2.1](http://xvik.github.io/dropwizard-guicey/4.2.1) (2018-07-23)
+### [4.2.1](https://xvik.github.io/dropwizard-guicey/4.2.1) (2018-07-23)
 * Show warning when configuration path's value resolution failed instead of startup fail (#53)
 * Add GuiceyOptions.BindConfigurationByPath to be able to disable configuration introspection (for edge cases) (#53)
 * Fix unique sub configuration object access (#54) 
 
-### [4.2.0](http://xvik.github.io/dropwizard-guicey/4.2.0) (2018-06-25)
+### [4.2.0](https://xvik.github.io/dropwizard-guicey/4.2.0) (2018-06-25)
 * Update to guice 4.2.0
     - remove guice-multibindings dependency as it's moved to guice core
 * Update to dropwizard 1.3.5    
@@ -632,7 +632,7 @@
         - .printCustomConfigurationBindings() - log only custom bindings (from custom configuration classes)                  
 * Includes much improved [generics-resolver](https://github.com/xvik/generics-resolver/releases/tag/3.0.0)
 
-### [4.1.0](http://xvik.github.io/dropwizard-guicey/4.1.0) (2017-05-09)
+### [4.1.0](https://xvik.github.io/dropwizard-guicey/4.1.0) (2017-05-09)
 * Update to dropwizard 1.1.0
 * Add StartupErrorRule to simplify dropwizard startup error testing
 * (breaking) HK2 guice-bridge dependency become optional. New option GuiceyOptions.UseHkBridge could be used 
@@ -642,7 +642,7 @@ to enable bridge (#28)
 * Fix loggers for GuiceyAppRule (junit) and @UseGuiceyApp (spock) (#32)
 * Fix guava conflict in guicey pom. Make guicey pom usable as BOM.
 
-### [4.0.1](http://xvik.github.io/dropwizard-guicey/4.0.1) (2016-11-18)
+### [4.0.1](https://xvik.github.io/dropwizard-guicey/4.0.1) (2016-11-18)
 * Update to dropwizard 1.0.5 and fix compatibility (#24)
 * Fix guice version conflict for maven (#20)
 
