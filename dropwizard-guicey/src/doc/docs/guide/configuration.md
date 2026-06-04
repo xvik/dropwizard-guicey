@@ -303,10 +303,10 @@ Shortcuts:
 [Shared state](shared.md) access:
 
 `#!java .shareState(Class<?> key, Object value)`
-:   Declare shared state ([primary module](bundles.md#parent-child-scenario) scenario)
+:   Declare shared state ([primary module](shared.md#parent-child) scenario)
 
 `#!java .sharedState(Class<?> key, Supplier<T> defaultValue)`
-:   Get or init shared state ([equal bundles](bundles.md#equal-communication-scenario) scenario)
+:   Get or init shared state ([equal bundles](shared.md#first-wins) scenario)
 
 `#!java .sharedStateOrFail(Class<?> key, String message, Object... args)`
 :   Shortcut to get shared state or immediately fail if not declared    

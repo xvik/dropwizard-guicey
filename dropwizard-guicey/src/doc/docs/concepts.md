@@ -128,12 +128,12 @@ installs guice managed instance (and so all other extensions).
 !!! summary
     With classpath scan you don't need to do anything to install extension and in manual mode 
     you only need to specify extension classes. 
-    
-!!! tip
-    Most installer implementations are very simple, so you can easily understand how it works 
-    (all core installers are declared in [core installers bundle](guide/bundles.md#core-installers-bundle)).    
 
-### Guice bindings 
+!!! tip
+    Most installer implementations are very simple, so you can easily understand how it works
+    (all core installers are declared in [core installers bundle](guide/bundles.md)).
+
+### Guice bindings
 
 Guicey also search extensions in registered guice modules. For example:
 

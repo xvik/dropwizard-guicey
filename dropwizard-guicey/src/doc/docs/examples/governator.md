@@ -6,8 +6,8 @@ Include the [Netflix Governator](https://github.com/Netflix/governator) dependen
 implementation "com.netflix.governator:governator:1.17.8"
 ```
 
-Governator [owns injector creation](https://github.com/Netflix/governator/wiki/Getting-Started#quick-start), 
-so we need to create custom guicey `InjectorFactory`
+Governator [owns injector creation](https://github.com/Netflix/governator/wiki/Getting-Started#quick-start),
+so we need to create a custom Guicey `InjectorFactory`.
 
 ```java
 public class GovernatorInjectorFactory implements InjectorFactory {
@@ -33,23 +33,23 @@ public void initialize(Bootstrap<Configuration> bootstrap) {
 
 !!! warning
     Guicey by default [parses configured guice modules](../guide/guice/module-analysis.md#modules-analysis)
-    and so injector factory receives single synthetic module of parsed elements, instead of 
+    and so injector factory receives single synthetic module of parsed elements, instead of
     configured module instances. Some governator features may require exact module instances and so
-    you may need to [disable guicey analysis](../guide/guice/module-analysis.md#disabling-analysis).    
-    
+    you may need to [disable Guicey analysis](../guide/guice/module-analysis.md#disabling-analysis).
+
     Also, when using [overriding modules configuration](../guide/guice/override.md) (with `#modulesOverride` configuration)
-    injector factory also receives syntetic module after {@code Modules.override(modules).with(overridingModules)}.
-    So you will have not to use this feature when direct module instances required (for some governator features).  
+    injector factory also receives a synthetic module after {@code Modules.override(modules).with(overridingModules)}.
+    So you will need to avoid this feature when direct module instances are required (for some governator features).
 
 !!! note
-    Auto scan is enabled and managed bean, described below, will be discovered and installed automatically (assuming its inside scanned package).
+    Auto scan is enabled and managed bean, described below, will be discovered and installed automatically (assuming it's inside the scanned package).
 
 ## Governator Lifecycle
-Many Governator enhancements are only available when the Governator [LifecycleManager](http://netflix.github.io/governator/javadoc/index.html?com/netflix/governator/lifecycle/LifecycleManager.html) 
-is properly [started and closed](https://github.com/Netflix/governator/wiki/Getting-Started#just-a-bit-more) 
-with the application. 
+Many Governator enhancements are only available when the Governator [LifecycleManager](http://netflix.github.io/governator/javadoc/index.html?com/netflix/governator/lifecycle/LifecycleManager.html)
+is properly [started and closed](https://github.com/Netflix/governator/wiki/Getting-Started#just-a-bit-more)
+with the application.
 
-Use dropwizard's [managed object](http://dropwizard.io/manual/core.html#managed-objects) 
+Use Dropwizard's [managed object](https://www.dropwizard.io/en/stable/manual/core.html#managed-objects)
 to control governator lifecycle:
 
 ```java
@@ -76,8 +76,8 @@ public class GovernatorLifecycle implements Managed {
 
 ```
 
-Guicey will find this managed bean, create governator injector (using a custom factory), create a managed bean instance and register it in dropwizard. 
-This will "bind" the governator lifecycle to the dropwizard lifecycle.
+Guicey will find this managed bean, create governator injector (using a custom factory), create a managed bean instance and register it in Dropwizard.
+This will "bind" the governator lifecycle to the Dropwizard lifecycle.
 
 !!! note
-    If you need to control the order which the managed beans are started, use the [@Order annotation](../guide/ordering.md). 
+    If you need to control the order in which the managed beans are started, use the [@Order annotation](../guide/ordering.md).

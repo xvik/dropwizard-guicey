@@ -3,7 +3,7 @@
 ## Servlets, filters
 
 Servlets and filters could be registered either with guice [ServletModule](guice/servletmodule.md)
-or using [extensions](extensions.md#web).
+or using [extensions](#web-extensions).
 
 ### Guice servlet module
 

@@ -230,7 +230,7 @@ public class XFeatureModule extends DropwizardAwareModule<Configuration> {
 In this example, module search for properties declared directly in MyConfig configuration
 class with not null value and annotated (classes annotated, not properties!) with custom marker (`@MyMarker`).  
 
-See introspected configuration [structure description](bindings.md#introspected-configuration)
+See introspected configuration [structure description](bindings.md#yaml-config-introspection)
 
 ## Shared state
 
