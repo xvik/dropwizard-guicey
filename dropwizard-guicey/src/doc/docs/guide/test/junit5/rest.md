@@ -1,12 +1,12 @@
 # Testing rest
- 
-Guicey provides lightweight REST testing support: same as [dropwizard resource testing support](https://www.dropwizard.io/en/stable/manual/testing.html#testing-resources),
-but with guicey-specific features.
+
+Guicey provides lightweight REST testing support: the same as [Dropwizard resource testing support](https://www.dropwizard.io/en/stable/manual/testing.html#testing-resources),
+but with Guicey-specific features.
 
 Such tests would not start web container: all rest calls are simulated (but still, it tests every part of resource execution).
 
 !!! important
-    Rest stubs work only with lightweight guicey run (they are simply useless when web container started)
+    Rest stubs work only with a lightweight Guicey run (they are simply useless when the web container is started)
 
 Lightweight REST could be declared with `@StubRest` annotation.
 
@@ -35,7 +35,7 @@ public class Test {
 
 By default, all declared resources would be started with all existing jersey extensions
 (filters, exception mappers, etc.). **Servlets and http filters are not started**
-(guicey disables all web extensions to avoid their (confusing) appearance in console)
+(Guicey disables all web extensions to avoid their confusing appearance in the console)
 
 ## Selecting resources
 
@@ -47,7 +47,7 @@ RestClient rest;
 ```
 
 This way only one resource would be started (and all resources directly registered in
-application, not as guicey extension). All jersey extensions will remain.
+application, not as a Guicey extension). All Jersey extensions will remain.
 
 Or a couple of resources:
 
@@ -67,10 +67,10 @@ RestClient rest;
 
 Often jersey extensions, required for the final application, make complications for testing.
 
-For example, exception mapper: dropwizard register default exception mapper which
-returns only the error message, instead of actual exception (and so sometimes we can't check the real cause).
+For example, an exception mapper: Dropwizard registers a default exception mapper which
+returns only the error message, instead of the actual exception (and so sometimes we can't check the real cause).
 
-`disableDropwizardExceptionMappers = true` disables extensions, registered by dropwizard.
+`disableDropwizardExceptionMappers = true` disables extensions registered by Dropwizard.
 
 When default exception mapper enabled, resource throwing runtime error would return just error code:
 
@@ -105,7 +105,7 @@ public class Test {
 }
 ```
 
-Without dropwizard exception mapper, we can verify exact exception:
+Without the Dropwizard exception mapper, we can verify the exact exception:
 
 ```java
 public class Test {
@@ -125,17 +125,16 @@ public class Test {
 It might be useful to disable application extensions also with `disableAllJerseyExtensions`:
 
 ```java
-```java
 @StubRest(disableDropwizardExceptionMappers = true,
         disableAllJerseyExtensions = true)
 RestClient rest;
 ```
 
-This way raw resource would be called without any additional logic.
+This way the raw resource would be called without any additional logic.
 
 !!! note
-    Only extensions, managed by guicey could be disabled: extensions directly registered
-    in dropwizard would remain.
+    Only extensions managed by Guicey could be disabled: extensions directly registered
+    in Dropwizard would remain.
 
 Also, you can select exact extensions to use (e.g., to test it):
 
@@ -165,7 +164,7 @@ public class Test {
 }
 ```
 
-```
+```text
 REST stub (@StubRest) started on DebugReportTest$Test1:
 
 	Jersey test container factory: org.glassfish.jersey.test.inmemory.InMemoryTestContainerFactory
@@ -176,15 +175,15 @@ REST stub (@StubRest) started on DebugReportTest$Test1:
 		Resource1                    (r.v.d.g.t.j.s.r.support)  
 
 	2 jersey extensions (disabled 1):
-		RestExceptionMapper          (r.v.d.g.t.j.s.r.support)  
-		RestFilter1                  (r.v.d.g.t.j.s.r.support)  
+		RestExceptionMapper          (r.v.d.g.t.j.s.r.support)
+		RestFilter1                  (r.v.d.g.t.j.s.r.support)
 
-	Use .printJerseyConfig() report to see ALL registered jersey extensions (including dropwizard)
+	Use the .printJerseyConfig() report to see ALL registered Jersey extensions (including Dropwizard)
 ```
 
 ## Requests logging
 
-By default, rest client would log requests and responses:
+By default, the REST client would log requests and responses:
 
 ```java
 @TestGuiceyApp(App.class)
@@ -201,7 +200,7 @@ public class Test {
 }
 ```
 
-```
+```text
 [Client action]---------------------------------------------{
 1 * Sending client request on thread main
 1 > GET http://localhost:0/foo
@@ -219,15 +218,15 @@ something
 }----------------------------------------------------------
 ```
 
-Logging could be disabled with `logRequests` option: ` @StubRest(logRequests = false)`
+Logging could be disabled with the `logRequests` option: `@StubRest(logRequests = false)`
 
 ## Container
 
 By default, [InMemoryTestContainerFactory](https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/test-framework.html#d0e18552)
-used.
+is used.
 
-    In-Memory container is not a real container. It starts Jersey application and 
-    directly calls internal APIs to handle request created by client provided by 
+    In-Memory container is not a real container. It starts Jersey application and
+    directly calls internal APIs to handle request created by client provided by
     test framework. There is no network communication involved. This containers 
     does not support servlet and other container dependent features, but it is a 
     perfect choice for simple unit tests.
@@ -236,16 +235,16 @@ If it is not enough (in-memory container does not support all functions), then
 use `GrizzlyTestContainerFactory`
 
     The GrizzlyTestContainerFactory creates a container that can run as a light-weight, 
-    plain HTTP container. Almost all Jersey tests are using Grizzly HTTP test container 
+    plain HTTP container. Almost all Jersey tests are using Grizzly HTTP test container
     factory.
 
-To activate grizzly container add dependency (version managed by dropwizard BOM):
+To activate the Grizzly container, add the dependency (version managed by the Dropwizard BOM):
 
 ```groovy
 testImplementation 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2'
 ```
 
-By default, grizzly would be used if it's available on classpath, otherwise in-memory used.
+By default, Grizzly would be used if it's available on the classpath; otherwise, in-memory is used.
 If you need to force any container type use:
 
 ```java
@@ -262,11 +261,11 @@ If you need to force any container type use:
 
 ## Rest client
 
-`RestClient` is the same as [ClientSupport#restClient()](client.md), available for guicey extensions.
+`RestClient` is the same as [ClientSupport#restClient()](client.md), available for Guicey extensions.
 It extends the same `TestClient` class and so provides the same abilities:
 
 * [Defaults](client.md#defaults)
-* [Shortcut methods](client.md#simple-shortcuts)
+* [Shortcut methods](client.md#shortcuts)
 * [Builder API](client.md#builder-api)
 * [Response assertions](client.md#response-assertions)
 * [Static resource client](client.md#resource-clients)
@@ -278,7 +277,7 @@ It extends the same `TestClient` class and so provides the same abilities:
     it could be used with a full URLs.
 
 !!! note
-    Multipart support is enabled automatically when dropwizard-forms available in classpath
+    Multipart support is enabled automatically when `dropwizard-forms` is available in the classpath
 
     ```java
     rest.buildForm("/some/path")

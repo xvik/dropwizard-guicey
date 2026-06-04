@@ -32,9 +32,9 @@ Object is a wrapper above [JerseyClient](https://eclipse-ee4j.github.io/jersey.g
     * `server.rootPath` - rest context (relative to app context)
     * `server.adminContextPath` - admin context
 
-    By default, all contexts are "/". 
-    
-    ClientSupport povides access to resolved configuration with:
+    By default, all contexts are "/".
+
+    ClientSupport provides access to resolved configuration with:
 
     ```java
     client.getPort()        // app port (8080)
@@ -104,8 +104,8 @@ all required methods to call web resources.
 `TestClient` contains simplified GET/POST/PUT/PATCH/DELETE shortcut methods:
 
 !!! tip
-    For rest testing prefer [lightweight rest](rest.md) - these tests are faster because the real web server is 
-    not started (no rela web calls - they are simulated). This is an official jersey testing api. 
+    For rest testing prefer [lightweight rest](rest.md) - these tests are faster because the real web server is
+    not started (no real web calls - they are simulated). This is an official jersey testing api.
 
 
 ```java
@@ -126,7 +126,7 @@ public void testWeb(ClientSupport client) {
 }
 ```
 
-POST/PUT/PATCH could accept raw entities (converted to json) or custom `Enitity` objects:
+POST/PUT/PATCH could accept raw entities (converted to JSON) or custom `Entity` objects:
 
 ```java
 client.post("rest/action", Entity.text("text"), Result.class);
@@ -185,7 +185,7 @@ Defaults could be cleared at any time with `client.reset()`.
 ## Sub clients
 
 There is a concept of sub clients. It is used to create a client for a specific sub-url.
-For example, suppose all called methods in test have some base path: `/{somehting}/path/to/resource`.
+For example, suppose all called methods in a test have some base path: `/{something}/path/to/resource`.
 Instead of putting it into each request:
 
 ```java
@@ -288,8 +288,8 @@ client.buildGet("/path")
     .as(User.class)
 ```
 
-```
-Request configuration: 
+```text
+Request configuration:
 
 	Path params:
 		p1=1                                      at r.v.d.g.t.c.builder.(RequestBuilderTest.java:61)
@@ -371,7 +371,7 @@ User user = rest.buildGet("/users/123")
 
 Here assertion error will be thrown if header or cookie was not provided or condition does not match.
 
-Even if you need to obtain a header or cookie value from response, you can use assetions to verify 
+Even if you need to obtain a header or cookie value from response, you can use assertions to verify
 header/cookie presence:
 
 ```java
@@ -709,7 +709,7 @@ ResourceClient<SubResource> subRest = rest.subResource(Resource::sub, SubResourc
 
 ### Resource typification
 
-It is not always possible to use resource class to buld a sub client
+It is not always possible to use a resource class to build a sub client
 (with `.restClient(Resource.class)`).
 
 In such cases you can build a resource path manually and then "cast" client to the resource type:
@@ -779,8 +779,8 @@ public class SimpleTestClientFactory extends DefaultTestClientFactory {
 }
 ```
 
-Default implementation (`DefaultTestClientFactory`) applies timeouts and auto-registers multipart support if `dropwizard-forms` module
-if available in classpath.
+The default implementation (`DefaultTestClientFactory`) applies timeouts and auto-registers multipart support if the `dropwizard-forms` module
+is available in the classpath.
 
 Custom implementation could be specified directly in the test annotation:
 
@@ -796,7 +796,7 @@ Custom implementation could be specified directly in the test annotation:
 
 Default implementation:
 
-1. Enables multipart feature if `dropwizard-forms` is in classpath (so the client could be used
+1. Enables multipart feature if `dropwizard-forms` is in the classpath (so the client could be used
    for sending multipart data).
 2. Enables request and response logging to simplify writing (and debugging) tests.
 
@@ -805,7 +805,7 @@ actions visibility (logging might not be configured in tests).
 
 Example output:
 
-```
+```text
 
 [Client action]---------------------------------------------{
 1 * Sending client request on thread main
@@ -826,7 +826,7 @@ Example output:
 }----------------------------------------------------------
 ```
 
-Console output might be disabled with a system proprty:
+Console output might be disabled with a system property:
 
 ```java
 // shortcut sets DefaultTestClientFactory.USE_LOGGER property

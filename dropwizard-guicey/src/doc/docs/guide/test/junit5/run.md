@@ -1,6 +1,6 @@
 # Testing application
 
-Guicey provides two junit extensions:
+Guicey provides two JUnit extensions:
 
 * [@TestGuiceyApp](#testing-core-logic) - for lightweight tests (without starting web part, only guice context)
 * [@TestDropwizardApp](#testing-web-logic) - for complete integration tests
@@ -18,10 +18,10 @@ Both extensions:
 * [Inject guice beans](inject.md) directly in test fields.
 * Support [method parameters injection](inject.md#parameter-injection)
 * Support [hooks](hooks.md) and [setup objects](setup-object.md) for test configuration
-* Support [alternative declaration](#alternative-declaration) for [deferred configuration](#deferred-configuration)
-  or [starting application for each test method](#start-application-by-test-method). 
+* Support [alternative declaration](#alternative-declaration) for [deferred configuration](config.md#deferred-configuration)
+  or [starting application for each test method](#start-application-per-test-method).
 * Provide pre-configured [http client](client.md) might be used for calling test application endpoints (or external).
-* Support junit [parallel execution](#parallel-execution) (no side effects).
+* Support JUnit [parallel execution](parallel.md#parallel-execution) (no side effects).
 
 
 Field annotations:
@@ -82,7 +82,7 @@ Application started before all tests in annotated class and stopped after them.
 | injectOnce      | Inject test fields just one for multiple test methods with one test instance | false                      |
 | debug           | Enable extension debug output                                               | false                      |
 | reuseApplication | Use the same application instance for multiple tests                        | false                      |
-| useDefaultExtensions | Use default guicey field extensions                                         | true                       |
+| useDefaultExtensions | Use default Guicey field extensions                                         | true                       |
 | clientFactory | Custom client factory to use                                                | `DefaultTestClientFactory` |
 | managedLifecycle | Managed beans lifecycle simulation                                          | true                       |
 
@@ -113,7 +113,7 @@ static TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(..)
 
 ### Inject test fields once
 
-By default, guicey would inject test field values before every test method, even if the same
+By default, Guicey would inject test field values before every test method, even if the same
 test instance used (`TestInstance.Lifecycle.PER_CLASS`). This should not be a problem
 in the majority of cases because guice injection takes very little time.
 Also, it is important for prototype beans, which will be refreshed for each test.
@@ -186,8 +186,8 @@ In order to start application on random port you can use configuration shortcut:
                       randomPorts = true)
     ```
     Also, random ports support both server types (default and simple)
-    
-Real ports could be resolved with [ClientSupport](#client) object.
+
+Real ports could be resolved with [ClientSupport](client.md) object.
 
 ### Rest mapping
 
@@ -230,15 +230,15 @@ static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(AutoScanApplic
         ...
 ```
 
-This alternative declaration is intended to be used in cases when guicey extensions need to be aligned with
-other 3rd party extensions: in junit you can order extensions declared with annotations (by annotation order)
+This alternative declaration is intended to be used in cases when Guicey extensions need to be aligned with
+other 3rd party extensions: in JUnit you can order extensions declared with annotations (by annotation order)
 and extensions declared with `@RegisterExtension` (by declaration order). But there is no way
 to order extension registered with `@RegisterExtension` before annotation extension.
 
-So if you have 3rd party extension which needs to be executed BEFORE guicey extensions, you can use field declaration.
+So if you have a 3rd party extension which needs to be executed BEFORE Guicey extensions, you can use field declaration.
 
 !!! note
-    Junit 5 intentionally shuffle `@RegisterExtension` extensions order, but you can always order them with
+    JUnit 5 intentionally shuffles the `@RegisterExtension` extension order, but you can always order them with
     `@Order` annotation.
 
 ### Start application per test method
