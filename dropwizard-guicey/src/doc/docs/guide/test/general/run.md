@@ -5,7 +5,7 @@ An application could be started in 2 ways:
 1. Core - create only Guice injector (without starting web services) - ideal for business logic testing (pretty fast)
 2. Web - full application startup to test web endpoints (and complete flows)
 
-The second case is handled by [DropwizardTestSupport](https://www.dropwizard.io/en/release-4.0.x/manual/testing.html#non-junit)
+The second case is handled by [DropwizardTestSupport](https://www.dropwizard.io/en/release-5.0.x/manual/testing.html#non-junit)
 and the first one by `GuiceyTestSupport` object (extending `DropwizardTestSupport`).
 
 There is a generic builder to simplify work with these objects (provides all possible configuration options):

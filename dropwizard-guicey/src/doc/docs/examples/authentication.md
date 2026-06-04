@@ -1,10 +1,10 @@
 # Authentication
 
-Example of [dropwizard authentication](https://www.dropwizard.io/en/release-4.0.x/manual/auth.html) usage with guice.
+Example of [Dropwizard authentication](https://www.dropwizard.io/en/release-5.0.x/manual/auth.html) usage with Guice.
 
 ## Simple auth
 
-Using [dropwizard oauth](https://www.dropwizard.io/en/release-4.0.x/manual/auth.html#oauth2) example as basement.
+Using the [Dropwizard OAuth](https://www.dropwizard.io/en/release-5.0.x/manual/auth.html#oauth2) example as the basis.
 Other auth types are configured in similar way.
 
 ```java
@@ -46,10 +46,10 @@ public class OAuthDynamicFeature extends AuthDynamicFeature {
 ```
 
 The class is automatically picked up by the [jersey installer](../installers/jersey-ext.md#dynamicfeature).
-`OAuthAuthenticator` and `UserAuthorizer` are simple guice beans (no special installation required).
+`OAuthAuthenticator` and `UserAuthorizer` are simple Guice beans (no special installation required).
 
 Constructor injection is used to obtain required guice managed instances and then configure
-authentication the same way as described in dropwizard docs.
+authentication the same way as described in the Dropwizard docs.
 
 If autoconfiguration is enabled, then the class will be resolved and installed automatically.
 
@@ -58,7 +58,7 @@ If autoconfiguration is enabled, then the class will be resolved and installed a
 
 ## Chained auth
 
-[Chained auth](https://www.dropwizard.io/en/release-4.0.x/manual/auth.html#chained-factories) can be used to support different authentication schemes.
+[Chained auth](https://www.dropwizard.io/en/release-5.0.x/manual/auth.html#chained-factories) can be used to support different authentication schemes.
 
 Integration approach is the same as in simple case:
 
@@ -92,7 +92,7 @@ public class ChainedAuthDynamicFeature extends AuthDynamicFeature {
 
 ## Polymorphic auth
 
-[Polymorphic auth](https://www.dropwizard.io/en/release-4.0.x/manual/auth.html#multiple-principals-and-authenticators) allows using different auth schemes simultaneously.
+[Polymorphic auth](https://www.dropwizard.io/en/release-5.0.x/manual/auth.html#multiple-principals-and-authenticators) allows using different auth schemes simultaneously.
 
 Integration approach is the same as in simple case:
 

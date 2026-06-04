@@ -14,7 +14,7 @@ Useful when:
 Test utils:
 
  - `TestSupport` - root utilities class, providing easy access to other helpers
- - `DropwizardTestSupport` - [Dropwizard native support](https://www.dropwizard.io/en/release-4.0.x/manual/testing.html#non-junit) for full integration tests
+ - `DropwizardTestSupport` - [Dropwizard native support](https://www.dropwizard.io/en/release-5.0.x/manual/testing.html#non-junit) for full integration tests
  - `GuiceyTestSupport` - Guice context-only integration tests (without starting web part)
  - `CommandTestSupport` - general commands tests 
  - `ClientSupport` - web client helper (useful for calling application urls)

@@ -1,9 +1,9 @@
 # Hibernate integration
 
-Example of [dropwizard-hibernate](https://www.dropwizard.io/en/release-4.0.x/manual/hibernate.html) bundle usage with guicey.
+Example of [dropwizard-hibernate](https://www.dropwizard.io/en/release-5.0.x/manual/hibernate.html) bundle usage with Guicey.
 
 !!! abstract ""
-    Example [source code](https://github.com/xvik/dropwizard-guicey/examples/tree/master/integration-hibernate)
+    Example [source code](https://github.com/xvik/dropwizard-guicey/tree/master/examples/integration-hibernate)
 
 ## Configuration
 
@@ -19,9 +19,9 @@ Additional dependencies required:
 
 For simplicity, an embedded H2 database is used.
 
-Overall configuration is exactly the same as described in [dropwizard docs](https://www.dropwizard.io/en/release-4.0.x/manual/hibernate.html), 
+Overall configuration is exactly the same as described in the [Dropwizard docs](https://www.dropwizard.io/en/release-5.0.x/manual/hibernate.html),
 but extracted to separate class for simplicity:
- 
+
 ```java
 public class HbnBundle extends HibernateBundle<HbnAppConfiguration> {
 
@@ -106,7 +106,7 @@ public void initialize(Bootstrap<HbnAppConfiguration> bootstrap) {
 
 ## Usage
 
-It is simpler to use dropwizard `AbstractDAO` for hibernate logic:
+It is simpler to use Dropwizard `AbstractDAO` for Hibernate logic:
 
 ```java
 public class SampleService extends AbstractDAO<Sample> {
@@ -127,10 +127,10 @@ public class SampleService extends AbstractDAO<Sample> {
 ```
 
 !!! attention ""
-    You will need to use dropwizard `@UnitOfWork` annotation to declare transaction scope.
-    
+    You will need to use Dropwizard `@UnitOfWork` annotation to declare transaction scope.
+
 For example:
-    
+
 ```java
 @Path("/sample")
 @Produces("application/json")

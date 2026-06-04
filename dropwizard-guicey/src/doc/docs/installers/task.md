@@ -1,13 +1,13 @@
 # Task installer
 
 !!! summary ""
-    CoreInstallersBundle / [TaskInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/TaskInstaller.java)        
+    CoreInstallersBundle / [TaskInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/dropwizard-guicey/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/TaskInstaller.java)
 
-Installs [dropwizard tasks](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#tasks).
+Installs [Dropwizard tasks](https://www.dropwizard.io/en/release-5.0.x/manual/core.html#tasks).
 
 ## Recognition
 
-Detects classes extending dropwizard `#!java Task` and register their instances in environment.
+Detects classes extending Dropwizard `#!java Task` and registers their instances in the environment.
 
 ```java
 public class MyTask extends Task {
