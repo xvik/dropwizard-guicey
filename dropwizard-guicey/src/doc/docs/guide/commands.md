@@ -2,7 +2,7 @@
 
 ## Guice injections
 
-Guicey calls `injector.injectMembers(command)` for all registered `EnvironmentCommand`s, so you can inject guice beans directly:
+Guicey calls `injector.injectMembers(command)` for all registered `EnvironmentCommand`s, so you can inject Guice beans directly:
 
 ```java
 public class MyCommand extends EnvironmentCommand<MyConfiguration> {
@@ -22,28 +22,28 @@ public class MyCommand extends EnvironmentCommand<MyConfiguration> {
         }
 }
 ```
- 
-!!! note 
-    It doesn't matter if command was registered manually, by some bundle or with commands search (see below).
+
+!!! note
+    It doesn't matter if a command was registered manually, by some bundle, or with command search (see below).
 
 !!! warning
-    You can use guice injections only in `EnvironmentCommand`s because only these commands start bundles (and so launch guice context creation).
+    You can use Guice injections only in `EnvironmentCommand`s because only these commands start bundles (and so launch Guice context creation).
 
 ## Automatic installation
 
-Automatic scan for commands is disabled by default. It could be enabled by: 
+Automatic scanning for commands is disabled by default. It can be enabled by:
 
 ```java
 GuiceBundle.builder()
     .enableAutoConfig("package.to.scan")
     .searchCommands()
-``` 
+```
 
-When enabled, all classes extending `Command` are instantiated using default constructor and registered in dropwizard bootstrap object. 
+When enabled, all classes extending `Command` are instantiated using the default constructor and registered in the Dropwizard bootstrap object.
 
 ### Simple commands
 
-For example, if command below would be inside scanned package, then guicey will automatically register it.
+For example, if the command below is inside a scanned package, then Guicey will automatically register it.
 
 ```java
 public class MyCommand extends Command {
@@ -62,7 +62,7 @@ public class MyCommand extends Command {
 ### Environment commands
 
 !!! important
-    `EnvironmentCommand` must have constructor with `Application` argument.
+    `EnvironmentCommand` must have a constructor with an `Application` argument.
 
 ```java
 public class SyncCommand extends EnvironmentCommand<AppConfiguration> {
@@ -90,5 +90,5 @@ public class SyncCommand extends EnvironmentCommand<AppConfiguration> {
 }
 ```
 
-This example shows workaround for managed initialization in commands: `DbManager` is some `Managed` bean which would run automatically 
-in server mode. But commands never call managed objects, so we have to manually start and stop them.
+This example shows a workaround for managed initialization in commands: `DbManager` is a `Managed` bean that would run automatically
+in server mode. But commands never start managed objects, so we have to manually start and stop them.

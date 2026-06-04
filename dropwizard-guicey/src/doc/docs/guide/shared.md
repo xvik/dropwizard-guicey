@@ -1,26 +1,26 @@
 # Shared configuration state
 
 Sometimes, it is required to pass configuration values between different application parts
-or implement bundles communication. In these cases usually you have to use `ThreadLocal` (direct static fields can't 
-be used because it will make problems for tests).
+or implement bundle communication. In these cases, you usually have to use `ThreadLocal` (direct static fields can't
+be used because they will cause problems for tests).
 
 !!! attention
-    Use it only when it's not possible to avoid.
+    Use it only when it is not possible to avoid it.
 
-Guicey adds shared state support in order to replace all current and future hacks (and 
-so avoid unexpected side effects for tests).
+Guicey adds shared state support in order to replace all current and future hacks (and
+so avoid unexpected side effects in tests).
 
 Shared state is created together with `GuiceBundle` creation and destroyed with application shutdown.
-Internally it is implemented as static map with value reference by application instance.
+Internally, it is implemented as a static map with values referenced by application instance.
 
 !!! note
     Don't abuse it! It must be used only for edge cases. To better understand
     shared state usage, there is a [special report](diagnostic/shared-state-report.md).
-    
-Guicey use it for storing `Injector` object ([InjectorLookup](guice/injector.md#access-injector) is actually a shortcut for shared state access).
-Also, all main dropwizard objects are stored there for direct reference.
 
-[SPA](../extras/spa.md) bundle use it to avoid colliding paths:
+Guicey uses it for storing the `Injector` object ([InjectorLookup](guice/injector.md#access-injector) is actually a shortcut for shared state access).
+Also, all main Dropwizard objects are stored there for direct reference.
+
+The [SPA](../extras/spa.md) bundle uses it to avoid colliding paths:
 
 ```java
 public class SpaBundle implements GuiceyBundle {
@@ -44,8 +44,8 @@ public class SpaBundleState {
 ```
 
 
-[GSP](../extras/gsp.md) bundles use it for bundles communication.
-Core bundle register global configuration:
+[GSP](../extras/gsp.md) bundles use it for bundle communication.
+The core bundle registers global configuration:
 
 ```java
 public class ServerPagesBundle extends UniqueGuiceyBundle {
@@ -60,7 +60,7 @@ public class ServerPagesBundle extends UniqueGuiceyBundle {
 }
 ```
 
-Application bundle reference this state:
+The application bundle references this state:
 
 ```java
 public class ServerPagesAppBundle implements GuiceyBundle {
@@ -80,9 +80,9 @@ This way, duplicate registrations could be checked, and global views support cou
 
 ## Shared state restrictions
 
-Internally shared state is a `Map<String, Object>`, but state API force you to use Class as key for **type safety**:
-it is assumed that **unique class** would be created for shared state (even if you just need to store a simple value)
-and the stored object type would be a key.
+Internally, shared state is a `Map<String, Object>`, but the state API forces you to use a `Class` as a key for **type safety**:
+it is assumed that a **unique class** would be created for shared state (even if you just need to store a simple value)
+and the stored object type would be the key.
 
 Other restrictions:
 
@@ -91,10 +91,10 @@ Other restrictions:
 
 ## Auto-closable values
 
-If stored value implements `AutoClosable` - it would be closed
-automcaticlly on application shutdown.
+If a stored value implements `AutoClosable`, it would be closed
+automatically on application shutdown.
 
-## State usage technics
+## State usage techniques
 
 ### Parent-child
 
@@ -111,10 +111,10 @@ SomeState state = bootstrap
         .sharedStateOrFail(SomeState.class, "State not declared");
 ```
 
-Here, error would be thrown if state is not initialized.
+Here, an error would be thrown if the state is not initialized.
 
 !!! note
-    Guicey bundles registration works the same way as for dropwizard bundles:
+    Guicey bundle registration works the same way as for Dropwizard bundles:
     if you register some bundle from the core bundle, it would be initialized immediately.
 
     ```java
@@ -132,8 +132,8 @@ Here, error would be thrown if state is not initialized.
 
 ### Indirect registration
 
-In some cases, we might have a "race condition" if we're not sure when state value is initialized
-(for example, two bundles could be declared in the different order).
+In some cases, we might have a "race condition" if we're not sure when the state value is initialized
+(for example, two bundles could be declared in a different order).
 
 For such cases, there is delayed access:
 
@@ -142,34 +142,34 @@ bootstrap.whenSharedStateReady(SomeState.class, (state) -> ...)
 ```
 
 !!! important
-    Listener could be not called at all if target value would not be initialized.
-    All not used listeners could be seen in [shared state report](diagnostic/shared-state-report.md)
+    A listener might not be called at all if the target value is not initialized.
+    All unused listeners can be seen in the [shared state report](diagnostic/shared-state-report.md)
 
 ### First wins
 
 As shown in the SPA example above, shared state may be used by different instances
 of the same bundle to perform global validations.
 
-In this case "get or initialize" approach used:
+In this case, the "get or initialize" approach is used:
 
 ```java
 SomeState state = bootstrap.sharedState(SomeState.class, SomeState::new)
 ```
 
-Here existing state would be requested (if already registered) or new one stored. 
+Here, existing state would be requested (if already registered) or a new one would be stored.
 
 ## Utility
 
-During startup shared state could be obtained with a static call:
+During startup, shared state can be obtained with a static call:
 
 ```java
-SharedConfigurationState.getStartupInstance() 
+SharedConfigurationState.getStartupInstance()
 ```
 
 !!! note ""
     Static reference is possible only from the main application thread (which is always the case during initialization)
 
-Shared state holds references to the main dropwizard objects, see methods:
+Shared state holds references to the main Dropwizard objects; see methods:
 
 - getBootstrap()
 - getApplication()
@@ -180,15 +180,15 @@ Shared state holds references to the main dropwizard objects, see methods:
 - getOptions()
 
 All of them return providers: e.g. `SharedConfigurationState.getStartupInstance().getBootsrap()`
-would return `Provider<Bootstrap>`. This is required because target object
-might not be available yet, still there would be a way to initialize some logic with "lazy object"
-(to call it later, when object would be available) at any configuration stage.
+would return `Provider<Bootstrap>`. This is required because the target object
+might not be available yet, and there would still be a way to initialize some logic with a "lazy object"
+(to call it later, when the object becomes available) at any configuration stage.
 
 ## Main bundle
 
 It is assumed that there should be no need to access shared state from [main bundle](configuration.md#main-bundle).
-So [the only state-related method](configuration.md#hooks-related) actually assumed to be used by [hooks](hooks.md):
- 
+So [the only state-related method](configuration.md#hooks-related) is actually assumed to be used by [hooks](hooks.md):
+
 ```java
 static class XHook implements GuiceyConfigurationHook {
     @Override
@@ -202,7 +202,7 @@ static class XHook implements GuiceyConfigurationHook {
 
 ## Guicey bundle
 
-Shared state is assumed to be used by bundles. Bundle provides special [shortcut methods](configuration.md#guicey-bundle) 
+Shared state is assumed to be used by bundles. Bundles provide special [shortcut methods](configuration.md#guicey-bundle)
 for accessing state. It is assumed that state is declared under initialization phase and
 could be accessed under both phases (but not restricted, so state could be declared in run phase too).
 
@@ -210,8 +210,8 @@ For usage examples see [decomposition section](../decomposition.md#shared-state)
 
 ## Guice modules
 
-Shared state is not intended to be used in guice modules, but it is possible. 
-To simplify usage there are shortcuts available in [dropwizard aware module](guice/module-autowiring.md#shared-state) base class. 
+Shared state is not intended to be used in Guice modules, but it is possible.
+To simplify usage, there are shortcuts available in the [Dropwizard-aware module](guice/module-autowiring.md#shared-state) base class.
 
 ## Static access
 
@@ -229,33 +229,33 @@ Or direct value access:
 
 ```java
 SharedConfigurationState.lookup(application, XBundle.class)
-```                    
+```
 
-And it is possible to use `Environment` instance for access:
+And it is possible to use an `Environment` instance for access:
 
 ```java
 SharedConfigurationState.get(environment)
 SharedConfigurationState.lookup(environment, XBundle.class)
 ```
 
-Special shortcut methods may be used for "get or fail behaviour":
+Special shortcut methods may be used for "get or fail" behavior:
 
 ```java
-SharedConfigurationState.lookupOrFail(app, XBundle.class, 
+SharedConfigurationState.lookupOrFail(app, XBundle.class,
         "Failed to lookup %s service", XBundle.class.getSimpleName())
-``` 
+```
 
-It will throw IllegalStateException if shared context is not available or no value.
-Note that message is formatted with `String.format`. 
+It will throw an `IllegalStateException` if the shared context is not available or no value exists.
+Note that message is formatted with `String.format`.
 
 ## Tests
 
 Shared state is referenced by application instance, so there should not be any
 problems with tests.
 
-The only possible side effect is when you test many application startup error situations, 
-when application did not shutdown properly and so some shared contexts may not be removed.
-If it (hard to imagine how) will affect your tests, you can forcefully clean all states:
+The only possible side effect is when you test many application startup error situations,
+when the application did not shut down properly and so some shared contexts may not be removed.
+If it (hard to imagine how) affects your tests, you can forcefully clean all states:
 
 ```java
 SharedConfigurationState.clear()
@@ -272,7 +272,7 @@ The following objects are available in shared state just in case:
 * [Options](options.md)
 * Injector
 
-So any of it could be accessed statically with application or environment instance:
+So any of them could be accessed statically with an application or environment instance:
 
 ```java
 Optional<Bootstrap> bootstrap = SharedConfigurationState
@@ -284,7 +284,7 @@ or
 ```java
 Bootstrap bootstrap = SharedConfigurationState
             .lookupOrFail(environment, Bootstrap.class, "No bootstrap available");
-``` 
+```
 
 !!! tip
-    During startup these objects might be referenced as lazy objects with [shortcuts](#utility)
+    During startup, these objects might be referenced as lazy objects with [shortcuts](#utility).

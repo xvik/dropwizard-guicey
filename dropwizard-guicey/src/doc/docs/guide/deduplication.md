@@ -1,6 +1,6 @@
 # Configuration de-duplication
 
-Guice modules, bundles and dropwizard bundles allow registration of multiple instance
+Guice modules, bundles, and Dropwizard bundles allow registration of multiple instances
 of the same type. For example:
 
 ```java
@@ -8,14 +8,14 @@ of the same type. For example:
 ```
 
 !!! note
-    Before, guice did not allow to register multiple modules of the same type, but
-    multiple instances support is more logical in context of dropwizard, because 
-    dropwizard itself allows registration of multiple bundles of the same type.
-    
+    Before, Guice did not allow registration of multiple modules of the same type, but
+    supporting multiple instances is more logical in the context of Dropwizard, because
+    Dropwizard itself allows registration of multiple bundles of the same type.
+
 ## Duplicates
 
-But in some cases it is desirable to avoid such registrations. For example, if two bundles 
-install the same common bundle it would be installed twice:
+But in some cases it is desirable to avoid such registrations. For example, if two bundles
+install the same common bundle, it would be installed twice:
 
 ```java
 public class Feature1Bundle implements GuiceyBundle {
@@ -37,13 +37,13 @@ GuiceBundle.buider()
     ...
 ```
 
-To work around such cases *deduplication mechanism** was introduced: instances of the same 
-type are considered duplicate if they are equal. 
+To work around such cases, a **de-duplication mechanism** was introduced: instances of the same
+type are considered duplicate if they are equal.
 
 ## Equals method
 
-In order to resolve "common bundle/module problem" bundle/module must only 
-properly implement equals method:
+In order to resolve the "common bundle/module problem", a bundle/module must only
+properly implement the `equals` method:
 
 ```java
 public class CommonBundle implements GuiceyBundle {
@@ -54,12 +54,12 @@ public class CommonBundle implements GuiceyBundle {
         return obj != null && getClass().equals(obj.getClass());
     }
 }
-```   
+```
 
 !!! tip
-    Guicey provide base classes for such cases: `UniqueGuiceyBundle` for unique bundles 
-    and `UniqueModule` (or `UniqueDropwizardAwareModule`) for unique guice modules. So bundle above could be simplified to:
-    
+    Guicey provides base classes for such cases: `UniqueGuiceyBundle` for unique bundles
+    and `UniqueModule` (or `UniqueDropwizardAwareModule`) for unique Guice modules. So the bundle above could be simplified to:
+
     ```java
     public class CommonBundle extends UniqueGuiceyBundle { ... }
     ```
@@ -69,24 +69,24 @@ comparison to treat as duplicates only instances with the same parameters.
 
 ## Unique items
 
-When it is impossible to properly implement equals method (for example, because target bundle or module is
-3rd party) you can simply explicitly declare them as unique:
+When it is impossible to properly implement the `equals` method (for example, because the target bundle or module is
+3rd-party), you can simply explicitly declare them as unique:
 
 ```java
 GuiceBundle.builder()
     .uniqueItems(Some3rdPartyBundle.class, 
                  Some3rdPartyModule.class)
-```  
+```
 
 Now only one instance of `Some3rdPartyBundle` and `Some3rdPartyModule` will be registered
-and all other instances considered as duplicate.
+and all other instances are considered duplicates.
 
 ## General unique logic
 
-[.uniqueItems()](#unique-items) method above is actually a shortcut for custom deduplication
-mechanism registration (most common case).
+The [.uniqueItems()](#unique-items) method above is actually a shortcut for custom de-duplication
+mechanism registration (the most common case).
 
-But you can implement your own deduplication logic and register with: 
+But you can implement your own de-duplication logic and register it with:
 
 ```java
 GuiceBundle.builder()
@@ -107,11 +107,11 @@ GuiceBundle.builder()
 
 !!! warning
     You can't use `.duplicateConfigDetector()` and `.uniqueItems()` at the same time - one would override another (depends on order).
-    In case of override you will only see warning in logs.
+    In case of an override, you will only see a warning in the logs.
 
 ## Legacy mode
 
-Old guicey "1 instance per class" behaviour could be recovered with bundled detector:
+Old Guicey "1 instance per class" behavior could be restored with the bundled detector:
 
 ```java
 .duplicateConfigDetector(new LegacyModeDuplicatesDetector())
@@ -119,10 +119,10 @@ Old guicey "1 instance per class" behaviour could be recovered with bundled dete
 
 ## Reporting
 
-[Configuration diagnostic report](diagnostic/configuration-report.md) (`.printDiagnosticInfo()`) 
+[Configuration diagnostic report](diagnostic/configuration-report.md) (`.printDiagnosticInfo()`)
 shows all registered instances and ignored duplicates.
 
-For example, if we have module declared to be unique by constructor value:
+For example, if we have a module declared to be unique by constructor value:
 
 ```java
 public class VMod extends AbstractModule {
@@ -150,29 +150,29 @@ If modules are registered like this:
     .build()
 ```
 
-Report would contain:
+The report would contain:
 
-```
+```text
 GUICE MODULES =
-        VMod                          (com.mycompany) *REG(2/4) 
+        VMod                          (com.mycompany) *REG(2/4)
 
 APPLICATION
     ├── module     VMod                          (com.mycompany)
     ├── module     -VMod                         (com.mycompany) *DUPLICATE
     ├── module     VMod#2                        (com.mycompany)
     ├── module     -VMod#2                       (com.mycompany) *DUPLICATE
-```         
+```
 
-Where you can see that 2 of 4 registered modules of type VMod were registered.
-Note that instances are numbered (#2) in order of registration (without duplicates) 
-so you can always see what bundle were considered as original (and see registration order when
-bundles of the same type are registered in different bundles). 
+There you can see that 2 of 4 registered modules of type VMod were registered.
+Note that instances are numbered (#2) in order of registration (without duplicates),
+so you can always see which bundle was considered the original (and see the registration order when
+bundles of the same type are registered in different bundles).
 
 ## Limitations
 
 ### Guice modules
 
-Transitive guice modules are **not counted** during de-duplication.
+Transitive Guice modules are **not counted** during de-duplication.
 
 For example,
 
@@ -192,29 +192,29 @@ GuiceBindle.builder()
     .uniqueItems(MyModule.class)
 ```
 
-This **will not work** because guicey is not aware of transitive modules (guicey can only know modules tree on class level, 
+This **will not work** because Guicey is not aware of transitive modules (Guicey can only know the module tree at the class level,
 but can't see exact instances).
 
-BUT *guice natively support de-duplication of equal modules*, so if your module have proper equals
+But *Guice natively supports de-duplication of equal modules*, so if your module has a proper `equals` method,
 
 ```java
 public class MyModule extends UniqueModule {}
 ```
 
-Then guice will perform de-duplication itself.
+Then Guice will perform de-duplication itself.
 
 !!! warning
-    Guice will perform de-duplication itself only if both `equals` and `hashCode` properly implemented
-    (like in `UniqueModule`)  
+    Guice will perform de-duplication itself only if both `equals` and `hashCode` are properly implemented
+    (like in `UniqueModule`)
 
 
 !!! note
     Guice can also *de-duplicate bindings*: if bindings from different module instances
-    are the same then guice will simply ignore duplicate bindings. 
+    are the same, then Guice will simply ignore duplicate bindings.
 
 ### Dropwizard bundles
 
-Guicey **can see** transitive dropwizard bundles and properly apply de-duplication logic.
+Guicey **can see** transitive Dropwizard bundles and properly apply de-duplication logic.
 For example,
 
 ```java
@@ -231,16 +231,16 @@ public class OtherBundle implements ConfiguredBundle {
 GuiceBindle.builder()
     .dropwizardBundles(new OtherBundle(), new MyBundle())
     .uniqueItems(MyBundle.class)
-```        
+```
 
-This **will work** because guicey use special proxy to intercept transitive registrations
-(so, essentially, transitive registrations are treated the same as direct)
+This **will work** because Guicey uses a special proxy to intercept transitive registrations
+(so, essentially, transitive registrations are treated the same as direct ones).
 
 !!! note
-    This means that if you have "common dropwizard bundle" problem, then you can simply 
-    register it with guicey and it will be able to properly de-duplicate it.
+    This means that if you have a "common Dropwizard bundle" problem, then you can simply
+    register it with Guicey and it will be able to properly de-duplicate it.
 
-BUT guicey *does not "see"* directly installed bundles (intentionally!). For example,
+But Guicey *does not "see"* directly installed bundles (intentionally!). For example,
 
 ```java
 bootstrap.addBundle(new MyBundle())
@@ -250,5 +250,5 @@ bootstrap.addBundle(GuiceBindle.builder()
                 .build())
 ```
 
-This **will not work** because guicey see only directly registered bundles: `OtherBundle` and transitive `MyBundle`,
-and so `MyBundle` would be registered twice.  
+This **will not work** because Guicey sees only directly registered bundles: `OtherBundle` and transitive `MyBundle`,
+and so `MyBundle` would be registered twice.
