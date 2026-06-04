@@ -1,7 +1,7 @@
 # Validation
 
-By default, dropwizard allows you to use validation annotations on [rest services](https://www.dropwizard.io/en/stable/manual/validation.html).
-This module allows you to use validation annotations the same way on any guice bean method.
+By default, Dropwizard allows you to use validation annotations on [rest services](https://www.dropwizard.io/en/stable/manual/validation.html).
+This module allows you to use validation annotations the same way on any Guice bean method.
 
 Bundle is actually a wrapper for [guice-validator](https://github.com/xvik/guice-validator) project.
 
@@ -23,12 +23,12 @@ Gradle:
 implementation 'ru.vyarus.guicey:guicey-validation:{{ gradle.version }}'
 ```
 
-Omit version if guicey BOM used
+Omit the version if the Guicey BOM is used.
 
 ## Usage
 
-By default, no setup required: bundle will be loaded automatically with the bundles lookup mechanism (enabled by default).
-So just add jar into classpath and annotations will work.
+By default, no setup is required: the bundle will be loaded automatically with the bundle lookup mechanism (enabled by default).
+So just add the jar to the classpath, and the annotations will work.
 
 For example:
 
@@ -43,18 +43,18 @@ public class SampleBean {
     }
     
 }
-```         
+```
 
-Call `bean.doSomething(null)` will fail with `ConstraintValidationException`.
+Calling `bean.doSomething(null)` will fail with `ConstraintValidationException`.
 
-For more usage examples see [guice-validator documentation](https://github.com/xvik/guice-validator#examples) 
+For more usage examples see [guice-validator documentation](https://github.com/xvik/guice-validator#examples)
 
 ### Explicit mode
 
 By default, validations work in implicit mode: any method containing validation annotations would trigger validation
 on call.
 
-If you want more explicitly mark methods requiring validation then register bundle manually:
+If you want to more explicitly mark methods requiring validation, then register the bundle manually:
 
 ```java
 .bundles(new ValidationBundle()
@@ -74,8 +74,8 @@ If you want, you can use your own annotation:
 ### Reducing scope
 
 By default, validation is not applied to resource classes (annotated with `@Path`) because
-dropwizard already performs validation there. And rest methods, annotated with `@GET`, `@POST`, etc. 
-are skipped (required for complex declaration cases, like dynamic resource mappings or sub resources). 
+Dropwizard already performs validation there. And rest methods, annotated with `@GET`, `@POST`, etc.
+are skipped (required for complex declaration cases, like dynamic resource mappings or sub resources).
 
 You can reduce this scope even further:
 
@@ -98,10 +98,10 @@ Or excluding methods:
 ```
 
 Now methods annotated with `@SuppressValidation` will not be validated. Note that
-`.and(new DirectMethodMatcher())` condition was added to also exclude synthetic and bridge methods (jvm generated methods).
+`.and(new DirectMethodMatcher())` condition was added to also exclude synthetic and bridge methods (JVM-generated methods).
 
-!!! note 
-    You can verify AOP appliance with guicey `.printGuiceAopMap()` report.
+!!! note
+    You can verify AOP application with the Guicey `.printGuiceAopMap()` report.
 
 ### Validation groups
 

@@ -1,10 +1,10 @@
 # Guicey BOM
 
-Maven BOM contains guicey and guicey ext modules versions. Also includes dropwizard and guice boms.
+Maven BOM contains Guicey and Guicey ext modules versions. Also includes Dropwizard and guice boms.
 
 !!! tip
-    BOMs are useful for versions management. After including bom you can simply include required dependencies
-    (dropwizard, guice, guicey, guicey-ext) without versions: bom will control all versions.
+    BOMs are useful for version management. After including the BOM, you can simply include the required dependencies
+    (Dropwizard, guice, Guicey, guicey-ext) without versions: bom will control all versions.
 
 
 ## Setup
@@ -81,9 +81,9 @@ Spock-junit5 | `ru.vyarus:spock-junit5`
 
 ## Dependencies override
 
-You may override BOM version for any dependency by simply specifying exact version in dependency declaration section.
+You may override the BOM version for any dependency by simply specifying the exact version in the dependency declaration section.
 
-If you want to use newer version (then provided by guicey BOM) of dropwizard or guice then import also their BOMs directly:
+If you want to use a newer version than the one provided by the Guicey BOM of Dropwizard or Guice, then also import their BOMs directly:
 
-* `io.dropwizard:dropwizard-dependencies:$VERSION` for dropwizard
+* `io.dropwizard:dropwizard-dependencies:$VERSION` for Dropwizard
 * `com.google.inject:guice-bom:$VERSION` for guice
