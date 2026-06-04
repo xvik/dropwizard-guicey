@@ -1,6 +1,6 @@
-# Rest client
+# REST client
 
-Rest client creation:
+REST client creation:
 
 ```java
     public void test (ClientSupport client) {
@@ -9,7 +9,7 @@ Rest client creation:
     }
 ```
 
-or from root rest client:
+or from the root REST client:
 
 ```java
     ResourceClient<ResourceClass> rest = client.restClient().subClient(RestResource.class);
@@ -94,9 +94,9 @@ MyType res = rest.method(RestResource::get)
 ```
 
 
-## Sub resources
+## Sub-resources
 
-### Sub resource by instance
+### Sub-resource by instance
 
 ```java
     @Path("/sub")
@@ -111,7 +111,7 @@ MyType res = rest.method(RestResource::get)
         .isEqualTo("something")
 ```
 
-### Sub resource by class
+### Sub-resource by class
 
 ```java
     @Path("/sub")
@@ -179,7 +179,7 @@ MyType res = rest.method(RestResource::get)
         .assertHeader("Location", s -> s.endsWith("/get"));
 ```
 
-## Urlencoded forms
+## URL-encoded forms
 
 ### Simple values
 
@@ -235,7 +235,7 @@ MyType res = rest.method(RestResource::get)
                 .as(String.class)).isEqualTo("something");
 ```
 
-### Not mapped fields
+### Unmapped fields
 
 ```java
     @Path("/post2")

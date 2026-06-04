@@ -53,7 +53,7 @@ Multiple values are also possible:
     }
 ```
 
-## Mutlipart
+## Multipart
 
 Simple parameters:
 

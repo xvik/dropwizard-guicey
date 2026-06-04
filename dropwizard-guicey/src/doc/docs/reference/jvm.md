@@ -14,15 +14,15 @@ you. Know them before your first OOMKilled encounter.
 
 ### Running your Java application under the layers of Container or Kubernetes? The environment variable JAVA_TOOL_OPTIONS is your friend
 
-If you are running in a constrained environment with limited access to modify the comand 
-`java -jar ...`, don’t worry it is very easy to pass in custom JVM flags. Just set 
-the environment variable `JAVA_TOOL_OPTIONS` and it will be automatically picked up by 
-the JDK. This is true for OpenJDK and its variants like RedHat. If you are using a 
+If you are running in a constrained environment with limited access to modify the command
+`java -jar ...`, don’t worry it is very easy to pass in custom JVM flags. Just set
+the environment variable `JAVA_TOOL_OPTIONS` and it will be automatically picked up by
+the JDK. This is true for OpenJDK and its variants like RedHat. If you are using a
 different JDK, check documentation for an equivalent variable.
 
 You will see a log line as below during startup:
 
-```
+```text
 Picked up JAVA_TOOL_OPTIONS: -XX:SharedArchiveFile=application.jsa -XX:MaxRAMPercentage=80
 ```
 
@@ -38,7 +38,7 @@ at startup.
 
 It would look something like this:
 
-```
+```text
 -XX:InitialHeapSize=16777216 -XX:MaxHeapSize=858993459 -XX:MaxRAM=1073741824 -XX:MaxRAMPercentage=80.000000 -XX:MinHeapSize=6815736 -XX:+PrintCommandLineFlags -XX:ReservedCodeCacheSize=251658240 -XX:+SegmentedCodeCache -XX:SharedArchiveFile=application.jsa -XX:-THPStackMitigation -XX:+UseCompressedOops -XX:+UseSerialGC
 ```
 
@@ -65,7 +65,7 @@ on the same machine. But when running in containers with memory limits set corre
 this value can be increased to 60, 70 or even 80% depending on the application’s non-heap
 memory usage like byte buffers, page cache etc.
 
-```
+```text
 > docker run --memory 2g openjdk:24 java -XX:+PrintFlagsFinal -version | grep MaxRAMPercentage
     double MaxRAMPercentage                         = 25.000000                                 {product} {default}
 ```
@@ -73,10 +73,10 @@ memory usage like byte buffers, page cache etc.
 ### Garbage Collection algorithm changes depending on available memory
 
 Since Java 9, G1 is the default garbage collection algorithm replacing Parallel GC in 
-previous versions. But there is a caveat! This applies only if available memory (not heap 
+previous versions. But there is a caveat! This applies only if available memory (not heap
 size) is at least 2 GB. Below 2 GB, serial GC is the default algorithm.
 
-```
+```text
 > docker run --memory 1g openjdk:24 java -XX:+PrintFlagsFinal -version | grep -E "UseSerialGC | UseG1GC"
     bool UseG1GC                                  = false                                     {product} {default}
     bool UseSerialGC                              = true                                      {product} {ergonomic}
@@ -100,7 +100,7 @@ has no impact. It only affects the scheduling of the pod on a node.
 
 Since Java 10+, the JVM flag UseContainerSupport is available and always enabled by default.
 
-```
+```text
 > docker run --memory 1g openjdk:24 java -XX:+PrintFlagsFinal -version | grep UseContainerSupport
     bool UseContainerSupport                      = true                                      {product} {default}
 ```
@@ -112,10 +112,10 @@ generation. The Young generation is further divided into Eden and Survivor space
 The survivor space consists of two equally divided spaces S0 and S1.
 
 A newly created object is born in the Eden space. If it survives one or two garbage 
-collections, it is promoted to the Survivor space. If it survives even more garbage 
+collections, it is promoted to the Survivor space. If it survives even more garbage
 collections, it is considered an elder and promoted to the Tenured or Old space.
 
-```
+```text
 Total heap size = Eden space + Survivor space + Tenured space
 ```
 
@@ -130,10 +130,10 @@ Eden, Survivor and Tenured spaces will be fixed. The size of Young generation
 (Eden + Survivor) is determined by `MaxNewSize` which usually defaults to 1/3rd of the 
 max heap size. Within the young generation, the sizing of Eden and Survivor is 
 determined via `NewRatio` and `SurvivorRatio`. These default to 2 and 8 respectively in 
-OpenJDK. Effectively, old generation will be twice the size of young generation and 
+OpenJDK. Effectively, old generation will be twice the size of young generation and
 the Survivor space is 1/8th the size of Eden space.
 
-```
+```text
 Heap breakup under 2 GB / Serial GC
 
 Container memory limit = 1 GB
@@ -154,10 +154,10 @@ The most striking difference in metrics for G1 GC compared to Serial GC is that 
 max sizes of Eden and Survivor spaces show as zero. This is because in G1 GC, the size 
 of these spaces are not fixed and is resized after every GC cycle. This can be 
 confusing in the metrics as the values are non-zero while max is zero. The flags 
-`MaxNewSize`, `NewRatio` and `SurvivorRatio` apply to generational GCs like Serial and 
+`MaxNewSize`, `NewRatio` and `SurvivorRatio` apply to generational GCs like Serial and
 Parallel only and not G1.
 
-```
+```text
 Heap breakup over 2 GB / G1 GC
 
 Container memory limit = 2GB
