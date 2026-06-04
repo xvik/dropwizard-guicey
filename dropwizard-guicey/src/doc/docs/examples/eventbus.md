@@ -3,13 +3,13 @@
 Example of [guicey-eventbus](../extras/eventbus.md) extension usage.
 
 !!! abstract ""
-    Example [source code](https://github.com/xvik/dropwizard-guicey/examples/tree/master/ext-eventbus)
-    
-The [eventbus extension](../extras/eventbus.md) is used for:
+    Example [source code](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-eventbus)
 
-* automatic listeners registration
-* binding eventbus instance in guice context (for publication)
-* printing available listeners to console
+The [EventBus extension](../extras/eventbus.md) is used for:
+
+* automatic listener registration
+* binding the EventBus instance in the Guice context (for publication)
+* printing available listeners to the console
 
 ## Configuration
 
@@ -22,7 +22,7 @@ implementation 'ru.vyarus.guicey:guicey-eventbus:{{ gradle.version }}'
 !!! note
     guicey-eventbus version could be managed with [BOM](../extras/bom.md)
 
-Register eventbus bundle:
+Register the EventBus bundle:
 
 ```java
 GuiceBundle.builder()
@@ -62,7 +62,7 @@ public class BarEvent extends BaseEvent {}
 
 ## Publication
 
-Inject the eventbus instance to enable publication:
+Inject the EventBus instance to enable publication:
 
 ```java
 @Inject EventBus eventbus;
@@ -87,8 +87,8 @@ public void onMultipleEvents(BaseEvent event) {}
 ```
 
 !!! attention
-    Listener methods will only be registered for "known" guice beans. That means any extension
-    or manually declared guice bean (using module) or bean created with guice AOT (because it's declared
+    Listener methods will only be registered for "known" Guice beans. That means any extension
+    or a manually declared Guice bean (using a module) or a bean created with Guice AOT (because it's declared
     as dependency for other bean) will be searched for listener methods.
-         
-See [a complete example](https://github.com/xvik/dropwizard-guicey/examples/tree/master/ext-eventbus)         
+
+See [a complete example](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-eventbus)
