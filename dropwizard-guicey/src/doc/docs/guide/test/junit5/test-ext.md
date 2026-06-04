@@ -16,16 +16,16 @@ Prepare test class, using your extension (better inner class):
 
 ```java
 public class Test {
-    
-    
+
+
     // IMPORTANT to skip this test for the main junit engine (don't let it run this test)
     @Disabled
     public static class TestCase1 {
-        
+
         // custom extension
         @MyAnnotation
         Something field;
-        
+
     }
 }
 ```
@@ -72,10 +72,10 @@ public void test() {
     String out = TestSupport.captureOutput(() -> {
         run(TestCase1.class);
     });
-    
+
     // windows compatibility
     out = out.replace("\r","");
-    
+
     Assertions.assertThat(out).contains("some probably long text");
 }
 ```

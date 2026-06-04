@@ -14,10 +14,10 @@ Guice will manage resource creation, so you may think of it as a usual Guice bea
 @Path("/res")
 @Produces('application/json')
 class SampleResource {
-    
+
     @Inject
     private MyService service;
-    
+
     @GET
     @Path("/sample")
     public Response sample() {
@@ -51,10 +51,10 @@ interface ResourceContract {
 }
 
 class SampleResource implements ResourceContract {
-    
+
     @Inject
     private MyService service;
-    
+
     @Override
     public Response sample() {
         return Response.ok(service.result()).build();
@@ -82,10 +82,10 @@ If you need request scoped objects, use `#!java Provider`:
 
 ```java
 class SampleResource {
-    
+
     @Inject
     private Provider<HttpServletRequest> requestProvider;
-    
+
     @GET
     @Path("/sample")
     public Response sample() {
@@ -98,7 +98,7 @@ See [jersey objects, available for injection](../guide/guice/bindings.md#jersey-
 
 ## @Context usage
 
-`@Context` annotation usage is a common point of confusion. You can't use it for class fields: 
+`@Context` annotation usage is a common point of confusion. You can't use it for class fields:
 
 !!! fail "this will not work"
     ```java
@@ -106,9 +106,9 @@ See [jersey objects, available for injection](../guide/guice/bindings.md#jersey-
         @Context UriInfo info;
     }
     ```
-    
+
 Use provider instead:
-    
+
 !!! success "correct way"
     ```java
     public class MyResource {

@@ -17,7 +17,7 @@ Ideal for cases not directly covered by installers. For example:
 ```java
 @EagerSingleton
 public class MyListener implements LifeCycle.Listener {
-    
+
     @Inject
     public MyListener(Environment environment) {
         environment.lifecicle.addListener(this);

@@ -37,11 +37,11 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import ru.vyarus.guicey.annotations.lifecycle.PostStartup;
 
-public class SampleBean {    
+public class SampleBean {
 
-    private void doSomething(@NotNull String param) {        
+    private void doSomething(@NotNull String param) {
     }
-    
+
 }
 ```
 
@@ -59,7 +59,7 @@ If you want to more explicitly mark methods requiring validation, then register 
 ```java
 .bundles(new ValidationBundle()
                     .validateAnnotatedOnly())
-```                                                     
+```
 
 Now, only methods annotated with `@ValidateOnExecution` (or all methods in annotated class)
 will trigger validation.
@@ -69,7 +69,7 @@ If you want, you can use your own annotation:
 ```java
 .bundles(new ValidationBundle()
                 .validateAnnotatedOnly(MyAnnotation.class))
-```                                                     
+```
 
 ### Reducing scope
 
@@ -83,9 +83,9 @@ You can reduce this scope even further:
 .bundles(new ValidationBundle()
                     .targetClasses(Matchers.subclassesOf(SomeService.class)
                          .and(Matchers.not(Matchers.annotatedWith(Path.class)))))
-```                                                     
+```
 
-Here `SomeService` is excluded from validation (its methods would not trigger validation). 
+Here `SomeService` is excluded from validation (its methods would not trigger validation).
 Note that default condition (not resource) is appended.
 
 
@@ -106,7 +106,7 @@ Now methods annotated with `@SuppressValidation` will not be validated. Note tha
 ### Validation groups
 
 By default, `Default` validation group is always enabled allowing you to not specify
-groups for each call. 
+groups for each call.
 
 This could be disabled with bundle option:
 

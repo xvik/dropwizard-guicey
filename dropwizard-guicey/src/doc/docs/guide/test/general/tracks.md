@@ -170,7 +170,7 @@ Assertions.assertEquals("1['foo1']", firstCallArg.size());
 ```
 
 In case of complex objects (pojo, for example), string representation would only contain
-the type and instance hash: `Type@hash` (which is not informative, but the only universal short 
+the type and instance hash: `Type@hash` (which is not informative, but the only universal short
 way to describe object).
 
 If tracker used only for performance testing (to accumulate execution time from many runs),
@@ -230,12 +230,12 @@ tracks = tracker.findTracks(mock -> when(
                mock.foo(Mockito.anyInt()))
          );
 
-// search methods with argument condition ( > 1) 
+// search methods with argument condition ( > 1)
 tracks = tracker.findTracks(mock -> when(
         mock.foo(Mockito.intThat(argument -> argument > 1)))
         );
 
-// search for methods with exact argument value  
+// search for methods with exact argument value
 tracks = tracker.findTracks(mock -> when(
         mock.foo(11))
         );
@@ -275,7 +275,7 @@ System.out.println(tracker.getStats().render());
 ```
 
 ```java
-	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]     
+	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]
 	Service                                  foo(int)                                           2 (2)      0          0.009 ms   0.352 ms   0.352 ms   0.352 ms   0.352 ms
 ```
 
@@ -289,15 +289,15 @@ Here is an example of tracking `GuiceyConfigurationInfo` with activated `.printA
 	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]
 	GuiceyConfigurationInfo                  getNormalModuleIds()                               1          0          1.076 ms   1.076 ms   1.076 ms   1.076 ms   1.076 ms
 	GuiceyConfigurationInfo                  getModulesDisabled()                               1          0          0.038 ms   0.038 ms   0.038 ms   0.038 ms   0.038 ms
-	GuiceyConfigurationInfo                  getOverridingModuleIds()                           1          0          0.034 ms   0.034 ms   0.034 ms   0.034 ms   0.034 ms  
-	GuiceyConfigurationInfo                  getExtensionsDisabled()                            1          0          0.020 ms   0.020 ms   0.020 ms   0.020 ms   0.020 ms  
-	GuiceyConfigurationInfo                  getOptions()                                       1          0          0.005 ms   0.005 ms   0.005 ms   0.005 ms   0.005 ms  
-	GuiceyConfigurationInfo                  getData()                                          3          0          0.003 ms   0.006 ms   0.004 ms   0.006 ms   0.006 ms  
+	GuiceyConfigurationInfo                  getOverridingModuleIds()                           1          0          0.034 ms   0.034 ms   0.034 ms   0.034 ms   0.034 ms
+	GuiceyConfigurationInfo                  getExtensionsDisabled()                            1          0          0.020 ms   0.020 ms   0.020 ms   0.020 ms   0.020 ms
+	GuiceyConfigurationInfo                  getOptions()                                       1          0          0.005 ms   0.005 ms   0.005 ms   0.005 ms   0.005 ms
+	GuiceyConfigurationInfo                  getData()                                          3          0          0.003 ms   0.006 ms   0.004 ms   0.006 ms   0.006 ms
 
 ```
 
 !!! note
-    Methods sorted by slowness 
+    Methods sorted by slowness
 
 You can also collect stats for multiple trackers:
 

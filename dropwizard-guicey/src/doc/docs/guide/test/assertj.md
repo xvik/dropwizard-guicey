@@ -30,7 +30,7 @@ assertThat(frodo.getName()).startsWith("Fro")
 !!! tip
     See [assertions guide](https://assertj.github.io/doc/#assertj-core-assertions-guide)
 
-!!! important 
+!!! important
     In many cases, AssertJ assertion failure messages would be much more informative,
     which speeds up test development and regression investigation.
 
@@ -46,7 +46,7 @@ Assertions.assertTrue(output.contains("some large string chunk here"))
 If assertion fails, you'll only:
 
 ```text
-org.opentest4j.AssertionFailedError: 
+org.opentest4j.AssertionFailedError:
 Expected :true
 Actual   :false
 ```
@@ -60,14 +60,14 @@ Assertions.assertThat(output).contains("some large string chunk here");
 You'll have all required info in the console:
 
 ```text
-java.lang.AssertionError: 
+java.lang.AssertionError:
 Expecting actual:
   "
   original text here
-  
+
 "
 to contain:
-  "some large string chunk here" 
+  "some large string chunk here"
 ```
 
 This is extremely helpful because often output is pre-processed with regexps
@@ -148,7 +148,7 @@ assertThat(first)
 ```
 
 !!! tip
-    Assert object does not contain null fields: 
+    Assert object does not contain null fields:
     ```java
     assertThat(object).usingRecursiveAssertion().hasNoNullFields()
     ```
@@ -156,7 +156,7 @@ assertThat(first)
 
 ## Assumptions
 
-[Assumption mechanism](https://assertj.github.io/doc/#assertj-core-assumptions) allows ignoring test if some 
+[Assumption mechanism](https://assertj.github.io/doc/#assertj-core-assumptions) allows ignoring test if some
 condition does not met:
 
 ```java
@@ -218,7 +218,7 @@ Assuming database is configured in application configuration:
 AssertDbConnection connection;
 
 @BeforeAll
-// here AppConfig would be injected as guice bean (assume junit extension used) 
+// here AppConfig would be injected as guice bean (assume junit extension used)
 static void beforeAll(AppConfig config) {
     final DataSourceFactory db = config.getDatabase();
     connection = AssertDbConnectionFactory

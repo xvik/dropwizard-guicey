@@ -63,9 +63,9 @@ public class CommonBundle implements GuiceyBundle {
     ```java
     public class CommonBundle extends UniqueGuiceyBundle { ... }
     ```
-    
+
 Equals logic could be more complicated: for example, it may involve constructor parameters
-comparison to treat as duplicates only instances with the same parameters.    
+comparison to treat as duplicates only instances with the same parameters.
 
 ## Unique items
 
@@ -74,7 +74,7 @@ When it is impossible to properly implement the `equals` method (for example, be
 
 ```java
 GuiceBundle.builder()
-    .uniqueItems(Some3rdPartyBundle.class, 
+    .uniqueItems(Some3rdPartyBundle.class,
                  Some3rdPartyModule.class)
 ```
 
@@ -95,11 +95,11 @@ GuiceBundle.builder()
          if (newItem isntanceof Some3rdPartyBundle) {
              // decide if item collide with provided registered instances (of the same type)
              return detectedDuplicate // instance that registered is duplicate to or null to accept item
-         }           
+         }
          // allow instance registration
-         return null;    
+         return null;
     })
-``` 
+```
 
 !!! important
     This does not override [equals method](#equals-method) logic: custom de-duplication mechanism
@@ -115,7 +115,7 @@ Old Guicey "1 instance per class" behavior could be restored with the bundled de
 
 ```java
 .duplicateConfigDetector(new LegacyModeDuplicatesDetector())
-```           
+```
 
 ## Reporting
 
@@ -138,8 +138,8 @@ public class VMod extends AbstractModule {
         return obj instanceof VMod && value.equals(obj.value);
     }
 
-}   
-```   
+}
+```
 
 If modules are registered like this:
 
@@ -181,11 +181,11 @@ public class MyModule extends AbstractModule {}
 
 public class SomeModule extends AbstractModule {
     @Override
-    public void configure() {   
+    public void configure() {
         // transitive module
         install(new MyModule());
     }
-}                           
+}
 
 GuiceBindle.builder()
     .modules(new OtherModule(), new MyModule())
@@ -222,11 +222,11 @@ public class MyBundle implements ConfiguredBundle {}
 
 public class OtherBundle implements ConfiguredBundle {
     @Override
-    public void initialize(Bootstrap bootstrap) {   
+    public void initialize(Bootstrap bootstrap) {
         // transitive bundle
         bootstrap.addBundle(new MyBundle());
     }
-}                           
+}
 
 GuiceBindle.builder()
     .dropwizardBundles(new OtherBundle(), new MyBundle())

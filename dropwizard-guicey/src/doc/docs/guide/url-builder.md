@@ -48,16 +48,16 @@ builder.admin("/")
 // http://localhost:8080/
 builder.rest("/")
 
-// http://localhost:8080/users/123     
+// http://localhost:8080/users/123
 builde.rest(Resource.class).method(r -> r.get(123)).build()
-// http://localhost:8080/users/123     
+// http://localhost:8080/users/123
 builde.rest(Resource.class).method(r -> r.get(null)).pathParam("id", 123).build()
 
 
-// https://some.com:8081/something     
+// https://some.com:8081/something
 builder.forHost("https://some.com").admin("/something")
 
-// https://some.com/something     
+// https://some.com/something
 builder.forProxy("https://some.com").admin("/something")
 ```
 

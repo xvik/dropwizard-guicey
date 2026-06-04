@@ -5,7 +5,7 @@ Stubs are hand-made replacements of real application services ("manual" or "lazy
 Guicey provides `StubsHook` for overriding Guice beans with stub implementations.
 
 !!! warning
-    Stubs will not work for HK2 beans 
+    Stubs will not work for HK2 beans
 
 There are two main cases:
 
@@ -81,10 +81,10 @@ In this case, stub could implement `StubLifecycle`:
 ```java
 public class ServiceStub extends Service implements StubLifecycle {
     int calls;
-    
-    @Override 
+
+    @Override
     public void before() {
-        calls = 0; 
+        calls = 0;
     }
 
     @Override
@@ -107,7 +107,7 @@ hook.before();
 hook.after();
 ```
 
-## Stub instance 
+## Stub instance
 
 Stub instance could be obtained either from injector (using overridden service as a key):
 

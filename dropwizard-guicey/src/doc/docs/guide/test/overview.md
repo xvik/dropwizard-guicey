@@ -1,9 +1,9 @@
 # Testing
 
-Guicey provides test extensions for: 
+Guicey provides test extensions for:
 
 * [JUnit 5](junit5/setup.md)
-* [Spock 2](spock2.md) 
+* [Spock 2](spock2.md)
 * [Framework-agnostic utilities](general/general.md)
 
 
@@ -64,7 +64,7 @@ Example hook:
 
 ```java
 public class MyHook implements GuiceyConfigurationHook {
-    
+
     public void configure(GuiceBundle.Builder builder) throws Exception {
         builder
             .disableModules(FeatureXModule.class)
@@ -96,8 +96,8 @@ and could avoid registering it (disable it).
 !!! note
     Guicey **can't** disable extensions registered directly:
     ```java
-    environment.jersey().register(MyExceptionMapper.class)    
-    ``` 
+    environment.jersey().register(MyExceptionMapper.class)
+    ```
 
 You can use hooks to disable all unnecessary features in test:
 
@@ -127,10 +127,10 @@ anything, including providers and provider methods).
 For example, we have some service binding declared as:
 ```java
 public class MyModule extends AbstractModule {
-    
+
     protected configure() {
-        // assumed @Inject ServiceX used everywhere 
-        bind(ServiceX.class).to(MyServiceX.class);        
+        // assumed @Inject ServiceX used everywhere
+        bind(ServiceX.class).to(MyServiceX.class);
     }
 }
 ```
@@ -139,12 +139,12 @@ To replace it with `MyServiceXExt`, preparing overriding module:
 
 ```java
 public class MyOverridingModule extends AbstractModule {
-    
+
     protected configure() {
-        bind(ServiceX.class).to(MyServiceXExt.class);        
+        bind(ServiceX.class).to(MyServiceXExt.class);
     }
 }
-```  
+```
 
 It could be overridden with a hook:
 
@@ -153,7 +153,7 @@ public class MyHook implements GuiceyConfigurationHook {
     public void configure(GuiceBundle.Builder builder) throws Exception {
         builder
             // the main module is still registered in application:
-            // .modules(new MyModule())        
+            // .modules(new MyModule())
             .modulesOverride(new MyOverridingModule());
     }
 }
@@ -229,9 +229,9 @@ BindingsOverrideInjectorFactory.override(new MyOverridingModule())
 !!! important
     It is assumed that overriding modules registration and application initialization
     will be at the same thread (`ThreadLocal` used for holding registered modules to allow
-    parallel tests usage). 
+    parallel tests usage).
 
-For example, suppose we have some service `CustomerService` and it's implementation `CustomerServiceImpl`, 
+For example, suppose we have some service `CustomerService` and it's implementation `CustomerServiceImpl`,
 defined in some 3rd party module. For some reason, we need to override this binding in the application:
 
 ```java
@@ -267,12 +267,12 @@ GuiceBundle.builder()
     .build()
 
 // register overriding somewhere in test
-BindingsOverrideInjectorFactory.override(new TestOverridingModule())    
+BindingsOverrideInjectorFactory.override(new TestOverridingModule())
 ```
 
 !!! tip
     [Configuration hook](#configuration-hooks) may be used for static call (as a good integration point)
-    
+
 After test startup, application will use customer service binding from `TestOverridingModule`.
 
 ## Test commands
@@ -297,10 +297,10 @@ already the best way.
 
 ## Test application startup fail
 
-To verify application self-validation mechanisms (make sure application would fail with incomplete configuration, 
+To verify application self-validation mechanisms (make sure application would fail with incomplete configuration,
 or whatever another reason) use [commands runner](general/startup.md).
 
-For example: 
+For example:
 
 ```java
 CommandResult result = TestSupport.buildCommandRunner(App.class)
@@ -320,8 +320,8 @@ Assertions.assertEquals();
             System.exit(1);
         }
     }
-    ```   
-    Commands runner runs commands directly so exit would not be called. 
+    ```
+    Commands runner runs commands directly so exit would not be called.
 
 ## Configuration
 

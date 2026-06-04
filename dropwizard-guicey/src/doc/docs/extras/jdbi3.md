@@ -43,7 +43,7 @@ Omit the version if the Guicey BOM is used.
 Register bundle:
 
 ```java
-GuiceBundle.builder()        
+GuiceBundle.builder()
         .bundles(JdbiBundle.<ConfType>forDatabase((conf, env) -> conf.getDatabase()))
         ...
 ```
@@ -137,7 +137,7 @@ public void action() {
 
 @InTransaction(TransactionIsolationLevel.READ_UNCOMMITTED)
 public void nestedAction() {
-...    
+...
 }
 ```
 
@@ -163,7 +163,7 @@ JdbiBundle.forDatabase((conf, env) -> conf.getDatabase())
 ```
 
 If you need to support transaction configuration (level and read only settings) with your annotation then:
- 
+
 1. Add required properties into annotation itself (see `@InTransaction` as example).
 2. Create implementation of `TxConfigFactory` (see `InTransactionTxConfigFactory` as example)
 3. Register factory inside your annotation with `@TxConfigSupport(MyCustomAnnotationTxConfigFactory.class)`
@@ -192,7 +192,7 @@ You may define transaction (with unit of work) without annotation using:
 template.inTrasansaction((handle) -> doSomething())
 ```
 
-Note that inside such manual scope you may also call any repository bean, as it's absolutely the same definition as 
+Note that inside such manual scope you may also call any repository bean, as it's absolutely the same definition as
 with annotation.
 
 You can also specify transaction config (if required):
@@ -201,14 +201,14 @@ You can also specify transaction config (if required):
 @Inject TransactionTempate template;
 ...
 template.inTrasansaction(
-        new TxConfig().level(TransactionIsolationLevel.READ_UNCOMMITTED), 
+        new TxConfig().level(TransactionIsolationLevel.READ_UNCOMMITTED),
         (handle) -> doSomething())
 ```
 
 
 ### Repository
 
-Declare repository (interface or abstract class) as usual, using DBI annotations. 
+Declare repository (interface or abstract class) as usual, using DBI annotations.
 It only must be annotated with `@JdbiRepository` so installer
 could recognize it and register in guice context.
 
@@ -218,8 +218,8 @@ could recognize it and register in guice context.
 ```java
 @JdbiRepository
 @InTransaction
-public interface MyRepository {     
-    
+public interface MyRepository {
+
     @SqlQuery("select name from something where id = :id")
     String findNameById(@Bind("id") int id);
 }
@@ -266,7 +266,7 @@ By default, JDBI proxies for declared repositories are created only on the first
 Lazy behaviour is important to take into account all registered JDBI extensions. Laziness also
 slightly speeds up application startup.
 
-If required, you can enable eager initialization during bundle construction:   
+If required, you can enable eager initialization during bundle construction:
 
 ```java
 JdbiBundle.forDatabase((conf, env) -> conf.getDatabase())
@@ -282,14 +282,14 @@ You can access Guice beans by annotating a getter with `@Inject` (Jakarta or Gui
 ```java
 @JdbiRepository
 @InTransaction
-public interface MyRepository {     
+public interface MyRepository {
 
     @Inject
     MyOtherRepository getOtherRepo();
-    
+
     @SqlQuery("select name from something where id = :id")
     String findNameById(@Bind("id") int id);
-    
+
     default String doSomething(int id) {
         String name = findNameById(id);
         return getOtherRepo().doSOmethingWithName(name);
@@ -321,8 +321,8 @@ And now Custom type could be used for queries:
 ```java
 @JdbiRepository
 @InTransaction
-public interface CustomRepository {     
-    
+public interface CustomRepository {
+
     @SqlQuery("select * from custom where id = :id")
     Custom findNameById(@Bind("id") int id);
 }
@@ -353,4 +353,4 @@ try {
 }
 ```
 
-Repositories could also be called inside such manual unit (as unit of work is correctly started).        
+Repositories could also be called inside such manual unit (as unit of work is correctly started).

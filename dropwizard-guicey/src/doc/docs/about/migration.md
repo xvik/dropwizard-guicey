@@ -27,7 +27,7 @@ use guice native annotations (so library could work with all guice versions).
 
 As the last option, there is a [gradle plugin](https://github.com/nebula-plugins/gradle-jakartaee-migration-plugin)
 for automatic conversion of project dependencies from javax to jakarta. This way, application started from gradle project
-would use repackaged dependencies with correct jakarta namespace. Application delivery would also contain 
+would use repackaged dependencies with correct jakarta namespace. Application delivery would also contain
 custom (repackaged) jars.
 
 Using this plugin, I did initial [automatic guice migration](https://github.com/xvik/guice-jakartaee), (appeared before official

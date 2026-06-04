@@ -43,7 +43,7 @@ Object serviceValue = TestSupport.build(App.class)
     All run methods declared as `throws Exception`. This was done to bypass original
     exceptions instead of wrapping them inside runtime exceptions.
 
-    This should not be a problem: just add `throws Exception` into test method signature 
+    This should not be a problem: just add `throws Exception` into test method signature
 
 ## Configuration
 
@@ -53,7 +53,7 @@ Configuration could be applied in a different ways:
 // with override values only
 TestSupport.build(App.class)
         .configOverride("foo: 12")
-    
+
 // file with overrides
 TestSupport.build(App.class)
         .config("src/test/resources/path/to/config.yml")
@@ -62,10 +62,10 @@ TestSupport.build(App.class)
 // file with config modifier
 TestSupport.build(App.class)
         .config("src/test/resources/path/to/config.yml")
-        .configModifiers(config -> config.setFoo(12))    
-    
-// direct config object 
-MyConfig config = new MyConfig();         
+        .configModifiers(config -> config.setFoo(12))
+
+// direct config object
+MyConfig config = new MyConfig();
 TestSupport.build(App.class)
         .config(config)
 ```
@@ -140,11 +140,11 @@ For simple cases, there are many builder shortcuts in `TestSupport` class.
 Support object construction:
 
 ```java
-DropTestSupport support = TestSupport.webApp(App.class, 
+DropTestSupport support = TestSupport.webApp(App.class,
         "path/to/config.yml", "prop: 1", "prop2: 2");
 
 GuiceyTestSupport support = TestSupport.coreApp(App.class,
-        "path/to/config.yml", "prop: 1", "prop2: 2"); 
+        "path/to/config.yml", "prop: 1", "prop2: 2");
 ```
 
 Run:
@@ -189,7 +189,7 @@ RunResult<CfgType> result = TestSupport.build(App.class).runCore();
 
 // direct configuratio instance
 Assertions.assertEquals(12, result.getConfiguration().getProp1());
-// any guice bean 
+// any guice bean
 Assertions.assertEquals(12, result.getBean(Configuration.class).getProp1());
 Assertions.assertNotNull(result.getEnvironment());
 Assertions.assertNotNull(result.getApplication());
@@ -244,7 +244,7 @@ There are also shortcut methods:
 
 ```java
 DropwizardTestSupport supportCore = TestSupport.coreApp(App.class,
-        "path/to/config.yml", 
+        "path/to/config.yml",
         "prop: 1", "prop2: 2");
 
 DropwizardTestSupport supportWeb = TestSupport.webApp(App.class,
@@ -289,11 +289,11 @@ Complete example using JUnit:
 
 ```java
 public class RawTest {
-    
+
     static DropwizardTestSupport support;
-    
+
     @Inject MyService service;
-    
+
     @BeforeAll
     public static void setup() {
         support = TestSupport.coreApp(App.class);
@@ -301,20 +301,20 @@ public class RawTest {
         // start app
         support.before();
     }
-    
+
     @BeforeEach
     public void before() {
         // inject services in test
         TestSupport.injectBeans(support, this);
     }
-    
+
     @AfterAll
     public static void cleanup() {
         if (support != null) {
             support.after();
         }
     }
-    
+
     @Test
     public void test() {
         Assertions.assertEquals("10", service.computeValue());

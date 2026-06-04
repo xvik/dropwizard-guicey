@@ -29,7 +29,7 @@ testImplementation 'org.junit.jupiter:junit-jupiter-api'
     test {
         useJUnitPlatform()
         ...
-    }                    
+    }
     ```
 
 ## Usage
@@ -45,18 +45,18 @@ Here is a simple example:
 ```groovy
 @TestDropwizardApp(App)
 class MyTest extends Specification {
-    
+
     @Inject MyService service
-    
+
     def "Check something" (ClientSupport client) {
-        
+
         when: "calling rest endpoint"
         def res = client.targetRest("foo/bar").request()
                 .buildGet().invoke().readEntity(String)
-        
+
         then: "result correct"
         res == "something"
-        
+
         and: "service called"
         service.isCalled()
     }
@@ -74,7 +74,7 @@ and Spock expressiveness for writing tests.
 !!! warning
     Command execution overrides System I/O and so can't run in parallel with other tests!
 
-    Use [`@Isolated`](https://spockframework.org/spock/docs/2.0/all_in_one.html#_isolated_execution) 
+    Use [`@Isolated`](https://spockframework.org/spock/docs/2.0/all_in_one.html#_isolated_execution)
     on such tests to prevent parallel execution with other tests
 
 Command execution is usually a short-lived action, so it is not possible to
@@ -82,11 +82,11 @@ write an extension for it. A command could be tested only with a generic utility
 
 ```java
 def "Test command execution"() {
-    
+
     when: "executing command"
     CommandResult result = TestSupport.buildCommandRunner(App)
             .run("cmd", "-p", "param")
-    
+
     then: "success"
     result.successful
 }
@@ -147,9 +147,9 @@ class EnvironmentChangeTest extends Specification {
         ENV.set("VAR", "1")
         System.setProperty("foo", "bar") // OR propsReset.set("foo", "bar") - both works the same
 
-        when: 
+        when:
         // something requiring custom env or property values
-        
+
         then:
         // validate system output (e.g. logs correctness)
         out.text.contains("Some message assumed to be logged")

@@ -20,10 +20,10 @@ TestSupport.build(App.class)
         .runCore(injector -> {
             // pre-configured client to call resources with relative paths
             RestClient rest = restHook.getRestClient();
-            
+
             String res = rest.get("/foo", String.class);
             Assertions.assertEquals("something", res);
-            
+
             WebApplicationException ex = Assertions.assertThrows(WebApplicationException.class,
                 () -> rest.get("/error", String.class));
                 Assertions.assertEquals("error message", ex.getResponse().readEntity(String.class));
@@ -88,7 +88,7 @@ public class ErrorResource {
     public String get() {
         throw new IllegalStateException("error");
     }
-}    
+}
 ```
 
 ```java
@@ -150,7 +150,7 @@ final RestStubsRunner restHook = RestStubsRunner.builder()
 
 ## Requests logging
 
-By default, rest client would log requests and responses, 
+By default, rest client would log requests and responses,
 
 ```java
 String res = rest.get("/foo", String.class);
@@ -188,17 +188,17 @@ final RestStubsRunner restHook = RestStubsRunner.builder()
 By default, [InMemoryTestContainerFactory](https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/test-framework.html#d0e18552)
 used.
 
-    In-Memory container is not a real container. It starts Jersey application and 
-    directly calls internal APIs to handle request created by client provided by 
-    test framework. There is no network communication involved. This containers 
-    does not support servlet and other container dependent features, but it is a 
+    In-Memory container is not a real container. It starts Jersey application and
+    directly calls internal APIs to handle request created by client provided by
+    test framework. There is no network communication involved. This containers
+    does not support servlet and other container dependent features, but it is a
     perfect choice for simple unit tests.
 
 If it is not enough (in-memory container does not support all functions), then
 use `GrizzlyTestContainerFactory`
 
-    The GrizzlyTestContainerFactory creates a container that can run as a light-weight, 
-    plain HTTP container. Almost all Jersey tests are using Grizzly HTTP test container 
+    The GrizzlyTestContainerFactory creates a container that can run as a light-weight,
+    plain HTTP container. Almost all Jersey tests are using Grizzly HTTP test container
     factory.
 
 To activate the Grizzly container, add the dependency (version managed by the Dropwizard BOM):
@@ -235,7 +235,7 @@ It extends the same `TestClient` class and so provides the same abilities:
 * [Forms builder](client.md#form-builder)
 
 !!! note
-    Just in case: `ClientSupport` would not work with rest stubs (because web container is actually 
+    Just in case: `ClientSupport` would not work with rest stubs (because web container is actually
     not started and so `ClientSupport` can't recognize a correct rest mapping path). Of course,
     it could be used with a full URLs.
 
@@ -245,20 +245,20 @@ It extends the same `TestClient` class and so provides the same abilities:
 
     ```java
     client.buildForm("/some/path")
-        .param("foo", "bar")     
+        .param("foo", "bar")
         .param("file", new File("src/test/resources/test.txt"))
         .buildPost()
         .asVoid();
-    ``` 
+    ```
 
 To clear defaults:
 
 ```java
-rest.reset() 
+rest.reset()
 ```
 
 Might be a part of call chain:
 
 ```java
-rest.reset().post(...) 
+rest.reset().post(...)
 ```

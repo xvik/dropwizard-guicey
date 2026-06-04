@@ -10,7 +10,7 @@ For example, suppose some service logs some technical hint at some condition:
 ```java
 public class Service {
     private final Logger logger = LoggerFactory.getLogger(Service.class);
-    
+
     public void foo() {
         ...
         if (someCondition) {
@@ -24,7 +24,7 @@ Testing that technical note actually logged:
 
 ```java
 public class LogsTest {
-    
+
     @Test
     public void testLog() {
         RecordedLogHook hook = new RecordedLogHook();
@@ -34,7 +34,7 @@ public class LogsTest {
                 .logger(Service.class)
                 // start recording all logger messages of level INFO and above
                 .start(Level.INFO);
-        
+
         // run application with hook
         TestsSupport.build(MyApp.class)
                 .hooks(hook)
@@ -42,7 +42,7 @@ public class LogsTest {
                     // run method foo (assume log message must appear)
                     injector.getInstance(Service.class).foo();
                 });
-        
+
         // one log recorded
         Assertions.assertEquals(1, logs.count());
         // log message appears
@@ -87,13 +87,13 @@ hook.register()
 Each recorder registration leads to logging appender registration for a target logger
 (or multiple loggers).
 
-If the current logger configuration is higher than required, then **logger would be 
+If the current logger configuration is higher than required, then **logger would be
 re-configured**. For example, if default logger level is `INFO` and recorder requires `TRACE` messages,
 then it would change logger configuration to receive required messages.
 
 !!! tip
-    Recorder might be used just to enable required logs, without application 
-    logging configuration. This is very useful in tests (to enable `DEBUG` or `TRACE` 
+    Recorder might be used just to enable required logs, without application
+    logging configuration. This is very useful in tests (to enable `DEBUG` or `TRACE`
     messages for exact service (or package)): `hook.register().loggers(MyClass.class).start(Level.TRACE)`
 
 During application startup **Dropwizard resets loggers twice** and the hook would
@@ -109,7 +109,7 @@ The hook would call these methods automatically.
 `RecordedLogs` used to query recorded logs. Root object always contains all recorded events
 (for configured loggers).
 
-Recorded logs are accessible in form of raw *event* (`ILoggingEvent`) or pure string *message* 
+Recorded logs are accessible in form of raw *event* (`ILoggingEvent`) or pure string *message*
 (formatted messages with arguments).
 
 | Method            | Description                                     | Example                                                                   |

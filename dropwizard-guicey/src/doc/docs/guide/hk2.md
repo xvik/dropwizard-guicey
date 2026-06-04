@@ -47,7 +47,7 @@ The provider is important because Jersey starts after Guice.
 
     ```java
     ServiceLocator locator = jerseyInjector.getInstance(ServiceLocator.class);
-    ``` 
+    ```
 
 ## Jersey extensions
 
@@ -102,11 +102,11 @@ After that, HK2 beans can inject Guice beans:
 ```java
 @JerseyManaged
 public class HkService {
-    
+
     @Inject
     private GuiceService service;
 }
-```   
+```
 
 ## Use HK2 for jersey extensions
 

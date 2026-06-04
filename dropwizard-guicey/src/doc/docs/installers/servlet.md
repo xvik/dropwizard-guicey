@@ -34,7 +34,7 @@ For example, for class "MyCoolServlet" generated name will be ".mycool".
     ```java
     @Order(10)
     @WebServlet("/mapped")
-    public class MyServlet extends HttpServlet 
+    public class MyServlet extends HttpServlet
     ```
 
 There is a difference between using servlet installer and registering servlets with guice servlet module:
@@ -60,8 +60,8 @@ public class AsyncServlet extends HttpServlet {
         });
     }
 }
-```    
-    
+```
+
 !!! note ""
     Note that guice servlet module does not allow using async servlets, so installer is the only option to install async servlets.
 

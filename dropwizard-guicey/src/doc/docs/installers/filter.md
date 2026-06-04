@@ -62,8 +62,8 @@ public class AsyncFilter implements Filter {
     public void destroy() {
     }
 }
-```    
-    
+```
+
 !!! note ""
     Note that guice servlet module does not allow using async filters, so installer is the only option to install async filters.
 

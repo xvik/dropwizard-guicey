@@ -1,7 +1,7 @@
 # Application configuration
 
 !!! note
-    In terms of configuration, both extensions (`@TestGuiceyApp` and `@TestDropwizardApp`) 
+    In terms of configuration, both extensions (`@TestGuiceyApp` and `@TestDropwizardApp`)
     are equal, so all examples would show just one of them.
 
     Also, annotation provides the same options as field-based extension declaration,
@@ -42,7 +42,7 @@ class ConfigOverrideTest {
 
 ## Manual configuration object
 
-Normally, either empty configuration object created (if a configuration file not provided) 
+Normally, either empty configuration object created (if a configuration file not provided)
 or it created from a specified file.
 
 It is also possible to manually construct configuration object instance in
@@ -92,7 +92,7 @@ Or in setup object:
 
 ```java
 @EnableSetup
-static TestEnvironmentSetup setup = ext -> 
+static TestEnvironmentSetup setup = ext ->
         ext.configModifiers(config -> config.getSomething().setFoo(12))
 ```
 
@@ -121,7 +121,7 @@ public class MyModifier implements ConfigModifier<MyConfig> {
 
 If you need to configure value, supplied by some other extension, or value may be resolved only
 after test start, then static overrides declaration is not an option. In this case use
-[alternative extensions declaration](run.md#alternative-declaration) which provides additional 
+[alternative extensions declaration](run.md#alternative-declaration) which provides additional
 config override methods:
 
 ```java
@@ -142,7 +142,7 @@ static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(AutoScanApplic
 In most cases `configOverride("bar", () -> ext.getValue())` would be enough to configure a supplier instead
 of static value.
 
-In more complex cases, you can use custom implementations of `ConfigOverride`. 
+In more complex cases, you can use custom implementations of `ConfigOverride`.
 
 !!! warning ""
     Guicey have to accept only `ConfigOverride` objects implementing custom
@@ -173,7 +173,7 @@ And map overrides directly from store using `configOverrideByExtension` method:
 ```java
 @ExtendWith(ConfigExtension.class)
 public class SampleTest {
-    
+
     @RegisterExtension
     static TestGuiceyAppExtension app = TestGuiceyAppExtension.forApp(App.class)
             .configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "ext1")

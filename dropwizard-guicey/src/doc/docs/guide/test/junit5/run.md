@@ -7,9 +7,9 @@ Guicey provides two JUnit extensions:
 
 !!! note ""
     `@TestGuiceyApp` assumed to be used for the majority of tests as it only starts guice injector
-    (which is much faster than complete application startup). Such tests are ideal for testing 
+    (which is much faster than complete application startup). Such tests are ideal for testing
       business logic (services).
-    
+
     `@TestDropwizardApp` (full integration test) used only to check web endpoints and full workflow
     (assuming all business logic was already tested with lightweight tests)
 
@@ -31,14 +31,14 @@ Field annotations:
 * `@StubBean` - guice bean [stubs](stubs.md) registration
 * `@MockBean` - guice bean [mocks](mocks.md) registration (mockito)
 * `@SpyBean` - guice bean [spies](spies.md) registration (mockito)
-* `@TrackBean` - guice beans [execution tracking](tracks.md) (simpler then mockito spies; suitable for performance testing) 
+* `@TrackBean` - guice beans [execution tracking](tracks.md) (simpler then mockito spies; suitable for performance testing)
 * `@StubRest` - lightweight [REST testing](rest.md)
 * `@RecordLogs` - [logs testing](logs.md)
 
 Method parameter annotations:
 
 * `@Jit` - for not declared [guice beans injection](inject.md#parameter-injection)
-    
+
 ## Testing core logic
 
 `@TestGuiceyApp` creates guice injector (runs all application services) without starting jetty (so resources, servlets and filters will not be available).
@@ -48,12 +48,12 @@ Method parameter annotations:
 @TestGuiceyApp(MyApplication.class)
 public class AutoScanModeTest {
 
-    @Inject 
+    @Inject
     MyService service;
-    
+
     @Test
-    public void testMyService() {        
-        Assertions.assertEquals("hello", service.getSmth());     
+    public void testMyService() {
+        Assertions.assertEquals("hello", service.getSmth());
     }
 ```
 
@@ -62,9 +62,9 @@ Also, [injections](inject.md) work as [method parameters](inject.md#parameter-in
 ```java
 @TestGuiceyApp(MyApplication.class)
 public class AutoScanModeTest {
-    
-    public void testMyService(MyService service) {        
-        Assertions.assertEquals("hello", service.getSmth());     
+
+    public void testMyService(MyService service) {
+        Assertions.assertEquals("hello", service.getSmth());
     }
 ```
 
@@ -89,7 +89,7 @@ Application started before all tests in annotated class and stopped after them.
 ### Managed lifecycle
 
 Core application tests (`@TestGuiceyApp`) does not start web part and so lifecycle should not work,
-but `Managed` objects often used to initialize core services.   
+but `Managed` objects often used to initialize core services.
 
 Guicey core test simulate `Managed` lifecycle (call start and stop methods).
 For tests, not requiring lifecycle at all, it might be disabled with:
@@ -122,12 +122,12 @@ But it is possible to inject fields just once:
 
 ```java
 @TestGuiceyApp(value = App.class, injectOnce = true)
-// by default new test instance used for each method, so injectOnce option would be useless 
+// by default new test instance used for each method, so injectOnce option would be useless
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PerClassInjectOnceGuiceyTest {
     @Inject
     Bean bean;
-    
+
     @Test
     public test1() {..}
 
@@ -144,7 +144,7 @@ and `Bean bean` field would be injected just once (`injectOnce = true`)
     it will [print injection time](debug.md#startup-performance) before each test method:
     ```
     [Before each]                      : 2.05 ms
-        Guice fields injection             : 1.58 ms    
+        Guice fields injection             : 1.58 ms
     ```
 
 ## Testing web logic
@@ -155,15 +155,15 @@ and `Bean bean` field would be injected just once (`injectOnce = true`)
 @TestDropwizardApp(MyApplication.class)
 class WebModuleTest {
 
-    @Inject 
+    @Inject
     MyService service
 
     @Test
     public void checkWebBindings(ClientSupport client) {
 
-        Assertions.assertEquals("Sample filter and service called", 
+        Assertions.assertEquals("Sample filter and service called",
             client.targetApp("servlet").request().buildGet().invoke().readEntity(String.class));
-        
+
         Assertions.assertTrur(service.isCalled());
 ```
 
@@ -181,8 +181,8 @@ In order to start application on random port you can use configuration shortcut:
 !!! note
     Random ports setting override exact ports in configuration:
     ```groovy
-    @TestDropwizardApp(value = MyApplication, 
-                      config = 'path/to/my/config.yml', 
+    @TestDropwizardApp(value = MyApplication,
+                      config = 'path/to/my/config.yml',
                       randomPorts = true)
     ```
     Also, random ports support both server types (default and simple)
@@ -199,7 +199,7 @@ if you don't use custom configuration class, but still want to re-map rest, shor
 ```
 
 In contrast to config declaration, attribute value may not start with '/' and end with '/*' -
-it would be appended automatically. 
+it would be appended automatically.
 
 This option is only intended to simplify cases when custom configuration file is not yet used in tests
 (usually early PoC phase). It allows you to map servlet into application root in test (because rest is no
@@ -221,7 +221,7 @@ static TestDropwizardAppExtension app = TestDropwizardAppExtension.forApp(AutoSc
         .create();
 ```
 
-The only difference with annotations is that you can declare hooks and setup objects as lambdas directly 
+The only difference with annotations is that you can declare hooks and setup objects as lambdas directly
 (still hooks in static fields will also work).
 
 ```java
@@ -259,7 +259,7 @@ TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class).create()
 public void test1() {
     Assertions.assertEquals(0, bean.value);
     // changing value to show that bean was reset between tests
-    bean.value = 10    
+    bean.value = 10
 }
 
 @Test

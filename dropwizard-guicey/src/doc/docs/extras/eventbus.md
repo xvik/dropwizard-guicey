@@ -7,7 +7,7 @@ Features:
 * EventBus available for injection (to publish events)
 * Automatic registration of listener methods (annotated with `@Subscribe`)
 * Console reporting of registered listeners
- 
+
 ## Setup
 
 Maven:
@@ -33,7 +33,7 @@ Omit the version if the Guicey BOM is used.
 Register bundle:
 
 ```java
-GuiceBundle.builder()        
+GuiceBundle.builder()
         .bundles(new EventBusBundle())
         ...
 ```
@@ -51,8 +51,8 @@ Inject `EventBus` to publish new events.
 ```java
 public class SomeService {
     @Inject
-    private EventBus eventbus;    
-    
+    private EventBus eventbus;
+
     public void inSomeMethod() {
         evetbus.post(new MyEvent());
     }
@@ -63,10 +63,10 @@ Listen for event:
 
 ```java
 public class SomeOtherService {
-    
+
     @Subscribe
     public void onEvent(MyEvent event) {
-         // handle event   
+         // handle event
     }
 }
 ```
@@ -77,7 +77,7 @@ After the server starts, you should see all registered event listeners in the lo
 INFO  [2016-12-01 12:31:02,819] ru.vyarus.guicey.eventbus.report.EventsReporter: EventBus subscribers =
 
     MyEvent
-        com.foo.something.SomeOtherService        
+        com.foo.something.SomeOtherService
 
 ```
 
@@ -87,14 +87,14 @@ INFO  [2016-12-01 12:31:02,819] ru.vyarus.guicey.eventbus.report.EventsReporter:
     a JIT binding will be created later in time (when bean will be actually used) and will not be reflected in the logs.
 
 ### Consuming multiple events
-  
-Note that you can build event hierarchies and subscribe to some base event to receive any derived event.   
+
+Note that you can build event hierarchies and subscribe to some base event to receive any derived event.
 
 To receive all events use:
 
 ```java
 @Subscribe
-public void onEvent(Object event){    
+public void onEvent(Object event){
 }
 ```
 
@@ -108,15 +108,15 @@ If you want events to be async, use a custom EventBus:
 new EventBusBundle(
         new AsyncEventBus(someExecutor)
 )
-``` 
+```
 
-By default, event listeners are not considered thread safe and no parallel events processing (for single method) 
+By default, event listeners are not considered thread safe and no parallel events processing (for single method)
 will be performed. To mark subscriber as thread safe use `@AllowConcurrentEvents`:
 
 ```java
 @Subscribe
 @AllowConcurrentEvents
-public void onEvent(MyEvent event)      
+public void onEvent(MyEvent event)
 ```
 
 If a listener method fails to process an event (throws an exception), then other listeners will still be processed

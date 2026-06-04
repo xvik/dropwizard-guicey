@@ -13,13 +13,13 @@ where support is `DropwizardTestSupport` or `GuiceyTestSupport` (in the latter c
 
 !!! note
     There are 4 base urls:
-    
+
     * Server root: http://localhost:8080/
     * Application root: http://localhost:8080/app ("/" by default but could be changed: `server.applicationContextPath = 'app'`)
     * Admin root: http://localhost:8081/ or http://localhost:8080/admin (simple server with `server.adminContextPath = 'admin'`)
     * Rest root: http://localhost:8080/rest/ ("/" by default, but could be changed: `server.rootPath = 'rest'`)
 
-    By default, all of them are "/" (root), but could be changed. 
+    By default, all of them are "/" (root), but could be changed.
 
 `ClientSupport` is a client for the server root (everything after the port). Usually,
 a more specific client is required (app/admin/rest):
@@ -31,24 +31,24 @@ TestClient rest = client.restClient();
 ```
 
 Specific client usage guarantees url correctness in case of server configuration change.
-For example, an integration test may use a random port and clients will use the correct one.  
+For example, an integration test may use a random port and clients will use the correct one.
 
 !!! note
     `ClientSupport` is also extends `TestClient`, so it is 4rth client (for application root)
     and provides the same shortcut methods as other clients.
 
     Also, `ClientSupport` provide special shortcuts for jersey api:
-    
+
     ```java
     // GET {rest path}/some
     client.targetRest("some").request().buildGet().invoke()
-    
+
     // GET {main context path}/servlet
     client.targetApp("servlet").request().buildGet().invoke()
-    
+
     // GET {admin context path}/adminServlet
     client.targetAdmin("adminServlet").request().buildGet().invoke()
-    
+
     // General external url call
     client.target("https://google.com").request().buildGet().invoke()
     ```
@@ -72,16 +72,16 @@ client.basePathRest()   // rest context path (http://localhost:8080/)
 @Test
 public void testWeb(ClientSupport client) {
     TestClient rest = client.restClient();
-    
+
     // get with simple result
     Result res = client.get("/sample", Result.class);
     // get with simple result list
     List<Entity> res = client.get("/list", new GenericType<>() {});
-    
+
     // post without result (void)
     client.post("/post", new PostObject());
 
-    // post with result 
+    // post with result
     Result res = client.post("rest/action", new PostObject(), Result.class);
 }
 ```
@@ -94,7 +94,7 @@ String format could be used for all methods:
 client.targetRest("some/%s", 12).request().buildGet().invoke()
 
 client.targetRest("some/%s", 12).request().buildGet().invoke(String.class)
-    
+
 client.get("/some/%s", User.class, 12)
 ```
 
@@ -113,7 +113,7 @@ The most obvious use case is authorization:
 ```java
 public void testSomething(ClientSupport client) {
     client.defaultHeader("Authorization", "Bearer 123");
-    
+
     User user = client.restClient().get("/users/123", User.class);
 }
 ```
@@ -129,7 +129,7 @@ Instead of putting it into each request:
 ```java
 public void testSomething(ClientSupport client) {
     TestClient rest = client.restClient();
-    
+
     rest.get("/%s/path/to/resource/%s", User.class, "path", 12);
     rest.post("/%s/path/to/resource/%s", new User(...), "path", 12);
 }
@@ -141,7 +141,7 @@ A sub client could be created:
 public void testSomething(ClientSupport client) {
     TestClient rest = client.restClient().subClient("/{something}/path/to/resource")
             .defaultPathParam("something", "path");
-    
+
     rest.get("/%s", User.class, "path", 12);
     rest.post("/%s", new User(...), "path", 12);
 }
@@ -154,7 +154,7 @@ public void testSomething(ClientSupport client) {
     client.defaultQueryParam("q", "v");
     TestClient rest = client.subClient("/path/to/resource");
 
-    // inherited query parameter q=v will be applied to all requests    
+    // inherited query parameter q=v will be applied to all requests
     rest.get("/%s", User.class, 12);
     ```
 
@@ -227,7 +227,7 @@ client.buildGet("/path")
 ```
 
 ```text
-Request configuration: 
+Request configuration:
 
 	Path params:
 		p1=1                                      at r.v.d.g.t.c.builder.(RequestBuilderTest.java:61)
@@ -242,7 +242,7 @@ Request configuration:
 	Accept:
 		application/json                          at r.v.d.g.t.c.builder.(RequestBuilderTest.java:54)
 
-Jersey request configuration: 
+Jersey request configuration:
 
 	Resolve template                          at r.v.d.g.t.c.builder.(TestRequestConfig.java:869)
 		(encodeSlashInPath=false encoded=true)
@@ -318,7 +318,7 @@ Response response = rest.buildGet("/users/123")
         .assertHeader("Token" , s -> s.startsWith("My-Header;"))
         .asResponse();
 
-// here you could be sure the header exists        
+// here you could be sure the header exists
 String token = response.getHeaderString("Token");
 ```
 
@@ -327,16 +327,16 @@ Redirection correctness could be checked as:
 ```java
 @Path("/resources")
 public class Resource {
-    
+
     @Inject
     AppUrlBuilder urlBuilder;
-    
+
     @Path("/list")
     @GET
     public Response get() {
         ...
     }
-    
+
     @Path("/redirect")
     @GET
     public Response redirect() {
@@ -359,7 +359,7 @@ Also, "with*" methods could be used for completely manual assertions:
 ```java
 rest.method(Resource::redirect)
         .expectSuccess(201)
-        .withHeader("MyHeader", s -> 
+        .withHeader("MyHeader", s ->
             assertThat(s).startsWith("My-Header;"));
 ```
 
@@ -385,7 +385,7 @@ client.buildForm("/some/path")
 
 // multipart
 client.buildForm("/some/path")
-        .param("foo", "bar")     
+        .param("foo", "bar")
         .param("file", new File("src/test/resources/test.txt"))
         .buildPost()
         .asVoid();
@@ -410,11 +410,11 @@ Also, it could be used to simply create a request entity and use it directly:
 
 ```java
 Entity entity = client.buildForm(null)
-        .param("foo", "bar")     
+        .param("foo", "bar")
         .param("file", new File("src/test/resources/test.txt"))
         .buildEntity()
 
-client.post("/some/path", entity); 
+client.post("/some/path", entity);
 ```
 
 Builder will serialize all provided (non-multipart) parameters to string.
@@ -463,7 +463,7 @@ resource class declaration already provides all required metadata to configure a
 ```java
 @Path("/users")
 public class UserResource {
-    
+
     @Path("/{id}")
     @GET
     public User get(@NotNull @PathParam("id") Integer id) {}
@@ -523,7 +523,7 @@ Multipart resource methods often use special multipart-related entities, like:
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String multipart(
             @NotNull @FormDataParam("file") InputStream uploadedInputStream,
-            @NotNull @FormDataParam("file") FormDataContentDisposition fileDetail) 
+            @NotNull @FormDataParam("file") FormDataContentDisposition fileDetail)
 ```
 
 Which is not handy to create manually. To address this, `ResourceClient` provides a
@@ -560,7 +560,7 @@ In case of generic multipart object argument:
     @Path("/multipartGeneric")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String multipartGeneric(@NotNull FormDataMultiPart multiPart) 
+    public String multipartGeneric(@NotNull FormDataMultiPart multiPart)
 ```
 
 there is a special builder:
@@ -681,7 +681,7 @@ or using the default implementation as base:
 
 ```java
 public class SimpleTestClientFactory extends DefaultTestClientFactory {
-    
+
     @Override
     protected void configure(final JerseyClientBuilder builder, final DropwizardTestSupport<?> support) {
         builder.getConfiguration().connectorProvider(new Apache5ConnectorProvider());

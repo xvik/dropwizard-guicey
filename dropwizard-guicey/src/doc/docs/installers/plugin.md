@@ -66,7 +66,7 @@ public @interface MyPlugin {
 
 !!! note
     Annotation itself is annotated with `#!java @Plugin`, defining target plugin interface.
-    Guicey will detect your custom annotation usage by analyzing its annotations. 
+    Guicey will detect your custom annotation usage by analyzing its annotations.
 
 Annotating plugin implementation:
 
@@ -82,16 +82,16 @@ All plugins could be referenced as map:
 ```
 
 !!! note
-    It's not required to use enum as key. Any type could be set in your custom annotation. 
-    For example, string key could be used: 
+    It's not required to use enum as key. Any type could be set in your custom annotation.
+    For example, string key could be used:
     ```java
     public @interface MyPlugin {
         String value();
     }
-    
+
     @MyPlugin("first")
     public class PluginImpl1 implements PluginInterface
-    
+
     @Inject Map<String, PluginInterface> plugins;
     ```
 

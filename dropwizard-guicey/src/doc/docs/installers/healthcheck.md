@@ -12,10 +12,10 @@ A custom base class is required because the default `#!java HealthCheck` does no
 
 ```java
 public class MyHealthCheck extends NamedHealthCheck {
-    
+
     @Inject
     private MyService service;
-    
+
     @Override
     protected Result check() throws Exception {
         if (service.isOk()) {
@@ -24,7 +24,7 @@ public class MyHealthCheck extends NamedHealthCheck {
             return Result.unhealthy("Service is not ok");
         }
     }
-    
+
     @Override
     public String getName() {
         return "my-service";

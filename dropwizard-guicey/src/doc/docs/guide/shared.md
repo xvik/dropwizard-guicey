@@ -76,7 +76,7 @@ public class ServerPagesAppBundle implements GuiceyBundle {
 }
 ```
 
-This way, duplicate registrations could be checked, and global views support could be configured by application bundles. 
+This way, duplicate registrations could be checked, and global views support could be configured by application bundles.
 
 ## Shared state restrictions
 
@@ -122,7 +122,7 @@ Here, an error would be thrown if the state is not initialized.
         public void initialize(GuiceyBootstrap bootstrap) throws Exception {
             // assume bundle initialize shared state value
             // (this bundle could be a unique bundle so guicey would remove duplicates)
-            bootstarp.bundles(new ParentBundle());        
+            bootstarp.bundles(new ParentBundle());
             // shared value could be used here
             SomeState state = bootstrap
                 .sharedStateOrFail(SomeState.class, "State not declared");
@@ -198,7 +198,7 @@ static class XHook implements GuiceyConfigurationHook {
         });
     }
 }
-```  
+```
 
 ## Guicey bundle
 
@@ -259,7 +259,7 @@ If it (hard to imagine how) affects your tests, you can forcefully clean all sta
 
 ```java
 SharedConfigurationState.clear()
-```                         
+```
 
 ## Default objects
 
@@ -277,7 +277,7 @@ So any of them could be accessed statically with an application or environment i
 ```java
 Optional<Bootstrap> bootstrap = SharedConfigurationState
             .lookup(environment, Bootstrap.class);
-```                
+```
 
 or
 

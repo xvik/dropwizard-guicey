@@ -24,8 +24,8 @@ Object is a wrapper above [JerseyClient](https://eclipse-ee4j.github.io/jersey.g
 
 !!! note
     By default, app context is on port 8080 and admin context is on port 8081.
-    For simple server both admin and app contexts located on the same port (8080). 
-    
+    For simple server both admin and app contexts located on the same port (8080).
+
     There are 3 configurations, related to context paths:
 
     * `server.applicationContextPath` - application context
@@ -112,7 +112,7 @@ all required methods to call web resources.
 @Test
 public void testWeb(ClientSupport client) {
     TestClient rest = client.restClient();
-    
+
     // get with simple result
     Result res = client.get("/sample", Result.class);
     // get with simple result list
@@ -121,7 +121,7 @@ public void testWeb(ClientSupport client) {
     // post without result (void)
     client.post("/post", new PostObject());
 
-    // post with result 
+    // post with result
     Result res = client.post("rest/action", new PostObject(), Result.class);
 }
 ```
@@ -142,10 +142,10 @@ Such methods only verify that the response was successful.
 
 !!! tip
     All client methods support `String.format` for path variables processing:
-    
+
     ```java
     client.get("/some/%s", User.class, 12)
-    ``` 
+    ```
 
 ## Defaults
 
@@ -191,7 +191,7 @@ Instead of putting it into each request:
 ```java
 public void testSomething(ClientSupport client) {
     TestClient rest = client.restClient();
-    
+
     rest.get("/%s/path/to/resource/%s", User.class, "path", 12);
     rest.post("/%s/path/to/resource/%s", new User(...), "path", 12);
 }
@@ -203,7 +203,7 @@ A sub client could be created:
 public void testSomething(ClientSupport client) {
     TestClient rest = client.restClient().subClient("/{something}/path/to/resource")
             .defaultPathParam("something", "path");
-    
+
     rest.get("/%s", User.class, "path", 12);
     rest.post("/%s", new User(...), "path", 12);
 }
@@ -216,7 +216,7 @@ public void testSomething(ClientSupport client) {
     client.defaultQueryParam("q", "v");
     TestClient rest = client.subClient("/path/to/resource");
 
-    // inherited query parameter q=v will be applied to all requests    
+    // inherited query parameter q=v will be applied to all requests
     rest.get("/%s", User.class, 12);
     ```
 
@@ -304,7 +304,7 @@ Request configuration:
 	Accept:
 		application/json                          at r.v.d.g.t.c.builder.(RequestBuilderTest.java:54)
 
-Jersey request configuration: 
+Jersey request configuration:
 
 	Resolve template                          at r.v.d.g.t.c.builder.(TestRequestConfig.java:869)
 		(encodeSlashInPath=false encoded=true)
@@ -351,7 +351,7 @@ or
 
 ```java
 .assertRequest(tracker -> assertThat(tracker.getQueryParams().get("q")).isEqualTo("1"))
-``` 
+```
 
 ## Response assertions
 
@@ -380,7 +380,7 @@ Response response = rest.buildGet("/users/123")
         .assertHeader("Token" , s -> s.startsWith("My-Header;"))
         .asResponse();
 
-// here you could be sure the header exists        
+// here you could be sure the header exists
 String token = response.getHeaderString("Token");
 ```
 
@@ -389,16 +389,16 @@ Redirection correctness could be checked as:
 ```java
 @Path("/resources")
 public class Resource {
-    
+
     @Inject
     AppUrlBuilder urlBuilder;
-    
+
     @Path("/list")
     @GET
     public Response get() {
         ...
     }
-    
+
     @Path("/redirect")
     @GET
     public Response redirect() {
@@ -421,7 +421,7 @@ Also, "with*" methods could be used for completely manual assertions:
 ```java
 rest.method(Resource::redirect)
         .expectSuccess(201)
-        .withHeader("MyHeader", s -> 
+        .withHeader("MyHeader", s ->
             assertThat(s).startsWith("My-Header;"));
 ```
 
@@ -447,7 +447,7 @@ client.buildForm("/some/path")
 
 // multipart
 client.buildForm("/some/path")
-        .param("foo", "bar")     
+        .param("foo", "bar")
         .param("file", new File("src/test/resources/test.txt"))
         .buildPost()
         .asVoid();
@@ -472,11 +472,11 @@ Also, it could be used to simply create a request entity and use it directly:
 
 ```java
 Entity entity = client.buildForm(null)
-        .param("foo", "bar")     
+        .param("foo", "bar")
         .param("file", new File("src/test/resources/test.txt"))
         .buildEntity()
 
-client.post("/some/path", entity); 
+client.post("/some/path", entity);
 ```
 
 Builder will serialize all provided (non-multipart) parameters to string.
@@ -520,7 +520,7 @@ client.target("https://google.com").request().buildGet().invoke()
 Direct `Invocation.Builder` (with applied defaults) could be built with:
 
 ```java
-// base url would be a current client's url 
+// base url would be a current client's url
 client.request("/path").buildGet().invoke();
 ```
 
@@ -545,7 +545,7 @@ resource class declaration already provides all required metadata to configure a
 ```java
 @Path("/users")
 public class UserResource {
-    
+
     @Path("/{id}")
     @GET
     public User get(@NotNull @PathParam("id") Integer id) {}
@@ -613,7 +613,7 @@ Multipart resource methods often use special multipart-related entities, like:
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String multipart(
             @NotNull @FormDataParam("file") InputStream uploadedInputStream,
-            @NotNull @FormDataParam("file") FormDataContentDisposition fileDetail) 
+            @NotNull @FormDataParam("file") FormDataContentDisposition fileDetail)
 ```
 
 Which is not handy to create manually. To address this, `ResourceClient` provides a
@@ -650,7 +650,7 @@ In case of generic multipart object argument:
     @Path("/multipartGeneric")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String multipartGeneric(@NotNull FormDataMultiPart multiPart) 
+    public String multipartGeneric(@NotNull FormDataMultiPart multiPart)
 ```
 
 there is a special builder:
@@ -771,7 +771,7 @@ or using the default implementation as base:
 
 ```java
 public class SimpleTestClientFactory extends DefaultTestClientFactory {
-    
+
     @Override
     protected void configure(final JerseyClientBuilder builder, final DropwizardTestSupport<?> support) {
         builder.getConfiguration().connectorProvider(new Apache5ConnectorProvider());

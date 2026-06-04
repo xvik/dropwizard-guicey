@@ -36,7 +36,7 @@ You can only omit configuration path and use builder instead:
     stored inside the result:
 
     ```java
-    Assertions.assertFalse(result.isSuccessful());  
+    Assertions.assertFalse(result.isSuccessful());
     Assertions.assertEquals("Error message", result.getException().getMessage());
     ```
 
@@ -69,7 +69,7 @@ At a minimum, the required number of answers must be provided (otherwise an erro
 indicating that there are not enough inputs)
 
 !!! warning
-    Due to IO overrides, command tests could not run in parallel.   
+    Due to IO overrides, command tests could not run in parallel.
     For JUnit 5, such tests could be annotated with [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization)
     (to prevent execution in parallel with other tests)
 
@@ -90,14 +90,14 @@ TestSupport.buildCommandRunner(App.class)
         .run("cfg");
 
 // direct config object
-MyConfig config = new MyConfig();         
+MyConfig config = new MyConfig();
 TestSupport.buildCommandRunner(App.class)
         .config(config)
         .run("cfg");
 ```
 
 !!! note
-    Config file should not be specified in command itself - builder would add it, if required.  
+    Config file should not be specified in command itself - builder would add it, if required.
     But still, it would not be a mistake to use config file directly in command:
 
     ```java

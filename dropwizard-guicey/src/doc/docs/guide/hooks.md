@@ -6,8 +6,8 @@ Guicey provides a special mechanism for external configuration:
 public class MyHook implements GuiceyConfigurationHook {
     @Override
     public void configure(GuiceBundle.Builder builder) throws Exception {
-        builder.bundles(new AdditinoalBundle());    
-    }       
+        builder.bundles(new AdditinoalBundle());
+    }
 }
 ```
 
@@ -30,7 +30,7 @@ For lambda hook registration, use:
 
 ```java
 ConfigurationHooksSupport.register(builder -> {
-    // do modifications 
+    // do modifications
 })
 ```
 

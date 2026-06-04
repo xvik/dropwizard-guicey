@@ -4,8 +4,8 @@ REST client creation:
 
 ```java
     public void test (ClientSupport client) {
-        // resource client 
-        ResourceClient<ResourceClass> rest = client.restClient(RestResource.class);    
+        // resource client
+        ResourceClient<ResourceClass> rest = client.restClient(RestResource.class);
     }
 ```
 
@@ -32,7 +32,7 @@ or from the root REST client:
 ```java
     @Path("/entity")
     @POST
-    public String entity(ModelType model) 
+    public String entity(ModelType model)
 ```
 
 ```java
@@ -48,7 +48,7 @@ or from the root REST client:
     TestClientResponse res = rest.method(RestResource::get).invoke()
     // throw exception if not success and AssertionError if not provided status
     TestClientResponse res = rest.method(RestResource::get).expectSuccess()
-    // throw AssertionError if success or not provided status        
+    // throw AssertionError if success or not provided status
     TestClientResponse res = rest.method(RestResource::get).expectFailure()
     // throw AssertionError if not redirect or not provided status
     TestClientResponse res = rest.method(RestResource::get).expectRedirect()
@@ -87,7 +87,7 @@ or from the root REST client:
 
 ```java
 rest.defaultHeader("Token", "abc")
-    
+
 MyType res = rest.method(RestResource::get)
         .assertRequest(tracker -> assertThat(tracker.getHeaders().get("Token")).isEqualsTo("abc"))
         .as(MyType.class)
@@ -137,7 +137,7 @@ MyType res = rest.method(RestResource::get)
                 .header(HttpHeader.CONTENT_DISPOSITION.toString(), "attachment; filename=some.txt")
                 .build();
     }
-```  
+```
 
 ```java
     // load in directory, preserving file name
@@ -205,7 +205,7 @@ MyType res = rest.method(RestResource::get)
         .isEqualTo("something");
 
     // manual entity building
-    assertThat(rest.method(r -> r.post(null, null), 
+    assertThat(rest.method(r -> r.post(null, null),
                             rest.buildForm(null)
                             .param("name", "1")
                             .param("date", "2")
@@ -308,7 +308,7 @@ MyType res = rest.method(RestResource::get)
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String multipartMulti(
-            @NotNull @FormDataParam("file") List<FormDataBodyPart> file) 
+            @NotNull @FormDataParam("file") List<FormDataBodyPart> file)
 ```
 
 ```java
@@ -332,7 +332,7 @@ MyType res = rest.method(RestResource::get)
     @Path("/multipartGeneric")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String multipartGeneric(@NotNull FormDataMultiPart multiPart) 
+    public String multipartGeneric(@NotNull FormDataMultiPart multiPart)
 ```
 
 ```java

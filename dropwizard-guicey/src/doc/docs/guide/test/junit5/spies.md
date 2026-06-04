@@ -1,5 +1,5 @@
 # Testing with spies
-                
+
 [Mockito](https://site.mockito.org/) spies allows dynamic modification of real objects behavior
 (configured same as [mocks](mocks.md), but, by default, all methods work as in raw bean).
 
@@ -15,8 +15,8 @@ Spies declared with a `@SpyBean` annotation.
 !!! warning
     Spies will not work for HK2 beans
 
-Mockito documentation is written in the `Mockito` class [javadoc](https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html).  
-Additional docs could be found in [mockito wiki](https://github.com/mockito/mockito/wiki/FAQ)  
+Mockito documentation is written in the `Mockito` class [javadoc](https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html).
+Additional docs could be found in [mockito wiki](https://github.com/mockito/mockito/wiki/FAQ)
 Also, see official [mockito refcard](https://dzone.com/refcardz/mockito)
 and [baeldung guides](https://www.baeldung.com/mockito-series).
 
@@ -46,26 +46,26 @@ Spying it:
 ```java
 @TestGuiceyApp(App.class)
 public class Test {
-    
+
     @SpyBean
     Service spy;
-    
+
     // NOT the same instance as spy (but calls on both objects are equivalent)
     @Inject
     Service service;
-    
+
     @BeforeEach
     public void setUp() {
-        // IMPORTANT: spies configured in reverse order to avoid accidental method call            
+        // IMPORTANT: spies configured in reverse order to avoid accidental method call
         doReturn("bar1").when(spy).get(11);
     }
-    
+
     @Test
     public void test() {
         // stubbed result
         Assertions.assertEquals("bar1", s1.get(11));
         // real method result (because argument is different)
-        Assertions.assertEquals("Hello 10", s1.get(10)); 
+        Assertions.assertEquals("Hello 10", s1.get(10));
     }
 }
 ```
@@ -120,15 +120,15 @@ public class Test {
     ResultCaptor<String> resultCaptor = new ResultCaptor<>();
     // capture actual argument value (just to show how to do it)
     ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
-    
-    @SpyBean 
+
+    @SpyBean
     Service spy;
-    
+
     @BeforeAll
     public void setUp() {
         doAnswer(resultCaptor).when(spy).get(argumentCaptor.capture());
     }
-    
+
     public void test() {
         // call method
         Assertions.assertThat(spy.get(11)).isEqualTo("bar");
@@ -142,7 +142,7 @@ public class Test {
 ```
 
 Why would you need that? It is often useful when verifying indirect bean call.
-For example, if we have `SuperService` which internally calls `Service` and so 
+For example, if we have `SuperService` which internally calls `Service` and so
 there is no other way to verify service call result correctness other than spying it (or use [tracker](tracks.md)).
 
 ## Pre initialization
@@ -160,17 +160,17 @@ public class Initializer implements Consumer<Service> {
     // real spy could be created ONLY after injector startup
     @Override
     public void accept(Service spy) {
-        doReturn("spied").when(service).get(11); 
+        doReturn("spied").when(service).get(11);
     }
-    
+
 }
 
 @TestGuiceyApp(App.class)
 public class Test {
-    
+
     @SpyBean(initializers = Initializer.class)
     Service spy;
-    
+
     ...
 }
 ```
@@ -229,7 +229,7 @@ When extension debug is active:
 
 ```java
 @TestGucieyApp(value = App.class, debug = true)
-public class Test 
+public class Test
 ```
 
 All recognized spy fields would be logged:
@@ -238,5 +238,5 @@ All recognized spy fields would be logged:
 Applied spies (@SpyBean) on SpySimpleTest:
 
 	#spy2                          Service2                     (r.v.d.g.t.j.s.s.SpySimpleTest)
-	#spy1                          Service1                     (r.v.d.g.t.j.s.s.SpySimpleTest) 
+	#spy1                          Service1                     (r.v.d.g.t.j.s.s.SpySimpleTest)
 ```

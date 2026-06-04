@@ -89,7 +89,7 @@ declaration into base test class:
 
 ```java
 public abstract class BaseTest {
-    
+
     @EnableSetup
     static TestDbSetup db = new TestDbSetup();
 }
@@ -111,9 +111,9 @@ static TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(..)
         ...
         .with(builder -> {
             if (...) {
-               builder.configOverrides("foo.bar", 12); 
+               builder.configOverrides("foo.bar", 12);
             }
-        }) 
+        })
 ```
 
 And the same for setup objects:
@@ -124,12 +124,12 @@ static TestEnvironmentSetup setup = ext ->
         ...
         .with(builder -> {
             ...
-        }) 
+        })
 ```
 
 ## Builder configuration
 
-`TestExtension` builder provides almost the same options as the main guice extension builder (when declared in field) 
+`TestExtension` builder provides almost the same options as the main guice extension builder (when declared in field)
 
 | Method                                                                   | Description                                                                                            | Example                                                                                     |
 |--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -174,7 +174,7 @@ public interface TestExecutionListener {
 ```
 
 
-Complex setup objects might simply `implement TestExecutionListener` and register self: 
+Complex setup objects might simply `implement TestExecutionListener` and register self:
 
 
 ```java
@@ -292,7 +292,7 @@ There is a special **base class** `AnnotatedTestFieldSetup` which implements bas
 Use this class if you want to implement new field annotation (`@MyAnnotation`) support:
 
 ```java
-public class MyFieldsSupport extends AnnotatedTestFieldSetup<MyAnnotation, Object>  
+public class MyFieldsSupport extends AnnotatedTestFieldSetup<MyAnnotation, Object>
 ```
 
 If your field value would always base on some class then specify it to automatically
@@ -307,7 +307,7 @@ All current field extensions are using this base class, so you can see usage exa
 * `TrackerFieldsSupport` - [@TrackBean](tracks.md)
 * `RestStubFieldsSupport` - [@StubRest](rest.md)
 
-Base class would search for all annotated fields and call other methods only if 
+Base class would search for all annotated fields and call other methods only if
 anything was found.
 
 !!! important
@@ -334,7 +334,7 @@ Take a look at `MockFieldsSupport` - it is a simple and easy to understand imple
 
 Method called as soon as field is detected:
 
-* Ideal place for an additional validations (`TrackerFieldsSupport` validates field type there) 
+* Ideal place for an additional validations (`TrackerFieldsSupport` validates field type there)
 * This is the earliest point: `LogFieldsSupport` use it to activate logger immediately
 
 #### registerHooks
@@ -360,7 +360,7 @@ protected <K> void initializeField(final AnnotatedField<MockBean, Object> field,
                 + "and let extension create mock automatically.");
         hook.mock(type, (K) userValue);
     } else {
-        // no need to store custom data for manual value - injectFieldValue not called for manual values 
+        // no need to store custom data for manual value - injectFieldValue not called for manual values
         field.setCustomData(FIELD_MOCK, hook.mock(type));
     }
 }
@@ -372,7 +372,7 @@ Note that value is stored inside an `AnnotatedField` object: `field.setCustomDat
 This is a not required step: for example, `LogFieldsSupport` create value object just after field detection
 (because logger must be appended as soon as possible), and so ignored `initializeField` method.
 
-Another example is `StubFieldsSupport` - where `initializeField` method used just for 
+Another example is `StubFieldsSupport` - where `initializeField` method used just for
 stub registration in hook. Value for injection into test field is obtained later directly
 from guice injector (stub could be declared by class - instance is guice managed).
 
@@ -386,7 +386,7 @@ There is even a helper method to validate non-instance bindings: `isInstanceBind
 
 #### injectFieldValue
 
-Method called **only for not pre-initialized** fields (no user value). 
+Method called **only for not pre-initialized** fields (no user value).
 
 In most cases, it just provides a value, created in `initializeField`:
 
@@ -413,8 +413,8 @@ Report assumed to show detected fields when root extension debug is enabled. See
 
 #### beforeTest and afterTest
 
-Special methods for implementing field value lifecycle. 
-Almost all values have to be reset after each test method (mocks, spies, stubs etc.). 
+Special methods for implementing field value lifecycle.
+Almost all values have to be reset after each test method (mocks, spies, stubs etc.).
 
 Example from logs extension:
 

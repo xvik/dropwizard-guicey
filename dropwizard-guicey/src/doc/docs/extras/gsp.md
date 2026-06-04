@@ -49,7 +49,7 @@ Now, if we want to use a template instead of pure HTML, we configure Dropwizard 
 
 ```java
 bootstrap.addBundle(new ViewBundle<MyConfiguration>());
-``` 
+```
 
 Renaming `index.html` to `index.ftl` and add view resource:
 
@@ -57,11 +57,11 @@ Renaming `index.html` to `index.ftl` and add view resource:
 @Path("/ui/")
 @Produces(MediaType.TEXT_HTML)
 public class IndexResource {
-    
+
     public static class IndexView extends View {
         public IndexView() {
             super("/com/something/index.ftl");
-        } 
+        }
     }
 
     @GET
@@ -87,7 +87,7 @@ So example above should become:
 com/something/
     index.ftl
     style.css
-``` 
+```
 
 Where `index.ftl` could use
 
@@ -105,14 +105,14 @@ When we need custom resource (most likely, for parameters mapping) we can still 
 @Template("foo.ftl")
 @Produces(MediaType.TEXT_HTML)
 public class IndexResource {
-    
+
     @GET
     @Path("/foo/{id}")
     public IndexView get(@PathParam("id") String id) {
         return new TemplateView();
     }
 }
-```   
+```
 
 It would be accessible from assets root `/foo/12` (more on naming and mapping details below).
 Under the hood `/foo/12` will be recognized as template call and redirected (server redirect) to `/rest/ui/foo/12`.
@@ -155,7 +155,7 @@ GuiceBundle.builder()
 ```
 
 !!! warning ""
-    Remove direct dropwizard-views bundle registrations (`ViewBundle`) if it was already used in application.  
+    Remove direct dropwizard-views bundle registrations (`ViewBundle`) if it was already used in application.
 
 ### Template engines
 
@@ -180,9 +180,9 @@ If your renderer is not declared as service then simply add it directly:
 Duplicate renderers are automatically removed.
 
 List of detected template engines will be printed to console. You can get list of used renderers
-from bundle instance `ServerPagesBundle#getRenderers()`  
+from bundle instance `ServerPagesBundle#getRenderers()`
 
-!!! note  
+!!! note
     This is pure dropwizard-views staff (everything is totally standard).
 
 ### Configuration
@@ -197,15 +197,15 @@ views:
     cache: false
 ```
 
-Where `freemarker` and `mustache` are keys from installed template renderer 
-`io.dropwizard.views.ViewRenderer#getConfigurationKey()`. 
+Where `freemarker` and `mustache` are keys from installed template renderer
+`io.dropwizard.views.ViewRenderer#getConfigurationKey()`.
 
 ```java
 public class AppConfig extends Configuration {
     @JsonProperty
     private Map<String, Map<String, String>> views;
-    
-    public Map<String, Map<String, String>> getViews() { return views;} 
+
+    public Map<String, Map<String, String>> getViews() { return views;}
 }
 ```
 
@@ -222,7 +222,7 @@ Additionally, in direct YAML configuration binding, you can apply exact template
 ```java
 .bundles(ServerPagesBundle.builder()
         .viewsConfiguration(AppConfig::getViews)
-        .viewsConfigurationModifier("freemarker", 
+        .viewsConfigurationModifier("freemarker",
                 map -> map.put("cache_storage", "freemarker.cache.NullCacheStorage"))
         .build());
 ```
@@ -243,7 +243,7 @@ Each GSP application is registered as separate bundle in main or admin context:
 .bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
                     .indexPage("index.ftl")
                     .build())
-                    
+
 .bundles(ServerPagesBundle.adminApp("projectName-admin", "com.app.admin", "/admin")
                     .build())
 ```
@@ -283,7 +283,7 @@ If application requires resources from multiple paths, use:
 ServerPagesBundle.app("projectName-ui", "com.app.path1", "/")
     .attachAssets("com.app.path1")
     ...
-```    
+```
 
 For example, this can be useful to attach some shared resources.
 To attach webjars there is a [pre-defined shortcut](#webjars-usage).
@@ -315,7 +315,7 @@ For example, this application requires freemarker:
                     .build())
 ```
 
-Template engine name is declared in `io.dropwizard.views.ViewRenderer#getConfigurationKey()` (same name used in configuration).   
+Template engine name is declared in `io.dropwizard.views.ViewRenderer#getConfigurationKey()` (same name used in configuration).
 
 ### Templates support
 
@@ -330,7 +330,7 @@ You need to map required rest prefix in GSP application:
 ```java
 .bundles(ServerPagesBundle.app("projectName-ui", "com.app.ui", "/")
                     .mapViews("/view/projectName/ui/")
-```                   
+```
 
 This will "map" all view rest paths after prefix directly to GSP application root.
 So if you have view resource `/view/projectName/ui/page1/action` you can access it
@@ -387,7 +387,7 @@ as a direct template call and rendered. Template file must be placed under regis
 `/com/app/ui/template.ftl`.
 
 Templates in sub folders will be rendered the same way, e.g. `http://localhost:8080/sub/path/template.ftl`
-will render `/com/app/ui/sub/path/template.ftl`. 
+will render `/com/app/ui/sub/path/template.ftl`.
 
 ### Template rest declaration
 
@@ -404,16 +404,16 @@ As in pure views, in most cases we will need custom model object:
 ```java
 public class SampleView extends TemplateView {
     private String name;
-    
+
     public SampleView(String name) {
         this.name = name;
     }
-    
-    public String getName() { return this.name; } 
+
+    public String getName() { return this.name; }
 }
 ```
 
-!!! note 
+!!! note
     Custom model is optional - you can use `TemplateView` directly, as default "empty" model.
 
 ```java
@@ -423,10 +423,10 @@ public class SamplePage {
 
     @Path("{name}")
     public SampleView doSomething(@PathParam("name") String name) {
-        return new SampleView(name);        
-    }    
+        return new SampleView(name);
+    }
 }
-``` 
+```
 
 And example template:
 
@@ -450,9 +450,9 @@ After application startup, the new URL must appear in the GSP application consol
 If we call new page with `http://localhost:8080/sample/fred` we should see
 `Name: fred` as a result.
 
-!!! note 
+!!! note
     Can pure dropwizard-views resources be used like that? Actually, yes, but
-    they must be annotated with `@Template` because not annotated resources are not 
+    they must be annotated with `@Template` because not annotated resources are not
     considered as potential GSP application views (and will not be shown in console report).
 
 #### @Template
@@ -468,25 +468,25 @@ extension only for template resources:
 @Template
 public class MyExtensions implements ContainerRequestFilter {
     ...
-} 
-``` 
+}
+```
 
-This request filter will be applied only to template resources. Such targeting is used 
+This request filter will be applied only to template resources. Such targeting is used
 internally in order to not affect global api with GSP specific handling logic.
 
 Template path resolution:
 
 * If path starts with `/` then it would be resolved from classpath root
 * Resolution relative to resource class
-* Resolution relative to static resources location (`/com/app/ui/` in the example above) 
+* Resolution relative to static resources location (`/com/app/ui/` in the example above)
 
-Examples: 
+Examples:
 
 * `@Template("/com/project/custom/path/sample.ftl")` - absolute declaration.
 * `@Template("sub/sample.ftl")` - relative declaration
 * `@Template("../sub/sample.ftl")` - relative declaration
 
-Even if template is configured in the annotation, exact resource method could specify it's own 
+Even if template is configured in the annotation, exact resource method could specify it's own
 template directly in `TemplateView` constructor:
 
 ```java
@@ -497,8 +497,8 @@ public class SamplePage {
     @Path("/")
     public TemplateView doSomething() {
         // override template
-        return new TemplateView("otherTemplate.ftl");        
-    }    
+        return new TemplateView("otherTemplate.ftl");
+    }
 }
 ```
 
@@ -545,8 +545,8 @@ It can be:
 * Rest powered template: `/mapping/`
 
 !!! note
-    By default, index page is set to `""` because most likely your index page will be 
-    handled with rest and `""` will redirect to root path (for current application): `/com.project.ui/` 
+    By default, index page is set to `""` because most likely your index page will be
+    handled with rest and `""` will redirect to root path (for current application): `/com.project.ui/`
 
 ### Error pages
 
@@ -603,7 +603,7 @@ public class ErrorPage {
         WebApplicationException ex = view.getError();
         // analyze error
         return view;
-    }        
+    }
 }
 ```
 
@@ -652,16 +652,16 @@ public class ErrorPage {
     public TemplateView render() {
         // if exception appear inside this method, it would be handled with ExceptionMapper
         // GSP error page will not be used
-        
-        // Also, if method return non 200 error code (>=400) like 
+
+        // Also, if method return non 200 error code (>=400) like
         // return Response.status(500).build()
-        // it would be also not handled with GSP error mechanism (only pure dropwizard staff) 
-    }        
+        // it would be also not handled with GSP error mechanism (only pure dropwizard staff)
+    }
 }
-```                                        
+```
 
 !!! note ""
-    Note that disabled errors will be indicated as `[DISABLED ERRORS]` in console report. 
+    Note that disabled errors will be indicated as `[DISABLED ERRORS]` in console report.
 
 ### SPA routing
 
@@ -703,7 +703,7 @@ If it does not cover your specific cases, it could be changed using:
                     .build())
 ```
 
-In case when you have static files without extension, you can include them directly 
+In case when you have static files without extension, you can include them directly
 into detection regexp (using regex or (|) syntax).
 
 Pattern must return detected file name as first matched group (so direct template could be detected).
@@ -789,7 +789,7 @@ use delayed extension init:
         .delayedConfiguration((env, assets, views) -> {
             if (env.configuration().isExtensionsEnabled()) {
                 assets.attach("com.foo.bar")
-            }           
+            }
          })
         .build())
 ```
@@ -837,7 +837,7 @@ OR
 !!! tip
     You can always see the content of webjar on [webjars site](https://www.webjars.org/) by clicking
     on package "Files" column. Use everything after "META-INF/resources/webjars/" to reference file.
-    
+
 ### Custom classloaders
 
 *Very specific case*
@@ -854,7 +854,7 @@ A custom classloader can be specified during application registration, for examp
 
 The same for admin app and extension.
 
-!!! warning 
+!!! warning
     This will affect only static resources! Template engine will not be able to resolve
     resources because it is not aware of custom loaders.
 
@@ -865,9 +865,9 @@ The same for admin app and extension.
 
     To workaround this, resolved absolute template path passed to view constructor. GSP module
     is able to found correct resourse later in correct class loader, but it requires obvious changes
-    to template engine templates resolution mechanism.    
+    to template engine templates resolution mechanism.
 
-To resolve this, special templates resolver is required. For freemarker it is provided out of the box, 
+To resolve this, special templates resolver is required. For freemarker it is provided out of the box,
 but must be enabled on main bundle:
 
 ```java

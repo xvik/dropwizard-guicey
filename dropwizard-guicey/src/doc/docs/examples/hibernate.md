@@ -12,7 +12,7 @@ Additional dependencies required:
 ```groovy
     implementation 'io.dropwizard:dropwizard-hibernate:4.0.2'
     implementation 'com.h2database:h2:2.2.224'
-```  
+```
 
 !!! note
     Both versions are managed by [BOM](../extras/bom.md)
@@ -28,7 +28,7 @@ public class HbnBundle extends HibernateBundle<HbnAppConfiguration> {
     public HbnBundle() {
         super(Sample.class);
     }
-    
+
     @Override
     public PooledDataSourceFactory getDataSourceFactory(HbnAppConfiguration configuration) {
         return configuration.getDataSourceFactory();
@@ -40,7 +40,7 @@ public class HbnBundle extends HibernateBundle<HbnAppConfiguration> {
     All model classes are configured inside the constructor: `#!java super(Sample.class);`
 
 Configuration class:
- 
+
 ```java
 public class HbnAppConfiguration extends Configuration {
     @Valid
@@ -52,7 +52,7 @@ public class HbnAppConfiguration extends Configuration {
         return database;
     }
 }
-``` 
+```
 
 Configuration file for in-memory database and automatic schema creation:
 
@@ -68,9 +68,9 @@ database:
     hibernate.dialect: org.hibernate.dialect.H2Dialect
     hibernate.hbm2ddl.auto: create
 ```
- 
-## Guice integration 
- 
+
+## Guice integration
+
 Guice module used to provide SessionFactory instance into guice context:
 
 ```java
@@ -151,4 +151,4 @@ public class SampleResource {
         return Response.ok(res).build();
     }
 }
-```    
+```

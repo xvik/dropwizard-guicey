@@ -12,8 +12,8 @@ Other auth types are configured in similar way.
 public class OAuthDynamicFeature extends AuthDynamicFeature {
 
     @Inject
-    public OAuthDynamicFeature(OAuthAuthenticator authenticator, 
-                                UserAuthorizer authorizer, 
+    public OAuthDynamicFeature(OAuthAuthenticator authenticator,
+                                UserAuthorizer authorizer,
                                 Environment environment) {
         super(new OAuthCredentialAuthFilter.Builder<User>()
                 .setAuthenticator(authenticator)
@@ -26,7 +26,7 @@ public class OAuthDynamicFeature extends AuthDynamicFeature {
     }
 
     // classes below may be external (internal for simplicity)
-    
+
     @Singleton
     public static class OAuthAuthenticator implements Authenticator<String, User> {
 
@@ -34,14 +34,14 @@ public class OAuthDynamicFeature extends AuthDynamicFeature {
         public Optional<User> authenticate(String credentials) throws AuthenticationException {
             return Optional.fromNullable("valid".equals(credentials) ? new User() : null);        }
     }
-    
+
     @Singleton
     public static class UserAuthorizer implements Authorizer<User> {
         @Override
         public boolean authorize(User user, String role) {
             return user.getName().equals("good-guy") && role.equals("ADMIN");
         }
-    }   
+    }
 }
 ```
 
@@ -68,8 +68,8 @@ public class ChainedAuthDynamicFeature extends AuthDynamicFeature {
 
     @Inject
     public ChainedAuthDynamicFeature(BasicAuthenticator basicAuthenticator,
-                                      OAuthAuthenticator oauthAuthenticator, 
-                                      UserAuthorizer authorizer, 
+                                      OAuthAuthenticator oauthAuthenticator,
+                                      UserAuthorizer authorizer,
                                       Environment environment) {
         super(new ChainedAuthFilter(Arrays.asList(
                 new BasicCredentialAuthFilter.Builder<>()
@@ -82,11 +82,11 @@ public class ChainedAuthDynamicFeature extends AuthDynamicFeature {
                             .setAuthorizer(authorizer)
                             .setPrefix("Bearer")
                             .buildAuthFilter()
-        )));                
+        )));
 
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AuthValueFactoryProvider.Binder(User.class));
-    }   
+    }
 }
 ```
 
@@ -115,11 +115,11 @@ public class PolyAuthDynamicFeature extends PolymorphicAuthDynamicFeature {
                                                 .setAuthenticator(oauthAuthenticator)
                                                 .setAuthorizer(authorizer)
                                                 .setPrefix("Bearer")
-                                                .buildAuthFilter()));             
-        
+                                                .buildAuthFilter()));
+
         final AbstractBinder binder = new PolymorphicAuthValueFactoryProvider.Binder<>(
             ImmutableSet.of(BasicPrincipal.class, OAuthPrincipal.class));
-        
+
         environment.jersey().register(binder);
         environment.jersey().register(RolesAllowedDynamicFeature.class);
     }

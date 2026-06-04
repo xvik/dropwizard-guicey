@@ -18,7 +18,7 @@ all classes without an order annotation *always go last*.
     [installers report](diagnostic/installers-report.md).
     For example, [managed](../installers/managed.md), [servlets](../installers/servlet.md) and
     [filters](../installers/filter.md) installers support order.
-    
+
 The most common case for ordering is ordering managed objects. For example:
 
 ```java
@@ -35,7 +35,7 @@ They will be ordered as: `Managed2`, `Managed1`, `Managed3`
 
 !!! note
     Guicey remembers extensions registration order:
-    
+
     ```java
     .extensions(Ext1.class, Ext2.class)
     ```
@@ -44,7 +44,7 @@ They will be ordered as: `Managed2`, `Managed1`, `Managed3`
     registration order will be preserved.
 
 !!! tip
-    You can use [diagnostic report](diagnostic/configuration-report.md) to see actual extensions order. 
+    You can use [diagnostic report](diagnostic/configuration-report.md) to see actual extensions order.
 
 ## Installers order
 
@@ -61,7 +61,7 @@ default installers.
 
 !!! attention
     Bundles can't be explicitly ordered.
-    
+
 Bundles are transitive and transitive registrations appear at the middle of bundle configuration,
 so it is physically impossible to order bundles.
 

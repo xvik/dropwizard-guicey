@@ -71,7 +71,7 @@ enum to differentiate required events:
 
 ```java
 public class MyListener implements GuiceyLifecycleListener {
-    
+
     public void onEvent(GuiceyLifecycleEvent event) {
         switch (event.getType()) {
             case InjectorCreation:
@@ -90,7 +90,7 @@ public class MyListener extends GuiceyLifecycleAdapter {
     @Override
     protected void injectorCreation(final InjectorCreationEvent event) {
            ...
-    }        
+    }
 }
 ```
 

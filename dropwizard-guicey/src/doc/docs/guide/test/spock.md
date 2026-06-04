@@ -41,7 +41,7 @@ Provided extensions:
 
 Both extensions allow using injections directly in specifications (like spock-guice).
 
-`@UseGuiceyHooks` extension could be used to apply [configuration hook](../hooks.md) 
+`@UseGuiceyHooks` extension could be used to apply [configuration hook](../hooks.md)
 common for all tests. But, it is deprecated in favor of native hooks support in main extensions.
 
 ## Testing core logic
@@ -56,7 +56,7 @@ class AutoScanModeTest extends Specification {
     @Inject MyService service
 
     def "My service test" {
-    
+
         when: 'calling service'
         def res = service.getSmth()
 
@@ -98,12 +98,12 @@ In order to start application on random port you can use configuration shortcut:
 !!! note
     Random ports will be applied even if configuration with exact ports provided:
     ```groovy
-    @UseDropwizardApp(value = MyApplication, 
-              config = 'path/to/my/config.yml', 
+    @UseDropwizardApp(value = MyApplication,
+              config = 'path/to/my/config.yml',
               randomPorts = true)
     ```
     Also, random ports support both server types (default and simple)
-    
+
 
 Real ports could be resolved with [ClientSupport](#client) object.
 
@@ -117,7 +117,7 @@ if you don't use custom configuration class, but still want to re-map rest, shor
 ```
 
 In contrast to config declaration, attribute value may not start with '/' and end with '/*' -
-it would be appended automatically. 
+it would be appended automatically.
 
 This option is only intended to simplify cases when custom configuration file is not yet used in tests
 (usually early PoC phase). It allows you to map servlet into application root in test (because rest is no
@@ -220,7 +220,7 @@ client.targetAdmin("adminServlet").request().buildGet().invoke()
     All methods above accepts any number of strings which would be automatically combined into correct path:
     ```groovy
     client.targetRest("some", "other/", "/part")
-    ``` 
+    ```
     would be correctly combined as "/some/other/part/"
 
 As you can see test code is abstracted from actual configuration: it may be default or simple server
@@ -324,7 +324,7 @@ Any number of fields could be declared. The same way hook could be declared in b
 
 ```groovy
 class BaseTest extends Specification {
-    
+
     // hook in base class
     @EnableHook
     static GuiceyConfigurationHook BASE_HOOK = { it.modules(new DebugModule()) }
@@ -332,7 +332,7 @@ class BaseTest extends Specification {
 
 @UseGuiceyApp(value = App, hooks = SomeOtherHook)
 class SomeTest extends BaseTest {
-    
+
     // Another hook
     @EnableHook
     static GuiceyConfigurationHook HOOK = { it.modules(new DebugModule2()) }
@@ -344,17 +344,17 @@ All 3 hooks will work.
 ### Hooks extension
 
 !!! warning
-    This extension is deprecated in favour of field hooks declarations. 
+    This extension is deprecated in favour of field hooks declarations.
 
 ```groovy
 @UseGuiceyHooks(MyBaseHook)
 class BaseTest extends Specification {
-    
+
 }
 
 @UseGuiceyApp(App)
 class SomeTest extends BaseTest {}
-``` 
+```
 
 !!! note
     You **can still use** test specific hooks together with declared base hook
@@ -383,10 +383,10 @@ And now all test classes should simply extend it:
 
 ```groovy
 class Test1 extends AbstractTest {
-    
+
     @Inject
     MyService service
-            
+
     def "Check something"() { ... }
 }
 ```
@@ -408,7 +408,7 @@ class ErrorTest extends Specification {
 
         when: "starting app with error"
         new MyErrApp().main(['server'])
-        
+
         then: "startup failed"
         thrown(RULE.indicatorExceptionType)
         RULE.output.contains('stating application')
@@ -419,19 +419,19 @@ class ErrorTest extends Specification {
 
 ```groovy
 class MyTest extends Specification {
-    
+
     @ClassRule @Shared
     JunitRule sharedRule = new JunitRule()
-    
+
     @Rule
     JunitRule2 rule = new JunitRule2()
-    
+
     def setupSpec() {
     }
-    
+
     def setup() {
     }
-    
+
     def "Test method body" () {
         setup:
     }
@@ -464,7 +464,7 @@ Current Spock extensions are almost equivalent to JUnit 5 extensions (in feature
 
 ### Client
 
-For `ClientSupport` object, INSTEAD of 
+For `ClientSupport` object, INSTEAD of
 
 ```java
 @Inject ClientSupport client
@@ -518,7 +518,7 @@ class MyTest extends Specification {
 ```
 
 This is an alternative to previous rules declaration in fields.
-It is useful when you need dynamic hook (as lambda) or configuration overrides 
+It is useful when you need dynamic hook (as lambda) or configuration overrides
 require some other extensions.
 
 Note that config override may be registered with `Supplier`:

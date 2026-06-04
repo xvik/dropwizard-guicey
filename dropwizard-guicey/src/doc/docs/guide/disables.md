@@ -64,7 +64,7 @@ GuiceBundle.builder()
     ...
     .disableInstallers(ResourceInstaller.class)
     .installers(CustomizedResourceInstaller.class)
-```              
+```
 
 !!! tip
     Custom installers are detected automatically by classpath scan (if enabled).
@@ -85,11 +85,11 @@ Disabling affects both normal (`.modules()`) and overriding (`.modulesOverride()
     ```java
     public class MyModule extends AbstractModule {
         @Override
-        public void configure() {   
+        public void configure() {
             install(new TransitiveModule());
         }
-    }                           
-    
+    }
+
     GuiceBindle.builder()
         .disableModules(TrannsitiveModule.clas)
         ...
@@ -133,15 +133,15 @@ a 3rd-party bundle.
 
 !!! important
     Disable affects transitive bundles!
-    
-    ```java   
+
+    ```java
     public class MyBundle implements ConfiguredBundle {
         @Override
-        public void initialize(Bootstrap bootstrap) {   
+        public void initialize(Bootstrap bootstrap) {
             bootstrap.addBundle(new TransitiveBundle());
         }
-    }                           
-    
+    }
+
     GuiceBindle.builder()
         .disableDropwizardBundles(TransitiveBundle.class)
         ...
@@ -216,8 +216,8 @@ utility (examples above).
 
 ## Reporting
 
-[Configuration diagnostic report](diagnostic/configuration-report.md) (`.printDiagnosticInfo()`) 
-shows all [disables and disabled](diagnostic/configuration-report.md#disables) items. 
+[Configuration diagnostic report](diagnostic/configuration-report.md) (`.printDiagnosticInfo()`)
+shows all [disables and disabled](diagnostic/configuration-report.md#disables) items.
 
 For example:
 
@@ -226,5 +226,5 @@ For example:
 
     ...
 
-    ├── installer  -LifeCycleInstaller           (r.v.d.g.m.i.feature)         *DISABLED  
+    ├── installer  -LifeCycleInstaller           (r.v.d.g.m.i.feature)         *DISABLED
 ```

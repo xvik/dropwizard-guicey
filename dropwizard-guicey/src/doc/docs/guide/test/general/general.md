@@ -4,7 +4,7 @@
     If you're going to use JUnit 5, go straight to the [JUnit 5 section](../junit5/setup.md):
     all required general tool usage scenarios are described there.
 
-Test framework-agnostic tools. 
+Test framework-agnostic tools.
 Useful when:
 
  - There are no extensions for your test framework
@@ -16,12 +16,12 @@ Test utils:
  - `TestSupport` - root utilities class, providing easy access to other helpers
  - `DropwizardTestSupport` - [Dropwizard native support](https://www.dropwizard.io/en/release-5.0.x/manual/testing.html#non-junit) for full integration tests
  - `GuiceyTestSupport` - Guice context-only integration tests (without starting web part)
- - `CommandTestSupport` - general commands tests 
+ - `CommandTestSupport` - general commands tests
  - `ClientSupport` - web client helper (useful for calling application urls)
 
 !!! important
     `TestSupport` assumed to be used as a universal shortcut: everything could be created/executed through it
-    so just type `TestSupport.` and look available methods - *no need to remember other classes*. 
+    so just type `TestSupport.` and look available methods - *no need to remember other classes*.
 
 Additional features implemented with hooks:
 

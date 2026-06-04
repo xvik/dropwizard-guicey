@@ -36,11 +36,11 @@ Events are simple POJOs. Create event classes with properties you need (or witho
 ```java
 public class FooEvent {
     private String something;
-    
+
     public FooEvent(String something) {
         this.something = something;
     }
-    
+
     public void getSomething() {
         return something;
     }

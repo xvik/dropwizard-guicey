@@ -15,8 +15,8 @@ Guicey provides `SpiesHook` for overriding Guice beans with Mockito spies.
 !!! warning
     Spies will not work for HK2 beans
 
-Mockito documentation is written in the `Mockito` class [javadoc](https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html).  
-Additional docs could be found in [mockito wiki](https://github.com/mockito/mockito/wiki/FAQ)  
+Mockito documentation is written in the `Mockito` class [javadoc](https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html).
+Additional docs could be found in [mockito wiki](https://github.com/mockito/mockito/wiki/FAQ)
 Also, see official [mockito refcard](https://dzone.com/refcardz/mockito)
 and [baeldung guides](https://www.baeldung.com/mockito-series).
 
@@ -47,7 +47,7 @@ Spying it:
 SpiesHook hook = new SpiesHook();
 // real spy could be created ONLY after injector startup
 final SpyProxy proxy = hook.spy(Service.class);
-// SpyProxy implements provider and so could be also used as: 
+// SpyProxy implements provider and so could be also used as:
 // Provider<Service> provider = hook.spy(Service.class)
 
 TestSupport.build(App.class)
@@ -55,7 +55,7 @@ TestSupport.build(App.class)
         .runCore(injector -> {
             // get spy object for configuration
             Service spy = proxy.getSpy();
-            // IMPORTANT: spies configured in reverse order to avoid accidental method call            
+            // IMPORTANT: spies configured in reverse order to avoid accidental method call
             doReturn("bar1").when(spy).get(11);
 
             // real instance, injected everywhere in application (AOP proxy)
@@ -127,7 +127,7 @@ Mockito.verify(spy, Mockito.times(1)).get(11);
 ```
 
 Why would you need that? It is often useful when verifying indirect bean call.
-For example, if we have `SuperService` which internally calls `Service` and so 
+For example, if we have `SuperService` which internally calls `Service` and so
 there is no other way to verify service call result correctness other than spying it (or use [tracker](tracks.md)).
 
 ## Pre initialization
@@ -147,7 +147,7 @@ final SpyProxy proxy = hook.spy(Service.class)
 ...
 ```
 
-Here, configuration from `withInitializer` block would be called just after 
+Here, configuration from `withInitializer` block would be called just after
 spy creation (on first access).
 
 And so any `Managed`, calling it during startup would use completely configured spy:
@@ -180,7 +180,7 @@ Spy instance (used to configure methods behavior) could be obtained:
 1. After application startup:
     ```java
     SpyProxy proxy = hook.spy(Service.class);
-    // after app startup  
+    // after app startup
     Service spy = proxy.getSpy();
     ```
 3. From hook: `Service spy = hook.getSpy(Service.class)`

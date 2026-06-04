@@ -60,7 +60,7 @@ TestsSupport.build(App.class)
 
             // mock instance instead of service
             Assertions.assertEquals(mock, service);
-            // method overridden            
+            // method overridden
             Assertions.assertEquals("static value", service.foo());
         });
 ```
@@ -145,7 +145,7 @@ use spies:
 ```java
 public class AbstractService implements IService {
     public abstract String bar();
-    
+
     public String foo() {
         return "value";
     }

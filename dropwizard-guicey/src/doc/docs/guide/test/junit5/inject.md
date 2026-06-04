@@ -66,17 +66,17 @@ Any **declared** guice bean may be injected as test method parameter:
 
 ```java
 @Test
-public void testSomthing(DummyBean bean) 
+public void testSomthing(DummyBean bean)
 ```
 
-(where `DummyBean` is manually declared in some module or requested as a dependency 
+(where `DummyBean` is manually declared in some module or requested as a dependency
 (JIT-instantiated) during injector creation).
 
 For unknown beans injection (not declared and not used during startup) special annotation must be used:
 
 ```java
 @Test
-public void testSomthing(@Jit TestBean bean) 
+public void testSomthing(@Jit TestBean bean)
 ```
 
 !!! info
@@ -90,8 +90,8 @@ Qualified and generified injections will also work:
 @Test
 public void testSomthing(@Named("qual") SomeBean bean,
                          TestBean<String> generifiedBean,
-                         Provider<OtherBean> provider) 
-```    
+                         Provider<OtherBean> provider)
+```
 
 Also, there are special objects available as parameters:
 
@@ -180,7 +180,7 @@ public class ParametersInjectionDwTest {
 
 !!! tip
     `DropwizardTestSupport` and `ClientSupport` objects are also available with a static calls (in the same thread):
-    
+
     ```java
     DropwizardTestSupport support = TestSupport.getContext();
     ClientSupport client = TestSupport.getContextClient();

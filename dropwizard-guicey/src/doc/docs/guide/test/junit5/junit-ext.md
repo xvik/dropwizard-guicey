@@ -43,7 +43,7 @@ For example:
 
 ```java
 public class MyExtension implements BeforeEachCallback {
-    
+
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
         Injector injector = GuiceyExtensionsSupport.lookupInjector(context).get();

@@ -84,7 +84,7 @@ public class ErrorResource {
     public String get() {
         throw new IllegalStateException("error");
     }
-}    
+}
 ```
 
 ```java
@@ -171,8 +171,8 @@ REST stub (@StubRest) started on DebugReportTest$Test1:
 	Dropwizard exception mappers: DISABLED
 
 	2 resources (disabled 1):
-		ErrorResource                (r.v.d.g.t.j.s.r.support)  
-		Resource1                    (r.v.d.g.t.j.s.r.support)  
+		ErrorResource                (r.v.d.g.t.j.s.r.support)
+		Resource1                    (r.v.d.g.t.j.s.r.support)
 
 	2 jersey extensions (disabled 1):
 		RestExceptionMapper          (r.v.d.g.t.j.s.r.support)
@@ -227,14 +227,14 @@ is used.
 
     In-Memory container is not a real container. It starts Jersey application and
     directly calls internal APIs to handle request created by client provided by
-    test framework. There is no network communication involved. This containers 
-    does not support servlet and other container dependent features, but it is a 
+    test framework. There is no network communication involved. This containers
+    does not support servlet and other container dependent features, but it is a
     perfect choice for simple unit tests.
 
 If it is not enough (in-memory container does not support all functions), then
 use `GrizzlyTestContainerFactory`
 
-    The GrizzlyTestContainerFactory creates a container that can run as a light-weight, 
+    The GrizzlyTestContainerFactory creates a container that can run as a light-weight,
     plain HTTP container. Almost all Jersey tests are using Grizzly HTTP test container
     factory.
 
@@ -272,7 +272,7 @@ It extends the same `TestClient` class and so provides the same abilities:
 * [Forms builder](client.md#form-builder)
 
 !!! note
-    Just in case: `ClientSupport` would not work with rest stubs (because web container is actually 
+    Just in case: `ClientSupport` would not work with rest stubs (because web container is actually
     not started and so `ClientSupport` can't recognize a correct rest mapping path). Of course,
     it could be used with a full URLs.
 
@@ -281,28 +281,28 @@ It extends the same `TestClient` class and so provides the same abilities:
 
     ```java
     rest.buildForm("/some/path")
-        .param("foo", "bar")     
+        .param("foo", "bar")
         .param("file", new File("src/test/resources/test.txt"))
         .buildPost()
         .asVoid();
-    ``` 
+    ```
 
 To clear defaults:
 
 ```java
-rest.reset() 
+rest.reset()
 ```
 
 Might be a part of call chain:
 
 ```java
-rest.reset().post(...) 
+rest.reset().post(...)
 ```
 
 !!! note
     Resource client could be directly injected as a test field
     (instead of calling `rest.resourceClient(MyResource.class)`:
-    
+
     ```java
     @WebResourceClient
     ResourceClient<MyResource> rest;

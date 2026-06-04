@@ -45,10 +45,10 @@ And we want to very indirect service call (when service called by some other ser
 public class Test {
     @TrackBean(trace = true)
     Tracker<Service> tracker;
-    
+
     @Inject
     Service service;
-    
+
     @Test
     public void test() {
         // call service
@@ -171,7 +171,7 @@ Assertions.assertEquals("1['foo1']", firstCallArg.size());
 ```
 
 In case of complex objects (pojo, for example), string representation would only contain
-the type and instance hash: `Type@hash` (which is not informative, but the only universal short 
+the type and instance hash: `Type@hash` (which is not informative, but the only universal short
 way to describe object).
 
 If tracker used only for performance testing (to accumulate execution time from many runs),
@@ -213,8 +213,8 @@ trace was enabled for clarity):
 \\\------------------------------------------------------------/ test instance = 51f18e31 /
 Tracker<Service> stats (sorted by median) for ReportForMultipleInstancesTest$Test1#testTracker():
 
-	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]     
-	Service                                  foo(int)                                           2 (2)      0          0.007 ms   0.281 ms   0.281 ms   0.281 ms   0.281 ms  
+	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]
+	Service                                  foo(int)                                           2 (2)      0          0.007 ms   0.281 ms   0.281 ms   0.281 ms   0.281 ms
 ```
 
 Note different instances in trace (`<@6707a4bf>`, `<@79d3473e>`) and instances count in calls column: `2 (2)`
@@ -253,12 +253,12 @@ tracks = tracker.findTracks(mock -> when(
                mock.foo(Mockito.anyInt()))
          );
 
-// search methods with argument condition ( > 1) 
+// search methods with argument condition ( > 1)
 tracks = tracker.findTracks(mock -> when(
                mock.foo(Mockito.intThat(argument -> argument > 1)))
         );
 
-// search for methods with exact argument value  
+// search for methods with exact argument value
 tracks = tracker.findTracks(mock -> when(
         mock.foo(11))
         );
@@ -280,7 +280,7 @@ When extension debug is active:
 
 ```java
 @TestGucieyApp(value = App.class, debug = true)
-public class Test 
+public class Test
 ```
 
 All recognized tracker fields would be logged:
@@ -297,9 +297,9 @@ Also, a performance report for **all registered tracker objects** would be print
 \\\------------------------------------------------------------/ test instance = 2bbb44da /
 Trackers stats (sorted by median) for TrackerSimpleTest#testTracker():
 
-	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]     
-	Service                                  foo(int)                                           3          0          0.011 ms   0.161 ms   0.151 ms   0.161 ms   0.161 ms  
-	Service                                  bar(int)                                           1          0          0.066 ms   0.066 ms   0.066 ms   0.066 ms   0.066 ms  
+	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]
+	Service                                  foo(int)                                           3          0          0.011 ms   0.161 ms   0.151 ms   0.161 ms   0.161 ms
+	Service                                  bar(int)                                           1          0          0.066 ms   0.066 ms   0.066 ms   0.066 ms   0.066 ms
 ```
 
 ## Stats
@@ -328,7 +328,7 @@ System.out.println(tracker.getStats().render());
 ```
 
 ```java
-	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]     
+	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]
 	Service                                  foo(int)                                           2 (2)      0          0.009 ms   0.352 ms   0.352 ms   0.352 ms   0.352 ms
 ```
 
@@ -342,15 +342,15 @@ Here is an example of tracking `GuiceyConfigurationInfo` with activated `.printA
 	[service]                                [method]                                           [calls]    [fails]    [min]      [max]      [median]   [75%]      [95%]
 	GuiceyConfigurationInfo                  getNormalModuleIds()                               1          0          1.076 ms   1.076 ms   1.076 ms   1.076 ms   1.076 ms
 	GuiceyConfigurationInfo                  getModulesDisabled()                               1          0          0.038 ms   0.038 ms   0.038 ms   0.038 ms   0.038 ms
-	GuiceyConfigurationInfo                  getOverridingModuleIds()                           1          0          0.034 ms   0.034 ms   0.034 ms   0.034 ms   0.034 ms  
-	GuiceyConfigurationInfo                  getExtensionsDisabled()                            1          0          0.020 ms   0.020 ms   0.020 ms   0.020 ms   0.020 ms  
-	GuiceyConfigurationInfo                  getOptions()                                       1          0          0.005 ms   0.005 ms   0.005 ms   0.005 ms   0.005 ms  
-	GuiceyConfigurationInfo                  getData()                                          3          0          0.003 ms   0.006 ms   0.004 ms   0.006 ms   0.006 ms  
+	GuiceyConfigurationInfo                  getOverridingModuleIds()                           1          0          0.034 ms   0.034 ms   0.034 ms   0.034 ms   0.034 ms
+	GuiceyConfigurationInfo                  getExtensionsDisabled()                            1          0          0.020 ms   0.020 ms   0.020 ms   0.020 ms   0.020 ms
+	GuiceyConfigurationInfo                  getOptions()                                       1          0          0.005 ms   0.005 ms   0.005 ms   0.005 ms   0.005 ms
+	GuiceyConfigurationInfo                  getData()                                          3          0          0.003 ms   0.006 ms   0.004 ms   0.006 ms   0.006 ms
 
 ```
 
 !!! note
-    Methods sorted by slowness 
+    Methods sorted by slowness
 
 You can also collect stats for multiple trackers:
 

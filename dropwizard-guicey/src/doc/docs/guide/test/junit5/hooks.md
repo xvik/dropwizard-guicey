@@ -4,7 +4,7 @@ You can use [hooks to customize application](../overview.md#configuration-hooks)
 
 !!! note
     Hook provides the same methods as the main `GuiceBundle.builder()` and
-    so it could easily re-configure application (change options, add or disable modules, 
+    so it could easily re-configure application (change options, add or disable modules,
     enable reports, etc.)
 
 In both extension annotations, hooks could be declared with attribute:
@@ -25,7 +25,7 @@ Where MyHook is:
 public class MyHook implements GuiceyConfigurationHook {
     @Override
     public void configure(GuiceBundle.Builder builder) throws Exception {
-        
+
     }
 }
 ```
@@ -36,7 +36,7 @@ support we can write hook like this:
 ```java
 public class MockApiHook implements GuiceyConfigurationHook {
     private final Class<?>[] classes;
-    
+
     public MockApiHook(final Class<?>... classes) {
         this.classes = classes;
     }
@@ -55,7 +55,7 @@ public class MockApiHook implements GuiceyConfigurationHook {
 Usage:
 
 ```java
-// mocks created and registered as overriding original services 
+// mocks created and registered as overriding original services
 @EnableHook
 static MockApiHook mocks = new MockApiHook(SomeService.class, SomeOtherService.class);
 
@@ -76,7 +76,7 @@ public void test() {
 ```
 
 !!! important
-    This is just a simple example (not counting possible AOP usage) - just to show how hooks 
+    This is just a simple example (not counting possible AOP usage) - just to show how hooks
     could be used. Mocks support is already implemented: see `@MockBean` extension.
 
 ## Hook fields
@@ -95,12 +95,12 @@ static GuiceyConfigurationHook HOOK = builder -> builder.modules(new DebugModule
     static GuiceyConfigurationHook hook = GuiceBundle.Builder::printStartupTime;
     ```
 
-Any number of hook fields could be declared.   
+Any number of hook fields could be declared.
 Hook fields could be also declared in base test class:
 
 ```java
 public abstract class BaseTest {
-    
+
     // hook in base class
     @EnableHook
     static GuiceyConfigurationHook BASE_HOOK = builder -> builder.modules(new DebugModule());
@@ -108,7 +108,7 @@ public abstract class BaseTest {
 
 @TestGuiceyApp(value = App.class, hooks = SomeOtherHook.class)
 public class SomeTest extends BaseTest {
-    
+
     // Another hook
     @EnableHook
     static GuiceyConfigurationHook HOOK = builder -> builder.modules(new DebugModule2());

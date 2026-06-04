@@ -11,10 +11,10 @@ Detects classes extending Dropwizard `#!java Task` and registers their instances
 
 ```java
 public class MyTask extends Task {
-    
+
     @Inject
     private MyService service;
-    
+
     public TruncateDatabaseTask() {
         super("mytask");
     }

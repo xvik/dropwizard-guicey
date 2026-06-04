@@ -38,7 +38,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import ru.vyarus.guicey.annotations.lifecycle.PostStartup;
 
-public class SampleBean {    
+public class SampleBean {
 
     @PostConstruct
     private void start() {
@@ -87,7 +87,7 @@ Also, direct `Matcher` implementation could be specified for more sophisticated 
 For example, if I want to exclude only one class:
 
 ```java
-new LifecycleAnnotationsBundle(new AbstractMatcher<TypeLiteral<?>>() {                               
+new LifecycleAnnotationsBundle(new AbstractMatcher<TypeLiteral<?>>() {
            @Override
            public boolean matches(TypeLiteral<?> o) {
                return o.getRawType() != SomeExcludedBean.class;

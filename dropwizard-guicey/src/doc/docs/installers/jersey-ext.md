@@ -7,7 +7,7 @@ Installs various Jersey extensions, usually annotated with the Jersey `#!java @P
 
     Supplier, ExceptionMapper, ValueParamProvider, InjectionResolver,
     ParamConverterProvider, ContextResolver, MessageBodyReader, MessageBodyWriter,
-    ReaderInterceptor, WriterInterceptor, ContainerRequestFilter, 
+    ReaderInterceptor, WriterInterceptor, ContainerRequestFilter,
     ContainerResponseFilter, DynamicFeature, ApplicationEventListener, ModelProcessor
 
 ## Recognition
@@ -76,7 +76,7 @@ For example, 1000 is prioritized before 2000. See `jakarta.ws.rs.Priorities` for
 
 !!! warning
     `Supplier` is used now by hk2 as a replacement to its own `Factory` interface.
-    
+
     If you were using `AbstractContainerRequestValueFactory` then use just `Supplier<T>` instead.
 
 Any class implementing `#!java java.util.function.Supplier` (or extending abstract class implementing it).
@@ -85,8 +85,8 @@ Any class implementing `#!java java.util.function.Supplier` (or extending abstra
 public class MySupplier implements Supplier<MyModel> {
     @Override
     public MyModel get() {
-       ...    
-    }   
+       ...
+    }
 }
 ```
 
@@ -99,7 +99,7 @@ public class MySupplier implements Supplier<MyModel> {
     ```java
     @Provider
     class AuthFactory implements Function<ContainerRequest, User> {
-    
+
         @Override
         public User apply(ContainerRequest containerRequest) {
             return new User();
@@ -109,7 +109,7 @@ public class MySupplier implements Supplier<MyModel> {
 
 ### ExceptionMapper
 
-Any class implementing `#!java jakarta.ws.rs.ext.ExceptionMapper` (or extending abstract class implementing it). 
+Any class implementing `#!java jakarta.ws.rs.ext.ExceptionMapper` (or extending abstract class implementing it).
 Useful for [error handling customization](https://www.dropwizard.io/en/release-5.0.x/manual/core.html#error-handling).
 
 ```java
@@ -380,13 +380,13 @@ Any class implementing [`#!java org.glassfish.jersey.server.model.ModelProcessor
 public class MyModelProcessor implements ModelProcessor {
 
     @Override
-    public ResourceModel processResourceModel(ResourceModel resourceModel, 
+    public ResourceModel processResourceModel(ResourceModel resourceModel,
                                               Configuration configuration) {
         return resourceModel;
     }
 
     @Override
-    public ResourceModel processSubResource(ResourceModel subResourceModel, 
+    public ResourceModel processSubResource(ResourceModel subResourceModel,
                                             Configuration configuration) {
         return subResourceModel;
     }

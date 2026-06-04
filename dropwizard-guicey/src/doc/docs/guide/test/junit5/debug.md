@@ -167,7 +167,7 @@ public class MySetup implements TestEnvironmentSetup, TestExecutionListener {
     @Override
     public Object setup(TestExtension extension) throws Exception {
         extension.listen(this);
-        
+
         if (extension.isDebug()) {
             System.out.println("Debug info: ...");
         }

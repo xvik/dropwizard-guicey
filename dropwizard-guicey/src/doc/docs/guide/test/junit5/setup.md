@@ -26,7 +26,7 @@ testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
     test {
         useJUnitPlatform()
         ...
-    }                    
+    }
     ```
 
 !!! warning
@@ -35,7 +35,7 @@ testRuntimeOnly 'org.junit.jupiter:junit-jupiter'
     ```java
     import org.junit.jupiter.api.Assertions;
     import org.junit.jupiter.api.Test;
-    ```    
+    ```
 
 ## Dropwizard extensions compatibility
 
@@ -52,7 +52,7 @@ For example:
 public class ClientSupportGuiceyTest {
 
     // Use dropwizard extension to start a separate server
-    // It might be the same application or different 
+    // It might be the same application or different
     // (application instances would be different in any case)
     static DropwizardAppExtension app = new DropwizardAppExtension(App.class);
 

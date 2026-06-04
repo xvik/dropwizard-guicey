@@ -26,7 +26,7 @@ implementation 'com.h2database:h2:2.2.224'
 !!! note
     Both versions are managed by [BOM](../extras/bom.md)
 
-[dropwizard-jdbi3](https://www.dropwizard.io/en/release-5.0.x/manual/jdbi3.html) is used to configure 
+[dropwizard-jdbi3](https://www.dropwizard.io/en/release-5.0.x/manual/jdbi3.html) is used to configure
 and create dbi instance:
 
 ```java
@@ -78,7 +78,7 @@ GuiceBundle.builder()
     .withPlugins(new H2DatabasePlugin()))
 ```
 
-!!! note 
+!!! note
     You can use [pre-build jdbi instance](../extras/jdbi3.md#usage) instead.
 
 ## Repository definition
@@ -91,7 +91,7 @@ GuiceBundle.builder()
 @JdbiRepository
 @InTransaction
 public interface UserRepository extends Crud<User> {
-    
+
     @Inject
     RandomNameGenerator getGenerator();
 
@@ -120,7 +120,7 @@ public interface UserRepository extends Crud<User> {
 }
 ```
 
-Where `Crud` base interface tries to unify repositories and provide hibernate-like optimistic locking behaviour 
+Where `Crud` base interface tries to unify repositories and provide hibernate-like optimistic locking behaviour
 (on each entity save version field is assigned/incremented and checked during update to prevent data loss):
 
 ```java
@@ -170,7 +170,7 @@ In order to better understand how transactions work, read the [unit of work docs
 
 ## Row mapper
 
-Row mapper is used to map query result set to entity: 
+Row mapper is used to map query result set to entity:
 
 ```java
 public class UserMapper implements RowMapper<User> {
@@ -213,7 +213,7 @@ public @interface UserBind {
                 Parameter param,
                 int index,
                 Type paramType) {
-            
+
             return (stmt, obj) -> {
                 User arg = (User) obj;
                 ((SqlStatement) stmt)
@@ -228,7 +228,7 @@ public @interface UserBind {
 
 See `@UserBind` usage above in repository definition.
 
-There is no custom installer for annotation because it's detected automatically by JDBI.  
+There is no custom installer for annotation because it's detected automatically by JDBI.
 
 ## Usage
 
@@ -249,7 +249,7 @@ public class UserResource {
         user.setName(name);
         return repository.save(user);
     }
-    
+
     @GET
     @Path("/")
     public List<User> findAll() {
@@ -261,7 +261,7 @@ public class UserResource {
 `UserMapper` and `UserBind` are used implicitly to convert the POJO into a db record and back.
 
 You can use `@InTransaction` on repository method to enlarge transaction scope, but, in contrast
-to hibernate you don't have to always declare it to avoid lazy initialization exception 
+to hibernate you don't have to always declare it to avoid lazy initialization exception
 (because jdbi produces simple pojos).
 
 !!! note

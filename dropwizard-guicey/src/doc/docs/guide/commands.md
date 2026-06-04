@@ -6,19 +6,19 @@ Guicey calls `injector.injectMembers(command)` for all registered `EnvironmentCo
 
 ```java
 public class MyCommand extends EnvironmentCommand<MyConfiguration> {
-    
+
     @Inject
     private MyService myservice;
-    
+
     public MyCommand(Application application) {
         super(application, "mycli", "my super useful cli");
     }
-    
+
     @Override
-        protected void run(Environment environment, 
-                             Namespace namespace, 
-                             MyConfiguration configuration) throws Exception { 
-            myservice.doSomething();        
+        protected void run(Environment environment,
+                             Namespace namespace,
+                             MyConfiguration configuration) throws Exception {
+            myservice.doSomething();
         }
 }
 ```
@@ -47,7 +47,7 @@ For example, if the command below is inside a scanned package, then Guicey will 
 
 ```java
 public class MyCommand extends Command {
-    
+
     public MyCommand() {
         super("hello", "Prints a greeting");
     }
@@ -77,8 +77,8 @@ public class SyncCommand extends EnvironmentCommand<AppConfiguration> {
     }
 
     @Override
-    protected void run(Environment environment, 
-                        Namespace namespace, 
+    protected void run(Environment environment,
+                        Namespace namespace,
                         AppConfiguration configuration) throws Exception {
         manager.start();
         try {

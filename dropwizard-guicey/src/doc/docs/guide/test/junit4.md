@@ -49,7 +49,7 @@ public class MyTest {
 
     @Rule
     GuiceyAppRule<MyConfiguration> RULE = new GuiceyAppRule<>(MyApplication.class, "path/to/configuration.yaml");
-    
+
     public void testSomething() {
         RULE.getBean(MyService.class).doSomething();
         ...
@@ -96,7 +96,7 @@ public static RuleChain chain = RuleChain
 
 !!! attention
     RuleChain is required because rules execution order is not guaranteed and
-    configuration rule must obviously be executed before application rule. 
+    configuration rule must obviously be executed before application rule.
 
 If you need to declare configurations common for all tests then declare rule instance
 in base test class and use it in chain (at each test):
@@ -113,7 +113,7 @@ public class BaseTest {
      public static RuleChain chain = RuleChain
         .outerRule(BASE)
         // optional test-specific staff
-        .around(new GuiceyHooksRule((builder) -> builder.modules(...)) 
+        .around(new GuiceyHooksRule((builder) -> builder.modules(...))
         .around(RULE);
  }
 ```
@@ -127,23 +127,23 @@ When using `DropwizardAppRule` the only way to obtain Guice managed beans is thr
 
 ```java
 InjectorLookup.getInjector(RULE.getApplication()).getBean(MyService.class);
-```         
+```
 
 Also, the following trick may be used to inject test fields:
 
 ```java
 public class MyTest {
-    
+
     @ClassRule
     static DropwizardAppRule<TestConfiguration> RULE = ...
 
     @Inject MyService service;
     @Inject MyOtherService otherService;
-    
+
     @Before
     public void setUp() {
         InjectorLookup.get(RULE.getApplication()).get().injectMemebers(this)
-    }                    
+    }
 }
 ```
 
@@ -164,7 +164,7 @@ public class MyErrTest {
 
     @Rule
     public StartupErrorRule RULE = StartupErrorRule.create();
-    
+
     public void testSomething() {
         new MyErrApp().main('server');
     }
@@ -184,7 +184,7 @@ public class MyErrTest {
         Assert.assertTrue(out.contains("some log line"));
         Assert.assertTrue(err.contains("expected exception message"));
     });
-    
+
     public void testSomething() {
         new MyErrApp().main('server');
     }
@@ -206,9 +206,9 @@ public void testSomething() throws Exception {
         });
     ...
 }
-``` 
+```
 
-Multiple check callbacks may be registered (even if the first one was registered in rule's 
+Multiple check callbacks may be registered (even if the first one was registered in rule's
 create call).
 
 !!! note ""

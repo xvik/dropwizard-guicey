@@ -1,16 +1,16 @@
 # Testing with mocks
- 
+
 [Mockito](https://site.mockito.org/) mocks are essentially an automatic [stubs](stubs.md):
-with the ability to dynamically declare method behavior (by default, all mock methods 
-return default value: often null). 
+with the ability to dynamically declare method behavior (by default, all mock methods
+return default value: often null).
 
 Mocks declared with a `@MockBean` annotation.
 
 !!! warning
-    Stubs will not work for HK2 beans     
+    Stubs will not work for HK2 beans
 
-Mockito documentation is written in the `Mockito` class [javadoc](https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html).  
-Additional docs could be found in [mockito wiki](https://github.com/mockito/mockito/wiki/FAQ)  
+Mockito documentation is written in the `Mockito` class [javadoc](https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html).
+Additional docs could be found in [mockito wiki](https://github.com/mockito/mockito/wiki/FAQ)
 Also, see official [mockito refcard](https://dzone.com/refcardz/mockito)
 and [baeldung guides](https://www.baeldung.com/mockito-series).
 
@@ -57,18 +57,18 @@ public class Test {
     // injecting here to show that mock replaced real service
     @Inject
     Service service;
-    
+
     @BeforeEach
     public void setUp() {
         // declaring behaviour
         when(mock.foo()).thenReturn("static value");
     }
-    
+
     @Test
     public void test() {
         // mock instance instead of service
         Assertions.assertEquals(mock, service);
-        // method overridden            
+        // method overridden
         Assertions.assertEquals("static value", service.foo());
     }
 }
@@ -76,7 +76,7 @@ public class Test {
 
 Here `when` refer to `Mockito.when()` used with static import.
 
-!!! important 
+!!! important
     Guice AOP would not be applied to mocks (only guice-managed beans support AOP)
 
 You can also provide a pre-created mock instance (useful if mock used during application startup or partial mocks):
@@ -166,7 +166,7 @@ use spies:
 ```java
 public class AbstractService implements IService {
     public abstract String bar();
-    
+
     public String foo() {
         return "value";
     }
@@ -174,13 +174,13 @@ public class AbstractService implements IService {
 
 @TestGuiceyApp(App.class)
 public class Test {
-    
+
     @MockBean
     static IService mock = Mockito.spy(AbstractService.class);
-    
-    @Inject 
+
+    @Inject
     IService service;
-    
+
     @Test
     public void test() {
         // default mock implementation for abstract method
@@ -216,7 +216,7 @@ When extension debug is active:
 
 ```java
 @TestGucieyApp(value = App.class, debug = true)
-public class Test 
+public class Test
 ```
 
 All recognized mock fields would be logged:
@@ -261,7 +261,7 @@ public class Test {
     // injecting here to show that mock replaced real service
     @Inject
     SomeService service;
-    
+
     @Inject
     Environment environment;
 
