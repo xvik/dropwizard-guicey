@@ -1,12 +1,12 @@
 # Testing REST
 
-Guicey provides lightweight REST testing support: same as [dropwizard resource testing support](https://www.dropwizard.io/en/stable/manual/testing.html#testing-resources),
-but with guicey-specific features.
+Guicey provides lightweight REST testing support: the same as [Dropwizard resource testing support](https://www.dropwizard.io/en/stable/manual/testing.html#testing-resources),
+but with Guicey-specific features.
 
-Such tests would not start web container: all rest calls are simulated (but still, it tests every part of resource execution).
+Such tests would not start the web container: all REST calls are simulated (but still, they test every part of resource execution).
 
 !!! important
-    Rest stubs work only with lightweight guicey run (they are simply useless when web container started)
+    REST stubs work only with lightweight Guicey run (they are simply useless when the web container is started)
 
 Lightweight REST could be started with `RestStubsRunner` hook:
 
@@ -20,10 +20,10 @@ TestSupport.build(App.class)
         .runCore(injector -> {
             // pre-configured client to call resources with relative paths
             RestClient rest = restHook.getRestClient();
-            
+
             String res = rest.get("/foo", String.class);
             Assertions.assertEquals("something", res);
-            
+
             WebApplicationException ex = Assertions.assertThrows(WebApplicationException.class,
                 () -> rest.get("/error", String.class));
                 Assertions.assertEquals("error message", ex.getResponse().readEntity(String.class));
@@ -34,9 +34,9 @@ TestSupport.build(App.class)
     Extension naming is not quite correct: it is not a stub, but real application resources are used.
     The word "stub" used to highlight the fact of incomplete startup: only rest without web.
 
-By default, all declared resources would be started with all existing jersey extensions
-(filters, exception mappers, etc.). **Servlets and http filters are not started**
-(guicey disables all web extensions to avoid their (confusing) appearance in console)
+By default, all declared resources would be started with all existing Jersey extensions
+(filters, exception mappers, etc.). **Servlets and HTTP filters are not started**
+(Guicey disables all web extensions to avoid their (confusing) appearance in the console)
 
 ## Selecting resources
 
@@ -49,7 +49,7 @@ final RestStubsRunner restHook = RestStubsRunner.builder()
 ```
 
 This way only one resource would be started (and all resources directly registered in
-application, not as guicey extension). All jersey extensions will remain.
+application, not as a Guicey extension). All Jersey extensions will remain.
 
 Or a couple of resources:
 
@@ -69,12 +69,12 @@ final RestStubsRunner restHook = RestStubsRunner.builder()
 
 ## Disabling jersey extensions
 
-Often jersey extensions, required for the final application, make complications for testing.
+Often Jersey extensions required for the final application complicate testing.
 
-For example, exception mapper: dropwizard register default exception mapper which
-returns only the error message, instead of actual exception (and so sometimes we can't check the real cause).
+For example, an exception mapper: Dropwizard registers a default exception mapper which
+returns only the error message, instead of the actual exception (and so sometimes we can't check the real cause).
 
-`.disableDropwizardExceptionMappers(true)` disables extensions, registered by dropwizard.
+`.disableDropwizardExceptionMappers(true)` disables extensions registered by Dropwizard.
 
 When default exception mapper enabled, resource throwing runtime error would return just error code:
 
@@ -88,7 +88,7 @@ public class ErrorResource {
     public String get() {
         throw new IllegalStateException("error");
     }
-}    
+}
 ```
 
 ```java
@@ -101,7 +101,7 @@ Assertions.assertTrue(ex.getResponse().readEntity(String.class)
 
 ```
 
-Without dropwizard exception mapper, we can verify exact exception:
+Without the Dropwizard exception mapper, we can verify the exact exception:
 
 ```java
 final RestStubsRunner restHook = RestStubsRunner.builder()
@@ -129,8 +129,8 @@ final RestStubsRunner restHook = RestStubsRunner.builder()
 This way raw resource would be called without any additional logic.
 
 !!! note
-    Only extensions, managed by guicey could be disabled: extensions directly registered
-    in dropwizard would remain.
+    Only extensions managed by Guicey could be disabled: extensions directly registered
+    in Dropwizard would remain.
 
 Also, you can select exact extensions to use (e.g., to test it):
 
@@ -150,14 +150,14 @@ final RestStubsRunner restHook = RestStubsRunner.builder()
 
 ## Requests logging
 
-By default, rest client would log requests and responses, 
+By default, rest client would log requests and responses,
 
 ```java
 String res = rest.get("/foo", String.class);
 Assertions.assertEquals("something", res);
 ```
 
-```
+```text
 [Client action]---------------------------------------------{
 1 * Sending client request on thread main
 1 > GET http://localhost:0/foo
@@ -188,20 +188,20 @@ final RestStubsRunner restHook = RestStubsRunner.builder()
 By default, [InMemoryTestContainerFactory](https://eclipse-ee4j.github.io/jersey.github.io/documentation/latest/test-framework.html#d0e18552)
 used.
 
-    In-Memory container is not a real container. It starts Jersey application and 
-    directly calls internal APIs to handle request created by client provided by 
-    test framework. There is no network communication involved. This containers 
-    does not support servlet and other container dependent features, but it is a 
+    In-Memory container is not a real container. It starts Jersey application and
+    directly calls internal APIs to handle request created by client provided by
+    test framework. There is no network communication involved. This containers
+    does not support servlet and other container dependent features, but it is a
     perfect choice for simple unit tests.
 
 If it is not enough (in-memory container does not support all functions), then
 use `GrizzlyTestContainerFactory`
 
-    The GrizzlyTestContainerFactory creates a container that can run as a light-weight, 
-    plain HTTP container. Almost all Jersey tests are using Grizzly HTTP test container 
+    The GrizzlyTestContainerFactory creates a container that can run as a light-weight,
+    plain HTTP container. Almost all Jersey tests are using Grizzly HTTP test container
     factory.
 
-To activate grizzly container add dependency (version managed by dropwizard BOM):
+To activate the Grizzly container, add the dependency (version managed by the Dropwizard BOM):
 
 ```groovy
 testImplementation 'org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2'
@@ -224,7 +224,7 @@ If you need to force any container type use:
 
 ## Rest client
 
-`RestClient` is the same as [ClientSupport#restClient()](client.md), available for guicey extensions.
+`RestClient` is the same as [ClientSupport#restClient()](client.md), available for Guicey extensions.
 It extends the same `TestClient` class and so provides the same abilities:
 
 * [Defaults](client.md#defaults)
@@ -235,30 +235,30 @@ It extends the same `TestClient` class and so provides the same abilities:
 * [Forms builder](client.md#form-builder)
 
 !!! note
-    Just in case: `ClientSupport` would not work with rest stubs (because web container is actually 
+    Just in case: `ClientSupport` would not work with rest stubs (because web container is actually
     not started and so `ClientSupport` can't recognize a correct rest mapping path). Of course,
     it could be used with a full URLs.
 
 !!! note
-    Multipart support is enabled automatically when dropwizard-forms available in classpath.
-    Creating multipart request with [form bulder](client.md#form-builder):
+    Multipart support is enabled automatically when dropwizard-forms is available on the classpath.
+    Creating a multipart request with the [form builder](client.md#form-builder):
 
     ```java
     client.buildForm("/some/path")
-        .param("foo", "bar")     
+        .param("foo", "bar")
         .param("file", new File("src/test/resources/test.txt"))
         .buildPost()
         .asVoid();
-    ``` 
+    ```
 
 To clear defaults:
 
 ```java
-rest.reset() 
+rest.reset()
 ```
 
 Might be a part of call chain:
 
 ```java
-rest.reset().post(...) 
+rest.reset().post(...)
 ```

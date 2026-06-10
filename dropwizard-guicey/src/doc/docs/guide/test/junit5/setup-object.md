@@ -1,8 +1,8 @@
 # Test environment setup
 
-It is often required to prepare test environment before starting dropwizard application.
-Normally, such cases require writing custom junit extensions. In order to simplify
-environment setup, guicey provides `TestEnviromentSetup` interface.
+It is often required to prepare the test environment before starting a Dropwizard application.
+Normally, such cases require writing custom JUnit extensions. In order to simplify
+environment setup, Guicey provides the `TestEnvironmentSetup` interface.
 
 Setup objects are called before application startup and could directly apply (through parameter)
 configuration overrides and hooks.
@@ -32,11 +32,11 @@ public class TestDbSetup implements TestEnvironmentSetup {
 ```
 
 It is not required to return anything, only if something needs to be closed after application shutdown:
-objects other than `Closable` (`AutoClosable`) or `org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource`
-simply ignored.
+objects other than `Closeable` (`AutoCloseable`) or `org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource`
+are simply ignored.
 This approach (only one method) simplifies interface usage with lambdas.
 
-Setup object might be declared in extension annotation: 
+Setup object might be declared in extension annotation:
 
 ```java
 @TestGuiceyApp(value=App.class, setup=TestDbSetup.class)
@@ -89,15 +89,15 @@ declaration into base test class:
 
 ```java
 public abstract class BaseTest {
-    
+
     @EnableSetup
     static TestDbSetup db = new TestDbSetup();
 }
 ```
 
 !!! note
-    To avoid confusion with guicey hooks: setup object required to prepare test environment before test (and apply
-    required configurations) whereas hooks is a general mechanism for application customization (not only in tests).
+    To avoid confusion with Guicey hooks: a setup object is required to prepare the test environment before a test (and apply
+    required configurations), whereas hooks are a general mechanism for application customization (not only in tests).
     Setup objects are executed before application startup (before `DropwizardTestSupport` object creation) and hooks
     are executed by started application.
 
@@ -111,9 +111,9 @@ static TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(..)
         ...
         .with(builder -> {
             if (...) {
-               builder.configOverrides("foo.bar", 12); 
+               builder.configOverrides("foo.bar", 12);
             }
-        }) 
+        })
 ```
 
 And the same for setup objects:
@@ -124,12 +124,12 @@ static TestEnvironmentSetup setup = ext ->
         ...
         .with(builder -> {
             ...
-        }) 
+        })
 ```
 
 ## Builder configuration
 
-`TestExtension` builder provides almost the same options as the main guice extension builder (when declared in field) 
+`TestExtension` builder provides almost the same options as the main guice extension builder (when declared in field)
 
 | Method                                                                   | Description                                                                                            | Example                                                                                     |
 |--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -138,8 +138,8 @@ static TestEnvironmentSetup setup = ext ->
 | `.configOverrides(ConfigOverride & ConfigurablePrefix)`                  | Config override object (used for deferred values)                                                      | `.configOverrides(new ConfigOverrideValue("baa", () -> "44"))`                              |
 | `.configOverride(String, String)`                                        | Single config path override                                                                            | `.configOverride("some.foo", "12")`                                                         |
 | `.configOverride(String, Supplier<String>)`                              | Deferred config override value                                                                         | `.configOverride("foo", () -> "1")`                                                         |
-| `.configOverrideByExtension(ExtensionContext.Namespace, String)`         | 3rd party junit extension integration                                                                  | `.configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "foo")`                      |
-| `.configOverrideByExtension(ExtensionContext.Namespace, String, String)` | 3rd party junit extension integration                                                                  | `.configOverrideByExtension(ExtensionContext.Namespace.create("sample"), "storKey", "foo")` |
+| `.configOverrideByExtension(ExtensionContext.Namespace, String)`         | 3rd party JUnit extension integration                                                                  | `.configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "foo")`                      |
+| `.configOverrideByExtension(ExtensionContext.Namespace, String, String)` | 3rd party JUnit extension integration                                                                  | `.configOverrideByExtension(ExtensionContext.Namespace.create("sample"), "storKey", "foo")` |
 | `.hooks(GuiceyConfigurationHook)`                                        | Hooks registration                                                                                     | `.hooks(builder -> builder.disableExtensions(Something.class))`                             |
 | `.configModifiers(ConfigModifier...)`                                    | Config modifier registration                                                                           | `.<MyConfig>configModifiers(config -> config.bar = 11)`                                     |
 | `.injectOnce()`                                                          | Process test fields injection only once (for same test instance)                                       |                                                                                             |
@@ -153,8 +153,8 @@ Specific options:
 | Method                            | Description                                                                  |
 |-----------------------------------|------------------------------------------------------------------------------|
 | `.isDebug()`                      | Identifies activated debug mode                                              |
-| `.isApplicationStartedForClass()` | Shortcut to differentiate application started for test calss or every method |
-| `.getJunitContext()`              | Access junit `ExtensionContext`                                              |
+| `.isApplicationStartedForClass()` | Shortcut to differentiate an application started for a test class or every method |
+| `.getJunitContext()`              | Access JUnit `ExtensionContext`                                                  |
 
 ### Lifecycle
 
@@ -174,7 +174,7 @@ public interface TestExecutionListener {
 ```
 
 
-Complex setup objects might simply `implement TestExecutionListener` and register self: 
+Complex setup objects might simply `implement TestExecutionListener` and register self:
 
 
 ```java
@@ -211,7 +211,7 @@ public class Test {
 
 Events:
 
-| Listener     | Shortcut method         | Description                                                                          | Junit phase             |
+| Listener     | Shortcut method         | Description                                                                          | JUnit phase             |
 |--------------|-------------------------|--------------------------------------------------------------------------------------|-------------------------|
 | `starting`   | `onApplicationStarting` | Just before application starting                                                     | BeforeAll or BeforeEach |
 | `started`    | `onApplicationStart`    | Application started                                                                  | BeforeAll or BeforeEach |
@@ -222,10 +222,10 @@ Events:
 | `stopping`   | `onApplicationStopping` | Just before application stopping                                                     | AfterAll or AfterEach   |
 | `stopped`    | `onApplicationStop`     | Application stopped                                                                  | AfterAll or AfterEach   |
 
-`EventContext` parameter provides access for guice injector, DropwizardTestSupport object and junit 5 context.
+`EventContext` parameter provides access to the Guice injector, the `DropwizardTestSupport` object, and the JUnit 5 context.
 
-As you can see, events cover all junit lifecycle events together with application specific
-events. Which makes setup objects a complete alternative to pure junit extensions.
+As you can see, events cover all JUnit lifecycle events together with application-specific
+events, which makes setup objects a complete alternative to pure JUnit extensions.
 
 ## Auto lookup
 
@@ -237,7 +237,7 @@ To enable automatic loading of custom extension add:
 
 And put there required setup object classes (one per line), like this:
 
-```
+```text
 ru.vyarus.dropwizard.guice.test.jupiter.ext.log.RecordedLogsSupport
 ru.vyarus.dropwizard.guice.test.jupiter.ext.rest.RestStubSupport
 ru.vyarus.dropwizard.guice.test.jupiter.ext.stub.StubsSupport
@@ -292,7 +292,7 @@ There is a special **base class** `AnnotatedTestFieldSetup` which implements bas
 Use this class if you want to implement new field annotation (`@MyAnnotation`) support:
 
 ```java
-public class MyFieldsSupport extends AnnotatedTestFieldSetup<MyAnnotation, Object>  
+public class MyFieldsSupport extends AnnotatedTestFieldSetup<MyAnnotation, Object>
 ```
 
 If your field value would always base on some class then specify it to automatically
@@ -307,7 +307,7 @@ All current field extensions are using this base class, so you can see usage exa
 * `TrackerFieldsSupport` - [@TrackBean](tracks.md)
 * `RestStubFieldsSupport` - [@StubRest](rest.md)
 
-Base class would search for all annotated fields and call other methods only if 
+Base class would search for all annotated fields and call other methods only if
 anything was found.
 
 !!! important
@@ -322,8 +322,8 @@ The following methods should be implemented:
 | fieldDetected        | Validate resolved field, if required. Anything that could not be checked automatically                                           | beforeAll or beforeEach, app not started                     |
 | registerHooks        | Register hook instance (hook used to apply extensions, override guice bindings etc.).                                            | beforeAll or beforeEach, app not started                     |
 | initializeField      | Here value must be prepared to inject into annotated field. Or user-provided value must be validated                             | beforeAll or beforeEach, app not started                     |
-| beforeValueInjection | Called just before injecting value into test field. Good point to apply remaining validations (e.g. requireing started injector) | beforeAll and beforeEach (called up to 2 times), app started |
-| injectFieldValue     | Called to provide field value for injection (if pre-initializerd by user - method not called)                                    | beforeAll and beforeEach (called up to 2 times), app started |
+| beforeValueInjection | Called just before injecting a value into a test field. A good point to apply remaining validations (e.g. requiring a started injector) | beforeAll and beforeEach (called up to 2 times), app started |
+| injectFieldValue     | Called to provide a field value for injection (if pre-initialized by the user - method not called)                                 | beforeAll and beforeEach (called up to 2 times), app started |
 | report               | Debug report (list detected fields). Report is called when root extension debug is enabled                                       | beforeAll or beforeEach, app started                         |
 | beforeTest           | Called to call lifecycle method before test (like state clearing)                                                                | beforeEach, app started                         |
 | afterTest            | Called to call lifecycle method after test (like state clearing)                                                                 | beforeEach, app started                         |
@@ -334,14 +334,14 @@ Take a look at `MockFieldsSupport` - it is a simple and easy to understand imple
 
 Method called as soon as field is detected:
 
-* Ideal place for an additional validations (`TrackerFieldsSupport` validates field type there) 
+* Ideal place for an additional validations (`TrackerFieldsSupport` validates field type there)
 * This is the earliest point: `LogFieldsSupport` use it to activate logger immediately
 
 #### registerHooks
 
-Usually simple hook registration. Only `RestStubFieldsSupport` use it to register 2 hooks
-(second hook validates application scope: in theory could be implemented in one hook but guicey implements generic 
-hooks which could be used without junit).
+Usually simple hook registration. Only `RestStubFieldsSupport` uses it to register 2 hooks
+(second hook validates application scope: in theory it could be implemented in one hook, but Guicey implements generic
+hooks which could be used without JUnit).
 
 #### initializeField
 
@@ -360,7 +360,7 @@ protected <K> void initializeField(final AnnotatedField<MockBean, Object> field,
                 + "and let extension create mock automatically.");
         hook.mock(type, (K) userValue);
     } else {
-        // no need to store custom data for manual value - injectFieldValue not called for manual values 
+        // no need to store custom data for manual value - injectFieldValue not called for manual values
         field.setCustomData(FIELD_MOCK, hook.mock(type));
     }
 }
@@ -372,7 +372,7 @@ Note that value is stored inside an `AnnotatedField` object: `field.setCustomDat
 This is a not required step: for example, `LogFieldsSupport` create value object just after field detection
 (because logger must be appended as soon as possible), and so ignored `initializeField` method.
 
-Another example is `StubFieldsSupport` - where `initializeField` method used just for 
+Another example is `StubFieldsSupport` - where `initializeField` method used just for
 stub registration in hook. Value for injection into test field is obtained later directly
 from guice injector (stub could be declared by class - instance is guice managed).
 
@@ -386,7 +386,7 @@ There is even a helper method to validate non-instance bindings: `isInstanceBind
 
 #### injectFieldValue
 
-Method called **only for not pre-initialized** fields (no user value). 
+Method called **only for not pre-initialized** fields (no user value).
 
 In most cases, it just provides a value, created in `initializeField`:
 
@@ -413,8 +413,8 @@ Report assumed to show detected fields when root extension debug is enabled. See
 
 #### beforeTest and afterTest
 
-Special methods for implementing field value lifecycle. 
-Almost all values have to be reset after each test method (mocks, spies, stubs etc.). 
+Special methods for implementing field value lifecycle.
+Almost all values have to be reset after each test method (mocks, spies, stubs etc.).
 
 Example from logs extension:
 
@@ -428,7 +428,7 @@ protected void afterTest(final EventContext context,
 }
 ```
 
-Mocks and speies use this method also to print summary report (if requested in annoation):
+Mocks and spies also use this method to print a summary report (if requested in the annotation):
 
 ```java
 @Override

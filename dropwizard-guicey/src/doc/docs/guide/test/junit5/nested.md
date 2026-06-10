@@ -1,6 +1,6 @@
-# Junit nested tests
+# JUnit nested tests
 
-Junit natively supports [nested tests](https://junit.org/junit5/docs/current/user-guide/#writing-tests-nested).
+JUnit natively supports [nested tests](https://junit.org/junit5/docs/current/user-guide/#writing-tests-nested).
 
 Guicey extensions affects all nested tests below declaration (nesting level is not limited):
 
@@ -134,6 +134,6 @@ public class ClientSupportDwTest {
 }
 ```
 
-Here test declared in `ClientCallTest` interface will be called for each nested test 
+Here test declared in `ClientCallTest` interface will be called for each nested test
 (one declaration - two executions in different environments).
- 
+

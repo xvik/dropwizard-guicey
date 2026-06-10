@@ -232,7 +232,7 @@ Request-scoped bindings:
 * `org.glassfish.jersey.server.AsyncContext`
 
 !!! tip
-    Read about jersey bindings implementation in [lifecycle section](../lifecycle.md#access-guice-beans-from-jersey).
+    Read about jersey bindings implementation in [lifecycle section](../lifecycle.md#jersey-startup).
 
 ## Request and response
 
@@ -257,7 +257,7 @@ Example usage:
 
 !!! note
     Pay attention, that in guice-managed resources `@Context` field bindings 
-    [must be replaced with providers](../../installers/resource.md#@context-usage).
+    [must be replaced with providers](../../installers/resource.md#context-usage).
 
 ## Options
 

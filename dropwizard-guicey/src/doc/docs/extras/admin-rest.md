@@ -1,14 +1,14 @@
 # Admin REST
 
-Mirror all resources in admin context: on admin side special servlet simply redirects all incoming requests into the jersey context.
-Hides admin-only resources from user context: resource is working under admin context and return 404 on user context.
+Mirror all resources in the admin context: on the admin side, a special servlet simply redirects all incoming requests into the Jersey context.
+Hides admin-only resources from the user context: resources work under the admin context and return 404 in the user context.
 
-Such approach is better than registering a completely separate jersey context for admin rest because
+Such an approach is better than registering a completely separate Jersey context for admin REST because
 of no overhead and the simplicity of jersey extensions management.
 
 Features:
-* All user context rest available in admin context
-* Admin-only resources not visible in user context
+* All user-context REST resources are available in the admin context
+* Admin-only resources are not visible in the user context
 
 ## Setup
 
@@ -28,7 +28,7 @@ Gradle:
 implementation 'ru.vyarus.guicey:guicey-admin-rest:{{ gradle.version }}'
 ```
 
-Omit version if guicey BOM used
+Omit the version if the Guicey BOM is used.
 
 ## Usage
 
@@ -39,8 +39,8 @@ GuiceBundle.builder()
     .bundles(new AdminRestBundle());
 ```
 
-In this case, rest is registered either to '/api/*', if main context rest is mapped to root ('/*')
-or to the same path as main context rest.
+In this case, REST is registered either to '/api/*', if the main-context REST is mapped to the root ('/*')
+or to the same path as the main-context REST.
 
 To register on a custom path:
 
@@ -49,11 +49,11 @@ To register on a custom path:
 ```
 
 !!! note
-    In case if multiple bundles registered, only first registration will be used (due to [de-duplication](../guide/deduplication.md))
+    If multiple bundles are registered, only the first registration will be used (due to [de-duplication](../guide/deduplication.md))
 
 ### Security
 
-In order to hide specific resource methods or entire resources on the main context, annotate resource methods
+To hide specific resource methods or entire resources in the main context, annotate resource methods
 or resource classes with the `@AdminResource` annotation.
 
 For example:
@@ -67,5 +67,5 @@ public String admin() {
 }
 ```
 
-This (annotated) method will return 404 error when called from main context, but should function normally 
+This annotated method will return a 404 error when called from the main context, but should function normally
 when called from the admin context.

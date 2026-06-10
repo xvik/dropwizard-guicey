@@ -1,23 +1,23 @@
 # Resource installer
 
 !!! summary ""
-    CoreInstallersBundle / [ResourceInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/ResourceInstaller.java)
+    CoreInstallersBundle / [ResourceInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/dropwizard-guicey/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/ResourceInstaller.java)
 
-Installs [rest resources](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#resources).
+Installs [rest resources](https://www.dropwizard.io/en/release-5.0.x/manual/core.html#resources).
 
 ## Recognition
 
-Detects classes annotated with jax-rs `#!java @Path` annotation and register them as rest resources.
-Guice will manage resource creation, so you may think of it as usual guice bean.
+Detects classes annotated with the JAX-RS `#!java @Path` annotation and registers them as REST resources.
+Guice will manage resource creation, so you may think of it as a usual Guice bean.
 
 ```java
 @Path("/res")
 @Produces('application/json')
 class SampleResource {
-    
+
     @Inject
     private MyService service;
-    
+
     @GET
     @Path("/sample")
     public Response sample() {
@@ -27,14 +27,14 @@ class SampleResource {
 ```
 
 !!! attention ""
-    Resources registered as **singletons**, when no explicit scope annotation is used.
-    Behaviour could be disabled with [option](../guide/configuration.md#options):
+    Resources are registered as **singletons** when no explicit scope annotation is used.
+    This behaviour can be disabled with the [option](../guide/configuration.md#options):
     ```java
     .option(InstallerOptions.ForceSingletonForJerseyExtensions, false)
-    ``` 
+    ```
 
 Special `@Prototype` scope annotation may be used to mark resources in prototype scope.
-It is useful when [guice servlet support is disabled](../guide/web.md#disable-servletmodule-support) (and so `@RequestScoped` could not be used). 
+It is useful when [guice servlet support is disabled](../guide/guice/servletmodule.md#disable-servletmodule-support) (and so `@RequestScoped` could not be used).
 
 ### Interface recognition
 
@@ -51,10 +51,10 @@ interface ResourceContract {
 }
 
 class SampleResource implements ResourceContract {
-    
+
     @Inject
     private MyService service;
-    
+
     @Override
     public Response sample() {
         return Response.ok(service.result()).build();
@@ -62,7 +62,7 @@ class SampleResource implements ResourceContract {
 }
 ```
 
-Annotations on interfaces are useful for [jersey client proxies](https://jersey.java.net/apidocs/2.22.1/jersey/org/glassfish/jersey/client/proxy/package-summary.html)  
+Annotations on interfaces are useful for [jersey client proxies](https://eclipse-ee4j.github.io/jersey.github.io/apidocs/2.29.1/jersey/org/glassfish/jersey/client/proxy/package-summary.html)
 
 ```java
 Client client = ClientBuilder.newClient();
@@ -74,7 +74,7 @@ String result = resource.sample();
 ```
 
 !!! warning ""
-    Jersey client proxies requires extra dependency `org.glassfish.jersey.ext:jersey-proxy-client`
+    Jersey client proxies require the extra dependency `org.glassfish.jersey.ext:jersey-proxy-client`
 
 ## Request scope bindings
 
@@ -82,10 +82,10 @@ If you need request scoped objects, use `#!java Provider`:
 
 ```java
 class SampleResource {
-    
+
     @Inject
     private Provider<HttpServletRequest> requestProvider;
-    
+
     @GET
     @Path("/sample")
     public Response sample() {
@@ -98,7 +98,7 @@ See [jersey objects, available for injection](../guide/guice/bindings.md#jersey-
 
 ## @Context usage
 
-`@Context` annotation usage is a common point of confusion. You can't use it for class fields: 
+`@Context` annotation usage is a common point of confusion. You can't use it for class fields:
 
 !!! fail "this will not work"
     ```java
@@ -106,9 +106,9 @@ See [jersey objects, available for injection](../guide/guice/bindings.md#jersey-
         @Context UriInfo info;
     }
     ```
-    
+
 Use provider instead:
-    
+
 !!! success "correct way"
     ```java
     public class MyResource {
@@ -127,9 +127,9 @@ public class MyResource {
 
 ## Jersey managed resource
 
-If resource class is annotated with `#!java @JerseyManaged` then jersey HK2 container will manage bean creation instead of guice. 
-Injection of guice managed beans [could still be possible](../guide/hk2.md#hk2-guice-bridge) via registered [HK2-guice-bridge](https://hk2.java.net/2.4.0-b34/guice-bridge.html),
-but guice aop features will not work.
+If resource class is annotated with `#!java @JerseyManaged` then jersey HK2 container will manage bean creation instead of guice.
+Injection of guice managed beans [could still be possible](../guide/hk2.md#hk2-guice-bridge) via registered [HK2-guice-bridge](https://javaee.github.io/hk2/guice-bridge.html),
+but Guice AOP features will not work.
 
 !!! note
     You can manage resources with [HK2 by default](../guide/hk2.md#use-hk2-for-jersey-extensions),

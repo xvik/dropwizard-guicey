@@ -15,10 +15,10 @@ And now all test classes should simply extend it:
 
 ```java
 public class Test1 extends AbstractTest {
-    
+
     @Inject
     MyService service;
-    
+
     @Test
     public void testSomething() { ... }
 }
@@ -29,7 +29,7 @@ manual declaration - approach would still work.
 
 ## Meta annotation
 
-You can prepare meta annotation (possibly combining multiple 3rd party extensions): 
+You can prepare meta annotation (possibly combining multiple 3rd party extensions):
 
 ```java
 @Retention(RetentionPolicy.RUNTIME)
@@ -44,7 +44,7 @@ public class MetaAnnotationDwTest {
     @Test
     void checkAnnotationRecognized(Application app) {
         Assertions.assertNotNull(app);
-    }   
+    }
 }
 ```
 
@@ -54,7 +54,7 @@ OR you can simply use base test class and configure annotation there:
 @TestDropwizardApp(AutoScanApplication.class)
 public class BaseTest {}
 
-public class ActualTest extends BaseTest {} 
+public class ActualTest extends BaseTest {}
 ```
 
 ## Reuse application between tests
@@ -62,7 +62,7 @@ public class ActualTest extends BaseTest {}
 In some cases it is preferable to start application just once and use for all tests
 (e.g. due to long startup or time-consuming environment preparation).
 
-In order to use the same application instance, extension declaration must be performed in 
+In order to use the same application instance, extension declaration must be performed in
 [base test class](#extension-configuration-unification) and `reuseApplication` flag must be enabled:
 
 ```java
@@ -78,19 +78,19 @@ public abstract class BaseTest {
     static TestGuiceyAppExtension ext = TestGuiceyAppExtension.forApp(App.class)
             .reuseApplication()
             .create();
-    
+
 }
 ```
 
-The same will work for dropwizard extension (`@TestDropwizardApp` and `TestDropwizardAppExtension`).
+The same will work for the Dropwizard extension (`@TestDropwizardApp` and `TestDropwizardAppExtension`).
 
 !!! important
-    Application instance re-use is not enabled by default for backwards compatibility
-    (for cases when base class declaration already used).
+    Application instance reuse is not enabled by default for backwards compatibility
+    (for cases when the base class declaration is already used).
 
 There might be multiple base test classes declaring reusable applications:
 different global applications would be started for each declaration (allowing you
-to group tests requiring different applications) 
+to group tests requiring different applications)
 
 Global application would be closed after all tests execution (with test engine shutdown).
 
@@ -99,8 +99,8 @@ extending base class "inherit" the same declaration and so the same application 
 
 !!! tip
     Reusable applications may be used together with tests, not extending base class
-    and using guicey extensions. Such tests would simply start a new application instance.
-    Just be sure to avoid port clashes when using reusable dropwizard apps (by using `randomPorts` option).
+    and using Guicey extensions. Such tests would simply start a new application instance.
+    Just be sure to avoid port clashes when using reusable Dropwizard apps (by using the `randomPorts` option).
 
 `@EnableSetup` and `@EnableHook` fields are also supported for reusable applications.
 But declare all such fields on base class level (or below) because otherwise only fields

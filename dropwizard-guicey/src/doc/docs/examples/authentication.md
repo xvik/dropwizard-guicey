@@ -1,10 +1,10 @@
 # Authentication
 
-Example of [dropwizard authentication](https://www.dropwizard.io/en/release-4.0.x/manual/auth.html) usage with guice.
+Example of [Dropwizard authentication](https://www.dropwizard.io/en/release-5.0.x/manual/auth.html) usage with Guice.
 
 ## Simple auth
 
-Using [dropwizard oauth](https://www.dropwizard.io/en/release-4.0.x/manual/auth.html#oauth2) example as basement.
+Using the [Dropwizard OAuth](https://www.dropwizard.io/en/release-5.0.x/manual/auth.html#oauth2) example as the basis.
 Other auth types are configured in similar way.
 
 ```java
@@ -12,8 +12,8 @@ Other auth types are configured in similar way.
 public class OAuthDynamicFeature extends AuthDynamicFeature {
 
     @Inject
-    public OAuthDynamicFeature(OAuthAuthenticator authenticator, 
-                                UserAuthorizer authorizer, 
+    public OAuthDynamicFeature(OAuthAuthenticator authenticator,
+                                UserAuthorizer authorizer,
                                 Environment environment) {
         super(new OAuthCredentialAuthFilter.Builder<User>()
                 .setAuthenticator(authenticator)
@@ -26,7 +26,7 @@ public class OAuthDynamicFeature extends AuthDynamicFeature {
     }
 
     // classes below may be external (internal for simplicity)
-    
+
     @Singleton
     public static class OAuthAuthenticator implements Authenticator<String, User> {
 
@@ -34,22 +34,22 @@ public class OAuthDynamicFeature extends AuthDynamicFeature {
         public Optional<User> authenticate(String credentials) throws AuthenticationException {
             return Optional.fromNullable("valid".equals(credentials) ? new User() : null);        }
     }
-    
+
     @Singleton
     public static class UserAuthorizer implements Authorizer<User> {
         @Override
         public boolean authorize(User user, String role) {
             return user.getName().equals("good-guy") && role.equals("ADMIN");
         }
-    }   
+    }
 }
 ```
 
 The class is automatically picked up by the [jersey installer](../installers/jersey-ext.md#dynamicfeature).
-`OAuthAuthenticator` and `UserAuthorizer` are simple guice beans (no special installation required).
+`OAuthAuthenticator` and `UserAuthorizer` are simple Guice beans (no special installation required).
 
 Constructor injection is used to obtain required guice managed instances and then configure
-authentication the same way as described in dropwizard docs.
+authentication the same way as described in the Dropwizard docs.
 
 If autoconfiguration is enabled, then the class will be resolved and installed automatically.
 
@@ -58,7 +58,7 @@ If autoconfiguration is enabled, then the class will be resolved and installed a
 
 ## Chained auth
 
-[Chained auth](https://www.dropwizard.io/en/release-4.0.x/manual/auth.html#chained-factories) can be used to support different authentication schemes.
+[Chained auth](https://www.dropwizard.io/en/release-5.0.x/manual/auth.html#chained-factories) can be used to support different authentication schemes.
 
 Integration approach is the same as in simple case:
 
@@ -68,8 +68,8 @@ public class ChainedAuthDynamicFeature extends AuthDynamicFeature {
 
     @Inject
     public ChainedAuthDynamicFeature(BasicAuthenticator basicAuthenticator,
-                                      OAuthAuthenticator oauthAuthenticator, 
-                                      UserAuthorizer authorizer, 
+                                      OAuthAuthenticator oauthAuthenticator,
+                                      UserAuthorizer authorizer,
                                       Environment environment) {
         super(new ChainedAuthFilter(Arrays.asList(
                 new BasicCredentialAuthFilter.Builder<>()
@@ -82,17 +82,17 @@ public class ChainedAuthDynamicFeature extends AuthDynamicFeature {
                             .setAuthorizer(authorizer)
                             .setPrefix("Bearer")
                             .buildAuthFilter()
-        )));                
+        )));
 
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AuthValueFactoryProvider.Binder(User.class));
-    }   
+    }
 }
 ```
 
 ## Polymorphic auth
 
-[Polymorphic auth](https://www.dropwizard.io/en/release-4.0.x/manual/auth.html#multiple-principals-and-authenticators) allows using different auth schemes simultaneously.
+[Polymorphic auth](https://www.dropwizard.io/en/release-5.0.x/manual/auth.html#multiple-principals-and-authenticators) allows using different auth schemes simultaneously.
 
 Integration approach is the same as in simple case:
 
@@ -115,11 +115,11 @@ public class PolyAuthDynamicFeature extends PolymorphicAuthDynamicFeature {
                                                 .setAuthenticator(oauthAuthenticator)
                                                 .setAuthorizer(authorizer)
                                                 .setPrefix("Bearer")
-                                                .buildAuthFilter()));             
-        
+                                                .buildAuthFilter()));
+
         final AbstractBinder binder = new PolymorphicAuthValueFactoryProvider.Binder<>(
             ImmutableSet.of(BasicPrincipal.class, OAuthPrincipal.class));
-        
+
         environment.jersey().register(binder);
         environment.jersey().register(RolesAllowedDynamicFeature.class);
     }

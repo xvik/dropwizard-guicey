@@ -1,9 +1,9 @@
 # Hibernate integration
 
-Example of [dropwizard-hibernate](https://www.dropwizard.io/en/release-4.0.x/manual/hibernate.html) bundle usage with guicey.
+Example of [dropwizard-hibernate](https://www.dropwizard.io/en/release-5.0.x/manual/hibernate.html) bundle usage with Guicey.
 
 !!! abstract ""
-    Example [source code](https://github.com/xvik/dropwizard-guicey/examples/tree/master/integration-hibernate)
+    Example [source code](https://github.com/xvik/dropwizard-guicey/tree/master/examples/integration-hibernate)
 
 ## Configuration
 
@@ -12,23 +12,23 @@ Additional dependencies required:
 ```groovy
     implementation 'io.dropwizard:dropwizard-hibernate:4.0.2'
     implementation 'com.h2database:h2:2.2.224'
-```  
+```
 
 !!! note
     Both versions are managed by [BOM](../extras/bom.md)
 
 For simplicity, an embedded H2 database is used.
 
-Overall configuration is exactly the same as described in [dropwizard docs](https://www.dropwizard.io/en/release-4.0.x/manual/hibernate.html), 
+Overall configuration is exactly the same as described in the [Dropwizard docs](https://www.dropwizard.io/en/release-5.0.x/manual/hibernate.html),
 but extracted to separate class for simplicity:
- 
+
 ```java
 public class HbnBundle extends HibernateBundle<HbnAppConfiguration> {
 
     public HbnBundle() {
         super(Sample.class);
     }
-    
+
     @Override
     public PooledDataSourceFactory getDataSourceFactory(HbnAppConfiguration configuration) {
         return configuration.getDataSourceFactory();
@@ -40,7 +40,7 @@ public class HbnBundle extends HibernateBundle<HbnAppConfiguration> {
     All model classes are configured inside the constructor: `#!java super(Sample.class);`
 
 Configuration class:
- 
+
 ```java
 public class HbnAppConfiguration extends Configuration {
     @Valid
@@ -52,7 +52,7 @@ public class HbnAppConfiguration extends Configuration {
         return database;
     }
 }
-``` 
+```
 
 Configuration file for in-memory database and automatic schema creation:
 
@@ -68,9 +68,9 @@ database:
     hibernate.dialect: org.hibernate.dialect.H2Dialect
     hibernate.hbm2ddl.auto: create
 ```
- 
-## Guice integration 
- 
+
+## Guice integration
+
 Guice module used to provide SessionFactory instance into guice context:
 
 ```java
@@ -106,7 +106,7 @@ public void initialize(Bootstrap<HbnAppConfiguration> bootstrap) {
 
 ## Usage
 
-It is simpler to use dropwizard `AbstractDAO` for hibernate logic:
+It is simpler to use Dropwizard `AbstractDAO` for Hibernate logic:
 
 ```java
 public class SampleService extends AbstractDAO<Sample> {
@@ -127,10 +127,10 @@ public class SampleService extends AbstractDAO<Sample> {
 ```
 
 !!! attention ""
-    You will need to use dropwizard `@UnitOfWork` annotation to declare transaction scope.
-    
+    You will need to use Dropwizard `@UnitOfWork` annotation to declare transaction scope.
+
 For example:
-    
+
 ```java
 @Path("/sample")
 @Produces("application/json")
@@ -151,4 +151,4 @@ public class SampleResource {
         return Response.ok(res).build();
     }
 }
-```    
+```

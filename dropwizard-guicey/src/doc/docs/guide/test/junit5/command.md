@@ -3,7 +3,7 @@
 !!! warning
     Commands execution overrides System IO and so can't run in parallel with other tests!
 
-    Use [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization) 
+    Use [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization)
     on such tests to prevent parallel execution with other tests
 
 Command execution is usually a short-lived action, so it is not possible to
@@ -14,13 +14,13 @@ write an extension for it. Command could be tested only with generic utility:
 public class testCommand() {
     CommandResult result = TestSupport.buildCommandRunner(App.class)
             .run("cmd", "-p", "param");
-    
+
     Assertions.assertTrue(result.isSuccessful());
 }
 ```
 
 This runner could be used to run *any* command type (simple, configured, environment).
-The type of command would define what objects would be present ofter the command execution
+The type of command would define what objects would be present after command execution
 (for example, `Injector` would be available only for `EnvironmentCommand`).
 
 Run command arguments are the same as real command arguments (the same `Cli` used for commands parsing).
@@ -36,9 +36,9 @@ You can only omit configuration path and use builder instead:
 !!! important
     Command execution never throws an exception - any appeared exception would be
     inside resulted object:
-    
+
     ```java
-    Assertions.assertFalse(result.isSuccessful());  
+    Assertions.assertFalse(result.isSuccessful());
     Assertions.assertEquals("Error message", result.getException().getMessage());
     ```
 
@@ -48,7 +48,7 @@ You can only omit configuration path and use builder instead:
     ```
 
     All special objects (like configuration, environment etc), created during command execution
-    are all stored inside the result object (this is the only way to access them). 
+    are all stored inside the result object (this is the only way to access them).
 
 ### IO
 
@@ -79,8 +79,8 @@ At least, the required number of answers must be provided (otherwise error would
 indicating not enough inputs)
 
 !!! warning
-    Due to IO overrides, command tests could not run in parallel.   
-    For junit 5, such tests could be annotated with [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization)
+    Due to IO overrides, command tests could not run in parallel.
+    For JUnit 5, such tests could be annotated with [`@Isolated`](https://junit.org/junit5/docs/current/user-guide/#writing-tests-parallel-execution-synchronization)
     (to prevent execution in parallel with other tests)
 
 ### Configuration
@@ -100,14 +100,14 @@ TestSupport.buildCommandRunner(App.class)
         .run("cfg");
 
 // direct config object
-MyConfig config = new MyConfig();         
+MyConfig config = new MyConfig();
 TestSupport.buildCommandRunner(App.class)
         .config(config)
         .run("cfg");
 ```
 
 !!! note
-    Config file should not be specified in command itself - builder would add it, if required.  
+    Config file should not be specified in command itself - builder would add it, if required.
     But still, it would not be a mistake to use config file directly in command:
 
     ```java

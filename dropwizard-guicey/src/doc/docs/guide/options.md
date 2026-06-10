@@ -1,44 +1,44 @@
 # Options
 
-Options are low level configurations. In contrast to dropwizard configuration (file), which is user specific,
-options are set during development and represent developer decisions. Often, options allow to change opinionated default behaviours.
+Options are low-level configurations. In contrast to Dropwizard configuration (file), which is user-specific,
+options are set during development and represent developer decisions. Often, options allow you to change opinionated default behaviors.
 
-Options are declared with enums. Enums used to naturally group options (also cause pretty reporting). 
-Enums must implement `Option` interface (this makes enum declaration more verbose (because it is impossible to use abstract class in enum),
-but provides required option info).
+Options are declared with enums. Enums are used to naturally group options (and also provide pretty reporting).
+Enums must implement the `Option` interface (this makes enum declaration more verbose because it is impossible to use an abstract class in an enum,
+but it provides the required option info).
 
-Guicey use options to share guice bundle configurations (configured packages to scan, search commands enabling etc) through `GuiceyOptions` enum
-(for simplicity, main guicey options usages are already implemented as shortcut methods in guice bundle).
-Another use is in web installers to change default behaviour though `InstallersOptions` enum. 
+Guicey uses options to share Guice bundle configurations (configured packages to scan, command search enabling, etc.) through the `GuiceyOptions` enum
+(for simplicity, the main Guicey option usages are already implemented as shortcut methods in the Guice bundle).
+Another use is in web installers to change default behavior through the `InstallersOptions` enum.
 
-Custom options may be defined for 3rd party bundle or even application. Options is a general mechanism providing configuration and access points with 
-standard reporting (part of [diagnostic reporting](diagnostic/configuration-report.md)). It may be used as feature triggers (like guicey do), to enable debug behaviour or to specialize
+Custom options may be defined for a 3rd-party bundle or even the application. Options are a general mechanism providing configuration and access points with
+standard reporting (part of [diagnostic reporting](diagnostic/configuration-report.md)). They may be used as feature triggers (like Guicey does), to enable debug behavior, or to specialize
 application state in tests (just to name a few).
 
 ## Usage
- 
-Options may be set only in main GuiceBundle using `.option` method. This is important to let configuration parts to see the same values.
-For example, if guicey bundles would be allowed to change options then one bundles would see one value and other bundles - different value and,
-for sure, this will eventually lead to inconsistent behaviour.
 
-Option could not be set to null. Option could be null only if it's default value is null and custom value not set.
-Custom option value is checked for compatibility with option type (from option definition) and error thrown if does not match.
-Of course, type checking is limited to top class and generics are ignored (so `List<String>` could not be specified and so
-can't be checked), but it's a compromise between complexity and easy of use (the same as `Enum & Option` pair).
+Options may be set only in the main GuiceBundle using the `.option` method. This is important to let configuration parts see the same values.
+For example, if Guicey bundles were allowed to change options, then one bundle would see one value and other bundles would see different values and,
+for sure, this would eventually lead to inconsistent behavior.
+
+An option cannot be set to null. An option can be null only if its default value is null and no custom value is set.
+A custom option value is checked for compatibility with the option type (from the option definition), and an error is thrown if it does not match.
+Of course, type checking is limited to the top class and generics are ignored (so `List<String>` could not be specified and therefore
+can't be checked), but it's a compromise between complexity and ease of use (the same as the `Enum & Option` pair).
 
 Options could be accessed by:
 
-* Guicey bundles using [`bootstrap.option()`](bundles.md#options)
-* Installer by implementing [`WithOptions`](installers.md#options) interface 
-* Any guice bean could inject [`Options`](guice/bindings.md#options) bean and use it to access options.
-* Guice module could access options by implementing [`OptionsAwareModule`](guice/module-autowiring.md#options) marker interface
+* Guicey bundles using [`bootstrap.option()`](bundles.md#configuration)
+* Installers by implementing the [`WithOptions`](installers.md#options) interface
+* Any Guice bean could inject the [`Options`](guice/bindings.md#options) bean and use it to access options.
+* A Guice module could access options by implementing the [`OptionsAwareModule`](guice/module-autowiring.md#options) marker interface
 
-Guicey tracks options definition and usage and report all used options as part of [diagnostic reporting](diagnostic/configuration-report.md).
-Pay attention that defined (value set) but not used (not consumed) options are marked as NOT_USED to indicate possibly redundant options.
+Guicey tracks option definition and usage and reports all used options as part of [diagnostic reporting](diagnostic/configuration-report.md).
+Note that defined (value set) but not used (not consumed) options are marked as NOT_USED to indicate possibly redundant options.
 
-Actual application may use options in different time and so option may be defined as NOT_USE even if its actually "not yet" used.
-Try to consume options closer to actual usage to let user be aware if option not used with current configuration. For example,
-GuiceyOptions.BindConfigurationInterfaces will not appear in report at all if no custom configuration class used.
+An application may use options at different times, and so an option may be defined as NOT_USED even if it is actually "not yet" used.
+Try to consume options closer to actual usage to let the user be aware if an option is not used with the current configuration. For example,
+GuiceyOptions.BindConfigurationInterfaces will not appear in the report at all if no custom configuration class is used.
 
 ## Custom options
 
@@ -72,10 +72,10 @@ enum MyOptions implements Option {
 }
 ```
 
-Each enum value declares option with exact type and default value. Option type is not limited, but implement proper toString for custom object used as option value.
-This will require for pretty reporting, as simple toString used for option value (except collections and arrays are rendered as \[\]).
+Each enum value declares an option with an exact type and default value. The option type is not limited, but implement a proper `toString()` for a custom object used as an option value.
+This is required for pretty reporting, as a simple `toString()` is used for the option value (except collections and arrays, which are rendered as \[\]).
 
-Now you can use option, for example, in bean:
+Now you can use an option, for example, in a bean:
 
 ```java
 import static MyOptions.DoExtraWork;
@@ -92,7 +92,7 @@ public class MyBean {
 }
 ```
 
-To provide custom option value:
+To provide a custom option value:
 
 ```java
     GuiceBundle.builder()
@@ -102,8 +102,8 @@ To provide custom option value:
 
 ## Options lookup
 
-Guicey provides simple mapping utility to map properties to system properties, environment variables 
-or simply bind from string (obtained manually somewhere). 
+Guicey provides a simple mapping utility to map properties to system properties, environment variables,
+or simply bind from a string (obtained manually somewhere).
 
 ```java
 GuiceBundle.builder()
@@ -120,11 +120,11 @@ Here:
 
 * `Myoptions.SomeOption` could be changed with "myprop" system property (`-Dmyprop=something`)
 * `GuiceyOptions.InjectorStage` could be changed with environment variable "STAGE"
-* `Myoptions.SomeOtherOption` set from string (string could be obtained somewhere else manually) 
+* `Myoptions.SomeOtherOption` is set from a string (the string could be obtained somewhere else manually)
 
 !!! important
-    Missed mappings are ignored: e.g. if system property or environment variable is not 
-    defined - option will remain with default value (null will not be set!)
+    Missing mappings are ignored: e.g. if a system property or environment variable is not
+    defined, the option will remain at its default value (null will not be set!)
 
 ### Supported conversions
 
@@ -143,13 +143,13 @@ Mapper could automatically convert string to:
     - If option type is exact enum then value must be constant name
     - If option type is generic `Enum` then value must be 'fullEnumClass.constantName'
 * Array or any type (from above): values must be separated by comma ("one, two, three")
-* EnumSet: value must be comma separated list with fully qualified enum constants ('fullEnumClass.constantName')   
+* EnumSet: value must be comma separated list with fully qualified enum constants ('fullEnumClass.constantName')
 
 !!! tip
-    You can use sting conversion directly somewhere else, if required:
+    You can use string conversion directly somewhere else, if required:
     `StringConverter.convert(TargetType, stringValue)`
 
-Exception is thrown when type is not supported for conversion. In this case use manual converter:
+An exception is thrown when a type is not supported for conversion. In this case, use a manual converter:
 
 ```java
 new OptionsMapper()
@@ -157,27 +157,27 @@ new OptionsMapper()
             .map()
 ```
 
-Converter is actually any `java.util.Function` (here, lambda with method call (`::convertVal`)).
+A converter is actually any `java.util.Function` (here, a lambda with a method call: `::convertVal`).
 
 ### System properties
 
-As shown before, you can bind single system property to option. But you can also allow
-to set any option with system property:
+As shown before, you can bind a single system property to an option. But you can also allow
+any option to be set with a system property:
 
 ```java
 new OptionsMapper().props().map()
 ```
 
-It will bind all properties in format: `option.enumClasName.enumValue`.
-For example, `-Doption.ru.vyarus.dropwizard.guice.GuiceyOptions.UseHkBridge=true` 
+It will bind all properties in the format: `option.enumClasName.enumValue`.
+For example, `-Doption.ru.vyarus.dropwizard.guice.GuiceyOptions.UseHkBridge=true`
 
-Different prefix could be used: `.props("myprefix")` 
+A different prefix could be used: `.props("myprefix")`
 
 !!! warning
-    All properties with matched prefix must be mappable to option (target enum exists),
-    otherwise error will be thrown.
+    All properties with the matched prefix must be mappable to an option (the target enum must exist),
+    otherwise an error will be thrown.
 
-If any property requires custom value conversion then bind it *before* with converter
+If any property requires custom value conversion, then bind it *before* with a converter
 and it will be ignored during mass mapping by prefix:
 
 ```java
@@ -190,7 +190,7 @@ new OptionsMapper()
 
 ### Debug
 
-You can enable mapped options print with `.printMappings()`:
+You can enable mapped option printing with `.printMappings()`:
 
 ```java
 new OptionsMapper()
@@ -199,16 +199,16 @@ new OptionsMapper()
             .map()
 ```
 
-When enabled, all mapped options will be printed to console (logger is not used because it's not yet initialized).
+When enabled, all mapped options will be printed to the console (the logger is not used because it is not yet initialized).
 
 Example output:
-```
+```text
 	env: VAR                   Opts.OptInt = 1
 	prop: foo                  Opts.OptStr = bar
 	                           Opts.OptBool = true
 ```
 
-for mapper:
+For the mapper:
 ```java
 new OptionsMapper()
         .printMappings()
@@ -220,11 +220,11 @@ new OptionsMapper()
         .map()
 ```
 
-Here "VAR2" env. variable and "foo2" system property wasn't declared and so not mapped. 
+Here, the "VAR2" environment variable and the "foo2" system property were not declared and so were not mapped.
 
 ### Custom lookup
 
-You can directly specify map of options (`.options(Map<Enum, Object>)`) or write your own lookup mechanism:
+You can directly specify a map of options (`.options(Map<Enum, Object>)`) or write your own lookup mechanism:
 
 ```java
     GuiceBundle.builder()
@@ -233,5 +233,5 @@ You can directly specify map of options (`.options(Map<Enum, Object>)`) or write
 ```
 
 !!! note ""
-    `.options()` method contract simplified for just `Enum`, excluding `Option` for 
+    The `.options()` method contract is simplified for just `Enum`, excluding `Option` for
     simpler usage, but still only option enums must be provided

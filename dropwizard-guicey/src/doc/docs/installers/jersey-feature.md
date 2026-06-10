@@ -1,18 +1,18 @@
 # Jersey feature installer
 
 !!! summary ""
-    CoreInstallersBundle / [JerseyFeatureInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/JerseyFeatureInstaller.java)
+    CoreInstallersBundle / [JerseyFeatureInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/dropwizard-guicey/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/jersey/JerseyFeatureInstaller.java)
 
 ## Recognition
 
-Detects classes implementing `#!java jakarta.ws.rs.core.Feature` and register their instances in jersey.
+Detects classes implementing `#!java jakarta.ws.rs.core.Feature` and registers their instances in Jersey.
 
 It may be useful to configure jersey inside guice components:
 
 ```java
 
 public class MyClass {
-    ...   
+    ...
     public static class ConfigurationFeature implements Feature {
         @Override
         public boolean configure(FeatureContext context) {
@@ -32,12 +32,12 @@ But often the same could be achieved by injecting `#!java Environment` instance.
 ```java
 @Singleton
 public class MyClass {
-    
+
     @Inject
     public MyClass(Environment environment) {
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(
                 new AuthValueFactoryProvider.Binder(User.class));
-    }    
+    }
 }
 ```

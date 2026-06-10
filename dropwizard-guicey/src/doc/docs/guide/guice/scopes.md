@@ -7,7 +7,7 @@
 Available scopes:
 
 * `@Singleton` - single instance per context
-* `@RequestScoped` - object per request (if guice filter support is [not disabled](../web.md#disable-servletmodule-support))
+* `@RequestScoped` - object per request (if guice filter support is [not disabled](../web.md#guice-servlet-module))
 * `@Prototype` - prototype scope annotation (useful to override forced singleton scope for jersey services)
 
 !!! note ""

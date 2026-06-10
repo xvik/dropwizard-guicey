@@ -1,13 +1,13 @@
 # Plugin installer
 
 !!! summary ""
-    CoreInstallersBundle / [PluginInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/plugin/PluginInstaller.java)
+    CoreInstallersBundle / [PluginInstaller](https://github.com/xvik/dropwizard-guicey/tree/master/dropwizard-guicey/src/main/java/ru/vyarus/dropwizard/guice/module/installer/feature/plugin/PluginInstaller.java)
 
-Allows automatic gathering of multiple implementations of some interface into bindable set or map (dynamic plugins case).  
+Allows automatic gathering of multiple implementations of some interface into bindable set or map (dynamic plugins case).
 
 ## Recognition
 
-Detects classes annotated with guicey `#!java @Plugin` annotation and bind them into set or map using guice 
+Detects classes annotated with Guicey `#!java @Plugin` annotation and bind them into set or map using guice
 [multibindings](https://github.com/google/guice/wiki/Multibindings) mechanism.
 
 Suppose you have plugin interface `#!java public interface PluginInterface`.
@@ -19,30 +19,30 @@ Annotate plugin implementations with `#!java @Plugin`:
 public class PluginImpl1 implements PluginInterface
 ```
 
-Now all implementations could be autowired as
+Now all implementations can be autowired as:
 
 ```java
 @Inject Set<PluginInterface> plugins;
 ```
 
 !!! warning
-    At least one implementation must be provided because otherwise guicey will not be able to register
+    At least one implementation must be provided because otherwise Guicey will not be able to register
     Set<PluginInterface> binding and guice startup will fail.
-    If no plugins situation is possible, then you will have to manually register empty (default)
-    plugins binding: 
+    If a no-plugins situation is possible, then you will have to manually register an empty (default)
+    plugins binding:
     ```java
-    public class MyModule extends AbstractModule {    
+    public class MyModule extends AbstractModule {
         @Override
         protected configure() {
             Multibinder.newSetBinder(binder(), PluginInterface.class);
         }
     }
     ```
-    Guicey can't register empty plugin set for you because it's impossible to know what plugins are you expecting.
+    Guicey can't register empty plugin set for you because it's impossible to know which plugins you are expecting.
 
 ### Named plugins
 
-Sometimes it's required to have named plugin mapping: to bind, Map<String, PluginClass> instead of simple set.
+Sometimes it's required to have named plugin mapping: to bind `Map<String, PluginClass>` instead of a simple set.
 For example, when you have multiple authorization providers and each provider implementation must be registered with name.
 
 Most likely, you would use enum for keys:
@@ -66,7 +66,7 @@ public @interface MyPlugin {
 
 !!! note
     Annotation itself is annotated with `#!java @Plugin`, defining target plugin interface.
-    Guicey will detect your custom annotation usage by analyzing its annotations. 
+    Guicey will detect your custom annotation usage by analyzing its annotations.
 
 Annotating plugin implementation:
 
@@ -82,16 +82,16 @@ All plugins could be referenced as map:
 ```
 
 !!! note
-    It's not required to use enum as key. Any type could be set in your custom annotation. 
-    For example, string key could be used: 
+    It's not required to use enum as key. Any type could be set in your custom annotation.
+    For example, string key could be used:
     ```java
     public @interface MyPlugin {
         String value();
     }
-    
+
     @MyPlugin("first")
     public class PluginImpl1 implements PluginInterface
-    
+
     @Inject Map<String, PluginInterface> plugins;
     ```
 

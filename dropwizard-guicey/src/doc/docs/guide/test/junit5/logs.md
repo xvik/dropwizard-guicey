@@ -1,7 +1,7 @@
 # Testing logs
 
 !!! important
-    Works only with logback (default dropwizard logger).
+    Works only with Logback (the default Dropwizard logger).
 
 `@RecordLogs` extension could record log messages for one or multiple classes.
 
@@ -10,7 +10,7 @@ For example, for service:
 ```java
 public class Service {
     private final Logger logger = LoggerFactory.getLogger(Service.class);
-    
+
     public void foo() {
         ...
         if (someCondition) {
@@ -20,19 +20,19 @@ public class Service {
 }
 ```
 
-Testing log appears: 
+Testing log appears:
 
 ```java
 @Isolated
 @TestGucieyApp(App.class)
 public class Test {
-    
+
     @RecordLogs(value = Service.class, level = Level.DEBUG)
     RecordedLogs logs;
-    
+
     @Inject
     Service service;
-    
+
     @Test
     public void test() {
         // here some actions with service, involving logging
@@ -55,7 +55,7 @@ RecordedLogs logs;
 ```
 
 !!! warning
-    Such tests could not be run in parallel because logger configuration is global 
+    Such tests could not be run in parallel because logger configuration is global
     (use `@Isolated` to prevent parallel execution)
 
 ## Registration
@@ -96,15 +96,15 @@ then it would change logger configuration to receive required messages.
 !!! tip
     Recorder might be used just to enable required logs, without application
     logging configuration. This is very useful in tests (to enable `DEBUG` or `TRACE`
-    messages for exact service (or package)): 
+    messages for exact service (or package)):
     ```java
-    @RecordLogs(value = MyClass.class, level = Level.TRACE) 
+    @RecordLogs(value = MyClass.class, level = Level.TRACE)
     RecordedLogs logs;
     ```
 
-During application startup **dropwizard resets loggers two times** and hook would
-re-attach appenders to compensate it. You should be able to record all messages from application startup,
-except logs from dropwizard bundles, registered BEFORE `GuiceBundle`.
+During application startup **Dropwizard resets loggers twice** and the hook would
+re-attach appenders to compensate for it. You should be able to record all messages from application startup,
+except logs from Dropwizard bundles, registered BEFORE `GuiceBundle`.
 
 ## Querying
 
@@ -169,11 +169,11 @@ service.boo();
 ...
 ```
 
-By default, recorded logs cleared after each test method. 
+By default, recorded logs cleared after each test method.
 This could be disabled with `autoReset` option:
 
 ```java
-@RecordLogs(value = MyClass.class, level = Level.INFO, autoReset = false) 
+@RecordLogs(value = MyClass.class, level = Level.INFO, autoReset = false)
 RecordedLogs logs;
 ```
 
@@ -183,12 +183,12 @@ When extension debug is active:
 
 ```java
 @TestGucieyApp(value = App.class, debug = true)
-public class Test 
+public class Test
 ```
 
 All recognized log recorder fields would be logged:
 
-```
+```text
 Applied log recorders (@RecordLogs) on Test
 
 	#logs                          DEBUG  Service

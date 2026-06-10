@@ -1,6 +1,6 @@
 # Matrix params
 
-Matrix param are almost the same as query params:
+Matrix params are almost the same as query params:
 
 /some;m=1?q=2
 
@@ -9,7 +9,7 @@ Matrix param are almost the same as query params:
     public Response get(@MatrixParam("m") String m, @QueryParam("q") String q)
 ```
 
-But matrix params could appear in the middle of path:
+But matrix params could appear in the middle of the path:
 
 /some;m=1/path?q=2
 
@@ -18,5 +18,5 @@ But matrix params could appear in the middle of path:
     public Response get(@PathParam("vars") PathSegment vars, @QueryParam("1") String q)
 ```
 
-`@MatrixParam` annotation can't be used here, instead using path param with static regex ("some").
-Actual matrix parameters are available from `PathSegment.getMatrixParams()`
+The `@MatrixParam` annotation can't be used here; instead, use a path param with a static regex (`"some"`).
+Actual matrix parameters are available from `PathSegment.getMatrixParams()`.

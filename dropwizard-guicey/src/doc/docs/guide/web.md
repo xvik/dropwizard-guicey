@@ -3,7 +3,7 @@
 ## Servlets, filters
 
 Servlets and filters could be registered either with guice [ServletModule](guice/servletmodule.md)
-or using [extensions](extensions.md#web).
+or using [extensions](#web-extensions).
 
 ### Guice servlet module
 
@@ -17,33 +17,33 @@ public class WebModule extends ServletModule {
         filter("/*").through(MyFilter.class);
         serve("/myservlet").with(MyServlet.class);
     }
-}  
+}
 ```
 
 !!! success "Pros"
     Only `ServletModule` allows mappings [by regexp](https://github.com/google/guice/wiki/ServletRegexKeyMapping):
-    
+
     ```java
     serveRegex("(.)*ajax(.)*").with(MyAjaxServlet.class)
     ```
 
 !!! warning
-    It is important to note that `GuiceFilter` dispatch all requests for filters and servlets 
-    registered by `ServletModule` internally and so you may have problems combining servlets from 
+    It is important to note that `GuiceFilter` dispatch all requests for filters and servlets
+    registered by `ServletModule` internally and so you may have problems combining servlets from
     `ServletModule` with filters in main scope.
-    
+
     It is never a blocking issues, but often "not obvious to understand" situations.
 
 ### Web extensions
 
 Extensions declared with standard `jakarta.servlet` annotations.
 
-Servlet registration: 
+Servlet registration:
 
 ```java
 @WebServlet("/mapped")
 public class MyServlet extends HttpServlet { ... }
-```       
+```
 
 Extension [recognized](../installers/servlet.md) by `@WebServlet` annotation.
 
@@ -53,9 +53,9 @@ Could be registered on admin context:
 @WebServlet("/mapped")
 @AdminContext
 public class MyServlet extends HttpServlet { ... }
-```   
+```
 
-Or even on both contexts at the same time: `#!java @AdminContext(andAdmin=true)`. 
+Or even on both contexts at the same time: `#!java @AdminContext(andAdmin=true)`.
 
 Filter:
 
@@ -64,7 +64,7 @@ Filter:
 public class MyFilter implements Filter { ... }
 ```
 
-Extension [recognized](../installers/filter.md) by `@WebFilter` annotation. 
+Extension [recognized](../installers/filter.md) by `@WebFilter` annotation.
 
 Web listeners (servlet, request, session):
 
@@ -78,7 +78,7 @@ Extension [recognized](../installers/listener.md) by `@WebListener` annotation.
 
 !!! success "Pros"
     Installation through extensions has more abilities comparing to `ServletModule`:
-    
+
     * Installation into [admin context](../installers/servlet.md#admin-context)
     * [Async support](../installers/servlet.md#admin-context)
     * Filter may be applied to exact servlet(s) (`#!java @WebFilter(servletNames = "servletName")`)
@@ -94,7 +94,7 @@ GuiceBundle.builder()
 ```
 
 ### Manual registration
-    
+
 Alternatively, you can always register servlet or filter manually with dropwizard api:
 
 ```java
@@ -102,59 +102,59 @@ public class App extends Application {
     public void initialize(Bootstrap bootstrap) {
         bootstrap.addBundle(GuiceBundle.builder().build());
     }
-    
+
     public void run(Configuration configuration, Environment environment) {
         final MyFilter filter = InjectorLookup.getInstance(this, MyFilterBean.class).get();
         environment.servlets().addFilter("manualFilter", filter)
             .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
     }
 }
-```    
+```
 
 ## Resources
 
-Dropwizard provides [AssetsBundle](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#serving-assets) 
+Dropwizard provides [AssetsBundle](https://www.dropwizard.io/en/release-5.0.x/manual/core.html#serving-assets)
 for serving static files from classpath:
 
-```java                       
+```java
 bootstrap.addBundle(new AssetsBundle("/assets/app/", "/", "index.html"));
-```                           
+```
 
-`http://localhost:8080/foo.css` --> `src/main/resources/assets/app/foo.css`   
+`http://localhost:8080/foo.css` --> `src/main/resources/assets/app/foo.css`
 `http://localhost:8080/` --> `src/main/resources/assets/app/index.html`
 
 ### HTML5 routing
 
 But, if you develop SPA application with HTML5 routes, server will not handle these routes
-properly. Use guicey [SPA bundle](../extras/spa.md) which adds proper SPA routing support above dropwizard `AssetBundle` 
+properly. Use guicey [SPA bundle](../extras/spa.md) which adds proper SPA routing support above dropwizard `AssetBundle`
 
 ```java
 GuiceBundle.builder()
     .bundles(SpaBundle.app("spaApp", "/assets/app/", "/").build());
-```          
+```
 
-`http://localhost:8080/` --> `src/main/resources/assets/app/index.html`   
+`http://localhost:8080/` --> `src/main/resources/assets/app/index.html`
 `http://localhost:8080/route/path` --> `src/main/resources/assets/app/index.html`
 
-## Templates 
+## Templates
 
-Dropwizard provides [ViewBundle](https://www.dropwizard.io/en/release-4.0.x/manual/views.html)
+Dropwizard provides [ViewBundle](https://www.dropwizard.io/en/release-5.0.x/manual/views.html)
 for handling templates (freemarker and mustache out of the box, more engines could be plugged).
 
 ```java
 bootstrap.addBundle(new ViewBundle());
-```    
+```
 
-Which allows you to serve rendered templates [from rest endpoints](https://www.dropwizard.io/en/release-4.0.x/manual/views.html).
+Which allows you to serve rendered templates [from rest endpoints](https://www.dropwizard.io/en/release-5.0.x/manual/views.html).
 
 
 ### Templates + resources
 
 But it is not quite handful to use it together with static resources ([AssetsBundle](#resources))
-because static resources will have different urls (as they are not served from rest).  
+because static resources will have different urls (as they are not served from rest).
 
 If you would like to have JSP-like behaviour (when templates and resources live at the same
-location and so could easily reference each other) - then use guicey [GSP bundle](../extras/gsp.md) 
+location and so could easily reference each other) - then use guicey [GSP bundle](../extras/gsp.md)
 (which is actually just a "glue" for dropwizard `ViewBundle` and `AssetsBundle`).
 
 ```java
@@ -162,22 +162,22 @@ com/exmaple/app/
     person.ftl
     foo.ftl
     style.css
-```     
+```
 
-```html  
+```html
 <#-- Sample template without model (/foo.ftl) -->
 <html>
-    <body>        
+    <body>
         <h1>Hello, it's a template: ${12+22}!</h1>
     </body>
 </html>
-```      
+```
 
-```html  
+```html
 <#-- Template with model, rendered by rest endpoint (/person/) -->
 <#-- @ftlvariable name="" type="com.example.views.PersonView" -->
-<html>   
-    <head>  
+<html>
+    <head>
         <link href="/style.css" rel="stylesheet">
     </head>
     <body>
@@ -191,7 +191,7 @@ com/exmaple/app/
 public class PersonView extends TemplateView {
     private final Person person;
 
-    public PersonView(Person person) {    
+    public PersonView(Person person) {
         super('person.ftl');
         this.person = person;
     }
@@ -200,44 +200,44 @@ public class PersonView extends TemplateView {
         return person;
     }
 }
-```      
+```
 
-```java       
-// Path starts with application name  
-@Path("/com.example.app/person/")  
-@Produces(MediaType.TEXT_HTML)    
+```java
+// Path starts with application name
+@Path("/com.example.app/person/")
+@Produces(MediaType.TEXT_HTML)
 // Important marker
 @Template
-public class PersonPage {      
-    
+public class PersonPage {
+
     @Inject
     private PersonDAO dao;
 
-    @GET  
+    @GET
     @Path("/")
     public PersonView getMaster() {
         return new PersonView(dao.find(1));
-    }    
+    }
 
-    @GET  
+    @GET
     @Path("/{id}")
     public PersonView getPerson(@PathParam("id") String id) {
         return new PersonView(dao.find(id));
-    }   
+    }
 }
-```       
+```
 
 ```java
-GuiceBundle.builder()                                     
+GuiceBundle.builder()
     .bundles(
              // global views support
              ServerPagesBundle.builder().build(),
              // application registration
-             ServerPagesBundle.app("com.example.app", "/com/example/app/", "/")   
+             ServerPagesBundle.app("com.example.app", "/com/example/app/", "/")
                                  // rest path as index page
                                  .indexPage("person/")
                                  .build());
-```                 
+```
 
 Static resource call:
 
@@ -257,13 +257,13 @@ Index page:
 
 !!! note "Summary"
     Declaration differences from pure dropwizard views:
-    
+
     * Model extends `TemplateView`
     * Rest endpoints always annotated with `@Template`
     * Rest endpoints paths starts with registered application name (`#!java ServerPagesBundle.app("com.example.app"`)
-    to be able to differentiate rest for different UI applications     
-    
+    to be able to differentiate rest for different UI applications
+
 !!! warning
-    Standard errors handling in views ([templates](https://www.dropwizard.io/en/release-4.0.x/manual/views.html#template-errors),
-    [custom pages](https://www.dropwizard.io/en/release-4.0.x/manual/views.html#custom-error-pages)) is replaced by 
+    Standard errors handling in views ([templates](https://www.dropwizard.io/en/release-5.0.x/manual/views.html#template-errors),
+    [custom pages](https://www.dropwizard.io/en/release-5.0.x/manual/views.html#custom-error-pages)) is replaced by
     [custom mechanism](../extras/gsp.md#error-pages), required to implement per-ui-app errors support.

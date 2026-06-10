@@ -4,14 +4,14 @@
 * [Guice without bundled ASM](#guice-without-bundled-asm)
 * [Application fields injection](#application-fields-injection)
 * [Auto close object stored in the shared state](#auto-close-object-stored-in-the-shared-state)
-  
 
-* Tests support: 
+
+* Tests support:
   - [Apache test client](#apache-test-client)
   - [Unify ClientSupport and stubs rest](#unify-clientsupport-and-stubs-rest)
   - [Test client fields support](#test-client-fields-support)
   - [Application urls builder](#application-urls-builder)
-  - [Fix stubs rest early initialization](#fix-stubs-rest-early-initialization) 
+  - [Fix stubs rest early initialization](#fix-stubs-rest-early-initialization)
 
 [Migration guide](#migration-guide)
 
@@ -20,11 +20,11 @@
 Guicey now use guice with a [classes](https://repo1.maven.org/maven2/com/google/inject/guice/7.0.0/) classifier without bundled ASM.
 ASM is provided as a direct dependency.
 
-Required to support recent java versions (>22). 
+Required to support recent java versions (>22).
 
 ## Application fields injection
 
-It is now possible to use injections in the application class. 
+It is now possible to use injections in the application class.
 Useful for accessing services in the application run method:
 
 ```java
@@ -46,18 +46,18 @@ public class App extends Application<Configuration> {
 ## Apache test client
 
 `DefaultTestClientFactory` class was reworked to support extensibility.
-`ApacheTestClientFactory` added (extending default factory) to use apache client (`Apache5ConnectorProvider`) 
+`ApacheTestClientFactory` added (extending default factory) to use apache client (`Apache5ConnectorProvider`)
 instead of urlconnection (`HttpUrlConnectorProvider`).
 
 !!! important "Why apache client is not set as default"
     Apache client has [problems with multipart requests](https://github.com/eclipse-ee4j/jersey/issues/5528#issuecomment-1934766714)
     (not a bug, but technical limitation).
 
-    Urlconnection client has problems with PATCH requests on java > 16 
+    Urlconnection client has problems with PATCH requests on java > 16
     (requires additional --add-opens).
 
-    Urlconnection remains as default because PATCH requests are less usable 
-    than multipart forms. 
+    Urlconnection remains as default because PATCH requests are less usable
+    than multipart forms.
 
 There are new shortcuts to switch to apache client in test:
 
@@ -77,13 +77,13 @@ public void testSomething(ClientSupport client) {
 
 ## Unify ClientSupport and stubs rest
 
-Guicey provides default (universal) test client `ClientSupport` (used for integration tests) and 
+Guicey provides default (universal) test client `ClientSupport` (used for integration tests) and
 stubs rest (`@StubRest`) `RestClient` (used for lightweight rest tests).
 
 Now base client methods are unified by the `TestClient` class (extended by both):
 this means both clients provide exactly the same request-related methods.
 
-Also, as `ClientSupport` represents an application root client, which is not 
+Also, as `ClientSupport` represents an application root client, which is not
 very useful in tests, it now provides 3 additinoal clients:
 
 * `.appClient()` - application context client (could not be the same as application root)
@@ -103,12 +103,12 @@ public void testSomething(ClientSupport client) {
 
 ### Client API changes
 
-The main change is in `ClientSupport.target()` methods, which were previously 
+The main change is in `ClientSupport.target()` methods, which were previously
 supporting a sequence of strings: `target(String... pathParts)`, but now
 `String.format()` is used: `target(String format, Object... args)`.
 
 !!!! note "Why String.format?"
-    Sequence of paths appears to be a bad idea. Compare: 
+    Sequence of paths appears to be a bad idea. Compare:
     `target("a", "12", "c")` and `target("a/%s/c", 12)`.
     The latter is more readable and more flexible.
 
@@ -122,14 +122,14 @@ There is now not only `Class`-based shortcuts, but also a `GenericType`-based:
     List<User> list = client.get("/users", new GenericType<>() {});
 ```
 
-As an addition to existing method shortcuts (`get()`, `post()`, etc), 
+As an addition to existing method shortcuts (`get()`, `post()`, etc),
 there is a new `patch()` shortcut: `client.patch("/users/%s", new User(), 123)`
 
 !!! WARNING "Breaking changes"
     * Due to `String.format()`-based syntax, old calls like `target("a", "12", "c")` will work incorrectly now.
     * It was possible to use target method without arguments to get root path: `target()`,
       but now it is not possible. Use `target("/")` instead.
-    * Old calls like `client.get("/some/path", null)` used for void calls will also not work 
+    * Old calls like `client.get("/some/path", null)` used for void calls will also not work
       (jvm will not know what method to choose: Class or GenericType). Instead, there is a special void shortcut now:
       `client.get("/some/path")` (but `client.get("/some/path", Void.class)` will also work).
     * `basePathMain()` and `targetMain()` methods now deprecated: use `basePathApp()` and `targetApp()` instead.
@@ -159,7 +159,7 @@ The most obvious use case is authorization:
 ```java
 public void testSomething(ClientSupport client) {
     client.defaultHeader("Authorization", "Bearer 123");
-    
+
     User user = client.restClient().get("/users/123", User.class);
 }
 ```
@@ -173,7 +173,7 @@ Instead of putting it into each request:
 ```java
 public void testSomething(ClientSupport client) {
     TestClient rest = client.restClient();
-    
+
     rest.get("/%s/path/to/resource/%s", User.class, "path", 12);
     rest.post("/%s/path/to/resource/%s", new User(...), "path", 12);
 }
@@ -185,7 +185,7 @@ A sub client can be created:
 public void testSomething(ClientSupport client) {
     TestClient rest = client.restClient().subClient("/{something}/path/to/resource")
             .defaultPathParam("something", "path");
-    
+
     rest.get("/%s", User.class, "path", 12);
     rest.post("/%s", new User(...), "path", 12);
 }
@@ -193,12 +193,12 @@ public void testSomething(ClientSupport client) {
 
 !!! note
     Sub clients inherit defaults of parent client.
-    
+
     ```java
     client.defaultQueryParam("q", "v");
     TestClient rest = client.subClient("/path/to/resource");
 
-    // inherited query parameter q=v will be applied to all requests    
+    // inherited query parameter q=v will be applied to all requests
     rest.get("/%s", User.class, 12);
     ```
 
@@ -253,7 +253,7 @@ And methods, returning raw (wrapped) response:
 * `.expectSuccess()` - fail if not success
 * `.expectSuccess(201, 204)` - fail if not success or not expected status
 * `.expectRedirect()` - fail if not redirect (method also disabled redirects following)
-* `.expectRedirect(301)` - fail if not redirect or not expected status 
+* `.expectRedirect(301)` - fail if not redirect or not expected status
 * `.expectFailure()` - fail if success
 * `.expectFailure(400)` - fail success or not expected status
 
@@ -264,7 +264,7 @@ Response wrapper would be described below.
 Considering the client defaults inheritance (potential decentralized request configuration)
 it might be unobvious what was applied to the request.
 
-Request builder provides a `debug()` option, which will print all applied defaults 
+Request builder provides a `debug()` option, which will print all applied defaults
 and direct builder configurations to the console:
 
 ```java
@@ -274,8 +274,8 @@ client.buildGet("/path")
     .as(User.class)
 ```
 
-```
-Request configuration: 
+```text
+Request configuration:
 
 	Path params:
 		p1=1                                      at r.v.d.g.t.c.builder.(RequestBuilderTest.java:61)
@@ -290,7 +290,7 @@ Request configuration:
 	Accept:
 		application/json                          at r.v.d.g.t.c.builder.(RequestBuilderTest.java:54)
 
-Jersey request configuration: 
+Jersey request configuration:
 
 	Resolve template                          at r.v.d.g.t.c.builder.(TestRequestConfig.java:869)
 		(encodeSlashInPath=false encoded=true)
@@ -353,7 +353,7 @@ client.buildForm("/some/path")
 
 // multipart
 client.buildForm("/some/path")
-        .param("foo", "bar")     
+        .param("foo", "bar")
         .param("file", new File("src/test/resources/test.txt"))
         .buildPost()
         .asVoid();
@@ -363,11 +363,11 @@ Also, it could be used to simply create a request entity and use it directly:
 
 ```java
 Entity entity = client.buildForm(null)
-        .param("foo", "bar")     
+        .param("foo", "bar")
         .param("file", new File("src/test/resources/test.txt"))
         .buildEntity()
 
-client.post("/some/path", entity); 
+client.post("/some/path", entity);
 ```
 
 Builder will serialize all provided (non-multipart) parameters to string.
@@ -384,8 +384,8 @@ client.buildForm("/some/path")
 
 (java.util and java.time date formatters could be set separately with `dateFormatter()` or `dateTimeFormatter()` methods)
 
-The default format could be changed globally: `client.defaultFormDateFormat("dd/MM/yyyy")` 
-(or `defaultFormDateFormatter()` with `defaultFormDateTimeFormatter()`). 
+The default format could be changed globally: `client.defaultFormDateFormat("dd/MM/yyyy")`
+(or `defaultFormDateFormatter()` with `defaultFormDateTimeFormatter()`).
 
 ### Response assertions
 
@@ -403,23 +403,23 @@ User user = rest.buildGet("/users/123")
         .as(User.class);
 ```
 
-Here assertion error will be thrown if header or cookie was not provided or condition does not match. 
+Here assertion error will be thrown if header or cookie was not provided or condition does not match.
 
 Redirection correctness could be checked as:
 
 ```java
 @Path("/resources")
 public class Resource {
-    
+
     @Inject
     AppUrlBuilder urlBuilder;
-    
+
     @Path("/list")
     @GET
     public Response get() {
         ...
     }
-    
+
     @Path("/redirect")
     @GET
     public Response redirect() {
@@ -442,7 +442,7 @@ Also, "with*" methods could be used for completely manual assertions:
 ```java
 rest.method(Resource::redirect)
         .expectSuccess(201)
-        .withHeader("MyHeader", s -> 
+        .withHeader("MyHeader", s ->
             assertThat(s).startsWith("My-Header;"));
 ```
 
@@ -483,7 +483,7 @@ resource class declaration already provides all required metadata to configure a
 ```java
 @Path("/users")
 public class UserResource {
-    
+
     @Path("/{id}")
     @GET
     public User get(@NotNull @PathParam("id") Integer id) {}
@@ -497,7 +497,7 @@ tell that it's a GET request on path `/users/{id}` with required path parameter.
 public void testSomething(ClientSupport client) {
     // essentially, it's a sub client build with the resource path (from @Path annotation)
     ResourceClient<UserResource> rest = client.restClient(UserResource.class);
-    
+
     User user = rest.method(r -> r.get(123)).as(User.class);
 }
 ```
@@ -505,13 +505,13 @@ public void testSomething(ClientSupport client) {
 By using a mock object call (`r -> r.get(123)`) we specify a source of metadata and the required values
 for request. Using it, a request builder is configured automatically.
 
-It is not required to use all parameters (reverse mapping is not always possible): 
+It is not required to use all parameters (reverse mapping is not always possible):
 use null for not important arguments. All additional configurations could be done manually:
 
 ```java
 public void testSomething(ClientSupport client) {
     ResourceClient<UserResource> rest = client.restClient(UserResource.class);
-    
+
     User user = rest.method(r -> r.get(null))
             .pathParam("id", 123)
             .as(User.class);
@@ -547,7 +547,7 @@ Multipart resource methods often use special multipart-related entities, like:
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String multipart(
             @NotNull @FormDataParam("file") InputStream uploadedInputStream,
-            @NotNull @FormDataParam("file") FormDataContentDisposition fileDetail) 
+            @NotNull @FormDataParam("file") FormDataContentDisposition fileDetail)
 ```
 
 Which is not handy to create manually. To address this, `ResourceClient` provides a
@@ -584,7 +584,7 @@ In case of generic multipart object argument:
     @Path("/multipartGeneric")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String multipartGeneric(@NotNull FormDataMultiPart multiPart) 
+    public String multipartGeneric(@NotNull FormDataMultiPart multiPart)
 ```
 
 there is a special builder:
@@ -599,7 +599,7 @@ rest.multipartMethod((r, multipart) ->
 ```
 
 !!! note
-    Multipart methods require the urlencoded client (default) and, most likely, 
+    Multipart methods require the urlencoded client (default) and, most likely,
     will fail with the apache client.
 
 #### Sub resources
@@ -632,7 +632,7 @@ public class Resource {
 }
 ```
 
-you'll have to build a sub-client first: 
+you'll have to build a sub-client first:
 
 ```java
 ResourceClient<SubResource> subRest = rest.subResource(Resource::sub, SubResource.class);
@@ -643,7 +643,7 @@ ResourceClient<SubResource> subRest = rest.subResource(Resource::sub, SubResourc
 
 #### Resource typification
 
-It is not always possible to use resource class to buld a sub client 
+It is not always possible to use resource class to buld a sub client
 (with `.restClient(Resource.class)`).
 
 In such cases you can build a resource path manually and then "cast" client to the resource type:
@@ -653,7 +653,7 @@ ResourceClient<MyResource> rest = client.subClient("/resource/path")
             .asResourceClient(MyResource.class);
 ```
 
-or just buid path manually: 
+or just buid path manually:
 
 ```java
 ResourceClient<MyResource> rest = client.subClient(
@@ -689,7 +689,7 @@ TestClient admin;
 @WebClient(WebClientType.Rest)
 TestClient rest;
 ```
- 
+
 Additionally, `ResourceClient` could be injected directly:
 
 ```java
@@ -706,17 +706,17 @@ ResourceClient<MyResource> rest;
     public class MyTest {
         StubRest
         RestClient client;
-    
+
         @WebResourceClient
         ResourceClient<MyResource> rest;
     }
     ```
 
-    Note that resource client could be directly obtained form `RestClient`: 
+    Note that resource client could be directly obtained form `RestClient`:
     `client.restClient(MyResource.class)` (same as in `ClientSupport`).
 
 !!! important
-    Clients assigned with a field would reset client defaults automatically (call `client.reset()`) after 
+    Clients assigned with a field would reset client defaults automatically (call `client.reset()`) after
     each test method. This could be disabled with `@WebClient(autoReset = false)`.
 
 ## Application urls builder
@@ -735,7 +735,7 @@ Or it could be created manually: `new AppUrlBuilder(environment)`
 There are 3 scenarios:
 
 * Localhost urls: the default mode when all urls contain "localhost" and application port.
-* Custom host: `builder.forHost("myhost.com")` when custom host used instead of localhost and application port 
+* Custom host: `builder.forHost("myhost.com")` when custom host used instead of localhost and application port
    is applied automatically
 * Proxy mode: `builder.forProxy("https://myhost.com")` when application is behind some proxy
   (like apache or nginx) hiding its real port.
@@ -752,16 +752,16 @@ builder.admin("/")
 // http://localhost:8080/
 builder.rest("/")
 
-// http://localhost:8080/users/123     
+// http://localhost:8080/users/123
 builde.rest(Resource.class).method(r -> r.get(123)).build()
-// http://localhost:8080/users/123     
+// http://localhost:8080/users/123
 builde.rest(Resource.class).method(r -> r.get(null)).pathParam("id", 123).build()
 
 
-// https://some.com:8081/something     
+// https://some.com:8081/something
 builder.forHost("https://some.com").admin("/something")
 
-// https://some.com/something     
+// https://some.com/something
 builder.forProxy("https://some.com").admin("/something")
 ```
 
@@ -850,7 +850,7 @@ RestClient client;
 
 public void testSomething() {
     rest.defaultOk(201);
-    
+
     // error on 200 response (only 201 required)
     rest.post("/some/path", entity, null);
 }

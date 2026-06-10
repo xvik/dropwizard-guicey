@@ -43,14 +43,14 @@ Using stub in test:
 ```java
 @TestGuiceyApp(App.class)
 public class Test {
-    
+
     @StubBean(Service.class)
     ServiceStub stub;
-    
+
     // injecting here to show that stub replaced real service
     @Inject
     Service service;
-    
+
     @Test
     public void test(){
         // service is a stub
@@ -64,7 +64,7 @@ public class Test {
     In many cases, mockito [mocks](mocks.md) and [spies](spies.md) could be more useful,
     but stubs are simpler (easier to understand, especially comparing to spies).
 
-In the example above, stub instance is created by guice. 
+In the example above, stub instance is created by guice.
 Stub could also be registered by instance:
 
 ```java
@@ -91,10 +91,10 @@ In this case, stub could implement `StubLifecycle`:
 ```java
 public class ServiceStub extends Service implements StubLifecycle {
     int calls;
-    
-    @Override 
+
+    @Override
     public void before() {
-        calls = 0; 
+        calls = 0;
     }
 
     @Override
@@ -114,14 +114,14 @@ When extension debug is active:
 
 ```java
 @TestGucieyApp(value = App.class, debug = true)
-public class Test 
+public class Test
 ```
 
 All recognized stub fields would be logged:
 
-```
+```text
 Applied stubs (@StubBean) on StubsSimpleTest:
 
-	StubsSimpleTest.stub2                    GUICE                  Service2 >> Service2Stub        
-	StubsSimpleTest.stub                     GUICE                  Service1 >> Service1Stub 
+	StubsSimpleTest.stub2                    GUICE                  Service2 >> Service2Stub
+	StubsSimpleTest.stub                     GUICE                  Service1 >> Service1Stub
 ```

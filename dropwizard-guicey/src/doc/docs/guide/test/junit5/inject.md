@@ -66,32 +66,32 @@ Any **declared** guice bean may be injected as test method parameter:
 
 ```java
 @Test
-public void testSomthing(DummyBean bean) 
+public void testSomthing(DummyBean bean)
 ```
 
-(where `DummyBean` is manually declared in some module or requested as a dependency 
+(where `DummyBean` is manually declared in some module or requested as a dependency
 (JIT-instantiated) during injector creation).
 
 For unknown beans injection (not declared and not used during startup) special annotation must be used:
 
 ```java
 @Test
-public void testSomthing(@Jit TestBean bean) 
+public void testSomthing(@Jit TestBean bean)
 ```
 
 !!! info
-    Additional annotation required because you may use other junit extensions providing their own
-    parameters, which guicey extension should not try to handle. That's why not annotated parameters
+    An additional annotation is required because you may use other JUnit extensions providing their own
+    parameters, which the Guicey extension should not try to handle. That's why unannotated parameters are
     verified with existing injector bindings.
-    
+
 Qualified and generified injections will also work:
 
 ```java
 @Test
 public void testSomthing(@Named("qual") SomeBean bean,
                          TestBean<String> generifiedBean,
-                         Provider<OtherBean> provider) 
-```    
+                         Provider<OtherBean> provider)
+```
 
 Also, there are special objects available as parameters:
 
@@ -99,10 +99,10 @@ Also, there are special objects available as parameters:
 * `ObjectMapper`
 * `ClientSupport` application web client helper
 * `DropwizardTestSupport` test support object used internally
-* `ExtensionContext` junit extension context
+* `ExtensionContext` JUnit extension context
 
 !!! note
-    Parameter injection will work on test methods as well as lifecyle methods (beforeAll, afterEach etc.) 
+    Parameter injection will work on test methods as well as lifecycle methods (beforeAll, afterEach, etc.)
 
 Example:
 
@@ -180,7 +180,7 @@ public class ParametersInjectionDwTest {
 
 !!! tip
     `DropwizardTestSupport` and `ClientSupport` objects are also available with a static calls (in the same thread):
-    
+
     ```java
     DropwizardTestSupport support = TestSupport.getContext();
     ClientSupport client = TestSupport.getContextClient();

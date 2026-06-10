@@ -1,15 +1,15 @@
-# Rest client
+# REST client
 
-Rest client creation:
+REST client creation:
 
 ```java
     public void test (ClientSupport client) {
-        // resource client 
-        ResourceClient<ResourceClass> rest = client.restClient(RestResource.class);    
+        // resource client
+        ResourceClient<ResourceClass> rest = client.restClient(RestResource.class);
     }
 ```
 
-or from root rest client:
+or from the root REST client:
 
 ```java
     ResourceClient<ResourceClass> rest = client.restClient().subClient(RestResource.class);
@@ -32,7 +32,7 @@ or from root rest client:
 ```java
     @Path("/entity")
     @POST
-    public String entity(ModelType model) 
+    public String entity(ModelType model)
 ```
 
 ```java
@@ -48,7 +48,7 @@ or from root rest client:
     TestClientResponse res = rest.method(RestResource::get).invoke()
     // throw exception if not success and AssertionError if not provided status
     TestClientResponse res = rest.method(RestResource::get).expectSuccess()
-    // throw AssertionError if success or not provided status        
+    // throw AssertionError if success or not provided status
     TestClientResponse res = rest.method(RestResource::get).expectFailure()
     // throw AssertionError if not redirect or not provided status
     TestClientResponse res = rest.method(RestResource::get).expectRedirect()
@@ -87,16 +87,16 @@ or from root rest client:
 
 ```java
 rest.defaultHeader("Token", "abc")
-    
+
 MyType res = rest.method(RestResource::get)
         .assertRequest(tracker -> assertThat(tracker.getHeaders().get("Token")).isEqualsTo("abc"))
         .as(MyType.class)
 ```
 
 
-## Sub resources
+## Sub-resources
 
-### Sub resource by instance
+### Sub-resource by instance
 
 ```java
     @Path("/sub")
@@ -111,7 +111,7 @@ MyType res = rest.method(RestResource::get)
         .isEqualTo("something")
 ```
 
-### Sub resource by class
+### Sub-resource by class
 
 ```java
     @Path("/sub")
@@ -137,7 +137,7 @@ MyType res = rest.method(RestResource::get)
                 .header(HttpHeader.CONTENT_DISPOSITION.toString(), "attachment; filename=some.txt")
                 .build();
     }
-```  
+```
 
 ```java
     // load in directory, preserving file name
@@ -179,7 +179,7 @@ MyType res = rest.method(RestResource::get)
         .assertHeader("Location", s -> s.endsWith("/get"));
 ```
 
-## Urlencoded forms
+## URL-encoded forms
 
 ### Simple values
 
@@ -205,7 +205,7 @@ MyType res = rest.method(RestResource::get)
         .isEqualTo("something");
 
     // manual entity building
-    assertThat(rest.method(r -> r.post(null, null), 
+    assertThat(rest.method(r -> r.post(null, null),
                             rest.buildForm(null)
                             .param("name", "1")
                             .param("date", "2")
@@ -235,7 +235,7 @@ MyType res = rest.method(RestResource::get)
                 .as(String.class)).isEqualTo("something");
 ```
 
-### Not mapped fields
+### Unmapped fields
 
 ```java
     @Path("/post2")
@@ -308,7 +308,7 @@ MyType res = rest.method(RestResource::get)
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public String multipartMulti(
-            @NotNull @FormDataParam("file") List<FormDataBodyPart> file) 
+            @NotNull @FormDataParam("file") List<FormDataBodyPart> file)
 ```
 
 ```java
@@ -332,7 +332,7 @@ MyType res = rest.method(RestResource::get)
     @Path("/multipartGeneric")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String multipartGeneric(@NotNull FormDataMultiPart multiPart) 
+    public String multipartGeneric(@NotNull FormDataMultiPart multiPart)
 ```
 
 ```java

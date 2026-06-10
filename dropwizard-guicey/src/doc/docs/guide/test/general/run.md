@@ -1,11 +1,11 @@
 # Testing application
 
-Application could be started in 2 ways:
+An application could be started in 2 ways:
 
-1. Core - create only guice injector (without starting web services) - ideal for business logic testing (pretty fast)
-2. Web - full application start to test web endpoints (and complete flows)
+1. Core - create only Guice injector (without starting web services) - ideal for business logic testing (pretty fast)
+2. Web - full application startup to test web endpoints (and complete flows)
 
-The second case is handled by [DropwizardTestSupport](https://www.dropwizard.io/en/release-4.0.x/manual/testing.html#non-junit)
+The second case is handled by [DropwizardTestSupport](https://www.dropwizard.io/en/release-5.0.x/manual/testing.html#non-junit)
 and the first one by `GuiceyTestSupport` object (extending `DropwizardTestSupport`).
 
 There is a generic builder to simplify work with these objects (provides all possible configuration options):
@@ -37,13 +37,13 @@ Object serviceValue = TestSupport.build(App.class)
 ```
 
 !!! note
-    Builder methods are almost equal to [junit 5 extension builder](../junit5/run.md#alternative-declaration)
+    Builder methods are almost equal to the [JUnit 5 extension builder](../junit5/run.md#alternative-declaration).
 
 !!! important
     All run methods declared as `throws Exception`. This was done to bypass original
     exceptions instead of wrapping them inside runtime exceptions.
 
-    This should not be a problem: just add `throws Exception` into test method signature 
+    This should not be a problem: just add `throws Exception` into test method signature
 
 ## Configuration
 
@@ -53,7 +53,7 @@ Configuration could be applied in a different ways:
 // with override values only
 TestSupport.build(App.class)
         .configOverride("foo: 12")
-    
+
 // file with overrides
 TestSupport.build(App.class)
         .config("src/test/resources/path/to/config.yml")
@@ -62,23 +62,23 @@ TestSupport.build(App.class)
 // file with config modifier
 TestSupport.build(App.class)
         .config("src/test/resources/path/to/config.yml")
-        .configModifiers(config -> config.setFoo(12))    
-    
-// direct config object 
-MyConfig config = new MyConfig();         
+        .configModifiers(config -> config.setFoo(12))
+
+// direct config object
+MyConfig config = new MyConfig();
 TestSupport.build(App.class)
         .config(config)
 ```
 
 !!! note
-    Config override (`.configOverride()`) mechanism is provided by dropwizard: values are stored
-    as system properties and applied in time of configuration parsing. It might not work for some
+    Config override (`.configOverride()`) mechanism is provided by Dropwizard: values are stored
+    as system properties and applied at configuration parsing time. It might not work for some
     properties (like collections) and it can't be used with manual configuration (last example).
 
-    Config modifier (`.configModifiers()`) is a guicey concept: it could be used with either 
+    Config modifier (`.configModifiers()`) is a Guicey concept: it could be used with either
     configuration file or manual configuration object. It was added to simplify config modifications
     and overcome limitations of config override. The only downside: when configuration is parsed
-    from file, modifier called after logging configuration, so to modify logging only config overrides
+    from file, the modifier is called after logging configuration, so to modify logging only config overrides
     could be used.
 
 
@@ -109,7 +109,7 @@ TestSupport.build(App.class)
         .propertyPrefix("something")
 ```
 
-Junit 5 extensions use test class (and sometimes method) name to generate unique prefixes.
+JUnit 5 extensions use the test class (and sometimes method) name to generate unique prefixes.
 
 ## Lifecycle listeners
 
@@ -140,11 +140,11 @@ For simple cases, there are many builder shortcuts in `TestSupport` class.
 Support object construction:
 
 ```java
-DropTestSupport support = TestSupport.webApp(App.class, 
+DropTestSupport support = TestSupport.webApp(App.class,
         "path/to/config.yml", "prop: 1", "prop2: 2");
 
 GuiceyTestSupport support = TestSupport.coreApp(App.class,
-        "path/to/config.yml", "prop: 1", "prop2: 2"); 
+        "path/to/config.yml", "prop: 1", "prop2: 2");
 ```
 
 Run:
@@ -182,14 +182,14 @@ All these methods are builder shortcuts (suitable for simple cases).
 
 ## Asserting execution
 
-To assert configuration or any guicey bean it would be enough to use run without callback:
+To assert configuration or any Guicey bean, it is enough to use run without a callback:
 
 ```java
 RunResult<CfgType> result = TestSupport.build(App.class).runCore();
 
 // direct configuratio instance
 Assertions.assertEquals(12, result.getConfiguration().getProp1());
-// any guice bean 
+// any guice bean
 Assertions.assertEquals(12, result.getBean(Configuration.class).getProp1());
 Assertions.assertNotNull(result.getEnvironment());
 Assertions.assertNotNull(result.getApplication());
@@ -244,7 +244,7 @@ There are also shortcut methods:
 
 ```java
 DropwizardTestSupport supportCore = TestSupport.coreApp(App.class,
-        "path/to/config.yml", 
+        "path/to/config.yml",
         "prop: 1", "prop2: 2");
 
 DropwizardTestSupport supportWeb = TestSupport.webApp(App.class,
@@ -273,11 +273,11 @@ TestSupport.run(support, injector -> {
 Other helper methods for support object (executed while the support object is active):
 
 * `TestSupport.getInjector(support)` - obtain application injector
-* `TestSupport.getBean(support, Key/Class)` - get guice bean
+* `TestSupport.getBean(support, Key/Class)` - get Guice bean
 * `TestSupport.injectBeans(support, target)` - inject annotated object fields
 * `TestSupport.webClient(support)` - construct `ClientSupport` object
 
-Support object provides references for dropwizard objects:
+Support object provides references for Dropwizard objects:
 
 ```java
 support.getEnvironment();
@@ -285,15 +285,15 @@ support.getConfiguration();
 support.getApplication();
 ```
 
-Complete example using junit:
+Complete example using JUnit:
 
 ```java
 public class RawTest {
-    
+
     static DropwizardTestSupport support;
-    
+
     @Inject MyService service;
-    
+
     @BeforeAll
     public static void setup() {
         support = TestSupport.coreApp(App.class);
@@ -301,20 +301,20 @@ public class RawTest {
         // start app
         support.before();
     }
-    
+
     @BeforeEach
     public void before() {
         // inject services in test
         TestSupport.injectBeans(support, this);
     }
-    
+
     @AfterAll
     public static void cleanup() {
         if (support != null) {
             support.after();
         }
     }
-    
+
     @Test
     public void test() {
         Assertions.assertEquals("10", service.computeValue());

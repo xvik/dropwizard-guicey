@@ -1,27 +1,27 @@
 # 3rd party extensions integration
 
 It is extremely simple in JUnit 5 to [write extensions](https://junit.org/junit5/docs/current/user-guide/#extensions).
-If you do your own extension, you can easily integrate with guicey or dropwizard extensions.
+If you write your own extension, you can easily integrate with Guicey or Dropwizard extensions.
 
 !!! tip
-    In many cases, it would be easier to write a custom guicey [setup object](setup-object.md) 
-    which provides almost the same abilities as junit extensions plus guicey awareness.
-    All field-based extensions in guicey are implemented with setup objects.
+    In many cases, it would be easier to write a custom Guicey [setup object](setup-object.md)
+    which provides almost the same abilities as JUnit extensions plus Guicey awareness.
+    All field-based extensions in Guicey are implemented with setup objects.
 
 ## Guicey side
 
-If you already have a junit extension that stores something in `ExtensionContext` then you can:
+If you already have a JUnit extension that stores something in `ExtensionContext`, then you can:
 
-1. Bind value into [configuration directly](config.md#configuration-from-3rd-party-extensions): 
-    `.configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "ext-key", "config.key")` 
-2. Bind junit `ExtensionContext` as test method parameter (and access storage manually):
+1. Bind value into [configuration directly](config.md#configuration-from-3rd-party-extensions):
+    `.configOverrideByExtension(ExtensionContext.Namespace.GLOBAL, "ext-key", "config.key")`
+2. Bind JUnit `ExtensionContext` as a test method parameter (and access storage manually):
 ```java
 @BeforeAll
 public static void beforeAll(ExtensionContext junitContext) {
     ...
 }
 ```
-3. Inside [setup object](setup-object.md) access junit context: 
+3. Inside a [setup object](setup-object.md), access the JUnit context:
 ```java
 public class MyExt implements GuiceyEnvironmentSetup {
     @Override
@@ -43,7 +43,7 @@ For example:
 
 ```java
 public class MyExtension implements BeforeEachCallback {
-    
+
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
         Injector injector = GuiceyExtensionsSupport.lookupInjector(context).get();
@@ -52,14 +52,14 @@ public class MyExtension implements BeforeEachCallback {
 }
 ```
 
-(guicey holds test state in junit test-specific storages and that's why test context is required)
+(Guicey holds test state in JUnit test-specific storages, and that's why a test context is required)
 
 !!! warning
-    There is no way in junit to order extensions, so you will have to make sure that your extension
-    will be declared after guicey extension (`@TestGuiceyApp` or `@TestDropwizardApp`).
+    There is no way in JUnit to order extensions, so you will have to make sure that your extension
+    will be declared after the Guicey extension (`@TestGuiceyApp` or `@TestDropwizardApp`).
 
-There is intentionally no direct api for applying configuration overrides from
-3rd party extensions because it would be not obvious. Instead, you should always
+There is intentionally no direct API for applying configuration overrides from
+3rd party extensions because it would not be obvious. Instead, you should always
 declare overridden value in extension declaration. Either use instance getter:
 
 ```java
@@ -72,7 +72,7 @@ static TestGuiceyAppExtension dw = TestGuiceyAppExtension.forApp(App.class)
         .create()
 ```
 
-Or store value [inside junit store](#configuration-from-3rd-party-extensions) and then reference it:
+Or store the value [inside the JUnit store](config.md#configuration-from-3rd-party-extensions) and then reference it:
 
 ```java
 @RegisterExtension

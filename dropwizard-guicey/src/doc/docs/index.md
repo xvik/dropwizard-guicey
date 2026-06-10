@@ -1,10 +1,10 @@
 # Welcome to dropwizard-guicey
 
 !!! summary ""
-    [Guice](https://github.com/google/guice) `{{ gradle.guice }}` integration for [dropwizard](http://dropwizard.io) `{{ gradle.dropwizard }}`.        
-    Compiled for `java 11`, compatible with `java 11 - 21`. 
+    [Guice](https://github.com/google/guice) `{{ gradle.guice }}` integration for [dropwizard](https://www.dropwizard.io) `{{ gradle.dropwizard }}`.
+    Compiled for `java 11`, compatible with `java 11 - 21`.
 
-**[Release Notes](about/release-notes.md)** - [History](about/history.md) - [Javadoc](https://javadoc.io/doc/ru.vyarus/dropwizard-guicey/) - [Support](about/support.md) - [License](about/license.md)       
+**[Release Notes](about/release-notes.md)** - [History](about/history.md) - [Javadoc](https://javadoc.io/doc/ru.vyarus/dropwizard-guicey/) - [Support](about/support.md) - [License](about/license.md)
 
 !!! note ""
     For migration see [migration guide](about/migration.md)
@@ -12,12 +12,12 @@
 ## Main features
 
 * Auto configuration from [classpath scan](guide/scan.md) and [guice bindings](guide/guice/module-analysis.md#extensions-recognition).  
-* [Yaml config values bindings](guide/yaml-values.md) by path or unique sub objects. 
+* [Yaml config values bindings](guide/yaml-values.md) by path or unique sub objects.
 * Advanced [Web support](guide/web.md)
-* Dropwizard style [console reporting](guide/installers.md#reporting): detected (and installed) extensions are printed to console to remove uncertainty 
-* [Test support](guide/test/overview.md): custom junit and [spock](http://spockframework.org) extensions
+* Dropwizard style [console reporting](guide/installers.md#reporting): detected (and installed) extensions are printed to console to remove uncertainty
+* [Test support](guide/test/overview.md): custom junit and [spock](https://spockframework.org) extensions
     - Advanced test abilities to [disable](guide/disables.md) or [override](guide/guice/override.md) application logic
-* Developer friendly: 
+* Developer friendly:
     - core integrations [may be replaced](guide/disables.md#disable-installers) (to better fit needs)
     - rich api for developing [custom integrations](guide/installers.md#writing-custom-installer), and hooking into [lifecycle](guide/events.md)) 
     - out of the box support for plug-n-play plugins ([auto discoverable](guide/bundles.md#service-loader-lookup))

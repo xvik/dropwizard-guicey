@@ -1,23 +1,23 @@
 # JDBI3 integration
 
-Integrates [JDBI3](http://jdbi.org/) with guice. Based on [dropwizard-jdbi3](https://www.dropwizard.io/en/release-4.0.x/manual/jdbi3.html) integration.
- 
+Integrates [JDBI3](http://jdbi.org/) with Guice. Based on [dropwizard-jdbi3](https://www.dropwizard.io/en/release-5.0.x/manual/jdbi3.html) integration.
+
 Features:
 
 * JDBI instance available for injection
-* Introduce unit of work concept, which is managed by annotations and guice aop (very like spring's @Transactional)
+* Introduces a unit-of-work concept, which is managed by annotations and Guice AOP (much like Spring's `@Transactional`)
 * Repositories (JDBI proxies for interfaces):
     - installed automatically (when classpath scan enabled)
-    - are normal guice beans, supporting aop and participating in global (thread bound) transaction.
+    - are normal Guice beans, supporting AOP and participating in a global (thread-bound) transaction.
     - no need to compose repositories anymore (e.g. with @CreateSqlObject) to gain single transaction.
-    - can reference guice beans (with annotated getters)
-* Automatic installation for custom `RowMapper` 
+    - can reference Guice beans (with annotated getters)
+* Automatic installation for custom `RowMapper`s
 
 Added installers:
 
-* [RepositoryInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/repository/RepositoryInstaller.java) - sql proxies
-* [MapperInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/MapperInstaller.java) - row mappers  
- 
+* [RepositoryInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/repository/RepositoryInstaller.java) - SQL proxies
+* [MapperInstaller](https://github.com/xvik/dropwizard-guicey/blob/master/guicey-jdbi3/src/main/java/ru/vyarus/guicey/jdbi3/installer/MapperInstaller.java) - row mappers
+
 ## Setup
 
 Maven:
@@ -36,28 +36,28 @@ Gradle:
 implementation 'ru.vyarus.guicey:guicey-jdbi3:{{ gradle.version }}'
 ```
 
-Omit version if guicey BOM used
+Omit the version if the Guicey BOM is used.
 
 ## Usage
 
 Register bundle:
 
 ```java
-GuiceBundle.builder()        
+GuiceBundle.builder()
         .bundles(JdbiBundle.<ConfType>forDatabase((conf, env) -> conf.getDatabase()))
         ...
 ```
 
-Here default JDBI instance will be created from database configuration (much like it's described in 
-[dropwizard documentation](https://www.dropwizard.io/en/release-4.0.x/manual/jdbi3.html)).
+Here, the default JDBI instance will be created from the database configuration (much like it's described in
+[Dropwizard documentation](https://www.dropwizard.io/en/release-5.0.x/manual/jdbi3.html)).
 
-Or build JDBI instance yourself:
+Or build the JDBI instance yourself:
 
 ```java
 JdbiBundle.forDbi((conf, env) -> locateDbi())
 ```
 
-Jdbi3 introduce plugins concept. Dropwizard will automatically register `SqlObjectPlugin`, `GuavaPlugin`, `JodaTimePlugin`.
+Jdbi3 introduces the plugin concept. Dropwizard will automatically register `SqlObjectPlugin`, `GuavaPlugin`, `JodaTimePlugin`.
 If you need to install custom plugin:
 
 ```java
@@ -65,7 +65,7 @@ JdbiBundle.forDbi((conf, env) -> locateDbi())
     .withPlugins(new H2DatabasePlugin())
 ```
 
-Also, If custom registration must be performed on jdbi instance:
+Also, if custom registration must be performed on the JDBI instance:
 
 ```java
 JdbiBundle.forDbi((conf, env) -> locateDbi())
@@ -76,13 +76,13 @@ Such configuration block will be called just after jdbi instance creation (but b
 
 ### Unit of work
 
-Unit of work concept states for: every database related operation must be performed inside unit of work.
+The unit-of-work concept states that every database-related operation must be performed inside a unit of work.
 
-In JDBI such approach was implicit: you were always tied to initial handle. This lead to cumbersome usage of
+In JDBI such approach was implicit: you were always tied to initial handle. This led to cumbersome usage of
 sql object proxies: if you create it on-demand it would always create new handle; if you want to combine
 multiple objects in one transaction, you have to always create them manually for each transaction.
 
-Integration removes these restrictions: dao (repository) objects are normal guice beans and transaction
+Integration removes these restrictions: DAO (repository) objects are normal Guice beans, and transaction
 scope is controlled by `@InTransaction` annotation (note that such name was intentional to avoid confusion with
 JDBI's own Transaction annotation and more common Transactional annotations).
 
@@ -103,14 +103,14 @@ public Result doSomething() {
 }
 ```
 
-Transaction opened before doSomething() method and closed after it. 
-Dao call is also performed inside transaction.
+The transaction is opened before the `doSomething()` method and closed after it.
+The DAO call is also performed inside the transaction.
 If exception appears during execution, it's propagated and transaction rolled back.
 
-Nested annotations are allowed (they simply ignored).
+Nested annotations are allowed (they are simply ignored).
 
-Note that unit of work is not the same as transaction scope (transaction scope could be less or equal to unit of work). 
-But, for simplicity, you may think of it as the same things, if you always use `@InTransaction` annotation. 
+Note that unit of work is not the same as transaction scope (transaction scope could be less or equal to unit of work).
+But, for simplicity, you may think of it as the same things, if you always use `@InTransaction` annotation.
 
 ##### Transaction configuration
 
@@ -137,13 +137,13 @@ public void action() {
 
 @InTransaction(TransactionIsolationLevel.READ_UNCOMMITTED)
 public void nestedAction() {
-...    
+...
 }
-``` 
+```
 
-When `action()` method called new transaction is created with default level
+When the `action()` method is called, a new transaction is created with the default level
 (usually READ_COMMITTED). When `nestedAction()` is called exception will be thrown
-because it's transaction level requirement (READ_UNCOMMITTED) contradict with current transaction.
+because its transaction-level requirement (READ_UNCOMMITTED) contradicts the current transaction.
 
 ##### Custom transactional annotation
 
@@ -163,16 +163,16 @@ JdbiBundle.forDatabase((conf, env) -> conf.getDatabase())
 ```
 
 If you need to support transaction configuration (level and read only settings) with your annotation then:
- 
+
 1. Add required properties into annotation itself (see `@InTransaction` as example).
 2. Create implementation of `TxConfigFactory` (see `InTransactionTxConfigFactory` as example)
-3. Register factory inside your annotation with `@TxConfigSupport(MyCustomAnnotationTxConfigFactory.class)` 
+3. Register factory inside your annotation with `@TxConfigSupport(MyCustomAnnotationTxConfigFactory.class)`
 
-Your factory will be instantiated as guice bean so annotate it as Singleton, if possible
+Your factory will be instantiated as a Guice bean, so annotate it as `@Singleton`, if possible
 to avoid redundant instances creation.
 
-Configuration is resolved just once for each method, so yur factory will be called just once 
-for each annotated (with your custom annotation) method. 
+Configuration is resolved only once for each method, so your factory will be called just once
+for each annotated (with your custom annotation) method.
 
 #### Context Handle
 
@@ -192,7 +192,7 @@ You may define transaction (with unit of work) without annotation using:
 template.inTrasansaction((handle) -> doSomething())
 ```
 
-Note that inside such manual scope you may also call any repository bean, as it's absolutely the same definition as 
+Note that inside such manual scope you may also call any repository bean, as it's absolutely the same definition as
 with annotation.
 
 You can also specify transaction config (if required):
@@ -201,14 +201,14 @@ You can also specify transaction config (if required):
 @Inject TransactionTempate template;
 ...
 template.inTrasansaction(
-        new TxConfig().level(TransactionIsolationLevel.READ_UNCOMMITTED), 
+        new TxConfig().level(TransactionIsolationLevel.READ_UNCOMMITTED),
         (handle) -> doSomething())
 ```
 
 
 ### Repository
 
-Declare repository (interface or abstract class) as usual, using DBI annotations. 
+Declare repository (interface or abstract class) as usual, using DBI annotations.
 It only must be annotated with `@JdbiRepository` so installer
 could recognize it and register in guice context.
 
@@ -218,27 +218,27 @@ could recognize it and register in guice context.
 ```java
 @JdbiRepository
 @InTransaction
-public interface MyRepository {     
-    
+public interface MyRepository {
+
     @SqlQuery("select name from something where id = :id")
     String findNameById(@Bind("id") int id);
 }
 ```
 
-Note the use of `@InTransaction`: it was used to be able to call repository methods without extra annotations
-(the lowest transaction scope its repository itself). It will make beans "feel the same" as usual JDBI on demand
+Note the use of `@InTransaction`: it is used to call repository methods without extra annotations
+(the lowest transaction scope is the repository itself). It will make beans "feel the same" as usual JDBI on demand
 sql object proxies.
 
-`@InTransaction` annotation is handled using guice aop. You can use any other guice aop related features.
+`@InTransaction` annotation is handled using Guice AOP. You can use any other Guice AOP-related features.
 
-!!! warning 
+!!! warning
     *Don't use JDBI `@Transaction` and `@CreateSqlObject` annotations anymore*: probably they will even work, but they are not
     needed now and may confuse.
 
-All installed repositories are reported into console:
+All installed repositories are reported in the console:
 
-```
-INFO  [2016-12-05 19:42:27,374] ru.vyarus.guicey.jdbi3.installer.repository.RepositoryInstaller: repositories = 
+```text
+INFO  [2016-12-05 19:42:27,374] ru.vyarus.guicey.jdbi3.installer.repository.RepositoryInstaller: repositories =
 
     (ru.vyarus.guicey.jdbi3.support.repository.SampleRepository)
 ```
@@ -262,11 +262,11 @@ In all other cases, repository declaration would cause an error (to identify inc
 
 ### Laziness
 
-By default, JDBI proxies for declared repositories created only on first repository method call.
+By default, JDBI proxies for declared repositories are created only on the first repository method call.
 Lazy behaviour is important to take into account all registered JDBI extensions. Laziness also
-slightly speeds up application startup. 
+slightly speeds up application startup.
 
-If required, you can enable eager initialization during bundle construction:   
+If required, you can enable eager initialization during bundle construction:
 
 ```java
 JdbiBundle.forDatabase((conf, env) -> conf.getDatabase())
@@ -277,19 +277,19 @@ In the eager mode all proxies would be constructed after application initializat
 
 ### Guice beans access
 
-You can access guice beans by annotating getter with `@Inject` (jakarta or guice):
+You can access Guice beans by annotating a getter with `@Inject` (Jakarta or Guice):
 
 ```java
 @JdbiRepository
 @InTransaction
-public interface MyRepository {     
+public interface MyRepository {
 
     @Inject
     MyOtherRepository getOtherRepo();
-    
+
     @SqlQuery("select name from something where id = :id")
     String findNameById(@Bind("id") int id);
-    
+
     default String doSomething(int id) {
         String name = findNameById(id);
         return getOtherRepo().doSOmethingWithName(name);
@@ -297,13 +297,13 @@ public interface MyRepository {
 }
 ```
 
-Here call to `getOtherRepo()` will return `MyOtherRepository` guice bean, which is actually
-another proxy.  
+Here, a call to `getOtherRepo()` will return the `MyOtherRepository` Guice bean, which is actually
+another proxy.
 
 ### Row mapper
 
-If you have custom implementations of `RowMapper`, it may be registered automatically. 
-You will be able to use injections there because mappers become usual guice beans (singletons).
+If you have custom implementations of `RowMapper`, it may be registered automatically.
+You will be able to use injections there because mappers become usual Guice beans (singletons).
 When classpath scan is enabled, such classes will be searched and installed automatically.
 
 ```java
@@ -321,24 +321,24 @@ And now Custom type could be used for queries:
 ```java
 @JdbiRepository
 @InTransaction
-public interface CustomRepository {     
-    
+public interface CustomRepository {
+
     @SqlQuery("select * from custom where id = :id")
     Custom findNameById(@Bind("id") int id);
 }
 ```
 
-All installed mappers are reported to console:
+All installed mappers are reported to the console:
 
-```
-INFO  [2016-12-05 20:02:25,399] ru.vyarus.guicey.jdbi3.installer.MapperInstaller: jdbi mappers = 
+```text
+INFO  [2016-12-05 20:02:25,399] ru.vyarus.guicey.jdbi3.installer.MapperInstaller: jdbi mappers =
 
     Sample               (ru.vyarus.guicey.jdbi3.support.mapper.SampleMapper)
 ```
 
 ## Manual unit of work definition
 
-If, for some reason, you don't need transaction at some place, you can declare raw unit of work and use 
+If, for some reason, you don't need a transaction in some place, you can declare a raw unit of work and use
 assigned handle directly:
 
 ```java
@@ -353,4 +353,4 @@ try {
 }
 ```
 
-Repositories could also be called inside such manual unit (as unit of work is correctly started).        
+Repositories could also be called inside such manual unit (as unit of work is correctly started).

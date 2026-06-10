@@ -2,7 +2,7 @@
 
 !!! note ""
     Getting started guide briefly shows the most commonly used features.
-    Advanced descriptions of guicey concepts may be found in [the concepts section](concepts.md).    
+    Advanced descriptions of guicey concepts may be found in [the concepts section](concepts.md).
 
 ## Installation
 
@@ -27,7 +27,7 @@ implementation 'ru.vyarus:dropwizard-guicey:{{ gradle.version }}'
 ### BOM
 
 But, it would be simpler to use it with BOM because of [simplified versions management for guice, dropwizard and guicey
-modules](extras/bom.md): 
+modules](extras/bom.md):
 
 Gradle:
 
@@ -39,19 +39,19 @@ dependencies {
 
     // no need to specify versions
     implementation 'ru.vyarus:dropwizard-guicey'
-    
+
     // example modules without versions
     implementation 'io.dropwizard:dropwizard-auth'
     implementation 'com.google.inject:guice-assistedinject'
 
     testImplementation 'io.dropwizard:dropwizard-testing'
 }
-```    
+```
 
 Maven:
 
-```xml      
-<dependencyManagement>  
+```xml
+<dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>ru.vyarus</groupId>
@@ -59,15 +59,15 @@ Maven:
             <version>{{ gradle.version }}</version>
             <type>pom</type>
             <scope>import</scope>
-        </dependency> 
-        <!-- uncomment to override dropwizard and its dependencies versions  
+        </dependency>
+        <!-- uncomment to override dropwizard and its dependencies versions
         <dependency>
             <groupId>io.dropwizard/groupId>
             <artifactId>dropwizard-dependencies</artifactId>
             <version>{{ gradle.dropwizard }}</version>
             <type>pom</type>
             <scope>import</scope>
-        </dependency> -->                 
+        </dependency> -->
     </dependencies>
 </dependencyManagement>
 
@@ -111,16 +111,16 @@ public class SampleApplication extends Application<Configuration> {
 ```
 
 !!! tip
-    Bundle builder contains shortcuts for all available features, so required function 
+    Bundle builder contains shortcuts for all available features, so required function
     may be found only by looking at available methods (and reading the javadoc).
 
-[Auto configuration](guide/scan.md) (activated with `enableAutoConfig`) means that guicey will search for extensions in 
-the application package and subpackages. Extension classes are detected by "feature markers": for example, 
+[Auto configuration](guide/scan.md) (activated with `enableAutoConfig`) means that guicey will search for extensions in
+the application package and subpackages. Extension classes are detected by "feature markers": for example,
 resources has `@Path` annotation, tasks extends `Task` etc.
 
 !!! tip
-    By default, auto configuration enabled for application package, but 
-    you can declare manually any packages for classpath scan: 
+    By default, auto configuration enabled for application package, but
+    you can declare manually any packages for classpath scan:
     ```java
      .enableAutoConfig("com.mycompany.foo", "com.mycompany.bar")
     ```
@@ -131,7 +131,7 @@ resources has `@Path` annotation, tasks extends `Task` etc.
     .autoConfigFilter(ClassFilters.annotated(Component.class, Service.class))
     ```
     This way, only classes annotated with `@Component` or `@Service` would be recognized.
-    
+
     But the better way to use filters is to add additional skip annoatations:
     ```java
     .autoConfigFilter(ClassFilters.ignoreAnnotated(Skip.class))
@@ -156,15 +156,15 @@ To simplify usage, you can apply injections directly into application class:
 
 ```java
 public class App extends Application<Configuration> {
-    
-    @Inject MyService service; 
-    
+
+    @Inject MyService service;
+
     ...
-    
+
     @Override
     public void run(Configuration configuration, Environment environment) throws Exception {
         service.doSomething();
-    } 
+    }
 }
 ```
 
@@ -226,15 +226,15 @@ public class SampleResource {
 The example resource now obtains the caller's remote ip address and returns it in the response body.
 
 !!! warning
-    Providers must be used [instead of `@Context` field injections](installers/resource.md#context-usage) 
+    Providers must be used [instead of `@Context` field injections](installers/resource.md#context-usage)
     But `@Context` can be used for [method parameters](installers/resource.md#context-usage)
 
 !!! note
-    By default, resources are **forced to be singletons** (when no scope annotation defined). 
+    By default, resources are **forced to be singletons** (when no scope annotation defined).
 
 ### Adding a Managed Object
 
-[Dropwizard managed objects](https://www.dropwizard.io/en/release-4.0.x/manual/core.html#managed-objects) are extremely useful for managing resources.
+[Dropwizard managed objects](https://www.dropwizard.io/en/release-5.0.x/manual/core.html#managed-objects) are extremely useful for managing resources.
 
 Create a simple managed implementation:
 
@@ -267,9 +267,9 @@ INFO  [2017-02-05 11:59:30,750] ru.vyarus.dropwizard.guice.module.installer.feat
 ### Adding A Filter
 
 !!! note
-    Guice [ServletModule](guide/guice/servletmodule.md) may be used for servlets and filters definitions, but most of 
-    the time it's more convenient to use simple servlet annotations ([@WebFilter](installers/filter.md), 
-    [@WebServlet](installers/servlet.md), [@WebListener](installers/listener.md)). 
+    Guice [ServletModule](guide/guice/servletmodule.md) may be used for servlets and filters definitions, but most of
+    the time it's more convenient to use simple servlet annotations ([@WebFilter](installers/filter.md),
+    [@WebServlet](installers/servlet.md), [@WebListener](installers/listener.md)).
     Moreover, guice servlet module is not able to register async [filters](installers/filter.md#async) and [servlets](installers/servlet.md#async).
 
 Add a sample filter around rest methods:
@@ -330,7 +330,7 @@ Multiple modules could be registered at once:
 
 !!! note
     The above registration occurs in dropwizard initialization phase, when neither `Configuration`
-    nor `Environment` objects are available. If you need either of them in a module, you may register a module in 
+    nor `Environment` objects are available. If you need either of them in a module, you may register a module in
     [guicey bundle's](guide/bundles.md#guicey-bundles) `run` method, use [marker interfaces](guide/guice/module-autowiring.md) or delayed bundle callback:
 
     ```java
@@ -343,7 +343,7 @@ Multiple modules could be registered at once:
             .modules(new SampleModule())
             .build());
     ```
-        
+
 ## Manual mode
 
 If you don't want to use classpath scanning for extension discovery, then you will have to manually specify all extensions.
@@ -365,13 +365,13 @@ The only difference is the absence of `.enableAutoConfig()` and the explicit dec
 !!! tip
     Explicit extension declaration could be used together with `enableAutoConfig` (classpath scan). For example,
     a classpath scan may only scan for extensions in your application's package and subpackages, while extensions outside of
-    those packages may be specified separately. This avoids large class path scans and improves the startup time of your 
+    those packages may be specified separately. This avoids large class path scans and improves the startup time of your
     application.
 
 !!! note
-    Only distinct extensions are registered. Duplicates are not registered. If some extension is registered manually and also found 
-    with auto config, then only one instance of that extension will be registered. If an extension is registered multiple times 
-    manually, the same rules apply and only one extension instance will be registered. 
+    Only distinct extensions are registered. Duplicates are not registered. If some extension is registered manually and also found
+    with auto config, then only one instance of that extension will be registered. If an extension is registered multiple times
+    manually, the same rules apply and only one extension instance will be registered.
 
 ## Configuration from bindings
 
@@ -380,7 +380,7 @@ Guicey is also able to recognize extensions from declared guice bindings, so man
 ```java
 bootstrap.addBundle(GuiceBundle.builder()
                 .modules(new SampleModule())
-                .build());                 
+                .build());
 
 
 public class SampleModule extends AbstractModule {
@@ -388,17 +388,17 @@ public class SampleModule extends AbstractModule {
     protected void configure() {
          bind(SampleResource.class).in(Singleton.class);
          bind(SampleBootstrap.class);
-         bind(CustomHeaderFilter.class);                        
-    }   
+         bind(CustomHeaderFilter.class);
+    }
 }
-```     
+```
 
 Guicey will recognize all three bindings and register extensions. The difference with classpath scanning
-or manual declaration is only that guicey will not declare default bindings for extensions 
+or manual declaration is only that guicey will not declare default bindings for extensions
 (by default, guicey creates untargeted bindings for all extensions: `bind(Extension.class)`).
 
 !!! tip
-    An extension may be found three ways: by classpath scan, explicit extension declaration on the GuiceBundle, and by 
+    An extension may be found three ways: by classpath scan, explicit extension declaration on the GuiceBundle, and by
     declaring a binding in a guice module. Even if all three were used, the extension would only be registered once.
 
 ## Recognized Extensions
@@ -409,40 +409,40 @@ Guicey can recognize and install:
 * Dropwizard [managed objects](installers/managed.md)
 * Dropwizard [health checks](installers/healthcheck.md)
 * REST [resources](installers/resource.md)
-* REST [extensions (exception mappers, message body readers etc.)](installers/jersey-ext.md) 
+* REST [extensions (exception mappers, message body readers etc.)](installers/jersey-ext.md)
 * Jersey [features](installers/jersey-feature.md)
 * [Filters](installers/filter.md), [servlets](installers/servlet.md), [listeners](installers/listener.md)
 * [Eager singletons](installers/eager.md), without direct guice registration
 
 It can even simulate simple [plugins](installers/plugin.md).
 
-Other extension types may be recognized with additional installed modules. For example, [jdbi](extras/jdbi3.md) adds 
-support for jdbi mappers and repositories. You may add others yourself. Any existing extension integration may be 
+Other extension types may be recognized with additional installed modules. For example, [jdbi](extras/jdbi3.md) adds
+support for jdbi mappers and repositories. You may add others yourself. Any existing extension integration may be
 replaced, if it doesn't suit your needs.
 
 !!! tip
     If you are unsure or don't understand what guicey is using for its configuration, enable diagnostic logs:
     ```java
-    GuiceBundle.builder()        
+    GuiceBundle.builder()
         .printDiagnosticInfo()
         ...
     ```
-    
+
     To see what extensions are supported you can always use:
     ```java
-    GuiceBundle.builder()        
-        .printAvailableInstallers()    
+    GuiceBundle.builder()
+        .printAvailableInstallers()
     ```
-    
+
     And to see available guice bindings:
     ```java
-    GuiceBundle.builder()        
-        .printGuiceBindings()    
+    GuiceBundle.builder()
+        .printGuiceBindings()
     ```
 
-## Guicey Bundles 
+## Guicey Bundles
 
-Guicey Bundles are intended to extend the functionality of Dropwizard Bundles, not limit them. To get access for these extended 
+Guicey Bundles are intended to extend the functionality of Dropwizard Bundles, not limit them. To get access for these extended
 abilities you'll need to use [GuiceyBundle](guide/bundles.md) instead of a dropwizard `ConfiguredBundle`.
 
 The Guicey Bundle **lifecycle and methods are the same** as Dropwizard Bundles. Guicey Bundles simply provide more functionality.
@@ -451,19 +451,19 @@ The Guicey Bundle **lifecycle and methods are the same** as Dropwizard Bundles. 
 !!! attention
     This does not mean that dropwizard bundles can't be used! An opposite, Guicey provides
     direct shortcuts for them in its bundles:
-    
+
     ```java
     public class MyBundle implements GuiceyBundle {
          default void initialize(GuiceyBootstrap bootstrap) throws Exception {
              bootstrap.dropwizardBundles(new MyDropeizardBundle());
          }
     }
-    ```     
-    
+    ```
+
     Additional features will be available for Dropwizard Bundles registered through guicey api and
-    they also will appear in reports.                          
+    they also will appear in reports.
 
 
-You can always use vanilla Dropwizard Bundles if you don't need to register guice modules 
-or use other guicey features. Usually Dropwizard Bundles used when the required integration has 
+You can always use vanilla Dropwizard Bundles if you don't need to register guice modules
+or use other guicey features. Usually Dropwizard Bundles used when the required integration has
 already implemented as a 3rd party Dropwizard Bundle.

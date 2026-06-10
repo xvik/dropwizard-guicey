@@ -3,12 +3,12 @@
 Example of [guicey-jdbi3](../extras/jdbi3.md) extension usage.
 
 !!! abstract ""
-    Example [source code](https://github.com/xvik/dropwizard-guicey/examples/tree/master/ext-jdbi3)
+    Example [source code](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-jdbi3)
 
 
 The [JDBI3 extension](../extras/jdbi3.md) allows:
 
-* using jdbi proxies as guice beans
+* using JDBI proxies as Guice beans
 * using injection inside proxies
 * using AOP on proxies
 * using annotations for transaction definition
@@ -16,7 +16,7 @@ The [JDBI3 extension](../extras/jdbi3.md) allows:
 
 ## Configuration
 
-Additional dependencies required:
+Additional dependencies are required:
 
 ```groovy
 implementation 'ru.vyarus.guicey:guicey-jdbi3:{{ gradle.version }}'
@@ -26,7 +26,7 @@ implementation 'com.h2database:h2:2.2.224'
 !!! note
     Both versions are managed by [BOM](../extras/bom.md)
 
-[dropwizard-jdbi3](https://www.dropwizard.io/en/release-4.0.x/manual/jdbi3.html) is used to configure 
+[dropwizard-jdbi3](https://www.dropwizard.io/en/release-5.0.x/manual/jdbi3.html) is used to configure
 and create dbi instance:
 
 ```java
@@ -64,12 +64,12 @@ database:
 ```
 
 !!! warning
-    Database scheme must be created manually. You can use 
-    [dropwizard-flyway](https://github.com/dropwizard/dropwizard-flyway) module to prepare database. 
-    See [example app source](https://github.com/xvik/dropwizard-guicey/examples/tree/master/ext-jdbi3) for details. 
- 
+    Database schema must be created manually. You can use
+    [dropwizard-flyway](https://github.com/dropwizard/dropwizard-flyway) module to prepare database.
+    See [example app source](https://github.com/xvik/dropwizard-guicey/tree/master/examples/ext-jdbi3) for details.
 
-JDBI instance created exactly as described in [dropwizard docs](https://www.dropwizard.io/en/release-4.0.x/manual/jdbi3.html) 
+
+The JDBI instance is created exactly as described in the [Dropwizard docs](https://www.dropwizard.io/en/release-5.0.x/manual/jdbi3.html)
 using provided db configuration:
 
 ```java
@@ -78,7 +78,7 @@ GuiceBundle.builder()
     .withPlugins(new H2DatabasePlugin()))
 ```
 
-!!! note 
+!!! note
     You can use [pre-build jdbi instance](../extras/jdbi3.md#usage) instead.
 
 ## Repository definition
@@ -91,7 +91,7 @@ GuiceBundle.builder()
 @JdbiRepository
 @InTransaction
 public interface UserRepository extends Crud<User> {
-    
+
     @Inject
     RandomNameGenerator getGenerator();
 
@@ -120,7 +120,7 @@ public interface UserRepository extends Crud<User> {
 }
 ```
 
-Where `Crud` base interface tries to unify repositories and provide hibernate-like optimistic locking behaviour 
+Where `Crud` base interface tries to unify repositories and provide hibernate-like optimistic locking behaviour
 (on each entity save version field is assigned/incremented and checked during update to prevent data loss):
 
 ```java
@@ -152,16 +152,16 @@ public interface Crud<T extends IdEntity> {
 
 !!! note ""
     You don't necessarily need to use `Crud` - it's an advanced usage example.
-    
-The repository is annotated with `@InTransaction` to allow direct usage; repository method calls are the smallest transaction scope. 
-The transaction scope can be enlarged by using annotations on calling guice beans or 
+
+The repository is annotated with `@InTransaction` to allow direct usage; repository method calls are the smallest transaction scope.
+The transaction scope can be enlarged by using annotations on calling Guice beans or
 [declaring transactions manually](../extras/jdbi3.md#manual-transaction-definition).
 In order to better understand how transactions work, read the [unit of work docs section](../extras/jdbi3.md#unit-of-work).
 
 !!! note
-    `@InTransaction` is handled with guice AOP, so you can use any other guice aop related features.
+    `@InTransaction` is handled with Guice AOP, so you can use any other Guice AOP-related features.
 
-!!! attention 
+!!! attention
     Constructor injection is impossible in repositories, but you can use getter injections:
     ```java
      @Inject
@@ -170,7 +170,7 @@ In order to better understand how transactions work, read the [unit of work docs
 
 ## Row mapper
 
-Row mapper is used to map query result set to entity: 
+Row mapper is used to map query result set to entity:
 
 ```java
 public class UserMapper implements RowMapper<User> {
@@ -188,11 +188,11 @@ public class UserMapper implements RowMapper<User> {
 
 Mappers are installed with the [mapper installer](../extras/jdbi3.md#row-mapper).
 If auto scan is enabled then all mappers will be detected automatically and registered in the jdbi instance.
-Mappers are instantiated as normal guice beans without restrictions which means you can use injection and aop 
+Mappers are instantiated as normal Guice beans without restrictions, which means you can use injection and AOP
 (it's only not shown in example mapper).
 
 !!! note
-    The mapper installer mostly automates (and unifies) registration. If your mapper does not need to be guice bean
+    The mapper installer mostly automates (and unifies) registration. If your mapper does not need to be a Guice bean
     and you don't want to use auto configuration then you can register it manually in jdbi instance, making it available for injection.
 
 Also, see complementing binding annotation, used to bind object to query parameters:
@@ -213,7 +213,7 @@ public @interface UserBind {
                 Parameter param,
                 int index,
                 Type paramType) {
-            
+
             return (stmt, obj) -> {
                 User arg = (User) obj;
                 ((SqlStatement) stmt)
@@ -228,11 +228,11 @@ public @interface UserBind {
 
 See `@UserBind` usage above in repository definition.
 
-There is no custom installer for annotation because it's detected automatically by JDBI.  
+There is no custom installer for annotation because it's detected automatically by JDBI.
 
 ## Usage
 
-Repositories are used as normal guice beans:
+Repositories are used as normal Guice beans:
 
 ```java
 @Path("/users")
@@ -249,7 +249,7 @@ public class UserResource {
         user.setName(name);
         return repository.save(user);
     }
-    
+
     @GET
     @Path("/")
     public List<User> findAll() {
@@ -261,9 +261,9 @@ public class UserResource {
 `UserMapper` and `UserBind` are used implicitly to convert the POJO into a db record and back.
 
 You can use `@InTransaction` on repository method to enlarge transaction scope, but, in contrast
-to hibernate you don't have to always declare it to avoid lazy initialization exception 
+to hibernate you don't have to always declare it to avoid lazy initialization exception
 (because jdbi produces simple pojos).
 
 !!! note
-    `@InTrasaction` is named to avoid confusion with the commonly used `@Transactional` annotation.
+    `@InTransaction` is named to avoid confusion with the commonly used `@Transactional` annotation.
     You [can bind any annotation class](../extras/jdbi3.md#intransaction) if you like to use a different name (the annotation is just a marker)
