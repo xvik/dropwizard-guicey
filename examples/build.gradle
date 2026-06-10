@@ -1,11 +1,11 @@
 plugins {
     id 'com.github.ben-manes.versions' version '0.51.0'
-    id 'com.github.dkorotych.gradle-maven-exec' version '4.0.0' apply false
+    id 'com.github.dkorotych.gradle-maven-exec' version '4.0.1' apply false
     id 'org.openapi.generator' version '7.12.0' apply false
 }
 
 wrapper {
-    gradleVersion = '8.10.1'
+    gradleVersion = '9.5.1'
 }
 
 description = 'Dropwizard guicey examples'
@@ -52,8 +52,8 @@ subprojects {
 
         implementation 'ru.vyarus:dropwizard-guicey'
 
-        testImplementation 'ru.vyarus:spock-junit5:1.2.0'
-        testImplementation 'org.spockframework:spock-core:2.4-M5-groovy-4.0'
+        testImplementation 'ru.vyarus:spock-junit5:1.5.0'
+        testImplementation 'org.spockframework:spock-core:2.4-groovy-5.0'
         testImplementation "io.dropwizard:dropwizard-testing"
         testImplementation 'org.junit.jupiter:junit-jupiter-api'
 

@@ -14,8 +14,11 @@ tasks.withType(Jar).configureEach {
 }
 
 tasks.register('maven-test', MavenExec) {
+    environment('JAVA_HOME', System.getProperty('java.home'))
     goals 'test'
     options {
+        // show java and maven versions
+        showVersion = true
         settings = rootProject.file('maven-settings.xml')
         define=[ 'dropwizard-guicey.version':rootProject.ext.guiceyBom, 'dropwizard.version': rootProject.ext.dwVersion]
     }
