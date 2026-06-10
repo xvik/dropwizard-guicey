@@ -14,7 +14,7 @@ plugins {
 }
 
 wrapper {
-    gradleVersion = '8.10.1'
+    gradleVersion = '9.5.1'
 }
 
 description = 'Dropwizard guice integration'
@@ -109,13 +109,6 @@ allprojects {
 
     // skip signing for jitpack (snapshots)
     tasks.withType(Sign) { onlyIf { !System.getenv('JITPACK') && !version.endsWith('-SNAPSHOT') } }
-
-    // override Gradle's bundled JaCoCo version to ensure Java 25+ support (class file version 69+)
-    pluginManager.withPlugin("jacoco") {
-        jacoco {
-            toolVersion = '0.8.15'
-        }
-    }
 }
 
 // all sub-modules are normal java modules, using root BOM (like maven)
