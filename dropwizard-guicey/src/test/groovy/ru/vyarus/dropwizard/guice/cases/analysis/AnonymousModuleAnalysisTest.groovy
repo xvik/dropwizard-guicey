@@ -31,8 +31,10 @@ class AnonymousModuleAnalysisTest extends AbstractTest {
 
         new GuiceBindingsRenderer(injector).renderReport(new GuiceConfig().hideGuiceBindings().hideGuiceyBindings())
                 .replaceAll("\r", "").replaceAll(" +\n", "\n")
-        // in jdk 8 inner lambda shown as null, above 8 as initialize
-                .replace('$initialize$0(AnnModuleApp.java:25)', '$null$0(AnnModuleApp.java:25)') == """
+                // JVM versions assign different synthetic indices to nested lambdas inside initialize();
+                // normalize both by line number so the assertion holds across JDK 8, 17, 21, and 25+
+                .replaceAll(/lambda\$\w+\$\d+\(AnnModuleApp\.java:24\)/, 'lambda\\$initialize\\$1(AnnModuleApp.java:24)')
+                .replaceAll(/lambda\$\w+\$\d+\(AnnModuleApp\.java:25\)/, 'lambda\\$null\\$0(AnnModuleApp.java:25)') == """
 
     2 MODULES with 5 bindings
     │
