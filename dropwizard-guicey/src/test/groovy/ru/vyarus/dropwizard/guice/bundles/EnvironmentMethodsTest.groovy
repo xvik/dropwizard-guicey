@@ -1,10 +1,12 @@
 package ru.vyarus.dropwizard.guice.bundles
 
 import com.google.inject.AbstractModule
+import com.google.inject.TypeLiteral
 import io.dropwizard.core.Application
 import io.dropwizard.core.Configuration
 import io.dropwizard.core.setup.Bootstrap
 import io.dropwizard.core.setup.Environment
+import jakarta.inject.Provider
 import ru.vyarus.dropwizard.guice.GuiceBundle
 import ru.vyarus.dropwizard.guice.module.GuiceyConfigurationInfo
 import ru.vyarus.dropwizard.guice.module.installer.bundle.GuiceyBootstrap
@@ -37,9 +39,13 @@ class EnvironmentMethodsTest extends Specification {
         info.getModulesDisabled() == [DisabledModule]
         Feature.called == 1
         Feature2.called == 1
+
+        Bundle.service.get() instanceof Service
+        Bundle.genericService.get() instanceof GenericService
     }
 
     static class App extends Application<Configuration> {
+
         @Override
         void initialize(Bootstrap<Configuration> bootstrap) {
             bootstrap.addBundle(GuiceBundle.builder()
@@ -54,6 +60,8 @@ class EnvironmentMethodsTest extends Specification {
     }
 
     static class Bundle implements GuiceyBundle {
+        public static Provider<Service> service;
+        public static Provider<GenericService<String>> genericService;
 
         @Override
         void initialize(GuiceyBootstrap bootstrap) {
@@ -69,12 +77,21 @@ class EnvironmentMethodsTest extends Specification {
                     .disableExtensions(Ext)
                     .register(Feature)
                     .register(new Feature2())
+
+            service = environment.getProvider(Service)
+            genericService = environment.getProvider(new TypeLiteral<GenericService<String>>() {})
         }
     }
 
     static class DisabledModule extends AbstractModule {}
 
-    static class Module extends AbstractModule {}
+    static class Module extends AbstractModule {
+        @Override
+        protected void configure() {
+            bind(Service)
+            bind(new TypeLiteral<GenericService<String>>() {})
+        }
+    }
 
     static class OverrideModule extends AbstractModule {}
 
@@ -100,4 +117,7 @@ class EnvironmentMethodsTest extends Specification {
             return false
         }
     }
+
+    static class Service {}
+    static class GenericService<T> {}
 }

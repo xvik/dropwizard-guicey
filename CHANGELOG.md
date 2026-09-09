@@ -10,6 +10,8 @@
     - Add debug report for resource method analysis (enabled with client debug)
     - Extension debug (in annotation) enables client debug logs
 * Add GuiceBeanProvider utility provider as a shortcut for InjectorLookup
+* Add GuiceyEnvironment.getProvider() methods to simplify guice beans providers creation
+  in bundles (when non guice-managed object must be configured)
 * [GSP]
     - Global views bundle registration is optional now (ServerPagesBundle.builder().build())
       It should be registered only if additional configuration is required

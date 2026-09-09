@@ -2,14 +2,17 @@ package ru.vyarus.dropwizard.guice.module.installer.bundle;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.Configuration;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.lifecycle.ServerLifecycleListener;
+import jakarta.inject.Provider;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
+import ru.vyarus.dropwizard.guice.injector.lookup.GuiceBeanProvider;
 import ru.vyarus.dropwizard.guice.module.context.ConfigurationContext;
 import ru.vyarus.dropwizard.guice.module.context.option.Option;
 import ru.vyarus.dropwizard.guice.module.installer.bundle.listener.ApplicationShutdownListener;
@@ -332,6 +335,36 @@ public class GuiceyEnvironment implements GuiceyCommonRegistration<GuiceyEnviron
     public GuiceyEnvironment listenJersey(final ApplicationEventListener listener) {
         environment().jersey().register(listener);
         return this;
+    }
+
+    /**
+     * Shortcut for creating guice bean providers. It could be useful in "run" sections to provide lazy bean reference
+     * into some non guice-managed object configuration.
+     * <p>
+     * Note: if qualifier is required, use {@link ru.vyarus.dropwizard.guice.injector.lookup.GuiceBeanProvider}
+     * directly.
+     *
+     * @param type target bean type
+     * @return guice bean provider
+     * @param <T> bean type
+     */
+    public <T> Provider<T> getProvider(final Class<T> type) {
+        return GuiceBeanProvider.provide(type).forEnv(environment());
+    }
+
+    /**
+     * Shortcut for creating guice bean providers. It could be useful in "run" sections to provide lazy bean reference
+     * into some non guice-managed object configuration.
+     * <p>
+     * Note: if qualifier is required, use {@link ru.vyarus.dropwizard.guice.injector.lookup.GuiceBeanProvider}
+     * directly.
+     *
+     * @param type target bean type
+     * @return guice bean provider
+     * @param <T> bean type
+     */
+    public <T> Provider<T> getProvider(final TypeLiteral<T> type) {
+        return GuiceBeanProvider.provide(type).forEnv(environment());
     }
 
     // ------------------------------------------------------------------ COMMON METHODS
